@@ -1,0 +1,14 @@
+hopitalnumerique_questionnaire_edit:
+    pattern:  /questionnaire/edit/{user}/{questionnaire}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", user: 1, questionnaire: 1 }
+    requirements:
+        user: \d+  
+        questionnaire: \d+
+
+hopitalnumerique_questionnaire_delete_all:
+    pattern: /questionnaire/deleteAll
+    defaults: { _controller: HopitalNumeriqueQuestionnaireBundle:Questionnaire:deleteAll }
+
+hopitalnumerique_questionnaire_download:
+    pattern: /questionnaire/download
+    defaults: { _controller: HopitalNumeriqueQuestionnaireBundle:Questionnaire:download }

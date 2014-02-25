@@ -1,0 +1,17 @@
+
+    /**
+{% block phpdoc_method_header %}
+     * Ajoute les boutons d'action
+{% endblock phpdoc_method_header %}
+     */
+{% block method_definition %}
+    public function setActionsButtons()
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        $this->addActionButton( new Action\ShowButton( '{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}_show' ) );
+        $this->addActionButton( new Action\EditButton( '{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}_edit' ) );
+        $this->addActionButton( new Action\DeleteButton( '{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}_delete' ) );
+{% endblock method_body %}
+
+    }

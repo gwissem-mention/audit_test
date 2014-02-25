@@ -1,0 +1,25 @@
+    /**
+{% block phpdoc_method_header %}
+     * Suppresion d'un {{ entity }}.
+     * 
+     * @param integer $id Id de {{ entity }}.
+     * METHOD = POST|DELETE
+{% endblock phpdoc_method_header %}
+     */
+{% block method_definition %}
+    public function deleteAction( $id )
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        ${{entity|lower}} = $this->get('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}')->findOneBy( array( 'id' => $id) );
+
+        //Suppression de l'entitée
+        $this->get('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}')->delete( ${{entity|lower}} );
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+{% endblock method_body %}
+
+{% block method_return %}
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}').'"}', 200);
+{% endblock method_return %}
+    }

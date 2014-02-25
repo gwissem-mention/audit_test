@@ -1,0 +1,8 @@
+{% if etablissements %}
+    <option value=""> - </option>
+    {% for etablissement in etablissements %}
+        <option value="{{etablissement.id}}">{{etablissement.nom}} - {{etablissement.finess}}</option>
+    {% endfor %}
+{% else %}
+    <option value=""> Sélectionnez un département avant de choisir une entreprise </option>
+{% endif %}

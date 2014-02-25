@@ -1,0 +1,10 @@
+.groupe{position:relative;display:block;height:auto;width:300px;}
+.nSelectClear{position:absolute;top:5px;right:5px;height: 28px;
+	padding: 0 1px;
+	width: 25px;
+	height: 22px;
+	display: none;
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAC4gAAAuIBSbr4BAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAEXSURBVDiNtZU9boNAFIS/DVFExzVcuMxZUkVuuQQncUuElGukc0NlpaDzEVJhu/C4mUir9cYkETzpScsyO++H2UeQxJSFECoASV+TYEk3DhRADXTAAFzsg/dqoMiezZCtgB0g4Az0wNbee0/GrO4SAhtgBE5AA5SZgKXfnYzdZAmd2Qh8AutcOQnx2tgxzjTu2c5RJ8kS0pPPFjFh7b40vyWLSBufrWPCzs0uE/ABaF1B4fUh09Mz0Eni0ep5BvaSjomqPoBX4MnPL8BbIrtjCGFvDgAqa2z7gx7fXZK8vtGfJXUBqgfmNkcYgD4TuY0y+860zeB6YFjkoywmm3mFPfvVW2Q4JJnOM74SQf9rwAYT3LW//AKuOM1lkChxNSkAAAAASUVORK5CYII=) right center no-repeat;
+	border: none;
+	cursor: pointer;
+}

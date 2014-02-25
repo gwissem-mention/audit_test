@@ -1,0 +1,52 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Fiche du référentiel {{reference.code}}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_reference_reference') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if reference.id %}
+        <a href="{{ path('hopitalnumerique_reference_reference_edit', { 'id': reference.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                <p>
+                    <strong>Libelle : </strong>
+                    {{ reference.libelle }}
+                </p>
+                <p>
+                    <strong>Code : </strong>
+                    {{ reference.code }}
+                </p>
+                {% if reference.dictionnaire %}
+                    <p>
+                        <strong>Affichée dans le dictionnaire de référencement </strong>
+                    </p>
+                {% endif %}
+                {% if reference.recherche %}
+                    <p>
+                        <strong>Présent dans les champs du moteur de recherche </strong>
+                    </p>
+                {% endif %}
+                {% if reference.lock %}
+                    <p>
+                        <strong>Cet élément est vérouillé </strong>
+                    </p>
+                {% endif %}
+                <p>
+                    <strong>Ordre d'affichage : </strong>
+                    {{ reference.order }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

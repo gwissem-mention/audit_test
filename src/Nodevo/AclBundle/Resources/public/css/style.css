@@ -1,0 +1,2 @@
+#acls .panel-body{padding:0;}
+#acls .panel-body > div {width:100%; overflow-x:scroll}

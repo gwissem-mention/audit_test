@@ -1,0 +1,3 @@
+{% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+{{ form_javascript(form) }}
+{{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}

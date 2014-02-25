@@ -1,0 +1,121 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+
+framework:
+    translator:      { fallback: "%locale%" }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:
+        handler_id:  ~
+    fragments:       ~
+    http_method_override: true
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+
+# Assetic Configuration
+assetic:
+    debug:          "%kernel.debug%"
+    use_controller: false
+    bundles:
+        - NodevoAdminBundle
+        - NodevoUserBundle
+        - NodevoMenuBundle
+        - NodevoGridBundle
+        - NodevoAclBundle
+        - NodevoRoleBundle
+        - NodevoMailBundle
+        - HopitalNumeriqueMediaBundle
+        - HopitalNumeriqueUserBundle
+        - HopitalNumeriqueReferenceBundle
+        - HopitalNumeriqueEtablissementBundle
+        - HopitalNumeriqueCoreBundle
+        - HopitalNumeriqueObjetBundle
+    filters:
+        cssrewrite: ~
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   "%database_driver%"
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        auto_mapping: true
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    spool:     { type: memory }
+
+# Cache Doctrine
+liip_doctrine_cache:
+    namespaces:
+        main:
+            type: array
+
+# Gestion des users via FOSUserBundle
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: HopitalNumerique\UserBundle\Entity\User
+
+#KNP Menu Bundle
+knp_menu:
+    twig:
+        template: knp_main_menu.html.twig
+    templating: true
+    default_renderer: twig
+
+# Grid APY DATA GRID
+apy_data_grid:
+    pagerfanta:
+        enable: true
+        view_class: Pagerfanta\View\TwitterBootstrap3View
+        options:
+           prev_message : «
+           next_message : »
+
+# Genemu Form - Ajout de composant externe dans les formulaires
+genemu_form:
+    select2: ~
+    date: ~
+    tinymce:
+        enabled: true
+        theme:   advanced
+
+# Nodevo mail
+nodevo_mail:
+    autorisations:
+        allowAdd: false
+        allowDelete: false
+
+nodevo_menu:
+    breadcrumb:
+        routeRacine: hopital_numerique_admin_homepage
+
+# Gestion download fichiers sécurisé (pas dans /web)
+igorw_file_serve:
+    base_dir: ~        # The default value is "%kernel.root_dir%"

@@ -1,0 +1,21 @@
+#Symfony2
+/web/bundles/
+/web/compiled/
+/app/bootstrap.php.cache
+/app/cache/*
+/app/config/parameters.yml
+/app/logs/*
+/build/
+/vendor/
+/bin/
+
+# Mac OSX 
+.DS_Store
+
+#Net Beans
+.buildpath
+.project
+.settings
+
+#Windows
+.thumbs

@@ -1,0 +1,11 @@
+<li class="dd-item dd3-item" data-id="{{id}}" id="contenu-{{id}}" >
+    <div class="dd-handle dd3-handle"></div>
+    <div class="dd3-content">
+        <a href="{{path('hopitalnumerique_objet_contenu_edit', {'id': id })}}" class="fancybox.ajax" >{{order}}. Nouveau contenu</a>
+        <p class="text-muted pull-right"><span>0</span> éléments référencés</p>
+    </div>
+    <div class="dd3-actions">
+        <div onclick="deleteContenu( {{id}}, '{{path('hopitalnumerique_objet_contenu_delete', {'id':id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+        <a href="{{path('hopitalnumerique_objet_reference_contenu', {'id':id})}}" class="pull-right dd3-cog manageReferences fancybox.ajax"><i class="fa fa-cog"></i></a>
+    </div>
+</li>

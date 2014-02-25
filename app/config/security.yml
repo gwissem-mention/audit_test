@@ -1,0 +1,47 @@
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
+    firewalls:
+        # On crée un pare-feu uniquement pour le formulaire (accessible aux anonymes)
+        main_login:
+            pattern: ^/admin/login$ # Cette expression régulière permet de prendre /login
+            anonymous: true
+
+        # On autorise l'accès à la console de dev et aux assets (sans notions de sécurité)
+        dev:
+            pattern: ^/(_(profiler|wdt)|compiled|js|css|images)/
+            security: false
+
+        # Pare-feu général du site (on protège tout)
+        main:
+            pattern: ^/admin
+            form_login:
+                login_path: /admin/login
+                check_path: fos_user_security_check
+                provider: fos_userbundle
+                remember_me:  true
+                always_use_default_target_path : true
+                default_target_path: /admin/
+                use_referer : true
+                csrf_provider: form.csrf_provider
+            logout: true
+            logout:
+                path:   /admin/logout
+                target: /admin
+            remember_me:
+                key: %secret%
+            anonymous: false
+
+    access_decision_manager:
+        strategy: unanimous
+
+    access_control:
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }

@@ -1,0 +1,63 @@
+parameters:
+    #Menu
+    nodevo_menu.menu.class: Nodevo\MenuBundle\Entity\Menu
+    nodevo_menu.form.menu.class: Nodevo\MenuBundle\Form\Type\MenuType
+    nodevo_menu.manager.menu.class: Nodevo\MenuBundle\Manager\MenuManager
+    nodevo_menu.grid.menu.class: Nodevo\MenuBundle\Grid\MenuGrid
+
+    #Item
+    nodevo_menu.item.class: Nodevo\MenuBundle\Entity\Item
+    nodevo_menu.form.item.class: Nodevo\MenuBundle\Form\Type\ItemType
+    nodevo_menu.manager.item.class: Nodevo\MenuBundle\Manager\ItemManager
+    nodevo_menu.grid.item.class: Nodevo\MenuBundle\Grid\ItemGrid
+
+services:
+    nodevo_menu.manager.menu:
+        class: %nodevo_menu.manager.menu.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    nodevo_menu.manager.item:
+        class: %nodevo_menu.manager.item.class%
+        arguments: ["@doctrine.orm.entity_manager", "@nodevo_menu.manager.menu"]
+        calls:
+            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    nodevo_menu.form.menu:
+        class: %nodevo_menu.form.menu.class%
+        arguments: ["@nodevo_menu.manager.menu", "@validator"]
+        tags:
+            - { name: form.type, alias: nodevo_menu_menu}
+
+    nodevo_menu.form.item:
+        class: %nodevo_menu.form.item.class%
+        arguments: ["@nodevo_menu.manager.item", "@validator", "@router"]
+        tags:
+            - { name: form.type, alias: nodevo_menu_item }
+
+    nodevo_menu.loader.node:
+        class: Nodevo\MenuBundle\Provider\NodeLoader
+        arguments: ["@knp_menu.factory", "@security.context", "@service_container"]
+
+    nodevo_menu.loader.breadcrumb.node:
+        class: Nodevo\MenuBundle\Provider\BreadcrumbNodeLoader
+        arguments: ["@knp_menu.factory", "@security.context", "@service_container", "%nodevo_menu.loader.breadcrumb.rootNode%"]
+
+    nodevo_menu.provider:
+        class: Nodevo\MenuBundle\Provider\MenuProvider
+        arguments:
+            - @nodevo_menu.loader.node
+            - @nodevo_menu.loader.breadcrumb.node
+            - @nodevo_menu.manager.menu
+            - @nodevo_menu.manager.item
+        tags:
+          - { name: knp_menu.provider }
+
+    nodevo_menu.grid.menu:
+        class: %nodevo_menu.grid.menu.class%
+        arguments: ["@service_container"]
+
+    nodevo_menu.grid.item:
+        class: %nodevo_menu.grid.item.class%
+        arguments: ["@service_container"]

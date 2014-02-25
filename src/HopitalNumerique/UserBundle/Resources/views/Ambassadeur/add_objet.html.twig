@@ -1,0 +1,39 @@
+<div class="panel panel-midnightblue" style="margin:0" >
+    <div class="panel-heading">
+        <h4>Ajouter une production maitrisée</h4>
+    </div>
+
+    <div class="panel-body" >
+        <form action="" class="form-horizontal" style="min-height:150px">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label for="Objets" class="col-md-3">Liste des productions</label>
+                    <select name="objets" id="objets-ambassadeurs" multiple="multiple" class="form-control col-md-9">
+                        {% for objet in objets %}
+                            <option value="{{objet.id}}" >{{objet.titre}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </form>
+
+        <input type="hidden" id="add-objet-url" value="{{path('hopitalnumerique_user_ambassadeur_saveobjet')}}" />
+
+        <div class="panel-footer" >
+            <div class="row">
+                <div class="btn-toolbar pull-right">
+                    <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+                    <div onclick="addObjet( {{ambassadeur}} );" class="btn-primary btn">Enregistrer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() { 
+        $("#objets-ambassadeurs").nSelect({
+            formatNoMatches : function(){ return 'Aucune donnée trouvée'; }
+        });
+    });
+</script>

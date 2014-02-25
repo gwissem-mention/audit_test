@@ -1,0 +1,78 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Editer un utilisateur
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-user-expert-edit.css" filter="cssrewrite"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+        'bundles/hopitalnumeriqueuser/css/specificationUser.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-user-expert-edit.js"
+        'bundles/hopitalnumeriqueuser/js/Expert/script.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste des utilisateurs"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div id="form_edit_user" class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <div class="options">
+                    <ul class="nav nav-tabs">
+                        <li>
+						    <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Données de caractérisation</a>
+						</li>
+                        {% if user.id is not null and (options.expert or options.ambassadeur)  %}
+							<li>
+							    <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Données de contractualisation</a>
+							</li>
+						{% endif %}
+                        {% if user.id is not null and (options.expert or options.expert_form) %}
+							<li class="active">
+							    <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature pour devenir expert</a>
+							</li>
+						{% endif %}
+                        {% if user.id is not null and (options.ambassadeur or options.ambassadeur_form) %}
+							<li>
+							    <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature pour devenir ambassadeur</a>
+							</li>
+						{% endif %}
+                        {% if user.id is not null and options.ambassadeur %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maitrisés</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel-body" >
+	            <div class="sous_options">
+	                <div class="btn-toolbar">
+					    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+					    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+                        <div onclick='deleteWithConfirm("{{path('hopitalnumerique_user_expert_deleteAll', {'idUser':user.id, 'idQuestionnaire': questionnaire.id})}}" );' class="btn btn-default" title="Suppression des réponses de ce questionnaire"><i class="fa fa-trash-o"></i></div>
+	                </div>
+	            </div>
+                {# Include des données de contractualisation #}
+                {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire} )) }}
+	        </div>            
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,76 @@
+<?php
+
+namespace HopitalNumerique\ReferenceBundle\Grid;
+
+use Nodevo\GridBundle\Grid\Grid;
+use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\Column;
+use Nodevo\GridBundle\Grid\Action;
+
+use APY\DataGridBundle\Grid\Action\RowAction;
+
+/**
+ * Configuration du grid Reference.
+ */
+class ReferenceGrid extends Grid implements IGrid
+{
+    /**
+     * Définie la config spécifique au grid Reference.
+     */
+    public function setConfig()
+    {
+        $this->setSource( 'hopitalnumerique_reference.manager.reference' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+    }
+
+    /**
+     * Ajoute les colonnes du grid Reference.
+     */
+    public function setColumns()
+    {
+        $this->addColonne( new Column\TextColumn('code', 'Code') );
+        $this->addColonne( new Column\TextColumn('libelle', 'Libellé') );
+
+        $etatColonne = new Column\TextColumn('etat', 'Etat');
+        $etatColonne->setSize( 80 );
+        $this->addColonne( $etatColonne );
+
+        $this->addColonne( new Column\OrderColumn() );
+
+        $dictionnaireColumn = new Column\BooleanColumn('dictionnaire', 'Dictionnaire');
+        $dictionnaireColumn->setValues( array( 1 => 'Présent dans le dictionnaire de référencement', 0 => 'Absent du dictionnaire') );
+        $this->addColonne( $dictionnaireColumn );
+
+        $rechercheColumn = new Column\BooleanColumn('recherche', 'Recherche');
+        $rechercheColumn->setValues( array( 1 => 'Présent dans les champs du moteur de recherche', 0 => 'Absent des champs du moteur de recherche') );
+        $this->addColonne( $rechercheColumn );
+
+        $this->addColonne( new Column\LockedColumn() );
+
+        $this->addColonne( new Column\BlankColumn('idParent') );
+    }
+
+    /**
+     * Ajoute les boutons d'action
+     */
+    public function setActionsButtons()
+    {
+        $this->addActionButton( new Action\ShowButton('hopitalnumerique_reference_reference_show') );
+        $this->addActionButton( new Action\EditButton('hopitalnumerique_reference_reference_edit') );
+        $this->addActionButton( new Action\DeleteButton('hopitalnumerique_reference_reference_delete') );
+
+        //Boutton d'ajout d'un référentiel avec parent par défaut
+        $button = new RowAction('', 'hopitalnumerique_reference_reference_add');
+        $button->setRouteParameters( array('id') );
+        $button->setAttributes( array('class'=>'btn btn-warning fa fa-plus','title' => 'Ajouter comme enfant') );
+        $this->addActionButton( $button );
+    }
+
+    /**
+     * Ajoute les actions de masses
+     */
+    public function setMassActions()
+    {
+
+    }
+}

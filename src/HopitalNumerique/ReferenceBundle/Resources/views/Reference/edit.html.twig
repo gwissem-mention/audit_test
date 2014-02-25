@@ -1,0 +1,61 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    {% if reference.id %}
+        Editer le référentiel
+    {% else %}
+        Ajouter un référentiel
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-reference-reference-edit.js"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-reference-reference-edit.css" filter="cssrewrite"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_reference_reference') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+    {% if reference.id %}
+        <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_reference_reference_delete', { 'id': reference.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body">
+                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                {{ form_start(form) }}
+                    {{ form_row(form.libelle) }}
+                    {{ form_row(form.code) }}
+                    {{ form_row(form.etat) }}
+                    {{ form_row(form.dictionnaire) }}
+                    {{ form_row(form.recherche) }}
+                    {% form_theme form 'HopitalNumeriqueReferenceBundle::form.html.twig' %}
+                    {{ form_row(form.parent) }}
+                    {{ form_row(form.order) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

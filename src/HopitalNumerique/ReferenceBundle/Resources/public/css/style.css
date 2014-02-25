@@ -1,0 +1,15 @@
+.references .panel-body{
+	padding:5px 20px !important;
+	display:none;
+}
+.references .panel-body > li{
+	list-style:none;
+}
+@media print {
+	.references .panel-body{
+        display:block !important;
+    }
+    .breadcrumb{
+        display:none;
+    }
+}

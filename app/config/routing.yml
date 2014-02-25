@@ -1,0 +1,53 @@
+# Bundles Hopital Numérique
+hopital_numerique_user:
+    resource: "@HopitalNumeriqueUserBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+hopital_numerique_reference:
+    resource: "@HopitalNumeriqueReferenceBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+hopital_numerique_etablissement:
+    resource: "@HopitalNumeriqueEtablissementBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+hopital_numerique_core:
+    resource: "@HopitalNumeriqueCoreBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hopital_numerique_admin:
+    resource: "@HopitalNumeriqueAdminBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+hopital_numerique_objet:
+    resource: "@HopitalNumeriqueObjetBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+hopital_numerique_media:
+    resource: "@HopitalNumeriqueMediaBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+hopital_numerique_questionnaire:
+    resource: "@HopitalNumeriqueQuestionnaireBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+# Bundles Nodevo
+nodevo_acl:
+    resource: "@NodevoAclBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+nodevo_role:
+    resource: "@NodevoRoleBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+nodevo_menu:
+    resource: "@NodevoMenuBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+nodevo_admin:
+    resource: "@NodevoAdminBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+nodevo_mail:
+    resource: "@NodevoMailBundle/Resources/config/routing.yml"
+    prefix:   /admin

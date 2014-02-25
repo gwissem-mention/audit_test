@@ -1,0 +1,21 @@
+parameters:
+    hopitalnumerique_etablissement.manager.etablissement.class: HopitalNumerique\EtablissementBundle\Manager\EtablissementManager
+    hopitalnumerique_etablissement.grid.etablissement.class: HopitalNumerique\EtablissementBundle\Grid\EtablissementGrid
+    hopitalnumerique_etablissement.form.etablissement.class: HopitalNumerique\EtablissementBundle\Form\EtablissementType
+
+services:
+    hopitalnumerique_etablissement.manager.etablissement:
+        class: %hopitalnumerique_etablissement.manager.etablissement.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_etablissement.grid.etablissement:
+        class: %hopitalnumerique_etablissement.grid.etablissement.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_etablissement.form.etablissement:
+        class: %hopitalnumerique_etablissement.form.etablissement.class%
+        arguments: ["@hopitalnumerique_etablissement.manager.etablissement", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_etablissement_etablissement }

@@ -1,0 +1,22 @@
+<?php
+
+namespace {{ namespace }}\Manager;
+
+{% block use_statements %}
+use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+{% endblock use_statements %}
+
+/**
+{% block phpdoc_class_header %}
+ * Manager de l'entité {{ entity }}.
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+class {{ entity_class }}Manager extends BaseManager
+{% endblock class_definition %}
+{
+{% block class_body %}
+    protected $_class = '{{ namespace }}\Entity\{{entity}}';
+
+{% endblock class_body %}
+}

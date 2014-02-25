@@ -1,0 +1,15 @@
+parameters:
+    database_driver: pdo_mysql
+    database_host: local.nodevo.com
+    database_port: null
+    database_name: wwwhopitalnumeriquecom
+    database_user: dbuser
+    database_password: null
+
+    mailer_transport: smtp
+    mailer_host: smtp.nodevo.com
+    mailer_user: noreply@nodevo.com
+    mailer_password: 'W;a75g*2Ur'
+    
+    locale: fr
+    secret: '536ghdge7g&7hdjzy6g"gvxojheg'

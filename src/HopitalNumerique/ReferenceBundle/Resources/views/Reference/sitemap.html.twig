@@ -1,0 +1,54 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Arborescence du référentiel générique
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-reference-reference-sitemap.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquereference/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a href="javascript:print();" class="btn btn-default" title="Imprimer"><i class="fa fa-print"></i></a>
+    <a href="{{path('hopitalnumerique_reference_reference')}}" class="btn btn-default" title="Afficher la vue liste"><i class="fa fa-list"></i></a>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <ul class="references">
+            {% for code,reference in references %}
+            <div class="panel panel-midnightblue">
+                <div class="panel-heading panel-collapse">{{ code }}</div>
+                <div class="panel-body">
+                    {{ _self.buildTree(reference) }}
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+
+{% macro buildTree(reference, codeChild = false) %}
+    {% for ref in reference  %}
+    <li>
+        {% if codeChild %}
+        {{ref.libelle}} ({{ codeChild }})
+        {% else %}
+        {{ref.libelle}}
+        {% endif %}
+ 
+        {% if ref.childs %}
+            <ul>
+                {% for code, child in ref.childs %}
+                    {{ _self.buildTree(child, code) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+    {% endfor %}
+{% endmacro %}

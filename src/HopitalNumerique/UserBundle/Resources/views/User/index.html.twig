@@ -1,0 +1,38 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{# Grid mandatory Stuff #}
+{# {% use 'NodevoGridBundle::grid.config.html.twig' %}#}
+{% use 'HopitalNumeriqueUserBundle:Contractualisation:grid.config.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-user-user-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueuser/css/grid.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+    {{ block('grid_stylesheets')}}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ block('grid_javascripts')}}
+{% endblock %}
+
+{# Template Stuff #}
+{% block h1Title %}
+    Liste des utilisateurs
+{% endblock %}
+
+{% block toolbarButton %}
+    {% if app.user|checkAuthorization( path('hopital_numerique_user_add') ) %}
+        <a href="{{path('hopital_numerique_user_add')}}" class="btn btn-default" title="Ajouter un utilisateur"><i class="fa fa-plus"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+    {{ grid(grid, _self) }}
+    {# Cache les lignes de filtres dans le grid #}
+    {% block grid_filters %}{% endblock grid_filters%}
+{% endblock %}

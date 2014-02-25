@@ -1,0 +1,20 @@
+
+    /**
+{% block phpdoc_method_header %}
+     * Ajoute les colonnes du grid {{ entity }}.
+{% endblock phpdoc_method_header %}
+     */
+{% block method_definition %}
+    public function setColumns()
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        //field, titre, isSortable, size
+        {%- for field, metadata in fields %}
+
+        $this->addColonne( new Column\TextColumn('{{field|replace({'_': ''})}}', '{{ field|capitalize }}') );
+
+        {%- endfor %}
+        
+{% endblock method_body %}
+    }

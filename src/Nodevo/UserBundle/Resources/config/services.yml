@@ -1,0 +1,9 @@
+parameters:
+    nodevo_user.manager.user.class: Nodevo\UserBundle\Manager\UserManager
+
+services:
+    nodevo_user.manager.user:
+        class: %nodevo_user.manager.user.class%
+        arguments: ["@doctrine.orm.entity_manager", "@security.encoder_factory", "Nodevo\UserBundle\Entity\User"]
+        calls:
+            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

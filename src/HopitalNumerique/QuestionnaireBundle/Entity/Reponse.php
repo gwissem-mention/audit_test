@@ -1,0 +1,162 @@
+<?php
+
+namespace HopitalNumerique\QuestionnaireBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+//Asserts Stuff
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
+
+/**
+ * Reponse
+ *
+ * @ORM\Table("hn_questionnaire_reponse")
+ * @ORM\Entity(repositoryClass="HopitalNumerique\QuestionnaireBundle\Repository\ReponseRepository")
+ */
+class Reponse
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="rep_id", type="integer", options = {"comment" = "ID de la réponse"})
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="reponses")
+     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
+     */
+    private $user;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="Question", inversedBy="reponses")
+     * @ORM\JoinColumn(name="que_id", referencedColumnName="que_id", onDelete="CASCADE")
+     */
+    private $question;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="rep_reponse", type="text", options = {"comment" = "Contenu de la réponse"})
+     */
+    private $reponse;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
+     * @ORM\JoinColumn(name="ref_reference", referencedColumnName="ref_id")
+     */
+    protected $reference;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set reponse
+     *
+     * @param string $reponse
+     * @return Reponse
+     */
+    public function setReponse($reponse)
+    {
+        $this->reponse = $reponse;
+
+        return $this;
+    }
+
+    /**
+     * Get reponse
+     *
+     * @return string 
+     */
+    public function getReponse()
+    {
+        return $this->reponse;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @return Reponse
+     */
+    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set question
+     *
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Question $question
+     * @return Reponse
+     */
+    public function setQuestion(\HopitalNumerique\QuestionnaireBundle\Entity\Question $question = null)
+    {
+        $this->question = $question;
+
+        return $this;
+    }
+
+    /**
+     * Get question
+     *
+     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Question 
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
+
+    /**
+     * Get reference
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+    
+    /**
+     * Set reference
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
+     */
+    public function setReference($reference)
+    {
+        if($reference instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+            $this->reference = $reference;
+        else
+            $this->reference = null;
+    }
+
+    // ---------------------Test de file---------------------------------
+    public $file;
+}

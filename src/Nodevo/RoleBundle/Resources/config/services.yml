@@ -1,0 +1,26 @@
+parameters:
+    security.role_hierarchy.class: Nodevo\RoleBundle\Manager\RoleHierarchy
+    nodevo_role.manager.role.class: Nodevo\RoleBundle\Manager\RoleManager
+    nodevo_role.grid.role.class: Nodevo\RoleBundle\Grid\RoleGrid
+    nodevo_role.form.role.class: Nodevo\RoleBundle\Form\RoleType
+
+services:
+    security.role_hierarchy:
+        class: %security.role_hierarchy.class%
+        arguments: ["%security.role_hierarchy.roles%", "@doctrine.orm.entity_manager"]
+
+    nodevo_role.manager.role:
+        class: %nodevo_role.manager.role.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    nodevo_role.grid.role:
+        class: %nodevo_role.grid.role.class%
+        arguments: ["@service_container"]
+
+    nodevo_role.form.role:
+        class: %nodevo_role.form.role.class%
+        arguments: ["@nodevo_role.manager.role", "@validator"]
+        tags:
+            - { name: form.type, alias: nodevo_role_role }

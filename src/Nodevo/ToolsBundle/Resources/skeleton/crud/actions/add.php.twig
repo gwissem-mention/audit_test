@@ -1,0 +1,18 @@
+
+    /**
+{% block phpdoc_method_header %}
+     * Affiche le formulaire d'ajout de {{ entity }}.
+{% endblock phpdoc_method_header %}
+     */
+{% block method_definition %}
+    public function addAction()
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        ${{entity|lower}} = $this->get('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}')->createEmpty();
+{% endblock method_body %}
+
+{% block method_return %}
+        return $this->_renderForm('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{entity|lower}}', ${{entity|lower}}, '{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:edit.html.twig' );
+{% endblock method_return %}
+    }

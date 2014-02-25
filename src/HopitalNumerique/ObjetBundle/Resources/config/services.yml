@@ -1,0 +1,59 @@
+parameters:
+    hopitalnumerique_objet.manager.objet.class: HopitalNumerique\ObjetBundle\Manager\ObjetManager
+    hopitalnumerique_objet.grid.objet.class: HopitalNumerique\ObjetBundle\Grid\ObjetGrid
+    hopitalnumerique_objet.form.objet.class: HopitalNumerique\ObjetBundle\Form\ObjetType
+    hopitalnumerique_objet.manager.contenu.class: HopitalNumerique\ObjetBundle\Manager\ContenuManager
+    hopitalnumerique_objet.form.contenu.class: HopitalNumerique\ObjetBundle\Form\ContenuType
+    hopitalnumerique_objet.manager.refobjet.class: HopitalNumerique\ObjetBundle\Manager\RefObjetManager
+    hopitalnumerique_objet.manager.refcontenu.class: HopitalNumerique\ObjetBundle\Manager\RefContenuManager
+
+services:
+    #managers
+    hopitalnumerique_objet.manager.objet:
+        class: %hopitalnumerique_objet.manager.objet.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_objet.manager.contenu:
+        class: %hopitalnumerique_objet.manager.contenu.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_objet.manager.refobjet:
+        class: %hopitalnumerique_objet.manager.refobjet.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_objet.manager.refcontenu:
+        class: %hopitalnumerique_objet.manager.refcontenu.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    #forms
+    hopitalnumerique_objet.form.objet:
+        class: %hopitalnumerique_objet.form.objet.class%
+        arguments: ["@hopitalnumerique_objet.manager.objet", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_objet_objet }
+
+    hopitalnumerique_objet.form.contenu:
+        class: %hopitalnumerique_objet.form.contenu.class%
+        arguments: ["@hopitalnumerique_objet.manager.contenu", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_objet_contenu }
+
+    #grids
+    hopitalnumerique_objet.grid.objet:
+        class: %hopitalnumerique_objet.grid.objet.class%
+        arguments: ["@service_container"]
+
+    #twig extensions
+    hopitalnumerique_objet.twig.objet_extension:
+        class: HopitalNumerique\ObjetBundle\Twig\ObjetExtension
+        arguments : []
+        tags:
+            - { name: twig.extension }

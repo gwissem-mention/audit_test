@@ -1,0 +1,118 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    {% if contractualisation.id %}
+        Editer un fichier de contractualisation
+    {% else %}
+        Ajouter un fichier de contractualisation
+    {% endif %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste des utilisateurs"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-user-contractualisation-edit.js"
+        'bundles/hopitalnumeriqueuser/js/Contractualisation/script.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-user-contractualisation-edit.css" filter="cssrewrite"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+        'bundles/hopitalnumeriqueuser/css/specificationUser.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <div class="options">
+                    <ul class="nav nav-tabs">
+                        <li>
+						    <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Données de caractérisation</a>
+						</li>
+                        {% if user.id is not null and (options.expert or options.ambassadeur) %}
+							<li class="active">
+							    <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Données de contractualisation</a>
+							</li>
+						{% endif %}
+                        {% if user.id is not null and (options.expert or options.expert_form) %}
+							<li>
+							    <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature pour devenir expert</a>
+							</li>
+						{% endif %}
+                        {% if user.id is not null and (options.ambassadeur or options.ambassadeur_form) %}
+							<li>
+							    <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature pour devenir ambassadeur</a>
+							</li>
+						{% endif %}
+                        {% if user.id is not null and options.ambassadeur %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maitrisés</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel-body">
+	            <div class="sous_options">
+	                <div class="btn-toolbar">	                    
+					    <a class="btn btn-default" href="{{ path('hopitalnumerique_user_contractualisation', { 'id': contractualisation.user.id }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+					    <div onclick="sauvegardeFormulaire();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+					    <div onclick="$('#do').val('save-close');sauvegardeFormulaire();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+					    {% if contractualisation.id %}
+					        <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_user_contractualisation_delete', { 'id': contractualisation.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
+					    {% endif %}
+	                </div>
+	            </div>
+	            
+                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                {{ form_start(form) }}
+                    {# Application des librairies JS sur le form : #}
+                    {{ form_javascript(form) }}                    
+                    
+                    {# Formulaire : #}
+                    <div class="form-group">
+                        {{ form_label(form.file) }}
+                        <div class="col-md-6">
+                            {% if contractualisation.getAbsolutePath() is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
+                            <div class="inputUpload" style="display:{{visibility}}">
+                                {{ form_widget(form.file) }}    
+                            </div>
+
+                            {% if contractualisation.getAbsolutePath() is not null %}
+                                <span class="uploadedFile">{{contractualisation.path}}</span>
+                                <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" ><i class="fa fa-trash-o"></i></div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3">
+                            <div class="help-block error_file">
+                                {{ form_errors(form.file) }}
+                            </div>
+                        </div>
+                    </div>
+                    {{ form_row(form.nomDocument) }}
+                    {{ form_row(form.typeDocument) }}
+                    {% if contractualisation.typeDocument is not null %}
+                        {% if 'Autres' == contractualisation.typeDocument.libelle %}
+                            {{ form_row(form.dateRenouvellement) }}
+                        {% endif %}
+                    {% endif %}
+                    <input type="hidden" id="id-contractualisation" value="{% if contractualisation is defined and contractualisation is not null %}{{ contractualisation.id }}{% endif %}" />
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

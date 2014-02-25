@@ -1,0 +1,21 @@
+parameters:
+    {{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}.class: {{ namespace }}\Manager\{{entity}}Manager
+    {{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.grid.{{entity|lower}}.class: {{ namespace }}\Grid\{{entity}}Grid
+    {{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.form.{{entity|lower}}.class: {{ namespace }}\Form\{{entity}}Type
+
+services:
+    {{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}:
+        class: %{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    {{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.grid.{{entity|lower}}:
+        class: %{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.grid.{{entity|lower}}.class%
+        arguments: ["@service_container"]
+
+    {{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.form.{{entity|lower}}:
+        class: %{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.form.{{entity|lower}}.class%
+        arguments: ["@{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}", "@validator"]
+        tags:
+            - { name: form.type, alias: {{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{entity|lower}} }

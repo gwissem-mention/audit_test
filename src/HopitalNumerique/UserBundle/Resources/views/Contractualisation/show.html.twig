@@ -1,0 +1,80 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Fiche d'un fichier de contractualisation
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-user-contractualisation-show.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueuser/css/specificationUser.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste des utilisateurs"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <div class="options">
+                    <ul class="nav nav-tabs">
+                        <li>
+						    <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Données de caractérisation</a>
+						</li>
+                        {% if user.id is not null and (options.expert or options.ambassadeur) %}
+							<li class="active">
+							    <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Données de contractualisation</a>
+							</li>
+						{% endif %}
+                        {% if user.id is not null and (options.expert or options.expert_form) %}
+							<li>
+							    <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature pour devenir expert</a>
+							</li>
+						{% endif %}
+                        {% if user.id is not null and (options.ambassadeur or options.ambassadeur_form) %}
+							<li>
+							    <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature pour devenir ambassadeur</a>
+							</li>
+						{% endif %}
+                        {% if user.id is not null and options.ambassadeur %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maitrisés</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel-body" > 
+	            <div class="sous_options">
+	                <a class="btn btn-default" href="{{ path('hopitalnumerique_user_contractualisation', { 'id': contractualisation.user.id }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+				    {% if contractualisation.id %}
+				        <a href="{{ path('hopitalnumerique_user_contractualisation_edit', { 'id': contractualisation.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+				    {% endif %}
+	            </div>
+	                              
+                <div class="form-group">
+                    <div><strong>Nom du document</strong></div>
+                    <div>{{contractualisation.nomDocument}}</div>
+                </div>
+                <div class="form-group">
+                    <div><strong>Type de document</strong></div>
+                    <div>
+                        {% if contractualisation.typeDocument is defined and contractualisation.typeDocument is not null %}
+                            {{contractualisation.typeDocument.libelle}}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div><strong>Date de renouvellement</strong></div>
+                    {{ contractualisation.dateRenouvellement|date('d/m/Y') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

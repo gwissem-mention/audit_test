@@ -1,0 +1,70 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Fiche de l'établissement {{etablissement.nom}}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a href="{{path('hopitalnumerique_etablissement')}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if app.user|checkAuthorization( path('hopitalnumerique_etablissement_edit', {'id':etablissement.id}) ) %}
+        <a href="{{path('hopitalnumerique_etablissement_edit', {'id':etablissement.id})}}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" style="border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;">
+                 <p>
+                    <strong>Nom : </strong>
+                    {{ etablissement.nom }}
+                </p>
+
+                <p>
+                    <strong>FINESS Geographique : </strong>
+                    {{ etablissement.finess }}
+                </p>
+
+                <p>
+                    <strong>Adresse : </strong>
+                    {{ etablissement.adresse }}
+                </p>
+
+                <p>
+                    <strong>Ville : </strong>
+                    {{ etablissement.ville }}
+                </p>
+
+                <p>
+                    <strong>Code Postal : </strong>
+                    {{ etablissement.codepostal }}
+                </p>
+
+                {% if etablissement.region is not null %}
+                    <p>
+                        <strong>Région : </strong>
+                        {{ etablissement.region.libelle }}
+                    </p>
+                {% endif %}
+
+                {% if etablissement.departement is not null %}
+                    <p>
+                        <strong>Département : </strong>
+                        {{ etablissement.departement.libelle }}
+                    </p>
+                {% endif %}
+
+                {% if etablissement.typeOrganisme is not null %}
+                    <p>
+                        <strong>Type d'organisme : </strong>
+                        {{ etablissement.typeOrganisme.libelle }}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Gestion des habilitations
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/nodevo-acl-acl-index.js"
+        'bundles/nodevoacl/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/nodevo-acl-acl-index.css" filter="cssrewrite"
+        'bundles/nodevoacl/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-12" id="acls" >
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Groupes initiaux</h4>
+            </div>
+            
+            {# on crée une variable write : si l'user connecté à accès en écriture à la gestion des habilitations, il peut modifier les droits des autres #}
+            {% if app.user|checkAuthorization( path('nodevo_acl_modify') ) %}{% set write = true %}{% else %}{% set write = false %}{% endif %}
+
+            <div class="panel-body" >
+                <div>
+                    <table class="nodevo-acls table table-striped table-hover" style="width:{{ (roles.initiaux|length * 130) + 235 }}px" >
+                        <thead>
+                            <tr>
+                                <th></th>
+                                {% for role in roles.initiaux %}
+                                    <th align="center" width="130px">
+                                        {{role.name}}
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ressource in ressources %}
+                                <tr>
+                                    <td>{{ressource.nom}}</td>
+                                    {% for role in roles.initiaux %}
+                                        <td align="center">
+                                            <div class="btn-group">
+                                                {% if acls[ressource.id][role.id]['read'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
+                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Lecture" data-type="1" data-ressource="{{ressource.id}}" data-role="{{role.id}}" >
+                                                    <i class="fa fa-eye"></i>
+                                                </div>
+                                                
+                                                {% if acls[ressource.id][role.id]['write'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
+                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Ecriture" data-type="2" data-ressource="{{ressource.id}}" data-role="{{role.id}}" >
+                                                    <i class="fa fa-edit"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Autres groupes</h4>
+            </div>
+
+            <div class="panel-body" >
+                <div>
+                    <table class="nodevo-acls table table-striped table-hover" style="width:{{ (roles.nonInitiaux|length * 130) + 235 }}px" >
+                        <thead>
+                            <tr>
+                                <th></th>
+                                {% for role in roles.nonInitiaux %}
+                                    <th align="center" width="130px" >
+                                        {{role.name}}
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ressource in ressources %}
+                                <tr>
+                                    <td>{{ressource.nom}}</td>
+                                    {% for role in roles.nonInitiaux %}
+                                        <td align="center">
+                                            <div class="btn-group">
+                                                {% if acls[ressource.id][role.id]['read'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
+                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Lecture" data-type="1" data-ressource="{{ressource.id}}" data-role="{{role.id}}" >
+                                                    <i class="fa fa-eye"></i>
+                                                </div>
+                                                
+                                                {% if acls[ressource.id][role.id]['write'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
+                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Ecriture" data-type="2" data-ressource="{{ressource.id}}" data-role="{{role.id}}" >
+                                                    <i class="fa fa-edit"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="acl-url" value="{{path('nodevo_acl_modify')}}" />
+{% endblock %}

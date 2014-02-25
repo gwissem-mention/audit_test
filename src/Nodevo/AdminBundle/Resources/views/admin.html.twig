@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Hopital Numérique">
+        <meta name="author" content="NODEVO">
+
+        <title>{% block title %}Hopital Numérique{% endblock %}</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        {% block stylesheets %}
+            {% stylesheets output="compiled/admin-main.css" filter="cssrewrite"
+                'bundles/nodevoadmin/css/styles.min.css'
+                'bundles/nodevoadmin/css/nodevo.css'
+                'bundles/nodevoadmin/plugins/codeprettifier/prettify.css'
+                'bundles/nodevoadmin/plugins/apprise/apprise.css'
+                'bundles/nodevoadmin/js/jqueryui.min.css'
+                'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+                
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% endblock %}
+    
+        <noscript>
+            Ce site requis l'activation de javascript pour être utilisé, merci de l'activer.
+            <style>header, .nav, #page-container, footer {display: none}</style>
+        </noscript>
+
+        {% block javascripts %}
+            {% javascripts output="compiled/admin-main.js"
+                'bundles/nodevoadmin/js/jquery-1.10.2.min.js'
+                'bundles/nodevoadmin/js/jqueryui-1.10.3.min.js'
+                'bundles/nodevoadmin/js/jqueryui-fr.js'
+                'bundles/nodevoadmin/js/bootstrap.min.js'
+                'bundles/nodevoadmin/js/enquire.js'
+                'bundles/nodevoadmin/js/jquery.cookie.js'
+                'bundles/nodevoadmin/js/jquery.nicescroll.min.js'
+                'bundles/nodevoadmin/plugins/codeprettifier/prettify.js'
+                'bundles/nodevoadmin/js/placeholdr.js'
+                'bundles/nodevoadmin/js/application.js'
+                'bundles/nodevoadmin/plugins/apprise/apprise.js'
+                'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+            %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% endblock %}
+    </head>
+
+    <body>
+        <header class="navbar navbar-inverse navbar-fixed-top" role="banner">
+            <a id="leftmenu-trigger" class="tooltips" data-toggle="tooltip" data-placement="right" title="Toggle Sidebar"></a>
+
+            <div class="navbar-header pull-left">
+                <a class="navbar-brand" href="{{path('hopital_numerique_admin_homepage')}}">Hopital Numérique</a>
+            </div>
+
+            <ul class="nav navbar-nav pull-right toolbar">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle username" data-toggle="dropdown">
+                        <span class="hidden-xs">
+                            {% if app.user.nom or app.user.prenom %}
+                                {{ app.user.prenom|capitalize ~ ' ' ~ app.user.nom|capitalize }}
+                            {% else %}
+                                {{ app.user.username|capitalize }}
+                            {% endif %}
+                            <i class="fa fa-caret-down"></i>
+                        </span>
+                        <img src="{{asset('bundles/nodevoadmin/img/logo-small.png')}}" alt="{{ app.user.username|capitalize }}" />
+                    </a>
+                    <ul class="dropdown-menu userinfo arrow">
+                        <li class="username">
+                            <div>
+                                <div class="pull-left"><img class="userimg" src="{{asset('bundles/nodevoadmin/img/logo-small.png')}}" alt="{{ app.user.username|capitalize }}"/></div>
+                                <div class="pull-right">
+                                    <h5>
+                                        {% if app.user.prenom %}
+                                            Bonjour {{ app.user.prenom|capitalize }} !
+                                        {% else %}
+                                            Bonjour {{ app.user.username|capitalize }} !
+                                        {% endif %}
+                                    </h5>
+                                    <small><span>{{ app.user.email }}</span></small></div>
+                            </div>
+                        </li>
+
+                        <li class="userlinks">
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('hopital_numerique_homepage') }}" target="_blank">Accès au site front <i class="pull-right fa fa-external-link"></i></a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{ path('fos_user_security_logout') }}" class="text-right">Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </header>
+
+        <div id="page-container">
+            <nav id="page-leftbar" role="navigation">
+                {%- set KnpMenu = knp_menu_get('menu-admin', [], {'breadcrumb' : 'no'}) %}
+                {{ knp_menu_render(KnpMenu, {'currentClass': 'active', 'ancestorClass':'active','template':'NodevoAdminBundle::menu.html.twig'}) }}
+            </nav>
+            
+            <div id="page-content">
+                <div id='wrap'>
+                    <div id="page-heading">
+                        {{ block('flashBags') }}
+                        
+                        {%- set KnpMenu = knp_menu_get('menu-admin', [], {'breadcrumb' : 'yes'}) %}
+                        {{ knp_menu_render(KnpMenu, {'currentClass': 'active', 'ancestorClass':'active','template':'NodevoAdminBundle::menu.html.twig', 'currentAsLink':'0', 'breadcrumb':'1'}) }}
+
+                        <h1>{% block h1Title %}{% endblock %}</h1>
+                        <div class="options">
+                            <div class="btn-toolbar">
+                                {% block toolbarButton %}{% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            {% block body %}{% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer role="contentinfo">
+                <div class="clearfix">
+                    <ul class="list-unstyled list-inline">
+                        <li><a href="http://www.nodevo.com" target="_blank">NODEVO</a> &copy; 2014</li>
+                        <button class="pull-right btn btn-inverse-alt btn-xs hidden-print" id="back-to-top"><i class="fa fa-arrow-up"></i></button>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+    </body>
+</html>
+
+{% block flashBags %}
+    {% for type, messages in app.session.flashBag.all %}
+        {% for message in messages %}
+            <div class="alert alert-block alert-{{type}}" onclick="$(this).slideUp();">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

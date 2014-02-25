@@ -1,0 +1,204 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Fiche de l'utilisateur {{user.username|capitalize}}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+{#     {% if app.user|checkAuthorization( path('hopital_numerique_user_edit', {'id':user.id} ) ) %}#}
+{#         <a href="{{path('hopital_numerique_user_edit', {'id':user.id} )}}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>#}
+{#     {% endif %}#}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Fiche de l'utilisateur</h4>
+            </div>
+
+            <div class="panel-body" >           
+            
+                <div class="row">
+	                <div class="panel panel-default gray">
+				        <a data-toggle="collapse" data-parent="#accordion" href="#collapseUser" class="collapsed" id="questionnaire_expert_collapse">
+				            <div class="panel-heading"><h4>Informations de caractérisation</h4></div>
+				        </a>
+				        <div id="collapseUser" class="panel-collapse collapse" style="height: 0px;"> 
+                            <div class="panel-body">       
+            
+				                <div class="col-md-6">
+				                    <div class="form-group">
+				                        <div><strong>Civilité</strong></div>
+				                        <div>
+				                            {% if user.civilite is defined and user.civilite is not null %}
+				                                {{user.civilite.libelle}}
+				                            {% endif %}
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <div><strong>Titre</strong></div>
+				                        <div>
+				                            {% if user.titre is defined and user.titre is not null %}
+				                                {{user.titre.libelle}}
+				                            {% endif %}
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <div><strong>Nom d'utilisateur</strong></div>
+				                        <div>{{user.username}}</div>
+				                    </div>
+				                    <div class="form-group">
+				                        <div><strong>Nom</strong></div>
+				                        <div>{{user.nom}}</div>
+				                    </div>
+				                    <div class="form-group">
+				                        <div><strong>Prénom</strong></div>
+				                        <div>{{user.prenom}}</div>
+				                    </div>
+				                    <div class="form-group">
+				                        <div><strong>Adresse e-mail</strong></div>
+				                        <div>{{user.email}}</div>
+				                    </div>
+				                    <div class="form-group">
+				                        <div><strong>Téléphone direct</strong></div>
+				                        <div>{{user.telephoneDirect}}</div>
+				                    </div>
+				                    <div class="form-group">
+				                        <div><strong>Téléphone portable</strong></div>
+				                        <div>{{user.telephonePortable}}</div>
+				                    </div>                    
+				                    <div class="form-group">
+				                        <div><strong>Contact autre</strong></div>
+				                        <div>{{user.contactAutre}}</div>
+				                    </div>
+				                    <div class="form-group">
+				                        <div><strong>Région</strong></div>
+				                        <div>
+				                            {% if user.region is defined and user.region is not null %}
+				                                {{user.region.libelle}}
+				                            {% endif %}
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <div><strong>Département</strong></div>
+				                        <div>
+				                            {% if user.departement is defined and user.departement is not null %}
+				                                {{user.departement.libelle}}
+				                            {% endif %}
+				                        </div>
+				                    </div>
+				                    <div class="form-group">
+				                        <div><strong>Groupe associé</strong></div>
+				                        {% for role in user.roles %}
+				                            <div>{{ role.name }}</div>
+				                        {% endfor %}
+				                    </div>
+				                    <div class="form-group">
+				                        <div><strong>Etat</strong></div>
+				                        <div>
+				                            {% if user.etat is defined and user.etat is not null  %}
+				                                {{user.etat.libelle}}
+				                            {% endif %}
+				                        </div>
+				                    </div>  
+				                </div>
+			                
+				                {# Zones des volets #}
+				                <div class="col-md-6">
+				                    <div class="panel-group panel-info" id="accordion">
+				                        {# Affichage du bloc uniquement si il y a des données de structure #}
+				                        {% if user.nomStructure is not defined or user.nomStructure is null %}
+					                        {# Zone établissement de santé #}
+			                                <div><h4>Vous êtes un établissement de santé</h4></div>		                          
+							                <div class="form-group">
+							                    <div><strong>Statut de l'établissement</strong></div>
+							                    <div>
+							                        {% if user.statutEtablissementSante is defined and user.statutEtablissementSante is not null  %}
+							                            {{user.statutEtablissementSante.libelle}}
+							                        {% endif %}
+							                    </div>
+							                </div>
+							                <div class="form-group">
+							                    <div><strong>Etablissement de rattachement</strong></div>
+							                    <div>
+							                        {% if user.etablissementRattachementSante is defined and user.etablissementRattachementSante is not null  %}
+							                            {{user.etablissementRattachementSante.nom}}
+							                        {% endif %}
+							                    </div>
+							                </div>
+							                <div class="form-group">
+							                    <div><strong>Autre structure de rattachement</strong></div>
+							                    <div>{{user.autreStructureRattacheementSante}}</div>
+							                </div>
+							                <div class="form-group">
+							                    <div><strong>Fonction de l'établissement</strong></div>
+							                    <div>
+							                        {% if user.fonctionEtablissementSante is defined and user.fonctionEtablissementSante is not null  %}
+							                            {{user.fonctionEtablissementSante.libelle}}
+							                        {% endif %}
+							                    </div>
+							                </div>
+							                <div class="form-group">
+							                    <div><strong>Raison de l'inscription</strong></div>
+							                    <div>
+							                        {% if user.raisonInscriptionSante is defined and user.raisonInscriptionSante is not null  %}
+							                            {{user.raisonInscriptionSante.libelle}}
+							                        {% endif %}
+							                    </div>
+							                </div>
+				                        {% endif %}
+				                        
+				                        {# Affichage du bloc uniquement si il y a des données de structure #}
+				                        {% if user.nomStructure is defined and user.nomStructure is not null %}
+					                        {# Zone autre qu'un établissement de santé #}
+					                        <h4>Vous êtes une structure autre qu'un établissement de santé</h4>
+							                <div class="form-group">
+							                    <div><strong>Nom de la structure</strong></div>
+							                    <div>{{user.nomStructure}}</div>
+							                </div>
+							                <div class="form-group">
+							                    <div><strong>Fonction de la structure</strong></div>
+							                    <div>{{user.fonctionStructure}}</div>
+							                </div>
+							                <div class="form-group">
+							                    <div><strong>Raison de l'inscription</strong></div>
+							                    <div>
+							                        {% if user.raisonInscriptionStructure is defined and user.raisonInscriptionStructure is not null  %}
+							                            {{user.raisonInscriptionStructure.libelle}}
+							                        {% endif %}
+							                    </div>
+							                </div>
+				                        {% endif %}			                        
+				                    </div>
+			                    </div>	
+			                </div>
+		                </div>
+		            </div>
+		        </div>                  
+                    
+                <div class='row'>
+	                {# Include des données de contractualisation #}
+	                {{ render(controller("HopitalNumeriqueUserBundle:Contractualisation:liste", {'idUser':user.id} )) }}
+                </div>
+                
+                <div class='row'>
+	                {# Include des données des objets #}
+	                {{ render(controller("HopitalNumeriqueUserBundle:Ambassadeur:listeObjets", {'idUser':user.id} )) }}
+                </div>
+                
+                <div class='row'>
+	                {# Include des données d'expert #}
+	                {{ render(controller("HopitalNumeriqueUserBundle:Expert:show", {'idUser':user.id} )) }}
+                </div>
+	                
+                <div class='row'>
+	                {# Include des données d'ambassadeur #}
+	                {{ render(controller("HopitalNumeriqueUserBundle:Ambassadeur:show", {'idUser':user.id} )) }}
+                </div>
+	                
+            </div>
+        </div>
+    </div>
+{% endblock %}

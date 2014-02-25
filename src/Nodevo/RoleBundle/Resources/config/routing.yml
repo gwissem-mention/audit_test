@@ -1,0 +1,26 @@
+nodevo_role_role:
+    pattern:  /role/
+    defaults: { _controller: "NodevoRoleBundle:Role:index" }
+
+nodevo_role_add:
+    pattern:  /role/add
+    defaults: { _controller: "NodevoRoleBundle:Role:add" }
+
+nodevo_role_show:
+    pattern:  /role/show/{id}
+    defaults: { _controller: "NodevoRoleBundle:Role:show", id:1 }
+    requirements:
+        id: \d+
+
+nodevo_role_edit:
+    pattern:  /role/edit/{id}
+    defaults: { _controller: "NodevoRoleBundle:Role:edit", id:1 }
+    requirements:
+        id: \d+
+
+nodevo_role_delete:
+    pattern:  /role/delete/{id}.{_format}
+    defaults: { _controller: "NodevoRoleBundle:Role:delete", _format: json }
+    requirements:
+        idItem: \d+
+        _method: post|delete

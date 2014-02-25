@@ -1,0 +1,66 @@
+<?php
+
+namespace {{ namespace }}\DataFixtures\ORM;
+
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use {{ entity_namespace }};
+
+class Load{{ entity_name }}Data extends AbstractFixture implements OrderedFixtureInterface
+{
+	/**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $manager)
+    {
+{% set index = 1 %}
+{# Insert des données #}
+{% for occurence in data %}
+{# Création d'une instance de l'entité #}
+		${{ entity_name|lower ~ index }} = new {{ entity_name }}();
+{% for column in columns %}
+{# Set de la propriété (si type string ou text => entouré de guillements, si boolean => valeur vaut 'true' ou 'false', si datetime => formatter données en français day/month/year etc) #}
+		${{ entity_name|lower ~ index }}->set{{ column.propertyName }}({% if column.columnType == 'string' or column.columnType == 'text' %}{{ '"' }}{% endif %}{% if column.columnType == 'boolean' %}{{ attribute(occurence, column.columnName) ? 'true' : 'false' }}{% elseif column.columnType == 'datetime' %}{{ attribute(occurence, column.columnName)|date("d/m/Y") }}{% else %}{{ attribute(occurence, column.columnName) }}{% endif %}{% if column.columnType == 'string' or column.columnType == 'text' %}{{ '"' }}{% endif %});
+{% endfor %}
+
+{# Stockage en mémoire de l'entité si elle doit par la suite être référencée par une autre entité dans cette fixture ou dans une autre #}
+{% for column in identifiers %}
+		$this->addReference({{ "'" }}{{ entity_name|lower ~ attribute(occurence, column.columnName) }}{{ "'" }}, ${{ entity_name|lower ~ index }});
+{% endfor %}
+
+        $manager->persist(${{ entity_name|lower ~ index }});
+        {% set index = index + 1 %}
+
+{% endfor %}
+{% set index = 1 %}
+{% for occurence in data %}
+
+{# Update des associations #}
+{% for column in associations %}
+{% if attribute(occurence, column.columnName) is not null %}
+{# Si l'association est sous la forme d'une collection, méthode add{Property} sinon méthode set{Property} #}
+{% if column.columnType %}
+		${{ entity_name|lower ~ index }}->add{{ column.propertyNameCollecion }}($this->getReference({{ "'" }}{{ column.target_entity|lower ~ attribute(attribute(occurence, column.columnName), 'id') }}{{ "'" }}));
+{% else %}
+		${{ entity_name|lower ~ index }}->set{{ column.propertyName }}($this->getReference({{ "'" }}{{ column.target_entity|lower ~ attribute(attribute(occurence, column.columnName), 'id') }}{{ "'" }}));
+{% endif %}
+{% endif %}
+{% endfor %}
+{% if associations|length > 0 %}
+		$manager->persist(${{ entity_name|lower ~ index }});
+
+{% endif %}
+{% set index = index + 1 %}
+{% endfor %}
+        $manager->flush();     
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOrder()
+    {
+        return {{ order }}; // l'ordre dans lequel les fichiers sont chargés
+    }
+}

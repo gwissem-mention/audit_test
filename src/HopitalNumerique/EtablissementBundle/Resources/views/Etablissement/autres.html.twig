@@ -1,0 +1,25 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{# Grid mandatory Stuff #}
+{% use 'NodevoGridBundle::grid.config.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('grid_stylesheets')}}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ block('grid_javascripts')}}
+{% endblock %}
+
+{# Template Stuff #}
+{% block h1Title %}
+    Liste des établissements "autres"
+{% endblock %}
+
+{% block body %}
+    {{ grid(grid, _self) }}
+    {# Cache les lignes de filtres dans le grid #}
+    {% block grid_filters %}{% endblock grid_filters%}
+{% endblock %}

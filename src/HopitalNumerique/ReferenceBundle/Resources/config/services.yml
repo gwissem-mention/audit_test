@@ -1,0 +1,27 @@
+parameters:
+    hopitalnumerique_reference.manager.reference.class: HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
+    hopitalnumerique_reference.grid.reference.class: HopitalNumerique\ReferenceBundle\Grid\ReferenceGrid
+    hopitalnumerique_reference.form.reference.class: HopitalNumerique\ReferenceBundle\Form\ReferenceType
+
+services:
+    hopitalnumerique_reference.manager.reference:
+        class: %hopitalnumerique_reference.manager.reference.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_reference.grid.reference:
+        class: %hopitalnumerique_reference.grid.reference.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_reference.form.reference:
+        class: %hopitalnumerique_reference.form.reference.class%
+        arguments: ["@hopitalnumerique_reference.manager.reference", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_reference_reference }
+
+    hopitalnumerique.twig.ref_extension:
+        class: HopitalNumerique\ReferenceBundle\Twig\ReferenceExtension
+        arguments : ["@hopitalnumerique_reference.manager.reference"]
+        tags:
+            - { name: twig.extension }

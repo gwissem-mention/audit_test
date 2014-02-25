@@ -1,0 +1,37 @@
+<div class="panel panel-midnightblue" style="margin:0" >
+    <div class="panel-heading">
+        <h4>Upload du sommaire en CSV</h4>
+    </div>
+
+    <div class="panel-body">
+        <div class="form-group">
+            <div class="col-md-12">
+                <p class="col-sm-10">
+                    Collez le contenu de votre fichier CSV dans la zone de texte ci-dessous.<br />
+                    Les lignes doivent êtres formatées de la façon suivante : <br />
+                </p>
+                <p class="col-sm-2">
+                    1;"Grand Titre"<br />
+                    1.1;"Titre 1"<br />
+                    1.2;"Titre 2"<br />
+                    2;"Grand Titre"<br />
+                    ...
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                <textarea class="form-control" id="csv" rows="16"></textarea>
+            </div>
+        </div>
+
+        <div class="panel-footer">
+            <div class="row">
+                <div class="btn-toolbar pull-right">
+                    <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+                    <div onclick="uploadContenu();" class="btn-primary btn">Enregistrer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

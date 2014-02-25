@@ -1,0 +1,32 @@
+parameters:
+    nodevo_acl.manager.acl.class: Nodevo\AclBundle\Manager\AclManager
+    nodevo_acl.manager.ressource.class: Nodevo\AclBundle\Manager\RessourceManager
+
+services:
+    #Managers
+    nodevo_acl.manager.acl:
+        class: %nodevo_acl.manager.acl.class%
+        arguments: ["@doctrine.orm.entity_manager", @service_container]
+        calls:
+            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    nodevo_acl.manager.ressource:
+        class: %nodevo_acl.manager.ressource.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    #AclVoter
+    security.access.acl_voter:
+        class:      Nodevo\AclBundle\Security\Authorization\Voter\AclVoter
+        arguments:  [@service_container]
+        public:     false
+        tags:
+            -       { name: security.voter }
+
+    #Extension Twig
+    nodevo.twig.acl_extension:
+        class: Nodevo\AclBundle\Twig\AclExtension
+        arguments : ["@nodevo_acl.manager.acl"]
+        tags:
+            - { name: twig.extension }

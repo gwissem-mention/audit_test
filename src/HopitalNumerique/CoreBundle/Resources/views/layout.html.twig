@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Hopital Numérique">
+        <meta name="author" content="NODEVO">
+
+        <title>{% block title %}Hopital Numérique{% endblock %}</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        {% block stylesheets %}
+            {% stylesheets output="compiled/main-front.css" filter="cssrewrite"
+                'bundles/hopitalnumeriquecore/css/bootstrap.min.css'
+                'bundles/hopitalnumeriquecore/css/bootstrap-theme.min.css'
+                'bundles/hopitalnumeriquecore/css/style.css'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {% javascripts output="compiled/main-front.js"
+                'bundles/hopitalnumeriquecore/js/jquery-1.11.0.min.js'
+                'bundles/hopitalnumeriquecore/js/bootstrap.min.js'
+            %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% endblock %}
+    </head>
+
+    <body>
+        <div id="body">
+            <div id="header">
+                <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
+                <div id="titre" class="pull-left">
+                    <h1>Mon Hôpital Numérique</h1>
+                    <h2>Plateforme d'accompagnement hôpital numérique</h2>    
+                </div>
+            </div>
+            <div id="content">
+                {% block body %}{% endblock %}
+            </div>
+            <div id="footer">
+                
+            </div>
+        </div>
+    </body>
+</html>
+
+{% block flashBags %}
+    {% for type, messages in app.session.flashBag.all %}
+        {% for message in messages %}
+            <div class="alert alert-block alert-{{type}}" onclick="$(this).slideUp();">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

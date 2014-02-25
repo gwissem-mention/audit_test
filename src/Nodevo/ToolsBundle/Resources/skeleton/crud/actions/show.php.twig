@@ -1,0 +1,24 @@
+
+    /**
+{% block phpdoc_method_header %}
+     * Affiche le {{ entity }} en fonction de son ID passé en paramètre.
+     * 
+     * @param integer $id Id de {{ entity }}.
+{% endblock phpdoc_method_header %}
+     */
+{% block method_definition %}
+    public function showAction( $id )
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        //Récupération de l'entité en fonction du paramètre
+        ${{entity|lower}} = $this->get('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}')->findOneBy( array( 'id' => $id) );
+{% endblock method_body %}
+
+{% block method_return %}
+        return $this->render('{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:show.html.twig', array(
+            '{{entity|lower}}' => ${{entity|lower}},
+        ));
+{% endblock method_return %}
+    }
+

@@ -1,0 +1,29 @@
+{# Liste appelée dans la fiche d'un utilisateur #}
+
+{# Affichage du bloc uniquement si il y a des reponses #}
+{% if objets is defined and objets is not null and nombreObjets != 0 %}
+    {# Zone autre qu'un établissement de santé #}
+    <div class="panel panel-default gray">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseObjet" class="collapsed" id="questionnaire_objet_collapse">
+            <div class="panel-heading"><h4>Productions maitrisées</h4></div>
+        </a>
+        <div id="collapseObjet" class="panel-collapse collapse" style="height: 0px;">
+            <div class="panel-body">
+				<div class="col-md-12">
+				    <ul>
+						{% for key,objet in objets %}
+					        <li>
+					            <div class="form-group">
+						            <div>
+			                            {# Titre de l'objet #}
+			                            {{ objet.titre }} 
+			                        </div>	
+						        </div>
+						    </li>
+						{% endfor %}
+					</ul>
+				</div>	
+            </div>
+        </div>
+    </div>
+{% endif %}

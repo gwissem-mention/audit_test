@@ -1,0 +1,14 @@
+    /**
+{% block phpdoc_method_header %}
+     * Définie la config spécifique au grid {{ entity }}.
+{% endblock phpdoc_method_header %}
+     */
+{% block method_definition %}
+    public function setConfig()
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        $this->setSource( '{{namespace|replace({'\\': ''})}}:{{entity}}' );
+        $this->setNoDataMessage('Aucun {{entity}} à afficher.');
+{% endblock method_body %}
+    }

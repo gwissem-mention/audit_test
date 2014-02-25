@@ -1,0 +1,32 @@
+{# Fiche appelée dans la fiche d'un utilisateur #}
+
+{# Affichage du bloc uniquement si il y a des reponses #}
+{% if reponses is defined and reponses is not null and nombreReponses != 0 %}
+    {# Zone autre qu'un établissement de santé #}
+    <div class="panel panel-default gray">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseAmbassadeur" class="collapsed" id="questionnaire_ambassadeur_collapse">
+            <div class="panel-heading"><h4>Questionnaire ambassadeur</h4></div>
+        </a>
+        <div id="collapseAmbassadeur" class="collapse" style="height: 0px;">
+            <div class="panel-body">
+				<div class="col-md-12">
+					{% for key,reponse in reponses %}
+				        <div class="form-group">
+				            <div><strong>{{ reponse.question.libelle }}</strong></div>	
+	                        {# Référence de la table référence #}					    
+	                        {% if reponse.reference is defined and reponse.reference is not null  %}
+	                            <div>{{reponse.reference.libelle}}</div>
+	                        {# Booléen #}
+	                        {% elseif 'checkbox' == reponse.question.typeQuestion.libelle %}	    
+						        {% if reponse.reponse == '1'%}<div>Oui</div>{% else %}<div>Non</div>{% endif %}
+	                        {# Champ texte #} 	 
+	                        {% else %}	    
+						        <div>{{ reponse.reponse }}</div>	                        
+	                        {% endif %}
+				        </div>
+					{% endfor %}
+				</div>						                
+            </div>
+        </div>
+    </div>
+{% endif %}

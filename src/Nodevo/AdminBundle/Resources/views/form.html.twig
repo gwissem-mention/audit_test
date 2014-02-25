@@ -1,0 +1,123 @@
+{% extends 'form_div_layout.html.twig' %}
+{# Surcharge de vendor/symfony/symfony/src/Symfony/Bridge/Twig/Resources/views/Form/form_div_layout.html.twig #}
+
+{% block form_start %}
+{% spaceless %}
+    {% set attr = attr|default({'class': 'form-horizontal toValidate', 'novalidate':'novalidate'}) %}
+    {{parent()}}
+{% endspaceless %}
+{% endblock form_start %}
+
+{% block form_end %}
+{% spaceless %}
+    {% if not render_rest is defined or render_rest %}
+        {{ form_rest(form) }}
+    {% endif %}
+    <input type="hidden" name="do" id="do" />
+    </form>
+{% endspaceless %}
+{% endblock form_end %}
+
+{% block form_row %}
+    {% spaceless %}
+        <div class="form-group">
+            {{ form_label(form) }}
+            <div class="col-md-6">
+                {{ form_widget(form) }}
+            </div>
+            <div class="col-md-3">
+                <div class="help-block">
+                    {{ form_errors(form) }}
+                </div>
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}
+
+{% block form_label %}
+    {% spaceless %}
+        {% if label is not sameas(false) %}
+            {% if not compound %}
+                {% set label_attr = label_attr|merge({'for': id}) %}
+            {% endif %}
+            {% if required %}
+                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-md-3 control-label') ~ ' required')|trim}) %}
+            {% else %}
+                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-md-3 control-label'))|trim}) %}
+            {% endif %}
+            {% if label is empty %}
+                {% set label = name|humanize %}
+            {% endif %}
+            <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            {{ label|trans({}, translation_domain) }}
+            {% if required %}
+                <span style="color:red;font-size:10px" title="Ce champ est requis">*</span>
+            {% endif %}
+            </label>
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}
+
+{# Overrides widget attributes to add class form-control to ALL elements #}
+{% block widget_attributes %}
+{% spaceless %}
+    id="{{ id }}" name="{{ full_name }}"
+    {%- if read_only %} readonly="readonly"{% endif -%}
+    {%- if disabled %} disabled="disabled"{% endif -%}
+    {%- if required %} required="required"{% endif -%}
+    {%- if max_length %} maxlength="{{ max_length }}"{% endif -%}
+    {%- if pattern %} pattern="{{ pattern }}"{% endif -%}
+    
+    {% set classAdded = false %}
+
+    {%- for attrname, attrvalue in attr -%}
+        {{- " " -}}
+        {%- if attrname in ['placeholder', 'title'] -%}
+            {{- attrname }}="{{ attrvalue|trans({}, translation_domain) }}"
+        {%- elseif attrname == 'class' -%}
+            {{- attrname }}="{{ attrvalue }} form-control"
+            {% set classAdded = true %}
+        {%- elseif attrvalue is sameas(true) -%}
+            {{- attrname }}="{{ attrname }}"
+        {%- elseif attrvalue is not sameas(false) -%}
+            {{- attrname }}="{{ attrvalue }}"
+        {%- endif -%}
+    {%- endfor -%}
+
+    {% if classAdded is sameas(false) %}
+        class="form-control"
+    {% endif %}
+{% endspaceless %}
+{% endblock widget_attributes %}
+
+{% block form_errors %}
+{% spaceless %}
+    {% if errors|length > 0 %}
+    <ul class="list-unstyled">
+        {% for error in errors %}
+            <li class="text-danger">{{ error.message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endspaceless %}
+{% endblock form_errors %}
+
+{% block genemu_jqueryslider_widget %}
+{% spaceless %}
+    {{ block("hidden_widget") }}
+    <div id="{{ id }}_slider"></div>
+    <div id="{{ id }}_slider_value" class="slider-value">{{attr['value_label']}}<span>{{value}}</span></div>
+{% endspaceless %}
+{% endblock genemu_jqueryslider_widget %}
+
+{% block genemu_jqueryselect2_javascript %}
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $field = $('#{{ id }}');
+
+        {% block genemu_jqueryselect2_javascript_prototype %}
+            $field.select2({{ configs|merge({"formatNoMatches": '%this%'})|json_encode|replace( {'"%this%"' : "function(){ return 'Aucune donnée trouvée'}"} )|raw }});
+        {% endblock %}
+    });
+    </script>
+{% endblock %}

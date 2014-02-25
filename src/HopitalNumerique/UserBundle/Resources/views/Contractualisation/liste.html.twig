@@ -1,0 +1,46 @@
+{# Liste appelée dans la fiche d'un utilisateur #}
+
+{# Affichage du bloc uniquement si il y a des reponses #}
+{% if contractualisations is defined and contractualisations is not null and nombrecontractualisations != 0 %}
+    {# Zone autre qu'un établissement de santé #}
+    <div class="panel panel-default gray">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseContractualisation" class="collapsed" id="questionnaire_contractualisation_collapse">
+            <div class="panel-heading"><h4>Informations de contractualisation</h4></div>
+        </a>
+        <div id="collapseContractualisation" class="collapse" style="height: 0px;">
+            <div class="panel-body">
+				<div class="col-md-12">
+				    <ul>
+						{% for key,contractualisation in contractualisations %}
+					        <li>
+					            <div class="form-group">
+						            <div>
+		                                {# Type de document #}
+			                            {% if contractualisation.typeDocument is defined and contractualisation.typeDocument is not null %}
+			                                {{contractualisation.typeDocument.libelle}} 
+			                                -
+			                            {% endif %}
+			                            {# Nom du document #}
+			                            {{ contractualisation.nomDocument }} 
+			                            - 
+			                            {# Date de renouvellement #}
+			                            {{ contractualisation.dateRenouvellement|date('d-m-Y') }}
+			                            -   
+			                            {# Booléen archivé #}                         
+			                            {% if contractualisation.archiver %}
+			                                Archivé
+		                                {% else %}
+			                                Pas archivé
+			                            {% endif %}
+			                            {# Téléchargement de la contractualisation #}
+			                            <a href="{{path('hopitalnumerique_user_contractualisation_dowload', {'id' : contractualisation.id })}}" class="btn btn-default" title="Téléchargement"><i class="fa fa-download"></i></a>
+						            </div>	
+					            </div>
+					        </li>
+						{% endfor %}
+					</ul>
+				</div>	
+            </div>
+        </div>
+    </div>
+{% endif %}

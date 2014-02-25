@@ -1,0 +1,39 @@
+{% block extends %}
+{{ "{% extends 'NodevoAdminBundle::admin.html.twig' %}" }}
+{% endblock extends %}
+
+{% block body %}
+{{ "{% block h1Title %}" }}
+    Fiche {{ entity }}
+{{ "{% endblock %}" }}
+
+{{ "{% block toolbarButton %}" }}
+    <a class="btn btn-default" href="{{ "{{ path('" ~ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) ~ "_" ~ route_name_prefix ~ "') }}" }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {{ "{% if " ~ entity|lower ~ ".id %}" }}
+        <a href="{{ "{{ path('" ~ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) ~ "_" ~ route_name_prefix ~ "_edit', { 'id': " ~ entity|lower ~ ".id }) }}" }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {{"{% endif %}"}}
+{{ "{% endblock %}" }}
+
+{{ "{% block body %}" }}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+            
+{%- for field, metadata in fields %}
+
+                <p>
+                    <strong>{{ field|capitalize }} : </strong>
+                    {{'{{ ' ~ entity|lower ~ '.' ~ field|replace({'_': ''}) ~ ' }}'}}
+                </p>
+    
+{%- endfor %}
+
+            </div>
+        </div>
+    </div>
+{{ "{% endblock %}" }}
+{% endblock body %}

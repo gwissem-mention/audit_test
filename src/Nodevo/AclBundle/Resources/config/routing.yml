@@ -1,0 +1,9 @@
+nodevo_acl:
+    pattern: /acl
+    defaults: { _controller: NodevoAclBundle:Acl:index }
+
+nodevo_acl_modify:
+    pattern: /acl/modify.{_format}
+    defaults: { _controller: NodevoAclBundle:Acl:modify, _format:json }
+    requirements:
+        _method:  post

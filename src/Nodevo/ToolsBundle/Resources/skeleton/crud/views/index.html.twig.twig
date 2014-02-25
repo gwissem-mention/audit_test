@@ -1,0 +1,31 @@
+{% block extends %}
+{{ "{% extends 'NodevoAdminBundle::admin.html.twig' %}" }}
+{% endblock extends %}
+
+{% block body %}
+{{'{# Grid mandatory Stuff #}'}}
+{{"{% use 'NodevoGridBundle::grid.config.html.twig' %}"}}
+
+{{"{% block stylesheets %}"}}
+    {{"{{ parent() }}"}}
+    {{"{{ block('grid_stylesheets')}}"}}
+{{"{% endblock %}"}}
+
+{{"{% block javascripts %}"}}
+    {{"{{ parent() }}"}}
+    {{"{{ block('grid_javascripts')}}"}}
+{{"{% endblock %}"}}
+
+{{ "{% block h1Title %}" }}
+    Gestion des {{ entity }}
+{{ "{% endblock %}" }}
+
+{{ "{% block toolbarButton %}" }}
+    <a class="btn btn-default" href="{{ "{{ path('" ~ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) ~ "_" ~ route_name_prefix ~ "_add') }}" }}" title="Ajouter un {{ entity }}"><i class="fa fa-plus"></i></a>
+{{ "{% endblock %}" }}
+
+{{ "{% block body %}" }}
+    {{"{{ grid(grid, _self) }}"}}
+{{ "{% endblock %}" }}
+
+{% endblock body %}

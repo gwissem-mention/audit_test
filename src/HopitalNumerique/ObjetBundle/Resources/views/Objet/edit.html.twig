@@ -1,0 +1,222 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    {% if objet.id %}
+        Editer un Objet
+    {% else %}
+        Ajouter un Objet
+    {% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-objet-objet-edit.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+        'bundles/nodevoadmin/plugins/form-nestable/jquery.nestable.css'
+        'bundles/hopitalnumeriqueobjet/css/style.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
+        'bundles/nodevoadmin/plugins/form-toggle/toggles.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-objet-objet-edit.js"
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
+        'bundles/nodevotools/js/json.js'
+        'bundles/nodevoadmin/plugins/tinymce/tinymce.min.js'
+        'bundles/nodevoadmin/plugins/tinymce/tinymce.fr_FR.js'
+        'bundles/nodevoadmin/plugins/form-toggle/toggle.min.js'
+        'bundles/hopitalnumeriqueobjet/js/script.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+        'bundles/nodevoadmin/plugins/form-nestable/jquery.nestable.min.js'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block toolbarButton %}
+    {% if objet.id %}
+        <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_cancel', { 'id': objet.id }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% else %}
+        <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% endif %}
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+    {% if objet.id %}
+        <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_objet_objet_delete', { 'id': objet.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+                <div class="options">
+                    <ul class="nav nav-tabs">
+                        <li {% if not infra %}class="active"{% endif %}><a href="#objet" data-toggle="tab">Objet</a></li>
+                        {% if objet.id %}
+                            <li class="{% if infra %}active{% endif %}"><a href="#infra" data-toggle="tab">Infra-documentaire</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                {% form_theme form 'HopitalNumeriqueObjetBundle::formObjet.html.twig' %}
+                
+                {{ form_start(form) }}
+                    {{ form_javascript(form) }}
+
+                    <div class="tab-content">
+                        <div class="tab-pane {% if not infra %}active{% endif %}" id="objet">
+                            <div class="col-md-4">
+                                {{ form_row(form.titre) }}
+                                {{ form_row(form.alias) }}
+                                {{ form_row(form.etat) }}
+                                {{ form_row(form.roles) }}
+                                {{ form_row(form.types) }}
+                                
+                                <div class="form-group" style="margin-bottom:0">
+                                    {{ form_label(form.file) }}
+                                    <div class="col-md-9">
+                                        {% if objet.getAbsolutePath() is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
+                                        <div class="inputUpload" style="display:{{visibility}}">
+                                            {{ form_widget(form.file) }}    
+                                        </div>
+
+                                        {% if objet.getAbsolutePath() is not null %}
+                                            <a class="uploadedFile pull-left" href="/{{objet.getWebPath()}}" target="_blank">{{objet.path}}</a>
+                                            <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" ><i class="fa fa-trash-o"></i></div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="help-block">
+                                                {{ form_errors(form.file) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{ form_row(form.ambassadeurs) }}
+                                {{ form_row(form.commentaires) }}
+                                {{ form_row(form.notes) }}
+                                {{ form_row(form.dateCreation) }}
+                                {{ form_row(form.dateDebutPublication) }}
+                                {{ form_row(form.dateFinPublication) }}
+                                {{ form_row(form.dateModification) }}
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group {% if not objet.id %}hide{% endif %}">
+                                    <label class="col-md-2" for="hopitalnumerique_objet_objet_references">Références</label>
+                                    <div class="col-md-10">
+                                        <a href="{{path('hopitalnumerique_objet_reference_objet', {'id':objet.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
+                                        <p class="text-muted text-right pull-right"><span class="nbRefs">{% if not objet.id %}0{% else %}{{objet.references|length}}{% endif %}</span> éléments référencés</p>
+                                    </div>
+                                    <div class="col-md-10 hide">
+                                        {{ form_widget(form.references) }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="help-block">
+                                            {{ form_errors(form.references) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label for="hopitalnumerique_objet_objet_synthese">Synthèse</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{ form_widget(form.synthese) }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="help-block">
+                                            {{ form_errors(form.synthese) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label for="hopitalnumerique_objet_objet_resume">Résumé <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{ form_widget(form.resume) }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="help-block">
+                                            {{ form_errors(form.resume) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if objet.id %}
+                            <div class="tab-pane {% if infra %}active{% endif %}" id="infra">
+                                <div class="btn btn-primary addContenu" title="Ajouter un contenu"><i class="fa fa-plus"></i></div>
+                                <a class="btn btn-success reloadContenu" title="Recharger le sommaire" href="{{path('hopitalnumerique_objet_objet_edit',{'id':objet.id,'infra':1})}}" ><i class="fa fa-refresh"></i></a>
+                                <a class="btn btn-warning uploadSommaire fancybox.ajax" style="{% if contenus|length >= 1 %}display:none{% endif %}" title="Uploader un sommaire en CSV" href="{{path('hopitalnumerique_objet_contenu_upload')}}" ><i class="fa fa-upload"></i></a>
+
+                                <fieldset>
+                                    <legend>Sommaire</legend>
+
+                                    <p class="designForBlank" style="{% if contenus|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour ajouter un élément dans votre sommaire.</p>
+                                    <div class="dd" id="sommaire">
+                                        <ol class="dd-list">
+                                            {% for contenu in contenus %}
+                                                {{ _self.buildTree(contenu) }}
+                                            {% endfor %}
+                                        </ol>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        {% endif %}
+                    </div>
+                {{ form_end(form) }}
+            </div>
+            
+            {% if objet.id %}
+                <input type="hidden" id="add-contenu-url" value="{{path('hopitalnumerique_objet_contenu_add', {'id':objet.id})}}" />
+                <input type="hidden" id="reorder-objet-url" value="{{path('hopitalnumerique_objet_contenu_reorder')}}" />
+                <input type="hidden" id="objet-id" value="{{objet.id}}" />
+                <input type="hidden" id="save-references-objet-url" value="{{path('hopitalnumerique_objet_reference_objet_save',{'id':objet.id})}}" />
+                <input type="hidden" id="parse-upload-url" value="{{path('hopitalnumerique_objet_contenu_uploadparse',{'id':objet.id})}}" />
+                <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_objet_reference_contenu_save')}}" />
+            {% endif %}
+            <input type="hidden" id="objet-file-url" value="{{path('hopitalnumerique_objet_objet_isFileExist')}}" />
+        </div>
+    </div>
+{% endblock %}
+
+{% macro buildTree(contenu) %}
+    <li class="dd-item dd3-item" data-id="{{contenu.id}}" id="contenu-{{contenu.id}}" >
+        <div class="dd-handle dd3-handle"></div>
+        <div class="dd3-content">
+            <a href="{{path('hopitalnumerique_objet_contenu_edit', {'id': contenu.id })}}" class="fancybox.ajax" >{{contenu.order ~ ' ' ~ contenu.titre}}</a>
+            <p class="text-muted pull-right"><span>{{contenu.references}}</span> éléments référencés</p>
+        </div>
+        <div class="dd3-actions">
+            <div onclick="deleteContenu( {{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_delete', {'id':contenu.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+            <a href="{{path('hopitalnumerique_objet_reference_contenu', {'id':contenu.id})}}" class="pull-right dd3-cog manageReferences fancybox.ajax"><i class="fa fa-cog"></i></a>
+        </div>
+        
+        {% if contenu.childs %}
+            <ol class="dd-list">
+                {% for child in contenu.childs %}
+                    {{ _self.buildTree(child) }}
+                {% endfor %}
+            </ol>
+        {% endif %}
+    </li>
+{% endmacro %}

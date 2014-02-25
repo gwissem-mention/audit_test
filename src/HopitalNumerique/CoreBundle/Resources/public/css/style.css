@@ -1,0 +1,10 @@
+body{ background: url('../img/background.png') repeat center}
+#body{width:980px; margin:0 auto; background: white}
+#content{min-height: 800px}
+
+/* HEADER */
+#header{ height: 93px; background: url('../img/header.jpg') no-repeat center bottom; }
+#header #logoAnap { margin:18px 75px 20px 54px;  }
+#header #titre{ margin-top: 18px; width: 385px;  }
+#header #titre h1{ font-size:28px; text-transform: uppercase; margin:0; padding: 0}
+#header #titre h2{ font-size: 13px; text-transform: uppercase; margin: 9px 0 0 0; padding: 0}

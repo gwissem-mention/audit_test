@@ -1,0 +1,30 @@
+<?php
+
+namespace {{ namespace }}\Grid;
+
+{% block use_statements %}
+use Nodevo\GridBundle\Grid\Grid;
+use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\Column;
+use Nodevo\GridBundle\Grid\Action;
+{% endblock use_statements %}
+
+/**
+{% block phpdoc_class_header %}
+ * Configuration du grid {{ entity }}.
+{% endblock phpdoc_class_header %}
+ */
+{% block class_definition %}
+class {{ entity_class }}Grid extends Grid implements IGrid
+{% endblock class_definition %}
+{
+{% block class_body %}
+    {%- include 'crud/grid/config.php.twig' %}
+
+    {%- include 'crud/grid/columns.php.twig' %}
+    
+    {%- include 'crud/grid/buttons.php.twig' %}
+
+    {%- include 'crud/grid/massactions.php.twig' %}
+{% endblock class_body %}
+}

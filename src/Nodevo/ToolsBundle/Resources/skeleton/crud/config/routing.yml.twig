@@ -1,0 +1,38 @@
+
+{% if 'index' in actions %}
+{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}:
+    pattern:  /{{ route_name_prefix }}
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:index" }
+{% endif %}
+
+{% if 'new' in actions %}
+{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}_add:
+    pattern:  /{{ route_name_prefix }}/add
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:add" }
+{% endif %}
+
+{% if 'show' in actions %}
+{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}_show:
+    pattern:  /{{ route_name_prefix }}/show/{id}
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:show" }
+    requirements:
+        id: \d+
+{% endif %}
+
+{% if 'edit' in actions %}
+{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}_edit:
+    pattern:  /{{ route_name_prefix }}/edit/{id}
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:edit" }
+    requirements:
+        id: \d+
+{% endif %}
+
+{% if 'delete' in actions %}
+{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}_delete:
+    pattern:  /{{ route_name_prefix }}/delete/{id}.{_format}
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: post|delete
+{% endif %}
+

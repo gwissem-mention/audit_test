@@ -1,0 +1,52 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Fiche de l'email {{mail.objet}}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('nodevo_mail_mail') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if mail.id %}
+        {% if app.user|checkAuthorization( path('nodevo_mail_mail_edit', {'id':mail.id} ) ) %}
+            <a href="{{ path('nodevo_mail_mail_edit', { 'id': mail.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+            <a class="btn btn-default" href="{{ path('nodevo_mail_mail_test', { 'id': mail.id }) }}" title="Tester"><i class="fa fa-envelope"></i></a>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                <p>
+                    <strong>Id : </strong>
+                    {{ mail.id }}
+                </p>
+                <p>
+                    <strong>Objet : </strong>
+                    {{ mail.objet }}
+                </p>
+                <p>
+                    <strong>Description : </strong>
+                    {{ mail.description }}
+                </p>
+                <p>
+                    <strong>Expediteurmail : </strong>
+                    {{ mail.expediteurMail }}
+                </p>
+                <p>
+                    <strong>Expediteurname : </strong>
+                    {{ mail.expediteurName }}
+                </p>
+                <p>
+                    <strong>Body : </strong>
+                    {{ mail.body }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

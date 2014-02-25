@@ -1,0 +1,57 @@
+<div class="panel panel-midnightblue" style="margin:0" >
+    <div class="panel-heading">
+        <h4>Gestion du contenu</h4>
+    </div>
+
+    <div class="panel-body">
+        {% form_theme form 'HopitalNumeriqueObjetBundle::formContenu.html.twig' %}
+        {{ form_start(form) }}
+            
+            <div class="form-group">
+                <div class="col-md-1">
+                    <label class="control-label">Titre <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
+                </div>
+                <div class="col-md-8">
+                    {{ form_widget(form.titre) }}
+                </div>
+                <div class="col-md-1">
+                    <label class="control-label">Alias</label>
+                </div>
+                <div class="col-md-2">
+                    {{ form_widget(form.alias) }}
+                </div>
+                <div class="col-md-8 col-md-offset-1 errorTitre">
+                    <div class="help-block"><p class="text-danger"></p></div>
+                </div>
+                <div class="col-md-2 col-md-offset-1 errorAlias">
+                    <div class="help-block"><p class="text-danger"></p></div>
+                </div>
+            </div>
+            
+            {{ form_row(form.contenu) }}
+
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="btn-toolbar pull-right">
+                        <div onclick="deleteContenu();" class="btn-danger btn">Supprimer</div>
+                        <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+                        <div onclick="saveContenu();" class="btn-primary btn">Enregistrer</div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="contenu-id" value="{{contenu.id}}" />
+            <input type="hidden" id="save-contenu-url" value="{{path('hopitalnumerique_objet_contenu_edit', {'id':contenu.id})}}" />
+            <input type="hidden" id="delete-contenu-url" value="{{path('hopitalnumerique_objet_contenu_delete', {'id':contenu.id})}}" />
+        {{ form_end(form) }} 
+    </div>
+</div>
+
+<script>
+    tinymce.init({
+        selector  : "textarea",
+        theme     : "modern",
+        theme_url : '/bundles/nodevoadmin/plugins/tinymce/themes/modern/theme.min.js',
+        skin_url  : '/bundles/nodevoadmin/plugins/tinymce/skins/lightgray',
+        height    : 260
+    });
+</script>

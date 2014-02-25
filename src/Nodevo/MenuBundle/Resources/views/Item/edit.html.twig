@@ -1,0 +1,89 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/nodevo-menu-item-edit.js"
+        'bundles/nodevoadmin/js/bootstrap-iconpicker.min.js'
+        'bundles/nodevomenu/js/itemForm.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/nodevo-menu-item-edit.css" filter="cssrewrite"
+        'bundles/nodevoadmin/css/bootstrap-iconpicker.min.css'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block h1Title %}
+    {% if item.id > 0 %}
+        Editer le lien de menu
+    {% else %}
+        Ajouter un lien de menu
+    {% endif %}
+{% endblock %}
+
+{% block toolbarButton %}
+    {% if item.menu %}
+        <a href="{{path('nodevo_menu_item', {'id':item.menu.id})}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% else %}
+        <a href="{{path('nodevo_menu_menu')}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% endif %}
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+    {% if item.id %}
+        <div onclick='deleteWithConfirm("{{path('nodevo_menu_item_delete', {'id':item.id})}}" );' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+			    
+                {{ form_start(form) }}
+			    
+	                {{ form_row(form.name) }}
+	                {{ form_row(form.route) }}
+	                {{ form_row(form.routeAbsolute) }}
+	                {{ form_row(form.uri) }}
+	                {{ form_row(form.display) }}
+	                {{ form_row(form.displayChildren) }}
+	                {{ form_row(form.parent) }}
+	                {{ form_row(form.menu) }}
+	                {{ form_row(form.order) }}
+	                
+                    <div class="form-group">
+                        <label for="nodevo_menu_item_order" class="col-sm-3 control-label required">Icône</label>
+                        <div class="col-md-2">
+                            {{ form_widget(form.selectIcon, { 'attr':{ 'class':'selectIcon' } }) }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_widget(form.buttonIconGlyph, { 'attr':{ 'class':'btn btn-primary' } })  }}
+                            {{ form_widget(form.buttonIconFontAwesome, { 'attr':{ 'class':'btn btn-info' } })  }}
+                        </div>
+                        <div class="col-md-3">
+                            <div class="help-block"></div>
+                        </div>
+                    </div>
+
+	                {{ form_row(form.icon) }}
+		        
+                {{ form_end(form) }}
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}

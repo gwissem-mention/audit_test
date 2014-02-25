@@ -1,0 +1,174 @@
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+#Utilisateur
+hopital_numerique_user_homepage:
+    pattern:  /user
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:index }
+
+hopital_numerique_user_add:
+    pattern:  /user/add
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:add }
+
+hopital_numerique_user_edit:
+    pattern: /user/edit/{id}
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:edit, id: 1 }
+    requirements:
+        id: \d+
+
+hopital_numerique_user_show:
+    pattern: /user/show/{id}
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:show, id: 1}
+    requirements:
+        id: \d+
+
+hopital_numerique_user_delete:
+    pattern: /user/delete/{id}.{_format}
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:delete, _format: json}
+    requirements:
+        id: \d+
+        _method: post|delete
+
+#Utilisateur - ajax
+hopital_numerique_user_departements:
+    pattern:  /user/departements
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:ajaxEditDepartements }
+
+hopital_numerique_user_etablissements:
+    pattern:  /user/etablissements
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:ajaxEditEtablissements }
+
+#Contractualisation
+hopitalnumerique_user_contractualisation:
+    pattern:  /user/contractualisation/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:index", id: 1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_user_contractualisation_add:
+    pattern:  /user/contractualisation/add/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:add", id: 1  }
+    requirements:
+        id: \d+
+
+hopitalnumerique_user_contractualisation_show:
+    pattern:  /user/contractualisation/show/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:show", id: 1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_user_contractualisation_dowload:
+    pattern:  /user/contractualisation/dowload/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:dowload", id: 1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_user_contractualisation_edit:
+    pattern:  /user/contractualisation/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:edit", id: 1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_user_contractualisation_delete:
+    pattern:  /user/contractualisation/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: post|delete
+
+#Contractualisation - archiver
+hopitalnumerique_user_contractualisation_archiver:
+    pattern:  /user/contractualisation/archiver/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:archiver", _format: json }
+    requirements:
+        id: \d+
+
+#Contractualisation - ajax
+hopitalnumerique_user_contractualisation_isFileExist:
+    pattern:  /user/contractualisation/isFileExist
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:isFileExist" }
+
+#Contractualisation - liste
+hopitalnumerique_user_contractualisation_liste:
+    pattern:  /user/contractualisation/liste/{idUser}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:liste", id: 1 }
+    requirements:
+        idUser: \d+
+
+#Expert
+hopitalnumerique_user_expert_edit:
+    pattern:  /user/expert/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Expert:edit", id: 1 }
+    requirements:
+        id: \d+        
+
+hopitalnumerique_user_expert_fiche:
+    pattern: /user/expert/show/{idUser}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Expert:show, idUser: 1 }
+    requirements:
+        idUser: \d+
+
+hopitalnumerique_user_expert_download:
+    pattern: /user/expert/dowload/{id}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Expert:dowload, id: 1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_user_expert_deleteAll:
+    pattern: /user/expert/{idUser}/{idQuestionnaire}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Expert:deleteAll, _format: json, idUser: 1, idQuestionnaire: 1 }
+    requirements:
+        idUser: \d+
+        idQuestionnaire: \d+
+        _method: post|delete
+
+#Ambassadeur
+hopitalnumerique_user_ambassadeur_edit:
+    pattern:  /user/ambassadeur/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:edit", id: 1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_user_ambassadeur_fiche:
+    pattern: /user/ambassadeur/show/{idUser}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:show, idUser: 1 }
+    requirements:
+        idUser: \d+
+
+hopitalnumerique_user_ambassadeur_deleteAll:
+    pattern: /user/ambassadeur/deleteAll/{idUser}/{idQuestionnaire}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:deleteAll, _format: json, idUser: 1, idQuestionnaire: 1 }
+    requirements:
+        idUser: \d+
+        idQuestionnaire: \d+
+        _method: post|delete
+
+hopitalnumerique_user_ambassadeur_liste_objets:
+    pattern:  /user/ambassadeur/listeobjets/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:listeObjets", id: 1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_user_ambassadeur_objets:
+    pattern:  /user/ambassadeur/objets/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:objets", id: 1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_user_ambassadeur_addobjet:
+    pattern: /user/ambassadeur/addObjet/{id}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:addObjet, _format: json, id: 1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_user_ambassadeur_deleteobjet:
+    pattern: /user/ambassadeur/deleteObjet/{id}/{user}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:deleteObjet, _format: json, id: 1, user: 1 }
+    requirements:
+        id: \d+
+        user: \d+
+        _method: post|delete
+
+hopitalnumerique_user_ambassadeur_saveobjet:
+    pattern: /user/ambassadeur/saveObjet
+    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:saveObjet, _format: json }

@@ -1,0 +1,30 @@
+hopitalnumerique_reference_reference:
+    pattern:  /reference/
+    defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:index" }
+
+hopitalnumerique_reference_sitemap:
+    pattern:  /reference/arbo
+    defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:sitemap" }
+
+hopitalnumerique_reference_reference_add:
+    pattern:  /reference/add/{id}
+    defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:add", id: null }
+
+hopitalnumerique_reference_reference_edit:
+    pattern:  /reference/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:edit", id:1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_reference_reference_show:
+    pattern:  /reference/show/{id}
+    defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:show", id:1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_reference_reference_delete:
+    pattern:  /reference/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: post|delete

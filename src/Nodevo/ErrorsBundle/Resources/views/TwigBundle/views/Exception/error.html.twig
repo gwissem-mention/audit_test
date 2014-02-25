@@ -1,0 +1,160 @@
+{% if status_code == "404" %}
+{% set title = 'Cette page n\'est plus accessible ' %}
+{% elseif status_code == "403" %}
+{% set title = 'Vous n\'avez pas acces à cette page' %} 
+{% elseif status_code == "500" %}
+{% set title = 'Erreur interne du serveur' %}
+{% endif %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset={{ _charset }}"/>
+        <meta name="robots" content="noindex,nofollow" />
+        <link href="{{ asset('bundles/framework/css/exception.css') }}" rel="stylesheet" type="text/css" media="all" />
+        <link href="{{ asset('bundles/nodevoerrors/css/exception_layout.css') }}" type="text/css" rel="stylesheet" />
+        <title>{{ status_code }} | {{ title }}</title>
+    </head>
+    <body>
+        <div class="container">            
+            <img src="{{ asset('bundles/nodevoerrors/images/nodevo.jpg')}}" class="logo" alt="" />
+        </div>
+
+        <div class="bandeau">
+            <div class="container">
+                {% if status_code == "404" %}
+                    Oups! Cette page n'est plus accessible
+                {% elseif status_code == "403" %}
+                    Vous n'avez pas acces à cette page
+                {% elseif status_code == "500" %}
+                    Oups! Erreur interne du serveur
+                {% endif %}
+                <span class="code_error">{{ status_code }}</span>
+            </div>
+        </div>  
+        
+        <div class="container">
+             <div class="back">
+                <p>Pour retourner &agrave; la page d'accueil</p>
+                <a href="{{ app.request.schemeAndHttpHost }}"><span class="btn-back">Cliquez ici</span></a>
+            </div>
+
+            {% if kernel.debug %}
+            <div class="block">
+                <h1>
+                    {{ exception.message|nl2br|format_file_from_text }}
+                </h1>
+
+                <div>
+                    <strong>{{ status_code }}</strong> {{ status_text }} - {{ exception.class|abbr_class }}
+                </div>
+
+                {% set previous_count = exception.allPrevious|length %}
+                {% if previous_count %}
+                    <div class="linked"><span><strong>{{ previous_count }}</strong> linked Exception{{ previous_count > 1 ? 's' : '' }}:</span>
+                        <ul>
+                            {% for i, previous in exception.allPrevious %}
+                                <li>
+                                    {{ previous.class|abbr_class }} <a href="#traces-link-{{ i + 1 }}" onclick="toggle('traces-{{ i + 1 }}', 'traces'); switchIcons('icon-traces-{{ i + 1 }}-open', 'icon-traces-{{ i + 1 }}-close');">&#187;</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% set previous_count = exception.allPrevious|length %}
+
+            {% for position, e in exception.toarray %}
+                {% include 'TwigBundle:Exception:traces.html.twig' with { 'exception': e, 'position': position, 'count': previous_count } only %}
+            {% endfor %} 
+
+
+            {% if logger %}
+            <div class="block">
+                <div class="logs clear-fix">
+                    {% spaceless %}
+                    <h2>
+                        Logs&nbsp;
+                        <a href="#" onclick="toggle('logs'); switchIcons('icon-logs-open', 'icon-logs-close'); return false;">
+                            <img class="toggle" id="icon-logs-open" alt="+" src="{{ asset('bundles/framework/images/blue_picto_more.gif') }}" style="display: inline" />
+                            <img class="toggle" id="icon-logs-close" alt="-" src="{{ asset('bundles/framework/images/blue_picto_less.gif') }}" style="display: none" />
+                        </a>
+                    </h2>
+                    {% endspaceless %}
+
+                    {% if logger.counterrors %}
+                        <div class="error-count">
+                            <span>
+                                {{ logger.counterrors }} error{{ logger.counterrors > 1 ? 's' : ''}}
+                            </span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div id="logs" style="display:none;">
+                    {% include 'TwigBundle:Exception:logs.html.twig' with { 'logs': logger.logs } only %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if currentContent %}
+                <div class="block">
+                    {% spaceless %}
+                    <h2>
+                        Content of the Output&nbsp;
+                        <a href="#" onclick="toggle('output-content'); switchIcons('icon-content-open', 'icon-content-close'); return false;">
+                            <img class="toggle" id="icon-content-close" alt="-" src="{{ asset('bundles/framework/images/blue_picto_less.gif') }}=" style="display: none" />
+                            <img class="toggle" id="icon-content-open" alt="+" src="{{ asset('bundles/framework/images/blue_picto_more.gif') }}" style="display: inline" />
+                        </a>
+                    </h2>
+                    {% endspaceless %}
+
+                    <div id="output-content" style="display: none">
+                        {{ currentContent }}
+                    </div>
+
+                    <div style="clear: both"></div>
+                </div>
+            {% endif %}
+
+            {% include 'TwigBundle:Exception:traces_text.html.twig' with { 'exception': exception } only %}
+
+
+        </div>
+
+        <script type="text/javascript">
+            //<![CDATA[
+            function toggle(id, clazz) {
+                var el = document.getElementById(id),
+                    current = el.style.display,
+                    i;
+
+                if (clazz) {
+                    var tags = document.getElementsByTagName('*');
+                    for (i = tags.length - 1; i >= 0 ; i--) {
+                        if (tags[i].className === clazz) {
+                            tags[i].style.display = 'none';
+                        }
+                    }
+                }
+
+                el.style.display = current === 'none' ? 'block' : 'none';
+            }
+
+            function switchIcons(id1, id2) {
+                var icon1, icon2, display1, display2;
+
+                icon1 = document.getElementById(id1);
+                icon2 = document.getElementById(id2);
+
+                display1 = icon1.style.display;
+                display2 = icon2.style.display;
+
+                icon1.style.display = display2;
+                icon2.style.display = display1;
+            }
+        //]]>
+        </script>
+            {% endif %}
+    </body>
+</html>

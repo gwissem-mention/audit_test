@@ -1,0 +1,8 @@
+parameters:
+    nodevo_grid.column.locked.class: Nodevo\GridBundle\Grid\Column\LockedColumn
+
+services:
+   grid.column.locked:
+       class: %nodevo_grid.column.locked.class%
+       tags:
+            - { name: grid.column.extension }

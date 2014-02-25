@@ -1,0 +1,119 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Fiche Objet
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if objet.id %}
+        <a href="{{ path('hopitalnumerique_objet_objet_edit', { 'id': objet.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>
+                            <strong>Titre : </strong>
+                            {{ objet.titre }}
+                        </p>
+                        <p>
+                            <strong>Alias : </strong>
+                            {{ objet.alias }}
+                        </p>
+                        <p>
+                            <strong>Etat : </strong>
+                            {{ objet.etat.libelle }}
+                        </p>
+                        <p>
+                            <strong>Accès restreint aux groupes : </strong>
+                            {{ objet.roles|rearangeDatas('name') }}
+                        </p>
+                        
+                        <p>
+                            <strong>Types d'objet : </strong>
+                            {{ objet.types|rearangeDatas('libelle') }}
+                        </p>
+
+                        {% if objet.getAbsolutePath() is not null %}
+                            <p>
+                                <strong>Fichier : </strong>
+                                <a href="/{{objet.getWebPath()}}" target="_blank">{{objet.path}}</a>
+                            </p>
+                        {% endif %}
+                        
+                        <p>
+                            <strong>Ambassadeurs concernés : </strong>
+                            {{ objet.ambassadeurs|rearangeDatas('prenomNom') }}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        {% if objet.commentaires %}
+                            <p>
+                                <strong>Les commentaires sont autorisés sur cet objet</strong>
+                            </p>
+                        {% endif %}
+                        {% if objet.notes %}
+                            <p>
+                                <strong>Les notes sont autorisées sur cet objet</strong>
+                            </p>
+                        {% endif %}
+                        {% if objet.lock %}
+                            <p>
+                                <strong>Cet objet est vérouillé</strong>
+                            </p>
+                        {% endif %}
+                        
+                        <p>
+                            <strong>Date de création de l'objet : </strong>
+                            {{ objet.dateCreation|date('d/m/Y') }}
+                        </p>
+
+                        {% if objet.dateDebutPublication %}
+                            <p>
+                                <strong>Date de début de la publication : </strong>
+                                {{ objet.dateDebutPublication|date('d/m/Y') }}
+                            </p>
+                        {% endif %}
+                        {% if objet.dateFinPublication %}
+                            <p>
+                                <strong>Date de fin de publication : </strong>
+                                {{ objet.dateFinPublication|date('d/m/Y') }}
+                            </p>
+                        {% endif %}
+                        {% if objet.dateModification %}
+                            <p>
+                                <strong>Date de dernière modification : </strong>
+                                {{ objet.dateModification|date('d/m/Y') }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>
+                            <strong>Synthese : </strong><br />
+                            <div class="well">
+                                {{ objet.synthese|raw }}
+                            </div>
+                        </p>
+                        <p>
+                            <strong>Resume : </strong><br />
+                            <div class="well">
+                                {{ objet.resume|raw }}
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

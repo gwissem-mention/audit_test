@@ -1,0 +1,22 @@
+/* Edit Objet */
+ul.list-unstyled{margin-bottom:0;}
+.loader .loaderIcon{background-image: url('../images/big_ajax_loader.gif') !important;width:66px;height:66px; }
+
+    /* Tab Objet*/
+    #objet .uploadedFile{display: block; margin-top: 7px}
+    #objet .deleteUploadedFile{margin-top:7px;}
+    #objet .manageReferences{margin-left : 10px;}
+
+    /* Tab Infra-documentaire */
+    #infra .addContenu{position:absolute; right: 28px; z-index: 200}
+    #infra .reloadContenu{position:absolute; right: 75px; z-index: 200}
+    #infra .uploadSommaire{position:absolute; right: 125px; z-index: 200}
+    #infra fieldset{position: relative;}
+    #infra #sommaire .text-muted {margin-right: 60px}
+
+/* fancybox References */
+#panel-references{padding:0;}
+#panel-references .tableContent{overflow-y:scroll; height:485px}
+#panel-references .tableContent thead .checkAll{display: block; margin: 0 auto}
+#panel-references .panel-footer{margin:0;}
+#panel-references .toggle-slide .toggle-off,#panel-references .toggle-slide .toggle-off.active{background: #2D78D5}

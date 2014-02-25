@@ -1,0 +1,21 @@
+
+    /**
+{% block phpdoc_method_header %}
+     * Affiche le formulaire d'édition de {{ entity }}.
+     *
+     * @param integer $id Id de {{ entity }}.
+{% endblock phpdoc_method_header %}
+     */
+{% block method_definition %}
+    public function editAction( $id )
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        //Récupération de l'entité passée en paramètre
+        ${{entity|lower}} = $this->get('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}')->findOneBy( array('id' => $id) );
+{% endblock method_body %}
+
+{% block method_return %}
+        return $this->_renderForm('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{entity|lower}}', ${{entity|lower}}, '{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:edit.html.twig' );
+{% endblock method_return %}
+    }

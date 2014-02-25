@@ -1,0 +1,57 @@
+
+
+
+
+
+    /**
+{% block phpdoc_method_header %}
+     * Effectue le render du formulaire {{ entity }}.
+     *
+     * @param string $formName Nom du service associé au formulaire
+     * @param {{ entity }}   $entity   Entité ${{entity|lower}}
+     * @param string $view     Chemin de la vue ou sera rendu le formulaire
+     *
+     * @return Form | redirect
+{% endblock phpdoc_method_header %}
+     */
+{% block method_definition %}
+    private function _renderForm( $formName, ${{entity|lower}}, $view )
+{% endblock method_definition %}
+    {
+{% block method_body %}
+        //Création du formulaire via le service
+        $form = $this->createForm( $formName, ${{entity|lower}});
+
+        $request = $this->get('request');
+        
+        // Si l'utilisateur soumet le formulaire
+        if ('POST' == $request->getMethod()) {
+            
+            // On bind les données du form
+            $form->handleRequest($request);
+
+            //si le formulaire est valide
+            if ($form->isValid()) {
+                //test ajout ou edition
+                $new = is_null(${{entity|lower}}->getId()) ? true : false;
+
+                //On utilise notre Manager pour gérer la sauvegarde de l'objet
+                $this->get('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}')->save(${{entity|lower}});
+                
+                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , '{{entity}} ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
+                
+                //on redirige vers la page index ou la page edit selon le bouton utilisé
+                $do = $request->request->get('do');
+                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}') : $this->generateUrl('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}_edit', array( 'id' => ${{entity|lower}}->getId() ) ) ) );
+            }
+        }
+{% endblock method_body %}
+
+{% block method_return %}
+        return $this->render( $view , array(
+            'form'             => $form->createView(),
+            '{{entity|lower}}' => ${{entity|lower}}
+        ));
+{% endblock method_return %}
+    }

@@ -1,0 +1,32 @@
+nodevo_mail_mail:
+    pattern:  /mail
+    defaults: { _controller: "NodevoMailBundle:Mail:index" }
+
+nodevo_mail_mail_add:
+    pattern:  /mail/add
+    defaults: { _controller: "NodevoMailBundle:Mail:add" }
+
+nodevo_mail_mail_show:
+    pattern:  /mail/show/{id}
+    defaults: { _controller: "NodevoMailBundle:Mail:show", id:1 }
+    requirements:
+        id: \d+
+
+nodevo_mail_mail_edit:
+    pattern:  /mail/edit/{id}
+    defaults: { _controller: "NodevoMailBundle:Mail:edit", id:1 }
+    requirements:
+        id: \d+
+
+nodevo_mail_mail_delete:
+    pattern:  /mail/delete/{id}.{_format}
+    defaults: { _controller: "NodevoMailBundle:Mail:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: post|delete
+
+nodevo_mail_mail_test:
+    pattern:  /mail/sendTest/{id}
+    defaults: { _controller: "NodevoMailBundle:Mail:sendTest", id:1 }
+    requirements:
+        id: \d+

@@ -1,0 +1,39 @@
+parameters:
+    #Questionnaire
+    hopitalnumerique_questionnaire.manager.questionnaire.class: HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager
+    hopitalnumerique_questionnaire.form.type.questionnaire: HopitalNumerique\QuestionnaireBundle\Form\Type\QuestionnaireType
+    #Question
+    hopitalnumerique_questionnaire.manager.question.class: HopitalNumerique\QuestionnaireBundle\Manager\QuestionManager
+#    hopitalnumerique_questionnaire.form.type.question: HopitalNumerique\QuestionnaireBundle\Form\Type\QuestionType
+    #Reponse
+    hopitalnumerique_questionnaire.manager.reponse.class: HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager
+#    hopitalnumerique_questionnaire.form.type.reponse: HopitalNumerique\QuestionnaireBundle\Form\Type\ReponseType
+
+services:
+    #Questionnaire:
+    #--Manager
+    hopitalnumerique_questionnaire.manager.questionnaire:
+        class: %hopitalnumerique_questionnaire.manager.questionnaire.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    #--Type
+    hopitalnumerique_questionnaire.form.type.questionnaire:
+        class: %hopitalnumerique_questionnaire.form.type.questionnaire%
+        arguments: ["@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.question", "@hopitalnumerique_questionnaire.manager.questionnaire", "@validator"]
+        tags:
+            - { name: form.type, alias: nodevo_questionnaire_questionnaire }
+    #Question:
+    #--Manager
+    hopitalnumerique_questionnaire.manager.question:
+        class: %hopitalnumerique_questionnaire.manager.question.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    #Reponse:
+    #--Manager
+    hopitalnumerique_questionnaire.manager.reponse:
+        class: %hopitalnumerique_questionnaire.manager.reponse.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

@@ -1,0 +1,42 @@
+#Etablissements
+hopitalnumerique_etablissement:
+    pattern:  /etablissement/
+    defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:index" }
+
+hopitalnumerique_etablissement_add:
+    pattern:  /etablissement/add
+    defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:add" }
+
+hopitalnumerique_etablissement_show:
+    pattern:  /etablissement/show/{id}
+    defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:show", id:1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_etablissement_edit:
+    pattern:  /etablissement/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:edit", id:1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_etablissement_delete:
+    pattern:  /etablissement/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:delete", _format: json}
+    requirements:
+        id: \d+
+        _method: post|delete
+
+hopitalnumerique_etablissement_departements:
+    pattern:  /etablissement/departements
+    defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:departements" }
+
+#Etablissements Autres
+hopitalnumerique_etablissement_autres:
+    pattern:  /etablissement/autres
+    defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:autres" }
+
+hopitalnumerique_etablissement_archiver:
+    pattern:  /user/archiver/{id}
+    defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:archiver" }
+    requirements:
+        id: \d+

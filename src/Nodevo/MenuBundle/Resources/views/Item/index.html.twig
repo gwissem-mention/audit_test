@@ -1,0 +1,32 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{# Grid mandatory Stuff #}
+{% use 'NodevoGridBundle::grid.config.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('grid_stylesheets')}}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ block('grid_javascripts')}}
+{% endblock %}
+
+{# Template Stuff #}
+{% block h1Title %}
+    Liste des éléments du {{ menu.name }}
+{% endblock %}
+
+{% block toolbarButton %}
+    {% if app.user|checkAuthorization( path('nodevo_menu_item_add', {'id':menu.id}) ) %}
+        <a href="{{path('nodevo_menu_item_add', {'id':menu.id})}}" class="btn btn-default" title="Ajouter un lien de menu"><i class="fa fa-plus"></i></a>
+    {% endif %}
+    <a href="{{path('nodevo_menu_menu')}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+    {{ grid(grid, _self) }}
+    {# Cache les lignes de filtres dans le grid #}
+    {% block grid_filters %}{% endblock grid_filters%}
+{% endblock %}
