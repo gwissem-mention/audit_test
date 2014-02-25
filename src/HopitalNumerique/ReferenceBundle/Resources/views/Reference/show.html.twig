@@ -6,7 +6,7 @@
 
 {% block toolbarButton %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_reference_reference') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
-    {% if reference.id %}
+    {% if reference.id and app.user|checkAuthorization( path('hopitalnumerique_reference_reference_add') ) %}
         <a href="{{ path('hopitalnumerique_reference_reference_edit', { 'id': reference.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
     {% endif %}
 {% endblock %}
