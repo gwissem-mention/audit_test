@@ -70,4 +70,24 @@ class UserManager extends BaseManager
     {
         return $this->getRepository()->getDatasForGridEtablissement()->getQuery()->getResult();
     }
+
+    /**
+     * Modifie l'état de tous les users
+     *
+     * @param array     $users Liste des utilisateurs
+     * @param Reference $ref   RefStatut à mettre
+     *
+     * @return empty
+     */
+    public function toogleState( $users, $ref )
+    {
+        foreach($users as $user) {
+            $user->setEtat( $ref );
+            $user->setEnabled( ($ref->getId() == 3 ? 1 : 0) );
+            $this->_em->persist( $user );
+        }
+
+        //save
+        $this->_em->flush();
+    }
 }
