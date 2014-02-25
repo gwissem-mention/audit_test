@@ -140,9 +140,17 @@
                                 {{ form_row(form.dateCreation) }}
                                 {{ form_row(form.dateDebutPublication) }}
                                 {{ form_row(form.dateFinPublication) }}
-                                {{ form_row(form.dateModification) }}
                             </div>
                             <div class="col-md-8">
+                                <div class="form-group {% if not objet.id %}hide{% endif %}">
+                                    <label class="col-md-11" f>Notifier la mise à jour ?</label>
+                                    <div class="col-md-1">
+                                        <div class="pull-right toggle toggle-success"></div>
+                                    </div>
+                                    <div class="col-md-10 hide">
+                                        {{ form_widget(form.modified) }}
+                                    </div>
+                                </div>
                                 <div class="form-group {% if not objet.id %}hide{% endif %}">
                                     <label class="col-md-2" for="hopitalnumerique_objet_objet_references">Références</label>
                                     <div class="col-md-10">

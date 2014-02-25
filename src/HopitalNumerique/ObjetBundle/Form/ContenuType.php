@@ -35,6 +35,9 @@ class ContenuType extends AbstractType
                 'required' => true, 
                 'label'    => 'Contenu',
                 'attr'     => array('class' => $this->_constraints['contenu']['class'] )
+            ))
+            ->add('modified', 'hidden', array(
+                'mapped' => false
             ));
     }
 
