@@ -117,17 +117,69 @@ class UserController extends Controller
     /**
      * Suppression de masse des users
      *
-     * @param  [type] $primaryKeys    [description]
-     * @param  [type] $allPrimaryKeys [description]
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
      *
-     * @return [type]
+     * @return Redirect
      */
     public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        //get all selected Users
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        $this->get('hopitalnumerique_user.manager.user')->delete( $users );
+
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
 
         return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
     }
+
+    /**
+     * Désactivation de masse des users
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function desactiverMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+
+        //get ref and Toggle State
+        $ref = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 4) );
+        $this->get('hopitalnumerique_user.manager.user')->toogleState( $users, $ref );
+
+        //inform user connected
+        $this->get('session')->getFlashBag()->add('info', 'Désactivation effectuée avec succès.' );
+
+        return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
+    }
+
+    /**
+     * Activation de masse des users
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function activerMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+
+        //get ref and Toggle State
+        $ref = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 3) );
+        $this->get('hopitalnumerique_user.manager.user')->toogleState( $users, $ref );
+
+        //inform user connected
+        $this->get('session')->getFlashBag()->add('info', 'Activation effectuée avec succès.' );
+
+        return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
+    }
+
+    
 
     /**
      * Export CSV de la liste des utilisateurs sélectionnés
