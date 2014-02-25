@@ -32,7 +32,7 @@ class Questionnaire
     /**
      * @var boolean
      *
-     * @ORM\Column(name="qst_lock", type="boolean", options = {"comment" = "Verrouillage du quesionnaire ?"})
+     * @ORM\Column(name="qst_lock", type="boolean", options = {"comment" = "Verrouillage du questionnaire ?"})
      */
     private $lock;
 
