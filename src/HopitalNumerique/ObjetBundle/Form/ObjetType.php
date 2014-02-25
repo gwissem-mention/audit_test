@@ -78,9 +78,14 @@ class ObjetType extends AbstractType
             ))
             ->add('file', 'file', array(
                 'required' => false, 
-                'label'    => 'Fichier objet'
+                'label'    => 'Fichier objet 1'
             ))
             ->add('path', 'hidden')
+            ->add('file2', 'file', array(
+                'required' => false, 
+                'label'    => 'Fichier objet 2'
+            ))
+            ->add('path2', 'hidden')
             ->add('references', 'entity', array(
                 'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',

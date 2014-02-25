@@ -162,18 +162,7 @@ class ObjetController extends Controller
 
             //Vérification de la présence rôle et des types
             $formTypes = $form->get("types")->getData();
-            // $formRoles = $form->get("roles")->getData();
-
             $formType  = !is_null($formTypes) ? $formTypes[0] : null;
-            // $formRole  = !is_null($formRoles) ? $formRoles[0] : null;
-
-            // if( is_null($formRole) ) {
-            //     $this->get('session')->getFlashBag()->add('danger', 'Veuillez resteindre l\'accès à un groupe au minimum.' );
-            //     return $this->render( $view , array(
-            //         'form'  => $form->createView(),
-            //         'objet' => $objet
-            //     ));
-            // }
 
             if( is_null($formType) ) {
                 $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un type d\'objet.' );
@@ -186,7 +175,7 @@ class ObjetController extends Controller
             //si le formulaire est valide
             if ($form->isValid()) {
                 //test ajout ou edition
-                $new = is_null($objet->getId()) ? true : false;
+                $new  = is_null($objet->getId()) ? true : false;
 
                 //si l'alias est vide, on le génère depuis le titre
                 $tool = new Chaine( ( $objet->getAlias() == '' ? $objet->getTitre() : $objet->getAlias() ) );
@@ -194,10 +183,7 @@ class ObjetController extends Controller
 
                 //si on à choisis fermer et sauvegarder : on unlock l'user (unlock + save)
                 $do = $request->request->get('do');
-                if( $do == 'save-close' )
-                    $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
-                else
-                    $this->get('hopitalnumerique_objet.manager.objet')->save($objet);
+                $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 if( $do == "save-auto" )
