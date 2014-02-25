@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+
+/* <-- Structure de la page */
+div.panel-moxiemanager {}
+    div.panel-moxiemanager div.panel-body { padding:0px !important; }
+    div#moxiemanager_conteneur {}
+        div#moxiemanager_conteneur iframe { border-width:0px; }
+/* --> */
+
+/* MoxieManager */
+
+/* --> */
