@@ -23,10 +23,6 @@ hopital_numerique_objet:
     resource: "@HopitalNumeriqueObjetBundle/Resources/config/routing.yml"
     prefix:   /admin
 
-hopital_numerique_media:
-    resource: "@HopitalNumeriqueMediaBundle/Resources/config/routing.yml"
-    prefix:   /admin
-
 hopital_numerique_questionnaire:
     resource: "@HopitalNumeriqueQuestionnaireBundle/Resources/config/routing.yml"
     prefix:   /admin
@@ -35,6 +31,10 @@ hopital_numerique_questionnaire:
 nodevo_acl:
     resource: "@NodevoAclBundle/Resources/config/routing.yml"
     prefix:   /admin
+    
+nodevo_gestionnaire_media:
+    resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"
+    prefix:   /admin/media
 
 nodevo_role:
     resource: "@NodevoRoleBundle/Resources/config/routing.yml"

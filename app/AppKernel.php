@@ -35,12 +35,12 @@ class AppKernel extends Kernel
             new HopitalNumerique\ReferenceBundle\HopitalNumeriqueReferenceBundle(),
             new HopitalNumerique\EtablissementBundle\HopitalNumeriqueEtablissementBundle(),
             new HopitalNumerique\AdminBundle\HopitalNumeriqueAdminBundle(),
-            new HopitalNumerique\MediaBundle\HopitalNumeriqueMediaBundle(),
             new HopitalNumerique\ObjetBundle\HopitalNumeriqueObjetBundle(),
             new Igorw\FileServeBundle\IgorwFileServeBundle(),
             new HopitalNumerique\QuestionnaireBundle\HopitalNumeriqueQuestionnaireBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new Nodevo\ErrorsBundle\NodevoErrorsBundle(),
+            new Nodevo\GestionnaireMediaBundle\NodevoGestionnaireMediaBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
