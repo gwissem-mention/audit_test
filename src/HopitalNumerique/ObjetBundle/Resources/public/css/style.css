@@ -3,9 +3,10 @@ ul.list-unstyled{margin-bottom:0;}
 .loader .loaderIcon{background-image: url('../images/big_ajax_loader.gif') !important;width:66px;height:66px; }
 
     /* Tab Objet*/
-    #objet .uploadedFile{display: block; margin-top: 7px}
-    #objet .deleteUploadedFile{margin-top:7px;}
+    #objet .uploadedFile, #objet .uploadedFile2{display: block; margin-top: 7px}
+    #objet .deleteUploadedFile, #objet .deleteUploadedFile2{margin-top:7px;}
     #objet .manageReferences{margin-left : 10px;}
+    .inputUpload2 .form-control {border:0; padding:5px 0;}
 
     /* Tab Infra-documentaire */
     #infra .addContenu{position:absolute; right: 28px; z-index: 200}

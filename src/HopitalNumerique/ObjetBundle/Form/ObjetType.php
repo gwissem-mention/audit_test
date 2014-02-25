@@ -78,7 +78,7 @@ class ObjetType extends AbstractType
             ))
             ->add('file', 'file', array(
                 'required' => false, 
-                'label'    => 'Fichier objet'
+                'label'    => 'Fichier objet 1'
             ))
             ->add('path', 'hidden')
             ->add('references', 'entity', array(

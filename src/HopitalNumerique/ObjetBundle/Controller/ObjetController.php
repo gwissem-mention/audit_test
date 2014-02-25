@@ -162,18 +162,7 @@ class ObjetController extends Controller
 
             //Vérification de la présence rôle et des types
             $formTypes = $form->get("types")->getData();
-            // $formRoles = $form->get("roles")->getData();
-
             $formType  = !is_null($formTypes) ? $formTypes[0] : null;
-            // $formRole  = !is_null($formRoles) ? $formRoles[0] : null;
-
-            // if( is_null($formRole) ) {
-            //     $this->get('session')->getFlashBag()->add('danger', 'Veuillez resteindre l\'accès à un groupe au minimum.' );
-            //     return $this->render( $view , array(
-            //         'form'  => $form->createView(),
-            //         'objet' => $objet
-            //     ));
-            // }
 
             if( is_null($formType) ) {
                 $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un type d\'objet.' );
