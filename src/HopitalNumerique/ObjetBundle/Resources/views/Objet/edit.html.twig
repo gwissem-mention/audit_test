@@ -87,14 +87,14 @@
                                 <div class="form-group" style="margin-bottom:0">
                                     {{ form_label(form.file) }}
                                     <div class="col-md-9">
-                                        {% if objet.getAbsolutePath() is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
+                                        {% if objet.getAbsolutePath(true) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
                                         <div class="inputUpload" style="display:{{visibility}}">
                                             {{ form_widget(form.file) }}    
                                         </div>
 
-                                        {% if objet.getAbsolutePath() is not null %}
-                                            <a class="uploadedFile pull-left" href="/{{objet.getWebPath()}}" target="_blank">{{objet.path}}</a>
-                                            <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" ><i class="fa fa-trash-o"></i></div>
+                                        {% if objet.getAbsolutePath(true) is not null %}
+                                            <a class="uploadedFile pull-left" href="/{{objet.getWebPath(true)}}" target="_blank">{{objet.path}}</a>
+                                            <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" data-path="hopitalnumerique_objet_objet_path" ><i class="fa fa-trash-o"></i></div>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -104,6 +104,31 @@
                                         <div class="col-md-12">
                                             <div class="help-block">
                                                 {{ form_errors(form.file) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom:0">
+                                    {{ form_label(form.file2) }}
+                                    <div class="col-md-9">
+                                        {% if objet.getAbsolutePath(false) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
+                                        <div class="inputUpload" style="display:{{visibility}}">
+                                            {{ form_widget(form.file2) }}    
+                                        </div>
+
+                                        {% if objet.getAbsolutePath(false) is not null %}
+                                            <a class="uploadedFile pull-left" href="/{{objet.getWebPath(false)}}" target="_blank">{{objet.path2}}</a>
+                                            <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" data-path="hopitalnumerique_objet_objet_path2" ><i class="fa fa-trash-o"></i></div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="help-block">
+                                                {{ form_errors(form.file2) }}
                                             </div>
                                         </div>
                                     </div>
