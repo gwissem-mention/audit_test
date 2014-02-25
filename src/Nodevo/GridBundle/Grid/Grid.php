@@ -30,6 +30,7 @@ class Grid
     protected $_limits               = array(10, 20, 50, 100);
     protected $_defaultLimit         = 20;
     protected $_noDataMessage        = ' - Aucun élément à afficher - ';
+    protected $_noResultMessage      = ' - Aucun résultat à afficher - ';
     protected $_buttonSize           = 60;
     protected $_fieldParentRecursive = null;
     protected $_fieldLabelRecursive  = null;
@@ -154,6 +155,16 @@ class Grid
         protected function setNoDataMessage( $message = ' - Aucun élément à afficher - ')
         {
             $this->_noDataMessage = $message;
+        }
+
+        /**
+         * Set le message affiché lorsqu'aucune donnée n'a été trouvée après Filtre
+         *
+         * @param string $message Message affiché
+         */
+        protected function setNoResultMessage( $message = ' - Aucun résultat à afficher - ' )
+        {
+            $this->_noResultMessage = $message;
         }
 
         /**
@@ -294,6 +305,9 @@ class Grid
 
             //Message lorsque vide
             $this->_grid->setNoDataMessage( $this->_noDataMessage );
+
+            //Message lorsque filtrer no Results
+            $this->_grid->setNoResultMessage( $this->_noResultMessage );
         }
 
         /**
