@@ -77,6 +77,13 @@ class Objet
     private $path;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="obj_path2", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier 2 lié à l objet"})
+     */
+    private $path2;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="obj_commentaires", type="boolean", options = {"comment" = "Commentaires autorisés sur l objet ?"})
@@ -213,6 +220,39 @@ class Objet
     public $file;
 
     /**
+     * @Assert\File(
+     *     maxSize = "10M",
+     *     mimeTypes = { 
+     *         "application/pdf", 
+     *         "application/x-pdf", 
+     *         "application/vnd.ms-excel", 
+     *         "application/msword", 
+     *         "application/xls", 
+     *         "application/x-xls", 
+     *         "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
+     *         "application/vnd.ms-powerpoint", 
+     *         "application/vnd.openxmlformats-officedocument.presentationml.presentation", 
+     *         "image/gif", 
+     *         "image/jpeg", 
+     *         "image/png", 
+     *         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+     *         "application/zip",
+     *         "application/vnd.oasis.opendocument.text ",
+     *         "application/vnd.oasis.opendocument.graphics",
+     *         "application/vnd.oasis.opendocument.presentation",
+     *         "application/vnd.oasis.opendocument.spreadsheet",
+     *         "application/vnd.oasis.opendocument.chart",
+     *         "application/vnd.oasis.opendocument.formula",
+     *         "application/vnd.oasis.opendocument.database",
+     *         "application/vnd.oasis.opendocument.image",
+     *         "application/vnd.openofficeorg.extension"
+     *     },
+     *     mimeTypesMessage = "Choisissez un fichier valide (PDF, EXCEL, WORD, POWER POINT, ZIP, IMAGE)"
+     * )
+     */
+    public $file2;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -338,8 +378,8 @@ class Objet
      */
     public function setPath($path)
     {
-        if( is_null($path) && file_exists($this->getAbsolutePath()) )
-            unlink($this->getAbsolutePath());
+        if( is_null($path) && file_exists($this->getAbsolutePath( true )) )
+            unlink($this->getAbsolutePath( true ));
 
         $this->path = $path;
 
@@ -354,6 +394,32 @@ class Objet
     public function getPath()
     {
         return $this->path;
+    }
+
+    /**
+     * Set path2
+     *
+     * @param string $path2
+     * @return Objet
+     */
+    public function setPath2($path2)
+    {
+        if( is_null($path2) && file_exists($this->getAbsolutePath( false )) )
+            unlink($this->getAbsolutePath( false ));
+
+        $this->path2 = $path2;
+
+        return $this;
+    }
+
+    /**
+     * Get path2
+     *
+     * @return string 
+     */
+    public function getPath2()
+    {
+        return $this->path2;
     }
 
     /**
@@ -741,14 +807,20 @@ class Objet
         return $this;
     }
 
-    public function getAbsolutePath()
+    public function getAbsolutePath( $firstFile = true )
     {
-        return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+        if( $firstFile )
+            return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+        else
+            return null === $this->path2 ? null : $this->getUploadRootDir().'/'.$this->path2;
     }
 
-    public function getWebPath()
+    public function getWebPath( $firstFile = true )
     {
-        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+        if( $firstFile )
+            return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+        else
+            return null === $this->path2 ? null : $this->getUploadDir().'/'.$this->path2;
     }
 
     public function getUploadRootDir()
@@ -770,10 +842,18 @@ class Objet
     {
         if (null !== $this->file){
             //delete Old File
-            if ( file_exists($this->getAbsolutePath()) )
-                unlink($this->getAbsolutePath());
+            if ( file_exists($this->getAbsolutePath( true )) )
+                unlink($this->getAbsolutePath( true ));
 
             $this->path = $this->file->getClientOriginalName();
+        }
+
+        if (null !== $this->file2){
+            //delete Old File
+            if ( file_exists($this->getAbsolutePath( false )) )
+                unlink($this->getAbsolutePath( false ));
+
+            $this->path2 = $this->file2->getClientOriginalName();
         }
     }
 
@@ -783,16 +863,22 @@ class Objet
      */
     public function upload()
     {
-        if (null === $this->file)
+        if ( null === $this->file && null === $this->file2 )
             return;
-
+        
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
-        // proprement l'entité d'être persistée dans la base de données si
-        // erreur il y a
-        $this->file->move($this->getUploadRootDir(), $this->path);
+        // proprement l'entité d'être persistée dans la base de données si erreur il y a   
+        
+        if ( null !== $this->file ){        
+            $this->file->move($this->getUploadRootDir(), $this->path);
+            unset($this->file);
+        }
 
-        unset($this->file);
+        if ( null !== $this->file2 ){
+            $this->file2->move($this->getUploadRootDir(), $this->path2);
+            unset($this->file2);
+        }
     }
 
     /**
@@ -800,7 +886,10 @@ class Objet
      */
     public function removeUpload()
     {
-        if ( $file = $this->getAbsolutePath() && file_exists( $this->getAbsolutePath() ) )
+        if ( $file = $this->getAbsolutePath( true ) && file_exists( $this->getAbsolutePath( true ) ) )
             unlink($file);
+
+        if ( $file2 = $this->getAbsolutePath( false ) && file_exists( $this->getAbsolutePath( false ) ) )
+            unlink($file2);
     }
 }

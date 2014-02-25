@@ -54,13 +54,14 @@ $(document).ready(function() {
 
     //gestion du bouton delete : changement du fichier uploadé
     $('.deleteUploadedFile').on('click',function(){
-        $('.uploadedFile, .deleteUploadedFile').hide();
-        $('.inputUpload').show();
-        $('#hopitalnumerique_objet_objet_path').val('');
+        $(this).hide();
+        $(this).parent().find('.uploadedFile').hide();
+        $(this).parent().find('.inputUpload').show();
+        $('#' + $(this).data('path') ) .val('');
     });
 
     //gestion du nom de fichier unique
-    $('#hopitalnumerique_objet_objet_file').on('change', function() {
+    $('#hopitalnumerique_objet_objet_file, #hopitalnumerique_objet_objet_file2').on('change', function() {
         $.ajax({
             url  : $('#objet-file-url').val(),
             data : {
