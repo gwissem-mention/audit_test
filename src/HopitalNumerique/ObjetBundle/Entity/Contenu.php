@@ -68,6 +68,13 @@ class Contenu
     protected $contenu;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="con_date_modification", type="datetime", nullable=true, options = {"comment" = "Date de modification du contenu"})
+     */
+    private $dateModification;
+
+    /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\RefContenu", mappedBy="contenu", cascade={"persist", "remove" })
      */
     protected $references;
@@ -254,5 +261,28 @@ class Contenu
     public function setObjet(Objet $objet)
     {
         $this->objet = $objet;
-    }   
+    }
+
+    /**
+     * Set dateModification
+     *
+     * @param \DateTime $dateModification
+     * @return Objet
+     */
+    public function setDateModification($dateModification)
+    {
+        $this->dateModification = $dateModification;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModification
+     *
+     * @return \DateTime 
+     */
+    public function getDateModification()
+    {
+        return $this->dateModification;
+    }  
 }

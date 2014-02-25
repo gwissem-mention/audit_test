@@ -127,13 +127,11 @@ class ObjetType extends AbstractType
             ))
             ->add('dateFinPublication', 'genemu_jquerydate', array(
                 'required' => false, 
-                'label'    => 'Fin de publication',
+                'label'    => 'Fin de publicat!ion',
                 'widget'   => 'single_text'
             ))
-            ->add('dateModification', 'genemu_jquerydate', array(
-                'required' => false, 
-                'label'    => 'Date de modification',
-                'widget'   => 'single_text'
+            ->add('modified', 'hidden', array(
+                'mapped'   => false
             ));
     }
 

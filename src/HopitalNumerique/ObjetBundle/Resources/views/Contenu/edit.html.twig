@@ -30,6 +30,16 @@
             
             {{ form_row(form.contenu) }}
 
+            <div class="form-group">
+                <label class="col-md-11" >Notifier la mise à jour ?</label>
+                <div class="col-md-1">
+                    <div class="pull-right toggle toggle-success"></div>
+                </div>
+                <div class="col-md-10 hide">
+                    {{ form_widget(form.modified) }}
+                </div>
+            </div>
+    
             <div class="panel-footer">
                 <div class="row">
                     <div class="btn-toolbar pull-right">
@@ -47,11 +57,22 @@
 </div>
 
 <script>
-    tinymce.init({
-        selector  : "textarea",
-        theme     : "modern",
-        theme_url : '/bundles/nodevoadmin/plugins/tinymce/themes/modern/theme.min.js',
-        skin_url  : '/bundles/nodevoadmin/plugins/tinymce/skins/lightgray',
-        height    : 260
+    $(document).ready(function() {
+        //Toggle notif mise à jour
+        $('.toggle').toggles( { on : false, text : { on : 'OUI', off : 'NON' } } ).on('toggle', function (e, active) {
+            if (active) {
+                $('#hopitalnumerique_objet_contenu_modified').val(1);
+            } else {
+                $('#hopitalnumerique_objet_contenu_modified').val(0);
+            }
+        });
+        
+        tinymce.init({
+            selector  : "textarea",
+            theme     : "modern",
+            theme_url : '/bundles/nodevoadmin/plugins/tinymce/themes/modern/theme.min.js',
+            skin_url  : '/bundles/nodevoadmin/plugins/tinymce/skins/lightgray',
+            height    : 240
+        });
     });
 </script>
