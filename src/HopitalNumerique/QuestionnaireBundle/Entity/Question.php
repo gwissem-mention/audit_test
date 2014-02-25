@@ -53,7 +53,7 @@ class Question
     /**
      * @var string
      *
-     * @ORM\Column(name="que_reference_param_tri", type="string", length=50, nullable=true, options = {"comment" = "Code de la référence si le type est une entité"})
+     * @ORM\Column(name="que_reference_param_tri", type="string", length=50, nullable=true, options = {"comment" = "Code de la référence si le type est une entitée"})
      */
     protected $referenceParamTri;
 
