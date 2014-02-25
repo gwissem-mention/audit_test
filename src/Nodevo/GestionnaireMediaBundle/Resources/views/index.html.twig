@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {% stylesheets output="compiled/admin-main.css" filter="cssrewrite"
+    {% stylesheets output="compiled/MoxieManager_Admin.css" filter="cssrewrite"
         'bundles/nodevogestionnairemedia/css/MoxieManager_Admin.css'
     %}
         <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
