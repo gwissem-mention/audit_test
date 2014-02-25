@@ -1,4 +1,4 @@
-h1. README
+h1.README
 
 > Rédigé par Quentin Somazzi le 19/01/2014.
 > MAJ par Gaëtan Melchilsen le 18/02/2014.
