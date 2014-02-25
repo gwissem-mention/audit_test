@@ -18,8 +18,11 @@
 {% endblock %}
 
 {% block toolbarButton %}
+    {% if app.user|checkAuthorization( path('hopitalnumerique_objet_objet_add') ) %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_add') }}" title="Ajouter un objet"><i class="fa fa-plus"></i></a>
+    {% endif %}
 {% endblock %}
+
 
 {% block body %}
     {{ grid(grid, _self) }}
