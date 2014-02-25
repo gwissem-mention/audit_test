@@ -181,6 +181,11 @@ class ObjetController extends Controller
                 $tool = new Chaine( ( $objet->getAlias() == '' ? $objet->getTitre() : $objet->getAlias() ) );
                 $objet->setAlias( $tool->minifie() );
 
+                //Met à jour la date de modification
+                $notify = $form->get("modified")->getData();
+                if( $notify === "1")
+                    $objet->setDateModification( new \DateTime() );
+                
                 //si on à choisis fermer et sauvegarder : on unlock l'user (unlock + save)
                 $do = $request->request->get('do');
                 $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);

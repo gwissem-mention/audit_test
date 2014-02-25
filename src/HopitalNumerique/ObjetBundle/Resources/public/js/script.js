@@ -134,6 +134,15 @@ $(document).ready(function() {
     $('.reloadContenu').on('click',function(){
         var loader = $('body').nodevoLoader().start();
     })
+
+    //Toggle notif mise à jour
+    $('.toggle').toggles( { on : false, text : { on : 'OUI', off : 'NON' } } ).on('toggle', function (e, active) {
+        if (active) {
+            $('#hopitalnumerique_objet_objet_modified').val(1);
+        } else {
+            $('#hopitalnumerique_objet_objet_modified').val(0);
+        }
+    });
 });
 
 // Gère les options disable en fonction de l'origine (element ajouté ou initialisation du select)
@@ -170,6 +179,7 @@ function saveContenu()
             id      : idContenu,
             titre   : $('#hopitalnumerique_objet_contenu_titre').val(),
             alias   : $('#hopitalnumerique_objet_contenu_alias').val(),
+            notify  : $('#hopitalnumerique_objet_contenu_modified').val(),
             contenu : tinyMCE.get('hopitalnumerique_objet_contenu_contenu').getContent()
         },
         type     : 'POST',

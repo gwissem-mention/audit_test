@@ -202,6 +202,7 @@ class ContenuController extends Controller
             $titre   = $request->request->get('titre');
             $alias   = $request->request->get('alias');
             $content = $request->request->get('contenu');
+            $notify  = $request->request->get('notify');
 
             //error si le titre est vide
             if($titre == '')
@@ -210,6 +211,9 @@ class ContenuController extends Controller
             //set Form datas
             $contenu->setTitre( $titre );
             $contenu->setContenu( $content );
+
+            if( $notify === "1")
+                $contenu->setDateModification( new \DateTime() );
 
             //on régénère l'alias à chaque fois
             $tool = ( $alias == '' || $alias == 'nouveau-contenu' ) ? new Chaine( $titre ) : new Chaine( $alias );
