@@ -1,7 +1,0 @@
-hopital_numerique_media_homepage:
-    pattern:  /medias
-    defaults: { _controller: HopitalNumeriqueMediaBundle:Default:index }
-
-hopital_numerique_media_moxie:
-    pattern:  /moxie
-    defaults: { _controller: HopitalNumeriqueMediaBundle:Default:moxie }
