@@ -8,6 +8,11 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('HopitalNumeriqueCoreBundle:Default:index.html.twig', array());
+        $article = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => 1) );
+
+
+        return $this->render('HopitalNumeriqueCoreBundle:Default:index.html.twig', array(
+            'article' => $article
+        ));
     }
 }

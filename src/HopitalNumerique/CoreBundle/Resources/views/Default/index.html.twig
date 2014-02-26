@@ -1,5 +1,70 @@
 {% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
 
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-core-default-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquecore/css/homepage.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
 {% block body %}
-    Homepage Front
+    <div id="homepage">
+        <div class="home-left pull-left">
+            <img src="{{asset('bundles/hopitalnumeriquecore/img/article-home.jpg')}}" alt="Article Home" />
+            <h4>{{article.titre}}</h4>
+            {{article.resume|raw}}
+            <a href="#" class="readmore"><i class="common-sprite common-sprite-arrow"></i> En savoir plus</a>
+
+            <h3 class="violet">Actualités</h3>
+            <div class="actus">
+                <div class="actu">
+                    <h6>Categorie</h6>
+                    <h5>Lorem ipsum dolor sit amet</h5>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.
+                    </p>
+                </div>
+                <div class="actu">
+                    <h6>Categorie</h6>
+                    <h5>Lorem ipsum dolor sit amet</h5>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. elit, sed do eiusmod tempor incididunt ut labore et dolore. 
+                    </p>
+                </div>
+
+                <a href="#" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Voir toutes les actualités</a>
+            </div>
+        </div>
+
+        <div class="home-right pull-right">
+            <div class="recherche bloc-home pull-left home-sprite">
+                <a href="#">Recherche</a>
+                <p>
+                    Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum.
+                </p>
+            </div>
+            <div class="forum bloc-home pull-right home-sprite">
+                <a href="#">Forum</a>
+                <p>
+                    Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum.
+                </p>
+            </div>
+            <div class="creation-compte pull-left home-sprite">
+                <p class="titre">Creation de compte</p>
+                <p>
+                    Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum, omnes pari sorte sunt bellatores seminudi coloratis.
+                </p>
+                <p>
+                    Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum, omnes pari sorte sunt bellatores seminudi.
+                </p>
+
+                <div class="buttons pull-right">
+                    <a href="#" class="btn btn-default pull-right login">Connexion</a>
+                    <a href="#" class="btn btn-default pull-right signup">Création de compte</a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

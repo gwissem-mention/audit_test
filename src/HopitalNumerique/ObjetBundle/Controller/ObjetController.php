@@ -28,7 +28,7 @@ class ObjetController extends Controller
      */
     public function cancelAction( $id, $message )
     {
-        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );   
+        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
 
         //On récupère l'user connecté et son role
         $user  = $this->get('security.context')->getToken()->getUser();

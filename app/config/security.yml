@@ -18,7 +18,7 @@ security:
             security: false
 
         # Pare-feu général du site (on protège tout)
-        main:
+        admin:
             pattern: ^/admin
             form_login:
                 login_path: /admin/login
@@ -36,6 +36,10 @@ security:
             remember_me:
                 key: %secret%
             anonymous: false
+
+        main:
+            pattern: ^/
+            anonymous: true
 
     access_decision_manager:
         strategy: unanimous
