@@ -10,6 +10,7 @@
                     <tr>
                         <th width="60px" align="center"><input type="checkbox" class="checkAll" /></th>
                         <th width="150px" align="center" class="text-center">Type Primaire ?</th>
+                        <th>Enfant ?</th>
                         <th>Nom</th>
                     </tr>
                 </thead>
@@ -27,7 +28,12 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <label for="checkbox-{{ref.id}}">{{ref.nom}}</label>
+                                {% if ref.childs %}
+                                    <div class="btn btn-default check-child">Check Child</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <label for="checkbox-{{ref.id}}" style="width:100%;">{{ref.nom}}</label>
                             </td>
                         </tr>
                     {% endfor %}
@@ -65,26 +71,42 @@
             childs = $(this).parent().parent().data('childs');
 
             if( childs.length > 0 ){
-
                 //on coche les enfants et on les met en lecture seule
                 if ( $(this).prop('checked') ){
-
                     $.each(childs,function(key, val){
-
                         $('.ref-'+val+' .checkbox').prop('checked','checked');
-
                         $('.ref-'+val+' .checkbox').prop('disabled','disabled');
-
                     });
                 //on décoche les enfants et on autorise le cochage
                 }else{
+                    $.each(childs,function(key, val){
+                        $('.ref-'+val+' .checkbox').prop('checked',false);
+                        $('.ref-'+val+' .checkbox').prop('disabled', '');
+                    });
+                }    
+            }
+        });
+
+        $('#references-tab .check-child').on('click', function(){
+            //get childs (if exist)
+            // .parent().data('childs')
+            childs = $(this).parent().parent().data('childs');
+
+
+            if( childs.length > 0 ){
+                //on coche les enfants et on les met en lecture seule
+                if ( $(this).attr('class') == 'btn btn-default check-child' ){
+                    $(this).addClass('checked');
 
                     $.each(childs,function(key, val){
+                        $('.ref-'+val+' .checkbox').prop('checked','checked');
+                    });
+                // //on décoche les enfants et on autorise le cochage
+                }else{
+                    $(this).removeClass('checked');
 
+                    $.each(childs,function(key, val){
                         $('.ref-'+val+' .checkbox').prop('checked',false);
-
-                        $('.ref-'+val+' .checkbox').prop('disabled', '');
-
                     });
                 }    
             }
