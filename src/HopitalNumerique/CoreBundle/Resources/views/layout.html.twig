@@ -9,7 +9,7 @@
 
         <title>{% block title %}Hopital Numérique{% endblock %}</title>
 
-        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
             {% stylesheets output="compiled/main-front.css" filter="cssrewrite"
@@ -36,8 +36,8 @@
             <div id="header">
                 <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
                 <div id="titre" class="pull-left">
-                    <h1>Mon Hôpital Numérique</h1>
-                    <h2>Plateforme d'accompagnement hôpital numérique</h2>    
+                    <h1><span class="violet">Mon</span> Hôpital <span class="gris">Numérique</span></h1>
+                    <h2 class="gris">Accompagnement pour l’atteinte des cibles d’usage</h2>    
                 </div>
             </div>
             <div id="content">
