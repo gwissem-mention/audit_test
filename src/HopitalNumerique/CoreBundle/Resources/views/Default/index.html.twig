@@ -1,5 +1,47 @@
 {% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
 
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-core-default-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquecore/css/homepage.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
 {% block body %}
-    Homepage Front
+    <div id="homepage">
+        <div class="home-left pull-left">
+            left
+        </div>
+
+        <div class="home-right pull-right">
+            <div class="recherche bloc-home pull-left home-sprite">
+                <a href="#">Recherche</a>
+                <p>
+                    Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum.
+                </p>
+            </div>
+            <div class="forum bloc-home pull-right home-sprite">
+                <a href="#">Forum</a>
+                <p>
+                    Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum.
+                </p>
+            </div>
+            <div class="creation-compte pull-left home-sprite">
+                <p class="titre">Creation de compte</p>
+                <p>
+                    Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum, omnes pari sorte sunt bellatores seminudi coloratis.
+                </p>
+                <p>
+                    Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum, omnes pari sorte sunt bellatores seminudi.
+                </p>
+
+                <div class="buttons pull-right">
+                    <a href="#" class="btn btn-default pull-right login">Connexion</a>
+                    <a href="#" class="btn btn-default pull-right signup">Création de compte</a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

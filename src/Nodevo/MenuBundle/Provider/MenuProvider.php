@@ -69,11 +69,11 @@ class MenuProvider implements MenuProviderInterface
                 $menu   = $this->loader->load($tree);
             }
 
-            if ( !is_null($this->_menuEntity->getCssClass()) )
-                $menu->setChildrenAttribute('class', $this->_menuEntity->getCssClass() );
+            $class = !is_null($this->_menuEntity->getCssClass()) ? $this->_menuEntity->getCssClass() : '';
+            $menu->setChildrenAttribute('class', $class );
 
-            if ( !is_null($this->_menuEntity->getCssId()) )
-                $menu->setChildrenAttribute('id', $this->_menuEntity->getCssId() );
+            $id = !is_null($this->_menuEntity->getCssId()) ? $this->_menuEntity->getCssId() : '';
+            $menu->setChildrenAttribute('id', $id );
         }
         
         return $menu;
