@@ -9,7 +9,7 @@
 /vendor/
 /bin/
 
-# Mac OSX 
+#Mac OSX 
 .DS_Store
 
 #Net Beans
@@ -19,3 +19,6 @@
 
 #Windows
 .thumbs
+
+#UNIX
+.directory

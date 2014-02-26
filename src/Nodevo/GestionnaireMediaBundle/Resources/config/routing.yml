@@ -1,0 +1,17 @@
+nodevo_gestionnaire_media_index:
+    pattern:  /
+    defaults: { _controller: "NodevoGestionnaireMediaBundle:Index:index" }
+    
+#<-- MoxieManager
+nodevo_gestionnaire_media_moxiemanager_explorateur:
+    pattern:  /MoxieManager/Explorateur/modify
+    defaults: { _controller: "NodevoGestionnaireMediaBundle:MoxieManager:explorateur" }
+nodevo_gestionnaire_media_moxiemanager_api:
+    pattern:  /MoxieManager/api.php
+    defaults: { _controller: "NodevoGestionnaireMediaBundle:MoxieManager:api" }
+nodevo_gestionnaire_media_moxiemanager_json_parametres:
+    pattern:  /MoxieManager/JsonParametres
+    defaults: { _controller: "NodevoGestionnaireMediaBundle:MoxieManager:jsonParametres", _format: "json" }
+    requirements:
+        _format: json
+#-->

@@ -32,13 +32,13 @@ assetic:
     use_controller: false
     bundles:
         - NodevoAdminBundle
+        - NodevoGestionnaireMediaBundle
         - NodevoUserBundle
         - NodevoMenuBundle
         - NodevoGridBundle
         - NodevoAclBundle
         - NodevoRoleBundle
         - NodevoMailBundle
-        - HopitalNumeriqueMediaBundle
         - HopitalNumeriqueUserBundle
         - HopitalNumeriqueReferenceBundle
         - HopitalNumeriqueEtablissementBundle
