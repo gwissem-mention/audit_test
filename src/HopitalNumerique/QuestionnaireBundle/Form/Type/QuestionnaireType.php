@@ -134,6 +134,7 @@ class QuestionnaireType extends AbstractType
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'file', array(
             	            'required'   => $question->getObligatoire(),
             	            'label'      => $question->getLibelle(),
+                            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
             	            'mapped'     => false
             	    ));
             	    $builder->add('path', 'hidden', array(

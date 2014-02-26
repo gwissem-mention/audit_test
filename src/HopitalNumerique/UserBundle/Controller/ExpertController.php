@@ -44,7 +44,7 @@ class ExpertController extends Controller
      * @param integer $id Identifiant de l'utilisateur
      */
     public function editAction( HopiUser $user )
-    {        
+    {                
         //Récupération du questionnaire de l'expert
         $idQuestionnaireExpert = Manager\QuestionnaireManager::_getQuestionnaireId('expert');
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
@@ -52,7 +52,17 @@ class ExpertController extends Controller
         return $this->render('HopitalNumeriqueUserBundle:Expert:edit.html.twig',array(
                 'questionnaire' => $questionnaire,
                 'user'          => $user,
-                'options' => $this->_gestionAffichageOnglet($user)
+                'options' => $this->_gestionAffichageOnglet($user),
+                'routeRedirect' => array(
+                    'quit' => array(
+                        'route'     => 'hopital_numerique_user_homepage',
+                        'arguments' => array()
+                    ),
+                    'sauvegarde' => array(
+                        'route'     => 'hopitalnumerique_user_expert_edit',
+                        'arguments' => array('id' => $user->getId())
+                    )
+                )
         ));
     }  
 
@@ -123,14 +133,14 @@ class ExpertController extends Controller
         {
             switch ($role->getRole())
             {
-            	case 'ROLE_EXPERT_6':
-            	    $options['expert'] = true;
-            	    break;
-            	case 'ROLE_AMBASSADEUR_7':
-            	    $options['ambassadeur'] = true;
-            	    break;
-            	default:
-            	    break;
+                case 'ROLE_EXPERT_6':
+                    $options['expert'] = true;
+                    break;
+                case 'ROLE_AMBASSADEUR_7':
+                    $options['ambassadeur'] = true;
+                    break;
+                default:
+                    break;
             }
         }
     

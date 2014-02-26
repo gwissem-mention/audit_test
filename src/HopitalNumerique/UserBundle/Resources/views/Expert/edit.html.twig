@@ -71,7 +71,7 @@
 	                </div>
 	            </div>
                 {# Include des données de contractualisation #}
-                {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire} )) }}
+                {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'routeRedirection' : routeRedirect } )) }}
 	        </div>            
         </div>
     </div>
