@@ -8,15 +8,41 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire as HopiQuestionnai
 use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\VarDateTimeType;
 
 class QuestionnaireController extends Controller
 {
-    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire )
-    {
+
+    /**
+     * Tableau de la route de redirection sous la forme :
+     * array(
+     *   'sauvegarde' => array( 'route' => nom_de_ma_route, 'arguments' => array ('keyArgument' => valueArgument))
+     *   'quit'       => array( 'route' => nom_de_ma_route, 'arguments' => array ('keyArgument' => valueArgument))
+     *  )
+     *  
+     * @var array
+     */
+    private $routeRedirection = array();
+    
+    /**
+     * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
+     * 
+     * @param HopiUser $user Utilisateur courant
+     * @param HopiQuestionnaire $questionnaire Questionnaire à afficher
+     * @param array $routeRedirection Tableau de la route de redirection une fois que le formulaire est validé
+     * 
+     * @return Ambigous <\HopitalNumerique\QuestionnaireBundle\Controller\Form, \Symfony\Component\HttpFoundation\RedirectResponse, \Symfony\Component\HttpFoundation\Response>
+     */
+    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $routeRedirection = array())
+    {      
+        //Si le tableau n'est pas vide on le récupère
+        if(!empty($routeRedirection))
+            $this->routeRedirection = $routeRedirection;
+        
         return $this->_renderForm('nodevo_questionnaire_questionnaire',
                 array(
-                        'questionnaire' => $questionnaire,
-                        'user'          => $user
+                        'questionnaire'    => $questionnaire,
+                        'user'             => $user
                 ) ,
                 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit.html.twig'
         );
@@ -28,53 +54,6 @@ class QuestionnaireController extends Controller
 
     public function downloadAction()
     {
-    }
-
-    /**
-     * Fonction permettant d'envoyer un tableau d'option à la vue pour vérifier le role de l'utilisateur
-     *
-     * @param User $user
-     * @return array
-     */
-    private function _gestionAffichageOnglet( $user )
-    {
-        $roles = $user->getRoles();
-        $options = array(
-                'ambassadeur' => false,
-                'expert'      => false
-        );
-    
-        //Récupération du questionnaire de l'expert
-        $idQuestionnaireExpert = QuestionnaireManager::_getQuestionnaireId('expert');
-        //Récupération du questionnaire de l'ambassadeur
-        $idQuestionnaireAmbassadeur = QuestionnaireManager::_getQuestionnaireId('ambassadeur');
-    
-        //Récupération des réponses du questionnaire expert de l'utilisateur courant
-        $reponsesExpert      = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireExpert, $user->getId());
-        //Récupération des réponses du questionnaire ambassadeur de l'utilisateur courant
-        $reponsesAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireAmbassadeur, $user->getId());
-    
-        //Si il y a des réponses correspondant au questionnaire du groupe alors on donne l'accès
-        $options['expert_form']      = !empty($reponsesExpert);
-        $options['ambassadeur_form'] = !empty($reponsesAmbassadeur);
-    
-        //Dans tout les cas si l'utilisateur a le bon groupe on lui donne l'accès
-        foreach ($roles as $key => $role)
-        {
-            switch ($role->getRole())
-            {
-            	case 'ROLE_EXPERT_6':
-            	    $options['expert'] = true;
-            	    break;
-            	case 'ROLE_AMBASSADEUR_7':
-            	    $options['ambassadeur'] = true;
-            	    break;
-            	default:
-            	    break;
-            }
-        }
-    
-        return $options;
     }
     
     /**
@@ -88,13 +67,13 @@ class QuestionnaireController extends Controller
      */
     private function _renderForm( $formName, $options, $view )
     {
-        $user          = $options['user'];
-        $questionnaire = $options['questionnaire'];
+        $user             = $options['user'];
+        $questionnaire    = $options['questionnaire'];
     
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $questionnaire, array(
                 'label_attr' => array(
-                        'idUser' => $user->getId(),
+                        'idUser'          => $user->getId(),
                         'idQuestionnaire' => $questionnaire->getId()
                 )
         ));
@@ -150,31 +129,6 @@ class QuestionnaireController extends Controller
                     //MAJ/ajout du nouveau path
                     $files[$questionFiles->getAlias()]['reponse']->setReponse($files[$questionFiles->getAlias()]['nom']);
                                                                  //->setPath($files[$questionFiles->getAlias()]['nom']);
-                
-                    //Vérification si le file est obligatoire et renseigné
-                    if( $questionFiles->getObligatoire() && is_null($files[$questionFiles->getAlias()]['file']))
-                    {
-                        $this->get('session')->getFlashBag()->add('danger' ,  'Le champ '. $questionFiles->getAlias() .' est obligatoire.' );
-                
-                        return $this->render('HopitalNumeriqueUserBundle:Expert:edit.html.twig',array(
-                                'questionnaire' => $questionnaire,
-                                'user'          => $user,
-                                'options' => $this->_gestionAffichageOnglet($user)
-                        ));
-                    }
-                    //Vérification du mimetype et de la taille (10Mo)
-                    elseif( !is_null($files[$questionFiles->getAlias()]['file'])
-                            && ('application/pdf' !== $files[$questionFiles->getAlias()]['file']->getMimeType() || 10000000 < $files[$questionFiles->getAlias()]['file']->getSize())
-                    )
-                    {
-                        $this->get('session')->getFlashBag()->add('danger' ,  ('application/pdf' !== $files[$questionFiles->getAlias()]['file']->getMimeType() ? 'Le fichier attendu pour votre '. $questionFilesExpert->getAlias() .' doit être un pdf.' : 'La taille de votre CV est trop volumineuse, 10Mo maximum.' ));
-                
-                        return $this->render('HopitalNumeriqueUserBundle:Expert:edit.html.twig',array(
-                                'questionnaire' => $questionnaire,
-                                'user'          => $user,
-                                'options' => $this->_gestionAffichageOnglet($user)
-                        ));
-                    }
                 }    
                 
                 $reponses = array();
@@ -233,14 +187,15 @@ class QuestionnaireController extends Controller
     
                 //Sauvegarde / Sauvegarde + quitte
                 $do = $request->request->get('do');
-                return $this->redirect( $do == 'save-close' ? $this->generateUrl('hopital_numerique_user_homepage') : $this->generateUrl('hopitalnumerique_user_expert_edit', array( 'id' => $user->getId())));
+                return $this->redirect( $do == 'save-close' ? $this->generateUrl($this->routeRedirection['quit']['route'], $this->routeRedirection['quit']['arguments']) : $this->generateUrl($this->routeRedirection['sauvegarde']['route'], $this->routeRedirection['sauvegarde']['arguments']));
+                //return $this->redirect( $do == 'save-close' ? $this->generateUrl('hopital_numerique_user_homepage') : $this->generateUrl('hopitalnumerique_user_expert_edit', array( 'id' => $user->getId())));
             }
         }
     
         return $this->render( $view , array(
-                'form' => $form->createView(),
+                'form'          => $form->createView(),
                 'questionnaire' => $questionnaire,
-                'user' => $user
+                'user'          => $user
         ));
     }
     
