@@ -1,0 +1,1 @@
+tinymce.addI18n('ja',{"Insert file":"\u30d5\u30a1\u30a4\u30eb\u3092\u633f\u5165","moxiemanager_insert":"\u30d5\u30a1\u30a4\u30eb\u3092\u633f\u5165"});

@@ -4,5 +4,13 @@ parameters:
         - /medias
     nodevo_gestionnaire_media.moxie_manager.langue.defaut: fr
     nodevo_gestionnaire_media.moxie_manager.langue.langues_disponibles:
-        - fr
+        - ar
+        - ca
+        - de
         - en
+        - es
+        - fr
+        - it
+        - ja
+        - pt
+        - ru

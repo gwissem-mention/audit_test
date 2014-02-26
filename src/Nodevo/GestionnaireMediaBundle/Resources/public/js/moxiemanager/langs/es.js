@@ -1,0 +1,1 @@
+tinymce.addI18n('es',{"Insert file":"Insertar archivo","moxiemanager_insert":"Insertar archivo"});

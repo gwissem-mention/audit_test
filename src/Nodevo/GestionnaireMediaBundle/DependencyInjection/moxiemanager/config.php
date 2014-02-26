@@ -190,9 +190,4 @@
 
 	// History plugin
 	$moxieManagerConfig['history.max'] = 20;
-	
-	// Tiny MCE
-	
-	
-	
 ?>
