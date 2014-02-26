@@ -36,7 +36,7 @@ NodevoGestionnaireMediaBundle_MoxieManager.affiche = function(options)
 NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce = function()
 {
     //NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux(function() {
-        tinymce.PluginManager.load('moxiemanager', '/bundles/nodevogestionnairemedia/compiled/moxiemanager/editor_plugin.js');
+        tinymce.PluginManager.load('moxiemanager', '/bundles/nodevogestionnairemedia/js/moxiemanager/editor_plugin.js');
     //});
 };
 

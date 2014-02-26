@@ -3,7 +3,7 @@
 	$moxieManagerConfig['general.license'] = 'EWJ5-YFAB-KWOK-PISD-6PW5-QEOS-N6AI-FDZC';
 	$moxieManagerConfig['general.hidden_tools'] = '';
 	$moxieManagerConfig['general.disabled_tools'] = '';
-	$moxieManagerConfig['general.plugins'] = 'Favorites,History,Uploaded';
+	$moxieManagerConfig['general.plugins'] = 'AutoRename';
 	$moxieManagerConfig['general.demo'] = false;
 	$moxieManagerConfig['general.debug'] = false;
 	$moxieManagerConfig['general.language'] = MOXIEMANAGER_GENERAL_LANGUAGE;
@@ -16,7 +16,7 @@
 	$moxieManagerConfig['filesystem.exclude_directory_pattern'] = '/^mcith$/i';
 	$moxieManagerConfig['filesystem.include_file_pattern'] = '';
 	$moxieManagerConfig['filesystem.exclude_file_pattern'] = '';
-	$moxieManagerConfig['filesystem.extensions'] = 'jpg,jpeg,png,gif,html,htm,txt,docx,doc,zip,pdf';
+	$moxieManagerConfig['filesystem.extensions'] = MOXIEMANAGER_FILESYSTEM_EXTENSIONS;
 	$moxieManagerConfig['filesystem.readable'] = true;
 	$moxieManagerConfig['filesystem.writable'] = true;
 	$moxieManagerConfig['filesystem.allow_override'] = '*';
@@ -146,7 +146,7 @@
 	$moxieManagerConfig['autoformat.delete_format_images'] = true;
 
 	// AutoRename, remember to include it in your plugin config.
-	$moxieManagerConfig['autorename.enabled'] = false;
+	$moxieManagerConfig['autorename.enabled'] = true;
 	$moxieManagerConfig['autorename.spacechar'] = "_";
 	$moxieManagerConfig['autorename.lowercase'] = false;
 

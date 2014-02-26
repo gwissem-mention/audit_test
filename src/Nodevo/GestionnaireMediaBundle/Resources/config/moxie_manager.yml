@@ -1,4 +1,5 @@
 parameters:
+    nodevo_gestionnaire_media.moxie_manager.extensions_autorisees: jpg,jpeg,png,gif,html,htm,txt,docx,doc,zip,pdf
     nodevo_gestionnaire_media.moxie_manager.media.dossiers:
         - /medias
     nodevo_gestionnaire_media.moxie_manager.langue.defaut: fr

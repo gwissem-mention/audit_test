@@ -17,10 +17,10 @@
             <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
 
-        {% if app.user|checkAuthorization( path('nodevo_gestionnaire_media_moxiemanager_explorateur') ) %}<script type="text/javascript">
+        <script type="text/javascript">
             NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
             NodevoGestionnaireMediaBundle_MoxieManager_Admin.affichePleinEcran();
-        </script>{% endif %}
+        </script>
     {% endblock %}
 </head>
 <body>

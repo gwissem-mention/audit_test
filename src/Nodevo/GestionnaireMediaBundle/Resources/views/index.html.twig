@@ -16,12 +16,12 @@
 
 {% block body %}
     <div class="col-sm-12">
-        <div class="panel panel-midnightblue panel-moxiemanager">
+        <div class="panel panel-moxiemanager">
             <div class="panel-body" >
 
-                <div id="moxiemanager_conteneur">
+                {% if app.user|checkAuthorization( path('nodevo_gestionnaire_media_moxiemanager_explorateur') ) %}<div id="moxiemanager_conteneur">
                     <iframe src="{{ url('nodevo_gestionnaire_media_moxiemanager_explorateur') }}" width="100%" height="600"></iframe>
-                </div>
+                </div>{% endif %}
 
             </div>
         </div>
