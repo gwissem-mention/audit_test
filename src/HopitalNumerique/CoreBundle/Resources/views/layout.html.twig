@@ -41,7 +41,7 @@
                 </div>
                 
                 <div class="loggedUser pull-right">
-                    {#<a class="user" href="#">Nom Utilisateur</a>
+                    {#<a class="user" href="#"><i class="common-sprite common-sprite-user-red"></i>Nom Utilisateur</a>
                     <a class="infos rose" href="#">Informations</a>
                     <a class="infos rose" href="#">utilisateur</a>#}
                 </div>
@@ -52,11 +52,14 @@
                     Ce projet s’inscrit dans le cadre du programme
                 </p>
                 <div class="connexion">
-                    <a href="#" class="login">Identification</a>
+                    <a href="#" class="login"><i class="common-sprite common-sprite-user" ></i>Identification</a>
                 </div>
+
+                <div class="common-sprite common-sprite-header"></div>
             </div>
             <div id="content">
                 {% block body %}{% endblock %}
+                <div class="clearfix"></div>
             </div>
             <div id="footer">
                 {{ knp_menu_render('menu-footer-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
