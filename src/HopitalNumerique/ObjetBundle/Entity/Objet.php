@@ -140,6 +140,13 @@ class Objet
     private $isInfraDoc;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="obj_isArticle", type="boolean", options = {"comment" = "L objet est un article ?"})
+     */
+    private $isArticle;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="obj_locked_by", referencedColumnName="usr_id")
      */
@@ -262,6 +269,7 @@ class Objet
         $this->commentaires = true;
         $this->notes        = true;
         $this->isInfraDoc   = false;
+        $this->isArticle    = false;
         $this->lock         = false;
         $this->roles        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->types        = new \Doctrine\Common\Collections\ArrayCollection();
@@ -603,6 +611,26 @@ class Objet
         return $this->isInfraDoc;
     }
 
+    /**
+     * Get isArticle
+     *
+     * @return boolean $isArticle
+     */
+    public function getIsArticle()
+    {
+        return $this->isArticle;
+    }
+    
+    /**
+     * Set isArticle
+     *
+     * @param boolean $isArticle
+     */
+    public function setIsArticle($isArticle)
+    {
+        $this->isArticle = $isArticle;
+    }
+    
     /**
      * Get lockedBy
      *
