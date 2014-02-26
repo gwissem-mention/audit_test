@@ -33,7 +33,7 @@ class ObjetGrid extends Grid implements IGrid
         
         $infraColumn = new Column\BooleanColumn('isInfraDoc', 'Infra-doc');
         $infraColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
-        $infraColumn->setSize( 80 );
+        $infraColumn->setSize( 90 );
         $this->addColonne( $infraColumn );
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');

@@ -40,7 +40,7 @@
         {% spaceless %}
         <div class="grid_massactions pull-right form-group">
             <input type="hidden" id="{{ grid.hash }}_mass_action_all" name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION_ALL_KEYS_SELECTED') }}]" value="0" />
-            <div class="col-md-8">
+            <div class="pull-left" style="margin-right:10px" >
                 <select name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION') }}]" class="form-control">
                     <option value="-1">Sélectionner une action</option>
                     {% for key, massAction in grid.massActions %}
@@ -48,7 +48,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="btn btn-default col-md-4 submit" >{{ 'Submit Action'|trans }}</div>
+            <div class="btn btn-default pull-left submit" >{{ 'Submit Action'|trans }}</div>
         </div>
         {% endspaceless %}
     </div>

@@ -125,7 +125,7 @@ class UserController extends Controller
     public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
     {
         //get all selected Users
-        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
         $this->get('hopitalnumerique_user.manager.user')->delete( $users );
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
@@ -144,7 +144,7 @@ class UserController extends Controller
     public function desactiverMassAction( $primaryKeys, $allPrimaryKeys )
     {
         //get all selected Users
-        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
 
         //get ref and Toggle State
         $ref = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 4) );
@@ -167,7 +167,7 @@ class UserController extends Controller
     public function activerMassAction( $primaryKeys, $allPrimaryKeys )
     {
         //get all selected Users
-        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
 
         //get ref and Toggle State
         $ref = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 3) );
@@ -178,8 +178,6 @@ class UserController extends Controller
 
         return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
     }
-
-    
 
     /**
      * Export CSV de la liste des utilisateurs sélectionnés

@@ -32,7 +32,7 @@ $(document).ready(function() {
         theme_url    : '/bundles/nodevoadmin/plugins/tinymce/themes/modern/theme.min.js',
         skin_url     : '/bundles/nodevoadmin/plugins/tinymce/skins/lightgray',
         plugins      : 'table code textcolor pagebreak importcss',
-        height       : 190,
+        height       : 210,
         menubar      : false,
         content_css  : '/bundles/hopitalnumeriqueobjet/css/wysiwyg.css',
         toolbar1     : "code | undo redo cut copy paste | pagebreak",

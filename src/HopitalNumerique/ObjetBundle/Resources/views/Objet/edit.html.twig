@@ -133,13 +133,80 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                
                                 {{ form_row(form.ambassadeurs) }}
-                                {{ form_row(form.commentaires) }}
-                                {{ form_row(form.notes) }}
-                                {{ form_row(form.dateCreation) }}
-                                {{ form_row(form.dateDebutPublication) }}
-                                {{ form_row(form.dateFinPublication) }}
+
+                                <div class="form-group">
+                                    {{ form_label(form.commentaires) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.commentaires) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.commentaires) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    {{ form_label(form.notes) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.notes) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.notes) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    {{ form_label(form.dateCreation) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.dateCreation) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.dateCreation) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    {{ form_label(form.dateDebutPublication) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.dateDebutPublication) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.dateDebutPublication) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    {{ form_label(form.dateFinPublication) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.dateFinPublication) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.dateFinPublication) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    {{ form_label(form.dateModification) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.dateModification) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.dateModification) }}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="form-group {% if not objet.id %}hide{% endif %}">

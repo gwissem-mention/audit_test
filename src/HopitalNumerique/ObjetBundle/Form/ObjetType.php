@@ -108,27 +108,51 @@ class ObjetType extends AbstractType
                 }
             ))
             ->add('commentaires', 'checkbox', array(
-                'required' => false,
-                'label'    => 'Commentaires autorisés'
+                'required'   => false,
+                'label'      => 'Commentaires autorisés',
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                )
             ))
             ->add('notes', 'checkbox', array(
-                'required' => false,
-                'label'    => 'Notes autorisés'
+                'required'   => false,
+                'label'      => 'Notes autorisés',
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                )
             ))
             ->add('dateCreation', 'genemu_jquerydate', array(
-                'required' => true, 
-                'label'    => 'Date de création',
-                'widget'   => 'single_text'
+                'required'   => true, 
+                'label'      => 'Date de création',
+                'widget'     => 'single_text',
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                )
             ))
             ->add('dateDebutPublication', 'genemu_jquerydate', array(
-                'required' => false, 
-                'label'    => 'Début de publication',
-                'widget'   => 'single_text'
+                'required'   => false, 
+                'label'      => 'Début de publication',
+                'widget'     => 'single_text',
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                )
             ))
             ->add('dateFinPublication', 'genemu_jquerydate', array(
-                'required' => false, 
-                'label'    => 'Fin de publicat!ion',
-                'widget'   => 'single_text'
+                'required'   => false, 
+                'label'      => 'Fin de publication',
+                'widget'     => 'single_text',
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                )
+            ))
+            ->add('dateModification', 'date', array(
+                'required'   => false, 
+                'widget'     => 'single_text',
+                'label'      => 'Date de dernière modification notifiée',
+                'attr'       => array('readonly' => 'readonly'),
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                )
             ))
             ->add('modified', 'hidden', array(
                 'mapped'   => false
