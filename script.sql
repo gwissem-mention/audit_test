@@ -3,7 +3,6 @@
    Lorem ipsum */
 INSERT .....
 
-
 /* GME - 19/02/14
    DEv -> PROD
    Ajout des amb/expert + prod maitrisé dans le menu
@@ -18,7 +17,6 @@ INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `i
 /*INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`) VALUES
 (NULL, 1, 3, 'Joindre votre DPI', 1, NULL, 16, 'dpi', NULL);*/
 
-
 /* QSO - 25/02/14
    DEV -> PROD
    Ajout lien de menu*/
@@ -28,4 +26,4 @@ INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `i
 /* RLE - 25/02/2014
    DEV -> PROD
    Modif URL gestion des médias */
-UPDATE `core_menu_item` SET `itm_route` = 'nodevo_gestionnaire_media_index' WHERE `core_menu_item`.`itm_id` =44;
+/*UPDATE `core_menu_item` SET `itm_route` = 'nodevo_gestionnaire_media_index' WHERE `core_menu_item`.`itm_id` =44;*/
