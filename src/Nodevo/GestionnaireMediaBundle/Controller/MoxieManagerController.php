@@ -32,16 +32,19 @@ class MoxieManagerController extends Controller
      */
     public function apiAction()
     {
-        $moxieManagerDossiers = $this->container->getParameter('nodevo_gestionnaire_media.moxie_manager.media.dossiers');
-        for ($i = 0; $i < count($moxieManagerDossiers); $i++)
-            $moxieManagerDossiers[$i] = $this->get('request')->server->get('DOCUMENT_ROOT').$moxieManagerDossiers[$i];
-
-        define('MOXIEMANAGER_FILESYSTEM_ROOTPATH', implode(';', $moxieManagerDossiers));
-        define('MOXIEMANAGER_FILESYSTEM_EXTENSIONS', $this->container->getParameter('nodevo_gestionnaire_media.moxie_manager.extensions_autorisees'));
-        define('MOXIEMANAGER_GENERAL_LANGUAGE', $this->get('nodevo_gestionnaire_media.service.moxie_manager')->getLangue());
-        define('MOXIEMANAGER_JS_BASE_URL', $this->get('request')->server->get('DOCUMENT_ROOT').$this->container->get('templating.helper.assets')->getUrl('bundles/nodevogestionnairemedia/js/moxiemanager'));
-
-        require_once(dirname(__FILE__).'/../DependencyInjection/moxiemanager/api.php');
+        if ($this->container->get('nodevo_acl.manager.acl')->checkAuthorization($this->get('request')->attributes->get('_route'), $this->get('security.context')->getToken()->getUser()))
+        {
+            $moxieManagerDossiers = $this->container->getParameter('nodevo_gestionnaire_media.moxie_manager.media.dossiers');
+            for ($i = 0; $i < count($moxieManagerDossiers); $i++)
+                $moxieManagerDossiers[$i] = $this->get('request')->server->get('DOCUMENT_ROOT').$moxieManagerDossiers[$i];
+    
+            define('MOXIEMANAGER_FILESYSTEM_ROOTPATH', implode(';', $moxieManagerDossiers));
+            define('MOXIEMANAGER_FILESYSTEM_EXTENSIONS', $this->container->getParameter('nodevo_gestionnaire_media.moxie_manager.extensions_autorisees'));
+            define('MOXIEMANAGER_GENERAL_LANGUAGE', $this->get('nodevo_gestionnaire_media.service.moxie_manager')->getLangue());
+            define('MOXIEMANAGER_JS_BASE_URL', $this->get('request')->server->get('DOCUMENT_ROOT').$this->container->get('templating.helper.assets')->getUrl('bundles/nodevogestionnairemedia/js/moxiemanager'));
+    
+            require_once(dirname(__FILE__).'/../DependencyInjection/moxiemanager/api.php');
+        }
 
         return new Response();
     }
