@@ -9,6 +9,7 @@
  * Command that creates directories.
  *
  * @package MOXMAN_Commands
+ * @TODO RLE 27/02/2014 : Traduction selon la langue de l'utilisateur
  */
 class MOXMAN_Commands_CreateDirectoryCommand extends MOXMAN_Commands_BaseCommand {
 	/**
@@ -23,21 +24,24 @@ class MOXMAN_Commands_CreateDirectoryCommand extends MOXMAN_Commands_BaseCommand
 
 		if ($config->get('general.demo')) {
 			throw new MOXMAN_Exception(
-				"This action is restricted in demo mode.",
+				//"This action is restricted in demo mode.",
+			    "Cette action n'est pas permise dans cette version de démonstration.",
 				MOXMAN_Exception::DEMO_MODE
 			);
 		}
 
 		if (!$file->canWrite()) {
 			throw new MOXMAN_Exception(
-				"No write access to file: " . $file->getPublicPath(),
+				//"No write access to file: " . $file->getPublicPath(),
+			    "Droit en écriture manquant pour le fichier : " . $file->getPublicPath(),
 				MOXMAN_Exception::NO_WRITE_ACCESS
 			);
 		}
 
 		if ($file->exists()) {
 			throw new MOXMAN_Exception(
-				"File already exist: " . $file->getPublicPath(),
+				//"File already exist: " . $file->getPublicPath(),
+			    "Fichier déjà existant : " . $file->getPublicPath(),
 				MOXMAN_Exception::FILE_EXISTS
 			);
 		}
@@ -45,7 +49,8 @@ class MOXMAN_Commands_CreateDirectoryCommand extends MOXMAN_Commands_BaseCommand
 		$filter = MOXMAN_Vfs_CombinedFileFilter::createFromConfig($config, "createdir");
 		if (!$filter->accept($file, false)) {
 			throw new MOXMAN_Exception(
-				"Invalid file name for: " . $file->getPublicPath(),
+				//"Invalid file name for: " . $file->getPublicPath(),
+			    "Nom de fichier invalide : " . $file->getPublicPath(),
 				MOXMAN_Exception::INVALID_FILE_NAME
 			);
 		}
@@ -60,7 +65,8 @@ class MOXMAN_Commands_CreateDirectoryCommand extends MOXMAN_Commands_BaseCommand
 			$templateFile = MOXMAN::getFile($params->template);
 			if (!$templateFile->exists()) {
 				throw new MOXMAN_Exception(
-					"Template file doesn't exists: " . $file->getPublicPath(),
+					//"Template file doesn't exists: " . $file->getPublicPath(),
+				    "Gabarit de fichier inexistant : " . $file->getPublicPath(),
 					MOXMAN_Exception::FILE_DOESNT_EXIST
 				);
 			}
