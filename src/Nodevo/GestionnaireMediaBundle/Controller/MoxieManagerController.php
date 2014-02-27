@@ -15,13 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
 class MoxieManagerController extends Controller
 {
     /**
-     * Vue de l'explorateur du gestionnaire de média MoxieManager.
+     * Vue de l'explorateur (frame) du gestionnaire de média MoxieManager.
      * 
      * @return \Symfony\Component\HttpFoundation\Response Vue de l'explorateur MoxieManager
      */
-    public function explorateurAction()
+    public function frameAction()
     {
-        return $this->render('NodevoGestionnaireMediaBundle:MoxieManager:explorateur.html.twig');
+        return $this->render('NodevoGestionnaireMediaBundle:MoxieManager:frame.html.twig');
     }
 
     /**
