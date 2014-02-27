@@ -4,10 +4,10 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Hopital Numérique">
+        <meta name="description" content="{% block metadesc %}Mon Hôpital Numérique{% endblock %}">
         <meta name="author" content="NODEVO">
 
-        <title>{% block title %}Hopital Numérique{% endblock %}</title>
+        <title>{% block title %}Mon Hôpital Numérique{% endblock %}</title>
 
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
@@ -34,16 +34,26 @@
     <body>
         <div id="body">
             <div id="header">
-                <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
+                <a href="{{path('hopital_numerique_homepage')}}">
+                    <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
+                </a>
                 <div id="titre" class="pull-left">
                     <h1><span class="violet">Mon</span> Hôpital <span class="gris">Numérique</span></h1>
                     <h2 class="gris">Accompagnement pour l’atteinte des cibles d’usage</h2>    
                 </div>
                 
                 <div class="loggedUser pull-right">
-                    {#<a class="user" href="#"><i class="common-sprite common-sprite-user-red"></i>Nom Utilisateur</a>
-                    <a class="infos rose" href="#">Informations</a>
-                    <a class="infos rose" href="#">utilisateur</a>#}
+                    {% if app.user %}
+                        <p>
+                            <i class="common-sprite common-sprite-user-red"></i>
+                            {% if app.user.nom or app.user.prenom %}
+                                {{ app.user.prenom|capitalize ~ ' ' ~ app.user.nom|capitalize }}
+                            {% else %}
+                                {{ app.user.username|capitalize }}
+                            {% endif %}
+                        </p>
+                        <a class="infos rose" href="{{path('hopital_numerique_account_homepage')}}">Mon tableau de bord</a>
+                    {% endif %}
                 </div>
                 
                 <img src="{{asset('bundles/hopitalnumeriquecore/img/hn.jpg')}}" alt="HOPITAL NUMERIQUE" id="logoHn" class="pull-right" />
@@ -51,13 +61,33 @@
                 <p class="violet pull-right align-right">
                     Ce projet s’inscrit dans le cadre du programme
                 </p>
+                
                 <div class="connexion">
-                    <a href="#" class="login"><i class="common-sprite common-sprite-user" ></i>Identification</a>
+                    {% if app.user %}
+                        <a href="{{path('account_logout')}}">Déconnexion <i class="common-sprite common-sprite-close" ></i></a>
+                    {% else %}
+                        <a href="{{path('account_login')}}"><i class="common-sprite common-sprite-user" ></i>Identification</a>
+                    {% endif %}
                 </div>
 
                 <div class="common-sprite common-sprite-header"></div>
             </div>
             <div id="content">
+                {% if app.request.attributes.get('_route') != 'hopital_numerique_homepage' %}
+                    {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+                    <div class="clearfix"></div>
+                {% endif %}
+                {{ block('flashBags') }}
+                {% if error is defined and error %}
+                    <div class="alert alert-warning" onclick="$(this).slideUp();" >
+                        {{ error|trans({}, 'FOSUserBundle') }}
+                    </div>
+                {% endif %}
+                {% if invalid_username is defined %}
+                    <div class="alert alert-warning" onclick="$(this).slideUp();" >
+                        {{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}
+                    </div>
+                {% endif %}
                 {% block body %}{% endblock %}
                 <div class="clearfix"></div>
             </div>

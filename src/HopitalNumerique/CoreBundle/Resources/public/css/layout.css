@@ -1,6 +1,6 @@
 body{ background: #f5f5f5;}
 #body{width:980px; margin:0 auto; background: white}
-#content{padding:40px 20px;}
+#content{padding:10px 20px 40px;}
 *{ font-family: 'Open Sans', sans-serif }
 .common-sprite { background-image: url('../img/common-sprite.png'); background-repeat: no-repeat; display: block; }
 a.readmore{display: block; color:#000000; font-family: Arial; font-weight: bold}
@@ -22,12 +22,13 @@ a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 
 #header #titre h1, #header #titre h1 span{ font-size:25px; text-transform: uppercase; margin:0; padding: 0; font-family: 'Viga', sans-serif}
 #header #titre h2{ font-size: 11px; text-transform: uppercase; padding: 0; margin:0;}
 #header .connexion{position: absolute; right:0; bottom:0; z-index: 5}
-#header .connexion a{display: block; padding-left: 25px;color:black;margin-right: 18px; text-transform: uppercase; font-size: 10px}
+#header .connexion a{display: block; padding-left: 25px;color:black;margin-right: 18px; text-transform: uppercase; font-size: 10px; width: 125px}
 #header .connexion a .common-sprite-user { width: 14px; height: 13px; background-position: -2px -33px; float: left; margin-right: 5px}
+#header .connexion a .common-sprite-close { width: 9px; height: 9px; background-position: -15px -2px; float: right; margin-left: 5px; margin-top:2px;}
 #header .loggedUser{width: 158px;height:79px;padding:13px 20px 10px 30px; }
-#header .loggedUser a.user{display: block; color:black; font-size: 11px;}
-#header .loggedUser a.user .common-sprite-user-red{ width: 14px; height: 13px; background-position: -20px -33px; float: left; margin-right: 5px }
-#header .loggedUser .infos{font-size: 11px}
+#header .loggedUser p{font-size: 11px;}
+#header .loggedUser p .common-sprite-user-red{ width: 14px; height: 13px; background-position: -20px -33px; float: left; margin-right: 5px }
+#header .loggedUser .infos{font-size: 10px}
 #header #logoHn{margin:3px 0 0 10px;}
 #header p.violet{width:93px;font-size: 9px; font-weight: 600; margin-top: 30px;line-height: 12px}
 
@@ -36,6 +37,11 @@ a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 
 #footer .menu-footer{ width: 355px; margin:0 auto; list-style: none; padding:0;}
 #footer .menu-footer li a{color:#5d5d5d; display: block; float: left; padding:0 6px; text-transform: uppercase; border-right: 1px solid #5d5d5d}
 #footer .menu-footer li.last a{border :0;}
+
+/* MENU */
+#menu{ margin:0 auto; list-style: none; padding:0; }
+#menu li a{ display: block; float: left; padding:3px 10px; text-transform: uppercase; color: #333333; font-size: 13px}
+
 
 /*!
  *  Font Awesome 4.0.3 by @davegandy - http://fontawesome.io - @fontawesome

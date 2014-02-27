@@ -1,4 +1,13 @@
-# Bundles Hopital Numérique
+# Bundles Hopital Numérique : partie Front
+hopital_numerique_core:
+    resource: "@HopitalNumeriqueCoreBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hopital_numerique_account:
+    resource: "@HopitalNumeriqueAccountBundle/Resources/config/routing.yml"
+    prefix:   /compte-hn
+
+# Bundles Hopital Numérique : partie Admin
 hopital_numerique_user:
     resource: "@HopitalNumeriqueUserBundle/Resources/config/routing.yml"
     prefix:   /admin
@@ -10,10 +19,6 @@ hopital_numerique_reference:
 hopital_numerique_etablissement:
     resource: "@HopitalNumeriqueEtablissementBundle/Resources/config/routing.yml"
     prefix:   /admin
-
-hopital_numerique_core:
-    resource: "@HopitalNumeriqueCoreBundle/Resources/config/routing.yml"
-    prefix:   /
 
 hopital_numerique_admin:
     resource: "@HopitalNumeriqueAdminBundle/Resources/config/routing.yml"
@@ -31,7 +36,7 @@ hopital_numerique_questionnaire:
 nodevo_acl:
     resource: "@NodevoAclBundle/Resources/config/routing.yml"
     prefix:   /admin
-    
+
 nodevo_gestionnaire_media:
     resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"
     prefix:   /admin/media

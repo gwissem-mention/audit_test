@@ -2,6 +2,7 @@
 .home-sprite { background-image: url('../img/home-sprite.png'); background-repeat: no-repeat; display: block; }
 
 /* Block Droit : sprite used */
+#homepage{margin-top:30px;}
 #homepage .home-right{ width:620px; }
 #homepage .home-right .bloc-home{ color:#ffffff; height: 282px; padding:150px 31px 31px 31px; width:300px; height: 282px;}
 #homepage .home-right .bloc-home.recherche{ background-position: -2px -574px; }
