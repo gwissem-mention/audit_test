@@ -31,6 +31,7 @@ class Contractualisation
      *     mimeTypes = {"application/pdf", "application/x-pdf"},
      *     mimeTypesMessage = "Le fichier doit être un PDF."
      * )
+     * @Nodevo\Javascript(class="validate[required]")
      */
     public $file;
     

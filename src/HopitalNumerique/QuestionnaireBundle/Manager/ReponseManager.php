@@ -82,10 +82,24 @@ class ReponseManager extends BaseManager
         $reponses = $this->getRepository()->reponsesByQuestionnaireByUser( $idQuestionnaire , $idUser )->getResult();
         
         $this->delete($reponses);
+    }
+    
+    /**
+     * Téléchargement des fichiers attaché au questionnaire expert.
+     *
+     * @param int $id Id de la réponse du fichier à télécharger
+     */
+    public function download( $id )
+    {
+        //Récupération de l'entité en fonction du paramètre
+        $reponse = $this->findOneBy( array( 'id' => $id) );
         
-//         foreach ($reponses as $reponse)
-//         {
-//             $this->delete($reponses);
-//         }
+        $options = array(
+                'serve_filename' => $reponse->getReponse(),
+                'absolute_path' => false,
+                'inline' => false,
+        );
+        
+        return $options;
     }
 }

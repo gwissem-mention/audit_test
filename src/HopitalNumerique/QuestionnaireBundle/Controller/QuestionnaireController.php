@@ -29,14 +29,14 @@ class QuestionnaireController extends Controller
      * 
      * @param HopiUser $user Utilisateur courant
      * @param HopiQuestionnaire $questionnaire Questionnaire à afficher
-     * @param array $routeRedirection Tableau de la route de redirection une fois que le formulaire est validé
+     * @param json $routeRedirection Tableau de la route de redirection une fois que le formulaire est validé
      * 
      * @return Ambigous <\HopitalNumerique\QuestionnaireBundle\Controller\Form, \Symfony\Component\HttpFoundation\RedirectResponse, \Symfony\Component\HttpFoundation\Response>
      */
-    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $routeRedirection = array())
+    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $routeRedirection = '')
     {      
         //Si le tableau n'est pas vide on le récupère
-        if(!empty($routeRedirection))
+        if(!is_null($routeRedirection))
             $this->routeRedirection = $routeRedirection;
         
         return $this->_renderForm('nodevo_questionnaire_questionnaire',
@@ -52,10 +52,7 @@ class QuestionnaireController extends Controller
     {
     }
 
-    public function downloadAction()
-    {
-    }
-    
+        
     /**
      * Effectue le render des formulaires de Questionnaire
      *
@@ -73,8 +70,9 @@ class QuestionnaireController extends Controller
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $questionnaire, array(
                 'label_attr' => array(
-                        'idUser'          => $user->getId(),
-                        'idQuestionnaire' => $questionnaire->getId()
+                        'idUser'           => $user->getId(),
+                        'idQuestionnaire'  => $questionnaire->getId(),
+                        'routeRedirection' => $this->routeRedirection 
                 )
         ));
         
@@ -85,6 +83,9 @@ class QuestionnaireController extends Controller
     
             // On bind les données du form
             $form->handleRequest($request);
+            
+            $routeRedirection = json_decode($form["routeRedirect"]->getData(), true);
+            
             //si le formulaire est valide
             if ($form->isValid()) {
     
@@ -100,7 +101,7 @@ class QuestionnaireController extends Controller
                 
                 //get All References, and convert to ArrayCollection
                 $reponses = new ArrayCollection( $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUserByFileQuestion( $questionnaire->getId(), $user->getId(), false ) );
-             
+                
                 //Parcourt les questions de champ file
                 foreach ($questionsFiles as $key => $questionFiles)
                 {   
@@ -108,7 +109,16 @@ class QuestionnaireController extends Controller
                     $criteria = Criteria::create()->where(Criteria::expr()->eq("question", $questionFiles) );
                     //Récupération d'un tableau comportant une seule réponse
                     $tempReponse = $reponses->matching( $criteria );
-                    $reponse  = $tempReponse[0];
+                    
+                    // -v-v-v- GME 26/02/2014 : Traitement brouillon, le array_shift ou reset ne fonctionne pas -v-v-v-
+                    $test = array();                    
+                    foreach ($tempReponse as $temp)
+                    {
+                        $test[] = $temp;
+                        break;
+                    }                    
+                    $reponse  = !empty($test) ? $test[0] : null;
+                    // -^-^-^- Traitement brouillon, le array_shift ou reset ne fonctionne pas -^-^-^-
                 
                     //Si il n'y a pas de réponses pour cette question pour cet utilisateur
                     if(is_null($reponse))
@@ -119,7 +129,7 @@ class QuestionnaireController extends Controller
                     }
                 
                     //Format du champ file
-                    $champFile = $questionFiles->getTypeQuestion()->getLibelle() . '_' . $questionFiles->getId() . '_' . $questionFiles->getAlias();
+                    $champFile = $questionFiles->getTypeQuestion()->getLibelle() . '_' . $questionFiles->getId() . '_' . $questionFiles->getAlias();                    
                     $files[$questionFiles->getAlias()] = array(
                             'nom'  => $questionnaire->getNomMinifie() . '_' . $user->getId() . '_' . $user->getNom() . '_' . $user->getPrenom() . '_' . $questionFiles->getAlias() . '.pdf',
                             'file' => $form[$champFile]->getData(),
@@ -128,14 +138,17 @@ class QuestionnaireController extends Controller
                     
                     //MAJ/ajout du nouveau path
                     $files[$questionFiles->getAlias()]['reponse']->setReponse($files[$questionFiles->getAlias()]['nom']);
-                                                                 //->setPath($files[$questionFiles->getAlias()]['nom']);
-                }    
+                } 
                 
                 $reponses = array();
-            
+                           
                 //Parcourt les fichiers uploadés
                 foreach ($files as $file)
                 {
+                    //Si le JS est désactivé, il se peut qu'il n'y ait pas de fichier uploadé
+                    if(is_null($file['file']))
+                        break;
+                    
                     $file['file']->move($dossierRoot, $file['nom']);
         
                     $reponses[] = $file['reponse'];
@@ -155,7 +168,7 @@ class QuestionnaireController extends Controller
     
                     //Le tableau de arrayParamKey : 0 => type du champ - 1 => Id de la question - 2+=> alias du champ
                     $idQuestion = isset($arrayParamKey) && key_exists(1, $arrayParamKey)  ? $arrayParamKey[1] : 0;
-    
+
                     //Si l'id de la question n'a pas été récupéré alors on ne sauvegarde pas la question (exemple avec le cas particulier du token du formulaire)
                     if(0 === $idQuestion || '' === $idQuestion || '_token' === $key)
                         continue;
@@ -187,8 +200,7 @@ class QuestionnaireController extends Controller
     
                 //Sauvegarde / Sauvegarde + quitte
                 $do = $request->request->get('do');
-                return $this->redirect( $do == 'save-close' ? $this->generateUrl($this->routeRedirection['quit']['route'], $this->routeRedirection['quit']['arguments']) : $this->generateUrl($this->routeRedirection['sauvegarde']['route'], $this->routeRedirection['sauvegarde']['arguments']));
-                //return $this->redirect( $do == 'save-close' ? $this->generateUrl('hopital_numerique_user_homepage') : $this->generateUrl('hopitalnumerique_user_expert_edit', array( 'id' => $user->getId())));
+                return $this->redirect( $do == 'save-close' ? $this->generateUrl($routeRedirection['quit']['route'], $routeRedirection['quit']['arguments']) : $this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']));
             }
         }
     

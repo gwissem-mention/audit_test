@@ -1,0 +1,11 @@
+{% extends 'NodevoAdminBundle::form.html.twig' %}
+
+{% block file_widget %}
+    {% spaceless %}   
+	    {% if data is not null %}
+			<a href="{{path('hopitalnumerique_reponse_download', {'reponse':data})}}">Télécharger</a>
+        {% else %}
+            <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+        {% endif %}
+    {% endspaceless %} 
+{% endblock file_widget %}

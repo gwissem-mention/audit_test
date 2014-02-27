@@ -52,17 +52,19 @@ class ExpertController extends Controller
         return $this->render('HopitalNumeriqueUserBundle:Expert:edit.html.twig',array(
                 'questionnaire' => $questionnaire,
                 'user'          => $user,
-                'options' => $this->_gestionAffichageOnglet($user),
-                'routeRedirect' => array(
+                'options'       => $this->_gestionAffichageOnglet($user),
+                'routeRedirect' => json_encode(array(
                     'quit' => array(
                         'route'     => 'hopital_numerique_user_homepage',
                         'arguments' => array()
                     ),
                     'sauvegarde' => array(
                         'route'     => 'hopitalnumerique_user_expert_edit',
-                        'arguments' => array('id' => $user->getId())
+                        'arguments' => array(
+                                'id' => $user->getId()
+                        )
                     )
-                )
+                ))
         ));
     }  
 
