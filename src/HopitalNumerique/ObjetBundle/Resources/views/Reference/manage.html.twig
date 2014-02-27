@@ -1,0 +1,115 @@
+<div class="panel panel-midnightblue" style="margin:0" >
+    <div class="panel-heading">
+        <h4>Gestion des références</h4>
+    </div>
+
+    <div class="panel-body" id="panel-references" >
+        <div class="tableContent" >
+            <table id="references-tab" class="table table-striped table-hover" >
+                <thead>
+                    <tr>
+                        <th width="60px" align="center"><input type="checkbox" class="checkAll" /></th>
+                        <th width="150px" align="center" class="text-center">Type Primaire ?</th>
+                        <th>Enfant ?</th>
+                        <th>Nom</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ref in references %}
+                        <tr class="ref ref-{{ref.id}}" data-id="{{ref.id}}" data-childs="{{ref.childs|default('[]')}}" >
+                            <td align="center">
+                                <input type="checkbox" class="checkbox" id="checkbox-{{ref.id}}" {% if ref.selected %}checked="checked"{% endif %} {% if ref.disabled %}disabled="disabled"{% endif %} />
+                            </td>
+                            <td align="center">
+                                {% if ref.primary %}
+                                    <div class="toggle toggle-success on"></div>
+                                {% else %}
+                                    <div class="toggle toggle-success off"></div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if ref.childs %}
+                                    <div class="btn btn-default check-child">Check Child</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <label for="checkbox-{{ref.id}}" style="width:100%;">{{ref.nom}}</label>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>    
+        </div>
+        
+        <div class="panel-footer" >
+            <div class="row">
+                <div class="btn-toolbar pull-right">
+                    <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+                    <div onclick="saveReferences( {{objet}}, {{contenu}} );" class="btn-primary btn">Enregistrer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function() {
+
+        //toggles primary
+        $('.toggle.on').toggles( { on : true, text : { on : 'OUI', off : 'NON' } } );
+        $('.toggle.off').toggles( { on : false, text : { on : 'OUI', off : 'NON' } } );
+
+        //click de la checkbox globale
+        $('#references-tab .checkAll').on('click', function(){
+            checkAllReferences();
+        });
+
+        //click de chaque checkbox : on gère les enfants (disabled + selected)
+        $('#references-tab .checkbox').on('click', function(){
+            //get childs (if exist)
+            childs = $(this).parent().parent().data('childs');
+
+            if( childs.length > 0 ){
+                //on coche les enfants et on les met en lecture seule
+                if ( $(this).prop('checked') ){
+                    $.each(childs,function(key, val){
+                        $('.ref-'+val+' .checkbox').prop('checked','checked');
+                        $('.ref-'+val+' .checkbox').prop('disabled','disabled');
+                    });
+                //on décoche les enfants et on autorise le cochage
+                }else{
+                    $.each(childs,function(key, val){
+                        $('.ref-'+val+' .checkbox').prop('checked',false);
+                        $('.ref-'+val+' .checkbox').prop('disabled', '');
+                    });
+                }    
+            }
+        });
+
+        $('#references-tab .check-child').on('click', function(){
+            //get childs (if exist)
+            // .parent().data('childs')
+            childs = $(this).parent().parent().data('childs');
+
+
+            if( childs.length > 0 ){
+                //on coche les enfants et on les met en lecture seule
+                if ( $(this).attr('class') == 'btn btn-default check-child' ){
+                    $(this).addClass('checked');
+
+                    $.each(childs,function(key, val){
+                        $('.ref-'+val+' .checkbox').prop('checked','checked');
+                    });
+                // //on décoche les enfants et on autorise le cochage
+                }else{
+                    $(this).removeClass('checked');
+
+                    $.each(childs,function(key, val){
+                        $('.ref-'+val+' .checkbox').prop('checked',false);
+                    });
+                }    
+            }
+        });
+    });
+</script>
