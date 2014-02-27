@@ -2,8 +2,13 @@
 
 {% block file_widget %}
     {% spaceless %}   
-	    {% if data is not null %}
-			<a href="{{path('hopitalnumerique_reponse_download', {'reponse':data})}}">Télécharger</a>
+	    {% if data is not null or data is not empty %}
+			<a id="downloadFile{{ id }}" href="{{path('hopitalnumerique_reponse_download', {'reponse':data})}}">Télécharger</a>
+			<input id={{ id }} type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+			<script>$('#{{ id }}').addClass('inputFile{{ id }}') ;$('.inputFile{{ id }}').hide();</script>
+			<div class="deleteUploadedFile{{ id }} btn btn-danger btn-xs pull-right" >
+                <i class="fa fa-trash-o" onclick="$('.deleteUploadedFile{{ id }}, #downloadFile{{ id }}').hide(); $('.inputFile{{ id }}').show();"></i>
+            </div>
         {% else %}
             <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
         {% endif %}
