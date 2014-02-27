@@ -41,6 +41,7 @@ a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 
 /* MENU */
 #menu{ margin:0 auto; list-style: none; padding:0; }
 #menu li a{ display: block; float: left; padding:3px 10px; text-transform: uppercase; color: #333333; font-size: 13px}
+#menu li.active a, #menu li a:hover{ color:#de0d4d;}
 
 
 /*!

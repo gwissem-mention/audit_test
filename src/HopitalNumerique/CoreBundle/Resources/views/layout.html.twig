@@ -47,12 +47,13 @@
                         <p>
                             <i class="common-sprite common-sprite-user-red"></i>
                             {% if app.user.nom or app.user.prenom %}
-                                {{ app.user.prenom|capitalize ~ ' ' ~ app.user.nom|capitalize }}
+                                {{ app.user.prenom|capitalize }}<br />
+                                {{ app.user.nom|capitalize }}
                             {% else %}
                                 {{ app.user.username|capitalize }}
                             {% endif %}
                         </p>
-                        <a class="infos rose" href="{{path('hopital_numerique_account_homepage')}}">Mon tableau de bord</a>
+                        <a class="infos rose" href="{{path('hopital_numerique_account_homepage')}}"> > Tableau de bord</a>
                     {% endif %}
                 </div>
                 
