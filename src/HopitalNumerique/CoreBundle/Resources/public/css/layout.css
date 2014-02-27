@@ -25,10 +25,11 @@ a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 
 #header .connexion a{display: block; padding-left: 25px;color:black;margin-right: 18px; text-transform: uppercase; font-size: 10px; width: 125px}
 #header .connexion a .common-sprite-user { width: 14px; height: 13px; background-position: -2px -33px; float: left; margin-right: 5px}
 #header .connexion a .common-sprite-close { width: 9px; height: 9px; background-position: -15px -2px; float: right; margin-left: 5px; margin-top:2px;}
-#header .loggedUser{width: 158px;height:79px;padding:13px 20px 10px 30px; }
+#header .loggedUser{width: 158px;height:79px;padding:13px 20px 10px 30px; position: relative;}
 #header .loggedUser p{font-size: 11px;}
 #header .loggedUser p .common-sprite-user-red{ width: 14px; height: 13px; background-position: -20px -33px; float: left; margin-right: 5px }
-#header .loggedUser .infos{font-size: 10px}
+#header .loggedUser p .nom{ padding-left:19px; }
+#header .loggedUser .infos{font-size: 10px; position: absolute; bottom: 14px;}
 #header #logoHn{margin:3px 0 0 10px;}
 #header p.violet{width:93px;font-size: 9px; font-weight: 600; margin-top: 30px;line-height: 12px}
 

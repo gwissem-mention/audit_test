@@ -44,15 +44,18 @@
                 
                 <div class="loggedUser pull-right">
                     {% if app.user %}
-                        <p>
-                            <i class="common-sprite common-sprite-user-red"></i>
-                            {% if app.user.nom or app.user.prenom %}
-                                {{ app.user.prenom|capitalize }}<br />
-                                {{ app.user.nom|capitalize }}
-                            {% else %}
+                        {% if app.user.nom or app.user.prenom %}
+                            <p>
+                                <i class="common-sprite common-sprite-user-red"></i>
+                                {{ app.user.prenom|capitalize }}
+                                <span class="nom">{{ app.user.nom|capitalize }}</span>
+                            </p>
+                        {% else %}
+                            <p>
+                                <i class="common-sprite common-sprite-user-red"></i>
                                 {{ app.user.username|capitalize }}
-                            {% endif %}
-                        </p>
+                            </p>
+                        {% endif %}
                         <a class="infos rose" href="{{path('hopital_numerique_account_homepage')}}"> > Tableau de bord</a>
                     {% endif %}
                 </div>
