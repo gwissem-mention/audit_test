@@ -3,6 +3,16 @@
 <head>
     <meta charset="utf-8">
     <title>{{ 'nodevo_gestionnaire_media.titre'|trans }}</title>
+
+    {% block stylesheets %}
+        {% stylesheets output="compiled/nodevoGestionnaireMedia.css" filter="cssrewrite"
+            'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+            'bundles/nodevogestionnairemedia/css/MoxieManager_Frame.css'
+        %}
+            <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+        {% endstylesheets %}
+    {% endblock %}
+
     {% block javascripts %}
         {% javascripts output="compiled/jquery-1.js"
             'bundles/nodevoadmin/js/jquery-1.10.2.min.js'
@@ -10,6 +20,7 @@
             <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
         {% javascripts output="compiled/nodevoGestionnaireMedia.js"
+            'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
             'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
             'bundles/nodevogestionnairemedia/js/MoxieManager.js'
             'bundles/nodevogestionnairemedia/js/MoxieManager_Admin.js'
@@ -19,11 +30,10 @@
 
         <script type="text/javascript">
             NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
-            NodevoGestionnaireMediaBundle_MoxieManager_Admin.affichePleinEcran();
         </script>
     {% endblock %}
 </head>
 <body>
-
+    <div id="moxiemanager_frame"></div>
 </body>
 </html>

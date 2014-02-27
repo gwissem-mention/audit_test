@@ -51,7 +51,8 @@ $(document).ready(function() {
         importcss_append: true,
         importcss_groups: [
             {title: 'Styles personnalisés'}
-        ]
+        ],
+        relative_urls:false
     });
 
     //gestion du bouton delete : changement du fichier uploadé

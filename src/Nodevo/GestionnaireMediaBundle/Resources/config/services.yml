@@ -2,9 +2,17 @@ imports:
     - { resource: moxie_manager.yml }
 
 parameters:
+    # Managers
+    nodevo_gestionnaire_media.manager.moxie_manager.class: Nodevo\GestionnaireMediaBundle\Manager\MoxieManagerManager
+    # Services
     nodevo_gestionnaire_media.service.moxie_manager.class: Nodevo\GestionnaireMediaBundle\DependencyInjection\MoxieManager
 
 services:
+    # Managers
+    nodevo_gestionnaire_media.manager.moxie_manager:
+        class: "%nodevo_gestionnaire_media.manager.moxie_manager.class%"
+        arguments: ["@service_container"]
+    # services
     nodevo_gestionnaire_media.service.moxie_manager:
         class: "%nodevo_gestionnaire_media.service.moxie_manager.class%"
         arguments: ["@service_container"]
