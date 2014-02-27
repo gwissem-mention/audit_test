@@ -7,17 +7,43 @@ security:
             id: fos_user.user_provider.username
 
     firewalls:
-        # On crée un pare-feu uniquement pour le formulaire (accessible aux anonymes)
-        main_login:
-            pattern: ^/admin/login$ # Cette expression régulière permet de prendre /login
+        # Formulaire ADMIN (accessible aux anonymes)
+        admin_login:
+            pattern: ^/admin/login$
             anonymous: true
 
-        # On autorise l'accès à la console de dev et aux assets (sans notions de sécurité)
+        # Formulaire FRONT (accessible aux anonymes)
+        comptehn_login:
+            pattern: ^/compte-hn/connexion$ # Cette expression régulière permet de prendre /login
+            anonymous: true
+
+        # Console DEV/ASSETS (sans notions de sécurité)
         dev:
             pattern: ^/(_(profiler|wdt)|compiled|js|css|images)/
             security: false
 
-        # Pare-feu général du site (on protège tout)
+        # Si on essaye d'accéder à l'url  /compte-hn, on redirige vers le form /compte-hn/login
+        comptehn:
+            pattern: ^/compte-hn
+            anonymous: false
+            form_login:
+                login_path: account_login
+                check_path: account_login_check
+                provider: fos_userbundle
+                remember_me:  true
+                always_use_default_target_path : true
+                default_target_path: hopital_numerique_account_homepage
+                use_referer : true
+                csrf_provider: form.csrf_provider
+            logout: true
+            logout:
+                path:   account_logout
+                target: hopital_numerique_homepage
+            remember_me:
+                key: %secret%
+            context: application
+
+        # Pare-feu de la partie admin du site (on protège tout)
         admin:
             pattern: ^/admin
             form_login:
@@ -26,26 +52,48 @@ security:
                 provider: fos_userbundle
                 remember_me:  true
                 always_use_default_target_path : true
-                default_target_path: /admin/
+                default_target_path: hopital_numerique_admin_homepage
                 use_referer : true
                 csrf_provider: form.csrf_provider
             logout: true
             logout:
                 path:   /admin/logout
-                target: /admin
+                target: hopital_numerique_admin_homepage
             remember_me:
                 key: %secret%
             anonymous: false
+            context: application
 
+        # Pare-feu de la partie front du site
         main:
             pattern: ^/
+            form_login:
+                login_path: account_login
+                check_path: account_login_check
+                provider: fos_userbundle
+                remember_me:  true
+                always_use_default_target_path : true
+                default_target_path: hopital_numerique_account_homepage
+                use_referer : true
+                csrf_provider: form.csrf_provider
+            logout: true
+            logout:
+                path:   account_logout
+                target: hopital_numerique_homepage
+            remember_me:
+                key: %secret%
             anonymous: true
+            context: application
 
     access_decision_manager:
         strategy: unanimous
 
+    # On Gère rien ici, tout est authorisé en anonymous car les ACLs sont gérés depuis le NodevoAclBundle
     access_control:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/compte-hn/connexion$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/compte-hn/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }

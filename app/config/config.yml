@@ -44,6 +44,7 @@ assetic:
         - HopitalNumeriqueEtablissementBundle
         - HopitalNumeriqueCoreBundle
         - HopitalNumeriqueObjetBundle
+        - HopitalNumeriqueAccountBundle
     filters:
         cssrewrite: ~
 
