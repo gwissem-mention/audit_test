@@ -63,10 +63,15 @@
         //click de la checkbox globale
         $('#references-tab .checkAll').on('click', function(){
             checkAllReferences();
+            if ($(this).prop('checked'))
+                $('#references-tab .check-child').addClass('disabled');
+            else
+                $('#references-tab .check-child').removeClass('disabled');
         });
 
         //click de chaque checkbox : on gère les enfants (disabled + selected)
         $('#references-tab .checkbox').on('click', function(){
+            $('#references-tab .checkAll').prop('checked',false);
             //get childs (if exist)
             childs = $(this).parent().parent().data('childs');
 
@@ -82,8 +87,9 @@
                         $('.ref-'+val+' .checkbox').prop('disabled','disabled');
                     });
                 }else{ // on décoche les enfants et on autorise le cochage
-                    // Réactive le bouton selection des enfants
+
                     $(this).parent().parent().find('.check-child').removeClass('disabled');
+
                     if ( $(this).parent().parent().find('.check-child').hasClass('checked'))
                         $(this).parent().parent().find('.check-child').removeClass('checked');
 
