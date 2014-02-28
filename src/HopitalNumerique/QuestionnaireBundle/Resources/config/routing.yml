@@ -17,4 +17,12 @@ hopitalnumerique_reponse_download:
     pattern: /reponse/download/{reponse}
     defaults: { _controller: HopitalNumeriqueQuestionnaireBundle:Reponse:dowloadReponse }
     requirements:
-        id: \d+  
+        reponse: \d+ 
+
+hopitalnumerique_reponse_deleteAll:
+    pattern: /reponse/deleteAll/{user}/{questionnaire}.{_format}
+    defaults: { _controller: HopitalNumeriqueQuestionnaireBundle:Reponse:deleteAll, _format: json}
+    requirements:
+        user: \d+ 
+        questionnaire: \d+  
+        _method: post|delete

@@ -26,6 +26,7 @@ class ReponseRepository extends EntityRepository
         ->leftJoin('reponse.user', 'user')
         ->where( 'user.id = :idUser')
         ->setParameter('idUser', $idUser )
+        ->leftJoin('reponse.reference', 'reference')
         ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
         ->setParameter('idQuestionnaire', $idQuestionnaire )
         ->leftJoin('question.typeQuestion', 'typeQuestion');

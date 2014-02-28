@@ -68,28 +68,6 @@ class QuestionnaireType extends AbstractType
         $builder = $this->_constructBuilder($builder, $questions, $questionnaire); 
     }
     
-	public function buildView(FormView $view, FormInterface $form, array $options) 
-	{
-            // définit une variable "image_url" qui sera disponible à l'affichage du champ
-            $view->vars['testest'] = 'toto';
-            
-// 	    if (array_key_exists('image_path', $options)) {
-//             $parentData = $form->getParent()->getData();
-
-//             if (null !== $parentData) {
-//                $accessor = PropertyAccess::createPropertyAccessor();
-//                $imageUrl = $accessor->getValue($parentData, $options['image_path']);
-//             } else {
-//                 $imageUrl = null;
-//             }
-
-//             // définit une variable "image_url" qui sera disponible à l'affichage du champ
-//             $view->vars['download']['aa'] = 'toto';
-//         }
-
-	}
-
-    
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
@@ -152,7 +130,7 @@ class QuestionnaireType extends AbstractType
             	            'data'       => is_null($reponseCourante) ? false : ('1' === $reponseCourante->getReponse() ? true : false)
             	    ));
             	    break;
-            	//Les entity ne sont prévues que pour des entités de Référence
+            	//Les entity ne sont prévues que pour des entités de Référence (TODO : mettre en base la class et le property ?)
             	case 'entity':
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
             	            'class'       => 'HopitalNumeriqueReferenceBundle:Reference',

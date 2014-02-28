@@ -167,6 +167,7 @@ class QuestionnaireController extends Controller
                     $arrayParamKey = explode('_', $key);
     
                     //Le tableau de arrayParamKey : 0 => type du champ - 1 => Id de la question - 2+=> alias du champ
+                    $typeParam  = isset($arrayParamKey) && key_exists(0, $arrayParamKey)  ? $arrayParamKey[0] : '';
                     $idQuestion = isset($arrayParamKey) && key_exists(1, $arrayParamKey)  ? $arrayParamKey[1] : 0;
 
                     //Si l'id de la question n'a pas été récupéré alors on ne sauvegarde pas la question (exemple avec le cas particulier du token du formulaire)
@@ -185,6 +186,10 @@ class QuestionnaireController extends Controller
                     }
                     //Mode ajout + édition : set la nouvelle réponse
                     $reponse->setReponse($param);
+                    if('entity' === $typeParam)
+                    {
+                        $reponse->setReference($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $param)));
+                    }
     
                     //Test ajout ou edition
                     $new = is_null($reponse->getId()) ? true : false;

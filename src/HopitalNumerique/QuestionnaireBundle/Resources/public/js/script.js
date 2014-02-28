@@ -6,4 +6,4 @@ $(document).ready(function() {
         $(this).parent().find('.inputUpload').show();
         $('#' + $(this).data('path') ) .val('');
     });
-}
+});
