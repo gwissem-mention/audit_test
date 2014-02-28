@@ -19,11 +19,11 @@
                         <tr class="ref ref-{{ref.id}}" data-id="{{ref.id}}" data-childs="{{ref.childs|default('[]')}}" >
                             <td width="60px">
                                 {% if ref.childs %}
-                                    <div class="btn btn-default check-child {% if ref.selected %}disabled{% endif %}">Sélectionner les enfants</div>
+                                    <div class="btn btn-default check-child{% if ref.selected %} disabled{% endif %}">Sélectionner les enfants</div>
                                 {% endif %}
                             </td>
                             <td align="center">
-                                <input type="checkbox" class="checkbox" id="checkbox-{{ref.id}}" {% if ref.selected %}checked="checked"{% endif %} {% if ref.disabled %}disabled="disabled"{% endif %} />
+                                <input type="checkbox" class="checkbox" id="checkbox-{{ref.id}}"{% if ref.selected %} checked="checked"{% endif %} {% if ref.disabled %}disabled="disabled"{% endif %} />
                             </td>
                             <td align="center">
                                 {% if ref.primary %}
@@ -75,6 +75,8 @@
                 if ( $(this).prop('checked') ){
                     // Désactive le bouton selection des enfants
                     $(this).parent().parent().find('.check-child').addClass('disabled');
+
+
                     $.each(childs,function(key, val){
                         $('.ref-'+val+' .checkbox').prop('checked','checked');
                         $('.ref-'+val+' .checkbox').prop('disabled','disabled');
@@ -82,6 +84,9 @@
                 }else{ // on décoche les enfants et on autorise le cochage
                     // Réactive le bouton selection des enfants
                     $(this).parent().parent().find('.check-child').removeClass('disabled');
+                    if ( $(this).parent().parent().find('.check-child').hasClass('checked'))
+                        $(this).parent().parent().find('.check-child').removeClass('checked');
+
                     $.each(childs,function(key, val){
                         $('.ref-'+val+' .checkbox').prop('checked',false);
                         $('.ref-'+val+' .checkbox').prop('disabled', '');
@@ -96,7 +101,7 @@
 
             if( childs.length > 0 ){
                 //on coche les enfants
-                if ( $(this).attr('class') == 'btn btn-default check-child' ){
+                if ( !$(this).hasClass('checked') ){
                     $(this).addClass('checked');
 
                     $.each(childs,function(key, val){
