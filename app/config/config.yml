@@ -47,7 +47,6 @@ assetic:
         - HopitalNumeriqueQuestionnaireBundle
         - HopitalNumeriqueAccountBundle
 
-
     filters:
         cssrewrite: ~
 
