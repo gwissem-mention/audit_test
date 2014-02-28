@@ -26,12 +26,24 @@ class AmbassadeurController extends Controller
     {        
         //Récupération du questionnaire de l'expert
         $idQuestionnaireExpert = Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur');
-        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
+        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );        
 
-        return $this->render('HopitalNumeriqueUserBundle:Expert:edit.html.twig',array(
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:edit.html.twig',array(
                 'questionnaire' => $questionnaire,
                 'user'          => $user,
-                'options' => $this->_gestionAffichageOnglet($user)
+                'options'       => $this->_gestionAffichageOnglet($user),
+                'routeRedirect' => json_encode(array(
+                    'quit' => array(
+                        'route'     => 'hopital_numerique_user_homepage',
+                        'arguments' => array()
+                    ),
+                    'sauvegarde' => array(
+                        'route'     => 'hopitalnumerique_user_ambassadeur_edit',
+                        'arguments' => array(
+                                'id' => $user->getId()
+                        )
+                    )
+                ))
         ));
     }
 

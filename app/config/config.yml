@@ -43,6 +43,7 @@ assetic:
         - HopitalNumeriqueEtablissementBundle
         - HopitalNumeriqueCoreBundle
         - HopitalNumeriqueObjetBundle
+        - HopitalNumeriqueQuestionnaireBundle
         - HopitalNumeriqueAccountBundle
         - FOSUserBundle
     filters:

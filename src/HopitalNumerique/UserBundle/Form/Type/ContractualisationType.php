@@ -30,7 +30,8 @@ class ContractualisationType extends AbstractType
         $builder
             ->add('file', 'file', array(
                 'required' => true, 
-                'label'    => 'Fichier objet'
+                'label'    => 'Fichier objet',
+                'attr'        => array('class' => $this->_constraints['file']['class'] ),
             ))
             ->add('path', 'hidden')
             ->add('nomDocument', 'text', array(

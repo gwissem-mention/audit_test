@@ -23,6 +23,7 @@ $(document).ready(function() {
     tinymce.PluginManager.load('importcss', '/bundles/nodevoadmin/plugins/tinymce/plugins/importcss/plugin.min.js');
     tinymce.PluginManager.load('textcolor', '/bundles/hopitalnumeriqueobjet/js/ObjetTextColor/plugin.min.js');
     tinymce.PluginManager.load('image', '/bundles/nodevoadmin/plugins/tinymce/plugins/image/plugin.min.js');
+    tinymce.PluginManager.load('link', '/bundles/nodevoadmin/plugins/tinymce/plugins/link/plugin.min.js');
     NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
 
     //Save auto : toutes les 5 minutes  
@@ -33,12 +34,12 @@ $(document).ready(function() {
         theme        : "modern",
         theme_url    : '/bundles/nodevoadmin/plugins/tinymce/themes/modern/theme.min.js',
         skin_url     : '/bundles/nodevoadmin/plugins/tinymce/skins/lightgray',
-        plugins      : 'moxiemanager image table code textcolor pagebreak importcss',
+        plugins      : 'moxiemanager image table code textcolor pagebreak importcss link',
         height       : 210,
         menubar      : false,
         content_css  : '/bundles/hopitalnumeriqueobjet/css/wysiwyg.css',
-        toolbar1     : "code | undo redo cut copy paste | pagebreak",
-        toolbar2     : "insertfile image | styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
+        toolbar1     : "code | undo redo cut copy paste | pagebreak | link | insertfile image ",
+        toolbar2     : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
         style_formats: [
             {title: 'Titres', items: [
                 {title: 'Titre 2', block: 'h2'},
