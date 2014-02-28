@@ -1,0 +1,28 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Mon compte{% endblock %}
+{% block metadesc %}Connectez-vous à votre compte "Mon Hôpital Numérique" pour accéder aux outils proposés par l'ANAP{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-account-layout.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueaccount/css/layout.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div id="tableau-de-bord">
+        <h3 class="violet">Tableau de bord</h3>
+
+        {{ knp_menu_render('menu-tdb', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+        
+        <div class="content">
+            {% block content %}{% endblock %}
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endblock %}

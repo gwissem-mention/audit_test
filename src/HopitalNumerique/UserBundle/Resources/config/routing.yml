@@ -1,6 +1,10 @@
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
+
+
+
+
 #Utilisateur
 hopital_numerique_user_homepage:
     pattern:  /user

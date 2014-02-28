@@ -1,0 +1,15 @@
+hopital_numerique_account_homepage:
+    pattern:  /
+    defaults: { _controller: HopitalNumeriqueAccountBundle:Default:index }
+
+account_login:
+    pattern:  /connexion
+    defaults: { _controller: FOSUserBundle:Security:login }
+
+account_login_check:
+    pattern:  /login_check
+    defaults: { _controller: FOSUserBundle:Security:check }
+
+account_logout:
+    pattern:  /deconnexion
+    defaults: { _controller: FOSUserBundle:Security:logout }
