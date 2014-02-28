@@ -5,8 +5,10 @@ namespace HopitalNumerique\QuestionnaireBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\File\File;
 
 class QuestionnaireType extends AbstractType
 {
@@ -41,13 +43,29 @@ class QuestionnaireType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {    
         $idUser = (isset($options['label_attr']['idUser']) && !is_null($options['label_attr']['idUser'])) ? $options['label_attr']['idUser'] : 0;
-        $idQuestionnaire = (isset($options['label_attr']['idQuestionnaire']) && !is_null($options['label_attr']['idQuestionnaire'])) ? $options['label_attr']['idQuestionnaire'] : 0;
+        $idQuestionnaire = (isset($options['label_attr']['idQuestionnaire']) && !is_null($options['label_attr']['idQuestionnaire'])) ? $options['label_attr']['idQuestionnaire'] : 0;        
+        $questionnaire = $this->_managerQuestionnaire->findOneBy(array('id' => $idQuestionnaire));
+        
+       /*
+        * Tableau de la route de redirection sous la forme :
+        * array(
+        *   'sauvegarde' => array( 'route' => nom_de_ma_route, 'arguments' => array ('keyArgument' => valueArgument))
+        *   'quit'       => array( 'route' => nom_de_ma_route, 'arguments' => array ('keyArgument' => valueArgument))
+        *  )
+        **/
+        $routeRedirection = (isset($options['label_attr']['routeRedirection']) && !is_null($options['label_attr']['routeRedirection'])) ? $options['label_attr']['routeRedirection'] : array();
 
+        //Ajout d'un champ hidden pour récupérer les routes de redirection dans le controleur à la validation
+        $builder->add('routeRedirect', 'hidden', array(
+                'data'       => $routeRedirection,
+                'mapped'     => false
+        ));
+        
         //Récupération du questionnaire
         $questions = $this->_managerQuestionnaire->getQuestionsReponses($idQuestionnaire, $idUser);
 
         //Construction du formulaire en fonction des questions + chargement des réponses si il y en a
-        $builder = $this->_constructBuilder($builder, $questions);        
+        $builder = $this->_constructBuilder($builder, $questions, $questionnaire); 
     }
     
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -72,10 +90,11 @@ class QuestionnaireType extends AbstractType
      * 
      * @param FormBuilderInterface $builder Le builder contient les champs du formulaire
      * @param HopitalNumerique\QuestionnaireBundle\Entity\Question[] $questions
+     * @param HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire
      * 
      * @return FormBuilderInterface Le builder avec tous les champs
      */
-    private function _constructBuilder(FormBuilderInterface $builder, $questions)
+    private function _constructBuilder(FormBuilderInterface $builder, $questions, $questionnaire)
     {
         //Réponse de la question courante
         $reponseCourante;
@@ -111,7 +130,7 @@ class QuestionnaireType extends AbstractType
             	            'data'       => is_null($reponseCourante) ? false : ('1' === $reponseCourante->getReponse() ? true : false)
             	    ));
             	    break;
-            	//Les entity ne sont prévues que pour des entités de Référence
+            	//Les entity ne sont prévues que pour des entités de Référence (TODO : mettre en base la class et le property ?)
             	case 'entity':
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
             	            'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
@@ -130,16 +149,14 @@ class QuestionnaireType extends AbstractType
             	            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReference()
             	    ));
             	    break;
-            	case 'file':
+            	case 'file':            	    
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'file', array(
             	            'required'   => $question->getObligatoire(),
             	            'label'      => $question->getLibelle(),
-                            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
-            	            'mapped'     => false
-            	    ));
-            	    $builder->add('path', 'hidden', array(
-            	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse(),
-            	            'mapped'     => false
+                            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS()),
+            	            'mapped'     => false,
+            	            'data'       => is_null($reponseCourante) ? null : $reponseCourante->getId(),
+            	            'data_class' => null
             	    ));
             	    break;
             	default:

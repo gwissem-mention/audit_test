@@ -16,7 +16,7 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-user-expert-edit.js"
+    {% javascripts output="compiled/hopitalnumerique-user-expert-editer.js"
         'bundles/hopitalnumeriqueuser/js/Expert/script.js'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
@@ -67,7 +67,8 @@
 	                <div class="btn-toolbar">
 					    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
 					    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
-                        <div onclick='deleteWithConfirm("{{path('hopitalnumerique_user_expert_deleteAll', {'idUser':user.id, 'idQuestionnaire': questionnaire.id})}}" );' class="btn btn-default" title="Suppression des réponses de ce questionnaire"><i class="fa fa-trash-o"></i></div>
+                        <div onclick='deleteAllReponses("{{path('hopitalnumerique_reponse_deleteAll', {'user':user.id, 'questionnaire':questionnaire.id})}}" );' class="btn btn-default" title="Suppression des réponses de ce questionnaire"><i class="fa fa-trash-o"></i></div>
+	                    <input id="questionnaire_route_redirection" type="hidden" value='{{ routeRedirect|raw }}'>
 	                </div>
 	            </div>
                 {# Include des données de contractualisation #}

@@ -32,16 +32,6 @@ class Question
      * @ORM\Column(name="que_alias", type="string", length=60, options = {"comment" = "Alias de la question"})
      */
     protected $alias;
-    
-    /**
-     * @Assert\NotBlank(message="Le fichier ne peut pas être vide.")
-     * @Assert\File(
-     *     maxSize = "10M",
-     *     mimeTypes = {"application/pdf", "application/x-pdf"},
-     *     mimeTypesMessage = "Choisissez un fichier PDF valide"
-     * )
-     */
-    public $file;
 
     /**
      * @var string
