@@ -14,9 +14,9 @@ use Nodevo\ToolsBundle\Tools\Chaine;
  */
 class UserGrid extends Grid implements IGrid
 {
-    private $arrayRolesDateContractualisation = array(
-    	   'ambassadeur',
-           'expert'
+    private $_arrayRolesDateContractualisation = array(
+    	   'ROLE_AMBASSADEUR_7',
+           'ROLE_EXPERT_6'
     );
     
     /**
@@ -34,37 +34,58 @@ class UserGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
+        $roles = $this->_container->get('nodevo_role.manager.role')->getRolesAsArray();
+
         //Récupération des roles
-        $arrayRolesDateContractualisation = $this->arrayRolesDateContractualisation;
+        $arrayRolesDateContractualisation = $this->_arrayRolesDateContractualisation;
         
         $this->addColonne( new Column\TextColumn('username', 'Nom d\'utilisateur') );
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('prenom', 'Prénom') );
         $this->addColonne( new Column\TextColumn('email', 'Adresse e-mail') );
         $this->addColonne( new Column\TextColumn('region', 'Région') );
-        $this->addColonne( new Column\TextColumn('roles', 'Groupe associé') );
+
+        $roleColumn = new Column\ArrayColumn('roles', 'Groupe associé');
+        $roleColumn->manipulateRenderCell(
+            function($value, $row, $router) use ($roles){
+                return array($roles[$value[0]]);
+            }
+        );
+        $this->addColonne( $roleColumn );
         
         $contractualisationColumn = new Column\TextColumn('contra', 'À jour');
-        //$contractualisationColumn->setValues( array('true' => 'Document(s) à jour', 'false' => 'Document(s) dépassé(s) ', '' => 'Pas de document') );
         $contractualisationColumn->setSize( 75 );
         $contractualisationColumn->setAlign('center');
         //Affichage de l'icone uniquement si le role fait parti de $arrayRolesDateContractualisation
         $contractualisationColumn->manipulateRenderCell(
             function($value, $row, $router) use ($arrayRolesDateContractualisation) {
-                $role = new Chaine($row->getField('roles'));       
-
-                return in_array($role->minifie(), $arrayRolesDateContractualisation) ? ($value ? 'true' : 'false') : null;
+                $roles = $row->getField('roles');
+                return in_array( $roles, $arrayRolesDateContractualisation) ? ($value ? 'true' : 'false') : null;
             }
         );
         $this->addColonne( $contractualisationColumn );
 
-        $expertColonne = new Column\BooleanColumn('expert', 'Expert');
-        $expertColonne->setValues( array( 1 => 'Oui', 0 => 'Non') );
-        $this->addColonne( $expertColonne->setSize(75) );
+        $expertColumn = new Column\BooleanColumn('expert', 'Expert');
+        $expertColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
+        $expertColumn->setSize(75);
+        $expertColumn->manipulateRenderCell(
+            function($value, $row, $router) {
+                $roles = $row->getField('roles');
+                return $roles[0] == "ROLE_EXPERT_6" ? true : false;
+            }
+        );
+        $this->addColonne( $expertColumn );
 
-        $expertColonne = new Column\BooleanColumn('ambassadeur', 'Ambassadeur');
-        $expertColonne->setValues( array( 1 => 'Oui', 0 => 'Non') );
-        $this->addColonne( $expertColonne->setSize(115) );
+        $ambassadeurColumn = new Column\BooleanColumn('ambassadeur', 'Ambassadeur');
+        $ambassadeurColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
+        $ambassadeurColumn->setSize(115);
+        $ambassadeurColumn->manipulateRenderCell(
+            function($value, $row, $router) {
+                $roles = $row->getField('roles');
+                return $roles[0] == "ROLE_AMBASSADEUR_7" ? true : false;
+            }
+        );
+        $this->addColonne( $ambassadeurColumn );
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize( 60 );

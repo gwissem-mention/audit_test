@@ -13,6 +13,7 @@ parameters:
     hopitalnumerique_user.grid.objet.class: HopitalNumerique\UserBundle\Grid\ObjetGrid
     #Etablissements
     hopitalnumerique_user.grid.etablissement.class: HopitalNumerique\UserBundle\Grid\EtablissementGrid
+
 services:
     #Utilisateur:
     #--Manager
@@ -24,7 +25,7 @@ services:
     #--Type
     hopitalnumerique_user.form.type.user:
         class: %hopitalnumerique_user.form.type.user%
-        arguments: ["@hopitalnumerique_user.manager.user", "@validator"]
+        arguments: ["@hopitalnumerique_user.manager.user", "@validator", "@nodevo_role.manager.role"]
         tags:
             - { name: form.type, alias: nodevo_user_user }
     #--Grid
@@ -66,3 +67,10 @@ services:
     hopitalnumerique_user.grid.etablissement:
         class: %hopitalnumerique_user.grid.etablissement.class%
         arguments: ["@service_container"]
+
+    #HOOK redirect response after password reset
+    hopitalnumerique_user.password_resetting:
+        class: HopitalNumerique\UserBundle\EventListener\PasswordResettingListener
+        arguments: [@router]
+        tags:
+            - { name: kernel.event_subscriber }

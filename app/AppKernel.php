@@ -18,7 +18,6 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Nodevo\AdminBundle\NodevoAdminBundle(),
-            new Nodevo\UserBundle\NodevoUserBundle(),
             new HopitalNumerique\CoreBundle\HopitalNumeriqueCoreBundle(),
             new Nodevo\MenuBundle\NodevoMenuBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),

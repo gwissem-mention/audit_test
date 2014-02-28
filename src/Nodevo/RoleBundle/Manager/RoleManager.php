@@ -80,4 +80,19 @@ class RoleManager extends BaseManager
             $this->_em->flush();
         }
     }
+
+    /**
+     * Retourne les roles sous forme de tableau
+     *
+     * @return array
+     */
+    public function getRolesAsArray()
+    {
+        $datas = $this->findAll();
+        $roles = array();
+        foreach($datas as $data)
+            $roles[ $data->getRole() ] = $data->getName();
+
+        return $roles;
+    }
 }

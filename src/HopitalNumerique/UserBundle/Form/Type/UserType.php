@@ -16,10 +16,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 class UserType extends AbstractType
 {
     private $_constraints = array();
+    private $_managerRole;
 
-    public function __construct($manager, $validator)
+    public function __construct($manager, $validator, $managerRole)
     {
         $this->_constraints = $manager->getConstraints( $validator );
+        $this->_managerRole = $managerRole;
     }
 
     /**
@@ -31,7 +33,10 @@ class UserType extends AbstractType
      * @return void                 
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {        
+    {
+        $datas = $options['data'];
+        $roles = $datas->getRoles();
+
         $builder
             ->add('username', 'text', array(
                 'max_length' => $this->_constraints['username']['maxlength'],
@@ -54,7 +59,7 @@ class UserType extends AbstractType
                 'attr'       => array('class' => $this->_constraints['prenom']['class'] )
             ));   
 
-            if( is_null($options['data']->getId()) ) {
+            if( is_null($datas->getId()) ) {
                 $builder
                 ->add('plainPassword', 'text', array(
                         'required' => false,
@@ -78,37 +83,37 @@ class UserType extends AbstractType
                 'label'      => 'Adresse email',
                 'attr'       => array(
                                         'autocomplete' => 'off',
-                                        'class' => $this->_constraints['email']['class']
+                                        'class'        => $this->_constraints['email']['class']
                                     )
             ))
             
             ->add('civilite', 'entity', array(
-                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'property'    => 'libelle',
-                    'required'    => true,
-                    'label'       => 'Civilite',
-                    'empty_value' => ' - ',
-                    'attr'        => array('class' => $this->_constraints['civilite']['class'] ),
+                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property'      => 'libelle',
+                    'required'      => true,
+                    'label'         => 'Civilite',
+                    'empty_value'   => ' - ',
+                    'attr'          => array('class' => $this->_constraints['civilite']['class'] ),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'CIVILITE')
-                        ->orderBy('ref.order', 'ASC');
+                            ->where('ref.code = :etat')
+                            ->setParameter('etat', 'CIVILITE')
+                            ->orderBy('ref.order', 'ASC');
                     }
             ))
 
             ->add('titre', 'entity', array(
-                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'property'    => 'libelle',
-                    'required'    => false,
-                    'label'       => 'Titre',
-                    'empty_value' => ' - ',
-                    'attr'        => array(),
+                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property'      => 'libelle',
+                    'required'      => false,
+                    'label'         => 'Titre',
+                    'empty_value'   => ' - ',
+                    'attr'          => array(),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'TITRE')
-                        ->orderBy('ref.order', 'ASC');
+                            ->where('ref.code = :etat')
+                            ->setParameter('etat', 'TITRE')
+                            ->orderBy('ref.order', 'ASC');
                     }
             ))
             
@@ -117,7 +122,7 @@ class UserType extends AbstractType
                 'required'   => false, 
                 'label'      => 'Téléphone direct',
                 'attr'       => array(
-                                        'class' => $this->_constraints['telephoneDirect']['class'], 
+                                        'class'     => $this->_constraints['telephoneDirect']['class'], 
                                         'data-mask' => $this->_constraints['telephoneDirect']['mask'] 
                                     )
             ))
@@ -127,23 +132,27 @@ class UserType extends AbstractType
                     'required'   => false,
                     'label'      => 'Téléphone portable',
                     'attr'       => array(
-                                        'class' => $this->_constraints['telephonePortable']['class'], 
+                                        'class'     => $this->_constraints['telephonePortable']['class'], 
                                         'data-mask' => $this->_constraints['telephonePortable']['mask'] 
                                     )
             ))
             
             
             ->add('roles', 'genemu_jqueryselect2_entity', array(
-                'class'    => 'NodevoRoleBundle:Role',
-                'property' => 'name',
-                'multiple' => true,
-                'required' => true,
-                'label'    => 'Groupe associé',
+                'class'         => 'NodevoRoleBundle:Role',
+                'property'      => 'name',
+                'multiple'      => false,
+                'required'      => true,
+                'label'         => 'Groupe associé',
+                'mapped'        => false,
+                'empty_value'   => 'Choissisez un groupe',
+                //'attr'          => array('class'=>'validate[required]'),
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ro')
                               ->where('ro.etat != :etat')
                               ->setParameter('etat', 4);
-                }
+                },
+                'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
             ))
 
             ->add('region', 'entity', array(

@@ -19,7 +19,7 @@ class SecurityController extends BaseController
         if ('account_login' === $requestAttributes->get('_route'))
             $template = sprintf('HopitalNumeriqueAccountBundle:Security:login.html.twig');
         else
-            $template = sprintf('NodevoUserBundle:Security:login.html.twig');
+            $template = sprintf('HopitalNumeriqueUserBundle:Security:login.html.twig');
 
         return $this->container->get('templating')->renderResponse($template, $data);
     }

@@ -144,13 +144,12 @@ class AclManager extends BaseManager
             return VoterInterface::ACCESS_GRANTED;
 
         if( $user === 'anon.' )
-            $role = $this->_container->get('nodevo_role.manager.role')->findOneBy(array('role'=>'ROLE_ANONYME_10'));
+            $roles = $this->_container->get('nodevo_role.manager.role')->findOneBy(array('role'=>'ROLE_ANONYME_10'));
         else{
-            //get Roles binded to the User
-            $roles = $user->getRoles();
-            $role  = $roles[0];
-            if( $role->getId() == 1 )
+            if( $user->hasRole('ROLE_ADMINISTRATEUR_1') )
                 return VoterInterface::ACCESS_GRANTED;
+
+            $roles = $this->_container->get('nodevo_role.manager.role')->findBy(array('role'=> $user->getRoles() ));
         }
         
         //search in DB ressource matching this url
@@ -161,7 +160,7 @@ class AclManager extends BaseManager
             return VoterInterface::ACCESS_DENIED;
 
         //search if Acl matching role and Ressource exist
-        $acl = $this->findOneBy( array('role' => $role, 'ressource' => $ressource) );
+        $acl = $this->findOneBy( array('role' => $roles, 'ressource' => $ressource) );
 
         //if no acl matching exist, access denied
         if ( is_null($acl) )

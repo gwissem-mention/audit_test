@@ -3,8 +3,8 @@
 namespace HopitalNumerique\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Nodevo\UserBundle\Entity\User as BaseUser;
-use Nodevo\RoleBundle\Entity\Role as Role;
+use FOS\UserBundle\Model\User as BaseUser;
+//use Nodevo\RoleBundle\Entity\Role as Role;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,6 +18,131 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  * @ORM\Entity(repositoryClass="HopitalNumerique\UserBundle\Repository\UserRepository")
  * @UniqueEntity(fields="email", message="Cette adresse email existe déjà.")
  * @UniqueEntity(fields="username", message="Ce nom d'utilisateur existe déjà.")
+ * @ORM\AttributeOverrides({
+ *      @ORM\AttributeOverride(name="username",
+ *          column=@ORM\Column(
+ *              name     = "usr_username",
+ *              type     = "string",
+ *              length   = 50,
+ *              options  = {"comment" = "Nom utilisateur pour la connexion"}
+ *          )
+ *      ), 
+ *      @ORM\AttributeOverride(name="usernameCanonical",
+ *          column=@ORM\Column(
+ *              name     = "usr_username_canonical",
+ *              type     = "string",
+ *              length   = 50,
+ *              options  = {"comment" = "Pseudonyme canonique"},
+ *              unique   = true
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="email",
+ *          column=@ORM\Column(
+ *              name     = "usr_email",
+ *              type     = "string",
+ *              length   = 50,
+ *              options  = {"comment" = "Adresse électronique"}
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="emailCanonical",
+ *          column=@ORM\Column(
+ *              name     = "usr_email_canonical",
+ *              type     = "string",
+ *              length   = 50,
+ *              options  = {"comment" = "Adresse électronique canonique"},
+ *              unique   = true
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="enabled",
+ *          column=@ORM\Column(
+ *              name     = "usr_enabled",
+ *              type     = "boolean",
+ *              options  = {"comment" = "L utilisateur est-il activé ?"}
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="salt",
+ *          column=@ORM\Column(
+ *              name     = "usr_salt",
+ *              type     = "string",
+ *              length   = 100,
+ *              nullable = true,
+ *              options  = {"comment" = "Grain de sel de chiffrement du mot de passe"}
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="password",
+ *          column=@ORM\Column(
+ *              name     = "usr_password",
+ *              type     = "string",
+ *              length   = 100,
+ *              options  = {"comment" = "Mot de passe"}
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="lastLogin",
+ *          column=@ORM\Column(
+ *              name     = "usr_last_login",
+ *              type     = "datetime",
+ *              nullable = true,
+ *              options  = {"comment" = "Date de la dernière connexion"}
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="confirmationToken",
+ *          column=@ORM\Column(
+ *              name     = "usr_confirmation_token",
+ *              type     = "string",
+ *              length   = 50,
+ *              nullable = true,
+ *              options  = {"comment" = "Jeton de confirmation du compte"}
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="passwordRequestedAt",
+ *          column=@ORM\Column(
+ *              name     = "usr_password_requested_at",
+ *              type     = "datetime",
+ *              nullable = true,
+ *              options  = {"comment" = "Date de demande du nouveau mot de passe"}
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="locked",
+ *          column=@ORM\Column(
+ *              name     = "usr_locked",
+ *              type     = "boolean",
+ *              nullable = true,
+ *              options  = {"comment" = "Verrouillage de l utilisateur ?"}
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="expired",
+ *          column=@ORM\Column(
+ *              name     = "usr_expired",
+ *              type     = "boolean",
+ *              nullable = true,
+ *              options  = {"comment" = "L utilisateur est-il activé ?"}
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="expiresAt",
+ *          column=@ORM\Column(
+ *              name     = "usr_expires_at",
+ *              type     = "datetime",
+ *              nullable = true,
+ *              options  = {"comment" = "Date d expiration de l utilisateur"}
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="credentialsExpired",
+ *          column=@ORM\Column(
+ *              name     = "usr_credentials_expired",
+ *              type     = "boolean",
+ *              nullable = true,
+ *              options  = {"comment" = "Expiration du mot de passe ?"}
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="credentialsExpireAt",
+ *          column=@ORM\Column(
+ *              name     = "usr_credentials_expire_at",
+ *              type     = "datetime",
+ *              nullable = true,
+ *              options  = {"comment" = "Date d expiration du mot de passe"}
+ *          )
+ *      )
+ * })
  */
 class User extends BaseUser
 {
@@ -27,6 +152,32 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @var string
+     * @Assert\NotBlank(message="Le nom d'utilisateur ne peut pas être vide.")
+     * @Assert\Length(
+     *      min = "3",
+     *      max = "50",
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom d'utilisateur.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom d'utilisateur."
+     * )
+     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[50]]")
+     */
+    protected $username;
+
+    /**
+     * @var string
+     * @Assert\NotBlank(message="L'adresse éléctronique ne peut pas être vide.")
+     * @Assert\Length(
+     *      min = "3",
+     *      max = "50",
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom d'utilisateur.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom d'utilisateur."
+     * )
+     * @Nodevo\Javascript(class="validate[required,custom[email]]")
+     */
+    protected $email;
 
     /**
      * @var string
@@ -121,16 +272,6 @@ class User extends BaseUser
      * @ORM\Column(name="usr_contact_autre", type="text", nullable=true, options = {"comment" = "Autre moyen de contacter l utilsateur"})
      */
     protected $contactAutre;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="\Nodevo\RoleBundle\Entity\Role", inversedBy="users")
-     * @ORM\JoinTable(name="core_user_role",
-     *      joinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="ro_id", referencedColumnName="ro_id")}
-     * )
-     */
-    protected $roles;
-    
     
     // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
     
@@ -237,6 +378,8 @@ class User extends BaseUser
      */
     protected $reponses;
     
+    protected $nodevoRoles;
+
     /**
      * Constructor
      */
@@ -244,7 +387,6 @@ class User extends BaseUser
     {
         parent::__construct();
         
-        $this->roles    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->objets   = new \Doctrine\Common\Collections\ArrayCollection();
         $this->username = '';
         $this->enabled  = 1;
@@ -376,52 +518,6 @@ class User extends BaseUser
             $this->etat = $etat;
         else
             $this->etat = null;
-    }
-
-    /**
-     * Add role
-     *
-     * @param \Nodevo\RoleBundle\Entity\Role $role
-     * @return Project
-     */
-    public function addRole($role)
-    {
-        $this->roles[] = $role;
-    
-        return $this;
-    }
-
-    /**
-     * Remove role
-     *
-     * @param \Nodevo\RoleBundle\Entity\Role $role
-     */
-    public function removeRole($role)
-    {
-        $this->roles->removeElement($role);
-    }
-
-    /**
-     * Set roles
-     *
-     * @param \Doctrine\Common\Collections\Collection $roles
-     * @return Project
-     */
-    public function setRoles(array $roles)
-    {        
-        $this->roles = $roles;
-    
-        return $this;
-    }
-
-    /**
-     * Get roles
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getRoles()
-    {
-        return $this->roles->toArray();
     }
     
     /**
@@ -820,4 +916,26 @@ class User extends BaseUser
     {
         return $this->prenom . ' ' . $this->nom;
     }
+
+    /**
+     * Get nodevoRoles
+     *
+     * @return string $nodevoRoles
+     */
+    public function getNodevoRoles()
+    {
+        return $this->nodevoRoles;
+    }
+    
+    /**
+     * Set nodevoRoles
+     *
+     * @param string $nodevoRoles
+     */
+    public function setNodevoRoles($nodevoRoles)
+    {
+        $this->nodevoRoles = $nodevoRoles;
+    }
+    
+
 }

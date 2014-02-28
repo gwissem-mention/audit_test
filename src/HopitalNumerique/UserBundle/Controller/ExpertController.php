@@ -100,6 +100,16 @@ class ExpertController extends Controller
         return $this->get('igorw_file_serve.response_factory')->create( $this->get('hopitalnumerique_questionnaire.manager.question')->getUploadRootDir('expert') . '/'. $reponse->getReponse(), 'application/pdf', $options);
     }
     
+
+
+
+
+
+
+
+
+
+    
     /**
      * Fonction permettant d'envoyer un tableau d'option à la vue pour vérifier le role de l'utilisateur
      *
@@ -108,7 +118,6 @@ class ExpertController extends Controller
      */
     private function _gestionAffichageOnglet( $user )
     {
-        $roles = $user->getRoles();
         $options = array(
                 'ambassadeur' => false,
                 'expert'      => false
@@ -129,20 +138,11 @@ class ExpertController extends Controller
         $options['ambassadeur_form'] = !empty($reponsesAmbassadeur);
         
         //Dans tout les cas si l'utilisateur a le bon groupe on lui donne l'accès
-        foreach ($roles as $key => $role)
-        {
-            switch ($role->getRole())
-            {
-                case 'ROLE_EXPERT_6':
-                    $options['expert'] = true;
-                    break;
-                case 'ROLE_AMBASSADEUR_7':
-                    $options['ambassadeur'] = true;
-                    break;
-                default:
-                    break;
-            }
-        }
+        if( $user->hasRole('ROLE_EXPERT_6') )
+            $options['expert'] = true;
+
+        if( $user->hasRole('ROLE_AMBASSADEUR_7') )
+            $options['ambassadeur'] = true;
     
         return $options;
     }

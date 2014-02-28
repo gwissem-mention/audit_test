@@ -23,21 +23,15 @@ class UserRepository extends EntityRepository
                         user.nom, 
                         user.prenom, 
                         refRegion.libelle as region, 
-                        refRole.name as roles , 
+                        user.roles,
                         refEtat.libelle as etat, 
                         user.lock, 
                         min(contractualisation.dateRenouvellement) as contra
             ')
-//                         questionnaire.id as questionnaireId
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->leftJoin('user.etat','refEtat')
             ->leftJoin('user.region','refRegion')
-            ->leftJoin('user.roles','refRole')
             ->leftJoin('user.contractualisations', 'contractualisation', 'WITH', 'contractualisation.archiver = 0')
-            //Récupération des réponses par questionnaire pour vérifier si ils sont remplis
-//             ->leftJoin('user.reponses', 'reponse')
-//             ->leftJoin('reponse.question', 'question')
-//             ->leftJoin('question.questionnaire' , 'questionnaire')
             ->groupBy('user')
             ->orderBy('user.username');
         
@@ -58,6 +52,51 @@ class UserRepository extends EntityRepository
             ->where('user.autreStructureRattacheementSante IS NOT NULL ')
             ->orderBy('user.username');
         
+        return $qb;
+    }
+
+    /**
+     * On cherche a savoir si un user existe avec le role et la région de l'user modifié
+     *
+     * @param User $user L'utilisateur modifié
+     *
+     * @return QueryBuilder
+     */
+    public function userExistForRoleArs( $user )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('user')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->andWhere('user.region = :region', 'user.roles LIKE :role')
+            ->setParameter('role', '%ROLE_ARS_CMSI_4%')
+            ->setParameter('region', $user->getRegion() );
+        
+        if( !is_null($user->getId()) ){
+            $qb->andWhere('user.id != :id')
+               ->setParameter('id', $user->getId() );
+        }
+
+        return $qb;
+    }
+
+    /**
+     * On cherche a savoir si un user existe avec le role et la région de l'user modifié
+     *
+     * @param User $user L'utilisateur modifié
+     *
+     * @return QueryBuilder
+     */
+    public function userExistForRoleDirection( $user )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('user')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->andWhere('user.roles LIKE :role', 'user.etablissementRattachementSante IS NOT NULL')
+            ->andWhere('user.etablissementRattachementSante = :etablissementRattachementSante', 'user.id != :id')
+            ->setParameter('id', $user->getId() )
+            ->setParameter('role', '%ROLE_ES_DIRECTION_GENERALE_5%')
+            ->setParameter('etablissementRattachementSante', $user->getEtablissementRattachementSante() );
+
         return $qb;
     }
 }

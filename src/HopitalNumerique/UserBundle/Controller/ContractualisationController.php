@@ -160,7 +160,6 @@ class ContractualisationController extends Controller
      */
     private function _gestionAffichageOnglet( $user )
     {
-        $roles = $user->getRoles();
         $options = array(
                 'ambassadeur' => false,
                 'expert'      => false
@@ -181,20 +180,11 @@ class ContractualisationController extends Controller
         $options['ambassadeur_form'] = !empty($reponsesAmbassadeur);
         
         //Dans tout les cas si l'utilisateur a le bon groupe on lui donne l'accès
-        foreach ($roles as $key => $role)
-        {
-            switch ($role->getRole())
-            {
-            	case 'ROLE_EXPERT_6':
-            	    $options['expert'] = true;
-            	    break;
-            	case 'ROLE_AMBASSADEUR_7':
-            	    $options['ambassadeur'] = true;
-            	    break;
-            	default:
-            	    break;
-            }
-        }
+        if( $user->hasRole('ROLE_EXPERT_6') )
+            $options['expert'] = true;
+
+        if( $user->hasRole('ROLE_AMBASSADEUR_7') )
+            $options['ambassadeur'] = true;
     
         return $options;
     }

@@ -62,14 +62,8 @@ class Role implements RoleInterface
      */
     protected $etat;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", mappedBy="roles")
-     */
-    protected $users;
-
     public function __construct()
     {
-        $this->users   = new \Doctrine\Common\Collections\ArrayCollection();
         $this->initial = false;
     }
 
@@ -178,51 +172,5 @@ class Role implements RoleInterface
     public function getEtat()
     {
         return $this->etat;
-    }
-
-    /**
-     * Add user
-     *
-     * @param \HopitalNumerique\userBundle\Entity\User $user
-     * @return Db
-     */
-    public function addUser(\HopitalNumerique\userBundle\Entity\User $user)
-    {
-        $this->users[] = $user;
-    
-        return $this;
-    }
-
-    /**
-     * Remove user
-     *
-     * @param \HopitalNumerique\userBundle\Entity\User $user
-     */
-    public function removeUser(\HopitalNumerique\userBundle\Entity\User $user)
-    {
-        $this->users->removeElement($user);
-    }
-
-    /**
-     * Set users
-     *
-     * @param \Doctrine\Common\Collections\Collection $users
-     * @return Db
-     */
-    public function setUsers(\Doctrine\Common\Collections\Collection $users)
-    {
-        $this->users = $users;
-    
-        return $this;
-    }
-
-    /**
-     * Get users
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUsers()
-    {
-        return $this->users;
     }
 }

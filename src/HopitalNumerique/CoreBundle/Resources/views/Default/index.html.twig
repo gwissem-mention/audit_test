@@ -1,5 +1,9 @@
 {% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
 
+{# Référencement #}
+{% block title %}{{parent()}} - Accueil{% endblock %}
+{% block metadesc %}Page d'accueil{% endblock %}
+
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-core-default-index.css" filter="cssrewrite"

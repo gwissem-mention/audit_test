@@ -8,6 +8,6 @@ class HopitalNumeriqueUserBundle extends Bundle
 {
     public function getParent()
     {
-        return 'NodevoUserBundle';
+        return 'FOSUserBundle';
     }
 }

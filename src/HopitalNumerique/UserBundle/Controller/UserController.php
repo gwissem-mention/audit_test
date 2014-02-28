@@ -227,10 +227,9 @@ class UserController extends Controller
      */
     private function _gestionAffichageOnglet( $user )
     {
-        $roles = $user->getRoles();
         $options = array(
-                'ambassadeur' => false,
-                'expert'      => false
+            'ambassadeur' => false,
+            'expert'      => false
         );
 
         //Récupération du questionnaire de l'expert
@@ -246,23 +245,14 @@ class UserController extends Controller
         //Si il y a des réponses correspondant au questionnaire du groupe alors on donne l'accès
         $options['expert_form']      = !empty($reponsesExpert);
         $options['ambassadeur_form'] = !empty($reponsesAmbassadeur);
-        
+
         //Dans tout les cas si l'utilisateur a le bon groupe on lui donne l'accès
-        foreach ($roles as $key => $role)
-        {
-            switch ($role->getRole())
-            {
-            	case 'ROLE_EXPERT_6':
-            	    $options['expert'] = true;
-            	    break;
-            	case 'ROLE_AMBASSADEUR_7':
-            	    $options['ambassadeur'] = true;
-            	    break;
-            	default:
-            	    break;
-            }
-        }
-    
+        if( $user->hasRole('ROLE_EXPERT_6') )
+            $options['expert'] = true;
+
+        if( $user->hasRole('ROLE_AMBASSADEUR_7') )
+            $options['ambassadeur'] = true;
+
         return $options;
     }
 
@@ -290,18 +280,15 @@ class UserController extends Controller
             $form->handleRequest($request);
             
             //Vérification de la présence rôle
-            $formRoles = $form->get("roles")->getData();
-            $formRole  =  $formRoles != null ? $formRoles[0] : null;
-            //$formRole  = array_shift( $formRoles );   BUG : en mode ajout WARNING         
+            $role = $form->get("roles")->getData();
             
-            if(is_null($formRole))
-            {
-                $message = 'Veuillez sélectionner un groupe associé.';
-                $this->get('session')->getFlashBag()->add('danger', $message);
+            if(is_null($role)) {
+                $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un groupe associé.');
             
                 return $this->render( $view , array(
-                        'form' => $form->createView(),
-                        'user' => $user
+                    'form'    => $form->createView(),
+                    'user'    => $user,
+                    'options' => $this->_gestionAffichageOnglet($user)
                 ));
             }
 
@@ -323,79 +310,55 @@ class UserController extends Controller
                     $this->get('mailer')->send($mail);
                 }
 
-                //security for user's roles
-                $roles = $user->getRoles();
-                $role  = array_shift( $roles );
-                $user->setRoles( array($role) );                
-                
+                //set Role for User : not mapped field
+                $user->setRoles( array( $role->getRole() ) );
+
                 //Cas particulier: 1 utilisateur par groupe ARS-CMSI par région 
-                $roleArscmsi     = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ARS_CMSI_4')); 
-                $roleAmbassadeur = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_AMBASSADEUR_7'));               
-                $usersByRole     = $roleArscmsi->getUsers();                
-                
-                //Dans le cas où la région est à nulle il n'y a pas besoin de vérifier si il existe déjà un ARS pour cette région.
-                if(null != $user->getRegion())
-                {
-                    //Pour chaque utilisateur ayant ce rôle, on vérifie qu'il n'a pas non plus la même région sinon on return et pas de sauvegarde
-                    foreach ($usersByRole as $key => $userByRole)
+                    //Dans le cas où la région est à nulle il n'y a pas besoin de vérifier si il existe déjà un ARS pour cette région.
+                    if(null != $user->getRegion() && $role->getRole() == 'ROLE_ARS_CMSI_4' )
                     {
-                        if($userByRole->getRegion()->getId() == $user->getRegion()->getId()
-                        && $roleArscmsi->getId() == $role->getId()
-                        && $user->getId() != $userByRole->getId())
-                        {
-                            $message = 'Il existe déjà un utilisateur associé au groupe ARS-CMSI pour cette région.';
-                            $this->get('session')->getFlashBag()->add('danger', $message);
+                        //On vérifie que l'utilisateur ayant le rôle ROLE_ARS_CMSI_4 n'a pas non plus la même région sinon on return et pas de sauvegarde
+                        $result = $this->get('hopitalnumerique_user.manager.user')->userExistForRoleArs( $user );
+
+                        if( ! is_null($result) ) {
+                            $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe ARS-CMSI pour cette région.' );
                     
                             return $this->render( $view , array(
-                                    'form' => $form->createView(),
-                                    'user' => $user
+                                'form'    => $form->createView(),
+                                'user'    => $user,
+                                'options' => $this->_gestionAffichageOnglet($user)
                             ));
                         }
                     }
-                }
-                else
-                {
-                    //Cas particuliers : La région est obligatoire pour les roles ARS-CMSI et Ambassadeur
-                    if($role->getId() == $roleArscmsi->getId()
-                       || $role->getId() == $roleAmbassadeur->getId())
+                    else if ( null == $user->getRegion() )
                     {
-                        $message = 'Il est obligatoire de choisir une région pour le rôle sélectionné.';
-                        $this->get('session')->getFlashBag()->add('danger', $message);
-                        
-                        return $this->render( $view , array(
-                                'form' => $form->createView(),
-                                'user' => $user
-                        ));
-                    }
-                }
-                
-                //Cas particulier : 1 utilisateur ES - Direction générale par établissement de rattachement
-                $roleDirectionGenerale    = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ES_DIRECTION_GENERALE_5'));
-                $usersByRoleDirectGeneral = $roleDirectionGenerale->getUsers();
-                if(null != $user->getEtablissementRattachementSante())
-                {
-                    //Pour chaque utilisateur ayant ce rôle, on vérifie qu'il n'a pas non plus la même région sinon on return et pas de sauvegarde
-                    foreach ($usersByRoleDirectGeneral as $key => $userByRoleDirectGeneral)
-                    {
-                        //L'utilisateur courant possède bien un établissement de rattachement
-                        if(null != $userByRoleDirectGeneral->getEtablissementRattachementSante())
-                        {
-                            if($userByRoleDirectGeneral->getEtablissementRattachementSante()->getId() == $user->getEtablissementRattachementSante()->getId()
-                            && $roleDirectionGenerale->getId() == $role->getId()
-                            && $user->getId() != $userByRoleDirectGeneral->getId())
-                            {
-                                $message = 'Il existe déjà un utilisateur associé au groupe Direction générale pour cet établissement.';
-                                $this->get('session')->getFlashBag()->add('danger', $message);
+                        //Cas particuliers : La région est obligatoire pour les roles ARS-CMSI et Ambassadeur
+                        if( $role->getRole() == 'ROLE_ARS_CMSI_4' || $role->getRole() == 'ROLE_AMBASSADEUR_7') {
+                            $this->get('session')->getFlashBag()->add('danger', 'Il est obligatoire de choisir une région pour le groupe sélectionné.' );
                             
-                                return $this->render( $view , array(
-                                        'form' => $form->createView(),
-                                        'user' => $user
-                                ));
-                            } 
+                            return $this->render( $view , array(
+                                'form'    => $form->createView(),
+                                'user'    => $user,
+                                'options' => $this->_gestionAffichageOnglet($user)
+                            ));
                         }
                     }
-                }
-                
+
+                //Cas particulier : 2 utilisateur ES - Direction générale par établissement de rattachement
+                    if( null != $user->getEtablissementRattachementSante() )
+                    {
+                        $result = $this->get('hopitalnumerique_user.manager.user')->userExistForRoleDirection( $user );
+                        if( ! is_null($result) ) {
+                            $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe Direction générale pour cet établissement.');
+                        
+                            return $this->render( $view , array(
+                                'form'    => $form->createView(),
+                                'user'    => $user,
+                                'options' => $this->_gestionAffichageOnglet($user)
+                            ));
+                        }
+                    }
+
                 //bind Référence Etat with Enable FosUserField
                 if( $user->getEtat()->getId() == 3 )
                     $user->setEnabled( 1 );
@@ -414,8 +377,8 @@ class UserController extends Controller
         }
 
         return $this->render( $view , array(
-            'form' => $form->createView(),
-            'user' => $user,
+            'form'    => $form->createView(),
+            'user'    => $user,
             'options' => $this->_gestionAffichageOnglet($user)
         ));
     }
