@@ -102,9 +102,8 @@ class ObjetType extends AbstractType
                 'attr'     => array( 'placeholder' => 'Selectionnez le ou les ambassadeurs qui sont concernés par cet objet' ),
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('user')
-                              ->leftJoin('user.roles', 'role')
-                              ->where('role.role = :ambassadeur')
-                              ->setParameter('ambassadeur','ROLE_AMBASSADEUR_7');
+                              ->where('user.roles LIKE :ambassadeur')
+                              ->setParameter('ambassadeur','%ROLE_AMBASSADEUR_7%');
                 }
             ))
             ->add('commentaires', 'checkbox', array(

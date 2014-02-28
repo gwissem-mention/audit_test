@@ -67,7 +67,7 @@ class ObjetController extends Controller
         $user  = $this->get('security.context')->getToken()->getUser();
 
         // l'objet est locked, on redirige vers la home page
-        if( $objet->getLock() && $objet->getLockedBy() != $user ){
+        if( $objet->getLock() && $objet->getLockedBy() && $objet->getLockedBy() != $user ){
             $this->get('session')->getFlashBag()->add( 'warning' , 'Cet objet est en cours d\'édition par '.$objet->getLockedBy()->getEmail().', il n\'est donc pas accessible pour le moment.' ); 
             return $this->redirect($this->generateUrl('hopitalnumerique_objet_objet'));
         }
@@ -166,8 +166,10 @@ class ObjetController extends Controller
             if( is_null($formType) ) {
                 $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un type d\'objet.' );
                 return $this->render( $view , array(
-                    'form'  => $form->createView(),
-                    'objet' => $objet
+                    'form'     => $form->createView(),
+                    'objet'    => $objet,
+                    'contenus' => $contenus,
+                    'infra'    => $infra
                 ));
             }
 
