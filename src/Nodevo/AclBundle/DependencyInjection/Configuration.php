@@ -20,6 +20,13 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('nodevo_acl');
 
+        $rootNode
+        	->children()
+                ->variableNode('options')
+                ->end()
+        	->end()
+        ;
+
         return $treeBuilder;
     }
 }

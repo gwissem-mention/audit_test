@@ -24,5 +24,10 @@ class NodevoAclExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        if (isset($config['options']))
+        {            
+            $container->setParameter('nodevo_acl.options', $config['options']);
+        }
     }
 }

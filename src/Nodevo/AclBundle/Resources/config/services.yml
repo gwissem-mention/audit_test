@@ -1,4 +1,7 @@
 parameters:
+    #Options
+    nodevo_acl.options:
+
     nodevo_acl.manager.acl.class: Nodevo\AclBundle\Manager\AclManager
     nodevo_acl.manager.ressource.class: Nodevo\AclBundle\Manager\RessourceManager
 
@@ -6,7 +9,7 @@ services:
     #Managers
     nodevo_acl.manager.acl:
         class: %nodevo_acl.manager.acl.class%
-        arguments: ["@doctrine.orm.entity_manager", @service_container]
+        arguments: ["@doctrine.orm.entity_manager", @service_container, "%nodevo_acl.options%"]
         calls:
             - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
