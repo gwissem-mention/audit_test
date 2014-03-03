@@ -120,7 +120,9 @@ class FixturesCommand extends GeneratorCommand
             '',
         ));
 
-        $bundle = $dialog->askAndValidate($output, $dialog->getQuestion('The Bundle shortcut name', $input->getOption('bundle')), array('Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateBundleName'), false, $input->getOption('bundle'));
+        $bundleNames = array_keys($this->getContainer()->get('kernel')->getBundles());
+
+        $bundle = $dialog->askAndValidate($output, $dialog->getQuestion('The Bundle shortcut name', $input->getOption('bundle')), array('Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateBundleName'), false, $input->getOption('bundle'), $bundleNames);
         $input->setOption('bundle', $bundle);
 
         $erase = $dialog->askConfirmation($output, $dialog->getQuestion('Erase existing fixtures (yes, no)?', 'yes', '?'), true);
