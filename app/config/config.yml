@@ -116,13 +116,13 @@ genemu_form:
 
 # Nodevo mail
 nodevo_mail:
-    autorisations:
+    options:
         allowAdd: false
         allowDelete: false
 
 nodevo_menu:
-    breadcrumb:
-        routeRacine: hopital_numerique_admin_homepage
+    options:
+        breadcrumbRouteRacine: hopital_numerique_admin_homepage
 
 # Gestion download fichiers sécurisé (pas dans /web)
 igorw_file_serve:

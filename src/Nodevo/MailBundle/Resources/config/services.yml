@@ -1,21 +1,21 @@
 parameters:
+    #Options
+    nodevo_mail.options:
+
     nodevo_mail.manager.mail.class: Nodevo\MailBundle\Manager\MailManager
     nodevo_mail.grid.mail.class: Nodevo\MailBundle\Grid\MailGrid
     nodevo_mail.form.mail.class: Nodevo\MailBundle\Form\MailType
-    nodevo_mail.manager.mail.nomExpediteur: 
-    nodevo_mail.manager.mail.emailExpediteur : 
-    nodevo_mail.manager.mail.destinataire : 
 
 services:
     nodevo_mail.manager.mail:
         class: %nodevo_mail.manager.mail.class%
-        arguments: ["@doctrine.orm.entity_manager", "@twig", "%nodevo_mail.mail.allowAdd%", "%nodevo_mail.mail.allowDelete%", "%nodevo_mail.manager.mail.nomExpediteur%", "%nodevo_mail.manager.mail.emailExpediteur%", "%nodevo_mail.manager.mail.destinataire%"]
+        arguments: ["@doctrine.orm.entity_manager", "@twig", "%nodevo_mail.options%"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
     nodevo_mail.grid.mail:
         class: %nodevo_mail.grid.mail.class%
-        arguments: ["@service_container", "%nodevo_mail.mail.allowDelete%"]
+        arguments: ["@service_container", "%nodevo_mail.options%"]
 
     nodevo_mail.form.mail:
         class: %nodevo_mail.form.mail.class%

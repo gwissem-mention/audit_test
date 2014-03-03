@@ -21,14 +21,10 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('nodevo_menu');
 
         $rootNode
-        	->children()
-        	    ->arrayNode('breadcrumb')
-                    ->addDefaultsIfNotSet()
-        	    	->children()        	    	
-        				->scalarNode('routeRacine')->defaultValue('')->end()
-        			->end()
-        		->end()
-        	->end()
+            ->children()
+                ->variableNode('options')
+                ->end()
+            ->end()
         ;
 
         return $treeBuilder;

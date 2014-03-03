@@ -18,13 +18,13 @@ class MailGrid extends Grid implements IGrid
     * Constructeur du grid, on lui passe le conteneur de services, un booléen si la suppression des mails est autorisée
     *
     * @param container Le conteneur de services
-    * @param allowDelete La suppression de mail est-elle autorisée ?
+    * @param options Tableau d'options
     */
-    public function __construct($container, $allowDelete = true)
+    public function __construct($container, $options = array())
     {
         parent::__construct( $container );
 
-        $this->_allowDelete = $allowDelete;
+        $this->_allowDelete = $options['allowDelete'];
     }
 
     /**

@@ -23,20 +23,18 @@ class MailManager extends BaseManager
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails
      *
      * @param EntityManager $em Entity      Manager de Doctrine
-     * @param Boolean       $allowAdd       L'ajout de mail est autorisée
-     * @param String        $nomExpediteur  Nom expéditeur
-     * @param String        $mailExpediteur Mail expéditeur
+     * @param Array         $options        Tableau d'options
      */
-    public function __construct(EntityManager $em, \Twig_Environment $twig, $allowAdd = true, $allowDelete = true, $nomExpediteur = '', $mailExpediteur = '', $destinataire = '')
+    public function __construct(EntityManager $em, \Twig_Environment $twig, $options = array())
     {
         parent::__construct($em);
 
         $this->_twig           = $twig;
-        $this->_allowAdd       = $allowAdd;
-        $this->_allowDelete    = $allowDelete;
-        $this->_nomExpediteur  = $nomExpediteur;
-        $this->_mailExpediteur = $mailExpediteur;
-        $this->_destinataire   = $destinataire;
+        $this->_allowAdd       = isset($options['allowAdd'])        ? $options['allowAdd']          : true;
+        $this->_allowDelete    = isset($options['allowDelete'])     ? $options['allowDelete']       : true;
+        $this->_nomExpediteur  = isset($options['nomExpediteur'])   ? $options['nomExpediteur']     : '';        
+        $this->_mailExpediteur = isset($options['mailExpediteur'])  ? $options['mailExpediteur']    : '';
+        $this->_destinataire   = isset($options['destinataire'])    ? $options['destinataire']      : '';
     }
 
     /**
