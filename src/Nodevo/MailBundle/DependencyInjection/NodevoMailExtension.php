@@ -25,14 +25,9 @@ class NodevoMailExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        $container->setParameter('nodevo_mail.mail.allowAdd', $config['autorisations']['allowAdd']);
-        $container->setParameter('nodevo_mail.mail.allowDelete', $config['autorisations']['allowDelete']);
-        if (isset($config['expediteur']))
+        if (isset($config['options']))
         {
-            $container->setParameter('nodevo_mail.manager.mail.nomExpediteur', $config['expediteur']['nom']);
-            $container->setParameter('nodevo_mail.manager.mail.emailExpediteur', $config['expediteur']['mail']);
+            $container->setParameter('nodevo_mail.options', $config['options']);
         }
-        if (isset($config['test']['destinataire']))
-            $container->setParameter('nodevo_mail.manager.mail.destinataire', $config['test']['destinataire']);
     }
 }

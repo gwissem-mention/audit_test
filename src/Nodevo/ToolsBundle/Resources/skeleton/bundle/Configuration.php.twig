@@ -27,6 +27,12 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode    = $treeBuilder->root('{{ extension_alias }}');
 
+        $rootNode
+            ->children()
+                ->variableNode('options')->end()
+            ->end()
+        ;
+
         return $treeBuilder;
     }
 {% endblock class_body %}

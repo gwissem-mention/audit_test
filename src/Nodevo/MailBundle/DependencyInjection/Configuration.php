@@ -22,24 +22,8 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
         	->children()
-        	    ->arrayNode('autorisations')
-        	    	->children()        	    	
-        				->booleanNode('allowAdd')->defaultTrue()->end()
-        				->booleanNode('allowDelete')->defaultTrue()->end()
-        			->end()
-        		->end()
-        		->arrayNode('expediteur')
-        	    	->children()	    	
-        				->scalarNode('mail')->isRequired()->cannotBeEmpty()->end()
-        				->scalarNode('nom')->isRequired()->cannotBeEmpty()->end()
-        			->end()
-        		->end()
-        		->arrayNode('test')
-                    ->addDefaultsIfNotSet()
-        	    	->children()	    	
-        				->scalarNode('destinataire')->isRequired()->cannotBeEmpty()->end()
-        			->end()
-        		->end()
+                ->variableNode('options')
+                ->end()
         	->end()
         ;
 

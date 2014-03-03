@@ -19,12 +19,12 @@ class BreadcrumbNodeLoader implements LoaderInterface
     private $container;
     private $_rootNode;
 
-    public function __construct(FactoryInterface $factory, SecurityContextInterface $security, $container, $rootNode = '')
+    public function __construct(FactoryInterface $factory, SecurityContextInterface $security, $container, $options = array())
     {
         $this->factory   = $factory;
         $this->security  = $security;
         $this->container = $container;
-        $this->_rootNode = $rootNode;
+        $this->_rootNode = isset($options['rootNode']) ? $options['breadcrumbRouteRacine'] : '';
     }
 
     public function getMenu($data)
