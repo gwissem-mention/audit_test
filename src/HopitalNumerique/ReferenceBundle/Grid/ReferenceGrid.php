@@ -59,11 +59,18 @@ class ReferenceGrid extends Grid implements IGrid
         $this->addActionButton( new Action\EditButton('hopitalnumerique_reference_reference_edit') );
         $this->addActionButton( new Action\DeleteButton('hopitalnumerique_reference_reference_delete') );
 
+        //Boutton d'ajout d'un référentiel avec le même code par défaut
+        $button = new RowAction('', 'hopitalnumerique_reference_reference_add');
+        $button->setRouteParameters( array('id','mod' => 'code') );
+        $button->setAttributes( array('class'=>'btn btn-warning fa fa-plus','title' => 'Ajouter comme code') );
+        $this->addActionButton( $button );
+
         //Boutton d'ajout d'un référentiel avec parent par défaut
         $button = new RowAction('', 'hopitalnumerique_reference_reference_add');
         $button->setRouteParameters( array('id') );
-        $button->setAttributes( array('class'=>'btn btn-warning fa fa-plus','title' => 'Ajouter comme enfant') );
+        $button->setAttributes( array('class'=>'btn btn-warning fa fa-level-down','title' => 'Ajouter comme enfant') );
         $this->addActionButton( $button );
+
     }
 
     /**
