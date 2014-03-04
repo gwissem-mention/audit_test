@@ -59,12 +59,14 @@ class UserController extends Controller
     {
         //Récupération de l'utilisateur passé en param
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
+        $roles = $this->get('nodevo_role.manager.role')->findIn( $user->getRoles() );
 
         return $this->render('HopitalNumeriqueUserBundle:User:show.html.twig', array(
             'user' => $user,
             'questionnaireExpert' => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('expert'),
             'questionnaireAmbassadeur' => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur'),
-            'options' => $this->_gestionAffichageOnglet($user)
+            'options' => $this->_gestionAffichageOnglet($user),
+            'roles' => $roles
         ));
     }
 
