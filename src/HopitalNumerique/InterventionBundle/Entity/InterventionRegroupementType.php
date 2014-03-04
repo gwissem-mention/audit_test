@@ -27,4 +27,37 @@ class InterventionRegroupementType
      * @ORM\Column(name="intervregtyp_libelle", type="string", length=32, nullable=false)
      */
     private $libelle;
+
+    /**
+     * Get id
+     *
+     * @return string 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set libelle
+     *
+     * @param string $libelle
+     * @return InterventionRegroupementType
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string 
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
 }

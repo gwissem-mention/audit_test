@@ -85,9 +85,9 @@ class InterventionDemande
     private $refusMessage;
 
     /**
-     * @var \CoreUser
+     * @var \HopitalNumerique\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="CoreUser")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="referent_id", referencedColumnName="usr_id")
      * })
@@ -95,9 +95,9 @@ class InterventionDemande
     private $referent;
 
     /**
-     * @var \CoreUser
+     * @var \HopitalNumerique\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="CoreUser")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ambassadeur_id", referencedColumnName="usr_id")
      * })
@@ -105,9 +105,9 @@ class InterventionDemande
     private $ambassadeur;
     
     /**
-     * @var \CoreUser
+     * @var \HopitalNumerique\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="CoreUser")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="cmsi_id", referencedColumnName="usr_id")
      * })
@@ -115,9 +115,9 @@ class InterventionDemande
     private $cmsi;
 
     /**
-     * @var \CoreUser
+     * @var \HopitalNumerique\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="CoreUser")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="directeur_id", referencedColumnName="usr_id")
      * })
@@ -135,9 +135,9 @@ class InterventionDemande
     private $interventionInitiateur;
 
     /**
-     * @var \HnReference
+     * @var \HopitalNumerique\ReferenceBundle\Entity\Reference
      *
-     * @ORM\ManyToOne(targetEntity="HnReference")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_intervention_type_id", referencedColumnName="ref_id")
      * })
@@ -145,9 +145,9 @@ class InterventionDemande
     private $interventionType;
 
     /**
-     * @var \HnReference
+     * @var \HopitalNumerique\ReferenceBundle\Entity\Reference
      *
-     * @ORM\ManyToOne(targetEntity="HnReference")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_intervention_etat_id", referencedColumnName="ref_id")
      * })
@@ -155,9 +155,9 @@ class InterventionDemande
     private $interventionEtat;
 
     /**
-     * @var \HnReference
+     * @var \HopitalNumerique\ReferenceBundle\Entity\Reference
      *
-     * @ORM\ManyToOne(targetEntity="HnReference")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_evaluation_etat_id", referencedColumnName="ref_id")
      * })
@@ -165,9 +165,9 @@ class InterventionDemande
     private $evaluationEtat;
 
     /**
-     * @var \HnReference
+     * @var \HopitalNumerique\ReferenceBundle\Entity\Reference
      *
-     * @ORM\ManyToOne(targetEntity="HnReference")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_remboursement_etat_id", referencedColumnName="ref_id")
      * })
@@ -177,7 +177,7 @@ class InterventionDemande
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="CoreUser", inversedBy="interv")
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interv")
      * @ORM\JoinTable(name="hn_intervention_ambassadeur_historique",
      *   joinColumns={
      *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id")
@@ -192,7 +192,7 @@ class InterventionDemande
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="HnEtablissement", inversedBy="interv")
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\EtablissementBundle\Entity\Etablissement", inversedBy="interv")
      * @ORM\JoinTable(name="hn_intervention_etablissement_rattache",
      *   joinColumns={
      *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id")
@@ -207,7 +207,7 @@ class InterventionDemande
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="HnObjet", inversedBy="interv")
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet", inversedBy="interv")
      * @ORM\JoinTable(name="hn_intervention_objet",
      *   joinColumns={
      *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id")
@@ -229,4 +229,527 @@ class InterventionDemande
         $this->obj = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return InterventionDemande
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set cmsiDateChoix
+     *
+     * @param \DateTime $cmsiDateChoix
+     * @return InterventionDemande
+     */
+    public function setCmsiDateChoix($cmsiDateChoix)
+    {
+        $this->cmsiDateChoix = $cmsiDateChoix;
+
+        return $this;
+    }
+
+    /**
+     * Get cmsiDateChoix
+     *
+     * @return \DateTime 
+     */
+    public function getCmsiDateChoix()
+    {
+        return $this->cmsiDateChoix;
+    }
+
+    /**
+     * Set ambassadeurDateChoix
+     *
+     * @param \DateTime $ambassadeurDateChoix
+     * @return InterventionDemande
+     */
+    public function setAmbassadeurDateChoix($ambassadeurDateChoix)
+    {
+        $this->ambassadeurDateChoix = $ambassadeurDateChoix;
+
+        return $this;
+    }
+
+    /**
+     * Get ambassadeurDateChoix
+     *
+     * @return \DateTime 
+     */
+    public function getAmbassadeurDateChoix()
+    {
+        return $this->ambassadeurDateChoix;
+    }
+
+    /**
+     * Set autresEtablissements
+     *
+     * @param string $autresEtablissements
+     * @return InterventionDemande
+     */
+    public function setAutresEtablissements($autresEtablissements)
+    {
+        $this->autresEtablissements = $autresEtablissements;
+
+        return $this;
+    }
+
+    /**
+     * Get autresEtablissements
+     *
+     * @return string 
+     */
+    public function getAutresEtablissements()
+    {
+        return $this->autresEtablissements;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return InterventionDemande
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set difficulteDescription
+     *
+     * @param string $difficulteDescription
+     * @return InterventionDemande
+     */
+    public function setDifficulteDescription($difficulteDescription)
+    {
+        $this->difficulteDescription = $difficulteDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get difficulteDescription
+     *
+     * @return string 
+     */
+    public function getDifficulteDescription()
+    {
+        return $this->difficulteDescription;
+    }
+
+    /**
+     * Set champLibre
+     *
+     * @param string $champLibre
+     * @return InterventionDemande
+     */
+    public function setChampLibre($champLibre)
+    {
+        $this->champLibre = $champLibre;
+
+        return $this;
+    }
+
+    /**
+     * Get champLibre
+     *
+     * @return string 
+     */
+    public function getChampLibre()
+    {
+        return $this->champLibre;
+    }
+
+    /**
+     * Set rdvInformations
+     *
+     * @param string $rdvInformations
+     * @return InterventionDemande
+     */
+    public function setRdvInformations($rdvInformations)
+    {
+        $this->rdvInformations = $rdvInformations;
+
+        return $this;
+    }
+
+    /**
+     * Get rdvInformations
+     *
+     * @return string 
+     */
+    public function getRdvInformations()
+    {
+        return $this->rdvInformations;
+    }
+
+    /**
+     * Set refusMessage
+     *
+     * @param string $refusMessage
+     * @return InterventionDemande
+     */
+    public function setRefusMessage($refusMessage)
+    {
+        $this->refusMessage = $refusMessage;
+
+        return $this;
+    }
+
+    /**
+     * Get refusMessage
+     *
+     * @return string 
+     */
+    public function getRefusMessage()
+    {
+        return $this->refusMessage;
+    }
+
+    /**
+     * Set referent
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $referent
+     * @return InterventionDemande
+     */
+    public function setReferent(\HopitalNumerique\UserBundle\Entity\User $referent = null)
+    {
+        $this->referent = $referent;
+
+        return $this;
+    }
+
+    /**
+     * Get referent
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User 
+     */
+    public function getReferent()
+    {
+        return $this->referent;
+    }
+
+    /**
+     * Set ambassadeur
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur
+     * @return InterventionDemande
+     */
+    public function setAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ambassadeur = null)
+    {
+        $this->ambassadeur = $ambassadeur;
+
+        return $this;
+    }
+
+    /**
+     * Get ambassadeur
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User 
+     */
+    public function getAmbassadeur()
+    {
+        return $this->ambassadeur;
+    }
+
+    /**
+     * Set cmsi
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $cmsi
+     * @return InterventionDemande
+     */
+    public function setCmsi(\HopitalNumerique\UserBundle\Entity\User $cmsi = null)
+    {
+        $this->cmsi = $cmsi;
+
+        return $this;
+    }
+
+    /**
+     * Get cmsi
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User 
+     */
+    public function getCmsi()
+    {
+        return $this->cmsi;
+    }
+
+    /**
+     * Set directeur
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $directeur
+     * @return InterventionDemande
+     */
+    public function setDirecteur(\HopitalNumerique\UserBundle\Entity\User $directeur = null)
+    {
+        $this->directeur = $directeur;
+
+        return $this;
+    }
+
+    /**
+     * Get directeur
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User 
+     */
+    public function getDirecteur()
+    {
+        return $this->directeur;
+    }
+
+    /**
+     * Set interventionInitiateur
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur $interventionInitiateur
+     * @return InterventionDemande
+     */
+    public function setInterventionInitiateur(\HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur $interventionInitiateur = null)
+    {
+        $this->interventionInitiateur = $interventionInitiateur;
+
+        return $this;
+    }
+
+    /**
+     * Get interventionInitiateur
+     *
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur 
+     */
+    public function getInterventionInitiateur()
+    {
+        return $this->interventionInitiateur;
+    }
+
+    /**
+     * Set interventionType
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionType
+     * @return InterventionDemande
+     */
+    public function setInterventionType(\HopitalNumerique\ReferenceBundle\Entity\Reference $interventionType = null)
+    {
+        $this->interventionType = $interventionType;
+
+        return $this;
+    }
+
+    /**
+     * Get interventionType
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     */
+    public function getInterventionType()
+    {
+        return $this->interventionType;
+    }
+
+    /**
+     * Set interventionEtat
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat
+     * @return InterventionDemande
+     */
+    public function setInterventionEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat = null)
+    {
+        $this->interventionEtat = $interventionEtat;
+
+        return $this;
+    }
+
+    /**
+     * Get interventionEtat
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     */
+    public function getInterventionEtat()
+    {
+        return $this->interventionEtat;
+    }
+
+    /**
+     * Set evaluationEtat
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $evaluationEtat
+     * @return InterventionDemande
+     */
+    public function setEvaluationEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $evaluationEtat = null)
+    {
+        $this->evaluationEtat = $evaluationEtat;
+
+        return $this;
+    }
+
+    /**
+     * Get evaluationEtat
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     */
+    public function getEvaluationEtat()
+    {
+        return $this->evaluationEtat;
+    }
+
+    /**
+     * Set remboursementEtat
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $remboursementEtat
+     * @return InterventionDemande
+     */
+    public function setRemboursementEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $remboursementEtat = null)
+    {
+        $this->remboursementEtat = $remboursementEtat;
+
+        return $this;
+    }
+
+    /**
+     * Get remboursementEtat
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     */
+    public function getRemboursementEtat()
+    {
+        return $this->remboursementEtat;
+    }
+
+    /**
+     * Add ambassadeurs
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeurs
+     * @return InterventionDemande
+     */
+    public function addAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ambassadeurs)
+    {
+        $this->ambassadeurs[] = $ambassadeurs;
+
+        return $this;
+    }
+
+    /**
+     * Remove ambassadeurs
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeurs
+     */
+    public function removeAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ambassadeurs)
+    {
+        $this->ambassadeurs->removeElement($ambassadeurs);
+    }
+
+    /**
+     * Get ambassadeurs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAmbassadeurs()
+    {
+        return $this->ambassadeurs;
+    }
+
+    /**
+     * Add etablissements
+     *
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissements
+     * @return InterventionDemande
+     */
+    public function addEtablissement(\HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissements)
+    {
+        $this->etablissements[] = $etablissements;
+
+        return $this;
+    }
+
+    /**
+     * Remove etablissements
+     *
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissements
+     */
+    public function removeEtablissement(\HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissements)
+    {
+        $this->etablissements->removeElement($etablissements);
+    }
+
+    /**
+     * Get etablissements
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEtablissements()
+    {
+        return $this->etablissements;
+    }
+
+    /**
+     * Add objets
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objets
+     * @return InterventionDemande
+     */
+    public function addObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objets)
+    {
+        $this->objets[] = $objets;
+
+        return $this;
+    }
+
+    /**
+     * Remove objets
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objets
+     */
+    public function removeObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objets)
+    {
+        $this->objets->removeElement($objets);
+    }
+
+    /**
+     * Get objets
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getObjets()
+    {
+        return $this->objets;
+    }
 }

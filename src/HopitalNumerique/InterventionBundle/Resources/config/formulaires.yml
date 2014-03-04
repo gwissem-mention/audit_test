@@ -1,0 +1,15 @@
+parameters:
+    hopitalnumerique_intervention.intervention_demande.type.class: HopitalNumerique\InterventionBundle\Form\InterventionDemandeType
+    hopitalnumerique_intervention.user.type.class: HopitalNumerique\InterventionBundle\Form\UserType
+
+services:
+    hopitalnumerique_intervention.intervention_demande.type:
+        class: "%hopitalnumerique_intervention.intervention_demande.type.class%"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_interventionbundle_interventiondemande }
+        arguments: ["@service_container"]
+    hopitalnumerique_intervention.user.type:
+        class: "%hopitalnumerique_intervention.user.type.class%"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_interventionbundle_user }
+        arguments: ["@service_container"]

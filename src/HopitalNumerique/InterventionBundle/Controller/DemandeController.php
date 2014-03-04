@@ -7,6 +7,7 @@
 namespace HopitalNumerique\InterventionBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 
 /**
  * Contrôleur des demandes d'intervention.
@@ -18,6 +19,15 @@ class DemandeController extends Controller
      */
     public function nouveauAction()
     {
-        return $this->render('HopitalNumeriqueInterventionBundle:Demande:nouveau.html.twig');
+        $interventionDemande = new InterventionDemande();
+        $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande', $interventionDemande);
+        //$interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_user', new \HopitalNumerique\UserBundle\Entity\User());
+
+        return $this->render(
+            'HopitalNumeriqueInterventionBundle:Demande:nouveau.html.twig',
+            array(
+                'interventionDemandeFormulaireNouveau' => $interventionDemandeFormulaire->createView()
+            )
+        );
     }
 }

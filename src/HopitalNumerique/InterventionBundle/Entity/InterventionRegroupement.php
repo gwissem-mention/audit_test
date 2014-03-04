@@ -47,4 +47,73 @@ class InterventionRegroupement
     private $interventionDemandeRegroupee;
 
 
+
+    /**
+     * Set interventionRegroupementType
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType $interventionRegroupementType
+     * @return InterventionRegroupement
+     */
+    public function setInterventionRegroupementType(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType $interventionRegroupementType = null)
+    {
+        $this->interventionRegroupementType = $interventionRegroupementType;
+
+        return $this;
+    }
+
+    /**
+     * Get interventionRegroupementType
+     *
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType 
+     */
+    public function getInterventionRegroupementType()
+    {
+        return $this->interventionRegroupementType;
+    }
+
+    /**
+     * Set interventionDemandePrincipale
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandePrincipale
+     * @return InterventionRegroupement
+     */
+    public function setInterventionDemandePrincipale(\HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandePrincipale)
+    {
+        $this->interventionDemandePrincipale = $interventionDemandePrincipale;
+
+        return $this;
+    }
+
+    /**
+     * Get interventionDemandePrincipale
+     *
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande 
+     */
+    public function getInterventionDemandePrincipale()
+    {
+        return $this->interventionDemandePrincipale;
+    }
+
+    /**
+     * Set interventionDemandeRegroupee
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandeRegroupee
+     * @return InterventionRegroupement
+     */
+    public function setInterventionDemandeRegroupee(\HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandeRegroupee)
+    {
+        $this->interventionDemandeRegroupee = $interventionDemandeRegroupee;
+
+        return $this;
+    }
+
+    /**
+     * Get interventionDemandeRegroupee
+     *
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande 
+     */
+    public function getInterventionDemandeRegroupee()
+    {
+        return $this->interventionDemandeRegroupee;
+    }
 }

@@ -4,9 +4,37 @@
 
 {% block chapoDescription %}
     <p>Tu vois, là-bas, les champs de blé ? Je ne mange pas de pain. Le blé pour moi est inutile. Les champs de blé ne me rappellent rien. Et ça, c'est triste ! Mais tu as des cheveux couleur d'or. Alors ce sera merveilleux quand tu m'auras apprivoisé ! Le blé, qui est doré, me fera souvenir de toi. Et j'aimerai le bruit du vent dans le blé...</p>
-    <p>On ne voit bien qu’avec le coeur. L’essentiel est invisible pour les yeux.</p>
 {% endblock %}
 
 {% block contenu %}
-    13
+    <div class="panel">
+        
+        <form method="post" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
+            {{ form_widget(interventionDemandeFormulaireNouveau) }}
+            <input type="submit" class="btn btn-primary" />
+        </form>
+        
+        <form class="form-horizontal" method="post" >
+            <div class="background-violet"></div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label class="control-label col-md-4" for="username">Nom d'utilisateur</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="username" name="_username" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label class="control-label col-md-4" for="password">Mot de passe</label>
+                    <div class="col-md-8">
+                        <input type="password" class="form-control" id="password" name="_password" />
+                        <a href="{{path('fos_user_resetting_request')}}" class="resetPass">Mot de passe oublié</a>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <input type="submit" id="_submit" name="_submit" class="btn btn-success pull-right submit" value="CONNEXION" />
+        </form>
+    </div>
 {% endblock %}
