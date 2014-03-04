@@ -2,14 +2,7 @@ $(document).ready(function() {
 
     var idEntreprise = 0;
     var idDepartement = 0;
-    
-    $("#nodevo_user_user_roles").select2({ 
-        maximumSelectionSize: 1,
-        formatSelectionTooBig : function(maxSize){
-            return 'Vous ne pouvez associer qu\'un seul groupe par utilisateur';
-        }
-    });
-    
+        
     //Récupération de l'id du département si il on est en édition
     if(null !== $('#nodevo_user_user_departement').val())
     	idDepartement = $('#nodevo_user_user_departement').val();

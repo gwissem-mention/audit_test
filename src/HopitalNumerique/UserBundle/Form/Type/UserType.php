@@ -149,15 +149,14 @@ class UserType extends AbstractType
             ))
             
             
-            ->add('roles', 'genemu_jqueryselect2_entity', array(
+            ->add('roles', 'entity', array(
                 'class'         => 'NodevoRoleBundle:Role',
                 'property'      => 'name',
-                'multiple'      => false,
                 'required'      => true,
                 'label'         => 'Groupe associé',
                 'mapped'        => false,
-                'empty_value'   => 'Choissisez un groupe',
-                //'attr'          => array('class'=>'validate[required]'),
+                'empty_value'   => ' - ',
+                'attr'          => array('class'=>'validate[required]'),
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ro')
                               ->where('ro.etat != :etat')
