@@ -1,0 +1,17 @@
+{% extends 'NodevoAdminBundle::form.html.twig' %}
+
+{% block form_row %}
+    {% spaceless %}
+        <div class="form-group">
+                {{ form_label(form) }}
+            <div class="col-md-8">
+                {{ form_widget(form) }}
+            </div>
+            <div class="col-md-3">
+                <div class="help-block">
+                    {{ form_errors(form) }}
+                </div>
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}

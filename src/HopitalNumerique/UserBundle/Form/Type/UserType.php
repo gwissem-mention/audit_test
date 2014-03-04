@@ -9,9 +9,9 @@
 namespace HopitalNumerique\UserBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class UserType extends AbstractType
 {
@@ -24,6 +24,17 @@ class UserType extends AbstractType
         $this->_managerRole = $managerRole;
     }
 
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+                'data_class'      => 'HopitalNumerique\UserBundle\Entity\User',
+                'csrf_protection' => false,
+                'csrf_field_name' => '_token',
+                // une clé unique pour aider à la génération du jeton secret
+                'intention'       => 'task_item',
+        ));
+    }
+    
     /**
      * Ajout des éléments dans le formulaire, spécifie les labels, les widgets utilisés ainsi que l'obligation
      * 
@@ -306,6 +317,11 @@ class UserType extends AbstractType
             ;
             
             // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
+            
+            $builder->add('save', 'button', array(
+                    'attr'  => array('class' => 'save btn btn-success pull-right submit'),
+                    'label' => 'INSCRIPTION'
+            ));
     }
 
     /**

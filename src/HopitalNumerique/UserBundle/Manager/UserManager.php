@@ -4,7 +4,7 @@ namespace HopitalNumerique\UserBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use Symfony\Component\Security\Core\User\UserInterface;
-use HopitalNumerique;
+use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 
 class UserManager extends BaseManager
 {
@@ -27,8 +27,8 @@ class UserManager extends BaseManager
     {
         $users = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
         
-        $idExpert      = HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('expert');
-        $idAmbassadeur = HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur');
+        $idExpert      = QuestionnaireManager::_getQuestionnaireId('expert');
+        $idAmbassadeur = QuestionnaireManager::_getQuestionnaireId('ambassadeur');
         
         //Récupération des questionnaires et users
         $questionnaireByUser = $this->_managerReponse->reponseExiste($idExpert, $idAmbassadeur);        

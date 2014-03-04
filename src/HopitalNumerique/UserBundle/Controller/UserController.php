@@ -49,6 +49,17 @@ class UserController extends Controller
 
         return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig' );
     }
+    
+    /**
+     * Affichage du formulaire d'inscription
+     */
+    public function inscriptionAction()
+    {       
+        //Récupération de l'utilisateur passé en param
+        $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
+         
+        return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:inscription.html.twig');
+    }
 
     /**
      * Affichage de la fiche d'un utilisateur
@@ -277,7 +288,7 @@ class UserController extends Controller
         
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
+                        
             // On bind les données du form
             $form->handleRequest($request);
             
@@ -293,7 +304,6 @@ class UserController extends Controller
                     'options' => $this->_gestionAffichageOnglet($user)
                 ));
             }
-
             //si le formulaire est valide
             if ($form->isValid()) {
                 //test ajout ou edition
@@ -374,10 +384,22 @@ class UserController extends Controller
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Utilisateur ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
                 
                 $do = $request->request->get('do');
-                return $this->redirect( ( $do == 'save-close' ? $this->generateUrl('hopital_numerique_user_homepage') : $this->generateUrl('hopital_numerique_user_edit', array( 'id' => $user->getId() ) ) ) );
+                switch ($do)
+                {
+                	case 'front':
+                	    return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+                	    break;
+                	case 'save-close':
+                	    return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
+                	    break;
+                	default:
+                	    return $this->redirect( $this->generateUrl('hopital_numerique_user_edit', array( 'id' => $user->getId())) );
+                	    break;
+                }
+                //return $this->redirect( ( $do == 'save-close' ? $this->generateUrl('hopital_numerique_user_homepage') : $this->generateUrl('hopital_numerique_user_edit', array( 'id' => $user->getId() ) ) ) );
             }
         }
-
+        
         return $this->render( $view , array(
             'form'    => $form->createView(),
             'user'    => $user,
