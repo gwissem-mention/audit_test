@@ -8,6 +8,7 @@
 /build/
 /vendor/
 /bin/
+composer.lock
 
 #Mac OSX 
 .DS_Store
