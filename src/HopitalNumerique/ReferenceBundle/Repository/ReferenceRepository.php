@@ -14,7 +14,7 @@ class ReferenceRepository extends EntityRepository
      *
      * @return array
      */
-    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false )
+    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref.id, ref.libelle, ref.code, par.id as parent, ref.order')
@@ -27,6 +27,9 @@ class ReferenceRepository extends EntityRepository
 
         if( $fromDictionnaire )
             $qb->andWhere('ref.dictionnaire = 1');
+
+        if( $fromRecherche )
+            $qb->andWhere('ref.recherche = 1');
 
         return $qb->getQuery()->getResult();
     }

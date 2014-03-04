@@ -1,1 +1,236 @@
-index
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Recherche{% endblock %}
+{% block metadesc %}Recherche{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-default-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquerecherche/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-recherche-default-index.js"
+        'bundles/hopitalnumeriquerecherche/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="recherche">
+        <div class="col-md-4">
+            <div id="origin">
+                <ol>
+                    {{ _self.buildTree(elements, 0, 'cliquable') }}
+                </ol>
+            </div>
+        </div>
+
+        <div class="col-md-8 requete">
+            <h2 class="violet">Requête de recherche</h2>
+            <div id="dest">
+                <ol>
+                    <li class="placeholder text-muted">Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi</li>
+                    {{ _self.buildTree(elements, 0, 'hide') }}
+                </ol>
+            </div>
+        </div>
+        <script>
+            var DELAY = 200, clicks = 0, timer = null, showPlaceholder = true;;
+
+            $(function() {
+                $('#origin li span').on("click", function(e){
+                    clicks++;                                        //count clicks
+
+                    //collapse click
+                    if(clicks === 1) {
+                        that = this;
+                        timer = setTimeout(function() {
+                            $(that).parent().toggleClass("active");
+                            $(that).parent().find('i').toggleClass("fa-chevron-down fa-chevron-right");
+                            $(that).parent().find('ol:first').slideToggle({duration: 200});
+
+                            clicks = 0;                              //after action performed, reset counter
+                        }, DELAY);
+                    //add click
+                    } else {
+                        clearTimeout(timer);                         //prevent single-click action
+                        success = selectElement( $(this).parent() ); //add element to DEST
+                        //placeholder management
+                        if( success && showPlaceholder){
+                            $( "#dest .placeholder").hide();
+                            showPlaceholder = false;
+                        }
+
+                        clicks = 0;                                  //after action performed, reset counter
+                    }
+                })
+                .on("dblclick", function(e){
+                    e.preventDefault(); //cancel system double-click event
+                });
+
+
+                /* BEFORE */
+                    // //TOUS les éléments de l'origine sont draggable
+                    // $( "#origin li.draggable" ).draggable({
+                    //     appendTo : "body",
+                    //     helper   : "clone"
+                    // });
+
+                    // //La "zone de drop" est une autre liste
+                    // $( "#dest ol" ).droppable({
+                    //     activeClass : "ui-state-default",
+                    //     hoverClass  : "ui-state-hover",
+                    //     accept      : ":not(.ui-sortable-helper)",
+                    //     drop: function( event, ui ) {
+                    //         //placeholder management
+                    //         if( showPlaceholder ){
+                    //             $( this ).find( ".placeholder" ).remove();
+                    //             showPlaceholder = false;
+                    //         }
+
+                    //         //items drop
+                    //         dropChilds( ui.helper.prevObject, this );
+                            
+                    //         //hide origin object
+                    //         ui.helper.prevObject.slideUp();
+                    //     }
+                    // }).sortable({
+                    //     items: "li:not(.placeholder)",
+                    //     sort: function() {
+                    //         $( this ).removeClass( "ui-state-default" );
+                    //     }
+                    // });
+            });
+
+            /* BEFORE */
+                // function dropChilds( item, that )
+                // {
+                //     //add parent Text
+                //     li = $( '<li class="'+$(item).attr('id')+'"></li>' ).text( $(item).find('span:first').html() ).appendTo(that);
+
+                //     if( item.find('ol').length > 0 ){
+                //         //on ajoute TOUS les enfants en vérifiants que les enfants déjà ajouté sont bien supprimés
+                //         parent = $('<ol></ol>');
+
+                //         item.find('ol:first li').each(function(){
+                //             //if this element already exist, we remove the previous one
+                //             $('#dest li.'+$(this).attr('id')).remove();
+
+                //             //add the his childs
+                //             $( '<li class="'+$(this).attr('id')+'"></li>' ).text( $(this).text() ).appendTo( parent );
+
+
+                //             dropChilds( $(this), that )
+                //         });
+                        
+                //         parent.appendTo( li );
+                //     }
+                // }
+
+            function selectElement( item )
+            {
+                if( $(item).hasClass('cliquable') ) {
+                    //cache l'élément de l'origine
+                    $(item).slideUp().removeClass('cliquable');
+                    $(item).find('li').removeClass('cliquable active'); //pour éviter les bugs, on retire la class cliquable|active à tous les enfants de l'élément
+
+                    //cache le parent de l'élément d'origine (si c'est le dernier enfant que l'on viens de cacher)
+                    handleParentsOrigin( $(item) );
+                    
+                    //vérification et ajoute de l'item empty pour le premier level
+                    $('#origin li.level0').each(function(){
+                        if ( $(this).find('ol > li.cliquable').length == 0 && $(this).find('ol > li.empty').length == 0 )
+                            $(this).find('ol').prepend('<li class="empty level1" ><span>Aucun sous éléments</span></li>');
+                    })
+
+
+                    //affiche l'élément dans la liste de droite
+                    showItemDestRecursive( $(item) );
+
+                    //si c'est un parent, on show ces enfants (NON recursif)
+                    $('#dest .element-' + $(item).data('id') + ' li.hide').removeClass('hide');
+
+                }else
+                    return false;
+
+                return true;
+            }
+
+            /**
+             * On cache en mode récursif tous les parents de l'élément
+             */
+            function handleParentsOrigin( item )
+            {
+                //si le parent de l'élément n'a plus d'enfants cliquables
+                if( $(item).parent().find('li.cliquable').length == 0 ) {
+
+                    //alors on check si le LI de la liste parente n'est pas le level0
+                    if( $(item).parent().parent().hasClass('cliquable') ){
+
+                        //on remove le LI qui contient la liste des enfants
+                        $(item).parent().parent().slideUp().removeClass('cliquable');
+
+                        //on check de manière récursive
+                        handleParentsOrigin( $(item).parent().parent() );
+                    }
+                }
+            }
+
+            /**
+             * Affiche les items dans la liste de destination de manière récursive
+             */
+            function showItemDestRecursive( item )
+            {
+                destItem = $('#dest .element-' + $(item).data('id') );
+                $(destItem).removeClass('hide');
+
+                if ( $(destItem).parent().parent().hasClass('hide') )
+                    showItemDestRecursive( $(destItem).parent().parent() );
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </script>
+    </div>
+{% endblock %}
+
+{% macro buildTree(elements, level, class) %}
+    {% if level == 0 and class == 'cliquable' %}
+        {% set liClass = '' %}
+    {% else %}
+        {% set liClass = class %}
+    {% endif %}
+
+    {% for element in elements  %}
+        <li class="{{liClass}} level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
+            <span>{{element.libelle}}</span>
+            {% if element.childs %}
+                {% if level == 2 and class == 'cliquable' %}
+                    <i class="fa fa-chevron-right pull-right"></i>
+                {% endif %}
+                <ol>
+                    {% for child in element.childs %}
+                        {{ _self.buildTree(child, level+1, class ) }}
+                    {% endfor %}
+                </ol>
+            {% endif %}
+        </li>
+    {% endfor %}
+{% endmacro %}

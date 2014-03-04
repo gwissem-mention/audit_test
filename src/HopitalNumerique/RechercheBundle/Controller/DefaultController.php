@@ -11,6 +11,10 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('HopitalNumeriqueRechercheBundle:Default:index.html.twig', array());
+        $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
+
+        return $this->render('HopitalNumeriqueRechercheBundle:Default:index.html.twig', array(
+            'elements' => $elements['CATEGORIES_RECHERCHE']
+        ));
     }
 }

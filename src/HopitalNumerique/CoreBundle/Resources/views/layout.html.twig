@@ -16,6 +16,7 @@
                 'bundles/hopitalnumeriquecore/css/bootstrap.min.css'
                 'bundles/hopitalnumeriquecore/css/bootstrap-theme.min.css'
                 'bundles/hopitalnumeriquecore/css/layout.css'
+                'bundles/hopitalnumeriquecore/js/jqueryui.min.css'
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
@@ -24,6 +25,8 @@
         {% block javascripts %}
             {% javascripts output="compiled/main-front.js"
                 'bundles/hopitalnumeriquecore/js/jquery-1.11.0.min.js'
+                'bundles/hopitalnumeriquecore/js/jqueryui-1.10.3.min.js'
+                'bundles/hopitalnumeriquecore/js/jqueryui-fr.js'
                 'bundles/hopitalnumeriquecore/js/bootstrap.min.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
