@@ -4,7 +4,7 @@ namespace HopitalNumerique\EtablissementBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 
-use Nodevo\UserBundle\Manager\UserManager as BaseManager;
+use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 
 class EtablissementManager extends BaseManager
 {

@@ -1,0 +1,86 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Inscription{% endblock %}
+{% block metadesc %}Créez-vous à un compte "Mon Hôpital Numérique" pour accéder aux outils proposés par l'ANAP{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-user-user-inscription.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+        'bundles/hopitalnumeriqueuser/css/inscription.css'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-user-user-inscription.js"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
+        'bundles/hopitalnumeriqueuser/js/User/script.js'
+        'bundles/hopitalnumeriquecore/js/jquery.maskedinput.min.js'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="inscription">
+        <h3>Inscription</h3>
+            {% form_theme form 'HopitalNumeriqueUserBundle:User:theme_inscription_form.html.twig' %}
+                {{ form_start(form) }}
+                    {{ form_javascript(form) }}
+                    <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+                    <div class="background-violet"></div>
+
+                    {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
+                    <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_departements')}}" />
+                    <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_etablissements')}}" />
+                    <input type="hidden" id="do" name="do" value="save" />
+                    
+                    {# Formulaire : #}
+                    {{ form_row(form.civilite) }}
+                    {{ form_row(form.titre) }}
+                    {{ form_row(form.username) }}
+                    {{ form_row(form.nom) }}
+                    {{ form_row(form.prenom) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.plainPassword) }}
+                    {{ form_row(form.telephoneDirect) }}
+                    {{ form_row(form.telephonePortable) }}
+                    {{ form_row(form.contactAutre) }}
+                    {{ form_row(form.region) }}
+                    {{ form_row(form.departement) }} 
+                    {{ form_row(form.roles) }}
+
+                    {% if user.id != 1 %}
+                        {{ form_row(form.etat) }}
+                    {% else %}
+                        <div class="hide">
+                            {{ form_row(form.etat) }}    
+                        </div>
+                    {% endif %}
+
+                    <h4>Vous êtes un établissement de santé</h4>
+                    {{ form_row(form.statutEtablissementSante) }}
+                    {{ form_row(form.etablissementRattachementSante) }}
+                    {{ form_row(form.autreStructureRattacheementSante) }}
+                    {{ form_row(form.fonctionEtablissementSante) }}
+                    {{ form_row(form.raisonInscriptionSante) }}
+
+                    <h4>Vous êtes une structure autre qu'un établissement de santé</h4>
+                    {{ form_row(form.nomStructure) }}
+                    {{ form_row(form.fonctionStructure) }}
+                    {{ form_row(form.raisonInscriptionStructure) }}
+                {# Permet de mettre à la ligne le submit #}
+                <div class="clearfix"></div>
+                <input onclick="$('#do').val('front');sauvegardeFormulaire();" type="submit" id="_submit" name="_submit" class="btn btn-success pull-right submit" value="INSCRIPTION" />
+    </div>
+{% endblock %}

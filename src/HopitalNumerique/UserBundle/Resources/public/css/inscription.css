@@ -1,0 +1,10 @@
+#inscription{ width: 780px; margin: 0 auto;}
+#inscription h3{ color:#070707; font-size: 18px; font-weight: bold; margin: 53px 0 18px;}
+#inscription form{ background: #f4f4f4; padding:60px 0px; position: relative;}
+#inscription form .background-violet{width: 214px; height: 4px; position: absolute; top: 0; left: 0;}
+#inscription form label{ color:#333333; font-size: 13px }
+#inscription form .champ-obligatoire{color: #5d5d5d;width: 164px; height: 4px; position: absolute; top: -20px; right: 0px;font-style:italic;}
+#inscription form .champ-obligatoire .etoile{color: #e01958;}
+#inscription form .submit{margin: 10px 16px 0px 0px;}
+#inscription form .resetPass{display:block; font-size: 13px; color: #a3a3a3; margin-top: 20px}
+#inscription form h4{ text-align:center; }
