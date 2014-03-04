@@ -83,7 +83,17 @@ class ContractualisationController extends Controller
                 'inline'         => false,
         );
         
-        return $this->get('igorw_file_serve.response_factory')->create( $contractualisation->getUploadRootDir() . '/'. $contractualisation->getPath(), 'application/pdf', $options);
+        if(file_exists($contractualisation->getUploadRootDir() . '/'. $contractualisation->getPath()))
+        {
+            return $this->get('igorw_file_serve.response_factory')->create( $contractualisation->getUploadRootDir() . '/'. $contractualisation->getPath(), 'application/pdf', $options);
+        }
+        else
+        {
+            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
+            $this->get('session')->getFlashBag()->add( ('danger') , 'Le document n\'existe plus sur le serveur.' );
+
+            return $this->redirect( $this->generateUrl('hopitalnumerique_user_contractualisation', array( 'id' => $contractualisation->getUser()->getId())) );
+        }        
     }
 
     /**
@@ -141,12 +151,6 @@ class ContractualisationController extends Controller
         ));
         
     }
-
-
-
-
-
-
 
 
 
