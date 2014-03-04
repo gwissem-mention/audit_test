@@ -16,7 +16,7 @@ class ReponseController extends Controller
      * @param int $id Id de la réponse du fichier à télécharger
      */
     public function dowloadReponseAction( Reponse $reponse )
-    {        
+    {                
         if(file_exists($this->get('hopitalnumerique_questionnaire.manager.question')->getUploadRootDir($reponse->getQuestion()->getQuestionnaire()->getNomMinifie()) . '/'. $reponse->getReponse()))
         {        
             $option = $this->get('hopitalnumerique_questionnaire.manager.reponse')->download($reponse);
@@ -35,8 +35,7 @@ class ReponseController extends Controller
             else
                 //FrontOffice
                 return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
-        }        
-        
+        }
     }
     
     /**

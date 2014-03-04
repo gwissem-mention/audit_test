@@ -68,48 +68,6 @@ class ExpertController extends Controller
         ));
     }  
 
-    /**
-     * Suppression de toutes les réponses de l'utilisateur pour le questionnaire passé en param
-     *
-     * @param int $idUser
-     * @param int $idQuestionnaire
-     */
-    public function deleteAllAction( $idUser, $idQuestionnaire )
-    {
-        $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAll( $idUser, $idQuestionnaire);
-    
-        $this->get('session')->getFlashBag()->add( 'success' ,  'Le questionnaire d\'expert a été vidé.' );
-    
-        return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_user_expert_edit', array('id' => $idUser)).'"}', 200);
-    }
-
-    /**
-     * Téléchargement des fichiers attaché au questionnaire expert.
-     * 
-     * @param int $id Id de la réponse du fichier à télécharger
-     */
-    public function dowloadAction( $id )
-    {        
-        //Récupération de l'entité en fonction du paramètre
-        $reponse = $this->get('hopitalnumerique_questionnaire.manager.reponse')->findOneBy( array( 'id' => $id) );
-    
-        $options = array(
-                'serve_filename' => $reponse->getReponse(),
-                'absolute_path' => false,
-                'inline' => false,
-        );
-    
-        return $this->get('igorw_file_serve.response_factory')->create( $this->get('hopitalnumerique_questionnaire.manager.question')->getUploadRootDir('expert') . '/'. $reponse->getReponse(), 'application/pdf', $options);
-    }
-    
-
-
-
-
-
-
-
-
 
     
     /**

@@ -105,21 +105,6 @@ class AmbassadeurController extends Controller
     }
 
     /**
-     * Suppression de toutes les réponses de l'utilisateur pour le questionnaire passé en param
-     *
-     * @param int $idUser
-     * @param int $idQuestionnaire
-     */
-    public function deleteAllAction( $idUser, $idQuestionnaire )
-    {
-        $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAll( $idUser, $idQuestionnaire);
-        
-        $this->get('session')->getFlashBag()->add( 'success' ,  'Le questionnaire d\'ambassadeur a été vidé.' );
-
-        return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_user_ambassadeur_edit', array('id' => $idUser)).'"}', 200);
-    }
-
-    /**
      * Supprime le lien objet => ambassadeur
      *
      * @param int $id   ID de l'objet
