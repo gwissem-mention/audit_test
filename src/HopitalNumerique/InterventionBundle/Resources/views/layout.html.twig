@@ -1,0 +1,24 @@
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hnIntervention.css"
+        'bundles/hopitalnumeriqueintervention/css/intervention.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}{% block pageTitre %}{% endblock %} / Intervention - {{ parent() }}{% endblock %}
+
+{% block content %}
+    <div class="page_intervention">
+        {% block chapo %}
+            <div class="chapo">
+                <h1>{% block chapoTitre %}{{ block('pageTitre') }}{% endblock %}</h1>
+                <div class="description">{% block chapoDescription %}{% endblock %}</div>
+            </div>
+        {% endblock %}
+        {% block contenu %}{% endblock %}
+    </div>
+{% endblock %}

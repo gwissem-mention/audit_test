@@ -41,6 +41,7 @@ class AppKernel extends Kernel
             new Nodevo\ErrorsBundle\NodevoErrorsBundle(),
             new Nodevo\GestionnaireMediaBundle\NodevoGestionnaireMediaBundle(),
             new HopitalNumerique\AccountBundle\HopitalNumeriqueAccountBundle(),
+            new HopitalNumerique\InterventionBundle\HopitalNumeriqueInterventionBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

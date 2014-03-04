@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+
+/* <-- Structure générale de la page */
+div.page_intervention {}
+    div.page_intervention div.chapo {}
+        div.page_intervention div.chapo h1 {}
+        div.page_intervention div.chapo div.description {}
+            div.page_intervention div.chapo div.description p {}
+/* --> */
