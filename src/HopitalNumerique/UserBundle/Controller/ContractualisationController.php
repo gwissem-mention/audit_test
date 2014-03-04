@@ -92,7 +92,7 @@ class ContractualisationController extends Controller
             // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
             $this->get('session')->getFlashBag()->add( ('danger') , 'Le document n\'existe plus sur le serveur.' );
 
-            return $this->redirect( $this->generateUrl('hopitalnumerique_user_contractualisation', array( 'id' => $contractualisation->getUser()->getId())) );
+            return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
         }        
     }
 

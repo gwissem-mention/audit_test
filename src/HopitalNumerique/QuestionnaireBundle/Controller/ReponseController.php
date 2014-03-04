@@ -16,10 +16,27 @@ class ReponseController extends Controller
      * @param int $id Id de la réponse du fichier à télécharger
      */
     public function dowloadReponseAction( Reponse $reponse )
-    {
-        $option = $this->get('hopitalnumerique_questionnaire.manager.reponse')->download($reponse);
+    {        
+        if(file_exists($this->get('hopitalnumerique_questionnaire.manager.question')->getUploadRootDir($reponse->getQuestion()->getQuestionnaire()->getNomMinifie()) . '/'. $reponse->getReponse()))
+        {        
+            $option = $this->get('hopitalnumerique_questionnaire.manager.reponse')->download($reponse);
+            
+            return $this->get('igorw_file_serve.response_factory')->create( $this->get('hopitalnumerique_questionnaire.manager.question')->getUploadRootDir($reponse->getQuestion()->getQuestionnaire()->getNomMinifie()) . '/'. $reponse->getReponse(), 'application/pdf', $option);
+        }
+        else
+        {     
+            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
+            $this->get('session')->getFlashBag()->add( ('danger') , 'Le document n\'existe plus sur le serveur.' );
         
-        return $this->get('igorw_file_serve.response_factory')->create( $this->get('hopitalnumerique_questionnaire.manager.question')->getUploadRootDir($reponse->getQuestion()->getQuestionnaire()->getNomMinifie()) . '/'. $reponse->getReponse(), 'application/pdf', $option);
+            //Si l'url courante contient le mot clé "admin"
+            if (strpos($this->get('request')->getPathInfo(),'admin') !== false) 
+                //BackOffice
+                return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
+            else
+                //FrontOffice
+                return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+        }        
+        
     }
     
     /**
