@@ -1,37 +1,46 @@
 #recherche{margin-top: 30px}
 #recherche ol{list-style: none; }
-#recherche .requete{border:1px solid #bfbfbf; padding: 15px}
-#recherche .requete h2{font-size: 18px; font-weight: bold; padding:0; margin: 0 0 13px 0; text-transform: uppercase;}
-#recherche .requete .placeholder{border: 1px dashed #bfbfbf; min-height:100px; padding:22px;}
-#recherche .requete .ui-state-default{border: 1px dashed #bfbfbf; min-height:100px; background: transparent;}
-#recherche .requete .ui-state-hover{border: 1px dashed #bfbfbf; min-height:100px; background: #dfdfdf}
+#recherche .requete{border:1px solid #bfbfbf; padding: 15px 17px; background: #f4f4f4}
+#recherche .requete h2{font-size: 18px; font-weight: bold; padding:0; margin: 0 0 30px 0; text-transform: uppercase; display:block; width: 100%; height: 25px}
+#recherche .requete h2.rclose{background: url('../img/requete-close.jpg') no-repeat center right; cursor:pointer;}
+#recherche .requete h2.ropen{background: url('../img/requete-open.jpg') no-repeat center right; cursor:pointer; }
+#recherche .requete .placeholder{border-top: 1px inset #e5e5e5;border-left: 1px inset #e5e5e5; min-height:100px; padding:22px; background: #f8f8f8}
 
 /* Destination */
-#recherche #dest > ol{padding : 0;}
+#recherche .requete #dest h3{font-size: 18px; text-transform: uppercase; font-weight: bold; color:#595959; display: block; height: 38px; background: url('../img/resultats.jpg') no-repeat center left; padding:10px 0 0px 60px; margin:0; }
+#recherche .requete #dest ol.arbo-requete{padding:0; margin-top:15px;}
+#recherche .requete #dest ol.arbo-requete ol{padding-left: 30px}
+#recherche .requete #dest li.level0 span{ text-transform: uppercase; color: #703695; font-size: 16px; font-weight: bold }
+#recherche .requete #dest li.level0 ol li.level1 span{ text-transform: none; color: #000000; font-size: 12px; font-weight: bold }
+#recherche .requete #dest li.level0 ol li.level1 ol li.level2 span{ font-size: 12px; font-weight: normal; color:#070707; }
+#recherche .requete #dest li.level0 ol li.level1 ol li.level2 ol li.level3 span{ font-style:italic; color:#070707; }
+#recherche .requete #dest li span{display: block; border-radius:5px; padding:2px 10px; }
+#recherche .requete #dest li span:hover{ background: url('../img/resultats-delete.jpg') no-repeat 98% center #ffffff; cursor : pointer; -webkit-box-shadow: 3px 3px 5px 0px rgba(50, 50, 50, 0.75); -moz-box-shadow: 3px 3px 5px 0px rgba(50, 50, 50, 0.75); box-shadow: 3px 3px 5px 0px rgba(50, 50, 50, 0.75);}
 
 /* Orgine */
-/* Parents */
-#recherche #origin ol{padding : 0;}
-#recherche #origin li{position: relative;}
-#recherche #origin li.level0{background: #703695 url('../img/level0.jpg') no-repeat 255px 15px; }
-#recherche #origin li.level0.active{background: #703695 url('../img/level0-active.jpg') no-repeat 255px 15px;}
-#recherche #origin li.level0 span{padding:15px 10px 10px 18px; width: 100%; display: block; cursor:pointer; text-transform: uppercase; color: #ffffff; font-size: 16px; font-weight: bold}
-#recherche #origin li.level0 ol{display: none; }
+    /* Parents */
+    #recherche #origin ol{padding : 0;}
+    #recherche #origin li{position: relative;}
+    #recherche #origin li.level0{background: #703695 url('../img/level0.jpg') no-repeat 255px 15px; }
+    #recherche #origin li.level0.active{background: #703695 url('../img/level0-active.jpg') no-repeat 255px 15px;}
+    #recherche #origin li.level0 span{padding:15px 10px 10px 18px; width: 100%; display: block; cursor:pointer; text-transform: uppercase; color: #ffffff; font-size: 16px; font-weight: bold}
+    #recherche #origin li.level0 ol{display: none; }
 
-/* 1er niveau de sous-catégories */
-#recherche #origin li.level0 ol li.level1{background: #f4f4f4 url('../img/level1.jpg') no-repeat 255px 15px; border-bottom: 1px solid #d5d5d5; border-top:1px solid #ffffff;border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5 }
-#recherche #origin li.level0 ol li.level1.active{background: #f4f4f4 url('../img/level1-active.jpg') no-repeat 255px 15px;}
-#recherche #origin li.level0 ol li.level1.empty{background: #f4f4f4;}
-#recherche #origin li.level0 ol li.level1.active span{color:#703695; font-weight: bold}
-#recherche #origin li.level0 ol li.level1 span{ font-weight: bold; font-size: 12px; color:#000000; text-transform: none; padding:10px 30px 10px 15px;}
-#recherche #origin li.level0 ol li.level1 ol{display: none;}
+    /* 1er niveau de sous-catégories */
+    #recherche #origin li.level0 ol li.level1{background: #f4f4f4; border-bottom: 1px solid #d5d5d5; border-top:1px solid #ffffff;border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5 }
+    #recherche #origin li.level0 ol li.level1.childs{background: #f4f4f4 url('../img/level1.jpg') no-repeat 255px 15px;}
+    #recherche #origin li.level0 ol li.level1.childs.active{background: #f4f4f4 url('../img/level1-active.jpg') no-repeat 255px 15px;}
+    #recherche #origin li.level0 ol li.level1.empty{background: #f4f4f4;}
+    #recherche #origin li.level0 ol li.level1.active span{color:#703695; font-weight: bold}
+    #recherche #origin li.level0 ol li.level1 span{ font-weight: bold; font-size: 12px; color:#000000; text-transform: none; padding:10px 30px 10px 15px;}
+    #recherche #origin li.level0 ol li.level1 ol{display: none;}
 
-/* 2nd niveau de sous-catégories */
-#recherche #origin li.level0 ol li.level1 ol li.level2{}
-#recherche #origin li.level0 ol li.level1 ol li.level2.active span{color:#703695;}
-#recherche #origin li.level0 ol li.level1 ol li.level2 span{color:#070707; font-weight: normal; padding:5px 15px;}
-#recherche #origin li.level0 ol li.level1 ol li.level2 i{color:#070707; position: absolute; right: 10px; top:7px;}
-#recherche #origin li.level0 ol li.level1 ol li.level2 ol{display: none;padding-left:20px;}
+    /* 2nd niveau de sous-catégories */
+    #recherche #origin li.level0 ol li.level1 ol li.level2{}
+    #recherche #origin li.level0 ol li.level1 ol li.level2.active span{color:#703695;}
+    #recherche #origin li.level0 ol li.level1 ol li.level2 span{color:#070707; font-weight: normal; padding:5px 15px 5px 30px;}
+    #recherche #origin li.level0 ol li.level1 ol li.level2 i{color:#070707; position: absolute; right: 10px; top:7px;}
+    #recherche #origin li.level0 ol li.level1 ol li.level2 ol{display: none;padding-left:20px;}
 
-#recherche #origin li.level0 ol li.level1 ol li.level2 ol li.level3{}
-#recherche #origin li.level0 ol li.level1 ol li.level2 ol li.level3 span{font-style:italic; color:#070707; }
+    #recherche #origin li.level0 ol li.level1 ol li.level2 ol li.level3{}
+    #recherche #origin li.level0 ol li.level1 ol li.level2 ol li.level3 span{font-style:italic; color:#070707; }
