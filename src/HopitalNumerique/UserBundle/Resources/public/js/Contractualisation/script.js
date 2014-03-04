@@ -18,6 +18,7 @@ $(document).ready(function() {
         $('.uploadedFile').html('');
         $('.inputUpload').show();
         $('#hopitalnumerique_user_contractualisation_path').val('');
+        $('#hopitalnumerique_user_contractualisation_file').val('');
     });
 	
 });
@@ -35,23 +36,4 @@ function gestionAffichageDateRenouvellement(ID_DOCUMENT_CONTRACTUALISATION_TYPE_
 		$('#hopitalnumerique_user_contractualisation_dateRenouvellement').parent().parent().addClass('hide');	
 		$('#hopitalnumerique_user_contractualisation_dateRenouvellement').val('');	
 	}
-}
-
-/**
- * Fonction appelée lors du click sur le bouton save
- */
-function sauvegardeFormulaire()
-{		
-	//Si le fichier n'est pas modifié il est dans uploaded file, sinon si il est réupload il est dans file
-	if('' != $('.uploadedFile').html() 
-		|| '' != $('#hopitalnumerique_user_contractualisation_file').val())
-	{
-		$('form').submit();
-	}
-	else
-	{
-		apprise('Veuillez renseigner le champ fichier.');
-		$(".error_file").val('Le fichier est obligatoire.');		
-	}
-	
 }

@@ -155,7 +155,7 @@ class QuestionnaireType extends AbstractType
             	            'label'      => $question->getLibelle(),
                             'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS()),
             	            'mapped'     => false,
-            	            'data'       => is_null($reponseCourante) ? null : $reponseCourante->getId(),
+            	            'data'       => is_null($reponseCourante) ? null : array('id' => $reponseCourante->getId(), 'lib' => $reponseCourante->getReponse()),
             	            'data_class' => null
             	    ));
             	    break;

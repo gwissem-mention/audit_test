@@ -1,9 +1,9 @@
 {% extends 'NodevoAdminBundle::form.html.twig' %}
 
 {% block file_widget %}
-    {% spaceless %}   
+    {% spaceless %}
 	    {% if data is not null or data is not empty %}
-			<a id="downloadFile{{ id }}" href="{{path('hopitalnumerique_reponse_download', {'reponse':data})}}">Télécharger</a>
+			<a id="downloadFile{{ id }}" href="{{path('hopitalnumerique_reponse_download', {'reponse':data.id})}}">{{ data.lib }}</a>
 			<input id={{ id }} type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 			<script>$('#{{ id }}').addClass('inputFile{{ id }}') ;$('.inputFile{{ id }}').hide();</script>
 			<div class="deleteUploadedFile{{ id }} btn btn-danger btn-xs pull-right" >
