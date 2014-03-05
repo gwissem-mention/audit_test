@@ -24,7 +24,7 @@ $(document).ready(function() {
                 $(".placeholder").hide();
                 showPlaceholder = false;
                 $("#dest").removeClass('hide');
-                $(".requete h2").addClass('rclose');
+                $(".requete h2").addClass('ropen');
             }
 
             clicks = 0; //after action performed, reset counter
@@ -57,9 +57,14 @@ $(document).ready(function() {
 
     //toggle des paramètres de la requete
     $('.requete h2').on('click', function(){
-        $(this).toggleClass('ropen rclose');
-        $('#dest .arbo-requete').slideToggle({duration: 200});
+        if( $(this).hasClass('ropen') || $(this).hasClass('rclose') ) {
+            $(this).toggleClass('ropen rclose');
+            $('#dest').slideToggle({duration: 200});
+        }
     });
+
+    //init : open first categ
+    $('#origin li.level0:first').addClass('active').find('ol:first').slideDown();
 });
 
 /**
@@ -176,7 +181,7 @@ function handleParentsDestination( item )
             $(".placeholder").show();
             showPlaceholder = true;
             $("#dest").addClass('hide');
-            $(".requete h2").click();
+            $(".requete h2").removeClass('ropen rclose');
         }
     }
 }

@@ -30,31 +30,27 @@
                     {{ _self.buildTree(elements, 0, 'cliquable') }}
                 </ol>
             </div>
+
+            <div class="input-group">
+                <input type="text" class="form-control" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                </span>
+            </div>
         </div>
 
         <div class="col-md-8 requete">
-            <h2 class="violet">Requête de recherche</h2>
+            <h2 class="violet">Requête de recherche ( X Résultats )</h2>
     
             <div class="placeholder">
                 <p class="text-muted">Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi</p>
             </div>
 
             <div id="dest" class="row hide">
-                <div class="col-md-9">
-                    <h3>
-                        3 Résultats
-                    </h3>
-                </div>
-                
-                <div class="col-md-3">
-                    <div class="btn btn-success pull-right">Enregistrer</div>
-                </div>
-
-                <div class="col-md-12">
-                    <ol class="arbo-requete" style="display:none">
-                        {{ _self.buildTree(elements, 0, 'hide') }}
-                    </ol>
-                </div>
+                <ol class="arbo-requete">
+                    {{ _self.buildTree(elements, 0, 'hide') }}
+                </ol>
+                <div class="btn btn-success">Enregistrer</div>
             </div>
         </div>
     </div>
