@@ -27,6 +27,8 @@ $(document).ready(function() {
                 $(".requete h2").addClass('ropen');
             }
 
+            updateResultats();
+
             clicks = 0; //after action performed, reset counter
         }
     })
@@ -48,6 +50,8 @@ $(document).ready(function() {
         } else {
             clearTimeout(timer); //prevent single-click action
             removeElement( $(this).parent() ); //remove element from DEST
+            updateResultats();
+            
             clicks = 0; //after action performed, reset counter
         }
     })
@@ -83,7 +87,7 @@ function selectElement( item )
         //vérification et ajoute de l'item empty pour le premier level
         $('#origin li.level0').each(function(){
             if ( $(this).find('ol > li.cliquable').length == 0 && $(this).find('ol > li.empty').length == 0 )
-                $(this).find('ol').prepend('<li class="empty level1" ><span>Aucun sous éléments</span></li>');
+                $(this).find('ol').prepend('<li class="empty level1" ><span>Tous les éléments sont selectionnés</span></li>');
         })
 
         //affiche l'élément dans la liste de droite

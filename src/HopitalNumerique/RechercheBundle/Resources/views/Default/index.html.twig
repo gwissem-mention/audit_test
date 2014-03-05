@@ -8,6 +8,8 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-recherche-default-index.css" filter="cssrewrite"
         'bundles/hopitalnumeriquerecherche/css/style.css'
+        'bundles/nodevoadmin/plugins/apprise/apprise.css'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -17,6 +19,8 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-recherche-default-index.js"
         'bundles/hopitalnumeriquerecherche/js/script.js'
+        'bundles/nodevoadmin/plugins/apprise/apprise.js'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -39,23 +43,53 @@
             </div>
         </div>
 
-        <div class="col-md-8 requete">
-            <h2 class="violet">Requête de recherche ( X Résultats )</h2>
+        <div class="col-md-8">
+            <div class="requete">
+                <h2 class="violet">Requête de recherche ( X Résultats )</h2>
     
-            <div class="placeholder">
-                <p class="text-muted">Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi</p>
-            </div>
+                <div class="placeholder">
+                    <p class="text-muted">Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi</p>
+                </div>
 
-            <div id="dest" class="row hide">
-                <ol class="arbo-requete">
-                    {{ _self.buildTree(elements, 0, 'hide') }}
-                </ol>
-                <div class="btn btn-success">Enregistrer</div>
+                <div id="dest" class="hide">
+                    <div class="btn btn-xs btn-success">Enregistrer ma requête</div>
+
+                    <hr />
+
+                    <ol class="arbo-requete">
+                        {{ _self.buildTree(elements, 0, 'hide') }}
+                    </ol>
+                </div>    
+            </div>
+            
+            <div id="resultats">
+                
             </div>
         </div>
+
+        <script>
+
+            function updateResultats()
+            {
+                var loader = $('#resultats').nodevoLoader().start();
+                //alert( 'Résultats' );
+
+
+
+
+
+
+                loader.finished();
+            }
+
+        </script>
+
+
+        <div class="clearfix"></div>
     </div>
 {% endblock %}
 
+{# Construit le système de parents > enfants des catégories #}
 {% macro buildTree(elements, level, class) %}
     {% if level == 0 and class == 'cliquable' %}
         {% set liClass = '' %}
