@@ -10,12 +10,14 @@ class UserManager extends BaseManager
 {
     protected $_class = '\HopitalNumerique\UserBundle\Entity\User';
     protected $_managerReponse;
+    protected $_options;
 
-    public function __construct($managerUser, $managerReponse)
+    public function __construct($managerUser, $managerReponse, $options = array())
     {
         parent::__construct($managerUser);
         //Récupération des managers Réponses et Questionnaire
         $this->_managerReponse = $managerReponse;
+        $this->_options = $options;
     }
     
     /**

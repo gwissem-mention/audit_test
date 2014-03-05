@@ -127,3 +127,7 @@ nodevo_menu:
 # Gestion download fichiers sécurisé (pas dans /web)
 igorw_file_serve:
     base_dir: ~        # The default value is "%kernel.root_dir%"
+    
+hopital_numerique_user:
+    options: 
+        idEtatActif: 3
