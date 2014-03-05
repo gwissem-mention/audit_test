@@ -1,4 +1,7 @@
 parameters:
+    #Permet d'avoir une valeur par défaut et/ou d'etre surchargé par le config.yml de app/config
+    hopital_numerique_user.options: ~
+    hopitalnumerique_user.options_config.class: HopitalNumerique\UserBundle\Util\OptionsConfig
     #Utilisateur
     hopitalnumerique_user.manager.user.class: HopitalNumerique\UserBundle\Manager\UserManager
     hopitalnumerique_user.form.type.user: HopitalNumerique\UserBundle\Form\Type\UserType
@@ -25,13 +28,17 @@ services:
     #--Type
     hopitalnumerique_user.form.type.user:
         class: %hopitalnumerique_user.form.type.user%
-        arguments: ["@hopitalnumerique_user.manager.user", "@validator", "@nodevo_role.manager.role"]
+        arguments: ["@hopitalnumerique_user.manager.user", "@validator", "@nodevo_role.manager.role", "@security.context"]
         tags:
             - { name: form.type, alias: nodevo_user_user }
     #--Grid
     hopitalnumerique_user.grid.user:
         class: %hopitalnumerique_user.grid.user.class%
         arguments: ["@service_container"]
+    #--OptionsConfig
+    hopitalnumerique_user.options.user:
+        class: %hopitalnumerique_user.options_config.class%
+        arguments: ["%hopital_numerique_user.options%"]
 
     #Contractualisation
     #--Manager

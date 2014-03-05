@@ -17,11 +17,13 @@ class UserType extends AbstractType
 {
     private $_constraints = array();
     private $_managerRole;
+    private $_securityContext;
 
-    public function __construct($manager, $validator, $managerRole)
+    public function __construct($manager, $validator, $managerRole, $securityContext)
     {
         $this->_constraints = $manager->getConstraints( $validator );
         $this->_managerRole = $managerRole;
+        $this->_securityContext = $securityContext;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -48,14 +50,24 @@ class UserType extends AbstractType
         $datas = $options['data'];
         $roles = $datas->getRoles();
 
-        $builder
-            ->add('username', 'text', array(
-                'max_length' => $this->_constraints['username']['maxlength'],
-                'required'   => true, 
-                'label'      => 'Nom d\'utilisateur',
-                'attr'       => array('class' => $this->_constraints['username']['class'] )
-            ))
+        //Si il y a un utilisateur connecté nous sommes en BO
+        if($this->_securityContext->isGranted('ROLE_USER'))
+            $builder->add('username', 'text', array(
+                    'max_length' => $this->_constraints['username']['maxlength'],
+                    'required'   => true, 
+                    'label'      => 'Nom d\'utilisateur',
+                    'attr'       => array('class' => $this->_constraints['username']['class'] )
+                ));
+        else
+            $builder->add('username', 'hidden', array(
+                    'max_length' => $this->_constraints['username']['maxlength'],
+                    'required'   => true,
+                    'label'      => 'Nom d\'utilisateur',
+                    'attr'       => array('class' => $this->_constraints['username']['class'] ),
+                    'data'       => 'Nom par défaut'
+            ));
 
+        $builder
             ->add('nom', 'text', array(
                 'max_length' => $this->_constraints['nom']['maxlength'],
                 'required'   => true, 
@@ -146,26 +158,28 @@ class UserType extends AbstractType
                                         'class'     => $this->_constraints['telephonePortable']['class'], 
                                         'data-mask' => $this->_constraints['telephonePortable']['mask'] 
                                     )
-            ))
+            ));
             
-            
-            ->add('roles', 'entity', array(
-                'class'         => 'NodevoRoleBundle:Role',
-                'property'      => 'name',
-                'required'      => true,
-                'label'         => 'Groupe associé',
-                'mapped'        => false,
-                'empty_value'   => ' - ',
-                'attr'          => array('class'=>'validate[required]'),
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ro')
-                              ->where('ro.etat != :etat')
-                              ->setParameter('etat', 4);
-                },
-                'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
-            ))
 
-            ->add('region', 'entity', array(
+            //Si il y a un utilisateur connecté nous sommes en BO
+            if($this->_securityContext->isGranted('ROLE_USER'))
+                $builder->add('roles', 'entity', array(
+                    'class'         => 'NodevoRoleBundle:Role',
+                    'property'      => 'name',
+                    'required'      => true,
+                    'label'         => 'Groupe associé',
+                    'mapped'        => false,
+                    'empty_value'   => ' - ',
+                    'attr'          => array('class'=>'validate[required]'),
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('ro')
+                                  ->where('ro.etat != :etat')
+                                  ->setParameter('etat', 4);
+                    },
+                    'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
+                ));
+
+            $builder->add('region', 'entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'    => 'libelle',
                 'required'    => false,
@@ -193,7 +207,7 @@ class UserType extends AbstractType
                             ->orderBy('ref.libelle', 'ASC');                        
                     }
             ))
-
+            
             ->add('etat', 'entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'    => 'libelle',
@@ -206,15 +220,13 @@ class UserType extends AbstractType
                               ->setParameter('etat', 'ETAT')
                               ->orderBy('ref.order', 'ASC');
                 }
-            ))
+            ));
             
-            ->add('contactAutre', 'textarea', array(
+            $builder->add('contactAutre', 'textarea', array(
                     'required'   => false,
                     'label'      => 'Contact autre',
                     'attr'       => array()
-            ))
-            
-            ;
+            ));
 
             // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
             $builder->add('statutEtablissementSante', 'entity', array(
@@ -317,10 +329,6 @@ class UserType extends AbstractType
             
             // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
             
-            $builder->add('save', 'button', array(
-                    'attr'  => array('class' => 'save btn btn-success pull-right submit'),
-                    'label' => 'INSCRIPTION'
-            ));
     }
 
     /**

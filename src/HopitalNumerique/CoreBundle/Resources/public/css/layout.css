@@ -45,7 +45,7 @@ a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 
 #menu li.active a, #menu li a:hover{ color:#de0d4d;}
 
 /* ALERTES NODEVO - Flash messages */
-.nalert-success { color: #3c763d; background-color: #b4dc00; border-color: #d6e9c6;}
+.nalert-success { color: #333333; background-color: #b4dc00; border-color: #d6e9c6;}
 .nalert-success hr { border-top-color: #c9e2b3;}
 .nalert-success .alert-link {color: #2b542c;}
 .nalert-info {color: #31708f;background-color: #5d5d5d;border-color: #bce8f1;}
