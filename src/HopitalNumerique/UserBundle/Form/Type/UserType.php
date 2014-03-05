@@ -231,11 +231,11 @@ class UserType extends AbstractType
                     'attr'        => array()
             ))
 
-            ->add('autreStructureRattacheementSante', 'text', array(
-                    'max_length' => $this->_constraints['autreStructureRattacheementSante']['maxlength'],
+            ->add('autreStructureRattachementSante', 'text', array(
+                    'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
                     'required'   => false,
                     'label'      => 'Autre structure de rattachement',
-                    'attr'       => array('class' => $this->_constraints['autreStructureRattacheementSante']['class'] )
+                    'attr'       => array('class' => $this->_constraints['autreStructureRattachementSante']['class'] )
             ))
             
             ->add('fonctionEtablissementSante', 'entity', array(

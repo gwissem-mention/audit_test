@@ -1,5 +1,15 @@
 {% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/intervention-nouveau.js"
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/Formulaire.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/FormulaireEvenement.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block pageTitre %}Nouvelle intervention{% endblock %}
 
 {% block chapoDescription %}
@@ -9,32 +19,16 @@
 {% block contenu %}
     <div class="panel">
         
-        <form method="post" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
+        <form method="post" class="form-horizontal" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
+            {% form_theme referentFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
+            {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
+            
+            {{ form_widget(referentFormulaireNouveau) }}
+            <hr>
             {{ form_widget(interventionDemandeFormulaireNouveau) }}
-            <input type="submit" class="btn btn-primary" />
+            
+            <input type="submit" class="btn btn-success pull-right submit">
         </form>
-        
-        <form class="form-horizontal" method="post" >
-            <div class="background-violet"></div>
-            <div class="form-group">
-                <div class="col-md-12">
-                    <label class="control-label col-md-4" for="username">Nom d'utilisateur</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" id="username" name="_username" />
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-12">
-                    <label class="control-label col-md-4" for="password">Mot de passe</label>
-                    <div class="col-md-8">
-                        <input type="password" class="form-control" id="password" name="_password" />
-                        <a href="{{path('fos_user_resetting_request')}}" class="resetPass">Mot de passe oublié</a>
-                    </div>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <input type="submit" id="_submit" name="_submit" class="btn btn-success pull-right submit" value="CONNEXION" />
-        </form>
+
     </div>
 {% endblock %}

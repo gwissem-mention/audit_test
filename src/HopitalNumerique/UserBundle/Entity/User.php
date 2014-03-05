@@ -297,7 +297,7 @@ class User extends BaseUser
      * @Nodevo\Javascript(class="validate[minSize[3],maxSize[255]]")
      * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Autre structure de rattachement santé de l utilisateur"})
      */
-    protected $autreStructureRattacheementSante;
+    protected $autreStructureRattachementSante;
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
@@ -672,23 +672,23 @@ class User extends BaseUser
     }
     
     /**
-     * Get autreStructureRattacheementSante
+     * Get autreStructureRattachementSante
      *
-     * @return string $autreStructureRattacheementSante
+     * @return string $autreStructureRattachementSante
      */
-    public function getAutreStructureRattacheementSante()
+    public function getAutreStructureRattachementSante()
     {
-        return $this->autreStructureRattacheementSante;
+        return $this->autreStructureRattachementSante;
     }
     
     /**
-     * Set autreStructureRattacheementSante
+     * Set autreStructureRattachementSante
      *
-     * @param string $autreStructureRattacheementSante
+     * @param string $autreStructureRattachementSante
      */
-    public function setAutreStructureRattacheementSante($autreStructureRattacheementSante)
+    public function setAutreStructureRattachementSante($autreStructureRattachementSante)
     {
-        $this->autreStructureRattacheementSante = $autreStructureRattacheementSante;
+        $this->autreStructureRattachementSante = $autreStructureRattachementSante;
     }
     
     /**

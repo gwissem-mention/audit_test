@@ -1,3 +1,9 @@
-hopital_numerique_intervention_homepage:
+hopital_numerique_intervention_demande_nouveau:
     pattern:  /demande/nouveau
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:nouveau" }
+
+hopital_numerique_intervention_reference_departements:
+    pattern:  /reference/departements/json
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Reference:jsonDepartements" }
+    requirements:
+        _format:  json

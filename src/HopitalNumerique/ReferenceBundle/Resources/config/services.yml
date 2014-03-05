@@ -5,17 +5,17 @@ parameters:
 
 services:
     hopitalnumerique_reference.manager.reference:
-        class: %hopitalnumerique_reference.manager.reference.class%
+        class: "%hopitalnumerique_reference.manager.reference.class%"
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, [ "@liip_doctrine_cache.ns.main" ] ]
 
     hopitalnumerique_reference.grid.reference:
-        class: %hopitalnumerique_reference.grid.reference.class%
+        class: "%hopitalnumerique_reference.grid.reference.class%"
         arguments: ["@service_container"]
 
     hopitalnumerique_reference.form.reference:
-        class: %hopitalnumerique_reference.form.reference.class%
+        class: "%hopitalnumerique_reference.form.reference.class%"
         arguments: ["@hopitalnumerique_reference.manager.reference", "@validator"]
         tags:
             - { name: form.type, alias: hopitalnumerique_reference_reference }

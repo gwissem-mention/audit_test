@@ -133,12 +133,14 @@ abstract class Manager
      * Retourne la liste des éléments filtrés par le tableau de critères
      *
      * @param array $criteria Le tableau de critères array('field' => value)
-     *
+     * @param array $orderBy Order by
+     * @param integer $limit Limit
+     * @param integer $offset Offset
      * @return array
      */
-    public function findBy(array $criteria)
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        return $this->getRepository()->findBy($criteria);
+        return $this->getRepository()->findBy($criteria, $orderBy, $limit, $offset);
     }
 
     /**
