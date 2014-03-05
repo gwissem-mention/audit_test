@@ -137,8 +137,7 @@ class MailManager extends BaseManager
     {
         $content = str_replace('%u', $user->getPrenom() . ' ' . $user->getNom(), $content);
         $content = str_replace('%p', $user->getPlainPassword(), $content);
-        $content = str_replace('%s', '<a href="http://hopital.local" target="_blank" >Hopital Numérique</a>', $content);
-
+   
         return $content;
     }
 
