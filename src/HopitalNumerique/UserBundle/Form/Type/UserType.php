@@ -235,7 +235,7 @@ class UserType extends AbstractType
                     'required'    => false,
                     'label'       => 'Statut de l\'établissement',
                     'empty_value' => ' - ',
-                    'attr'        => array(),
+                    'attr'        => array('class' => 'etablissement_sante'),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')
@@ -243,21 +243,23 @@ class UserType extends AbstractType
                         ->orderBy('ref.libelle', 'ASC');
                     }
             ))
-
-            ->add('etablissementRattachementSante', 'entity', array(
-                    'class'       => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                    'property'    => 'usersAffichage',
-                    'required'    => false,
-                    'empty_value' => ' - ',
-                    'label'       => 'Etablissement de rattachement',
-                    'attr'        => array()
+            
+            ->add('etablissementRattachementSante', 'genemu_jqueryselect2_entity', array(
+                    'class'         => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+                    'property'      => 'usersAffichage',
+                    'multiple'      => false,
+                    'required'      => false,
+                    'label'         => 'Etablissement de rattachement',
+                    'empty_value'   => ' - ',
+                    'attr'        => array('class' => 'etablissement_sante')
             ))
+            
 
             ->add('autreStructureRattacheementSante', 'text', array(
                     'max_length' => $this->_constraints['autreStructureRattacheementSante']['maxlength'],
                     'required'   => false,
                     'label'      => 'Autre structure de rattachement',
-                    'attr'       => array('class' => $this->_constraints['autreStructureRattacheementSante']['class'] )
+                    'attr'       => array('class' => $this->_constraints['autreStructureRattacheementSante']['class'] . ' etablissement_sante' )
             ))
             
             ->add('fonctionEtablissementSante', 'entity', array(
@@ -266,7 +268,7 @@ class UserType extends AbstractType
                     'required'    => false,
                     'label'       => 'Fonction de l\'établissement',
                     'empty_value' => ' - ',
-                    'attr'        => array(),
+                    'attr'        => array('class' => 'etablissement_sante'),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')
@@ -281,7 +283,7 @@ class UserType extends AbstractType
                     'required'    => false,
                     'label'       => 'Raison de l \'inscription',
                     'empty_value' => ' - ',
-                    'attr'        => array(),
+                    'attr'        => array('class' => 'etablissement_sante'),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')
@@ -300,14 +302,14 @@ class UserType extends AbstractType
                     'max_length' => $this->_constraints['nomStructure']['maxlength'],
                     'required'   => false,
                     'label'      => 'Nom de la structure',
-                    'attr'       => array('class' => $this->_constraints['nomStructure']['class'] )
+                    'attr'       => array('class' => $this->_constraints['nomStructure']['class'] . ' autre_structure' )
             ))
             
             ->add('fonctionStructure', 'text', array(
                     'max_length' => $this->_constraints['fonctionStructure']['maxlength'],
                     'required'   => false,
                     'label'      => 'Fonction de la structure',
-                    'attr'       => array('class' => $this->_constraints['fonctionStructure']['class'] )
+                    'attr'       => array('class' => $this->_constraints['fonctionStructure']['class'] . ' autre_structure' )
             ))
             
             ->add('raisonInscriptionStructure', 'entity', array(
@@ -316,7 +318,7 @@ class UserType extends AbstractType
                     'required'    => false,
                     'label'       => 'Raison de l \'inscription',
                     'empty_value' => ' - ',
-                    'attr'        => array(),
+                    'attr'        => array('class' => 'autre_structure'),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')
