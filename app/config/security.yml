@@ -14,8 +14,9 @@ security:
 
         # Formulaire FRONT : connexion + reset password (accessible aux anonymes)
         comptehn_login:
-            pattern: ^/compte-hn/(connexion|inscription|mot-de-passe-perdu(.*))$ # Cette expression régulière permet de prendre /login
+            pattern: (^/compte-hn/(connexion|mot-de-passe-perdu(.*))$)|(^/compte-hn/inscription) # Cette expression régulière permet de prendre /login
             anonymous: true
+            context: application
 
         # Console DEV/ASSETS (sans notions de sécurité)
         dev:
@@ -95,6 +96,6 @@ security:
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/compte-hn/connexion$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/compte-hn/inscription$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/compte-hn/inscription, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/compte-hn/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }

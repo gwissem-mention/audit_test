@@ -27,7 +27,7 @@ class ExpertController extends Controller
     public function showAction( $idUser )
     {
         //Récupération du questionnaire de l'expert
-        $idQuestionnaireExpert = Manager\QuestionnaireManager::_getQuestionnaireId('expert');
+        $idQuestionnaireExpert = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('expert');
         
         //Récupération de l'utilisateur passé en param
         $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $idQuestionnaireExpert , $idUser );
@@ -45,14 +45,16 @@ class ExpertController extends Controller
      */
     public function editAction( HopiUser $user )
     {                
+        $manager = $this->get('hopitalnumerique_questionnaire.manager.questionnaire');
+
         //Récupération du questionnaire de l'expert
-        $idQuestionnaireExpert = Manager\QuestionnaireManager::_getQuestionnaireId('expert');
-        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
+        $idQuestionnaireExpert = $manager->getQuestionnaireId('expert');
+        $questionnaire = $manager->findOneBy( array('id' => $idQuestionnaireExpert) );
 
         return $this->render('HopitalNumeriqueUserBundle:Expert:edit.html.twig',array(
                 'questionnaire' => $questionnaire,
                 'user'          => $user,
-                'options'       => $this->_gestionAffichageOnglet($user),
+                'options'       => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
                 'routeRedirect' => json_encode(array(
                     'quit' => array(
                         'route'     => 'hopital_numerique_user_homepage',
@@ -66,44 +68,5 @@ class ExpertController extends Controller
                     )
                 ))
         ));
-    }  
-
-
-    
-    /**
-     * Fonction permettant d'envoyer un tableau d'option à la vue pour vérifier le role de l'utilisateur
-     *
-     * @param User $user
-     * @return array
-     */
-    private function _gestionAffichageOnglet( $user )
-    {
-        $options = array(
-                'ambassadeur' => false,
-                'expert'      => false
-        );
-
-        //Récupération du questionnaire de l'expert
-        $idQuestionnaireExpert = Manager\QuestionnaireManager::_getQuestionnaireId('expert');
-        //Récupération du questionnaire de l'ambassadeur
-        $idQuestionnaireAmbassadeur = Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur');
-        
-        //Récupération des réponses du questionnaire expert de l'utilisateur courant
-        $reponsesExpert      = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireExpert, $user->getId());
-        //Récupération des réponses du questionnaire ambassadeur de l'utilisateur courant
-        $reponsesAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireAmbassadeur, $user->getId());
-
-        //Si il y a des réponses correspondant au questionnaire du groupe alors on donne l'accès
-        $options['expert_form']      = !empty($reponsesExpert);
-        $options['ambassadeur_form'] = !empty($reponsesAmbassadeur);
-        
-        //Dans tout les cas si l'utilisateur a le bon groupe on lui donne l'accès
-        if( $user->hasRole('ROLE_EXPERT_6') )
-            $options['expert'] = true;
-
-        if( $user->hasRole('ROLE_AMBASSADEUR_7') )
-            $options['ambassadeur'] = true;
-    
-        return $options;
     }
 }

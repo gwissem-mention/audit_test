@@ -24,5 +24,10 @@ class HopitalNumeriqueUserExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        
+        if (isset($config['options']))
+        {            
+            $container->setParameter('hopital_numerique_user.options', $config['options']);
+        }
     }
 }
