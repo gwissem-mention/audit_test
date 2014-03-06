@@ -81,7 +81,11 @@
 	                    </div>
 	                {# Permet de mettre à la ligne le submit #}
 	                <div class="clearfix"></div>
-	                <input onclick="$('#do').val('front');sauvegardeFormulaire();" class="btn btn-success pull-right submit" value="INSCRIPTION" />
+                    <div class="form-group">
+                    <div class="col-md-9 col-md-offset-2">
+	                   <input onclick="$('#do').val('front');sauvegardeFormulaire();" class="btn btn-success pull-right submit" value="INSCRIPTION" />
+	                </div>
+	                </div>
 	            {{ form_end(form) }}
             </div>
     </div>
