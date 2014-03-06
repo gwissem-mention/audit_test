@@ -7,6 +7,15 @@ hopital_numerique_user_inscription:
     pattern:  /compte-hn/inscription
     defaults: { _controller: HopitalNumeriqueUserBundle:User:inscription }
 
+#Utilisateur - ajax
+hopital_numerique_user_front_departements:
+    pattern:  /compte-hn/inscription/departements
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:ajaxEditDepartements }
+
+hopital_numerique_user_front_etablissements:
+    pattern:  /compte-hn/inscription/etablissements
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:ajaxEditEtablissements }
+
 
 #Utilisateur  -- Back Office
 hopital_numerique_user_homepage:

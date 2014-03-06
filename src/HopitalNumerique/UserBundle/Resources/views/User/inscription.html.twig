@@ -10,8 +10,8 @@
         'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
         'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
-        'bundles/hopitalnumeriqueuser/css/inscription.css'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+        'bundles/hopitalnumeriqueuser/css/inscription.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -43,8 +43,8 @@
 	                    <div class="background-violet"></div>
 	
 	                    {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
-	                    <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_departements')}}" />
-	                    <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_etablissements')}}" />
+	                    <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_front_departements')}}" />
+	                    <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_front_etablissements')}}" />
 	                    
 	                    {# Formulaire : #}
 	                    {{ form_row(form.civilite) }}
