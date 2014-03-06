@@ -1,6 +1,7 @@
 parameters:
     hopitalnumerique_intervention.manager.form_intervention_demande.class: HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager
     hopitalnumerique_intervention.manager.form_user.class: HopitalNumerique\InterventionBundle\Manager\Form\UserManager
+    hopitalnumerique_intervention.manager.form_etablissement.class: HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager
 
 services:
     hopitalnumerique_intervention.manager.form_intervention_demande:
@@ -8,4 +9,7 @@ services:
         arguments: ["@service_container"]
     hopitalnumerique_intervention.manager.form_user:
         class: "%hopitalnumerique_intervention.manager.form_user.class%"
+        arguments: ["@service_container"]
+    hopitalnumerique_intervention.manager.form_etablissement:
+        class: "%hopitalnumerique_intervention.manager.form_etablissement.class%"
         arguments: ["@service_container"]

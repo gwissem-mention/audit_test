@@ -4,34 +4,35 @@
  *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
-namespace HopitalNumerique\InterventionBundle\Form;
+namespace HopitalNumerique\InterventionBundle\Form\InterventionDemande;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use HopitalNumerique\InterventionBundle\Form\InterventionDemandeType;
 use HopitalNumerique\InterventionBundle\Form\UserType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Formulaire d'une demande d'intervention.
+ * Formulaire d'une demande d'intervention spécifique au CMSI.
  */
-class InterventionDemandeType extends AbstractType
+class InterventionDemandeType extends InterventionDemandeType
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      */
     private $container;
-
+    
     /**
      * Constructeur du formulaire Utilisateur.
-     * 
+     *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      * @return void
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
+        parent::__construct($container);
     }
+    
     
     /**
      * @param FormBuilderInterface $builder
@@ -39,6 +40,7 @@ class InterventionDemandeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        parent::buildForm($builder, $options);
         
         $builder
             //->add('referent', $this->container->get('hopitalnumerique_intervention.type.user'))
@@ -114,22 +116,12 @@ class InterventionDemandeType extends AbstractType
             )
         ;
     }
-    
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande'
-        ));
-    }
 
     /**
      * @return string
      */
     public function getName()
     {
-        return 'hopitalnumerique_interventionbundle_interventiondemande';
+        return 'hopitalnumerique_interventionbundle_interventiondemande_cmsi';
     }
 }

@@ -7,9 +7,9 @@ services:
         class: "%hopitalnumerique_intervention.type.intervention_demande.class%"
         tags:
             - { name: form.type, alias: hopitalnumerique_interventionbundle_interventiondemande }
-        arguments: ["@service_container"]
+        arguments: ["@service_container", "@validator"]
     hopitalnumerique_intervention.type.user:
         class: "%hopitalnumerique_intervention.type.user.class%"
         tags:
             - { name: form.type, alias: hopitalnumerique_interventionbundle_user }
-        arguments: ["@service_container"]
+        arguments: ["@service_container", "@validator"]

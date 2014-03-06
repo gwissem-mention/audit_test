@@ -10,12 +10,17 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Validator\Validator;
 
 /**
  * Formulaire avec les champs propres aux utilisateurs.
  */
 class UserType extends AbstractType
 {
+    /**
+     * @var \Symfony\Component\Validator\Validator $validator Validator du formulaire
+     */
+    private $_constraints = array();
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      */
@@ -27,9 +32,10 @@ class UserType extends AbstractType
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      * @return void
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, Validator $validator)
     {
         $this->container = $container;
+        $this->_constraints = $this->container->get('hopitalnumerique_user.manager.user')->getConstraints($validator);
     }
 
     /**
@@ -47,7 +53,8 @@ class UserType extends AbstractType
                     'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getCivilitesChoices(),
                     'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
                     'property' => 'libelle',
-                    'required' => true
+                    'required' => true,
+                    'attr' => array('class' => $this->_constraints['civilite']['class'] )
                 )
             )
             ->add(
@@ -57,14 +64,17 @@ class UserType extends AbstractType
                     'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getTitresChoices(),
                     'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
                     'property' => 'libelle',
-                    'required' => true
+                    'required' => true,
+                    'attr' => array()
                 )
             )
             ->add(
                 'nom',
                 'text',
                 array(
-                    'required' => true
+                    'required' => true,
+                    'max_length' => $this->_constraints['nom']['maxlength'],
+                    'attr' => array('class' => $this->_constraints['nom']['class'])
                 )
             )
             ->add(
@@ -72,7 +82,9 @@ class UserType extends AbstractType
                 'text',
                 array(
                     'label' => 'Prénom',
-                    'required' => true
+                    'required' => true,
+                    'max_length' => $this->_constraints['prenom']['maxlength'],
+                    'attr' => array('class' => $this->_constraints['prenom']['class'])
                 )
             )
             ->add(
@@ -88,7 +100,12 @@ class UserType extends AbstractType
                 'text',
                 array(
                     'label' => 'Téléphone direct',
-                    'required' => true
+                    'required' => true,
+                    'max_length' => $this->_constraints['telephoneDirect']['maxlength'],
+                    'attr' => array(
+                        'class' => $this->_constraints['telephoneDirect']['class'],
+                        'data-mask' => $this->_constraints['telephoneDirect']['mask']
+                    )
                 )
             )
             ->add(
@@ -96,14 +113,20 @@ class UserType extends AbstractType
                 'text',
                 array(
                     'label' => 'Téléphone portable',
-                    'required' => false
+                    'required' => false,
+                    'max_length' => $this->_constraints['telephonePortable']['maxlength'],
+                    'attr' => array(
+                        'class' => $this->_constraints['telephonePortable']['class'],
+                        'data-mask' => $this->_constraints['telephonePortable']['mask']
+                    )
                 )
             )
             ->add(
                 'contactAutre',
                 'textarea',
                 array(
-                    'required' => false
+                    'required' => false,
+                    'attr' => array()
                 )
             )
             ->add(
@@ -123,25 +146,29 @@ class UserType extends AbstractType
                 array(
                     'label' => 'Département',
                     'choices' => array(),
-                    'required' => true
+                    'required' => true,
+                    'attr' => array()
                 )
             )
             ->add(
                 'etablissementRattachementSante',
-                'entity',
+                'choice',
                 array(
                     'label' => 'Établissement de santé de rattachement',
-                    'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
+                    /*'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
                     'property' => 'nom',
                     'empty_value' => '',
-                    'required' => false
+                    'required' => false*/
+                    'attr' => array()
                 )
             )
             ->add(
                 'autreStructureRattachementSante',
                 'text',
                 array(
-                    'label' => 'Autre établissement de rattachement'
+                    'label' => 'Autre établissement de rattachement',
+                    'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
+                    'attr' => array('class' => $this->_constraints['autreStructureRattachementSante']['class'])
                 )
             )
             ->add(
@@ -153,7 +180,8 @@ class UserType extends AbstractType
                     'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
                     'property' => 'libelle',
                     'empty_value' => '',
-                    'required' => true
+                    'required' => true,
+                    'attr' => array()
                 )
             )
         ;

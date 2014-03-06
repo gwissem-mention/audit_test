@@ -22,6 +22,19 @@ class DemandeController extends Controller
      */
     public function nouveauAction()
     {
+        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
+        
+        if ($utilisateurConnecte->hasRoleCmsi())
+        {
+            
+        }
+        else
+        {
+            
+        }
+
+        
+        
         $referent = $this->get('security.context')->getToken()->getUser();
         $interventionDemande = new InterventionDemande();
         $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande', $interventionDemande);

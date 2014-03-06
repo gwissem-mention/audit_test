@@ -1,8 +1,20 @@
 {% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hnInterventionNouveau.css"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/intervention-nouveau.js"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+        
         'bundles/hopitalnumeriqueintervention/js/InterventionDemande/Formulaire.js'
         'bundles/hopitalnumeriqueintervention/js/InterventionDemande/FormulaireEvenement.js'
     %}
@@ -19,7 +31,7 @@
 {% block contenu %}
     <div class="panel">
         
-        <form method="post" class="form-horizontal" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
+        <form method="post" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
             {% form_theme referentFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
             {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
             
