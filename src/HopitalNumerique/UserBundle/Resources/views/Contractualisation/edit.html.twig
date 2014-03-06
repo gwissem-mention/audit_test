@@ -111,6 +111,7 @@
                         {% endif %}
                     {% endif %}
                     <input type="hidden" id="id-contractualisation" value="{% if contractualisation is defined and contractualisation is not null %}{{ contractualisation.id }}{% endif %}" />
+                    <input type="hidden" id="hopitalnumerique_user_contractualisation_typeAutres" value="{{ type_autres }}" />
                 {{ form_end(form) }}
             </div>
         </div>

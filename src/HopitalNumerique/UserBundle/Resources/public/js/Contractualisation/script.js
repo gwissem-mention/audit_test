@@ -1,7 +1,7 @@
 $(document).ready(function() { 
 	
 	//Id en dur dans la table de références générales
-	var ID_DOCUMENT_CONTRACTUALISATION_TYPE_AUTRES = 10;
+	var ID_DOCUMENT_CONTRACTUALISATION_TYPE_AUTRES = $('#hopitalnumerique_user_contractualisation_typeAutres').val();
 	
 	//Pour l'edition, gère l'affichage de la date de renouvellement
 	gestionAffichageDateRenouvellement(ID_DOCUMENT_CONTRACTUALISATION_TYPE_AUTRES);
@@ -9,7 +9,7 @@ $(document).ready(function() {
 	//Ajout du champs date de renouvellement si le type de document est "Autres"
     $('#hopitalnumerique_user_contractualisation_typeDocument').on('change', function() 
     {
-    	gestionAffichageDateRenouvellement(ID_DOCUMENT_CONTRACTUALISATION_TYPE_AUTRES);
+        	gestionAffichageDateRenouvellement(ID_DOCUMENT_CONTRACTUALISATION_TYPE_AUTRES);
     });
     
     //Gestion du bouton delete : changement du fichier uploadé

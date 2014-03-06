@@ -27,7 +27,7 @@ class ContractualisationController extends Controller
     
         return $grid->render('HopitalNumeriqueUserBundle:Contractualisation:index.html.twig', array(
                 'utilisateur' => $user,
-                'options' => $this->_gestionAffichageOnglet($user)
+                'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user)
         ));
     }
 
@@ -39,8 +39,11 @@ class ContractualisationController extends Controller
         $contractualisation = $this->get('hopitalnumerique_user.manager.contractualisation')->createEmpty();
         $user               = $this->get('hopitalnumerique_user.manager.user')->findOneById($id);
         $contractualisation->setUser( $user );
+        $type_autres = $this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idTypeAutres');
 
-        return $this->_renderForm('hopitalnumerique_user_contractualisation', $contractualisation, 'HopitalNumeriqueUserBundle:Contractualisation:edit.html.twig' );
+        return $this->_renderForm('hopitalnumerique_user_contractualisation', $contractualisation, 'HopitalNumeriqueUserBundle:Contractualisation:edit.html.twig', array(
+                'type_autres' => $type_autres,
+            ));
     }
 
     /**
@@ -51,7 +54,11 @@ class ContractualisationController extends Controller
         //Récupération de l'entité passée en paramètre
         $contractualisation = $this->get('hopitalnumerique_user.manager.contractualisation')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('hopitalnumerique_user_contractualisation', $contractualisation, 'HopitalNumeriqueUserBundle:Contractualisation:edit.html.twig' );
+        $type_autres = $this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idTypeAutres');
+        
+        return $this->_renderForm('hopitalnumerique_user_contractualisation', $contractualisation, 'HopitalNumeriqueUserBundle:Contractualisation:edit.html.twig', array(
+                'type_autres' => $type_autres,
+            ));
     }
 
     /**
@@ -65,7 +72,7 @@ class ContractualisationController extends Controller
         return $this->render('HopitalNumeriqueUserBundle:Contractualisation:show.html.twig', array(
             'contractualisation' => $contractualisation,
             'user'               => $contractualisation->getUser(),
-            'options'            => $this->_gestionAffichageOnglet($contractualisation->getUser())
+            'options'            => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($contractualisation->getUser())
         ));
     }
     
@@ -152,47 +159,6 @@ class ContractualisationController extends Controller
         
     }
 
-
-
-
-
-    /**
-     * Fonction permettant d'envoyer un tableau d'option à la vue pour vérifier le role de l'utilisateur
-     *
-     * @param User $user
-     * @return array
-     */
-    private function _gestionAffichageOnglet( $user )
-    {
-        $options = array(
-                'ambassadeur' => false,
-                'expert'      => false
-        );
-
-        //Récupération du questionnaire de l'expert
-        $idQuestionnaireExpert = Manager\QuestionnaireManager::_getQuestionnaireId('expert');
-        //Récupération du questionnaire de l'ambassadeur
-        $idQuestionnaireAmbassadeur = Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur');
-        
-        //Récupération des réponses du questionnaire expert de l'utilisateur courant
-        $reponsesExpert      = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireExpert, $user->getId());
-        //Récupération des réponses du questionnaire ambassadeur de l'utilisateur courant
-        $reponsesAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireAmbassadeur, $user->getId());
-
-        //Si il y a des réponses correspondant au questionnaire du groupe alors on donne l'accès
-        $options['expert_form']      = !empty($reponsesExpert);
-        $options['ambassadeur_form'] = !empty($reponsesAmbassadeur);
-        
-        //Dans tout les cas si l'utilisateur a le bon groupe on lui donne l'accès
-        if( $user->hasRole('ROLE_EXPERT_6') )
-            $options['expert'] = true;
-
-        if( $user->hasRole('ROLE_AMBASSADEUR_7') )
-            $options['ambassadeur'] = true;
-    
-        return $options;
-    }
-
     /**
      * Effectue le render du formulaire Contractualisation.
      *
@@ -202,7 +168,7 @@ class ContractualisationController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $contractualisation, $view )
+    private function _renderForm( $formName, $contractualisation, $view, $parametres = array() )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $contractualisation);
@@ -231,11 +197,13 @@ class ContractualisationController extends Controller
             }
         }
 
-        return $this->render( $view , array(
+        $array = array_merge(array(
             'form'               => $form->createView(),
             'contractualisation' => $contractualisation,
             'user'               => $contractualisation->getUser(),
-            'options'            => $this->_gestionAffichageOnglet($contractualisation->getUser())
-        ));
+            'options'            => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($contractualisation->getUser())
+        ), $parametres);
+
+        return $this->render( $view , $array);
     }
 }

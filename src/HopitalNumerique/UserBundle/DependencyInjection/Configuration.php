@@ -21,10 +21,10 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('hopital_numerique_user');
         
         $rootNode
-        ->children()
-        ->variableNode('options')
-        ->end()
-        ->end()
+            ->children()
+                ->variableNode('options')
+                ->end()
+            ->end()
         ;
 
         return $treeBuilder;

@@ -84,9 +84,9 @@ class UserController extends Controller
 
         return $this->render('HopitalNumeriqueUserBundle:User:show.html.twig', array(
             'user' => $user,
-            'questionnaireExpert' => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('expert'),
-            'questionnaireAmbassadeur' => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur'),
-            'options' => $this->_gestionAffichageOnglet($user),
+            'questionnaireExpert' => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('expert'),
+            'questionnaireAmbassadeur' => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur'),
+            'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
             'roles' => $roles
         ));
     }
@@ -234,52 +234,6 @@ class UserController extends Controller
     }
 
 
-
-
-
-
-
-
-
-    
-    /**
-     * Fonction permettant d'envoyer un tableau d'option à la vue pour vérifier le role de l'utilisateur
-     *
-     * @param User $user
-     * @return array
-     */
-    private function _gestionAffichageOnglet( $user )
-    {
-        $options = array(
-            'ambassadeur' => false,
-            'expert'      => false
-        );
-
-        //Récupération du questionnaire de l'expert
-        $idQuestionnaireExpert = Manager\QuestionnaireManager::_getQuestionnaireId('expert');
-        //Récupération du questionnaire de l'ambassadeur
-        $idQuestionnaireAmbassadeur = Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur');
-        
-        //Récupération des réponses du questionnaire expert de l'utilisateur courant
-        $reponsesExpert      = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireExpert, $user->getId());
-        //Récupération des réponses du questionnaire ambassadeur de l'utilisateur courant
-        $reponsesAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireAmbassadeur, $user->getId());
-
-        //Si il y a des réponses correspondant au questionnaire du groupe alors on donne l'accès
-        $options['expert_form']      = !empty($reponsesExpert);
-        $options['ambassadeur_form'] = !empty($reponsesAmbassadeur);
-
-        //Dans tout les cas si l'utilisateur a le bon groupe on lui donne l'accès
-        if( $user->hasRole('ROLE_EXPERT_6') )
-            $options['expert'] = true;
-
-        if( $user->hasRole('ROLE_AMBASSADEUR_7') )
-            $options['ambassadeur'] = true;
-
-        return $options;
-    }
-
-
     /**
      * Effectue le render du formulaire Utilisateur
      *
@@ -311,11 +265,7 @@ class UserController extends Controller
                 if(is_null($role)) {
                     $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un groupe associé.');
                 
-                    return $this->render( $view , array(
-                        'form'    => $form->createView(),
-                        'user'    => $user,
-                        'options' => $this->_gestionAffichageOnglet($user)
-                    ));
+                    return $this->_renderView( $view , $form, $user);
                 }
             }
             else
@@ -332,7 +282,7 @@ class UserController extends Controller
             if ($form->isValid()) 
             {
                 //test ajout ou edition
-                $new = is_null($user->getId()) ? true : false;
+                $new = is_null($user->getId());
 
                 //Generate password for new users
                 if( $new ) {
@@ -372,11 +322,7 @@ class UserController extends Controller
                     if( ! is_null($result) ) {
                         $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe ARS-CMSI pour cette région.' );
                 
-                        return $this->render( $view , array(
-                            'form'    => $form->createView(),
-                            'user'    => $user,
-                            'options' => $this->_gestionAffichageOnglet($user)
-                        ));
+                        return $this->_renderView( $view , $form, $user);
                     }
                 }
                 else if ( null == $user->getRegion() )
@@ -385,11 +331,7 @@ class UserController extends Controller
                     if( $role->getRole() == 'ROLE_ARS_CMSI_4' || $role->getRole() == 'ROLE_AMBASSADEUR_7') {
                         $this->get('session')->getFlashBag()->add('danger', 'Il est obligatoire de choisir une région pour le groupe sélectionné.' );
                         
-                        return $this->render( $view , array(
-                            'form'    => $form->createView(),
-                            'user'    => $user,
-                            'options' => $this->_gestionAffichageOnglet($user)
-                        ));
+                        return $this->_renderView( $view , $form, $user);
                     }
                 }
 
@@ -400,11 +342,7 @@ class UserController extends Controller
                     if( ! is_null($result) ) {
                         $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe Direction générale pour cet établissement.');
                     
-                        return $this->render( $view , array(
-                            'form'    => $form->createView(),
-                            'user'    => $user,
-                            'options' => $this->_gestionAffichageOnglet($user)
-                        ));
+                        return $this->_renderView( $view , $form, $user);
                     }
                 }
                 
@@ -438,10 +376,15 @@ class UserController extends Controller
             }
         }
         
+        return $this->_renderView( $view , $form, $user);
+    }
+
+    private function _renderView( $view, $form, $user )
+    {
         return $this->render( $view , array(
             'form'    => $form->createView(),
             'user'    => $user,
-            'options' => $this->_gestionAffichageOnglet($user)
+            'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user)
         ));
     }
 }

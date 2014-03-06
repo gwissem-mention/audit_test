@@ -47,7 +47,7 @@ hopital_numerique_user_etablissements:
 
 #Contractualisation
 hopitalnumerique_user_contractualisation:
-    pattern:  /user/contractualisation/{id}
+    pattern:  /admin/user/contractualisation/{id}
     defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:index", id: 1 }
     requirements:
         id: \d+
