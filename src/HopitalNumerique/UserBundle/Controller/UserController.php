@@ -58,7 +58,6 @@ class UserController extends Controller
         //On récupère l'user connecté et son role
         $user  = $this->get('security.context')->getToken()->getUser();
         
-        //var_dump($this->get('security.context')->isGranted('ROLE_USER'));die('die');
         
         //Si il n'y a pas d'utilisateur connecté
         if(!$this->get('security.context')->isGranted('ROLE_USER'))
