@@ -17,6 +17,8 @@ use HopitalNumerique\UserBundle\Entity\User as HopiUser;
  */
 class AmbassadeurController extends Controller
 {
+
+    //---- Front Office ------
     /**
      * Affichage du formulaire d'utilisateur
      * 
@@ -26,7 +28,7 @@ class AmbassadeurController extends Controller
     {        
         //Récupération du questionnaire de l'expert
         $idQuestionnaireExpert = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
-        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );        
+        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:edit.html.twig',array(
                 'questionnaire' => $questionnaire,
@@ -44,6 +46,37 @@ class AmbassadeurController extends Controller
                         )
                     )
                 ))
+        ));
+    }
+    
+    //---- Back Office ------
+    /**
+     * Affichage du formulaire d'utilisateur
+     *
+     * @param integer $id Identifiant de l'utilisateur
+     */
+     public function editAction( HopiUser $user )
+     {
+     //Récupération du questionnaire de l'expert
+        $idQuestionnaireExpert = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
+        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
+    
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:edit.html.twig',array(
+                'questionnaire' => $questionnaire,
+                    'user'          => $user,
+                    'options'       => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
+                'routeRedirect' => json_encode(array(
+                            'quit' => array(
+                                    'route'     => 'hopital_numerique_user_homepage',
+                                    'arguments' => array()
+                            ),
+                            'sauvegarde' => array(
+                                    'route'     => 'hopitalnumerique_user_ambassadeur_edit',
+                                    'arguments' => array(
+                                            'id' => $user->getId()
+                                    )
+                            )
+        ))
         ));
     }
 
