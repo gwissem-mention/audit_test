@@ -5,3 +5,9 @@ hopital_numerique_recherche_homepage:
 hopital_numerique_recherche_getresults:
     pattern:  /get-results
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:getResults }
+
+hopital_numerique_recherche_synthese:
+    pattern:  /synthese/{id}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:Search:synthese", id:1 }
+    requirements:
+        id: \d+

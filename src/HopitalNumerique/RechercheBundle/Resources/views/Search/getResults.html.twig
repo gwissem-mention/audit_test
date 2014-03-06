@@ -4,14 +4,17 @@
         <div class="background-violet"></div>
         <div class="results">
             {% set count = 1 %}
-            {% for objet in objets if objet.categ == "point-dur" %}
+            {% for objet in objets if objet['categ'] == "point-dur" %}
                 {% include 'HopitalNumeriqueRechercheBundle:Search:points-durs.html.twig' with {'objet': objet, 'count':count} %}
                 {% set count = count + 1 %}
             {% else %}
-                - Aucun point dur trouvé -
+                <p> - Aucun point dur trouvé - </p>
             {% endfor %}
         </div>
     </div>
+    {% if count > 2 %}
+        <div class="btn btn-default btn-xs showMore" onclick="showMore(this);" >Plus de résultats</div>
+    {% endif %}
 </div>
 
 <div id="productions">
@@ -20,36 +23,41 @@
         <div class="background-rose"></div>
         <div class="results">
             {% set count = 1 %}
-            {% for objet in objets if objet.categ == "production" %}
+            {% for objet in objets if objet['categ'] == "production" %}
                 {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count} %}
                 {% set count = count + 1 %}
             {% else %}
-                - Aucune production trouvée -
+                <p> - Aucune production trouvée - </p>
             {% endfor %}
         </div>
     </div>
+    {% if count > 2 %}
+        <div class="btn btn-default btn-xs showMore" onclick="showMore(this);" >Plus de résultats</div>
+    {% endif %}
 </div>
 
 <div id="ressources">
+    <h3>Ressources externes</h3>
     <div class="results">
         {% set count = 1 %}
-        {% for objet in objets if objet.categ == "ressource" %}
+        {% for objet in objets if objet['categ'] == "ressource" %}
             {% include 'HopitalNumeriqueRechercheBundle:Search:ressources.html.twig' with {'objet': objet, 'count':count} %}
             {% set count = count + 1 %}
         {% else %}
-            - Aucune ressource externe trouvée -
+            <p> - Aucune ressource externe trouvée - </p>
         {% endfor %}
     </div>
 </div>
 
 <div id="forum">
+    <h3><i class="fa fa-users"></i>Forum</h3>
     <div class="results">
         {#{% set count = 1 %}
-        {% for objet in objets if objet.categ == "forum" %}
+        {% for objet in objets if objet['categ'] == "forum" %}
             {% include 'HopitalNumeriqueRechercheBundle:Search:forum.html.twig' with {'objet': objet, 'count':count} %}
             {% set count = count + 1 %}
         {% else %}#}
-            - Aucun fil de discussion du forum trouvé -
+            <p> - Aucun fil de discussion du forum trouvé - </p>
         {#{% endfor %}#}
     </div>
 </div>

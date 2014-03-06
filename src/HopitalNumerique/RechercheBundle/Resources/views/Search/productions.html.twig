@@ -1,12 +1,12 @@
 <div {% if count > 2 %}style="display:none"{% endif %} >
-    <h5>{{objet.type}}</h5>
-    {% if objet.objet is not null %}
-        <a href="#">synthèse</a>
+    <h5>{{objet['type']}}</h5>
+    {% if objet['objet'] is not null %}
+        <a class="synthese fancybox.ajax" href="{{path('hopital_numerique_recherche_synthese',{'id':objet['objet']})}}">synthèse</a>
     {% endif %}
     <h4>
-        {{objet.titre}}
+        {{objet['titre']}}
     </h4>
     <div>
-        <p>{{ objet.resume }}</p>
+        <p>{{ objet['resume']|trim }} <span class="rose">[...]</span></p>
     </div>
 </div>

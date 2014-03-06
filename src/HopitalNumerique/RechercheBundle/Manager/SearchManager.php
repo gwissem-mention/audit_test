@@ -64,7 +64,7 @@ class SearchManager extends BaseManager
                     foreach( $results as $one) {
                         $objet = $this->_formateObjet( $one, $role );
                         if( !is_null($objet) )
-                            $tmp[ $objet->id ] = $objet;
+                            $tmp[ $objet['id'] ] = $objet;
                     }
 
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
@@ -78,7 +78,7 @@ class SearchManager extends BaseManager
                     foreach( $results as $one) {
                         $contenu = $this->_formateContenu( $one, $role );
                         if( !is_null($contenu) )
-                            $tmp[ $contenu->id ] = $contenu;
+                            $tmp[ $contenu['id'] ] = $contenu;
                     }
 
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
@@ -88,16 +88,37 @@ class SearchManager extends BaseManager
         }
 
         //Si on a filtré sur plusieurs catégories, on récupère uniquement les objets commun à chaque catégorie (filtre ET)
-        // if( isset($objetsToIntersect[0]) )
-        //     $objets = (count($objetsToIntersect) > 1) ? call_user_func_array('array_intersect_key',$objetsToIntersect) : $objetsToIntersect[0];
+        if( isset($objetsToIntersect[0]) )
+            $objets = (count($objetsToIntersect) > 1) ? call_user_func_array('array_intersect_key',$objetsToIntersect) : $objetsToIntersect[0];
         
 
         //Si on a filtré sur plusieurs catégories, on récupère uniquement les contenus commun à chaque catégorie (filtre ET)
         if( isset($contenusToIntersect[0]) )
             $contenus = (count($contenusToIntersect) > 1) ? call_user_func_array('array_intersect_key',$contenusToIntersect) : $contenusToIntersect[0];
 
-        return array_merge( $objets, $contenus );
+        $fusion = array_merge( $objets, $contenus );
+
+        if( empty($fusion) )
+            return $fusion;
+
+        //make a $sort array for multi-sort function
+        $sort = array();
+        foreach($fusion as $k=>$v) {
+            $sort['primary'][$k] = $v['primary'];
+            $sort['nbRef'][$k]   = $v['nbRef'];
+        }
+        //sort by primary desc and then nbRef asc
+        array_multisort($sort['primary'], SORT_DESC, $sort['nbRef'], SORT_ASC,$fusion);
+
+        return $fusion;
     }
+
+
+
+
+
+
+
 
 
 
@@ -118,8 +139,8 @@ class SearchManager extends BaseManager
     private function _formateContenu( $one, $role )
     {
         //Références
-        $item          = new \stdClass;
-        $item->primary = $one->getPrimary();
+        $item            = array();
+        $item['primary'] = $one->getPrimary();
 
         //contenu
         $contenu = $one->getContenu();
@@ -133,19 +154,20 @@ class SearchManager extends BaseManager
                 return null;
         }
 
-        $item->id     = $contenu->getId();
-        $item->titre  = $contenu->getTitre();
-        $item->objet  = $objet->getId();
+        $item['id']     = $contenu->getId();
+        $item['titre']  = $contenu->getTitre();
+        $item['nbRef']  = count($contenu->getReferences());
+        $item['objet']  = $objet->getId();
 
         //clean resume (pagebreak)
         $tab = explode('<!-- pagebreak -->', $contenu->getContenu());
-        $item->resume = html_entity_decode(strip_tags($tab[0]));
-        $item->type   = array();
+        $item['resume'] = html_entity_decode(strip_tags($tab[0]));
+        $item['type']   = array();
 
         //get Categ and Type
         $tmp = $this->_getTypeAndCateg( $objet );
-        $item->type  = $tmp['type'];
-        $item->categ = $tmp['categ'];
+        $item['type']  = $tmp['type'];
+        $item['categ'] = $tmp['categ'];
 
         return $item;
     }
@@ -161,8 +183,8 @@ class SearchManager extends BaseManager
     private function _formateObjet( $one, $role )
     {
         //Références
-        $item          = new \stdClass;
-        $item->primary = $one->getPrimary();
+        $item          = array();
+        $item['primary'] = $one->getPrimary();
 
         //objet
         $objet = $one->getObjet();
@@ -175,18 +197,19 @@ class SearchManager extends BaseManager
                 return null;
         }
 
-        $item->id     = $objet->getId();
-        $item->titre  = $objet->getTitre();
-        $item->objet  = null;
+        $item['id']     = $objet->getId();
+        $item['titre']  = $objet->getTitre();
+        $item['nbRef']  = count($objet->getReferences());
+        $item['objet']  = null;
 
         //clean resume (pagebreak)
         $tab = explode('<!-- pagebreak -->', $objet->getResume() );
-        $item->resume = html_entity_decode(strip_tags($tab[0]));
+        $item['resume'] = html_entity_decode(strip_tags($tab[0]));
         
         //get Categ and Type
         $tmp = $this->_getTypeAndCateg( $objet );
-        $item->type  = $tmp['type'];
-        $item->categ = $tmp['categ'];
+        $item['type']  = $tmp['type'];
+        $item['categ'] = $tmp['categ'];
         
         return $item;
     }

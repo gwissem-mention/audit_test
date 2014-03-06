@@ -69,6 +69,15 @@ $(document).ready(function() {
 
     //init : open first categ
     $('#origin li.level0:first').addClass('active').find('ol:first').slideDown();
+
+    //fancybox daffichage de la synthese
+    $('a.synthese').fancybox({
+        'padding'   : 0,
+        'autoSize'  : false,
+        'width'     : '80%',
+        'scrolling' : 'no',
+        'modal'     : true
+    });
 });
 
 /**
@@ -251,4 +260,21 @@ function updateResultats()
     });
     
     loader.finished();
+}
+
+/**
+ * Gestion du bouton Plus de résultats
+ */
+function showMore(that)
+{
+    toHide = 2;
+    $(that).parent().find('.results > div:hidden').each(function(){
+        if( toHide != 0){
+            $(this).slideDown();
+            toHide = toHide - 1;
+        }
+    });
+    
+    if (toHide != 0)
+        $(that).remove();
 }

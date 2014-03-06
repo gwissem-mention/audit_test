@@ -10,6 +10,7 @@
         'bundles/hopitalnumeriquerecherche/css/style.css'
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -18,9 +19,10 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-recherche-default-index.js"
-        'bundles/hopitalnumeriquerecherche/js/script.js'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/hopitalnumeriquerecherche/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

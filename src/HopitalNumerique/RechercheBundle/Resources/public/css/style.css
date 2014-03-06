@@ -6,6 +6,13 @@
 #recherche .requete h2.ropen{background: url('../img/requete-open.jpg') no-repeat center right; cursor:pointer; }
 #recherche .requete .placeholder{border:2px dashed #bfbfbf; min-height:100px; padding:20px; background: #f8f8f8; margin-top: 10px; border-radius: 10px}
 #recherche .requete .placeholder p{margin:0;}
+#recherche .showMore{margin: 10px auto; display: block; width: 110px}
+
+/* Pop-in de synthèse*/
+#synthese-ajax{ margin:0;}
+#synthese-ajax .panel-body{ padding:0;}
+#synthese-ajax .panel-body .content{ min-height:480px; padding:15px }
+#synthese-ajax .panel-body .panel-footer .btn{ margin-right:10px }
 
 /* Destination */
     #recherche .requete #dest{position: relative;}
@@ -55,33 +62,30 @@
         #resultats #pointsdurs h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal}
         #resultats #pointsdurs .wrapper-results{ background: #f4f4f4; padding:20px; position: relative; }
         #resultats #pointsdurs .wrapper-results .background-violet{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
-        #resultats #pointsdurs .wrapper-results .results h4{color:#703695; font-size: 18px; font-weight: bold;display: block;float: left}
-        #resultats #pointsdurs .wrapper-results .results a{display: block;float:right; font-size: 11px; color:#161616; background: url('../img/synthese.jpg') no-repeat right center; padding-right:25px; height:18px; width: 75px}
+        #resultats #pointsdurs .wrapper-results .results h4{color:#703695; font-size: 18px; font-weight: bold;display: block;float: left; width: 460px; margin-bottom: 15px}
+        #resultats #pointsdurs .wrapper-results .results a.synthese{display: block;float:right; font-size: 11px; color:#161616; background: url('../img/synthese.jpg') no-repeat right center; padding-right:25px; height:18px; width: 75px; margin-top: 10px; }
+        #resultats #pointsdurs .wrapper-results .results p{font-size: 13px; color:#070707; }
 
     /* Productions */
         #resultats #productions{ margin-top: 30px; }
         #resultats #productions h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal }
-        #resultats #productions .wrapper-results{ padding:20px; position: relative;}
+        #resultats #productions .wrapper-results{ padding:20px 0; position: relative;}
         #resultats #productions .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
         #resultats #productions .wrapper-results .results h4{color:#070005; font-size: 18px; font-weight: bold;clear: both}
-        #resultats #productions .wrapper-results .results h5{color:#b71c8b; font-size: 13px; font-weight: normal;display: block;float: left; text-transform: uppercase; width: 460px}
-        #resultats #productions .wrapper-results .results a{display: block;float:right; font-size: 11px; color:#161616; background: url('../img/synthese.jpg') no-repeat right center; padding-right:25px; height:18px; margin-top:10px; width: 75px}
+        #resultats #productions .wrapper-results .results h5{color:#b71c8b; font-size: 13px; font-weight: normal;display: block;float: left; text-transform: uppercase; width: 460px; margin-bottom: 5px}
+        #resultats #productions .wrapper-results .results a.synthese{display: block;float:right; font-size: 11px; color:#161616; background: url('../img/synthese.jpg') no-repeat right center; padding-right:25px; height:18px; margin-top:10px; width: 75px; margin-top:0;}
+        #resultats #productions .wrapper-results .results p{font-size: 13px; color:#070707; }
 
     /* Ressources externes */
         #resultats #ressources{ margin-top:25px; width: 48%; float: left; background: #de0d4d; padding:10px;}
+        #resultats #ressources h3{color:#ffffff; font-size: 18px; font-weight: bold; display: block; height: 19px; background: url('../img/ressources.jpg') no-repeat left center; padding-left : 30px; margin-left:15px; margin-top:5px;}
+        #resultats #ressources .results{padding:0 15px;}
+        #resultats #ressources .results h4{color: #ffffff; font-size: 14px; font-weight: bold; margin-bottom: 0; }
+        #resultats #ressources .results p{color: #ffffff; font-size: 12px; font-weight: normal}
     /* Forum */
         #resultats #forum{ margin-top:25px; width: 48%; float: right; background: #b01389; padding:10px;}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        #resultats #forum h3{color:#ffffff; font-size: 18px; font-weight: bold; margin-left:15px; margin-top:5px;}
+        #resultats #forum h3 i{margin-right:10px;}
+        #resultats #forum .results{padding:0 15px;}
+        #resultats #forum .results h4{color: #ffffff; font-size: 14px; font-weight: bold; margin-bottom: 0; }
+        #resultats #forum .results p{color: #ffffff; font-size: 12px; font-weight: normal}
