@@ -51,7 +51,11 @@ class ContractualisationController extends Controller
         //Récupération de l'entité passée en paramètre
         $contractualisation = $this->get('hopitalnumerique_user.manager.contractualisation')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('hopitalnumerique_user_contractualisation', $contractualisation, 'HopitalNumeriqueUserBundle:Contractualisation:edit.html.twig' );
+        $type_autres = $this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idTypeAutres');
+        
+        return $this->_renderForm('hopitalnumerique_user_contractualisation', $contractualisation, 'HopitalNumeriqueUserBundle:Contractualisation:edit.html.twig', array(
+                'type_autres' => $type_autres,
+            ));
     }
 
     /**
@@ -202,7 +206,7 @@ class ContractualisationController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $contractualisation, $view )
+    private function _renderForm( $formName, $contractualisation, $view, $parametres = array() )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $contractualisation);
@@ -231,11 +235,13 @@ class ContractualisationController extends Controller
             }
         }
 
-        return $this->render( $view , array(
+        $array = array_merge(array(
             'form'               => $form->createView(),
             'contractualisation' => $contractualisation,
             'user'               => $contractualisation->getUser(),
             'options'            => $this->_gestionAffichageOnglet($contractualisation->getUser())
-        ));
+        ), $parametres);
+
+        return $this->render( $view , $array);
     }
 }
