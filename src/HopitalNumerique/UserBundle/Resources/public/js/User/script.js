@@ -1,5 +1,7 @@
-$(document).ready(function() { 
+var loader;
 
+$(document).ready(function() { 
+    loader = $('#form_edit_user').nodevoLoader();
     var idEntreprise = 0;
     var idDepartement = 0;
         
@@ -53,7 +55,7 @@ $(document).ready(function() {
  * Permet de charger les départements en fonction de la région selectionné en ajax
  */
 function chargementDepartement(){
-	var loader = $('#form_edit_user').nodevoLoader().start();
+	loader.start();
 
     $.ajax({
         url  : $('#departement-url').val(),
@@ -73,7 +75,7 @@ function chargementDepartement(){
  * Permet de charger les entreprises en fonction du département selectionné en ajax
  */
 function chargementEntreprise(){
-	var loader = $('#form_edit_user').nodevoLoader().start();
+    loader.start();
 
     $.ajax({
         url  : $('#etablissement-url').val(),
