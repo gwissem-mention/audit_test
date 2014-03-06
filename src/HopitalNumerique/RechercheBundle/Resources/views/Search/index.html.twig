@@ -45,7 +45,7 @@
 
         <div class="col-md-8">
             <div class="requete">
-                <h2 class="violet">Requête de recherche ( X Résultats )</h2>
+                <h2 class="violet">Requête de recherche</h2>
     
                 <div class="placeholder">
                     <p class="text-muted">Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi</p>
@@ -62,28 +62,10 @@
                 </div>    
             </div>
             
-            <div id="resultats">
-                
-            </div>
+            <div id="resultats"></div>
         </div>
 
-        <script>
-
-            function updateResultats()
-            {
-                var loader = $('#resultats').nodevoLoader().start();
-                //alert( 'Résultats' );
-
-
-
-
-
-
-                loader.finished();
-            }
-
-        </script>
-
+        <input type="hidden" id="resultats-url" value="{{path('hopital_numerique_recherche_getresults')}}" />
 
         <div class="clearfix"></div>
     </div>

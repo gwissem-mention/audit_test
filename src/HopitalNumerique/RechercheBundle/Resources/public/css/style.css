@@ -47,3 +47,34 @@
 
     #recherche #origin li.level0 ol li.level1 ol li.level2 ol li.level3{}
     #recherche #origin li.level0 ol li.level1 ol li.level2 ol li.level3 span{font-style:italic; color:#070707; }
+
+/* Résultats */
+    #recherche #resultats{ margin-top: 20px; }
+    /* Points Dur*/
+        #recherche #resultats #pointsdurs{padding:0;}
+        #recherche #resultats #pointsdurs h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal}
+        #recherche #resultats #pointsdurs .wrapper-results{ background: #f4f4f4; padding:20px; position: relative; }
+        #recherche #resultats #pointsdurs .wrapper-results .background-violet{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+    /* Productions */
+        #recherche #resultats #productions{ margin-top: 30px; }
+        #recherche #resultats #productions h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal }
+        #recherche #resultats #productions .wrapper-results{ padding:20px; position: relative;}
+        #recherche #resultats #productions .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+    /* Ressources externes */
+        #recherche #resultats #ressources{ margin-top:25px; width: 48%; float: left; background: #de0d4d; padding:10px;}
+    /* Forum */
+        #recherche #resultats #forum{ margin-top:25px; width: 48%; float: right; background: #b01389; padding:10px;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

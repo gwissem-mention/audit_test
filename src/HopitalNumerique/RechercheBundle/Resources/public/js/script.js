@@ -202,3 +202,53 @@ function showItemOriginRecursive( item )
     if ( !$(originItem).parent().parent().hasClass('cliquable') && !$(originItem).parent().parent().hasClass("level0") )
         showItemOriginRecursive( $(originItem).parent().parent() );
 }
+
+/**
+ * Met à jour les résulats trouvés en fonction des paramètres de la requête
+ */
+function updateResultats()
+{
+    var loader     = $('#resultats').nodevoLoader().start();
+    var references = {'categ1':[],'categ2':[],'categ3':[],'categ4':[]};
+
+    //create array with selected references
+    if( !$('#dest .element-220').hasClass('hide') ){
+        references.categ1.push( 220 );
+        $('#dest .element-220 li:not(.hide)').each(function(){
+            references.categ1.push( $(this).data('id') );
+        });
+    }
+    if( !$('#dest .element-221').hasClass('hide') ){
+        references.categ2.push( 221 );
+        $('#dest .element-221 li:not(.hide)').each(function(){
+            references.categ2.push( $(this).data('id') );
+        });
+    }
+    if( !$('#dest .element-223').hasClass('hide') ){
+        references.categ3.push( 223 );
+        $('#dest .element-223 li:not(.hide)').each(function(){
+            references.categ3.push( $(this).data('id') );
+        });
+    }
+    if( !$('#dest .element-222').hasClass('hide') ){
+        references.categ4.push( 222 );
+        $('#dest .element-222 li:not(.hide)').each(function(){
+            references.categ4.push( $(this).data('id') );
+        });
+    }
+    
+    //AJAX call for results
+    $.ajax({
+        url  : $('#resultats-url').val(),
+        data : {
+            references : references
+        },
+        type    : 'POST',
+        success : function( data ){
+            $('#resultats').html( data );
+            $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
+        }
+    });
+    
+    loader.finished();
+}

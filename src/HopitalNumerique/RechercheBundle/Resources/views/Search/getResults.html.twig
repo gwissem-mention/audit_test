@@ -1,0 +1,57 @@
+<div id="pointsdurs">
+    <h3>Points Durs</h3>
+    <div class="wrapper-results">
+        <div class="background-violet"></div>
+        <div class="results">
+            {% set count = 1 %}
+            {% for objet in objets if objet.categ == "point-dur" %}
+                {% include 'HopitalNumeriqueRechercheBundle:Search:points-durs.html.twig' with {'objet': objet, 'count':count} %}
+                {% set count = count + 1 %}
+            {% else %}
+                - Aucun objet trouvé -
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div id="productions">
+    <h3>Productions</h3>
+    <div class="wrapper-results">
+        <div class="background-rose"></div>
+        <div class="results">
+            {% set count = 1 %}
+            {% for objet in objets if objet.categ == "production" %}
+                {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count} %}
+                {% set count = count + 1 %}
+            {% else %}
+                - Aucun objet trouvé -
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div id="ressources">
+    <div class="results">
+        {% set count = 1 %}
+        {% for objet in objets if objet.categ == "ressource" %}
+            {% include 'HopitalNumeriqueRechercheBundle:Search:ressources.html.twig' with {'objet': objet, 'count':count} %}
+            {% set count = count + 1 %}
+        {% else %}
+            - Aucun objet trouvé -
+        {% endfor %}
+    </div>
+</div>
+
+<div id="forum">
+    <div class="results">
+        {% set count = 1 %}
+        {% for objet in objets if objet.categ == "forum" %}
+            {% include 'HopitalNumeriqueRechercheBundle:Search:forum.html.twig' with {'objet': objet, 'count':count} %}
+            {% set count = count + 1 %}
+        {% else %}
+            - Aucun objet trouvé -
+        {% endfor %}
+    </div>
+</div>
+
+<input type="hidden" id="nbResults" value="{{objets|length}}" />
