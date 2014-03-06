@@ -83,11 +83,11 @@ class UserController extends Controller
         $roles = $this->get('nodevo_role.manager.role')->findIn( $user->getRoles() );
 
         return $this->render('HopitalNumeriqueUserBundle:User:show.html.twig', array(
-            'user' => $user,
-            'questionnaireExpert' => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('expert'),
+            'user'                     => $user,
+            'questionnaireExpert'      => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('expert'),
             'questionnaireAmbassadeur' => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur'),
-            'options' => $this->_gestionAffichageOnglet($user),
-            'roles' => $roles
+            'options'                  => $this->_gestionAffichageOnglet($user),
+            'roles'                    => $roles
         ));
     }
 

@@ -1,0 +1,104 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Recherche{% endblock %}
+{% block metadesc %}Recherche{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-default-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquerecherche/css/style.css'
+        'bundles/nodevoadmin/plugins/apprise/apprise.css'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-recherche-default-index.js"
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        'bundles/nodevoadmin/plugins/apprise/apprise.js'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/hopitalnumeriquerecherche/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="recherche">
+        <div class="col-md-4">
+            <div id="origin">
+                <ol>
+                    {{ _self.buildTree(elements, 0, 'cliquable') }}
+                </ol>
+            </div>
+
+            <div class="input-group">
+                <input type="text" class="form-control" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                </span>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="requete">
+                <h2 class="violet">Requête de recherche</h2>
+    
+                <div class="placeholder">
+                    <p class="text-muted">Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi</p>
+                </div>
+
+                <div id="dest" class="hide">
+                    <div class="btn btn-xs btn-success">Enregistrer ma requête</div>
+
+                    <hr />
+
+                    <ol class="arbo-requete">
+                        {{ _self.buildTree(elements, 0, 'hide') }}
+                    </ol>
+                </div>    
+            </div>
+            
+            <div id="resultats"></div>
+        </div>
+
+        <input type="hidden" id="resultats-url" value="{{path('hopital_numerique_recherche_getresults')}}" />
+
+        <div class="clearfix"></div>
+    </div>
+{% endblock %}
+
+{# Construit le système de parents > enfants des catégories #}
+{% macro buildTree(elements, level, class) %}
+    {% if level == 0 and class == 'cliquable' %}
+        {% set liClass = '' %}
+    {% else %}
+        {% set liClass = class %}
+    {% endif %}
+
+    {% for element in elements  %}
+        
+        {% if level == 1 and element.childs %}
+            <li class="{{liClass}} childs level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
+        {% else %}
+            <li class="{{liClass}} level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
+        {% endif %}
+            <span>{{element.libelle}}</span>
+            {% if element.childs %}
+                {% if level == 2 and class == 'cliquable' %}
+                    <i class="fa fa-chevron-right pull-right"></i>
+                {% endif %}
+                <ol>
+                    {% for child in element.childs %}
+                        {{ _self.buildTree(child, level+1, class ) }}
+                    {% endfor %}
+                </ol>
+            {% endif %}
+        </li>
+    {% endfor %}
+{% endmacro %}

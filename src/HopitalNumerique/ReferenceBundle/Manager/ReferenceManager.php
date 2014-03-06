@@ -18,12 +18,16 @@ class ReferenceManager extends BaseManager
     /**
      * Formate et retourne l'arborescence des références
      *
+     * @param  boolean $unlockedOnly     Retourne que les éléments non vérouillés
+     * @param  boolean $fromDictionnaire Retourne que les éléments présent dans le dictionnaire
+     * @param  boolean $fromRecherche    Retourne que les éléments présent dans la recherche
+     *
      * @return array
      */
-    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false )
+    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false )
     {
         //get All References, and convert to ArrayCollection
-        $datas = new ArrayCollection( $this->getRepository()->getArbo( $unlockedOnly, $fromDictionnaire ) );
+        $datas = new ArrayCollection( $this->getRepository()->getArbo( $unlockedOnly, $fromDictionnaire, $fromRecherche ) );
 
         //Récupère uniquement les premiers parents
         $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );
@@ -33,24 +37,21 @@ class ReferenceManager extends BaseManager
         return $this->_getArboRecursive($datas, $parents, array() );
     }
     
-    public function getArboFormat( $unlockedOnly = false, $fromDictionnaire = false ){
-        $arbo = $this->getArbo($unlockedOnly, $fromDictionnaire);
-        return $this->formatArbo($arbo);
+    /**
+     * Retourne l'arbo formatée
+     *
+     * @param  boolean $unlockedOnly     Retourne que les éléments non vérouillés
+     * @param  boolean $fromDictionnaire Retourne que les éléments présent dans le dictionnaire
+     * @param  boolean $fromRecherche    Retourne que les éléments présent dans la recherche
+     *
+     * @return array
+     */
+    public function getArboFormat( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false )
+    {
+        $arbo = $this->getArbo($unlockedOnly, $fromDictionnaire, $fromRecherche );
+        return $this->_formatArbo($arbo);
     }
     
-    public function formatArbo($arbo){
-        $retour = array();
-        foreach( $arbo as $key => $ref ){
-            $retour[ $ref->code ][ $key ]['libelle'] = $ref->libelle;
-            if( $ref->childs ){
-                $retour[ $ref->code ][ $key ]['childs'] = $this->formatArbo( $ref->childs );
-            } else {
-                $retour[ $ref->code ][ $key ]['childs'] = false;
-            }
-        }
-        return $retour;
-    }
-
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
      *
@@ -132,6 +133,11 @@ class ReferenceManager extends BaseManager
 
         return $this->_tabReferences;
     }
+
+
+
+
+
 
 
 
@@ -285,5 +291,27 @@ class ReferenceManager extends BaseManager
             $childs = $parent->getChildsFromCollection( $referentiels );
 
         return $childs;
+    }
+
+    /**
+     * Formatte de manière récursive l'arborescence des références
+     *
+     * @param array $arbo [description]
+     *
+     * @return array
+     */
+    private function _formatArbo($arbo)
+    {
+        $retour = array();
+        foreach( $arbo as $key => $ref ){
+            $retour[ $ref->code ][ $key ]['libelle'] = $ref->libelle;
+            $retour[ $ref->code ][ $key ]['id']      = $ref->id;
+            if( $ref->childs ){
+                $retour[ $ref->code ][ $key ]['childs'] = $this->_formatArbo( $ref->childs );
+            } else {
+                $retour[ $ref->code ][ $key ]['childs'] = false;
+            }
+        }
+        return $retour;
     }
 }
