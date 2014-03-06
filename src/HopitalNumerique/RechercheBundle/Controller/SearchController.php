@@ -25,8 +25,11 @@ class SearchController extends Controller
      */
     public function getResultsAction()
     {
+        //On récupère l'user connecté et son role
+        $user = $this->get('security.context')->getToken()->getUser();
+
         $references = $this->get('request')->request->get('references');
-        $objets     = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references );
+        $objets     = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $user );
         
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(
             'objets' => $objets

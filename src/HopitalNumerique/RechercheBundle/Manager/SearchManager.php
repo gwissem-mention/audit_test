@@ -27,16 +27,25 @@ class SearchManager extends BaseManager
         $this->_refObjetManager   = $refObjetManager;
         $this->_refContenuManager = $refContenuManager;
     }
-
+    
     /**
      * Retourne la liste des objets concernés par la requete de recherche
      *
      * @param array $references Liste des références sélectionées
+     * @param User  $user       User connecté
      *
      * @return array
      */
-    public function getObjetsForRecherche( $references )
+    public function getObjetsForRecherche( $references, $user )
     {
+        if( $user === 'anon.')
+            $role = 'ROLE_ANONYME_10';
+        else{
+            //on récupère le rôle de l'user connecté
+            $roles = $user->getRoles();
+            $role  = $roles[0];
+        }
+
         //prepare some vars
         $nbCateg             = 4;
         $objets              = array();
@@ -53,8 +62,9 @@ class SearchManager extends BaseManager
                 if( $results ){
                     $tmp = array();
                     foreach( $results as $one) {
-                        $objet = $this->_formateObjet( $one );
-                        $tmp[ $objet->id ] = $objet;
+                        $objet = $this->_formateObjet( $one, $role );
+                        if( !is_null($objet) )
+                            $tmp[ $objet->id ] = $objet;
                     }
 
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
@@ -66,8 +76,9 @@ class SearchManager extends BaseManager
                 if( $results ) {
                     $tmp = array();
                     foreach( $results as $one) {
-                        $contenu = $this->_formateContenu( $one );
-                        $tmp[ $contenu->id ] = $contenu;
+                        $contenu = $this->_formateContenu( $one, $role );
+                        if( !is_null($contenu) )
+                            $tmp[ $contenu->id ] = $contenu;
                     }
 
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
@@ -77,8 +88,8 @@ class SearchManager extends BaseManager
         }
 
         //Si on a filtré sur plusieurs catégories, on récupère uniquement les objets commun à chaque catégorie (filtre ET)
-        if( isset($objetsToIntersect[0]) )
-            $objets = (count($objetsToIntersect) > 1) ? call_user_func_array('array_intersect_key',$objetsToIntersect) : $objetsToIntersect[0];
+        // if( isset($objetsToIntersect[0]) )
+        //     $objets = (count($objetsToIntersect) > 1) ? call_user_func_array('array_intersect_key',$objetsToIntersect) : $objetsToIntersect[0];
         
 
         //Si on a filtré sur plusieurs catégories, on récupère uniquement les contenus commun à chaque catégorie (filtre ET)
@@ -99,27 +110,40 @@ class SearchManager extends BaseManager
     /**
      * Formatte Correctement les refContenus
      *
-     * @param RefContenu $one L'entité RefContenu
+     * @param RefContenu $one  L'entité RefContenu
+     * @param string     $role Le rôle de l'user connecté
      *
      * @return stdClass
      */
-    private function _formateContenu( $one )
+    private function _formateContenu( $one, $role )
     {
         //Références
         $item          = new \stdClass;
         $item->primary = $one->getPrimary();
 
         //contenu
-        $contenu      = $one->getContenu();
+        $contenu = $one->getContenu();
+        $objet   = $contenu->getObjet();
+
+        //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
+        $roles = $objet->getRoles();
+        foreach($roles as $restrictedRole){
+            //on "break" en retournant null, l'objet n'est pas ajouté
+            if( $restrictedRole->getRole() == $role)
+                return null;
+        }
+
         $item->id     = $contenu->getId();
         $item->titre  = $contenu->getTitre();
+        $item->objet  = $objet->getId();
 
+        //clean resume (pagebreak)
         $tab = explode('<!-- pagebreak -->', $contenu->getContenu());
         $item->resume = html_entity_decode(strip_tags($tab[0]));
         $item->type   = array();
 
         //get Categ and Type
-        $tmp = $this->_getTypeAndCateg( $contenu->getObjet() );
+        $tmp = $this->_getTypeAndCateg( $objet );
         $item->type  = $tmp['type'];
         $item->categ = $tmp['categ'];
 
@@ -129,21 +153,33 @@ class SearchManager extends BaseManager
     /**
      * Formatte Correctement les refObjets
      *
-     * @param Refobjet $one L'entité RefObjet
-     *
+     * @param Refobjet $one  L'entité RefObjet
+     * @param string   $role Le rôle de l'user connecté
+     * 
      * @return stdClass
      */
-    private function _formateObjet( $one )
+    private function _formateObjet( $one, $role )
     {
         //Références
         $item          = new \stdClass;
         $item->primary = $one->getPrimary();
 
         //objet
-        $objet        = $one->getObjet();
+        $objet = $one->getObjet();
+        
+        //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
+        $roles = $objet->getRoles();
+        foreach($roles as $restrictedRole){
+            //on "break" en retournant null, l'objet n'est pas ajouté
+            if( $restrictedRole->getRole() == $role)
+                return null;
+        }
+
         $item->id     = $objet->getId();
         $item->titre  = $objet->getTitre();
+        $item->objet  = null;
 
+        //clean resume (pagebreak)
         $tab = explode('<!-- pagebreak -->', $objet->getResume() );
         $item->resume = html_entity_decode(strip_tags($tab[0]));
         

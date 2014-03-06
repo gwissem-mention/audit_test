@@ -51,19 +51,26 @@
 /* Résultats */
     #recherche #resultats{ margin-top: 20px; }
     /* Points Dur*/
-        #recherche #resultats #pointsdurs{padding:0;}
-        #recherche #resultats #pointsdurs h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal}
-        #recherche #resultats #pointsdurs .wrapper-results{ background: #f4f4f4; padding:20px; position: relative; }
-        #recherche #resultats #pointsdurs .wrapper-results .background-violet{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+        #resultats #pointsdurs{padding:0;}
+        #resultats #pointsdurs h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal}
+        #resultats #pointsdurs .wrapper-results{ background: #f4f4f4; padding:20px; position: relative; }
+        #resultats #pointsdurs .wrapper-results .background-violet{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+        #resultats #pointsdurs .wrapper-results .results h4{color:#703695; font-size: 18px; font-weight: bold;display: block;float: left}
+        #resultats #pointsdurs .wrapper-results .results a{display: block;float:right; font-size: 11px; color:#161616; background: url('../img/synthese.jpg') no-repeat right center; padding-right:25px; height:18px; width: 75px}
+
     /* Productions */
-        #recherche #resultats #productions{ margin-top: 30px; }
-        #recherche #resultats #productions h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal }
-        #recherche #resultats #productions .wrapper-results{ padding:20px; position: relative;}
-        #recherche #resultats #productions .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+        #resultats #productions{ margin-top: 30px; }
+        #resultats #productions h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal }
+        #resultats #productions .wrapper-results{ padding:20px; position: relative;}
+        #resultats #productions .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+        #resultats #productions .wrapper-results .results h4{color:#070005; font-size: 18px; font-weight: bold;clear: both}
+        #resultats #productions .wrapper-results .results h5{color:#b71c8b; font-size: 13px; font-weight: normal;display: block;float: left; text-transform: uppercase; width: 460px}
+        #resultats #productions .wrapper-results .results a{display: block;float:right; font-size: 11px; color:#161616; background: url('../img/synthese.jpg') no-repeat right center; padding-right:25px; height:18px; margin-top:10px; width: 75px}
+
     /* Ressources externes */
-        #recherche #resultats #ressources{ margin-top:25px; width: 48%; float: left; background: #de0d4d; padding:10px;}
+        #resultats #ressources{ margin-top:25px; width: 48%; float: left; background: #de0d4d; padding:10px;}
     /* Forum */
-        #recherche #resultats #forum{ margin-top:25px; width: 48%; float: right; background: #b01389; padding:10px;}
+        #resultats #forum{ margin-top:25px; width: 48%; float: right; background: #b01389; padding:10px;}
 
 
 

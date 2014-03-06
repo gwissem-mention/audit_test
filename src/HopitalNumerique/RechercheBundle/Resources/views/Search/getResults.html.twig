@@ -8,7 +8,7 @@
                 {% include 'HopitalNumeriqueRechercheBundle:Search:points-durs.html.twig' with {'objet': objet, 'count':count} %}
                 {% set count = count + 1 %}
             {% else %}
-                - Aucun objet trouvé -
+                - Aucun point dur trouvé -
             {% endfor %}
         </div>
     </div>
@@ -24,7 +24,7 @@
                 {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count} %}
                 {% set count = count + 1 %}
             {% else %}
-                - Aucun objet trouvé -
+                - Aucune production trouvée -
             {% endfor %}
         </div>
     </div>
@@ -37,20 +37,20 @@
             {% include 'HopitalNumeriqueRechercheBundle:Search:ressources.html.twig' with {'objet': objet, 'count':count} %}
             {% set count = count + 1 %}
         {% else %}
-            - Aucun objet trouvé -
+            - Aucune ressource externe trouvée -
         {% endfor %}
     </div>
 </div>
 
 <div id="forum">
     <div class="results">
-        {% set count = 1 %}
+        {#{% set count = 1 %}
         {% for objet in objets if objet.categ == "forum" %}
             {% include 'HopitalNumeriqueRechercheBundle:Search:forum.html.twig' with {'objet': objet, 'count':count} %}
             {% set count = count + 1 %}
-        {% else %}
-            - Aucun objet trouvé -
-        {% endfor %}
+        {% else %}#}
+            - Aucun fil de discussion du forum trouvé -
+        {#{% endfor %}#}
     </div>
 </div>
 

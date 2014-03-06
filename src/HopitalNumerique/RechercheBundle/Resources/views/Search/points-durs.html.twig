@@ -1,6 +1,11 @@
 <div {% if count > 2 %}style="display:none"{% endif %} >
-    <h4><i class="fa fa-plus"></i> {{objet.titre}}</h4>
-    <div>
+    <h4>
+        {{objet.titre}}
+    </h4>
+    {% if objet.objet is not null %}
+        <a href="#">synthèse</a>
+    {% endif %}
+    <div class="clearfix">
         <p>{{ objet.resume }}</p>
     </div>    
 </div>
