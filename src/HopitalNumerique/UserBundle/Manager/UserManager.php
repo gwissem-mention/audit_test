@@ -12,12 +12,13 @@ class UserManager extends BaseManager
     protected $_managerReponse;
     protected $_options;
 
-    public function __construct($managerUser, $managerReponse, $options = array())
+    public function __construct($managerUser, $managerReponse, $managerQuestionnaire)
     {
         parent::__construct($managerUser);
         //Récupération des managers Réponses et Questionnaire
         $this->_managerReponse = $managerReponse;
-        $this->_options = $options;
+        $this->_managerQuestionnaire = $managerQuestionnaire;
+        $this->_options = array();
     }
     
     /**
@@ -28,9 +29,9 @@ class UserManager extends BaseManager
     public function getDatasForGrid( $condition = null )
     {
         $users = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
-        
-        $idExpert      = QuestionnaireManager::_getQuestionnaireId('expert');
-        $idAmbassadeur = QuestionnaireManager::_getQuestionnaireId('ambassadeur');
+
+        $idExpert      = $this->_managerQuestionnaire->getQuestionnaireId('expert');
+        $idAmbassadeur = $this->_managerQuestionnaire->getQuestionnaireId('ambassadeur');
         
         //Récupération des questionnaires et users
         $questionnaireByUser = $this->_managerReponse->reponseExiste($idExpert, $idAmbassadeur);        
