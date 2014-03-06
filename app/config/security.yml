@@ -16,6 +16,7 @@ security:
         comptehn_login:
             pattern: (^/compte-hn/(connexion|mot-de-passe-perdu(.*))$)|(^/compte-hn/inscription) # Cette expression régulière permet de prendre /login
             anonymous: true
+            context: application
 
         # Console DEV/ASSETS (sans notions de sécurité)
         dev:
