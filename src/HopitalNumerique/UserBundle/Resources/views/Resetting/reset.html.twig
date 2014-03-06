@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block body %}
-    <div id="login">
+    <div class="col-md-8 col-md-offset-2" id="login">
         <h3>Réinitialisation du mot de passe</h3>
         <form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} class="form-horizontal fos_user_resetting_reset" method="post" >
             <div class="background-violet"></div>
