@@ -6,7 +6,14 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:theme.form.html.twig' %}
+{% block stylesheets %}
+    {% stylesheets output="compiled/hopitalnumerique-questionnaire-questionnaire-edit.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquequestionnaire/css/questionnaire.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
 {{ form_javascript(form) }}
 {{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}	
-

@@ -17,6 +17,26 @@ use HopitalNumerique;
  */
 class UserController extends Controller
 {
+    //---- Front Office ------
+    /**
+     * Affichage du formulaire d'inscription
+     */
+    public function inscriptionAction()
+    {
+        //Si il n'y a pas d'utilisateur connecté
+        if(!$this->get('security.context')->isGranted('ROLE_USER'))
+        {
+            //Récupération de l'utilisateur passé en param
+            $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
+             
+            return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:inscription.html.twig');
+        }
+    
+        return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+    }
+    
+
+    //---- Back Office ------    
     /**
      * Affichage des utilisateurs
      */
@@ -50,27 +70,9 @@ class UserController extends Controller
         return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig' );
     }
     
-    /**
-     * Affichage du formulaire d'inscription
-     */
-    public function inscriptionAction()
-    {       
-        //On récupère l'user connecté et son role
-        $user  = $this->get('security.context')->getToken()->getUser();
-        
-        
-        //Si il n'y a pas d'utilisateur connecté
-        if(!$this->get('security.context')->isGranted('ROLE_USER'))
-        {
-            //Récupération de l'utilisateur passé en param
-            $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
-             
-            return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:inscription.html.twig');            
-        }
-        
-        return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
-    }
-
+    
+    
+    
     /**
      * Affichage de la fiche d'un utilisateur
      * 
