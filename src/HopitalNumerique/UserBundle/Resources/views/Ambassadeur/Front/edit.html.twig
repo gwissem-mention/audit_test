@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+{% extends 'HopitalNumeriqueAccountBundle:Formulaire:layout.html.twig' %}
 
 {% block stylesheets %}
     {{parent()}}
@@ -21,12 +21,19 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block content %}
-blablabla
-	{# Include des données de contractualisation #}
-    {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'routeRedirection' : routeRedirect, 'themeQuestionnaire' : themeQuestionnaire} )) }}
+{% block pageTitre %}Lorem ipsum dolor sit amet{% endblock %}
 
-    <div class="col-md-10 col-md-offset-2">
-        <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit" value="ENVOYER MA CANDIDATURE" />
+{% block chapoDescription %}
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tincidunt purus nec adipiscing. Cras eu nisi dolor. Vestibulum laoreet mi at quam dictum, vitae iaculis metus elementum. Aliquam ut ante non ligula sollicitudin vulputate. Nullam mattis vulputate sem ut placerat. Ut ac vulputate diam. Aenean suscipit lobortis tortor sit amet pharetra. Suspendisse placerat mauris non fringilla mollis. Nulla non eleifend est. Mauris ac tincidunt dolor. Mauris venenatis sit amet eros in rutrum. Ut erat sapien, viverra id dui in.</p>
+{% endblock %}
+
+{% block contenu %}
+    <div class="panel">
+    	{# Include des données de contractualisation #}
+        {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'routeRedirection' : routeRedirect, 'themeQuestionnaire' : themeQuestionnaire} )) }}
+    
+        <div class="col-md-10 col-md-offset-2">
+            <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit" value="ENVOYER MA CANDIDATURE" />
+        </div>
     </div>
 {% endblock %}

@@ -31,7 +31,7 @@ class EtablissementGrid extends Grid implements IGrid
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('prenom', 'Prénom') );
         $this->addColonne( new Column\TextColumn('region', 'Région') );
-        $this->addColonne( new Column\TextColumn('autreStructureRattacheementSante', 'Etablissement autre') );
+        $this->addColonne( new Column\TextColumn('autreStructureRattachementSante', 'Etablissement autre') );
 
         $archiverColonne = new Column\BooleanColumn('archiver', 'Archivé');
         $archiverColonne->setValues( array( 1 => 'Oui', 0 => 'Non') );

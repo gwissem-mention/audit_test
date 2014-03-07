@@ -9,6 +9,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
+use Nodevo\RoleBundle\Entity\Role;
 
 /**
  * User
@@ -190,7 +191,7 @@ class User extends BaseUser
      * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[50]]")
      * @ORM\Column(name="usr_nom", type="string", length=50, options = {"comment" = "Nom de l utilisateur"})
      */
-    protected $nom;   
+    protected $nom;
     
     /**
      * @var string
@@ -297,7 +298,7 @@ class User extends BaseUser
      * @Nodevo\Javascript(class="validate[minSize[3],maxSize[255]]")
      * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Autre structure de rattachement santé de l utilisateur"})
      */
-    protected $autreStructureRattacheementSante;
+    protected $autreStructureRattachementSante;
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
@@ -670,23 +671,23 @@ class User extends BaseUser
     }
     
     /**
-     * Get autreStructureRattacheementSante
+     * Get autreStructureRattachementSante
      *
-     * @return string $autreStructureRattacheementSante
+     * @return string $autreStructureRattachementSante
      */
-    public function getAutreStructureRattacheementSante()
+    public function getAutreStructureRattachementSante()
     {
-        return $this->autreStructureRattacheementSante;
+        return $this->autreStructureRattachementSante;
     }
     
     /**
-     * Set autreStructureRattacheementSante
+     * Set autreStructureRattachementSante
      *
-     * @param string $autreStructureRattacheementSante
+     * @param string $autreStructureRattachementSante
      */
-    public function setAutreStructureRattacheementSante($autreStructureRattacheementSante)
+    public function setAutreStructureRattachementSante($autreStructureRattachementSante)
     {
-        $this->autreStructureRattacheementSante = $autreStructureRattacheementSante;
+        $this->autreStructureRattachementSante = $autreStructureRattachementSante;
     }
     
     /**
@@ -912,5 +913,54 @@ class User extends BaseUser
     public function getPrenomNom()
     {
         return $this->prenom . ' ' . $this->nom;
+    }
+
+    /**
+     * Get nodevoRoles
+     *
+     * @return string $nodevoRoles
+     */
+    public function getNodevoRoles()
+    {
+        return $this->nodevoRoles;
+    }
+    
+    /**
+     * Set nodevoRoles
+     *
+     * @param string $nodevoRoles
+     */
+    public function setNodevoRoles($nodevoRoles)
+    {
+        $this->nodevoRoles = $nodevoRoles;
+    }
+    
+
+    /**
+     * Retourne si l'utilisateur a le rôle CMSI ou pas.
+     *
+     * @return boolean VRAI ssi l'utilisateur a le rôle CMSI
+     */
+    public function hasRoleCmsi()
+    {
+        return $this->hasRole(Role::$ROLE_CMSI_LABEL);
+    }
+    /**
+     * Retourne si l'utilisateur a le rôle ES - Direction générale ou pas.
+     *
+     * @return boolean VRAI ssi l'utilisateur a le rôle ES - Direction générale
+     */
+    public function hasRoleDirecteur()
+    {
+        return $this->hasRole(Role::$ROLE_DIRECTEUR_LABEL);
+    }
+    /**
+     * Retourne si l'utilisateur a le rôle ambassadeur ou pas.
+     *
+     * @return boolean VRAI ssi l'utilisateur a le rôle ambassadeur
+     */
+    public function hasRoleAmbassadeur()
+    {
+        return $this->hasRole(Role::$ROLE_AMBASSADEUR_LABEL);
     }
 }

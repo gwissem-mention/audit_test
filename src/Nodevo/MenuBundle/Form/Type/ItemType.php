@@ -33,7 +33,7 @@ class ItemType extends AbstractType
     {
         $builder
             ->add('name', 'text', array(
-                'max_length' => $this->_constraints['name']['maxlength'], 
+                'max_length' => $this->_constraints['name']['maxlength'],
                 'required'   => true, 
                 'label'      => 'Nom',
                 'attr'       => array('class' => $this->_constraints['name']['class'] )
