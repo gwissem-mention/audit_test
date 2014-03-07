@@ -72,7 +72,7 @@
         #resultats #productions .wrapper-results{ padding:20px 0; position: relative;}
         #resultats #productions .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
         #resultats #productions .wrapper-results .results h4{color:#070005; font-size: 18px; font-weight: bold;clear: both}
-        #resultats #productions .wrapper-results .results h5{color:#b71c8b; font-size: 13px; font-weight: normal;display: block;float: left; text-transform: uppercase; width: 460px; margin-bottom: 5px}
+        #resultats #productions .wrapper-results .results h5{color:#b71c8b; font-size: 13px; font-weight: normal;display: block;float: left; text-transform: uppercase; width: 645px; margin-bottom: 5px}
         #resultats #productions .wrapper-results .results a.synthese{display: block;float:right; font-size: 11px; color:#161616; background: url('../img/synthese.jpg') no-repeat right center; padding-right:25px; height:18px; margin-top:10px; width: 75px; margin-top:0;}
         #resultats #productions .wrapper-results .results p{font-size: 13px; color:#070707; }
 
