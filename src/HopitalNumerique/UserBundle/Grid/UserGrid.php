@@ -60,7 +60,7 @@ class UserGrid extends Grid implements IGrid
         $contractualisationColumn->manipulateRenderCell(
             function($value, $row, $router) use ($arrayRolesDateContractualisation) {
                 $roles = $row->getField('roles');
-                return in_array( $roles, $arrayRolesDateContractualisation) ? ($value ? 'true' : 'false') : null;
+                return in_array( reset($roles), $arrayRolesDateContractualisation, true ) ? ($value ? 'true' : 'false') : null;
             }
         );
         $this->addColonne( $contractualisationColumn );
@@ -71,7 +71,7 @@ class UserGrid extends Grid implements IGrid
         $expertColumn->manipulateRenderCell(
             function($value, $row, $router) {
                 $roles = $row->getField('roles');
-                return $roles[0] == "ROLE_EXPERT_6" ? true : false;
+                return $roles[0] == "ROLE_EXPERT_6";
             }
         );
         $this->addColonne( $expertColumn );
@@ -82,7 +82,7 @@ class UserGrid extends Grid implements IGrid
         $ambassadeurColumn->manipulateRenderCell(
             function($value, $row, $router) {
                 $roles = $row->getField('roles');
-                return $roles[0] == "ROLE_AMBASSADEUR_7" ? true : false;
+                return $roles[0] == "ROLE_AMBASSADEUR_7";
             }
         );
         $this->addColonne( $ambassadeurColumn );

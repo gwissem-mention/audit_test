@@ -56,7 +56,7 @@ class UserManager extends BaseManager
             
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);
-            $users[$key]['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui ? true : false) : false;            
+            $users[$key]['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui) : false;            
         }
         
         return $users;
