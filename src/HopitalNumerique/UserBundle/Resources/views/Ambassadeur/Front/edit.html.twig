@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+{% extends 'HopitalNumeriqueAccountBundle:Formulaire:layout.html.twig' %}
 
 {% block stylesheets %}
     {{parent()}}
@@ -21,12 +21,20 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block content %}
-blablabla
-	{# Include des données de contractualisation #}
-    {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'routeRedirection' : routeRedirect, 'themeQuestionnaire' : themeQuestionnaire} )) }}
+{% block pageTitre %}Mon formulaire{% endblock %}
 
-    <div class="col-md-10 col-md-offset-2">
-        <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit" value="ENVOYER MA CANDIDATURE" />
+{% block chapoDescription %}
+    <p>Tu vois, là-bas, les champs de blé ? Je ne mange pas de pain. Le blé pour moi est inutile. Les champs de blé ne me rappellent rien. Et ça, c'est triste ! Mais tu as des cheveux couleur d'or. Alors ce sera merveilleux quand tu m'auras apprivoisé ! Le blé, qui est doré, me fera souvenir de toi. Et j'aimerai le bruit du vent dans le blé...</p>
+{% endblock %}
+
+{% block contenu %}
+    <div class="panel">
+        blablabla
+    	{# Include des données de contractualisation #}
+        {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'routeRedirection' : routeRedirect, 'themeQuestionnaire' : themeQuestionnaire} )) }}
+    
+        <div class="col-md-10 col-md-offset-2">
+            <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit" value="ENVOYER MA CANDIDATURE" />
+        </div>
     </div>
 {% endblock %}

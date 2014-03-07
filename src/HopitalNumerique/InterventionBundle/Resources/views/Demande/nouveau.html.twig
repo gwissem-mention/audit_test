@@ -14,7 +14,7 @@
     {% javascripts output="compiled/intervention-nouveau.js"
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
-        
+
         'bundles/hopitalnumeriqueintervention/js/InterventionDemande/Formulaire.js'
         'bundles/hopitalnumeriqueintervention/js/InterventionDemande/FormulaireEvenement.js'
     %}
@@ -34,6 +34,9 @@
         <form method="post" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
             {% form_theme utilisateurFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
             {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
+            
+            {{ form_javascript(utilisateurFormulaireNouveau) }}
+            {{ form_javascript(interventionDemandeFormulaireNouveau) }}
             
             {{ form_widget(utilisateurFormulaireNouveau) }}
             <hr>

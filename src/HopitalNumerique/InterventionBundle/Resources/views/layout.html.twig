@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+{% extends 'HopitalNumeriqueAccountBundle:Formulaire:layout.html.twig' %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -10,18 +10,3 @@
 {% endblock %}
 
 {% block title %}{% block pageTitre %}{% endblock %} / Intervention - {{ parent() }}{% endblock %}
-
-{% block content %}
-    <div class="page_intervention">
-    
-        {% block chapo %}
-            <div class="chapo">
-                <h1>{% block chapoTitre %}{{ block('pageTitre') }}{% endblock %}</h1>
-                <div class="description">{% block chapoDescription %}{% endblock %}</div>
-            </div>
-        {% endblock %}
-        
-        {% block contenu %}{% endblock %}
-        
-    </div>
-{% endblock %}
