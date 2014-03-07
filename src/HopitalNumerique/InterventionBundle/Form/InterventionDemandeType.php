@@ -54,6 +54,21 @@ class InterventionDemandeType extends AbstractType
                     'required' => true
                 )
             )
+            ->add(
+                'etablissements',
+                'entity',
+                array(
+                    'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_etablissement')->getEtablissementsChoices(),
+                    'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
+                    'property' => 'nom',
+                    'multiple' => true,
+                    'label' => 'Rattacher d\'autres établissements à ma demande, parmi',
+                    'required' => false,
+                    'attr' => array(
+                        'class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements'
+                    )
+                )
+            )
             /*->add(
                 'etablissements',
                 'choice',

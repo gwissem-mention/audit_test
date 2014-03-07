@@ -160,11 +160,14 @@ class UserType extends AbstractType
             )
             ->add(
                 'etablissementRattachementSante',
-                'choice',
+                'entity',
                 array(
+                    'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_etablissement')->getEtablissementsChoices(),
+                    'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
+                    'property' => 'nom',
                     'label' => 'Établissement de santé de rattachement',
                     'attr' => array(
-                        'class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements'
+                        'class' => 'hopitalnumerique_interventionbundle_user_etablissementRattachementSante'
                     )
                 )
             )

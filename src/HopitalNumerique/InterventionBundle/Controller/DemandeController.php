@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Form\Form;
+use HopitalNumerique\InterventionBundle\Exception\InterventionException;
+use Nodevo\RoleBundle\Entity\Role;
 
 /**
  * Contrôleur des demandes d'intervention.
@@ -30,10 +32,13 @@ class DemandeController extends Controller
      * 
      * @return \Symfony\Component\HttpFoundation\Response La vue du formulaire de création d'une demande d'intervention
      */
-    public function nouveauAction()
+    public function nouveauAction(User $ambassadeur)
     {
+        ini_set('memory_limit', '256M');
+        
         $this->utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         $this->interventionDemande = new InterventionDemande();
+        $this->interventionDemande->setAmbassadeur($ambassadeur);
 
         // @todo TEST
         if (/*true || */$this->utilisateurConnecte->hasRoleCmsi())
@@ -73,7 +78,33 @@ class DemandeController extends Controller
         
             if ($utilisateurFormulaire->isValid() && $interventionDemandeFormulaire->isValid())
             {
-                //@todo Enre date création
+                $directeur = $this->get('hopitalnumerique_user.manager.user')->getDirecteur(array(
+                    'region' => $this->utilisateurConnecte->getRegion()
+                ));
+                if ($directeur == null)
+                    throw new InterventionException('Un directeur pour la région choisie doit existé pour créer une demande d\'intervention.');
+
+                if ($this->utilisateurConnecte->hasRoleCmsi())
+                {
+                    $cmsi = $this->get('hopitalnumerique_user.manager.user')->getCmsi(array(
+                        'region' => $this->utilisateurConnecte->getRegion()
+                    ));
+                    if ($cmsi == null)
+                        throw new InterventionException('Un CMSI pour la région choisie doit existé pour créer une demande d\'intervention.');
+                    $this->interventionDemande->setCmsi($cmsi);
+                    $this->interventionDemande->setInterventionInitiateur($this->get('hopitalnumerique_intervention.manager.intervention_initiateur')->getInterventionInitiateurCmsi());
+                }
+                else
+                {
+                    $this->interventionDemande->setCmsi($this->utilisateurConnecte);
+                    $this->interventionDemande->setReferent($this->utilisateurConnecte);
+                    $this->interventionDemande->setInterventionInitiateur($this->get('hopitalnumerique_intervention.manager.intervention_initiateur')->getInterventionInitiateurEtablissement());
+                }
+                
+                $this->interventionDemande->setDateCreation(new \DateTime());
+                
+                $this->interventionDemande->setDirecteur($directeur);
+                
                 $this->get('hopitalnumerique_user.manager.user')->save($this->utilisateurConnecte);
                 $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
                 $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été enregistrée.');

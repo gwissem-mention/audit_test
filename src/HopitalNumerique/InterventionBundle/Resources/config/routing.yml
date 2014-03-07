@@ -1,3 +1,5 @@
 hopital_numerique_intervention_demande_nouveau:
-    pattern:  /demande/nouveau
+    pattern:  /demande/nouveau/{ambassadeur}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:nouveau" }
+    requirements: 
+        ambassadeur: \d+

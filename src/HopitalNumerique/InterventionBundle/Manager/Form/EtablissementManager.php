@@ -30,6 +30,18 @@ class EtablissementManager
     }
     
     /**
+     * Retourne la liste des établissements pour les listes de formulaire.
+     *
+     * @return array Liste des établissements pour les listes de formulaire
+     */
+    public function getEtablissementsChoices()
+    {
+        $etablissements = $this->container->get('hopitalnumerique_etablissement.manager.etablissement')->findAll();
+
+        return $etablissements;
+    }
+    
+    /**
      * Retourne la liste jsonifiée des établissements regroupés par type d'organisme.
      *
      * @param array $criteres Le filtre à appliquer sur la liste

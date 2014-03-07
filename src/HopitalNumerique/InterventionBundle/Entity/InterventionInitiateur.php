@@ -8,10 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
  * Entité de l'initiateur d'une intervention.
  *
  * @ORM\Table(name="hn_intervention_initiateur")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\InterventionBundle\Repository\InterventionInitiateurRepository")
  */
 class InterventionInitiateur
 {
+    private static $INTERVENTION_INITIATEUR_CMSI = 1;
+    private static $INTERVENTION_INITIATEUR_ETABLISSEMENT = 2;
+    
     /**
      * @var integer
      *
@@ -61,5 +64,24 @@ class InterventionInitiateur
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Returne l'ID du CMSI.
+     * 
+     * @return integer ID du CMSI
+     */
+    public static function getInterventionInitiateurCmsiId()
+    {
+        return self::$INTERVENTION_INITIATEUR_CMSI;
+    }
+    /**
+     * Returne l'ID de l'établissement.
+     *
+     * @return integer ID de l'établissement
+     */
+    public static function getInterventionInitiateurEtablissementId()
+    {
+        return self::$INTERVENTION_INITIATEUR_ETABLISSEMENT;
     }
 }
