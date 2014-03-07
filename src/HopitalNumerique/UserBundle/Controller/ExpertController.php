@@ -36,11 +36,14 @@ class ExpertController extends Controller
         //Récupération du questionnaire de l'expert
         $idQuestionnaireExpert = $manager->getQuestionnaireId('expert');
         $questionnaire = $manager->findOneBy( array('id' => $idQuestionnaireExpert) );
+        
+        $themeQuestionnaire = 'vertical';
     
         return $this->render('HopitalNumeriqueUserBundle:Expert/Front:edit.html.twig',array(
-                'questionnaire' => $questionnaire,
-                'user'          => $user,
-                'routeRedirect' => json_encode(array(
+                'questionnaire'      => $questionnaire,
+                'user'               => $user,
+                'themeQuestionnaire' => $themeQuestionnaire,
+                'routeRedirect'      => json_encode(array(
                     'quit' => array(
                             'route'     => 'hopital_numerique_homepage',
                             'arguments' => array()

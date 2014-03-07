@@ -24,9 +24,9 @@
 {% block content %}
 blablabla
 	{# Include des données de contractualisation #}
-    {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'routeRedirection' : routeRedirect} )) }}
+    {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'routeRedirection' : routeRedirect, 'themeQuestionnaire' : themeQuestionnaire} )) }}
 
-    <div class="col-md-8 col-md-offset-2">
-        <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-6 pull-right submit" value="ENVOYER MA CANDIDATURE" />
+    <div class="col-md-10 col-md-offset-2">
+        <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit" value="ENVOYER MA CANDIDATURE" />
     </div>
 {% endblock %}
