@@ -121,7 +121,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -177,7 +177,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -196,7 +196,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -244,7 +244,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -263,7 +263,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -317,7 +317,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -336,7 +336,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -446,7 +446,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -524,7 +524,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -634,7 +636,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -653,7 +655,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -707,9 +709,9 @@
                     "email": "roman@code-factory.org"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -770,7 +772,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -804,12 +806,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "815055bcb1936a0bba0af93cf1b44fddf98a64b5"
+                "reference": "6a79d379164ec7d63088c3c7ba18bcca5f993a97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/815055bcb1936a0bba0af93cf1b44fddf98a64b5",
-                "reference": "815055bcb1936a0bba0af93cf1b44fddf98a64b5",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/6a79d379164ec7d63088c3c7ba18bcca5f993a97",
+                "reference": "6a79d379164ec7d63088c3c7ba18bcca5f993a97",
                 "shasum": ""
             },
             "require": {
@@ -864,7 +866,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2014-02-21 12:52:40"
+            "time": "2014-03-04 01:12:08"
         },
         {
             "name": "genemu/form-bundle",
@@ -1098,12 +1100,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
+<<<<<<< HEAD
+                "reference": "c730b8a019ca914bd90c0aef80dcf42c4320dcec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/c730b8a019ca914bd90c0aef80dcf42c4320dcec",
+                "reference": "c730b8a019ca914bd90c0aef80dcf42c4320dcec",
+=======
                 "reference": "8206c3a9a7567607c34e621ffd8f6f7eb7936525"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/8206c3a9a7567607c34e621ffd8f6f7eb7936525",
                 "reference": "8206c3a9a7567607c34e621ffd8f6f7eb7936525",
+>>>>>>> develop
                 "shasum": ""
             },
             "require": {
@@ -1154,7 +1165,11 @@
                 "menu",
                 "tree"
             ],
+<<<<<<< HEAD
+            "time": "2014-03-03 11:05:54"
+=======
             "time": "2014-02-28 13:06:53"
+>>>>>>> develop
         },
         {
             "name": "knplabs/knp-menu-bundle",
@@ -1163,12 +1178,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenuBundle.git",
-                "reference": "838c4a0f9b0631b37d699d9a7ebd695707298678"
+                "reference": "e5700ed8cbd5c402d24d6dda118aa23400937288"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/838c4a0f9b0631b37d699d9a7ebd695707298678",
-                "reference": "838c4a0f9b0631b37d699d9a7ebd695707298678",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/e5700ed8cbd5c402d24d6dda118aa23400937288",
+                "reference": "e5700ed8cbd5c402d24d6dda118aa23400937288",
                 "shasum": ""
             },
             "require": {
@@ -1208,7 +1223,7 @@
             "keywords": [
                 "menu"
             ],
-            "time": "2013-12-03 00:27:28"
+            "time": "2014-03-03 22:44:01"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -1536,7 +1551,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 }
             ],
             "description": "The base bundle for the Symfony Distributions",
@@ -1591,7 +1608,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 }
             ],
             "description": "This bundle provides a way to configure your controllers with annotations",
@@ -1643,7 +1662,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 }
             ],
             "description": "This bundle generates code for you",
@@ -1684,7 +1705,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Chris Corbyn"
@@ -1915,7 +1938,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -2076,7 +2101,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 }
             ],
             "description": "Common additional features for Twig that do not directly belong in core",
@@ -2128,7 +2155,7 @@
                     "role": "Lead Developer"
                 },
                 {
-                    "name": "Armin Ronacher",
+                    "name": "Armin Ronacher2",
                     "email": "armin.ronacher@active-4.com",
                     "role": "Project Founder"
                 },

@@ -18,7 +18,11 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  * @UniqueEntity(fields="name", message="Ce groupe existe déjà.")
  */
 class Role implements RoleInterface
-{    
+{
+    public static $ROLE_CMSI_LABEL = 'ROLE_ARS_CMSI_4';
+    public static $ROLE_DIRECTEUR_LABEL = 'ROLE_ADMINISTRATEUR_1';
+    public static $ROLE_AMBASSADEUR_LABEL = 'ROLE_AMBASSADEUR_7';
+    
     /**
      * @var integer
      *

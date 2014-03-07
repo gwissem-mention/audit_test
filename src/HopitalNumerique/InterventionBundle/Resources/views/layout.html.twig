@@ -1,0 +1,12 @@
+{% extends 'HopitalNumeriqueAccountBundle:Formulaire:layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hnIntervention.css"
+        'bundles/hopitalnumeriqueintervention/css/intervention.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}{% block pageTitre %}{% endblock %} / Intervention - {{ parent() }}{% endblock %}

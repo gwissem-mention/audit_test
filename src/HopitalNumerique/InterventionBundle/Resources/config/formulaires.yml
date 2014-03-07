@@ -1,0 +1,40 @@
+parameters:
+    hopitalnumerique_intervention.type.user.class: HopitalNumerique\InterventionBundle\Form\UserType
+    hopitalnumerique_intervention.type.user.cmsi.class: HopitalNumerique\InterventionBundle\Form\User\CmsiType
+    hopitalnumerique_intervention.type.user.etablissement.class: HopitalNumerique\InterventionBundle\Form\User\EtablissementType
+    hopitalnumerique_intervention.type.intervention_demande.class: HopitalNumerique\InterventionBundle\Form\InterventionDemandeType
+    hopitalnumerique_intervention.type.intervention_demande.cmsi.class: HopitalNumerique\InterventionBundle\Form\InterventionDemande\CmsiType
+    hopitalnumerique_intervention.type.intervention_demande.etablissement.class: HopitalNumerique\InterventionBundle\Form\InterventionDemande\EtablissementType
+
+services:
+    hopitalnumerique_intervention.type.user:
+        class: "%hopitalnumerique_intervention.type.user.class%"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_interventionbundle_user }
+        arguments: ["@service_container", "@validator"]
+    hopitalnumerique_intervention.type.user_cmsi:
+        class: "%hopitalnumerique_intervention.type.user.cmsi.class%"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_interventionbundle_user_cmsi }
+        arguments: ["@service_container", "@validator"]
+    hopitalnumerique_intervention.type.user_etablissement:
+        class: "%hopitalnumerique_intervention.type.user.etablissement.class%"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_interventionbundle_user_etablissement }
+        arguments: ["@service_container", "@validator"]
+
+    hopitalnumerique_intervention.type.intervention_demande:
+        class: "%hopitalnumerique_intervention.type.intervention_demande.class%"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_interventionbundle_interventiondemande }
+        arguments: ["@service_container", "@validator"]
+    hopitalnumerique_intervention.type.intervention_demande_cmsi:
+        class: "%hopitalnumerique_intervention.type.intervention_demande.cmsi.class%"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_interventionbundle_interventiondemande_cmsi }
+        arguments: ["@service_container", "@validator"]
+    hopitalnumerique_intervention.type.intervention_demande_etablissement:
+        class: "%hopitalnumerique_intervention.type.intervention_demande.etablissement.class%"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_interventionbundle_interventiondemande_etablissement }
+        arguments: ["@service_container", "@validator"]

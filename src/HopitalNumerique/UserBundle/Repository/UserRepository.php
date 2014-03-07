@@ -46,10 +46,10 @@ class UserRepository extends EntityRepository
     public function getDatasForGridEtablissement()
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('user.id, user.username, user.nom, user.prenom, refRegion.libelle as region, user.archiver, user.autreStructureRattacheementSante')
+        $qb->select('user.id, user.username, user.nom, user.prenom, refRegion.libelle as region, user.archiver, user.autreStructureRattachementSante')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->leftJoin('user.region','refRegion')
-            ->where('user.autreStructureRattacheementSante IS NOT NULL ')
+            ->where('user.autreStructureRattachementSante IS NOT NULL ')
             ->orderBy('user.username');
         
         return $qb;

@@ -10,6 +10,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\VarDateTimeType;
 
+/**
+ * Controller des Questionnaire
+ *
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
+ */
 class QuestionnaireController extends Controller
 {
 
@@ -22,22 +28,33 @@ class QuestionnaireController extends Controller
      *  
      * @var array
      */
-    private $routeRedirection = array();
+    private $_routeRedirection = array();
+    
+    /**
+     * Theme du formulaire utilisé
+     * 
+     * @var string
+     */
+    private $_themeQuestionnaire;
     
     /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
      * 
-     * @param HopiUser $user Utilisateur courant
-     * @param HopiQuestionnaire $questionnaire Questionnaire à afficher
-     * @param json $routeRedirection Tableau de la route de redirection une fois que le formulaire est validé
+     * @param HopiUser          $user               Utilisateur courant
+     * @param HopiQuestionnaire $questionnaire      Questionnaire à afficher
+     * @param json              $routeRedirection   Tableau de la route de redirection une fois que le formulaire est validé
+     * @param string            $themeQuestionnaire Theme de formulaire utilisé
      * 
      * @return Ambigous <\HopitalNumerique\QuestionnaireBundle\Controller\Form, \Symfony\Component\HttpFoundation\RedirectResponse, \Symfony\Component\HttpFoundation\Response>
      */
-    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $routeRedirection = '')
+    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $routeRedirection = '', $themeQuestionnaire = 'horizontal')
     {      
         //Si le tableau n'est pas vide on le récupère
         if(!is_null($routeRedirection))
-            $this->routeRedirection = $routeRedirection;
+            $this->_routeRedirection = $routeRedirection;
+        
+        //Récupération du thème de formulaire
+        $this->_themeQuestionnaire = $themeQuestionnaire;
         
         return $this->_renderForm('nodevo_questionnaire_questionnaire',
                 array(
@@ -72,7 +89,7 @@ class QuestionnaireController extends Controller
                 'label_attr' => array(
                         'idUser'           => $user->getId(),
                         'idQuestionnaire'  => $questionnaire->getId(),
-                        'routeRedirection' => $this->routeRedirection 
+                        'routeRedirection' => $this->_routeRedirection 
                 )
         ));
         
@@ -221,21 +238,9 @@ class QuestionnaireController extends Controller
         return $this->render( $view , array(
                 'form'          => $form->createView(),
                 'questionnaire' => $questionnaire,
-                'user'          => $user
+                'user'          => $user,
+                'theme'         => $this->_themeQuestionnaire
         ));
-    }
-    
-    /**
-     * Fonction permettant de gerer les files des questionnaire
-     * 
-     * @param HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire
-     * @param HopitalNumerique\UserBundle\Entity\User                   $user
-     * @param Formulaire                                                $form
-     * @param string                                                    $view     Chemin de la vue ou sera rendu le formulaire
-     */
-    public function _gestionFile( HopiQuestionnaire $questionnaire, HopiUser $user, $form, $view)
-    {
-                
     }
     
 }
