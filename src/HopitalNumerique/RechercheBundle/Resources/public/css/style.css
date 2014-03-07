@@ -82,6 +82,12 @@
         #resultats #ressources .results{padding:0 15px;}
         #resultats #ressources .results h4{color: #ffffff; font-size: 14px; font-weight: bold; margin-bottom: 0; }
         #resultats #ressources .results p{color: #ffffff; font-size: 12px; font-weight: normal}
+        #resultats #ressources .results .carousel-indicators{bottom: 0}
+        #resultats #ressources .results .carousel-inner{padding:0 25px 25px 25px}
+        #resultats #ressources .results .carousel-control{width:1%;}
+        #resultats #ressources .results .carousel-control.right {background: none}
+        #resultats #ressources .results .carousel-control.left {background: none}
+
     /* Forum */
         #resultats #forum{ margin-top:25px; width: 48%; float: right; background: #b01389; padding:10px;}
         #resultats #forum h3{color:#ffffff; font-size: 18px; font-weight: bold; margin-left:15px; margin-top:5px;}
