@@ -21,7 +21,7 @@ hopital_numerique_recherche_publication_objet:
         id: \d+
 
 hopital_numerique_recherche_publication_contenu:
-    pattern:  /{id}-{alias}/{idc}-{aliasc}.{_format}
+    pattern:  /{id}-{alias}/{idc}-{aliasc}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:Publication:contenu", id:1, idc:1, alias:alias, aliasc:aliasc}
     requirements:
         id: \d+
