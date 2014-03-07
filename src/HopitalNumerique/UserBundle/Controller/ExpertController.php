@@ -19,6 +19,37 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
  */
 class ExpertController extends Controller
 {
+    // ----- Front office -----
+
+    /**
+     * Met en place une vue pour accueillir la vue du formulaire QuestionnaireBundle
+     *
+     * @param integer $id Identifiant de l'utilisateur
+     */
+    public function editFrontAction( HopiUser $user )
+    {
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        $manager = $this->get('hopitalnumerique_questionnaire.manager.questionnaire');
+    
+        //Récupération du questionnaire de l'expert
+        $idQuestionnaireExpert = $manager->getQuestionnaireId('expert');
+        $questionnaire = $manager->findOneBy( array('id' => $idQuestionnaireExpert) );
+    
+        return $this->render('HopitalNumeriqueUserBundle:Expert/Front:edit.html.twig',array(
+                'questionnaire' => $questionnaire,
+                'user'          => $user,
+                'routeRedirect' => json_encode(array(
+                    'quit' => array(
+                            'route'     => 'hopital_numerique_homepage',
+                            'arguments' => array()
+                    )
+                ))
+        ));
+    }
+    
+    // ----- Back office ----
     /**
      * Affichage de la fiche des réponses au questionnaire expert d'un utilisateur
      *

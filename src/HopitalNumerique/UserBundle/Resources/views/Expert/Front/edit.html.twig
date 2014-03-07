@@ -1,0 +1,34 @@
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-user-expert-edit.css" filter="cssrewrite"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+        'bundles/hopitalnumeriqueuser/css/specificationUser.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-user-expert-editer.js"
+        'bundles/hopitalnumeriqueuser/js/Expert/script.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block content %}
+blablabla
+	{# Include des données de contractualisation #}
+    {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'routeRedirection' : routeRedirect} )) }}
+
+    <div class="col-md-8 col-md-offset-2">
+        <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-6 pull-right submit" value="ENVOYER MA CANDIDATURE" />
+    </div>
+    
+{% endblock %}

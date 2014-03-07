@@ -24,28 +24,24 @@ class AmbassadeurController extends Controller
      * 
      * @param integer $id Identifiant de l'utilisateur
      */
-    public function editAction( HopiUser $user )
+    public function editFrontAction( )
     {        
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+        
         //Récupération du questionnaire de l'expert
         $idQuestionnaireExpert = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
 
-        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:edit.html.twig',array(
-                'questionnaire' => $questionnaire,
-                'user'          => $user,
-                'options'       => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
-                'routeRedirect' => json_encode(array(
-                    'quit' => array(
-                        'route'     => 'hopital_numerique_user_homepage',
-                        'arguments' => array()
-                    ),
-                    'sauvegarde' => array(
-                        'route'     => 'hopitalnumerique_user_ambassadeur_edit',
-                        'arguments' => array(
-                                'id' => $user->getId()
-                        )
-                    )
-                ))
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur/Front:edit.html.twig',array(
+            'questionnaire' => $questionnaire,
+            'user'          => $user,
+            'routeRedirect' => json_encode(array(
+                'quit' => array(
+                    'route'     => 'hopital_numerique_homepage',
+                    'arguments' => array()
+                )
+            ))
         ));
     }
     

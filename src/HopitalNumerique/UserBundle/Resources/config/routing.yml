@@ -20,45 +20,17 @@ hopital_numerique_user_front_etablissements:
     
 #Expert
 hopitalnumerique_user_expert_front_edit:
-    pattern:  /admin/user/expert/edit/{id}
+    pattern:  /compte-hn/expert/edit
     defaults: { _controller: "HopitalNumeriqueUserBundle:Expert:editFront", id: 1 }
     requirements:
-        id: \d+   
-
-hopitalnumerique_user_expert_front_download:
-    pattern: /admin/user/expert/dowload/{id}
-    defaults: { _controller: HopitalNumeriqueUserBundle:Expert:dowloadFront, id: 1 }
-    requirements:
         id: \d+
-
-hopitalnumerique_user_expert_front_deleteAll:
-    pattern: /admin/user/expert/{idUser}/{idQuestionnaire}
-    defaults: { _controller: HopitalNumeriqueUserBundle:Expert:deleteAllFront, _format: json, idUser: 1, idQuestionnaire: 1 }
-    requirements:
-        idUser: \d+
-        idQuestionnaire: \d+
-        _method: post|delete
         
 #Ambassadeur
 hopitalnumerique_user_ambassadeur_front_edit:
-    pattern:  /admin/user/ambassadeur/edit/{id}
-    defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:edit", id: 1 }
+    pattern:  /compte-hn/ambassadeur/edit
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:editFront", id: 1 }
     requirements:
         id: \d+
-
-hopitalnumerique_user_ambassadeur_front_fiche:
-    pattern: /admin/user/ambassadeur/show/{idUser}
-    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:show, idUser: 1 }
-    requirements:
-        idUser: \d+
-
-hopitalnumerique_user_ambassadeur_front_deleteAll:
-    pattern: /admin/user/ambassadeur/deleteAll/{idUser}/{idQuestionnaire}
-    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:deleteAll, _format: json, idUser: 1, idQuestionnaire: 1 }
-    requirements:
-        idUser: \d+
-        idQuestionnaire: \d+
-        _method: post|delete
 
 # ----- Back Office -----
 
