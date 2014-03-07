@@ -20,10 +20,10 @@ class InterventionDemandeType extends AbstractType
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      */
-    private $container;
+    protected $container;
 
     /**
-     * Constructeur du formulaire Utilisateur.
+     * Constructeur du formulaire de demande d'intervention.
      * 
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      * @return void
@@ -32,7 +32,7 @@ class InterventionDemandeType extends AbstractType
     {
         $this->container = $container;
     }
-    
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -50,16 +50,31 @@ class InterventionDemandeType extends AbstractType
                     'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
                     'property' => 'libelle',
                     'label' => 'Type d\'intervention souhaitée',
+                    'empty_value' => '',
                     'required' => true
                 )
             )
-            ->add(
+            /*->add(
                 'etablissements',
                 'choice',
                 array(
                     'multiple' => true,
                     'label' => 'Rattacher d\'autres établissements à ma demande, parmi',
-                    'required' => false
+                    'required' => false,
+                    'attr' => array(
+                        'class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements'
+                    )
+                )
+            )*/
+            ->add(
+                'referent',
+                'choice',
+                array(
+                    'label' => 'Référent de la demande',
+                    'required' => true,
+                    'attr' => array(
+                        'class' => 'hopitalnumerique_interventionbundle_interventiondemande_referent'
+                    )
                 )
             )
             ->add(
@@ -114,7 +129,7 @@ class InterventionDemandeType extends AbstractType
             )
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

@@ -32,10 +32,10 @@
     <div class="panel">
         
         <form method="post" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
-            {% form_theme referentFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
+            {% form_theme utilisateurFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
             {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
             
-            {{ form_widget(referentFormulaireNouveau) }}
+            {{ form_widget(utilisateurFormulaireNouveau) }}
             <hr>
             {{ form_widget(interventionDemandeFormulaireNouveau) }}
             

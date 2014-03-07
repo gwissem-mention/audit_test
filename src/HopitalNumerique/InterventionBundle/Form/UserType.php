@@ -20,11 +20,11 @@ class UserType extends AbstractType
     /**
      * @var \Symfony\Component\Validator\Validator $validator Validator du formulaire
      */
-    private $_constraints = array();
+    protected $_constraints = array();
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      */
-    private $container;
+    protected $container;
 
     /**
      * Constructeur du formulaire Utilisateur.
@@ -137,17 +137,25 @@ class UserType extends AbstractType
                     'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getRegionsChoices(),
                     'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
                     'property' => 'libelle',
-                    'required' => true
+                    'required' => true,
+                    'attr' => array(
+                        'class' => 'hopitalnumerique_interventionbundle_user_region'
+                    )
                 )
             )
             ->add(
                 'departement',
-                'choice',
+                'entity',
                 array(
                     'label' => 'Département',
-                    'choices' => array(),
+                    'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
+                    'property' => 'libelle',
+                    //@todo Obligé forcément de tout récupérer pour la validation
+                    'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getDepartementsChoices(),
                     'required' => true,
-                    'attr' => array()
+                    'attr' => array(
+                        'class' => 'hopitalnumerique_interventionbundle_user_departement'
+                    )
                 )
             )
             ->add(
@@ -155,11 +163,9 @@ class UserType extends AbstractType
                 'choice',
                 array(
                     'label' => 'Établissement de santé de rattachement',
-                    /*'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
-                    'property' => 'nom',
-                    'empty_value' => '',
-                    'required' => false*/
-                    'attr' => array()
+                    'attr' => array(
+                        'class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements'
+                    )
                 )
             )
             ->add(

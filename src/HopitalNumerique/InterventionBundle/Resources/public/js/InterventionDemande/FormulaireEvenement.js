@@ -14,6 +14,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init 
 {
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initRegion_Change();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initDepartement_Change();
+    HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initAutresEtablissements_Change();
 };
 
 /**
@@ -23,10 +24,11 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init 
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initRegion_Change = function()
 {
-    var regionSelect = $('select#hopitalnumerique_interventionbundle_user_region');
+    var regionSelect = $('select.hopitalnumerique_interventionbundle_user_region');
 
     $(regionSelect).change(function() {
-        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initListeDepartements();
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeDepartements();
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements();
     });
 };
 /**
@@ -36,9 +38,22 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initR
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initDepartement_Change = function()
 {
-    var departementSelect = $('select#hopitalnumerique_interventionbundle_user_departement');
+    var departementSelect = $('select.hopitalnumerique_interventionbundle_user_departement');
 
     $(departementSelect).change(function() {
-        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initListeEtablissements();
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeEtablissements();
+    });
+};
+/**
+ * Initialisation de l'événement d'un changement parmi les autres établissements de santé.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initAutresEtablissements_Change = function()
+{
+    var etablissementsSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements');
+
+    $(etablissementsSelect).change(function() {
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeReferents();
     });
 };

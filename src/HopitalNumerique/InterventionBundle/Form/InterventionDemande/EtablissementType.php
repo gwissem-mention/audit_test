@@ -1,6 +1,6 @@
 <?php
 /**
- * Formulaire d'une demande d'intervention spécifique au CMSI.
+ * Formulaire d'une demande d'intervention spécifique à un établissement.
  *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
@@ -13,12 +13,12 @@ use HopitalNumerique\InterventionBundle\Form\UserType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Formulaire d'une demande d'intervention spécifique au CMSI.
+ * Formulaire d'une demande d'intervention spécifique à un établissement.
  */
-class CmsiType extends InterventionDemandeType
+class EtablissementType extends InterventionDemandeType
 {
     /**
-     * Constructeur du formulaire de demande d'intervention spécifique au CMSI.
+     * Constructeur du formulaire de demande d'intervention à un établissement.
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      * @return void
@@ -36,20 +36,7 @@ class CmsiType extends InterventionDemandeType
     {
         parent::buildForm($builder, $options);
         $builder
-            ->add(
-                'etablissements',
-                'choice',
-                array(
-                    'multiple' => true,
-                    'label' => 'Rattacher des établissements à ma demande, parmi',
-                    'required' => false,
-                    'attr' => array(
-                        'class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements'
-                    )
-                )
-            )
-            ->remove('description')
-            ->remove('difficulteDescription')
+            ->remove('referent')
         ;
     }
 
@@ -58,6 +45,6 @@ class CmsiType extends InterventionDemandeType
      */
     public function getName()
     {
-        return 'hopitalnumerique_interventionbundle_interventiondemande_cmsi';
+        return 'hopitalnumerique_interventionbundle_interventiondemande_etablissement';
     }
 }

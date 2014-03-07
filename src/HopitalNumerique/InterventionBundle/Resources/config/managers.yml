@@ -1,9 +1,13 @@
 parameters:
+    hopitalnumerique_intervention.manager.intervention_demande.class: HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager
     hopitalnumerique_intervention.manager.form_intervention_demande.class: HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager
     hopitalnumerique_intervention.manager.form_user.class: HopitalNumerique\InterventionBundle\Manager\Form\UserManager
     hopitalnumerique_intervention.manager.form_etablissement.class: HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager
 
 services:
+    hopitalnumerique_intervention.manager.intervention_demande:
+        class: "%hopitalnumerique_intervention.manager.intervention_demande.class%"
+        arguments: ["@doctrine.orm.entity_manager", "@service_container"]
     hopitalnumerique_intervention.manager.form_intervention_demande:
         class: "%hopitalnumerique_intervention.manager.form_intervention_demande.class%"
         arguments: ["@service_container"]

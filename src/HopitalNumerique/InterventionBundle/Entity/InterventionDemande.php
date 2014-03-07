@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Entité d'une demande d'intervention.
  *
  * @ORM\Table(name="hn_intervention_demande", indexes={@ORM\Index(name="fk_hn_intervention_core_user", columns={"referent_id"}), @ORM\Index(name="fk_hn_intervention_demande_core_user1", columns={"ambassadeur_id"}), @ORM\Index(name="fk_hn_intervention_demande_core_user2", columns={"cmsi_id"}), @ORM\Index(name="fk_hn_intervention_demande_core_user3", columns={"directeur_id"}), @ORM\Index(name="fk_hn_intervention_demande_hn_reference1", columns={"ref_intervention_type_id"}), @ORM\Index(name="fk_hn_intervention_demande_hn_reference2", columns={"ref_intervention_etat_id"}), @ORM\Index(name="fk_hn_intervention_demande_hn_intervention_initiateur1", columns={"intervinit_id"}), @ORM\Index(name="fk_hn_intervention_demande_hn_reference3", columns={"ref_evaluation_etat_id"}), @ORM\Index(name="fk_hn_intervention_demande_hn_reference4", columns={"ref_remboursement_etat_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\InterventionBundle\Repository\InterventionDemandeRepository")
  */
 class InterventionDemande
 {
@@ -224,9 +224,9 @@ class InterventionDemande
      */
     public function __construct()
     {
-        $this->ambassadeur = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->eta = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->obj = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ambassadeurs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->etablissements = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 

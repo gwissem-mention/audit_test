@@ -20,10 +20,22 @@ class EtablissementManager extends BaseManager
         $etablissementsRegroupesParTypeOrganisme = array();
         $etablissements = $this->getRepository()->findBy($criteres, array('typeOrganisme' => 'ASC', 'nom' => 'ASC'));
         
-        $typeOrganismeId = null;
+        $typeOrganismeId = -1;
         foreach ($etablissements as $etablissement)
         {
-            if ($etablissement->getTypeOrganisme()->getId() != $typeOrganismeId)
+            if ($etablissement->getTypeOrganisme() == null)
+            {
+                if ($typeOrganismeId == -1)
+                {
+                    $typeOrganismeId = null;
+                    
+                    $etablissementsRegroupesParTypeOrganisme[] = array(
+                        'typeOrganisme' => null,
+                        'departements' => array()
+                    );
+                }
+            }
+            else if ($etablissement->getTypeOrganisme()->getId() != $typeOrganismeId)
             {
                 $typeOrganismeId = $etablissement->getTypeOrganisme()->getId();
                 

@@ -44,8 +44,8 @@ class EtablissementManager
         {
             $etablissementsListeFormatee[] = array(
                 'typeOrganisme' => array(
-                    'id' => $etablissementsRegroupes['typeOrganisme']->getId(),
-                    'libelle' => $etablissementsRegroupes['typeOrganisme']->getLibelle()
+                    'id' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']->getId() : '0'),
+                    'libelle' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']->getLibelle() : '')
                 ),
                 'etablissements' => array()
             );
