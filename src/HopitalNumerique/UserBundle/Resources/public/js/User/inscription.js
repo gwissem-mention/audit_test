@@ -27,47 +27,55 @@ jQuery(document).ready(function() {
 });
 
 function viderStructureEtablissementSante(elementCourant)
-{	
-	var confirmation = confirm ("Vous-êtes sur le point de supprimer les données de 'Etablissement de santé', continuer ?")
+{		
+	var textRetour = '';
 	
-	if(confirmation)
-	{
-		//Récupération de tout les champs dans établissement de santé
-		var childsEtablissementSante = $("#etablissement_sante input,#etablissement_sante select");
-		
-		childsEtablissementSante.each(function(){
-			$(this).val('');
-		})	
-		
-		return 'autre';
-	}
-	else
-	{
-		elementCourant.val('');
-		
-		return 'etablissement';
-	}
+	apprise("Vous-êtes sur le point de supprimer les données de 'Etablissement de santé', continuer ?", {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+		if(r)
+		{				
+			//Récupération de tout les champs dans établissement de santé
+			var childsEtablissementSante = $("#etablissement_sante input,#etablissement_sante select");
+			
+			childsEtablissementSante.each(function(){
+				$(this).val('');
+			})	
+
+			textRetour = 'autre';
+		}
+		else
+		{
+			elementCourant.val('');
+
+			textRetour = 'etablissement';
+		}
+    });
+	
+	return textRetour;
 }
 
 function viderAutreStructure(elementCourant)
 {
-	var confirmation = confirm ("Vous-êtes sur le point de supprimer les données de 'Autre structure', continuer ?")
+	var textRetour = '';
 	
-	if(confirmation)
-	{
-		//Récupération de tout les champs dans établissement de santé
-		var childsAutreStructure = $("#autre_etablissement_sante input,#autre_etablissement_sante select");
-		
-		childsAutreStructure.each(function(){
-			$(this).val('');
-		})	
-		
-		return 'etablissement';
-	}
-	else
-	{
-		elementCourant.val('');
-		
-		return 'autre';
-	}
+	apprise("Vous-êtes sur le point de supprimer les données de 'Autre structure', continuer ?", {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+		if(r)
+		{
+			//Récupération de tout les champs dans établissement de santé
+			var childsAutreStructure = $("#autre_etablissement_sante input,#autre_etablissement_sante select");
+			
+			childsAutreStructure.each(function(){
+				$(this).val('');
+			})	
+			
+			textRetour = 'etablissement';
+		}
+		else
+		{
+			elementCourant.val('');
+			
+			textRetour = 'autre';
+		}
+    });
+	
+	return textRetour;	
 }

@@ -215,7 +215,7 @@ class QuestionnaireController extends Controller
                     $reponses[$idQuestion] = $reponse;
                 }
                 
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Candidature ' . $questionnaire->getNomMinifie() . ' ' . ($new ? 'créée.' : 'mise à jour.') );
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Votre candidature au poste ' . $questionnaire->getNomMinifie() . ' a bien été envoyée, nous reviendrons vers vous dans les plus brefs délais.' );
                 
                 //Mise à jour/création des réponses
                 $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );
