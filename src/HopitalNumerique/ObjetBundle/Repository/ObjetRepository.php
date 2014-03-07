@@ -54,9 +54,10 @@ class ObjetRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-            ->leftJoin('obj.ambassadeurs','user', 'WITH', 'user.id = :idAmbassadeur')
-            ->setParameter('idAmbassadeur', $idAmbassadeur);
-            
+            ->leftJoin('obj.types','refTypes')
+            ->leftJoin('obj.ambassadeurs','refUser')
+            ->where('refUser.id = :idAmbassadeur')
+            ->setParameter('idAmbassadeur', $idAmbassadeur );
         
         return $qb->getQuery()->getResult();
     }

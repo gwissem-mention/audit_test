@@ -52,7 +52,7 @@ class ObjetType extends AbstractType
                 'label'    => 'Interdire l\'accès au groupes',
                 'attr'     => array( 'placeholder' => 'Selectionnez le ou les rôles qui auront accès à cet objet' )
             ))
-            ->add('types', 'entity', array(
+            ->add('types', 'genemu_jqueryselect2_entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'      => 'libelle',
                 'required'      => true,
@@ -63,7 +63,7 @@ class ObjetType extends AbstractType
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
                               ->andWhere('ref.code = :etat', 'ref.id != 175', 'ref.id != 176', 'ref.id != 179')
-                              ->setParameter('etat', 'TYPE_OBJET')
+                              ->setParameter('etat', 'CATEGORIE_OBJET')
                               ->orderBy('ref.parent, ref.order', 'ASC');
                 }
             ))

@@ -17,6 +17,26 @@ use HopitalNumerique;
  */
 class UserController extends Controller
 {
+    //---- Front Office ------
+    /**
+     * Affichage du formulaire d'inscription
+     */
+    public function inscriptionAction()
+    {
+        //Si il n'y a pas d'utilisateur connecté
+        if(!$this->get('security.context')->isGranted('ROLE_USER'))
+        {
+            //Récupération de l'utilisateur passé en param
+            $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
+             
+            return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:inscription.html.twig');
+        }
+    
+        return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+    }
+    
+
+    //---- Back Office ------    
     /**
      * Affichage des utilisateurs
      */
@@ -49,7 +69,10 @@ class UserController extends Controller
 
         return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig' );
     }
-
+    
+    
+    
+    
     /**
      * Affichage de la fiche d'un utilisateur
      * 
@@ -62,11 +85,11 @@ class UserController extends Controller
         $roles = $this->get('nodevo_role.manager.role')->findIn( $user->getRoles() );
 
         return $this->render('HopitalNumeriqueUserBundle:User:show.html.twig', array(
-            'user' => $user,
-            'questionnaireExpert' => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('expert'),
+            'user'                     => $user,
+            'questionnaireExpert'      => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('expert'),
             'questionnaireAmbassadeur' => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur'),
-            'options' => $this->_gestionAffichageOnglet($user),
-            'roles' => $roles
+            'options'                  => $this->_gestionAffichageOnglet($user),
+            'roles'                    => $roles
         ));
     }
 
@@ -213,52 +236,6 @@ class UserController extends Controller
     }
 
 
-
-
-
-
-
-
-
-    
-    /**
-     * Fonction permettant d'envoyer un tableau d'option à la vue pour vérifier le role de l'utilisateur
-     *
-     * @param User $user
-     * @return array
-     */
-    private function _gestionAffichageOnglet( $user )
-    {
-        $options = array(
-            'ambassadeur' => false,
-            'expert'      => false
-        );
-
-        //Récupération du questionnaire de l'expert
-        $idQuestionnaireExpert = Manager\QuestionnaireManager::_getQuestionnaireId('expert');
-        //Récupération du questionnaire de l'ambassadeur
-        $idQuestionnaireAmbassadeur = Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur');
-        
-        //Récupération des réponses du questionnaire expert de l'utilisateur courant
-        $reponsesExpert      = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireExpert, $user->getId());
-        //Récupération des réponses du questionnaire ambassadeur de l'utilisateur courant
-        $reponsesAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireAmbassadeur, $user->getId());
-
-        //Si il y a des réponses correspondant au questionnaire du groupe alors on donne l'accès
-        $options['expert_form']      = !empty($reponsesExpert);
-        $options['ambassadeur_form'] = !empty($reponsesAmbassadeur);
-
-        //Dans tout les cas si l'utilisateur a le bon groupe on lui donne l'accès
-        if( $user->hasRole('ROLE_EXPERT_6') )
-            $options['expert'] = true;
-
-        if( $user->hasRole('ROLE_AMBASSADEUR_7') )
-            $options['ambassadeur'] = true;
-
-        return $options;
-    }
-
-
     /**
      * Effectue le render du formulaire Utilisateur
      *
@@ -269,7 +246,7 @@ class UserController extends Controller
      * @return Form | redirect
      */
     private function _renderForm( $formName, $user, $view )
-    {
+    {        
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $user);
 
@@ -277,27 +254,37 @@ class UserController extends Controller
         
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
+                        
             // On bind les données du form
             $form->handleRequest($request);
-            
-            //Vérification de la présence rôle
-            $role = $form->get("roles")->getData();
-            
-            if(is_null($role)) {
-                $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un groupe associé.');
-            
-                return $this->render( $view , array(
-                    'form'    => $form->createView(),
-                    'user'    => $user,
-                    'options' => $this->_gestionAffichageOnglet($user)
-                ));
-            }
 
+            //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
+            if($this->get('security.context')->isGranted('ROLE_USER'))
+            {            
+                //--Backoffice--
+                //Vérification de la présence rôle
+                $role = $form->get("roles")->getData();
+                if(is_null($role)) {
+                    $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un groupe associé.');
+                
+                    return $this->_renderView( $view , $form, $user);
+                }
+            }
+            else
+            {
+                //L'username = l'adresse mail de l'utilisateur
+                $user->setUsername($user->getEmail());
+                
+                //Set de l'état
+                $idEtatActif = intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif'));
+                $user->setEtat($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $idEtatActif)));
+            }
+            
             //si le formulaire est valide
-            if ($form->isValid()) {
+            if ($form->isValid()) 
+            {
                 //test ajout ou edition
-                $new = is_null($user->getId()) ? true : false;
+                $new = is_null($user->getId());
 
                 //Generate password for new users
                 if( $new ) {
@@ -308,61 +295,74 @@ class UserController extends Controller
                     $mdp = str_shuffle($mdp);
                     $user->setPlainPassword( $mdp );
 
-                    $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserFromAdminMail($user);
-                    $this->get('mailer')->send($mail);
+                    //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
+                    if($this->get('security.context')->isGranted('ROLE_USER'))
+                    {
+                        //--BO--
+                        //set Role for User : not mapped field
+                        $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserFromAdminMail($user);
+                        $this->get('mailer')->send($mail);
+                    }
+                    else
+                    {
+                        //--FO--
+                        //Set du role "Enregistré" par défaut pour les utilisateurs
+                        $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserMail($user);
+                        $this->get('mailer')->send($mail);
+                    }
                 }
 
-                //set Role for User : not mapped field
-                $user->setRoles( array( $role->getRole() ) );
+                //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
+                if($this->get('security.context')->isGranted('ROLE_USER'))
+                {
+                    //--BO--
+                    //set Role for User : not mapped field
+                    $user->setRoles( array( $role->getRole() ) );
+                }
+                else
+                {
+                    //--FO--
+                    //Set du role "Enregistré" par défaut pour les utilisateurs
+                    $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
+                    $user->setRoles( array( $role->getRole() ) );
+                }
 
                 //Cas particulier: 1 utilisateur par groupe ARS-CMSI par région 
-                    //Dans le cas où la région est à nulle il n'y a pas besoin de vérifier si il existe déjà un ARS pour cette région.
-                    if(null != $user->getRegion() && $role->getRole() == 'ROLE_ARS_CMSI_4' )
-                    {
-                        //On vérifie que l'utilisateur ayant le rôle ROLE_ARS_CMSI_4 n'a pas non plus la même région sinon on return et pas de sauvegarde
-                        $result = $this->get('hopitalnumerique_user.manager.user')->userExistForRoleArs( $user );
+                //Dans le cas où la région est à nulle il n'y a pas besoin de vérifier si il existe déjà un ARS pour cette région.
+                if(null != $user->getRegion() && $role->getRole() == 'ROLE_ARS_CMSI_4' )
+                {
+                    //On vérifie que l'utilisateur ayant le rôle ROLE_ARS_CMSI_4 n'a pas non plus la même région sinon on return et pas de sauvegarde
+                    $result = $this->get('hopitalnumerique_user.manager.user')->userExistForRoleArs( $user );
 
-                        if( ! is_null($result) ) {
-                            $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe ARS-CMSI pour cette région.' );
-                    
-                            return $this->render( $view , array(
-                                'form'    => $form->createView(),
-                                'user'    => $user,
-                                'options' => $this->_gestionAffichageOnglet($user)
-                            ));
-                        }
+                    if( ! is_null($result) ) {
+                        $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe ARS-CMSI pour cette région.' );
+                
+                        return $this->_renderView( $view , $form, $user);
                     }
-                    else if ( null == $user->getRegion() )
-                    {
-                        //Cas particuliers : La région est obligatoire pour les roles ARS-CMSI et Ambassadeur
-                        if( $role->getRole() == 'ROLE_ARS_CMSI_4' || $role->getRole() == 'ROLE_AMBASSADEUR_7') {
-                            $this->get('session')->getFlashBag()->add('danger', 'Il est obligatoire de choisir une région pour le groupe sélectionné.' );
-                            
-                            return $this->render( $view , array(
-                                'form'    => $form->createView(),
-                                'user'    => $user,
-                                'options' => $this->_gestionAffichageOnglet($user)
-                            ));
-                        }
+                }
+                else if ( null == $user->getRegion() )
+                {
+                    //Cas particuliers : La région est obligatoire pour les roles ARS-CMSI et Ambassadeur
+                    if( $role->getRole() == 'ROLE_ARS_CMSI_4' || $role->getRole() == 'ROLE_AMBASSADEUR_7') {
+                        $this->get('session')->getFlashBag()->add('danger', 'Il est obligatoire de choisir une région pour le groupe sélectionné.' );
+                        
+                        return $this->_renderView( $view , $form, $user);
                     }
+                }
 
                 //Cas particulier : 2 utilisateur ES - Direction générale par établissement de rattachement
-                    if( null != $user->getEtablissementRattachementSante() )
-                    {
-                        $result = $this->get('hopitalnumerique_user.manager.user')->userExistForRoleDirection( $user );
-                        if( ! is_null($result) ) {
-                            $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe Direction générale pour cet établissement.');
-                        
-                            return $this->render( $view , array(
-                                'form'    => $form->createView(),
-                                'user'    => $user,
-                                'options' => $this->_gestionAffichageOnglet($user)
-                            ));
-                        }
+                if( null != $user->getEtablissementRattachementSante() )
+                {
+                    $result = $this->get('hopitalnumerique_user.manager.user')->userExistForRoleDirection( $user );
+                    if( ! is_null($result) ) {
+                        $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe Direction générale pour cet établissement.');
+                    
+                        return $this->_renderView( $view , $form, $user);
                     }
-
+                }
+                
                 //bind Référence Etat with Enable FosUserField
-                if( $user->getEtat()->getId() == 3 )
+                if( intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif')) === $user->getEtat()->getId())
                     $user->setEnabled( 1 );
                 else
                     $user->setEnabled( 0 );
@@ -371,17 +371,35 @@ class UserController extends Controller
                 $this->get('fos_user.user_manager')->updateUser( $user );
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Utilisateur ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Utilisateur ' . $user->getUsername() . ($new ? ' ajouté.' : ' mis à jour.') ); 
                 
                 $do = $request->request->get('do');
-                return $this->redirect( ( $do == 'save-close' ? $this->generateUrl('hopital_numerique_user_homepage') : $this->generateUrl('hopital_numerique_user_edit', array( 'id' => $user->getId() ) ) ) );
+                
+                switch ($do)
+                {
+                	case 'front':
+                	    return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+                	    break;
+                	case 'save-close':
+                	    return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
+                	    break;
+                	default:
+                	    return $this->redirect( $this->generateUrl('hopital_numerique_user_edit', array( 'id' => $user->getId())) );
+                	    break;
+                }
+                //return $this->redirect( ( $do == 'save-close' ? $this->generateUrl('hopital_numerique_user_homepage') : $this->generateUrl('hopital_numerique_user_edit', array( 'id' => $user->getId() ) ) ) );
             }
         }
+        
+        return $this->_renderView( $view , $form, $user);
+    }
 
+    private function _renderView( $view, $form, $user )
+    {
         return $this->render( $view , array(
             'form'    => $form->createView(),
             'user'    => $user,
-            'options' => $this->_gestionAffichageOnglet($user)
+            'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user)
         ));
     }
 }

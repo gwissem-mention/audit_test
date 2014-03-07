@@ -22,7 +22,7 @@
 	                        {# File #} 
 	                        {% elseif 'file' == reponse.question.typeQuestion.libelle %} 
 	                            {# Téléchargement des fichiers #}
-	                            Téléchargement : <a href="{{path('hopitalnumerique_user_expert_download', {'id' : reponse.id })}}" class="btn btn-default" title="Téléchargement {{ reponse.question.alias }}"><i class="fa fa-download"></i></a>
+	                            Téléchargement : <a href="{{path('hopitalnumerique_reponse_download', {'reponse' : reponse.id })}}" class="btn btn-default" title="Téléchargement {{ reponse.question.alias }}"><i class="fa fa-download"></i></a>
 	                        {# Champ texte #} 	 
 	                        {% else %}	    
 						        <div>{{ reponse.reponse }}</div>	                        

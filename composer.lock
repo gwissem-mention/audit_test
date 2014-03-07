@@ -1098,12 +1098,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
-                "reference": "835ee51d911e4d8c9adf129907ebbebfa9a1e906"
+                "reference": "8206c3a9a7567607c34e621ffd8f6f7eb7936525"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/835ee51d911e4d8c9adf129907ebbebfa9a1e906",
-                "reference": "835ee51d911e4d8c9adf129907ebbebfa9a1e906",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/8206c3a9a7567607c34e621ffd8f6f7eb7936525",
+                "reference": "8206c3a9a7567607c34e621ffd8f6f7eb7936525",
                 "shasum": ""
             },
             "require": {
@@ -1140,7 +1140,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "Knplabs",
+                    "name": "KnpLabs",
                     "homepage": "http://knplabs.com"
                 },
                 {
@@ -1154,7 +1154,7 @@
                 "menu",
                 "tree"
             ],
-            "time": "2014-02-03 10:44:10"
+            "time": "2014-02-28 13:06:53"
         },
         {
             "name": "knplabs/knp-menu-bundle",

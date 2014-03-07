@@ -7,10 +7,15 @@ hopital_numerique_account:
     resource: "@HopitalNumeriqueAccountBundle/Resources/config/routing.yml"
     prefix:   /compte-hn
 
+hopital_numerique_recherche:
+    resource: "@HopitalNumeriqueRechercheBundle/Resources/config/routing.yml"
+    prefix:   /recherche-par-referencement
+
 # Bundles Hopital Numérique : partie Admin
 hopital_numerique_user:
     resource: "@HopitalNumeriqueUserBundle/Resources/config/routing.yml"
-    prefix:   /admin
+    prefix:   /
+    #Pour le user bundle le prefixe "/admin" se fait au cas par cas, parce qu'il est utilisé à la fois dans le FO et dans le BO    
 
 hopital_numerique_reference:
     resource: "@HopitalNumeriqueReferenceBundle/Resources/config/routing.yml"

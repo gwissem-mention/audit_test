@@ -376,8 +376,6 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\QuestionnaireBundle\Entity\Reponse", mappedBy="user", cascade={"persist", "remove" })
      */
     protected $reponses;
-    
-    protected $nodevoRoles;
 
     /**
      * Constructor
@@ -915,26 +913,4 @@ class User extends BaseUser
     {
         return $this->prenom . ' ' . $this->nom;
     }
-
-    /**
-     * Get nodevoRoles
-     *
-     * @return string $nodevoRoles
-     */
-    public function getNodevoRoles()
-    {
-        return $this->nodevoRoles;
-    }
-    
-    /**
-     * Set nodevoRoles
-     *
-     * @param string $nodevoRoles
-     */
-    public function setNodevoRoles($nodevoRoles)
-    {
-        $this->nodevoRoles = $nodevoRoles;
-    }
-    
-
 }
