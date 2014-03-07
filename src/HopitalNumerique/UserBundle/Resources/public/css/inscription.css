@@ -1,6 +1,6 @@
 #inscription{ }
 #inscription h3{ color:#070707; font-size: 18px; font-weight: bold; margin: 40px 0 18px;}
-#inscription form{ background: #f4f4f4; padding:60px 20px; position: relative;}
+#inscription form{ background: #f4f4f4; padding:60px 20px 50px 20px; position: relative;}
 #inscription form .background-violet{width: 214px; height: 4px; position: absolute; top: 0; left: 0;}
 #inscription form label{ color:#333333; font-size: 13px }
 #inscription form .champ-obligatoire{color: #5d5d5d;width: 165px; height: 4px; position: absolute; top: -20px; right: 0px;font-style:italic;}

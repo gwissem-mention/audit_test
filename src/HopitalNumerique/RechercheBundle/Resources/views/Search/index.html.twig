@@ -6,7 +6,7 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-recherche-default-index.css" filter="cssrewrite"
+    {% stylesheets output="compiled/hopitalnumerique-recherche-search-index.css" filter="cssrewrite"
         'bundles/hopitalnumeriquerecherche/css/style.css'
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
@@ -18,7 +18,7 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-recherche-default-index.js"
+    {% javascripts output="compiled/hopitalnumerique-recherche-search-index.js"
         'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'

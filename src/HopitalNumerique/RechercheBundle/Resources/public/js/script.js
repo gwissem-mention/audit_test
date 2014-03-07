@@ -27,7 +27,8 @@ $(document).ready(function() {
                 $(".requete h2").addClass('ropen');
             }
 
-            updateResultats();
+            if( !$(this).parent().hasClass('level0') )
+                updateResultats();
 
             clicks = 0; //after action performed, reset counter
         }

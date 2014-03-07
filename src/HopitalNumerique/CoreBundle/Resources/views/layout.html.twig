@@ -88,12 +88,12 @@
                 {% endif %}
                 {{ block('flashBags') }}
                 {% if error is defined and error %}
-                    <div class="alert alert-warning" onclick="$(this).slideUp();" >
+                    <div class="alert nalert-warning" onclick="$(this).slideUp();" >
                         {{ error|trans({}, 'FOSUserBundle') }}
                     </div>
                 {% endif %}
                 {% if invalid_username is defined %}
-                    <div class="alert alert-warning" onclick="$(this).slideUp();" >
+                    <div class="alert nalert-warning" onclick="$(this).slideUp();" >
                         {{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}
                     </div>
                 {% endif %}
