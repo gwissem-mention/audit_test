@@ -377,8 +377,6 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\QuestionnaireBundle\Entity\Reponse", mappedBy="user", cascade={"persist", "remove" })
      */
     protected $reponses;
-    
-    protected $nodevoRoles;
 
     /**
      * Constructor

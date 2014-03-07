@@ -1,0 +1,7 @@
+parameters:
+    hopitalnumerique_recherche.manager.search.class: HopitalNumerique\RechercheBundle\Manager\SearchManager
+
+services:
+    hopitalnumerique_recherche.manager.search:
+        class: %hopitalnumerique_recherche.manager.search.class%
+        arguments: ["@hopitalnumerique_objet.manager.refobjet", "@hopitalnumerique_objet.manager.refcontenu"]

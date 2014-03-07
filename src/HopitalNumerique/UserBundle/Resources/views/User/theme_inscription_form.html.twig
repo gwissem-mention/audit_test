@@ -1,21 +1,5 @@
 {% extends 'NodevoAdminBundle::form.html.twig' %}
 
-{% block form_row %}
-    {% spaceless %}
-        <div class="form-group">
-            {{ form_label(form) }}
-            <div class="col-md-5">
-                {{ form_widget(form) }}
-            </div>
-             <div class="col-md-2">
-                 <div class="help-block">
-                     {{ form_errors(form) }}
-                 </div>
-            </div>
-        </div>
-    {% endspaceless %}
-{% endblock form_row %}
-
 {% block form_label %}
     {% spaceless %}
         {% if label is not sameas(false) %}
@@ -23,9 +7,9 @@
                 {% set label_attr = label_attr|merge({'for': id}) %}
             {% endif %}
             {% if required %}
-                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-md-5 ') ~ ' required')|trim}) %}
+                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-md-4 control-label') ~ ' required')|trim}) %}
             {% else %}
-                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-md-5 '))|trim}) %}
+                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-md-4 control-label'))|trim}) %}
             {% endif %}
             {% if label is empty %}
                 {% set label = name|humanize %}
@@ -39,3 +23,19 @@
         {% endif %}
     {% endspaceless %}
 {% endblock %}
+
+{% block form_row %}
+    {% spaceless %}
+        <div class="form-group">
+                {{ form_label(form) }}
+            <div class="col-md-7">
+                {{ form_widget(form) }}
+            </div>
+            <div class="col-md-4">
+                <div class="help-block">
+                    {{ form_errors(form) }}
+                </div>
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}

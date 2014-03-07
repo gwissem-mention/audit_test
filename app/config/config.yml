@@ -46,6 +46,7 @@ assetic:
         - HopitalNumeriqueObjetBundle
         - HopitalNumeriqueQuestionnaireBundle
         - HopitalNumeriqueAccountBundle
+        - HopitalNumeriqueRechercheBundle
         - FOSUserBundle
     filters:
         cssrewrite: ~
@@ -87,9 +88,11 @@ fos_user:
     from_email:
         address: admin@nodevo.com
         sender_name: Administrateur
+    service:
+        mailer: fos_user.mailer.twig_swift
     resetting:
         email:
-            template: FOSUserBundle:Resetting:email.txt.twig
+            template: HopitalNumeriqueUserBundle:Resetting:email.txt.twig
 
 #KNP Menu Bundle
 knp_menu:
@@ -117,14 +120,25 @@ genemu_form:
 
 # Nodevo mail
 nodevo_mail:
-    autorisations:
+    options:
         allowAdd: false
         allowDelete: false
 
 nodevo_menu:
-    breadcrumb:
-        routeRacine: hopital_numerique_admin_homepage
+    options:
+        breadcrumbRouteRacine: hopital_numerique_admin_homepage
 
 # Gestion download fichiers sécurisé (pas dans /web)
 igorw_file_serve:
     base_dir: ~        # The default value is "%kernel.root_dir%"
+
+hopital_numerique_user:
+    options: 
+        idEtatActif: 3
+        idTypeAutres : 10
+
+hopital_numerique_questionnaire:
+    options:
+        idRoles:
+            expert: 1
+            ambassadeur: 2

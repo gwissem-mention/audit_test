@@ -144,15 +144,38 @@ class ObjetManager extends BaseManager
             }
 
             if( $add ) {
-                $objet           = new \stdClass;
-                $objet->id       = $one->getId();
-                $objet->titre    = $one->getTitre();
-                $objets[] = $objet;
+                $objet        = new \stdClass;
+                $objet->id    = $one->getId();
+                $objet->titre = $one->getTitre();
+                $objets[]     = $objet;
             }
         }
 
         return $objets;
     }
+
+    /**
+     * Vérifie que le rôle ne fait pas partie de la liste des rôles exclus
+     *
+     * @param string $role  Rôle de l'user connecté
+     * @param Objet  $objet L'entitée Objet
+     *
+     * @return boolean
+     */
+    public function checkAccessToObjet($role, $objet)
+    {
+        //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
+        $roles = $objet->getRoles();
+        foreach($roles as $restrictedRole){
+            //on "break" en retournant null, l'objet n'est pas ajouté
+            if( $restrictedRole->getRole() == $role)
+                return false;
+        }
+
+        return true;
+    }
+
+
 
 
 

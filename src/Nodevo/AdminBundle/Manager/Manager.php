@@ -144,6 +144,26 @@ abstract class Manager
     }
 
     /**
+    * Retourne les objets rôles présents dans le tableau de chaînes $roles
+    *
+    * @param array $roles Tableau de chaînes contenant les noms des roles
+    *
+    * @return array
+    */
+    public function findIn(array $roles)
+    {
+        $allRoles = $this->getRepository()->findAll();
+        $matchingRoles = array();
+
+        foreach ($allRoles as $role) {
+            if (in_array($role->getRole(), $roles, true))
+                $matchingRoles[] = $role;
+        }
+
+        return $matchingRoles;
+    }
+
+    /**
      * Enregistre l'entitée
      *
      * @param Entity|array $entity L'entitée

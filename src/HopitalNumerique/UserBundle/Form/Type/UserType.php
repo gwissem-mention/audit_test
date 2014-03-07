@@ -9,21 +9,34 @@
 namespace HopitalNumerique\UserBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class UserType extends AbstractType
 {
     private $_constraints = array();
     private $_managerRole;
+    private $_securityContext;
 
-    public function __construct($manager, $validator, $managerRole)
+    public function __construct($manager, $validator, $managerRole, $securityContext)
     {
         $this->_constraints = $manager->getConstraints( $validator );
         $this->_managerRole = $managerRole;
+        $this->_securityContext = $securityContext;
     }
 
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+                'data_class'      => 'HopitalNumerique\UserBundle\Entity\User',
+                'csrf_protection' => false,
+                'csrf_field_name' => '_token',
+                // une clé unique pour aider à la génération du jeton secret
+                'intention'       => 'task_item',
+        ));
+    }
+    
     /**
      * Ajout des éléments dans le formulaire, spécifie les labels, les widgets utilisés ainsi que l'obligation
      * 
@@ -37,14 +50,24 @@ class UserType extends AbstractType
         $datas = $options['data'];
         $roles = $datas->getRoles();
 
-        $builder
-            ->add('username', 'text', array(
-                'max_length' => $this->_constraints['username']['maxlength'],
-                'required'   => true, 
-                'label'      => 'Nom d\'utilisateur',
-                'attr'       => array('class' => $this->_constraints['username']['class'] )
-            ))
+        //Si il y a un utilisateur connecté nous sommes en BO
+        if($this->_securityContext->isGranted('ROLE_USER'))
+            $builder->add('username', 'text', array(
+                    'max_length' => $this->_constraints['username']['maxlength'],
+                    'required'   => true, 
+                    'label'      => 'Nom d\'utilisateur',
+                    'attr'       => array('class' => $this->_constraints['username']['class'] )
+                ));
+        else
+            $builder->add('username', 'hidden', array(
+                    'max_length' => $this->_constraints['username']['maxlength'],
+                    'required'   => true,
+                    'label'      => 'Nom d\'utilisateur',
+                    'attr'       => array('class' => $this->_constraints['username']['class'] ),
+                    'data'       => 'Nom par défaut'
+            ));
 
+        $builder
             ->add('nom', 'text', array(
                 'max_length' => $this->_constraints['nom']['maxlength'],
                 'required'   => true, 
@@ -135,27 +158,28 @@ class UserType extends AbstractType
                                         'class'     => $this->_constraints['telephonePortable']['class'], 
                                         'data-mask' => $this->_constraints['telephonePortable']['mask'] 
                                     )
-            ))
+            ));
             
-            
-            ->add('roles', 'genemu_jqueryselect2_entity', array(
-                'class'         => 'NodevoRoleBundle:Role',
-                'property'      => 'name',
-                'multiple'      => false,
-                'required'      => true,
-                'label'         => 'Groupe associé',
-                'mapped'        => false,
-                'empty_value'   => 'Choissisez un groupe',
-                //'attr'          => array('class'=>'validate[required]'),
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ro')
-                              ->where('ro.etat != :etat')
-                              ->setParameter('etat', 4);
-                },
-                'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
-            ))
 
-            ->add('region', 'entity', array(
+            //Si il y a un utilisateur connecté nous sommes en BO
+            if($this->_securityContext->isGranted('ROLE_USER'))
+                $builder->add('roles', 'entity', array(
+                    'class'         => 'NodevoRoleBundle:Role',
+                    'property'      => 'name',
+                    'required'      => true,
+                    'label'         => 'Groupe associé',
+                    'mapped'        => false,
+                    'empty_value'   => ' - ',
+                    'attr'          => array('class'=>'validate[required]'),
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('ro')
+                                  ->where('ro.etat != :etat')
+                                  ->setParameter('etat', 4);
+                    },
+                    'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
+                ));
+
+            $builder->add('region', 'entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'    => 'libelle',
                 'required'    => false,
@@ -183,7 +207,7 @@ class UserType extends AbstractType
                             ->orderBy('ref.libelle', 'ASC');                        
                     }
             ))
-
+            
             ->add('etat', 'entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'    => 'libelle',
@@ -196,15 +220,13 @@ class UserType extends AbstractType
                               ->setParameter('etat', 'ETAT')
                               ->orderBy('ref.order', 'ASC');
                 }
-            ))
+            ));
             
-            ->add('contactAutre', 'textarea', array(
+            $builder->add('contactAutre', 'textarea', array(
                     'required'   => false,
                     'label'      => 'Contact autre',
                     'attr'       => array()
-            ))
-            
-            ;
+            ));
 
             // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
             $builder->add('statutEtablissementSante', 'entity', array(
@@ -213,7 +235,7 @@ class UserType extends AbstractType
                     'required'    => false,
                     'label'       => 'Statut de l\'établissement',
                     'empty_value' => ' - ',
-                    'attr'        => array(),
+                    'attr'        => array('class' => 'etablissement_sante'),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')
@@ -221,21 +243,23 @@ class UserType extends AbstractType
                         ->orderBy('ref.libelle', 'ASC');
                     }
             ))
-
-            ->add('etablissementRattachementSante', 'entity', array(
-                    'class'       => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                    'property'    => 'usersAffichage',
-                    'required'    => false,
-                    'empty_value' => ' - ',
-                    'label'       => 'Etablissement de rattachement',
-                    'attr'        => array()
+            
+            ->add('etablissementRattachementSante', 'genemu_jqueryselect2_entity', array(
+                    'class'         => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+                    'property'      => 'usersAffichage',
+                    'multiple'      => false,
+                    'required'      => false,
+                    'label'         => 'Etablissement de rattachement',
+                    'empty_value'   => ' - ',
+                    'attr'        => array('class' => 'etablissement_sante')
             ))
+            
 
             ->add('autreStructureRattachementSante', 'text', array(
                     'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
                     'required'   => false,
                     'label'      => 'Autre structure de rattachement',
-                    'attr'       => array('class' => $this->_constraints['autreStructureRattachementSante']['class'] )
+                    'attr'       => array('class' => $this->_constraints['autreStructureRattacheementSante']['class'] . ' etablissement_sante' )
             ))
             
             ->add('fonctionEtablissementSante', 'entity', array(
@@ -244,7 +268,7 @@ class UserType extends AbstractType
                     'required'    => false,
                     'label'       => 'Fonction de l\'établissement',
                     'empty_value' => ' - ',
-                    'attr'        => array(),
+                    'attr'        => array('class' => 'etablissement_sante'),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')
@@ -259,7 +283,7 @@ class UserType extends AbstractType
                     'required'    => false,
                     'label'       => 'Raison de l \'inscription',
                     'empty_value' => ' - ',
-                    'attr'        => array(),
+                    'attr'        => array('class' => 'etablissement_sante'),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')
@@ -278,14 +302,14 @@ class UserType extends AbstractType
                     'max_length' => $this->_constraints['nomStructure']['maxlength'],
                     'required'   => false,
                     'label'      => 'Nom de la structure',
-                    'attr'       => array('class' => $this->_constraints['nomStructure']['class'] )
+                    'attr'       => array('class' => $this->_constraints['nomStructure']['class'] . ' autre_structure' )
             ))
             
             ->add('fonctionStructure', 'text', array(
                     'max_length' => $this->_constraints['fonctionStructure']['maxlength'],
                     'required'   => false,
                     'label'      => 'Fonction de la structure',
-                    'attr'       => array('class' => $this->_constraints['fonctionStructure']['class'] )
+                    'attr'       => array('class' => $this->_constraints['fonctionStructure']['class'] . ' autre_structure' )
             ))
             
             ->add('raisonInscriptionStructure', 'entity', array(
@@ -294,7 +318,7 @@ class UserType extends AbstractType
                     'required'    => false,
                     'label'       => 'Raison de l \'inscription',
                     'empty_value' => ' - ',
-                    'attr'        => array(),
+                    'attr'        => array('class' => 'autre_structure'),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')
@@ -306,6 +330,7 @@ class UserType extends AbstractType
             ;
             
             // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
+            
     }
 
     /**

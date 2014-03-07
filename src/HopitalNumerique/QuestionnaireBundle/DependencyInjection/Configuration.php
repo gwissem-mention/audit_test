@@ -18,7 +18,14 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root('hopital_numerique_questionnaire');
+        $rootNode    = $treeBuilder->root('hopitalnumerique_questionnaire');
+
+        $rootNode
+            ->children()
+                ->variableNode('options')
+                ->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }

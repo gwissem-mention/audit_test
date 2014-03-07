@@ -1100,12 +1100,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
+<<<<<<< HEAD
                 "reference": "c730b8a019ca914bd90c0aef80dcf42c4320dcec"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/c730b8a019ca914bd90c0aef80dcf42c4320dcec",
                 "reference": "c730b8a019ca914bd90c0aef80dcf42c4320dcec",
+=======
+                "reference": "8206c3a9a7567607c34e621ffd8f6f7eb7936525"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/8206c3a9a7567607c34e621ffd8f6f7eb7936525",
+                "reference": "8206c3a9a7567607c34e621ffd8f6f7eb7936525",
+>>>>>>> develop
                 "shasum": ""
             },
             "require": {
@@ -1156,7 +1165,11 @@
                 "menu",
                 "tree"
             ],
+<<<<<<< HEAD
             "time": "2014-03-03 11:05:54"
+=======
+            "time": "2014-02-28 13:06:53"
+>>>>>>> develop
         },
         {
             "name": "knplabs/knp-menu-bundle",

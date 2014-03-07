@@ -25,6 +25,9 @@ class NodevoMenuExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        $container->setParameter('nodevo_menu.loader.breadcrumb.rootNode', $config['breadcrumb']['routeRacine']);
+        if (isset($config['options']))
+        {
+            $container->setParameter('nodevo_menu.options', $config['options']);
+        }
     }
 }

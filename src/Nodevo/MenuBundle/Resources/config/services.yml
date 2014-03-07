@@ -1,4 +1,7 @@
 parameters:
+    #Options
+    nodevo_menu.options:
+
     #Menu
     nodevo_menu.menu.class: Nodevo\MenuBundle\Entity\Menu
     nodevo_menu.form.menu.class: Nodevo\MenuBundle\Form\Type\MenuType
@@ -42,7 +45,7 @@ services:
 
     nodevo_menu.loader.breadcrumb.node:
         class: Nodevo\MenuBundle\Provider\BreadcrumbNodeLoader
-        arguments: ["@knp_menu.factory", "@security.context", "@service_container", "%nodevo_menu.loader.breadcrumb.rootNode%"]
+        arguments: ["@knp_menu.factory", "@security.context", "@service_container", "%nodevo_menu.options%"]
 
     nodevo_menu.provider:
         class: Nodevo\MenuBundle\Provider\MenuProvider

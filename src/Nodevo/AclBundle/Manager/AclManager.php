@@ -18,8 +18,9 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
  */
 class AclManager extends BaseManager
 {
-    protected $_class = '\Nodevo\AclBundle\Entity\Acl';
-    private $_container;
+    protected   $_class         = '\Nodevo\AclBundle\Entity\Acl';
+    private     $_container;
+    private     $_writeWords    = array();
 
     /**
      * Construct extension : we need to have the Container here
@@ -27,11 +28,30 @@ class AclManager extends BaseManager
      * @param EntityManager      $em        Entity Mangager de doctrine
      * @param ContainerInterface $container Container : permet d'appeller des services
      */
-    public function __construct( EntityManager $em, ContainerInterface $container )
+    public function __construct( EntityManager $em, ContainerInterface $container, $options = array() )
     {
         parent::__construct($em);
 
         $this->_container = $container;
+
+        $this->_setOptions($options);
+    }
+
+    /**
+    * Gère les options passées en paramètre
+    *
+    * @param options Tableau d'options
+    */
+    private function _setOptions($options = array())
+    {
+        if (isset($options['writeWords']) && is_array($options['writeWords']))
+        {
+            $this->_writeWords = $options['writeWords'];
+        }
+        else
+        {
+            $this->_writeWords = array();
+        }
     }
 
     /**
@@ -169,7 +189,7 @@ class AclManager extends BaseManager
         $wordFind = false;
 
         //check Write access
-        $writeWords = array('create', 'edit', 'delete', 'modify', 'new', 'update', 'add');
+        $writeWords = array_merge(array('create', 'edit', 'delete', 'modify', 'new', 'update', 'add'), $this->_writeWords);
         foreach($writeWords as $word) {
             if( strpos($url, $word) )
                 $wordFind = true;
@@ -177,16 +197,6 @@ class AclManager extends BaseManager
 
         if( $wordFind )
             return $acl->getWrite() ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_DENIED;
-        
-        //check Read access
-        $readWords = array('show', 'view', 'liste', 'list');
-        foreach( $readWords as $word ) {
-            if( strpos($url, $word) )
-                $wordFind = true;
-        }
-        
-        if( $wordFind )
-            return $acl->getRead() ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_DENIED;
 
         return $acl->getRead() ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_DENIED;
     }

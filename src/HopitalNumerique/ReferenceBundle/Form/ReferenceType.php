@@ -42,6 +42,8 @@ class ReferenceType extends AbstractType
                 'attr'       => array('class' => $this->_constraints['libelle']['class'] )
             ))
             ->add('code', 'text', array(
+                //'class'      => 'HopitalNumeriqueReferenceBundle:Reference',
+                //'property'   => 'code',
                 'max_length' => $this->_constraints['code']['maxlength'],
                 'required'   => true, 
                 'label'      => 'Code',

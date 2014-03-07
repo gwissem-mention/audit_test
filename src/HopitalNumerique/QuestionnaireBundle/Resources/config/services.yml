@@ -1,4 +1,7 @@
 parameters:
+    #Permet d'avoir une valeur par défaut et/ou d'etre surchargé par le config.yml de app/config
+    hopitalnumerique_questionnaire.options: ~
+    hopitalnumerique_questionnaire.options_config.class: HopitalNumerique\QuestionnaireBundle\Util\OptionsConfig
     #Questionnaire
     hopitalnumerique_questionnaire.manager.questionnaire.class: HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager
     hopitalnumerique_questionnaire.form.type.questionnaire: HopitalNumerique\QuestionnaireBundle\Form\Type\QuestionnaireType
@@ -10,11 +13,15 @@ parameters:
 #    hopitalnumerique_questionnaire.form.type.reponse: HopitalNumerique\QuestionnaireBundle\Form\Type\ReponseType
 
 services:
+    #--OptionsConfig
+    hopitalnumerique_questionnaire.options:
+        class: %hopitalnumerique_questionnaire.options_config.class%
+        arguments: ["%hopitalnumerique_questionnaire.options%"]
     #Questionnaire:
     #--Manager
     hopitalnumerique_questionnaire.manager.questionnaire:
         class: %hopitalnumerique_questionnaire.manager.questionnaire.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "%hopitalnumerique_questionnaire.options%"]
         calls:
             - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
     #--Type
