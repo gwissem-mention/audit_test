@@ -9,13 +9,14 @@
 
         <title>{% block title %}Mon Hôpital Numérique{% endblock %}</title>
 
-        <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
             {% stylesheets output="compiled/main-front.css" filter="cssrewrite"
                 'bundles/hopitalnumeriquecore/css/bootstrap.min.css'
                 'bundles/hopitalnumeriquecore/css/bootstrap-theme.min.css'
                 'bundles/hopitalnumeriquecore/css/layout.css'
+                'bundles/hopitalnumeriquecore/js/jqueryui.min.css'
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
@@ -24,6 +25,8 @@
         {% block javascripts %}
             {% javascripts output="compiled/main-front.js"
                 'bundles/hopitalnumeriquecore/js/jquery-1.11.0.min.js'
+                'bundles/hopitalnumeriquecore/js/jqueryui-1.10.3.min.js'
+                'bundles/hopitalnumeriquecore/js/jqueryui-fr.js'
                 'bundles/hopitalnumeriquecore/js/bootstrap.min.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -32,7 +35,7 @@
     </head>
 
     <body>
-        <div id="body">
+        <div class="row" id="body">
             <div id="header">
                 <a href="{{path('hopital_numerique_homepage')}}">
                     <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
@@ -48,6 +51,8 @@
                             <p>
                                 <i class="common-sprite common-sprite-user-red"></i>
                                 {{ app.user.prenom|capitalize }}
+                            </p>
+                            <p>
                                 <span class="nom">{{ app.user.nom|capitalize }}</span>
                             </p>
                         {% else %}
@@ -76,7 +81,7 @@
 
                 <div class="common-sprite common-sprite-header"></div>
             </div>
-            <div id="content">
+            <div class="col-md-12" id="content">
                 {% if app.request.attributes.get('_route') != 'hopital_numerique_homepage' %}
                     {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
                     <div class="clearfix"></div>
@@ -95,7 +100,7 @@
                 {% block body %}{% endblock %}
                 <div class="clearfix"></div>
             </div>
-            <div id="footer">
+            <div class="col-md-12" id="footer">
                 {{ knp_menu_render('menu-footer-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
             </div>
         </div>

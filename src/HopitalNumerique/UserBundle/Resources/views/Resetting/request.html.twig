@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block body %}
-    <div id="login">
+    <div class="col-md-8 col-md-offset-2" id="login">
         <h3>Mot de passe perdu ?</h3>
         <form action="{{ path("fos_user_resetting_send_email") }}" class="form-horizontal fos_user_resetting_request" method="post" >
             <div class="background-violet"></div>
@@ -32,34 +32,3 @@
         </form>
     </div>
 {% endblock %}
-
-
-
-
-
-
-
-{#}
-
-{% block body %}
-    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        <p style="text-align:center" >
-            {{ 'layout.logged_in_as'|trans({'%username%': app.user.username|capitalize }, 'FOSUserBundle') }} <br />
-            <a href="{{ path('homepage') }}">
-                Go to Homepage
-            </a><br />
-            <a href="{{ path('fos_user_security_logout') }}">
-                {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-            </a>
-        </p>
-    {% else %}
-        
-
-        
-            
-        
-        
-    {% endif %}
-{% endblock %}
-
-#}

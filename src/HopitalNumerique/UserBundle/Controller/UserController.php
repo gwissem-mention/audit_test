@@ -85,11 +85,11 @@ class UserController extends Controller
         $roles = $this->get('nodevo_role.manager.role')->findIn( $user->getRoles() );
 
         return $this->render('HopitalNumeriqueUserBundle:User:show.html.twig', array(
-            'user' => $user,
-            'questionnaireExpert' => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('expert'),
-            'questionnaireAmbassadeur' => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur'),
-            'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
-            'roles' => $roles
+            'user'                     => $user,
+            'questionnaireExpert'      => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('expert'),
+            'questionnaireAmbassadeur' => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur'),
+            'options'                  => $this->_gestionAffichageOnglet($user),
+            'roles'                    => $roles
         ));
     }
 
@@ -295,8 +295,21 @@ class UserController extends Controller
                     $mdp = str_shuffle($mdp);
                     $user->setPlainPassword( $mdp );
 
-                    $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserFromAdminMail($user);
-                    $this->get('mailer')->send($mail);
+                    //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
+                    if($this->get('security.context')->isGranted('ROLE_USER'))
+                    {
+                        //--BO--
+                        //set Role for User : not mapped field
+                        $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserFromAdminMail($user);
+                        $this->get('mailer')->send($mail);
+                    }
+                    else
+                    {
+                        //--FO--
+                        //Set du role "Enregistré" par défaut pour les utilisateurs
+                        $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserMail($user);
+                        $this->get('mailer')->send($mail);
+                    }
                 }
 
                 //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté

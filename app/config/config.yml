@@ -45,6 +45,7 @@ assetic:
         - HopitalNumeriqueObjetBundle
         - HopitalNumeriqueQuestionnaireBundle
         - HopitalNumeriqueAccountBundle
+        - HopitalNumeriqueRechercheBundle
         - FOSUserBundle
     filters:
         cssrewrite: ~
@@ -86,9 +87,11 @@ fos_user:
     from_email:
         address: admin@nodevo.com
         sender_name: Administrateur
+    service:
+        mailer: fos_user.mailer.twig_swift
     resetting:
         email:
-            template: FOSUserBundle:Resetting:email.txt.twig
+            template: HopitalNumeriqueUserBundle:Resetting:email.txt.twig
 
 #KNP Menu Bundle
 knp_menu:
