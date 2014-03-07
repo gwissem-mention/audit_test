@@ -128,7 +128,7 @@ class QuestionnaireController extends Controller
                     $tempReponse = $reponses->matching( $criteria );
                     
                     // -v-v-v- GME 26/02/2014 : Traitement brouillon, le array_shift ou reset ne fonctionne pas -v-v-v-
-                    $test = array();                    
+                    $test = array();                 
                     foreach ($tempReponse as $temp)
                     {
                         $test[] = $temp;
@@ -146,10 +146,21 @@ class QuestionnaireController extends Controller
                     }
                 
                     //Format du champ file
-                    $champFile = $questionFiles->getTypeQuestion()->getLibelle() . '_' . $questionFiles->getId() . '_' . $questionFiles->getAlias();                    
+                    $champFile = $questionFiles->getTypeQuestion()->getLibelle() . '_' . $questionFiles->getId() . '_' . $questionFiles->getAlias(); 
+
+                    $file = $form[$champFile]->getData();
+
+                    // Si le fichier n'est pas un pdf, on ne continue pas la validation du formulaire et on retourne sur celui-ci avec un message d'information
+                    if ($file && $file->getMimeType() !== "application/pdf")
+                    {
+                        $this->get('session')->getFlashBag()->add( ('danger') , 'Vous ne pouvez uploader que des fichiers pdf pour le '. $questionFiles->getAlias() . '.' );
+
+                        return $this->redirect( $request->headers->get('referer') );
+                    }
+
                     $files[$questionFiles->getAlias()] = array(
                             'nom'  => $questionnaire->getNomMinifie() . '_' . $user->getId() . '_' . $user->getNom() . '_' . $user->getPrenom() . '_' . $questionFiles->getAlias() . '.pdf',
-                            'file' => $form[$champFile]->getData(),
+                            'file' => $file,
                             'reponse' => $reponse
                     );
                     
