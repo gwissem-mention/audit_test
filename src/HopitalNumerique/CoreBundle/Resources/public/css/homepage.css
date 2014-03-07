@@ -18,8 +18,9 @@
 #homepage .home-right p{font-size: 13px; text-align: justify; margin:0;}
 
 #homepage .home-right .recherche{  }
-#homepage .home-right .recherche div{ background-color: #df0d4e; padding:150px 30px 30px 30px; }
-#homepage .home-right .recherche:hover div{ background-color: #CB072D; }
+#homepage .home-right .recherche .icone{  }
+#homepage .home-right .recherche > div{ background-color: #df0d4e; padding:150px 30px 30px 30px; }
+#homepage .home-right .recherche:hover > div{ background-color: #CB072D; }
 #homepage .home-right .recherche a{text-align: center; font-size: 24px; font-weight: bold; display: block; width: 100%; margin-bottom: 15px; color: #ffffff; text-transform: uppercase;}
 #homepage .home-right .forum{ }
 #homepage .home-right .forum div{ background-color: #b1138a; padding:150px 30px 30px 30px;}
