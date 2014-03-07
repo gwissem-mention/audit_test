@@ -1,6 +1,5 @@
 {% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
 
-
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-user-expert-edit.css" filter="cssrewrite"
@@ -30,5 +29,4 @@ blablabla
     <div class="col-md-8 col-md-offset-2">
         <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-6 pull-right submit" value="ENVOYER MA CANDIDATURE" />
     </div>
-    
 {% endblock %}

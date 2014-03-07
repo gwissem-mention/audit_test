@@ -31,12 +31,6 @@ class QuestionnaireController extends Controller
     private $routeRedirection = array();
     
     /**
-     * Affichage des champs du formulaire
-     * @var boolean
-     */
-    private $_estHorizontal;
-    
-    /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
      * 
      * @param HopiUser $user Utilisateur courant
@@ -45,13 +39,11 @@ class QuestionnaireController extends Controller
      * 
      * @return Ambigous <\HopitalNumerique\QuestionnaireBundle\Controller\Form, \Symfony\Component\HttpFoundation\RedirectResponse, \Symfony\Component\HttpFoundation\Response>
      */
-    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $routeRedirection = '', $estHorizontal = false)
+    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $routeRedirection = '')
     {      
         //Si le tableau n'est pas vide on le récupère
         if(!is_null($routeRedirection))
             $this->routeRedirection = $routeRedirection;
-        
-        $this->estHorizontal = $estHorizontal;
         
         return $this->_renderForm('nodevo_questionnaire_questionnaire',
                 array(
@@ -226,8 +218,7 @@ class QuestionnaireController extends Controller
         return $this->render( $view , array(
                 'form'          => $form->createView(),
                 'questionnaire' => $questionnaire,
-                'user'          => $user,
-                'estHorizontal' => $this->_estHorizontal
+                'user'          => $user
         ));
     }
     
