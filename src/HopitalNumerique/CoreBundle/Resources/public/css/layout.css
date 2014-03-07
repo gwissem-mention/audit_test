@@ -16,14 +16,14 @@ a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 
 
 /* HEADER */
 #header{ height: 93px; position:relative;}
-#header .common-sprite-header{ width: 1196px; height: 14px; background-position: -2px -15px; position: absolute; bottom: 0}
+#header .common-sprite-header{ width: 100%; height: 14px; background-position: -2px -15px; position: absolute; bottom: 0; overflow:hidden;}
 #header #logoAnap { margin:25px 78px 14px 55px;  }
 #header #titre{ margin-top: 27px; width: 350px;  }
 #header #titre h1, #header #titre h1 span{ font-size:25px; text-transform: uppercase; margin:0; padding: 0; font-family: 'Viga', sans-serif}
 #header #titre h2{ font-size: 11px; text-transform: uppercase; padding: 0; margin:0;}
 #header .connexion{position: absolute; right:0; bottom:0; z-index: 5}
 #header .connexion a{display: block; color:black;margin-right: 18px; text-transform: uppercase; font-size: 10px; width: 130px}
-#header .connexion a .common-sprite-user { width: 14px; height: 13px; background-position: -2px -33px; float: left; margin-right: 5px}
+#header .connexion a .common-sprite-user { width: 14px; height: 13px; background-position: -302px -33px; float: left; margin-right: 5px}
 #header .connexion a .common-sprite-close { width: 9px; height: 9px; background-position: -15px -2px; float: right; margin-left: 5px; margin-top:2px;}
 #header .loggedUser{width: 180px;height:79px;padding:13px 20px 10px 30px; position: relative;}
 #header .loggedUser p{font-size: 11px; margin-bottom: 0}
@@ -45,13 +45,14 @@ a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 
 #menu li.active a, #menu li a:hover{ color:#de0d4d;}
 
 /* ALERTES NODEVO - Flash messages */
+.alert{margin:10px 0 0 0;}
 .nalert-success { color: #333333; background-color: #b4dc00; border-color: #d6e9c6;}
 .nalert-success hr { border-top-color: #c9e2b3;}
 .nalert-success .alert-link {color: #2b542c;}
 .nalert-info {color: #31708f;background-color: #5d5d5d;border-color: #bce8f1;}
 .nalert-info hr {border-top-color: #a6e1ec;}
 .nalert-info .alert-link {color: #245269;}
-.nalert-warning {color: #8a6d3b; background-color: #6b309c; border-color: #faebcc;}
+.nalert-warning {color: #ffffff; background-color: #6b309c; border-color: #faebcc;}
 .nalert-warning hr { border-top-color: #f7e1b5;}
 .nalert-warning .alert-link {color: #66512c;}
 .nalert-danger {color: #a94442;background-color: #cb324e;border-color: #ebccd1;}

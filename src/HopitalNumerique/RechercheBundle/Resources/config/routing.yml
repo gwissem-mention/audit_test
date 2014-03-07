@@ -15,13 +15,13 @@ hopital_numerique_recherche_synthese:
 
 #URLs de publication (visualisation)
 hopital_numerique_recherche_publication_objet:
-    pattern:  /{id}-{alias}.{_format}
-    defaults: { _controller: "HopitalNumeriqueRechercheBundle:Publication:objet", id:1, alias:alias, _format : html }
+    pattern:  /{id}-{alias}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:Publication:objet", id:1, alias:alias }
     requirements:
         id: \d+
 
 hopital_numerique_recherche_publication_contenu:
     pattern:  /{id}-{alias}/{idc}-{aliasc}.{_format}
-    defaults: { _controller: "HopitalNumeriqueRechercheBundle:Publication:contenu", id:1, idc:1, alias:alias, aliasc:aliasc, _format : html }
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:Publication:contenu", id:1, idc:1, alias:alias, aliasc:aliasc}
     requirements:
         id: \d+
