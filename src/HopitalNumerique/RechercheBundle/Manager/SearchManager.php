@@ -158,6 +158,8 @@ class SearchManager extends BaseManager
         $item['titre']  = $contenu->getTitre();
         $item['nbRef']  = count($contenu->getReferences());
         $item['objet']  = $objet->getId();
+        $item['aliasO'] = $objet->getAlias();
+        $item['aliasC'] = $contenu->getAlias();
 
         //clean resume (pagebreak)
         $tab = explode('<!-- pagebreak -->', $contenu->getContenu());
@@ -201,6 +203,7 @@ class SearchManager extends BaseManager
         $item['titre']  = $objet->getTitre();
         $item['nbRef']  = count($objet->getReferences());
         $item['objet']  = null;
+        $item['alias']  = $objet->getAlias();
 
         //clean resume (pagebreak)
         $tab = explode('<!-- pagebreak -->', $objet->getResume() );

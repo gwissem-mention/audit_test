@@ -1,3 +1,4 @@
+# URLs de recherche
 hopital_numerique_recherche_homepage:
     pattern:  /
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index }
@@ -9,5 +10,18 @@ hopital_numerique_recherche_getresults:
 hopital_numerique_recherche_synthese:
     pattern:  /synthese/{id}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:Search:synthese", id:1 }
+    requirements:
+        id: \d+
+
+#URLs de publication (visualisation)
+hopital_numerique_recherche_publication_objet:
+    pattern:  /{id}-{alias}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:Publication:objet", id:1, alias:alias, _format : html }
+    requirements:
+        id: \d+
+
+hopital_numerique_recherche_publication_contenu:
+    pattern:  /{id}-{alias}/{idc}-{aliasc}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:Publication:contenu", id:1, idc:1, alias:alias, aliasc:aliasc, _format : html }
     requirements:
         id: \d+
