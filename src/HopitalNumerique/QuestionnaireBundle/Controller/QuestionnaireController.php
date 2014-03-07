@@ -31,15 +31,23 @@ class QuestionnaireController extends Controller
     private $routeRedirection = array();
     
     /**
+     * Theme du formulaire utilisé
+     * 
+     * @var string
+     */
+    private $themeFormulaire;
+    
+    /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
      * 
-     * @param HopiUser $user Utilisateur courant
-     * @param HopiQuestionnaire $questionnaire Questionnaire à afficher
-     * @param json $routeRedirection Tableau de la route de redirection une fois que le formulaire est validé
+     * @param HopiUser          $user               Utilisateur courant
+     * @param HopiQuestionnaire $questionnaire      Questionnaire à afficher
+     * @param json              $routeRedirection   Tableau de la route de redirection une fois que le formulaire est validé
+     * @param string            $themeQuestionnaire Theme de formulaire utilisé
      * 
      * @return Ambigous <\HopitalNumerique\QuestionnaireBundle\Controller\Form, \Symfony\Component\HttpFoundation\RedirectResponse, \Symfony\Component\HttpFoundation\Response>
      */
-    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $routeRedirection = '')
+    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $routeRedirection = '', $themeQuestionnaire)
     {      
         //Si le tableau n'est pas vide on le récupère
         if(!is_null($routeRedirection))
