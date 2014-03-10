@@ -47,6 +47,7 @@ class PublicationController extends Controller
 
         //on récupère le contenu
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array( 'id' => $idc ) );
+        $prefix  = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu);
 
         //Types objet
         $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
@@ -60,6 +61,7 @@ class PublicationController extends Controller
             'contenus' => $contenus,
             'types'    => $types,
             'contenu'  => $contenu,
+            'prefix'   => $prefix,
             'meta'     => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() )
         ));
     }

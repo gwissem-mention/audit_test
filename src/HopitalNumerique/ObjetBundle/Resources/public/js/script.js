@@ -1,22 +1,4 @@
 $(document).ready(function() {
-    //Custom initialisation : Ce champ est particulier car on doit directement manipuler l'affichage des données au chargement 
-    //$("#hopitalnumerique_objet_objet_types").select2();
-
-    // //si il y a des valeurs par défaut
-    // if( $("#hopitalnumerique_objet_objet_types").select2('data').length >= 1 )
-    //     manageOptionDisabled( $("#hopitalnumerique_objet_objet_types").select2('data')[0] );
-
-    // //Sélection d'un element dans la liste déroulante implique le Disable de certains attributs
-    // $("#hopitalnumerique_objet_objet_types").on("change", function(e) {
-    //     //Si on AJOUTE un ELEMENT
-    //     if ( e.added )
-    //         manageOptionDisabled( e.added );
-            
-    //     //si aucun element dans la liste : select All
-    //     if( e.val.length === 0 )
-    //         $("#hopitalnumerique_objet_objet_types option").attr('disabled',false);
-    // });
-
     tinymce.PluginManager.load('table', '/bundles/nodevoadmin/plugins/tinymce/plugins/table/plugin.min.js');
     tinymce.PluginManager.load('code', '/bundles/nodevoadmin/plugins/tinymce/plugins/code/plugin.min.js');
     tinymce.PluginManager.load('pagebreak', '/bundles/nodevoadmin/plugins/tinymce/plugins/pagebreak/plugin.min.js');
@@ -109,8 +91,6 @@ $(document).ready(function() {
     $('#sommaire').nestable({'maxDepth':10,'group':0}).on('change', function() {
         var serializedDatas = $(this).nestable('serialize');
 
-        //console.log( serializedDatas );
-
         $.ajax({
             url  : $('#reorder-objet-url').val(),
             data : {
@@ -148,20 +128,6 @@ $(document).ready(function() {
         }
     });
 });
-
-// Gère les options disable en fonction de l'origine (element ajouté ou initialisation du select)
-// function manageOptionDisabled( origin )
-// {
-//     //si on a sélectionné un élément enfant : on lock tous les éléments parents
-//     if( origin.element[0].parentElement.tagName == 'OPTGROUP') {
-//         $("#hopitalnumerique_objet_objet_types > option").attr('disabled','disabled');
-//         $("#hopitalnumerique_objet_objet_types > optgroup > option").attr('disabled',false);
-//     //sinon, on a sélectionné un élément parent : on lock tous les enfants
-//     }else{
-//         $("#hopitalnumerique_objet_objet_types option").attr('disabled','disabled');
-//         $("#hopitalnumerique_objet_objet_types > option:selected").attr('disabled',false);
-//     }
-// }
 
 //met un loader sur le formulaire et sauvegarde automatiquement le formulaire objet
 function saveAutomatique()

@@ -98,8 +98,35 @@ class ContenuManager extends BaseManager
         return $this->getRepository()->countContenu($objet)->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * Retourne le prefix du contenu
+     *
+     * @param Contenu $contenu Contenu
+     *
+     * @return string
+     */
+    public function getPrefix($contenu)
+    {
+        return $this->_getPrefix( $contenu, '' );
+    }
 
+    /**
+     * Retourne le prefix du contenu
+     *
+     * @param Contenu $contenu Contenu
+     * @param string  $prefix  Prefix
+     *
+     * @return string
+     */
+    private function _getPrefix( $contenu, $prefix )
+    {
+        $prefix = $contenu->getOrder() . '.' . $prefix;
 
+        if( !is_null($contenu->getParent()) )
+            $prefix = $this->_getPrefix($contenu->getParent(), $prefix);
+        
+        return $prefix;
+    }
 
 
 
@@ -183,6 +210,7 @@ class ContenuManager extends BaseManager
             $item->id         = $element->getId();
             $item->references = count($element->getReferences());
             $item->order      = $chapitre;
+            $item->hasContent = $element->getContenu() == '' ? false : true;
 
             //add childs : filter items with current element
             $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $element ))->orderBy(array("order"=>Criteria::ASC));

@@ -8,8 +8,13 @@
 #sommaire h3{font-size: 18px;margin-top: 10px; }
 #sommaire .content ul{list-style: none;}
 #sommaire .content > ul{padding:0;}
-#sommaire .content ul li a{color: #777777; font-size: 12px}
-#sommaire .content > ul > li > a{color: #6f3596; font-weight: bold; }
+
+#sommaire .content ul li a, 
+#sommaire .content ul li p
+    {color: #777777; font-size: 12px}
+#sommaire .content > ul > li > a, 
+#sommaire .content > ul > li > p
+    {color: #6f3596; font-weight: bold; }
 
 /* Bloc publication*/
 #publication{margin-top: 20px}
