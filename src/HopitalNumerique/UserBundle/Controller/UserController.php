@@ -213,21 +213,34 @@ class UserController extends Controller
     public function ExportCsvAction( $primaryKeys, $allPrimaryKeys )
     {
         //get all selected Users
-        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+		if($allPrimaryKeys == 1)
+			$users = $this->get('hopitalnumerique_user.manager.user')->findAll();
+		else
+			$users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
 
-        $colonnes = array( 
-                            'id'                  => 'ID', 
+        // Pour Excel Windows, les deux premiers caractères doivent être en minuscules,
+		// sinon le fichier est reconnu en tant que fichier SYLK.
+		//
+		// Un fichier SYLK est un fichier texte qui commence par « ID » ou « ID_xxxx »,
+		// où xxxx est une chaîne de texte. Le premier enregistrement d'un fichier
+		// SYLK est ID_Number. Lorsqu'Excel identifie ce texte au début d'un fichier texte,
+		// il interprète le fichier en tant que fichier SYLK. Excel essaie de convertir
+		// le fichier à partir du format SYLK, mais il n'y parvient pas car aucun code
+		// SYLK ne figure après les caractères « ID ». Étant donné qu'Excel ne peut pas
+		// convertir le fichier, le message d'erreur d'affiche. 
+		$colonnes = array( 
+                            'id'                  => 'id', 
                             'nom'                 => 'Nom', 
-                            'prenom'              => 'Pr&eacute;nom', 
+                            'prenom'              => 'Prénom', 
                             'username'            => 'Nom d\'utilisateur', 
                             'email'               => 'Adresse e-mail',
                             'etat.libelle'        => 'Etat',
-                            'region.libelle'      => 'R&eacute;gion',
+                            'region.libelle'      => 'Région',
                             'titre.libelle'       => 'Titre',
-                            'civilite.libelle'    => 'Civilit&eacute;',
-                            'telephoneDirect'     => 'T&eacute;l&eacute;phone Direct',
-                            'telephonePortable'   => 'T&eacute;l&eacute;phone Portable',
-                            'departement.libelle' => 'D&eacute;partement'
+                            'civilite.libelle'    => 'Civilité',
+                            'telephoneDirect'     => 'Téléphone Direct',
+                            'telephonePortable'   => 'Téléphone Portable',
+                            'departement.libelle' => 'Département'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
