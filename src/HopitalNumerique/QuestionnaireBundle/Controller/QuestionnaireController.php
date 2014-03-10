@@ -47,8 +47,12 @@ class QuestionnaireController extends Controller
      * 
      * @return Ambigous <\HopitalNumerique\QuestionnaireBundle\Controller\Form, \Symfony\Component\HttpFoundation\RedirectResponse, \Symfony\Component\HttpFoundation\Response>
      */
-    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $routeRedirection = '', $themeQuestionnaire = 'horizontal')
+    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $optionRenderForm = array())
     {      
+        $readOnly           = array_key_exists('readOnly', $optionRenderForm) ? $optionRenderForm['readOnly'] : false;
+        $routeRedirection   = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect'] : '';
+        $themeQuestionnaire = array_key_exists('themeQuestionnaire', $optionRenderForm) ? $optionRenderForm['themeQuestionnaire'] : 'default';
+        
         //Si le tableau n'est pas vide on le récupère
         if(!is_null($routeRedirection))
             $this->_routeRedirection = $routeRedirection;
@@ -59,7 +63,8 @@ class QuestionnaireController extends Controller
         return $this->_renderForm('nodevo_questionnaire_questionnaire',
                 array(
                         'questionnaire'    => $questionnaire,
-                        'user'             => $user
+                        'user'             => $user,
+                        'readOnly'         => $readOnly
                 ) ,
                 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit.html.twig'
         );
@@ -82,6 +87,7 @@ class QuestionnaireController extends Controller
     private function _renderForm( $formName, $options, $view )
     {
         $user             = $options['user'];
+        $readOnly         = $options['readOnly'];
         $questionnaire    = $options['questionnaire'];
     
         //Création du formulaire via le service
@@ -89,7 +95,8 @@ class QuestionnaireController extends Controller
                 'label_attr' => array(
                         'idUser'           => $user->getId(),
                         'idQuestionnaire'  => $questionnaire->getId(),
-                        'routeRedirection' => $this->_routeRedirection 
+                        'routeRedirection' => $this->_routeRedirection,
+                        'readOnly'         => $readOnly 
                 )
         ));
         
@@ -181,12 +188,14 @@ class QuestionnaireController extends Controller
         
                     $reponses[] = $file['reponse'];
                 }
+                
+                \Doctrine\Common\Util\Debug::dump($reponses);die("die");
                     
                 //Mise à jour / créations des réponses correspondantent aux fichiers
                 $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );
                 
                 //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
-                $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
+                $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), false );
                 
                 //Gestion des réponses
                 foreach ($params as $key => $param)

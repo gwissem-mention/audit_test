@@ -46,6 +46,9 @@ class ReponseManager extends BaseManager
     
     /**
      * Récupère les réponses pour l'utilisateur en fonction du questionnaire passés en param
+     * 
+     * @param int $idExpert      Identifiant du questionnaire expert
+     * @param int $idAmbassadeur Identifiant du questionnaire ambassadeur
      *
      * @return array Tableau sous la forme array(utilisateur => array(questionnaireId))
      */

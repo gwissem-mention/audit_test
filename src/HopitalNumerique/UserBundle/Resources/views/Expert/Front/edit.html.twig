@@ -30,10 +30,13 @@
 {% block contenu %}
     <div class="panel">
 		{# Include des données de contractualisation #}
-	    {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'routeRedirection' : routeRedirect, 'themeQuestionnaire' : themeQuestionnaire} )) }}
+	    {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
 	
-	    <div class="col-md-10 col-md-offset-2">
-	        <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit" value="ENVOYER MA CANDIDATURE" />
-	    </div>
+        {% if optionRenderForm.readOnly == false  %}
+		    <div class="col-md-10 col-md-offset-2">
+		        <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit questionnaire_submit" value="ENVOYER MA CANDIDATURE" />
+		    </div>
+			<div class="clearfix"></div>
+		{% endif %}
     </div>
 {% endblock %}
