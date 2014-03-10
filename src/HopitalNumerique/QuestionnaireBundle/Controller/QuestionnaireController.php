@@ -109,7 +109,7 @@ class QuestionnaireController extends Controller
             $form->handleRequest($request);
             
             $routeRedirection = json_decode($form["routeRedirect"]->getData(), true);
-            
+
             //si le formulaire est valide
             if ($form->isValid()) {
     
@@ -125,7 +125,7 @@ class QuestionnaireController extends Controller
                 
                 //get All References, and convert to ArrayCollection
                 $reponses = new ArrayCollection( $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUserByFileQuestion( $questionnaire->getId(), $user->getId(), false ) );
-                
+
                 //Parcourt les questions de champ file
                 foreach ($questionsFiles as $key => $questionFiles)
                 {   
@@ -156,7 +156,6 @@ class QuestionnaireController extends Controller
                     $champFile = $questionFiles->getTypeQuestion()->getLibelle() . '_' . $questionFiles->getId() . '_' . $questionFiles->getAlias(); 
 
                     $file = $form[$champFile]->getData();
-
                     // Si le fichier n'est pas un pdf, on ne continue pas la validation du formulaire et on retourne sur celui-ci avec un message d'information
                     if ($file && $file->getMimeType() !== "application/pdf")
                     {

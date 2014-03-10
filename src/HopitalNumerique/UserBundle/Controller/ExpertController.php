@@ -40,7 +40,7 @@ class ExpertController extends Controller
         //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
         $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
         
-        $themeQuestionnaire = 'vertical';
+        $themeQuestionnaire = empty($reponses) ? 'vertical' : 'vertical_readonly';
     
         return $this->render('HopitalNumeriqueUserBundle:Expert/Front:edit.html.twig',array(
                 'questionnaire'      => $questionnaire,

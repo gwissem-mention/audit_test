@@ -55,7 +55,7 @@ a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 
 .nalert-warning {color: #ffffff; background-color: #6b309c; border-color: #faebcc;}
 .nalert-warning hr { border-top-color: #f7e1b5;}
 .nalert-warning .alert-link {color: #66512c;}
-.nalert-danger {color: #a94442;background-color: #cb324e;border-color: #ebccd1;}
+.nalert-danger {color: #ffffff;background-color: #cb324e;border-color: #ebccd1;}
 .nalert-danger hr {border-top-color: #e4b9c0;}
 .nalert-danger .alert-link {color: #843534;}
 

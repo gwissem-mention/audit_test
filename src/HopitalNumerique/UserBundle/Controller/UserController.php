@@ -29,10 +29,41 @@ class UserController extends Controller
             //Récupération de l'utilisateur passé en param
             $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
              
-            return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:inscription.html.twig');
+            return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User/Front:inscription.html.twig');
         }
     
         return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+    }
+    
+    /**
+     * Affichage du formulaire d'utilisateur
+     * 
+     * @param integer $id Identifiant de l'utilisateur
+     */
+    public function informationsPersonnellesAction( )
+    {        
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
+        $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
+
+        $themeQuestionnaire = empty($reponses) ? 'vertical' : 'vertical_readonly';
+
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur/Front:edit.html.twig',array(
+            'questionnaire'      => $questionnaire,
+            'user'               => $user,
+            'optionRenderForm'   => array(
+                'readOnly'           => !empty($reponses),
+                'themeQuestionnaire' => $themeQuestionnaire,
+                'routeRedirect'      => json_encode(array(
+                    'quit' => array(
+                        'route'     => 'hopital_numerique_homepage',
+                        'arguments' => array()
+                    )
+                ))
+            )
+        ));
     }
     
 
@@ -284,10 +315,7 @@ class UserController extends Controller
                 }
             }
             else
-            {
-                //L'username = l'adresse mail de l'utilisateur
-                $user->setUsername($user->getEmail());
-                
+            {                
                 //Set de l'état
                 $idEtatActif = intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif'));
                 $user->setEtat($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $idEtatActif)));
