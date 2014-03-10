@@ -103,7 +103,7 @@ class QuestionnaireType extends AbstractType
         
         //Création des questions
         foreach ($questions as $question)
-        {        
+        {                    
             $reponses = $question->getReponses();
             $reponseCourante = $reponses[0];
             

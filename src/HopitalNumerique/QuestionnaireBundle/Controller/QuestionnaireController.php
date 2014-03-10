@@ -188,14 +188,12 @@ class QuestionnaireController extends Controller
         
                     $reponses[] = $file['reponse'];
                 }
-                
-                \Doctrine\Common\Util\Debug::dump($reponses);die("die");
                     
                 //Mise à jour / créations des réponses correspondantent aux fichiers
                 $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );
                 
                 //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
-                $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), false );
+                $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
                 
                 //Gestion des réponses
                 foreach ($params as $key => $param)
