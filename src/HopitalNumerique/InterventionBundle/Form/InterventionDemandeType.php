@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\InterventionBundle\Form\UserType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Formulaire d'une demande d'intervention.
@@ -21,7 +22,11 @@ class InterventionDemandeType extends AbstractType
      * @var \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      */
     protected $container;
-
+    /**
+     * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
+     */
+    protected $utilisateurConnecte;
+    
     /**
      * Constructeur du formulaire de demande d'intervention.
      * 
@@ -31,6 +36,7 @@ class InterventionDemandeType extends AbstractType
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->utilisateurConnecte = $this->container->get('security.context')->getToken()->getUser();
     }
 
     /**
@@ -39,7 +45,6 @@ class InterventionDemandeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        
         $builder
             //->add('referent', $this->container->get('hopitalnumerique_intervention.type.user'))
             ->add(
@@ -62,7 +67,7 @@ class InterventionDemandeType extends AbstractType
                     'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
                     'property' => 'nom',
                     'multiple' => true,
-                    'label' => 'Rattacher d\'autres établissements à ma demande, parmi',
+                    'label' => 'Attacher d\'autres établissements à ma demande, parmi',
                     'required' => false,
                     'attr' => array(
                         'class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements'
@@ -96,7 +101,7 @@ class InterventionDemandeType extends AbstractType
                 'autresEtablissements',
                 'textarea',
                 array(
-                    'label' => 'Rattacher d\'autres établissements à ma demande',
+                    'label' => 'Attacher d\'autres établissements à ma demande',
                     'required' => false
                 )
             )

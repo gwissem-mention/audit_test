@@ -963,4 +963,13 @@ class User extends BaseUser
     {
         return $this->hasRole(Role::$ROLE_AMBASSADEUR_LABEL);
     }
+    /**
+     * Retourne les prénom et nom de l'utilisateur avec sa civilité.
+     * 
+     * @return string Appelation de l'utilisateur
+     */
+    public function getAppellation()
+    {
+        return ($this->civilite != null ? $this->civilite->getLibelle().' ' : '').$this->prenom.' '.$this->nom;
+    }
 }

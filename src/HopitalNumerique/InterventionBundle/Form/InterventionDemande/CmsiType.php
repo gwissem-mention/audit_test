@@ -38,8 +38,11 @@ class CmsiType extends InterventionDemandeType
         $builder
             ->add(
                 'etablissements',
-                'choice',
+                'entity',
                 array(
+                    'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_etablissement')->getEtablissementsChoices(),
+                    'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
+                    'property' => 'nom',
                     'multiple' => true,
                     'label' => 'Rattacher des établissements à ma demande, parmi',
                     'required' => false,

@@ -7,6 +7,7 @@
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
  * Manager pour les établissements utilisés dans les formulaires des demandes d'intervention.
@@ -32,11 +33,16 @@ class EtablissementManager
     /**
      * Retourne la liste des établissements pour les listes de formulaire.
      *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference|null $region Région des établissements à récupérer
      * @return array Liste des établissements pour les listes de formulaire
      */
-    public function getEtablissementsChoices()
+    public function getEtablissementsChoices(Reference $region = null)
     {
-        $etablissements = $this->container->get('hopitalnumerique_etablissement.manager.etablissement')->findAll();
+        $etablissementsFiltre = array();
+        if ($region != null)
+            $etablissementsFiltre['region'] = $region;
+        
+        $etablissements = $this->container->get('hopitalnumerique_etablissement.manager.etablissement')->findAll($etablissementsFiltre);
 
         return $etablissements;
     }
