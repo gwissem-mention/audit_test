@@ -15,18 +15,12 @@ class PublicationController extends Controller
     {
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
 
-        //test si l'user connecté à le rôle requis pour voir la synthèse
-        $role = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
-        if( !$this->get('hopitalnumerique_objet.manager.objet')->checkAccessToObjet($role, $objet) ){
-            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas accès à cette publication.' );
+        //Si l'user connecté à le rôle requis pour voir l'objet
+        if( $this->_checkAuthorization( $objet ) === false )
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
-        }
-
+        
         //Types objet
-        $type  = array();
-        $types = $objet->getTypes();
-        foreach ($types as $one)
-            $type[] = $one->getLibelle();
+        $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
 
         //get Contenus : for sommaire
         $contenus = $objet->getIsInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
@@ -34,8 +28,9 @@ class PublicationController extends Controller
         //render
         return $this->render('HopitalNumeriqueRechercheBundle:Publication:objet.html.twig', array(
             'objet'    => $objet,
-            'types'    => implode(' ♦ ', $type),
-            'contenus' => $contenus
+            'types'    => $types,
+            'contenus' => $contenus,
+            'meta'     => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() )
         ));
     }
 
@@ -44,14 +39,17 @@ class PublicationController extends Controller
      */
     public function contenuAction($id, $alias, $idc, $aliasc)
     {
-        $objet   = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
+        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
+
+        //Si l'user connecté à le rôle requis pour voir l'objet
+        if( $this->_checkAuthorization( $objet ) === false )
+            return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+
+        //on récupère le contenu
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array( 'id' => $idc ) );
 
         //Types objet
-        $type  = array();
-        $types = $objet->getTypes();
-        foreach ($types as $one)
-            $type[] = $one->getLibelle();
+        $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
 
         //get Contenus : for sommaire
         $contenus = $objet->getIsInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
@@ -60,8 +58,52 @@ class PublicationController extends Controller
         return $this->render('HopitalNumeriqueRechercheBundle:Publication:objet.html.twig', array(
             'objet'    => $objet,
             'contenus' => $contenus,
-            'types'    => implode(' ♦ ', $type),
-            'contenu'  => $contenu
+            'types'    => $types,
+            'contenu'  => $contenu,
+            'meta'     => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() )
         ));
+    }
+
+
+
+
+
+
+
+
+    
+
+    /**
+     * Vérifie que l'objet est accessible à l'user connecté ET que l'objet est toujours bien publié
+     *
+     * @param Objet $objet L'objet
+     *
+     * @return boolean
+     */
+    private function _checkAuthorization( $objet )
+    {
+        $role = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+
+        //test si l'user connecté à le rôle requis pour voir l'objet
+        if( !$this->get('hopitalnumerique_objet.manager.objet')->checkAccessToObjet($role, $objet) ) {
+            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas accès à cette publication.' );
+            return false;
+        }
+
+        $today = new \DateTime();
+
+        //test si l'objet est publié
+        if( !is_null($objet->getDateDebutPublication()) && $today < $objet->getDateDebutPublication() ){
+            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas accès à cette publication.' );
+            return false;
+        }
+
+        //test si l'objet est toujours publié
+        if( !is_null($objet->getDateFinPublication()) && $today > $objet->getDateFinPublication() ){
+            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas accès à cette publication.' );
+            return false;
+        }
+
+        return true;
     }
 }

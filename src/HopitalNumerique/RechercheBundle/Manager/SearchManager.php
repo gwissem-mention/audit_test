@@ -50,7 +50,7 @@ class SearchManager extends BaseManager
             //si on a filtré sur la catégorie
             if( isset($references['categ'.$i]) ) {
                 //on récupères tous les objets, on les formate et on les ajoute à nos catégories
-                $results = $this->_refObjetManager->findBy( array('reference' => $references['categ'.$i]) );
+                $results = $this->_refObjetManager->getObjetsForRecherche( $references['categ'.$i] );
                 if( $results ){
                     $tmp = array();
                     foreach( $results as $one) {
@@ -64,7 +64,7 @@ class SearchManager extends BaseManager
                 }
                 
                 //on récupères tous les contenus (infradoc), on les formate et on les ajoute à nos catégories
-                $results = $this->_refContenuManager->findBy( array('reference' => $references['categ'.$i]) );
+                $results = $this->_refContenuManager->getContenusForRecherche( $references['categ'.$i] );
                 if( $results ) {
                     $tmp = array();
                     foreach( $results as $one) {
@@ -105,7 +105,31 @@ class SearchManager extends BaseManager
         return $fusion;
     }
 
+    /**
+     * GetMeta (desc+keywords) : for référencement
+     *
+     * @param array  $references Liste des références
+     * @param string $desc       Resume|contenu
+     *
+     * @return array
+     */
+    public function getMetas($references, $desc )
+    {
+        $meta = array();
 
+        //description
+        $tab          = explode('<!-- pagebreak -->', $desc);
+        $meta['desc'] = html_entity_decode(strip_tags($tab[0]));
+
+        //keywords
+        $meta['keywords'] = array();
+        foreach ($references as $reference) {
+            $ref                = $reference->getReference();
+            $meta['keywords'][] = $ref->getLibelle();
+        }
+
+        return $meta;
+    }
 
 
 

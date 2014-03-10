@@ -174,6 +174,25 @@ class ObjetManager extends BaseManager
 
         return true;
     }
+    
+    /**
+     * Formatte les types d'objet sous forme d'une chaine de caractère avec le séparateur $sep
+     *
+     * @param array  $types Types de l'objet
+     * @param string $sep   Séparateur pour l'implode
+     *
+     * @return string
+     */
+    public function formatteTypes( $types, $sep = ' ♦ ' )
+    {
+        $tabType  = array();
+        foreach ($types as $type)
+            $tabType[] = $type->getLibelle();
+
+        return implode($sep, $tabType);
+    }
+
+
 
 
 
