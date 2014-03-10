@@ -34,13 +34,13 @@ INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `i
 INSERT INTO `wwwhopitalnumeriquecom`.`core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES (NULL, NULL, '4', 'Candidature pour devenir ambassadeur', 'hopitalnumerique_user_ambassadeur_front_edit', NULL, NULL, NULL, NULL, '1', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '8');
 INSERT INTO `wwwhopitalnumeriquecom`.`core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES (NULL, NULL, '4', 'Candidature pour devenir expert', 'hopitalnumerique_user_expert_front_edit', NULL, NULL, NULL, NULL, '1', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '9');
 
-
-
-
-
-
-
-
+/* GME - 10/03/2014
+   DEV -> PROD
+   Modifs questionnaire*/
+UPDATE `wwwhopitalnumeriquecom`.`hn_questionnaire_question` SET `que_ordre` = '6' WHERE `hn_questionnaire_question`.`que_id` =16;
+UPDATE `wwwhopitalnumeriquecom`.`hn_questionnaire_question` SET `que_ordre` = '3' WHERE `hn_questionnaire_question`.`que_id` =17;
+UPDATE `wwwhopitalnumeriquecom`.`hn_questionnaire_question` SET `que_ordre` = '4' WHERE `hn_questionnaire_question`.`que_id` =18;
+UPDATE `wwwhopitalnumeriquecom`.`hn_questionnaire_question` SET `que_ordre` = '5' WHERE `hn_questionnaire_question`.`que_id` =19;
 
 /* RLE - 07/03/2014
    DEV -> PROD
@@ -346,8 +346,6 @@ INSERT INTO `core_mail` (
 VALUES (
 '7', '[HOPITALNUMERIQUE] - Demande d''intervention refusée par le CMSI', 'Demande d''intervention refusée par le CMSI', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention a été refusée. %c Cordialement,'
 );
-
-
 
 
 
