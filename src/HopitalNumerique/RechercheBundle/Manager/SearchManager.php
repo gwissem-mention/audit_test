@@ -31,21 +31,13 @@ class SearchManager extends BaseManager
     /**
      * Retourne la liste des objets concernés par la requete de recherche
      *
-     * @param array $references Liste des références sélectionées
-     * @param User  $user       User connecté
+     * @param array  $references Liste des références sélectionées
+     * @param string $role       Role de l'user connecté
      *
      * @return array
      */
-    public function getObjetsForRecherche( $references, $user )
+    public function getObjetsForRecherche( $references, $role )
     {
-        if( $user === 'anon.')
-            $role = 'ROLE_ANONYME_10';
-        else{
-            //on récupère le rôle de l'user connecté
-            $roles = $user->getRoles();
-            $role  = $roles[0];
-        }
-
         //prepare some vars
         $nbCateg             = 4;
         $objets              = array();

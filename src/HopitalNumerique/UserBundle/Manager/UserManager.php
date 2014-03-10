@@ -16,9 +16,9 @@ class UserManager extends BaseManager
     {
         parent::__construct($managerUser);
         //Récupération des managers Réponses et Questionnaire
-        $this->_managerReponse = $managerReponse;
+        $this->_managerReponse       = $managerReponse;
         $this->_managerQuestionnaire = $managerQuestionnaire;
-        $this->_options = array();
+        $this->_options              = array();
     }
     
     /**

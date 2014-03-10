@@ -8,13 +8,123 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-recherche-publication-index.css" filter="cssrewrite"
         'bundles/hopitalnumeriquerecherche/css/publication.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 {% endblock %}
 
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-recherche-publication-index.js"
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        'bundles/hopitalnumeriquerecherche/js/publication.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block body %}
-    <div id="publication">
+    {% if objet.isInfraDoc %}
+        <div id="sommaire" class="closed">
+            <div class="content" style="display:none">
+                <a class="resume" href="{{path('hopital_numerique_recherche_publication_objet', {'id':objet.id,'alias':objet.alias})}}">Resume</a>
+                <h3 class="violet">Sommaire</h3>
+                <ul>
+                    {% for contenu in contenus %}
+                        {{ _self.buildTree(contenu, objet) }}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div id="publication" class="with-sommaire">
+    {% else %}
+        <div id="publication">
+    {% endif %}
+        <div class="col-md-12">
+            <h4 class="violet" >{{types}}</h4>
+        </div>
+        {# Cas Objet #}
+        {% if contenu is defined %}
+            <div class="col-md-12">
+                <h3>{{contenu.titre}}</h3>
+            </div>
+            
+            <div class="col-md-12">
+                {{contenu.contenu|raw}}
+            </div>
+        {% else %}
+            <div class="col-md-12">
+                <h3>{{objet.titre}}</h3>
+            </div>
+            
+            <div class="col-md-12">
+                {{objet.resume|raw}}
+            </div>
+        {% endif %}
+
+        {# Téléchargement fichier + synthèse #}
+        <div class="col-md-4">
+            <div class="wrapper">
+                {% if objet.getAbsolutePath(true) is not null %}
+                    <a class="downloadLink readmore" href="/{{objet.getWebPath(true)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Téléchargement</span> du fichier de l’objet <i class="fa fa-download violet"></i> </a>
+                {% endif %}
+
+                <div class="clearfix"></div>
+                {% if objet.getAbsolutePath(false) is not null %}
+                    <a class="downloadLink readmore" href="/{{objet.getWebPath(false)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Téléchargement</span> du fichier de l’objet <i class="fa fa-download violet"></i> </a>
+                {% endif %}
+                
+                <div class="clearfix"></div>
+                {% if objet.synthese is not null %}
+                    <a class="downloadLink readmore synthese fancybox.ajax" href="{{path('hopital_numerique_recherche_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Prod utile ? #}
+        <div class="col-md-4">
+            <div class="wrapper" >
+                
+            </div>
+        </div>
+
+        {# Commentaires #}
+        {#<div class="col-md-12 commentaires">
+            <h5>3 commentaires</h5>
+        </div>#}
         
+        {# Autres résultats de recherche#}
+        <div class="col-md-12 autresResultats">
+            <h5>Autres résultats de votre requête de recherche</h5>
+            <div class="col-md-6">
+                
+            </div>
+            <div class="col-md-6">
+                
+            </div>
+            <div class="col-md-6">
+                
+            </div>
+            <div class="col-md-6">
+                
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
     </div>
 {% endblock %}
+
+
+{% macro buildTree(contenu, objet) %}
+    <li>
+        <a href="{{path('hopital_numerique_recherche_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':contenu.id,'aliasc':contenu.alias})}}" class="fancybox.ajax" >{{contenu.order ~ ' ' ~ contenu.titre}}</a>
+        {% if contenu.childs %}
+            <ul>
+                {% for child in contenu.childs %}
+                    {{ _self.buildTree(child, objet) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endmacro %}

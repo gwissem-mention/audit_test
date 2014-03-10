@@ -25,11 +25,11 @@ class SearchController extends Controller
      */
     public function getResultsAction()
     {
-        //On récupère l'user connecté et son role
-        $user = $this->get('security.context')->getToken()->getUser();
+        //On récupère le role de l'user connecté
+        $role = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
 
         $references = $this->get('request')->request->get('references');
-        $objets     = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $user );
+        $objets     = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role );
         
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(
             'objets' => $objets
@@ -44,15 +44,7 @@ class SearchController extends Controller
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
 
         //test si l'user connecté à le rôle requis pour voir la synthèse
-        $user  = $this->get('security.context')->getToken()->getUser();
-        if( $user === 'anon.')
-            $role = 'ROLE_ANONYME_10';
-        else{
-            //on récupère le rôle de l'user connecté
-            $roles = $user->getRoles();
-            $role  = $roles[0];
-        }
-
+        $role   = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
         $params = array();
         if( $this->get('hopitalnumerique_objet.manager.objet')->checkAccessToObjet($role, $objet) )
             $params['objet'] = $objet;

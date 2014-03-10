@@ -184,6 +184,10 @@ class ObjetManager extends BaseManager
 
 
 
+
+
+
+
     /**
      * Réarrange les objets pour afficher correctement les types
      *

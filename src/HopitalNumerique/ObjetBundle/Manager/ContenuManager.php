@@ -179,6 +179,7 @@ class ContenuManager extends BaseManager
             //construction de l'element current
             $item             = new \stdClass;
             $item->titre      = $element->getTitre();
+            $item->alias      = $element->getAlias();
             $item->id         = $element->getId();
             $item->references = count($element->getReferences());
             $item->order      = $chapitre;

@@ -13,10 +13,29 @@ class PublicationController extends Controller
      */
     public function objetAction($id, $alias)
     {
-        
+        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
 
+        //test si l'user connecté à le rôle requis pour voir la synthèse
+        $role = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+        if( !$this->get('hopitalnumerique_objet.manager.objet')->checkAccessToObjet($role, $objet) ){
+            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas accès à cette publication.' );
+            return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+        }
+
+        //Types objet
+        $type  = array();
+        $types = $objet->getTypes();
+        foreach ($types as $one)
+            $type[] = $one->getLibelle();
+
+        //get Contenus : for sommaire
+        $contenus = $objet->getIsInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
+
+        //render
         return $this->render('HopitalNumeriqueRechercheBundle:Publication:objet.html.twig', array(
-            
+            'objet'    => $objet,
+            'types'    => implode(' ♦ ', $type),
+            'contenus' => $contenus
         ));
     }
 
@@ -25,10 +44,24 @@ class PublicationController extends Controller
      */
     public function contenuAction($id, $alias, $idc, $aliasc)
     {
-        
+        $objet   = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
+        $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array( 'id' => $idc ) );
 
-        return $this->render('HopitalNumeriqueRechercheBundle:Publication:contenu.html.twig', array(
-            
+        //Types objet
+        $type  = array();
+        $types = $objet->getTypes();
+        foreach ($types as $one)
+            $type[] = $one->getLibelle();
+
+        //get Contenus : for sommaire
+        $contenus = $objet->getIsInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
+
+        //render
+        return $this->render('HopitalNumeriqueRechercheBundle:Publication:objet.html.twig', array(
+            'objet'    => $objet,
+            'contenus' => $contenus,
+            'types'    => implode(' ♦ ', $type),
+            'contenu'  => $contenu
         ));
     }
 }
