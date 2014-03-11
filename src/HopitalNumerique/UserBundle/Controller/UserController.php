@@ -153,8 +153,9 @@ class UserController extends Controller
      */
     public function ajaxEditEtablissementsAction()
     {
-        $id              = $this->get('request')->request->get('id');
-        $etablissements  = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( array('departement' => $id) );
+        $idDepartement        = $this->get('request')->request->get('idDepartement');
+        $idTypeEtablissement  = $this->get('request')->request->get('idTypeEtablissement');
+        $etablissements       = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( array('departement' => $idDepartement, 'typeOrganisme' => $idTypeEtablissement) );
     
         return $this->render('HopitalNumeriqueUserBundle:User:etablissements.html.twig', array(
                 'etablissements' => $etablissements
@@ -293,23 +294,25 @@ class UserController extends Controller
             // On bind les données du form
             $form->handleRequest($request);
 
-            //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
+            //Vérification d'un utilisateur connecté
             if($this->get('security.context')->isGranted('ROLE_USER'))
             {
-                //--Frontoffice-- Informations personnelles
-                //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
-                
-                //--Backoffice--
-                //Vérification de la présence rôle
-                $role = $form->get("roles")->getData();
-                if(is_null($role)) {
-                    $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un groupe associé.');
-                
-                    return $this->_renderView( $view , $form, $user);
+                //Si un utilisateur est connecté mais qu'on est en FO : informations personnelles
+                if(!$this->_informationsPersonnelles)
+                {
+                    //--Backoffice--
+                    //Vérification de la présence rôle
+                    $role = $form->get("roles")->getData();
+                    if(is_null($role)) {
+                        $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un groupe associé.');
+                    
+                        return $this->_renderView( $view , $form, $user);
+                    }                    
                 }
             }
             else
-            {                
+            {    
+                //--FO-- inscription            
                 //Set de l'état
                 $idEtatActif = intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif'));
                 $user->setEtat($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $idEtatActif)));
@@ -334,29 +337,41 @@ class UserController extends Controller
                     if($this->get('security.context')->isGranted('ROLE_USER'))
                     {
                         //--BO--
-                        //set Role for User : not mapped field
                         $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserFromAdminMail($user);
                         $this->get('mailer')->send($mail);
                     }
                     else
                     {
                         //--FO--
-                        //Set du role "Enregistré" par défaut pour les utilisateurs
                         $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserMail($user);
                         $this->get('mailer')->send($mail);
                     }
                 }
 
-                //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
+                //Vérification d'un utilisateur connecté
                 if($this->get('security.context')->isGranted('ROLE_USER'))
                 {
-                    //--BO--
-                    //set Role for User : not mapped field
-                    $user->setRoles( array( $role->getRole() ) );
+                    if($this->_informationsPersonnelles)
+                    {
+                        //--Frontoffice-- Informations personnelles
+                        //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
+                        $roleUserConnectedLabel = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+                        $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => $roleUserConnectedLabel));
+                        $user->setRoles( array( $role ) );
+                        
+                        //Reforce l'username
+                        $user->setUsername($user->getUsername());
+                    }
+                    else 
+                    {
+                        //--BO--
+                        //set Role for User : not mapped field
+                        $user->setRoles( array( $role->getRole() ) );
+                    }
                 }
                 else
                 {
-                    //--FO--
+                    //--FO-- Inscription
                     //Set du role "Enregistré" par défaut pour les utilisateurs
                     $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
                     $user->setRoles( array( $role->getRole() ) );
@@ -413,6 +428,9 @@ class UserController extends Controller
                 switch ($do)
                 {
                 	case 'front':
+                	    return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+                	    break;
+                	case 'i':
                 	    return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
                 	    break;
                 	case 'save-close':

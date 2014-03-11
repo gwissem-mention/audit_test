@@ -109,7 +109,7 @@
 				                <div class="col-md-6">
 				                    <div class="panel-group panel-info" id="accordion">
 				                        {# Affichage du bloc uniquement si il y a des données de structure #}
-				                        {% if user.nomStructure is not defined or user.nomStructure is null %}
+				                        {% if user.statutEtablissementSante is defined and user.statutEtablissementSante is not null %}
 					                        {# Zone établissement de santé #}
 			                                <div><h4>Vous êtes un établissement de santé</h4></div>		                          
 							                <div class="form-group">

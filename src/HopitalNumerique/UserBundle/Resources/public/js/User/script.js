@@ -4,7 +4,9 @@ $(document).ready(function() {
     loader = $('#form_edit_user').nodevoLoader();
     var idEntreprise = 0;
     var idDepartement = 0;
-        
+    
+    // ------- Gestion des listes déroulantes en AJAX ----------
+            
     //Récupération de l'id du département si il on est en édition
     if(null !== $('#nodevo_user_user_departement').val())
         idDepartement = $('#nodevo_user_user_departement').val();
@@ -12,6 +14,8 @@ $(document).ready(function() {
     if(null !== $('#nodevo_user_user_etablissementRattachementSante').val())
         idEntreprise = $('#nodevo_user_user_etablissementRattachementSante').val();
 
+    // --- Département
+    
     //Chargement des départements du formulaire en fonction de la région selectionnée
     chargementDepartement();
 
@@ -23,11 +27,21 @@ $(document).ready(function() {
     $('#nodevo_user_user_region').on('change', function() 
     {
         chargementDepartement();
-        chargementEntreprise();
+        chargementEtablissementRattachement();
     });
     
+    // --- Type d'établissement
+    
+    //Ajout de la fonction de chargement des entreprises sur le on change des type d'établissement
+    $('#nodevo_user_user_statutEtablissementSante').on('change', function() 
+    {
+    	chargementEtablissementRattachement();
+    });
+    
+    // --- Etablissement rattachement
+    
     //Chargement des entreprises du formulaire en fonction du département selectionné
-    chargementEntreprise();
+    chargementEtablissementRattachement();
     
     //Si le département était renseigné on le recharge une fois que la liste des département est correct
     if( 0 != idEntreprise )
@@ -36,7 +50,7 @@ $(document).ready(function() {
     //Ajout de la fonction de chargement des entreprises sur le on change des départements
     $('#nodevo_user_user_departement').on('change', function() 
     {
-        chargementEntreprise();
+    	chargementEtablissementRattachement();
     });
     
     //Chargement des masks du formulaire
@@ -74,13 +88,14 @@ function chargementDepartement(){
 /**
  * Permet de charger les entreprises en fonction du département selectionné en ajax
  */
-function chargementEntreprise(){
+function chargementEtablissementRattachement(){
     loader.start();
 
     $.ajax({
         url  : $('#etablissement-url').val(),
         data : {
-            id : $('#nodevo_user_user_departement').val(),
+            idDepartement : $('#nodevo_user_user_departement').val(),
+            idTypeEtablissement: $('#nodevo_user_user_statutEtablissementSante').val(),
         },
         type    : 'POST',
         async   : false,

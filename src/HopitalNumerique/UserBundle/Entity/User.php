@@ -156,13 +156,14 @@ class User extends BaseUser
     /**
      * @var string
      * @Assert\NotBlank(message="Le nom d'utilisateur ne peut pas être vide.")
+     * @Assert\Regex(pattern= "/[0-9a-zA-Z]/")
      * @Assert\Length(
      *      min = "3",
      *      max = "50",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom d'utilisateur.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom d'utilisateur."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[50]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[50]],custom[onlyLetterNumber]")
      */
     protected $username;
 
