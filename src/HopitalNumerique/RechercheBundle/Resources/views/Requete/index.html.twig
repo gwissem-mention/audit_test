@@ -1,0 +1,59 @@
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-requete-index.css" filter="cssrewrite"
+        'bundles/nodevoadmin/plugins/apprise/apprise.css'
+        'bundles/hopitalnumeriquerecherche/css/requete.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-recherche-requete-index.js"
+        'bundles/nodevoadmin/plugins/apprise/apprise.js'
+        'bundles/hopitalnumeriquerecherche/js/requete.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block content %}
+    <div id="requetes">
+        <h4 class="violet"> <i class="fa fa-2x fa-search"></i> Requêtes de recherche</h4>
+        <p class="sous-titre">
+            Gérer mes Requêtes de recherches
+        </p>
+        
+        <div class="liste">
+            {% for requete in requetes %}
+                <div class="ligne requete-{{requete.id}}">
+                    <div class="default">
+                        <i class="fa {% if requete.isDefault %}fa-star{% endif %}"></i>
+                    </div>
+
+                    <p {% if requete.isDefault %}class="violet"{% endif %} >{{requete.nom|capitalize}}</p>
+
+                    <div class="actions pull-right">
+                        <div class="fa fa-edit" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
+                        <div class="fa fa-times-circle" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+            {% else %}
+                <div class="ligne">
+                    <p> - Aucunes requêtes de recherche enregistrées - </p>
+                    <div class="clearfix"></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        
+    </script>
+{% endblock %}

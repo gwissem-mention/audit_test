@@ -288,3 +288,32 @@ function getReferences()
 
     return references;
 }
+
+/**
+ * Sauvegarde de la requête de recherche
+ */
+function saveRequest( user )
+{
+    if( user ){
+        apprise('Nom de la requête', {'input':true,'textOk':'Enregistrer','textCancel':'Annuler'}, function(r) {
+            if( r ){
+                $.ajax({
+                    url  : $('#requete-save-url').val(),
+                    data : {
+                        nom        : r,
+                        references : getReferences()
+                    },
+                    type     : 'POST',
+                    dataType : 'json',
+                    success  : function( data ){
+                        if(data.success){
+                            apprise('Requête enregistrée');
+                            $('.requeteNom').html( r ).slideDown();
+                        }
+                    }
+                });
+            }
+        });
+    }else
+        apprise('Pour enregistrer votre requête, vous devez créer un compte.');
+}
