@@ -293,18 +293,11 @@ class UserController extends Controller
             // On bind les données du form
             $form->handleRequest($request);
 
-            //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
+            //Vérification d'un utilisateur connecté
             if($this->get('security.context')->isGranted('ROLE_USER'))
             {
-                if($this->_informationsPersonnelles)
-                {
-                    //--Frontoffice-- Informations personnelles
-                    //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
-                    $roleUserConnectedLabel = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
-                    $roleUserConnected = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => $roleUserConnectedLabel));
-                    $user->setRole($roleUserConnected);
-                }
-                else
+                //Si un utilisateur est connecté mais qu'on est en FO : informations personnelles
+                if(!$this->_informationsPersonnelles)
                 {
                     //--Backoffice--
                     //Vérification de la présence rôle
@@ -317,7 +310,8 @@ class UserController extends Controller
                 }
             }
             else
-            {                
+            {    
+                //--FO-- inscription            
                 //Set de l'état
                 $idEtatActif = intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif'));
                 $user->setEtat($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $idEtatActif)));
@@ -342,29 +336,41 @@ class UserController extends Controller
                     if($this->get('security.context')->isGranted('ROLE_USER'))
                     {
                         //--BO--
-                        //set Role for User : not mapped field
                         $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserFromAdminMail($user);
                         $this->get('mailer')->send($mail);
                     }
                     else
                     {
                         //--FO--
-                        //Set du role "Enregistré" par défaut pour les utilisateurs
                         $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserMail($user);
                         $this->get('mailer')->send($mail);
                     }
                 }
 
-                //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
+                //Vérification d'un utilisateur connecté
                 if($this->get('security.context')->isGranted('ROLE_USER'))
                 {
-                    //--BO--
-                    //set Role for User : not mapped field
-                    $user->setRoles( array( $role->getRole() ) );
+                    if($this->_informationsPersonnelles)
+                    {
+                        //--Frontoffice-- Informations personnelles
+                        //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
+                        $roleUserConnectedLabel = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+                        $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => $roleUserConnectedLabel));
+                        $user->setRoles( array( $role ) );
+                        
+                        //Reforce l'username
+                        $user->setUsername($user->getUsername());
+                    }
+                    else 
+                    {
+                        //--BO--
+                        //set Role for User : not mapped field
+                        $user->setRoles( array( $role->getRole() ) );
+                    }
                 }
                 else
                 {
-                    //--FO--
+                    //--FO-- Inscription
                     //Set du role "Enregistré" par défaut pour les utilisateurs
                     $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
                     $user->setRoles( array( $role->getRole() ) );
@@ -394,7 +400,7 @@ class UserController extends Controller
                 }
 
                 //Cas particulier : 2 utilisateur ES - Direction générale par établissement de rattachement
-                if( null != $user->getEtablissementRattachementSante() )
+                if( null != $user->getEtablissementRattachementSante() && $role->getRole() == 'ROLE_ES_DIRECTION_GENERALE_5' )
                 {
                     $result = $this->get('hopitalnumerique_user.manager.user')->userExistForRoleDirection( $user );
                     if( ! is_null($result) ) {
@@ -422,6 +428,9 @@ class UserController extends Controller
                 {
                 	case 'front':
                 	    return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+                	    break;
+                	case 'information-personnelles':
+                	    return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
                 	    break;
                 	case 'save-close':
                 	    return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );

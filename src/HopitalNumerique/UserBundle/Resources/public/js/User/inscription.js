@@ -16,6 +16,8 @@ jQuery(document).ready(function() {
     //Ajout de la fonction de chargement des entreprises sur le on change des départements
     $('.autre_structure').on('focus', function() 
     {
+console.log(toggleEtablissementAutre);
+    	
     	if('' == toggleEtablissementAutre)
     		toggleEtablissementAutre = 'autre';
     	else if('etablissement' == toggleEtablissementAutre)
@@ -28,7 +30,7 @@ jQuery(document).ready(function() {
 
 function viderStructureEtablissementSante(elementCourant)
 {		
-	var textRetour = '';
+	var textRetour = '';  
 	
 	apprise("Vous-êtes sur le point de supprimer les données de 'Etablissement de santé', continuer ?", {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
 		if(r)
@@ -51,6 +53,8 @@ function viderStructureEtablissementSante(elementCourant)
 		}
     });
 	
+	console.log(textRetour);
+	
 	return textRetour;
 }
 
@@ -58,25 +62,45 @@ function viderAutreStructure(elementCourant)
 {
 	var textRetour = '';
 	
-	apprise("Vous-êtes sur le point de supprimer les données de 'Autre structure', continuer ?", {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
-		if(r)
-		{
-			//Récupération de tout les champs dans établissement de santé
-			var childsAutreStructure = $("#autre_etablissement_sante input,#autre_etablissement_sante select");
-			
-			childsAutreStructure.each(function(){
-				$(this).val('');
-			})	
-			
-			textRetour = 'etablissement';
-		}
-		else
-		{
-			elementCourant.val('');
-			
-			textRetour = 'autre';
-		}
-    });
+	var test = confirm('Oui/Non ?');
+	
+	if(test)
+	{
+		//Récupération de tout les champs dans établissement de santé
+		var childsAutreStructure = $("#autre_etablissement_sante input,#autre_etablissement_sante select");
+		
+		childsAutreStructure.each(function(){
+			$(this).val('');
+		})	
+		
+		textRetour = 'etablissement';
+	}
+	else
+	{
+		elementCourant.val('');
+		
+		textRetour = 'autre';
+	}
+	
+//	apprise("Vous-êtes sur le point de supprimer les données de 'Autre structure', continuer ?", {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+//		if(r)
+//		{
+//			//Récupération de tout les champs dans établissement de santé
+//			var childsAutreStructure = $("#autre_etablissement_sante input,#autre_etablissement_sante select");
+//			
+//			childsAutreStructure.each(function(){
+//				$(this).val('');
+//			})	
+//			
+//			textRetour = 'etablissement';
+//		}
+//		else
+//		{
+//			elementCourant.val('');
+//			
+//			textRetour = 'autre';
+//		}
+//    });
 	
 	return textRetour;	
 }
