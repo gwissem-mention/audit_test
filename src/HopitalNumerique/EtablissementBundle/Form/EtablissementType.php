@@ -36,13 +36,13 @@ class EtablissementType extends AbstractType
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'      => 'libelle',
                 'required'      => true,
-                'label'         => 'Type Organisme',
+                'label'         => 'Type d\'établissement',
                 'empty_value'   => ' - ',
                 'attr'        => array('class' => $this->_constraints['typeOrganisme']['class'] ),                
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
                               ->where('ref.code = :etat')
-                              ->setParameter('etat', 'TYPE_ORGANISME')
+                              ->setParameter('etat', 'CONTEXTE_TYPE_ES')
                               ->orderBy('ref.order', 'ASC');
                 }
             ))

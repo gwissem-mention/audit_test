@@ -39,6 +39,7 @@ function viderStructureEtablissementSante(elementCourant)
 			childsEtablissementSante.each(function(){
 				$(this).val('');
 			})	
+			$('#s2id_nodevo_user_user_etablissementRattachementSante').select2('data', null);
 
 			textRetour = 'autre';
 		}

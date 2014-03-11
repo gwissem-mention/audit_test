@@ -298,8 +298,6 @@ class UserController extends Controller
             {
                 //--Frontoffice-- Informations personnelles
                 //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
-                \Doctrine\Common\Util\Debug::dump($user->getRole());die();
-                $user->setRole($user->getRole());
                 
                 //--Backoffice--
                 //Vérification de la présence rôle
