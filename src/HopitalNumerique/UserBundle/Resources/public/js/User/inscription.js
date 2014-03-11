@@ -47,6 +47,7 @@ function viderStructureEtablissementSante(elementCourant)
 	else
 	{
 		elementCourant.val('');
+		elementCourant.blur();
 
 		textRetour = 'etablissement';
 	}
