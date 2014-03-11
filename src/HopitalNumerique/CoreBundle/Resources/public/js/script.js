@@ -1,8 +1,15 @@
-$(document).ready(function() { 
-    tinymce.init({
-        selector: "textarea",
-        theme: "modern",
-        theme_url: 'bundles/hopitalnumeriquecore/js/tinymce/themes/modern/theme.min.js',
-        skin_url: 'bundles/hopitalnumeriquecore/js/tinymce/skins/lightgray'
+$(document).ready(function() {
+    $('#mesrequetes.closed').click(function(){
+        //on ouvre
+        if ( $(this).hasClass('closed') ){
+            wrapper = $('<div />').addClass('lock-screen');
+            $('body').append(wrapper);
+        //on ferme
+        }else{
+            $('.lock-screen').remove();
+        }
+        
+        $('#mesrequetes').toggleClass('closed open');
+        $('#mesrequetes .content').toggle();
     });
 });

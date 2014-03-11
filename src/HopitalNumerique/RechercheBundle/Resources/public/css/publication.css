@@ -1,5 +1,3 @@
-.lock-screen{background:#000000 !important; position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.5; z-index: 10}
-
 /* Sommaire */
     #sommaire{ position: fixed; left:0; }
     #sommaire.closed{ width:33px;background: url('../img/sommaire.jpg') no-repeat center center; height: 297px; cursor: pointer }
