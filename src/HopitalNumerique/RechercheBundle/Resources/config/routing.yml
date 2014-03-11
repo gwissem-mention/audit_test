@@ -27,6 +27,10 @@ hopital_numerique_recherche_publication_contenu:
         id: \d+
 
 #URLs concernant les requêtes de recherche
+hopital_numerique_requete_homepage:
+    pattern:  /requetes
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:index }
+
 hopital_numerique_requete_save:
     pattern:  /requetes/save
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:save }
