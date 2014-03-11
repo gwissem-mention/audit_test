@@ -49,7 +49,8 @@
         {# Cas Contenu #}
         {% if contenu is defined %}
             <div class="col-md-12">
-                <h3>{{prefix ~ contenu.titre}}</h3>
+                <h4 class="violet pull-right objetTitre" >{{objet.titre}}</h4>
+                <h3>{{prefix ~ ' ' ~ contenu.titre}}</h3>
             </div>
             
             <div class="col-md-12">
@@ -58,7 +59,7 @@
         {# Cas Objet #}
         {% else %}
             <div class="col-md-12">
-                <h3>{{objet.titre}}</h3>
+                <h3>{{objet.titre}} - Résumé</h3>
             </div>
             
             <div class="col-md-12">
@@ -67,23 +68,25 @@
         {% endif %}
 
         {# Téléchargement fichier + synthèse #}
-        <div class="col-md-4">
-            <div class="wrapper">
-                {% if objet.getAbsolutePath(true) is not null %}
-                    <a class="downloadLink readmore" href="/{{objet.getWebPath(true)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Téléchargement</span> du fichier de l’objet <i class="fa fa-download violet"></i> </a>
-                {% endif %}
+        {% if objet.getAbsolutePath(true) is not null or objet.getAbsolutePath(false) is not null or objet.synthese is not null %}
+            <div class="col-md-4">
+                <div class="wrapper">
+                    {% if objet.getAbsolutePath(true) is not null %}
+                        <a class="downloadLink readmore" href="/{{objet.getWebPath(true)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Téléchargement</span> du fichier de l’objet <i class="fa fa-download violet"></i> </a>
+                    {% endif %}
 
-                <div class="clearfix"></div>
-                {% if objet.getAbsolutePath(false) is not null %}
-                    <a class="downloadLink readmore" href="/{{objet.getWebPath(false)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Téléchargement</span> du fichier de l’objet <i class="fa fa-download violet"></i> </a>
-                {% endif %}
-                
-                <div class="clearfix"></div>
-                {% if objet.synthese is not null %}
-                    <a class="downloadLink readmore synthese fancybox.ajax" href="{{path('hopital_numerique_recherche_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
-                {% endif %}
+                    <div class="clearfix"></div>
+                    {% if objet.getAbsolutePath(false) is not null %}
+                        <a class="downloadLink readmore" href="/{{objet.getWebPath(false)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Téléchargement</span> du fichier de l’objet <i class="fa fa-download violet"></i> </a>
+                    {% endif %}
+                    
+                    <div class="clearfix"></div>
+                    {% if objet.synthese is not null %}
+                        <a class="downloadLink readmore synthese fancybox.ajax" href="{{path('hopital_numerique_recherche_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
+                    {% endif %}
+                </div>
             </div>
-        </div>
+        {% endif %}
 
         {# Prod utile ? #}
         {#<div class="col-md-4">
@@ -121,7 +124,7 @@
 {% macro buildTree(one, objet) %}
     <li>
         {% if one.hasContent %}
-            <a href="{{path('hopital_numerique_recherche_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':one.id,'aliasc':one.alias})}}" >{{one.order ~ ' ' ~ one.titre}}</a>
+            <a href="{{path('hopital_numerique_recherche_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':one.id,'aliasc':one.alias})}}" >{{one.order ~ ' ' ~ one.titre}} <i class="fa fa-eye"></i></a>
         {% else %}
             <p>{{one.order ~ ' ' ~ one.titre}}</p>
         {% endif %}

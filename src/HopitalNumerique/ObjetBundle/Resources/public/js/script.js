@@ -4,6 +4,7 @@ $(document).ready(function() {
     tinymce.PluginManager.load('pagebreak', '/bundles/nodevoadmin/plugins/tinymce/plugins/pagebreak/plugin.min.js');
     tinymce.PluginManager.load('importcss', '/bundles/nodevoadmin/plugins/tinymce/plugins/importcss/plugin.min.js');
     tinymce.PluginManager.load('textcolor', '/bundles/hopitalnumeriqueobjet/js/ObjetTextColor/plugin.min.js');
+    tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/ObjetAddPublication/plugin.min.js');
     tinymce.PluginManager.load('image', '/bundles/nodevoadmin/plugins/tinymce/plugins/image/plugin.min.js');
     tinymce.PluginManager.load('link', '/bundles/nodevoadmin/plugins/tinymce/plugins/link/plugin.min.js');
     NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
@@ -16,11 +17,11 @@ $(document).ready(function() {
         theme        : "modern",
         theme_url    : '/bundles/nodevoadmin/plugins/tinymce/themes/modern/theme.min.js',
         skin_url     : '/bundles/nodevoadmin/plugins/tinymce/skins/lightgray',
-        plugins      : 'moxiemanager image table code textcolor pagebreak importcss link',
+        plugins      : 'moxiemanager image table code textcolor pagebreak importcss link publication',
         height       : 210,
         menubar      : false,
         content_css  : '/bundles/hopitalnumeriqueobjet/css/wysiwyg.css',
-        toolbar1     : "code | undo redo cut copy paste | pagebreak | link | insertfile image ",
+        toolbar1     : "code | undo redo cut copy paste | pagebreak | link | insertfile image | publication",
         toolbar2     : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
         style_formats: [
             {title: 'Titres', items: [
@@ -269,30 +270,6 @@ function saveReferences( objet, idContenu )
             $.fancybox.close(true);
         }
     });
-}
-
-//checkbox de selection multiple
-function checkAllReferences()
-{
-    if( $('.checkAll').prop('checked') ){
-        $('#references-tab .checkbox').each(function(){
-            childs = $(this).parent().parent().data('childs');
-
-            if( childs.length > 0 ){
-                $.each(childs,function(key, val){
-                    $('.ref-'+val+' .checkbox').prop('checked','checked');
-                    $('.ref-'+val+' .checkbox').prop('disabled','disabled');
-                });
-            }
-
-            $(this).prop('checked', 'checked');
-        })
-    }else{
-        $('#references-tab .checkbox').each(function(){
-            $(this).prop('checked', false);
-            $(this).prop('disabled', '');
-        })
-    }
 }
 
 //Upload le contenu CSV et le transforme en sommaire
