@@ -75,6 +75,7 @@ function viderAutreStructure(elementCourant)
 	else
 	{
 		elementCourant.val('');
+		elementCourant.blur();
 		
 		textRetour = 'autre';
 	}
