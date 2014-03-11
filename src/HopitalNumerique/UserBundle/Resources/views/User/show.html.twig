@@ -109,7 +109,12 @@
 				                <div class="col-md-6">
 				                    <div class="panel-group panel-info" id="accordion">
 				                        {# Affichage du bloc uniquement si il y a des données de structure #}
-				                        {% if user.statutEtablissementSante is defined and user.statutEtablissementSante is not null %}
+				                        {% if (user.statutEtablissementSante is defined and user.statutEtablissementSante is not null)
+				                            or (user.etablissementRattachementSante is defined and user.etablissementRattachementSante is not null)
+				                            or (user.autreStructureRattachementSante is defined and user.autreStructureRattachementSante is not null) 
+				                            or (user.fonctionDansEtablissementSante is defined and user.fonctionDansEtablissementSante is not null) 
+				                            or (user.profilEtablissementSante is defined and user.profilEtablissementSante is not null)
+				                            or (user.raisonInscriptionSante is defined and user.raisonInscriptionSante is not null) %}
 					                        {# Zone établissement de santé #}
 			                                <div><h4>Vous êtes un établissement de santé</h4></div>		                          
 							                <div class="form-group">
@@ -133,10 +138,14 @@
 							                    <div>{{user.autreStructureRattachementSante}}</div>
 							                </div>
 							                <div class="form-group">
-							                    <div><strong>Fonction de l'établissement</strong></div>
+							                    <div><strong>Fonction dans l'établissement</strong></div>
+							                    <div>{{user.fonctionDansEtablissementSante}}</div>
+							                </div>
+							                <div class="form-group">
+							                    <div><strong>Profil de l'établissement</strong></div>
 							                    <div>
-							                        {% if user.fonctionEtablissementSante is defined and user.fonctionEtablissementSante is not null  %}
-							                            {{user.fonctionEtablissementSante.libelle}}
+							                        {% if user.profilEtablissementSante is defined and user.profilEtablissementSante is not null  %}
+							                            {{user.profilEtablissementSante.libelle}}
 							                        {% endif %}
 							                    </div>
 							                </div>
@@ -151,7 +160,9 @@
 				                        {% endif %}
 				                        
 				                        {# Affichage du bloc uniquement si il y a des données de structure #}
-				                        {% if user.nomStructure is defined and user.nomStructure is not null %}
+				                        {% if (user.nomStructure is defined and user.nomStructure is not null)
+				                           or (user.fonctionStructure is defined and user.fonctionStructure is not null)
+				                           or (user.raisonInscriptionStructure is defined and user.raisonInscriptionStructure is not null) %}
 					                        {# Zone autre qu'un établissement de santé #}
 					                        <h4>Vous êtes une structure autre qu'un établissement de santé</h4>
 							                <div class="form-group">

@@ -300,12 +300,25 @@ class User extends BaseUser
      * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Autre structure de rattachement santé de l utilisateur"})
      */
     protected $autreStructureRattachementSante;
+    
+    /**
+     * @var string
+     * @Assert\Length(
+     *      min = "3",
+     *      max = "255",
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'autre structure de rattachement.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'autre structure de rattachement."
+     * )
+     * @Nodevo\Javascript(class="validate[minSize[3],maxSize[255]]")
+     * @ORM\Column(name="usr_fonction_dans_etablissement", type="string", length=255, nullable=true, options = {"comment" = "Fonction dans l etablissement de santé de l utilisateur"})
+     */
+    protected $fonctionDansEtablissementSante;
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
-     * @ORM\JoinColumn(name="ref_fonction_etablissement_sante", referencedColumnName="ref_id")
+     * @ORM\JoinColumn(name="ref_profil_etablissement_sante", referencedColumnName="ref_id")
      */
-    protected $fonctionEtablissementSante;
+    protected $profilEtablissementSante;
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
@@ -692,26 +705,46 @@ class User extends BaseUser
     }
     
     /**
-     * Set fonctionEtablissementSante
+     * Get fonctionDansEtablissementSante
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $fonctionEtablissementSante
+     * @return string $fonctionDansEtablissementSante
      */
-    public function setFonctionEtablissementSante($fonctionEtablissementSante)
+    public function getFonctionDansEtablissementSante()
     {
-        if($fonctionEtablissementSante instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
-            $this->fonctionEtablissementSante = $fonctionEtablissementSante;
-        else
-            $this->fonctionEtablissementSante = null;
+        return $this->fonctionDansEtablissementSante;
     }
     
     /**
-     * Get fonctionEtablissementSante
+     * Set fonctionDansEtablissementSante
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $fonctionEtablissementSante
+     * @param string $fonctionDansEtablissementSante
      */
-    public function getFonctionEtablissementSante()
+    public function setFonctionDansEtablissementSante($fonctionDansEtablissementSante)
     {
-        return $this->fonctionEtablissementSante;
+        $this->fonctionDansEtablissementSante = $fonctionDansEtablissementSante;
+    }
+    
+    /**
+     * Set profilEtablissementSante
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $profilEtablissementSante
+     */
+    public function setProfilEtablissementSante($profilEtablissementSante)
+    {
+        if($profilEtablissementSante instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+            $this->profilEtablissementSante = $profilEtablissementSante;
+        else
+            $this->profilEtablissementSante = null;
+    }
+    
+    /**
+     * Get profilEtablissementSante
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $profilEtablissementSante
+     */
+    public function getProfilEtablissementSante()
+    {
+        return $this->profilEtablissementSante;
     }
 
     /**

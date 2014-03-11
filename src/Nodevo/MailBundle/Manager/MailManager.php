@@ -108,6 +108,32 @@ class MailManager extends BaseManager
                             ->setTo ( $user->getEmail() )
                             ->setBody ( $body, 'text/html' );
     }
+    
+    /**
+     * Envoi un mail du type AjoutUser
+     *
+     * @param User $user Utilisateur qui recevras l'email
+     *
+     * @return Swift_Message
+     */
+    public function sendCandidatureMail( $user )
+    {
+        $mail = $this->findOneById(3);
+        //prepare content
+        $content         = $this->_replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user);
+        $templateFile    = "NodevoMailBundle::template.mail.html.twig";
+        $templateContent = $this->_twig->loadTemplate($templateFile);
+    
+        // Render the whole template including any layouts etc
+        $body = $templateContent->render( array("content" => $content) );
+    
+        //send email to users with new password
+        return \Swift_Message::newInstance()
+        ->setSubject ( $mail->getObjet() )
+        ->setFrom ( array($mail->getExpediteurMail() => $mail->getExpediteurName() ) )
+        ->setTo ( $user->getEmail() )
+        ->setBody ( $body, 'text/html' );
+    }
    
     /**
      * Retourne un email de test
