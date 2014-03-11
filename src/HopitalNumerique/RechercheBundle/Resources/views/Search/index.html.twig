@@ -54,7 +54,7 @@
                 </div>
 
                 <div id="dest" class="hide">
-                    <div class="btn btn-xs btn-success">Enregistrer ma requête</div>
+                    <div class="btn btn-xs btn-success" onclick="saveRequest( '{{ app.user }}' );">Enregistrer ma requête</div>
 
                     <hr />
 
@@ -71,6 +71,23 @@
 
         <div class="clearfix"></div>
     </div>
+
+    
+
+    <script>
+
+        function saveRequest( user )
+        {
+            if( user ){
+                console.log( getReferences() );
+            }else{
+                apprise('Pour enregistrer votre requête, vous devez créer un compte.');
+            }
+        }
+
+
+    </script>
+
 {% endblock %}
 
 {# Construit le système de parents > enfants des catégories #}

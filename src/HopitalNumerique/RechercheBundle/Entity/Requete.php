@@ -43,6 +43,12 @@ class Requete
     private $refs;
 
     /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")
+     */
+    private $user;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -129,4 +135,25 @@ class Requete
     {
         return $this->refs;
     }
+
+    /**
+     * Get user
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User $user
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+    
+    /**
+     * Set user
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     */
+    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
+    {
+        $this->user = $user;
+    }
+    
 }
