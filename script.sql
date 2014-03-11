@@ -51,3 +51,16 @@ UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_route` = 'hopital_nume
    DEV -> PROD
    Modifs items menu*/
 UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_route` = 'hopital_numerique_requete_homepage', `itm_uri` = NULL WHERE `core_menu_item`.`itm_id` = 70;
+
+/* GME - 11/03/2014
+   DEV -> PROD
+   Mails */
+INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`) VALUES
+(2, '[HOPITALNUMERIQUE] - Inscription à Hôpital Numérique', 'Inscription en Front Office', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\r\n\r\nVoici votre mot de passe : %p \r\n\r\nVous pouvez vous connecter sur le site %s en entrant votre adresse mail et votre mot de passe.\r\n\r\nCordialement,'),
+(3, '[HOPITALNUMERIQUE] - Création d''une demande d''intervention', 'Création d''une demande d''intervention', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Votre demande d''intervention a correctement été créée. Cordialement,'),
+(4, '[HOPITALNUMERIQUE] - Demande d''intervention', 'Acceptation ou non d''une demande d''intervention par l''ambassadeur', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''intervention a été créée. Vous puvez la valider ou la refuser en visitant : %l Cordialement,'),
+(5, '[HOPITALNUMERIQUE] - Demande d''intervention', 'Alerte référent d''une demande d''intervention émise par un CMSI', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention a été émise en votre nom et va être étudiée par l''ambassadeur. Cordialement,'),
+(6, '[HOPITALNUMERIQUE] - Demande d''intervention acceptée par le CMSI', 'Demande d''intervention acceptée par le CMSI', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention a été acceptée. Vous pouvez vous rendre à votre interface pour la gérer. Cordialement,'),
+(7, '[HOPITALNUMERIQUE] - Demande d''intervention refusée par le CMSI', 'Demande d''intervention refusée par le CMSI', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention a été refusée. %c Cordialement,');
+
+
