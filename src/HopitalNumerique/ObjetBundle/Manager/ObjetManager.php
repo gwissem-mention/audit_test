@@ -181,7 +181,17 @@ class ObjetManager extends BaseManager
         return implode($sep, $tabType);
     }
 
+    public function testAliasExist( $objet, $new )
+    {
+        $alias = $this->findOneBy( array( 'alias'=>$objet->getAlias() ) );
 
+        if( $alias && $new === true )
+            return true;
+        elseif( $alias && $new === false && $alias->getId() != $objet->getId() )
+            return true;
+        
+        return false;
+    }
 
 
 

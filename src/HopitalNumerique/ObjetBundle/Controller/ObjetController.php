@@ -176,11 +176,22 @@ class ObjetController extends Controller
             //si le formulaire est valide
             if ($form->isValid()) {
                 //test ajout ou edition
-                $new  = is_null($objet->getId()) ? true : false;
+                $new = is_null($objet->getId()) ? true : false;
 
                 //si l'alias est vide, on le génère depuis le titre
                 $tool = new Chaine( ( $objet->getAlias() == '' ? $objet->getTitre() : $objet->getAlias() ) );
                 $objet->setAlias( $tool->minifie() );
+
+                //Test if alias already exist
+                if( $this->get('hopitalnumerique_objet.manager.objet')->testAliasExist( $objet, $new ) ){
+                    $this->get('session')->getFlashBag()->add('danger', 'Cet Alias existe déjà.' );
+                    return $this->render( $view , array(
+                        'form'     => $form->createView(),
+                        'objet'    => $objet,
+                        'contenus' => $contenus,
+                        'infra'    => $infra
+                    ));
+                }
 
                 //Met à jour la date de modification
                 $notify = $form->get("modified")->getData();
