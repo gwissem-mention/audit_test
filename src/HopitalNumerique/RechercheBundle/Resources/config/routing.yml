@@ -46,3 +46,10 @@ hopital_numerique_requete_edit:
     requirements: 
         id: \d+
         _method: post
+
+hopital_numerique_requete_toggle:
+    pattern:  /requetes/toggle/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:toggle, id:1}
+    requirements: 
+        id: \d+
+        _method: post

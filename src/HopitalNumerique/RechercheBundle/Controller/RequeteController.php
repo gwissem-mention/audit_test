@@ -78,6 +78,31 @@ class RequeteController extends Controller
         //Suppression de l'entitée
         $this->get('hopitalnumerique_recherche.manager.requete')->save( $requete );
 
-        return new Response('{"success":true, "id" : '.$requete->getId().'}', 200);
+        $this->get('session')->getFlashBag()->add('info', 'Requête mise à jour avec succès.' );
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopital_numerique_requete_homepage').'"}', 200);
+    }
+
+    /**
+     * Toggle Default d'une requete (AJAX)
+     *
+     * @param integer $id ID de la requete à toggle
+     */
+    public function toggleAction($id)
+    {
+        //get connected user
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        //get requetes
+        $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->findBy( array( 'user' => $user ) );
+        foreach($requetes as $requete){
+            $isDefault = $requete->getId() == $id ? true : false;
+            $requete->setIsDefault( $isDefault );
+        }
+        $this->get('hopitalnumerique_recherche.manager.requete')->save( $requetes );
+
+        $this->get('session')->getFlashBag()->add('info', 'Requête par défaut modifiée avec succès.' );
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopital_numerique_requete_homepage').'"}', 200);
     }
 }

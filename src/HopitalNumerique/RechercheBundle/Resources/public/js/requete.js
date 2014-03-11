@@ -1,3 +1,19 @@
+$(document).ready(function() {
+    //gestion du click pour mettre la requête par défaut
+    $('.default:not(.active)').click(function(){
+        link = $(this).data('link');
+
+        $.ajax({
+            url      : link,
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                window.location = data.url;
+            }
+        });
+    });
+});
+
 /**
  * Reprise de la fonction ADMIN:deletewithConfirm
  */
@@ -32,10 +48,7 @@ function editRequete( path )
                 type     : 'POST',
                 dataType : 'json',
                 success  : function( data ){
-                    if(data.success){
-                        apprise('Requête mise à jour');
-                        $('.requete-'+data.id+' p').html(r);
-                    }
+                    window.location = data.url;
                 }
             });
         }
