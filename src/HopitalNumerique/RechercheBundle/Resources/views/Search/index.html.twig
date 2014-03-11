@@ -54,7 +54,7 @@
                 </div>
 
                 <div id="dest" class="hide">
-                    <div class="btn btn-xs btn-success">Enregistrer ma requête</div>
+                    <div class="btn btn-xs btn-success" onclick="saveRequest( '{{ app.user }}' );">Enregistrer ma requête</div>
 
                     <hr />
 
@@ -68,9 +68,38 @@
         </div>
 
         <input type="hidden" id="resultats-url" value="{{path('hopital_numerique_recherche_getresults')}}" />
+        <input type="hidden" id="requete-save-url" value="{{path('hopital_numerique_requete_save')}}" />
 
         <div class="clearfix"></div>
     </div>
+
+    <script>
+        function saveRequest( user )
+        {
+            if( user ){
+                apprise('Nom de la requête', {'input':true,'textOk':'Enregistrer','textCancel':'Annuler'}, function(r) {
+                    if( r ){
+                        $.ajax({
+                            url  : $('#requete-save-url').val(),
+                            data : {
+                                id         : null,
+                                nom        : r,
+                                references : getReferences()
+                            },
+                            type     : 'POST',
+                            dataType : 'json',
+                            success  : function( data ){
+                                if(data.success)
+                                    apprise('Requête enregistrée');
+                            }
+                        });
+                    }
+                });
+            }else
+                apprise('Pour enregistrer votre requête, vous devez créer un compte.');
+        }
+    </script>
+
 {% endblock %}
 
 {# Construit le système de parents > enfants des catégories #}

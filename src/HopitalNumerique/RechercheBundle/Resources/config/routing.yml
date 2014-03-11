@@ -25,3 +25,10 @@ hopital_numerique_recherche_publication_contenu:
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:Publication:contenu", id:1, idc:1, alias:alias, aliasc:aliasc}
     requirements:
         id: \d+
+
+#URLs concernant les requêtes de recherche
+hopital_numerique_requete_save:
+    pattern:  /requetes/save
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:save }
+    requirements:
+        _method: post

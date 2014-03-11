@@ -1,7 +1,14 @@
 parameters:
     hopitalnumerique_recherche.manager.search.class: HopitalNumerique\RechercheBundle\Manager\SearchManager
+    hopitalnumerique_recherche.manager.requete.class: HopitalNumerique\RechercheBundle\Manager\RequeteManager
 
 services:
     hopitalnumerique_recherche.manager.search:
         class: %hopitalnumerique_recherche.manager.search.class%
         arguments: ["@hopitalnumerique_objet.manager.refobjet", "@hopitalnumerique_objet.manager.refcontenu"]
+
+    hopitalnumerique_recherche.manager.requete:
+        class: %hopitalnumerique_recherche.manager.requete.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

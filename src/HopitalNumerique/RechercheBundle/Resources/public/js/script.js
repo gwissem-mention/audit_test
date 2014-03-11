@@ -218,7 +218,46 @@ function showItemOriginRecursive( item )
  */
 function updateResultats()
 {
-    var loader     = $('#resultats').nodevoLoader().start();
+    var loader = $('#resultats').nodevoLoader().start();
+    
+    //AJAX call for results
+    $.ajax({
+        url  : $('#resultats-url').val(),
+        data : {
+            references : getReferences()
+        },
+        type    : 'POST',
+        success : function( data ){
+            $('#resultats').html( data );
+            $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
+        }
+    });
+    
+    loader.finished();
+}
+
+/**
+ * Gestion du bouton Plus de résultats
+ */
+function showMore(that)
+{
+    toHide = 2;
+    $(that).parent().find('.results > div:hidden').each(function(){
+        if( toHide != 0){
+            $(this).slideDown();
+            toHide = toHide - 1;
+        }
+    });
+    
+    if (toHide != 0)
+        $(that).remove();
+}
+
+/**
+ * Retourne les références selectionnées pour la requete de recherche
+ */
+function getReferences()
+{
     var references = {'categ1':[],'categ2':[],'categ3':[],'categ4':[]};
 
     //create array with selected references
@@ -246,36 +285,6 @@ function updateResultats()
             references.categ4.push( $(this).data('id') );
         });
     }
-    
-    //AJAX call for results
-    $.ajax({
-        url  : $('#resultats-url').val(),
-        data : {
-            references : references
-        },
-        type    : 'POST',
-        success : function( data ){
-            $('#resultats').html( data );
-            $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
-        }
-    });
-    
-    loader.finished();
-}
 
-/**
- * Gestion du bouton Plus de résultats
- */
-function showMore(that)
-{
-    toHide = 2;
-    $(that).parent().find('.results > div:hidden').each(function(){
-        if( toHide != 0){
-            $(this).slideDown();
-            toHide = toHide - 1;
-        }
-    });
-    
-    if (toHide != 0)
-        $(that).remove();
+    return references;
 }
