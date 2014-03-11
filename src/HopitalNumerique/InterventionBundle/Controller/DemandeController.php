@@ -77,24 +77,18 @@ class DemandeController extends Controller
 
             if ($interventionDemandeFormulaire->isValid())
             {
+                $this->interventionDemande->setDateCreation(new \DateTime());
+                
                 $cmsi = null;
                 if ($this->utilisateurConnecte->hasRoleCmsi())
                 {
-                    $cmsi = $this->get('hopitalnumerique_user.manager.user')
-                            ->getCmsi(
-                                    array('region' => $ambassadeur->getRegion(), 'enabled' => true));
+                    $cmsi = $this->get('hopitalnumerique_user.manager.user')->getCmsi(array('region' => $ambassadeur->getRegion(), 'enabled' => true));
                     if ($cmsi == null)
-                        throw new InterventionException(
-                                'Un CMSI pour la région choisie doit existé pour créer une demande d\'intervention.');
+                        throw new InterventionException('Un CMSI pour la région choisie doit existé pour créer une demande d\'intervention.');
 
-                    $this->interventionDemande
-                            ->setInterventionInitiateur(
-                                    $this->get('hopitalnumerique_intervention.manager.intervention_initiateur')
-                                            ->getInterventionInitiateurCmsi());
-                    $this->interventionDemande
-                            ->setInterventionEtat(
-                                    $this->get('hopitalnumerique_intervention.manager.intervention_etat')
-                                            ->getInterventionEtatAcceptationCmsiId());
+                    $this->interventionDemande->setCmsiDateChoix($this->interventionDemande->getDateCreation());
+                    $this->interventionDemande->setInterventionInitiateur($this->get('hopitalnumerique_intervention.manager.intervention_initiateur')->getInterventionInitiateurCmsi());
+                    $this->interventionDemande->setInterventionEtat($this->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatAcceptationCmsiId());
                 }
                 else // Établissement par défaut
                 {
@@ -105,16 +99,13 @@ class DemandeController extends Controller
                 }
 
                 $this->interventionDemande->setCmsi($cmsi);
-                $this->interventionDemande->setDateCreation(new \DateTime());
                 $this->interventionDemande->setDirecteur($this->get('hopitalnumerique_user.manager.user')->getDirecteur(array('region' => $this->utilisateurConnecte->getRegion(), 'enabled' => true)));
                 $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
 
                 if ($this->utilisateurConnecte->hasRoleCmsi())
                 {
-                    $this->get('hopitalnumerique_intervention.manager.intervention_courriel')
-                            ->envoiCourrielDemandeAcceptationAmbassadeur($this->utilisateurConnecte, 'TOTOURLDEMANDEINTERVENTION');
-                    $this->get('hopitalnumerique_intervention.manager.intervention_courriel')
-                            ->envoiCourrielAlerteReferent($this->utilisateurConnecte);
+                    $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielDemandeAcceptationAmbassadeur($this->utilisateurConnecte, 'TOTOURLDEMANDEINTERVENTION');
+                    $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielAlerteReferent($this->utilisateurConnecte);
                 }
                 else // Établissement par défaut
                 {
@@ -135,22 +126,51 @@ class DemandeController extends Controller
     /**
      * Action pour la visualisation d'une demande d'intervention.
      *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $id La demande d'intervention à visionner
      * @return \Symfony\Component\HttpFoundation\Response La vue de la visualisation d'une demande d'intervention
      */
-    public function voirAction(InterventionDemande $interventionDemande)
+    public function voirAction(InterventionDemande $id)
     {
-        
+        return $this->render(
+            'HopitalNumeriqueInterventionBundle:Demande:voir.html.twig',
+            array(
+                'interventionDemande' => $id
+            )
+        );
     }
     
     /**
-     * Action pour la liste 1 des demandes d'intervention (demandes en début de processus).
+     * Action pour la visualisation d'une liste de demandes d'intervention.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response La vue de la liste de demandes d'intervention
+     */
+    public function listeAction()
+    {
+        return $this->render(
+            'HopitalNumeriqueInterventionBundle:Demande:liste.html.twig'
+        );
+    }
+    
+    /**
+     * Action pour la liste des nouvelles demandes d'intervention (demandes en début de processus).
      *
      * @return \Symfony\Component\HttpFoundation\Response La vue de la liste des demandes d'intervention
      */
     public function listeDemandesNouvellesAction()
     {
-        $interventionDemandesGrille = $this->get('hopitalnumerique_intervention.grid.intervention_demande');
+        $interventionDemandesGrille = $this->get('hopitalnumerique_intervention.grid.intervention_demande_nouvelles');
 
         return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Demande:Listes/demandesNouvelles.html.twig');
+    }
+    /**
+     * Action pour la liste des demandes d'intervention traitées.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response La vue de la liste des demandes d'intervention
+     */
+    public function listeDemandesTraiteesAction()
+    {
+        $interventionDemandesGrille = $this->get('hopitalnumerique_intervention.grid.intervention_demande_traitees');
+
+        return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Demande:Listes/demandesTraitees.html.twig');
     }
 }

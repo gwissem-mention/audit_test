@@ -10,4 +10,25 @@
     {{ block('grid_javascripts')}}
 {% endblock %}
 
-{% block pageTitre %}Liste des demandes d'intervention{% endblock %}
+{% block pageTitre %}Les interventions{% endblock %}
+
+{% block chapoDescription %}123456{% endblock %}
+
+
+{% block contenu %}
+
+    <ul class="nav nav-tabs">
+       <li class="active"><a href="#demandesNouvelles" data-toggle="tab">Liste des nouvelles demandes</a></li>
+       <li><a href="#demandesTraitees" data-toggle="tab">Liste des demandes traitées</a></li>
+    </ul>
+    
+    <div class="tab-content">
+        <div class="tab-pane active" id="demandesNouvelles">{{ render(path("hopital_numerique_intervention_demandes_nouvelles")) }}</div>
+        <div class="tab-pane" id="demandesTraitees">{{ render(path("hopital_numerique_intervention_demandes_traitees")) }}</div>
+    </div>
+
+    
+    
+
+    
+{% endblock %}

@@ -1,7 +1,11 @@
 parameters:
-    hopitalnumerique_intervention.grid.intervention_demande.class: HopitalNumerique\InterventionBundle\Grid\DemandesNouvellesGrid
+    hopitalnumerique_intervention.grid.intervention_demande_nouvelles.class: HopitalNumerique\InterventionBundle\Grid\DemandesNouvellesGrid
+    hopitalnumerique_intervention.grid.intervention_demande_traitees.class: HopitalNumerique\InterventionBundle\Grid\DemandesTraiteesGrid
 
 services:
-    hopitalnumerique_intervention.grid.intervention_demande:
-        class: "%hopitalnumerique_intervention.grid.intervention_demande.class%"
+    hopitalnumerique_intervention.grid.intervention_demande_nouvelles:
+        class: "%hopitalnumerique_intervention.grid.intervention_demande_nouvelles.class%"
+        arguments: ["@service_container"]
+    hopitalnumerique_intervention.grid.intervention_demande_traitees:
+        class: "%hopitalnumerique_intervention.grid.intervention_demande_traitees.class%"
         arguments: ["@service_container"]
