@@ -51,20 +51,11 @@ class UserType extends AbstractType
         $roles = $datas->getRoles();
 
         //Si il y a un utilisateur connecté nous sommes en BO
-        if($this->_securityContext->isGranted('ROLE_USER'))
-            $builder->add('username', 'text', array(
-                    'max_length' => $this->_constraints['username']['maxlength'],
-                    'required'   => true, 
-                    'label'      => 'Nom d\'utilisateur',
-                    'attr'       => array('class' => $this->_constraints['username']['class'] )
-                ));
-        else
-            $builder->add('username', 'hidden', array(
-                    'max_length' => $this->_constraints['username']['maxlength'],
-                    'required'   => true,
-                    'label'      => 'Nom d\'utilisateur',
-                    'attr'       => array('class' => $this->_constraints['username']['class'] ),
-                    'data'       => 'Nom par défaut'
+        $builder->add('username', 'text', array(
+                'max_length' => $this->_constraints['username']['maxlength'],
+                'required'   => true, 
+                'label'      => 'Nom d\'utilisateur',
+                'attr'       => array('class' => $this->_constraints['username']['class'] )
             ));
 
         $builder
@@ -233,13 +224,13 @@ class UserType extends AbstractType
                     'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property'    => 'libelle',
                     'required'    => false,
-                    'label'       => 'Statut de l\'établissement',
+                    'label'       => 'Type d\'établissement',
                     'empty_value' => ' - ',
                     'attr'        => array('class' => 'etablissement_sante'),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')
-                        ->setParameter('etat', 'STATUT_ETABLISSEMENT')
+                        ->setParameter('etat', 'CONTEXTE_TYPE_ES')
                         ->orderBy('ref.libelle', 'ASC');
                     }
             ))

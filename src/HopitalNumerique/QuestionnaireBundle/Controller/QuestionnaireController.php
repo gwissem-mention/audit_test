@@ -47,8 +47,12 @@ class QuestionnaireController extends Controller
      * 
      * @return Ambigous <\HopitalNumerique\QuestionnaireBundle\Controller\Form, \Symfony\Component\HttpFoundation\RedirectResponse, \Symfony\Component\HttpFoundation\Response>
      */
-    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $routeRedirection = '', $themeQuestionnaire = 'horizontal')
+    public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $optionRenderForm = array())
     {      
+        $readOnly           = array_key_exists('readOnly', $optionRenderForm) ? $optionRenderForm['readOnly'] : false;
+        $routeRedirection   = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect'] : '';
+        $themeQuestionnaire = array_key_exists('themeQuestionnaire', $optionRenderForm) ? $optionRenderForm['themeQuestionnaire'] : 'default';
+        
         //Si le tableau n'est pas vide on le récupère
         if(!is_null($routeRedirection))
             $this->_routeRedirection = $routeRedirection;
@@ -59,7 +63,8 @@ class QuestionnaireController extends Controller
         return $this->_renderForm('nodevo_questionnaire_questionnaire',
                 array(
                         'questionnaire'    => $questionnaire,
-                        'user'             => $user
+                        'user'             => $user,
+                        'readOnly'         => $readOnly
                 ) ,
                 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit.html.twig'
         );
@@ -82,6 +87,7 @@ class QuestionnaireController extends Controller
     private function _renderForm( $formName, $options, $view )
     {
         $user             = $options['user'];
+        $readOnly         = $options['readOnly'];
         $questionnaire    = $options['questionnaire'];
     
         //Création du formulaire via le service
@@ -89,7 +95,8 @@ class QuestionnaireController extends Controller
                 'label_attr' => array(
                         'idUser'           => $user->getId(),
                         'idQuestionnaire'  => $questionnaire->getId(),
-                        'routeRedirection' => $this->_routeRedirection 
+                        'routeRedirection' => $this->_routeRedirection,
+                        'readOnly'         => $readOnly 
                 )
         ));
         
@@ -102,7 +109,7 @@ class QuestionnaireController extends Controller
             $form->handleRequest($request);
             
             $routeRedirection = json_decode($form["routeRedirect"]->getData(), true);
-            
+
             //si le formulaire est valide
             if ($form->isValid()) {
     
@@ -118,7 +125,7 @@ class QuestionnaireController extends Controller
                 
                 //get All References, and convert to ArrayCollection
                 $reponses = new ArrayCollection( $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUserByFileQuestion( $questionnaire->getId(), $user->getId(), false ) );
-                
+
                 //Parcourt les questions de champ file
                 foreach ($questionsFiles as $key => $questionFiles)
                 {   
@@ -149,7 +156,6 @@ class QuestionnaireController extends Controller
                     $champFile = $questionFiles->getTypeQuestion()->getLibelle() . '_' . $questionFiles->getId() . '_' . $questionFiles->getAlias(); 
 
                     $file = $form[$champFile]->getData();
-
                     // Si le fichier n'est pas un pdf, on ne continue pas la validation du formulaire et on retourne sur celui-ci avec un message d'information
                     if ($file && $file->getMimeType() !== "application/pdf")
                     {

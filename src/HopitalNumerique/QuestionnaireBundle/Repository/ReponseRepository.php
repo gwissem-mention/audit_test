@@ -56,6 +56,14 @@ class ReponseRepository extends EntityRepository
         return $qb->getQuery();
     }
     
+    /**
+     * Récupère les réponses pour l'utilisateur en fonction des questionnaires passés en param
+     * 
+     * @param int $idExpert      Identifiant du questionnaire expert
+     * @param int $idAmbassadeur Identifiant du questionnaire ambassadeur
+     *
+     * @return array Tableau sous la forme array(utilisateur => array(questionnaireId))
+     */
     public function reponseExiste($idExpert, $idAmbassadeur)
     {
         $qb = $this->_em->createQueryBuilder();

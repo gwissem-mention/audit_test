@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\File\File;
 class QuestionnaireType extends AbstractType
 {
     private $idQuestionnaire;
+    private $_readOnly = false;
     private $_managerReponse;
     private $_managerQuestion;
     private $_managerQuestionnaire;
@@ -54,7 +55,8 @@ class QuestionnaireType extends AbstractType
         *  )
         **/
         $routeRedirection = (isset($options['label_attr']['routeRedirection']) && !is_null($options['label_attr']['routeRedirection'])) ? $options['label_attr']['routeRedirection'] : array();
-
+        $this->_readOnly = (isset($options['label_attr']['readOnly']) && !is_null($options['label_attr']['readOnly'])) ? $options['label_attr']['readOnly'] : false;
+        
         //Ajout d'un champ hidden pour récupérer les routes de redirection dans le controleur à la validation
         $builder->add('routeRedirect', 'hidden', array(
                 'data'       => $routeRedirection,
@@ -95,13 +97,13 @@ class QuestionnaireType extends AbstractType
      * @return FormBuilderInterface Le builder avec tous les champs
      */
     private function _constructBuilder(FormBuilderInterface $builder, $questions, $questionnaire)
-    {
+    {        
         //Réponse de la question courante
         $reponseCourante;
         
         //Création des questions
         foreach ($questions as $question)
-        {        
+        {                    
             $reponses = $question->getReponses();
             $reponseCourante = $reponses[0];
             
@@ -117,6 +119,7 @@ class QuestionnaireType extends AbstractType
             	            'required'   => $question->getObligatoire(),
             	            'label'      => $question->getLibelle(),
             	            'mapped'     => false,
+            	            'read_only'   => $this->_readOnly,
             	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
             	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
             	    ));
@@ -126,6 +129,7 @@ class QuestionnaireType extends AbstractType
             	            'required'   => $question->getObligatoire(),
             	            'label'      => $question->getLibelle(),
             	            'mapped'     => false,
+            	            'read_only'   => $this->_readOnly,
             	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
             	            'data'       => is_null($reponseCourante) ? false : ('1' === $reponseCourante->getReponse() ? true : false)
             	    ));
@@ -138,6 +142,7 @@ class QuestionnaireType extends AbstractType
             	            'required'    => $question->getObligatoire(),
             	            'label'       => $question->getLibelle(),
             	            'mapped'      => false,
+            	            'read_only'   => $this->_readOnly,
             	            'empty_value' => ' - ',
             	            'attr'        => $attr,
             	            'query_builder' => function(EntityRepository $er) use ($question){
@@ -149,12 +154,14 @@ class QuestionnaireType extends AbstractType
             	            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReference()
             	    ));
             	    break;
-            	case 'file':            	    
+            	case 'file':  
+                    $attr = $question->getObligatoire() ? array('class' => 'inputUpload validate[required]') : array();          	    
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'file', array(
             	            'required'   => $question->getObligatoire(),
             	            'label'      => $question->getLibelle(),
-                            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS()),
+                            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => 'inputUpload ' . $question->getVerifJS()),
             	            'mapped'     => false,
+            	            'read_only'   => $this->_readOnly,
             	            'data'       => is_null($reponseCourante) ? null : array('id' => $reponseCourante->getId(), 'lib' => $reponseCourante->getReponse()),
             	            'data_class' => null
             	    ));
@@ -164,6 +171,7 @@ class QuestionnaireType extends AbstractType
             	            'required'   => $question->getObligatoire(),
             	            'label'      => $question->getLibelle(),
             	            'mapped'     => false,
+            	            'read_only'   => $this->_readOnly,
             	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
             	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
             	    ));

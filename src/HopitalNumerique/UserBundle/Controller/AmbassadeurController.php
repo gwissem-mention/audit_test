@@ -33,18 +33,24 @@ class AmbassadeurController extends Controller
         $idQuestionnaireExpert = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
         
-        $themeQuestionnaire = 'vertical';
+        //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
+        $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
+
+        $themeQuestionnaire = empty($reponses) ? 'vertical' : 'vertical_readonly';
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur/Front:edit.html.twig',array(
             'questionnaire'      => $questionnaire,
             'user'               => $user,
-            'themeQuestionnaire' => $themeQuestionnaire,
-            'routeRedirect'      => json_encode(array(
-                'quit' => array(
-                    'route'     => 'hopital_numerique_homepage',
-                    'arguments' => array()
-                )
-            ))
+            'optionRenderForm'   => array(
+                'readOnly'           => !empty($reponses),
+                'themeQuestionnaire' => $themeQuestionnaire,
+                'routeRedirect'      => json_encode(array(
+                    'quit' => array(
+                        'route'     => 'hopital_numerique_homepage',
+                        'arguments' => array()
+                    )
+                ))
+            )
         ));
     }
     
@@ -56,7 +62,7 @@ class AmbassadeurController extends Controller
      */
      public function editAction( HopiUser $user )
      {
-     //Récupération du questionnaire de l'expert
+        //Récupération du questionnaire de l'expert
         $idQuestionnaireExpert = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
     
@@ -64,18 +70,20 @@ class AmbassadeurController extends Controller
                 'questionnaire' => $questionnaire,
                     'user'          => $user,
                     'options'       => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
-                'routeRedirect' => json_encode(array(
-                            'quit' => array(
-                                    'route'     => 'hopital_numerique_user_homepage',
-                                    'arguments' => array()
-                            ),
-                            'sauvegarde' => array(
-                                    'route'     => 'hopitalnumerique_user_ambassadeur_edit',
-                                    'arguments' => array(
-                                            'id' => $user->getId()
-                                    )
-                            )
-        ))
+                    'optionRenderForm'   => array(
+                        'routeRedirect' => json_encode(array(
+                                'quit' => array(
+                                        'route'     => 'hopital_numerique_user_homepage',
+                                        'arguments' => array()
+                                ),
+                                'sauvegarde' => array(
+                                        'route'     => 'hopitalnumerique_user_ambassadeur_edit',
+                                        'arguments' => array(
+                                                'id' => $user->getId()
+                                        )
+                                )
+                        ))
+                    )
         ));
     }
 

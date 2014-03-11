@@ -1,0 +1,7 @@
+{% extends 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.horizontal.html.twig' %}
+
+{% block file_widget %}
+    {% spaceless %}
+		<a id="downloadFile{{ id }}" href="{{path('hopitalnumerique_reponse_download', {'reponse':data.id})}}">{{ data.lib }}</a>
+    {% endspaceless %}
+{% endblock file_widget %}}

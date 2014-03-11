@@ -1,0 +1,98 @@
+{% extends 'HopitalNumeriqueAccountBundle:Formulaire:layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-user-informations_personnelles-edit.css" filter="cssrewrite"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+        'bundles/hopitalnumeriqueuser/css/specificationUser.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-user-informations_personnelles-editer.js"
+        'bundles/hopitalnumeriqueuser/js/Expert/script.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block pageTitre %}Lorem ipsum dolor sit amet{% endblock %}
+
+{% block chapoDescription %}
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tincidunt purus nec adipiscing. Cras eu nisi dolor. Vestibulum laoreet mi at quam dictum, vitae iaculis metus elementum. Aliquam ut ante non ligula sollicitudin vulputate. Nullam mattis vulputate sem ut placerat. Ut ac vulputate diam. Aenean suscipit lobortis tortor sit amet pharetra. Suspendisse placerat mauris non fringilla mollis. Nulla non eleifend est. Mauris ac tincidunt dolor. Mauris venenatis sit amet eros in rutrum. Ut erat sapien, viverra id dui in.</p>
+{% endblock %}
+
+{% block contenu %}
+    <div class="panel">
+		<div id="form_edit_user">
+            {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
+                {{ form_start(form) }}
+                    {{ form_javascript(form) }}
+                    <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+                    <div class="background-violet"></div>
+
+                    {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
+                    <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_front_departements')}}" />
+                    <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_front_etablissements')}}" />
+                    
+                    {# Formulaire : #}
+		            <div class="form-group">
+                        <label class="control-label col-md-4">Nom d'utilisateur</label>
+                        <div class="username col-md-7">{{ user.username }}</div>
+                    </div>
+	                <div class="clearfix"></div>
+                    {{ form_row(form.civilite) }}
+                    {{ form_row(form.titre) }}
+                    {{ form_row(form.nom) }}
+                    {{ form_row(form.prenom) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.plainPassword) }}
+                    {{ form_row(form.telephoneDirect) }}
+                    {{ form_row(form.telephonePortable) }}
+                    {{ form_row(form.contactAutre) }}
+                    {{ form_row(form.region) }}
+                    {{ form_row(form.departement) }} 
+                    
+                    <div class="hide">
+                        {{ form_row(form.etat) }}  
+                    </div>
+
+                    <div id="etablissement_sante">
+	                    <h4 class="violet">Vous êtes un établissement de santé</h4>
+	                    {{ form_row(form.statutEtablissementSante) }}
+	                    {{ form_row(form.etablissementRattachementSante) }}
+	                    {{ form_row(form.autreStructureRattachementSante) }}
+	                    {{ form_row(form.fonctionEtablissementSante) }}
+	                    {{ form_row(form.raisonInscriptionSante) }}
+                    </div>
+
+                    <div id="autre_etablissement_sante">
+	                    <h4 class="violet">Vous êtes une structure autre qu'un établissement de santé</h4>
+	                    {{ form_row(form.nomStructure) }}
+	                    {{ form_row(form.fonctionStructure) }}
+	                    {{ form_row(form.raisonInscriptionStructure) }}
+                    </div>
+                {# Permet de mettre à la ligne le submit #}
+	                <div class="clearfix"></div>
+                    <div class="form-group">
+	                    <div class="col-md-9 col-md-offset-2">
+		                   <input onclick="$('#do').val('front');sauvegardeFormulaire();" class="btn btn-success pull-right submit" value="INSCRIPTION" />
+	                </div>
+                </div>
+                    
+                    <div class="hide">
+                        {{ form_row(form.username) }}  
+                    </div>
+                    
+                    <div class="hide">
+                        {{ form_row(form.roles) }}  
+                    </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
