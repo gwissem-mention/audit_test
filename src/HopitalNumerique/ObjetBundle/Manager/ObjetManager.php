@@ -81,7 +81,6 @@ class ObjetManager extends BaseManager
     public function getReferences($objet, $references)
     {
         $selectedReferences = $objet->getReferences();
-        $disabledChilds     = array();
 
         //applique les références 
         foreach( $selectedReferences as $selected )
@@ -92,16 +91,6 @@ class ObjetManager extends BaseManager
             //on le met à jour 
             $ref->selected = true;
             $ref->primary  = $selected->getPrimary();
-
-            //si on est un enfant et que l'on est présent dans le tableau disabled childs, on devient disabled (car notre parent est sélectionné)
-            if( in_array($ref->id, $disabledChilds))
-                $ref->disabled = true;
-
-            //si y'a des enfants, on ajoute les ids dans les disabledChilds
-            if( !is_null($ref->childs) ){
-                $childs         = json_decode($ref->childs);
-                $disabledChilds = array_unique( array_merge($disabledChilds, $childs) );
-            }
 
             //on remet l'élément à sa place
             $references[ $selected->getReference()->getId() ] = $ref;
@@ -174,6 +163,29 @@ class ObjetManager extends BaseManager
 
         return true;
     }
+    
+    /**
+     * Formatte les types d'objet sous forme d'une chaine de caractère avec le séparateur $sep
+     *
+     * @param array  $types Types de l'objet
+     * @param string $sep   Séparateur pour l'implode
+     *
+     * @return string
+     */
+    public function formatteTypes( $types, $sep = ' ♦ ' )
+    {
+        $tabType  = array();
+        foreach ($types as $type)
+            $tabType[] = $type->getLibelle();
+
+        return implode($sep, $tabType);
+    }
+
+
+
+
+
+
 
 
 

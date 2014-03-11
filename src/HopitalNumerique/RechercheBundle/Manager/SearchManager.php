@@ -31,21 +31,13 @@ class SearchManager extends BaseManager
     /**
      * Retourne la liste des objets concernés par la requete de recherche
      *
-     * @param array $references Liste des références sélectionées
-     * @param User  $user       User connecté
+     * @param array  $references Liste des références sélectionées
+     * @param string $role       Role de l'user connecté
      *
      * @return array
      */
-    public function getObjetsForRecherche( $references, $user )
+    public function getObjetsForRecherche( $references, $role )
     {
-        if( $user === 'anon.')
-            $role = 'ROLE_ANONYME_10';
-        else{
-            //on récupère le rôle de l'user connecté
-            $roles = $user->getRoles();
-            $role  = $roles[0];
-        }
-
         //prepare some vars
         $nbCateg             = 4;
         $objets              = array();
@@ -58,7 +50,7 @@ class SearchManager extends BaseManager
             //si on a filtré sur la catégorie
             if( isset($references['categ'.$i]) ) {
                 //on récupères tous les objets, on les formate et on les ajoute à nos catégories
-                $results = $this->_refObjetManager->findBy( array('reference' => $references['categ'.$i]) );
+                $results = $this->_refObjetManager->getObjetsForRecherche( $references['categ'.$i] );
                 if( $results ){
                     $tmp = array();
                     foreach( $results as $one) {
@@ -72,7 +64,7 @@ class SearchManager extends BaseManager
                 }
                 
                 //on récupères tous les contenus (infradoc), on les formate et on les ajoute à nos catégories
-                $results = $this->_refContenuManager->findBy( array('reference' => $references['categ'.$i]) );
+                $results = $this->_refContenuManager->getContenusForRecherche( $references['categ'.$i] );
                 if( $results ) {
                     $tmp = array();
                     foreach( $results as $one) {
@@ -113,7 +105,31 @@ class SearchManager extends BaseManager
         return $fusion;
     }
 
+    /**
+     * GetMeta (desc+keywords) : for référencement
+     *
+     * @param array  $references Liste des références
+     * @param string $desc       Resume|contenu
+     *
+     * @return array
+     */
+    public function getMetas($references, $desc )
+    {
+        $meta = array();
 
+        //description
+        $tab          = explode('<!-- pagebreak -->', $desc);
+        $meta['desc'] = html_entity_decode(strip_tags($tab[0]));
+
+        //keywords
+        $meta['keywords'] = array();
+        foreach ($references as $reference) {
+            $ref                = $reference->getReference();
+            $meta['keywords'][] = $ref->getLibelle();
+        }
+
+        return $meta;
+    }
 
 
 

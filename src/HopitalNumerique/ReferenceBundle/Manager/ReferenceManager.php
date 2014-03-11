@@ -129,7 +129,7 @@ class ReferenceManager extends BaseManager
      */
     public function getRefsForGestionObjets()
     {
-        $this->_convertAsFlatArray( $this->getArbo(false, true), 1 );
+        $this->_convertAsFlatArray( $this->getArbo(false, true), 1, array() );
 
         return $this->_tabReferences;
     }
@@ -152,7 +152,7 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    private function _convertAsFlatArray( $childs, $level )
+    private function _convertAsFlatArray( $childs, $level, $parent )
     {
         //affiche le level sous forme de |--
         $sep = '';
@@ -165,7 +165,7 @@ class ReferenceManager extends BaseManager
         //create Child Ids table : permet de lister les ID de tous les enfants de l'élément : selection récursive des références
         $childsIds = array();
 
-        //pour chaque element, on le traforme on objet simple avec son niveau de profondeur affiché dans le nom
+        //pour chaque element, on le transforme on objet simple avec son niveau de profondeur affiché dans le nom
         foreach($childs as $child)
         {
             //populate childsIds
@@ -177,16 +177,20 @@ class ReferenceManager extends BaseManager
             $ref->nom      = $sep . $child->code . ' - ' . $child->libelle;
             $ref->selected = false;
             $ref->primary  = true;
-            $ref->disabled = false;
             $ref->childs   = null;
+            $ref->parents  = json_encode($parent);
 
             //add element parent first
             $this->_tabReferences[ $child->id ] = $ref;
 
             //if childs
             if ( !empty($child->childs) ){
+                //met à jour le tab parent
+                $tmp = $parent;
+                $tmp[] = $child->id;
+
                 //on met à jour sa liste d'enfants
-                $newChilds = $this->_convertAsFlatArray( $child->childs, $level + 1 );
+                $newChilds = $this->_convertAsFlatArray( $child->childs, $level + 1, $tmp );
 
                 //récupère temporairement l'élément que l'on vien d'ajouter
                 $tmp = $this->_tabReferences[ $child->id ];

@@ -14,6 +14,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class RoleManager extends BaseManager
 {
     protected $_class = '\Nodevo\RoleBundle\Entity\Role';
+    protected $_securityContext;
+
+    public function __construct($em, $securityContext)
+    {
+        parent::__construct($em);
+        $this->_securityContext = $securityContext;
+    }
 
     /**
      * Retourne les données sous forme de tableau
@@ -94,5 +101,24 @@ class RoleManager extends BaseManager
             $roles[ $data->getRole() ] = $data->getName();
 
         return $roles;
+    }
+
+    /**
+     * Retourne le Role de l'user connecté
+     *
+     * @return string
+     */
+    public function getConnectedUserRole()
+    {
+        $user  = $this->_securityContext->getToken()->getUser();
+        if( $user === 'anon.')
+            $role = 'ROLE_ANONYME_10';
+        else{
+            //on récupère le rôle de l'user connecté
+            $roles = $user->getRoles();
+            $role  = $roles[0];
+        }
+
+        return $role;
     }
 }
