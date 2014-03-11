@@ -5,7 +5,6 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Manager;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Nodevo\MailBundle\Entity\Mail;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -24,7 +23,7 @@ class InterventionCourrielManager
      * @var \Twig_Environment Environnement Twig de l'application
      */
     private $twig;
-    
+
     /**
      * Constructeur du manager gérant les demandes d'intervention.
      *
@@ -37,7 +36,7 @@ class InterventionCourrielManager
         $this->container = $container;
         $this->twig = $twig;
     }
-    
+
     /**
      * Envoi le courriel de création de demande d'intervention à l'établissement.
      * 
@@ -46,12 +45,10 @@ class InterventionCourrielManager
      */
     public function envoiCourrielCreation(User $utilisateurEtablissement)
     {
-        $courriel = $this->container->get('hopitalnumerique_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielCreationId());
-        
-        $this->envoiCourriel(
-            $courriel,
-            $utilisateurEtablissement
-        );
+        $courriel = $this->container->get('nodevo_mail.manager.mail')
+                ->findOneById(InterventionCourriel::getInterventionCourrielCreationId());
+
+        $this->envoiCourriel($courriel, $utilisateurEtablissement);
     }
     /**
      * Envoi le courriel d'acceptation ou non d'une demande d'intervention par l'ambassadeur.
@@ -62,13 +59,11 @@ class InterventionCourrielManager
      */
     public function envoiCourrielDemandeAcceptationAmbassadeur(User $ambassadeur, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('hopitalnumerique_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielAcceptationAmbassadeurId());
-    
-        $this->envoiCourriel(
-            $courriel,
-            $ambassadeur,
-            'l' => $interventionDemandeUrl
-        );
+        $courriel = $this->container->get('nodevo_mail.manager.mail')
+                ->findOneById(InterventionCourriel::getInterventionCourrielAcceptationAmbassadeurId());
+
+        $this
+                ->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionDemandeUrl));
     }
     /**
      * Envoi le courriel d'acceptation ou non d'une demande d'intervention par le CMSI.
@@ -79,13 +74,11 @@ class InterventionCourrielManager
      */
     public function envoiCourrielDemandeAcceptationCmsi(User $cmsi, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('hopitalnumerique_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielAcceptationCmsiId());
-    
-        $this->envoiCourriel(
-            $courriel,
-            $cmsi,
-            'l' => $interventionDemandeUrl
-        );
+        $courriel = $this->container->get('nodevo_mail.manager.mail')
+                ->findOneById(InterventionCourriel::getInterventionCourrielAcceptationCmsiId());
+
+        $this
+                ->envoiCourriel($courriel, $cmsi, array('l' => $interventionDemandeUrl));
     }
     /**
      * Envoi le courriel d'alerte de création de demande d'acceptation émise par un CMSI.
@@ -95,12 +88,9 @@ class InterventionCourrielManager
      */
     public function envoiCourrielAlerteReferent(User $referentEtablissement)
     {
-        $courriel = $this->container->get('hopitalnumerique_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionAlerteReferentId());
-    
-        $this->envoiCourriel(
-            $courriel,
-            $referentEtablissement
-        );
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionAlerteReferentId());
+
+        $this->envoiCourriel($courriel, $referentEtablissement);
     }
     /**
      * Envoi le courriel d'acceptation d'une demande d'acceptation par un CMSI.
@@ -110,12 +100,10 @@ class InterventionCourrielManager
      */
     public function envoiCourrielEstAccepteCmsi(User $referentEtablissement)
     {
-        $courriel = $this->container->get('hopitalnumerique_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionEstAccepteeCmsiId());
-    
-        $this->envoiCourriel(
-            $courriel,
-            $referentEtablissement
-        );
+        $courriel = $this->container->get('nodevo_mail.manager.mail')
+                ->findOneById(InterventionCourriel::getInterventionEstAccepteeCmsiId());
+
+        $this->envoiCourriel($courriel, $referentEtablissement);
     }
     /**
      * Envoi le courriel de refus d'une demande d'acceptation par un CMSI.
@@ -125,12 +113,9 @@ class InterventionCourrielManager
      */
     public function envoiCourrielEstRefuseCmsi(User $referentEtablissement)
     {
-        $courriel = $this->contaier->get('hopitalnumerique_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionEstRefuseeCmsiId());
-    
-        $this->envoiCourriel(
-            $courriel,
-            $referentEtablissement
-        );
+        $courriel = $this->contaier->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionEstRefuseeCmsiId());
+
+        $this->envoiCourriel($courriel, $referentEtablissement);
     }
 
     /**
@@ -144,15 +129,12 @@ class InterventionCourrielManager
     private function envoiCourriel(Mail $mail, User $destinataire, $remplacements = array())
     {
         $remplacements['u'] = $destinataire->getAppellation();
-        $courrielCorps = $this->_twig->loadTemplate('NodevoMailBundle::template.mail.html.twig')
-            ->render(array("content" => $this->getCourrielCorps($mail, $remplacements)));
+        $courrielCorps = $this->getCourrielCorps($mail, $remplacements);
 
-        \Swift_Message::newInstance()
-            ->setSubject($mail->getObjet())
-            ->setFrom(array($mail->getExpediteurMail() => $mail->getExpediteurName()))
-            ->setTo($destinataire->getEmail())
-            ->setBody($courrielCorps, 'text/html')
-            ->send();
+        $courriel = \Swift_Message::newInstance()->setSubject($mail->getObjet())
+                ->setFrom(array($mail->getExpediteurMail() => $mail->getExpediteurName()))->setTo($destinataire->getEmail())
+                ->setBody($courrielCorps, 'text/html');
+        $this->container->get('mailer')->send($courriel);
     }
     /**
      * Retourne le corps du courriel.
@@ -165,8 +147,7 @@ class InterventionCourrielManager
     {
         $courrielContenu = $mail->getBody();
         foreach ($remplacements as $texteRecherche => $remplacement)
-            $courrielContenu = str_replace('%'.$texteRecherche, $remplacement, $courrielContenu);
-        return $this->_twig->loadTemplate('NodevoMailBundle::template.mail.html.twig')
-            ->render(array("content" => $courrielContenu));
+            $courrielContenu = str_replace('%' . $texteRecherche, $remplacement, $courrielContenu);
+        return $this->twig->loadTemplate('NodevoMailBundle::template.mail.html.twig')->render(array("content" => $courrielContenu));
     }
 }

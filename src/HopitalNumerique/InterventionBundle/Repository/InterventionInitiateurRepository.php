@@ -5,7 +5,6 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Repository;
-
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -13,5 +12,5 @@ use Doctrine\ORM\EntityRepository;
  */
 class InterventionInitiateurRepository extends EntityRepository
 {
-    
+
 }

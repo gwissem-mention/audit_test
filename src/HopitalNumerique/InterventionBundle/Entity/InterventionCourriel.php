@@ -5,7 +5,6 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Entity;
-
 use Nodevo\MailBundle\Entity\Mail;
 
 /**
@@ -32,12 +31,12 @@ class InterventionCourriel extends Mail
     /**
      * @var integer ID du courriel d'acceptation d'une demande d'acceptation par un CMSI
      */
-    private static $COURRIEL_INTERVENTION_DEMANDE_ACCEPTATION_CMSI_ID = 6;
+    private static $COURRIEL_INTERVENTION_DEMANDE_EST_ACCEPTEE_CMSI_ID = 6;
     /**
      * @var integer ID du courriel de refus d'une demande d'acceptation par un CMSI
      */
-    private static $COURRIEL_INTERVENTION_DEMANDE_REFUS_CMSI_ID = 7;
-    
+    private static $COURRIEL_INTERVENTION_DEMANDE_EST_REFUSEE_CMSI_ID = 7;
+
     /**
      * Retourne l'ID du courriel de création d'une demande d'intervention.
      * 

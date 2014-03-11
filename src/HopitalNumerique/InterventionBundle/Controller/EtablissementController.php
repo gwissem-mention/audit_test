@@ -5,7 +5,6 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Controller;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -26,14 +25,13 @@ class EtablissementController extends Controller
     {
         $etablissementsFiltres = array();
         if ($this->get('request')->query->has('region'))
-            $etablissementsFiltres['region'] = intval($this->get('request')->query->get('region')); 
+            $etablissementsFiltres['region'] = intval($this->get('request')->query->get('region'));
         if ($this->get('request')->query->has('departement'))
-            $etablissementsFiltres['departement'] = intval($this->get('request')->query->get('departement')); 
+            $etablissementsFiltres['departement'] = intval($this->get('request')->query->get('departement'));
 
-        $etablissementsRegroupesParTypeOrganismeJson = $this->get('hopitalnumerique_intervention.manager.form_etablissement')->jsonEtablissementsRegroupesParTypeOrganisme($etablissementsFiltres);
+        $etablissementsRegroupesParTypeOrganismeJson = $this->get('hopitalnumerique_intervention.manager.form_etablissement')
+                ->jsonEtablissementsRegroupesParTypeOrganisme($etablissementsFiltres);
 
-        return new \Symfony\Component\HttpFoundation\Response(
-            $etablissementsRegroupesParTypeOrganismeJson
-        );
+        return new \Symfony\Component\HttpFoundation\Response($etablissementsRegroupesParTypeOrganismeJson);
     }
 }

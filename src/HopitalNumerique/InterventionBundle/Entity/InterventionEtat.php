@@ -5,7 +5,6 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Entity;
-
 /**
  * Entité d'état d'une demande d'intervention.
  */
@@ -51,7 +50,7 @@ class InterventionEtat
      * @var integer ID de l'état Clôturée
      */
     private static $INTERVENTION_ETAT_CLOTURE = 23;
-    
+
     /**
      * Retourne l'ID de la référence correspondant à Demande initiale.
      * 

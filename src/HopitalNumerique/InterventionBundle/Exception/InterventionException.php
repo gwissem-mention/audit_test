@@ -1,6 +1,5 @@
 <?php
 namespace HopitalNumerique\InterventionBundle\Exception;
-
 /**
  * Exception liée à une intervention.
  * 
@@ -17,6 +16,6 @@ class InterventionException extends \Exception
      */
     public function __construct($message = 'Erreur intervention Hopital Numérique', $code = 0, \Exception $erreurPrecedente = null)
     {
-        parent::__construct('Erreur intervention Hopital Numérique : '.$message, $code, $erreurPrecedente);
+        parent::__construct('Erreur intervention Hopital Numérique : ' . $message, $code, $erreurPrecedente);
     }
 }

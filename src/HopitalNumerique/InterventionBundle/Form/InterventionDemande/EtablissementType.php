@@ -5,7 +5,6 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Form\InterventionDemande;
-
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemandeType;
@@ -27,7 +26,7 @@ class EtablissementType extends InterventionDemandeType
     {
         parent::__construct($container);
     }
-    
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -35,9 +34,7 @@ class EtablissementType extends InterventionDemandeType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder
-            ->remove('referent')
-        ;
+        $builder->remove('referent');
     }
 
     /**

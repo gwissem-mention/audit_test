@@ -5,7 +5,6 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
@@ -18,7 +17,7 @@ class EtablissementManager
      * @var \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      */
     private $container;
-    
+
     /**
      * Constructeur du manager des établissements pour les formulaires utilisateurs.
      *
@@ -29,7 +28,7 @@ class EtablissementManager
     {
         $this->container = $container;
     }
-    
+
     /**
      * Retourne la liste des établissements pour les listes de formulaire.
      *
@@ -41,12 +40,12 @@ class EtablissementManager
         $etablissementsFiltre = array();
         if ($region != null)
             $etablissementsFiltre['region'] = $region;
-        
+
         $etablissements = $this->container->get('hopitalnumerique_etablissement.manager.etablissement')->findAll($etablissementsFiltre);
 
         return $etablissements;
     }
-    
+
     /**
      * Retourne la liste jsonifiée des établissements regroupés par type d'organisme.
      *
@@ -55,27 +54,25 @@ class EtablissementManager
      */
     public function jsonEtablissementsRegroupesParTypeOrganisme(array $criteres)
     {
-        $etablissementsRegroupesParTypeOrganisme = $this->container->get('hopitalnumerique_etablissement.manager.etablissement')->getEtablissementsRegroupesParTypeOrganisme($criteres);
+        $etablissementsRegroupesParTypeOrganisme = $this->container->get('hopitalnumerique_etablissement.manager.etablissement')
+                ->getEtablissementsRegroupesParTypeOrganisme($criteres);
         $etablissementsListeFormatee = array();
-        
+
         foreach ($etablissementsRegroupesParTypeOrganisme as $etablissementsRegroupes)
         {
             $etablissementsListeFormatee[] = array(
-                'typeOrganisme' => array(
-                    'id' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']->getId() : '0'),
-                    'libelle' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']->getLibelle() : '')
-                ),
-                'etablissements' => array()
-            );
+                    'typeOrganisme' => array(
+                            'id' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']->getId()
+                                    : '0'),
+                            'libelle' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']
+                                            ->getLibelle() : '')), 'etablissements' => array());
             foreach ($etablissementsRegroupes['etablissements'] as $etablissement)
             {
                 $etablissementsListeFormatee[count($etablissementsListeFormatee) - 1]['etablissements'][] = array(
-                    'id' => $etablissement->getId(),
-                    'nom' => $etablissement->getNom()
-                );
+                        'id' => $etablissement->getId(), 'nom' => $etablissement->getNom());
             }
         }
-        
+
         return json_encode($etablissementsListeFormatee);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
 namespace HopitalNumerique\InterventionBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -103,7 +102,7 @@ class InterventionDemande
      * })
      */
     private $ambassadeur;
-    
+
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User
      *
@@ -228,7 +227,6 @@ class InterventionDemande
         $this->etablissements = new \Doctrine\Common\Collections\ArrayCollection();
         $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
 
     /**
      * Get id
@@ -545,7 +543,8 @@ class InterventionDemande
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur $interventionInitiateur
      * @return InterventionDemande
      */
-    public function setInterventionInitiateur(\HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur $interventionInitiateur = null)
+    public function setInterventionInitiateur(
+            \HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur $interventionInitiateur = null)
     {
         $this->interventionInitiateur = $interventionInitiateur;
 

@@ -1,7 +1,6 @@
 <?php
 
 namespace HopitalNumerique\InterventionBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,7 +13,7 @@ class InterventionInitiateur
 {
     private static $INTERVENTION_INITIATEUR_CMSI = 1;
     private static $INTERVENTION_INITIATEUR_ETABLISSEMENT = 2;
-    
+
     /**
      * @var integer
      *
@@ -30,8 +29,6 @@ class InterventionInitiateur
      * @ORM\Column(name="intervinit_type", type="string", length=32, nullable=false)
      */
     private $type;
-
-
 
     /**
      * Get id

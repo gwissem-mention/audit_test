@@ -16,129 +16,8 @@ $(document).ready(function() {
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.init = function()
 {
-    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeDepartements();
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init();
-};
-
-
-/**
- * Met à jour la liste des départements.
- * 
- * @return void
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeDepartements = function()
-{
-    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampDepartements();
-    var regionId = parseInt($('select.hopitalnumerique_interventionbundle_user_region option:selected').attr('value'));
-
-    $.getJSON(
-        '/compte-hn/intervention/reference/departements/json',
-        {
-            region:regionId
-        },
-        function(departements)
-        {
-            HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampDepartements(departements)
-        }
-    );
-};
-/**
- * Vide le SELECT des départements.
- * 
- * @return void
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampDepartements = function()
-{
-    var departementSelect = $('select.hopitalnumerique_interventionbundle_user_departement');
-    $(departementSelect).html('');
-};
-/**
- * Raffraîchit le SELECT des départements.
- * 
- * @param array departements Liste des départements à afficher.
- * @return void
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampDepartements = function(departements)
-{
-    var departementSelect = $('select.hopitalnumerique_interventionbundle_user_departement');
-    var departementSelectHtml = '';
-    
-    $.each(departements, function(index, departement) {
-        departementSelectHtml += '<option value="' + departement.id + '">' + departement.libelle + '</option>';
-    });
-    
-    $(departementSelect).html(departementSelectHtml);
-    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeEtablissements();
-};
-
-
-/**
- * Initialise la liste des établissements de santé de rattachement.
- * 
- * @return void
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeEtablissements = function()
-{
-    if (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.listeEtablissementsExiste())
-    {
-        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampEtablissements();
-        var departementId = parseInt($('select.hopitalnumerique_interventionbundle_user_departement option:selected').attr('value'));
-    
-        if (departementId != 0)
-        {
-            $.getJSON(
-                '/compte-hn/intervention/etablissement/etablissements/json',
-                {
-                    departement:departementId
-                },
-                function(etablissementsRegroupesParTypeOrganisme)
-                {
-                    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampEtablissements(etablissementsRegroupesParTypeOrganisme);
-                }
-            );
-        }
-    }
-};
-/**
- * Retourne si la liste des établissements de santé est présente.
- * 
- * @return boolean VRAI ssi la liste des établissements de santé est présente
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.listeEtablissementsExiste = function()
-{
-    return ($('select.hopitalnumerique_interventionbundle_user_etablissementRattachementSante').size() > 0);
-};
-/**
- * Vide le SELECT des établissements.
- * 
- * @return void
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampEtablissements = function()
-{
-    var etablissementSelect = $('select.hopitalnumerique_interventionbundle_user_etablissementRattachementSante');
-    $(etablissementSelect).html('');
-};
-/**
- * Raffraîchit le SELECT des établissements.
- * 
- * @param array etablissementsRegroupesParTypeOrganisme Liste des établissements regroupés par type d'organisme à afficher.
- * @return void
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampEtablissements = function(etablissementsRegroupesParTypeOrganisme)
-{
-    var etablissementSelect = $('select.hopitalnumerique_interventionbundle_user_etablissementRattachementSante');
-    var etablissementsSelectHtml = '';
-    
-    $.each(etablissementsRegroupesParTypeOrganisme, function(index, etablissementsRegroupes) {
-        etablissementsSelectHtml += '<optgroup label="' + etablissementsRegroupes.typeOrganisme.libelle + '">';
-            $.each(etablissementsRegroupes.etablissements, function(index, etablissement) {
-                etablissementsSelectHtml += '<option value="' + etablissement.id + '">' + etablissement.nom + '</option>';
-            });
-        etablissementsSelectHtml += '</optgroup>';
-    });
-    
-    $(etablissementSelect).html(etablissementsSelectHtml);
 };
 
 
@@ -150,7 +29,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampEtabli
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements = function()
 {
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampAutresEtablissements();
-    var regionId = parseInt($('select.hopitalnumerique_interventionbundle_user_region option:selected').attr('value'));
+    var regionId = parseInt($('select.hopitalnumerique_interventionbundle_interventiondemande_region option:selected').attr('value'));
 
     if (regionId != 0)
     {

@@ -3,3 +3,19 @@ hopital_numerique_intervention_demande_nouveau:
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:nouveau" }
     requirements: 
         ambassadeur: \d+
+
+hopital_numerique_intervention_demande_visu:
+    pattern:  /demande/{interventionDemande}
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:voir" }
+    requirements: 
+        interventionDemande: \d+
+
+
+#<-- Vues Grid
+hopital_numerique_intervention_demandes_nouvelles:
+    pattern:  /demandes/liste/nouvelles
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:listeDemandesNouvelles" }
+hopital_numerique_intervention_demandes_traitees:
+    pattern:  /demandes/liste/traitees
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:listeDemandesTraitees" }
+#-->

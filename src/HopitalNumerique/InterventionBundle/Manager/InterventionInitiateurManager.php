@@ -5,7 +5,6 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Manager;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur;
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
@@ -17,7 +16,7 @@ use Doctrine\ORM\EntityManager;
 class InterventionInitiateurManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur';
-    
+
     /**
      * Returne le CMSI.
      *

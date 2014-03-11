@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {% stylesheets output="compiled/hnInterventionNouveau.css"
+    {% stylesheets output="compiled/hopitalnumerique-intervention-demande-nouveau.css"
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}">
@@ -11,7 +11,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts output="compiled/intervention-nouveau.js"
+    {% javascripts output="compiled/hopitalnumerique-intervention-demande-nouveau.js"
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
 

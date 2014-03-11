@@ -5,7 +5,6 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Manager;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 
@@ -18,7 +17,7 @@ class InterventionEtatManager
      * @var \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      */
     private $container;
-    
+
     /**
      * Constructeur du manager gérant les états d'intervention.
      *
@@ -29,7 +28,7 @@ class InterventionEtatManager
     {
         $this->container = $container;
     }
-    
+
     /**
      * Retourne l'état d'intervention correspondant à Demande initiale.
      * 
@@ -120,7 +119,7 @@ class InterventionEtatManager
     {
         return $this->findOneById(InterventionEtat::getInterventionEtatClotureId());
     }
-    
+
     /**
      * Récupère un état d'intervention par rapport à son référence ID.
      * 

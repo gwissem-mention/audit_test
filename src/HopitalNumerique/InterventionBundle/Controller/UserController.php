@@ -5,7 +5,6 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Controller;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -23,14 +22,12 @@ class UserController extends Controller
      */
     public function jsonUsersAction()
     {
-        $usersFiltres = array();
+        $usersFiltres = array('enabled' => true);
         if ($this->get('request')->query->has('etablissementRattachementSante'))
-            $usersFiltres['etablissementRattachementSante'] = intval($this->get('request')->query->get('etablissementRattachementSante'));
+            $usersFiltres['etablissementRattachementSante'] = $this->get('request')->query->get('etablissementRattachementSante');
 
         $usersJson = $this->get('hopitalnumerique_intervention.manager.form_user')->jsonUsers($usersFiltres);
 
-        return new \Symfony\Component\HttpFoundation\Response(
-            $usersJson
-        );
+        return new \Symfony\Component\HttpFoundation\Response($usersJson);
     }
 }

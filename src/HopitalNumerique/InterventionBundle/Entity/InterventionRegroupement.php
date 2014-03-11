@@ -1,7 +1,6 @@
 <?php
 
 namespace HopitalNumerique\InterventionBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,15 +45,14 @@ class InterventionRegroupement
      */
     private $interventionDemandeRegroupee;
 
-
-
     /**
      * Set interventionRegroupementType
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType $interventionRegroupementType
      * @return InterventionRegroupement
      */
-    public function setInterventionRegroupementType(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType $interventionRegroupementType = null)
+    public function setInterventionRegroupementType(
+            \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType $interventionRegroupementType = null)
     {
         $this->interventionRegroupementType = $interventionRegroupementType;
 
@@ -77,7 +75,8 @@ class InterventionRegroupement
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandePrincipale
      * @return InterventionRegroupement
      */
-    public function setInterventionDemandePrincipale(\HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandePrincipale)
+    public function setInterventionDemandePrincipale(
+            \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandePrincipale)
     {
         $this->interventionDemandePrincipale = $interventionDemandePrincipale;
 
@@ -100,7 +99,8 @@ class InterventionRegroupement
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandeRegroupee
      * @return InterventionRegroupement
      */
-    public function setInterventionDemandeRegroupee(\HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandeRegroupee)
+    public function setInterventionDemandeRegroupee(
+            \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandeRegroupee)
     {
         $this->interventionDemandeRegroupee = $interventionDemandeRegroupee;
 

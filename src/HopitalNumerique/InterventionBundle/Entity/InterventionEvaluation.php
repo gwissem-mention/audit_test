@@ -1,7 +1,6 @@
 <?php
 
 namespace HopitalNumerique\InterventionBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -101,8 +100,6 @@ class InterventionEvaluation
      * })
      */
     private $modalitesPratiques;
-
-
 
     /**
      * Get id

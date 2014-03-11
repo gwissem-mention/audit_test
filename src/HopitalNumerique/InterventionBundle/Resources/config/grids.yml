@@ -1,0 +1,7 @@
+parameters:
+    hopitalnumerique_intervention.grid.intervention_demande.class: HopitalNumerique\InterventionBundle\Grid\DemandesNouvellesGrid
+
+services:
+    hopitalnumerique_intervention.grid.intervention_demande:
+        class: "%hopitalnumerique_intervention.grid.intervention_demande.class%"
+        arguments: ["@service_container"]
