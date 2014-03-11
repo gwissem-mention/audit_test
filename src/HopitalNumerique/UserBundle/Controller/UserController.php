@@ -296,16 +296,24 @@ class UserController extends Controller
             //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
             if($this->get('security.context')->isGranted('ROLE_USER'))
             {
-                //--Frontoffice-- Informations personnelles
-                //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
-                
-                //--Backoffice--
-                //Vérification de la présence rôle
-                $role = $form->get("roles")->getData();
-                if(is_null($role)) {
-                    $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un groupe associé.');
-                
-                    return $this->_renderView( $view , $form, $user);
+                if($this->_informationsPersonnelles)
+                {
+                    //--Frontoffice-- Informations personnelles
+                    //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
+                    $roleUserConnectedLabel = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+                    $roleUserConnected = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => $roleUserConnectedLabel));
+                    $user->setRole($roleUserConnected);
+                }
+                else
+                {
+                    //--Backoffice--
+                    //Vérification de la présence rôle
+                    $role = $form->get("roles")->getData();
+                    if(is_null($role)) {
+                        $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un groupe associé.');
+                    
+                        return $this->_renderView( $view , $form, $user);
+                    }                    
                 }
             }
             else
