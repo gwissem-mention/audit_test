@@ -107,6 +107,12 @@
                 {{ knp_menu_render('menu-footer-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
             </div>
         </div>
+
+        {% if app.user %}
+            <div id="mesrequetes">
+                
+            </div>
+        {% endif %}
     </body>
 </html>
 

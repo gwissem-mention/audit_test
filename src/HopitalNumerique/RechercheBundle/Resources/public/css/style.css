@@ -81,7 +81,7 @@
         #resultats #productions .wrapper-results .results p{font-size: 13px; color:#070707; }
 
     /* Ressources externes */
-        #resultats #ressources{ margin-top:25px; background: #de0d4d; padding:10px;}
+        #resultats #ressources{ margin-top:25px; padding:10px;}
         #resultats #ressources h3{color:#ffffff; font-size: 18px; font-weight: bold; display: block; height: 19px; background: url('../img/ressources.jpg') no-repeat left center; padding-left : 30px; margin-left:15px; margin-top:5px;}
         #resultats #ressources .results{padding:0 15px;}
         #resultats #ressources .results h4{color: #ffffff; font-size: 14px; font-weight: bold; margin-bottom: 0; }
