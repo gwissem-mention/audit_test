@@ -155,7 +155,18 @@ class UserController extends Controller
     {
         $idDepartement        = $this->get('request')->request->get('idDepartement');
         $idTypeEtablissement  = $this->get('request')->request->get('idTypeEtablissement');
-        $etablissements       = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( array('departement' => $idDepartement, 'typeOrganisme' => $idTypeEtablissement) );
+        //Par défaut le département est obligatoire
+        $where = array(
+        	'departement' => $idDepartement
+        );
+        
+        //Si il y a un type établissement on rajoute filtre
+        if(!empty($idTypeEtablissement))
+        {
+            $where['typeOrganisme'] = $idTypeEtablissement;
+        }
+        
+        $etablissements       = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( $where );
     
         return $this->render('HopitalNumeriqueUserBundle:User:etablissements.html.twig', array(
                 'etablissements' => $etablissements

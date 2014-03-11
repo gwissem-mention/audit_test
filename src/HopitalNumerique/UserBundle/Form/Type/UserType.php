@@ -253,17 +253,25 @@ class UserType extends AbstractType
                     'attr'       => array('class' => $this->_constraints['autreStructureRattachementSante']['class'] . ' etablissement_sante' )
             ))
             
-            ->add('fonctionEtablissementSante', 'entity', array(
+
+            ->add('fonctionDansEtablissementSante', 'text', array(
+                    'max_length' => $this->_constraints['fonctionDansEtablissementSante']['maxlength'],
+                    'required'   => false,
+                    'label'      => 'Fonction dans l\'établissement',
+                    'attr'       => array('class' => $this->_constraints['fonctionDansEtablissementSante']['class'] . ' etablissement_sante' )
+            ))
+            
+            ->add('profilEtablissementSante', 'entity', array(
                     'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property'    => 'libelle',
                     'required'    => false,
-                    'label'       => 'Fonction de l\'établissement',
+                    'label'       => 'Profil',
                     'empty_value' => ' - ',
                     'attr'        => array('class' => 'etablissement_sante'),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')
-                        ->setParameter('etat', 'FONCTION_ES')
+                        ->setParameter('etat', 'PROFIL_ES')
                         ->orderBy('ref.libelle', 'ASC');
                     }
             ))
@@ -299,7 +307,7 @@ class UserType extends AbstractType
             ->add('fonctionStructure', 'text', array(
                     'max_length' => $this->_constraints['fonctionStructure']['maxlength'],
                     'required'   => false,
-                    'label'      => 'Fonction de la structure',
+                    'label'      => 'Fonction dans la structure',
                     'attr'       => array('class' => $this->_constraints['fonctionStructure']['class'] . ' autre_structure' )
             ))
             

@@ -30,26 +30,26 @@ function viderStructureEtablissementSante(elementCourant)
 {		
 	var textRetour = '';  
 	
-	apprise("Vous-êtes sur le point de supprimer les données de 'Etablissement de santé', continuer ?", {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
-		if(r)
-		{				
-			//Récupération de tout les champs dans établissement de santé
-			var childsEtablissementSante = $("#etablissement_sante input,#etablissement_sante select");
-			
-			childsEtablissementSante.each(function(){
-				$(this).val('');
-			})	
-			$('#s2id_nodevo_user_user_etablissementRattachementSante').select2('val', $('.select2 option:eq(1)').val());
+	var confirmation = confirm("Vous-êtes sur le point de supprimer les données de 'Etablissement de santé', continuer ?");
+	
+	if(confirmation)
+	{				
+		//Récupération de tout les champs dans établissement de santé
+		var childsEtablissementSante = $("#etablissement_sante input,#etablissement_sante select");
+		
+		childsEtablissementSante.each(function(){
+			$(this).val('');
+		})	
+		$('#s2id_nodevo_user_user_etablissementRattachementSante').select2('val', $('.select2 option:eq(1)').val());
 
-			textRetour = 'autre';
-		}
-		else
-		{
-			elementCourant.val('');
+		textRetour = 'autre';
+	}
+	else
+	{
+		elementCourant.val('');
 
-			textRetour = 'etablissement';
-		}
-    });
+		textRetour = 'etablissement';
+	}
 	
 	return textRetour;
 }
@@ -58,7 +58,7 @@ function viderAutreStructure(elementCourant)
 {
 	var textRetour = '';
 	
-	var confirmation = confirm('Oui/Non ?');
+	var confirmation = confirm('Vous-êtes sur le point de supprimer les données de \'Autre structure\', continuer ?');
 	
 	if(confirmation)
 	{
@@ -77,26 +77,6 @@ function viderAutreStructure(elementCourant)
 		
 		textRetour = 'autre';
 	}
-	
-//	apprise("Vous-êtes sur le point de supprimer les données de 'Autre structure', continuer ?", {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
-//		if(r)
-//		{
-//			//Récupération de tout les champs dans établissement de santé
-//			var childsAutreStructure = $("#autre_etablissement_sante input,#autre_etablissement_sante select");
-//			
-//			childsAutreStructure.each(function(){
-//				$(this).val('');
-//			})	
-//			
-//			textRetour = 'etablissement';
-//		}
-//		else
-//		{
-//			elementCourant.val('');
-//			
-//			textRetour = 'autre';
-//		}
-//    });
 	
 	return textRetour;	
 }
