@@ -108,9 +108,9 @@ class UserController extends Controller
 
         return $this->render('HopitalNumeriqueUserBundle:User:show.html.twig', array(
             'user'                     => $user,
-            'questionnaireExpert'      => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('expert'),
-            'questionnaireAmbassadeur' => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur'),
-            'options'                  => $this->_gestionAffichageOnglet($user),
+            'questionnaireExpert'      => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('expert'),
+            'questionnaireAmbassadeur' => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur'),
+            'options'                  => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
             'roles'                    => $roles
         ));
     }
@@ -295,7 +295,12 @@ class UserController extends Controller
 
             //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
             if($this->get('security.context')->isGranted('ROLE_USER'))
-            {            
+            {
+                //--Frontoffice-- Informations personnelles
+                //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
+                \Doctrine\Common\Util\Debug::dump($user->getRole());die();
+                $user->setRole($user->getRole());
+                
                 //--Backoffice--
                 //Vérification de la présence rôle
                 $role = $form->get("roles")->getData();
