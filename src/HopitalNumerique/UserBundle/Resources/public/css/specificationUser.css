@@ -1,1 +1,7 @@
-div#page-container div#page-content div#wrap div.container div.panel-body div.sous_options {text-align: right; margin: 0px 10px 10px 0px;};
+div#page-container div#page-content div#wrap div.container div.panel-body div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
+
+/* Informations personelles */
+div#form_edit_user form {position: relative;}
+div#form_edit_user div.username {padding: 7px 0px 0px 15px;}
+div#form_edit_user .champ-obligatoire{color: #5d5d5d;width: 165px; height: 4px; position: absolute; top: -20px; right: 0px;font-style:italic;}
+div#form_edit_user .champ-obligatoire .etoile{color: #e01958;}
