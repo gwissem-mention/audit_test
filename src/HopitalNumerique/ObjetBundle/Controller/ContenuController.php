@@ -32,6 +32,9 @@ class ContenuController extends Controller
         //save contenu
         $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
 
+        $contenu->setAlias( $contenu->getId() . '_contenu' );
+        $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
+
         //set objet as infra doc
         if( !$objet->getIsInfraDoc() ){
             $objet->setIsInfraDoc( true );
