@@ -119,7 +119,8 @@ class QuestionnaireType extends AbstractType
             	            'required'   => $question->getObligatoire(),
             	            'label'      => $question->getLibelle(),
             	            'mapped'     => false,
-            	            'read_only'   => $this->_readOnly,
+            	            'read_only'  => $this->_readOnly,
+            	            'disabled'   => $this->_readOnly,
             	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
             	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
             	    ));
@@ -129,7 +130,8 @@ class QuestionnaireType extends AbstractType
             	            'required'   => $question->getObligatoire(),
             	            'label'      => $question->getLibelle(),
             	            'mapped'     => false,
-            	            'read_only'   => $this->_readOnly,
+            	            'read_only'  => $this->_readOnly,
+            	            'disabled'   => $this->_readOnly,
             	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
             	            'data'       => is_null($reponseCourante) ? false : ('1' === $reponseCourante->getReponse() ? true : false)
             	    ));
@@ -143,6 +145,7 @@ class QuestionnaireType extends AbstractType
             	            'label'       => $question->getLibelle(),
             	            'mapped'      => false,
             	            'read_only'   => $this->_readOnly,
+            	            'disabled'    => $this->_readOnly,
             	            'empty_value' => ' - ',
             	            'attr'        => $attr,
             	            'query_builder' => function(EntityRepository $er) use ($question){
@@ -161,7 +164,8 @@ class QuestionnaireType extends AbstractType
             	            'label'      => $question->getLibelle(),
                             'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => 'inputUpload ' . $question->getVerifJS()),
             	            'mapped'     => false,
-            	            'read_only'   => $this->_readOnly,
+            	            'read_only'  => $this->_readOnly,
+            	            'disabled'   => $this->_readOnly,
             	            'data'       => is_null($reponseCourante) ? null : array('id' => $reponseCourante->getId(), 'lib' => $reponseCourante->getReponse()),
             	            'data_class' => null
             	    ));
@@ -171,7 +175,8 @@ class QuestionnaireType extends AbstractType
             	            'required'   => $question->getObligatoire(),
             	            'label'      => $question->getLibelle(),
             	            'mapped'     => false,
-            	            'read_only'   => $this->_readOnly,
+            	            'read_only'  => $this->_readOnly,
+            	            'disabled'   => $this->_readOnly,
             	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
             	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
             	    ));

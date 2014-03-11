@@ -15,9 +15,7 @@ jQuery(document).ready(function() {
     
     //Ajout de la fonction de chargement des entreprises sur le on change des départements
     $('.autre_structure').on('focus', function() 
-    {
-console.log(toggleEtablissementAutre);
-    	
+    {    	
     	if('' == toggleEtablissementAutre)
     		toggleEtablissementAutre = 'autre';
     	else if('etablissement' == toggleEtablissementAutre)
@@ -41,7 +39,7 @@ function viderStructureEtablissementSante(elementCourant)
 			childsEtablissementSante.each(function(){
 				$(this).val('');
 			})	
-			$('#s2id_nodevo_user_user_etablissementRattachementSante').select2('data', null);
+			$('#s2id_nodevo_user_user_etablissementRattachementSante').select2('val', $('.select2 option:eq(1)').val());
 
 			textRetour = 'autre';
 		}
@@ -53,8 +51,6 @@ function viderStructureEtablissementSante(elementCourant)
 		}
     });
 	
-	console.log(textRetour);
-	
 	return textRetour;
 }
 
@@ -62,9 +58,9 @@ function viderAutreStructure(elementCourant)
 {
 	var textRetour = '';
 	
-	var test = confirm('Oui/Non ?');
+	var confirmation = confirm('Oui/Non ?');
 	
-	if(test)
+	if(confirmation)
 	{
 		//Récupération de tout les champs dans établissement de santé
 		var childsAutreStructure = $("#autre_etablissement_sante input,#autre_etablissement_sante select");

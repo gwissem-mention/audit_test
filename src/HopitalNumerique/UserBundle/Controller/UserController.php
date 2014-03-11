@@ -153,8 +153,9 @@ class UserController extends Controller
      */
     public function ajaxEditEtablissementsAction()
     {
-        $id              = $this->get('request')->request->get('id');
-        $etablissements  = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( array('departement' => $id) );
+        $idDepartement        = $this->get('request')->request->get('idDepartement');
+        $idTypeEtablissement  = $this->get('request')->request->get('idTypeEtablissement');
+        $etablissements       = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( array('departement' => $idDepartement, 'typeOrganisme' => $idTypeEtablissement) );
     
         return $this->render('HopitalNumeriqueUserBundle:User:etablissements.html.twig', array(
                 'etablissements' => $etablissements
@@ -400,7 +401,7 @@ class UserController extends Controller
                 }
 
                 //Cas particulier : 2 utilisateur ES - Direction générale par établissement de rattachement
-                if( null != $user->getEtablissementRattachementSante() && $role->getRole() == 'ROLE_ES_DIRECTION_GENERALE_5' )
+                if( null != $user->getEtablissementRattachementSante() )
                 {
                     $result = $this->get('hopitalnumerique_user.manager.user')->userExistForRoleDirection( $user );
                     if( ! is_null($result) ) {
@@ -429,8 +430,8 @@ class UserController extends Controller
                 	case 'front':
                 	    return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
                 	    break;
-                	case 'information-personnelles':
-                	    return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
+                	case 'i':
+                	    return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
                 	    break;
                 	case 'save-close':
                 	    return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );

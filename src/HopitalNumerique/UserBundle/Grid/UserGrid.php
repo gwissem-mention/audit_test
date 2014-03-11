@@ -65,26 +65,14 @@ class UserGrid extends Grid implements IGrid
         );
         $this->addColonne( $contractualisationColumn );
 
-        $expertColumn = new Column\BooleanColumn('expert', 'Expert');
+        $expertColumn = new Column\BooleanColumn('expert', 'Candidat expert');
         $expertColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
-        $expertColumn->setSize(75);
-        $expertColumn->manipulateRenderCell(
-            function($value, $row, $router) {
-                $roles = $row->getField('roles');
-                return $roles[0] == "ROLE_EXPERT_6";
-            }
-        );
+        $expertColumn->setSize(90);
         $this->addColonne( $expertColumn );
 
-        $ambassadeurColumn = new Column\BooleanColumn('ambassadeur', 'Ambassadeur');
+        $ambassadeurColumn = new Column\BooleanColumn('ambassadeur', 'Candidat ambassadeur');
         $ambassadeurColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
         $ambassadeurColumn->setSize(115);
-        $ambassadeurColumn->manipulateRenderCell(
-            function($value, $row, $router) {
-                $roles = $row->getField('roles');
-                return $roles[0] == "ROLE_AMBASSADEUR_7";
-            }
-        );
         $this->addColonne( $ambassadeurColumn );
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
