@@ -45,4 +45,4 @@ UPDATE `wwwhopitalnumeriquecom`.`hn_questionnaire_question` SET `que_ordre` = '5
 /* GME - 10/03/2014
    DEV -> PROD
    Modifs items menu*/
-UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_route` = 'hopital_numerique_user_inscription', `itm_route_absolute` = NULL, `itm_uri` = NULL WHERE `core_menu_item`.`itm_id` = 69;
+UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_route` = 'hopital_numerique_user_informations_personnelles', `itm_route_absolute` = NULL, `itm_uri` = NULL WHERE `core_menu_item`.`itm_id` = 69;
