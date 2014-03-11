@@ -29,3 +29,8 @@ fos_user_resetting:
 #account_inscription_check_email:
 #    pattern:  /inscription/check-email
 #    defaults: { _controller: FOSUserBundle:Registration:checkEmail }
+
+#Requetes de recherche
+hopital_numerique_requete_homepage:
+    pattern:  /requetes
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:index }
