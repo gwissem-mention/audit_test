@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-user-expert-edit.css" filter="cssrewrite"
+    {% stylesheets output="compiled/hopitalnumerique-user-informations_personnelles-edit.css" filter="cssrewrite"
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
     %}
@@ -12,7 +12,7 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-user-expert-editer.js"
+    {% javascripts output="compiled/hopitalnumerique-user-informations_personnelles-editer.js"
         'bundles/hopitalnumeriqueuser/js/Expert/script.js'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
@@ -41,12 +41,16 @@
                     <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_front_etablissements')}}" />
                     
                     {# Formulaire : #}
+		            <div class="form-group">
+                        <label class="control-label col-md-4">Nom d'utilisateur</label>
+                        <div class="username col-md-7">{{ user.username }}</div>
+                    </div>
+	                <div class="clearfix"></div>
                     {{ form_row(form.civilite) }}
                     {{ form_row(form.titre) }}
                     {{ form_row(form.nom) }}
                     {{ form_row(form.prenom) }}
                     {{ form_row(form.email) }}
-                    {{ form_row(form.username, 'readonly':'readonly') }}
                     {{ form_row(form.plainPassword) }}
                     {{ form_row(form.telephoneDirect) }}
                     {{ form_row(form.telephonePortable) }}
@@ -80,6 +84,14 @@
 		                   <input onclick="$('#do').val('front');sauvegardeFormulaire();" class="btn btn-success pull-right submit" value="INSCRIPTION" />
 	                </div>
                 </div>
+                    
+                    <div class="hide">
+                        {{ form_row(form.username) }}  
+                    </div>
+                    
+                    <div class="hide">
+                        {{ form_row(form.roles) }}  
+                    </div>
             {{ form_end(form) }}
         </div>
     </div>

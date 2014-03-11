@@ -16,7 +16,14 @@ use HopitalNumerique;
  * @copyright Nodevo
  */
 class UserController extends Controller
-{
+{    
+    /**
+     * Vue informations personnelles sur le front
+     * 
+     * @var boolean
+     */
+    protected $_informationsPersonnelles = false;
+    
     //---- Front Office ------
     /**
      * Affichage du formulaire d'inscription
@@ -45,25 +52,9 @@ class UserController extends Controller
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
         
-        //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
-        $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
-
-        $themeQuestionnaire = empty($reponses) ? 'vertical' : 'vertical_readonly';
-
-        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur/Front:edit.html.twig',array(
-            'questionnaire'      => $questionnaire,
-            'user'               => $user,
-            'optionRenderForm'   => array(
-                'readOnly'           => !empty($reponses),
-                'themeQuestionnaire' => $themeQuestionnaire,
-                'routeRedirect'      => json_encode(array(
-                    'quit' => array(
-                        'route'     => 'hopital_numerique_homepage',
-                        'arguments' => array()
-                    )
-                ))
-            )
-        ));
+        $this->_informationsPersonnelles = true;
+             
+        return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User/Front:informations_personnelles.html.twig');
     }
     
 
@@ -117,9 +108,9 @@ class UserController extends Controller
 
         return $this->render('HopitalNumeriqueUserBundle:User:show.html.twig', array(
             'user'                     => $user,
-            'questionnaireExpert'      => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('expert'),
-            'questionnaireAmbassadeur' => HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur'),
-            'options'                  => $this->_gestionAffichageOnglet($user),
+            'questionnaireExpert'      => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('expert'),
+            'questionnaireAmbassadeur' => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur'),
+            'options'                  => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
             'roles'                    => $roles
         ));
     }
@@ -304,7 +295,12 @@ class UserController extends Controller
 
             //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
             if($this->get('security.context')->isGranted('ROLE_USER'))
-            {            
+            {
+                //--Frontoffice-- Informations personnelles
+                //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
+                \Doctrine\Common\Util\Debug::dump($user->getRole());die();
+                $user->setRole($user->getRole());
+                
                 //--Backoffice--
                 //Vérification de la présence rôle
                 $role = $form->get("roles")->getData();
