@@ -66,4 +66,4 @@ INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expe
 /*QSO - 12/03/2014
    DEV -> PROD
    Modifs items menu */
-UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_uri` = 'javascript:alert(''Forum Hôpital Numérique bientôt disponible.'');' WHERE `core_menu_item`.`itm_id` = 67;
+/*UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_uri` = 'javascript:alert(''Forum Hôpital Numérique bientôt disponible.'');' WHERE `core_menu_item`.`itm_id` = 67;*/
