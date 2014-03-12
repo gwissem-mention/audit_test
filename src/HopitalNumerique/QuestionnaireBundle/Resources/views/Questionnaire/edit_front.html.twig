@@ -14,6 +14,9 @@
     {% endstylesheets %}
 {% endblock %}
 
-{% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
-{{ form_javascript(form) }}
-{{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit_front', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}
+<div id="form_questionnaire">
+	<div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+	{% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
+	{{ form_javascript(form) }}
+	{{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit_front', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}
+</div>
