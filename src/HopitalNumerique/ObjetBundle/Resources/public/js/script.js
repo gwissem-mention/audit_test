@@ -128,6 +128,10 @@ $(document).ready(function() {
             $('#hopitalnumerique_objet_objet_modified').val(0);
         }
     });
+
+
+
+    
 });
 
 //met un loader sur le formulaire et sauvegarde automatiquement le formulaire objet
