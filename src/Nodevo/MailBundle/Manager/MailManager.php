@@ -67,20 +67,8 @@ class MailManager extends BaseManager
     public function sendAjoutUserFromAdminMail( $user )
     {
         $mail = $this->findOneById(1);
-        //prepare content
-        $content         = $this->_replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user);
-        $templateFile    = "NodevoMailBundle::template.mail.html.twig";
-        $templateContent = $this->_twig->loadTemplate($templateFile);
-
-        // Render the whole template including any layouts etc
-        $body = $templateContent->render( array("content" => $content) );
-
-        //send email to users with new password
-        return \Swift_Message::newInstance()
-                            ->setSubject ( $mail->getObjet() )
-                            ->setFrom ( array($mail->getExpediteurMail() => $mail->getExpediteurName() ) )
-                            ->setTo ( $user->getEmail() )
-                            ->setBody ( $body, 'text/html' );
+        
+        return $this->_generationMail($user, $mail);
     }  
 
     /**
@@ -93,20 +81,8 @@ class MailManager extends BaseManager
     public function sendAjoutUserMail( $user )
     {
         $mail = $this->findOneById(2);
-        //prepare content
-        $content         = $this->_replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user);
-        $templateFile    = "NodevoMailBundle::template.mail.html.twig";
-        $templateContent = $this->_twig->loadTemplate($templateFile);
-
-        // Render the whole template including any layouts etc
-        $body = $templateContent->render( array("content" => $content) );
-
-        //send email to users with new password
-        return \Swift_Message::newInstance()
-                            ->setSubject ( $mail->getObjet() )
-                            ->setFrom ( array($mail->getExpediteurMail() => $mail->getExpediteurName() ) )
-                            ->setTo ( $user->getEmail() )
-                            ->setBody ( $body, 'text/html' );
+        
+        return $this->_generationMail($user, $mail);
     }
     
     /**
@@ -118,21 +94,9 @@ class MailManager extends BaseManager
      */
     public function sendCandidatureMail( $user )
     {
-        $mail = $this->findOneById(3);
-        //prepare content
-        $content         = $this->_replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user);
-        $templateFile    = "NodevoMailBundle::template.mail.html.twig";
-        $templateContent = $this->_twig->loadTemplate($templateFile);
-    
-        // Render the whole template including any layouts etc
-        $body = $templateContent->render( array("content" => $content) );
-    
-        //send email to users with new password
-        return \Swift_Message::newInstance()
-        ->setSubject ( $mail->getObjet() )
-        ->setFrom ( array($mail->getExpediteurMail() => $mail->getExpediteurName() ) )
-        ->setTo ( $user->getEmail() )
-        ->setBody ( $body, 'text/html' );
+        $mail = $this->findOneById(8);
+        
+        return $this->_generationMail($user, $mail);
     }
    
     /**
@@ -170,6 +134,11 @@ class MailManager extends BaseManager
                         ->setBody( $body, 'text/html' );
     }
 
+    public function getDestinataire()
+    {
+        return $this->_destinataire;
+    }
+
 
 
 
@@ -192,10 +161,30 @@ class MailManager extends BaseManager
    
         return $content;
     }
-
-
-    public function getDestinataire()
+    
+    /**
+     * Génération du mail avec le template NodevoMailBundle::template.mail.html.twig + envoi à l'user
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @param \Nodevo\MailBundle\Entity\Mail           $mail
+     * 
+     * @return Swift_Message objet \Swift pour l'envoie du mail
+     */
+    private function _generationMail( $user, $mail )
     {
-        return $this->_destinataire;
+        //prepare content
+        $content         = $this->_replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user);
+        $templateFile    = "NodevoMailBundle::template.mail.html.twig";
+        $templateContent = $this->_twig->loadTemplate($templateFile);
+    
+        // Render the whole template including any layouts etc
+        $body = $templateContent->render( array("content" => $content) );
+    
+        //send email to users with new password
+        return \Swift_Message::newInstance()
+                            ->setSubject ( $mail->getObjet() )
+                            ->setFrom ( array($mail->getExpediteurMail() => $mail->getExpediteurName() ) )
+                            ->setTo ( $user->getEmail() )
+                            ->setBody ( $body, 'text/html' );
     }
 }

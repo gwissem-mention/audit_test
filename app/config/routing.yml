@@ -48,7 +48,8 @@ hopital_numerique_objet:
 
 hopital_numerique_questionnaire:
     resource: "@HopitalNumeriqueQuestionnaireBundle/Resources/config/routing.yml"
-    prefix:   /admin
+    prefix:   /
+    #Pour le questionnaire bundle le prefixe "/admin" se fait au cas par cas, parce qu'il est utilisé à la fois dans le FO et dans le BO    
 
 # Bundles Nodevo
 nodevo_acl:
