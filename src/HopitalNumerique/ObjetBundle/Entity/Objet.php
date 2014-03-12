@@ -33,12 +33,12 @@ class Objet
      * @var string
      * @Assert\NotBlank(message="Le titre ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage = "Il doit y avoir au moins {{ limit }} caractères dans le titre.",
      *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans le titre."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="obj_titre", type="string", length=255, options = {"comment" = "Titre de l objet"})
      */
     private $titre;

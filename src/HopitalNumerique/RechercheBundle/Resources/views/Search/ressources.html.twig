@@ -1,6 +1,18 @@
 <div class="item {% if count == 1 %}active{% endif %}" >
-    <h4>Titre</h4>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, facere impedit magni non dolore corrupti totam expedita sequi eum! Magni, minus, sint quo doloremque praesentium ipsum autem consectetur dolores delectus!lorem Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam, deserunt, explicabo, recusandae nihil mollitia qui accusantium cumque consequatur voluptate quidem nobis maxime
-    </p>
+    {% if objet['objet'] is not null %}
+        {# Contenu #}
+        <h4>
+            <a href="{{path('hopital_numerique_recherche_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >
+                {{objet['titre']}}
+            </a>
+        </h4>
+    {% else %}
+        {# Objet #}
+        <h4>
+            <a href="{{path('hopital_numerique_recherche_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
+                {{objet['titre']}}
+            </a>
+        </h4>
+    {% endif %}
+    <p>{{ objet['resume']|trim }} <span class="rose">[...]</span></p>
 </div>

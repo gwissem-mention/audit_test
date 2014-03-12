@@ -7,7 +7,7 @@ fos_user_security:
 #Utilisateur  
 hopital_numerique_user_inscription:
     pattern:  /compte-hn/inscription
-    defaults: { _controller: HopitalNumeriqueUserBundle:User:inscription }    
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:inscription }
 
 hopital_numerique_user_informations_personnelles:
     pattern:  /compte-hn/informationsPersonnelles

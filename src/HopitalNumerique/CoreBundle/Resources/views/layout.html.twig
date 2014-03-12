@@ -29,6 +29,7 @@
                 'bundles/hopitalnumeriquecore/js/jqueryui-1.10.3.min.js'
                 'bundles/hopitalnumeriquecore/js/jqueryui-fr.js'
                 'bundles/hopitalnumeriquecore/js/bootstrap.min.js'
+                'bundles/hopitalnumeriquecore/js/script.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
@@ -107,6 +108,21 @@
                 {{ knp_menu_render('menu-footer-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
             </div>
         </div>
+
+        {% if app.user %}
+            <div id="mesrequetes" class="closed">
+                <div class="content" style="display:none">
+                    <h3 class="violet">Mes requêtes</h3>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-circle violet" ></i> Requete 1</a></li>
+                        <li><a href="#"><i class="fa fa-circle fa-inverse" ></i> Requete 3</a></li>
+                        <li><a href="#"><i class="fa fa-circle fa-inverse" ></i> Requete 4</a></li>
+                        <li><a href="#"><i class="fa fa-circle fa-inverse" ></i> Requete 5</a></li>
+                    </ul>
+                    <a href="{{path('hopital_numerique_requete_homepage')}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Gérer mes requêtes</a>
+                </div>
+            </div>
+        {% endif %}
     </body>
 </html>
 

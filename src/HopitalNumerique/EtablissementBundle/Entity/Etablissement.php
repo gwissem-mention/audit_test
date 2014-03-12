@@ -31,12 +31,12 @@ class Etablissement
      * @var string
      * @Assert\NotBlank(message="Le nom ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="eta_nom", type="string", length=255, options = {"comment" = "Nom de l établissement"})
      */
     private $nom;
@@ -82,12 +82,12 @@ class Etablissement
      * @var string
      * @Assert\NotBlank(message="L'adresse ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "512",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'adresse.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'adresse."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[512]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[512]]")
      * @ORM\Column(name="eta_adresse", type="string", length=512, options = {"comment" = "Adresse de l établissement"})
      */
     private $adresse;
@@ -96,12 +96,12 @@ class Etablissement
      * @var string
      * @Assert\NotBlank(message="La ville ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans la ville.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans la ville."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="eta_ville", type="string", length=255, options = {"comment" = "Ville de l établissement"})
      */
     private $ville;

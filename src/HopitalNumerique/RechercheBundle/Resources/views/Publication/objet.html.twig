@@ -49,8 +49,7 @@
         {# Cas Contenu #}
         {% if contenu is defined %}
             <div class="col-md-12">
-                <h4 class="violet pull-right objetTitre" >{{objet.titre}}</h4>
-                <h3>{{prefix ~ ' ' ~ contenu.titre}}</h3>
+                <h3>{{objet.titre ~ ' - ' ~ prefix ~ ' ' ~ contenu.titre}}</h3>
             </div>
             
             <div class="col-md-12">

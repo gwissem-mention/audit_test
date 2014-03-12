@@ -158,12 +158,12 @@ class User extends BaseUser
      * @Assert\NotBlank(message="Le nom d'utilisateur ne peut pas être vide.")
      * @Assert\Regex(pattern= "/[0-9a-zA-Z]/")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "50",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom d'utilisateur.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom d'utilisateur."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[50]],custom[onlyLetterNumber]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]],custom[onlyLetterNumber]")
      */
     protected $username;
     
@@ -172,7 +172,7 @@ class User extends BaseUser
      * @Assert\NotBlank(message="L'adresse éléctronique ne peut pas être vide.")
      * @Assert\Regex(pattern= "/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]{2,}[.][a-zA-Z]{2,3}$/")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "50",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom d'utilisateur.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom d'utilisateur."
@@ -185,12 +185,12 @@ class User extends BaseUser
      * @var string
      * @Assert\NotBlank(message="Le nom ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "50",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[50]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
      * @ORM\Column(name="usr_nom", type="string", length=50, options = {"comment" = "Nom de l utilisateur"})
      */
     protected $nom;
@@ -199,12 +199,12 @@ class User extends BaseUser
      * @var string
      * @Assert\NotBlank(message="Le prénom ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "50",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le prénom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le prénom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[50]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
      * @ORM\Column(name="usr_prenom", type="string", length=50, options = {"comment" = "Prénom de l utilisateur"})
      */
     protected $prenom;
@@ -292,12 +292,12 @@ class User extends BaseUser
     /**
      * @var string
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'autre structure de rattachement.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'autre structure de rattachement."
      * )
-     * @Nodevo\Javascript(class="validate[minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
      * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Autre structure de rattachement santé de l utilisateur"})
      */
     protected $autreStructureRattachementSante;
@@ -334,12 +334,12 @@ class User extends BaseUser
     /**
      * @var string
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom de la structure.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom de la structure."
      * )
-     * @Nodevo\Javascript(class="validate[minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
      * @ORM\Column(name="usr_nom_structure", type="string", length=255, nullable=true, options = {"comment" = "Nom de la structure de l utilisateur"})
      */
     protected $nomStructure;
@@ -347,12 +347,12 @@ class User extends BaseUser
     /**
      * @var string
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans la fonction de la structure.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans la fonction de la structure."
      * )
-     * @Nodevo\Javascript(class="validate[minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
      * @ORM\Column(name="usr_fonction_strucutre", type="string", length=255, nullable=true, options = {"comment" = "Fonction au sein de la structure"})
      */
     protected $fonctionStructure;

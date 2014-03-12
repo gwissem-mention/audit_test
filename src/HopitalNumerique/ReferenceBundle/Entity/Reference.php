@@ -33,12 +33,12 @@ class Reference
      * @var string
      * @Assert\NotBlank(message="Le libellé ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le libellé.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le libellé."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="ref_libelle", type="string", length=255, options = {"comment" = "Libellé de la référence"})
      */
     protected $libelle;
@@ -47,12 +47,12 @@ class Reference
      * @var string
      * @Assert\NotBlank(message="Le code ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le code.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le code."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="ref_code", type="string", length=255, options = {"comment" = "Code de la référence"})
      */
     protected $code;
