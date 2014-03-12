@@ -113,12 +113,7 @@
             <div id="mesrequetes" class="closed">
                 <div class="content" style="display:none">
                     <h3 class="violet">Mes requêtes</h3>
-                    <ul>
-                        <li><a href="#"><i class="fa fa-circle violet" ></i> Requete 1</a></li>
-                        <li><a href="#"><i class="fa fa-circle fa-inverse" ></i> Requete 3</a></li>
-                        <li><a href="#"><i class="fa fa-circle fa-inverse" ></i> Requete 4</a></li>
-                        <li><a href="#"><i class="fa fa-circle fa-inverse" ></i> Requete 5</a></li>
-                    </ul>
+                    {{ render(controller("HopitalNumeriqueRechercheBundle:Requete:index", {'indexVue':false} )) }}
                     <a href="{{path('hopital_numerique_requete_homepage')}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Gérer mes requêtes</a>
                 </div>
             </div>

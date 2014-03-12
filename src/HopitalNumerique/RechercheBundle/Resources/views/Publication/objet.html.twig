@@ -56,7 +56,7 @@
             </div>
             
             <div class="col-md-12">
-                {{contenu.contenu|raw}}
+                {{contenu.contenu|parsePublication|raw}}
             </div>
         {# Cas Objet #}
         {% else %}
@@ -65,7 +65,7 @@
             </div>
             
             <div class="col-md-12">
-                {{objet.resume|raw}}
+                {{objet.resume|parsePublication|raw}}
             </div>
         {% endif %}
 
@@ -84,7 +84,7 @@
                     
                     <div class="clearfix"></div>
                     {% if objet.synthese is not null %}
-                        <a class="downloadLink readmore synthese fancybox.ajax" href="{{path('hopital_numerique_recherche_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
+                        <a class="downloadLink readmore synthese fancybox.iframe" href="{{path('hopital_numerique_recherche_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
                     {% endif %}
                 </div>
             </div>

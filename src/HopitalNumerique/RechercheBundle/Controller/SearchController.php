@@ -11,7 +11,7 @@ class SearchController extends Controller
     /**
      * Index Action
      */
-    public function indexAction()
+    public function indexAction( $id = null )
     {
         $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
 
