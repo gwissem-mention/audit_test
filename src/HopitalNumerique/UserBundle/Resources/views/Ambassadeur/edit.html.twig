@@ -65,8 +65,8 @@
             <div class="panel-body" >
 	            <div class="sous_options">
 	                <div class="btn-toolbar">
-					    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
-					    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+{# 					    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>#}
+{# 					    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>#}
 	                    <div onclick='deleteAllReponses("{{path('hopitalnumerique_reponse_deleteAll', {'user':user.id, 'questionnaire':questionnaire.id})}}" );' class="btn btn-default" title="Suppression des réponses de ce questionnaire"><i class="fa fa-trash-o"></i></div>
 	                    <input id="questionnaire_route_redirection" type="hidden" value='{{ optionRenderForm.routeRedirect|raw }}'>
 	                </div>
