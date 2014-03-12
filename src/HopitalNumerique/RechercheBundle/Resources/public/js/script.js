@@ -78,7 +78,45 @@ $(document).ready(function() {
         'width'     : '80%',
         'scrolling' : 'no'
     });
+
+    handleRequestForRecherche();
 });
+
+/**
+ * Prend en compte la requete par défaut ou la requte active
+ */
+function handleRequestForRecherche()
+{
+    refs = $.parseJSON( $('#requete-refs').val() );
+
+    //For each categ, reverse array avec select Elements
+    if( refs.categ1 ){
+        refs.categ1.reverse();
+        $.each(refs.categ1, function( key, item ){
+            selectElement( $('#origin .element-'+item) );
+        });
+    }
+    if( refs.categ2 ){
+        refs.categ2.reverse();
+        $.each(refs.categ2, function( key, item ){
+            selectElement( $('#origin .element-'+item) );
+        });
+    }
+    if( refs.categ3 ){
+        refs.categ3.reverse();
+        $.each(refs.categ3, function( key, item ){
+            selectElement( $('#origin .element-'+item) );
+        });
+    }
+    if( refs.categ4 ){
+        refs.categ4.reverse();
+        $.each(refs.categ4, function( key, item ){
+            selectElement( $('#origin .element-'+item) );
+        });
+    }
+
+    updateResultats();
+}
 
 /**
  * On sélectionne un critère que l'on veut ajouter dans la requete

@@ -15,8 +15,18 @@ class SearchController extends Controller
     {
         $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
 
+        //get connected user
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        //si on à choisis spécifiquement une requete, on la récupère
+        if( !is_null($id) )
+            $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'id' => $id ) );
+        else
+            $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'isDefault' => true ) );
+
         return $this->render('HopitalNumeriqueRechercheBundle:Search:index.html.twig', array(
-            'elements' => $elements['CATEGORIES_RECHERCHE']
+            'elements' => $elements['CATEGORIES_RECHERCHE'],
+            'requete'  => $requete
         ));
     }
 
