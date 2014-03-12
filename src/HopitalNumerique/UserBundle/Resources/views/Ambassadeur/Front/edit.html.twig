@@ -29,6 +29,11 @@
 
 {% block contenu %}
     <div class="panel">
+        {% set array = user|totototo() %}
+        {% if array is not empty %}
+            r"ejfgnbreigfbhrbhurhguzrebghi
+        {% endif %}
+    
     	{# Include des données de contractualisation #}
         {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
     
