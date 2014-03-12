@@ -47,14 +47,19 @@
 
         <div class="col-md-8">
             <div class="requete">
-                <h2 class="violet">Requête de recherche</h2>
+                <h2 class="violet {% if requete %}ropen{% endif %}">Requête de recherche</h2>
     
-                <div class="placeholder">
+                <div class="placeholder" {% if requete %}style="display:none"{% endif %}>
                     <p class="text-muted">Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi Ac ne quis a nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi nobis hoc ita dici forte miretur, quod alia quaedam in hoc facultas sit ingeni, neque haec dicendi</p>
                 </div>
 
-                <div id="dest" class="hide">
-                    <div class="requeteNom pull-right text-muted" style="display:none" data-id="" ></div>
+                <div id="dest" {% if requete is null %}class="hide"{% endif %} >
+                    {% if requete %}
+                        <div class="requeteNom pull-right text-muted" data-id="{{requete.id}}" >{{requete.nom}}</div>
+                        <script type="text/javascript">showPlaceholder = false;</script>
+                    {% else %}
+                        <div class="requeteNom pull-right text-muted" style="display:none" data-id="" ></div>
+                    {% endif %}
                     <div class="btn btn-xs btn-success" onclick="saveRequest( '{{ app.user }}' );" >Enregistrer ma requête</div>
 
                     <hr />
@@ -70,6 +75,7 @@
 
         <input type="hidden" id="resultats-url" value="{{path('hopital_numerique_recherche_getresults')}}" />
         <input type="hidden" id="requete-save-url" value="{{path('hopital_numerique_requete_save')}}" />
+        <input type="hidden" id="requete-refs" value="{% if requete %}{{requete.refs|json_encode()}}{% endif %}" />
 
         <div class="clearfix"></div>
     </div>
