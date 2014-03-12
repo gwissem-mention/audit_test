@@ -38,7 +38,7 @@
 </div>
 
 <div class="col-md-6">
-    <div id="ressources" >
+    <div id="ressources" class="background-rose" >
         <h3>Ressources externes</h3>
         <div id="ressources-slides" class="results carousel slide" data-ride="carousel" >
             <!-- Wrapper for slides -->
@@ -78,14 +78,36 @@
 <div class="col-md-6">
     <div id="forum" >
         <h3><i class="fa fa-users"></i>Forum</h3>
-        <div class="results">
-            {#{% set count = 1 %}
-            {% for objet in objets if objet['categ'] == "forum" %}
-                {% include 'HopitalNumeriqueRechercheBundle:Search:forum.html.twig' with {'objet': objet, 'count':count} %}
-                {% set count = count + 1 %}
-            {% else %}#}
-                <p> - Aucun fil de discussion du forum trouvé - </p>
-            {#{% endfor %}#}
+        <div id="forum-slides" class="results carousel slide" data-ride="carousel" >
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                {% set count = 1 %}
+                {% for objet in objets if objet['categ'] == "forum" %}
+                    {% include 'HopitalNumeriqueRechercheBundle:Search:forum.html.twig' with {'objet': objet, 'count':count} %}
+                    {% set count = count + 1 %}
+                {% else %}
+                    <div class="item active">
+                        <p> - Aucun fil de discussion du forum trouvé - </p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% if count > 1 %}
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    {% for i in 2..count %}
+                        <li data-target="#forum-slides" data-slide-to="{{i}}" class="{% if i == 2 %}active{% endif %}"></li>
+                    {% endfor %}
+                </ol>
+
+                <!-- Controls -->
+                <a class="left carousel-control" href="#forum-slides" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a class="right carousel-control" href="#forum-slides" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            {% endif %}
         </div>
     </div>
 </div>

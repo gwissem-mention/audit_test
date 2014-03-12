@@ -99,3 +99,11 @@
         #resultats #forum .results{padding:0 15px;}
         #resultats #forum .results h4{color: #ffffff; font-size: 14px; font-weight: bold; margin-bottom: 0; }
         #resultats #forum .results p{color: #ffffff; font-size: 12px; font-weight: normal}
+        #resultats #forum .results .carousel-indicators{bottom: 0}
+        #resultats #forum .results .carousel-inner{padding:0 25px 25px 25px}
+        #resultats #forum .results .carousel-control{width:1%;}
+        #resultats #forum .results .carousel-control.right {background: none}
+        #resultats #forum .results .carousel-control.left {background: none}
+
+
+        
