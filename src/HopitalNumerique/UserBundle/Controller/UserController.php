@@ -441,8 +441,8 @@ class UserController extends Controller
                 	case 'front':
                 	    return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
                 	    break;
-                	case 'i':
-                	    return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+                	case 'information-personnelles':
+                	    return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
                 	    break;
                 	case 'save-close':
                 	    return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );

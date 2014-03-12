@@ -263,14 +263,26 @@ class QuestionnaireController extends Controller
                     
                     //Mise à jour de la réponse dans le tableau des réponses
                     $reponses[$idQuestion] = $reponse;
+                }                
+
+                //Envoie du mail à l'utilisateur pour l'aleter de la validation de sa candidature
+                switch ($questionnaire->getNomMinifie())
+                {
+                	case 'expert':
+                        $mail = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertMail($user);
+                        $this->get('mailer')->send($mail);
+                	    break;
+                	case 'ambassadeur':
+                        $mail = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurMail($user);
+                        $this->get('mailer')->send($mail);
+                	    break;
+                	default:
+                	    throw new \Exception('Ce type de questionnaire ne possède pas de mail en base.');
+                	    break;
                 }
                 
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Votre candidature au poste ' . $questionnaire->getNomMinifie() . ' a bien été envoyée, nous reviendrons vers vous dans les plus brefs délais.' );
-                
-                //Envoie du mail à l'utilisateur pour l'aleter de la validation de sa candidature
-                $mail = $this->get('nodevo_mail.manager.mail')->sendCandidatureMail($user);
-                $this->get('mailer')->send($mail);
-                
+                                
                 //Mise à jour/création des réponses
                 $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );
     

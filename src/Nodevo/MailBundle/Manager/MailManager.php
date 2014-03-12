@@ -86,16 +86,30 @@ class MailManager extends BaseManager
     }
     
     /**
-     * Envoi un mail du type AjoutUser
+     * Envoi un mail de confirmation de candidature expert
      *
      * @param User $user Utilisateur qui recevras l'email
      *
      * @return Swift_Message
      */
-    public function sendCandidatureMail( $user )
+    public function sendCandidatureExpertMail( $user )
     {
         $mail = $this->findOneById(8);
         
+        return $this->_generationMail($user, $mail);
+    }
+    
+    /**
+     * Envoi un mail de confirmation de candidature ambassadeur
+     *
+     * @param User $user Utilisateur qui recevras l'email
+     *
+     * @return Swift_Message
+     */
+    public function sendCandidatureAmbassadeurMail( $user )
+    {
+        $mail = $this->findOneById(9);
+    
         return $this->_generationMail($user, $mail);
     }
    

@@ -46,7 +46,7 @@ class AmbassadeurController extends Controller
                 'themeQuestionnaire' => $themeQuestionnaire,
                 'routeRedirect'      => json_encode(array(
                     'quit' => array(
-                        'route'     => 'hopital_numerique_homepage',
+                        'route'     => 'hopitalnumerique_user_ambassadeur_front_edit',
                         'arguments' => array()
                     )
                 ))
