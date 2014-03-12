@@ -42,6 +42,11 @@ class RequeteController extends Controller
         $requete->setRefs( $references );
         $requete->setUser( $user );
 
+        //s'il n'existe pas encore de requête pour cet utilisateur, on met celle la en requête par défaut
+        $tmp = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user ) );
+        if( !$tmp )
+            $requete->setIsDefault( true );
+
         $this->get('hopitalnumerique_recherche.manager.requete')->save( $requete );
 
         return new Response('{"success":true}', 200);
