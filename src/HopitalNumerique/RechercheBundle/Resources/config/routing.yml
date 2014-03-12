@@ -1,7 +1,13 @@
 # URLs de recherche
 hopital_numerique_recherche_homepage:
     pattern:  /recherche-par-referencement/
-    defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index }
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index}
+
+hopital_numerique_recherche_homepage_requete:
+    pattern:  /recherche-par-referencement/requete/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index, id:1 }
+    requirements: 
+        id: \d+
 
 hopital_numerique_recherche_getresults:
     pattern:  /recherche-par-referencement/get-results

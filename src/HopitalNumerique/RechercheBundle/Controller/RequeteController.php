@@ -11,7 +11,7 @@ class RequeteController extends Controller
     /**
      * Affichage de la liste des requêtes de l'utilisateur connecté
      */
-    public function indexAction()
+    public function indexAction($indexVue)
     {
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -19,9 +19,10 @@ class RequeteController extends Controller
         //get requetes
         $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->findBy( array( 'user' => $user ) );
 
-        return $this->render('HopitalNumeriqueRechercheBundle:Requete:index.html.twig', array(
-            'requetes' => $requetes
-        ));
+        if( $indexVue )
+            return $this->render('HopitalNumeriqueRechercheBundle:Requete:index.html.twig', array('requetes' => $requetes));
+        else
+            return $this->render('HopitalNumeriqueRechercheBundle:Requete:mesrequetes.html.twig', array('requetes' => $requetes));
     }
 
     /**

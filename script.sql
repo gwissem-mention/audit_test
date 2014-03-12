@@ -70,7 +70,7 @@ UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_uri` = 'javascript:ale
 INSERT INTO `wwwhopitalnumeriquecom`.`core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`) VALUES (NULL, 'Système de recherche FrontOffice', '/^\\/recherche-par-referencement/', '12');
 INSERT INTO `wwwhopitalnumeriquecom`.`core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`) VALUES (NULL, 'Accès aux publications FrontOffice', '/^\\/publication/', '13');
 INSERT INTO `wwwhopitalnumeriquecom`.`core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`) VALUES (NULL, 'Accès aux requetes FrontOffice', '/^\\/requetes/', '14');
-
+INSERT INTO `wwwhopitalnumeriquecom`.`core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES (NULL, '66', '3', 'Recherche - Requete appliquée', 'hopital_numerique_recherche_homepage_requete', NULL, '0', NULL, NULL, '0', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '3');
 
 
 

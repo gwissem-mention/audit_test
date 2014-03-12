@@ -32,5 +32,5 @@ fos_user_resetting:
 
 #Requetes de recherche
 hopital_numerique_requete_homepage:
-    pattern:  /requetes
-    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:index }
+    pattern:  /requetes/{indexVue}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:index, indexVue:true }
