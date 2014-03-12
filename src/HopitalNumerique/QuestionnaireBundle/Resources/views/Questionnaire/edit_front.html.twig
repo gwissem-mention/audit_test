@@ -14,7 +14,7 @@
     {% endstylesheets %}
 {% endblock %}
 
-<div id="form_questionnaire">
+<div id="form_questionnaire_front">
 	<div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
 	{% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
 	{{ form_javascript(form) }}

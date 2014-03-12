@@ -103,10 +103,6 @@ class QuestionnaireController extends Controller
         );
     }
 
-    public function deleteAllAction()
-    {
-    }
-
         
     /**
      * Effectue le render des formulaires de Questionnaire

@@ -1,8 +1,9 @@
 div#page-container div#page-content div#wrap div.container div.panel-body div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
 
 /* Informations personelles */
-div#form_edit_informations_personnelles form {position: relative; padding: 60px 20px 50px 20px;}
+div#form_edit_informations_personnelles form {position: relative; padding: 20px 35px 15px 35px;}
 div#form_edit_informations_personnelles form .champ-obligatoire{color: #5d5d5d;width: 165px; height: 4px; position: absolute; top: -20px; right: 0px;font-style:italic;}
 div#form_edit_informations_personnelles form .champ-obligatoire .etoile{color: #e01958;}
 div#form_edit_informations_personnelles form .username {padding: 7px 0px 0px 15px;}
 div#form_edit_informations_personnelles form label{ color:#333333; font-size: 13px }
+div#form_edit_informations_personnelles form h4{ text-align:left; padding: 30px 0px 10px 0px; }
