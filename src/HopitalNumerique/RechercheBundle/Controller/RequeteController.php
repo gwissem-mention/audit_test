@@ -29,16 +29,22 @@ class RequeteController extends Controller
      */
     public function saveAction()
     {
+        $id         = $this->get('request')->request->get('id');
         $nom        = $this->get('request')->request->get('nom');
         $references = $this->get('request')->request->get('references');
-
-        //on crée une nouvelle requete
-        $requete = $this->get('hopitalnumerique_recherche.manager.requete')->createEmpty();
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
 
-        $requete->setNom( $nom );
+        //cas AJOUT
+        if( $id === ''){
+            //on crée une nouvelle requete
+            $requete = $this->get('hopitalnumerique_recherche.manager.requete')->createEmpty();
+            $requete->setNom( $nom );
+        //cas UPDATE
+        }else
+            $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'id' => $id ) );
+
         $requete->setRefs( $references );
         $requete->setUser( $user );
 
@@ -49,7 +55,7 @@ class RequeteController extends Controller
 
         $this->get('hopitalnumerique_recherche.manager.requete')->save( $requete );
 
-        return new Response('{"success":true}', 200);
+        return new Response('{"success":true, "id":'.$requete->getId().', "nom":"'.$requete->getNom().'"}', 200);
     }
 
     /**
@@ -60,10 +66,23 @@ class RequeteController extends Controller
     public function deleteAction($id)
     {
         $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'id' => $id ) );
+        $default = $requete->getIsDefault();
+
+        //get connected user
+        $user = $this->get('security.context')->getToken()->getUser();
 
         //Suppression de l'entitée
         $this->get('hopitalnumerique_recherche.manager.requete')->delete( $requete );
 
+        //si on a supprimé la dernière requete par défaut, on met en défaut une autre requete 
+        if($default){
+            $newRequete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user) );
+            if($newRequete){
+                $newRequete->setIsDefault(true);
+                $this->get('hopitalnumerique_recherche.manager.requete')->save( $newRequete );
+            }
+        }
+        
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
 
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopital_numerique_requete_homepage').'"}', 200);

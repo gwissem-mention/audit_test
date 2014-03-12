@@ -65,5 +65,15 @@ INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expe
 
 /*QSO - 12/03/2014
    DEV -> PROD
-   Modifs items menu */
+   Modifs items menu + ressource */
 UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_uri` = 'javascript:alert(''Forum Hôpital Numérique bientôt disponible.'');' WHERE `core_menu_item`.`itm_id` = 67;
+INSERT INTO `wwwhopitalnumeriquecom`.`core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`) VALUES (NULL, 'Système de recherche FrontOffice', '/^\\/recherche-par-referencement/', '12');
+INSERT INTO `wwwhopitalnumeriquecom`.`core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`) VALUES (NULL, 'Accès aux publications FrontOffice', '/^\\/publication/', '13');
+INSERT INTO `wwwhopitalnumeriquecom`.`core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`) VALUES (NULL, 'Accès aux requetes FrontOffice', '/^\\/requetes/', '14');
+
+
+
+
+
+
+

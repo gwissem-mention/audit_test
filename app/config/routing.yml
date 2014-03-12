@@ -22,7 +22,7 @@ hopital_numerique_intervention_user:
 
 hopital_numerique_recherche:
     resource: "@HopitalNumeriqueRechercheBundle/Resources/config/routing.yml"
-    prefix:   /recherche-par-referencement
+    prefix:   /
 
 # Bundles Hopital Numérique : partie Admin
 hopital_numerique_user:

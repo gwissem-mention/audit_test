@@ -1,10 +1,10 @@
 # URLs de recherche
 hopital_numerique_recherche_homepage:
-    pattern:  /
+    pattern:  /recherche-par-referencement/
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index }
 
 hopital_numerique_recherche_getresults:
-    pattern:  /get-results
+    pattern:  /recherche-par-referencement/get-results
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:getResults }
 
 hopital_numerique_recherche_synthese:
@@ -15,13 +15,13 @@ hopital_numerique_recherche_synthese:
 
 #URLs de publication (visualisation)
 hopital_numerique_recherche_publication_objet:
-    pattern:  /{id}-{alias}
+    pattern:  /publication/{id}-{alias}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:Publication:objet", id:1, alias:alias }
     requirements:
         id: \d+
 
 hopital_numerique_recherche_publication_contenu:
-    pattern:  /{id}-{alias}/{idc}-{aliasc}
+    pattern:  /publication/{id}-{alias}/{idc}-{aliasc}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:Publication:contenu", id:1, idc:1, alias:alias, aliasc:aliasc}
     requirements:
         id: \d+

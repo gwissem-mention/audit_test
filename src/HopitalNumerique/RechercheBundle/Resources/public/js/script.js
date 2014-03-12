@@ -76,8 +76,7 @@ $(document).ready(function() {
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '80%',
-        'scrolling' : 'no',
-        'modal'     : true
+        'scrolling' : 'no'
     });
 });
 
@@ -295,25 +294,48 @@ function getReferences()
 function saveRequest( user )
 {
     if( user ){
-        apprise('Nom de la requête', {'input':true,'textOk':'Enregistrer','textCancel':'Annuler'}, function(r) {
-            if( r ){
-                $.ajax({
-                    url  : $('#requete-save-url').val(),
-                    data : {
-                        nom        : r,
-                        references : getReferences()
-                    },
-                    type     : 'POST',
-                    dataType : 'json',
-                    success  : function( data ){
-                        if(data.success){
-                            apprise('Requête enregistrée');
-                            $('.requeteNom').html( r ).slideDown();
-                        }
-                    }
-                });
-            }
-        });
+        //une requete est déjà selectionnée, au click sur enregistrer on propose soit la création d'une nouvelle requete, soit la mise à jour de celle ci
+        if( $('.requeteNom').data('id') != '' ){
+            apprise('Enregistrer en tant que nouvelle requête :', {'input':true,'textOk':'Enregistrer','textCancel':'Mettre à jour la requête courante'}, function(r) {
+                if( r )
+                    handleRequeteSave( r, null );
+                else
+                    handleRequeteSave( r, $('.requeteNom').data('id') );
+            });
+        //aucune requete active, on propose l'enregistrement
+        }else{
+            apprise('Nom de la requête :', {'input':true,'textOk':'Enregistrer','textCancel':'Annuler'}, function(r) {
+                if( r )
+                    handleRequeteSave( r, null );
+            });
+        }
     }else
         apprise('Pour enregistrer votre requête, vous devez créer un compte.');
+}
+
+/**
+ * Fonction ajax qui gère la création ou la mise à jour de la requete
+ */
+function handleRequeteSave( r, id )
+{
+    $.ajax({
+        url  : $('#requete-save-url').val(),
+        data : {
+            nom        : r,
+            id         : id,
+            references : getReferences()
+        },
+        type     : 'POST',
+        dataType : 'json',
+        success  : function( data ){
+            if(data.success){
+                // if ( id != null)
+                //     apprise('Requête mise à jour');
+                // else
+                //     apprise('Requête enregistrée');
+                $('.requeteNom').html( data.nom ).slideDown();
+                $('.requeteNom').data('id', data.id);
+            }
+        }
+    });
 }

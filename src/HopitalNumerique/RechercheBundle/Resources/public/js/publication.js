@@ -4,8 +4,7 @@ $(document).ready(function() {
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '80%',
-        'scrolling' : 'no',
-        'modal'     : true
+        'scrolling' : 'no'
     });
 
     $('#sommaire.closed').click(function(){
