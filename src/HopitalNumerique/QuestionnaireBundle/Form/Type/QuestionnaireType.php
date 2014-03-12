@@ -126,13 +126,15 @@ class QuestionnaireType extends AbstractType
             	    ));
             	    break;
             	case 'checkbox':
+                    $attr = $question->getObligatoire() ? array('class' => 'checkbox validate[required]') : array();
+
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
             	            'required'   => $question->getObligatoire(),
             	            'label'      => $question->getLibelle(),
             	            'mapped'     => false,
             	            'read_only'  => $this->_readOnly,
             	            'disabled'   => $this->_readOnly,
-            	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
+            	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => 'checkbox ' . $question->getVerifJS() ),
             	            'data'       => is_null($reponseCourante) ? false : ('1' === $reponseCourante->getReponse() ? true : false)
             	    ));
             	    break;
