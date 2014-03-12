@@ -111,4 +111,56 @@ class ExpertController extends Controller
                 )
         ));
     }
+    
+    /**
+     * Validation de la candidature de l'utilisateur pour le questionnaire
+     *
+     * @param int $user
+     */
+    public function validationCandidatureAction( HopiUser $user )
+    {
+        $routeRedirection = $this->get('request')->request->get('routeRedirection');
+        $routeRedirection = json_decode($routeRedirection, true);
+    
+        //Récupération du questionnaire de l'ambassadeur
+        $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
+        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
+    
+        //Changement du rôle à ambassadeur de l'utilisateur
+        $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_EXPERT_6'));
+        $user->setRoles( array( $role ) );
+    
+        //Envoie du mail de validation de la candidature
+        $mail = $this->get('nodevo_mail.manager.mail')->sendValidationCandidatureExpertMail($user);
+        $this->get('mailer')->send($mail);
+    
+        //Mise à jour / création de l'utilisateur
+        $this->get('fos_user.user_manager')->updateUser( $user );
+    
+        $this->get('session')->getFlashBag()->add( 'success' ,  'La candidature au poste '. $questionnaire->getNomMinifie() .' a été validé.' );
+    
+        return new Response('{"success":true, "url" : "'.$this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']).'"}', 200);
+    }
+    
+    /**
+     * Refus de la candidature de l'utilisateur pour le questionnaire
+     *
+     * @param int $idUser
+     * @param int $idQuestionnaire
+     */
+    public function refusCandidatureAction( HopiUser $user )
+    {
+        $routeRedirection = $this->get('request')->request->get('routeRedirection');
+        $routeRedirection = json_decode($routeRedirection, true);
+    
+        //Récupération du questionnaire de l'expert
+        $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
+        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
+    
+        $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAll( $user->getId(), $questionnaire->getId());
+    
+        $this->get('session')->getFlashBag()->add( 'success' ,  'Le questionnaire '. $questionnaire->getNomMinifie() .' a été vidé.' );
+    
+        return new Response('{"success":true, "url" : "'.$this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']).'"}', 200);
+    }
 }

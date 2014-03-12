@@ -18,6 +18,4 @@
 	{% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
 	{{ form_javascript(form) }}
 	{{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}
-    {# Route de la validation de la candidature #}
-    <input type="hidden" id="questionnaire_validation_candidature" value="{{path('hopital_numerique_user_departements')}}" />
 </div>

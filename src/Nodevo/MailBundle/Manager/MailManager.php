@@ -112,6 +112,64 @@ class MailManager extends BaseManager
     
         return $this->_generationMail($user, $mail);
     }
+    
+
+
+    /**
+     * Envoi un mail de validation de candidature expert
+     *
+     * @param User $user Utilisateur qui recevras l'email
+     *
+     * @return Swift_Message
+     */
+    public function sendValidationCandidatureExpertMail( $user )
+    {
+        $mail = $this->findOneById(11);
+    
+        return $this->_generationMail($user, $mail);
+    }
+    
+    /**
+     * Envoi un mail de validation de candidature ambassadeur
+     *
+     * @param User $user Utilisateur qui recevras l'email
+     *
+     * @return Swift_Message
+     */
+    public function sendValidationCandidatureAmbassadeurMail( $user )
+    {
+        $mail = $this->findOneById(12);
+    
+        return $this->_generationMail($user, $mail);
+    }
+    
+    /**
+     * Envoi un mail de refus de candidature expert
+     *
+     * @param User $user Utilisateur qui recevras l'email
+     *
+     * @return Swift_Message
+     */
+    public function sendRefusCandidatureExpertMail( $user )
+    {
+        $mail = $this->findOneById(13);
+    
+        return $this->_generationMail($user, $mail);
+    }
+    
+    /**
+     * Envoi un mail de validation de candidature ambassadeur
+     *
+     * @param User $user Utilisateur qui recevras l'email
+     *
+     * @return Swift_Message
+     */
+    public function sendRefusCandidatureAmbassadeurMail( $user )
+    {
+        $mail = $this->findOneById(14);
+    
+        return $this->_generationMail($user, $mail);
+    }
    
     /**
      * Retourne un email de test

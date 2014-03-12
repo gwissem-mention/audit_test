@@ -203,13 +203,12 @@ class AmbassadeurController extends Controller
     }  
 
     /**
-     * Validation de la candidature de l'utilisateur pour le questionnaire donné
+     * Validation de la candidature de l'utilisateur pour le questionnaire
      *
-     * @param int $idUser
-     * @param int $idQuestionnaire
+     * @param int $user
      */
     public function validationCandidatureAction( HopiUser $user )
-    {
+    {                
         $routeRedirection = $this->get('request')->request->get('routeRedirection');
         $routeRedirection = json_decode($routeRedirection, true);
         
@@ -218,23 +217,23 @@ class AmbassadeurController extends Controller
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
 
         //Changement du rôle à ambassadeur de l'utilisateur
-        $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_AMBASSADEUR_7'));
-        $user->setRoles( array( $role ) );        
+        $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_AMBASSADEUR_7'));        
+        $user->setRoles( array( $role ) );
 
         //Envoie du mail de validation de la candidature
-        $mail = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertMail($user);
+        $mail = $this->get('nodevo_mail.manager.mail')->sendValidationCandidatureAmbassadeurMail($user);
         $this->get('mailer')->send($mail);
         
         //Mise à jour / création de l'utilisateur
         $this->get('fos_user.user_manager')->updateUser( $user );
     
-        $this->get('session')->getFlashBag()->add( 'success' ,  'Le questionnaire '. $questionnaire->getNomMinifie() .' a été vidé.' );
+        $this->get('session')->getFlashBag()->add( 'success' ,  'La candidature au poste '. $questionnaire->getNomMinifie() .' a été validé.' );
     
         return new Response('{"success":true, "url" : "'.$this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']).'"}', 200);
     }
     
     /**
-     * Refus de la candidature de l'utilisateur pour le questionnaire donné
+     * Refus de la candidature de l'utilisateur pour le questionnaire
      *
      * @param int $idUser
      * @param int $idQuestionnaire
@@ -243,6 +242,11 @@ class AmbassadeurController extends Controller
     {
         $routeRedirection = $this->get('request')->request->get('routeRedirection');
         $routeRedirection = json_decode($routeRedirection, true);
+        
+        //Texte du refus entré dans le apprise
+        $texteRefus = $this->get('request')->request->get('texteRefus');
+        
+        die($texteRefus);
         
         //Récupération du questionnaire de l'expert
         $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');

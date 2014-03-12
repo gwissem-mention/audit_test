@@ -159,6 +159,19 @@ hopitalnumerique_user_expert_deleteAll:
         idQuestionnaire: \d+
         _method: post|delete
 
+hopitalnumerique_user_expert_validationCandidature:
+    pattern: /admin/user/expert/validation/{user}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Expert:validationCandidature, _format: json, user: 1}
+    requirements:
+        user: \d+
+        _method: post
+
+hopitalnumerique_user_expert_refusCandidature:
+    pattern: /admin/user/expert/refus/{user}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Expert:refusCandidature, _format: json, user: 1}
+    requirements:
+        user: \d+
+
 #Ambassadeur
 hopitalnumerique_user_ambassadeur_edit:
     pattern:  /admin/user/ambassadeur/edit/{id}
@@ -179,6 +192,20 @@ hopitalnumerique_user_ambassadeur_deleteAll:
         idUser: \d+
         idQuestionnaire: \d+
         _method: post|delete
+
+hopitalnumerique_user_ambassadeur_validationCandidature:
+    pattern: /admin/user/ambassadeur/validation/{user}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:validationCandidature, _format: json, user: 1}
+    requirements:
+        user: \d+
+        _method: post
+
+hopitalnumerique_user_ambassadeur_refusCandidature:
+    pattern: /admin/user/ambassadeur/refus/{user}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:refusCandidature, _format: json, user: 1}
+    requirements:
+        user: \d+
+        _method: post
 
 hopitalnumerique_user_ambassadeur_liste_objets:
     pattern:  /admin/user/ambassadeur/listeobjets/{id}
