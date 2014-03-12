@@ -175,7 +175,7 @@ class UserRepository extends EntityRepository
         {
             $requete->andWhere('user.'.$critereChamp.' = :'.$critereChamp)
                 ->setParameter($critereChamp, $critereValeur);
-        }
+        } 
 
         return $requete->getQuery()->getResult();
     }

@@ -20,6 +20,13 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    <script type="text/javascript">
+        {% if interventionDemande.etablissements|length > 0 %}{% spaceless %}
+            {% for etablissement in interventionDemande.etablissements %}
+                HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS.push({{ etablissement.id }});
+            {% endfor %}
+        {% endspaceless %}{% endif %}
+    </script>
 {% endblock %}
 
 {% block pageTitre %}Nouvelle intervention{% endblock %}
@@ -29,14 +36,14 @@
 {% endblock %}
 
 {% block contenu %}
-    <div class="panel">
+    <div class="panel panel_form">
         
         <form method="post" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
             {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
             
             <div class="form-group">
                 <label class="col-md-4 control-label">Ambassadeur</label>
-                <div class="col-md-7"><div class="form-control">{{ ambassadeur.nom }} {{ ambassadeur.prenom }}</div></div>
+                <div class="col-md-7"><div class="form-control">{{ ambassadeur.appellation }}</div></div>
                 <div class="col-md-4"><div class="help-block"></div></div>
             </div>
             
@@ -44,7 +51,9 @@
 
             {{ form_widget(interventionDemandeFormulaireNouveau) }}
             
-            <input type="submit" class="btn btn-success pull-right submit">
+            <div class="boutons">
+                <input type="submit" class="btn btn-success submit">
+            </div>
         </form>
 
     </div>

@@ -38,7 +38,7 @@
 {% endblock %}
 
 {% block contenu %}
-    <div class="panel">
+    <div class="panel panel_form">
         
         <form method="post" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireEdition) }}>
             {% form_theme interventionDemandeFormulaireEdition 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
@@ -78,7 +78,10 @@
                 <div class="col-md-4"><div class="help-block"></div></div>
             </div>
 
-            <input type="submit" class="btn btn-success pull-right submit">
+            <div class="boutons">
+                <input type="submit" class="btn btn-success submit">
+            </div>
+            
         </form>
 
     </div>

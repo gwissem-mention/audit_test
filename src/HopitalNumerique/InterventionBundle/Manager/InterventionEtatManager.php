@@ -5,6 +5,7 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Manager;
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 
@@ -129,4 +130,5 @@ class InterventionEtatManager
     {
         return $this->container->get('hopitalnumerique_reference.manager.reference')->findOneById($referenceid);
     }
+
 }

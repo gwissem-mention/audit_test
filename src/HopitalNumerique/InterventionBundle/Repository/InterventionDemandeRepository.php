@@ -16,6 +16,27 @@ use HopitalNumerique\UserBundle\Entity\User;
 class InterventionDemandeRepository extends EntityRepository
 {
     /**
+     * Retourne les demandes d'intervention qui doivent automatiquement être validées par le CMSI.
+     * 
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention qui doivent automatiquement être validées par le CMSI
+     */
+    public function findByDemandesInitialesAValiderCmsi()
+    {
+        $requete = $this->_em->createQueryBuilder();
+        
+        $requete
+            ->select('interventionDemande')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+            ->where('interventionDemande.interventionEtat = :interventionEtat')
+                ->setParameter('interventionEtat', InterventionEtat::getInterventionEtatDemandeInitialeId())
+            ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.dateCreation, '.InterventionEtat::$VALIDATION_CMSI_NOMBRE_JOURS.', \'day\')')
+                ->setParameter('aujourdhui', new \DateTime())
+        ;
+
+        return $requete->getQUery()->getResult();
+    }
+    
+    /**
      * Récupère les données du grid des nouvelles demandes d'intervention sous forme de tableau correctement formaté
      * 
      * @param \HopitalNumerique\UserBundle\Entity\User $cmsi Le CMSI des demandes d'intervention
@@ -23,8 +44,6 @@ class InterventionDemandeRepository extends EntityRepository
      */
     public function getGridDonnees_DemandesNouvelles(User $cmsi)
     {
-        //$demandesInitiales = array();
-        
         $requete = $this->_em->createQueryBuilder();
         $requete
             ->select(
@@ -34,6 +53,7 @@ class InterventionDemandeRepository extends EntityRepository
                 'objet.id AS objetId',
                 //'objet.titre AS objetTitre',
                 'GROUP_CONCAT(objet.titre) AS objetsInformations',
+                'interventionEtat.id AS interventionEtatId',
                 'interventionEtat.libelle AS interventionEtatLibelle',
                 'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle'
             )
@@ -54,13 +74,10 @@ class InterventionDemandeRepository extends EntityRepository
             ->andWhere('interventionEtat.id = :interventionEtatDemandeInitiale OR interventionEtat.id = :interventionEtatAttenteCmsi')
                 ->setParameter('interventionEtatDemandeInitiale', InterventionEtat::getInterventionEtatDemandeInitialeId())
                 ->setParameter('interventionEtatAttenteCmsi', InterventionEtat::getInterventionEtatAttenteCmsiId())
+            ->orderBy('interventionDemande.id', 'DESC')
             ->groupBy('interventionDemande.id')
         ;
-        
-        
-        
-        
-        
+
         return $requete->getQUery()->getResult();
         
         
@@ -126,6 +143,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->andWhere('interventionEtat.id != :interventionEtatDemandeInitiale AND interventionEtat.id != :interventionEtatAttenteCmsi')
                 ->setParameter('interventionEtatDemandeInitiale', InterventionEtat::getInterventionEtatDemandeInitialeId())
                 ->setParameter('interventionEtatAttenteCmsi', InterventionEtat::getInterventionEtatAttenteCmsiId())
+            ->orderBy('interventionDemande.id', 'DESC')
         ;
 
         return $requete->getQUery()->getResult();

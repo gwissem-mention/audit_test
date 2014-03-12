@@ -12,6 +12,15 @@ namespace HopitalNumerique\InterventionBundle\Entity;
 class InterventionEtat
 {
     /**
+     * @var integer Nombre de jours que le CMSI a pour mettre à jour une demande initiale avant qu'elle soit automatiquement validée
+     */
+    public static $VALIDATION_CMSI_NOMBRE_JOURS = 7;
+    /**
+     * @var integer Nombre de jours avant que le CMSI reçoit une alerte s'il n'a pas mis à jour une demande d'intervention en attente
+     */
+    public static $NOTIFICATION_MISE_EN_ATTENTE_CMSI_NOMBRE_JOURS = 7;
+    
+    /**
      * @var integer ID de l'état Demande initiale
      */
     private static $INTERVENTION_ETAT_DEMANDE_INITIALE = 14;

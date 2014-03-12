@@ -70,14 +70,15 @@ class InterventionDemandeType extends AbstractType
                 'required' => true,
                 'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_region')
             ))
-            ->add('etablissements', 'entity',
-                    array(
-                            'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_etablissement')
-                                    ->getEtablissementsChoices(),
-                            'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement', 'property' => 'nom',
-                            'multiple' => true, 'label' => 'Attacher d\'autres établissements à ma demande, parmi',
-                            'required' => false,
-                            'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements')))
+            ->add('etablissements', 'entity', array(
+                'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_etablissement')->getEtablissementsChoices(),
+                'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
+                'property' => 'nom',
+                'multiple' => true,
+                'label' => 'Rattacher d\'autres établissements à ma demande, parmi',
+                'required' => false,
+                'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements')
+            ))
             ->add('referent', 'entity', array(
                 'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getUsersChoices(),
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
@@ -85,19 +86,32 @@ class InterventionDemandeType extends AbstractType
                 'required' => true,
                 'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_referent')
             ))
-            ->add('autresEtablissements', 'textarea',
-                    array('label' => 'Attacher d\'autres établissements à ma demande', 'required' => false))
-            ->add('objets', 'entity',
-                    array('label' => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
-                            'class' => 'HopitalNumeriqueObjetBundle:Objet', 'property' => 'titre', 'multiple' => true))
-            ->add('description', 'textarea',
-                    array('label' => 'Description succinte de mon projet', 'required' => false))
-            ->add('difficulteDescription', 'textarea',
-                    array('label' => 'Description de ma difficulté', 'required' => false))
-            ->add('champLibre', 'textarea',
-                    array('label' => 'Champ libre', 'required' => false))
-            ->add('rdvInformations', 'textarea',
-                    array('label' => 'Informations pour la prise de rendez-vous (échéance, disponibilités, etc)', 'required' => false));
+            ->add('autresEtablissements', 'textarea', array(
+                'label' => 'Attacher d\'autres établissements à ma demande',
+                'required' => false
+            ))
+            ->add('objets', 'entity', array(
+                'label' => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
+                'class' => 'HopitalNumeriqueObjetBundle:Objet',
+                'property' => 'titre',
+                'multiple' => true
+            ))
+            ->add('description', 'textarea', array(
+                'label' => 'Description succinte de mon projet',
+                'required' => false
+            ))
+            ->add('difficulteDescription', 'textarea', array(
+                'label' => 'Description de ma difficulté',
+                'required' => false
+            ))
+            ->add('champLibre', 'textarea', array(
+                'label' => 'Champ libre',
+                'required' => false
+            ))
+            ->add('rdvInformations', 'textarea', array(
+                'label' => 'Informations pour la prise de rendez-vous (échéance, disponibilités, etc)',
+                'required' => false
+            ));
     }
 
     /**

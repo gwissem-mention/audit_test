@@ -8,6 +8,7 @@ use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\IGrid;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 
 /**
  * Configuration du grid des demandes d'intervention.
@@ -35,6 +36,23 @@ class DemandesNouvellesGrid extends Grid implements IGrid
         $this->addColonne(new Column\TextColumn('objetsInformations', 'Objets'));
         $this->addColonne(new Column\TextColumn('interventionEtatLibelle', 'État'));
         $this->addColonne(new Column\DateColumn('dateCreationLibelle', 'Date de création'));
+        
+        
+        $colonneDateButoir = new Column\TextColumn('dateButoir', 'Date butoir');
+        $colonneDateButoir->setAlign('center');
+        $colonneDateButoir->manipulateRenderCell(
+            function($value, $row, $router) {
+                if ($row->getField('interventionEtatId') == InterventionEtat::getInterventionEtatDemandeInitialeId())
+                {
+                    $dateCreation = $row->getField('dateCreationLibelle');
+                    $dateButoir = new \DateTime($dateCreation);
+                    $dateButoir->add(new \DateInterval('P'.InterventionEtat::$VALIDATION_CMSI_NOMBRE_JOURS.'D'));
+                    return $dateButoir->format('d/m/Y');
+                }
+                return '';
+            }
+        );
+        $this->addColonne($colonneDateButoir);
     }
 
     /**

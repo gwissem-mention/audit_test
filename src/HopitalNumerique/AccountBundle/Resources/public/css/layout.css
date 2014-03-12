@@ -31,6 +31,10 @@ div#tableau-de-bord {}
         div#tableau-de-bord div.grid ul.pagination { margin-left:10px; }
             div#tableau-de-bord div.grid ul.pagination li.active a { background-color:#6F3596; }
     /* --> */
+    /* <-- Formulaire */
+    div#tableau-de-bord div.panel_form { padding:20px 0px 20px 0px; }
+        div#tableau-de-bord div.panel_form div.boutons { padding:0px 20px;text-align:right; }
+    /* --> */
     /* <-- Formulaire en lecture seule */
     div#tableau-de-bord div.panel_form_visu { font-size:13px;padding:0px 0px 20px 6px; }
         div#tableau-de-bord div.panel_form_visu div.row { margin:10px 0px; }

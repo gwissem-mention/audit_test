@@ -5,6 +5,7 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Manager;
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Nodevo\MailBundle\Entity\Mail;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -45,8 +46,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielCreation(User $utilisateurEtablissement)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')
-                ->findOneById(InterventionCourriel::getInterventionCourrielCreationId());
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielCreationId());
 
         $this->envoiCourriel($courriel, $utilisateurEtablissement);
     }
@@ -59,11 +59,9 @@ class InterventionCourrielManager
      */
     public function envoiCourrielDemandeAcceptationAmbassadeur(User $ambassadeur, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')
-                ->findOneById(InterventionCourriel::getInterventionCourrielAcceptationAmbassadeurId());
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielAcceptationAmbassadeurId());
 
-        $this
-                ->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionDemandeUrl));
+        $this->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionDemandeUrl));
     }
     /**
      * Envoi le courriel d'acceptation ou non d'une demande d'intervention par le CMSI.
@@ -74,11 +72,9 @@ class InterventionCourrielManager
      */
     public function envoiCourrielDemandeAcceptationCmsi(User $cmsi, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')
-                ->findOneById(InterventionCourriel::getInterventionCourrielAcceptationCmsiId());
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielAcceptationCmsiId());
 
-        $this
-                ->envoiCourriel($courriel, $cmsi, array('l' => $interventionDemandeUrl));
+        $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionDemandeUrl));
     }
     /**
      * Envoi le courriel d'alerte de création de demande d'acceptation émise par un CMSI.
@@ -88,7 +84,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielAlerteReferent(User $referentEtablissement)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionAlerteReferentId());
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielAlerteReferentId());
 
         $this->envoiCourriel($courriel, $referentEtablissement);
     }
@@ -100,8 +96,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielEstAccepteCmsi(User $referentEtablissement)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')
-                ->findOneById(InterventionCourriel::getInterventionEstAccepteeCmsiId());
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionEstAccepteeCmsiId());
 
         $this->envoiCourriel($courriel, $referentEtablissement);
     }
@@ -131,9 +126,11 @@ class InterventionCourrielManager
         $remplacements['u'] = $destinataire->getAppellation();
         $courrielCorps = $this->getCourrielCorps($mail, $remplacements);
 
-        $courriel = \Swift_Message::newInstance()->setSubject($mail->getObjet())
-                ->setFrom(array($mail->getExpediteurMail() => $mail->getExpediteurName()))->setTo($destinataire->getEmail())
-                ->setBody($courrielCorps, 'text/html');
+        $courriel = \Swift_Message::newInstance()
+            ->setSubject($mail->getObjet())
+            ->setFrom(array($mail->getExpediteurMail() => $mail->getExpediteurName()))
+            ->setTo($destinataire->getEmail())
+            ->setBody($courrielCorps, 'text/html');
         $this->container->get('mailer')->send($courriel);
     }
     /**

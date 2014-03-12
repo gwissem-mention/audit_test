@@ -1,8 +1,6 @@
-hopital_numerique_intervention_demande_nouveau:
-    pattern:  /demande/nouveau/{ambassadeur}
-    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:nouveau" }
-    requirements:
-        ambassadeur: \d+
+hopital_numerique_intervention_demande_liste:
+    pattern:  /demandes/liste
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:liste" }
 
 hopital_numerique_intervention_demande_voir:
     pattern:  /demande/voir/{id}
@@ -10,15 +8,17 @@ hopital_numerique_intervention_demande_voir:
     requirements:
         id: \d+
 
+hopital_numerique_intervention_demande_nouveau:
+    pattern:  /demande/nouveau/{ambassadeur}
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Demande:nouveau" }
+    requirements:
+        ambassadeur: \d+
+
 hopital_numerique_intervention_demande_edit:
     pattern:  /demande/edit/{id}
-    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:edit" }
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Demande:edit" }
     requirements:
         id: \d+
-
-hopital_numerique_intervention_demande_liste:
-    pattern:  /demandes/liste
-    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:liste" }
 
 #<-- Vues Grid
 hopital_numerique_intervention_demandes_nouvelles:

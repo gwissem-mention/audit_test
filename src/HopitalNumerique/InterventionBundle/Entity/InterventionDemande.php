@@ -754,6 +754,25 @@ class InterventionDemande
         return $this->objets;
     }
 
+
+    
+    /**
+     * Retourne la date butoir pour le refus, validation ou mise en attente de la demande d'intervention par le CMSI.
+     * Si priode modifiée, modifier également dans DemandesNouvellesGrid.php
+     * 
+     * @return \DateTime|null La date butoir du CMSI
+     */
+    public function getDateButoirCmsi()
+    {
+        if ($this->interventionEtatEstDemandeInitiale())
+        {
+            $dateButoir = new \DateTime($dateCreation);
+            $dateButoir->add(new \DateInterval('P'.InterventionEtat::$VALIDATION_CMSI_NOMBRE_JOURS.'D'));
+            return $dateButoir;
+        }
+        return null;
+    }
+
     /**
      * Retour si l'état de l'intervention est Demande initiale.
      * 

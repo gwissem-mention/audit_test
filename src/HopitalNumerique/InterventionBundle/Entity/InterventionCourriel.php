@@ -23,7 +23,7 @@ class InterventionCourriel extends Mail
     /**
      * @var integer ID du courriel de demande d'acceptation ou non d'une demande d'intervention par le CMSI
      */
-    private static $COURRIEL_INTERVENTION_DEMANDE_ACCEPTATION_CMSI_ID = 8;
+    private static $COURRIEL_INTERVENTION_DEMANDE_ACCEPTATION_CMSI_ID = 10;
     /**
      * @var integer ID du courriel d'alerte de création de demande d'acceptation émise par un CMSI
      */
