@@ -271,7 +271,7 @@ class UserType extends AbstractType
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')
-                        ->setParameter('etat', 'PROFIL_ES')
+                        ->setParameter('etat', 'CONTEXTE_METIER_INTERNAUTE')
                         ->orderBy('ref.libelle', 'ASC');
                     }
             ))

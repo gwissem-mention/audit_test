@@ -165,7 +165,7 @@ class QuestionnaireController extends Controller
                     }
 
                     $files[$questionFiles->getAlias()] = array(
-                            'nom'  => $questionnaire->getNomMinifie() . '_' . $user->getId() . '_' . $user->getNom() . '_' . $user->getPrenom() . '_' . $questionFiles->getAlias() . '.pdf',
+                            'nom'  => $questionnaire->getNomMinifie() . '_' . $user->getId() . '_' . $user->getUsername() . '_' . $questionFiles->getAlias() . '.pdf',
                             'file' => $file,
                             'reponse' => $reponse
                     );
