@@ -1,12 +1,20 @@
-$(document).ready(function() { 
-	
+$(document).ready(function() {
+
+    //pop-in affichage du message de refus
+    $('#refusCandidature').fancybox({
+        'padding'   : 0,
+        'autoSize'  : false,
+        'width'     : '70%',
+        'scrolling' : 'no',
+        'modal'     : true
+    });
 });
 
 function deleteAllReponses(path)
 {
     apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
         if(r) { 
-        	customAjaxRedirection(path);
+            customAjaxRedirection(path);
         }
     });
 }
@@ -15,27 +23,23 @@ function validerCandidature(path)
 {
     apprise('Valider la demande de candidature ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
         if(r) { 
-        	customAjaxRedirection(path);
+            customAjaxRedirection(path);
         }
     });
 }
 
-function refuserCandidature(path)
+function refuserCandidature()
 {
-	apprise('Entrez le motif de refus de la candidature', {'input':true,'textOk':'Envoyer refus','textCancel':'Annuler'}, function(r) {
-        if( r ){
-        	$.ajax({
-                url      : path,
-                data     : {
-                	routeRedirection : $('#questionnaire_route_redirection').val(),
-                	texteRefus : r
-                },
-                type     : 'POST',
-                dataType : 'json',
-                success : function( data ){
-                    window.location = data.url;
-                }
-            }); 		
+    $.ajax({
+        url  : $('#refus-candidature-url').val(),
+        data : {
+            routeRedirection : $('#questionnaire_route_redirection').val(),
+            texteRefus       : $('#message-refus').val()
+        },
+        type     : 'POST',
+        dataType : 'json',
+        success  : function( data ){
+            window.location = data.url;
         }
     });
 }
@@ -43,13 +47,13 @@ function refuserCandidature(path)
 function customAjaxRedirection(path)
 {    
     $.ajax({
-        url      : path,
-        data     : {
-        	routeRedirection : $('#questionnaire_route_redirection').val()
+        url  : path,
+        data : {
+            routeRedirection : $('#questionnaire_route_redirection').val()
         },
         type     : 'POST',
         dataType : 'json',
-        success : function( data ){
+        success  : function( data ){
             window.location = data.url;
         }
     });

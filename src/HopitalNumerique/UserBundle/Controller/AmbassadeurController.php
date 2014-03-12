@@ -17,7 +17,6 @@ use HopitalNumerique\UserBundle\Entity\User as HopiUser;
  */
 class AmbassadeurController extends Controller
 {
-
     //---- Front Office ------
     /**
      * Affichage du formulaire d'utilisateur
@@ -31,7 +30,7 @@ class AmbassadeurController extends Controller
         
         //Récupération du questionnaire de l'expert
         $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
-        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
+        $questionnaire              = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
         
         //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
         $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
@@ -86,7 +85,6 @@ class AmbassadeurController extends Controller
                     )
         ));
     }
-
 
     /**
      * Affichage de la fiche des réponses au questionnaire ambassadeur d'un utilisateur
@@ -243,7 +241,7 @@ class AmbassadeurController extends Controller
         $routeRedirection = $this->get('request')->request->get('routeRedirection');
         $routeRedirection = json_decode($routeRedirection, true);
         
-        //Texte du refus entré dans le apprise
+        //Texte du refus entré dans la fancybox
         $texteRefus = $this->get('request')->request->get('texteRefus');
         
         die($texteRefus);
@@ -257,5 +255,13 @@ class AmbassadeurController extends Controller
         $this->get('session')->getFlashBag()->add( 'success' ,  'Le questionnaire '. $questionnaire->getNomMinifie() .' a été vidé.' );
     
         return new Response('{"success":true, "url" : "'.$this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']).'"}', 200);
+    }
+
+    /**
+     * POP-IN de message de refus
+     */
+    public function messageRefusCandidatureAction()
+    {
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:popin-message-refus.html.twig');
     }
 }

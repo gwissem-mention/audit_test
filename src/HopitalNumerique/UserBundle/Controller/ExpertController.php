@@ -153,6 +153,11 @@ class ExpertController extends Controller
         $routeRedirection = $this->get('request')->request->get('routeRedirection');
         $routeRedirection = json_decode($routeRedirection, true);
     
+        //Texte du refus entré dans la fancybox
+        $texteRefus = $this->get('request')->request->get('texteRefus');
+        
+        die($texteRefus);
+
         //Récupération du questionnaire de l'expert
         $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
