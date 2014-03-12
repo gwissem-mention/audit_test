@@ -1,0 +1,6 @@
+hopital_numerique_intervention_etat_change:
+    pattern:  /demande/{interventionDemande}/etat/{interventionEtat}/change
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Etat:ajaxChange" }
+    requirements:
+        interventionDemande: \d+
+        interventionEtat: \d+

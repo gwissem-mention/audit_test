@@ -5,6 +5,7 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Entity;
+
 /**
  * Entité d'état d'une demande d'intervention.
  */

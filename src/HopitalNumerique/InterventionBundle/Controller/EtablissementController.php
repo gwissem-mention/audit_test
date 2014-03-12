@@ -5,6 +5,7 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**

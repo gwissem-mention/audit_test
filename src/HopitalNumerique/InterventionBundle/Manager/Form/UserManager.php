@@ -5,7 +5,9 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
  * Manager pour le formulaire utilisateur propre aux demandes d'intervention.
@@ -93,6 +95,19 @@ class UserManager
     public function getUsersChoices()
     {
         return $this->container->get('hopitalnumerique_user.manager.user')->findBy(array('enabled' => true));
+    }
+    /**
+     * Retourne la liste des ambassadeurs pour les listes de formulaire.
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $region La région des ambassadeurs
+     * @return array Liste des ambassadeurs pour les listes de formulaire
+     */
+    public function getAmbassadeursChoices(Reference $region)
+    {
+        return $this->container->get('hopitalnumerique_user.manager.user')->findBy(array(
+            'enabled' => true,
+            'region' => $region
+        ));
     }
 
     /**

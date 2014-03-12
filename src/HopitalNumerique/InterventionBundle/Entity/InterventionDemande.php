@@ -1,7 +1,9 @@
 <?php
 
 namespace HopitalNumerique\InterventionBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 
 /**
  * Entité d'une demande d'intervention.
@@ -750,5 +752,24 @@ class InterventionDemande
     public function getObjets()
     {
         return $this->objets;
+    }
+
+    /**
+     * Retour si l'état de l'intervention est Demande initiale.
+     * 
+     * @return boolean VRAI ssi l'état de l'intervention est Demande initiale
+     */
+    public function interventionEtatEstDemandeInitiale()
+    {
+        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatDemandeInitialeId());
+    }
+    /**
+     * Retour si l'état de l'intervention est Mise en attente par le CMSI.
+     *
+     * @return boolean VRAI ssi l'état de l'intervention est Mise en attente par le CMSI
+     */
+    public function interventionEtatEstAttenteCmsi()
+    {
+        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAttenteCmsiId());
     }
 }

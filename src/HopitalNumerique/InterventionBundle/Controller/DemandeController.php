@@ -5,8 +5,10 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Form\Form;
 use HopitalNumerique\InterventionBundle\Exception\InterventionException;
@@ -39,18 +41,13 @@ class DemandeController extends Controller
         $this->interventionDemande = new InterventionDemande();
         $this->interventionDemande->setAmbassadeur($ambassadeur);
 
-        /*$formulaireOptions = array(
-            'user' => $this->utilisateurConnecte
-        );*/
         // @todo TEST
-        if (true || $this->utilisateurConnecte->hasRoleCmsi())
+        if ($this->utilisateurConnecte->hasRoleCmsi())
         {
-            //$utilisateurFormulaire = $this->createForm('hopitalnumerique_interventionbundle_user_cmsi', $this->utilisateurConnecte);
             $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_cmsi', $this->interventionDemande);
         }
         else
         {
-            //$utilisateurFormulaire = $this->createForm('hopitalnumerique_interventionbundle_user_etablissement', $this->utilisateurConnecte);
             $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_etablissement', $this->interventionDemande);
         }
 
@@ -59,7 +56,8 @@ class DemandeController extends Controller
         return $this->render(
             'HopitalNumeriqueInterventionBundle:Demande:nouveau.html.twig',
             array(
-                'interventionDemandeFormulaireNouveau' => $interventionDemandeFormulaire->createView()
+                'interventionDemandeFormulaireNouveau' => $interventionDemandeFormulaire->createView(),
+                'ambassadeur' => $ambassadeur
             )
         );
     }
@@ -134,9 +132,67 @@ class DemandeController extends Controller
         return $this->render(
             'HopitalNumeriqueInterventionBundle:Demande:voir.html.twig',
             array(
-                'interventionDemande' => $id
+                'interventionDemande' => $id,
+                'InterventionEtat' => new InterventionEtat()
             )
         );
+    }
+    
+    /**
+     * Édition d'une demande d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $id La demande d'intervention à éditer
+     * @return \Symfony\Component\HttpFoundation\Response La vue du formulaire de modification d'une demande d'intervention
+     */
+    public function editAction(InterventionDemande $id)
+    {
+        ini_set('memory_limit', '256M');
+
+        $this->utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
+        $this->interventionDemande = $id;
+        $interventionDemandeFormulaire = null;
+
+        // @todo TEST
+        if (($this->utilisateurConnecte->hasRoleCmsi() && ($this->interventionDemande->getInterventionEtat()->getId() == InterventionEtat::getInterventionEtatDemandeInitialeId() || $this->interventionDemande->getInterventionEtat()->getId() == InterventionEtat::getInterventionEtatAttenteCmsiId())))
+        {
+            $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_edition_cmsi', $this->interventionDemande);
+        }
+        
+        if ($interventionDemandeFormulaire == null)
+            throw new InterventionException('Vous n\'êtes pas autorisé à éditer cette demande d\'intervention.');
+
+        $this->_gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire);
+
+        return $this->render(
+            'HopitalNumeriqueInterventionBundle:Demande:edit.html.twig',
+            array(
+                'interventionDemandeFormulaireEdition' => $interventionDemandeFormulaire->createView(),
+                'interventionDemande' => $this->interventionDemande
+            )
+        );
+    }
+    /**
+     * Gère l'enregistrement des données du formulaire d'édition d'une demande d'intervention.
+     *
+     * @param \Symfony\Component\Form\Form $interventionDemandeFormulaire Formulaire de la demande d'intervention
+     * @return void
+     */
+    private function _gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire)
+    {
+        if ($this->get('request')->getMethod() == 'POST')
+        {
+            $interventionDemandeFormulaire->bind($this->get('request'));
+    
+            if ($interventionDemandeFormulaire->isValid())
+            {
+                $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
+                $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été modifiée et sera étudiée.');
+            }
+            else
+            {
+                $this->get('session')->getFlashBag()->add('danger', 'Le formulaire n\'est pas valide.');
+            }
+        }
     }
     
     /**
@@ -150,7 +206,6 @@ class DemandeController extends Controller
             'HopitalNumeriqueInterventionBundle:Demande:liste.html.twig'
         );
     }
-    
     /**
      * Action pour la liste des nouvelles demandes d'intervention (demandes en début de processus).
      *

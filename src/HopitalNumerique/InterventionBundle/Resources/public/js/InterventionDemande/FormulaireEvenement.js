@@ -14,6 +14,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init 
 {
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initRegion_Change();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initAutresEtablissements_Change();
+    HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initInterventionEtat_Click();
 };
 
 /**
@@ -40,5 +41,19 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initA
 
     $(etablissementsSelect).change(function() {
         HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeReferents();
+    });
+};
+
+/**
+ * Initialisation de l'événement d'un clic sur un bouton de modification de l'état de l'intervention en cours.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initInterventionEtat_Click = function()
+{
+    var boutonsModificationInterventionEtat = $('button[data-intervention-etat]');
+    
+    $(boutonsModificationInterventionEtat).click(function() {
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.enregistreInterventionEtat(parseInt($(this).attr('data-intervention-etat')));
     });
 };

@@ -42,9 +42,8 @@ class DemandesNouvellesGrid extends Grid implements IGrid
      */
     public function setActionsButtons()
     {
-        /*$this->addActionButton(new Action\EditButton('hopital_numerique_user_edit'));
-        $this->addActionButton(new Action\ShowButton('hopital_numerique_user_show'));
-        $this->addActionButton(new Action\DeleteButton('hopital_numerique_user_delete'));*/
+        $this->addActionButton(new Action\ShowButton('hopital_numerique_intervention_demande_voir'));
+        $this->addActionButton(new Action\EditButton('hopital_numerique_intervention_demande_edit'));
     }
 
     /**

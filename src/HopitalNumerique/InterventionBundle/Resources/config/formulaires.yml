@@ -5,8 +5,10 @@ parameters:
     hopitalnumerique_intervention.type.intervention_demande.class: HopitalNumerique\InterventionBundle\Form\InterventionDemandeType
     hopitalnumerique_intervention.type.intervention_demande.cmsi.class: HopitalNumerique\InterventionBundle\Form\InterventionDemande\CmsiType
     hopitalnumerique_intervention.type.intervention_demande.etablissement.class: HopitalNumerique\InterventionBundle\Form\InterventionDemande\EtablissementType
+    hopitalnumerique_intervention.type.intervention_demande.edition.cmsi.class: HopitalNumerique\InterventionBundle\Form\InterventionDemande\Edition\CmsiType
 
 services:
+    #<-- Formulaire Utilisateur
     hopitalnumerique_intervention.type.user:
         class: "%hopitalnumerique_intervention.type.user.class%"
         tags:
@@ -22,7 +24,9 @@ services:
         tags:
             - { name: form.type, alias: hopitalnumerique_interventionbundle_user_etablissement }
         arguments: ["@service_container", "@validator"]
+    #-->
 
+    #<-- Formulaire Demande d'intervention
     hopitalnumerique_intervention.type.intervention_demande:
         class: "%hopitalnumerique_intervention.type.intervention_demande.class%"
         tags:
@@ -38,3 +42,9 @@ services:
         tags:
             - { name: form.type, alias: hopitalnumerique_interventionbundle_interventiondemande_etablissement }
         arguments: ["@service_container", "@validator"]
+    hopitalnumerique_intervention.type.intervention_demande_edition_cmsi:
+        class: "%hopitalnumerique_intervention.type.intervention_demande.edition.cmsi.class%"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_interventionbundle_interventiondemande_edition_cmsi }
+        arguments: ["@service_container", "@validator"]
+    #-->

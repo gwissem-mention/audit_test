@@ -34,6 +34,12 @@
         <form method="post" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
             {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
             
+            <div class="form-group">
+                <label class="col-md-4 control-label">Ambassadeur</label>
+                <div class="col-md-7"><div class="form-control">{{ ambassadeur.nom }} {{ ambassadeur.prenom }}</div></div>
+                <div class="col-md-4"><div class="help-block"></div></div>
+            </div>
+            
             {{ form_javascript(interventionDemandeFormulaireNouveau) }}
 
             {{ form_widget(interventionDemandeFormulaireNouveau) }}
