@@ -166,10 +166,11 @@ class User extends BaseUser
      * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[50]],custom[onlyLetterNumber]")
      */
     protected $username;
-
+    
     /**
      * @var string
      * @Assert\NotBlank(message="L'adresse éléctronique ne peut pas être vide.")
+     * @Assert\Regex(pattern= "/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]{2,}[.][a-zA-Z]{2,3}$/")
      * @Assert\Length(
      *      min = "3",
      *      max = "50",
