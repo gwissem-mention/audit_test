@@ -1,5 +1,12 @@
 $(document).ready(function() { 
-	
+	//pop-in affichage du message de refus
+    $('#refusCandidature').fancybox({
+        'padding'   : 0,
+        'autoSize'  : false,
+        'width'     : '70%',
+        'scrolling' : 'no',
+        'modal'     : true
+    });
 });
 
 function deleteAllReponses(path)
@@ -20,11 +27,18 @@ function validerCandidature(path)
     });
 }
 
-function refuserCandidature(path)
+function refuserCandidature()
 {
-    apprise('Refuser la demande de candidature ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
-        if(r) { 
-        	customAjaxRedirection(path);
+    $.ajax({
+        url  : $('#refus-candidature-url').val(),
+        data : {
+            routeRedirection : $('#questionnaire_route_redirection').val(),
+            texteRefus       : $('#message-refus').val()
+        },
+        type     : 'POST',
+        dataType : 'json',
+        success  : function( data ){
+            window.location = data.url;
         }
     });
 }

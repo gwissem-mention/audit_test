@@ -207,6 +207,10 @@ hopitalnumerique_user_ambassadeur_refusCandidature:
         user: \d+
         _method: post
 
+hopitalnumerique_user_ambassadeur_messageRefusCandidature:
+    pattern: /admin/user/ambassadeur/messagerefus
+    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:messageRefusCandidature}
+
 hopitalnumerique_user_ambassadeur_liste_objets:
     pattern:  /admin/user/ambassadeur/listeobjets/{id}
     defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:listeObjets", id: 1 }
