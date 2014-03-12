@@ -16,7 +16,8 @@
         {color: #6f3596; font-weight: bold; }
 
 /* Bloc publication*/
-    #publication{margin-top: 20px}
+    #publication{margin-top: 20px; position: relative}
+    #publication .print{position: absolute; right:0; top : 0; z-index: 5}
     #publication h4{font-size: 18px; font-weight: normal; margin:0;text-transform: uppercase;}
     #publication h4.objetTitre{font-weight: bold}
     #publication h3{font-size: 24px; font-weight: bold; margin:5px 0 20px 0; color:#070005;}
@@ -24,13 +25,13 @@
     #publication .col-md-4 div.wrapper a.downloadLink{color:#070707; font-size: 13px; font-weight: normal; margin-bottom: 10px}
     #publication .col-md-4 div.wrapper a.synthese{background: url('../img/synthese-violet.jpg') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 104px; font-weight: normal; margin-bottom: 10px}
         
-        /* Bloc Commentaires */
-        #publication .commentaires{ margin:50px 0;}
-        #publication .commentaires h5{ color:#414141;font-size: 18px; font-weight: bold;}
-        
-        /* Bloc Autres résultats */
-        #publication .autresResultats{ margin:0;}
-        #publication .autresResultats h5{ color:#414141;font-size: 18px; font-weight: bold;}
+    /* Bloc Commentaires */
+    #publication .commentaires{ margin:50px 0;}
+    #publication .commentaires h5{ color:#414141;font-size: 18px; font-weight: bold;}
+    
+    /* Bloc Autres résultats */
+    #publication .autresResultats{ margin:0;}
+    #publication .autresResultats h5{ color:#414141;font-size: 18px; font-weight: bold;}
 
 
 

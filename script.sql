@@ -62,3 +62,8 @@ INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expe
 (5, '[HOPITALNUMERIQUE] - Demande d''intervention', 'Alerte référent d''une demande d''intervention émise par un CMSI', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention a été émise en votre nom et va être étudiée par l''ambassadeur. Cordialement,'),
 (6, '[HOPITALNUMERIQUE] - Demande d''intervention acceptée par le CMSI', 'Demande d''intervention acceptée par le CMSI', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention a été acceptée. Vous pouvez vous rendre à votre interface pour la gérer. Cordialement,'),
 (7, '[HOPITALNUMERIQUE] - Demande d''intervention refusée par le CMSI', 'Demande d''intervention refusée par le CMSI', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention a été refusée. %c Cordialement,');*/
+
+/*QSO - 12/03/2014
+   DEV -> PROD
+   Modifs items menu */
+UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_uri` = 'javascript:alert(''Forum Hôpital Numérique bientôt disponible.'');' WHERE `core_menu_item`.`itm_id` = 67;

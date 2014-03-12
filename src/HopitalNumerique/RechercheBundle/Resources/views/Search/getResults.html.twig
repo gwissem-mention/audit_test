@@ -49,7 +49,7 @@
                     {% set count = count + 1 %}
                 {% else %}
                     <div class="item active">
-                        <p> - Aucune ressource externe trouvée - </p>
+                        <p class="noresult"> - Aucune ressource externe trouvée - </p>
                     </div>
                 {% endfor %}
             </div>
@@ -87,7 +87,8 @@
                     {% set count = count + 1 %}
                 {% else %}
                     <div class="item active">
-                        <p> - Aucun fil de discussion du forum trouvé - </p>
+                        <h4></h4>
+                        <p class="noresult"> - Aucun fil de discussion du forum trouvé - </p>
                     </div>
                 {% endfor %}
             </div>

@@ -14,6 +14,8 @@
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+    
+    <link rel="stylesheet" href="{{ asset('bundles/hopitalnumeriquerecherche/css/publication-print.css') }}" type="text/css" media="print" />
 {% endblock %}
 
 {% block javascripts %}
@@ -43,6 +45,7 @@
     {% else %}
         <div id="publication">
     {% endif %}
+        <div class="btn btn-default print" onclick="print();"><i class="fa fa-print"></i></div>
         <div class="col-md-12">
             <h4 class="violet" >{{types}}</h4>
         </div>

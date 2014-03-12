@@ -160,7 +160,7 @@ class AclManager extends BaseManager
      */
     public function checkAuthorization( $url, $user )
     {
-        if( $url === '#' || $url === '/')
+        if( $url === '#' || $url === '/' || substr($url, 0, 11) === 'javascript:')
             return VoterInterface::ACCESS_GRANTED;
 
         if( $user === 'anon.' )

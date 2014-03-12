@@ -1,3 +1,12 @@
+<style type="text/css">
+    @media print {
+        *{width: 100% !important; border:none;background-color :#fff; font-family :Serif;font-size :15pt;}
+        #body, .panel-footer { display:none; }
+        .fancybox-wrap{top:0 !important; left:0 !important;}
+        @page{ margin: 2cm .5cm; size: portrait; }
+        #mesrequetes{width: 0}
+    }
+</style>
 <div class="panel" id="synthese-ajax" >
     <div class="panel-heading">
         <h4 class="violet">Synthèse de la publication</h4>
@@ -15,6 +24,7 @@
         <div class="panel-footer" >
             <div class="row">
                 <div class="btn-toolbar pull-right">
+                    <div onclick="print();" class="btn-info btn">Imprimer</div>
                     <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
                 </div>
             </div>
