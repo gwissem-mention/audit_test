@@ -30,7 +30,7 @@
 {% block contenu %}
     <div class="panel">
     	{# Include des données de contractualisation #}
-        {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
+        {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
     
         {% if optionRenderForm.readOnly == false  %}
 	        <div class="col-md-10 col-md-offset-2">

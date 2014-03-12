@@ -1,0 +1,19 @@
+{% block javascripts %}
+    {% javascripts output="compiled/hopitalnumerique-questionnaire-questionnaire-edit.js"
+        'bundles/hopitalnumeriquequestionnaire/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {% stylesheets output="compiled/hopitalnumerique-questionnaire-questionnaire-edit.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquequestionnaire/css/questionnaire.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
+{{ form_javascript(form) }}
+{{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit_front', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}

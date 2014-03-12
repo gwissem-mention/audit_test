@@ -39,6 +39,39 @@ class QuestionnaireController extends Controller
     
     /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
+     *
+     * @param HopiUser          $user               Utilisateur courant
+     * @param HopiQuestionnaire $questionnaire      Questionnaire à afficher
+     * @param json              $routeRedirection   Tableau de la route de redirection une fois que le formulaire est validé
+     * @param string            $themeQuestionnaire Theme de formulaire utilisé
+     *
+     * @return Ambigous <\HopitalNumerique\QuestionnaireBundle\Controller\Form, \Symfony\Component\HttpFoundation\RedirectResponse, \Symfony\Component\HttpFoundation\Response>
+     */
+    public function editFrontAction( HopiUser $user, HopiQuestionnaire $questionnaire, $optionRenderForm = array())
+    {
+        $readOnly           = array_key_exists('readOnly', $optionRenderForm) ? $optionRenderForm['readOnly'] : false;
+        $routeRedirection   = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect'] : '';
+        $themeQuestionnaire = array_key_exists('themeQuestionnaire', $optionRenderForm) ? $optionRenderForm['themeQuestionnaire'] : 'default';
+    
+        //Si le tableau n'est pas vide on le récupère
+        if(!is_null($routeRedirection))
+            $this->_routeRedirection = $routeRedirection;
+    
+        //Récupération du thème de formulaire
+        $this->_themeQuestionnaire = $themeQuestionnaire;
+    
+        return $this->_renderForm('nodevo_questionnaire_questionnaire',
+                array(
+                        'questionnaire'    => $questionnaire,
+                        'user'             => $user,
+                        'readOnly'         => $readOnly
+                ) ,
+                'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit_front.html.twig'
+        );
+    }
+    
+    /**
+     * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
      * 
      * @param HopiUser          $user               Utilisateur courant
      * @param HopiQuestionnaire $questionnaire      Questionnaire à afficher
@@ -101,7 +134,7 @@ class QuestionnaireController extends Controller
         ));
         
         $request = $this->get('request');
-    
+        
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
     
@@ -233,6 +266,10 @@ class QuestionnaireController extends Controller
                 }
                 
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Votre candidature au poste ' . $questionnaire->getNomMinifie() . ' a bien été envoyée, nous reviendrons vers vous dans les plus brefs délais.' );
+                
+                //Envoie du mail à l'utilisateur pour l'aleter de la validation de sa candidature
+                $mail = $this->get('nodevo_mail.manager.mail')->sendCandidatureMail($user);
+                $this->get('mailer')->send($mail);
                 
                 //Mise à jour/création des réponses
                 $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );
