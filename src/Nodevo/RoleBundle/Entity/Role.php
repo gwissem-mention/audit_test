@@ -19,8 +19,8 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  */
 class Role implements RoleInterface
 {
-    public static $ROLE_CMSI_LABEL = 'ROLE_ARS_CMSI_4';
-    public static $ROLE_DIRECTEUR_LABEL = 'ROLE_ADMINISTRATEUR_1';
+    public static $ROLE_CMSI_LABEL        = 'ROLE_ARS_CMSI_4';
+    public static $ROLE_DIRECTEUR_LABEL   = 'ROLE_ADMINISTRATEUR_1';
     public static $ROLE_AMBASSADEUR_LABEL = 'ROLE_AMBASSADEUR_7';
     
     /**
@@ -36,12 +36,12 @@ class Role implements RoleInterface
      * @var string
      * @Assert\NotBlank(message="Le nom ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="ro_name", type="string", length=255, options = {"comment" = "Nom du groupe"})
      */
     protected $name;

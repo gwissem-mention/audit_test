@@ -32,12 +32,12 @@ class Item
      * @var string
      * @Assert\NotBlank(message="Le nom ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="itm_name", type="string", length=255, options = {"comment" = "Nom du lien"})
      */
     private $name;
