@@ -39,7 +39,7 @@
 
 {% block contenu %}
     <div class="panel">
-		<div id="form_edit_user">
+		<div id="form_edit_informations_personnelles">
             {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
                 {{ form_start(form) }}
                     {{ form_javascript(form) }}
@@ -92,7 +92,7 @@
 	                <div class="clearfix"></div>
                     <div class="form-group">
 	                    <div class="col-md-9 col-md-offset-2">
-		                   <input onclick="$('#do').val('information-personnelles');sauvegardeFormulaire();" class="btn btn-success pull-right submit" value="INSCRIPTION" type="button" />
+		                   <input onclick="$('#do').val('information-personnelles');sauvegardeFormulaire();" class="btn btn-success pull-right submit" value="ENREGISTRER MES MODIFICATIONS" type="button" />
 	                </div>
                 </div>
                     
