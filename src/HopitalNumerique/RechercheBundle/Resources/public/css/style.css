@@ -84,7 +84,8 @@
         #resultats #ressources{ margin-top:25px; padding:10px;}
         #resultats #ressources h3{color:#ffffff; font-size: 18px; font-weight: bold; display: block; height: 19px; background: url('../img/ressources.jpg') no-repeat left center; padding-left : 30px; margin-left:15px; margin-top:5px;}
         #resultats #ressources .results{padding:0 15px;}
-        #resultats #ressources .results h4{color: #ffffff; font-size: 14px; font-weight: bold; margin-bottom: 0; }
+        #resultats #ressources .results h4{margin-bottom: 0; }
+        #resultats #ressources .results h4 a{color: #ffffff; font-size: 14px; font-weight: bold; }
         #resultats #ressources .results p{color: #ffffff; font-size: 12px; font-weight: normal}
         #resultats #ressources .results .carousel-indicators{bottom: 0}
         #resultats #ressources .results .carousel-inner{padding:0 25px 25px 25px}
@@ -97,7 +98,8 @@
         #resultats #forum h3{color:#ffffff; font-size: 18px; font-weight: bold; margin-left:15px; margin-top:5px;}
         #resultats #forum h3 i{margin-right:10px;}
         #resultats #forum .results{padding:0 15px;}
-        #resultats #forum .results h4{color: #ffffff; font-size: 14px; font-weight: bold; margin-bottom: 0; }
+        #resultats #forum .results h4{margin-bottom: 0; }
+        #resultats #forum .results h4 a{color: #ffffff; font-size: 14px; font-weight: bold; }
         #resultats #forum .results p{color: #ffffff; font-size: 12px; font-weight: normal}
         #resultats #forum .results .carousel-indicators{bottom: 0}
         #resultats #forum .results .carousel-inner{padding:0 25px 25px 25px}
