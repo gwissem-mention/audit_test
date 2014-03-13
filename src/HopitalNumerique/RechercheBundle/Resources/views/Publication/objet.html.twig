@@ -1,7 +1,7 @@
 {% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
 
 {# Référencement #}
-{% block title %}{{parent()}} - Publication{% endblock %}
+{% block title %}{{parent()}} - {% if contenu is defined %}{{objet.titre ~ ' - ' ~ prefix ~ ' ' ~ contenu.titre}}{% else %}{{objet.titre}}{% endif %}{% endblock %}
 {% block metadesc %}{{meta['desc']}}{% endblock %}
 {% block metakeywords %}{{meta['keywords']|join(', ')}}{% endblock %}
 
@@ -74,18 +74,20 @@
             <div class="col-md-4">
                 <div class="wrapper">
                     {% if objet.getAbsolutePath(true) is not null %}
-                        <a class="downloadLink readmore" href="/{{objet.getWebPath(true)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Téléchargement</span> du fichier de l’objet <i class="fa fa-download violet"></i> </a>
+                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(true)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète</a><i class="pull-left fa fa-download violet"></i>
                     {% endif %}
 
                     <div class="clearfix"></div>
                     {% if objet.getAbsolutePath(false) is not null %}
-                        <a class="downloadLink readmore" href="/{{objet.getWebPath(false)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Téléchargement</span> du fichier de l’objet <i class="fa fa-download violet"></i> </a>
+                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(false)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète</a><i class="pull-left fa fa-download violet"></i>
                     {% endif %}
                     
                     <div class="clearfix"></div>
                     {% if objet.synthese is not null %}
                         <a class="downloadLink readmore synthese fancybox.iframe" href="{{path('hopital_numerique_recherche_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
                     {% endif %}
+
+                    <div class="clearfix"></div>
                 </div>
             </div>
         {% endif %}

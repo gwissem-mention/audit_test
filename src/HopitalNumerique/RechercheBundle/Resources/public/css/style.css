@@ -10,9 +10,9 @@
 
 /* Pop-in de synthèse*/
 #synthese-ajax{ margin:0;}
-#synthese-ajax h4{text-decoration: underline;}
+#synthese-ajax h4{text-decoration: underline; margin-bottom: 5px}
 #synthese-ajax .panel-body{ padding:0;}
-#synthese-ajax .panel-body .content{ min-height:480px; padding:15px }
+#synthese-ajax .panel-body .content{ min-height:480px; padding:0 15px 15px 15px }
 #synthese-ajax .panel-body .panel-footer .btn{ margin-right:10px }
 
 /* Destination */

@@ -170,12 +170,13 @@ class SearchManager extends BaseManager
                 return null;
         }
 
-        $item['id']     = $contenu->getId();
-        $item['titre']  = $contenu->getTitre();
-        $item['nbRef']  = count($contenu->getReferences());
-        $item['objet']  = $objet->getId();
-        $item['aliasO'] = $objet->getAlias();
-        $item['aliasC'] = $contenu->getAlias();
+        $item['id']       = $contenu->getId();
+        $item['titre']    = $contenu->getTitre();
+        $item['nbRef']    = count($contenu->getReferences());
+        $item['objet']    = $objet->getId();
+        $item['aliasO']   = $objet->getAlias();
+        $item['aliasC']   = $contenu->getAlias();
+        $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
 
         //clean resume (pagebreak)
         $tab = explode('<!-- pagebreak -->', $contenu->getContenu());
@@ -215,11 +216,12 @@ class SearchManager extends BaseManager
                 return null;
         }
 
-        $item['id']     = $objet->getId();
-        $item['titre']  = $objet->getTitre();
-        $item['nbRef']  = count($objet->getReferences());
-        $item['objet']  = null;
-        $item['alias']  = $objet->getAlias();
+        $item['id']       = $objet->getId();
+        $item['titre']    = $objet->getTitre();
+        $item['nbRef']    = count($objet->getReferences());
+        $item['objet']    = null;
+        $item['alias']    = $objet->getAlias();
+        $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
 
         //clean resume (pagebreak)
         $tab = explode('<!-- pagebreak -->', $objet->getResume() );
