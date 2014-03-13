@@ -20,7 +20,8 @@ class SearchController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
 
         //on prépare la session
-        $session = new Session();
+        //$session = new Session();
+        $session = $this->getRequest()->getSession();
 
         //on essaye de charger la requete par défaut
         if ( is_null($id) ){
