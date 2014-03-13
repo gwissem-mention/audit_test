@@ -252,6 +252,8 @@ class AmbassadeurController extends Controller
         $refusCandidature = $this->get('hopitalnumerique_user.manager.refus_candidature')->createEmpty();
         $refusCandidature->setQuestionnaire($questionnaire);
         $refusCandidature->setUser($user);
+        //Récupère l'utilsateur connecté
+        $refusCandidature->setUserOrigineRefus($this->get('security.context')->getToken()->getUser());
         $refusCandidature->setMotifRefus($texteRefus);
         $refusCandidature->setDateRefus(new \DateTime());
         
