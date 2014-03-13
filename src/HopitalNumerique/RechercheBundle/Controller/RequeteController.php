@@ -56,7 +56,9 @@ class RequeteController extends Controller
 
         $this->get('hopitalnumerique_recherche.manager.requete')->save( $requete );
 
-        return new Response('{"success":true, "id":'.$requete->getId().', "nom":"'.$requete->getNom().'"}', 200);
+        $path = $this->generateUrl('hopital_numerique_recherche_homepage_requete', array('id'=>$requete->getId()));
+
+        return new Response('{"success":true, "id":'.$requete->getId().', "nom":"'.$requete->getNom().'", "path":"'.$path.'"}', 200);
     }
 
     /**

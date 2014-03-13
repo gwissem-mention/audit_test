@@ -367,12 +367,9 @@ function handleRequeteSave( r, id )
         dataType : 'json',
         success  : function( data ){
             if(data.success){
-                // if ( id != null)
-                //     apprise('Requête mise à jour');
-                // else
-                //     apprise('Requête enregistrée');
                 $('.requeteNom').html( data.nom ).slideDown();
                 $('.requeteNom').data('id', data.id);
+                $('#mesrequetes ul').append('<li><a href="'+data.path+'" ><i class="fa fa-circle fa-inverse"></i>'+data.nom+'</a></li>');
             }
         }
     });

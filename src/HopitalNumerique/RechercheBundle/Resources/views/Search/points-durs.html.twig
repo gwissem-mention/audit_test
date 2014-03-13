@@ -10,8 +10,8 @@
     </div>
     
     <div class="col-md-2">
-        {% if objet['objet'] is not null %}
-            <a class="synthese fancybox.iframe" href="{{path('hopital_numerique_recherche_synthese',{'id':objet['objet']})}}">synthèse</a>
+        {% if objet['synthese'] is not null %}
+            <a class="synthese fancybox.iframe" href="{{path('hopital_numerique_recherche_synthese',{'id':objet['synthese']})}}">synthèse</a>
         {% endif %}
     </div>
     <div class="col-md-12">
