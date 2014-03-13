@@ -104,6 +104,7 @@ class InterventionCourrielManager
      * Envoi le courriel de refus d'une demande d'acceptation par un CMSI.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $utilisateurEtablissement L'utilisateur demandeur
+     * @param string $interventionDemandeUrl Le chemin vers l'URL de la demande d'intervention
      * @return void
      */
     public function envoiCourrielEstRefuseCmsi(User $referentEtablissement, $interventionDemandeUrl)
@@ -111,6 +112,19 @@ class InterventionCourrielManager
         $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielEstRefuseeCmsiId());
 
         $this->envoiCourriel($courriel, $referentEtablissement, array('l' => $interventionDemandeUrl));
+    }
+    /**
+     * Envoi le courriel d'invitation du référent à évaluaer une intervention.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $utilisateurEtablissement L'utilisateur demandeur
+     * @param string $interventionEvaluationUrl Le chemin vers l'URL de l'évaluation de la demande d'intervention
+     * @return void
+     */
+    public function envoiCourrielInvitationEvaluationReferent(User $referentEtablissement, $interventionEvaluationUrl)
+    {
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielInvitationEvaluationReferentId());
+    
+        $this->envoiCourriel($courriel, $referentEtablissement, array('l' => $interventionEvaluationUrl));
     }
 
     /**

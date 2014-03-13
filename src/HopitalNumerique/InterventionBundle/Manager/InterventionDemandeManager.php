@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
 /**
  * Manager pour les demandes d'intervention.
@@ -19,11 +20,11 @@ class InterventionDemandeManager extends BaseManager
     protected $_class = 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande';
 
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
+     * @var \Symfony\Component\Security\Core\SecurityContext  SecurityContext de l'application
      */
     private $securityContext;
     /**
-     * @var 
+     * @var \Symfony\Bundle\FrameworkBundle\Routing\Router Router de l'application
      */
     private $router;
     /**
@@ -39,11 +40,13 @@ class InterventionDemandeManager extends BaseManager
      * Constructeur du manager gérant les demandes d'intervention.
      *
      * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
+     * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
+     * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router Router de l'application
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager $interventionEtatManager Le manager de l'entité InterventionEtat
+     * @param \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager $interventionCourrielManager Le manager de l'entité InterventionCourriel
      * @return void
      */
-    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, $router, InterventionEtatManager $interventionEtatManager, InterventionCourrielManager $interventionCourrielManager)
+    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, InterventionEtatManager $interventionEtatManager, InterventionCourrielManager $interventionCourrielManager)
     {
         parent::__construct($entityManager);
         $this->securityContext = $securityContext;

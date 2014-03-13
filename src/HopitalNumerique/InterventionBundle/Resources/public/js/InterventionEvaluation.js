@@ -27,9 +27,21 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.in
  * Envoie une relance par courriel pour le remplissage du formulaire d'évaluation.
  * 
  * @param integer interventionDemandeId L'ID de la demande d'intervention
- * @return void
+ * @return boolean FAUX pour ne pas que la page avec le grid se recharge
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.relance = function(interventionDemandeId)
 {
-    alert(interventionDemandeId);
+    if (confirm('Confirmez-vous l\'envoi d\'une relance pour cette demande d\'intervention ?'))
+    {
+        var evaluationEnvoiRelanceUrl = '/compte-hn/intervention/demande/' + interventionDemandeId + '/evaluation/relance';
+
+        $.ajax(evaluationEnvoiRelanceUrl, {
+            success:function() {
+                alert('La relance a été envoyée, merci !');
+                return false;
+            }
+        });
+    }
+    
+    return false;
 };

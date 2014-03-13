@@ -1,6 +1,7 @@
 parameters:
     hopitalnumerique_intervention.manager.intervention_courriel.class: HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager
     hopitalnumerique_intervention.manager.intervention_demande.class: HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager
+    hopitalnumerique_intervention.manager.intervention_evaluation.class: HopitalNumerique\InterventionBundle\Manager\InterventionEvaluationManager
     hopitalnumerique_intervention.manager.intervention_etat.class: HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager
     hopitalnumerique_intervention.manager.intervention_initiateur.class: HopitalNumerique\InterventionBundle\Manager\InterventionInitiateurManager
     hopitalnumerique_intervention.manager.form_intervention_demande.class: HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager
@@ -17,6 +18,9 @@ services:
     hopitalnumerique_intervention.manager.intervention_etat:
         class: "%hopitalnumerique_intervention.manager.intervention_etat.class%"
         arguments: ["@service_container"]
+    hopitalnumerique_intervention.manager.intervention_evaluation:
+        class: "%hopitalnumerique_intervention.manager.intervention_evaluation.class%"
+        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@router", "@hopitalnumerique_intervention.manager.intervention_courriel"]
     hopitalnumerique_intervention.manager.intervention_initiateur:
         class: "%hopitalnumerique_intervention.manager.intervention_initiateur.class%"
         arguments: ["@doctrine.orm.entity_manager"]

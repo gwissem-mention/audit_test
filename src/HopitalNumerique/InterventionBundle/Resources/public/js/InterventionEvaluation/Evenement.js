@@ -28,6 +28,6 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluationEve
     
     relanceBoutons.click(function() {
         var interventionDemandeId = parseInt($(this).attr('data-evaluation-demande'));
-        HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.relance(interventionDemandeId);
+        return HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.relance(interventionDemandeId);
     });
 };

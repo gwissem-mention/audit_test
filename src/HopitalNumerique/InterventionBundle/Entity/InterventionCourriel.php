@@ -36,6 +36,10 @@ class InterventionCourriel extends Mail
      * @var integer ID du courriel de refus d'une demande d'acceptation par un CMSI
      */
     private static $COURRIEL_INTERVENTION_DEMANDE_EST_REFUSEE_CMSI_ID = 7;
+    /**
+     * @var integer ID du courriel d'invitation du référent à évaluaer une intervention
+     */
+    private static $COURRIEL_INVITATION_EVALUATION_REFERENT_ID = 15;
 
     /**
      * Retourne l'ID du courriel de création d'une demande d'intervention.
@@ -90,5 +94,14 @@ class InterventionCourriel extends Mail
     public static function getInterventionCourrielEstRefuseeCmsiId()
     {
         return self::$COURRIEL_INTERVENTION_DEMANDE_EST_REFUSEE_CMSI_ID;
+    }
+    /**
+     * Retourne l'ID du courriel d'invitation du référent à évaluaer une intervention.
+     *
+     * @return integer ID du courriel d'invitation du référent à évaluaer une intervention
+     */
+    public static function getInterventionCourrielInvitationEvaluationReferentId()
+    {
+        return self::$COURRIEL_INVITATION_EVALUATION_REFERENT_ID;
     }
 }
