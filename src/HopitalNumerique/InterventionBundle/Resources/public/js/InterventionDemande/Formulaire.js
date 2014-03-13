@@ -36,6 +36,26 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.init = functio
 
 
 /**
+ * Modifie l'état de la demande d'intervention en refusé CMSI.
+ * 
+ * @param integer interventionEtatId L'ID du nouvel état de la demande d'intervention (refusé CMSI)
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventionEtatRefusCmsi = function(interventionEtatId)
+{
+    var changementEtatUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
+
+    $.ajax(changementEtatUrl, {
+        method:'POST',
+        data:{
+            message:$('textarea#etat_intervention_refus_cmsi_justification').val()
+        },
+        success:function() {
+            Nodevo_Web.rechargePage();
+        }
+    });
+};
+/**
  * Enregistre l'état de la demande d'intervention.
  * 
  * @param integer interventionEtatId L'ID du nouvel état de la demande d'intervention

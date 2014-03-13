@@ -23,9 +23,17 @@ class InterventionDemandeManager extends BaseManager
      */
     private $securityContext;
     /**
+     * @var 
+     */
+    private $router;
+    /**
      * @var \HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager Le manager de l'entité InterventionEtat
      */
     private $interventionEtatManager;
+    /**
+     * @var \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager Le manager de l'entité InterventionCourriel
+     */
+    private $interventionCourrielManager;
 
     /**
      * Constructeur du manager gérant les demandes d'intervention.
@@ -35,11 +43,13 @@ class InterventionDemandeManager extends BaseManager
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager $interventionEtatManager Le manager de l'entité InterventionEtat
      * @return void
      */
-    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, InterventionEtatManager $interventionEtatManager)
+    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, $router, InterventionEtatManager $interventionEtatManager, InterventionCourrielManager $interventionCourrielManager)
     {
         parent::__construct($entityManager);
         $this->securityContext = $securityContext;
+        $this->router = $router;
         $this->interventionEtatManager = $interventionEtatManager;
+        $this->interventionCourrielManager = $interventionCourrielManager;
     }
 
     /**
@@ -68,24 +78,61 @@ class InterventionDemandeManager extends BaseManager
     }
     
     /**
-     * Retourne les données formatées pour la création du grid des nouvelles demandes d'intervention.
+     * Envoie les relances pour les demandes d'intervention non traitées.
+     * 
+     * @return void
+     */
+    public function relanceInterventionDemandes()
+    {
+        $this->relanceInterventionDemandesEnAttenteCmsi();
+    }
+    /**
+     * Envoie les relances pour les demandes d'intervention en attente CMSI non traitées.
+     *
+     * @return void
+     */
+    private function relanceInterventionDemandesEnAttenteCmsi()
+    {
+        $interventionDemandes = $this->_repository->findByEtatAttenteCmsiPourRelance();
+        
+        foreach ($interventionDemandes as $interventionDemande)
+        {
+            $interventionDemande->setCmsiDateDerniereRelance(new \DateTime());
+            $this->save($interventionDemande);
+            $this->interventionCourrielManager->envoiCourrielDemandeAcceptationCmsi($interventionDemande->getCmsi(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+        }
+    }
+    
+    /**
+     * Retourne les données formatées pour la création du grid des nouvelles demandes d'intervention pour le CMSI.
      * 
      * @return array Les données pour le grid des nouvelles demandes d'intervention
      */
-    public function getGridDonnees_DemandesNouvelles()
+    public function getGridDonnees_CmsiDemandesNouvelles()
     {
-        $interventionDemandes = $this->_repository->getGridDonnees_DemandesNouvelles($this->securityContext->getToken()->getUser());
+        $interventionDemandes = $this->_repository->getGridDonnees_CmsiDemandesNouvelles($this->securityContext->getToken()->getUser());
 
         return $interventionDemandes;
     }
     /**
-     * Retourne les données formatées pour la création du grid des demandes d'intervention traitées.
+     * Retourne les données formatées pour la création du grid des demandes d'intervention traitées pour le CMSI.
      * 
      * @return array Les données pour le grid des demandes d'intervention traitées
      */
-    public function getGridDonnees_DemandesTraitees()
+    public function getGridDonnees_CmsiDemandesTraitees()
     {
-        $interventionDemandes = $this->_repository->getGridDonnees_DemandesTraitees($this->securityContext->getToken()->getUser());
+        $interventionDemandes = $this->_repository->getGridDonnees_CmsiDemandesTraitees($this->securityContext->getToken()->getUser());
+
+        return $interventionDemandes;
+    }
+    /**
+     * Retourne les données formatées pour la création du grid des demandes d'intervention pour l'ambassadeur.
+     * 
+     * @return array Les données pour le grid des demandes d'intervention
+     */
+    public function getGridDonnees_AmbassadeurDemandes()
+    {
+        $interventionDemandes = $this->_repository->getGridDonnees_AmbassadeurDemandes($this->securityContext->getToken()->getUser());
 
         return $interventionDemandes;
     }

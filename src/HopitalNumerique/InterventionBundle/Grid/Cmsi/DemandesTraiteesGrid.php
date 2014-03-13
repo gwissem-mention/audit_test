@@ -1,8 +1,8 @@
 <?php
 /**
- * Configuration du grid des demandes d'intervention.
+ * Configuration du grid des demandes d'intervention traitées pour le CMSI.
  */
-namespace HopitalNumerique\InterventionBundle\Grid;
+namespace HopitalNumerique\InterventionBundle\Grid\Cmsi;
 
 use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\IGrid;
@@ -10,7 +10,7 @@ use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
- * Configuration du grid des demandes d'intervention.
+ * Configuration du grid des demandes d'intervention traitées pour le CMSI.
  */
 class DemandesTraiteesGrid extends Grid implements IGrid
 {
@@ -20,7 +20,7 @@ class DemandesTraiteesGrid extends Grid implements IGrid
     public function setConfig()
     {
         $this->setSource('hopitalnumerique_intervention.manager.intervention_demande');
-        $this->setFunctionName('getGridDonnees_DemandesTraitees');
+        $this->setFunctionName('getGridDonnees_CmsiDemandesTraitees');
         $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setNoDataMessage('Aucune intervention à afficher.');
     }
@@ -30,10 +30,22 @@ class DemandesTraiteesGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
+        $colonneRegroupements = new Column\TextColumn('nombreRegroupements', '');
+        $colonneRegroupements->manipulateRenderCell(
+            function($value, $row, $router) {
+                if (intval($row->getField('nombreRegroupements')) > 0)
+                {
+                    return '<img src="/bundles/hopitalnumeriquecore/img/common-sprite/users.jpg" width="16" height="14">';
+                }
+                return '';
+            }
+        );
+        $this->addColonne($colonneRegroupements);
+        
         $this->addColonne(new Column\TextColumn('demandeurInformations', 'Demandeur'));
         $this->addColonne(new Column\TextColumn('interventionInitiateurType', 'Initiateur'));
         $this->addColonne(new Column\TextColumn('ambassadeurInformations', 'Ambassadeur'));
-        $this->addColonne(new Column\DateColumn('dateCreationLibelle', 'Date de création'));
+        $this->addColonne(new Column\DateColumn('dateCreationLibelle', 'Création'));
         $this->addColonne(new Column\TextColumn('interventionEtatLibelle', 'État'));
         $this->addColonne(new Column\DateColumn('cmsiDateChoixLibelle', 'Choix CMSI'));
         $this->addColonne(new Column\DateColumn('ambassadeurDateChoixLibelle', 'Choix ambassadeur'));

@@ -51,7 +51,7 @@ class InterventionCourrielManager
         $this->envoiCourriel($courriel, $utilisateurEtablissement);
     }
     /**
-     * Envoi le courriel d'acceptation ou non d'une demande d'intervention par l'ambassadeur.
+     * Envoi le courriel de demande d'acceptation ou non d'une demande d'intervention à l'ambassadeur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur de la demande
      * @param string $interventionDemandeUrl Le chemin vers l'URL de la demande d'intervention
@@ -96,7 +96,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielEstAccepteCmsi(User $referentEtablissement)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionEstAccepteeCmsiId());
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielEstAccepteeCmsiId());
 
         $this->envoiCourriel($courriel, $referentEtablissement);
     }
@@ -106,11 +106,11 @@ class InterventionCourrielManager
      * @param \HopitalNumerique\UserBundle\Entity\User $utilisateurEtablissement L'utilisateur demandeur
      * @return void
      */
-    public function envoiCourrielEstRefuseCmsi(User $referentEtablissement)
+    public function envoiCourrielEstRefuseCmsi(User $referentEtablissement, $interventionDemandeUrl)
     {
-        $courriel = $this->contaier->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionEstRefuseeCmsiId());
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielEstRefuseeCmsiId());
 
-        $this->envoiCourriel($courriel, $referentEtablissement);
+        $this->envoiCourriel($courriel, $referentEtablissement, array('l' => $interventionDemandeUrl));
     }
 
     /**

@@ -1,0 +1,5 @@
+hopital_numerique_intervention_evaluation_voir:
+    pattern:  /demande/{interventionDemande}/evaluation/voir
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Evaluation:voir" }
+    requirements:
+        interventionDemande: \d+

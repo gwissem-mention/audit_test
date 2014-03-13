@@ -1,8 +1,8 @@
 <?php
 /**
- * Configuration du grid des demandes d'intervention.
+ * Configuration du grid des nouvelles demandes d'intervention pour le CMSI.
  */
-namespace HopitalNumerique\InterventionBundle\Grid;
+namespace HopitalNumerique\InterventionBundle\Grid\Cmsi;
 
 use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\IGrid;
@@ -11,7 +11,7 @@ use Nodevo\GridBundle\Grid\Action;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 
 /**
- * Configuration du grid des demandes d'intervention.
+ * Configuration du grid des nouvelles demandes d'intervention pour le CMSI.
  */
 class DemandesNouvellesGrid extends Grid implements IGrid
 {
@@ -21,7 +21,7 @@ class DemandesNouvellesGrid extends Grid implements IGrid
     public function setConfig()
     {
         $this->setSource('hopitalnumerique_intervention.manager.intervention_demande');
-        $this->setFunctionName('getGridDonnees_DemandesNouvelles');
+        $this->setFunctionName('getGridDonnees_CmsiDemandesNouvelles');
         $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setNoDataMessage('Aucune intervention à afficher.');
     }
@@ -35,7 +35,7 @@ class DemandesNouvellesGrid extends Grid implements IGrid
         $this->addColonne(new Column\TextColumn('ambassadeurInformations', 'Ambassadeur'));
         $this->addColonne(new Column\TextColumn('objetsInformations', 'Objets'));
         $this->addColonne(new Column\TextColumn('interventionEtatLibelle', 'État'));
-        $this->addColonne(new Column\DateColumn('dateCreationLibelle', 'Date de création'));
+        $this->addColonne(new Column\DateColumn('dateCreationLibelle', 'Création'));
         
         
         $colonneDateButoir = new Column\TextColumn('dateButoir', 'Date butoir');
@@ -48,6 +48,10 @@ class DemandesNouvellesGrid extends Grid implements IGrid
                     $dateButoir = new \DateTime($dateCreation);
                     $dateButoir->add(new \DateInterval('P'.InterventionEtat::$VALIDATION_CMSI_NOMBRE_JOURS.'D'));
                     return $dateButoir->format('d/m/Y');
+                }
+                else if ($row->getField('interventionEtatId') == InterventionEtat::getInterventionEtatAttenteCmsiId())
+                {
+                    return 'En attente';
                 }
                 return '';
             }

@@ -8,7 +8,21 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 /**
  * Entité d'une demande d'intervention.
  *
- * @ORM\Table(name="hn_intervention_demande", indexes={@ORM\Index(name="fk_hn_intervention_core_user", columns={"referent_id"}), @ORM\Index(name="fk_hn_intervention_demande_core_user1", columns={"ambassadeur_id"}), @ORM\Index(name="fk_hn_intervention_demande_core_user2", columns={"cmsi_id"}), @ORM\Index(name="fk_hn_intervention_demande_core_user3", columns={"directeur_id"}), @ORM\Index(name="fk_hn_intervention_demande_hn_reference1", columns={"ref_intervention_type_id"}), @ORM\Index(name="fk_hn_intervention_demande_hn_reference2", columns={"ref_intervention_etat_id"}), @ORM\Index(name="fk_hn_intervention_demande_hn_intervention_initiateur1", columns={"intervinit_id"}), @ORM\Index(name="fk_hn_intervention_demande_hn_reference3", columns={"ref_evaluation_etat_id"}), @ORM\Index(name="fk_hn_intervention_demande_hn_reference4", columns={"ref_remboursement_etat_id"})})
+ * @ORM\Table(
+ *     name="hn_intervention_demande",
+ *     indexes={
+ *         @ORM\Index(name="fk_hn_intervention_core_user", columns={"referent_id"}),
+ *         @ORM\Index(name="fk_hn_intervention_demande_core_user1", columns={"ambassadeur_id"}),
+ *         @ORM\Index(name="fk_hn_intervention_demande_core_user2", columns={"cmsi_id"}),
+ *         @ORM\Index(name="fk_hn_intervention_demande_core_user3", columns={"directeur_id"}),
+ *         @ORM\Index(name="fk_hn_intervention_demande_hn_reference1", columns={"ref_intervention_type_id"}),
+ *         @ORM\Index(name="fk_hn_intervention_demande_hn_reference2", columns={"ref_intervention_etat_id"}),
+ *         @ORM\Index(name="fk_hn_intervention_demande_hn_intervention_initiateur1", columns={"intervinit_id"}),
+ *         @ORM\Index(name="fk_hn_intervention_demande_hn_reference3", columns={"ref_evaluation_etat_id"}),
+ *         @ORM\Index(name="fk_hn_intervention_demande_hn_reference4", columns={"ref_remboursement_etat_id"}),
+ *         @ORM\Index(name="fk_hn_intervention_demande_date_creation", columns={"interv_date_creation"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="HopitalNumerique\InterventionBundle\Repository\InterventionDemandeRepository")
  */
 class InterventionDemande
@@ -43,6 +57,13 @@ class InterventionDemande
      */
     private $ambassadeurDateChoix;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="interv_cmsi_date_derniere_relance", type="datetime", nullable=true)
+     */
+    private $cmsiDateDerniereRelance;
+    
     /**
      * @var string
      *
@@ -309,6 +330,31 @@ class InterventionDemande
         return $this->ambassadeurDateChoix;
     }
 
+    
+    /**
+     * Set cmsiDateDerniereRelance
+     *
+     * @param \DateTime $cmsiDateDerniereRelance
+     * @return InterventionDemande
+     */
+    public function setCmsiDateDerniereRelance($cmsiDateDerniereRelance)
+    {
+        $this->cmsiDateDerniereRelance = $cmsiDateDerniereRelance;
+    
+        return $this;
+    }
+    
+    /**
+     * Get cmsiDateDerniereRelance
+     *
+     * @return \DateTime
+     */
+    public function getCmsiDateDerniereRelance()
+    {
+        return $this->cmsiDateDerniereRelance;
+    }
+    
+    
     /**
      * Set autresEtablissements
      *

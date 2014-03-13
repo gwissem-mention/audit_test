@@ -20,11 +20,14 @@ div#tableau-de-bord {}
         div#tableau-de-bord div.active {}
     /* --> */
     /* <-- Grid */
-    div#tableau-de-bord div.grid { font-size:11px; }
+    div#tableau-de-bord div.grid-search { background-color:#6F3596;padding:0px; }
+        div#tableau-de-bord div.grid-search div.panel { background-color:transparent;border-width:0px; }
+            div#tableau-de-bord div.grid-search div.panel div.panel-heading { border-width:0px; }
+    div#tableau-de-bord div.grid { font-size:11px;padding:0px; }
         div#tableau-de-bord div.grid table {}
             div#tableau-de-bord div.grid table tr.grid-row-titles { color:#6F3596;text-transform:uppercase; }
                 div#tableau-de-bord div.grid table tr.grid-row-titles a { color:#6F3596; }
-            div#tableau-de-bord div.grid table th, div#tableau-de-bord div.grid table td { padding:4px; }
+            div#tableau-de-bord div.grid table th, div#tableau-de-bord div.grid table td { background-color:transparent;border-width:0px;padding:4px; }
             div#tableau-de-bord div.grid table td.grid-column-actions {}
                 div#tableau-de-bord div.grid table td.grid-column-actions ul.grid-row-actions { list-style-type:none;margin:0px;padding:0px; }
                     div#tableau-de-bord div.grid table td.grid-column-actions ul.grid-row-actions li { display:inline; }

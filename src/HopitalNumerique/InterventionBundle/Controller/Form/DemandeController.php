@@ -72,7 +72,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      */
     private function _gereEnvoiFormulaireDemandeNouveau($interventionDemandeFormulaire)
     {
-        if ($this->get('request')->getMethod() == 'POST')
+        if ($this->get('request')->isMethod('POST'))
         {
             $interventionDemandeFormulaire->bind($this->get('request'));
 
@@ -189,7 +189,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      */
     private function _gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire)
     {
-        if ($this->get('request')->getMethod() == 'POST')
+        if ($this->get('request')->isMethod('POST'))
         {
             $interventionDemandeFormulaire->bind($this->get('request'));
     
