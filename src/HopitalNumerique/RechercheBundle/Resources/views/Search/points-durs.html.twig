@@ -1,5 +1,6 @@
 <div class="row" {% if count > 2 %}style="display:none"{% endif %} >
     <div class="col-md-10">
+        {{objet['nbRef'] ~ ' : ' ~ objet['primary']}}
         {% if objet['objet'] is not null %}
             {# Contenu #}
             <h4><a href="{{path('hopital_numerique_recherche_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >{{objet['titre']}}</a></h4>

@@ -38,6 +38,9 @@ class SearchController extends Controller
             $refs    = $requete ? json_encode($requete->getRefs()) : '[]';
         }
 
+        if( $refs == 'null' )
+            $refs = '[]';
+
         $session->set('requete-refs', $refs );
 
         return $this->render('HopitalNumeriqueRechercheBundle:Search:index.html.twig', array(
