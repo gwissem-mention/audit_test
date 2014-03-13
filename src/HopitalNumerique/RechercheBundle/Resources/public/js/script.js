@@ -79,7 +79,8 @@ $(document).ready(function() {
         'scrolling' : 'no'
     });
 
-    handleRequestForRecherche();
+    if( $('#requete-refs').val() != '[]')
+        handleRequestForRecherche();
 });
 
 /**
