@@ -25,7 +25,7 @@ class RefusCandidature
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="reponses")
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="refusCandidature")
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
      */
     private $user;
@@ -33,7 +33,15 @@ class RefusCandidature
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire", inversedBy="questions")
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="refusCandidature")
+     * @ORM\JoinColumn(name="usr_id_orgine_refus", referencedColumnName="usr_id", onDelete="CASCADE")
+     */
+    private $userOrigineRefus;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire", inversedBy="refusCandidature")
      * @ORM\JoinColumn(name="qst_id", referencedColumnName="qst_id")
      */
     protected $questionnaire;
@@ -107,6 +115,29 @@ class RefusCandidature
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @return RefusCandidature
+     */
+    public function setUserOrigineRefus(\HopitalNumerique\UserBundle\Entity\User $user = null)
+    {
+        $this->userOrigineRefus = $user;
+    
+        return $this;
+    }
+    
+    /**
+     * Get user
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User
+     */
+    public function getUserOrigineRefus()
+    {
+        return $this->userOrigineRefus;
     }
     
     /**

@@ -43,6 +43,11 @@ class Questionnaire
     private $questions;
     
     /**
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\UserBundle\Entity\RefusCandidature", mappedBy="user", cascade={"persist", "remove" })
+     */
+    protected $refusCandidature;
+    
+    /**
      * Constructor
      */
     public function __construct()

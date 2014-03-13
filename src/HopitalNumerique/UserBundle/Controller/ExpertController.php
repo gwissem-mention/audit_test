@@ -152,20 +152,31 @@ class ExpertController extends Controller
     {
         $routeRedirection = $this->get('request')->request->get('routeRedirection');
         $routeRedirection = json_decode($routeRedirection, true);
-    
+        
         //Texte du refus entré dans la fancybox
         $texteRefus = $this->get('request')->request->get('texteRefus');
         
-        die($texteRefus);
-
-        //Récupération du questionnaire de l'expert
-        $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
-        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
-    
-        $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAll( $user->getId(), $questionnaire->getId());
-    
-        $this->get('session')->getFlashBag()->add( 'success' ,  'Le questionnaire '. $questionnaire->getNomMinifie() .' a été vidé.' );
-    
+        //Récupération du questionnaire de l'ambassadeur
+        $idQuestionnaireExpert = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('expert');
+        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
+        
+        //Ajout en base du message de refus
+        $refusCandidature = $this->get('hopitalnumerique_user.manager.refus_candidature')->createEmpty();
+        $refusCandidature->setQuestionnaire($questionnaire);
+        $refusCandidature->setUser($user);
+        //Récupère l'utilsateur connecté
+        $refusCandidature->setUserOrigineRefus($this->get('security.context')->getToken()->getUser());
+        $refusCandidature->setMotifRefus($texteRefus);
+        $refusCandidature->setDateRefus(new \DateTime());
+        
+        $this->get('hopitalnumerique_user.manager.refus_candidature')->save($refusCandidature);
+        
+        //Envoie du mail de validation de la candidature
+        $mail = $this->get('nodevo_mail.manager.mail')->sendRefusCandidatureExpertMail($user, $texteRefus);
+        $this->get('mailer')->send($mail);
+        
+        $this->get('session')->getFlashBag()->add( 'success' ,  'La candidature au poste '. $questionnaire->getNomMinifie() .' a été refusé.' );
+        
         return new Response('{"success":true, "url" : "'.$this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']).'"}', 200);
     }
 
