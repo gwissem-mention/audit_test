@@ -1,40 +1,39 @@
 /* Sommaire */
-    #sommaire{ position: fixed; left:0; }
-    #sommaire.closed{ width:33px;background: url('../img/sommaire.jpg') no-repeat center center; height: 297px; cursor: pointer }
-    #sommaire.open{ z-index:20; background: #ffffff url('../img/sommaire-close.jpg') no-repeat 96% 55px; padding:25px 40px 15px 25px; border:1px solid #e2e2e2}
-    #sommaire a.resume{background: url('../img/synthese-violet.jpg') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 79px; color:#777777;}
-    #sommaire h3{font-size: 18px;margin-top: 10px; }
-    #sommaire .content ul{list-style: none;}
-    #sommaire .content > ul{padding:0;}
-    #sommaire .content p{margin:0;}
+#sommaire{ position: fixed; left:0; }
+#sommaire.closed{ width:33px;background: url('../img/sommaire.jpg') no-repeat center center; height: 297px; cursor: pointer }
+#sommaire.open{ z-index:20; background: #ffffff url('../img/sommaire-close.jpg') no-repeat 96% 55px; padding:25px 40px 15px 25px; border:1px solid #e2e2e2}
+#sommaire a.resume{background: url('../img/synthese-violet.jpg') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 79px; color:#777777;}
+#sommaire h3{font-size: 18px;margin-top: 10px; }
+#sommaire .content ul{list-style: none;}
+#sommaire .content > ul{padding:0;}
+#sommaire .content p{margin:0;}
 
-    #sommaire .content ul li a, 
-    #sommaire .content ul li p
-        {color: #777777; font-size: 12px}
-    #sommaire .content > ul > li > a, 
-    #sommaire .content > ul > li > p
-        {color: #6f3596; font-weight: bold; }
+#sommaire .content ul li a, 
+#sommaire .content ul li p
+{color: #777777; font-size: 12px}
+#sommaire .content > ul > li > a, 
+#sommaire .content > ul > li > p
+{color: #6f3596; font-weight: bold; }
 
 /* Bloc publication*/
-    #publication{margin-top: 20px; position: relative}
-    #publication .print{position: absolute; right:0; top : 0; z-index: 5}
-    #publication h4{font-size: 18px; font-weight: normal; margin:0;text-transform: uppercase;}
-    #publication h4.objetTitre{font-weight: bold}
-    #publication h3{font-size: 24px; font-weight: bold; margin:5px 0 20px 0; color:#070005;}
-    #publication .col-md-4 div.wrapper{border:1px solid #e2e2e2; padding:10px 20px 0;margin-top:10px;}
-    #publication .col-md-4 div.wrapper a.downloadLink{color:#070707; font-size: 13px; font-weight: normal; margin-bottom: 10px}
-    #publication .col-md-4 div.wrapper a.synthese{background: url('../img/synthese-violet.jpg') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 104px; font-weight: normal; margin-bottom: 10px}
-    #publication .col-md-4 div.wrapper .fa-download{margin:3px 0 0 7px;}
-        
-    /* Bloc Commentaires */
-    #publication .commentaires{ margin:50px 0;}
-    #publication .commentaires h5{ color:#414141;font-size: 18px; font-weight: bold;}
-    
-    /* Bloc Autres résultats */
-    #publication .autresResultats{ margin:0;}
-    #publication .autresResultats h5{ color:#414141;font-size: 18px; font-weight: bold;}
+#publication{margin-top: 20px; position: relative}
+#publication .print{position: absolute; right:0; top : 0; z-index: 5}
+#publication h4{font-size: 18px; font-weight: normal; margin:0;text-transform: uppercase;}
+#publication h4.objetTitre{font-weight: bold}
+#publication h3{font-size: 24px; font-weight: bold; margin:5px 0 20px 0; color:#070005;}
+#publication .col-md-4 div.wrapper{border:1px solid #e2e2e2; padding:10px 20px 0;margin-top:10px;}
+#publication .col-md-4 div.wrapper a.downloadLink{color:#070707; font-size: 13px; font-weight: normal; margin-bottom: 10px}
+#publication .col-md-4 div.wrapper a.synthese{background: url('../img/synthese-violet.jpg') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 104px; font-weight: normal; margin-bottom: 10px}
+#publication .col-md-4 div.wrapper .fa-download{margin:3px 0 0 7px;}
 
+/* Bloc Commentaires */
+#publication .commentaires{ margin:50px 0;}
+#publication .commentaires h5{ color:#414141;font-size: 18px; font-weight: bold;}
 
+/* Bloc Autres résultats */
+#publication .autresResultats{ margin:0;}
+#publication .autresResultats h5{ color:#414141;font-size: 18px; font-weight: bold;}
+#publication img{ margin: 5px 10px 0 0; }
 
 /**
  * MEDIA QUERIES
