@@ -87,7 +87,7 @@
             }
 
             //get parents (if exist)
-            parents = $(this).parent().parent().data('parents');
+            var parents = $(this).parents('tr').data('parents');
 
             if( parents.length > 0 ){
                 //on coche les parents
@@ -95,6 +95,25 @@
                     $.each(parents,function(key, val){
                         $('.ref-'+val+' .checkbox').prop('checked','checked');
                     });
+                }else{
+                    parents.reverse();
+                    //si on a décoché la case, on fait un traitement spécial aux parents
+                    $.each(parents,function(key, val){
+                        uncheck = true;
+
+                        //si on vient de décoché le dernier enfant on décoche le parent
+                        childs = $('.ref-'+val).data('childs');
+                        $.each(childs, function(cKey, cVal){
+                            if( $('.ref-'+cVal+' .checkbox').prop('checked') )
+                                uncheck = false;
+                        });
+
+                        if( uncheck )
+                            $('.ref-'+val+' .checkbox').prop('checked',false);
+                    });
+
+                    //on remet le tableau dans le bon ordre : sinon il le reverse au prochain click
+                    parents.reverse();
                 }
             }
         });
