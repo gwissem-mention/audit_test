@@ -27,12 +27,30 @@ class DemandeController extends Controller
      */
     public function voirAction(InterventionDemande $id)
     {
+        $interventionDemande = $id;
+        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
+        
+        if ($utilisateurConnecte->hasRoleAmbassadeur() && $utilisateurConnecte->getId() != $interventionDemande->getAmbassadeur()->getId())
+        {
+            $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à visualiser cette demande.');
+            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        }
+        
+        $vueParametres = array(
+            'interventionDemande' => $interventionDemande,
+            'InterventionEtat' => new InterventionEtat()
+        );
+        
+        if ($utilisateurConnecte->hasRoleAmbassadeur())
+        {
+            $vueParametres['ambassadeurs'] = $this->get('hopitalnumerique_user.manager.user')->getAmbassadeurs(array(
+                'region' => $interventionDemande->getCmsi()->getRegion()
+            ));
+        }
+        
         return $this->render(
             'HopitalNumeriqueInterventionBundle:Demande:voir.html.twig',
-            array(
-                'interventionDemande' => $id,
-                'InterventionEtat' => new InterventionEtat()
-            )
+            $vueParametres
         );
     }
 
@@ -43,11 +61,11 @@ class DemandeController extends Controller
      */
     public function listeAction()
     {
-        $this->utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
+        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
-        if ($this->utilisateurConnecte->hasRoleCmsi())
+        if ($utilisateurConnecte->hasRoleCmsi())
             return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/cmsi.html.twig');
-        else if ($this->utilisateurConnecte->hasRoleAmbassadeur())
+        else if ($utilisateurConnecte->hasRoleAmbassadeur())
             return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/ambassadeur.html.twig');
         
         $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à visualiser cette page.');

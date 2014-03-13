@@ -158,4 +158,14 @@ class UserManager extends BaseManager
     {
         return $this->getRepository()->getDirecteurs($criteres);
     }
+    /**
+     * Retourne une liste d'ambassadeurs.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des ambassadeurs
+     */
+    public function getAmbassadeurs(array $criteres)
+    {
+        return $this->getRepository()->getAmbassadeurs($criteres);
+    }
 }

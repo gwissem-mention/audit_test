@@ -126,6 +126,26 @@ class InterventionCourrielManager
     
         $this->envoiCourriel($courriel, $referentEtablissement, array('l' => $interventionEvaluationUrl));
     }
+    /**
+     * Envoi le courriel de changement d'ambassadeur.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User[] $destinataires Les destinataires du courriel
+     * @param \HopitalNumerique\UserBundle\Entity\User $nouvelAmbassadeur Le nouvel ambassadeur
+     * @param string $interventionDemandeUrl Le chemin vers l'URL de la demande d'intervention
+     * @return void
+     */
+    public function envoiCourrielChangementAmbassadeur(array $destinataires, User $nouvelAmbassadeur, $interventionDemandeUrl)
+    {
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielChangementAmbassadeurId());
+    
+        foreach ($destinataires as $destinataire)
+        {
+            $this->envoiCourriel($courriel, $destinataire, array(
+                'l' => $interventionDemandeUrl,
+                'a' => $nouvelAmbassadeur->getAppellation()
+            ));
+        }
+    }
 
     /**
      * Envoi un courriel concernant les interventions.

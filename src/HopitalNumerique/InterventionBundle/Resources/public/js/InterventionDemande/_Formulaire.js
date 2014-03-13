@@ -215,7 +215,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeRefere
         if (autresEtablissementsIds.length > 0)
         {
             $.getJSON(
-                '/compte-hn/intervention/user/users/json',
+                '/compte-hn/intervention/users/json',
                 {
                     etablissementRattachementSante:autresEtablissementsIds
                 },

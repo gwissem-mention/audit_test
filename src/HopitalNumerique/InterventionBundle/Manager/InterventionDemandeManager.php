@@ -9,8 +9,10 @@ namespace HopitalNumerique\InterventionBundle\Manager;
 use Symfony\Component\Security\Core\SecurityContext;
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Manager pour les demandes d'intervention.
@@ -138,5 +140,39 @@ class InterventionDemandeManager extends BaseManager
         $interventionDemandes = $this->_repository->getGridDonnees_AmbassadeurDemandes($this->securityContext->getToken()->getUser());
 
         return $interventionDemandes;
+    }
+
+    /**
+     * Change l'ambassadeur d'une demande d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention qui change d'ambassadeur
+     * @param \HopitalNumerique\UserBundle\Entity\User $nouvelAmbassadeur Le nouvelle ambassadeur de la demande
+     * @return boolean VRAI ssi le nouvel ambassadeur est validé et enregistré
+     */
+    public function changeAmbassadeur(InterventionDemande $interventionDemande, User $nouvelAmbassadeur)
+    {
+        $ancienAmbassadeur = $interventionDemande->getAmbassadeur();
+        
+        if ($nouvelAmbassadeur->getId() != $ancienAmbassadeur->getId())
+        {
+            if (!$interventionDemande->haveAncienAmbassadeur($ancienAmbassadeur))
+                $interventionDemande->addAncienAmbassadeur($ancienAmbassadeur);
+            $interventionDemande->setAmbassadeur($nouvelAmbassadeur);
+            $this->save($interventionDemande);
+            
+            $this->interventionCourrielManager->envoiCourrielChangementAmbassadeur(
+                array(
+                    $interventionDemande->getCmsi(),
+                    $interventionDemande->getReferent(),
+                    $nouvelAmbassadeur
+                ),
+                $nouvelAmbassadeur,
+                $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true)
+            );
+
+            return true;
+        }
+        
+        return false;
     }
 }

@@ -24,7 +24,7 @@ hopital_numerique_intervention_reference:
     prefix:   /compte-hn/intervention/reference
 hopital_numerique_intervention_user:
     resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/user.yml"
-    prefix:   /compte-hn/intervention/user
+    prefix:   /compte-hn/intervention
 
 hopital_numerique_recherche:
     resource: "@HopitalNumeriqueRechercheBundle/Resources/config/routing.yml"

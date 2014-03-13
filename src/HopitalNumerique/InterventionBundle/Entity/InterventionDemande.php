@@ -205,11 +205,11 @@ class InterventionDemande
      *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="ambassadeur_id", referencedColumnName="usr_id")
+     *     @ORM\JoinColumn(name="ambassadeur_ancien_id", referencedColumnName="usr_id")
      *   }
      * )
      */
-    private $ambassadeurs;
+    private $ancienAmbassadeurs;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -241,6 +241,11 @@ class InterventionDemande
      */
     private $objets;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InterventionEvaluation", mappedBy="interventionDemande")
+     */
+    private $interventionEvaluations;
+    
     /**
      * Constructor
      */
@@ -707,9 +712,9 @@ class InterventionDemande
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeurs
      * @return InterventionDemande
      */
-    public function addAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ambassadeurs)
+    public function addAncienAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ancienAmbassadeur)
     {
-        $this->ambassadeurs[] = $ambassadeurs;
+        $this->ancienAmbassadeurs[] = $ancienAmbassadeur;
 
         return $this;
     }
@@ -719,9 +724,9 @@ class InterventionDemande
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeurs
      */
-    public function removeAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ambassadeurs)
+    public function removeAncienAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ancienAmbassadeur)
     {
-        $this->ambassadeurs->removeElement($ambassadeurs);
+        $this->ancienAmbassadeurs->removeElement($ancienAmbassadeur);
     }
 
     /**
@@ -729,9 +734,9 @@ class InterventionDemande
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAmbassadeurs()
+    public function getAncienAmbassadeurs()
     {
-        return $this->ambassadeurs;
+        return $this->ancienAmbassadeurs;
     }
 
     /**
@@ -800,7 +805,55 @@ class InterventionDemande
         return $this->objets;
     }
 
+    /** Add interventionEvaluations
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation $interventionEvaluations
+     * @return InterventionDemande
+     */
+    public function addInterventionEvaluation(\HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation $interventionEvaluations)
+    {
+        $this->interventionEvaluations[] = $interventionEvaluations;
 
+        return $this;
+    }
+
+    /**
+     * Remove interventionEvaluations
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation $interventionEvaluations
+     */
+    public function removeInterventionEvaluation(\HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation $interventionEvaluations)
+    {
+        $this->interventionEvaluations->removeElement($interventionEvaluations);
+    }
+
+    /**
+     * Get interventionEvaluations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInterventionEvaluations()
+    {
+        return $this->interventionEvaluations;
+    }
+    
+    /**
+     * Retourne si la demande d'intervention a déjà eu un ambassadeur.
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur à vérifier parmi les anciens
+     * @return boolean VRAI ssi l'ambassadeur avait été relié à cette demande d'intervention
+     */
+    public function haveAncienAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ambassadeur)
+    {
+        foreach ($this->ancienAmbassadeurs as $ancienAmbassadeur)
+        {
+            if ($ancienAmbassadeur->getId() == $ambassadeur->getId())
+                return true;
+        }
+        
+        return false;
+    }
+    
     
     /**
      * Retourne la date butoir pour le refus, validation ou mise en attente de la demande d'intervention par le CMSI.

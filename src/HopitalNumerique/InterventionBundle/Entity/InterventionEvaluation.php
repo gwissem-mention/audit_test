@@ -44,7 +44,7 @@ class InterventionEvaluation
     /**
      * @var \InterventionDemande
      *
-     * @ORM\ManyToOne(targetEntity="InterventionDemande")
+     * @ORM\ManyToOne(targetEntity="InterventionDemande", inversedBy="interventionEvaluation")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id")
      * })

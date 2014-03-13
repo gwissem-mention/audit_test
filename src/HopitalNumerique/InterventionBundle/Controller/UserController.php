@@ -7,6 +7,9 @@
 namespace HopitalNumerique\InterventionBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 
 /**
  * Contrôleur de gestion des utilisateurs utilisés pour les interventions.
@@ -14,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class UserController extends Controller
 {
     /**
-     * Action qui renvoie une liste d'établissements. Les paramètres passables sont :
+     * Action qui renvoie une liste d'utilisateurs. Les paramètres passables sont :
      * <ul>
      *   <li>etablissementRattachementSante : L'ID ou les IDs de l'établissement de l'utilisateur</li>
      * </ul>
@@ -29,6 +32,28 @@ class UserController extends Controller
 
         $usersJson = $this->get('hopitalnumerique_intervention.manager.form_user')->jsonUsers($usersFiltres);
 
-        return new \Symfony\Component\HttpFoundation\Response($usersJson);
+        return new Response($usersJson);
+    }
+    
+    /**
+     * Action qui change l'ambassadeur d'une demandes d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention qui change d'ambassadeur
+     * @param \HopitalNumerique\UserBundle\Entity\User $nouvelAmbassadeur Le nouvelle ambassadeur de la demande
+     * @return \Symfony\Component\HttpFoundation\Response 1 ssi le nouvel ambassadeur est valide
+     */
+    public function ajaxAmbassadeurChangeAction(InterventionDemande $interventionDemande, User $nouvelAmbassadeur)
+    {
+        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
+        if ($utilisateurConnecte->hasRoleAmbassadeur() && $utilisateurConnecte->getId() == $interventionDemande->getAmbassadeur()->getId())
+        {
+            if ($this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeAmbassadeur($interventionDemande, $nouvelAmbassadeur))
+            {
+                $this->get('session')->getFlashBag()->add('success', 'L\'ambassadeur a été modifié.');
+                return new Response('1');
+            }
+        }
+    
+        return new Response('0');
     }
 }

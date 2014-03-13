@@ -74,6 +74,15 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.enregistreInte
 
 
 /**
+ * Retourne si la liste des régions est présente.
+ * 
+ * @return boolean VRAI ssi la liste des régions est présente
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.listeRegionsExiste = function()
+{
+    return ($('select.hopitalnumerique_interventionbundle_interventiondemande_region').size() > 0);
+};
+/**
  * Sélectionne la région des établissements.
  * 
  * @param integer regionId L'ID de la région à sélectionner
@@ -95,20 +104,24 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.setRegion = fu
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements = function()
 {
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampAutresEtablissements();
-    var regionId = parseInt($('select.hopitalnumerique_interventionbundle_interventiondemande_region option:selected').attr('value'));
-
-    if (regionId != 0)
+    
+    if (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.listeRegionsExiste())
     {
-        $.getJSON(
-            '/compte-hn/intervention/etablissement/etablissements/json',
-            {
-                region:regionId
-            },
-            function(etablissementsRegroupesParTypeOrganisme)
-            {
-                HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements(etablissementsRegroupesParTypeOrganisme);
-            }
-        );
+        var regionId = parseInt($('select.hopitalnumerique_interventionbundle_interventiondemande_region option:selected').attr('value'));
+    
+        if (regionId != 0)
+        {
+            $.getJSON(
+                '/compte-hn/intervention/etablissement/etablissements/json',
+                {
+                    region:regionId
+                },
+                function(etablissementsRegroupesParTypeOrganisme)
+                {
+                    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements(etablissementsRegroupesParTypeOrganisme);
+                }
+            );
+        }
     }
 };
 /**
@@ -205,7 +218,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeRefere
         if (autresEtablissementsIds.length > 0)
         {
             $.getJSON(
-                '/compte-hn/intervention/user/users/json',
+                '/compte-hn/intervention/users/json',
                 {
                     etablissementRattachementSante:autresEtablissementsIds
                 },
@@ -283,5 +296,35 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initReferentIn
     {
         $(etablissementSelect).find('option[value=' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REFERENT_INITIAL_ID + ']').attr('selected', true);
         HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REFERENT_INITIAL_ID = null;
+    }
+};
+
+
+/**
+ * Change l'ambassadeur de la demande d'intervention.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.changeAmbassadeur = function()
+{
+    var nouvelAmbassadeurId = parseInt($('select#intervention_demande_ambassadeur_change option:selected').val());
+
+    if (nouvelAmbassadeurId > 0)
+    {
+        if (confirm('Confirmez-vous le transfert d\'ambassadeur ?'))
+        {
+            var loaderAjax = $('.panel_form_visu').nodevoLoader().start();
+            var changementAmbassadeurUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/ambassadeur/' + nouvelAmbassadeurId + '/change'; 
+        
+            $.ajax(changementAmbassadeurUrl, {
+                success:function(reponse) {
+                    if (reponse != '1')
+                        alert('L\'ambassadeur n\'a pu être modifié.');
+                    else Nodevo_Web.redirige('/compte-hn/intervention/demandes/liste');
+
+                    loaderAjax.finished();
+                }
+            });
+        }
     }
 };

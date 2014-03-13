@@ -156,6 +156,16 @@ class UserRepository extends EntityRepository
         return $this->findByRole(Role::$ROLE_DIRECTEUR_LABEL, $criteres);
     }
     /**
+     * Retourne une liste d'ambassadeurs.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des ambassadeurs
+     */
+    public function getAmbassadeurs(array $criteres)
+    {
+        return $this->findByRole(Role::$ROLE_AMBASSADEUR_LABEL, $criteres);
+    }
+    /**
      * Retourne une liste d'utilisateurs en fonction d'un rôle.
      *
      * @param string $role Label du rôle sur lequel filtrer
