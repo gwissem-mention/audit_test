@@ -72,7 +72,7 @@
 	                <div class="btn-toolbar">
                         {% if user.id is not null and options.expert_form and not options.expert %}
                             <div onclick='validerCandidature("{{path('hopitalnumerique_user_expert_validationCandidature', {'user':user.id})}}" );' class="btn btn-default" title="Validation de la candidature"><i class="fa fa-check-circle"></i></div>
-                            <a class="btn btn-default fancybox.ajax" href="{{path('hopitalnumerique_user_ambassadeur_messageRefusCandidature')}}" title="Refus de la candidature" id="refusCandidature" ><i class="fa fa-minus-circle"></i></a>
+                            <a class="btn btn-default fancybox.ajax" href="{{path('hopitalnumerique_user_expert_messageRefusCandidature')}}" title="Refus de la candidature" id="refusCandidature" ><i class="fa fa-minus-circle"></i></a>
                         {% endif %}
 					    {#<div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
 					    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>#}

@@ -12,6 +12,8 @@ parameters:
     hopitalnumerique_user.form.contractualisation.class: HopitalNumerique\UserBundle\Form\Type\ContractualisationType
     #Contractualisation - grid  column  
     hopitalnumerique_user.column.contractualisation.class: HopitalNumerique\UserBundle\Grid\Column\ContractualisationColumn
+    #Refus candidature
+    hopitalnumerique_user.manager.refus_candidature.class: HopitalNumerique\UserBundle\Manager\RefusCandidatureManager
     #Ambassadeurs
     hopitalnumerique_user.grid.objet.class: HopitalNumerique\UserBundle\Grid\ObjetGrid
     #Etablissements
@@ -65,6 +67,14 @@ services:
         tags:
             - { name: form.type, alias: hopitalnumerique_user_contractualisation }
 
+    #Refus candidature
+    #--Manager
+    hopitalnumerique_user.manager.refus_candidature:
+        class: %hopitalnumerique_user.manager.refus_candidature.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           
     #Ambassadeurs
     #--Grid
     hopitalnumerique_user.grid.objet:

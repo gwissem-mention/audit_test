@@ -168,4 +168,12 @@ class ExpertController extends Controller
     
         return new Response('{"success":true, "url" : "'.$this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']).'"}', 200);
     }
+
+    /**
+     * POP-IN de message de refus
+     */
+    public function messageRefusCandidatureAction()
+    {
+        return $this->render('HopitalNumeriqueUserBundle:Expert:popin_refus_candidature.html.twig');
+    }
 }

@@ -147,28 +147,30 @@ class MailManager extends BaseManager
      * Envoi un mail de refus de candidature expert
      *
      * @param User $user Utilisateur qui recevras l'email
+     * @param string $message Message de refus ajouté au template
      *
      * @return Swift_Message
      */
-    public function sendRefusCandidatureExpertMail( $user )
+    public function sendRefusCandidatureExpertMail( $user, $message )
     {
         $mail = $this->findOneById(13);
     
-        return $this->_generationMail($user, $mail);
+        return $this->_generationMail($user, $mail, $message);
     }
     
     /**
      * Envoi un mail de validation de candidature ambassadeur
      *
      * @param User $user Utilisateur qui recevras l'email
+     * @param string $message Message de refus ajouté au template
      *
      * @return Swift_Message
      */
-    public function sendRefusCandidatureAmbassadeurMail( $user )
+    public function sendRefusCandidatureAmbassadeurMail( $user, $message )
     {
         $mail = $this->findOneById(14);
     
-        return $this->_generationMail($user, $mail);
+        return $this->_generationMail($user, $mail, $message);
     }
    
     /**
@@ -223,13 +225,17 @@ class MailManager extends BaseManager
      *
      * @param string $content Contenu Templaté du mail
      * @param User   $user    User qui recevras l'email
+     * @param string $message Message a ajouter au template
      *
      * @return string
      */
-    private function _replaceContent( $content, $user )
+    private function _replaceContent( $content, $user, $message )
     {
+        $message = nl2br($message);
+        
         $content = str_replace('%u', $user->getPrenom() . ' ' . $user->getNom(), $content);
         $content = str_replace('%p', $user->getPlainPassword(), $content);
+        $content = str_replace('%message', $message, $content);
    
         return $content;
     }
@@ -239,13 +245,14 @@ class MailManager extends BaseManager
      * 
      * @param \HopitalNumerique\UserBundle\Entity\User $user
      * @param \Nodevo\MailBundle\Entity\Mail           $mail
+     * @param string                                   $message Message a ajouter au template
      * 
      * @return Swift_Message objet \Swift pour l'envoie du mail
      */
-    private function _generationMail( $user, $mail )
+    private function _generationMail( $user, $mail, $message = '' )
     {
         //prepare content
-        $content         = $this->_replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user);
+        $content         = $this->_replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user, $message);
         $templateFile    = "NodevoMailBundle::template.mail.html.twig";
         $templateContent = $this->_twig->loadTemplate($templateFile);
     
