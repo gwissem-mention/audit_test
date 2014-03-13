@@ -24,7 +24,7 @@ class AmbassadeurController extends Controller
      * @param integer $id Identifiant de l'utilisateur
      */
     public function editFrontAction( )
-    {        
+    {
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
         
@@ -111,7 +111,7 @@ class AmbassadeurController extends Controller
      * @param integer $idUser          ID de l'utilisateur
      */
     public function listeObjetsAction( $idUser )
-    {    
+    {
         //Récupération de l'utilisateur passé en param
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByAmbassadeur($idUser);
     
@@ -206,7 +206,7 @@ class AmbassadeurController extends Controller
      * @param int $user
      */
     public function validationCandidatureAction( HopiUser $user )
-    {                
+    {
         $routeRedirection = $this->get('request')->request->get('routeRedirection');
         $routeRedirection = json_decode($routeRedirection, true);
         
@@ -263,5 +263,12 @@ class AmbassadeurController extends Controller
     public function messageRefusCandidatureAction()
     {
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:popin-message-refus.html.twig');
+    }
+
+    public function domainesFonctionnelsAction( HopiUser $user )
+    {
+
+
+
     }
 }
