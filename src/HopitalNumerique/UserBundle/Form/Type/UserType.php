@@ -324,11 +324,18 @@ class UserType extends AbstractType
                         ->setParameter('etat', 'RAISON_INSCRIPTION')
                         ->orderBy('ref.libelle', 'ASC');
                     }
-            ))
-            
-            ;
+            ));
             
             // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
+            
+            // Conditions générales d'utilisation - Uniquement en FO = Si l'utilisateur n'est pas connecté
+            if(!$this->_securityContext->isGranted('ROLE_USER'))
+                $builder->add('termsAccepted', 'checkbox', array(
+                        'required'   => true,
+                        'label'      => 'J\'accepte les conditions générales d\'utilisation de la plateforme',
+                        'label_attr' => array('class' => 'conditonsGenerales'),
+                        'attr'       => array('class' => $this->_constraints['termsAccepted']['class'] . ' checkbox')
+                ));
             
     }
 

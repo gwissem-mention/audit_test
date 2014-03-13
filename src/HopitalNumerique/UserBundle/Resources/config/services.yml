@@ -16,6 +16,8 @@ parameters:
     hopitalnumerique_user.grid.objet.class: HopitalNumerique\UserBundle\Grid\ObjetGrid
     #Etablissements
     hopitalnumerique_user.grid.etablissement.class: HopitalNumerique\UserBundle\Grid\EtablissementGrid
+    #Extensions twig
+    hopitalnumerique_user.twig.extensions.class: HopitalNumerique\UserBundle\Twig\UserExtension
 
 services:
     #Utilisateur:
@@ -85,3 +87,9 @@ services:
     hopitalnumerique_user.gestion_affichage_onglet:
         class: HopitalNumerique\UserBundle\Util\GestionAffichageOnglets
         arguments: ["@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.questionnaire"]
+
+    #Extension Twig        
+    hopitalnumerique_user.twig.user_extension:
+        class: %hopitalnumerique_user.twig.extensions.class%
+        tags:
+            - { name: twig.extension }

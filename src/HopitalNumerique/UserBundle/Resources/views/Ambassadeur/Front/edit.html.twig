@@ -28,13 +28,16 @@
 {% endblock %}
 
 {% block contenu %}
-    <div class="panel">
+    <div class="panel">       
+        
     	{# Include des données de contractualisation #}
         {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
     
-        {% if optionRenderForm.readOnly == false  %}
+	    {% set informationsManquantes = user|informationsManquantes %}
+	    
+        {% if optionRenderForm.readOnly == false and informationsManquantes.ok %}
 	        <div class="col-md-10 col-md-offset-2">
-	            <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit questionnaire_submit" value="ENVOYER MA CANDIDATURE" />
+	            <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit questionnaire_submit" value="ENVOYER MA CANDIDATURE" type="button"/>
 	        </div>
 			<div class="clearfix"></div>
 		{% endif %}
