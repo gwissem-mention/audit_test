@@ -2,11 +2,23 @@
 namespace HopitalNumerique\UserBundle\Twig;
 
 class UserExtension extends \Twig_Extension
-{  
+{
+    /**
+     * Retourne la liste des filtres custom pour cette extension
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        return array(
+            'informationsManquantes' => new \Twig_Filter_Method($this, 'informationsManquantes')
+        );
+    }
+
     /**
      * Vérifie que l'utilisateur a bien renseignés certains champs
      *
-     * @param User   $user  User a vérifier
+     * @param User $user User a vérifier
      *
      * @return boolean
      */
@@ -14,13 +26,13 @@ class UserExtension extends \Twig_Extension
     {
         $resultat = false;
         
-        if( !empty($user->getTelephoneDirect()) 
-            && !empty($user->getRegion())
-            && !empty($user->getDepartement())
-            && ( (!empty($user->getEtablissementRattachementSante())) || (!empty($user->getAutreStructureRattachementSante())))
-            && !empty($user->getFonctionDansEtablissementSante())
-            && !empty($user->getProfilEtablissementSante())
-            && !empty($user->getRaisonInscriptionSante()) )
+        if( !is_null($user->getTelephoneDirect())
+            && !is_null($user->getRegion())
+            && !is_null($user->getDepartement())
+            && ( (!is_null($user->getEtablissementRattachementSante())) || (!is_null($user->getAutreStructureRattachementSante())))
+            && !is_null($user->getFonctionDansEtablissementSante())
+            && !is_null($user->getProfilEtablissementSante())
+            && !is_null($user->getRaisonInscriptionSante()) )
         {
             $resultat = true;
         }
@@ -35,6 +47,6 @@ class UserExtension extends \Twig_Extension
      */
     public function getName()
     {
-        return 'acl_extension';
+        return 'user_extension';
     }
 }

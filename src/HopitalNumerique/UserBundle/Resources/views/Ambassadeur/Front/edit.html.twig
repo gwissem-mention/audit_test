@@ -29,9 +29,14 @@
 
 {% block contenu %}
     <div class="panel">
-        {% set array = user|totototo() %}
+        {#{% set array = user|informationsManquantes %}
         {% if array is not empty %}
             r"ejfgnbreigfbhrbhurhguzrebghi
+        {% endif %}#}
+        {% if user|informationsManquantes %}
+            <h1>TOTOTOTOTOTOTOT</h1>
+        {% else %}
+            <h1>NANOANOANOANOANAONAONAONAO</h1>
         {% endif %}
     
     	{# Include des données de contractualisation #}
