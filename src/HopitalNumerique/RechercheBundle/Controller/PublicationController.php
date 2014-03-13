@@ -106,6 +106,12 @@ class PublicationController extends Controller
             return false;
         }
 
+        //test si l'objet est actif : état actif === 3
+        if( $objet->getEtat()->getId() != 3 ){
+            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas accès à cette publication.' );
+            return false;
+        }
+
         return true;
     }
 }

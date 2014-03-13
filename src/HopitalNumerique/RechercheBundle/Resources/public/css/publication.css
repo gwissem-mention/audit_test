@@ -4,7 +4,7 @@
     #sommaire.open{ z-index:20; background: #ffffff url('../img/sommaire-close.jpg') no-repeat 96% 15px; padding:15px 40px 15px 15px; border:1px solid #e2e2e2}
     #sommaire a.resume{background: url('../img/synthese-violet.jpg') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 79px; color:#777777;}
     #sommaire h3{font-size: 18px;margin-top: 10px; }
-    #sommaire .content{overflow-y:scroll;height: 100%}
+    #sommaire .content{overflow-y:auto;height: 100%}
     #sommaire .content ul{list-style: none;}
     #sommaire .content > ul{padding:0;}
     #sommaire .content p{margin:0;}
