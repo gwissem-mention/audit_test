@@ -1,15 +1,26 @@
 .references .panel-body{
-	padding:5px 20px !important;
-	display:none;
+    padding:5px 20px !important;
+    display:none;
 }
 .references .panel-body > li{
-	list-style:none;
+    list-style:none;
 }
 @media print {
-	.references .panel-body{
+    @page{
+        margin: 1cm 0.5cm;
+        size:portrait;
+    }
+    .references .panel-body{
         display:block !important;
+        border:0 !important;
     }
     .breadcrumb{
         display:none;
+    }
+    #page-content{
+        margin-left:0px;
+    }
+    header{
+        display: none;
     }
 }
