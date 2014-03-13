@@ -395,8 +395,6 @@ class User extends BaseUser
  
     // ------- Conditions générales d'utilisations ------- 
     /**
-     * @Assert\NotBlank()
-     * @Assert\True()
      * @Nodevo\Javascript(class="validate[required]")
      */
     protected $termsAccepted;

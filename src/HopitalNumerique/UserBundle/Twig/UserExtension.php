@@ -23,18 +23,29 @@ class UserExtension extends \Twig_Extension
      * @return boolean
      */
     public function informationsManquantes( $user )
-    {
-        $resultat = false;
+    {        
+        $resultat = array('ok' => array());       
         
-        if( !is_null($user->getTelephoneDirect())
-            && !is_null($user->getRegion())
-            && !is_null($user->getDepartement())
-            && ( (!is_null($user->getEtablissementRattachementSante())) || (!is_null($user->getAutreStructureRattachementSante())))
-            && !is_null($user->getFonctionDansEtablissementSante())
-            && !is_null($user->getProfilEtablissementSante())
-            && !is_null($user->getRaisonInscriptionSante()) )
+        //Pour chacun des éléments ci-dessous, si sa valeur correspondante est nulle alors on créé un tableau contenant le label à afficher
+        $resultat['telephoneDirect']       = (is_null($user->getTelephoneDirect())) ? array('label' => 'Téléphone direct') : array();
+        $resultat['region']                = (is_null($user->getRegion())) ? array('label' => 'Région') : array();
+        $resultat['departement']           = (is_null($user->getDepartement())) ? array('label' => 'Département') : array();
+        //Si 'etablissement de rattachement' n'est pas renseigné on vérifie le 'autre structure' 
+        $resultat['rattachementSante']     = (is_null($user->getEtablissementRattachementSante())) ? (is_null($user->getAutreStructureRattachementSante()) ? array('label' => 'Etablissement de rattachement / Autre structure de rattachement') : array()) : array();
+        $resultat['fonctionEtablissement'] = (is_null($user->getFonctionDansEtablissementSante())) ? array('label' => 'Fonction dans l\'établissement') : array();
+        $resultat['profilEtablissement']   = (is_null($user->getProfilEtablissementSante())) ? array('label' => 'Profil de l\'établissement') : array();
+        $resultat['raisonInscription']     = (is_null($user->getRaisonInscriptionSante())) ? array('label' => 'Raison inscription') : array();
+        
+        //Si l'un des éléments ci-dessus est manquant
+        foreach ($resultat as $res)
         {
-            $resultat = true;
+            //Si au moins l'un des tableaux n'est pas vide alors il y a au moins un élément manquant
+            if(!empty($res))
+            {
+                $resultat['ok'] = false;
+                break; 
+            }
+            $resultat['ok'] = true; 
         }
 
         return $resultat;
