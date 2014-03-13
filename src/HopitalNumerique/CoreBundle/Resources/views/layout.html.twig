@@ -112,7 +112,7 @@
         {% if app.user %}
             <div id="mesrequetes" class="closed">
                 <div class="content" style="display:none">
-                    <h3 class="violet">Mes requêtes</h3>
+                    <h3 class="violet">Mes requêtes de recherche</h3>
                     {{ render(controller("HopitalNumeriqueRechercheBundle:Requete:index", {'indexVue':false} )) }}
                     <a href="{{path('hopital_numerique_requete_homepage')}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Gérer mes requêtes</a>
                 </div>

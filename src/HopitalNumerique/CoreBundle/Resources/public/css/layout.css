@@ -62,11 +62,13 @@ a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 
 
 /* BLOC : MES REQUETES */
     #mesrequetes{ position: absolute; right: 0; top: 145px}
-    #mesrequetes.open{ z-index:20; padding:25px 40px 15px 25px; border:1px solid #e2e2e2; background: #ffffff }
+    #mesrequetes .content{ width:310px; }
+    #mesrequetes.open{ z-index:20; padding:25px 20px 15px 15px; border:1px solid #e2e2e2; background: #ffffff;top:0px;height:100%;overflow-y:auto; }
     #mesrequetes.closed{ width: 34px; height: 156px; background: url('../img/mes-requetes.jpg') no-repeat center center; cursor: pointer }
-    #mesrequetes h3{margin:0;}
+    #mesrequetes h3{margin:0;font-weight:bold;}
     #mesrequetes ul{padding:0;list-style: none; margin-top: 10px}
     #mesrequetes ul li a{color:#070707; font-size: 12px; border-top:1px solid #c9c9c9; display: block; padding:5px 10px;}
+    #mesrequetes ul li:first-child a{ border-top:0; }
     #mesrequetes ul li:hover a{color:#6f3596;font-weight: bold}
     #mesrequetes ul li a i{margin-right: 5px; font-size: 0.7em;}
 
