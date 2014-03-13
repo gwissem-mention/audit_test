@@ -1,0 +1,52 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Domaines fonctionnels maitrisés
+{% endblock %}
+
+{% block toolbarButton %}
+    <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste des utilisateurs"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div id="form_edit_user" class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <div class="options">
+                    <ul class="nav nav-tabs">
+                        <li>
+                            <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Données de caractérisation</a>
+                        </li>
+                        {% if user.id is not null and (options.expert or options.ambassadeur)  %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Données de contractualisation</a>
+                            </li>
+                        {% endif %}
+                        {% if user.id is not null and (options.expert or options.expert_form) %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature pour devenir expert</a>
+                            </li>
+                        {% endif %}
+                        {% if user.id is not null and (options.ambassadeur or options.ambassadeur_form) %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature pour devenir ambassadeur</a>
+                            </li>
+                        {% endif %}
+                        {% if user.id is not null and options.ambassadeur %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maitrisés</a>
+                            </li>
+                            <li class="active" >
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Domaines fonctionnels maitrisés</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel-body" >
+                
+            </div>           
+        </div>
+    </div>
+{% endblock %}

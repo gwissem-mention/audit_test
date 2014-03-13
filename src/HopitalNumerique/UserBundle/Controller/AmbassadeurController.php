@@ -265,10 +265,14 @@ class AmbassadeurController extends Controller
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:popin-message-refus.html.twig');
     }
 
-    public function domainesFonctionnelsAction( HopiUser $user )
+    public function domainesFonctionnelsAction( $id )
     {
+        //Récupération de l'utilisateur passé en param
+        $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
 
-
-
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:domaines-fonctionnels.html.twig', array(
+            'user'    => $user,
+            'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user)
+        ));
     }
 }

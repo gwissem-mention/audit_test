@@ -100,7 +100,7 @@ class SearchManager extends BaseManager
         foreach($fusion as $k=>$v) {
             $sort['primary'][$k] = $v['primary'];
             $sort['nbRef'][$k]   = $v['nbRef'];
-            $sort['id'][$k]   = $v['id'];
+            $sort['id'][$k]      = $v['id'];
         }
         //sort by primary desc and then nbRef asc
         array_multisort($sort['primary'], SORT_DESC, $sort['nbRef'], SORT_ASC,$sort['id'], SORT_DESC,$fusion);
