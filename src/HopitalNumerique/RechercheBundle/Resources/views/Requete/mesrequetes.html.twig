@@ -2,7 +2,7 @@
     {% for requete in requetes %}
         <li>
             <a href="{{path('hopital_numerique_recherche_homepage_requete',{'id':requete.id})}}">
-                <i class="fa fa-circle {% if requete.isDefault %}violet{% else %}fa-inverse{% endif %}" ></i> {{requete.nom|capitalize}}
+                <i class="fa fa-circle {% if requete.isDefault %}violet{% else %}fa-inverse{% endif %}" ></i>{{requete.nom|capitalize}}
             </a>
         </li>
     {% endfor %}

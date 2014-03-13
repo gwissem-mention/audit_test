@@ -45,7 +45,14 @@
             </div>
 
             <div class="panel-body" >
-                
+    <!--                 /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="objets")
+     * @ORM\JoinTable(name="hn_objet_ambassadeur",
+     *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")}
+     * )
+     */
+    protected $ambassadeurs; -->
             </div>           
         </div>
     </div>
