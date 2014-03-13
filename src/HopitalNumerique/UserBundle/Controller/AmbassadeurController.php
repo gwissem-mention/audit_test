@@ -243,17 +243,26 @@ class AmbassadeurController extends Controller
         
         //Texte du refus entré dans la fancybox
         $texteRefus = $this->get('request')->request->get('texteRefus');
-        
-        die($texteRefus);
-        
-        //Récupération du questionnaire de l'expert
+
+        //Récupération du questionnaire de l'ambassadeur
         $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
-    
-        $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAll( $user->getId(), $questionnaire->getId());
-    
-        $this->get('session')->getFlashBag()->add( 'success' ,  'Le questionnaire '. $questionnaire->getNomMinifie() .' a été vidé.' );
-    
+        
+        //Ajout en base du message de refus
+        $refusCandidature = $this->get('hopitalnumerique_user.manager.refus_candidature')->createEmpty();
+        $refusCandidature->setQuestionnaire($questionnaire);
+        $refusCandidature->setUser($user);
+        $refusCandidature->setMotifRefus($texteRefus);
+        $refusCandidature->setDateRefus(new \DateTime());
+        
+        $this->get('hopitalnumerique_user.manager.refus_candidature')->save($refusCandidature);
+        
+        //Envoie du mail de validation de la candidature
+        $mail = $this->get('nodevo_mail.manager.mail')->sendRefusCandidatureAmbassadeurMail($user, $texteRefus);
+        $this->get('mailer')->send($mail);
+        
+        $this->get('session')->getFlashBag()->add( 'success' ,  'La candidature au poste '. $questionnaire->getNomMinifie() .' a été refusé.' );
+        
         return new Response('{"success":true, "url" : "'.$this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']).'"}', 200);
     }
 
@@ -262,6 +271,6 @@ class AmbassadeurController extends Controller
      */
     public function messageRefusCandidatureAction()
     {
-        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:popin-message-refus.html.twig');
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:popin_refus_candidature.html.twig');
     }
 }

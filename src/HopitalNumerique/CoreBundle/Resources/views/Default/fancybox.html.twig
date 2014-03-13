@@ -1,13 +1,14 @@
+{% block fancybox %}
 <div class="panel panel-midnightblue" style="margin:0" >
     <div class="panel-heading">
-        <h4>Refus de la candidature</h4>
+        <h4>{% block fancy_titre %}{% endblock %}</h4>
     </div>
 
     <div class="panel-body" >
         <form action="#">
             <div class="form-group">
                 <div class="col-md-12">
-                    <label for="message">Motif de refus de la candidature</label>
+                    <label for="message">{% block fancy_message %}{% endblock %}</label>
                 </div>
                 <div class="col-md-12">
                     <textarea name="message" id="message-refus" style="width:100%" rows="15"></textarea>
@@ -19,9 +20,10 @@
             <div class="row">
                 <div class="btn-toolbar pull-right">
                     <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
-                    <div onclick="refuserCandidature();" class="btn-primary btn">Enregistrer</div>
+                    <div onclick="{% block fancy_fontion_validation %}{% endblock %};" class="btn-primary btn">Enregistrer</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}

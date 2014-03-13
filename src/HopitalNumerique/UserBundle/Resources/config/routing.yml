@@ -172,6 +172,10 @@ hopitalnumerique_user_expert_refusCandidature:
     requirements:
         user: \d+
 
+hopitalnumerique_user_expert_messageRefusCandidature:
+    pattern: /admin/user/expert/messagerefus
+    defaults: { _controller: HopitalNumeriqueUserBundle:Expert:messageRefusCandidature}
+
 #Ambassadeur
 hopitalnumerique_user_ambassadeur_edit:
     pattern:  /admin/user/ambassadeur/edit/{id}
