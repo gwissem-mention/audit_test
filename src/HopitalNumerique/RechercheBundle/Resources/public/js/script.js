@@ -83,37 +83,18 @@ $(document).ready(function() {
 });
 
 /**
- * Prend en compte la requete par défaut ou la requte active
+ * Prend en compte la requete par défaut ou la requete active
  */
 function handleRequestForRecherche()
 {
     refs = $.parseJSON( $('#requete-refs').val() );
 
-    //For each categ, reverse array avec select Elements
-    if( refs.categ1 ){
-        refs.categ1.reverse();
-        $.each(refs.categ1, function( key, item ){
-            selectElement( $('#origin .element-'+item) );
+    $.each(refs, function(key, val){
+        $.each(val.reverse(), function( key, item ){
+            if( $('#dest .element-'+item).hasClass('hide') )
+                selectElement( $('#origin .element-'+item) );
         });
-    }
-    if( refs.categ2 ){
-        refs.categ2.reverse();
-        $.each(refs.categ2, function( key, item ){
-            selectElement( $('#origin .element-'+item) );
-        });
-    }
-    if( refs.categ3 ){
-        refs.categ3.reverse();
-        $.each(refs.categ3, function( key, item ){
-            selectElement( $('#origin .element-'+item) );
-        });
-    }
-    if( refs.categ4 ){
-        refs.categ4.reverse();
-        $.each(refs.categ4, function( key, item ){
-            selectElement( $('#origin .element-'+item) );
-        });
-    }
+    });
 
     updateResultats();
 }
@@ -299,27 +280,27 @@ function getReferences()
 
     //create array with selected references
     if( !$('#dest .element-220').hasClass('hide') ){
-        references.categ1.push( 220 );
         $('#dest .element-220 li:not(.hide)').each(function(){
-            references.categ1.push( $(this).data('id') );
+            if( !$(this).hasClass('childs') )
+                references.categ1.push( $(this).data('id') );
         });
     }
     if( !$('#dest .element-221').hasClass('hide') ){
-        references.categ2.push( 221 );
         $('#dest .element-221 li:not(.hide)').each(function(){
-            references.categ2.push( $(this).data('id') );
+            if( !$(this).hasClass('childs') )
+                references.categ2.push( $(this).data('id') );
         });
     }
     if( !$('#dest .element-223').hasClass('hide') ){
-        references.categ3.push( 223 );
         $('#dest .element-223 li:not(.hide)').each(function(){
-            references.categ3.push( $(this).data('id') );
+            if( !$(this).hasClass('childs') )
+                references.categ3.push( $(this).data('id') );
         });
     }
     if( !$('#dest .element-222').hasClass('hide') ){
-        references.categ4.push( 222 );
         $('#dest .element-222 li:not(.hide)').each(function(){
-            references.categ4.push( $(this).data('id') );
+            if( !$(this).hasClass('childs') )
+                references.categ4.push( $(this).data('id') );
         });
     }
 
