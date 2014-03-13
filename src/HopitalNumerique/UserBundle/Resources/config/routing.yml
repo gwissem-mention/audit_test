@@ -250,3 +250,7 @@ hopitalnumerique_user_ambassadeur_domainesFonctionnels:
     defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:domainesFonctionnels", id: 1 }
     requirements:
         id: \d+
+
+hopitalnumerique_user_ambassadeur_savedomaine:
+    pattern: /admin/user/ambassadeur/saveDomaine
+    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:saveDomaine, _format: json }

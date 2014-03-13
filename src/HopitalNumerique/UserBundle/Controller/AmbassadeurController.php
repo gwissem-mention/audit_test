@@ -66,23 +66,23 @@ class AmbassadeurController extends Controller
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
     
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:edit.html.twig',array(
-                'questionnaire' => $questionnaire,
-                    'user'          => $user,
-                    'options'       => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
-                    'optionRenderForm'   => array(
-                        'routeRedirect' => json_encode(array(
-                                'quit' => array(
-                                        'route'     => 'hopital_numerique_user_homepage',
-                                        'arguments' => array()
-                                ),
-                                'sauvegarde' => array(
-                                        'route'     => 'hopitalnumerique_user_ambassadeur_edit',
-                                        'arguments' => array(
-                                                'id' => $user->getId()
-                                        )
-                                )
-                        ))
-                    )
+            'questionnaire' => $questionnaire,
+                'user'             => $user,
+                'options'          => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
+                'optionRenderForm' => array(
+                    'routeRedirect' => json_encode(array(
+                        'quit' => array(
+                            'route'     => 'hopital_numerique_user_homepage',
+                            'arguments' => array()
+                        ),
+                        'sauvegarde' => array(
+                            'route'     => 'hopitalnumerique_user_ambassadeur_edit',
+                            'arguments' => array(
+                                'id' => $user->getId()
+                            )
+                        )
+                    ))
+                )
         ));
     }
 
@@ -287,7 +287,7 @@ class AmbassadeurController extends Controller
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
 
         //récupération des domaines fonctionnels
-        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS') );
+        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->getDomainesForUser($user);
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:domaines-fonctionnels.html.twig', array(
             'user'     => $user,
@@ -295,4 +295,26 @@ class AmbassadeurController extends Controller
             'domaines' => $domaines
         ));
     }
+
+    /**
+     * Sauvegarde AJAX de la liaison domaine + ambassadeur
+     */
+    public function saveDomaineAction()
+    {
+        //get posted vars
+        $id       = $this->get('request')->request->get('id');
+        $domaines = $this->get('request')->request->get('domaines');
+
+        //bind ambassadeur
+        $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
+        
+        //bind objects
+        $refDomaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $domaines ) );
+        $user->setDomaines( $refDomaines );
+        $this->get('hopitalnumerique_user.manager.user')->save( $user );
+        
+        $this->get('session')->getFlashBag()->add( 'success' ,  'Les domaines fonctionnels de l\'utilisateur ont été mis à jour.' );
+
+        return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_user_ambassadeur_domainesFonctionnels', array('id' => $id)).'"}', 200);
+    }  
 }

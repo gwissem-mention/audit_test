@@ -7,5 +7,16 @@ function saveDomaines()
             domaines.push( $(this).data('id') )
     });
 
-    console.log( domaines );
+    $.ajax({
+        url  : $('#domaines-save-url').val(),
+        data : {
+            domaines : domaines,
+            id       : $('#user_id').val()
+        },
+        type     : 'POST',
+        dataType : 'json',
+        success  : function( data ){
+            window.location = data.url;
+        }
+    });
 }

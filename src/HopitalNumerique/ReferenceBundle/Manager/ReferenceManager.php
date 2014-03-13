@@ -134,6 +134,39 @@ class ReferenceManager extends BaseManager
         return $this->_tabReferences;
     }
 
+    /**
+     * Formatte la liste des domaines fonctionnels de l'user
+     *
+     * @param User $user User
+     *
+     * @return Array
+     */
+    public function getDomainesForUser ( $user )
+    {
+        $results = $this->findBy( array( 'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS') );
+
+        // on formatte les domaines de manière à les sélectionner plus simplement
+        $domaines = array();
+        foreach($results as $result){
+            $tmp           = new \stdClass;
+            $tmp->id       = $result->getId();
+            $tmp->libelle  = $result->getLibelle();
+            $tmp->selected = false;
+
+            $domaines[ $result->getId() ] = $tmp;
+        }
+
+        //on met en place ceux attribué à l'user
+        $userDomaines = $user->getDomaines();
+        foreach( $userDomaines as $one){
+            $tmp                       = $domaines[ $one->getId() ];
+            $tmp->selected             = true;
+            $domaines[ $one->getId() ] = $tmp;
+        }
+
+        return $domaines;
+    }
+
 
 
 

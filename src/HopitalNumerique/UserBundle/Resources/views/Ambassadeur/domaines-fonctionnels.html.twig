@@ -56,26 +56,31 @@
             <div class="panel-body" >
                 <div class="sous_options pull-right">
                     <div class="btn-toolbar">
-                        <div onclick="saveDomaines();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+                        {% if app.user|checkAuthorization( path('hopitalnumerique_user_ambassadeur_savedomaine') ) %}
+                            <div onclick="saveDomaines();" class="btn btn-default" title="Enregistrer"><i class="fa fa-save"></i></div>
+                        {% endif %}
                     </div>
                 </div>
                 <table class="table" id="domaines" >
                     <thead>
                         <tr>
                             <th width="50px"></th>
-                            <th> Domaine </th>
+                            <th> Domaine fonctionnel</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for domaine in domaines %}
                             <tr>
-                                <td><input type="checkbox" data-id="{{domaine.id}}" /></td>
-                                <td>{{domaine.libelle}}</td>
+                                <td><input type="checkbox" data-id="{{domaine.id}}" id="domaine_{{domaine.id}}" {% if domaine.selected %}checked="checked"{% endif %} /></td>
+                                <td><label for="domaine_{{domaine.id}}">{{domaine.libelle}}</label></td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>           
         </div>
+
+        <input type="hidden" id="domaines-save-url" value="{{path('hopitalnumerique_user_ambassadeur_savedomaine')}}" />
+        <input type="hidden" id="user_id" value="{{user.id}}" />
     </div>
 {% endblock %}
