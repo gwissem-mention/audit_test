@@ -4,6 +4,15 @@
     Domaines fonctionnels maitrisés
 {% endblock %}
 
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-user-ambassadeur-domaines.js"
+        'bundles/hopitalnumeriqueuser/js/Ambassadeur/domaines.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block toolbarButton %}
     <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste des utilisateurs"><i class="fa fa-reply"></i></a>
 {% endblock %}
@@ -45,14 +54,27 @@
             </div>
 
             <div class="panel-body" >
-    <!--                 /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="objets")
-     * @ORM\JoinTable(name="hn_objet_ambassadeur",
-     *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")}
-     * )
-     */
-    protected $ambassadeurs; -->
+                <div class="sous_options pull-right">
+                    <div class="btn-toolbar">
+                        <div onclick="saveDomaines();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+                    </div>
+                </div>
+                <table class="table" id="domaines" >
+                    <thead>
+                        <tr>
+                            <th width="50px"></th>
+                            <th> Domaine </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for domaine in domaines %}
+                            <tr>
+                                <td><input type="checkbox" data-id="{{domaine.id}}" /></td>
+                                <td>{{domaine.libelle}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>           
         </div>
     </div>

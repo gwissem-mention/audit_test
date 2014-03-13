@@ -275,6 +275,15 @@ class User extends BaseUser
      */
     protected $contactAutre;
     
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", inversedBy="users")
+     * @ORM\JoinTable(name="core_user_domaines",
+     *      joinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
+     * )
+     */
+    protected $domaines;
+
     // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
     
     /**
@@ -406,13 +415,14 @@ class User extends BaseUser
     {
         parent::__construct();
         
-        $this->objets   = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->username = '';
-        $this->enabled  = 1;
-        $this->sexe     = array();
-        $this->civilite = array();
-        $this->lock     = false;
-        $this->archiver = false;
+        $this->objets       = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->username     = '';
+        $this->enabled      = 1;
+        $this->sexe         = array();
+        $this->civilite     = array();
+        $this->lock         = false;
+        $this->archiver     = false;
+        $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString()
@@ -966,27 +976,6 @@ class User extends BaseUser
     }
 
     /**
-     * Get nodevoRoles
-     *
-     * @return string $nodevoRoles
-     */
-    public function getNodevoRoles()
-    {
-        return $this->nodevoRoles;
-    }
-    
-    /**
-     * Set nodevoRoles
-     *
-     * @param string $nodevoRoles
-     */
-    public function setNodevoRoles($nodevoRoles)
-    {
-        $this->nodevoRoles = $nodevoRoles;
-    }
-    
-
-    /**
      * Retourne si l'utilisateur a le rôle CMSI ou pas.
      *
      * @return boolean VRAI ssi l'utilisateur a le rôle CMSI
@@ -1004,6 +993,7 @@ class User extends BaseUser
     {
         return $this->hasRole(Role::$ROLE_DIRECTEUR_LABEL);
     }
+
     /**
      * Retourne si l'utilisateur a le rôle ambassadeur ou pas.
      *
@@ -1012,5 +1002,51 @@ class User extends BaseUser
     public function hasRoleAmbassadeur()
     {
         return $this->hasRole(Role::$ROLE_AMBASSADEUR_LABEL);
+    }
+
+    /**
+     * Add domaine
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $domaine
+     * @return Objet
+     */
+    public function addDomaine(\HopitalNumerique\ReferenceBundle\Entity\Reference $domaine)
+    {
+        $this->domaines[] = $domaine;
+    
+        return $this;
+    }
+
+    /**
+     * Remove domaine
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $domaine
+     */
+    public function removeDomaine(\HopitalNumerique\ReferenceBundle\Entity\Reference $domaine)
+    {
+        $this->domaines->removeElement($domaine);
+    }
+
+    /**
+     * Set domaines
+     *
+     * @param \Doctrine\Common\Collections\Collection $domaines
+     * @return Objet
+     */
+    public function setDomaines(array $domaines)
+    {        
+        $this->domaines = $domaines;
+    
+        return $this;
+    }
+
+    /**
+     * Get domaines
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDomaines()
+    {
+        return $this->domaines;
     }
 }
