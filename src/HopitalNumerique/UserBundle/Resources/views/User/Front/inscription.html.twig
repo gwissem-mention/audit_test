@@ -38,7 +38,8 @@
     <div class="col-md-10 col-md-offset-1" id="inscription">
         <h3>Inscription</h3>
             <div id="form_edit_user">
-	            {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
+{# 	            {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}#}
+	            {% form_theme form 'HopitalNumeriqueUserBundle:User/Theme:theme.inscription.html.twig' %}
 	                {{ form_start(form) }}
 	                    {{ form_javascript(form) }}
 	                    <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
@@ -82,6 +83,21 @@
 		                    {{ form_row(form.fonctionStructure) }}
 		                    {{ form_row(form.raisonInscriptionStructure) }}
 	                    </div>
+                        
+				        <div class="form-group">
+				            <div class="col-md-3"></div>
+				            <div class="col-md-1">
+				                {{ form_widget(form.termsAccepted) }}
+				            </div>
+				            <div class="col-md-8">
+				                <a href="#">{{ form_label(form.termsAccepted) }}</a>
+			                </div>
+				            <div class="col-md-4">
+				                <div class="help-block">
+				                    {{ form_errors(form.termsAccepted) }}
+				                </div>
+				            </div>
+				        </div>
 	                {# Permet de mettre à la ligne le submit #}
 	                <div class="clearfix"></div>
                     <div class="form-group">
