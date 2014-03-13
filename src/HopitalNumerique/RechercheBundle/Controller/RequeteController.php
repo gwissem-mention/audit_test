@@ -37,11 +37,13 @@ class RequeteController extends Controller
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
 
+        $add = false;
         //cas AJOUT
         if( $id === ''){
             //on crée une nouvelle requete
             $requete = $this->get('hopitalnumerique_recherche.manager.requete')->createEmpty();
             $requete->setNom( $nom );
+            $add = true;
         //cas UPDATE
         }else
             $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'id' => $id ) );
@@ -58,7 +60,7 @@ class RequeteController extends Controller
 
         $path = $this->generateUrl('hopital_numerique_recherche_homepage_requete', array('id'=>$requete->getId()));
 
-        return new Response('{"success":true, "id":'.$requete->getId().', "nom":"'.$requete->getNom().'", "path":"'.$path.'"}', 200);
+        return new Response('{"success":true, "id":'.$requete->getId().', "nom":"'.$requete->getNom().'", "path":"'.$path.'","add":'.$add.'}', 200);
     }
 
     /**

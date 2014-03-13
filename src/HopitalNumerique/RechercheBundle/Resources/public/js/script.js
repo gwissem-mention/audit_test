@@ -369,7 +369,8 @@ function handleRequeteSave( r, id )
             if(data.success){
                 $('.requeteNom').html( data.nom ).slideDown();
                 $('.requeteNom').data('id', data.id);
-                $('#mesrequetes ul').append('<li><a href="'+data.path+'" ><i class="fa fa-circle fa-inverse"></i>'+data.nom+'</a></li>');
+                if( data.add )
+                    $('#mesrequetes ul').append('<li><a href="'+data.path+'" ><i class="fa fa-circle fa-inverse"></i>'+data.nom+'</a></li>');
             }
         }
     });
