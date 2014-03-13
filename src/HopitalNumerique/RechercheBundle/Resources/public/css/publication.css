@@ -26,16 +26,15 @@
     #publication .col-md-4 div.wrapper a.downloadLink{color:#070707; font-size: 13px; font-weight: normal; margin-bottom: 10px}
     #publication .col-md-4 div.wrapper a.synthese{background: url('../img/synthese-violet.jpg') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 104px; font-weight: normal; margin-bottom: 10px}
     #publication .col-md-4 div.wrapper .fa-download{margin:3px 0 0 7px;}
-        
+
     /* Bloc Commentaires */
     #publication .commentaires{ margin:50px 0;}
     #publication .commentaires h5{ color:#414141;font-size: 18px; font-weight: bold;}
-    
+
     /* Bloc Autres résultats */
     #publication .autresResultats{ margin:0;}
     #publication .autresResultats h5{ color:#414141;font-size: 18px; font-weight: bold;}
-
-
+    #publication img{ margin: 5px 10px 0 0; }
 
 /**
  * MEDIA QUERIES
