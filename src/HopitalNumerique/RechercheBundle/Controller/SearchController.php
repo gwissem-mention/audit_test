@@ -35,11 +35,8 @@ class SearchController extends Controller
         //on charge la requete demandée explicitement
         }else{
             $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'id' => $id ) );
-            $refs    = json_encode($requete->getRefs());
+            $refs    = $requete ? json_encode($requete->getRefs()) : '[]';
         }
-
-        if($refs === 'null')
-            $refs = '[]';
 
         $session->set('requete-refs', $refs );
 
