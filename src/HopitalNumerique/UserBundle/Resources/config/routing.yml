@@ -244,3 +244,9 @@ hopitalnumerique_user_ambassadeur_deleteobjet:
 hopitalnumerique_user_ambassadeur_saveobjet:
     pattern: /admin/user/ambassadeur/saveObjet
     defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:saveObjet, _format: json }
+
+hopitalnumerique_user_ambassadeur_domainesFonctionnels:
+    pattern:  /admin/user/ambassadeur/domaines-fonctionnels/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:domainesFonctionnels", id: 1 }
+    requirements:
+        id: \d+

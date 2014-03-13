@@ -5,7 +5,6 @@ namespace HopitalNumerique\RechercheBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class SearchController extends Controller
 {
@@ -20,7 +19,7 @@ class SearchController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
 
         //on prépare la session
-        $session = new Session();
+        $session = $this->getRequest()->getSession();
 
         //on essaye de charger la requete par défaut
         if ( is_null($id) ){
@@ -36,8 +35,11 @@ class SearchController extends Controller
         //on charge la requete demandée explicitement
         }else{
             $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'id' => $id ) );
-            $refs    = json_encode($requete->getRefs());
+            $refs    = $requete ? json_encode($requete->getRefs()) : '[]';
         }
+
+        if( $refs == 'null' )
+            $refs = '[]';
 
         $session->set('requete-refs', $refs );
 
@@ -60,7 +62,7 @@ class SearchController extends Controller
         $objets     = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role );
         
         //on prépare la session
-        $session = new Session();
+        $session = $this->getRequest()->getSession();
         $session->set('requete-refs', json_encode($references) );
         
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(

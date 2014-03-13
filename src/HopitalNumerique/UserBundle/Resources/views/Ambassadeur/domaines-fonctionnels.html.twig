@@ -1,37 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
-{# Grid mandatory Stuff #}
-{% use 'NodevoGridBundle::grid.config.html.twig' %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    {{ block('grid_stylesheets')}}
-    {% stylesheets output="compiled/hopitalnumerique-user-ambassadeur-objets.css" filter="cssrewrite"
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
-        'bundles/hopitalnumeriqueuser/js/nSelect/style.css'
-        'bundles/hopitalnumeriqueuser/css/specificationUser.css'
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    {{ block('grid_javascripts')}}
-    {% javascripts output="compiled/hopitalnumerique-user-ambassadeur-objets.js"
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
-        'bundles/hopitalnumeriqueuser/js/nSelect/nSelect.min.js'
-        'bundles/hopitalnumeriqueuser/js/Ambassadeur/objets.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock %}
-
 {% block h1Title %}
-    Productions maitrisés
+    Domaines fonctionnels maitrisés
 {% endblock %}
 
 {% block toolbarButton %}
@@ -58,15 +28,15 @@
                             </li>
                         {% endif %}
                         {% if user.id is not null and (options.ambassadeur or options.ambassadeur_form) %}
-                            <li >
+                            <li>
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature pour devenir ambassadeur</a>
                             </li>
                         {% endif %}
                         {% if user.id is not null and options.ambassadeur %}
-                            <li class="active">
+                            <li>
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maitrisés</a>
                             </li>
-                            <li>
+                            <li class="active" >
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Domaines fonctionnels maitrisés</a>
                             </li>
                         {% endif %}
@@ -75,14 +45,15 @@
             </div>
 
             <div class="panel-body" >
-                <div class="sous_options">
-                    <div class="btn-toolbar">
-                        <a href="{{path('hopitalnumerique_user_ambassadeur_addobjet',{'id':user.id})}}" class="fancy fancybox.ajax btn btn-default" title="Ajouter une production maitrisée"><i class="fa fa-plus"></i></a>
-                    </div>
-                </div>
-
-                {{ grid(grid, _self) }}
-            </div>            
+    <!--                 /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="objets")
+     * @ORM\JoinTable(name="hn_objet_ambassadeur",
+     *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")}
+     * )
+     */
+    protected $ambassadeurs; -->
+            </div>           
         </div>
     </div>
 {% endblock %}

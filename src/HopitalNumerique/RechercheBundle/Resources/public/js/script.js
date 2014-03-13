@@ -351,8 +351,13 @@ function handleRequeteSave( r, id )
             if(data.success){
                 $('.requeteNom').html( data.nom ).slideDown();
                 $('.requeteNom').data('id', data.id);
-                if( data.add )
-                    $('#mesrequetes ul').append('<li><a href="'+data.path+'" ><i class="fa fa-circle fa-inverse"></i>'+data.nom+'</a></li>');
+                if( data.add ){
+                    if( data.def == '1' )
+                        selected = 'violet';
+                    else
+                        selected = 'fa-inverse';
+                    $('#mesrequetes ul').append('<li><a href="'+data.path+'" ><i class="fa fa-circle '+selected+'"></i>'+data.nom+'</a></li>');
+                }
             }
         }
     });

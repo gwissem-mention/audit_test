@@ -2,3 +2,4 @@
 @page{ margin: 1 cm .5cm; size: portrait; }
 #header, #footer, #menu, #sommaire, .col-md-4, .print {display: none}
 img{ width:auto !important }
+#publication .btn.btn-success.back { display:none; }

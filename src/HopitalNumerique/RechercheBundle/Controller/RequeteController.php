@@ -60,7 +60,7 @@ class RequeteController extends Controller
 
         $path = $this->generateUrl('hopital_numerique_recherche_homepage_requete', array('id'=>$requete->getId()));
 
-        return new Response('{"success":true, "id":'.$requete->getId().', "nom":"'.$requete->getNom().'", "path":"'.$path.'","add":'.$add.'}', 200);
+        return new Response('{"success":true, "id":'.$requete->getId().', "nom":"'.$requete->getNom().'", "path":"'.$path.'","add":'.$add.', "def":'.( $requete->getIsDefault() ? 1 : 0 ).'}', 200);
     }
 
     /**

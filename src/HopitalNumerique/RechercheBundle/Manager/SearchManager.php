@@ -60,9 +60,10 @@ class SearchManager extends BaseManager
                     }
 
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
-                    $objetsToIntersect[] = $tmp;    
-                }
-                
+                    $objetsToIntersect[] = $tmp;
+                }else
+                    $objetsToIntersect[] = array();
+
                 //on récupères tous les contenus (infradoc), on les formate et on les ajoute à nos catégories
                 $results = $this->_refContenuManager->getContenusForRecherche( $references['categ'.$i] );
                 if( $results ) {
@@ -76,6 +77,8 @@ class SearchManager extends BaseManager
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
                     $contenusToIntersect[] = $tmp;
                 }
+                else
+                    $contenusToIntersect[] = array();
             }
         }
 
@@ -83,7 +86,6 @@ class SearchManager extends BaseManager
         if( isset($objetsToIntersect[0]) )
             $objets = (count($objetsToIntersect) > 1) ? call_user_func_array('array_intersect_key',$objetsToIntersect) : $objetsToIntersect[0];
         
-
         //Si on a filtré sur plusieurs catégories, on récupère uniquement les contenus commun à chaque catégorie (filtre ET)
         if( isset($contenusToIntersect[0]) )
             $contenus = (count($contenusToIntersect) > 1) ? call_user_func_array('array_intersect_key',$contenusToIntersect) : $contenusToIntersect[0];
@@ -98,9 +100,10 @@ class SearchManager extends BaseManager
         foreach($fusion as $k=>$v) {
             $sort['primary'][$k] = $v['primary'];
             $sort['nbRef'][$k]   = $v['nbRef'];
+            $sort['id'][$k]      = $v['id'];
         }
         //sort by primary desc and then nbRef asc
-        array_multisort($sort['primary'], SORT_DESC, $sort['nbRef'], SORT_ASC,$fusion);
+        array_multisort($sort['primary'], SORT_DESC, $sort['nbRef'], SORT_ASC,$sort['id'], SORT_DESC,$fusion);
 
         return $fusion;
     }
