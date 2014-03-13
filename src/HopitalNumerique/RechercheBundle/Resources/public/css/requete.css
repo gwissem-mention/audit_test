@@ -1,6 +1,6 @@
 #requetes{background: #f8f8f8; padding:15px;}
-#requetes h4{font-size: 14px; font-weight: bold; margin:0;}
-#requetes p.sous-titre{font-size: 12px; font-weight: bold; color:#333333;padding-left:35px;margin:15px 0;}
+#requetes h4{font-size: 14px; font-weight: bold; margin:4px 0 0 0;}
+#requetes p.sous-titre{font-size: 12px; font-weight: bold; color:#333333;padding:15px 0 10px 0;margin:0; clear:both;}
 #requetes .liste .ligne{background: #ffffff; border-radius: 5px; border:1px solid #ecebeb; padding: 7px 10px; margin:2px 0;}
 #requetes .liste .ligne .default{width:16px;height: 16px; float: left;}
 #requetes .liste .ligne .default:hover i{ cursor: pointer; }

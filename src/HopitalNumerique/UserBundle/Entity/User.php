@@ -392,6 +392,12 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\QuestionnaireBundle\Entity\Reponse", mappedBy="user", cascade={"persist", "remove" })
      */
     protected $reponses;
+ 
+    // ------- Conditions générales d'utilisations ------- 
+    /**
+     * @Nodevo\Javascript(class="validate[required]")
+     */
+    protected $termsAccepted;
 
     /**
      * Constructor
@@ -944,7 +950,16 @@ class User extends BaseUser
     
     // v -------- Gestion questionnaire  -------- v
     
-
+    public function getTermsAccepted()
+    {
+        return $this->termsAccepted;
+    }
+    
+    public function setTermsAccepted($termsAccepted)
+    {
+        $this->termsAccepted = (Boolean) $termsAccepted;
+    }
+    
     public function getPrenomNom()
     {
         return $this->prenom . ' ' . $this->nom;

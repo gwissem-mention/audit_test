@@ -12,3 +12,6 @@
 .pagination { float:left; margin: 10px 0; }
 .affnbreelement { margin: 10px 0px 0px 10px; padding: 0px; }
 .affnbreelement .form-control { width: auto; display: inline-block; color: #4f8edc; }
+
+/* formulaire */
+input.checkbox {width:16px; height:16px;}
