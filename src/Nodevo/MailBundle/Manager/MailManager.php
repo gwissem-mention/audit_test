@@ -231,6 +231,8 @@ class MailManager extends BaseManager
      */
     private function _replaceContent( $content, $user, $message )
     {
+        $message = nl2br($message);
+        
         $content = str_replace('%u', $user->getPrenom() . ' ' . $user->getNom(), $content);
         $content = str_replace('%p', $user->getPlainPassword(), $content);
         $content = str_replace('%message', $message, $content);
