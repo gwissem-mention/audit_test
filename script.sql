@@ -182,3 +182,75 @@ VALUES (
    Add ressource + lien menu 
 INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`) VALUES (NULL, 'FrontOffice - Accès à la solocitation des ambassadeurs', '/^\\/registre-ambassadeurs/', '15');
 UPDATE `core_menu_item` SET `mnu_menu` = '3', `itm_order` = '5', `itm_route` = 'hopital_numerique_registre_homepage', `itm_uri` = NULL WHERE `core_menu_item`.`itm_id` = 75;*/
+*/
+
+
+
+
+
+
+
+
+/* RLE - 14/03/2014
+   DEV -> PROD
+   Interventions*/
+INSERT INTO `core_mail` (
+`mail_id` ,
+`mail_objet` ,
+`mail_description` ,
+`mail_expediteur_mail` ,
+`mail_expediteur_name` ,
+`mail_body`
+)
+VALUES (
+'19', '[HOPITALNUMERIQUE] - Demande d''intervention // Relance ambassadeur 1', 'Demande d''intervention // Relance ambassadeur 1', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention est en attente : %l Cordialement,'
+);
+
+INSERT INTO `core_mail` (
+`mail_id` ,
+`mail_objet` ,
+`mail_description` ,
+`mail_expediteur_mail` ,
+`mail_expediteur_name` ,
+`mail_body`
+)
+VALUES (
+'20', '[HOPITALNUMERIQUE] - Demande d''intervention // Relance ambassadeur 2', 'Demande d''intervention // Relance ambassadeur 2', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention est encore en attente : %l Cordialement,'
+);
+
+ALTER TABLE `hn_intervention_demande` ADD `interv_ambassadeur_date_derniere_relance` DATETIME NULL DEFAULT NULL COMMENT 'Date de la dernière relance envoyée à l''ambassadeur.' AFTER `interv_cmsi_date_derniere_relance` ;
+
+
+UPDATE `core_menu_item` SET `itm_route` = 'hopital_numerique_intervention_demande_liste',
+`itm_uri` = NULL WHERE `core_menu_item`.`itm_id` =73;
+
+INSERT INTO `core_mail` (
+`mail_id` ,
+`mail_objet` ,
+`mail_description` ,
+`mail_expediteur_mail` ,
+`mail_expediteur_name` ,
+`mail_body`
+)
+VALUES (
+'21', '[HOPITALNUMERIQUE] - Demande d''intervention // Relance ambassadeur avant cloture', 'Demande d''intervention // Relance ambassadeur avant cloture', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention est encore en attente : %l Cordialement,'
+);
+
+UPDATE `core_mail` SET `mail_objet` = '[HOPITALNUMERIQUE] - Demande d''intervention // Relance ambassadeur / Cloture',
+`mail_description` = 'Demande d''intervention // Relance ambassadeur / Cloture' WHERE `core_mail`.`mail_id` =21;
+
+INSERT INTO `hn_questionnaire_questionnaire` (
+`qst_id` ,
+`qst_nom` ,
+`qst_lock`
+)
+VALUES (
+NULL , 'Évaluation', '1'
+);
+
+INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`) VALUES (NULL, '3', '5', 'Les prod ANAP etc', '0', NULL, '1', 'evaluation_prod_anap', 'NOTE_EVALUATION');
+
+
+
+
+

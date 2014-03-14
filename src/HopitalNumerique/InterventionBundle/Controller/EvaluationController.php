@@ -9,6 +9,8 @@ namespace HopitalNumerique\InterventionBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
 
 /**
  * Contrôleur des évalutions des demandes d'intervention.
@@ -23,7 +25,69 @@ class EvaluationController extends Controller
      */
     public function nouveauAction(InterventionDemande $interventionDemande)
     {
+        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
+        if (
+            $utilisateurConnecte->getId() == $interventionDemande->getReferent()->getId()
+            && ($interventionDemande->getEvaluationEtat() != null && $interventionDemande->getEvaluationEtat()->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
+        )
+        {
+            
+            
+            //On récupère l'utilisateur qui est connecté
+            $user = $this->get('security.context')->getToken()->getUser();
+            
+            //Récupération du questionnaire de l'expert
+            $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
+            
+            //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
+            $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($questionnaire->getId(), $utilisateurConnecte->getId(), true);
+            
+            $themeQuestionnaire = empty($reponses) ? 'horizontal' : 'horizontal_readonly';
+            //readonly si il y a des réponses dans le questionnaire ou que le role courant de l'utilisateur est ambassadeur
+            $readOnly = (in_array('ROLE_AMBASSADEUR_7', $utilisateurConnecte->getRoles()) || !empty($reponses));
+            
+            return $this->render('HopitalNumeriqueInterventionBundle:Evaluation:nouveau.html.twig',array(
+                    'questionnaire'      => $questionnaire,
+                    'user'               => $utilisateurConnecte,
+                    'optionRenderForm'   => array(
+                            'readOnly'           => $readOnly,
+                            'themeQuestionnaire' => $themeQuestionnaire,
+                            'routeRedirect'      => json_encode(array(
+                                    'quit' => array(
+                                            'route'     => 'hopitalnumerique_user_ambassadeur_front_edit',
+                                            'arguments' => array()
+                                    )
+                            ))
+                    )
+            ));
+            
+            
+            
+            
+            
+            
+            
+            return $this->render(
+                    'HopitalNumeriqueInterventionBundle:Evaluation:nouveau.html.twig',
+                    array(
+                            'interventionDemande' => $interventionDemande
+                    )
+            );
+            
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à créer cette évaluation.');
+        return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
     }
     
     /**
