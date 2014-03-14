@@ -84,7 +84,10 @@ class PublicationController extends Controller
     {
         //get connected user and his region
         $user   = $this->get('security.context')->getToken()->getUser();
-        $region = $user->getRegion();
+        if( $user === 'anon.')
+            $region = false;
+        else
+            $region = $user->getRegion();
 
         return $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndProduction( $region, $objet );
     }
