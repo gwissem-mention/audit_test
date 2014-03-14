@@ -330,7 +330,7 @@ function saveRequest( user )
             });
         }
     }else
-        apprise('Pour enregistrer votre requête, vous devez créer un compte.');
+        apprise('Pour enregistrer une requête, vous devez créer au préalable un <a href="'+$('.loggedUser .infos').attr('href')+'">compte utilisateur.</a>');
 }
 
 /**
