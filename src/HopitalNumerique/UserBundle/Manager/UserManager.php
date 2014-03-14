@@ -126,4 +126,30 @@ class UserManager extends BaseManager
     {
         return $this->getRepository()->userExistForRoleDirection( $user )->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * Retourne la liste des ambassadeurs de la région et du domaine
+     *
+     * @param Reference $region  La région filtrée
+     * @param integer   $domaine Le domaine fonctionnel
+     *
+     * @return array
+     */
+    public function getAmbassadeursByRegionAndDomaine( $region, $domaine )
+    {
+        return $this->getRepository()->getAmbassadeursByRegionAndDomaine( $region, $domaine )->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne la liste des ambassadeurs de la région et de la publication
+     *
+     * @param Reference $region La région filtrée
+     * @param Objet     $objet  La publication
+     *
+     * @return array
+     */
+    public function getAmbassadeursByRegionAndProduction( $region, $objet )
+    {
+        return $this->getRepository()->getAmbassadeursByRegionAndProduction( $region, $objet )->getQuery()->getResult();
+    }
 }
