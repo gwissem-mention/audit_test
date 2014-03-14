@@ -19,6 +19,7 @@ class UserRepository extends EntityRepository
     {        
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user.id, 
+                        user.dateInscription, 
                         user.username, 
                         user.email, 
                         user.nom, 
@@ -34,7 +35,8 @@ class UserRepository extends EntityRepository
             ->leftJoin('user.region','refRegion')
             ->leftJoin('user.contractualisations', 'contractualisation', 'WITH', 'contractualisation.archiver = 0')
             ->groupBy('user')
-            ->orderBy('user.username');
+            ->orderBy('user.dateInscription')
+            ->addOrderBy('user.username');
         
         return $qb;
     }
