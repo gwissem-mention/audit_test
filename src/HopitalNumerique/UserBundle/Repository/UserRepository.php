@@ -103,11 +103,12 @@ class UserRepository extends EntityRepository
     /**
      * Retourne la liste des ambassadeurs de la région $region
      *
-     * @param Reference $region La région filtrée
+     * @param Reference $region  La région filtrée
+     * @param integer   $domaine Le domaine
      *
      * @return QueryBuilder
      */
-    public function getAmbassadeursByRegion( $region )
+    public function getAmbassadeursByRegionAndDomaine( $region, $domaine )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user')
@@ -116,6 +117,12 @@ class UserRepository extends EntityRepository
             ->andWhere('user.enabled = 1')
             ->setParameter('region', $region)
             ->setParameter('role', '%ROLE_AMBASSADEUR_7%');
+
+        if( !is_null($domaine) && $domaine != 0 ){
+            $qb->leftJoin('user.domaines','domaines')
+                ->andWhere('domaines.id = :domaine')
+                ->setParameter('domaine', $domaine );
+        }
 
         return $qb;
     }

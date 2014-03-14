@@ -9,16 +9,36 @@ class AmbassadeurController extends Controller
     /**
      * Index Action
      */
-    public function indexAction()
+    public function indexAction( $region = null, $domaine = null )
     {
-        //get connected user and Ambaassadeurs
-        $user         = $this->get('security.context')->getToken()->getUser();
-        $region       = $user->getRegion();
-        $ambassadeurs = $region ? $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegion( $region ) : array();
+        //get connected user and Ambassadeurs
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        //get User Role
+        $roles  = $user->getRoles();
+        $isCMSI = in_array('ROLE_ARS_CMSI_4', $roles) ? true : false;
+
+        //get region ( if not specified, get user's region)
+        $region = is_null($region) ? $user->getRegion() : $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $region) );
+        
+        //get ambassadeurs liste
+        $ambassadeurs = $region ? $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndDomaine( $region, $domaine ) : array();
+        
+        //test if user is authorized to contact Ambassadeurs
+        if( $isCMSI )
+            $allowContact = ($user->getRegion() && $region && $region->getId() == $user->getRegion()->getId()) ? true : false;
+        else
+            $allowContact = true;
+
+        //get liste des domaines fonctionnels
+        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS') );
 
         return $this->render('HopitalNumeriqueRegistreBundle:Ambassadeur:index.html.twig', array(
-            'ambassadeurs' => $ambassadeurs,
-            'region'       => $region ? $region : null
+            'ambassadeurs'    => $ambassadeurs,
+            'domaines'        => $domaines,
+            'domaineSelected' => $domaine,
+            'allowContact'    => $allowContact,
+            'region'          => $region ? $region : null
         ));
     }
 

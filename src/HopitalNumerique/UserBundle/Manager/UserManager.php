@@ -121,12 +121,13 @@ class UserManager extends BaseManager
     /**
      * Retourne la liste des ambassadeurs de la région $region
      *
-     * @param Reference $region La région filtrée
+     * @param Reference $region  La région filtrée
+     * @param integer   $domaine Le domaine fonctionnel
      *
      * @return array
      */
-    public function getAmbassadeursByRegion( $region )
+    public function getAmbassadeursByRegionAndDomaine( $region, $domaine )
     {
-        return $this->getRepository()->getAmbassadeursByRegion( $region )->getQuery()->getResult();
+        return $this->getRepository()->getAmbassadeursByRegionAndDomaine( $region, $domaine )->getQuery()->getResult();
     }
 }

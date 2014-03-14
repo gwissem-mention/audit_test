@@ -1,8 +1,10 @@
 #registre-ambassadeur h3{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; background: #f6f6f6}
-#registre-ambassadeur h3 a{font-size: 11px; color:#000000;}
+#registre-ambassadeur h3 a{font-size: 11px; color:#000000; display: block; background: url('../img/tdb.png') no-repeat right; padding-right: 30px; height: 22px; padding-top:11px; font-weight: normal}
 
 /* Partie map */
-#registre-ambassadeur .map{background: #f8f8f8; padding:15px 10px;}
+#registre-ambassadeur .map{background: #f8f8f8; padding:15px 10px; }
+#registre-ambassadeur .map p.titre{color:#4b4a49; font-size: 13px; font-weight: bold}
+#registre-ambassadeur .map #domaines_liste{width: 100%}
 
 /* Partie Registre : liste */
 #registre-ambassadeur h4{font-size: 14px;font-weight: bold}
