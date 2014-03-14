@@ -1,7 +1,6 @@
 <?php
 
 namespace HopitalNumerique\InterventionBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,7 +44,7 @@ class InterventionEvaluation
     /**
      * @var \InterventionDemande
      *
-     * @ORM\ManyToOne(targetEntity="InterventionDemande")
+     * @ORM\ManyToOne(targetEntity="InterventionDemande", inversedBy="interventionEvaluation")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id")
      * })
@@ -101,8 +100,6 @@ class InterventionEvaluation
      * })
      */
     private $modalitesPratiques;
-
-
 
     /**
      * Get id

@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemandeType;
 use HopitalNumerique\InterventionBundle\Form\UserType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Validator\Validator;
 
 /**
  * Formulaire d'une demande d'intervention spécifique à un établissement.
@@ -23,11 +24,11 @@ class EtablissementType extends InterventionDemandeType
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      * @return void
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, Validator $validator)
     {
-        parent::__construct($container);
+        parent::__construct($container, $validator);
     }
-    
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -35,9 +36,7 @@ class EtablissementType extends InterventionDemandeType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder
-            ->remove('referent')
-        ;
+        $builder->remove('referent');
     }
 
     /**

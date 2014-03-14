@@ -5,7 +5,6 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Form\User;
-
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\InterventionBundle\Form\UserType;
@@ -27,7 +26,7 @@ class EtablissementType extends UserType
     {
         parent::__construct($container, $validator);
     }
-    
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options

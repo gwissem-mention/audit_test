@@ -5,7 +5,6 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -17,7 +16,7 @@ class InterventionDemandeManager
      * @var \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
      */
     private $container;
-    
+
     /**
      * Constructeur du manager gérant les formulaires de demandes d'intervention.
      *
@@ -28,7 +27,7 @@ class InterventionDemandeManager
     {
         $this->container = $container;
     }
-    
+
     /**
      * Retourne la liste des civilités pour les listes de formulaire.
      *

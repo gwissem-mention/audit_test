@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
 
-/* <-- Structure générale de la page */
-
-/* --> */
+#intervention_panel_edition {}
+    #intervention_panel_edition div.form-group {}
+        #intervention_panel_edition div.form-group div.form-control { height:auto; }

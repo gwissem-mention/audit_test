@@ -52,6 +52,7 @@ UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_route` = 'hopital_nume
    Modifs items menu
 UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_route` = 'hopital_numerique_requete_homepage', `itm_uri` = NULL WHERE `core_menu_item`.`itm_id` = 70;*/
 
+
 /* GME - 11/03/2014
    DEV -> PROD
    Mails 
@@ -76,6 +77,105 @@ INSERT INTO `wwwhopitalnumeriquecom`.`core_menu_item` (`itm_id`, `itm_parent`, `
    DEV -> PROD
    Modifs items menu 
 INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES (NULL, '9', '1', 'Domaines fonctionnels maitrisés', 'hopitalnumerique_user_ambassadeur_domainesFonctionnels', NULL, '0', NULL, NULL, '0', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '10');
+
+
+/* RLE - 14/03/2014
+   DEV -> PROD
+   Interventions*/
+INSERT INTO `hn_intervention_initiateur` (
+`intervinit_id` ,
+`intervinit_type`
+)
+VALUES (
+1 , 'CMSI'
+), (
+2 , 'Établissement'
+);
+
+ALTER TABLE `hn_intervention_demande` CHANGE `directeur_id` `directeur_id` INT( 11 ) NULL COMMENT 'Le directeur de l''ES concerné';
+
+INSERT INTO `core_mail` (
+`mail_id` ,
+`mail_objet` ,
+`mail_description` ,
+`mail_expediteur_mail` ,
+`mail_expediteur_name` ,
+`mail_body`
+)
+VALUES (
+'10', '[HOPITALNUMERIQUE] - Demande d''intervention', 'Acceptation ou non d''une demande d''intervention par le CMSI', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''intervention a été créée. Vous puvez la valider ou la refuser en visitant : %l Cordialement,'
+);
+
+
+UPDATE `core_mail` SET `mail_body` = 'Bonjour %u, Une demande d''''intervention a été refusée. %l Cordialement,' WHERE `core_mail`.`mail_id` =7;
+
+ALTER TABLE `hn_intervention_demande` ADD `interv_cmsi_date_derniere_relance` DATETIME NULL DEFAULT NULL COMMENT 'Date de la dernière relance envoyée au CMSI.' AFTER `interv_ambassadeur_date_choix` ;
+
+INSERT INTO `hn_intervention_regroupement_type` (
+`intervregtyp_id` ,
+`intervregtyp_libelle`
+)
+VALUES (
+'1', 'Objet similaire'
+), (
+'2', 'Ambassadeur'
+);
+
+
+ALTER TABLE `hn_intervention_demande` ADD INDEX ( `interv_date_creation` ) ;
+
+INSERT INTO `core_mail` (
+`mail_id` ,
+`mail_objet` ,
+`mail_description` ,
+`mail_expediteur_mail` ,
+`mail_expediteur_name` ,
+`mail_body`
+)
+VALUES (
+'15', '[HOPITALNUMERIQUE] - Invitation référent pour évaluation', 'Invitation référent pour évaluation', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Vous pouvez dès à présent évaluer cette intervention : %l Cordialement,'
+);
+
+ALTER TABLE `hn_intervention_evaluation` ADD UNIQUE (
+`interv_id`
+);
+
+INSERT INTO `core_mail` (
+`mail_id` ,
+`mail_objet` ,
+`mail_description` ,
+`mail_expediteur_mail` ,
+`mail_expediteur_name` ,
+`mail_body`
+)
+VALUES (
+'16', '[HOPITALNUMERIQUE] - Intervention // Changement d''ambassadeur', 'Intervention // Changement d''ambassadeur', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Nouvel ambassadeur = %a : %l Cordialement,'
+);
+
+INSERT INTO `core_mail` (
+`mail_id` ,
+`mail_objet` ,
+`mail_description` ,
+`mail_expediteur_mail` ,
+`mail_expediteur_name` ,
+`mail_body`
+)
+VALUES (
+'17', '[HOPITALNUMERIQUE] - Demande d''intervention acceptée par l''ambassadeur', 'Demande d''intervention acceptée par l''ambassadeur', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention a été acceptée. Vous pouvez vous rendre à votre interface pour la visualiser : %l Cordialement,'
+);
+
+INSERT INTO `core_mail` (
+`mail_id` ,
+`mail_objet` ,
+`mail_description` ,
+`mail_expediteur_mail` ,
+`mail_expediteur_name` ,
+`mail_body`
+)
+VALUES (
+'18', '[HOPITALNUMERIQUE] - Demande d''intervention refusée par l''ambassadeur', 'Demande d''intervention refusée par l''ambassadeur', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention a été refusée. Vous pouvez vous rendre à votre interface pour la visualiser : %l Cordialement,'
+);
+
 
 /*QSO - 14/03/2014
    DEV -> PROD

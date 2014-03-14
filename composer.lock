@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "994b2cb46dc3d2730b6f588de5995476",
+    "hash": "d7339ddedce876f40d21244fbf6c738f",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Abhoryo/APYDataGridBundle.git",
-                "reference": "6c2a77c06a20e077bfbb58b0d6d761c7a38aa5c2"
+                "reference": "0ecfdc9111ef3862b4c269d7c880b6ee4f69f44c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Abhoryo/APYDataGridBundle/zipball/6c2a77c06a20e077bfbb58b0d6d761c7a38aa5c2",
-                "reference": "6c2a77c06a20e077bfbb58b0d6d761c7a38aa5c2",
+                "url": "https://api.github.com/repos/Abhoryo/APYDataGridBundle/zipball/0ecfdc9111ef3862b4c269d7c880b6ee4f69f44c",
+                "reference": "0ecfdc9111ef3862b4c269d7c880b6ee4f69f44c",
                 "shasum": ""
             },
             "require": {
@@ -62,7 +62,33 @@
                 "datagrid",
                 "symfony"
             ],
-            "time": "2014-02-12 22:32:06"
+            "time": "2014-03-10 11:38:05"
+        },
+        {
+            "name": "beberlei/DoctrineExtensions",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/beberlei/DoctrineExtensions.git",
+                "reference": "5e4ec9c3ec3434151e1c73144b4ab87ae30aefbc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/beberlei/DoctrineExtensions/zipball/5e4ec9c3ec3434151e1c73144b4ab87ae30aefbc",
+                "reference": "5e4ec9c3ec3434151e1c73144b4ab87ae30aefbc",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "DoctrineExtensions": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "time": "2013-12-20 22:02:19"
         },
         {
             "name": "doctrine/annotations",
@@ -554,12 +580,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineFixturesBundle.git",
-                "reference": "351bcc4de9ff58bac8d72bb3ef0b7481377bb25e"
+                "reference": "ccd69d9ec90013955a412a21125672afc09738dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/351bcc4de9ff58bac8d72bb3ef0b7481377bb25e",
-                "reference": "351bcc4de9ff58bac8d72bb3ef0b7481377bb25e",
+                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/ccd69d9ec90013955a412a21125672afc09738dc",
+                "reference": "ccd69d9ec90013955a412a21125672afc09738dc",
                 "shasum": ""
             },
             "require": {
@@ -585,7 +611,7 @@
             ],
             "authors": [
                 {
-                    "name": "Fabien Potencier2",
+                    "name": "Fabien Potencier",
                     "email": "fabien@symfony.com",
                     "homepage": "http://fabien.potencier.org",
                     "role": "Lead Developer"
@@ -605,7 +631,7 @@
                 "Fixture",
                 "persistence"
             ],
-            "time": "2014-02-22 15:01:12"
+            "time": "2014-03-05 01:11:31"
         },
         {
             "name": "doctrine/inflector",
@@ -806,12 +832,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "6a79d379164ec7d63088c3c7ba18bcca5f993a97"
+                "reference": "7867dfc7aa67969a24fec7f8aa1051eda23098e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/6a79d379164ec7d63088c3c7ba18bcca5f993a97",
-                "reference": "6a79d379164ec7d63088c3c7ba18bcca5f993a97",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/7867dfc7aa67969a24fec7f8aa1051eda23098e9",
+                "reference": "7867dfc7aa67969a24fec7f8aa1051eda23098e9",
                 "shasum": ""
             },
             "require": {
@@ -866,7 +892,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2014-03-04 01:12:08"
+            "time": "2014-03-04 23:23:39"
         },
         {
             "name": "genemu/form-bundle",
@@ -1100,21 +1126,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
-<<<<<<< HEAD
-                "reference": "c730b8a019ca914bd90c0aef80dcf42c4320dcec"
+                "reference": "ff1a6e73e79c9f75c6a130d03b07f05c89fede63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/c730b8a019ca914bd90c0aef80dcf42c4320dcec",
-                "reference": "c730b8a019ca914bd90c0aef80dcf42c4320dcec",
-=======
-                "reference": "8206c3a9a7567607c34e621ffd8f6f7eb7936525"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/8206c3a9a7567607c34e621ffd8f6f7eb7936525",
-                "reference": "8206c3a9a7567607c34e621ffd8f6f7eb7936525",
->>>>>>> develop
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/ff1a6e73e79c9f75c6a130d03b07f05c89fede63",
+                "reference": "ff1a6e73e79c9f75c6a130d03b07f05c89fede63",
                 "shasum": ""
             },
             "require": {
@@ -1165,11 +1182,7 @@
                 "menu",
                 "tree"
             ],
-<<<<<<< HEAD
-            "time": "2014-03-03 11:05:54"
-=======
-            "time": "2014-02-28 13:06:53"
->>>>>>> develop
+            "time": "2014-03-07 15:36:26"
         },
         {
             "name": "knplabs/knp-menu-bundle",
@@ -2236,7 +2249,8 @@
         "apy/datagrid-bundle": 20,
         "white-october/pagerfanta-bundle": 20,
         "pagerfanta/pagerfanta": 20,
-        "doctrine/doctrine-fixtures-bundle": 20
+        "doctrine/doctrine-fixtures-bundle": 20,
+        "beberlei/doctrineextensions": 20
     },
     "platform": {
         "php": ">=5.3.3"

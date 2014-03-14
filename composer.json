@@ -34,7 +34,8 @@
         "pagerfanta/pagerfanta": "1.0.*@dev",
         "genemu/form-bundle": "2.2.*",
         "igorw/file-serve-bundle": "~1.0",
-        "doctrine/doctrine-fixtures-bundle": "dev-master"
+        "doctrine/doctrine-fixtures-bundle": "dev-master",
+        "beberlei/DoctrineExtensions": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [
