@@ -36,12 +36,14 @@ class AmbassadeurController extends Controller
         $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
 
         $themeQuestionnaire = empty($reponses) ? 'vertical' : 'vertical_readonly';
+        //readonly si il y a des réponses dans le questionnaire ou que le role courant de l'utilisateur est ambassadeur
+        $readOnly = (in_array('ROLE_AMBASSADEUR_7', $user->getRoles()) || !empty($reponses));
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur/Front:edit.html.twig',array(
             'questionnaire'      => $questionnaire,
             'user'               => $user,
             'optionRenderForm'   => array(
-                'readOnly'           => !empty($reponses),
+                'readOnly'           => $readOnly,
                 'themeQuestionnaire' => $themeQuestionnaire,
                 'routeRedirect'      => json_encode(array(
                     'quit' => array(

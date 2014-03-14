@@ -438,7 +438,7 @@ class UserController extends Controller
                 
                 switch ($do)
                 {
-                	case 'front':
+                	case 'inscription':
                 	    return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
                 	    break;
                 	case 'information-personnelles':

@@ -33,7 +33,7 @@ class RefusCandidature
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="refusCandidature")
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_id_orgine_refus", referencedColumnName="usr_id", onDelete="CASCADE")
      */
     private $userOrigineRefus;

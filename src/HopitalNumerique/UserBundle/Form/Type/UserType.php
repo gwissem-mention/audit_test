@@ -50,7 +50,6 @@ class UserType extends AbstractType
         $datas = $options['data'];
         $roles = $datas->getRoles();
 
-        //Si il y a un utilisateur connecté nous sommes en BO
         $builder->add('username', 'text', array(
                 'max_length' => $this->_constraints['username']['maxlength'],
                 'required'   => true, 
