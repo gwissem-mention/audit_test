@@ -35,7 +35,7 @@ class UserRepository extends EntityRepository
             ->leftJoin('user.region','refRegion')
             ->leftJoin('user.contractualisations', 'contractualisation', 'WITH', 'contractualisation.archiver = 0')
             ->groupBy('user')
-            ->orderBy('user.dateInscription')
+            ->orderBy('user.dateInscription', 'DESC')
             ->addOrderBy('user.username');
         
         return $qb;
