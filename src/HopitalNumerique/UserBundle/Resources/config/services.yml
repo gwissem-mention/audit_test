@@ -26,7 +26,7 @@ services:
     #--Manager
     hopitalnumerique_user.manager.user:
         class: %hopitalnumerique_user.manager.user.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.questionnaire"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.questionnaire", "@hopitalnumerique_user.manager.refus_candidature"]
         calls:
             - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
     #--Type
@@ -93,6 +93,7 @@ services:
         arguments: [@router]
         tags:
             - { name: kernel.event_subscriber }
+            
     #GestionAffichageOnglet
     hopitalnumerique_user.gestion_affichage_onglet:
         class: HopitalNumerique\UserBundle\Util\GestionAffichageOnglets

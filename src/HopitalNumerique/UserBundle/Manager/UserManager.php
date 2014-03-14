@@ -10,14 +10,17 @@ class UserManager extends BaseManager
 {
     protected $_class = '\HopitalNumerique\UserBundle\Entity\User';
     protected $_managerReponse;
+    protected $_managerQuestionnaire;
+    protected $_managerRefusCandidature;    
     protected $_options;
 
-    public function __construct($managerUser, $managerReponse, $managerQuestionnaire)
+    public function __construct($managerUser, $managerReponse, $managerQuestionnaire, $managerRefusCandidature)
     {
         parent::__construct($managerUser);
         //Récupération des managers Réponses et Questionnaire
         $this->_managerReponse       = $managerReponse;
         $this->_managerQuestionnaire = $managerQuestionnaire;
+        $this->_managerRefusCandidature = $managerRefusCandidature;
         $this->_options              = array();
     }
     
@@ -42,17 +45,23 @@ class UserManager extends BaseManager
         $interval    = new \DateInterval('P1M');
         $interval->m = -1;
         
+        $refusCandidature = $this->_managerRefusCandidature->getRefusCandidatureByQuestionnaire();
+        
         //Pour chaque utilisateur, set la contractualisation à jour
         foreach ($users as $key => $user)
         {              
             //Récupération des questionnaires rempli par l'utilisateur courant
             $questionnairesByUser = key_exists($user['id'], $questionnaireByUser) ? $questionnaireByUser[$user['id']] : array();
             
-            //Vérification de réponses pour le questionnaire expert
-            $users[$key]['expert'] = in_array($idExpert, $questionnairesByUser);
+            //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
+            $users[$key]['expert'] = (in_array($idExpert, $questionnairesByUser) 
+                                        && !in_array('ROLE_EXPERT_6', $user["roles"]) 
+                                        && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idExpert, $refusCandidature));
             
-            //Vérification de réponses pour le questionnaire ambassadeur
-            $users[$key]['ambassadeur'] = in_array($idAmbassadeur, $questionnairesByUser);           
+            //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
+            $users[$key]['ambassadeur'] = (in_array($idAmbassadeur, $questionnairesByUser) 
+                                        && !in_array('ROLE_AMBASSADEUR_7', $user["roles"]) 
+                                        && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idAmbassadeur, $refusCandidature));        
             
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);

@@ -1,9 +1,9 @@
 /* Formulaire */
 #form_questionnaire_front { position:relative;  padding: 20px 20px 10px 20px;}
-#form_questionnaire_front .champ-obligatoire{color: #5d5d5d;width: 165px; height: 4px; position: absolute; top: -20px; right: 0px;font-style:italic;}
+#form_questionnaire_front .champ-obligatoire{color: #5d5d5d;width: 139px; height: 4px; position: absolute; top: -20px; right: 0px;font-style:italic; font-size:12px;}
 #form_questionnaire_front .champ-obligatoire .etoile{color: #e01958;} 
 #tableau-de-bord .questionnaire_submit{ margin: 0 20px 30px;}
-#form_questionnaire_front #nodevo_questionnaire_questionnaire label{ color:#333333; font-size: 13px }
+#form_questionnaire_front #nodevo_questionnaire_questionnaire label{ color:#333333; font-size: 14px }
 #form_questionnaire_front #nodevo_questionnaire_questionnaire .form_vertical_row{ margin: 10px 0px;}
 #form_questionnaire_front #nodevo_questionnaire_questionnaire .inputUpload {border:0; padding:0;}
 
