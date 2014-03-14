@@ -33,16 +33,31 @@ class ContenuManager extends BaseManager
         //call recursive function to handle all datas
         return $this->_getArboRecursive($datas, $parents, array(), '' );
     }
-    
-    public function getArboForAll(){
-        $datas = new ArrayCollection( $this->findAll() );
-        
+    /**
+     * 
+     * Retourne l'arbo des contenu de l'objet
+     *
+     * @param array $id ID de l'objet
+     *
+     * @return array
+     */
+    public function getArboForObjets( $ids )
+    {
+        $datas = new ArrayCollection( $this->getRepository()->getArboForObjets( $ids )->getQuery()->getResult() );
+
         //Récupère uniquement les premiers parents
         $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );
         $parents  = $datas->matching( $criteria );
         
         //call recursive function to handle all datas
-        return $this->_getArboRecursive($datas, $parents, array(), '' );
+        $elems = $this->_getArboRecursive($datas, $parents, array(), '' );
+        $return = array();
+        foreach( $elems as $one ){
+            if( $one->objet != null ){
+                $return[ $one->objet ][] = $one;
+            }
+        }
+        return $return;
     }
 
     /**
@@ -222,6 +237,7 @@ class ContenuManager extends BaseManager
             $item->references = count($element->getReferences());
             $item->order      = $chapitre;
             $item->hasContent = $element->getContenu() == '' ? false : true;
+            $item->objet      = $element->getParent() == null ? $element->getObjet()->getId() : NULL;
 
             //add childs : filter items with current element
             $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $element ))->orderBy(array("order"=>Criteria::ASC));

@@ -135,13 +135,26 @@ class ObjetController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getObjetsAction(){
-        $objets = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForAll();
+        $objets = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
         $return = array(array("text" => "Choisissez une publication", "value" => ""));
+        $ids = array();
+        foreach( $objets as $one ){
+            $ids[] = $one->getId();
+        }
+        $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjets($ids);
         foreach( $objets as $one ){
             $return[] = array(
-                "text" => $one->titre, "value" => "PUBLICATION:" . $one->id
+                "text" => $one->getTitre(), "value" => "PUBLICATION:" . $one->getId()
             );
-            $this->getObjetsChilds($return, $one);
+            if( !isset($contenus[ $one->getId() ]) || count( $contenus[ $one->getId() ] ) <= 0 ){
+                continue;
+            }
+            foreach( $contenus[ $one->getId() ] as $content ){
+                $return[] = array(
+                    "text" => "|--" . $content->titre, "value" => "INFRADOC:" . $content->id
+                );
+                $this->getObjetsChilds($return, $content, 2);
+            }
         }
         return new Response( json_encode($return), 200);
     }

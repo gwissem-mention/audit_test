@@ -28,6 +28,24 @@ class ContenuRepository extends EntityRepository
                          ->orderBy('con.parent, con.order')
                          ->setParameter('id', $id);
     }
+    
+    /**
+     * Retourne tous les elements de contenu pour l'objet $id
+     *
+     * @param array $id ID de l'objet
+     *
+     * @return array
+     */
+    public function getArboForObjets( $ids )
+    {
+        return $this->_em->createQueryBuilder()
+            ->select('con')
+            ->from('\HopitalNumerique\ObjetBundle\Entity\Contenu', 'con')
+            ->leftJoin('con.objet','obj')
+            ->where('obj.id IN (:ids)')
+            ->orderBy('con.parent, con.order')
+            ->setParameter('ids', $ids);
+    }
 
     /**
      * Retourne le nombre des contenus ayant le même alias
