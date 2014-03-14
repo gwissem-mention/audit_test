@@ -80,13 +80,13 @@ class Contenu
     protected $references;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="contenus", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Contenu", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="con_id", onDelete="CASCADE")
      */
     protected $parent = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Objet", inversedBy="objets", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Objet", cascade={"persist"})
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
      */
     protected $objet;

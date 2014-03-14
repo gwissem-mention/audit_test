@@ -276,7 +276,7 @@ class User extends BaseUser
     protected $contactAutre;
     
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="core_user_domaines",
      *      joinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
