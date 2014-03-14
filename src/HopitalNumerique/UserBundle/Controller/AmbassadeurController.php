@@ -318,5 +318,20 @@ class AmbassadeurController extends Controller
         $this->get('session')->getFlashBag()->add( 'success' ,  'Les domaines fonctionnels de l\'utilisateur ont été mis à jour.' );
 
         return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_user_ambassadeur_domainesFonctionnels', array('id' => $id)).'"}', 200);
-    }  
+    }
+
+    /**
+     * Liste des domaines de l'user : Fiche
+     *
+     * @param integer $idUser ID de l'utilisateur
+     */
+    public function listeDomainesAction( $idUser )
+    {
+        //bind ambassadeur
+        $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $idUser) );
+
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:liste-domaines.html.twig', array(
+            'domaines' => $user->getDomaines()
+        ));
+    }
 }
