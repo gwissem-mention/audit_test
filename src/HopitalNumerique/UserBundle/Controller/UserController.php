@@ -343,6 +343,7 @@ class UserController extends Controller
                     $mdp .= $passwordTool->generate(2,'1234567890');
                     $mdp = str_shuffle($mdp);
                     $user->setPlainPassword( $mdp );
+                    $user->setDateInscription( new \DateTime() );
 
                     //Différence entre le FO et BO : vérification qu'il y a un utilisateur connecté
                     if($this->get('security.context')->isGranted('ROLE_USER'))
