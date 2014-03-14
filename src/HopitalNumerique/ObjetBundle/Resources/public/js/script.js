@@ -21,7 +21,7 @@ $(document).ready(function() {
         height       : 210,
         menubar      : false,
         content_css  : '/bundles/hopitalnumeriqueobjet/css/wysiwyg.css',
-        toolbar1     : "code | undo redo cut copy paste | pagebreak | link | insertfile image | publication",
+        toolbar1     : "code | undo redo cut copy paste | pagebreak | link | publication | insertfile image ",
         toolbar2     : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
         style_formats: [
             {title: 'Titres', items: [
@@ -30,6 +30,9 @@ $(document).ready(function() {
                 {title: 'Titre 4', block: 'h4'},
                 {title: 'Titre 5', block: 'h5'},
                 {title: 'Titre 6', block: 'h6'}
+            ]},
+            {title: 'Blocs', items: [
+                {title: 'Paragraphe', block: 'p'}
             ]}
         ],
         importcss_append: true,
