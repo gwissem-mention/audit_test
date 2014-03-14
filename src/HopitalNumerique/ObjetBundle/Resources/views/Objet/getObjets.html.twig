@@ -6,7 +6,7 @@
             <label class="col-sm-2 control-label">Publication</label>
             <div  class="col-sm-10">
                 <select name="publication" id="publication" class="form-control">
-                    <option value="">Choisissez une publication</option>
+                    <option></option>
                 {% for option in objet %}
                     <option value="{{ option.value }}">{{ option.text }}</option>
                 {% endfor %}
@@ -37,7 +37,13 @@
 </form>
 <script>
     $(document).ready(function() {
-        $('#publication').select2();
+        $('#publication').select2({
+            placeholder: "Choisissez une publication",
+            allowClear: true,
+            formatNoMatches : function(){
+                return "Aucun résultat trouvé.";
+            }
+        });
         
         $('#submit').click(function() {
             $('#choix').val('submit');
