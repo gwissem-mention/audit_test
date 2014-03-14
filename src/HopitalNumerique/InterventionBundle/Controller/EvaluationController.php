@@ -36,7 +36,11 @@ class EvaluationController extends Controller
     {
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
-        if ($utilisateurConnecte->getId() == $interventionDemande->getAmbassadeur()->getId())
+        if (
+            $utilisateurConnecte->getId() == $interventionDemande->getAmbassadeur()->getId()
+            || $utilisateurConnecte->getId() == $interventionDemande->getReferent()->getId()
+            || ($utilisateurConnecte->getRegion() != null && $interventionDemande->getCmsi()->getRegion() != null && $utilisateurConnecte->getRegion()->getId() == $interventionDemande->getCmsi()->getRegion()->getId())
+        )
         {
             return $this->render(
                 'HopitalNumeriqueInterventionBundle:Evaluation:voir.html.twig',

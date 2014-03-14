@@ -93,6 +93,24 @@ class InterventionDemandeRepository extends EntityRepository
     
         return $requete->getQUery()->getResult();
     }
+    /**
+     * Retourne les demandes d'intervention en relance ambassadeur 2 pour leur clôture.
+     *
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention qui doivent être clôturées car sans réponse de leur ambassadeur
+     */
+    public function findByEtatRelanceAmbassadeur2PourRelance()
+    {
+        $requete = $this->_em->createQueryBuilder()
+            ->select('interventionDemande')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+            ->where('interventionDemande.interventionEtat = :interventionEtat')
+                ->setParameter('interventionEtat', InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id())
+            ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.ambassadeurDateDerniereRelance, '.InterventionEtat::$NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_CLOTURE_NOMBRE_JOURS.', \'day\')')
+                ->setParameter('aujourdhui', new \DateTime())
+        ;
+    
+        return $requete->getQUery()->getResult();
+    }
     
     
     /**
@@ -271,14 +289,15 @@ class InterventionDemandeRepository extends EntityRepository
      * Récupère les données du grid des demandes d'intervention pour l'établissement sous forme de tableau correctement formaté
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $referent Le référent de l'établissement des demandes d'intervention
-     * @param \HopitalNumerique\UserBundle\Entity\User $cmsi Le CMSI de la région du référent
+     * @param \HopitalNumerique\UserBundle\Entity\User|null $cmsi Le CMSI de la région du référent
      * @return array
      */
-    public function getGridDonnees_EtablissementDemandes(User $referent, User $cmsiRegion)
+    public function getGridDonnees_EtablissementDemandes(User $referent, $cmsiRegion)
     {
         $requete = $this->_em->createQueryBuilder()
             ->select(
                 'interventionDemande.id AS id',
+                'interventionInitiateur.id AS interventionInitiateurId',
                 'interventionInitiateur.type AS interventionInitiateurType',
                 'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurRegion.libelle) AS ambassadeurInformations',
                 'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
@@ -309,6 +328,7 @@ class InterventionDemandeRepository extends EntityRepository
             $requete->where('interventionDemande.referent = :referent')
                 ->setParameter('referent', $referent);
         }
+        $requete->orderBy('interventionDemande.dateCreation', 'DESC');
 
         return $requete->getQUery()->getResult();
     }

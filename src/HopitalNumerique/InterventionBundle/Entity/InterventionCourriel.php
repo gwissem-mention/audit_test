@@ -60,6 +60,10 @@ class InterventionCourriel extends Mail
      * @var integer ID du courriel de relance 2 d'un ambassadeur
      */
     private static $COURRIEL_INTERVENTION_DEMANDE_RELANCE_AMBASSADEUR_2_ID = 20;
+    /**
+     * @var integer ID du courriel de clôture car sans nouvelle de l'ambassadeur
+     */
+    private static $COURRIEL_INTERVENTION_DEMANDE_RELANCE_AMBASSADEUR_CLOTURE_ID = 21;
     
     
     /**
@@ -169,5 +173,14 @@ class InterventionCourriel extends Mail
     public static function getInterventionCourrielRelanceAmbassadeur2Id()
     {
         return self::$COURRIEL_INTERVENTION_DEMANDE_RELANCE_AMBASSADEUR_2_ID;
+    }
+    /**
+     * Retourne l'ID du courriel de clôture car sans nouvelle de l'ambassadeur.
+     *
+     * @return integer ID du courriel de clôture car sans nouvelle de l'ambassadeur
+     */
+    public static function getInterventionCourrielRelanceAmbassadeurClotureId()
+    {
+        return self::$COURRIEL_INTERVENTION_DEMANDE_RELANCE_AMBASSADEUR_CLOTURE_ID;
     }
 }

@@ -123,6 +123,7 @@ class InterventionDemande
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="referent_id", referencedColumnName="usr_id")
      * })
+     * @Nodevo\Javascript(class="validate[required]")
      */
     private $referent;
 
@@ -251,6 +252,7 @@ class InterventionDemande
      *   }
      * )
      * @Assert\Count(min=1,minMessage="Au moins une production doit être choisie.")
+     * @Nodevo\Javascript(class="validate[required]")
      */
     private $objets;
 

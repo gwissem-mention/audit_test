@@ -107,6 +107,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         {
             $cmsi = $this->utilisateurConnecte;
             $this->interventionDemande->setCmsiDateChoix($this->interventionDemande->getDateCreation());
+            $this->interventionDemande->setAmbassadeurDateDerniereRelance(new \DateTime());
             $this->interventionDemande->setInterventionInitiateur($this->get('hopitalnumerique_intervention.manager.intervention_initiateur')->getInterventionInitiateurCmsi());
             $this->interventionDemande->setInterventionEtat($this->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatAcceptationCmsi());
         }

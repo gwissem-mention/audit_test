@@ -98,6 +98,7 @@ class InterventionDemandeManager extends BaseManager
         $this->relanceInterventionDemandesEnAttenteCmsi();
         $this->relanceInterventionDemandesAcceptationCmsi();
         $this->relanceInterventionDemandesRelanceAmbassadeur1();
+        $this->relanceInterventionDemandesRelanceAmbassadeur2();
     }
     /**
      * Envoie les relances pour les demandes d'intervention en attente CMSI non traitées.
@@ -147,6 +148,23 @@ class InterventionDemandeManager extends BaseManager
             $interventionDemande->setAmbassadeurDateDerniereRelance(new \DateTime());
             $this->save($interventionDemande);
             $this->interventionCourrielManager->envoiCourrielRelanceAmbassadeur2($interventionDemande->getAmbassadeur(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+        }
+    }
+    /**
+     * Envoie les relances pour les demandes d'intervention non traitées en relance ambassadeur 2.
+     *
+     * @return void
+     */
+    private function relanceInterventionDemandesRelanceAmbassadeur2()
+    {
+        $interventionDemandes = $this->_repository->findByEtatRelanceAmbassadeur2PourRelance();
+    
+        foreach ($interventionDemandes as $interventionDemande)
+        {
+            $interventionDemande->setAmbassadeurDateDerniereRelance(new \DateTime());
+            $interventionDemande->setInterventionEtat($this->interventionEtatManager->getInterventionEtatCloture());
+            $this->save($interventionDemande);
+            $this->interventionCourrielManager->envoiCourrielRelanceAmbassadeurCloture($interventionDemande->getCmsi(), $interventionDemande->getAmbassadeur(), $interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
         }
     }
     

@@ -56,7 +56,7 @@ class DemandesGrid extends Grid implements IGrid
         );
         $this->addColonne($colonneEvaluation);
 
-        $this->addColonne(new Column\TextColumn('remboursementEtatLibelle', 'Remboursement'));
+        //$this->addColonne(new Column\TextColumn('remboursementEtatLibelle', 'Remboursement'));
         $this->addColonne(new Column\TextColumn('remboursementMontant', 'Montant'));
     }
 

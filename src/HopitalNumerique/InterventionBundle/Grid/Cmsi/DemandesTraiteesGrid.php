@@ -50,7 +50,7 @@ class DemandesTraiteesGrid extends Grid implements IGrid
         $this->addColonne(new Column\DateColumn('cmsiDateChoixLibelle', 'Choix CMSI'));
         $this->addColonne(new Column\DateColumn('ambassadeurDateChoixLibelle', 'Choix ambassadeur'));
         $this->addColonne(new Column\TextColumn('evaluationEtatLibelle', 'Évaluation'));
-        $this->addColonne(new Column\TextColumn('remboursementEtatLibelle', 'Remboursement'));
+        //$this->addColonne(new Column\TextColumn('remboursementEtatLibelle', 'Remboursement'));
     }
 
     /**
