@@ -35,6 +35,7 @@ class RefObjetRepository extends EntityRepository
                             )
                         )
                         ->setParameter('references', $references )
-                        ->setParameter('today', new \DateTime() );
+                        ->setParameter('today', new \DateTime() )
+                        ->orderBy('refO.primary', 'ASC');
     }
 }

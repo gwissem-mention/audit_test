@@ -36,6 +36,7 @@ class RefContenuRepository extends EntityRepository
                             )
                         )
                         ->setParameter('references', $references )
-                        ->setParameter('today', new \DateTime() );
+                        ->setParameter('today', new \DateTime() )
+                        ->orderBy('refC.primary', 'ASC');
     }
 }
