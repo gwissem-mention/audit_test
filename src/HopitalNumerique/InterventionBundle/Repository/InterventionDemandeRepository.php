@@ -57,6 +57,24 @@ class InterventionDemandeRepository extends EntityRepository
 
         return $requete->getQUery()->getResult();
     }
+    /**
+     * Retourne les demandes d'intervention acceptée par le CMSI pour une relance.
+     *
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention qui doivent être répondues par l'ambassadeur
+     */
+    public function findByEtatAcceptationCmsiPourRelance()
+    {
+        $requete = $this->_em->createQueryBuilder()
+            ->select('interventionDemande')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+            ->where('interventionDemande.interventionEtat = :interventionEtat')
+                ->setParameter('interventionEtat', InterventionEtat::getInterventionEtatAcceptationCmsiId())
+                ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.ambassadeurDateDerniereRelance, '.InterventionEtat::$NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_1_NOMBRE_JOURS.', \'day\')')
+            ->setParameter('aujourdhui', new \DateTime())
+        ;
+        
+        return $requete->getQUery()->getResult();
+    }
     
     /**
      * Récupère les données du grid des nouvelles demandes d'intervention pour le CMSI sous forme de tableau correctement formaté

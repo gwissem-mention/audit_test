@@ -19,7 +19,15 @@ class InterventionEtat
      * @var integer Nombre de jours avant que le CMSI reçoit une alerte s'il n'a pas mis à jour une demande d'intervention en attente
      */
     public static $NOTIFICATION_MISE_EN_ATTENTE_CMSI_NOMBRE_JOURS = 7;
-    
+    /**
+     * @var integer Nombre de jours avant que l'ambassadeur ne reçoive une première alerte après que la demande ait été validée par le CMSI
+     */
+    public static $NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_1_NOMBRE_JOURS = 7;
+    /**
+     * @var integer Nombre de jours avant que l'ambassadeur ne reçoive une seconde alerte après que la demande ait été validée par le CMSI
+     */
+    public static $NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_2_NOMBRE_JOURS = 7;
+
     /**
      * @var integer ID de l'état Demande initiale
      */

@@ -21,8 +21,14 @@ div#tableau-de-bord {}
     /* --> */
     /* <-- Grid */
     div#tableau-de-bord div.grid-search { background-color:#6F3596;padding:0px; }
-        div#tableau-de-bord div.grid-search div.panel { background-color:transparent;border-width:0px; }
-            div#tableau-de-bord div.grid-search div.panel div.panel-heading { border-width:0px; }
+        div#tableau-de-bord div.grid-search div.panel { background-color:transparent;border-width:0px;margin:0px; }
+            div#tableau-de-bord div.grid-search div.panel div.panel-heading { border-width:0px;padding:4px 10px; }
+                div#tableau-de-bord div.grid-search div.panel div.panel-heading h4 { color:#fff;font-size:15px;margin:0px;padding:4px 0px; }
+                div#tableau-de-bord div.grid-search div.panel div.panel-heading div.options { color:#fff;position:absolute;right:16px;top:6px; }
+                    div#tableau-de-bord div.grid-search div.panel div.panel-heading div.options a { color:#fff; }
+            div#tableau-de-bord div.grid-search div.panel div.panel-body {}
+                div#tableau-de-bord div.grid-search div.panel div.panel-body label { color:#fff; }
+                div#tableau-de-bord div.grid-search div.panel div.panel-body div.panel-footer { background-color:transparent;border-width:0px; }
     div#tableau-de-bord div.grid { font-size:11px;padding:0px; }
         div#tableau-de-bord div.grid table {}
             div#tableau-de-bord div.grid table tr.grid-row-titles { color:#6F3596;text-transform:uppercase; }
@@ -49,7 +55,9 @@ div#tableau-de-bord {}
         div#tableau-de-bord div.panel_boutons button { background-position:center center;color:#fff;font-size:12px;font-weight:bold;margin:0px 4px;padding:8px 0px;text-shadow:0px 0px 0px #fff;text-transform:uppercase;width:160px; }
           div#tableau-de-bord div.panel_boutons button.btn-acceptation { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-acceptation-fond.png); }
           div#tableau-de-bord div.panel_boutons button.btn-refus { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-refus-fond.png); }
-          div#tableau-de-bord div.panel_boutons button.btn-attente { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-attente-fond.png); } 
+          div#tableau-de-bord div.panel_boutons button.btn-attente { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-attente-fond.png); }
+        div#tableau-de-bord div.panel_boutons div.modal {}
+            div#tableau-de-bord div.panel_boutons div.modal button.btn-default { color:#000; }
     /* --> */
 
 #tableau-de-bord h3{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; background: #f6f6f6}

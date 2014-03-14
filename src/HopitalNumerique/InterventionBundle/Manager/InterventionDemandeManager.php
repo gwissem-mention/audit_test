@@ -90,6 +90,7 @@ class InterventionDemandeManager extends BaseManager
     public function relanceInterventionDemandes()
     {
         $this->relanceInterventionDemandesEnAttenteCmsi();
+        $this->relanceInterventionDemandesAcceptationCmsi();
     }
     /**
      * Envoie les relances pour les demandes d'intervention en attente CMSI non traitées.
@@ -105,6 +106,22 @@ class InterventionDemandeManager extends BaseManager
             $interventionDemande->setCmsiDateDerniereRelance(new \DateTime());
             $this->save($interventionDemande);
             $this->interventionCourrielManager->envoiCourrielDemandeAcceptationCmsi($interventionDemande->getCmsi(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+        }
+    }
+    /**
+     * Envoie les relances pour les demandes d'intervention acceptées par le CMSI non traitées.
+     *
+     * @return void
+     */
+    private function relanceInterventionDemandesAcceptationCmsi()
+    {
+        $interventionDemandes = $this->_repository->findByEtatAcceptationCmsiPourRelance();
+        
+        foreach ($interventionDemandes as $interventionDemande)
+        {
+            $interventionDemande->setAmbassadeurDateDerniereRelance(new \DateTime());
+            $this->save($interventionDemande);
+            $this->interventionCourrielManager->envoiCourrielRelanceAmbassadeur1($interventionDemande->getAmbassadeur(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
         }
     }
     
@@ -158,6 +175,7 @@ class InterventionDemandeManager extends BaseManager
             if (!$interventionDemande->haveAncienAmbassadeur($ancienAmbassadeur))
                 $interventionDemande->addAncienAmbassadeur($ancienAmbassadeur);
             $interventionDemande->setAmbassadeur($nouvelAmbassadeur);
+            $interventionDemande->setAmbassadeurDateDerniereRelance(new \DateTime());
             $this->save($interventionDemande);
             
             $this->interventionCourrielManager->envoiCourrielChangementAmbassadeur(

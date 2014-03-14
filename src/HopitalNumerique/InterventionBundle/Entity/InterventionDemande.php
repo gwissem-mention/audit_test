@@ -65,6 +65,13 @@ class InterventionDemande
     private $cmsiDateDerniereRelance;
     
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="interv_ambassadeur_date_derniere_relance", type="datetime", nullable=true)
+     */
+    private $ambassadeurDateDerniereRelance;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="interv_autres_etablissements", type="text", nullable=true)
@@ -359,6 +366,28 @@ class InterventionDemande
         return $this->cmsiDateDerniereRelance;
     }
     
+    /**
+     * Set ambassadeurDateDerniereRelance
+     *
+     * @param \DateTime $ambassadeurDateDerniereRelance
+     * @return InterventionDemande
+     */
+    public function setAmbassadeurDateDerniereRelance($ambassadeurDateDerniereRelance)
+    {
+        $this->ambassadeurDateDerniereRelance = $ambassadeurDateDerniereRelance;
+    
+        return $this;
+    }
+    
+    /**
+     * Get ambassadeurDateDerniereRelance
+     *
+     * @return \DateTime
+     */
+    public function getAmbassadeurDateDerniereRelance()
+    {
+        return $this->ambassadeurDateDerniereRelance;
+    }
     
     /**
      * Set autresEtablissements
@@ -889,5 +918,14 @@ class InterventionDemande
     public function interventionEtatEstAttenteCmsi()
     {
         return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAttenteCmsiId());
+    }
+    /**
+     * Retour si l'état de l'intervention est Validé par le CMSI.
+     *
+     * @return boolean VRAI ssi l'état de l'intervention est Validé par le CMSI
+     */
+    public function interventionEtatEstAcceptationCmsi()
+    {
+        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiId());
     }
 }

@@ -125,7 +125,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         }
 
         $this->interventionDemande->setCmsi($cmsi);
-        $this->interventionDemande->setDirecteur($this->get('hopitalnumerique_user.manager.user')->getDirecteur(array('region' => $this->interventionDemande->getAmbassadeur()->getRegion(), 'enabled' => true)));
+        $this->interventionDemande->setDirecteur($this->get('hopitalnumerique_user.manager.user')->getDirecteur(array('etablissementRattachementSante' => $this->interventionDemande->getReferent()->getEtablissementRattachementSante(), 'enabled' => true)));
         $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
 
         return true;

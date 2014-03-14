@@ -41,14 +41,14 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.init = functio
  * @param integer interventionEtatId L'ID du nouvel état de la demande d'intervention (refusé CMSI)
  * @return void
  */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventionEtatRefusCmsi = function(interventionEtatId)
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventionEtatRefus = function(interventionEtatId)
 {
     var changementEtatUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
 
     $.ajax(changementEtatUrl, {
         method:'POST',
         data:{
-            message:$('textarea#etat_intervention_refus_cmsi_justification').val()
+            message:$('textarea#etat_intervention_refus_justification').val()
         },
         success:function() {
             Nodevo_Web.rechargePage();

@@ -44,7 +44,24 @@ class InterventionCourriel extends Mail
      * @var integer ID du courriel de changement d'ambassadeur
      */
     private static $COURRIEL_INTERVENTION_CHANGEMENT_AMBASSADEUR_ID = 16;
-
+    /**
+     * @var integer ID du courriel d'acceptation d'une demande d'acceptation par un ambassadeur
+     */
+    private static $COURRIEL_INTERVENTION_DEMANDE_EST_ACCEPTEE_AMBASSADEUR_ID = 17;
+    /**
+     * @var integer ID du courriel de refus d'une demande d'acceptation par un ambassadeur
+     */
+    private static $COURRIEL_INTERVENTION_DEMANDE_EST_REFUSEE_AMBASSADEUR_ID = 18;
+    /**
+     * @var integer ID du courriel de relance 1 d'un ambassadeur
+     */
+    private static $COURRIEL_INTERVENTION_DEMANDE_RELANCE_AMBASSADEUR_1_ID = 19;
+    /**
+     * @var integer ID du courriel de relance 2 d'un ambassadeur
+     */
+    private static $COURRIEL_INTERVENTION_DEMANDE_RELANCE_AMBASSADEUR_2_ID = 20;
+    
+    
     /**
      * Retourne l'ID du courriel de création d'une demande d'intervention.
      * 
@@ -116,5 +133,41 @@ class InterventionCourriel extends Mail
     public static function getInterventionCourrielChangementAmbassadeurId()
     {
         return self::$COURRIEL_INTERVENTION_CHANGEMENT_AMBASSADEUR_ID;
+    }
+    /**
+     * Retourne l'ID du courriel d'acceptation d'une demande d'acceptation par un ambassadeur.
+     *
+     * @return integer ID du courriel d'acceptation d'une demande d'acceptation par un ambassadeur
+     */
+    public static function getInterventionCourrielEstAccepteeAmbassadeurId()
+    {
+        return self::$COURRIEL_INTERVENTION_DEMANDE_EST_ACCEPTEE_AMBASSADEUR_ID;
+    }
+    /**
+     * Retourne l'ID du courriel de refus d'une demande d'acceptation par un ambassadeur.
+     *
+     * @return integer ID du courriel de refus d'une demande d'acceptation par un ambassadeur
+     */
+    public static function getInterventionCourrielEstRefuseeAmbassadeurId()
+    {
+        return self::$COURRIEL_INTERVENTION_DEMANDE_EST_REFUSEE_AMBASSADEUR_ID;
+    }
+    /**
+     * Retourne l'ID du courriel de relance 1 pour l'ambassadeur.
+     *
+     * @return integer ID du courriel de relance 1 pour l'ambassadeur
+     */
+    public static function getInterventionCourrielRelanceAmbassadeur1Id()
+    {
+        return self::$COURRIEL_INTERVENTION_DEMANDE_RELANCE_AMBASSADEUR_1_ID;
+    }
+    /**
+     * Retourne l'ID du courriel de relance 2 pour l'ambassadeur.
+     *
+     * @return integer ID du courriel de relance 2 pour l'ambassadeur
+     */
+    public static function getInterventionCourrielRelanceAmbassadeur2Id()
+    {
+        return self::$COURRIEL_INTERVENTION_DEMANDE_RELANCE_AMBASSADEUR_2_ID;
     }
 }

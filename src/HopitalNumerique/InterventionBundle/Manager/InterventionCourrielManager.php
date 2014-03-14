@@ -146,7 +146,64 @@ class InterventionCourrielManager
             ));
         }
     }
-
+    /**
+     * Envoi le courriel d'acceptation d'une demande d'acceptation par un ambassadeur.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $cmsi Le CMSI de la demande d'intervention
+     * @param \HopitalNumerique\UserBundle\Entity\User $referent Le référent de la demande d'intervention
+     * @param string $interventionDemandeUrl Le chemin vers l'URL de la demande d'intervention
+     * @return void
+     */
+    public function envoiCourrielEstAccepteAmbassadeur(User $cmsi, User $referent, $interventionDemandeUrl)
+    {
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielEstAccepteeAmbassadeurId());
+    
+        $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionDemandeUrl));
+        $this->envoiCourriel($courriel, $referent, array('l' => $interventionDemandeUrl));
+    }
+    /**
+     * Envoi le courriel de refus d'une demande d'acceptation par un ambassadeur.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $cmsi Le CMSI de la demande d'intervention
+     * @param \HopitalNumerique\UserBundle\Entity\User $referent Le référent de la demande d'intervention
+     * @param string $interventionDemandeUrl Le chemin vers l'URL de la demande d'intervention
+     * @return void
+     */
+    public function envoiCourrielEstRefuseAmbassadeur(User $cmsi, User $referent, $interventionDemandeUrl)
+    {
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielEstRefuseeAmbassadeurId());
+    
+        $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionDemandeUrl));
+        $this->envoiCourriel($courriel, $referent, array('l' => $interventionDemandeUrl));
+    }
+    /**
+     * Envoi le courriel de relance 1 d'un ambassadeur.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur à relancer
+     * @param string $interventionDemandeUrl Le chemin vers l'URL de la demande d'intervention
+     * @return void
+     */
+    public function envoiCourrielRelanceAmbassadeur1(User $ambassadeur, $interventionDemandeUrl)
+    {
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielRelanceAmbassadeur1Id());
+    
+        $this->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionDemandeUrl));
+    }
+    /**
+     * Envoi le courriel de relance 2 d'un ambassadeur.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur à relancer
+     * @param string $interventionDemandeUrl Le chemin vers l'URL de la demande d'intervention
+     * @return void
+     */
+    public function envoiCourrielRelanceAmbassadeur2(User $ambassadeur, $interventionDemandeUrl)
+    {
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielRelanceAmbassadeur2Id());
+    
+        $this->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionDemandeUrl));
+    }
+    
+    
     /**
      * Envoi un courriel concernant les interventions.
      * 

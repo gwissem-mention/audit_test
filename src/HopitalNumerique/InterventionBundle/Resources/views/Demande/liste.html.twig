@@ -9,9 +9,10 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ block('grid_javascripts')}}
+    {{ block('grid_javascripts') }}
     
     {% javascripts output="compiled/hopitalnumerique-intervention-demande-liste.js"
+        'bundles/nodevogrid/js/Grid.js'
         'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation.js'
         'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation/Evenement.js'
     %}
