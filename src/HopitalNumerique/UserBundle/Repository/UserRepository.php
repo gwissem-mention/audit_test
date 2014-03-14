@@ -126,4 +126,31 @@ class UserRepository extends EntityRepository
 
         return $qb;
     }
+
+    /**
+     * Retourne la liste des ambassadeurs de la région et de la publication
+     *
+     * @param Reference $region La région filtrée
+     * @param Objet     $objet  La publication
+     *
+     * @return QueryBuilder
+     */
+    public function getAmbassadeursByRegionAndProduction( $region, $objet )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('user')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->leftJoin('user.objets','objets')
+            ->andWhere('user.roles LIKE :role','user.enabled = 1')
+            ->andWhere('objets.id = :objet')
+            ->setParameter('objet', $objet )
+            ->setParameter('role', '%ROLE_AMBASSADEUR_7%');
+
+        if( $region ){
+            $qb->andWhere('user.region = :region')
+                ->setParameter('region', $region);
+        }
+
+        return $qb;
+    }
 }

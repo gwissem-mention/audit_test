@@ -124,6 +124,25 @@
 
         <div class="clearfix"></div>
     </div>
+
+    <div id="ambassadeurs" class="closed">
+        <div class="content" style="display:none">
+            <h3 class="violet">Les ambassadeurs</h3>
+            {% for ambassadeur in ambassadeurs %}
+                <div class="ambassadeur">
+                    <p class="nom">{{ambassadeur.prenom|capitalize ~ ' ' ~ ambassadeur.nom|capitalize}}</p>
+                    <p class="etab">
+                        {% if ambassadeur.etablissementRattachementSante %}
+                            {{ambassadeur.etablissementRattachementSante.nom}}
+                        {% else %}
+                            {{ambassadeur.autreStructureRattachementSante}}
+                        {% endif %}
+                    </p>
+                    <a class="btn background-violet" href="{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}">Solliciter cet ambassadeur</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
 
 {% macro buildTree(one, objet) %}

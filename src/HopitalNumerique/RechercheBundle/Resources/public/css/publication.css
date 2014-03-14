@@ -37,6 +37,16 @@
     #publication .autresResultats h5{ color:#414141;font-size: 18px; font-weight: bold;}
     #publication img{ margin: 5px 10px 0 0; }
 
+/* Liste ambassadeurs */
+    #ambassadeurs{position: fixed; right:0; top:0; height: 100%; max-width: 33%}
+    #ambassadeurs.closed{ background: url('../img/ambassadeurs.png') no-repeat center 254px; cursor: pointer ; width: 33px}
+    #ambassadeurs.open{ z-index:20; background: #ffffff; padding:15px; border:1px solid #e2e2e2}
+    #ambassadeurs h3{font-size: 18px;margin-top: 10px; }
+    #ambassadeurs .ambassadeur{ background: #F8F8F8; padding:20px; margin-bottom: 10px}
+    #ambassadeurs .ambassadeur .nom{font-size: 14px; font-weight: bold; color:#020202;}
+    #ambassadeurs .ambassadeur .etab{font-size: 14px; color:#4c4c4c;}
+    #ambassadeurs .ambassadeur a.btn{color:#ffffff;font-size: 14px; font-weight: bold; display: block; margin:15px auto 0;}
+
 /**
  * MEDIA QUERIES
  */

@@ -58,7 +58,7 @@
                 {% for ambassadeur in ambassadeurs %}
                     <div class="fiche col-md-6">
                         <div class="content">
-                            <h5>{{ambassadeur.prenom ~ ' ' ~ ambassadeur.nom}}</h5>
+                            <h5>{{ambassadeur.prenom|capitalize ~ ' ' ~ ambassadeur.nom|capitalize}}</h5>
                             <div class="etab">
                                 {% if ambassadeur.etablissementRattachementSante %}
                                     {{ambassadeur.etablissementRattachementSante.nom}}

@@ -7,7 +7,8 @@ $(document).ready(function() {
         'scrolling' : 'no'
     });
 
-    $('#sommaire.closed').click(function(){
+    /* Gestion de l'ouverture/fermeture du sommaire et de la liste des ambassadeurs */
+    $('#sommaire.closed, #ambassadeurs.closed').click(function(){
         //on ouvre
         if ( $(this).hasClass('closed') ){
             wrapper = $('<div />').addClass('lock-screen');
@@ -17,7 +18,7 @@ $(document).ready(function() {
             $('.lock-screen').remove();
         }
         
-        $('#sommaire').toggleClass('closed open');
-        $('#sommaire .content').toggle();
+        $(this).toggleClass('closed open');
+        $(this).find('.content').toggle();
     });
 });
