@@ -1,0 +1,15 @@
+<div class="panel" style="margin:0" >
+    <div class="panel-heading">
+        <h4 class="violet">Outils maitrisés</h4>
+    </div>
+
+    <div class="panel-body" >
+        <div class="col-md-12">
+            <ul style="padding-left:10px">
+                {% for objet in objets %}
+                    <li>{{objet.titre}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>

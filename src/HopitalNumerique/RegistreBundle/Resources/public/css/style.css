@@ -1,0 +1,24 @@
+#registre-ambassadeur h3{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; background: #f6f6f6}
+#registre-ambassadeur h3 a{font-size: 11px; color:#000000;}
+
+/* Partie map */
+#registre-ambassadeur .map{background: #f8f8f8; padding:15px 10px;}
+
+/* Partie Registre : liste */
+#registre-ambassadeur h4{font-size: 14px;font-weight: bold}
+#registre-ambassadeur .fiche {margin-bottom: 20px}
+#registre-ambassadeur .fiche .content {padding: 20px;border:1px solid #f0ece3;
+    background: #ebeaea; /* Old browsers */
+    background: -moz-linear-gradient(top,  #ebeaea 0%, #ffffff 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ebeaea), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #ebeaea 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #ebeaea 0%,#ffffff 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #ebeaea 0%,#ffffff 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #ebeaea 0%,#ffffff 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebeaea', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */}
+#registre-ambassadeur .fiche .content h5{font-size: 14px; font-weight: bold; color: #020202}
+#registre-ambassadeur .fiche .content .etab{font-size: 14px; color: #4c4c4c;margin-bottom: 15px }
+#registre-ambassadeur .fiche .content p.titre{font-size: 14px; margin:0;}
+#registre-ambassadeur .fiche .content ul{margin:15px 0;}
+#registre-ambassadeur .fiche .content a.link{color:#2f2e2f; font-size: 11px;margin-bottom: 15px; }
+#registre-ambassadeur .fiche .content a.btn{color:#ffffff;font-size: 14px; font-weight: bold; width: 205px; display: block; margin:15px auto 0;}

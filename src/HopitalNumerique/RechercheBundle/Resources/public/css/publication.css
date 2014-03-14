@@ -1,8 +1,8 @@
 /* Sommaire */
     #sommaire{ position: fixed; left:0; top:0; height: 100%; max-width: 33% }
     #sommaire.closed{ width:33px;background: url('../img/sommaire.jpg') no-repeat center 95px; cursor: pointer }
-    #sommaire.open{ z-index:20; background: #ffffff url('../img/sommaire-close.jpg') no-repeat 96% 15px; padding:15px 40px 15px 15px; border:1px solid #e2e2e2}
-    #sommaire a.resume{background: url('../img/synthese-violet.jpg') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 79px; color:#777777;}
+    #sommaire.open{ z-index:20; background: #ffffff url('../img/sommaire-close.png') no-repeat 96% 15px; padding:15px 40px 15px 15px; border:1px solid #e2e2e2}
+    #sommaire a.resume{background: url('../img/synthese-violet.png') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 79px; color:#777777;}
     #sommaire h3{font-size: 18px;margin-top: 10px; }
     #sommaire .content{overflow-y:auto;height: 100%}
     #sommaire .content ul{list-style: none;}
@@ -25,7 +25,7 @@
     #publication h3{font-size: 24px; font-weight: bold; margin:5px 0 20px 0; color:#070005;}
     #publication .col-md-4 div.wrapper{border:1px solid #e2e2e2; padding:10px 20px 0;margin-top:10px;}
     #publication .col-md-4 div.wrapper a.downloadLink{color:#070707; font-size: 13px; font-weight: normal; margin-bottom: 10px}
-    #publication .col-md-4 div.wrapper a.synthese{background: url('../img/synthese-violet.jpg') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 104px; font-weight: normal; margin-bottom: 10px}
+    #publication .col-md-4 div.wrapper a.synthese{background: url('../img/synthese-violet.png') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 104px; font-weight: normal; margin-bottom: 10px}
     #publication .col-md-4 div.wrapper .fa-download{margin:3px 0 0 7px;}
 
     /* Bloc Commentaires */

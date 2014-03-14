@@ -45,7 +45,7 @@
     {% else %}
         <div id="publication">
     {% endif %}
-        <a class="btn btn-success back" href="{{path('hopital_numerique_recherche_homepage')}}">Retour aux résultats de recherche</a>
+        <a class="btn btn-default back" href="{{path('hopital_numerique_recherche_homepage')}}"><i class="fa fa-reply"></i></a>
         <div class="btn btn-default print" onclick="print();"><i class="fa fa-print"></i></div>
         <div class="col-md-12">
             <h4 class="violet" >{{types}}</h4>
@@ -62,7 +62,7 @@
         {# Cas Objet #}
         {% else %}
             <div class="col-md-12">
-                <h3>{{objet.titre}} - Résumé</h3>
+                <h3>{{objet.titre}}{% if objet.getIsInfraDoc %} - Résumé{% endif %}</h3>
             </div>
             
             <div class="col-md-12">

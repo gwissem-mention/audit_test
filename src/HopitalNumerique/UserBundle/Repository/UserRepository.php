@@ -99,4 +99,24 @@ class UserRepository extends EntityRepository
 
         return $qb;
     }
+
+    /**
+     * Retourne la liste des ambassadeurs de la région $region
+     *
+     * @param Reference $region La région filtrée
+     *
+     * @return QueryBuilder
+     */
+    public function getAmbassadeursByRegion( $region )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('user')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->andWhere('user.roles LIKE :role','user.region = :region')
+            ->andWhere('user.enabled = 1')
+            ->setParameter('region', $region)
+            ->setParameter('role', '%ROLE_AMBASSADEUR_7%');
+
+        return $qb;
+    }
 }

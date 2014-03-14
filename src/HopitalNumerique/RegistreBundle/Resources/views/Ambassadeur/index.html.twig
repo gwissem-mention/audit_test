@@ -1,1 +1,81 @@
-index
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Registre{% endblock %}
+{% block metadesc %}Registre des ambassadeurs{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-registre-ambassadeur-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueregistre/css/style.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-registre-ambassadeur-index.js"
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        'bundles/hopitalnumeriqueregistre/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="registre-ambassadeur">
+        <div class="col-md-12">
+            <h3 class="violet">Annuaire des ambassadeurs <a href="#" class="pull-right">Tableau de bord<i class="fa da-dashboard violet"></i></a> </h3>
+        </div>
+        
+        <div class="col-md-3">
+            <h4 class="violet">Critères de recherche</h4>
+            <div class="map">
+                <label for="domaines_liste">Domaines fonctionnels</label>
+                <select name="domaines_liste" id="domaines_liste"></select>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            {% if region %}
+                <div class="col-md-12">
+                    <h4 class="violet">{{region.libelle}}</h4>
+                </div>
+            {% endif %}
+            {% for ambassadeur in ambassadeurs %}
+                <div class="fiche col-md-6">
+                    <div class="content">
+                        <h5>{{ambassadeur.prenom ~ ' ' ~ ambassadeur.nom}}</h5>
+                        <div class="etab">
+                            {% if ambassadeur.etablissementRattachementSante %}
+                                {{ambassadeur.etablissementRattachementSante.nom}}
+                            {% else %}
+                                {{ambassadeur.autreStructureRattachementSante}}
+                            {% endif %}
+                        </div>
+                        <p class="titre violet">> Domaines fonctionnels</p>
+                        <ul>
+                            {% if ambassadeur.domaines %}
+                                {% for domaine in ambassadeur.domaines %}
+                                    <li>{{domaine.libelle}}</li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                        
+                        <p class="titre violet">> Liste des outils maîtrisés</p>
+                        <a class="link fancybox.ajax" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">voir tous les outils maîtrisés</a>
+
+                        <a class="btn background-violet" href="{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}">Solliciter cet ambassadeur</a>
+                    </div>
+                </div>
+            {% else %}
+                - Merci de sélectionner une région - 
+            {% endfor %}
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+{% endblock %}
