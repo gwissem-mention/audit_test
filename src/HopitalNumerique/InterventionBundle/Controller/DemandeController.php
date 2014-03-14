@@ -13,6 +13,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Form\Form;
 use HopitalNumerique\InterventionBundle\Exception\InterventionException;
 use Nodevo\RoleBundle\Entity\Role;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Contrôleur des demandes d'intervention.
@@ -103,5 +104,22 @@ class DemandeController extends Controller
         $interventionDemandesGrille = $this->get('hopitalnumerique_intervention.grid.ambassadeur.intervention_demandes');
 
         return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Ambassadeur/demandes.html.twig');
+    }
+
+    /**
+     * Action appelée par le CRON.
+     * 
+     * @param integer $id Identifiant de sécurité
+     * @return \Symfony\Component\HttpFoundation\Response Vide
+     */
+    public function cronAction($id)
+    {
+        if ($id == 'leschiensnefontpasdeschats')
+        {
+            $this->get('hopitalnumerique_intervention.manager.intervention_demande')->majInterventionEtatsDesInterventionDemandes();
+            $this->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceInterventionDemandes();
+        }
+        
+        return new Response();
     }
 }
