@@ -130,13 +130,11 @@ class ObjetController extends Controller
     }
 
     /**
-     * Renvoie la liste des publications formatées
-     * 
-     * @return \Symfony\Component\HttpFoundation\Response
+     * Action appelée dans le plugin "Publication" pour tinymce
      */
     public function getObjetsAction(){
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
-        $return = array(array("text" => "Choisissez une publication", "value" => ""));
+        $return = array();
         $ids = array();
         foreach( $objets as $one ){
             $ids[] = $one->getId();
@@ -156,7 +154,10 @@ class ObjetController extends Controller
                 $this->getObjetsChilds($return, $content, 2);
             }
         }
-        return new Response( json_encode($return), 200);
+        return $this->render('HopitalNumeriqueObjetBundle:Objet:getObjets.html.twig', array(
+            'objet' => $return,
+            'texte' => $this->get('request')->request->get('texte')
+        ));
     }
 
 

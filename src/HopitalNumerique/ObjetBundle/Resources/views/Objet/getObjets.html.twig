@@ -1,0 +1,49 @@
+<div style="width:800px;">
+    <h2>Ajouter un lien interne</h2>
+    <hr><form role="form">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Publication</label>
+        <div  class="col-sm-10">
+            <select name="publication" id="publication" class="form-control">
+                <option value="">Choisissez une publication</option>
+                {% for option in objet %}
+                <option value="{{ option.value }}">{{ option.text }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Texte à afficher</label>
+        <div  class="col-sm-10">
+            <input type="text" name="texte" id="texte"  class="form-control" value="{{ texte }}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Cible</label>
+        <div  class="col-sm-10">
+            <select name="cible" id="cible" class="form-control">
+                <option value="0">Même fenêtre</option>
+                <option value="1">Nouvelle fenêtre</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <button id="submit" type="button" class="btn btn-primary">OK</button>
+        <button id="cancel" type="button" class="btn btn-danger" >Annuler</button>
+        <input type="hidden" id="choix" />
+    </div>
+</div>
+</form>
+<script>
+    $(document).ready(function(){
+        $('#submit').click(function(){
+            $('#choix').val('submit');
+            $.fancybox.close();
+        });
+        
+        $('#cancel').click(function(){
+            $('#choix').val('cancel');
+            $.fancybox.close();
+        });
+    });
+</script>
