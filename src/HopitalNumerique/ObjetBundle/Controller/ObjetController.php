@@ -129,7 +129,22 @@ class ObjetController extends Controller
         return new Response('{"success":'.$result.'}', 200);
     }
 
-    
+    /**
+     * Renvoie la liste des publications formatées
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getObjetsAction(){
+        $objets = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForAll();
+        $return = array();
+        foreach( $objets as $one ){
+            $return[] = array(
+                "text" => $one->titre, "value" => "PUBLICATION:" . $one->id
+            );
+            $this->getObjetsChilds($return, $one);
+        }
+        return new Response( json_encode($return), 200);
+    }
 
 
 
@@ -140,8 +155,26 @@ class ObjetController extends Controller
 
 
 
-
-
+    /**
+     * Ajoute les enfants de $objet dans $return, formatées en fonction de $level
+     * 
+     * @param array    $return
+     * @param stdClass $objet
+     * @param integer  $level
+     * 
+     * @return void
+     */
+    private function getObjetsChilds( &$return, $objet, $level = 1 ){
+        if( count($objet->childs) > 0 ){
+            foreach( $objet->childs as $child ){
+                $texte = "|" . str_pad($child->titre, strlen($child->titre) + $level, "-", STR_PAD_LEFT);
+                $return[] = array(
+                    "text" => $texte, "value" => "INFRADOC:" . $child->id
+                );
+                $this->getObjetsChilds($return, $child, $level + 1);
+            }
+        }
+    }
 
     /**
      * Effectue le render du formulaire Objet.

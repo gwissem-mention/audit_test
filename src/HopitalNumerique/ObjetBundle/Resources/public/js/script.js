@@ -4,7 +4,7 @@ $(document).ready(function() {
     tinymce.PluginManager.load('pagebreak', '/bundles/nodevoadmin/plugins/tinymce/plugins/pagebreak/plugin.min.js');
     tinymce.PluginManager.load('importcss', '/bundles/nodevoadmin/plugins/tinymce/plugins/importcss/plugin.min.js');
     tinymce.PluginManager.load('textcolor', '/bundles/hopitalnumeriqueobjet/js/ObjetTextColor/plugin.min.js');
-    tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/ObjetAddPublication/plugin.min.js');
+    tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/ObjetAddPublication2/plugin.min.js');
     tinymce.PluginManager.load('image', '/bundles/nodevoadmin/plugins/tinymce/plugins/image/plugin.min.js');
     tinymce.PluginManager.load('link', '/bundles/nodevoadmin/plugins/tinymce/plugins/link/plugin.min.js');
     NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
@@ -36,7 +36,8 @@ $(document).ready(function() {
         importcss_groups: [
             {title: 'Styles personnalisés'}
         ],
-        relative_urls:false
+        relative_urls:false,
+        urlPublication : "/admin/objet/getObjets"
     });
 
     //gestion du bouton delete : changement du fichier uploadé

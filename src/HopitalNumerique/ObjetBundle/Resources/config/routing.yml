@@ -11,6 +11,10 @@ hopitalnumerique_objet_objet_isFileExist:
     pattern:  /objet/isFileExist
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:isFileExist" }
 
+hopitalnumerique_objet_objet_getObjets:
+    pattern:  /objet/getObjets
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getObjets" }
+
 hopitalnumerique_objet_objet_cancel:
     pattern:  /objet/cancel/{id}/{message}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:cancel", message:null }

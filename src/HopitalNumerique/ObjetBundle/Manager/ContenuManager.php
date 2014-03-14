@@ -33,6 +33,17 @@ class ContenuManager extends BaseManager
         //call recursive function to handle all datas
         return $this->_getArboRecursive($datas, $parents, array(), '' );
     }
+    
+    public function getArboForAll(){
+        $datas = new ArrayCollection( $this->findAll() );
+        
+        //Récupère uniquement les premiers parents
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );
+        $parents  = $datas->matching( $criteria );
+        
+        //call recursive function to handle all datas
+        return $this->_getArboRecursive($datas, $parents, array(), '' );
+    }
 
     /**
      * Formatte les références sous forme d'un unique tableau
