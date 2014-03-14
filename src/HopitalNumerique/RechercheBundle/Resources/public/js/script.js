@@ -260,15 +260,18 @@ function updateResultats()
  */
 function showMore(that)
 {
-    toHide = 2;
+    toHide       = 2;
+    elementsLeft = 0;
+
     $(that).parent().find('.results > div:hidden').each(function(){
         if( toHide != 0){
             $(this).slideDown();
             toHide = toHide - 1;
-        }
+        }else
+            elementsLeft = elementsLeft + 1;
     });
     
-    if (toHide != 0)
+    if (elementsLeft == 0)
         $(that).remove();
 }
 
