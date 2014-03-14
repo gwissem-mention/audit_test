@@ -130,20 +130,34 @@ class ObjetController extends Controller
     }
 
     /**
-     * Renvoie la liste des publications formatées
-     * 
-     * @return \Symfony\Component\HttpFoundation\Response
+     * Action appelée dans le plugin "Publication" pour tinymce
      */
     public function getObjetsAction(){
-        $objets = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForAll();
+        $objets = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
         $return = array();
+        $ids = array();
+        foreach( $objets as $one ){
+            $ids[] = $one->getId();
+        }
+        $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjets($ids);
         foreach( $objets as $one ){
             $return[] = array(
-                "text" => $one->titre, "value" => "PUBLICATION:" . $one->id
+                "text" => $one->getTitre(), "value" => "PUBLICATION:" . $one->getId()
             );
-            $this->getObjetsChilds($return, $one);
+            if( !isset($contenus[ $one->getId() ]) || count( $contenus[ $one->getId() ] ) <= 0 ){
+                continue;
+            }
+            foreach( $contenus[ $one->getId() ] as $content ){
+                $return[] = array(
+                    "text" => "|--" . $content->titre, "value" => "INFRADOC:" . $content->id
+                );
+                $this->getObjetsChilds($return, $content, 2);
+            }
         }
-        return new Response( json_encode($return), 200);
+        return $this->render('HopitalNumeriqueObjetBundle:Objet:getObjets.html.twig', array(
+            'objet' => $return,
+            'texte' => $this->get('request')->request->get('texte')
+        ));
     }
 
 
@@ -167,7 +181,7 @@ class ObjetController extends Controller
     private function getObjetsChilds( &$return, $objet, $level = 1 ){
         if( count($objet->childs) > 0 ){
             foreach( $objet->childs as $child ){
-                $texte = "|" . str_pad($child->titre, strlen($child->titre) + $level, "-", STR_PAD_LEFT);
+                $texte = str_pad($child->titre, strlen($child->titre) + ($level*3), "|--", STR_PAD_LEFT);
                 $return[] = array(
                     "text" => $texte, "value" => "INFRADOC:" . $child->id
                 );

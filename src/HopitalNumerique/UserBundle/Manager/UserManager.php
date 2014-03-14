@@ -23,7 +23,7 @@ class UserManager extends BaseManager
         $this->_managerRefusCandidature = $managerRefusCandidature;
         $this->_options              = array();
     }
-    
+
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
      *
@@ -151,5 +151,72 @@ class UserManager extends BaseManager
     public function getAmbassadeursByRegionAndProduction( $region, $objet )
     {
         return $this->getRepository()->getAmbassadeursByRegionAndProduction( $region, $objet )->getQuery()->getResult();
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    /**
+     * Retourne un unique CMSI.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User|null Un CMSI si trouvé, sinon NIL
+     */
+    public function getCmsi(array $criteres)
+    {
+        return $this->getRepository()->getCmsi($criteres);
+    }
+    /**
+     * Retourne un unique directeur.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User|null Un directeur si trouvé, sinon NIL
+     */
+    public function getDirecteur(array $criteres)
+    {
+        return $this->getRepository()->getDirecteur($criteres);
+    }
+    /**
+     * Retourne une liste de CMSIs.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des CMSIs
+     */
+    private function getCmsis(array $criteres)
+    {
+        return $this->getRepository()->getCmsis($criteres);
+    }
+    /**
+     * Retourne une liste de directeurs.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des directeurs
+     */
+    private function getDirecteurs(array $criteres)
+    {
+        return $this->getRepository()->getDirecteurs($criteres);
+    }
+    /**
+     * Retourne une liste d'ambassadeurs.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des ambassadeurs
+     */
+    public function getAmbassadeurs(array $criteres)
+    {
+        return $this->getRepository()->getAmbassadeurs($criteres);
     }
 }

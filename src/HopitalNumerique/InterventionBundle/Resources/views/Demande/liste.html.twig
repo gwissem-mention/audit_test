@@ -1,0 +1,26 @@
+{% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
+
+{% use 'HopitalNumeriqueInterventionBundle:Grid:config.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('grid_stylesheets') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ block('grid_javascripts') }}
+    
+    {% javascripts output="compiled/hopitalnumerique-intervention-demande-liste.js"
+        'bundles/nodevogrid/js/Grid.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation/Evenement.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}
+
+{% block pageTitre %}Les interventions{% endblock %}
+
+{% block chapoDescription %}Devoir la vie à un malfaiteur, accepter cette dette et la rembourser, être, en dépit de soi-même, de plain-pied avec un repris de justice, et lui payer un service avec un autre service ; se laisser dire : Va-t'en, et lui dire à son tour : Sois libre ; sacrifier à des motifs personnels le devoir, cette obligation générale, et sentir dans ces motifs personnels quelque chose de général aussi, et de supérieur peut-être ; trahir la société pour rester fidèle à sa conscience ; que toutes ces absurdités se réalisassent et qu'elles vinssent s'accumuler sur lui-même, c'est ce dont il était atterré.{% endblock %}

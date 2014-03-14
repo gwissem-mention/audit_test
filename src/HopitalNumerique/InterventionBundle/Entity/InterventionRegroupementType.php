@@ -1,7 +1,6 @@
 <?php
 
 namespace HopitalNumerique\InterventionBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**

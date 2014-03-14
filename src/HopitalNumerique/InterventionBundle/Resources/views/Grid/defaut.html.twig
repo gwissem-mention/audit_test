@@ -1,0 +1,6 @@
+{% use 'HopitalNumeriqueInterventionBundle:Grid:config.html.twig' %}
+
+{% block content %}
+    {{ grid(grid, _self) }}
+    {% block grid_filters %}{% endblock grid_filters%}
+{% endblock %}

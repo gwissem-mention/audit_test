@@ -45,152 +45,66 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add(
-                'civilite',
-                'entity',
-                array(
-                    'label' => 'Civilité',
-                    'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getCivilitesChoices(),
-                    'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
-                    'property' => 'libelle',
-                    'required' => true,
-                    'attr' => array('class' => $this->_constraints['civilite']['class'] )
-                )
-            )
-            ->add(
-                'titre',
-                'entity',
-                array(
-                    'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getTitresChoices(),
-                    'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
-                    'property' => 'libelle',
-                    'required' => true,
-                    'attr' => array()
-                )
-            )
-            ->add(
-                'nom',
-                'text',
-                array(
-                    'required' => true,
-                    'max_length' => $this->_constraints['nom']['maxlength'],
-                    'attr' => array('class' => $this->_constraints['nom']['class'])
-                )
-            )
-            ->add(
-                'prenom',
-                'text',
-                array(
-                    'label' => 'Prénom',
-                    'required' => true,
-                    'max_length' => $this->_constraints['prenom']['maxlength'],
-                    'attr' => array('class' => $this->_constraints['prenom']['class'])
-                )
-            )
-            ->add(
-                'email',
-                'email',
-                array(
-                    'label' => 'Adresse e-mail',
-                    'read_only' => true
-                )
-            )
-            ->add(
-                'telephoneDirect',
-                'text',
-                array(
-                    'label' => 'Téléphone direct',
-                    'required' => true,
-                    'max_length' => $this->_constraints['telephoneDirect']['maxlength'],
-                    'attr' => array(
-                        'class' => $this->_constraints['telephoneDirect']['class'],
-                        'data-mask' => $this->_constraints['telephoneDirect']['mask']
-                    )
-                )
-            )
-            ->add(
-                'telephonePortable',
-                'text',
-                array(
-                    'label' => 'Téléphone portable',
-                    'required' => false,
-                    'max_length' => $this->_constraints['telephonePortable']['maxlength'],
-                    'attr' => array(
-                        'class' => $this->_constraints['telephonePortable']['class'],
-                        'data-mask' => $this->_constraints['telephonePortable']['mask']
-                    )
-                )
-            )
-            ->add(
-                'contactAutre',
-                'textarea',
-                array(
-                    'required' => false,
-                    'attr' => array()
-                )
-            )
-            ->add(
-                'region',
-                'entity',
-                array(
-                    'label' => 'Région',
-                    'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getRegionsChoices(),
-                    'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
-                    'property' => 'libelle',
-                    'required' => true,
-                    'attr' => array(
-                        'class' => 'hopitalnumerique_interventionbundle_user_region'
-                    )
-                )
-            )
-            ->add(
-                'departement',
-                'entity',
-                array(
-                    'label' => 'Département',
-                    'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
-                    'property' => 'libelle',
-                    //@todo Obligé forcément de tout récupérer pour la validation
-                    'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getDepartementsChoices(),
-                    'required' => true,
-                    'attr' => array(
-                        'class' => 'hopitalnumerique_interventionbundle_user_departement'
-                    )
-                )
-            )
-            ->add(
-                'etablissementRattachementSante',
-                'choice',
-                array(
-                    'label' => 'Établissement de santé de rattachement',
-                    'attr' => array(
-                        'class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements'
-                    )
-                )
-            )
-            ->add(
-                'autreStructureRattachementSante',
-                'text',
-                array(
-                    'label' => 'Autre établissement de rattachement',
-                    'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
-                    'attr' => array('class' => $this->_constraints['autreStructureRattachementSante']['class'])
-                )
-            )
-            ->add(
-                'fonctionEtablissementSante',
-                'entity',
-                array(
-                    'label' => 'Fonction dans l\'établissement de santé',
-                    'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getFonctionsEtablissementSanteChoices(),
-                    'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
-                    'property' => 'libelle',
-                    'empty_value' => '',
-                    'required' => true,
-                    'attr' => array()
-                )
-            )
-        ;
+                ->add('civilite', 'entity',
+                        array('label' => 'Civilité',
+                                'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')
+                                        ->getCivilitesChoices(), 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
+                                'property' => 'libelle', 'required' => true,
+                                'attr' => array('class' => $this->_constraints['civilite']['class'])))
+                ->add('titre', 'entity',
+                        array('choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getTitresChoices(),
+                                'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference', 'property' => 'libelle',
+                                'required' => true, 'attr' => array()))
+                ->add('nom', 'text',
+                        array('required' => true, 'max_length' => $this->_constraints['nom']['maxlength'],
+                                'attr' => array('class' => $this->_constraints['nom']['class'])))
+                ->add('prenom', 'text',
+                        array('label' => 'Prénom', 'required' => true, 'max_length' => $this->_constraints['prenom']['maxlength'],
+                                'attr' => array('class' => $this->_constraints['prenom']['class'])))
+                ->add('email', 'email',
+                        array('label' => 'Adresse e-mail', 'read_only' => true))
+                ->add('telephoneDirect', 'text',
+                        array('label' => 'Téléphone direct', 'required' => true,
+                                'max_length' => $this->_constraints['telephoneDirect']['maxlength'],
+                                'attr' => array('class' => $this->_constraints['telephoneDirect']['class'],
+                                        'data-mask' => $this->_constraints['telephoneDirect']['mask'])))
+                ->add('telephonePortable', 'text',
+                        array('label' => 'Téléphone portable', 'required' => false,
+                                'max_length' => $this->_constraints['telephonePortable']['maxlength'],
+                                'attr' => array('class' => $this->_constraints['telephonePortable']['class'],
+                                        'data-mask' => $this->_constraints['telephonePortable']['mask'])))
+                ->add('contactAutre', 'textarea',
+                        array('required' => false, 'attr' => array()))
+                ->add('region', 'entity',
+                        array('label' => 'Région',
+                                'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getRegionsChoices(),
+                                'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference', 'property' => 'libelle',
+                                'required' => true,
+                                'attr' => array('class' => 'hopitalnumerique_interventionbundle_user_region')))
+                ->add('departement', 'entity',
+                        array('label' => 'Département', 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
+                                'property' => 'libelle',
+                                //@todo Obligé forcément de tout récupérer pour la validation
+                                'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')
+                                        ->getDepartementsChoices(), 'required' => true,
+                                'attr' => array('class' => 'hopitalnumerique_interventionbundle_user_departement')))
+                ->add('etablissementRattachementSante', 'entity',
+                        array(
+                                'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_etablissement')
+                                        ->getEtablissementsChoices(),
+                                'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement', 'property' => 'nom',
+                                'label' => 'Établissement de santé de rattachement',
+                                'attr' => array('class' => 'hopitalnumerique_interventionbundle_user_etablissementRattachementSante')))
+                ->add('autreStructureRattachementSante', 'text',
+                        array('label' => 'Autre établissement de rattachement',
+                                'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
+                                'attr' => array('class' => $this->_constraints['autreStructureRattachementSante']['class'])))
+                ->add('fonctionEtablissementSante', 'entity',
+                        array('label' => 'Fonction dans l\'établissement de santé',
+                                'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')
+                                        ->getFonctionsEtablissementSanteChoices(),
+                                'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference', 'property' => 'libelle',
+                                'empty_value' => '', 'required' => true, 'attr' => array()));
     }
 
     /**
@@ -198,9 +112,7 @@ class UserType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\UserBundle\Entity\User'
-        ));
+        $resolver->setDefaults(array('data_class' => 'HopitalNumerique\UserBundle\Entity\User'));
     }
 
     /**
