@@ -74,11 +74,11 @@ INSERT INTO `wwwhopitalnumeriquecom`.`core_menu_item` (`itm_id`, `itm_parent`, `
 
 /*QSO - 13/03/2014
    DEV -> PROD
-   Modifs items menu */
+   Modifs items menu 
 INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES (NULL, '9', '1', 'Domaines fonctionnels maitrisés', 'hopitalnumerique_user_ambassadeur_domainesFonctionnels', NULL, '0', NULL, NULL, '0', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '10');
 
 /*QSO - 14/03/2014
    DEV -> PROD
-   Add ressource + lien menu */
+   Add ressource + lien menu 
 INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`) VALUES (NULL, 'FrontOffice - Accès à la solocitation des ambassadeurs', '/^\\/registre-ambassadeurs/', '15');
-UPDATE `core_menu_item` SET `mnu_menu` = '3', `itm_order` = '5', `itm_route` = 'hopital_numerique_registre_homepage', `itm_uri` = NULL WHERE `core_menu_item`.`itm_id` = 75;
+UPDATE `core_menu_item` SET `mnu_menu` = '3', `itm_order` = '5', `itm_route` = 'hopital_numerique_registre_homepage', `itm_uri` = NULL WHERE `core_menu_item`.`itm_id` = 75;*/
