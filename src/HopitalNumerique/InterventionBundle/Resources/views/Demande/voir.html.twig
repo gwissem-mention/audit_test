@@ -71,13 +71,17 @@
                     <br>{{ interventionDemande.cmsi.region.libelle }}
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4">Directeur</div>
-                <div class="col-md-8">
-                    {{ interventionDemande.directeur.appellation }}
-                    <br>{{ interventionDemande.directeur.region.libelle }}
+            {% if interventionDemande.directeur is not empty %}
+                <div class="row">
+                    <div class="col-md-4">Directeur</div>
+                    <div class="col-md-8">
+                        {{ interventionDemande.directeur.appellation }}
+                        {% if interventionDemande.directeur.region is not null %}
+                            <br>{{ interventionDemande.directeur.region.libelle }}
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             
             <hr>
             

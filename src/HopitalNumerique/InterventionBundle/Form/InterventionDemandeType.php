@@ -59,7 +59,8 @@ class InterventionDemandeType extends AbstractType
                 'property' => 'libelle',
                 'label' => 'Type d\'intervention souhaitée',
                 'empty_value' => '',
-                'required' => true
+                'required' => true,
+                'attr' => array('class' => $this->_constraints['interventionType']['class'] )
             ))
             ->add('region', 'entity', array(
                 'label' => 'Région des établissements',

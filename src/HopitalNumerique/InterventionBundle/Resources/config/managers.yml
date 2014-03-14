@@ -14,7 +14,7 @@ services:
         arguments: ["@service_container", "@twig"]
     hopitalnumerique_intervention.manager.intervention_demande:
         class: "%hopitalnumerique_intervention.manager.intervention_demande.class%"
-        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@router", "@hopitalnumerique_intervention.manager.intervention_etat", "@hopitalnumerique_intervention.manager.intervention_courriel"]
+        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@router", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_intervention.manager.intervention_etat", "@hopitalnumerique_intervention.manager.intervention_courriel"]
     hopitalnumerique_intervention.manager.intervention_etat:
         class: "%hopitalnumerique_intervention.manager.intervention_etat.class%"
         arguments: ["@service_container"]

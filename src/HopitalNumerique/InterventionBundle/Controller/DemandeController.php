@@ -68,9 +68,10 @@ class DemandeController extends Controller
             return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/cmsi.html.twig');
         else if ($utilisateurConnecte->hasRoleAmbassadeur())
             return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/ambassadeur.html.twig');
+        else return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/etablissement.html.twig');
         
-        $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à visualiser cette page.');
-        return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        //$this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à visualiser cette page.');
+        //return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
     }
     /**
      * Action pour la liste des nouvelles demandes d'intervention (demandes en début de processus) pour le CMSI.
@@ -104,6 +105,17 @@ class DemandeController extends Controller
         $interventionDemandesGrille = $this->get('hopitalnumerique_intervention.grid.ambassadeur.intervention_demandes');
 
         return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Ambassadeur/demandes.html.twig');
+    }
+    /**
+     * Action pour la liste des demandes d'intervention pour l'établissement.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response La vue de la liste des demandes d'intervention
+     */
+    public function gridEtablissementDemandesAction()
+    {
+        $interventionDemandesGrille = $this->get('hopitalnumerique_intervention.grid.etablissement.intervention_demandes');
+    
+        return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Etablissement/demandes.html.twig');
     }
 
     /**

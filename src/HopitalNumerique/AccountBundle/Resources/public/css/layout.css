@@ -21,7 +21,7 @@ div#tableau-de-bord {}
     /* --> */
     /* <-- Grid */
     div#tableau-de-bord div.grid-search { background-color:#6F3596;padding:0px; }
-        div#tableau-de-bord div.grid-search div.panel { background-color:transparent;border-width:0px;margin:0px; }
+        div#tableau-de-bord div.grid-search div.panel { background-color:transparent !important;border-width:0px !important;margin:0px !important; }
             div#tableau-de-bord div.grid-search div.panel div.panel-heading { border-width:0px;padding:4px 10px; }
                 div#tableau-de-bord div.grid-search div.panel div.panel-heading h4 { color:#fff;font-size:15px;margin:0px;padding:4px 0px; }
                 div#tableau-de-bord div.grid-search div.panel div.panel-heading div.options { color:#fff;position:absolute;right:16px;top:6px; }

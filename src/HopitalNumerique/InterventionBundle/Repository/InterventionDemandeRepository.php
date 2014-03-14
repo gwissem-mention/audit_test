@@ -204,6 +204,7 @@ class InterventionDemandeRepository extends EntityRepository
                 ->setParameter('interventionEtatDemandeInitiale', InterventionEtat::getInterventionEtatDemandeInitialeId())
                 ->setParameter('interventionEtatAttenteCmsi', InterventionEtat::getInterventionEtatAttenteCmsiId())
             ->orderBy('interventionDemande.dateCreation', 'DESC')
+            ->groupBy('interventionDemande.id')
         ;
 
         return $requete->getQUery()->getResult();
@@ -264,6 +265,51 @@ class InterventionDemandeRepository extends EntityRepository
             ->orderBy('interventionDemande.dateCreation', 'DESC')
         ;
     
+        return $requete->getQUery()->getResult();
+    }
+    /**
+     * Récupère les données du grid des demandes d'intervention pour l'établissement sous forme de tableau correctement formaté
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $referent Le référent de l'établissement des demandes d'intervention
+     * @param \HopitalNumerique\UserBundle\Entity\User $cmsi Le CMSI de la région du référent
+     * @return array
+     */
+    public function getGridDonnees_EtablissementDemandes(User $referent, User $cmsiRegion)
+    {
+        $requete = $this->_em->createQueryBuilder()
+            ->select(
+                'interventionDemande.id AS id',
+                'interventionInitiateur.type AS interventionInitiateurType',
+                'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurRegion.libelle) AS ambassadeurInformations',
+                'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
+                'interventionEtat.libelle AS interventionEtatLibelle',
+                'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
+                'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
+                'evaluationEtat.id AS evaluationEtatId'
+            )
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+            // Référent
+            ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
+            ->innerJoin('ambassadeur.region', 'ambassadeurRegion')
+            // Initiateur
+            ->innerJoin('interventionDemande.interventionInitiateur', 'interventionInitiateur')
+            // État de l'intervention
+            ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
+            // État de l'évaluation
+            ->leftJoin('interventionDemande.evaluationEtat', 'evaluationEtat');
+        
+        if ($cmsiRegion != null)
+        {
+            $requete->where('interventionDemande.referent = :referent OR interventionDemande.cmsi = :cmsi')
+                ->setParameter('referent', $referent)
+                ->setParameter('cmsi', $cmsiRegion);
+        }
+        else
+        {
+            $requete->where('interventionDemande.referent = :referent')
+                ->setParameter('referent', $referent);
+        }
+
         return $requete->getQUery()->getResult();
     }
 }

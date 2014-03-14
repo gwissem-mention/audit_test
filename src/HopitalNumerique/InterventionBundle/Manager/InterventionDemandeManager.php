@@ -11,6 +11,7 @@ use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager;
+use HopitalNumerique\UserBundle\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use HopitalNumerique\UserBundle\Entity\User;
 
@@ -30,6 +31,10 @@ class InterventionDemandeManager extends BaseManager
      */
     private $router;
     /**
+     * @var \HopitalNumerique\UserBundle\Manager\UserManager Le manager de l'entité User
+     */
+    private $userManager;
+    /**
      * @var \HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager Le manager de l'entité InterventionEtat
      */
     private $interventionEtatManager;
@@ -48,11 +53,12 @@ class InterventionDemandeManager extends BaseManager
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager $interventionCourrielManager Le manager de l'entité InterventionCourriel
      * @return void
      */
-    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, InterventionEtatManager $interventionEtatManager, InterventionCourrielManager $interventionCourrielManager)
+    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, UserManager $userManager, InterventionEtatManager $interventionEtatManager, InterventionCourrielManager $interventionCourrielManager)
     {
         parent::__construct($entityManager);
         $this->securityContext = $securityContext;
         $this->router = $router;
+        $this->userManager = $userManager;
         $this->interventionEtatManager = $interventionEtatManager;
         $this->interventionCourrielManager = $interventionCourrielManager;
     }
@@ -175,6 +181,22 @@ class InterventionDemandeManager extends BaseManager
     {
         $interventionDemandes = $this->_repository->getGridDonnees_AmbassadeurDemandes($this->securityContext->getToken()->getUser());
 
+        return $interventionDemandes;
+    }
+    /**
+     * Retourne les données formatées pour la création du grid des demandes d'intervention pour l'établissement.
+     *
+     * @return array Les données pour le grid des demandes d'intervention
+     */
+    public function getGridDonnees_EtablissementDemandes()
+    {
+        $referent = $this->securityContext->getToken()->getUser();
+        $cmsiRegion = null;
+        if ($referent->getRegion() != null)
+            $cmsiRegion = $this->userManager->getCmsi(array('region' => $referent->getRegion(), 'enabled' => true));
+
+        $interventionDemandes = $this->_repository->getGridDonnees_EtablissementDemandes($referent, $cmsiRegion);
+    
         return $interventionDemandes;
     }
 

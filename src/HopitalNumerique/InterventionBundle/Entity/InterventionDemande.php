@@ -4,6 +4,9 @@ namespace HopitalNumerique\InterventionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
  * Entité d'une demande d'intervention.
@@ -170,6 +173,8 @@ class InterventionDemande
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_intervention_type_id", referencedColumnName="ref_id")
      * })
+     * @Assert\NotNull(message="Un type d'intervention doit être choisi.")
+     * @Nodevo\Javascript(class="validate[required]")
      */
     private $interventionType;
 
@@ -245,6 +250,7 @@ class InterventionDemande
      *     @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")
      *   }
      * )
+     * @Assert\Count(min=1,minMessage="Au moins une production doit être choisie.")
      */
     private $objets;
 
