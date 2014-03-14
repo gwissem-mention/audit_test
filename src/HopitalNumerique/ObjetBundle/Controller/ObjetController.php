@@ -136,7 +136,7 @@ class ObjetController extends Controller
      */
     public function getObjetsAction(){
         $objets = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForAll();
-        $return = array();
+        $return = array(array("text" => "Choisissez une publication", "value" => ""));
         foreach( $objets as $one ){
             $return[] = array(
                 "text" => $one->titre, "value" => "PUBLICATION:" . $one->id
@@ -167,7 +167,7 @@ class ObjetController extends Controller
     private function getObjetsChilds( &$return, $objet, $level = 1 ){
         if( count($objet->childs) > 0 ){
             foreach( $objet->childs as $child ){
-                $texte = "|" . str_pad($child->titre, strlen($child->titre) + $level, "-", STR_PAD_LEFT);
+                $texte = str_pad($child->titre, strlen($child->titre) + ($level*3), "|--", STR_PAD_LEFT);
                 $return[] = array(
                     "text" => $texte, "value" => "INFRADOC:" . $child->id
                 );

@@ -2,4 +2,4 @@ hopital_numerique_intervention_etablissement_etablissements:
     pattern:  /etablissements/json
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Etablissement:jsonEtablissements" }
     requirements:
-        _format:  json
+        _format: json

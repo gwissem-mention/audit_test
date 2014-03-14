@@ -1,3 +1,4 @@
 imports:
     - { resource: managers.yml }
     - { resource: formulaires.yml }
+    - { resource: grids.yml }

@@ -9,6 +9,20 @@ $(document).ready(function() {
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.init();
 });
 
+
+/**
+ * @var integer L'ID de la demande d'intervention en cours
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID = null;
+/**
+ * @var integer[] Les ID des derniers autres établissements initialement sélectionnés
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS = new Array();
+/**
+ * @var integer L'ID du référent initialement sélectionné
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REFERENT_INITIAL_ID = null;
+
 /**
  * Initialisation du formulaire de demande d'intervention.
  * 
@@ -16,130 +30,70 @@ $(document).ready(function() {
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.init = function()
 {
-    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeDepartements();
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init();
 };
 
 
 /**
- * Met à jour la liste des départements.
+ * Modifie l'état de la demande d'intervention en refusé CMSI.
  * 
+ * @param integer interventionEtatId L'ID du nouvel état de la demande d'intervention (refusé CMSI)
  * @return void
  */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeDepartements = function()
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventionEtatRefus = function(interventionEtatId)
 {
-    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampDepartements();
-    var regionId = parseInt($('select.hopitalnumerique_interventionbundle_user_region option:selected').attr('value'));
+    var changementEtatUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
 
-    $.getJSON(
-        '/compte-hn/intervention/reference/departements/json',
-        {
-            region:regionId
+    $.ajax(changementEtatUrl, {
+        method:'POST',
+        data:{
+            message:$('textarea#etat_intervention_refus_justification').val()
         },
-        function(departements)
-        {
-            HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampDepartements(departements)
+        success:function() {
+            Nodevo_Web.rechargePage();
         }
-    );
-};
-/**
- * Vide le SELECT des départements.
- * 
- * @return void
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampDepartements = function()
-{
-    var departementSelect = $('select.hopitalnumerique_interventionbundle_user_departement');
-    $(departementSelect).html('');
-};
-/**
- * Raffraîchit le SELECT des départements.
- * 
- * @param array departements Liste des départements à afficher.
- * @return void
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampDepartements = function(departements)
-{
-    var departementSelect = $('select.hopitalnumerique_interventionbundle_user_departement');
-    var departementSelectHtml = '';
-    
-    $.each(departements, function(index, departement) {
-        departementSelectHtml += '<option value="' + departement.id + '">' + departement.libelle + '</option>';
     });
-    
-    $(departementSelect).html(departementSelectHtml);
-    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeEtablissements();
+};
+/**
+ * Enregistre l'état de la demande d'intervention.
+ * 
+ * @param integer interventionEtatId L'ID du nouvel état de la demande d'intervention
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.enregistreInterventionEtat = function(interventionEtatId)
+{
+    var changementEtatUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
+
+    $.ajax(changementEtatUrl, {
+        success:function() {
+            Nodevo_Web.rechargePage();
+        }
+    });
 };
 
 
 /**
- * Initialise la liste des établissements de santé de rattachement.
+ * Retourne si la liste des régions est présente.
  * 
- * @return void
+ * @return boolean VRAI ssi la liste des régions est présente
  */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeEtablissements = function()
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.listeRegionsExiste = function()
 {
-    if (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.listeEtablissementsExiste())
-    {
-        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampEtablissements();
-        var departementId = parseInt($('select.hopitalnumerique_interventionbundle_user_departement option:selected').attr('value'));
-    
-        if (departementId != 0)
-        {
-            $.getJSON(
-                '/compte-hn/intervention/etablissement/etablissements/json',
-                {
-                    departement:departementId
-                },
-                function(etablissementsRegroupesParTypeOrganisme)
-                {
-                    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampEtablissements(etablissementsRegroupesParTypeOrganisme);
-                }
-            );
-        }
-    }
+    return ($('select.hopitalnumerique_interventionbundle_interventiondemande_region').size() > 0);
 };
 /**
- * Retourne si la liste des établissements de santé est présente.
+ * Sélectionne la région des établissements.
  * 
- * @return boolean VRAI ssi la liste des établissements de santé est présente
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.listeEtablissementsExiste = function()
-{
-    return ($('select.hopitalnumerique_interventionbundle_user_etablissementRattachementSante').size() > 0);
-};
-/**
- * Vide le SELECT des établissements.
- * 
+ * @param integer regionId L'ID de la région à sélectionner
  * @return void
  */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampEtablissements = function()
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.setRegion = function(regionId)
 {
-    var etablissementSelect = $('select.hopitalnumerique_interventionbundle_user_etablissementRattachementSante');
-    $(etablissementSelect).html('');
-};
-/**
- * Raffraîchit le SELECT des établissements.
- * 
- * @param array etablissementsRegroupesParTypeOrganisme Liste des établissements regroupés par type d'organisme à afficher.
- * @return void
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampEtablissements = function(etablissementsRegroupesParTypeOrganisme)
-{
-    var etablissementSelect = $('select.hopitalnumerique_interventionbundle_user_etablissementRattachementSante');
-    var etablissementsSelectHtml = '';
+    var regionSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_region');
     
-    $.each(etablissementsRegroupesParTypeOrganisme, function(index, etablissementsRegroupes) {
-        etablissementsSelectHtml += '<optgroup label="' + etablissementsRegroupes.typeOrganisme.libelle + '">';
-            $.each(etablissementsRegroupes.etablissements, function(index, etablissement) {
-                etablissementsSelectHtml += '<option value="' + etablissement.id + '">' + etablissement.nom + '</option>';
-            });
-        etablissementsSelectHtml += '</optgroup>';
-    });
-    
-    $(etablissementSelect).html(etablissementsSelectHtml);
-};
+    $(regionSelect).val(regionId);
+}
 
 
 /**
@@ -150,20 +104,24 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampEtabli
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements = function()
 {
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampAutresEtablissements();
-    var regionId = parseInt($('select.hopitalnumerique_interventionbundle_user_region option:selected').attr('value'));
-
-    if (regionId != 0)
+    
+    if (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.listeRegionsExiste())
     {
-        $.getJSON(
-            '/compte-hn/intervention/etablissement/etablissements/json',
-            {
-                region:regionId
-            },
-            function(etablissementsRegroupesParTypeOrganisme)
-            {
-                HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements(etablissementsRegroupesParTypeOrganisme);
-            }
-        );
+        var regionId = parseInt($('select.hopitalnumerique_interventionbundle_interventiondemande_region option:selected').attr('value'));
+    
+        if (regionId != 0)
+        {
+            $.getJSON(
+                '/compte-hn/intervention/etablissement/etablissements/json',
+                {
+                    region:regionId
+                },
+                function(etablissementsRegroupesParTypeOrganisme)
+                {
+                    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements(etablissementsRegroupesParTypeOrganisme);
+                }
+            );
+        }
     }
 };
 /**
@@ -197,6 +155,51 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutres
     });
     
     $(etablissementSelect).html(etablissementsSelectHtml);
+    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initAutresEtablissementsInitiaux();
+};
+/**
+ * Sélectionne les autres établissements de la demande d'intervention à l'entrée de la page.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initAutresEtablissementsInitiaux = function()
+{
+    var etablissementSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements');
+
+    if (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS.length > 0)
+    {
+        for (var i = 0; i < HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS.length; i++)
+            $(etablissementSelect).find('option[value=' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS[i] + ']').attr('selected', true);
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS = new Array();
+        $(etablissementSelect).trigger('change');
+    }
+};
+/**
+ * Sélectionne un établissement dans liste des établissements de rattachement.
+ * 
+ * @param integer etablissementId L'ID de l'établissement à sélectionner
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.addAutreEtablissement = function(etablissementId)
+{
+    var etablissementSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements');
+    
+    $(etablissementSelect).find('option[value=' + etablissementId + ']').attr('selected', true);
+};
+/**
+ * Sélectionne un établissement dans liste des établissements de rattachement.
+ * 
+ * @param integer etablissementId L'ID de l'établissement à sélectionner
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.getAutresEtablissementsSelectionnesIds = function()
+{
+    var etablissementSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements');
+    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.getAutresEtablissementsSelectionnesIds = new Array();
+    
+    $.each($(etablissementSelect).find(':selected'), function(index, optionSelectionne) {
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.getAutresEtablissementsSelectionnesIds.push($(optionSelectionne).val());
+    });
 };
 
 
@@ -215,7 +218,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeRefere
         if (autresEtablissementsIds.length > 0)
         {
             $.getJSON(
-                '/compte-hn/intervention/user/users/json',
+                '/compte-hn/intervention/users/json',
                 {
                     etablissementRattachementSante:autresEtablissementsIds
                 },
@@ -278,4 +281,50 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampRefere
     });
     
     $(referentsSelect).html(referentsSelectHtml);
+    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initReferentInitial();
+};
+/**
+ * Sélectionne le référent de la demande d'intervention à l'entrée de la page.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initReferentInitial = function()
+{
+    var etablissementSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_referent');
+
+    if (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REFERENT_INITIAL_ID != null)
+    {
+        $(etablissementSelect).find('option[value=' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REFERENT_INITIAL_ID + ']').attr('selected', true);
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REFERENT_INITIAL_ID = null;
+    }
+};
+
+
+/**
+ * Change l'ambassadeur de la demande d'intervention.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.changeAmbassadeur = function()
+{
+    var nouvelAmbassadeurId = parseInt($('select#intervention_demande_ambassadeur_change option:selected').val());
+
+    if (nouvelAmbassadeurId > 0)
+    {
+        if (confirm('Confirmez-vous le transfert d\'ambassadeur ?'))
+        {
+            var loaderAjax = $('.panel_form_visu').nodevoLoader().start();
+            var changementAmbassadeurUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/ambassadeur/' + nouvelAmbassadeurId + '/change'; 
+        
+            $.ajax(changementAmbassadeurUrl, {
+                success:function(reponse) {
+                    if (reponse != '1')
+                        alert('L\'ambassadeur n\'a pu être modifié.');
+                    else Nodevo_Web.redirige('/compte-hn/intervention/demandes/liste');
+
+                    loaderAjax.finished();
+                }
+            });
+        }
+    }
 };

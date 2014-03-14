@@ -20,7 +20,7 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 class Role implements RoleInterface
 {
     public static $ROLE_CMSI_LABEL        = 'ROLE_ARS_CMSI_4';
-    public static $ROLE_DIRECTEUR_LABEL   = 'ROLE_ADMINISTRATEUR_1';
+    public static $ROLE_DIRECTEUR_LABEL = 'ROLE_ES_DIRECTION_GENERALE_5';
     public static $ROLE_AMBASSADEUR_LABEL = 'ROLE_AMBASSADEUR_7';
     
     /**

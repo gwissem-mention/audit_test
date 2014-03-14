@@ -13,8 +13,8 @@ var HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement =
 HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init = function()
 {
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initRegion_Change();
-    HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initDepartement_Change();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initAutresEtablissements_Change();
+    HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initInterventionEtat_Click();
 };
 
 /**
@@ -24,24 +24,10 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init 
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initRegion_Change = function()
 {
-    var regionSelect = $('select.hopitalnumerique_interventionbundle_user_region');
+    var regionSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_region');
 
     $(regionSelect).change(function() {
-        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeDepartements();
         HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements();
-    });
-};
-/**
- * Initialisation de l'événement d'un changement de département.
- * 
- * @return void
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initDepartement_Change = function()
-{
-    var departementSelect = $('select.hopitalnumerique_interventionbundle_user_departement');
-
-    $(departementSelect).change(function() {
-        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeEtablissements();
     });
 };
 /**
@@ -55,5 +41,23 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initA
 
     $(etablissementsSelect).change(function() {
         HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeReferents();
+    });
+};
+
+/**
+ * Initialisation de l'événement d'un clic sur un bouton de modification de l'état de l'intervention en cours.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initInterventionEtat_Click = function()
+{
+    var boutonModificationInterventionEtatRefus = $('button[data-intervention-etat-refus]');
+    var autresBoutonsModificationInterventionEtat = $('button[data-intervention-etat]');
+    
+    $(boutonModificationInterventionEtatRefus).click(function() {
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventionEtatRefus(parseInt($(this).attr('data-intervention-etat-refus')));
+    });
+    $(autresBoutonsModificationInterventionEtat).click(function() {
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.enregistreInterventionEtat(parseInt($(this).attr('data-intervention-etat')));
     });
 };
