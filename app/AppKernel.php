@@ -43,6 +43,7 @@ class AppKernel extends Kernel
             new HopitalNumerique\AccountBundle\HopitalNumeriqueAccountBundle(),
             new HopitalNumerique\InterventionBundle\HopitalNumeriqueInterventionBundle(),
             new HopitalNumerique\RechercheBundle\HopitalNumeriqueRechercheBundle(),
+            new HopitalNumerique\RegistreBundle\HopitalNumeriqueRegistreBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
