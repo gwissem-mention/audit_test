@@ -152,6 +152,13 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="usr_date_inscription", type="datetime", options = {"comment" = "Date inscription"})
+     */
+    protected $dateInscription;
 
     /**
      * @var string
@@ -213,7 +220,7 @@ class User extends BaseUser
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id")
      */
-    protected $region;    
+    protected $region;
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
@@ -443,6 +450,29 @@ class User extends BaseUser
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set dateInscription
+     *
+     * @param \DateTime $dateInscription
+     * @return User
+     */
+    public function setDateInscription($dateInscription)
+    {
+        $this->dateInscription = $dateInscription;
+    
+        return $this;
+    }
+    
+    /**
+     * Get dateInscription
+     *
+     * @return \DateTime
+     */
+    public function getDateInscription()
+    {
+        return $this->dateInscription;
     }
     
     /**
@@ -1053,5 +1083,15 @@ class User extends BaseUser
     public function getDomaines()
     {
         return $this->domaines;
+    }
+
+    /**
+     * Retourne les prénom et nom de l'utilisateur avec sa civilité.
+     * 
+     * @return string Appelation de l'utilisateur
+     */
+    public function getAppellation()
+    {
+        return ($this->civilite != null ? $this->civilite->getLibelle().' ' : '').$this->prenom.' '.$this->nom;
     }
 }

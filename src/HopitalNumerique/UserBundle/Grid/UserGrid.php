@@ -39,6 +39,7 @@ class UserGrid extends Grid implements IGrid
         //Récupération des roles
         $arrayRolesDateContractualisation = $this->_arrayRolesDateContractualisation;
         
+        $this->addColonne( new Column\DateColumn('dateInscription', 'Date d\'inscription') );        
         $this->addColonne( new Column\TextColumn('username', 'Nom d\'utilisateur') );
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('prenom', 'Prénom') );

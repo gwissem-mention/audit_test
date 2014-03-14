@@ -1,0 +1,88 @@
+{% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-intervention-demande-edit.css" filter="cssrewrite"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-intervention-demande-edit.js"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/Formulaire.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/FormulaireEvenement.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+        {% if interventionDemande.etablissements|length > 0 %}{% spaceless %}
+            HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.setRegion({{ interventionDemande.etablissements[0].region.id }});
+            {% for etablissement in interventionDemande.etablissements %}
+                HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS.push({{ etablissement.id }});
+            {% endfor %}
+            HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REFERENT_INITIAL_ID = {{ interventionDemande.referent.id }};
+        {% endspaceless %}{% endif %}
+    </script>
+{% endblock %}
+
+{% block pageTitre %}Modifier une intervention{% endblock %}
+
+{% block chapoDescription %}
+    <p>Tu vois, là-bas, les champs de blé ? Je ne mange pas de pain. Le blé pour moi est inutile. Les champs de blé ne me rappellent rien. Et ça, c'est triste ! Mais tu as des cheveux couleur d'or. Alors ce sera merveilleux quand tu m'auras apprivoisé ! Le blé, qui est doré, me fera souvenir de toi. Et j'aimerai le bruit du vent dans le blé...</p>
+{% endblock %}
+
+{% block contenu %}
+    <div class="panel panel_form" id="intervention_panel_edition">
+        
+        <form method="post" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireEdition) }}>
+            {% form_theme interventionDemandeFormulaireEdition 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
+
+            {{ form_javascript(interventionDemandeFormulaireEdition) }}
+
+            {{ form_widget(interventionDemandeFormulaireEdition) }}
+
+            
+            <div class="form-group">
+                <label class="col-md-4 control-label">Type d'intervention</label>
+                <div class="col-md-7"><div class="form-control">{{ interventionDemande.interventionType.libelle }}</div></div>
+                <div class="col-md-4"><div class="help-block"></div></div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Référent</label>
+                <div class="col-md-7"><div class="form-control">{{ interventionDemande.referent.appellation }}</div></div>
+                <div class="col-md-4"><div class="help-block"></div></div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Objets</label>
+                <div class="col-md-7"><div class="form-control">
+                    {% for objet in interventionDemande.objets %}
+                        <div>{{ objet.titre }}</div>
+                    {% endfor %}
+                </div></div>
+                <div class="col-md-4"><div class="help-block"></div></div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Champ libre</label>
+                <div class="col-md-7"><div class="form-control">{{ interventionDemande.champLibre }}</div></div>
+                <div class="col-md-4"><div class="help-block"></div></div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Informations pour la prise de rendez-vous (échéance, disponibilités, etc)</label>
+                <div class="col-md-7"><div class="form-control">{{ interventionDemande.rdvInformations }}</div></div>
+                <div class="col-md-4"><div class="help-block"></div></div>
+            </div>
+
+            <div class="boutons">
+                <input type="submit" class="btn btn-success submit">
+            </div>
+            
+        </form>
+
+    </div>
+{% endblock %}

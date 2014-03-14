@@ -1,3 +1,65 @@
+div#tableau-de-bord {}
+
+    div#tableau-de-bord div.panel { background-color:#f8f8f8;border-color:#e3e3e3;border-radius:0px;border-width:1px;margin:20px 0px 20px 0px; }
+        div#tableau-de-bord div.panel h2 { color:#6F3596;font-size:14px;font-weight:bold;margin:0px;padding:20px 20px 20px 20px;text-transform:uppercase; }
+    
+    /* <-- Chapo */
+    div#tableau-de-bord div.chapo { background-color:#f8f8f8;background-image:url(/bundles/hopitalnumeriqueintervention/img/chapo.png);background-position:19px 7px;background-repeat:no-repeat;margin:0px 0px 20px 0px;padding:14px 18px 4px 18px; }
+        div#tableau-de-bord div.chapo h1 { color:#6F3596;font-size:14px;font-weight:bold;margin:0px;padding:0px 0px 10px 40px;text-transform:uppercase; }
+        div#tableau-de-bord div.chapo div.description { font-size:11px; }
+            div#tableau-de-bord div.chapo div.description p { margin:8px 0px;padding:0px; }
+    /* --> */
+    /* <-- Onglets */
+    div#tableau-de-bord ul.nav-tabs {}
+        div#tableau-de-bord ul.nav-tabs li {}
+            div#tableau-de-bord ul.nav-tabs li a { background-color:#f6f6f6;border-color:#e3e3e3;color:#6F3596;font-size:13px;font-weight:bold; }
+        div#tableau-de-bord ul.nav-tabs li.active {}
+            div#tableau-de-bord ul.nav-tabs li.active a { background-color:#6F3596;color:#fff; }
+    div#tableau-de-bord div.tab-content { background-color:#f6f6f6;border-color:#e3e3e3;border-style:solid;border-width:0px 1px 1px 1px; }
+        div#tableau-de-bord div.tab-pane {}
+        div#tableau-de-bord div.active {}
+    /* --> */
+    /* <-- Grid */
+    div#tableau-de-bord div.grid-search { background-color:#6F3596;padding:0px; }
+        div#tableau-de-bord div.grid-search div.panel { background-color:transparent;border-width:0px;margin:0px; }
+            div#tableau-de-bord div.grid-search div.panel div.panel-heading { border-width:0px;padding:4px 10px; }
+                div#tableau-de-bord div.grid-search div.panel div.panel-heading h4 { color:#fff;font-size:15px;margin:0px;padding:4px 0px; }
+                div#tableau-de-bord div.grid-search div.panel div.panel-heading div.options { color:#fff;position:absolute;right:16px;top:6px; }
+                    div#tableau-de-bord div.grid-search div.panel div.panel-heading div.options a { color:#fff; }
+            div#tableau-de-bord div.grid-search div.panel div.panel-body {}
+                div#tableau-de-bord div.grid-search div.panel div.panel-body label { color:#fff; }
+                div#tableau-de-bord div.grid-search div.panel div.panel-body div.panel-footer { background-color:transparent;border-width:0px; }
+    div#tableau-de-bord div.grid { font-size:11px;padding:0px; }
+        div#tableau-de-bord div.grid table {}
+            div#tableau-de-bord div.grid table tr.grid-row-titles { color:#6F3596;text-transform:uppercase; }
+                div#tableau-de-bord div.grid table tr.grid-row-titles a { color:#6F3596; }
+            div#tableau-de-bord div.grid table th, div#tableau-de-bord div.grid table td { background-color:transparent;border-width:0px;padding:4px; }
+            div#tableau-de-bord div.grid table td.grid-column-actions {}
+                div#tableau-de-bord div.grid table td.grid-column-actions ul.grid-row-actions { list-style-type:none;margin:0px;padding:0px; }
+                    div#tableau-de-bord div.grid table td.grid-column-actions ul.grid-row-actions li { display:inline; }
+        div#tableau-de-bord div.grid ul.pagination { margin-left:10px; }
+            div#tableau-de-bord div.grid ul.pagination li.active a { background-color:#6F3596; }
+    /* --> */
+    /* <-- Formulaire */
+    div#tableau-de-bord div.panel_form { padding:20px 0px 20px 0px; }
+        div#tableau-de-bord div.panel_form div.boutons { padding:0px 20px;text-align:right; }
+    /* --> */
+    /* <-- Formulaire en lecture seule */
+    div#tableau-de-bord div.panel_form_visu { font-size:13px;padding:0px 0px 20px 6px; }
+        div#tableau-de-bord div.panel_form_visu div.row { margin:10px 0px; }
+            div#tableau-de-bord div.panel_form_visu div.row div.col-md-4 { font-weight:bold; }
+            div#tableau-de-bord div.panel_form_visu div.row div.col-md-8 {}
+    /* --> */
+    /* <-- Boutons */
+    div#tableau-de-bord div.panel_boutons { background-color:transparent;border-width:0px;box-shadow:0px 0px 0px #fff;text-align:center; }
+        div#tableau-de-bord div.panel_boutons button { background-position:center center;color:#fff;font-size:12px;font-weight:bold;margin:0px 4px;padding:8px 0px;text-shadow:0px 0px 0px #fff;text-transform:uppercase;width:160px; }
+          div#tableau-de-bord div.panel_boutons button.btn-acceptation { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-acceptation-fond.png); }
+          div#tableau-de-bord div.panel_boutons button.btn-refus { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-refus-fond.png); }
+          div#tableau-de-bord div.panel_boutons button.btn-attente { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-attente-fond.png); }
+        div#tableau-de-bord div.panel_boutons div.modal {}
+            div#tableau-de-bord div.panel_boutons div.modal button.btn-default { color:#000; }
+    /* --> */
+
 #tableau-de-bord h3{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; background: #f6f6f6}
 #tableau-de-bord .menu-tdb{ margin:0 auto; list-style: none; padding:0; background: #f8f8f8; width: 100%; float: left}
 #tableau-de-bord .menu-tdb li a{display: block; padding: 20px 10px 20px 10px; margin: 0; font-size: 14px; color: #5d5e5e; background: url('../img/menu-tdb-sep.jpg') no-repeat top; border-left:5px solid #f8f8f8;}

@@ -1,0 +1,261 @@
+{% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-intervention-demande-voir.css" %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-intervention-demande-voir.js"
+        'bundles/nodevotools/Nodevo/js/Web.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/Formulaire.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/FormulaireEvenement.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID = {{ interventionDemande.id }};
+    </script>
+{% endblock %}
+
+{% block pageTitre %}Détail de la demande{% endblock %}
+
+{% block chapoDescription %}
+    <p>Tu vois, là-bas, les champs de blé ? Je ne mange pas de pain. Le blé pour moi est inutile. Les champs de blé ne me rappellent rien. Et ça, c'est triste ! Mais tu as des cheveux couleur d'or. Alors ce sera merveilleux quand tu m'auras apprivoisé ! Le blé, qui est doré, me fera souvenir de toi. Et j'aimerai le bruit du vent dans le blé...</p>
+{% endblock %}
+
+{% block contenu %}
+
+        <div class="panel panel_form_visu">
+
+            <h2>Détail de la demande</h2>
+        
+            <div class="row">
+                <div class="col-md-4">Référent</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.referent.appellation }}
+                    <br>{{ interventionDemande.referent.etablissementRattachementSante.nom }}, {{ interventionDemande.referent.region.libelle }}
+                </div>
+            </div>
+            {% if app.user.hasRoleCmsi or (app.user.hasRoleAmbassadeur and interventionDemande.interventionEtatEstAcceptationCmsi) %}
+                <div class="row">
+                    <div class="col-md-4">Ambassadeur</div>
+                    <div class="col-md-8">
+                        {% if app.user.hasRoleCmsi %}
+                            {{ interventionDemande.ambassadeur.appellation }}
+                            <br>{{ interventionDemande.ambassadeur.region.libelle }}
+                        {% elseif app.user.hasRoleAmbassadeur %}
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <select class="form-control" id="intervention_demande_ambassadeur_change">
+                                        {% for ambassadeur in ambassadeurs %}
+                                            <option {% if interventionDemande.ambassadeur.id == ambassadeur.id %}value="0" selected="selected"{% else %}value="{{ ambassadeur.id }}"{% endif %}>{{ ambassadeur.appellation }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-primary" onclick="HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.changeAmbassadeur();">Transférer</button>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-4">CMSI</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.cmsi.appellation }}
+                    <br>{{ interventionDemande.cmsi.region.libelle }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Directeur</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.directeur.appellation }}
+                    <br>{{ interventionDemande.directeur.region.libelle }}
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="row">
+                <div class="col-md-4">Type d'intervention</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.interventionType.libelle }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">État de l'intervention</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.interventionEtat.libelle }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">État de l'évaluation</div>
+                <div class="col-md-8">
+                    {% if interventionDemande.evaluationEtat != null %}{{ interventionDemande.evaluationEtat.libelle }}{% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">État du remboursement</div>
+                <div class="col-md-8">
+                    {% if interventionDemande.remboursementEtat != null %}{{ interventionDemande.remboursementEtat.libelle }}{% endif %}
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="row">
+                <div class="col-md-4">Initiateur</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.interventionInitiateur.type }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Date de création</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.dateCreation|date('m/d/Y') }}
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">Objets</div>
+                <div class="col-md-8">
+                    {% for objet in interventionDemande.objets %}
+                        <div>{{ objet.titre }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">Date de choix du CMSI</div>
+                <div class="col-md-8">
+                    {% if interventionDemande.cmsiDateChoix != null %}{{ interventionDemande.cmsiDateChoix|date('m/d/Y') }}{% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Date de choix de l'ambassadeur</div>
+                <div class="col-md-8">
+                    {% if interventionDemande.ambassadeurDateChoix != null %}{{ interventionDemande.ambassadeurDateChoix|date('m/d/Y') }}{% endif %}
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="row">
+                <div class="col-md-4">Établissements rattachés</div>
+                <div class="col-md-8">
+                    {% for etablissement in interventionDemande.etablissements %}
+                        <div>{{ etablissement.nom }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">Autres établissements</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.autresEtablissements }}
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="row">
+                <div class="col-md-4">Description</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.description }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Description de la difficulté</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.difficulteDescription }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Champ libre</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.champLibre }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Informations de rendez-vous</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.rdvInformations }}
+                </div>
+            </div>
+            
+            {% if interventionDemande.refusMessage != null %}
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">Motif du refus</div>
+                    <div class="col-md-8">
+                        {{ interventionDemande.refusMessage }}
+                    </div>
+                </div>
+            {% endif %}
+        
+        </div>
+        
+        <div class="panel panel_boutons">
+            {% if app.user.hasRoleCmsi and (interventionDemande.interventionEtatEstDemandeInitiale or interventionDemande.interventionEtatEstAttenteCmsi) %}
+            
+                <button type="button" data-intervention-etat="{{ InterventionEtat.InterventionEtatAcceptationCmsiId }}" class="btn btn-default btn-acceptation">Accepter</button>
+                <button type="button" class="btn btn-default btn-refus" data-toggle="modal" data-target="#modal_etat_intervention_refus_cmsi">Refuser</button>
+                {% if false == interventionDemande.interventionEtatEstAttenteCmsi %}
+                    <button type="button" data-intervention-etat="{{ InterventionEtat.InterventionEtatAttenteCmsiId }}" class="btn btn-default btn-attente">Mettre en attente</button>
+                {% endif %}
+                
+                <div class="modal fade" id="modal_etat_intervention_refus_cmsi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Refuser la demande</h4>
+                      </div>
+                      <div class="modal-body">
+                        <p>Si vous le souhaitez, vous pouvez justifier votre refus avant de le valider :</p>
+                        <textarea class="form-control" id="etat_intervention_refus_justification"></textarea>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-danger" data-intervention-etat-refus="{{ InterventionEtat.InterventionEtatRefusCmsiId }}">Valider le refus</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+            {% elseif app.user.hasRoleAmbassadeur and interventionDemande.interventionEtatEstAcceptationCmsi %}
+            
+                <button type="button" data-intervention-etat="{{ InterventionEtat.InterventionEtatAcceptationAmbassadeurId }}" class="btn btn-default btn-acceptation">Accepter</button>
+                <button type="button" class="btn btn-default btn-refus" data-toggle="modal" data-target="#modal_etat_intervention_refus_ambassadeur">Refuser</button>
+                
+                
+                <div class="modal fade" id="modal_etat_intervention_refus_ambassadeur" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Refuser la demande</h4>
+                      </div>
+                      <div class="modal-body">
+                        <p>Si vous le souhaitez, vous pouvez justifier votre refus avant de le valider :</p>
+                        <textarea class="form-control" id="etat_intervention_refus_justification"></textarea>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-danger" data-intervention-etat-refus="{{ InterventionEtat.InterventionEtatRefusAmbassadeurId }}">Valider le refus</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+            {% endif %}
+        </div>
+        
+        
+
+{% endblock %}
