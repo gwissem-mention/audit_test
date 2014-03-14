@@ -330,8 +330,10 @@ class AmbassadeurController extends Controller
         //bind ambassadeur
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $idUser) );
 
+        $domaines = count($user->getDomaines()) >= 1 ? $user->getDomaines() : false;
+
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:liste-domaines.html.twig', array(
-            'domaines' => $user->getDomaines()
+            'domaines' => $domaines
         ));
     }
 }
