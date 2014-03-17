@@ -1,0 +1,36 @@
+<div class="panel panel-midnightblue" style="margin:0;" >
+    <div style="height:525px;overflow:auto;">
+        <div class="panel-body" id="panel-references" >
+            {% for ref in references %}
+            <div class="panel panel-midnightblue">
+                <div class="panel-heading">{{ref.nom}}</div>
+                <div class="panel-body">
+                    {{ _self.buildTree(ref.childs) }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="panel-footer" >
+        <div class="row">
+            <div class="btn-toolbar pull-right">
+                <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% macro buildTree(reference) %}
+    {% for ref in reference  %}
+    <li>
+        
+        {{ref.nom}}
+        {% if ref.childs is defined %}
+            <ul>
+                {{ _self.buildTree(ref.childs) }}
+            </ul>
+        {% endif %}
+    </li>
+    {% endfor %}
+{% endmacro %}

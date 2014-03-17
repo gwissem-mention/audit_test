@@ -78,6 +78,12 @@ hopitalnumerique_objet_reference_objet:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:objet", id:1 }
     requirements:
         id: \d+
+        
+hopitalnumerique_objet_reference_objet_own:
+    pattern:  /objet/reference/objet-own/{id}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:objetOwn", id:1 }
+    requirements:
+        id: \d+
 
 hopitalnumerique_objet_reference_objet_save:
     pattern:  /objet/reference/save/objet/{id}

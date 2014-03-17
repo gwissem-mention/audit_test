@@ -26,6 +26,21 @@ class ReferenceController extends Controller
             'contenu'    => 'null'
         ));
     }
+    
+    public function objetOwnAction( $id )
+    {
+        //Récupération de l'objet passée en paramètre
+        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
+
+        //get references and selected references as One Array
+//        $results    = $this->get('hopitalnumerique_reference.manager.reference')->getRefsForGestionObjets();
+        $references = $this->get('hopitalnumerique_objet.manager.objet')->getReferencesOwn($objet);
+        return $this->render('HopitalNumeriqueObjetBundle:Reference:manage-own.html.twig', array(
+            'references' => $references,
+            'objet'      => true,
+            'contenu'    => 'null'
+        ));
+    }
 
     public function contenuAction( $id )
     {

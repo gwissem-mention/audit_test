@@ -20,11 +20,7 @@
                                 <input type="checkbox" class="checkbox" id="checkbox-{{ref.id}}"{% if ref.selected %} checked="checked"{% endif %} />
                             </td>
                             <td align="center">
-                                {% if ref.primary %}
-                                    <div class="toggle toggle-success on"></div>
-                                {% else %}
-                                    <div class="toggle toggle-success off"></div>
-                                {% endif %}
+                                <div class="toggle toggle-success {% if ref.primary %}on{% else %}off{% endif %}"></div>
                             </td>
                             <td>
                                 <label for="checkbox-{{ref.id}}" style="width:100%;">{{ref.nom}}</label>

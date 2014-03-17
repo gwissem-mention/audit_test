@@ -131,7 +131,7 @@ class ReferenceManager extends BaseManager
     public function getRefsForGestionObjets()
     {
         $this->_convertAsFlatArray( $this->getArbo(false, true), 1, array() );
-
+        
         return $this->_tabReferences;
     }
 
