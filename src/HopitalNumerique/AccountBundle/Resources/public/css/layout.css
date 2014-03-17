@@ -47,7 +47,12 @@ div#tableau-de-bord {}
         div#tableau-de-bord div.grid table {}
             div#tableau-de-bord div.grid table tr.grid-row-titles { color:#6F3596;text-transform:uppercase; }
                 div#tableau-de-bord div.grid table tr.grid-row-titles a { color:#6F3596; }
-            div#tableau-de-bord div.grid table th, div#tableau-de-bord div.grid table td { background-color:transparent;border-width:0px;padding:4px; }
+            div#tableau-de-bord div.grid table th, div#tableau-de-bord div.grid table td { background-color:transparent;border-width:1px;padding:4px; }
+            div#tableau-de-bord div.grid table tr th { background-color:#6F3596; }
+            div#tableau-de-bord div.grid table tr:nth-child(2n+1) td { background-color:#eee; }
+            div#tableau-de-bord div.grid table tr td .btn { padding:#eee;padding:3px 12px; }
+            div#tableau-de-bord div.grid table tr td.grid-column-actions .btn { padding:6px 12px; }
+                div#tableau-de-bord div.grid table th span { color:#fff; }
             div#tableau-de-bord div.grid table td.grid-column-actions {}
                 div#tableau-de-bord div.grid table td.grid-column-actions ul.grid-row-actions { list-style-type:none;margin:0px;padding:0px; }
                     div#tableau-de-bord div.grid table td.grid-column-actions ul.grid-row-actions li { display:inline; }
@@ -56,7 +61,7 @@ div#tableau-de-bord {}
     /* --> */
     /* <-- Formulaire */
     div#tableau-de-bord div.panel_form { padding:20px 35px 20px 35px;position:relative; }
-        div#tableau-de-bord div.panel_form div.boutons { padding:0px 20px;text-align:right; }
+        div#tableau-de-bord div.panel_form div.boutons { padding:0px;text-align:right; }
     /* --> */
     /* <-- Formulaire en lecture seule */
     div#tableau-de-bord div.panel_form_visu { font-size:13px;padding:0px 0px 20px 6px; }

@@ -1,0 +1,19 @@
+<div class="panel" style="margin:0" >
+    <div class="panel-heading">
+        <h4 class="violet" style="margin-bottom:0" >Domaines fonctionneles</h4>
+    </div>
+
+    <div class="panel-body" style="padding-top:0" >
+        <div class="col-md-12 fancybox-popin">            
+            {% if domaines is not null and domaines is not empty %}
+                <ul style="padding-left:10px">
+	                {% for domaine in domaines %}
+                        <li>{{domaine.libelle}}</li>
+	                {% endfor %}
+                </ul>
+            {% else %}
+	            - Aucun domaine fonctionnel -
+            {% endif %}   
+        </div>
+    </div>
+</div>

@@ -4,14 +4,16 @@
     </div>
 
     <div class="panel-body" style="padding-top:0" >
-        <div class="col-md-12">
-            <ul style="padding-left:10px">
-                {% for objet in objets %}
-                    <li><a href="{{path('hopital_numerique_recherche_publication_objet',{'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a></li>
-                {% else %}
-                    <li> - Aucun outil maitrisé - </li>
-                {% endfor %}
-            </ul>
+        <div class="col-md-12 fancybox-popin">
+            {% if objets %} 
+                <ul style="padding-left:10px">
+	                {% for objet in objets %}
+	                    <li><a href="{{path('hopital_numerique_recherche_publication_objet',{'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a></li>
+	                {% endfor %}
+                </ul>
+            {% else %}
+	            - Aucun outil maitrisé -
+            {% endif %}           
         </div>
     </div>
 </div>

@@ -267,7 +267,7 @@ class Grid
                 $this->_colonnesVisibles[] = 'actions';
 
                 //Ajout des actions au grid
-                $actionsColumn = new Column\ActionsColumn('actions', 'Actions', $this->_buttons);
+                $actionsColumn = new Column\ActionsColumn('actions', '', $this->_buttons);
                 $actionsColumn->setSize( (count($this->_buttons) * $this->_buttonSize) );
                 $this->_colonnes[] = $actionsColumn;
 

@@ -301,3 +301,26 @@ VALUES (
 
 UPDATE `core_ressource` SET `res_nom` = 'FrontOffice - Accès à la sollicitation des ambassadeurs',
 `res_pattern` = '/^\\/(registre-ambassadeurs|intervention)/' WHERE `core_ressource`.`res_id` =15;*/
+`res_pattern` = '/^\\/(registre-ambassadeurs|intervention)/' WHERE `core_ressource`.`res_id` =15;
+
+
+
+
+
+
+/* RLE - 17/03/2014
+   DEV -> PROD
+   Interventions*/
+
+UPDATE `core_ressource` SET `res_pattern` = '/^\\/(registre-ambassadeurs|compte-hn\\/intervention)/' WHERE `core_ressource`.`res_id` =15;
+
+INSERT INTO `core_ressource` (
+`res_id` ,
+`res_nom` ,
+`res_pattern` ,
+`res_order` ,
+`res_type`
+)
+VALUES (
+'20', 'FrontOffice - Gestion des intervention', '/^\\/compte-hn\\/intervention/demandes/liste', '20', '2'
+);
