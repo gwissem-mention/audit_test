@@ -274,11 +274,13 @@ class InterventionDemandeRepository extends EntityRepository
             'remboursementEtat.libelle AS remboursementEtatLibelle'
         )
         ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+            ->where('interventionDemande.directeur = :directeur')
+                ->setParameter('directeur', $directeur)
         // Référent
         ->innerJoin('interventionDemande.referent', 'referent')
         ->innerJoin('referent.etablissementRattachementSante', 'referentEtablissement')
-            ->andWhere('referentEtablissement = :directeurEtablissement')
-                ->setParameter('directeurEtablissement', $directeur->getEtablissementRattachementSante())
+            //->andWhere('referentEtablissement = :directeurEtablissement')
+                //->setParameter('directeurEtablissement', $directeur->getEtablissementRattachementSante())
         ->innerJoin('referent.region', 'referentRegion')
         // Ambassadeur
         ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
