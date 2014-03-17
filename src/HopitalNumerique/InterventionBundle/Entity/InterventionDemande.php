@@ -946,4 +946,13 @@ class InterventionDemande
     {
         return ($this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId());
     }
+    /**
+     * Retourne si l'état de l'évaluation est Évalué.
+     *
+     * @return boolean VRAI ssi l'état de l'évaluation est Évalué
+     */
+    public function evaluationEtatEstEvalue()
+    {
+        return ($this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId());
+    }
 }

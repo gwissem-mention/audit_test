@@ -253,4 +253,59 @@ INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `qu
 
 
 
+/* RLE - 17/03/2014
+   DEV -> PROD
+   Interventions*/
+ 
+INSERT INTO `hn_questionnaire_type_question` (
+`typ_id` ,
+`libelle` ,
+`nom`
+)
+VALUES (
+'6', 'date', 'Date'
+);
+
+ALTER TABLE `hn_questionnaire_reponse` ADD `param_id` INT UNSIGNED NULL COMMENT 'Éventuelle clef étrangère.',
+ADD INDEX ( `param_id` ) ;
+
+
+INSERT INTO `hn_reference` (
+`ref_id` ,
+`parent_id` ,
+`ref_libelle` ,
+`ref_code` ,
+`ref_etat` ,
+`ref_dictionnaire` ,
+`ref_recherche` ,
+`ref_lock` ,
+`ref_order`
+)
+VALUES (
+NULL , NULL , 'Bien', 'NOTE_EVALUATION', '3', '0', '0', '1', '1'
+), (
+NULL , NULL , 'Mal', 'NOTE_EVALUATION', '3', '0', '0', '1', '1'
+);
+
+
+INSERT INTO `core_mail` (
+`mail_id` ,
+`mail_objet` ,
+`mail_description` ,
+`mail_expediteur_mail` ,
+`mail_expediteur_name` ,
+`mail_body`
+)
+VALUES (
+'22', '[HOPITALNUMERIQUE] - Demande d''intervention // Évaluation', 'Demande d''intervention // Évaluation', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une évaluation a été créée : %l Cordialement,'
+);
+
+INSERT INTO `hn_questionnaire_type_question` (
+`typ_id` ,
+`libelle` ,
+`nom`
+)
+VALUES (
+'7', 'interventionobjets', 'Objets de l''intervention'
+);
 

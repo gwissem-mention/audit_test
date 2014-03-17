@@ -97,6 +97,40 @@ class InterventionDemandeManager extends BaseManager
         
         return $etablissements;
     }
+    /**
+     * Retourne les établissements rattachés et regroupés.
+     *
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionDemande $interventionDemande La demande d'intervention des établissements
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionRegroupement[] $interventionRegroupements Les regroupements d'intervention
+     * @return \HopitalNumerique\EtablissementBundle\Entity\Etablissement[] Les établissements rattachés et non regroupés
+     */
+    public function findEtablissementsRattachesEtRegroupes(InterventionDemande $interventionDemande)
+    {
+        $etablissements = array();
+        $interventionRegroupements = $this->interventionRegroupementManager->findBy(array('interventionDemandePrincipale' => $interventionDemande));
+
+        foreach ($interventionRegroupements as $interventionRegroupement)
+        {
+            $etablissements[] = $interventionRegroupement->getInterventionDemandeRegroupee()->getReferent()->getEtablissementRattachementSante();
+        }
+
+        foreach ($interventionDemande->getEtablissements() as $etablissement)
+        {
+            $etablissementEstPresent = false;
+            foreach ($etablissements as $etablissementPresent)
+            {
+                if ($etablissement->getId() == $etablissementPresent->getId())
+                {
+                    $etablissementEstPresent = true;
+                    break;
+                }
+            }
+            if (!$etablissementEstPresent)
+                $etablissements[] = $etablissement;
+        }
+    
+        return $etablissements;
+    }
     
     /**
      * Met à jour automatiquement les états des demandes d'intervention et envoie éventuellement les courriels adéquats.

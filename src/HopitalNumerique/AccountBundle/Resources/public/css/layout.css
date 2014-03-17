@@ -1,3 +1,17 @@
+.champ-obligatoire {
+    color: #5D5D5D;
+    font-size: 12px;
+    font-style: italic;
+    height: 4px;
+    position: absolute;
+    right: 0;
+    top: -20px;
+    width: 139px;
+}
+    .champ-obligatoire .etoile {
+        color: #E01958;
+    }
+
 div#tableau-de-bord {}
 
     div#tableau-de-bord div.panel { background-color:#f8f8f8;border-color:#e3e3e3;border-radius:0px;border-width:1px;margin:20px 0px 20px 0px; }
@@ -41,7 +55,7 @@ div#tableau-de-bord {}
             div#tableau-de-bord div.grid ul.pagination li.active a { background-color:#6F3596; }
     /* --> */
     /* <-- Formulaire */
-    div#tableau-de-bord div.panel_form { padding:20px 0px 20px 0px; }
+    div#tableau-de-bord div.panel_form { padding:20px 0px 20px 0px;position:relative; }
         div#tableau-de-bord div.panel_form div.boutons { padding:0px 20px;text-align:right; }
     /* --> */
     /* <-- Formulaire en lecture seule */

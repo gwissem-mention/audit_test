@@ -36,9 +36,10 @@ class EvaluationController extends Controller
             //$questionnaireReponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($questionnaire->getId(), $utilisateurConnecte->getId(), true);
             //$themeQuestionnaire = empty($questionnaireReponses) ? 'horizontal' : 'horizontal_readonly';
             //$readOnly = (in_array('ROLE_AMBASSADEUR_7', $utilisateurConnecte->getRoles()) || !empty($questionnaireReponses));
-            
+
             return $this->render('HopitalNumeriqueInterventionBundle:Evaluation:nouveau.html.twig', array(
                 'interventionDemande'=> $interventionDemande,
+                'etablissements' => $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesEtRegroupes($interventionDemande),
                 'questionnaire'=> $questionnaire,
                 'user' => $utilisateurConnecte,
                 'optionRenderForm'=> array(
@@ -62,16 +63,20 @@ class EvaluationController extends Controller
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
         if (
-            $utilisateurConnecte->getId() == $interventionDemande->getAmbassadeur()->getId()
-            || $utilisateurConnecte->getId() == $interventionDemande->getReferent()->getId()
-            || $utilisateurConnecte->getId() == $interventionDemande->getCmsi()->getId()
-            || ($utilisateurConnecte->getRegion() != null && $interventionDemande->getCmsi()->getRegion() != null && $utilisateurConnecte->getRegion()->getId() == $interventionDemande->getCmsi()->getRegion()->getId())
+            $interventionDemande->evaluationEtatEstEvalue()
+            && (
+                $utilisateurConnecte->getId() == $interventionDemande->getAmbassadeur()->getId()
+                || $utilisateurConnecte->getId() == $interventionDemande->getReferent()->getId()
+                || $utilisateurConnecte->getId() == $interventionDemande->getCmsi()->getId()
+                || ($utilisateurConnecte->getRegion() != null && $interventionDemande->getCmsi()->getRegion() != null && $utilisateurConnecte->getRegion()->getId() == $interventionDemande->getCmsi()->getRegion()->getId())
+            )
         )
         {
             $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
 
             return $this->render('HopitalNumeriqueInterventionBundle:Evaluation:nouveau.html.twig', array(
                 'interventionDemande'=> $interventionDemande,
+                'etablissements' => $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesEtRegroupes($interventionDemande),
                 'questionnaire'=> $questionnaire,
                 'optionRenderForm'=> array(
                     'themeQuestionnaire' => 'horizontal_readonly'

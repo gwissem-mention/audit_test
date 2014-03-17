@@ -40,8 +40,7 @@ class EvaluationController extends Controller
             'HopitalNumeriqueInterventionBundle:Evaluation/Form:edit.html.twig'
         );
     }
-   
-    
+
     /**
      * Effectue le render des formulaires de Questionnaire
      *
@@ -63,11 +62,12 @@ class EvaluationController extends Controller
             'label_attr' => array(
                 'idUser'           => $user->getId(),
                 'idQuestionnaire'  => $questionnaire->getId(),
-                'readOnly'         => $readOnly
+                'readOnly'         => $readOnly,
+                'interventionDemande' => $interventionDemande
             )
         ));
-    
         $request = $this->get('request');
+
         if (!$readOnly && $request->isMethod('POST'))
         {
             $form->handleRequest($request);
@@ -85,11 +85,23 @@ class EvaluationController extends Controller
                 {
                     //Récupération de l'id de la question, la clé est sous la forme : "type_id_alias"
                     $arrayParamKey = explode('_', $key);
-    
+                    
                     //Le tableau de arrayParamKey : 0 => type du champ - 1 => Id de la question - 2+=> alias du champ
                     $typeParam  = isset($arrayParamKey) && key_exists(0, $arrayParamKey)  ? $arrayParamKey[0] : '';
                     $idQuestion = isset($arrayParamKey) && key_exists(1, $arrayParamKey)  ? $arrayParamKey[1] : 0;
-    
+                    
+                    // Ids des objets choisis
+                    if ($key == 'interventionobjets_26_evaluation_productions')
+                    {
+                        $idQuestion = 26;
+                        $param = implode(',', $param);
+                    }
+                    /*elseif ($key == 'intervention_objets_26_evaluation_productions')
+                    {
+                        $idQuestion = 26;
+                        $param = implode(',', $param);
+                    }*/
+
                     //Si l'id de la question n'a pas été récupéré alors on ne sauvegarde pas la question (exemple avec le cas particulier du token du formulaire)
                     if (0 === $idQuestion || '' === $idQuestion || '_token' === $key)
                         continue;
