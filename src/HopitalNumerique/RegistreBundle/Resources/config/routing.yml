@@ -7,3 +7,9 @@ hopital_numerique_registre_ambassadeur_objets:
     defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:objets }
     requirements:
         id: \d+
+        
+hopital_numerique_registre_ambassadeur_domaines:
+    pattern:  /registre-ambassadeurs/show/domaines/{id}
+    defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:domaines }
+    requirements:
+        id: \d+

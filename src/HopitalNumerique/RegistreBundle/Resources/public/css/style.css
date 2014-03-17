@@ -18,9 +18,12 @@
     background: -ms-linear-gradient(top,  #ebeaea 0%,#ffffff 100%); /* IE10+ */
     background: linear-gradient(to bottom,  #ebeaea 0%,#ffffff 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebeaea', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */}
-#registre-ambassadeur .fiche .content h5{font-size: 16px; font-weight: bold; color: #020202}
+#registre-ambassadeur .fiche .content h5{font-size: 16px; font-weight: bold; color: #020202; margin: 0;}
 #registre-ambassadeur .fiche .content .etab{font-size: 14px; color: #4c4c4c;margin-bottom: 15px }
 #registre-ambassadeur .fiche .content p.titre{font-size: 16px; margin:0;}
 #registre-ambassadeur .fiche .content ul{margin:0 0 15px;}
-#registre-ambassadeur .fiche .content a.link{font-size: 16px;margin-bottom: 15px; }
+#registre-ambassadeur .fiche .content a.link{font-size: 12px;margin-bottom: 15px; }
 #registre-ambassadeur .fiche .content a.btn{color:#ffffff;font-size: 14px; font-weight: bold; width: 205px; display: block; margin:15px auto 0;}
+#registre-ambassadeur .fiche .content .col-md-12{margin:0 0 0 -14px;}
+
+.fancybox-popin {width:250px; height:70px;}

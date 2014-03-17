@@ -56,4 +56,18 @@ class AmbassadeurController extends Controller
             'objets' => $objets
         ));
     }
+    
+    /**
+     * Affiche la liste des domaines maitrisés par l'ambasssadeur dans une popin
+     *
+     * @param integer $id ID de l'user
+     */
+    public function domainesAction( $id )
+    {        
+        $ambassadeur = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => $id));
+        
+        return $this->render('HopitalNumeriqueRegistreBundle:Ambassadeur:domaines.html.twig', array(
+                'domaines' => $ambassadeur->getDomaines()
+        ));
+    }
 }
