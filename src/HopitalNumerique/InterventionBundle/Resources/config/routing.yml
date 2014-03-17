@@ -2,6 +2,10 @@ hopital_numerique_intervention_demande_liste:
     pattern:  /demandes/liste
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:liste" }
 
+hopital_numerique_intervention_demande_suivi_demandes:
+    pattern:  /demandes/suivi-demandes
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:suiviDemandes" }
+
 hopital_numerique_intervention_demande_voir:
     pattern:  /demande/voir/{id}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:voir" }
@@ -31,7 +35,13 @@ hopital_numerique_intervention_grid_cmsi_demandes_nouvelles:
 hopital_numerique_intervention_grid_cmsi_demandes_traitees:
     pattern: /demandes/grid/cmsi/traitees
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:gridCmsiDemandesTraitees" }
+hopital_numerique_intervention_grid_directeur_suivi_demandes:
+    pattern: /demandes/grid/directeur
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:gridDirecteurSuiviDemandes" }
 hopital_numerique_intervention_grid_ambassadeur_demandes:
     pattern: /demandes/grid/ambassadeur
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:gridAmbassadeurDemandes" }
+hopital_numerique_intervention_grid_etablissement_demandes:
+    pattern: /demandes/grid/etablissement
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:gridEtablissementDemandes" }
 #-->

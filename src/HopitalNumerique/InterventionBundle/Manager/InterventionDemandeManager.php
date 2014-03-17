@@ -11,6 +11,7 @@ use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager;
+use HopitalNumerique\UserBundle\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use HopitalNumerique\UserBundle\Entity\User;
 
@@ -30,9 +31,17 @@ class InterventionDemandeManager extends BaseManager
      */
     private $router;
     /**
+     * @var \HopitalNumerique\UserBundle\Manager\UserManager Le manager de l'entité User
+     */
+    private $userManager;
+    /**
      * @var \HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager Le manager de l'entité InterventionEtat
      */
     private $interventionEtatManager;
+    /**
+     * @var \HopitalNumerique\InterventionBundle\Manager\InterventionRegroupementManager Le manager de l'entité InterventionRegroupement
+     */
+    private $interventionRegroupementManager;
     /**
      * @var \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager Le manager de l'entité InterventionCourriel
      */
@@ -45,18 +54,84 @@ class InterventionDemandeManager extends BaseManager
      * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
      * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router Router de l'application
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager $interventionEtatManager Le manager de l'entité InterventionEtat
+     * @param \HopitalNumerique\InterventionBundle\Manager\InterventionRegroupementManager $interventionRegroupementManager Le manager de l'entité InterventionRegroupement
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager $interventionCourrielManager Le manager de l'entité InterventionCourriel
      * @return void
      */
-    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, InterventionEtatManager $interventionEtatManager, InterventionCourrielManager $interventionCourrielManager)
+    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, UserManager $userManager, InterventionEtatManager $interventionEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager)
     {
         parent::__construct($entityManager);
         $this->securityContext = $securityContext;
         $this->router = $router;
+        $this->userManager = $userManager;
         $this->interventionEtatManager = $interventionEtatManager;
+        $this->interventionRegroupementManager = $interventionRegroupementManager;
         $this->interventionCourrielManager = $interventionCourrielManager;
     }
 
+    /**
+     * Retourne les établissements rattachés et qui n'ont pas été regroupés (pour éviter les doublons lors de l'affichage).
+     *
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionDemande $interventionDemande La demande d'intervention des établissements
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionRegroupement[] $interventionRegroupements Les regroupements d'intervention
+     * @return \HopitalNumerique\EtablissementBundle\Entity\Etablissement[] Les établissements rattachés et non regroupés
+     */
+    public function findEtablissementsRattachesNonRegroupes(InterventionDemande $interventionDemande, array $interventionRegroupements)
+    {
+        $etablissements = array();
+        
+        foreach ($interventionDemande->getEtablissements() as $etablissement)
+        {
+            $etablissementEstPresent = false;
+            foreach ($interventionRegroupements as $interventionRegroupement)
+            {
+                if ($etablissement->getId() == $interventionRegroupement->getInterventionDemandeRegroupee()->getReferent()->getEtablissementRattachementSante()->getId())
+                {
+                    $etablissementEstPresent = true;
+                    break;
+                }
+            }
+            if (!$etablissementEstPresent)
+                $etablissements[] = $etablissement;
+        }
+        
+        return $etablissements;
+    }
+    /**
+     * Retourne les établissements rattachés et regroupés.
+     *
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionDemande $interventionDemande La demande d'intervention des établissements
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionRegroupement[] $interventionRegroupements Les regroupements d'intervention
+     * @return \HopitalNumerique\EtablissementBundle\Entity\Etablissement[] Les établissements rattachés et non regroupés
+     */
+    public function findEtablissementsRattachesEtRegroupes(InterventionDemande $interventionDemande)
+    {
+        $etablissements = array();
+        $interventionRegroupements = $this->interventionRegroupementManager->findBy(array('interventionDemandePrincipale' => $interventionDemande));
+
+        foreach ($interventionRegroupements as $interventionRegroupement)
+        {
+            $etablissements[] = $interventionRegroupement->getInterventionDemandeRegroupee()->getReferent()->getEtablissementRattachementSante();
+        }
+
+        foreach ($interventionDemande->getEtablissements() as $etablissement)
+        {
+            $etablissementEstPresent = false;
+            foreach ($etablissements as $etablissementPresent)
+            {
+                if ($etablissement->getId() == $etablissementPresent->getId())
+                {
+                    $etablissementEstPresent = true;
+                    break;
+                }
+            }
+            if (!$etablissementEstPresent)
+                $etablissements[] = $etablissement;
+        }
+    
+        return $etablissements;
+    }
+    
     /**
      * Met à jour automatiquement les états des demandes d'intervention et envoie éventuellement les courriels adéquats.
      *
@@ -92,6 +167,7 @@ class InterventionDemandeManager extends BaseManager
         $this->relanceInterventionDemandesEnAttenteCmsi();
         $this->relanceInterventionDemandesAcceptationCmsi();
         $this->relanceInterventionDemandesRelanceAmbassadeur1();
+        $this->relanceInterventionDemandesRelanceAmbassadeur2();
     }
     /**
      * Envoie les relances pour les demandes d'intervention en attente CMSI non traitées.
@@ -143,6 +219,23 @@ class InterventionDemandeManager extends BaseManager
             $this->interventionCourrielManager->envoiCourrielRelanceAmbassadeur2($interventionDemande->getAmbassadeur(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
         }
     }
+    /**
+     * Envoie les relances pour les demandes d'intervention non traitées en relance ambassadeur 2.
+     *
+     * @return void
+     */
+    private function relanceInterventionDemandesRelanceAmbassadeur2()
+    {
+        $interventionDemandes = $this->_repository->findByEtatRelanceAmbassadeur2PourRelance();
+    
+        foreach ($interventionDemandes as $interventionDemande)
+        {
+            $interventionDemande->setAmbassadeurDateDerniereRelance(new \DateTime());
+            $interventionDemande->setInterventionEtat($this->interventionEtatManager->getInterventionEtatCloture());
+            $this->save($interventionDemande);
+            $this->interventionCourrielManager->envoiCourrielRelanceAmbassadeurCloture($interventionDemande->getCmsi(), $interventionDemande->getAmbassadeur(), $interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+        }
+    }
     
     /**
      * Retourne les données formatées pour la création du grid des nouvelles demandes d'intervention pour le CMSI.
@@ -167,6 +260,17 @@ class InterventionDemandeManager extends BaseManager
         return $interventionDemandes;
     }
     /**
+     * Retourne les données formatées pour la création du grid des demandes d'intervention pour le directeur.
+     *
+     * @return array Les données pour le grid des demandes d'intervention
+     */
+    public function getGridDonnees_DirecteurSuiviDemandes()
+    {
+        $interventionDemandes = $this->_repository->getGridDonnees_DirecteurSuiviDemandes($this->securityContext->getToken()->getUser());
+    
+        return $interventionDemandes;
+    }
+    /**
      * Retourne les données formatées pour la création du grid des demandes d'intervention pour l'ambassadeur.
      * 
      * @return array Les données pour le grid des demandes d'intervention
@@ -177,7 +281,44 @@ class InterventionDemandeManager extends BaseManager
 
         return $interventionDemandes;
     }
+    /**
+     * Retourne les données formatées pour la création du grid des demandes d'intervention pour l'établissement.
+     *
+     * @return array Les données pour le grid des demandes d'intervention
+     */
+    public function getGridDonnees_EtablissementDemandes()
+    {
+        $referent = $this->securityContext->getToken()->getUser();
+        $cmsiRegion = null;
+        if ($referent->getRegion() != null)
+            $cmsiRegion = $this->userManager->getCmsi(array('region' => $referent->getRegion(), 'enabled' => true));
 
+        $interventionDemandes = $this->_repository->getGridDonnees_EtablissementDemandes($referent, $cmsiRegion);
+    
+        return $interventionDemandes;
+    }
+    
+    /**
+     * Retourne les demandes d'intervention similaire par rapport à l'ambassadeur d'une demande d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut rechercher les demandes similaires
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention similaires par rapport à l'ambassadeur
+     */
+    public function getInterventionsSimilairesParAmbassadeur(InterventionDemande $interventionDemande)
+    {
+        return $this->_repository->getInterventionsSimilairesParAmbassadeur($interventionDemande);
+    }
+    /**
+     * Retourne les demandes d'intervention similaire par rapport aux objets d'une demande d'intervention.
+     * 
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut rechercher les demandes similaires
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention similaires par rapport aux objets
+     */
+    public function getInterventionsSimilairesParObjets(InterventionDemande $interventionDemande)
+    {
+        return $this->_repository->getInterventionsSimilairesParObjets($interventionDemande);
+    }
+    
     /**
      * Change l'ambassadeur d'une demande d'intervention.
      *

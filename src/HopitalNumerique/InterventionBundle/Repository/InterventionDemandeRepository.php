@@ -7,6 +7,7 @@
 namespace HopitalNumerique\InterventionBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use HopitalNumerique\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
@@ -88,6 +89,24 @@ class InterventionDemandeRepository extends EntityRepository
             ->where('interventionDemande.interventionEtat = :interventionEtat')
                 ->setParameter('interventionEtat', InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id())
             ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.ambassadeurDateDerniereRelance, '.InterventionEtat::$NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_2_NOMBRE_JOURS.', \'day\')')
+                ->setParameter('aujourdhui', new \DateTime())
+        ;
+    
+        return $requete->getQUery()->getResult();
+    }
+    /**
+     * Retourne les demandes d'intervention en relance ambassadeur 2 pour leur clôture.
+     *
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention qui doivent être clôturées car sans réponse de leur ambassadeur
+     */
+    public function findByEtatRelanceAmbassadeur2PourRelance()
+    {
+        $requete = $this->_em->createQueryBuilder()
+            ->select('interventionDemande')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+            ->where('interventionDemande.interventionEtat = :interventionEtat')
+                ->setParameter('interventionEtat', InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id())
+            ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.ambassadeurDateDerniereRelance, '.InterventionEtat::$NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_CLOTURE_NOMBRE_JOURS.', \'day\')')
                 ->setParameter('aujourdhui', new \DateTime())
         ;
     
@@ -204,8 +223,72 @@ class InterventionDemandeRepository extends EntityRepository
                 ->setParameter('interventionEtatDemandeInitiale', InterventionEtat::getInterventionEtatDemandeInitialeId())
                 ->setParameter('interventionEtatAttenteCmsi', InterventionEtat::getInterventionEtatAttenteCmsiId())
             ->orderBy('interventionDemande.dateCreation', 'DESC')
+            ->groupBy('interventionDemande.id')
         ;
 
+        return $requete->getQUery()->getResult();
+    }
+    /**
+     * Récupère les données du grid des suivis de demandes d'intervention pour le directeur sous forme de tableau correctement formaté
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $directeur Le directeur des demandes d'intervention
+     * @return array
+     */
+    public function getGridDonnees_DirecteurSuiviDemandes(User $directeur)
+    {
+        $requete = $this->_em->createQueryBuilder();
+    
+        $requete
+        ->select(
+            'interventionDemande.id AS id',
+            'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
+            'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurEtablissement.nom, \' (\', ambassadeurRegion.libelle, \')\') AS ambassadeurInformations',
+            'interventionInitiateur.type AS interventionInitiateurType',
+            'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
+            'interventionEtat.libelle AS interventionEtatLibelle',
+            'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
+            'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
+            'evaluationEtat.id AS evaluationEtatId',
+            'remboursementEtat.libelle AS remboursementEtatLibelle'
+        )
+        ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+        // Référent
+        ->innerJoin('interventionDemande.referent', 'referent')
+        ->innerJoin('referent.etablissementRattachementSante', 'referentEtablissement')
+            ->andWhere('referentEtablissement = :directeurEtablissement')
+                ->setParameter('directeurEtablissement', $directeur->getEtablissementRattachementSante())
+        ->innerJoin('referent.region', 'referentRegion')
+        // Ambassadeur
+        ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
+        ->innerJoin('ambassadeur.etablissementRattachementSante', 'ambassadeurEtablissement')
+        ->innerJoin('ambassadeur.region', 'ambassadeurRegion')
+        // Initiateur
+        ->innerJoin('interventionDemande.interventionInitiateur', 'interventionInitiateur')
+        // État de l'intervention
+        ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
+        // État de l'évaluation
+        ->leftJoin('interventionDemande.evaluationEtat', 'evaluationEtat')
+        // État du remboursement
+        ->leftJoin('interventionDemande.remboursementEtat', 'remboursementEtat')
+        ->andWhere("
+            interventionEtat.id = :interventionEtatAcceptationCmsi
+            OR interventionEtat.id = :interventionEtatAcceptationCmsiRelance1
+            OR interventionEtat.id = :interventionEtatAcceptationCmsiRelance2
+            OR interventionEtat.id = :interventionEtatRefusAmbassadeur
+            OR interventionEtat.id = :interventionEtatAcceptationAmbassadeur
+            OR interventionEtat.id = :interventionEtatTermine
+            OR interventionEtat.id = :interventionEtatCloture
+        ")
+            ->setParameter('interventionEtatAcceptationCmsi', InterventionEtat::getInterventionEtatAcceptationCmsiId())
+            ->setParameter('interventionEtatAcceptationCmsiRelance1', InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id())
+            ->setParameter('interventionEtatAcceptationCmsiRelance2', InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id())
+            ->setParameter('interventionEtatRefusAmbassadeur', InterventionEtat::getInterventionEtatRefusAmbassadeurId())
+            ->setParameter('interventionEtatAcceptationAmbassadeur', InterventionEtat::getInterventionEtatAcceptationAmbassadeurId())
+            ->setParameter('interventionEtatTermine', InterventionEtat::getInterventionEtatTermineId())
+            ->setParameter('interventionEtatCloture', InterventionEtat::getInterventionEtatClotureId())
+            ->orderBy('interventionDemande.dateCreation', 'DESC')
+        ;
+    
         return $requete->getQUery()->getResult();
     }
     /**
@@ -265,5 +348,138 @@ class InterventionDemandeRepository extends EntityRepository
         ;
     
         return $requete->getQUery()->getResult();
+    }
+    /**
+     * Récupère les données du grid des demandes d'intervention pour l'établissement sous forme de tableau correctement formaté
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $referent Le référent de l'établissement des demandes d'intervention
+     * @param \HopitalNumerique\UserBundle\Entity\User|null $cmsi Le CMSI de la région du référent
+     * @return array
+     */
+    public function getGridDonnees_EtablissementDemandes(User $referent, $cmsiRegion)
+    {
+        $requete = $this->_em->createQueryBuilder()
+            ->select(
+                'interventionDemande.id AS id',
+                'interventionInitiateur.id AS interventionInitiateurId',
+                'interventionInitiateur.type AS interventionInitiateurType',
+                'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurRegion.libelle) AS ambassadeurInformations',
+                'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
+                'interventionEtat.libelle AS interventionEtatLibelle',
+                'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
+                'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
+                'evaluationEtat.id AS evaluationEtatId'
+            )
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+            // Référent
+            ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
+            ->innerJoin('ambassadeur.region', 'ambassadeurRegion')
+            // Initiateur
+            ->innerJoin('interventionDemande.interventionInitiateur', 'interventionInitiateur')
+            // État de l'intervention
+            ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
+            // État de l'évaluation
+            ->leftJoin('interventionDemande.evaluationEtat', 'evaluationEtat');
+        
+        if ($cmsiRegion != null)
+        {
+            $requete->where('interventionDemande.referent = :referent OR interventionDemande.cmsi = :cmsi')
+                ->setParameter('referent', $referent)
+                ->setParameter('cmsi', $cmsiRegion);
+        }
+        else
+        {
+            $requete->where('interventionDemande.referent = :referent')
+                ->setParameter('referent', $referent);
+        }
+        $requete->orderBy('interventionDemande.dateCreation', 'DESC');
+
+        return $requete->getQUery()->getResult();
+    }
+
+    
+    /**
+     * Retourne les demandes d'intervention similaire par rapport aux objets d'une demande d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut rechercher les demandes similaires
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention similaires par rapport aux objets
+     */
+    public function getInterventionsSimilairesParObjets(InterventionDemande $interventionDemande)
+    {
+        $objetIds = array();
+        foreach ($interventionDemande->getObjets() as $objet)
+            $objetIds[] = $objet->getId();
+
+        $requeteDemandesGroupees = $this->_em->createQueryBuilder()
+            ->select('IDENTITY(interventionRegroupement.interventionDemandeRegroupee)')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement')
+        ;
+    
+        $requete = $this->_em->createQueryBuilder();
+        $requete->select('interventionDemande')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+            ->where('interventionDemande.id != :interventionDemandeCourante')
+                ->setParameter('interventionDemandeCourante', $interventionDemande->getId())
+            ->andWhere('interventionDemande.interventionEtat = :interventionEtatDemandeInitiale OR interventionDemande.interventionEtat = :interventionEtatAttenteCmsi')
+                ->setparameter('interventionEtatDemandeInitiale', InterventionEtat::getInterventionEtatDemandeInitialeId())
+                ->setparameter('interventionEtatAttenteCmsi', InterventionEtat::getInterventionEtatAttenteCmsiId())
+            ->andWhere(
+                $requete->expr()->notIn(
+                    'interventionDemande',
+                    $requeteDemandesGroupees->getDQL()
+                )
+            )
+            ->leftJoin('interventionDemande.objets', 'objet');
+        if (count($objetIds) > 0)
+        {
+            $requete->innerJoin('interventionDemande.objets', 'objetSimilaire')
+                ->andWhere($requete->expr()->in(
+                    'objetSimilaire',
+                    implode(',', $objetIds)
+                ));
+        }
+        $requete->having('COUNT(objet) = '.count($interventionDemande->getObjets()))
+            ->orderBy('interventionDemande.dateCreation', 'ASC')
+            ->groupBy('interventionDemande')
+        ;
+    
+        return $requete->getQuery()->getResult();
+    }
+    /**
+     * Retourne les demandes d'intervention similaire par rapport à l'ambassadeur d'une demande d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut rechercher les demandes similaires
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention similaires par rapport à l'ambassadeur
+     */
+    public function getInterventionsSimilairesParAmbassadeur(InterventionDemande $interventionDemande)
+    {
+        $requeteDemandesGroupees = $this->_em->createQueryBuilder()
+            ->select('IDENTITY(interventionRegroupement.interventionDemandeRegroupee)')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement')
+        ;
+
+        $requete = $this->_em->createQueryBuilder();
+        $requete->select('interventionDemande')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+            ->where('interventionDemande.ambassadeur = :ambassadeur')
+                ->setParameter('ambassadeur', $interventionDemande->getAmbassadeur())
+            ->andWhere('interventionDemande.id != :interventionDemandeCourante')
+                ->setParameter('interventionDemandeCourante', $interventionDemande->getId())
+            ->andWhere(
+                $requete->expr()->notIn(
+                    'interventionDemande',
+                    $requeteDemandesGroupees->getDQL()
+                )
+            )
+            ->andWhere('interventionDemande.interventionEtat = :interventionEtatDemandeInitiale OR interventionDemande.interventionEtat = :interventionEtatAttenteCmsi')
+                ->setparameter('interventionEtatDemandeInitiale', InterventionEtat::getInterventionEtatDemandeInitialeId())
+                ->setparameter('interventionEtatAttenteCmsi', InterventionEtat::getInterventionEtatAttenteCmsiId())
+            ->orderBy('interventionDemande.dateCreation', 'ASC')
+        ;
+        
+        //foreach ($requete->getQuery()->getResult() as $resultat)
+        //    echo $resultat->getId().'<br>';
+        
+        return $requete->getQuery()->getResult();
     }
 }

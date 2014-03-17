@@ -17,6 +17,7 @@ class QuestionnaireType extends AbstractType
     private $_managerReponse;
     private $_managerQuestion;
     private $_managerQuestionnaire;
+    private $_managerInterventionDemande;
     private $_constraints = array();
 
     /**
@@ -25,11 +26,12 @@ class QuestionnaireType extends AbstractType
      * @param HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager $managerQuestionnaire
      * @param Validator $validator
      */
-    public function __construct($managerReponse, $managerQuestion, $managerQuestionnaire, $validator)
+    public function __construct($managerReponse, $managerQuestion, $managerQuestionnaire, $validator, $managerInterventionDemande)
     {
         $this->_managerReponse       = $managerReponse;
         $this->_managerQuestion      = $managerQuestion;
         $this->_managerQuestionnaire = $managerQuestionnaire;
+        $this->_managerInterventionDemande = $managerInterventionDemande;
         $this->_constraints          = $managerQuestionnaire->getConstraints( $validator );
     }
 
@@ -42,7 +44,7 @@ class QuestionnaireType extends AbstractType
      * @return void                 
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {    
+    {
         $idUser = (isset($options['label_attr']['idUser']) && !is_null($options['label_attr']['idUser'])) ? $options['label_attr']['idUser'] : 0;
         $idQuestionnaire = (isset($options['label_attr']['idQuestionnaire']) && !is_null($options['label_attr']['idQuestionnaire'])) ? $options['label_attr']['idQuestionnaire'] : 0;        
         $questionnaire = $this->_managerQuestionnaire->findOneBy(array('id' => $idQuestionnaire));
@@ -67,7 +69,7 @@ class QuestionnaireType extends AbstractType
         $questions = $this->_managerQuestionnaire->getQuestionsReponses($idQuestionnaire, $idUser);
 
         //Construction du formulaire en fonction des questions + chargement des réponses si il y en a
-        $builder = $this->_constructBuilder($builder, $questions, $questionnaire); 
+        $builder = $this->_constructBuilder($builder, $questions, $questionnaire, $options); 
     }
     
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -82,21 +84,18 @@ class QuestionnaireType extends AbstractType
         return 'nodevo_questionnaire_questionnaire';
     }
     
-    
-    
-    
-    
-    
+
     /**
      * Fonction permettant de créer les champs du formulaire en fonction des questions / réponses passé en param
      * 
      * @param FormBuilderInterface $builder Le builder contient les champs du formulaire
      * @param HopitalNumerique\QuestionnaireBundle\Entity\Question[] $questions
      * @param HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire
+     * @param  array                $options Data passée au formulaire
      * 
      * @return FormBuilderInterface Le builder avec tous les champs
      */
-    private function _constructBuilder(FormBuilderInterface $builder, $questions, $questionnaire)
+    private function _constructBuilder(FormBuilderInterface $builder, $questions, $questionnaire, $options)
     {        
         //Réponse de la question courante
         $reponseCourante;
@@ -172,15 +171,60 @@ class QuestionnaireType extends AbstractType
             	            'data_class' => null
             	    ));
             	    break;
+            	case 'date':
+            	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'text', array(
+        	            'required'   => $question->getObligatoire(),
+        	            'label'      => $question->getLibelle(),
+        	            'mapped'     => false,
+        	            'read_only'  => $this->_readOnly,
+        	            'disabled'   => $this->_readOnly,
+        	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
+        	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
+            	    ));
+            	    break;
+            	case 'interventionobjets':
+            	    
+            	    $interventionDemande = $options['label_attr']['interventionDemande'];
+
+            	    $objetsOptions = array();
+            	    foreach ($interventionDemande->getObjets() as $objet)
+            	        $objetsOptions[$objet->getId()] = $objet->getTitre();
+            	    
+            	    $objetIdsSelectionnees = array();
+            	    // @TODO : Ne rechercher que la bonne réponse et non toutes
+            	    $reponses = $this->_managerReponse->reponsesByQuestionnaireByUser($questionnaire->getId(), $interventionDemande->getReferent()->getId(), true, $interventionDemande->getId());
+            	    if (isset($reponses[$question->getId()]))
+            	    {
+            	        $objetIdsSelectionnees = explode(',', $reponses[$question->getId()]->getReponse());
+            	    }
+            	    else // Tout coché par défaut
+            	    {
+            	        foreach ($interventionDemande->getObjets() as $objet)
+            	            $objetIdsSelectionnees[] = $objet->getId();
+            	    }
+            	    
+            	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'choice', array(
+        	            'required'   => $question->getObligatoire(),
+        	            'label'      => $question->getLibelle(),
+        	            'mapped'     => false,
+        	            'read_only'  => $this->_readOnly,
+        	            'disabled'   => $this->_readOnly,
+        	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
+        	            'choices'    => $objetsOptions,
+            	        'multiple' => true,
+        	            'expanded' => true,
+            	        'data' => $objetIdsSelectionnees
+            	    ));
+            	    break;
             	default:
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
-            	            'required'   => $question->getObligatoire(),
-            	            'label'      => $question->getLibelle(),
-            	            'mapped'     => false,
-            	            'read_only'  => $this->_readOnly,
-            	            'disabled'   => $this->_readOnly,
-            	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
-            	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
+        	            'required'   => $question->getObligatoire(),
+        	            'label'      => $question->getLibelle(),
+        	            'mapped'     => false,
+        	            'read_only'  => $this->_readOnly,
+        	            'disabled'   => $this->_readOnly,
+        	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
+        	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
             	    ));
             	    break;
             }

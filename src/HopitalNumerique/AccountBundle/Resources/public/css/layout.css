@@ -1,3 +1,17 @@
+.champ-obligatoire {
+    color: #5D5D5D;
+    font-size: 12px;
+    font-style: italic;
+    height: 4px;
+    position: absolute;
+    right: 0;
+    top: -20px;
+    width: 139px;
+}
+    .champ-obligatoire .etoile {
+        color: #E01958;
+    }
+
 div#tableau-de-bord {}
 
     div#tableau-de-bord div.panel { background-color:#f8f8f8;border-color:#e3e3e3;border-radius:0px;border-width:1px;margin:20px 0px 20px 0px; }
@@ -21,7 +35,7 @@ div#tableau-de-bord {}
     /* --> */
     /* <-- Grid */
     div#tableau-de-bord div.grid-search { background-color:#6F3596;padding:0px; }
-        div#tableau-de-bord div.grid-search div.panel { background-color:transparent;border-width:0px;margin:0px; }
+        div#tableau-de-bord div.grid-search div.panel { background-color:transparent !important;border-width:0px !important;margin:0px !important; }
             div#tableau-de-bord div.grid-search div.panel div.panel-heading { border-width:0px;padding:4px 10px; }
                 div#tableau-de-bord div.grid-search div.panel div.panel-heading h4 { color:#fff;font-size:15px;margin:0px;padding:4px 0px; }
                 div#tableau-de-bord div.grid-search div.panel div.panel-heading div.options { color:#fff;position:absolute;right:16px;top:6px; }
@@ -41,7 +55,7 @@ div#tableau-de-bord {}
             div#tableau-de-bord div.grid ul.pagination li.active a { background-color:#6F3596; }
     /* --> */
     /* <-- Formulaire */
-    div#tableau-de-bord div.panel_form { padding:20px 0px 20px 0px; }
+    div#tableau-de-bord div.panel_form { padding:20px 0px 20px 0px;position:relative; }
         div#tableau-de-bord div.panel_form div.boutons { padding:0px 20px;text-align:right; }
     /* --> */
     /* <-- Formulaire en lecture seule */

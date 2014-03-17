@@ -328,3 +328,27 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.changeAmbassad
         }
     }
 };
+
+/**
+ * Regroupe une demande d'intervention.
+ * 
+ * @param integer interventionRegroupeeId L'ID de l'intervention à regrouper
+ * @param integer interventionRegroupementType L'ID du type de regroupement
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.regroupeInterventionSimilaire = function(interventionRegroupeeId, interventionRegroupementType)
+{
+    if (confirm('Confirmez-vous ce regroupement ?'))
+    {
+        var interventionRegroupementUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/regroupement/' + interventionRegroupementType + '/' + interventionRegroupeeId + '/regroupe';
+        
+        $.ajax(interventionRegroupementUrl, {
+            method:'POST',
+            success:function(reponse) {
+                if (reponse != '1')
+                    alert('Le regroupement ne s\est pas fait.');
+                else Nodevo_Web.rechargePage();
+            }
+        });
+    }
+}

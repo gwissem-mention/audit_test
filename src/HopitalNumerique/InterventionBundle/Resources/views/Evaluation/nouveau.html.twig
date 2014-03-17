@@ -1,0 +1,54 @@
+{% extends 'HopitalNumeriqueInterventionBundle:Form:layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-intervention-evaluation-nouveau.css"
+        'bundles/hopitalnumeriqueintervention/css/evaluation.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-intervention-evaluation-nouveau.js"
+        'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation/Evenement.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    
+    {% if interventionDemande.evaluationEtatEstAEvaluer %}
+        <script type="text/javascript">
+            var etablissements = new Array();
+            {% for etablissement in etablissements %}etablissements.push("{{ etablissement.nom }}");{% endfor %}
+            $(document).ready(function() {
+                HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.setAutresEtablissements(etablissements);
+            });
+        </script>
+    {% endif %}
+    
+{% endblock %}
+
+{% block pageTitre %}Mon évaluation{% endblock %}
+
+{% block chapoDescription %}
+    <p>Tu vois, là-bas, les champs de blé ? Je ne mange pas de pain. Le blé pour moi est inutile. Les champs de blé ne me rappellent rien. Et ça, c'est triste ! Mais tu as des cheveux couleur d'or. Alors ce sera merveilleux quand tu m'auras apprivoisé ! Le blé, qui est doré, me fera souvenir de toi. Et j'aimerai le bruit du vent dans le blé...</p>
+{% endblock %}
+
+{% block contenu %}
+
+    <div class="panel panel_form">
+
+        {{ render(controller(
+            "HopitalNumeriqueInterventionBundle:Form/Evaluation:edit",
+            {
+                interventionDemande:interventionDemande,
+                questionnaire:questionnaire,
+                optionRenderForm:optionRenderForm
+            }
+        )) }}
+
+    </div>
+
+{% endblock %}

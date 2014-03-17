@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class InterventionEvaluation
 {
+    private static $EVALUATION_QUESTIONNAIRE_ID = 3;
+    
     /**
      * @var integer
      *
@@ -316,5 +318,15 @@ class InterventionEvaluation
     public function getModalitesPratiques()
     {
         return $this->modalitesPratiques;
+    }
+
+    /**
+     * Retourne l'ID du questionnaire d'évaluation.
+     * 
+     * @return integer ID du questionnaire d'évaluation
+     */
+    public static function getEvaluationQuestionnaireId()
+    {
+        return self::$EVALUATION_QUESTIONNAIRE_ID;
     }
 }

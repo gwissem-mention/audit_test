@@ -1,7 +1,9 @@
 parameters:
     hopitalnumerique_intervention.grid.cmsi.intervention_demandes_nouvelles.class: HopitalNumerique\InterventionBundle\Grid\Cmsi\DemandesNouvellesGrid
     hopitalnumerique_intervention.grid.cmsi.intervention_demandes_traitees.class: HopitalNumerique\InterventionBundle\Grid\Cmsi\DemandesTraiteesGrid
+    hopitalnumerique_intervention.grid.directeur.intervention_suivi_demandes.class: HopitalNumerique\InterventionBundle\Grid\Directeur\SuiviDemandesGrid
     hopitalnumerique_intervention.grid.ambassadeur.intervention_demandes.class: HopitalNumerique\InterventionBundle\Grid\Ambassadeur\DemandesGrid
+    hopitalnumerique_intervention.grid.etablissement.intervention_demandes.class: HopitalNumerique\InterventionBundle\Grid\Etablissement\DemandesGrid
 
 services:
     hopitalnumerique_intervention.grid.cmsi.intervention_demandes_nouvelles:
@@ -10,6 +12,12 @@ services:
     hopitalnumerique_intervention.grid.cmsi.intervention_demandes_traitees:
         class: "%hopitalnumerique_intervention.grid.cmsi.intervention_demandes_traitees.class%"
         arguments: ["@service_container"]
+    hopitalnumerique_intervention.grid.directeur.intervention_suivi_demandes:
+        class: "%hopitalnumerique_intervention.grid.directeur.intervention_suivi_demandes.class%"
+        arguments: ["@service_container"]
     hopitalnumerique_intervention.grid.ambassadeur.intervention_demandes:
         class: "%hopitalnumerique_intervention.grid.ambassadeur.intervention_demandes.class%"
+        arguments: ["@service_container"]
+    hopitalnumerique_intervention.grid.etablissement.intervention_demandes:
+        class: "%hopitalnumerique_intervention.grid.etablissement.intervention_demandes.class%"
         arguments: ["@service_container"]

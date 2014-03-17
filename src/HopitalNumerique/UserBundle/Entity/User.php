@@ -146,6 +146,8 @@ use Nodevo\RoleBundle\Entity\Role;
  */
 class User extends BaseUser
 {
+    private static $ETAT_ACTIF_ID = 3;
+    
     /**
      * @ORM\Column(name="usr_id", type="integer", options = {"comment" = "ID de l utilisateur"})
      * @ORM\Id()
@@ -1093,5 +1095,15 @@ class User extends BaseUser
     public function getAppellation()
     {
         return ($this->civilite != null ? $this->civilite->getLibelle().' ' : '').$this->prenom.' '.$this->nom;
+    }
+
+    /**
+     * Retourne si l'utilisateur est actif.
+     * 
+     * @return boolean VRAI ssi l'utilisateur est actif.
+     */
+    public function isActif()
+    {
+        return ($this->etat != null && $this->etat->getId() == self::$ETAT_ACTIF_ID);
     }
 }

@@ -1,0 +1,17 @@
+<table cellpadding="1" cellspacing="0" class="table">
+    <tr>
+        <th>Référent</th>
+        <th>Date de création</th>
+        <th></th>
+    </tr>
+    {% for interventionSimilaire in interventionsSimilaires %}
+        <tr>
+            <td>
+                {{ interventionSimilaire.referent.appellation }}
+                <br>{{ interventionSimilaire.referent.etablissementRattachementSante.nom }}{% if interventionSimilaire.referent.region is defined %}, {{ interventionSimilaire.referent.region.libelle }}{% endif %}
+            </td>
+            <td>{{ interventionSimilaire.dateCreation|date('m/d/Y') }}</td>
+            <td><button class="btn btn-xs" data-intervention-regroupement-type="{{ interventionRegroupementType }}" data-intervention-similaire="{{ interventionSimilaire.id }}" title="Regrouper"><span class="glyphicon glyphicon-plus"></span></button></td>
+        </tr>
+    {% endfor %}
+</table>
