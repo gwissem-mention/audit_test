@@ -59,7 +59,7 @@ class DemandesTraiteesGrid extends Grid implements IGrid
         $colonneDateCreationLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneDateCreationLibelle);
         
-        $colonneInterventionEtatLibelle = new Column\DateColumn('interventionEtatLibelle', 'État');
+        $colonneInterventionEtatLibelle = new Column\TextColumn('interventionEtatLibelle', 'État');
         $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneInterventionEtatLibelle);
         
