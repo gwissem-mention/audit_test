@@ -39,7 +39,7 @@
     
         {% set informationsManquantes = app.user|informationsManquantes %}
 
-        {% if not informationsManquantes.ok %}
+        {% if app.user.hasRoleCmsi == false and (not informationsManquantes.ok) %}
             <div class="informations_manquantes col-md-12">
                 {% for key,informationManquante in informationsManquantes %}
                     {# Affichage de la 'légende' #}         
@@ -63,7 +63,7 @@
             <div class="clearfix"></div>
         {% endif %} 
     
-        {% if informationsManquantes.ok %}
+        {% if (informationsManquantes.ok or app.user.hasRoleCmsi) %}
             
         
             <form method="post" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
