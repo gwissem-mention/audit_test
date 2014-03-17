@@ -44,7 +44,7 @@ class UserController extends Controller
      */
     public function jsonReferentsAction()
     {
-        $usersFiltres = array('enabled' => true);
+        $usersFiltres = array();
         if ($this->get('request')->query->has('etablissementRattachementSante'))
             $usersFiltres['etablissementRattachementSante'] = $this->get('request')->query->get('etablissementRattachementSante');
 

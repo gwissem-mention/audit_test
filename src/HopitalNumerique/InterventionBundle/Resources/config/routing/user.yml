@@ -4,6 +4,12 @@ hopital_numerique_intervention_user_users:
     requirements:
         _format: json
 
+hopital_numerique_intervention_user_referents:
+    pattern:  /referents/json
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:User:jsonReferents" }
+    requirements:
+        _format: json
+
 hopital_numerique_intervention_user_ambassadeur_change:
     pattern:  /demande/{interventionDemande}/ambassadeur/{nouvelAmbassadeur}/change
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:User:ajaxAmbassadeurChange" }

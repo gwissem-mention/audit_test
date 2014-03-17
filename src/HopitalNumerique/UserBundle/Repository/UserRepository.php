@@ -139,8 +139,17 @@ class UserRepository extends EntityRepository
         ->setParameter('role', '%ROLE_ES_8%');
         
         foreach ($criteres as $critereChamp => $critereValeur)
-            $qb->where('user.'.$critereChamp.' = :'.$critereChamp)
-                ->setParameter($critereChamp, $critereValeur);
+        {
+            if (is_array($critereValeur))
+            {
+                $qb->andWhere('user.'.$critereChamp.' IN ('.implode(',', $critereValeur).')');
+            }
+            else
+            {
+                $qb->andWhere('user.'.$critereChamp.' = :'.$critereChamp)
+                    ->setParameter($critereChamp, $critereValeur);
+            }
+        }
 
         return $qb;
     }
