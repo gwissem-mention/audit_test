@@ -78,10 +78,9 @@ INSERT INTO `wwwhopitalnumeriquecom`.`core_menu_item` (`itm_id`, `itm_parent`, `
    Modifs items menu 
 INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES (NULL, '9', '1', 'Domaines fonctionnels maitrisés', 'hopitalnumerique_user_ambassadeur_domainesFonctionnels', NULL, '0', NULL, NULL, '0', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '10');
 
-
 /* RLE - 14/03/2014
    DEV -> PROD
-   Interventions*/
+   Interventions
 INSERT INTO `hn_intervention_initiateur` (
 `intervinit_id` ,
 `intervinit_type`
@@ -106,7 +105,6 @@ VALUES (
 '10', '[HOPITALNUMERIQUE] - Demande d''intervention', 'Acceptation ou non d''une demande d''intervention par le CMSI', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''intervention a été créée. Vous puvez la valider ou la refuser en visitant : %l Cordialement,'
 );
 
-
 UPDATE `core_mail` SET `mail_body` = 'Bonjour %u, Une demande d''''intervention a été refusée. %l Cordialement,' WHERE `core_mail`.`mail_id` =7;
 
 ALTER TABLE `hn_intervention_demande` ADD `interv_cmsi_date_derniere_relance` DATETIME NULL DEFAULT NULL COMMENT 'Date de la dernière relance envoyée au CMSI.' AFTER `interv_ambassadeur_date_choix` ;
@@ -120,7 +118,6 @@ VALUES (
 ), (
 '2', 'Ambassadeur'
 );
-
 
 ALTER TABLE `hn_intervention_demande` ADD INDEX ( `interv_date_creation` ) ;
 
@@ -174,8 +171,7 @@ INSERT INTO `core_mail` (
 )
 VALUES (
 '18', '[HOPITALNUMERIQUE] - Demande d''intervention refusée par l''ambassadeur', 'Demande d''intervention refusée par l''ambassadeur', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, Une demande d''''intervention a été refusée. Vous pouvez vous rendre à votre interface pour la visualiser : %l Cordialement,'
-);
-
+i);*/
 
 /*QSO - 14/03/2014
    DEV -> PROD
@@ -184,16 +180,9 @@ INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`) V
 UPDATE `core_menu_item` SET `mnu_menu` = '3', `itm_order` = '5', `itm_route` = 'hopital_numerique_registre_homepage', `itm_uri` = NULL WHERE `core_menu_item`.`itm_id` = 75;*/
 */
 
-
-
-
-
-
-
-
 /* RLE - 14/03/2014
    DEV -> PROD
-   Interventions*/
+   Interventions
 INSERT INTO `core_mail` (
 `mail_id` ,
 `mail_objet` ,
@@ -248,14 +237,11 @@ VALUES (
 NULL , 'Évaluation', '1'
 );
 
-INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`) VALUES (NULL, '3', '5', 'Les prod ANAP etc', '0', NULL, '1', 'evaluation_prod_anap', 'NOTE_EVALUATION');
-
-
-
+INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`) VALUES (NULL, '3', '5', 'Les prod ANAP etc', '0', NULL, '1', 'evaluation_prod_anap', 'NOTE_EVALUATION');*/
 
 /* RLE - 17/03/2014
    DEV -> PROD
-   Interventions*/
+   Interventions
  
 INSERT INTO `hn_questionnaire_type_question` (
 `typ_id` ,
@@ -309,11 +295,9 @@ VALUES (
 '7', 'interventionobjets', 'Objets de l''intervention'
 );
 
-
-
 /* RLE - 17/03/2014
    DEV -> PROD
-   Interventions*/
+   Interventions
 
 UPDATE `core_ressource` SET `res_nom` = 'FrontOffice - Accès à la sollicitation des ambassadeurs',
-`res_pattern` = '/^\\/(registre-ambassadeurs|intervention)/' WHERE `core_ressource`.`res_id` =15;
+`res_pattern` = '/^\\/(registre-ambassadeurs|intervention)/' WHERE `core_ressource`.`res_id` =15;*/
