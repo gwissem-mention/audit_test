@@ -64,6 +64,7 @@ div#tableau-de-bord {}
     div#tableau-de-bord div.panel_form { padding:20px 35px 20px 35px;position:relative; }
         div#tableau-de-bord div.panel_form div.boutons { padding:0px;text-align:right; }
             div#tableau-de-bord div.panel_form div.boutons button, div#tableau-de-bord div.panel_form div.boutons input { text-transform:uppercase; }
+        div#tableau-de-bord table.table_interventions_similaires { margin-left:10px; }
     /* --> */
     /* <-- Formulaire en lecture seule */
     div#tableau-de-bord div.panel_form_visu { font-size:13px;padding:0px 0px 20px 6px; }
@@ -78,6 +79,8 @@ div#tableau-de-bord {}
           div#tableau-de-bord div.panel_boutons button.btn-refus { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-refus-fond.png); }
           div#tableau-de-bord div.panel_boutons button.btn-attente { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-attente-fond.png); }
         div#tableau-de-bord div.panel_boutons div.modal {}
+            div#tableau-de-bord div.panel_boutons div.modal h4.modal-title { text-align:left; }
+            div#tableau-de-bord div.panel_boutons div.modal div.modal-body { text-align:left; }
             div#tableau-de-bord div.panel_boutons div.modal button.btn-default { color:#000; }
     /* --> */
 

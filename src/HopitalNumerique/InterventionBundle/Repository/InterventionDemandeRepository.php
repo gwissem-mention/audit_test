@@ -122,6 +122,11 @@ class InterventionDemandeRepository extends EntityRepository
      */
     public function getGridDonnees_CmsiDemandesNouvelles(User $cmsi)
     {
+        $requeteDemandesGroupees = $this->_em->createQueryBuilder()
+            ->select('IDENTITY(interventionRegroupement.interventionDemandeRegroupee)')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement')
+            ;
+        
         $requete = $this->_em->createQueryBuilder();
         $requete
             ->select(
@@ -151,6 +156,12 @@ class InterventionDemandeRepository extends EntityRepository
             ->andWhere('interventionEtat.id = :interventionEtatDemandeInitiale OR interventionEtat.id = :interventionEtatAttenteCmsi')
                 ->setParameter('interventionEtatDemandeInitiale', InterventionEtat::getInterventionEtatDemandeInitialeId())
                 ->setParameter('interventionEtatAttenteCmsi', InterventionEtat::getInterventionEtatAttenteCmsiId())
+            ->andWhere(
+                    $requete->expr()->notIn(
+                            'interventionDemande',
+                            $requeteDemandesGroupees->getDQL()
+                    )
+            )
             ->orderBy('interventionDemande.dateCreation', 'DESC')
             ->groupBy('interventionDemande.id')
         ;
@@ -184,6 +195,11 @@ class InterventionDemandeRepository extends EntityRepository
      */
     public function getGridDonnees_CmsiDemandesTraitees(User $cmsi)
     {
+        $requeteDemandesGroupees = $this->_em->createQueryBuilder()
+            ->select('IDENTITY(interventionRegroupement2.interventionDemandeRegroupee)')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement2')
+            ;
+        
         $requete = $this->_em->createQueryBuilder();
         $requete
             ->select(
@@ -222,6 +238,12 @@ class InterventionDemandeRepository extends EntityRepository
             ->andWhere('interventionEtat.id != :interventionEtatDemandeInitiale AND interventionEtat.id != :interventionEtatAttenteCmsi')
                 ->setParameter('interventionEtatDemandeInitiale', InterventionEtat::getInterventionEtatDemandeInitialeId())
                 ->setParameter('interventionEtatAttenteCmsi', InterventionEtat::getInterventionEtatAttenteCmsiId())
+            ->andWhere(
+                    $requete->expr()->notIn(
+                            'interventionDemande',
+                            $requeteDemandesGroupees->getDQL()
+                    )
+            )
             ->orderBy('interventionDemande.dateCreation', 'DESC')
             ->groupBy('interventionDemande.id')
         ;
