@@ -116,8 +116,11 @@ class AclManager extends BaseManager
             $result = $acl->getWrite() ? false : true;
             $acl->setWrite( $result );
             //si on donne directement l'accès en écriture, on donne aussi l'accès en lecture
-            if($result)
+            if( $acl->getRessource()->getType() == 2 ){
+                $acl->setRead( $result );
+            } elseif($result){
                 $acl->setRead( true );
+            }
         }
 
         $this->save( $acl );
