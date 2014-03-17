@@ -43,8 +43,12 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.se
     var autresEtablissementsChamp = $('textarea#nodevo_questionnaire_questionnaire_textarea_25_evaluation_autres_etablissements');
     $(autresEtablissementsChamp).val('');
     
-    for (var i in  autresEtablissements)
-        $(autresEtablissementsChamp).val($(autresEtablissementsChamp).val() + autresEtablissements[i] + "\n");
+    for (var i in autresEtablissements)
+    {
+        $(autresEtablissementsChamp).val($(autresEtablissementsChamp).val() + autresEtablissements[i]);
+        if (i < $(autresEtablissements).size() - 1)
+            $(autresEtablissementsChamp).val($(autresEtablissementsChamp).val() + "\n");
+    }
 };
 
 

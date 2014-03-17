@@ -343,3 +343,8 @@ INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `qu
 (31, 3, 5, 'Estimez-vous utile d''avoir sollicité cet ambassadeur ?', 0, NULL, 8, 'evaluation_utilite_ambassadeur', 'OUI_NON'),
 (32, 3, 5, 'Les modalités pratiques d''organisation de cette intervention étaient-elles satisfaisantes ?', 0, NULL, 10, 'evaluation_modalites', 'NOTE_EVALUATION'),
 (33, 3, 2, 'Avez-vous des suggestions d''amélioration ou des remarques dont vous souhaiteriez nous faire part ?', 0, NULL, 11, 'evaluation_ameliorations', NULL);
+
+
+
+
+
