@@ -83,7 +83,7 @@ class InterventionDemandeType extends AbstractType
                 'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements')
             ))
             ->add('referent', 'entity', array(
-                'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getUsersChoices(),
+                'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getReferentsChoices(),
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
                 'label' => 'Référent de la demande',
                 'required' => true,

@@ -109,7 +109,18 @@ class UserManager
             'region' => $region
         ));
     }
+    /**
+     * Retourne la liste des référents pour les listes de formulaire.
+     *
+     * @return array Liste des référents pour les listes de formulaire
+     */
+    public function getReferentsChoices()
+    {
+        return $this->container->get('hopitalnumerique_user.manager.user')->getUsersGroupeEtablissement();
+    }
 
+    
+    
     /**
      * Retourne la liste jsonifiée des utilisateurs.
      *

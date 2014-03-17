@@ -129,6 +129,17 @@ class UserRepository extends EntityRepository
 
         return $qb;
     }
+    public function getUsersGroupeEtablissement()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('user')
+        ->from('HopitalNumeriqueUserBundle:User', 'user')
+        ->andWhere('user.roles LIKE :role')
+        ->andWhere('user.enabled = 1')
+        ->setParameter('role', '%ROLE_ES_8%');
+
+        return $qb;
+    }
 
     /**
      * Retourne la liste des ambassadeurs de la région et de la publication
