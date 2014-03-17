@@ -309,3 +309,11 @@ VALUES (
 '7', 'interventionobjets', 'Objets de l''intervention'
 );
 
+
+
+/* RLE - 17/03/2014
+   DEV -> PROD
+   Interventions*/
+
+UPDATE `core_ressource` SET `res_nom` = 'FrontOffice - Accès à la sollicitation des ambassadeurs',
+`res_pattern` = '/^\\/(registre-ambassadeurs|intervention)/' WHERE `core_ressource`.`res_id` =15;

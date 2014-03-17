@@ -29,7 +29,9 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.in
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.initChamps = function()
 {
-    //$('input#nodevo_questionnaire_questionnaire_date_23_evaluation_intervention_date').datepicker();
+    $('input#nodevo_questionnaire_questionnaire_date_23_evaluation_intervention_date').datepicker({
+        dateFormat:'yy-mm-dd'
+    });
 };
 /**
  * Initialise les champs du formulaire d'initialisation des évaluations.
@@ -44,19 +46,6 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.se
     for (var i in  autresEtablissements)
         $(autresEtablissementsChamp).val($(autresEtablissementsChamp).val() + autresEtablissements[i] + "\n");
 };
-/**
- * Initialise les champs du formulaire d'initialisation des évaluations.
- * 
- * @return void
- */
-/*HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.cocheObjets = function()
-{
-    var autresEtablissementsChamp = $('textarea#nodevo_questionnaire_questionnaire_textarea_25_evaluation_autres_etablissements');
-    $(autresEtablissementsChamp).val('');
-    
-    for (var i in  autresEtablissements)
-        $(autresEtablissementsChamp).val($(autresEtablissementsChamp).val() + autresEtablissements[i] + "\n");
-};*/
 
 
 /**
