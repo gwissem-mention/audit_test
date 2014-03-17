@@ -12,7 +12,7 @@ ul.list-unstyled{margin-bottom:0;}
     #infra .reloadContenu{position:absolute; right: 75px; z-index: 200}
     #infra .uploadSommaire{position:absolute; right: 125px; z-index: 200}
     #infra fieldset{position: relative;}
-    #infra #sommaire .text-muted {margin-right: 60px}
+    #infra #sommaire .text-muted {margin-right: 90px}
 
 /* fancybox References */
 #panel-references{padding:0;}

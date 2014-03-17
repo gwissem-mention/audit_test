@@ -239,6 +239,7 @@
                                 <div class="form-group {% if not objet.id %}hide{% endif %}">
                                     <label class="col-md-2" for="hopitalnumerique_objet_objet_references">Références</label>
                                     <div class="col-md-10">
+                                        <a href="{{path('hopitalnumerique_objet_reference_objet_own', {'id':objet.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-eye"></i></a>
                                         <a href="{{path('hopitalnumerique_objet_reference_objet', {'id':objet.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
                                         <p class="text-muted text-right pull-right"><span class="nbRefs">{% if not objet.id %}0{% else %}{{objet.references|length}}{% endif %}</span> éléments référencés</p>
                                     </div>
@@ -325,8 +326,9 @@
             <a href="{{path('hopitalnumerique_objet_contenu_edit', {'id': contenu.id })}}" class="fancybox.ajax" >{{contenu.order ~ ' ' ~ contenu.titre}}</a>
             <p class="text-muted pull-right"><span>{{contenu.references}}</span> éléments référencés</p>
         </div>
-        <div class="dd3-actions">
+        <div class="dd3-actions dd4">
             <div onclick="deleteContenu( {{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_delete', {'id':contenu.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+            <a href="{{path('hopitalnumerique_objet_reference_contenu', {'id':contenu.id})}}" class="pull-right dd3-eye manageReferences fancybox.ajax"><i class="fa fa-eye"></i></a>
             <a href="{{path('hopitalnumerique_objet_reference_contenu', {'id':contenu.id})}}" class="pull-right dd3-cog manageReferences fancybox.ajax"><i class="fa fa-cog"></i></a>
         </div>
         
