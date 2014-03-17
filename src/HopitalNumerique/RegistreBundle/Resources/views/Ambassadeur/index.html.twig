@@ -27,28 +27,32 @@
 {% endblock %}
 
 {% block body %}
-    <div id="registre-ambassadeur">
+    <div id="registre-ambassadeur">    
+        {# En-tête #}
         <div class="col-md-12">
             <h3 class="violet">Annuaire des ambassadeurs <a href="{{path('hopital_numerique_account_homepage')}}" class="pull-right">Tableau de bord</a> </h3>
-        </div>
+        </div>        
         
+        {# Critère de recherche #}
         <div class="col-md-3">
             <h4 class="violet">Critères de recherche</h4>
             <div class="map">
+                {# Liste déroulante : domaine #}
                 <p class="titre">Domaines fonctionnels</p>
                 <select name="domaines_liste" id="domaines_liste">
                     <option value="0"> - </option>
                     {% for domaine in domaines %}
-
                         <option value="{{domaine.id}}" {% if domaineSelected == domaine.id %}selected="selected"{% endif %} >{{domaine.libelle}}</option>
                     {% endfor %}
                 </select>
+                {# Carte de france #}
                 <div id="canvas_france" style="width:100%;" ></div>
 
                 {#<p class="titre">Par zones géographiques</p>#}
             </div>
         </div>
         
+        {# Contenu de la page #}
         <div class="col-md-9">
             {% if region %}
                 <div class="col-md-12">
@@ -82,7 +86,7 @@
                     </div>
                 {% else %}
                     <div class="col-md-12">
-                        - Aucun ambassadeur de correspond à votre recherche - 
+                        - Aucun ambassadeur ne correspond à votre recherche - 
                     </div>
                 {% endfor %}
             {% else %}
