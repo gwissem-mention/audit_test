@@ -353,10 +353,9 @@ class InterventionDemandeRepository extends EntityRepository
      * Récupère les données du grid des demandes d'intervention pour l'établissement sous forme de tableau correctement formaté
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $referent Le référent de l'établissement des demandes d'intervention
-     * @param \HopitalNumerique\UserBundle\Entity\User|null $cmsi Le CMSI de la région du référent
      * @return array
      */
-    public function getGridDonnees_EtablissementDemandes(User $referent, $cmsiRegion)
+    public function getGridDonnees_EtablissementDemandes(User $referent)
     {
         $requete = $this->_em->createQueryBuilder()
             ->select(
@@ -380,18 +379,10 @@ class InterventionDemandeRepository extends EntityRepository
             ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
             // État de l'évaluation
             ->leftJoin('interventionDemande.evaluationEtat', 'evaluationEtat');
-        
-        if ($cmsiRegion != null)
-        {
-            $requete->where('interventionDemande.referent = :referent OR interventionDemande.cmsi = :cmsi')
-                ->setParameter('referent', $referent)
-                ->setParameter('cmsi', $cmsiRegion);
-        }
-        else
-        {
+
             $requete->where('interventionDemande.referent = :referent')
                 ->setParameter('referent', $referent);
-        }
+
         $requete->orderBy('interventionDemande.dateCreation', 'DESC');
 
         return $requete->getQUery()->getResult();

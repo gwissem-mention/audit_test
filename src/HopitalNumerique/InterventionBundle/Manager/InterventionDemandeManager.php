@@ -289,11 +289,7 @@ class InterventionDemandeManager extends BaseManager
     public function getGridDonnees_EtablissementDemandes()
     {
         $referent = $this->securityContext->getToken()->getUser();
-        $cmsiRegion = null;
-        if ($referent->getRegion() != null)
-            $cmsiRegion = $this->userManager->getCmsi(array('region' => $referent->getRegion(), 'enabled' => true));
-
-        $interventionDemandes = $this->_repository->getGridDonnees_EtablissementDemandes($referent, $cmsiRegion);
+        $interventionDemandes = $this->_repository->getGridDonnees_EtablissementDemandes($referent);
     
         return $interventionDemandes;
     }
