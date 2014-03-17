@@ -43,7 +43,7 @@ class EvaluationController extends Controller
                 'questionnaire'=> $questionnaire,
                 'user' => $utilisateurConnecte,
                 'optionRenderForm'=> array(
-                    'themeQuestionnaire' => 'horizontal'
+                    'themeQuestionnaire' => 'vertical'
                 )
             ));
         }
@@ -79,7 +79,7 @@ class EvaluationController extends Controller
                 'etablissements' => $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesEtRegroupes($interventionDemande),
                 'questionnaire'=> $questionnaire,
                 'optionRenderForm'=> array(
-                    'themeQuestionnaire' => 'horizontal_readonly'
+                    'themeQuestionnaire' => 'vertical_readonly'
                 )
             ));
             
