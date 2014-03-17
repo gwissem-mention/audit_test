@@ -47,7 +47,12 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.init = functio
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initChamps = function()
 {
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampAutresEtablissements();
-    $('select[multiple]').select2();
+    $('select[multiple]').select2({
+        formatNoMatches:function()
+        {
+            return 'Aucune option disponible'
+        }
+    });
 };
 
 
