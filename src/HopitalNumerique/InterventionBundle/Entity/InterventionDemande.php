@@ -252,7 +252,6 @@ class InterventionDemande
      *   }
      * )
      * @Assert\Count(min=1,minMessage="Au moins une production doit être choisie.")
-     * @Nodevo\Javascript(class="validate[required]")
      */
     private $objets;
 

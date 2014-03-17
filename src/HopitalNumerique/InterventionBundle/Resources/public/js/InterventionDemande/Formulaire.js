@@ -22,6 +22,10 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLIS
  * @var integer L'ID du référent initialement sélectionné
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REFERENT_INITIAL_ID = null;
+/**
+ * @var array Les régions qui ont été choisies : id => libellé
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REGIONS_CHOISIES = new Array();
 
 /**
  * Initialisation du formulaire de demande d'intervention.
@@ -31,7 +35,19 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REFERENT_INITI
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.init = function()
 {
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements();
+    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initChamps();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init();
+};
+
+/**
+ * Initialise les champs du formulaire.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initChamps = function()
+{
+    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampAutresEtablissements();
+    $('select[multiple]').select2();
 };
 
 
@@ -83,6 +99,17 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.listeRegionsEx
     return ($('select.hopitalnumerique_interventionbundle_interventiondemande_region').size() > 0);
 };
 /**
+ * Retourne le nom de la région des établissements.
+ * 
+ * @return string Le nom de la région sélectionnée
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.getRegionNom = function()
+{
+    var regionOptionSelectionnee = $('select.hopitalnumerique_interventionbundle_interventiondemande_region option:selected');
+    
+    return $(regionOptionSelectionnee).html();
+}
+/**
  * Sélectionne la région des établissements.
  * 
  * @param integer regionId L'ID de la région à sélectionner
@@ -103,22 +130,28 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.setRegion = fu
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements = function()
 {
-    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampAutresEtablissements();
+    //HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampAutresEtablissements();
+    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampReferents();
     
     if (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.listeRegionsExiste())
     {
         var regionId = parseInt($('select.hopitalnumerique_interventionbundle_interventiondemande_region option:selected').attr('value'));
-    
-        if (regionId != 0)
+
+        if (regionId != 0 && HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REGIONS_CHOISIES[regionId] == undefined)
         {
             $.getJSON(
                 '/compte-hn/intervention/etablissement/etablissements/json',
                 {
                     region:regionId
                 },
-                function(etablissementsRegroupesParTypeOrganisme)
+                /*function(etablissementsRegroupesParTypeOrganisme)
                 {
                     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements(etablissementsRegroupesParTypeOrganisme);
+                }*/
+                function(etablissements)
+                {
+                    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REGIONS_CHOISIES[regionId] = HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.getRegionNom();
+                    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements(etablissements);
                 }
             );
         }
@@ -141,11 +174,11 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampAutre
  * @param array etablissementsRegroupesParTypeOrganisme Liste des établissements regroupés par type d'organisme à afficher.
  * @return void
  */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements = function(etablissementsRegroupesParTypeOrganisme)
+/*HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements = function(etablissementsRegroupesParTypeOrganisme)
 {
     var etablissementSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements');
     var etablissementsSelectHtml = '';
-    
+
     $.each(etablissementsRegroupesParTypeOrganisme, function(index, etablissementsRegroupes) {
         etablissementsSelectHtml += '<optgroup label="' + etablissementsRegroupes.typeOrganisme.libelle + '">';
             $.each(etablissementsRegroupes.etablissements, function(index, etablissement) {
@@ -153,7 +186,22 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutres
             });
         etablissementsSelectHtml += '</optgroup>';
     });
-    
+
+    $(etablissementSelect).html(etablissementsSelectHtml);
+    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initAutresEtablissementsInitiaux();
+};*/
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements = function(etablissements)
+{
+    var etablissementSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements');
+    var etablissementsSelectHtml = $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements').html();
+
+    etablissementsSelectHtml += '<optgroup label="' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.getRegionNom() + '">';
+    $.each(etablissements, function(index, etablissement) {
+        etablissementsSelectHtml += '<option value="' + etablissement.id + '">' + etablissement.nom + '</option>';
+    });
+    etablissementsSelectHtml += '</optgroup>';
+
+
     $(etablissementSelect).html(etablissementsSelectHtml);
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initAutresEtablissementsInitiaux();
 };

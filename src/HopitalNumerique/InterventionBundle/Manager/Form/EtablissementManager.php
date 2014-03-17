@@ -62,10 +62,10 @@ class EtablissementManager
         {
             $etablissementsListeFormatee[] = array(
                     'typeOrganisme' => array(
-                            'id' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']->getId()
-                                    : '0'),
-                            'libelle' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']
-                                            ->getLibelle() : '')), 'etablissements' => array());
+                    'id' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']->getId()
+                            : '0'),
+                    'libelle' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']
+                                    ->getLibelle() : '')), 'etablissements' => array());
             foreach ($etablissementsRegroupes['etablissements'] as $etablissement)
             {
                 $etablissementsListeFormatee[count($etablissementsListeFormatee) - 1]['etablissements'][] = array(
@@ -75,4 +75,27 @@ class EtablissementManager
 
         return json_encode($etablissementsListeFormatee);
     }
+    
+    /**
+     * Retourne la liste jsonifiée des établissements.
+     *
+     * @param array $criteres Le filtre à appliquer sur la liste
+     * @return string La liste des établissements
+     */
+    public function jsonEtablissements(array $criteres)
+    {
+        $etablissements = $this->container->get('hopitalnumerique_etablissement.manager.etablissement')->findBy($criteres);
+        $etablissementsListeFormatee = array();
+    
+        foreach ($etablissements as $etablissement)
+        {
+            $etablissementsListeFormatee[] = array(
+                'id' => $etablissement->getId(),
+                'nom' => $etablissement->getNom()
+            );
+        }
+    
+        return json_encode($etablissementsListeFormatee);
+    }
+    
 }
