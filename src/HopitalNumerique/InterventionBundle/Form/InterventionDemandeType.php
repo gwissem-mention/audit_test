@@ -95,8 +95,7 @@ class InterventionDemandeType extends AbstractType
                 'label' => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
                 'class' => 'HopitalNumeriqueObjetBundle:Objet',
                 'property' => 'titre',
-                'multiple' => true,
-                'attr' => array('class' => $this->_constraints['objets']['class'] )
+                'multiple' => true
             ))
             ->add('description', 'textarea', array(
                 'label' => 'Description succinte de mon projet',

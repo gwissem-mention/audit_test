@@ -30,9 +30,11 @@ class EtablissementController extends Controller
         if ($this->get('request')->query->has('departement'))
             $etablissementsFiltres['departement'] = intval($this->get('request')->query->get('departement'));
 
-        $etablissementsRegroupesParTypeOrganismeJson = $this->get('hopitalnumerique_intervention.manager.form_etablissement')
-                ->jsonEtablissementsRegroupesParTypeOrganisme($etablissementsFiltres);
-
-        return new \Symfony\Component\HttpFoundation\Response($etablissementsRegroupesParTypeOrganismeJson);
+        //$etablissementsRegroupesParTypeOrganismeJson = $this->get('hopitalnumerique_intervention.manager.form_etablissement')->jsonEtablissementsRegroupesParTypeOrganisme($etablissementsFiltres);
+        //return new \Symfony\Component\HttpFoundation\Response($etablissementsRegroupesParTypeOrganismeJson);
+        
+        $etablissements = $etablissementsRegroupesParTypeOrganismeJson = $this->get('hopitalnumerique_intervention.manager.form_etablissement')->jsonEtablissements($etablissementsFiltres);
+        
+        return new \Symfony\Component\HttpFoundation\Response($etablissements);
     }
 }
