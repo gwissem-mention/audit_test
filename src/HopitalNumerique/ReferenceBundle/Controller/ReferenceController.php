@@ -157,7 +157,7 @@ class ReferenceController extends Controller
                 $new = is_null($reference->getId()) ? true : false;
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
-                $this->get('hopitalnumerique_reference.manager.reference')->updateOrder($reference);
+                // $this->get('hopitalnumerique_reference.manager.reference')->updateOrder($reference);
                 $this->get('hopitalnumerique_reference.manager.reference')->save($reference);
                 $this->get('hopitalnumerique_reference.manager.reference')->refreshOrder($oldParent);
                 $this->get('hopitalnumerique_reference.manager.reference')->refreshOrder($reference->getParent());

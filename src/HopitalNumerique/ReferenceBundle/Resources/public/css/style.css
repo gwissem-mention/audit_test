@@ -10,15 +10,16 @@
         margin: 1cm 0.5cm;
         size:portrait;
     }
+    #page-leftbar{ display:none !important; }
+    #page-content{
+        margin-left:0px !important;
+    }
     .references .panel-body{
         display:block !important;
         border:0 !important;
     }
     .breadcrumb{
         display:none;
-    }
-    #page-content{
-        margin-left:0px;
     }
     header{
         display: none;
