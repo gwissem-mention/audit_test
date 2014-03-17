@@ -36,7 +36,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      */
     public function nouveauAction(User $ambassadeur)
     {
-        if (!$ambassadeur->hasRoleAmbassadeur())
+        if (!$ambassadeur->hasRoleAmbassadeur() || !$ambassadeur->isActif())
         {
             $this->get('session')->getFlashBag()->add('danger', 'L\'utilisateur choisi n\'est pas un ambassadeur.');
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
@@ -107,6 +107,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         {
             $cmsi = $this->utilisateurConnecte;
             $this->interventionDemande->setCmsiDateChoix($this->interventionDemande->getDateCreation());
+            $this->interventionDemande->setAmbassadeurDateDerniereRelance(new \DateTime());
             $this->interventionDemande->setInterventionInitiateur($this->get('hopitalnumerique_intervention.manager.intervention_initiateur')->getInterventionInitiateurCmsi());
             $this->interventionDemande->setInterventionEtat($this->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatAcceptationCmsi());
         }

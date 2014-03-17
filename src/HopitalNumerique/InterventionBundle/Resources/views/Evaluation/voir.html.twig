@@ -1,6 +1,6 @@
 {% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
 
-{% block pageTitre %}Mon évaluation{% endblock %}
+{% block pageTitre %}Évaluation{% endblock %}
 
 {% block chapoDescription %}
     <p>Tu vois, là-bas, les champs de blé ? Je ne mange pas de pain. Le blé pour moi est inutile. Les champs de blé ne me rappellent rien. Et ça, c'est triste ! Mais tu as des cheveux couleur d'or. Alors ce sera merveilleux quand tu m'auras apprivoisé ! Le blé, qui est doré, me fera souvenir de toi. Et j'aimerai le bruit du vent dans le blé...</p>
@@ -8,17 +8,17 @@
 
 {% block contenu %}
 
-        {% if interventionDemande.interventionEvaluations|length > 0 %}
-            {% for interventionEvaluation in interventionDemande.interventionEvaluations %}
-                <div class="panel panel_form_visu">
-                    <h2>Contenu de l'évaluation</h2>
-                    
-                    
-                    
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="alert alert-warning">Aucune évaluation pour l'instant.</p>
-        {% endif %}
+    <div class="panel panel_form">
+
+        {{ render(controller(
+            "HopitalNumeriqueInterventionBundle:Form/Evaluation:edit",
+            {
+                interventionDemande:interventionDemande,
+                questionnaire:questionnaire,
+                optionRenderForm:optionRenderForm
+            }
+        )) }}
+
+    </div>
 
 {% endblock %}

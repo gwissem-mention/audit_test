@@ -59,7 +59,8 @@ class InterventionDemandeType extends AbstractType
                 'property' => 'libelle',
                 'label' => 'Type d\'intervention souhaitée',
                 'empty_value' => '',
-                'required' => true
+                'required' => true,
+                'attr' => array('class' => $this->_constraints['interventionType']['class'] )
             ))
             ->add('region', 'entity', array(
                 'label' => 'Région des établissements',
@@ -84,7 +85,7 @@ class InterventionDemandeType extends AbstractType
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
                 'label' => 'Référent de la demande',
                 'required' => true,
-                'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_referent')
+                'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_referent '.$this->_constraints['referent']['class'])
             ))
             ->add('autresEtablissements', 'textarea', array(
                 'label' => 'Attacher d\'autres établissements à ma demande',
@@ -94,7 +95,8 @@ class InterventionDemandeType extends AbstractType
                 'label' => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
                 'class' => 'HopitalNumeriqueObjetBundle:Objet',
                 'property' => 'titre',
-                'multiple' => true
+                'multiple' => true,
+                'attr' => array('class' => $this->_constraints['objets']['class'] )
             ))
             ->add('description', 'textarea', array(
                 'label' => 'Description succinte de mon projet',

@@ -4,6 +4,9 @@ namespace HopitalNumerique\InterventionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
  * Entité d'une demande d'intervention.
@@ -120,6 +123,7 @@ class InterventionDemande
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="referent_id", referencedColumnName="usr_id")
      * })
+     * @Nodevo\Javascript(class="validate[required]")
      */
     private $referent;
 
@@ -170,6 +174,8 @@ class InterventionDemande
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ref_intervention_type_id", referencedColumnName="ref_id")
      * })
+     * @Assert\NotNull(message="Un type d'intervention doit être choisi.")
+     * @Nodevo\Javascript(class="validate[required]")
      */
     private $interventionType;
 
@@ -245,6 +251,8 @@ class InterventionDemande
      *     @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")
      *   }
      * )
+     * @Assert\Count(min=1,minMessage="Au moins une production doit être choisie.")
+     * @Nodevo\Javascript(class="validate[required]")
      */
     private $objets;
 
@@ -902,7 +910,7 @@ class InterventionDemande
     }
 
     /**
-     * Retour si l'état de l'intervention est Demande initiale.
+     * Retourne si l'état de l'intervention est Demande initiale.
      * 
      * @return boolean VRAI ssi l'état de l'intervention est Demande initiale
      */
@@ -911,7 +919,7 @@ class InterventionDemande
         return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatDemandeInitialeId());
     }
     /**
-     * Retour si l'état de l'intervention est Mise en attente par le CMSI.
+     * Retourne si l'état de l'intervention est Mise en attente par le CMSI.
      *
      * @return boolean VRAI ssi l'état de l'intervention est Mise en attente par le CMSI
      */
@@ -920,12 +928,31 @@ class InterventionDemande
         return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAttenteCmsiId());
     }
     /**
-     * Retour si l'état de l'intervention est Validé par le CMSI.
+     * Retourne si l'état de l'intervention est Validé par le CMSI.
      *
      * @return boolean VRAI ssi l'état de l'intervention est Validé par le CMSI
      */
     public function interventionEtatEstAcceptationCmsi()
     {
         return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiId());
+    }
+
+    /**
+     * Retourne si l'état de l'évaluation est À évaluer.
+     *
+     * @return boolean VRAI ssi l'état de l'évaluation est À évaluer
+     */
+    public function evaluationEtatEstAEvaluer()
+    {
+        return ($this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId());
+    }
+    /**
+     * Retourne si l'état de l'évaluation est Évalué.
+     *
+     * @return boolean VRAI ssi l'état de l'évaluation est Évalué
+     */
+    public function evaluationEtatEstEvalue()
+    {
+        return ($this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId());
     }
 }

@@ -62,7 +62,9 @@
                         <script type="text/javascript">showPlaceholder = false;</script>
                     {% endif %}
 
-                    <div class="btn btn-xs btn-success" onclick="saveRequest( '{{ app.user }}' );" >Enregistrer ma requête</div>
+                    {% if not app.user or app.user|checkAuthorization( path('hopital_numerique_requete_homepage') ) %}
+                        <div class="btn btn-xs btn-success" onclick="saveRequest( '{{ app.user }}' );" >Enregistrer ma requête</div>
+                    {% endif %}
 
                     <hr />
 

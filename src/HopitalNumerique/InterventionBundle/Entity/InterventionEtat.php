@@ -27,7 +27,11 @@ class InterventionEtat
      * @var integer Nombre de jours avant que l'ambassadeur ne reçoive une seconde alerte après que la demande ait été validée par le CMSI
      */
     public static $NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_2_NOMBRE_JOURS = 7;
-
+    /**
+     * @var integer Nombre de jours avant que la demande d'intervention, sans réponse de l'ambassadeur, soit clôturée.
+     */
+    public static $NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_CLOTURE_NOMBRE_JOURS = 7;
+    
     /**
      * @var integer ID de l'état Demande initiale
      */

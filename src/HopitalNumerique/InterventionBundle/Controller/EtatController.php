@@ -110,6 +110,10 @@ class EtatController extends Controller
                         }
                         else return false;
                     }
+                    else if ($interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationAmbassadeurId())
+                    {
+                        $interventionDemande->setEvaluationEtat($this->get('hopitalnumerique_intervention.manager.intervention_evaluation_etat')->getInterventionEvaluationEtatAEvaluer());
+                    }
     
                     $this->get('hopitalnumerique_intervention.manager.intervention_demande')->save($interventionDemande);
                     $this->_envoieCourriel($interventionDemande, $interventionEtat);

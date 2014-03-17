@@ -55,6 +55,14 @@ class Reponse
      */
     protected $reference;
 
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="param_id", type="integer", options = {"comment" = "Éventuelle clef étrangère"})
+     */
+    private $paramId;
+    
     /**
      * Get id
      *
@@ -157,6 +165,27 @@ class Reponse
             $this->reference = null;
     }
 
+    /**
+     * Get paramId
+     *
+     * @return integer $paramId
+     */
+    public function getParamId()
+    {
+        return $this->paramId;
+    }
+    
+    /**
+     * Set paramId
+     *
+     * @param integer $paramId
+     */
+    public function setParamId($paramId)
+    {
+        $this->paramId = $paramId;
+    }
+    
+    
     // ---------------------Test de file---------------------------------
     public $file;
 }

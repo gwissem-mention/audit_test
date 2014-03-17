@@ -16,9 +16,9 @@ class ReponseManager extends BaseManager
      *
      * @return array
      */
-    public function reponsesByQuestionnaireByUser( $idQuestionnaire, $idUser, $orderByQuestion = false )
+    public function reponsesByQuestionnaireByUser( $idQuestionnaire, $idUser, $orderByQuestion = false, $paramId = null )
     {
-        $reponses = $this->getRepository()->reponsesByQuestionnaireByUser( $idQuestionnaire , $idUser )->getResult();
+        $reponses = $this->getRepository()->reponsesByQuestionnaireByUser( $idQuestionnaire , $idUser, $paramId )->getResult();
         
         //Si on le spécifie, $reponses prendra en clé l'id de la question
         if($orderByQuestion)

@@ -1,20 +1,8 @@
-{% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    {% stylesheets output="compiled/hopitalnumerique-intervention-demande-edit.css" filter="cssrewrite"
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}">
-    {% endstylesheets %}
-{% endblock %}
+{% extends 'HopitalNumeriqueInterventionBundle:Form:layout.html.twig' %}
 
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-intervention-demande-edit.js"
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
-
         'bundles/hopitalnumeriqueintervention/js/InterventionDemande/Formulaire.js'
         'bundles/hopitalnumeriqueintervention/js/InterventionDemande/FormulaireEvenement.js'
     %}
