@@ -36,7 +36,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      */
     public function nouveauAction(User $ambassadeur)
     {
-        if (!$ambassadeur->hasRoleAmbassadeur())
+        if (!$ambassadeur->hasRoleAmbassadeur() || !$ambassadeur->isActif())
         {
             $this->get('session')->getFlashBag()->add('danger', 'L\'utilisateur choisi n\'est pas un ambassadeur.');
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
