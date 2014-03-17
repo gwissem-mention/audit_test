@@ -47,11 +47,11 @@ class DemandesGrid extends Grid implements IGrid
         $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneInterventionEtatLibelle);
        
-        $colonneCmsiDateChoixLibelle = new Column\TextColumn('cmsiDateChoixLibelle', 'Choix CMSI');
+        $colonneCmsiDateChoixLibelle = new Column\TextColumn('cmsiDateChoixLibelle', 'CMSI');
         $colonneCmsiDateChoixLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneCmsiDateChoixLibelle);
        
-        $colonneAmbassadeurDateChoixLibelle = new Column\TextColumn('ambassadeurDateChoixLibelle', 'Choix ambassadeur');
+        $colonneAmbassadeurDateChoixLibelle = new Column\TextColumn('ambassadeurDateChoixLibelle', 'Ambassadeur');
         $colonneAmbassadeurDateChoixLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneAmbassadeurDateChoixLibelle);
 

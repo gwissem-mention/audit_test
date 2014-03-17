@@ -5,6 +5,8 @@
     {% stylesheets output="compiled/hopitalnumerique-intervention.css"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriqueintervention/css/intervention.css'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
@@ -14,6 +16,7 @@
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-intervention.js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

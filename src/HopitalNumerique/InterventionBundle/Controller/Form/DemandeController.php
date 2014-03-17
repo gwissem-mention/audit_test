@@ -166,7 +166,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
 
         if (($this->utilisateurConnecte->hasRoleCmsi() && ($this->interventionDemande->getInterventionEtat()->getId() == InterventionEtat::getInterventionEtatDemandeInitialeId() || $this->interventionDemande->getInterventionEtat()->getId() == InterventionEtat::getInterventionEtatAttenteCmsiId())))
         {
-            $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_edition_cmsi', $this->interventionDemande);
+            $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_edition_cmsi', $this->interventionDemande, array('interventionDemande' => $this->interventionDemande));
         }
 
         if ($interventionDemandeFormulaire == null)
