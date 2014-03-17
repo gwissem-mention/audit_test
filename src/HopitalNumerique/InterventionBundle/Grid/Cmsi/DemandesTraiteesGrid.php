@@ -22,7 +22,7 @@ class DemandesTraiteesGrid extends Grid implements IGrid
         $this->setSource('hopitalnumerique_intervention.manager.intervention_demande');
         $this->setFunctionName('getGridDonnees_CmsiDemandesTraitees');
         $this->setSourceType(self::SOURCE_TYPE_MANAGER);
-        $this->setNoDataMessage('Aucune intervention à afficher.');
+        $this->setNoDataMessage('- Aucune intervention à afficher -');
     }
 
     /**

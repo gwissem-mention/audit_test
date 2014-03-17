@@ -23,7 +23,7 @@ class DemandesGrid extends Grid implements IGrid
         $this->setSource('hopitalnumerique_intervention.manager.intervention_demande');
         $this->setFunctionName('getGridDonnees_AmbassadeurDemandes');
         $this->setSourceType(self::SOURCE_TYPE_MANAGER);
-        $this->setNoDataMessage('Aucune intervention à afficher.');
+        $this->setNoDataMessage('- Aucune intervention à afficher -');
     }
 
     /**

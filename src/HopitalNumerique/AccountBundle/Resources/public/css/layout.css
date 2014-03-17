@@ -44,6 +44,7 @@ div#tableau-de-bord {}
                 div#tableau-de-bord div.grid-search div.panel div.panel-body label { color:#fff; }
                 div#tableau-de-bord div.grid-search div.panel div.panel-body div.panel-footer { background-color:transparent;border-width:0px; }
     div#tableau-de-bord div.grid { font-size:11px;padding:0px; }
+        div#tableau-de-bord div.grid p.no_data { font-size:13px;padding:10px 0px 0px 0px; }
         div#tableau-de-bord div.grid table {}
             div#tableau-de-bord div.grid table tr.grid-row-titles { color:#6F3596;text-transform:uppercase; }
                 div#tableau-de-bord div.grid table tr.grid-row-titles a { color:#6F3596; }
