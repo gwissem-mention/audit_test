@@ -63,6 +63,7 @@ div#tableau-de-bord {}
     /* <-- Formulaire */
     div#tableau-de-bord div.panel_form { padding:20px 35px 20px 35px;position:relative; }
         div#tableau-de-bord div.panel_form div.boutons { padding:0px;text-align:right; }
+            div#tableau-de-bord div.panel_form div.boutons button, div#tableau-de-bord div.panel_form div.boutons input { text-transform:uppercase; }
     /* --> */
     /* <-- Formulaire en lecture seule */
     div#tableau-de-bord div.panel_form_visu { font-size:13px;padding:0px 0px 20px 6px; }

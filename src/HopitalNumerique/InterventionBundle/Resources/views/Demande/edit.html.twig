@@ -38,17 +38,17 @@
             
             <div class="form-group">
                 <label class="col-md-4 control-label">Type d'intervention</label>
-                <div class="col-md-7"><div class="form-control">{{ interventionDemande.interventionType.libelle }}</div></div>
+                <div class="col-md-8"><div class="form-control">{{ interventionDemande.interventionType.libelle }}</div></div>
                 <div class="col-md-4"><div class="help-block"></div></div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label">Référent</label>
-                <div class="col-md-7"><div class="form-control">{{ interventionDemande.referent.appellation }}</div></div>
+                <div class="col-md-8"><div class="form-control">{{ interventionDemande.referent.appellation }}</div></div>
                 <div class="col-md-4"><div class="help-block"></div></div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label">Objets</label>
-                <div class="col-md-7"><div class="form-control">
+                <div class="col-md-8"><div class="form-control">
                     {% for objet in interventionDemande.objets %}
                         <div>{{ objet.titre }}</div>
                     {% endfor %}
@@ -57,17 +57,17 @@
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label">Champ libre</label>
-                <div class="col-md-7"><div class="form-control">{{ interventionDemande.champLibre }}</div></div>
+                <div class="col-md-8"><div class="form-control">{{ interventionDemande.champLibre }}</div></div>
                 <div class="col-md-4"><div class="help-block"></div></div>
             </div>
             <div class="form-group">
                 <label class="col-md-4 control-label">Informations pour la prise de rendez-vous (échéance, disponibilités, etc)</label>
-                <div class="col-md-7"><div class="form-control">{{ interventionDemande.rdvInformations }}</div></div>
+                <div class="col-md-8"><div class="form-control">{{ interventionDemande.rdvInformations }}</div></div>
                 <div class="col-md-4"><div class="help-block"></div></div>
             </div>
 
             <div class="boutons">
-                <input type="submit" class="btn btn-success submit">
+                <input type="submit" class="btn btn-success submit" value="Enregistrer les modifications">
             </div>
             
         </form>
