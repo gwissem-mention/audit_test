@@ -1,3 +1,9 @@
 hopital_numerique_registre_homepage:
-    pattern:  /
-    defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:index }
+    pattern:  /registre-ambassadeurs/{region}/{domaine}
+    defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:index, region:null, domaine:null }
+
+hopital_numerique_registre_ambassadeur_objets:
+    pattern:  /registre-ambassadeurs/show/objets/{id}
+    defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:objets }
+    requirements:
+        id: \d+

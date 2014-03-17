@@ -35,7 +35,7 @@ hopital_numerique_recherche:
 
 hopital_numerique_registre:
     resource: "@HopitalNumeriqueRegistreBundle/Resources/config/routing.yml"
-    prefix:   /registre-ambassadeurs
+    prefix:   /
 
 # Bundles Hopital Numérique : partie Admin
 hopital_numerique_user:

@@ -1,1 +1,107 @@
-index
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Registre{% endblock %}
+{% block metadesc %}Registre des ambassadeurs{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-registre-ambassadeur-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueregistre/css/style.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-registre-ambassadeur-index.js"
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        'bundles/hopitalnumeriqueregistre/js/raphael.js'
+        'bundles/hopitalnumeriqueregistre/js/carte_departement.js'
+        'bundles/hopitalnumeriqueregistre/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="registre-ambassadeur">    
+        {# En-tête #}
+        <div class="col-md-12">
+            <h3 class="violet">Annuaire des ambassadeurs <a href="{{path('hopital_numerique_account_homepage')}}" class="pull-right">Tableau de bord</a> </h3>
+        </div>        
+        
+        {# Critère de recherche #}
+        <div class="col-md-3">
+            <h4 class="violet">Critères de recherche</h4>
+            <div class="map">
+                {# Liste déroulante : domaine #}
+                <p class="titre">Domaines fonctionnels</p>
+                <select name="domaines_liste" id="domaines_liste" data-url="{{ path('hopital_numerique_registre_homepage', {'region' : region.id}) }}">
+                    <option value="0"> - </option>
+                    {% for domaine in domaines %}
+                        <option value="{{domaine.id}}" {% if domaineSelected == domaine.id %}selected="selected"{% endif %} >{{domaine.libelle}}</option>
+                    {% endfor %}
+                </select>
+                {# Carte de france #}
+                <div id="canvas_france" style="width:100%;" ></div>
+
+                {#<p class="titre">Par zones géographiques</p>#}
+            </div>
+        </div>
+        
+        {# Contenu de la page #}
+        <div class="col-md-9">
+            {% if region %}
+                <div class="col-md-12">
+                    <h4 class="violet">{{region.libelle}}</h4>
+                </div>
+                <input type="hidden" id="selected-region" value="{{region.libelle}}" />
+                {% for ambassadeur in ambassadeurs %}
+                    <div class="fiche col-md-6">
+                        <div class="content">
+                            <h5>{{ambassadeur.prenom|capitalize ~ ' ' ~ ambassadeur.nom|capitalize}}</h5>
+                            <div class="etab">
+                                {% if ambassadeur.etablissementRattachementSante %}
+                                    {{ambassadeur.etablissementRattachementSante.nom}}
+                                {% else %}
+                                    {{ambassadeur.autreStructureRattachementSante}}
+                                {% endif %}
+                            </div>
+                            <p class="titre violet">Domaines fonctionnels</p>
+                            <ul>
+                                {% if ambassadeur.domaines %}
+                                    {% for domaine in ambassadeur.domaines %}
+                                        <li>{{domaine.libelle}}</li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                            
+                            <a class="link violet fancybox.ajax" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a>
+
+                            <a class="btn background-violet {% if not allowContact %}disabled{% endif %}" href="{% if not allowContact %}#{% else %}{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}{% endif %}">Solliciter cet ambassadeur</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-md-12">
+                        - Aucun ambassadeur ne correspond à votre recherche - 
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-md-12">
+                    <h4 class="violet">Aucune région sélectionnée</h4>
+                </div>
+                <div class="col-md-12">
+                    - Merci de sélectionner une région pour rechercher les ambassadeurs - 
+                </div>
+            {% endif %}
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <input type="hidden" id="registre-region-url" value="{{path('hopital_numerique_registre_homepage')}}" />
+    </div>
+{% endblock %}

@@ -27,10 +27,11 @@ class PublicationController extends Controller
 
         //render
         return $this->render('HopitalNumeriqueRechercheBundle:Publication:objet.html.twig', array(
-            'objet'    => $objet,
-            'types'    => $types,
-            'contenus' => $contenus,
-            'meta'     => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() )
+            'objet'        => $objet,
+            'types'        => $types,
+            'contenus'     => $contenus,
+            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
+            'ambassadeurs' => $this->_getAmbassadeursConcernes( $objet->getId() )
         ));
     }
 
@@ -57,12 +58,13 @@ class PublicationController extends Controller
 
         //render
         return $this->render('HopitalNumeriqueRechercheBundle:Publication:objet.html.twig', array(
-            'objet'    => $objet,
-            'contenus' => $contenus,
-            'types'    => $types,
-            'contenu'  => $contenu,
-            'prefix'   => $prefix,
-            'meta'     => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() )
+            'objet'        => $objet,
+            'contenus'     => $contenus,
+            'types'        => $types,
+            'contenu'      => $contenu,
+            'prefix'       => $prefix,
+            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() ),
+            'ambassadeurs' => $this->_getAmbassadeursConcernes( $objet->getId() )
         ));
     }
 
@@ -71,9 +73,24 @@ class PublicationController extends Controller
 
 
 
+    /**
+     * Retourne la liste des ambassadeurs concernés par la production
+     *
+     * @param Objet $objet La production consultée
+     *
+     * @return array
+     */
+    private function _getAmbassadeursConcernes( $objet )
+    {
+        //get connected user and his region
+        $user   = $this->get('security.context')->getToken()->getUser();
+        if( $user === 'anon.')
+            $region = false;
+        else
+            $region = $user->getRegion();
 
-
-    
+        return $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndProduction( $region, $objet );
+    }
 
     /**
      * Vérifie que l'objet est accessible à l'user connecté ET que l'objet est toujours bien publié

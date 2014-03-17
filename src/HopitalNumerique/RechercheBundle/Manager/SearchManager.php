@@ -183,7 +183,7 @@ class SearchManager extends BaseManager
 
         //clean resume (pagebreak)
         $tab = explode('<!-- pagebreak -->', $contenu->getContenu());
-        $item['resume'] = html_entity_decode(strip_tags($tab[0]));
+        $item['resume'] = html_entity_decode(strip_tags($tab[0]), ENT_COMPAT | ENT_HTML401, 'UTF-8');
         $item['type']   = array();
 
         //get Categ and Type
@@ -228,7 +228,7 @@ class SearchManager extends BaseManager
 
         //clean resume (pagebreak)
         $tab = explode('<!-- pagebreak -->', $objet->getResume() );
-        $item['resume'] = html_entity_decode(strip_tags($tab[0]));
+        $item['resume'] = html_entity_decode(strip_tags($tab[0]), ENT_COMPAT | ENT_HTML401, 'UTF-8');
         
         //get Categ and Type
         $tmp = $this->_getTypeAndCateg( $objet );

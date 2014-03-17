@@ -312,6 +312,7 @@
                 <input type="hidden" id="parse-upload-url" value="{{path('hopitalnumerique_objet_contenu_uploadparse',{'id':objet.id})}}" />
                 <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_objet_reference_contenu_save')}}" />
             {% endif %}
+            <a id="getObjets" href="{{path('hopitalnumerique_objet_objet_getObjets')}}" class="hide"></a>
             <input type="hidden" id="objet-file-url" value="{{path('hopitalnumerique_objet_objet_isFileExist')}}" />
         </div>
     </div>
