@@ -411,9 +411,9 @@ class UserController extends Controller
                         return $this->_renderView( $view , $form, $user);
                     }
                 }
-
+                
                 //Cas particulier : 2 utilisateur ES - Direction générale par établissement de rattachement
-                if( null != $user->getEtablissementRattachementSante() )
+                if( null != $user->getEtablissementRattachementSante() && $role->getRole() == 'ROLE_ES_DIRECTION_GENERALE_5')
                 {
                     $result = $this->get('hopitalnumerique_user.manager.user')->userExistForRoleDirection( $user );
                     if( ! is_null($result) ) {
