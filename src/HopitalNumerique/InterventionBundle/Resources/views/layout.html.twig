@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {% stylesheets output="compiled/hopitalnumerique-intervention.css"
+    {% stylesheets output="compiled/hopitalnumerique-intervention.css" filter="cssrewrite"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriqueintervention/css/intervention.css'
         'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'

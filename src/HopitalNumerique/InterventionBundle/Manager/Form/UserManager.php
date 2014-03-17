@@ -104,10 +104,11 @@ class UserManager
      */
     public function getAmbassadeursChoices(Reference $region)
     {
-        return $this->container->get('hopitalnumerique_user.manager.user')->findBy(array(
+        return $this->container->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndDomaine($region);
+        /*return $this->container->get('hopitalnumerique_user.manager.user')->findBy(array(
             'enabled' => true,
             'region' => $region
-        ));
+        ));*/
     }
     /**
      * Retourne la liste des référents pour les listes de formulaire.

@@ -135,7 +135,7 @@ class UserManager extends BaseManager
      *
      * @return array
      */
-    public function getAmbassadeursByRegionAndDomaine( $region, $domaine )
+    public function getAmbassadeursByRegionAndDomaine( $region, $domaine = null )
     {
         return $this->getRepository()->getAmbassadeursByRegionAndDomaine( $region, $domaine )->getQuery()->getResult();
     }
