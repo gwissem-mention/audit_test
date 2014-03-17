@@ -47,7 +47,12 @@ div#tableau-de-bord {}
         div#tableau-de-bord div.grid table {}
             div#tableau-de-bord div.grid table tr.grid-row-titles { color:#6F3596;text-transform:uppercase; }
                 div#tableau-de-bord div.grid table tr.grid-row-titles a { color:#6F3596; }
-            div#tableau-de-bord div.grid table th, div#tableau-de-bord div.grid table td { background-color:transparent;border-width:0px;padding:4px; }
+            div#tableau-de-bord div.grid table th, div#tableau-de-bord div.grid table td { background-color:transparent;border-width:1px;padding:4px; }
+            div#tableau-de-bord div.grid table tr th { background-color:#6F3596; }
+            div#tableau-de-bord div.grid table tr:nth-child(2n+1) td { background-color:#eee; }
+            div#tableau-de-bord div.grid table tr td .btn { padding:#eee;padding:3px 12px; }
+            div#tableau-de-bord div.grid table tr td.grid-column-actions .btn { padding:6px 12px; }
+                div#tableau-de-bord div.grid table th span { color:#fff; }
             div#tableau-de-bord div.grid table td.grid-column-actions {}
                 div#tableau-de-bord div.grid table td.grid-column-actions ul.grid-row-actions { list-style-type:none;margin:0px;padding:0px; }
                     div#tableau-de-bord div.grid table td.grid-column-actions ul.grid-row-actions li { display:inline; }
