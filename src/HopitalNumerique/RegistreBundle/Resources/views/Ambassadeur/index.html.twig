@@ -36,7 +36,7 @@
             <h4 class="violet">Critères de recherche</h4>
             <div class="map">
                 <p class="titre">Domaines fonctionnels</p>
-                <select name="domaines_liste" id="domaines_liste">
+                <select name="domaines_liste" id="domaines_liste" data-url="{{ path('hopital_numerique_registre_homepage', {'region' : region.id}) }}">
                     <option value="0"> - </option>
                     {% for domaine in domaines %}
 
