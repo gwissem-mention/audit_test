@@ -20,6 +20,8 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  */
 class Reference
 {
+    private static $STATUT_ACTIF_ID = 3;
+    
     /**
      * @var integer
      *
@@ -364,5 +366,15 @@ class Reference
             $currentLevel = $this->_getLevel( $currentLevel, $ref->getParent() );
 
         return $currentLevel;
+    }
+
+    /**
+     * Retourne l'ID pour le statut actif.
+     * 
+     * @return integer ID pour le statut actif
+     */
+    public static function getStatutActifId()
+    {
+        return self::$STATUT_ACTIF_ID;
     }
 }

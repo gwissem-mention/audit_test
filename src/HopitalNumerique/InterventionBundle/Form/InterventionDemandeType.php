@@ -51,6 +51,8 @@ class InterventionDemandeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $interventionDemande = $options['interventionDemande'];
+        
         $builder
             //->add('referent', $this->container->get('hopitalnumerique_intervention.type.user'))
             ->add('interventionType', 'entity', array(
@@ -58,7 +60,7 @@ class InterventionDemandeType extends AbstractType
                 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
                 'property' => 'libelle',
                 'label' => 'Type d\'intervention souhaitée',
-                'empty_value' => '',
+                'empty_value' => '-',
                 'required' => true,
                 'attr' => array('class' => $this->_constraints['interventionType']['class'] )
             ))
@@ -92,6 +94,7 @@ class InterventionDemandeType extends AbstractType
                 'required' => false
             ))
             ->add('objets', 'entity', array(
+                'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_intervention_demande')->getObjetsChoices($interventionDemande->getAmbassadeur()),
                 'label' => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
                 'class' => 'HopitalNumeriqueObjetBundle:Objet',
                 'property' => 'titre',
@@ -120,7 +123,10 @@ class InterventionDemandeType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array('data_class' => 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande'));
+        $resolver->setDefaults(array(
+            'data_class' => 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande',
+            'interventionDemande' => null
+        ));
     }
 
     /**

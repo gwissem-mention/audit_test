@@ -49,8 +49,8 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         $this->interventionDemande->setAmbassadeur($ambassadeur);
 
         if ($this->utilisateurConnecte->hasRoleCmsi())
-            $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_cmsi', $this->interventionDemande);
-        else $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_etablissement', $this->interventionDemande);
+            $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_cmsi', $this->interventionDemande, array('interventionDemande' => $this->interventionDemande));
+        else $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_etablissement', $this->interventionDemande, array('interventionDemande' => $this->interventionDemande));
 
         if ($this->_gereEnvoiFormulaireDemandeNouveau($interventionDemandeFormulaire))
             return $this->redirect($this->generateUrl('hopital_numerique_intervention_demande_liste'));

@@ -5,7 +5,10 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Manager pour le formulaire des demandes d'intervention.
@@ -36,5 +39,17 @@ class InterventionDemandeManager
     public function getInterventionTypesChoices()
     {
         return $this->container->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'TYPE_INTERVENTION'));
+    }
+    /**
+     * Retourne la liste des objets pour les listes de formulaire.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur pour le filtre
+     * @return array Liste des objets pour les listes de formulaire
+     */
+    public function getObjetsChoices(User $ambassadeur)
+    {
+        return $this->container->get('hopitalnumerique_objet.manager.objet')->getObjetsByAmbassadeur($ambassadeur);
+        
+        
     }
 }
