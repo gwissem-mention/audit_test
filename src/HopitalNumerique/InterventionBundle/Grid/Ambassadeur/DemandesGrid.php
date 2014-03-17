@@ -31,15 +31,32 @@ class DemandesGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        $this->addColonne(new Column\TextColumn('demandeurInformations', 'Demandeur'));
-        $this->addColonne(new Column\TextColumn('interventionInitiateurType', 'Initiateur'));
-        $this->addColonne(new Column\DateColumn('dateCreationLibelle', 'Création'));
-        $this->addColonne(new Column\TextColumn('interventionEtatLibelle', 'État'));
-        $this->addColonne(new Column\DateColumn('cmsiDateChoixLibelle', 'Choix CMSI'));
-        $this->addColonne(new Column\DateColumn('ambassadeurDateChoixLibelle', 'Choix ambassadeur'));
+        $colonneDemandeurInformations = new Column\TextColumn('demandeurInformations', 'Demandeur');
+        $colonneDemandeurInformations->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneDemandeurInformations);
         
+        $colonneInterventionInitiateurType = new Column\TextColumn('interventionInitiateurType', 'Initiateur');
+        $colonneInterventionInitiateurType->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneInterventionInitiateurType);
         
+        $colonneDateCreationLibelle = new Column\TextColumn('dateCreationLibelle', 'Création');
+        $colonneDateCreationLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneDateCreationLibelle);
+        
+        $colonneInterventionEtatLibelle = new Column\TextColumn('interventionEtatLibelle', 'État');
+        $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneInterventionEtatLibelle);
+       
+        $colonneCmsiDateChoixLibelle = new Column\TextColumn('cmsiDateChoixLibelle', 'Choix CMSI');
+        $colonneCmsiDateChoixLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneCmsiDateChoixLibelle);
+       
+        $colonneAmbassadeurDateChoixLibelle = new Column\TextColumn('ambassadeurDateChoixLibelle', 'Choix ambassadeur');
+        $colonneAmbassadeurDateChoixLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneAmbassadeurDateChoixLibelle);
+
         $colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
+        $colonneEvaluation->setFilterable(false)->setSortable(false);
         $colonneEvaluation->setAlign('center');
         $colonneEvaluation->manipulateRenderCell(
             function($value, $row, $router) {
@@ -57,7 +74,10 @@ class DemandesGrid extends Grid implements IGrid
         $this->addColonne($colonneEvaluation);
 
         //$this->addColonne(new Column\TextColumn('remboursementEtatLibelle', 'Remboursement'));
-        $this->addColonne(new Column\TextColumn('remboursementMontant', 'Montant'));
+
+        $colonneRemboursementMontant = new Column\TextColumn('remboursementMontant', 'Montant');
+        $colonneRemboursementMontant->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneRemboursementMontant);
     }
 
     /**

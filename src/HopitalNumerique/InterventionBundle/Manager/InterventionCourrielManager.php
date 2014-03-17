@@ -205,7 +205,9 @@ class InterventionCourrielManager
     /**
      * Envoi le courriel de clôture car sans nouvelle de l'ambassadeur.
      *
+     * @param \HopitalNumerique\UserBundle\Entity\User $cmsi Le CMSI de l'intervention
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur à relancer
+     * @param \HopitalNumerique\UserBundle\Entity\User $referent Le référent de l'établissement
      * @param string $interventionDemandeUrl Le chemin vers l'URL de la demande d'intervention
      * @return void
      */
@@ -216,6 +218,21 @@ class InterventionCourrielManager
         $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionDemandeUrl));
         $this->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionDemandeUrl));
         $this->envoiCourriel($courriel, $referent, array('l' => $interventionDemandeUrl));
+    }
+    /**
+     * Envoi le courriel de clôture car sans nouvelle de l'ambassadeur.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $cmsi Le CMSI de l'intervention
+     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur à relancer
+     * @param string $interventionEvaluationUrl Le chemin vers l'URL de l'évaluation de l'intervention
+     * @return void
+     */
+    public function envoiCourrielEvaluationRemplie(User $cmsi, User $ambassadeur, $interventionEvaluationUrl)
+    {
+        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielEvaluationRemplieId());
+    
+        $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionEvaluationUrl));
+        $this->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionEvaluationUrl));
     }
     
     

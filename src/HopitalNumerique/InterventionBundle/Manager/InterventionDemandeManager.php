@@ -39,6 +39,10 @@ class InterventionDemandeManager extends BaseManager
      */
     private $interventionEtatManager;
     /**
+     * @var \HopitalNumerique\InterventionBundle\Manager\InterventionRegroupementManager Le manager de l'entité InterventionRegroupement
+     */
+    private $interventionRegroupementManager;
+    /**
      * @var \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager Le manager de l'entité InterventionCourriel
      */
     private $interventionCourrielManager;
@@ -50,19 +54,50 @@ class InterventionDemandeManager extends BaseManager
      * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
      * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router Router de l'application
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager $interventionEtatManager Le manager de l'entité InterventionEtat
+     * @param \HopitalNumerique\InterventionBundle\Manager\InterventionRegroupementManager $interventionRegroupementManager Le manager de l'entité InterventionRegroupement
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager $interventionCourrielManager Le manager de l'entité InterventionCourriel
      * @return void
      */
-    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, UserManager $userManager, InterventionEtatManager $interventionEtatManager, InterventionCourrielManager $interventionCourrielManager)
+    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, UserManager $userManager, InterventionEtatManager $interventionEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager)
     {
         parent::__construct($entityManager);
         $this->securityContext = $securityContext;
         $this->router = $router;
         $this->userManager = $userManager;
         $this->interventionEtatManager = $interventionEtatManager;
+        $this->interventionRegroupementManager = $interventionRegroupementManager;
         $this->interventionCourrielManager = $interventionCourrielManager;
     }
 
+    /**
+     * Retourne les établissements rattachés et qui n'ont pas été regroupés (pour éviter les doublons lors de l'affichage).
+     *
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionDemande $interventionDemande La demande d'intervention des établissements
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionRegroupement[] $interventionRegroupements Les regroupements d'intervention
+     * @return \HopitalNumerique\EtablissementBundle\Entity\Etablissement[] Les établissements rattachés et non regroupés
+     */
+    public function findEtablissementsRattachesNonRegroupes(InterventionDemande $interventionDemande, array $interventionRegroupements)
+    {
+        $etablissements = array();
+        
+        foreach ($interventionDemande->getEtablissements() as $etablissement)
+        {
+            $etablissementEstPresent = false;
+            foreach ($interventionRegroupements as $interventionRegroupement)
+            {
+                if ($etablissement->getId() == $interventionRegroupement->getInterventionDemandeRegroupee()->getReferent()->getEtablissementRattachementSante()->getId())
+                {
+                    $etablissementEstPresent = true;
+                    break;
+                }
+            }
+            if (!$etablissementEstPresent)
+                $etablissements[] = $etablissement;
+        }
+        
+        return $etablissements;
+    }
+    
     /**
      * Met à jour automatiquement les états des demandes d'intervention et envoie éventuellement les courriels adéquats.
      *
@@ -191,6 +226,17 @@ class InterventionDemandeManager extends BaseManager
         return $interventionDemandes;
     }
     /**
+     * Retourne les données formatées pour la création du grid des demandes d'intervention pour le directeur.
+     *
+     * @return array Les données pour le grid des demandes d'intervention
+     */
+    public function getGridDonnees_DirecteurSuiviDemandes()
+    {
+        $interventionDemandes = $this->_repository->getGridDonnees_DirecteurSuiviDemandes($this->securityContext->getToken()->getUser());
+    
+        return $interventionDemandes;
+    }
+    /**
      * Retourne les données formatées pour la création du grid des demandes d'intervention pour l'ambassadeur.
      * 
      * @return array Les données pour le grid des demandes d'intervention
@@ -217,7 +263,28 @@ class InterventionDemandeManager extends BaseManager
     
         return $interventionDemandes;
     }
-
+    
+    /**
+     * Retourne les demandes d'intervention similaire par rapport à l'ambassadeur d'une demande d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut rechercher les demandes similaires
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention similaires par rapport à l'ambassadeur
+     */
+    public function getInterventionsSimilairesParAmbassadeur(InterventionDemande $interventionDemande)
+    {
+        return $this->_repository->getInterventionsSimilairesParAmbassadeur($interventionDemande);
+    }
+    /**
+     * Retourne les demandes d'intervention similaire par rapport aux objets d'une demande d'intervention.
+     * 
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut rechercher les demandes similaires
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention similaires par rapport aux objets
+     */
+    public function getInterventionsSimilairesParObjets(InterventionDemande $interventionDemande)
+    {
+        return $this->_repository->getInterventionsSimilairesParObjets($interventionDemande);
+    }
+    
     /**
      * Change l'ambassadeur d'une demande d'intervention.
      *

@@ -12,6 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
 class InterventionRegroupementType
 {
     /**
+     * @var integer ID du type de regroupement d'intervention Objet similaire
+     */
+    private static $INTERVENTION_REGROUPEMENT_TYPE_OBJET_ID = 1;
+    /**
+     * @var integer ID du type de regroupement d'intervention Ambassadeur
+     */
+    private static $INTERVENTION_REGROUPEMENT_TYPE_AMBASSADEUR_ID = 2;
+
+    /**
      * @var integer
      *
      * @ORM\Column(columnDefinition="TINYINT(3) UNSIGNED NOT NULL", name="intervregtyp_id", nullable=false)
@@ -58,5 +67,25 @@ class InterventionRegroupementType
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    
+    /**
+     * Retourne l'ID du type de regroupement d'intervention Objet similaire.
+     *
+     * @return integer ID du type de regroupement d'intervention Objet similaire
+     */
+    public static function getInterventionRegroupementTypeObjetId()
+    {
+        return self::$INTERVENTION_REGROUPEMENT_TYPE_OBJET_ID;
+    }
+    /**
+     * Retourne l'ID du type de regroupement d'intervention Ambassadeur.
+     *
+     * @return integer ID du type de regroupement d'intervention Ambassadeur
+     */
+    public static function getInterventionRegroupementTypeAmbassadeurId()
+    {
+        return self::$INTERVENTION_REGROUPEMENT_TYPE_AMBASSADEUR_ID;
     }
 }

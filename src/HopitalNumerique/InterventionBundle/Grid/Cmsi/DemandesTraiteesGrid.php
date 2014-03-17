@@ -31,6 +31,7 @@ class DemandesTraiteesGrid extends Grid implements IGrid
     public function setColumns()
     {
         $colonneRegroupements = new Column\TextColumn('nombreRegroupements', '');
+        $colonneRegroupements->setFilterable(false)->setSortable(false);
         $colonneRegroupements->manipulateRenderCell(
             function($value, $row, $router) {
                 if (intval($row->getField('nombreRegroupements')) > 0)
@@ -42,14 +43,38 @@ class DemandesTraiteesGrid extends Grid implements IGrid
         );
         $this->addColonne($colonneRegroupements);
         
-        $this->addColonne(new Column\TextColumn('demandeurInformations', 'Demandeur'));
-        $this->addColonne(new Column\TextColumn('interventionInitiateurType', 'Initiateur'));
-        $this->addColonne(new Column\TextColumn('ambassadeurInformations', 'Ambassadeur'));
-        $this->addColonne(new Column\DateColumn('dateCreationLibelle', 'Création'));
-        $this->addColonne(new Column\TextColumn('interventionEtatLibelle', 'État'));
-        $this->addColonne(new Column\DateColumn('cmsiDateChoixLibelle', 'Choix CMSI'));
-        $this->addColonne(new Column\DateColumn('ambassadeurDateChoixLibelle', 'Choix ambassadeur'));
-        $this->addColonne(new Column\TextColumn('evaluationEtatLibelle', 'Évaluation'));
+        $colonneDemandeurInformations = new Column\TextColumn('demandeurInformations', 'Demandeur');
+        $colonneDemandeurInformations->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneDemandeurInformations);
+        
+        $colonneInterventionInitiateurType = new Column\TextColumn('interventionInitiateurType', 'Initiateur');
+        $colonneInterventionInitiateurType->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneInterventionInitiateurType);
+        
+        $colonneAmbassadeurInformations = new Column\TextColumn('ambassadeurInformations', 'Ambassadeur');
+        $colonneAmbassadeurInformations->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneAmbassadeurInformations);
+        
+        $colonneDateCreationLibelle = new Column\TextColumn('dateCreationLibelle', 'Création');
+        $colonneDateCreationLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneDateCreationLibelle);
+        
+        $colonneInterventionEtatLibelle = new Column\TextColumn('interventionEtatLibelle', 'État');
+        $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneInterventionEtatLibelle);
+        
+        $colonneCmsiDateChoixLibelle = new Column\TextColumn('cmsiDateChoixLibelle', 'Choix CMSI');
+        $colonneCmsiDateChoixLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneCmsiDateChoixLibelle);
+        
+        $colonneAmbassadeurDateChoixLibelle = new Column\TextColumn('ambassadeurDateChoixLibelle', 'Choix ambassadeur');
+        $colonneAmbassadeurDateChoixLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneAmbassadeurDateChoixLibelle);
+        
+        $colonneEvaluationEtatLibelle = new Column\TextColumn('evaluationEtatLibelle', 'Évaluation');
+        $colonneEvaluationEtatLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneEvaluationEtatLibelle);
+
         //$this->addColonne(new Column\TextColumn('remboursementEtatLibelle', 'Remboursement'));
     }
 

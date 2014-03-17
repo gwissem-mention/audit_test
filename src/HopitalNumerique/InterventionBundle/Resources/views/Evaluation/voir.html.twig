@@ -8,17 +8,17 @@
 
 {% block contenu %}
 
-        {% if interventionDemande.interventionEvaluations|length > 0 %}
-            {% for interventionEvaluation in interventionDemande.interventionEvaluations %}
-                <div class="panel panel_form_visu">
-                    <h2>Contenu de l'évaluation</h2>
-                    
-                    
-                    
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="alert alert-warning">Aucune évaluation pour l'instant.</p>
-        {% endif %}
+    <div class="panel panel_form">
+
+        {{ render(controller(
+            "HopitalNumeriqueInterventionBundle:Form/Evaluation:edit",
+            {
+                interventionDemande:interventionDemande,
+                questionnaire:questionnaire,
+                optionRenderForm:optionRenderForm
+            }
+        )) }}
+
+    </div>
 
 {% endblock %}

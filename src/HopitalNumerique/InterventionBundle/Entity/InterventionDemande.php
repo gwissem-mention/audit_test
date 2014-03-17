@@ -910,7 +910,7 @@ class InterventionDemande
     }
 
     /**
-     * Retour si l'état de l'intervention est Demande initiale.
+     * Retourne si l'état de l'intervention est Demande initiale.
      * 
      * @return boolean VRAI ssi l'état de l'intervention est Demande initiale
      */
@@ -919,7 +919,7 @@ class InterventionDemande
         return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatDemandeInitialeId());
     }
     /**
-     * Retour si l'état de l'intervention est Mise en attente par le CMSI.
+     * Retourne si l'état de l'intervention est Mise en attente par le CMSI.
      *
      * @return boolean VRAI ssi l'état de l'intervention est Mise en attente par le CMSI
      */
@@ -928,12 +928,22 @@ class InterventionDemande
         return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAttenteCmsiId());
     }
     /**
-     * Retour si l'état de l'intervention est Validé par le CMSI.
+     * Retourne si l'état de l'intervention est Validé par le CMSI.
      *
      * @return boolean VRAI ssi l'état de l'intervention est Validé par le CMSI
      */
     public function interventionEtatEstAcceptationCmsi()
     {
         return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiId());
+    }
+
+    /**
+     * Retourne si l'état de l'évaluation est À évaluer.
+     *
+     * @return boolean VRAI ssi l'état de l'évaluation est À évaluer
+     */
+    public function evaluationEtatEstAEvaluer()
+    {
+        return ($this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId());
     }
 }

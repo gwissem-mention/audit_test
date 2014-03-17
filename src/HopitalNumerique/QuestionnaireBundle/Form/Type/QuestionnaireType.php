@@ -172,6 +172,17 @@ class QuestionnaireType extends AbstractType
             	            'data_class' => null
             	    ));
             	    break;
+            	case 'date':
+            	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'text', array(
+        	            'required'   => $question->getObligatoire(),
+        	            'label'      => $question->getLibelle(),
+        	            'mapped'     => false,
+        	            'read_only'  => $this->_readOnly,
+        	            'disabled'   => $this->_readOnly,
+        	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
+        	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
+            	    ));
+            	    break;
             	default:
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
             	            'required'   => $question->getObligatoire(),

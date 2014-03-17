@@ -154,7 +154,10 @@
             <div class="row">
                 <div class="col-md-4">Établissements rattachés</div>
                 <div class="col-md-8">
-                    {% for etablissement in interventionDemande.etablissements %}
+                    {% for interventionRegroupement in interventionRegroupements %}
+                        <div><a href="{{ path('hopital_numerique_intervention_demande_voir', { id:interventionRegroupement.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a> {{ interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante.nom }}</div>
+                    {% endfor %}
+                    {% for etablissement in etablissementsRattachesNonRegroupes %}
                         <div>{{ etablissement.nom }}</div>
                     {% endfor %}
                 </div>
@@ -205,6 +208,24 @@
             {% endif %}
         
         </div>
+        
+        {% if interventionsSimilairesParObjets is defined %}
+            {% if interventionsSimilairesParObjets|length > 0 %}
+                <div class="panel">
+                    <h2>Interventions similaires par objets</h2>
+                    {% include "HopitalNumeriqueInterventionBundle:Demande/Listes:interventionsSimilaires.html.twig" with { interventionsSimilaires:interventionsSimilairesParObjets, interventionRegroupementType:interventionRegroupementTypeObjetId } %}
+                </div>
+            {% endif %}
+        {% endif %}
+        
+        {% if interventionsSimilairesParAmbassadeur is defined %}
+            {% if interventionsSimilairesParAmbassadeur|length > 0 %}
+                <div class="panel">
+                    <h2>Interventions similaires par ambassadeur</h2>
+                    {% include "HopitalNumeriqueInterventionBundle:Demande/Listes:interventionsSimilaires.html.twig" with { interventionsSimilaires:interventionsSimilairesParAmbassadeur, interventionRegroupementType:interventionRegroupementTypeAmbassadeurId } %}
+                </div>
+            {% endif %}
+        {% endif %}
         
         <div class="panel panel_boutons">
             {% if app.user.hasRoleCmsi and (interventionDemande.interventionEtatEstDemandeInitiale or interventionDemande.interventionEtatEstAttenteCmsi) %}

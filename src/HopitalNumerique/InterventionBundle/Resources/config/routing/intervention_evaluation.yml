@@ -4,6 +4,12 @@ hopital_numerique_intervention_evaluation_nouveau:
     requirements:
         interventionDemande: \d+
 
+hopital_numerique_intervention_evaluation_form:
+    pattern:  /demande/{interventionDemande}/evaluation/form
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Evaluation:edit" }
+    requirements:
+        interventionDemande: \d+
+
 hopital_numerique_intervention_evaluation_voir:
     pattern:  /demande/{interventionDemande}/evaluation/voir
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Evaluation:voir" }

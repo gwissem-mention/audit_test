@@ -17,34 +17,34 @@
 <div id="form_questionnaire_front">
     {% set informationsManquantes = user|informationsManquantes %}
 
-	{% if not informationsManquantes.ok %}
-	    <div class="informations_manquantes col-md-12">
-			{% for key,informationManquante in informationsManquantes %}
-		        {# Affichage de la 'légende' #}			
-		        {% if 'ok' == key %}
-		            <span class="legende rose">
-		                <strong>Certaines données sont nécessaires pour l'étude de votre candidature, veuillez renseigner les <a href="{{path('hopital_numerique_user_informations_personnelles')}}">données personnelles</a> suivantes :</strong>
-		            </span>
+    {% if not informationsManquantes.ok %}
+        <div class="informations_manquantes col-md-12">
+            {% for key,informationManquante in informationsManquantes %}
+                {# Affichage de la 'légende' #}         
+                {% if 'ok' == key %}
+                    <span class="legende rose">
+                        <strong>Certaines données sont nécessaires pour l'étude de votre candidature, veuillez renseigner les <a href="{{path('hopital_numerique_user_informations_personnelles')}}">données personnelles</a> suivantes :</strong>
+                    </span>
                     <ul class="rose">
                 {% endif %}
-			    {% if informationManquante is not empty %}
-			        {% if informationManquante is not null %}
-			            <li><span class="champ_manquant"><strong>{{ informationManquante.label }}</strong></span></li>
-			        {% endif %}
-			    {% endif %}
-			{% endfor %}
-			</ul>
-		</div>		
-	    <div class="col-md-12 text-right button_donnees_personnelles">
-	       <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-success" title="Données personnelles">{{ 'données personnelles'|upper }}</i></a>
-	    </div>
-		<div class="clearfix"></div>
-	{% endif %}	
+                {% if informationManquante is not empty %}
+                    {% if informationManquante is not null %}
+                        <li><span class="champ_manquant"><strong>{{ informationManquante.label }}</strong></span></li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </div>      
+        <div class="col-md-12 text-right button_donnees_personnelles">
+           <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-success" title="Données personnelles">{{ 'données personnelles'|upper }}</i></a>
+        </div>
+        <div class="clearfix"></div>
+    {% endif %} 
 
-	{% if informationsManquantes.ok %}
-		<div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
-		{% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
-		{{ form_javascript(form) }}
-		{{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit_front', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}
-	{% endif %}
+    {% if informationsManquantes.ok %}
+        <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+        {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
+        {{ form_javascript(form) }}
+        {{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit_front', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}
+    {% endif %}
 </div>

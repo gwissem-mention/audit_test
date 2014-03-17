@@ -31,15 +31,29 @@ class DemandesNouvellesGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        $this->addColonne(new Column\TextColumn('demandeurInformations', 'Demandeur'));
-        $this->addColonne(new Column\TextColumn('ambassadeurInformations', 'Ambassadeur'));
-        $this->addColonne(new Column\TextColumn('objetsInformations', 'Objets'));
-        $this->addColonne(new Column\TextColumn('interventionEtatLibelle', 'État'));
-        $this->addColonne(new Column\DateColumn('dateCreationLibelle', 'Création'));
+        $colonneDemandeurInformations = new Column\TextColumn('demandeurInformations', 'Demandeur');
+        $colonneDemandeurInformations->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneDemandeurInformations);
         
+        $colonneAmbassadeurInformations = new Column\TextColumn('ambassadeurInformations', 'Ambassadeur');
+        $colonneAmbassadeurInformations->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneAmbassadeurInformations);
         
+        $colonneObjetsInformations = new Column\TextColumn('objetsInformations', 'Objets');
+        $colonneObjetsInformations->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneObjetsInformations);
+        
+        $colonneInterventionEtatLibelle = new Column\TextColumn('interventionEtatLibelle', 'État');
+        $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneInterventionEtatLibelle);
+        
+        $colonneDateCreationLibelle = new Column\TextColumn('dateCreationLibelle', 'Création');
+        $colonneDateCreationLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneDateCreationLibelle);
+
         $colonneDateButoir = new Column\TextColumn('dateButoir', 'Date butoir');
         $colonneDateButoir->setAlign('center');
+        $colonneDateButoir->setFilterable(false)->setSortable(false);
         $colonneDateButoir->manipulateRenderCell(
             function($value, $row, $router) {
                 if ($row->getField('interventionEtatId') == InterventionEtat::getInterventionEtatDemandeInitialeId())

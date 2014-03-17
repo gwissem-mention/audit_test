@@ -6,6 +6,8 @@
  */
 namespace HopitalNumerique\InterventionBundle\Controller;
 
+use HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
@@ -37,9 +39,12 @@ class DemandeController extends Controller
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
         
+        $interventionRegroupements = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->findBy(array('interventionDemandePrincipale' => $interventionDemande));
         $vueParametres = array(
             'interventionDemande' => $interventionDemande,
-            'InterventionEtat' => new InterventionEtat()
+            'InterventionEtat' => new InterventionEtat(),
+            'interventionRegroupements' => $interventionRegroupements,
+            'etablissementsRattachesNonRegroupes' => $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesNonRegroupes($interventionDemande, $interventionRegroupements)
         );
         
         if ($utilisateurConnecte->hasRoleAmbassadeur())
@@ -47,6 +52,16 @@ class DemandeController extends Controller
             $vueParametres['ambassadeurs'] = $this->get('hopitalnumerique_user.manager.user')->getAmbassadeurs(array(
                 'region' => $interventionDemande->getCmsi()->getRegion()
             ));
+        }
+        else if (
+            $utilisateurConnecte->hasRoleCmsi()
+            && ($interventionDemande->interventionEtatEstDemandeInitiale() || $interventionDemande->interventionEtatEstAttenteCmsi())
+        )
+        {
+            $vueParametres['interventionsSimilairesParObjets'] = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getInterventionsSimilairesParObjets($interventionDemande);
+            $vueParametres['interventionsSimilairesParAmbassadeur'] = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getInterventionsSimilairesParAmbassadeur($interventionDemande);
+            $vueParametres['interventionRegroupementTypeObjetId'] = InterventionRegroupementType::getInterventionRegroupementTypeObjetId();
+            $vueParametres['interventionRegroupementTypeAmbassadeurId'] = InterventionRegroupementType::getInterventionRegroupementTypeAmbassadeurId();
         }
         
         return $this->render(
@@ -69,9 +84,21 @@ class DemandeController extends Controller
         else if ($utilisateurConnecte->hasRoleAmbassadeur())
             return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/ambassadeur.html.twig');
         else return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/etablissement.html.twig');
-        
-        //$this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à visualiser cette page.');
-        //return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+    }
+    /**
+     * Action pour la visualisation des suivis de demandes d'intervention.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response La vue de la liste des suivis de demandes d'intervention
+     */
+    public function suiviDemandesAction()
+    {
+        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
+    
+        if ($utilisateurConnecte->hasRoleDirecteur())
+            return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/directeurSuivi.html.twig');
+
+        $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à visualiser cette page.');
+        return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
     }
     /**
      * Action pour la liste des nouvelles demandes d'intervention (demandes en début de processus) pour le CMSI.
@@ -94,6 +121,17 @@ class DemandeController extends Controller
         $interventionDemandesGrille = $this->get('hopitalnumerique_intervention.grid.cmsi.intervention_demandes_traitees');
 
         return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Cmsi/demandesTraitees.html.twig');
+    }
+    /**
+     * Action pour la liste des demandes d'intervention pour le directeur d'établissement.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response La vue de la liste des demandes d'intervention
+     */
+    public function gridDirecteurSuiviDemandesAction()
+    {
+        $interventionDemandesGrille = $this->get('hopitalnumerique_intervention.grid.directeur.intervention_suivi_demandes');
+    
+        return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Directeur/suiviDemandes.html.twig');
     }
     /**
      * Action pour la liste des demandes d'intervention pour l'ambassadeur.

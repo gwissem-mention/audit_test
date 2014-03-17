@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
+{% extends 'HopitalNumeriqueInterventionBundle:Form:layout.html.twig' %}
 
 {% block pageTitre %}Mon évaluation{% endblock %}
 
@@ -9,11 +9,16 @@
 {% block contenu %}
 
     <div class="panel panel_form">
-        
-        
-        {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
-        
-        
+
+        {{ render(controller(
+            "HopitalNumeriqueInterventionBundle:Form/Evaluation:edit",
+            {
+                interventionDemande:interventionDemande,
+                questionnaire:questionnaire,
+                optionRenderForm:optionRenderForm
+            }
+        )) }}
+
     </div>
 
 {% endblock %}

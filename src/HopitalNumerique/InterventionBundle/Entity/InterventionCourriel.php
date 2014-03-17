@@ -64,6 +64,10 @@ class InterventionCourriel extends Mail
      * @var integer ID du courriel de clôture car sans nouvelle de l'ambassadeur
      */
     private static $COURRIEL_INTERVENTION_DEMANDE_RELANCE_AMBASSADEUR_CLOTURE_ID = 21;
+    /**
+     * @var integer ID du courriel de l'évaluation remplie
+     */
+    private static $COURRIEL_EVALUATION_REMPLIE_ID = 22;
     
     
     /**
@@ -182,5 +186,14 @@ class InterventionCourriel extends Mail
     public static function getInterventionCourrielRelanceAmbassadeurClotureId()
     {
         return self::$COURRIEL_INTERVENTION_DEMANDE_RELANCE_AMBASSADEUR_CLOTURE_ID;
+    }
+    /**
+     * Retourne l'ID du courriel de l'évaluation remplie.
+     *
+     * @return integer ID du courriel de l'évaluation remplie
+     */
+    public static function getInterventionCourrielEvaluationRemplieId()
+    {
+        return self::$COURRIEL_EVALUATION_REMPLIE_ID;
     }
 }
