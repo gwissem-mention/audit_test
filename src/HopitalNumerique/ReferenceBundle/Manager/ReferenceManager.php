@@ -89,6 +89,7 @@ class ReferenceManager extends BaseManager
      */
     public function updateOrder( Reference $referentiel )
     {
+        
         //get All References
         $datas = new ArrayCollection($this->getRepository()->findBy(array('lock'=>0)));
         
