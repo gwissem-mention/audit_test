@@ -52,12 +52,12 @@
             </div>
         </div>
         
-        <div class="content col-md-9">
+        <div class="content col-md-9 no_padding">
 			{% block content %}
 			    <div class="annuaire_ambassadeur">
 			    
 			        {% block chapo %}
-		                <div class="col-md-12 no_padding">
+		                <div class="col-md-12">
 				            <div class="chapo">
 				                <h1 class="violet">Annuaire des ambassadeurs</h1>
 				                <div class="description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tincidunt purus nec adipiscing. Cras eu nisi dolor. Vestibulum laoreet mi at quam dictum, vitae iaculis metus elementum. Aliquam ut ante non ligula sollicitudin vulputate. Nullam mattis vulputate sem ut placerat. Ut ac vulputate diam. Aenean suscipit lobortis tortor sit amet pharetra. Suspendisse placerat mauris non fringilla mollis. Nulla non eleifend est. Mauris ac tincidunt dolor. Mauris venenatis sit amet eros in rutrum. Ut erat sapien, viverra id dui in.</p></div>
@@ -68,12 +68,12 @@
 			        
 			        {% block contenu %}
 				        {% if region %}
-			                <div class="col-md-12 no_padding">
+			                <div class="col-md-12">
 			                    <h4 class="violet">{{region.libelle}}</h4>
 			                </div>
 			                <input type="hidden" id="selected-region" value="{{region.libelle}}" />
 			                {% for ambassadeur in ambassadeurs %}
-			                    <div class="fiche col-md-6 no_padding">
+			                    <div class="fiche col-md-6">
 			                        <div class="content">
 			                            <h5>{{ambassadeur.prenom|capitalize ~ ' ' ~ ambassadeur.nom|capitalize}}</h5>
 			                            <div class="etab">
