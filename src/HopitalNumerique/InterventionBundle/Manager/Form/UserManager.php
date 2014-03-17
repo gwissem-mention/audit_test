@@ -139,4 +139,22 @@ class UserManager
 
         return json_encode($usersListeFormatee);
     }
+    /**
+     * Retourne la liste jsonifiée des référents.
+     *
+     * @param array $criteres Le filtre à appliquer sur la liste
+     * @return string La liste des utilisateurs jsonifiée
+     */
+    public function jsonReferents(array $criteres)
+    {
+        $users = $this->container->get('hopitalnumerique_user.manager.user')->getUsersGroupeEtablissement($criteres);
+        $usersListeFormatee = array();
+
+        foreach ($users as $user)
+        {
+            $usersListeFormatee[] = array('id' => $user->getId(), 'nom' => $user->getNom(), 'prenom' => $user->getPrenom());
+        }
+
+        return json_encode($usersListeFormatee);
+    }
 }

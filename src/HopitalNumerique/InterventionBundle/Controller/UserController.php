@@ -34,6 +34,24 @@ class UserController extends Controller
 
         return new Response($usersJson);
     }
+    /**
+     * Action qui renvoie une liste de référents. Les paramètres passables sont :
+     * <ul>
+     *   <li>etablissementRattachementSante : L'ID ou les IDs de l'établissement de l'utilisateur</li>
+     * </ul>
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response Un objet JSON comprenant la liste des utilisateurs
+     */
+    public function jsonReferentsAction()
+    {
+        $usersFiltres = array('enabled' => true);
+        if ($this->get('request')->query->has('etablissementRattachementSante'))
+            $usersFiltres['etablissementRattachementSante'] = $this->get('request')->query->get('etablissementRattachementSante');
+
+        $usersJson = $this->get('hopitalnumerique_intervention.manager.form_user')->jsonReferents($usersFiltres);
+
+        return new Response($usersJson);
+    }
     
     /**
      * Action qui change l'ambassadeur d'une demandes d'intervention.

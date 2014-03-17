@@ -152,9 +152,9 @@ class UserManager extends BaseManager
     {
         return $this->getRepository()->getAmbassadeursByRegionAndProduction( $region, $objet )->getQuery()->getResult();
     }
-    public function getUsersGroupeEtablissement()
+    public function getUsersGroupeEtablissement($criteres = array())
     {
-        return $this->getRepository()->getUsersGroupeEtablissement()->getQuery()->getResult();
+        return $this->getRepository()->getUsersGroupeEtablissement($criteres)->getQuery()->getResult();
     }
 
 

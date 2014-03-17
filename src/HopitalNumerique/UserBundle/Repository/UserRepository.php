@@ -129,7 +129,7 @@ class UserRepository extends EntityRepository
 
         return $qb;
     }
-    public function getUsersGroupeEtablissement()
+    public function getUsersGroupeEtablissement($criteres)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user')
@@ -137,6 +137,10 @@ class UserRepository extends EntityRepository
         ->andWhere('user.roles LIKE :role')
         ->andWhere('user.enabled = 1')
         ->setParameter('role', '%ROLE_ES_8%');
+        
+        foreach ($criteres as $critereChamp => $critereValeur)
+            $qb->where('user.'.$critereChamp.' = :'.$critereChamp)
+                ->setParameter($critereChamp, $critereValeur);
 
         return $qb;
     }
