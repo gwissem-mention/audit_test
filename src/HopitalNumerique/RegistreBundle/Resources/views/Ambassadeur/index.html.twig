@@ -27,11 +27,11 @@
 {% endblock %}
 
 {% block body %}
-    <div id="registre-ambassadeur">    
+    <div id="registre-ambassadeur">
         {# En-tête #}
         <div class="col-md-12">
             <h3 class="violet">Annuaire des ambassadeurs <a href="{{path('hopital_numerique_account_homepage')}}" class="pull-right">Tableau de bord</a> </h3>
-        </div>        
+        </div> 
         
         {# Critère de recherche #}
         <div class="col-md-3">
@@ -52,50 +52,66 @@
             </div>
         </div>
         
-        {# Contenu de la page #}
-        <div class="col-md-9">
-            {% if region %}
-                <div class="col-md-12">
-                    <h4 class="violet">{{region.libelle}}</h4>
-                </div>
-                <input type="hidden" id="selected-region" value="{{region.libelle}}" />
-                {% for ambassadeur in ambassadeurs %}
-                    <div class="fiche col-md-6">
-                        <div class="content">
-                            <h5>{{ambassadeur.prenom|capitalize ~ ' ' ~ ambassadeur.nom|capitalize}}</h5>
-                            <div class="etab">
-                                {% if ambassadeur.etablissementRattachementSante %}
-                                    {{ambassadeur.etablissementRattachementSante.nom}}
-                                {% else %}
-                                    {{ambassadeur.autreStructureRattachementSante}}
-                                {% endif %}
-                            </div>
-                            
-                            <span class="col-md-12"><a class="link violet fancybox.ajax" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Domaines fonctionnels</a></span>
-                            <span class="col-md-12"><a class="link violet fancybox.ajax" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a></span>
+        <div class="content col-md-9">
+			{% block content %}
+			    <div class="annuaire_ambassadeur">
+			    
+			        {% block chapo %}
+			            <div class="chapo">
+			                <h1 class="violet">Annuaire des ambassadeurs</h1>
+			                <div class="description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tincidunt purus nec adipiscing. Cras eu nisi dolor. Vestibulum laoreet mi at quam dictum, vitae iaculis metus elementum. Aliquam ut ante non ligula sollicitudin vulputate. Nullam mattis vulputate sem ut placerat. Ut ac vulputate diam. Aenean suscipit lobortis tortor sit amet pharetra. Suspendisse placerat mauris non fringilla mollis. Nulla non eleifend est. Mauris ac tincidunt dolor. Mauris venenatis sit amet eros in rutrum. Ut erat sapien, viverra id dui in.</p></div>
+			            </div>
+                        <div class="clearfix"></div>
+			        {% endblock %}
+			        
+			        {% block contenu %}
+				        {% if region %}
+			                <div class="col-md-12">
+			                    <h4 class="violet">{{region.libelle}}</h4>
+			                </div>
+			                <input type="hidden" id="selected-region" value="{{region.libelle}}" />
+			                {% for ambassadeur in ambassadeurs %}
+			                    <div class="fiche col-md-6">
+			                        <div class="content">
+			                            <h5>{{ambassadeur.prenom|capitalize ~ ' ' ~ ambassadeur.nom|capitalize}}</h5>
+			                            <div class="etab">
+			                                {% if ambassadeur.etablissementRattachementSante %}
+			                                    {{ambassadeur.etablissementRattachementSante.nom}}
+			                                {% else %}
+			                                    {{ambassadeur.autreStructureRattachementSante}}
+			                                {% endif %}
+			                            </div>
+			                            
+			                            <span class="col-md-12"><a class="link violet fancybox.ajax" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Domaines fonctionnels</a></span>
+			                            <span class="col-md-12"><a class="link violet fancybox.ajax" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a></span>
+			
+			                            <span class="col-md-12"><a class="btn background-violet {% if not allowContact %}disabled{% endif %}" href="{% if not allowContact %}#{% else %}{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}{% endif %}">Solliciter cet ambassadeur</a></span>
+			                            <div class="clearfix"></div>
+			                        </div>
+			                    </div>
+			                {% else %}
+			                    <div class="col-md-12">
+			                        - Aucun ambassadeur ne correspond à votre recherche - 
+			                    </div>
+			                {% endfor %}
+			            {% else %}
+			                <div class="col-md-12">
+			                    <h4 class="violet">Aucune région sélectionnée</h4>
+			                </div>
+			                <div class="col-md-12">
+			                    - Merci de sélectionner une région pour rechercher les ambassadeurs - 
+			                </div>
+			            {% endif %}
+		                <input type="hidden" id="registre-region-url" value="{{path('hopital_numerique_registre_homepage')}}" />
+		                <div class="clearfix"></div>
+                {% endblock contenu%}
+			        
+			    </div>
+			{% endblock content %}
 
-                            <span class="col-md-12"><a class="btn background-violet {% if not allowContact %}disabled{% endif %}" href="{% if not allowContact %}#{% else %}{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}{% endif %}">Solliciter cet ambassadeur</a></span>
-            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="col-md-12">
-                        - Aucun ambassadeur ne correspond à votre recherche - 
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="col-md-12">
-                    <h4 class="violet">Aucune région sélectionnée</h4>
-                </div>
-                <div class="col-md-12">
-                    - Merci de sélectionner une région pour rechercher les ambassadeurs - 
-                </div>
-            {% endif %}
             <div class="clearfix"></div>
         </div>
 
         <div class="clearfix"></div>
-
-        <input type="hidden" id="registre-region-url" value="{{path('hopital_numerique_registre_homepage')}}" />
     </div>
-{% endblock %}
+{% endblock body %}
