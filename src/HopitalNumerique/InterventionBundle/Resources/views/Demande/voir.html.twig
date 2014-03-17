@@ -225,61 +225,63 @@
             {% endif %}
         {% endif %}
         
-        <div class="panel panel_boutons">
-            {% if app.user.hasRoleCmsi and (interventionDemande.interventionEtatEstDemandeInitiale or interventionDemande.interventionEtatEstAttenteCmsi) %}
-            
-                <button type="button" data-intervention-etat="{{ InterventionEtat.InterventionEtatAcceptationCmsiId }}" class="btn btn-default btn-acceptation">Accepter</button>
-                <button type="button" class="btn btn-default btn-refus" data-toggle="modal" data-target="#modal_etat_intervention_refus_cmsi">Refuser</button>
-                {% if false == interventionDemande.interventionEtatEstAttenteCmsi %}
-                    <button type="button" data-intervention-etat="{{ InterventionEtat.InterventionEtatAttenteCmsiId }}" class="btn btn-default btn-attente">Mettre en attente</button>
+        {% if interventionDemandeEstRegroupee == false %}
+            <div class="panel panel_boutons">
+                {% if app.user.hasRoleCmsi and (interventionDemande.interventionEtatEstDemandeInitiale or interventionDemande.interventionEtatEstAttenteCmsi) %}
+                
+                    <button type="button" data-intervention-etat="{{ InterventionEtat.InterventionEtatAcceptationCmsiId }}" class="btn btn-default btn-acceptation">Accepter</button>
+                    <button type="button" class="btn btn-default btn-refus" data-toggle="modal" data-target="#modal_etat_intervention_refus_cmsi">Refuser</button>
+                    {% if false == interventionDemande.interventionEtatEstAttenteCmsi %}
+                        <button type="button" data-intervention-etat="{{ InterventionEtat.InterventionEtatAttenteCmsiId }}" class="btn btn-default btn-attente">Mettre en attente</button>
+                    {% endif %}
+                    
+                    <div class="modal fade" id="modal_etat_intervention_refus_cmsi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Refuser la demande</h4>
+                          </div>
+                          <div class="modal-body">
+                            <p>Si vous le souhaitez, vous pouvez justifier votre refus avant de le valider :</p>
+                            <textarea class="form-control" id="etat_intervention_refus_justification"></textarea>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                            <button type="button" class="btn btn-danger" data-intervention-etat-refus="{{ InterventionEtat.InterventionEtatRefusCmsiId }}">Valider le refus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                {% elseif app.user.hasRoleAmbassadeur and interventionDemande.interventionEtatEstAcceptationCmsi %}
+                
+                    <button type="button" data-intervention-etat="{{ InterventionEtat.InterventionEtatAcceptationAmbassadeurId }}" class="btn btn-default btn-acceptation">Accepter</button>
+                    <button type="button" class="btn btn-default btn-refus" data-toggle="modal" data-target="#modal_etat_intervention_refus_ambassadeur">Refuser</button>
+                    
+                    
+                    <div class="modal fade" id="modal_etat_intervention_refus_ambassadeur" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Refuser la demande</h4>
+                          </div>
+                          <div class="modal-body">
+                            <p>Si vous le souhaitez, vous pouvez justifier votre refus avant de le valider :</p>
+                            <textarea class="form-control" id="etat_intervention_refus_justification"></textarea>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                            <button type="button" class="btn btn-danger" data-intervention-etat-refus="{{ InterventionEtat.InterventionEtatRefusAmbassadeurId }}">Valider le refus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
                 {% endif %}
-                
-                <div class="modal fade" id="modal_etat_intervention_refus_cmsi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Refuser la demande</h4>
-                      </div>
-                      <div class="modal-body">
-                        <p>Si vous le souhaitez, vous pouvez justifier votre refus avant de le valider :</p>
-                        <textarea class="form-control" id="etat_intervention_refus_justification"></textarea>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-danger" data-intervention-etat-refus="{{ InterventionEtat.InterventionEtatRefusCmsiId }}">Valider le refus</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-            {% elseif app.user.hasRoleAmbassadeur and interventionDemande.interventionEtatEstAcceptationCmsi %}
-            
-                <button type="button" data-intervention-etat="{{ InterventionEtat.InterventionEtatAcceptationAmbassadeurId }}" class="btn btn-default btn-acceptation">Accepter</button>
-                <button type="button" class="btn btn-default btn-refus" data-toggle="modal" data-target="#modal_etat_intervention_refus_ambassadeur">Refuser</button>
-                
-                
-                <div class="modal fade" id="modal_etat_intervention_refus_ambassadeur" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Refuser la demande</h4>
-                      </div>
-                      <div class="modal-body">
-                        <p>Si vous le souhaitez, vous pouvez justifier votre refus avant de le valider :</p>
-                        <textarea class="form-control" id="etat_intervention_refus_justification"></textarea>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-danger" data-intervention-etat-refus="{{ InterventionEtat.InterventionEtatRefusAmbassadeurId }}">Valider le refus</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
         
         
 

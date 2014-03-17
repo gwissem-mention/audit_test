@@ -32,6 +32,7 @@ class DemandeController extends Controller
     {
         $interventionDemande = $id;
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
+        $interventionDemandeEstRegroupee = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->estInterventionDemandeRegroupee($interventionDemande);
         
         if ($utilisateurConnecte->hasRoleAmbassadeur() && $utilisateurConnecte->getId() != $interventionDemande->getAmbassadeur()->getId())
         {
@@ -42,6 +43,7 @@ class DemandeController extends Controller
         $interventionRegroupements = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->findBy(array('interventionDemandePrincipale' => $interventionDemande));
         $vueParametres = array(
             'interventionDemande' => $interventionDemande,
+             'interventionDemandeEstRegroupee' => $interventionDemandeEstRegroupee,
             'InterventionEtat' => new InterventionEtat(),
             'interventionRegroupements' => $interventionRegroupements,
             'etablissementsRattachesNonRegroupes' => $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesNonRegroupes($interventionDemande, $interventionRegroupements)
@@ -58,8 +60,6 @@ class DemandeController extends Controller
             && ($interventionDemande->interventionEtatEstDemandeInitiale() || $interventionDemande->interventionEtatEstAttenteCmsi())
         )
         {
-            $interventionDemandeEstRegroupee = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->estInterventionDemandeRegroupee($interventionDemande);
-            
             if (!$interventionDemandeEstRegroupee)
             {
                 $vueParametres['interventionsSimilairesParObjets'] = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getInterventionsSimilairesParObjets($interventionDemande);

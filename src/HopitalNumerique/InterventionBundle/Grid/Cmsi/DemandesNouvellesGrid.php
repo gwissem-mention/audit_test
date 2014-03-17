@@ -47,7 +47,7 @@ class DemandesNouvellesGrid extends Grid implements IGrid
         $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneInterventionEtatLibelle);
         
-        $colonneDateCreationLibelle = new Column\TextColumn('dateCreationLibelle', 'Création');
+        $colonneDateCreationLibelle = new Column\DateColumn('dateCreationLibelle', 'Création');
         $colonneDateCreationLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneDateCreationLibelle);
 

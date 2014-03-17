@@ -55,19 +55,19 @@ class DemandesTraiteesGrid extends Grid implements IGrid
         $colonneAmbassadeurInformations->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneAmbassadeurInformations);
         
-        $colonneDateCreationLibelle = new Column\TextColumn('dateCreationLibelle', 'Création');
+        $colonneDateCreationLibelle = new Column\DateColumn('dateCreationLibelle', 'Création');
         $colonneDateCreationLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneDateCreationLibelle);
         
-        $colonneInterventionEtatLibelle = new Column\TextColumn('interventionEtatLibelle', 'État');
+        $colonneInterventionEtatLibelle = new Column\DateColumn('interventionEtatLibelle', 'État');
         $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneInterventionEtatLibelle);
         
-        $colonneCmsiDateChoixLibelle = new Column\TextColumn('cmsiDateChoixLibelle', 'CMSI');
+        $colonneCmsiDateChoixLibelle = new Column\DateColumn('cmsiDateChoixLibelle', 'CMSI');
         $colonneCmsiDateChoixLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneCmsiDateChoixLibelle);
         
-        $colonneAmbassadeurDateChoixLibelle = new Column\TextColumn('ambassadeurDateChoixLibelle', 'Ambassadeur');
+        $colonneAmbassadeurDateChoixLibelle = new Column\DateColumn('ambassadeurDateChoixLibelle', 'Ambassadeur');
         $colonneAmbassadeurDateChoixLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneAmbassadeurDateChoixLibelle);
         
