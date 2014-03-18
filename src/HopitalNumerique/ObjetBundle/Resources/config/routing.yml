@@ -97,6 +97,12 @@ hopitalnumerique_objet_reference_contenu:
     requirements:
         id: \d+
 
+hopitalnumerique_objet_reference_contenu_own:
+    pattern:  /objet/reference/contenu_own/{id}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:contenuOwn", id:1 }
+    requirements:
+        id: \d+
+
 hopitalnumerique_objet_reference_contenu_save:
     pattern:  /objet/reference/save/contenu
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:saveContenu" }

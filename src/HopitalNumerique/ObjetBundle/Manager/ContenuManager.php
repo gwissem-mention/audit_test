@@ -101,6 +101,37 @@ class ContenuManager extends BaseManager
     }
 
     /**
+     * Formatte les références sous forme d'un unique tableau
+     *
+     * @param Contenu $contenu    Contenu concerné
+     * @param array   $references Liste des références de type dictionnaire
+     *
+     * @return array
+     */
+    public function getReferencesOwn($contenu)
+    {
+        $return = array();
+        $selectedReferences = $contenu->getReferences();
+
+        //applique les références 
+        foreach( $selectedReferences as $selected )
+        {
+            $reference = $selected->getReference();
+
+            //on remet l'élément à sa place
+            $return[ $selected->getReference()->getId() ]['nom'] = $reference->getCode() . " - " . $reference->getLibelle();
+            
+            if( $reference->getParent() ){
+                $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
+            }
+        }
+        
+        $this->formatReferencesOwn( $return );
+        
+        return $return;
+    }
+
+    /**
      * Retourne le nombre des contenus ayant le même alias
      *
      * @param Contenu $contenu Objet contenu
@@ -250,5 +281,30 @@ class ContenuManager extends BaseManager
 
         //return big table
         return $tab;
+    }
+    
+    private function formatReferencesOwn( &$retour ){
+        foreach( $retour as $key => $one ){
+            $retour[ $key ]['childs'] = $this->getChilds($retour, $one);
+        }
+    }
+    
+    private function getChilds(&$retour, $elem){
+        if( isset( $elem['childs'] ) && count($elem['childs']) ){
+            $childs = array();
+            foreach( $elem["childs"] as $key => $one ){
+                $childs[ $one ] = $retour[ $one ];
+                $petitsEnfants = $this->getChilds($retour, $childs[ $one ]);
+                if( $petitsEnfants ){
+                    $childs[ $one ]['childs'] = $petitsEnfants;
+                    unset( $retour[ $one ] );
+                } else {
+                    unset( $retour[ $one ] );
+                }
+            }
+            return $childs;
+        } else {
+            return false;
+        }
     }
 }
