@@ -111,14 +111,16 @@ class ObjetType extends AbstractType
                 'label'      => 'Commentaires autorisés',
                 'label_attr' => array(
                     'class' => 'col-md-7 control-label'
-                )
+                ),
+                'attr'       => array( 'class'=> 'checkbox' )
             ))
             ->add('notes', 'checkbox', array(
                 'required'   => false,
                 'label'      => 'Notes autorisés',
                 'label_attr' => array(
                     'class' => 'col-md-7 control-label'
-                )
+                ),
+                'attr'       => array( 'class'=> 'checkbox' )
             ))
             ->add('dateCreation', 'genemu_jquerydate', array(
                 'required'   => true, 

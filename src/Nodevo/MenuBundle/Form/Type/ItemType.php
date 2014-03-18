@@ -49,7 +49,8 @@ class ItemType extends AbstractType
 
             ->add('routeAbsolute', 'checkbox', array(
                 'required' => false,
-                'label'    => 'Route absolue'
+                'label'    => 'Route absolue',
+                'attr'     => array( 'class'=> 'checkbox' )
             ))
 
             ->add('uri', 'text', array(
@@ -60,12 +61,14 @@ class ItemType extends AbstractType
 
             ->add('display', 'checkbox', array(
                 'required' => false,
-                'label'    => 'Afficher le lien'
+                'label'    => 'Afficher le lien',
+                'attr'     => array( 'class'=> 'checkbox' )
             ))
 
             ->add('displayChildren', 'checkbox', array(
                 'required' => false,
-                'label'    => 'Elément parent ?'
+                'label'    => 'Elément parent ?',
+                'attr'     => array( 'class'=> 'checkbox' )
             ))
             
             ->add('parent', 'entity', array(
