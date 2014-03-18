@@ -1007,9 +1007,24 @@ class User extends BaseUser
         $this->termsAccepted = (Boolean) $termsAccepted;
     }
     
+    /**
+     * Retourne le prénom puis le nom
+     *
+     * @return string
+     */
     public function getPrenomNom()
     {
-        return $this->prenom . ' ' . $this->nom;
+        return ucfirst($this->prenom) . ' ' . ucfirst($this->nom);
+    }
+
+    /**
+     * Retourne le nom puis le prénom
+     *
+     * @return string
+     */
+    public function getNomPrenom()
+    {
+        return ucfirst($this->nom) . ' ' . ucfirst($this->prenom);
     }
 
     /**

@@ -28,7 +28,6 @@
 {% macro buildTree(reference) %}
     {% for ref in reference  %}
     <li>
-        
         {{ref.nom}}
         {% if ref.childs is defined %}
             <ul>

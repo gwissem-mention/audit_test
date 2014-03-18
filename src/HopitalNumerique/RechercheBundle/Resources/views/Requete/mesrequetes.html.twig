@@ -5,5 +5,7 @@
                 <i class="fa fa-circle {% if requete.isDefault %}violet{% else %}fa-inverse{% endif %}" ></i>{{requete.nom|capitalize}}
             </a>
         </li>
+    {% else %}
+        <li> - Aucune requête enregistrée - </li>
     {% endfor %}
 </ul>

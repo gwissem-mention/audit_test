@@ -50,7 +50,7 @@ class ContenuManager extends BaseManager
         $parents  = $datas->matching( $criteria );
         
         //call recursive function to handle all datas
-        $elems = $this->_getArboRecursive($datas, $parents, array(), '' );
+        $elems  = $this->_getArboRecursive($datas, $parents, array(), '' );
         $return = array();
         foreach( $elems as $one ){
             if( $one->objet != null ){
@@ -119,14 +119,14 @@ class ContenuManager extends BaseManager
             $reference = $selected->getReference();
 
             //on remet l'élément à sa place
-            $return[ $selected->getReference()->getId() ]['nom'] = $reference->getCode() . " - " . $reference->getLibelle();
+            $return[ $selected->getReference()->getId() ]['nom']     = $reference->getCode() . " - " . $reference->getLibelle();
+            $return[ $selected->getReference()->getId() ]['primary'] = $selected->getPrimary();
             
-            if( $reference->getParent() ){
+            if( $reference->getParent() )
                 $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
-            }
         }
         
-        $this->formatReferencesOwn( $return );
+        $this->_formatReferencesOwn( $return );
         
         return $return;
     }
@@ -168,26 +168,13 @@ class ContenuManager extends BaseManager
     }
 
     /**
-     * Retourne le prefix du contenu
+     * [parseCsv description]
      *
-     * @param Contenu $contenu Contenu
-     * @param string  $prefix  Prefix
+     * @param  [type] $csv   [description]
+     * @param  [type] $objet [description]
      *
-     * @return string
+     * @return [type]
      */
-    private function _getPrefix( $contenu, $prefix )
-    {
-        $prefix = $contenu->getOrder() . '.' . $prefix;
-
-        if( !is_null($contenu->getParent()) )
-            $prefix = $this->_getPrefix($contenu->getParent(), $prefix);
-        
-        return $prefix;
-    }
-
-
-
-
     public function parseCsv( $csv, $objet )
     {
         //parse Str CSV and convert to array
@@ -240,6 +227,27 @@ class ContenuManager extends BaseManager
 
 
 
+
+
+
+    /**
+     * Retourne le prefix du contenu
+     *
+     * @param Contenu $contenu Contenu
+     * @param string  $prefix  Prefix
+     *
+     * @return string
+     */
+    private function _getPrefix( $contenu, $prefix )
+    {
+        $prefix = $contenu->getOrder() . '.' . $prefix;
+
+        if( !is_null($contenu->getParent()) )
+            $prefix = $this->_getPrefix($contenu->getParent(), $prefix);
+        
+        return $prefix;
+    }
+
     /**
      * Fonction récursive qui parcourt l'ensemble des références en ajoutant l'element et recherchant les éventuels enfants
      *
@@ -263,11 +271,11 @@ class ContenuManager extends BaseManager
             $item->id         = $element->getId();
             $item->references = count($element->getReferences());
             $item->order      = $chapitre;
-            $item->hasContent = $element->getContenu() == '' ? false : true;
-            $item->objet      = $element->getParent() == null ? $element->getObjet()->getId() : NULL;
+            $item->hasContent = $element->getContenu() == ''   ? false : true;
+            $item->objet      = $element->getParent()  == null ? $element->getObjet()->getId() : NULL;
 
             //add childs : filter items with current element
-            $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $element ))->orderBy(array("order"=>Criteria::ASC));
+            $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $element ))->orderBy( array( "order" => Criteria::ASC ) );
             $childs       = $items->matching( $criteria );
             $item->childs = $this->_getArboRecursive($items, $childs, array(), $chapitre );
 
@@ -279,18 +287,35 @@ class ContenuManager extends BaseManager
         return $tab;
     }
     
-    private function formatReferencesOwn( &$retour ){
-        foreach( $retour as $key => $one ){
-            $retour[ $key ]['childs'] = $this->getChilds($retour, $one);
+    /**
+     * [_formatReferencesOwn description]
+     *
+     * @param  [type] $retour [description]
+     *
+     * @return [type]
+     */
+    private function _formatReferencesOwn ( &$retour )
+    {
+        foreach( $retour as $key => $one ) {
+            $retour[ $key ]['childs'] = $this->_getChilds($retour, $one);
         }
     }
     
-    private function getChilds(&$retour, $elem){
-        if( isset( $elem['childs'] ) && count($elem['childs']) ){
+    /**
+     * [_getChilds description]
+     *
+     * @param  [type] $retour [description]
+     * @param  [type] $elem   [description]
+     *
+     * @return [type]
+     */
+    private function _getChilds ( &$retour, $elem )
+    {
+        if( isset( $elem['childs'] ) && count($elem['childs']) ) {
             $childs = array();
-            foreach( $elem["childs"] as $key => $one ){
+            foreach( $elem["childs"] as $key => $one ) {
                 $childs[ $one ] = $retour[ $one ];
-                $petitsEnfants = $this->getChilds($retour, $childs[ $one ]);
+                $petitsEnfants  = $this->_getChilds($retour, $childs[ $one ]);
                 if( $petitsEnfants ){
                     $childs[ $one ]['childs'] = $petitsEnfants;
                     unset( $retour[ $one ] );
