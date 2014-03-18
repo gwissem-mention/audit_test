@@ -174,47 +174,43 @@ class ContenuManager extends BaseManager
     {
         //parse Str CSV and convert to array
         $lines    = explode("\n", $csv);
-        if( empty($lines) )
+        if( empty($lines) ){
             return false;
+        }
 
         //gestion des erreurs lors du parse du CSV
         $sommaire = array();
         foreach ($lines as $line) {
             $tmp = str_getcsv($line,';');
-            if( isset($tmp[0]) && isset($tmp[1]) && !isset($tmp[2]) )
+            if( isset($tmp[0]) && isset($tmp[1]) && !isset($tmp[2]) ){
                 $sommaire[] = $tmp;
-            else
+            } else {
                 return false;
+            }
         }
 
         //ajout des éléments parents only
         $parents = array();
         foreach($sommaire as $element)
         {
+            $elem = &$parents;
             list($chapitre, $titre) = $element;
             $numeroChapitre = explode('.', $chapitre);
-
-            if( isset($numeroChapitre[0]) && !isset($numeroChapitre[1]) )
-                $parents[ $numeroChapitre[0] ] = $titre;
+            foreach( $numeroChapitre as $key => $one ){
+                if( $key == count($numeroChapitre) - 1 ){
+                    $elem = &$elem[ $one ];
+                } else {
+                    $elem = &$elem[ $one ]['childs'];
+                }
+            }
+            $elem['titre'] = $titre;
         }
         
+        // clean elements sans titre
+        $parents = $this->cleanSansTitre($parents);
+        $this->saveContenusCSV($objet, $parents);
 
-
-
-
-        echo '<pre>';
-        var_dump($parents);
-        die();
-
-        //créer un contenu (set titre, generate alias, set objet)
-            // $contenu = $this->createEmpty();
-            // $contenu->setObjet( $objet );
-            // $contenu->setTitre( $titre );
-            // $tool = new Chaine( $titre );
-            // $contenu->setAlias( $tool->minifie() );
-            // $this->save($contenu);
-
-        return $result;
+        return true;
     }
 
 
@@ -320,6 +316,60 @@ class ContenuManager extends BaseManager
             return $childs;
         } else {
             return false;
+        }
+    }
+    
+    /**
+     * Fonction qui renvoie uniquement les éléments du tableau ayant l'index "titre" qui existe, de manière récursive
+     * 
+     * @param array $elements
+     * 
+     * @return array 
+     */
+    private function cleanSansTitre($elements){
+        $retour = array();
+        foreach( $elements as $cle => $elem ){
+            if( isset($elem['childs']) ){
+                $elem['childs'] = $this->cleanSansTitre( $elem['childs'] );
+            }
+            if( isset($elem['titre']) ){
+                $retour[$cle] = $elem;
+            }
+        }
+        return $retour;
+    }
+    
+    /**
+     * Fonctionne qui sauvegarde tous les éléments du sommaire
+     * 
+     * @param type $objet
+     * @param type $contenus
+     * @param type $objects
+     * @param type $parent
+     * @param boolean doit-on sauvegarder $objects
+     * 
+     * @retun void
+     */
+    private function saveContenusCSV($objet, $contenus, &$objects = array(), $parent = null, $save = true){
+        foreach( $contenus as $ordre => $content ){
+            //créer un contenu (set titre, generate alias, set objet)
+            $contenu = $this->createEmpty();
+            $contenu->setObjet( $objet );
+            $contenu->setTitre( $content['titre'] );
+            $tool = new Chaine( $content['titre'] );
+            $contenu->setAlias( $tool->minifie() );
+            $contenu->setOrder($ordre);
+            if( $parent ){
+                $contenu->setParent($parent);
+            }
+            $objects[] = $contenu;
+            if( isset($content['childs']) ){
+                $this->saveContenusCSV($objet, $content['childs'], $objects, $contenu, false);
+            }
+        }
+        
+        if( $save ){
+            $this->save($objects);
         }
     }
 }
