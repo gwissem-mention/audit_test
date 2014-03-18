@@ -7,8 +7,8 @@
         <form action="" class="form-horizontal" style="min-height:150px">
             <div class="form-group">
                 <div class="col-md-12">
-                    <label for="Objets" class="col-md-3">Liste des productions</label>
-                    <select name="objets" id="objets-ambassadeurs" multiple="multiple" class="form-control col-md-9">
+                    <label for="Objets" class="col-md-12">Liste des productions</label>
+                    <select name="objets" id="objets-ambassadeurs" multiple="multiple" class="form-control col-md-12">
                         {% for objet in objets %}
                             <option value="{{objet.id}}" >{{objet.titre}}</option>
                         {% endfor %}
