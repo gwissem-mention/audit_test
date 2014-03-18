@@ -151,7 +151,7 @@
 {% macro buildTree(one, objet) %}
     <li>
         {% if one.hasContent %}
-            <a href="{{path('hopital_numerique_recherche_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':one.id,'aliasc':one.alias})}}" >{{one.order ~ ' ' ~ one.titre}} <i class="fa fa-eye"></i></a>
+            <a href="{{path('hopital_numerique_recherche_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':one.id,'aliasc':one.alias})}}" >{{one.order ~ ' ' ~ one.titre}} </a>
         {% else %}
             <p>{{one.order ~ ' ' ~ one.titre}}</p>
         {% endif %}
