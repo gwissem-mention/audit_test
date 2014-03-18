@@ -230,31 +230,6 @@ class ContenuManager extends BaseManager
 
         return true;
     }
-    
-    private function saveContenusCSV($objet, $contenus, &$objects = array(), $parent = null, $save = true){
-        
-            
-        foreach( $contenus as $ordre => $content ){
-            //créer un contenu (set titre, generate alias, set objet)
-            $contenu = $this->createEmpty();
-            $contenu->setObjet( $objet );
-            $contenu->setTitre( $content['titre'] );
-            $tool = new Chaine( $content['titre'] );
-            $contenu->setAlias( $tool->minifie() );
-            $contenu->setOrder($ordre);
-            if( $parent ){
-                $contenu->setParent($parent);
-            }
-            $objects[] = $contenu;
-            if( isset($content['childs']) ){
-                $this->saveContenusCSV($objet, $content['childs'], $objects, $contenu, false);
-            }
-        }
-        
-        if( $save ){
-            $this->save($objects);
-        }
-    }
 
 
 
@@ -329,6 +304,13 @@ class ContenuManager extends BaseManager
         }
     }
     
+    /**
+     * Fonction qui renvoie uniquement les éléments du tableau ayant l'index "titre" qui existe, de manière récursive
+     * 
+     * @param array $elements
+     * 
+     * @return array 
+     */
     private function cleanSansTitre($elements){
         $retour = array();
         foreach( $elements as $cle => $elem ){
@@ -340,5 +322,39 @@ class ContenuManager extends BaseManager
             }
         }
         return $retour;
+    }
+    
+    /**
+     * Fonctionne qui sauvegarde tous les éléments du sommaire
+     * 
+     * @param type $objet
+     * @param type $contenus
+     * @param type $objects
+     * @param type $parent
+     * @param boolean doit-on sauvegarder $objects
+     * 
+     * @retun void
+     */
+    private function saveContenusCSV($objet, $contenus, &$objects = array(), $parent = null, $save = true){
+        foreach( $contenus as $ordre => $content ){
+            //créer un contenu (set titre, generate alias, set objet)
+            $contenu = $this->createEmpty();
+            $contenu->setObjet( $objet );
+            $contenu->setTitre( $content['titre'] );
+            $tool = new Chaine( $content['titre'] );
+            $contenu->setAlias( $tool->minifie() );
+            $contenu->setOrder($ordre);
+            if( $parent ){
+                $contenu->setParent($parent);
+            }
+            $objects[] = $contenu;
+            if( isset($content['childs']) ){
+                $this->saveContenusCSV($objet, $content['childs'], $objects, $contenu, false);
+            }
+        }
+        
+        if( $save ){
+            $this->save($objects);
+        }
     }
 }
