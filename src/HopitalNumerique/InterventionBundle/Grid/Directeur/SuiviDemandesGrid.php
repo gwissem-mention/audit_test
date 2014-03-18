@@ -51,11 +51,11 @@ class SuiviDemandesGrid extends Grid implements IGrid
         $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneInterventionEtatLibelle);
        
-        $colonneCmsiDateChoixLibelle = new Column\TextColumn('cmsiDateChoixLibelle', 'Choix CMSI');
+        $colonneCmsiDateChoixLibelle = new Column\DateColumn('cmsiDateChoixLibelle', 'CMSI');
         $colonneCmsiDateChoixLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneCmsiDateChoixLibelle);
        
-        $colonneAmbassadeurDateChoixLibelle = new Column\TextColumn('ambassadeurDateChoixLibelle', 'Choix ambassadeur');
+        $colonneAmbassadeurDateChoixLibelle = new Column\DateColumn('ambassadeurDateChoixLibelle', 'Ambassadeur');
         $colonneAmbassadeurDateChoixLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneAmbassadeurDateChoixLibelle);
 
@@ -79,9 +79,9 @@ class SuiviDemandesGrid extends Grid implements IGrid
 
         //$this->addColonne(new Column\TextColumn('remboursementEtatLibelle', 'Remboursement'));
 
-        $colonneRemboursementMontant = new Column\TextColumn('remboursementMontant', 'Montant');
+        /*$colonneRemboursementMontant = new Column\TextColumn('remboursementMontant', 'Montant');
         $colonneRemboursementMontant->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneRemboursementMontant);
+        $this->addColonne($colonneRemboursementMontant);*/
     }
 
     /**

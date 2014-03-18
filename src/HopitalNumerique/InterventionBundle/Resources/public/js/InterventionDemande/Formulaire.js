@@ -85,7 +85,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventio
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.enregistreInterventionEtat = function(interventionEtatId)
 {
     var changementEtatUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
-
+    
     $.ajax(changementEtatUrl, {
         success:function() {
             Nodevo_Web.rechargePage();

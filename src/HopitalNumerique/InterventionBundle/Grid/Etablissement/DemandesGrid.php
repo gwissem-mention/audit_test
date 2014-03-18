@@ -52,7 +52,7 @@ class DemandesGrid extends Grid implements IGrid
         );
 
         $colonneAmbassadeur = new Column\TextColumn('ambassadeurInformations', 'Ambassadeur');
-        $colonneCreation = new Column\TextColumn('dateCreationLibelle', 'Création');
+        $colonneCreation = new Column\DateColumn('dateCreationLibelle', 'Création');
         $colonneEtat = new Column\TextColumn('interventionEtatLibelle', 'État');
         $colonneChoixCMSI = new Column\DateColumn('cmsiDateChoixLibelle', 'CMSI');
         $colonneChoixAmbassadeur = new Column\DateColumn('ambassadeurDateChoixLibelle', 'Ambassadeur');

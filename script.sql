@@ -324,3 +324,27 @@ INSERT INTO `core_ressource` (
 VALUES (
 '20', 'FrontOffice - Gestion des intervention', '/^\\/compte-hn\\/intervention/demandes/liste', '20', '2'
 );
+
+
+
+/* RLE - 17/03/2014
+   DEV -> PROD
+   Interventions*/
+
+INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`) VALUES
+(34, 3, 6, 'Date de l''intervention', 1, NULL, 1, 'evaluation_intervention_date', NULL),
+(35, 3, 5, 'Type d''intervention', 1, NULL, 2, 'evaluation_intervention_type', 'TYPE_INTERVENTION'),
+(25, 3, 2, 'Autres établissements participants', 1, NULL, 3, 'evaluation_autres_etablissements', NULL),
+(26, 3, 7, 'La présentation a porté sur la/les production(s) ANAP suivante(s)', 0, NULL, 4, 'evaluation_productions', NULL),
+(27, 3, 5, 'Les productions ANAP abordées correspondaient-elles à vos attentes ?', 0, NULL, 6, 'evaluation_attentes', 'NOTE_EVALUATION'),
+(28, 3, 2, 'La présentation a porté également sur', 0, NULL, 5, 'evaluation_presentation_porte', NULL),
+(29, 3, 5, 'Avez-vous utilisé la plateforme ANAP avant l''intervention de l''Ambassadeur ?', 0, NULL, 9, 'evaluation_utilisation_plateforme', 'UTILISATION_PLATEFORME_INTERVENTION'),
+(30, 3, 5, 'L''apport de la présentation vous semble-t-il applicable dans votre contexte ?', 0, NULL, 7, 'evaluation_apport_presentation', 'NOTE_EVALUATION'),
+(31, 3, 5, 'Estimez-vous utile d''avoir sollicité cet ambassadeur ?', 0, NULL, 8, 'evaluation_utilite_ambassadeur', 'OUI_NON'),
+(32, 3, 5, 'Les modalités pratiques d''organisation de cette intervention étaient-elles satisfaisantes ?', 0, NULL, 10, 'evaluation_modalites', 'NOTE_EVALUATION'),
+(33, 3, 2, 'Avez-vous des suggestions d''amélioration ou des remarques dont vous souhaiteriez nous faire part ?', 0, NULL, 11, 'evaluation_ameliorations', NULL);
+
+
+
+
+

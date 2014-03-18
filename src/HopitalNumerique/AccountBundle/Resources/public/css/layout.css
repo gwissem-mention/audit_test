@@ -4,7 +4,7 @@
     font-style: italic;
     height: 4px;
     position: absolute;
-    right: 0;
+    right:0px;
     top: -20px;
     width: 139px;
 }
@@ -16,7 +16,8 @@ div#tableau-de-bord {}
 
     div#tableau-de-bord div.panel { background-color:#f8f8f8;border-color:#e3e3e3;border-radius:0px;border-width:1px;margin:20px 0px 20px 0px; }
         div#tableau-de-bord div.panel h2 { color:#6F3596;font-size:14px;font-weight:bold;margin:0px;padding:20px 20px 20px 20px;text-transform:uppercase; }
-    
+        div#tableau-de-bord div.panel div.boutons { padding:0px;text-align:right; }
+            div#tableau-de-bord div.panel div.boutons button, div#tableau-de-bord div.panel div.boutons input { text-transform:uppercase; }
     /* <-- Chapo */
     div#tableau-de-bord div.chapo { background-color:#f8f8f8;background-image:url(/bundles/hopitalnumeriqueintervention/img/chapo.png);background-position:19px 7px;background-repeat:no-repeat;margin:0px 0px 20px 0px;padding:14px 18px 4px 18px; }
         div#tableau-de-bord div.chapo h1 { color:#6F3596;font-size:14px;font-weight:bold;margin:0px;padding:0px 0px 10px 40px;text-transform:uppercase; }
@@ -62,7 +63,7 @@ div#tableau-de-bord {}
     /* --> */
     /* <-- Formulaire */
     div#tableau-de-bord div.panel_form { padding:20px 35px 20px 35px;position:relative; }
-        div#tableau-de-bord div.panel_form div.boutons { padding:0px;text-align:right; }
+        div#tableau-de-bord table.table_interventions_similaires { margin-left:10px; }
     /* --> */
     /* <-- Formulaire en lecture seule */
     div#tableau-de-bord div.panel_form_visu { font-size:13px;padding:0px 0px 20px 6px; }
@@ -71,12 +72,14 @@ div#tableau-de-bord {}
             div#tableau-de-bord div.panel_form_visu div.row div.col-md-8 {}
     /* --> */
     /* <-- Boutons */
-    div#tableau-de-bord div.panel_boutons { background-color:transparent;border-width:0px;box-shadow:0px 0px 0px #fff;text-align:center; }
+    div#tableau-de-bord div.panel_boutons { background-color:transparent !important;border-width:0px !important;box-shadow:0px 0px 0px #fff;text-align:center; }
         div#tableau-de-bord div.panel_boutons button { background-position:center center;color:#fff;font-size:12px;font-weight:bold;margin:0px 4px;padding:8px 0px;text-shadow:0px 0px 0px #fff;text-transform:uppercase;width:160px; }
           div#tableau-de-bord div.panel_boutons button.btn-acceptation { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-acceptation-fond.png); }
           div#tableau-de-bord div.panel_boutons button.btn-refus { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-refus-fond.png); }
           div#tableau-de-bord div.panel_boutons button.btn-attente { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-attente-fond.png); }
         div#tableau-de-bord div.panel_boutons div.modal {}
+            div#tableau-de-bord div.panel_boutons div.modal h4.modal-title { text-align:left; }
+            div#tableau-de-bord div.panel_boutons div.modal div.modal-body { text-align:left; }
             div#tableau-de-bord div.panel_boutons div.modal button.btn-default { color:#000; }
     /* --> */
 

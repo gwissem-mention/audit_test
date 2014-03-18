@@ -3,5 +3,5 @@
 form#form_intervention_evaluation {}
     form#form_intervention_evaluation div.form-group {}
         form#form_intervention_evaluation div.form-group div#nodevo_questionnaire_questionnaire_interventionobjets_26_evaluation_productions {}
-            form#form_intervention_evaluation div.form-group div#nodevo_questionnaire_questionnaire_interventionobjets_26_evaluation_productions input { display:inline;vertical-align:top; }
+            form#form_intervention_evaluation div.form-group div#nodevo_questionnaire_questionnaire_interventionobjets_26_evaluation_productions input { display:inline;height:16px;vertical-align:top;width:16px; }
             form#form_intervention_evaluation div.form-group div#nodevo_questionnaire_questionnaire_interventionobjets_26_evaluation_productions label { float:none;text-align:left;width:auto; }

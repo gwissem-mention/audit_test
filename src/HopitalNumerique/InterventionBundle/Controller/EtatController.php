@@ -53,6 +53,8 @@ class EtatController extends Controller
                     $interventionDemande->setInterventionEtat($interventionEtat);
                     $interventionDemande->setCmsiDateDerniereRelance(new \DateTime());
                     $this->get('hopitalnumerique_intervention.manager.intervention_demande')->save($interventionDemande);
+                    
+                    //@todo Change l'état pour tous les regroupées
         
                     $this->get('session')->getFlashBag()->add('success', 'L\'état de la demande d\'intervention a été mis en attente.');
                     return true;
@@ -74,6 +76,9 @@ class EtatController extends Controller
                     $interventionDemande->setAmbassadeurDateDerniereRelance(new \DateTime());
                     $this->get('hopitalnumerique_intervention.manager.intervention_demande')->save($interventionDemande);
                     $this->_envoieCourriel($interventionDemande, $interventionEtat);
+                    
+                    //@todo Change l'état pour tous les regroupées
+                    
                     $this->get('session')->getFlashBag()->add('success', 'L\'état de la demande d\'intervention a été modifié.');
                     return true;
                 }
