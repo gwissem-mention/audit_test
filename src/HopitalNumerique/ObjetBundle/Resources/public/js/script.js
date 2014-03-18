@@ -10,7 +10,7 @@ $(document).ready(function() {
     NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
 
     //Save auto : toutes les 10 minutes  
-    setInterval(saveAutomatique, 600000);
+    //setInterval(saveAutomatique, 600000);
     
     tinyMCE.init({
         selector     : "textarea",
