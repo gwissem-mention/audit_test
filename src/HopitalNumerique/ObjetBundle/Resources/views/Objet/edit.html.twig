@@ -328,7 +328,7 @@
         </div>
         <div class="dd3-actions dd4">
             <div onclick="deleteContenu( {{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_delete', {'id':contenu.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-            <a href="{{path('hopitalnumerique_objet_reference_contenu', {'id':contenu.id})}}" class="pull-right dd3-eye manageReferences fancybox.ajax"><i class="fa fa-eye"></i></a>
+            <a href="{{path('hopitalnumerique_objet_reference_contenu_own', {'id':contenu.id})}}" class="pull-right dd3-eye manageReferences fancybox.ajax"><i class="fa fa-eye"></i></a>
             <a href="{{path('hopitalnumerique_objet_reference_contenu', {'id':contenu.id})}}" class="pull-right dd3-cog manageReferences fancybox.ajax"><i class="fa fa-cog"></i></a>
         </div>
         

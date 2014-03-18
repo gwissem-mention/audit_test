@@ -22,7 +22,7 @@ services:
         arguments: ["@service_container"]
     hopitalnumerique_intervention.manager.intervention_evaluation:
         class: "%hopitalnumerique_intervention.manager.intervention_evaluation.class%"
-        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@router", "@hopitalnumerique_intervention.manager.intervention_courriel"]
+        arguments: ["@security.context", "@router", "@hopitalnumerique_intervention.manager.intervention_courriel"]
     hopitalnumerique_intervention.manager.intervention_evaluation_etat:
         class: "%hopitalnumerique_intervention.manager.intervention_evaluation_etat.class%"
         arguments: ["@hopitalnumerique_reference.manager.reference"]

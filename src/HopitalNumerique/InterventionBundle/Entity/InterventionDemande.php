@@ -256,11 +256,6 @@ class InterventionDemande
     private $objets;
 
     /**
-     * @ORM\OneToMany(targetEntity="InterventionEvaluation", mappedBy="interventionDemande")
-     */
-    private $interventionEvaluations;
-    
-    /**
      * Constructor
      */
     public function __construct()
@@ -841,38 +836,6 @@ class InterventionDemande
         return $this->objets;
     }
 
-    /** Add interventionEvaluations
-     *
-     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation $interventionEvaluations
-     * @return InterventionDemande
-     */
-    public function addInterventionEvaluation(\HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation $interventionEvaluations)
-    {
-        $this->interventionEvaluations[] = $interventionEvaluations;
-
-        return $this;
-    }
-
-    /**
-     * Remove interventionEvaluations
-     *
-     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation $interventionEvaluations
-     */
-    public function removeInterventionEvaluation(\HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation $interventionEvaluations)
-    {
-        $this->interventionEvaluations->removeElement($interventionEvaluations);
-    }
-
-    /**
-     * Get interventionEvaluations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getInterventionEvaluations()
-    {
-        return $this->interventionEvaluations;
-    }
-    
     /**
      * Retourne si la demande d'intervention a déjà eu un ambassadeur.
      * 
