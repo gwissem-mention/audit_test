@@ -564,6 +564,30 @@ class User extends BaseUser
     }
     
     /**
+     * Get ville
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
+     */
+    public function getVille()
+    {
+        return $this->ville;
+    }
+    
+    /**
+     * Set ville
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $ville
+     */
+    public function setVille($ville)
+    {
+        if($ville instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference ){
+            $this->ville = $ville;
+        } else {
+            $this->ville = null;
+        }
+    }
+    
+    /**
      * Get etat
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
