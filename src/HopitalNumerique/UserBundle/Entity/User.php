@@ -232,6 +232,12 @@ class User extends BaseUser
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
+     * @ORM\JoinColumn(name="ref_ville", referencedColumnName="ref_id")
+     */
+    protected $ville;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_etat", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="L'état ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")

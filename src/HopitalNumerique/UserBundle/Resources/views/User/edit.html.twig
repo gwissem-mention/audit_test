@@ -99,6 +99,7 @@
                     {{ form_row(form.contactAutre) }}
                     {{ form_row(form.region) }}
                     {{ form_row(form.departement) }} 
+                    {{ form_row(form.ville) }} 
                     {{ form_row(form.roles) }}
 
                     {% if user.id != 1 %}
@@ -124,8 +125,8 @@
                                         {{ form_row(form.statutEtablissementSante) }}
                                         {{ form_row(form.etablissementRattachementSante) }}
                                         {{ form_row(form.autreStructureRattachementSante) }}
-					                    {{ form_row(form.fonctionDansEtablissementSante) }}
-					                    {{ form_row(form.profilEtablissementSante) }}
+                                        {{ form_row(form.profilEtablissementSante) }}
+                                        {{ form_row(form.fonctionDansEtablissementSante) }}
                                         {{ form_row(form.raisonInscriptionSante) }}
 
                                     </div>
