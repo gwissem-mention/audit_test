@@ -59,7 +59,7 @@ class Reponse
     /**
      * @var integer
      *
-     * @ORM\Column(name="param_id", type="integer", options = {"comment" = "Éventuelle clef étrangère"})
+     * @ORM\Column(name="param_id", type="integer",nullable=true, options = {"comment" = "Éventuelle clef étrangère"})
      */
     private $paramId;
     
