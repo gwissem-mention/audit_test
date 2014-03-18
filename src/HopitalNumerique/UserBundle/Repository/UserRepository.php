@@ -129,6 +129,7 @@ class UserRepository extends EntityRepository
 
         return $qb;
     }
+
     public function getUsersGroupeEtablissement($criteres)
     {
         $qb = $this->_em->createQueryBuilder();
@@ -181,6 +182,24 @@ class UserRepository extends EntityRepository
         return $qb;
     }
     
+    /**
+     * Retourne la liste des utilisateurs possédant le role demandé
+     *
+     * @param string $role Le rôle demandé
+     *
+     * @return QueryBuilder
+     */
+    public function findUsersByRole( $role )
+    {
+        $qb = $this->_em->createQueryBuilder();
+    
+        $qb->select('user')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->where('user.roles LIKE :role')
+            ->setParameter('role', '%'.$role.'%');
+
+        return $qb;
+    }
 
 
 

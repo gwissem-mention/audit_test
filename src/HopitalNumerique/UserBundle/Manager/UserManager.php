@@ -157,6 +157,19 @@ class UserManager extends BaseManager
         return $this->getRepository()->getUsersGroupeEtablissement($criteres)->getQuery()->getResult();
     }
 
+    /**
+     * Retourne la liste des utilisateurs possédant le role demandé
+     *
+     * @param string $role Le rôle demandé
+     *
+     * @return array
+     */
+    public function findUsersByRole( $role )
+    {
+        return $this->getRepository()->findUsersByRole($role)->getQuery()->getOneOrNullResult();
+    }
+
+
 
 
 
