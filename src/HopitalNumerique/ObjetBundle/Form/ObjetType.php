@@ -95,7 +95,7 @@ class ObjetType extends AbstractType
             ))
             ->add('ambassadeurs', 'entity', array(
                 'class'    => 'HopitalNumeriqueUserBundle:User',
-                'property' => 'prenomNom',
+                'property' => 'nomPrenom',
                 'required' => false,
                 'multiple' => true,
                 'label'    => 'Ambassadeurs concernés',
@@ -103,7 +103,8 @@ class ObjetType extends AbstractType
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('user')
                               ->where('user.roles LIKE :ambassadeur')
-                              ->setParameter('ambassadeur','%ROLE_AMBASSADEUR_7%');
+                              ->setParameter('ambassadeur','%ROLE_AMBASSADEUR_7%')
+                              ->orderBy('user.nom');
                 }
             ))
             ->add('commentaires', 'checkbox', array(
