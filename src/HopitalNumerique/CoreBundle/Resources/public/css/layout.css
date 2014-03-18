@@ -78,6 +78,7 @@ a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 
     input.checkbox {width:16px; height:16px;}
 
 
+/* BLOCK RESPONSIVB : to delete */
 @media screen and (max-width: 1000px) {
     #body { display:none; }
 }
