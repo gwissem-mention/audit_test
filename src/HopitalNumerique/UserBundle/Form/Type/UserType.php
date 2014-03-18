@@ -198,21 +198,6 @@ class UserType extends AbstractType
                     }
             ))
             
-            ->add('ville', 'entity', array(
-                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'property'    => 'libelle',
-                    'required'    => false,
-                    'label'       => 'Ville',
-                    'empty_value' => ' - ',
-                    'attr'        => array(),
-                    'query_builder' => function(EntityRepository $er) use($options) {
-                        return $er->createQueryBuilder('ref')
-                            ->where('ref.code = :etat')
-                            ->setParameter('etat', 'DEPARTEMENT')
-                            ->orderBy('ref.libelle', 'ASC');                        
-                    }
-            ))
-            
             ->add('etat', 'entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'    => 'libelle',
