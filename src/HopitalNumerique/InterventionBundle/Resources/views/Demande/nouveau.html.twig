@@ -33,10 +33,8 @@
 
 {% block contenu %}
     <div class="panel panel_form">
-    
-    
-    
-    
+
+
         {% set informationsManquantes = app.user|informationsManquantes %}
 
         {% if app.user.hasRoleCmsi == false and (not informationsManquantes.ok) %}
@@ -64,9 +62,8 @@
         {% endif %} 
     
         {% if (informationsManquantes.ok or app.user.hasRoleCmsi) %}
-            
-        
-            <form method="post" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
+
+            <form method="post" id="form_intervention_demande_nouveau" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
                 <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
                 {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
                 
@@ -84,23 +81,9 @@
                     <input type="submit" class="btn btn-success submit" value="Valider ma demande">
                 </div>
             </form>
-        
-        
+
         {% endif %}
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        
-        
+
 
     </div>
 {% endblock %}

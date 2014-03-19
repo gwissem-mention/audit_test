@@ -60,17 +60,20 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.se
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.relance = function(interventionDemandeId)
 {
-    if (confirm('Confirmez-vous l\'envoi d\'une relance pour cette demande d\'intervention ?'))
+    apprise('Confirmez-vous l\'envoi d\'une relance pour cette demande d\'intervention ?', { verify:true, textYes:'Oui', textNo:'Non' }, function(reponse)
     {
-        var evaluationEnvoiRelanceUrl = '/compte-hn/intervention/demande/' + interventionDemandeId + '/evaluation/relance';
+        if (reponse)
+        {
+            var evaluationEnvoiRelanceUrl = '/compte-hn/intervention/demande/' + interventionDemandeId + '/evaluation/relance';
 
-        $.ajax(evaluationEnvoiRelanceUrl, {
-            success:function() {
-                alert('La relance a été envoyée, merci !');
-                return false;
-            }
-        });
-    }
-    
+            $.ajax(evaluationEnvoiRelanceUrl, {
+                success:function() {
+                    apprise('La relance a été envoyée, merci !');
+                    return false;
+                }
+            });
+        }
+    });
+
     return false;
 };

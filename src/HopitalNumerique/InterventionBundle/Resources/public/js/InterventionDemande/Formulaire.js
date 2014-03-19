@@ -57,6 +57,26 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initChamps = f
 
 
 /**
+ * Vérifie, avant soumission, le formulaire de création d'une nouvelle demande d'intervention.
+ * 
+ * @return boolean VRAI ssi le formulaire est valide
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormulaireCreation = function()
+{
+    var objetsChamp = $('#hopitalnumerique_interventionbundle_interventiondemande_etablissement_objets');
+    var objetsChampEngineValidator = $('#s2id_hopitalnumerique_interventionbundle_interventiondemande_etablissement_objets ul.select2-choices');
+    
+    if ($(objetsChamp).val() == null)
+    {
+        $(objetsChampEngineValidator).validationEngine('showPrompt', '* Ce champ est requis', 'red', 'topRight', true);
+        return false;
+    }
+    else $(objetsChampEngineValidator).validationEngine('hide');
+
+    return true;
+}
+
+/**
  * Modifie l'état de la demande d'intervention en refusé CMSI.
  * 
  * @param integer interventionEtatId L'ID du nouvel état de la demande d'intervention (refusé CMSI)
@@ -364,21 +384,24 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.changeAmbassad
 
     if (nouvelAmbassadeurId > 0)
     {
-        if (confirm('Confirmez-vous le transfert d\'ambassadeur ?'))
+        apprise('Confirmez-vous le transfert d\'ambassadeur ?', { verify:true, textYes:'Oui', textNo:'Non' }, function(reponse)
         {
-            var loaderAjax = $('.panel_form_visu').nodevoLoader().start();
-            var changementAmbassadeurUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/ambassadeur/' + nouvelAmbassadeurId + '/change'; 
-        
-            $.ajax(changementAmbassadeurUrl, {
-                success:function(reponse) {
-                    if (reponse != '1')
-                        alert('L\'ambassadeur n\'a pu être modifié.');
-                    else Nodevo_Web.redirige('/compte-hn/intervention/demandes/liste');
+            if (reponse)
+            {
+                var loaderAjax = $('.panel_form_visu').nodevoLoader().start();
+                var changementAmbassadeurUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/ambassadeur/' + nouvelAmbassadeurId + '/change'; 
+            
+                $.ajax(changementAmbassadeurUrl, {
+                    success:function(reponse) {
+                        if (reponse != '1')
+                            alert('L\'ambassadeur n\'a pu être modifié.');
+                        else Nodevo_Web.redirige('/compte-hn/intervention/demandes/liste');
 
-                    loaderAjax.finished();
-                }
-            });
-        }
+                        loaderAjax.finished();
+                    }
+                });
+            }
+        });
     }
 };
 
@@ -391,17 +414,20 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.changeAmbassad
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.regroupeInterventionSimilaire = function(interventionRegroupeeId, interventionRegroupementType)
 {
-    if (confirm('Confirmez-vous ce regroupement ?'))
+    apprise('Confirmez-vous ce regroupement ?', { verify:true, textYes:'Oui', textNo:'Non' }, function(reponse)
     {
-        var interventionRegroupementUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/regroupement/' + interventionRegroupementType + '/' + interventionRegroupeeId + '/regroupe';
-        
-        $.ajax(interventionRegroupementUrl, {
-            method:'POST',
-            success:function(reponse) {
-                if (reponse != '1')
-                    alert('Le regroupement ne s\est pas fait.');
-                else Nodevo_Web.rechargePage();
-            }
-        });
-    }
+        if (reponse)
+        {
+            var interventionRegroupementUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/regroupement/' + interventionRegroupementType + '/' + interventionRegroupeeId + '/regroupe';
+            
+            $.ajax(interventionRegroupementUrl, {
+                method:'POST',
+                success:function(reponse) {
+                    if (reponse != '1')
+                        alert('Le regroupement ne s\est pas fait.');
+                    else Nodevo_Web.rechargePage();
+                }
+            });
+        }
+    });
 }

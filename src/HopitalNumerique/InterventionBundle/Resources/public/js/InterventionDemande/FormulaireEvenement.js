@@ -12,11 +12,26 @@ var HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement =
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init = function()
 {
+    HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initFormulaireCreation_Submit();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initRegion_Change();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initAutresEtablissements_Change();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initInterventionEtat_Click();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initInterventionRegroupement_Click();
 };
+
+/**
+ * Initialise l'événement de soumission du formulaire de création d'une demande d'intervention.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initFormulaireCreation_Submit = function()
+{
+    var demandeCreationFormulaire = $('form#form_intervention_demande_nouveau');
+
+    $(demandeCreationFormulaire).submit(function() {
+        return HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormulaireCreation();
+    });
+}
 
 /**
  * Initialisation de l'événement d'un changement de région.
