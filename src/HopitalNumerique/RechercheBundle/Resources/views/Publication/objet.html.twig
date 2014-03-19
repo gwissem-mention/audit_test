@@ -75,12 +75,12 @@
             <div class="col-md-4">
                 <div class="wrapper">
                     {% if objet.getAbsolutePath(true) is not null %}
-                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(true)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète</a><i class="pull-left fa fa-download violet"></i>
+                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(true)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(true)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
                     {% endif %}
 
                     <div class="clearfix"></div>
                     {% if objet.getAbsolutePath(false) is not null %}
-                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(false)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète</a><i class="pull-left fa fa-download violet"></i>
+                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(false)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(false)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
                     {% endif %}
                     
                     <div class="clearfix"></div>

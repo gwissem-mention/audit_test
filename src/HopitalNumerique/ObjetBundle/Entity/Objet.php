@@ -850,6 +850,25 @@ class Objet
         else
             return null === $this->path2 ? null : $this->getUploadDir().'/'.$this->path2;
     }
+    
+    /**
+     * Fonction qui renvoie le type mime de la piece jointe 1 ou 2
+     */
+    public function getTypeMime( $firstFile = true )
+    {
+        $return = "";
+        if( $firstFile ){
+            $path = $this->path;
+        } else {
+            $path = $this->path2;
+        }
+        
+        if( !$path ){
+            return "";
+        }
+        
+        return substr($path, strrpos($path, ".") + 1);
+    }
 
     public function getUploadRootDir()
     {
