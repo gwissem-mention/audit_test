@@ -32,13 +32,16 @@
     {% if objet.isInfraDoc %}
         <div id="sommaire" class="closed">
             <div class="content" style="display:none">
-                <a class="resume" href="{{path('hopital_numerique_recherche_publication_objet', {'id':objet.id,'alias':objet.alias})}}">Resume</a>
+                <a class="resume" href="{{path('hopital_numerique_recherche_publication_objet', {'id':objet.id,'alias':objet.alias})}}">Résumé</a>
                 <h3 class="violet">Sommaire</h3>
                 <ul>
                     {% for one in contenus %}
                         {{ _self.buildTree(one, objet) }}
                     {% endfor %}
                 </ul>
+                {% if objet.synthese is not null %}
+                <a class="resume downloadLink synthese fancybox.iframe" style="width:90px;" href="{{path('hopital_numerique_recherche_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
+                {% endif %}
             </div>
         </div>
         <div id="publication" class="with-sommaire">
