@@ -119,6 +119,21 @@ class MailManager extends BaseManager
         return $this->_generationMail($user, $mail);
     }
     
+    /**
+     * Envoi un mail de confirmation de candidature ambassadeur
+     *
+     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendCandidatureAmbassadeurCMSIMail( $user, $options )
+    {
+        $mail = $this->findOneById(24);
+    
+        return $this->_generationMail($user, $mail, $options);
+    }
+    
 
 
     /**
@@ -152,31 +167,31 @@ class MailManager extends BaseManager
     /**
      * Envoi un mail de refus de candidature expert
      *
-     * @param User $user Utilisateur qui recevras l'email
-     * @param string $message Message de refus ajouté au template
+     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : 'nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
      */
-    public function sendRefusCandidatureExpertMail( $user, $message )
+    public function sendRefusCandidatureExpertMail( $user, $options )
     {
         $mail = $this->findOneById(13);
     
-        return $this->_generationMail($user, $mail, $message);
+        return $this->_generationMail($user, $mail, $options);
     }
     
     /**
      * Envoi un mail de validation de candidature ambassadeur
      *
-     * @param User $user Utilisateur qui recevras l'email
-     * @param string $message Message de refus ajouté au template
+     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : 'nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
      */
-    public function sendRefusCandidatureAmbassadeurMail( $user, $message )
+    public function sendRefusCandidatureAmbassadeurMail( $user, $options )
     {
         $mail = $this->findOneById(14);
     
-        return $this->_generationMail($user, $mail, $message);
+        return $this->_generationMail($user, $mail, $options);
     }
    
     /**
@@ -231,17 +246,30 @@ class MailManager extends BaseManager
      *
      * @param string $content Contenu Templaté du mail
      * @param User   $user    User qui recevras l'email
-     * @param string $message Message a ajouter au template
+     * @param array  $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return string
      */
-    private function _replaceContent( $content, $user, $message )
+    private function _replaceContent( $content, $user, $options)
     {
-        $message = nl2br($message);
+        //Si il y a des variables spécifique dans le template courant
+        if(!empty($options))
+        {
+            foreach ($options as $key => $option)
+            {
+                //Récupération de la variable du template
+                $variableARemplacer = '%' . $key;
+                //Remplacement de la mise en forme
+                $message = nl2br($option);
+                //Remplacement des sauts de lignes
+                $message2 = str_replace(array("\r\n", "\n", "\r"),'<br />',$message);
+                //Mise à jour du body du mail
+                $content = str_replace($variableARemplacer, $message, $content);
+            }
+        }
         
         $content = str_replace('%u', $user->getPrenom() . ' ' . $user->getNom(), $content);
         $content = str_replace('%p', $user->getPlainPassword(), $content);
-        $content = str_replace('%message', $message, $content);
    
         return $content;
     }
@@ -251,14 +279,14 @@ class MailManager extends BaseManager
      * 
      * @param \HopitalNumerique\UserBundle\Entity\User $user
      * @param \Nodevo\MailBundle\Entity\Mail           $mail
-     * @param string                                   $message Message a ajouter au template
+     * @param array                                    $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      * 
      * @return Swift_Message objet \Swift pour l'envoie du mail
      */
-    private function _generationMail( $user, $mail, $message = '' )
-    {
+    private function _generationMail( $user, $mail, $options = array() )
+    {        
         //prepare content
-        $content         = $this->_replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user, $message);
+        $content         = $this->_replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user, $options);
         $templateFile    = "NodevoMailBundle::template.mail.html.twig";
         $templateContent = $this->_twig->loadTemplate($templateFile);
     

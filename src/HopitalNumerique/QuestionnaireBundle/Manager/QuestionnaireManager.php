@@ -61,4 +61,27 @@ class QuestionnaireManager extends BaseManager
         
         return $res;
     }
+    
+    public function getQuestionnaireFormateMail($reponses)
+    {
+        $candidature = '<ul>';
+        foreach ($reponses as $key => $reponse)
+        {
+            switch($reponse->getQuestion()->getTypeQuestion()->getLibelle())
+            {
+            	case 'entity':
+            	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . $reponse->getReference()->getLibelle() . "</li>";
+            	    break;
+            	case 'checkbox':
+            	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . ('1' == $reponse->getReponse() ? 'Oui' : 'Non' ). "</li>";
+            	    break;
+            	default:
+            	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . $reponse->getReponse() . "</li>";
+            	    break;
+            }
+        }
+        $candidature .= '</ul>';
+        
+        return $candidature;
+    }
 }
