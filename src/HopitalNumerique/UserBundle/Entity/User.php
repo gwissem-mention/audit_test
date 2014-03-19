@@ -17,7 +17,7 @@ use Nodevo\RoleBundle\Entity\Role;
  * @ORM\Table("core_user")
  * @ORM\Entity(repositoryClass="HopitalNumerique\UserBundle\Repository\UserRepository")
  * @UniqueEntity(fields="email", message="Cette adresse email existe déjà.")
- * @UniqueEntity(fields="username", message="Ce nom d'utilisateur existe déjà.")
+ * @UniqueEntity(fields="username", message="Ce nom de compte existe déjà.")
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="username",
  *          column=@ORM\Column(
@@ -164,13 +164,13 @@ class User extends BaseUser
 
     /**
      * @var string
-     * @Assert\NotBlank(message="Le nom d'utilisateur ne peut pas être vide.")
+     * @Assert\NotBlank(message="Le nom de compte ne peut pas être vide.")
      * @Assert\Regex(pattern= "/[0-9a-zA-Z]/")
      * @Assert\Length(
      *      min = "1",
      *      max = "50",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom d'utilisateur.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom d'utilisateur."
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom de compte.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom de compte."
      * )
      * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]],custom[onlyLetterNumber]")
      */
@@ -183,8 +183,8 @@ class User extends BaseUser
      * @Assert\Length(
      *      min = "1",
      *      max = "50",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom d'utilisateur.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom d'utilisateur."
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom de compte.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom de compte."
      * )
      * @Nodevo\Javascript(class="validate[required,custom[email]]")
      */
