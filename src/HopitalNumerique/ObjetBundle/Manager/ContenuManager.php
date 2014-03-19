@@ -50,7 +50,7 @@ class ContenuManager extends BaseManager
         $parents  = $datas->matching( $criteria );
         
         //call recursive function to handle all datas
-        $elems = $this->_getArboRecursive($datas, $parents, array(), '' );
+        $elems  = $this->_getArboRecursive($datas, $parents, array(), '' );
         $return = array();
         foreach( $elems as $one ){
             if( $one->objet != null ){
@@ -119,14 +119,14 @@ class ContenuManager extends BaseManager
             $reference = $selected->getReference();
 
             //on remet l'élément à sa place
-            $return[ $selected->getReference()->getId() ]['nom'] = $reference->getCode() . " - " . $reference->getLibelle();
+            $return[ $selected->getReference()->getId() ]['nom']     = $reference->getCode() . " - " . $reference->getLibelle();
+            $return[ $selected->getReference()->getId() ]['primary'] = $selected->getPrimary();
             
-            if( $reference->getParent() ){
+            if( $reference->getParent() )
                 $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
-            }
         }
         
-        $this->formatReferencesOwn( $return );
+        $this->_formatReferencesOwn( $return );
         
         return $return;
     }
@@ -168,6 +168,69 @@ class ContenuManager extends BaseManager
     }
 
     /**
+     * [parseCsv description]
+     *
+     * @param  [type] $csv   [description]
+     * @param  [type] $objet [description]
+     *
+     * @return [type]
+     */
+    public function parseCsv( $csv, $objet )
+    {
+        //parse Str CSV and convert to array
+        $lines    = explode("\n", $csv);
+        if( empty($lines) ){
+            return false;
+        }
+
+        //gestion des erreurs lors du parse du CSV
+        $sommaire = array();
+        foreach ($lines as $line) {
+            $tmp = str_getcsv($line,';');
+            if( isset($tmp[0]) && isset($tmp[1]) && !isset($tmp[2]) ){
+                $sommaire[] = $tmp;
+            } else {
+                return false;
+            }
+        }
+
+        //ajout des éléments parents only
+        $parents = array();
+        foreach($sommaire as $element)
+        {
+            $elem = &$parents;
+            list($chapitre, $titre) = $element;
+            $numeroChapitre = explode('.', $chapitre);
+            foreach( $numeroChapitre as $key => $one ){
+                if( $key == count($numeroChapitre) - 1 ){
+                    $elem = &$elem[ $one ];
+                } else {
+                    $elem = &$elem[ $one ]['childs'];
+                }
+            }
+            $elem['titre'] = $titre;
+        }
+        
+        // clean elements sans titre
+        $parents = $this->cleanSansTitre($parents);
+        $this->saveContenusCSV($objet, $parents);
+
+        return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
      * Retourne le prefix du contenu
      *
      * @param Contenu $contenu Contenu
@@ -184,65 +247,6 @@ class ContenuManager extends BaseManager
         
         return $prefix;
     }
-
-
-
-
-    public function parseCsv( $csv, $objet )
-    {
-        //parse Str CSV and convert to array
-        $lines    = explode("\n", $csv);
-        if( empty($lines) )
-            return false;
-
-        //gestion des erreurs lors du parse du CSV
-        $sommaire = array();
-        foreach ($lines as $line) {
-            $tmp = str_getcsv($line,';');
-            if( isset($tmp[0]) && isset($tmp[1]) && !isset($tmp[2]) )
-                $sommaire[] = $tmp;
-            else
-                return false;
-        }
-
-        //ajout des éléments parents only
-        $parents = array();
-        foreach($sommaire as $element)
-        {
-            list($chapitre, $titre) = $element;
-            $numeroChapitre = explode('.', $chapitre);
-
-            if( isset($numeroChapitre[0]) && !isset($numeroChapitre[1]) )
-                $parents[ $numeroChapitre[0] ] = $titre;
-        }
-        
-
-
-
-
-        echo '<pre>';
-        var_dump($parents);
-        die();
-
-        //créer un contenu (set titre, generate alias, set objet)
-            // $contenu = $this->createEmpty();
-            // $contenu->setObjet( $objet );
-            // $contenu->setTitre( $titre );
-            // $tool = new Chaine( $titre );
-            // $contenu->setAlias( $tool->minifie() );
-            // $this->save($contenu);
-
-        return $result;
-    }
-
-
-
-
-
-
-
-
-
 
     /**
      * Fonction récursive qui parcourt l'ensemble des références en ajoutant l'element et recherchant les éventuels enfants
@@ -267,11 +271,11 @@ class ContenuManager extends BaseManager
             $item->id         = $element->getId();
             $item->references = count($element->getReferences());
             $item->order      = $chapitre;
-            $item->hasContent = $element->getContenu() == '' ? false : true;
-            $item->objet      = $element->getParent() == null ? $element->getObjet()->getId() : NULL;
+            $item->hasContent = $element->getContenu() == ''   ? false : true;
+            $item->objet      = $element->getParent()  == null ? $element->getObjet()->getId() : NULL;
 
             //add childs : filter items with current element
-            $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $element ))->orderBy(array("order"=>Criteria::ASC));
+            $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $element ))->orderBy( array( "order" => Criteria::ASC ) );
             $childs       = $items->matching( $criteria );
             $item->childs = $this->_getArboRecursive($items, $childs, array(), $chapitre );
 
@@ -283,18 +287,35 @@ class ContenuManager extends BaseManager
         return $tab;
     }
     
-    private function formatReferencesOwn( &$retour ){
-        foreach( $retour as $key => $one ){
-            $retour[ $key ]['childs'] = $this->getChilds($retour, $one);
+    /**
+     * [_formatReferencesOwn description]
+     *
+     * @param  [type] $retour [description]
+     *
+     * @return [type]
+     */
+    private function _formatReferencesOwn ( &$retour )
+    {
+        foreach( $retour as $key => $one ) {
+            $retour[ $key ]['childs'] = $this->_getChilds($retour, $one);
         }
     }
     
-    private function getChilds(&$retour, $elem){
-        if( isset( $elem['childs'] ) && count($elem['childs']) ){
+    /**
+     * [_getChilds description]
+     *
+     * @param  [type] $retour [description]
+     * @param  [type] $elem   [description]
+     *
+     * @return [type]
+     */
+    private function _getChilds ( &$retour, $elem )
+    {
+        if( isset( $elem['childs'] ) && count($elem['childs']) ) {
             $childs = array();
-            foreach( $elem["childs"] as $key => $one ){
+            foreach( $elem["childs"] as $key => $one ) {
                 $childs[ $one ] = $retour[ $one ];
-                $petitsEnfants = $this->getChilds($retour, $childs[ $one ]);
+                $petitsEnfants  = $this->_getChilds($retour, $childs[ $one ]);
                 if( $petitsEnfants ){
                     $childs[ $one ]['childs'] = $petitsEnfants;
                     unset( $retour[ $one ] );
@@ -305,6 +326,60 @@ class ContenuManager extends BaseManager
             return $childs;
         } else {
             return false;
+        }
+    }
+    
+    /**
+     * Fonction qui renvoie uniquement les éléments du tableau ayant l'index "titre" qui existe, de manière récursive
+     * 
+     * @param array $elements
+     * 
+     * @return array 
+     */
+    private function cleanSansTitre($elements){
+        $retour = array();
+        foreach( $elements as $cle => $elem ){
+            if( isset($elem['childs']) ){
+                $elem['childs'] = $this->cleanSansTitre( $elem['childs'] );
+            }
+            if( isset($elem['titre']) ){
+                $retour[$cle] = $elem;
+            }
+        }
+        return $retour;
+    }
+    
+    /**
+     * Fonctionne qui sauvegarde tous les éléments du sommaire
+     * 
+     * @param type $objet
+     * @param type $contenus
+     * @param type $objects
+     * @param type $parent
+     * @param boolean doit-on sauvegarder $objects
+     * 
+     * @retun void
+     */
+    private function saveContenusCSV($objet, $contenus, &$objects = array(), $parent = null, $save = true){
+        foreach( $contenus as $ordre => $content ){
+            //créer un contenu (set titre, generate alias, set objet)
+            $contenu = $this->createEmpty();
+            $contenu->setObjet( $objet );
+            $contenu->setTitre( $content['titre'] );
+            $tool = new Chaine( $content['titre'] );
+            $contenu->setAlias( $tool->minifie() );
+            $contenu->setOrder($ordre);
+            if( $parent ){
+                $contenu->setParent($parent);
+            }
+            $objects[] = $contenu;
+            if( isset($content['childs']) ){
+                $this->saveContenusCSV($objet, $content['childs'], $objects, $contenu, false);
+            }
+        }
+        
+        if( $save ){
+            $this->save($objects);
         }
     }
 }

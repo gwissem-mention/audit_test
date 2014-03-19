@@ -65,12 +65,12 @@ class ReferenceType extends AbstractType
             ->add('dictionnaire', 'checkbox', array(
                 'required' => false,
                 'label'    => 'Fait parti du dictionnaire de référencement',
-                'attr'     => array()
+                'attr'     => array( 'class'=> 'checkbox' )
             ))
             ->add('recherche', 'checkbox', array(
                 'required' => false,
                 'label'    => 'Présent dans les champs du moteur de recherche',
-                'attr'     => array()
+                'attr'     => array( 'class'=> 'checkbox' )
             ))
             ->add('parent', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',

@@ -208,9 +208,9 @@ class ObjetController extends Controller
 
             //Vérification de la présence rôle et des types
             $formTypes = $form->get("types")->getData();
-            $formType  = !is_null($formTypes) ? $formTypes[0] : null;
+//            $formType  = !is_null($formTypes) ? $formTypes[0] : null;
 
-            if( is_null($formType) ) {
+            if( is_null($formTypes) ) {
                 $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un type d\'objet.' );
                 return $this->render( $view , array(
                     'form'     => $form->createView(),

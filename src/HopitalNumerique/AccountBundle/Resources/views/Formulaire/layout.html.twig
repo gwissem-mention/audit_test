@@ -10,6 +10,12 @@
             </div>
         {% endblock %}
         
+        {% if block('barreActions') is not empty %}
+            <div class="actions">
+                {% block barreActions %}{% endblock %}
+            </div>
+        {% endif %}
+        
         {% block contenu %}{% endblock %}
         
     </div>

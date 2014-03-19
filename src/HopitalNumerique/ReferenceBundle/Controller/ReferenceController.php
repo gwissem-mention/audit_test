@@ -43,14 +43,17 @@ class ReferenceController extends Controller
         if( !is_null($id)){
             $referenceBase = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $id) );
 
-            if (!is_null($mod))
+            if (!is_null($mod)){
                 $reference->setCode( $referenceBase->getCode() );
-
-            else{
-                if ( $referenceBase->getLock() )
+                if( $referenceBase->getParent() ){
+                    $reference->setParent( $referenceBase->getParent() );
+                }
+            } else {
+                if ( $referenceBase->getLock() ){
                     $this->get('session')->getFlashBag()->add('warning', 'Attention, l\'élément que vous avez choisi est verrouillé, il ne peut donc pas être sélectionné comme Item parent.' );
-                else
+                } else {
                     $reference->setParent( $referenceBase );
+                }
             }
         }
 

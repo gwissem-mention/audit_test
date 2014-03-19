@@ -24,6 +24,9 @@ div#tableau-de-bord {}
         div#tableau-de-bord div.chapo div.description { font-size:11px; }
             div#tableau-de-bord div.chapo div.description p { margin:8px 0px;padding:0px; }
     /* --> */
+    /* <-- Barre avec les actions/boutons */
+    div#tableau-de-bord div.actions { text-align:right; }
+    /* --> */
     /* <-- Onglets */
     div#tableau-de-bord ul.nav-tabs {}
         div#tableau-de-bord ul.nav-tabs li {}

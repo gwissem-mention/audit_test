@@ -62,8 +62,8 @@ class ContractualisationType extends AbstractType
             ->add('archiver', 'checkbox', array(
                 'required' => false, 
                 'label'    => 'Archiver le document ?',
-                'attr'     => array()//array('class' => $this->_constraints['archiver']['class'] )
-            ))       ;
+                'attr'     => array( 'class' => 'checkbox' )//array('class' => $this->_constraints['archiver']['class'] )
+            ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

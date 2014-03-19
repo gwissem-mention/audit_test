@@ -18,6 +18,11 @@ class MailManager extends BaseManager
     private $_mailExpediteur;
     private $_destinataire;
     private $_twig;
+    /**
+     * Adresses mails en Copie Caché de l'anap
+     * @var array() Tableau clé: Nom affiché => valeur : Adresse mail
+     */
+    private $_mailAnap;
 
     /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails
@@ -34,7 +39,8 @@ class MailManager extends BaseManager
         $this->_allowDelete    = isset($options['allowDelete'])     ? $options['allowDelete']       : true;
         $this->_nomExpediteur  = isset($options['nomExpediteur'])   ? $options['nomExpediteur']     : '';        
         $this->_mailExpediteur = isset($options['mailExpediteur'])  ? $options['mailExpediteur']    : '';
-        $this->_destinataire   = isset($options['destinataire'])    ? $options['destinataire']      : '';
+        $this->_destinataire   = isset($options['destinataire'])    ? $options['destinataire']      : '';      
+        $this->_mailAnap       = isset($options['mailAnap'])        ? $options['mailAnap']          : array();
     }
 
     /**
@@ -264,6 +270,7 @@ class MailManager extends BaseManager
                             ->setSubject ( $mail->getObjet() )
                             ->setFrom ( array($mail->getExpediteurMail() => $mail->getExpediteurName() ) )
                             ->setTo ( $user->getEmail() )
+                            ->setBcc( $this->_mailAnap )
                             ->setBody ( $body, 'text/html' );
     }
 }

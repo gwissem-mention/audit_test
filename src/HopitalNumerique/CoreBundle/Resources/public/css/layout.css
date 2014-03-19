@@ -48,7 +48,7 @@ a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 
     #menu li a:hover{color:#6f3596; text-decoration: none;}
 
 /* ALERTES NODEVO - Flash messages */
-    .alert{margin:10px 0 0 0;}
+    .alert{margin:10px 15px 0;}
     .nalert-success { color: #333333; background-color: #b4dc00; border-color: #d6e9c6;}
     .nalert-success hr { border-top-color: #c9e2b3;}
     .nalert-success .alert-link {color: #2b542c;}
@@ -77,6 +77,11 @@ a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 
 /* FORM */
     input.checkbox {width:16px; height:16px;}
 
+
+/* BLOCK RESPONSIVB : to delete */
+@media screen and (max-width: 1000px) {
+    #body { display:none; }
+}
 
 /*!
  *  Font Awesome 4.0.3 by @davegandy - http://fontawesome.io - @fontawesome

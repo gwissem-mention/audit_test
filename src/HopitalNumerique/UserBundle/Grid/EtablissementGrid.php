@@ -44,6 +44,7 @@ class EtablissementGrid extends Grid implements IGrid
     public function setActionsButtons()
     {
         $this->addActionButton( new Action\ShowButton( 'hopital_numerique_user_show' ) );
+        $this->addActionButton( new Action\EditButton( 'hopital_numerique_user_edit' ) );
 
         //Custom Archive button : Affiche le bouton archiver
         $archiveButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_etablissement_archiver');

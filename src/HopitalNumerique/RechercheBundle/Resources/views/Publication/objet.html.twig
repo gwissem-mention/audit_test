@@ -32,13 +32,16 @@
     {% if objet.isInfraDoc %}
         <div id="sommaire" class="closed">
             <div class="content" style="display:none">
-                <a class="resume" href="{{path('hopital_numerique_recherche_publication_objet', {'id':objet.id,'alias':objet.alias})}}">Resume</a>
+                <a class="resume" href="{{path('hopital_numerique_recherche_publication_objet', {'id':objet.id,'alias':objet.alias})}}">Résumé</a>
                 <h3 class="violet">Sommaire</h3>
                 <ul>
                     {% for one in contenus %}
                         {{ _self.buildTree(one, objet) }}
                     {% endfor %}
                 </ul>
+                {% if objet.synthese is not null %}
+                <a class="resume downloadLink synthese fancybox.iframe" style="width:90px;" href="{{path('hopital_numerique_recherche_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
+                {% endif %}
             </div>
         </div>
         <div id="publication" class="with-sommaire">
@@ -75,12 +78,12 @@
             <div class="col-md-4">
                 <div class="wrapper">
                     {% if objet.getAbsolutePath(true) is not null %}
-                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(true)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète</a><i class="pull-left fa fa-download violet"></i>
+                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(true)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(true)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
                     {% endif %}
 
                     <div class="clearfix"></div>
                     {% if objet.getAbsolutePath(false) is not null %}
-                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(false)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète</a><i class="pull-left fa fa-download violet"></i>
+                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(false)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(false)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
                     {% endif %}
                     
                     <div class="clearfix"></div>
@@ -151,7 +154,7 @@
 {% macro buildTree(one, objet) %}
     <li>
         {% if one.hasContent %}
-            <a href="{{path('hopital_numerique_recherche_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':one.id,'aliasc':one.alias})}}" >{{one.order ~ ' ' ~ one.titre}} <i class="fa fa-eye"></i></a>
+            <a href="{{path('hopital_numerique_recherche_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':one.id,'aliasc':one.alias})}}" >{{one.order ~ ' ' ~ one.titre}} </a>
         {% else %}
             <p>{{one.order ~ ' ' ~ one.titre}}</p>
         {% endif %}

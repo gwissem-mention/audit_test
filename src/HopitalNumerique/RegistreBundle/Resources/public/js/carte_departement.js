@@ -3,13 +3,13 @@ var frenchMap;
 window.onload = function() {
     frenchMap = new Raphael(document.getElementById('canvas_france'), 240, 300);
 
-    frenchMap.setViewBox(0, 0, 800, 900, true); 
+    frenchMap.setViewBox(0, 0, 810, 900, true); 
 
     // Les styles visuels pour toutes les régions
     var attr = {
         fill              : "#FFFFFF", /* Couleur de remplissage par defaut */
-        stroke            : "#C8C8C8", /* Couleur des bordures par defaut */
-        "stroke-width"    : 0.2,
+        stroke            : "#6f3596", /* Couleur des bordures par defaut */
+        "stroke-width"    : 1,
         "stroke-linejoin" : "round"
     };
 

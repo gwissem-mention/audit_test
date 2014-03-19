@@ -9,8 +9,8 @@ $(document).ready(function() {
     tinymce.PluginManager.load('link', '/bundles/nodevoadmin/plugins/tinymce/plugins/link/plugin.min.js');
     NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
 
-    //Save auto : toutes les 5 minutes  
-    setInterval(saveAutomatique, 300000);
+    //Save auto : toutes les 10 minutes  
+    //setInterval(saveAutomatique, 600000);
     
     tinyMCE.init({
         selector     : "textarea",

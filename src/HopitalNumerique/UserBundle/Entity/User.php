@@ -564,6 +564,30 @@ class User extends BaseUser
     }
     
     /**
+     * Get ville
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
+     */
+    public function getVille()
+    {
+        return $this->ville;
+    }
+    
+    /**
+     * Set ville
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $ville
+     */
+    public function setVille($ville)
+    {
+        if($ville instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference ){
+            $this->ville = $ville;
+        } else {
+            $this->ville = null;
+        }
+    }
+    
+    /**
      * Get etat
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
@@ -1007,9 +1031,24 @@ class User extends BaseUser
         $this->termsAccepted = (Boolean) $termsAccepted;
     }
     
+    /**
+     * Retourne le prénom puis le nom
+     *
+     * @return string
+     */
     public function getPrenomNom()
     {
-        return $this->prenom . ' ' . $this->nom;
+        return ucfirst($this->prenom) . ' ' . ucfirst($this->nom);
+    }
+
+    /**
+     * Retourne le nom puis le prénom
+     *
+     * @return string
+     */
+    public function getNomPrenom()
+    {
+        return ucfirst($this->nom) . ' ' . ucfirst($this->prenom);
     }
 
     /**

@@ -62,7 +62,7 @@ class ObjetType extends AbstractType
                 'attr'          => array( 'placeholder' => 'Selectionnez le ou les types de cet objet' ),
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
-                              ->andWhere('ref.code = :etat', 'ref.id != 175', 'ref.id != 176', 'ref.id != 179')
+                              ->andWhere('ref.code = :etat','ref.id != 175')
                               ->setParameter('etat', 'CATEGORIE_OBJET')
                               ->orderBy('ref.parent, ref.order', 'ASC');
                 }
@@ -95,7 +95,7 @@ class ObjetType extends AbstractType
             ))
             ->add('ambassadeurs', 'entity', array(
                 'class'    => 'HopitalNumeriqueUserBundle:User',
-                'property' => 'prenomNom',
+                'property' => 'nomPrenom',
                 'required' => false,
                 'multiple' => true,
                 'label'    => 'Ambassadeurs concernés',
@@ -103,7 +103,8 @@ class ObjetType extends AbstractType
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('user')
                               ->where('user.roles LIKE :ambassadeur')
-                              ->setParameter('ambassadeur','%ROLE_AMBASSADEUR_7%');
+                              ->setParameter('ambassadeur','%ROLE_AMBASSADEUR_7%')
+                              ->orderBy('user.nom');
                 }
             ))
             ->add('commentaires', 'checkbox', array(
@@ -111,14 +112,16 @@ class ObjetType extends AbstractType
                 'label'      => 'Commentaires autorisés',
                 'label_attr' => array(
                     'class' => 'col-md-7 control-label'
-                )
+                ),
+                'attr'       => array( 'class'=> 'checkbox' )
             ))
             ->add('notes', 'checkbox', array(
                 'required'   => false,
                 'label'      => 'Notes autorisés',
                 'label_attr' => array(
                     'class' => 'col-md-7 control-label'
-                )
+                ),
+                'attr'       => array( 'class'=> 'checkbox' )
             ))
             ->add('dateCreation', 'genemu_jquerydate', array(
                 'required'   => true, 

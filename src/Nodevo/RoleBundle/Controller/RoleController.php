@@ -68,9 +68,9 @@ class RoleController extends Controller
         if( $role->getInitial() ){
             $this->get('session')->getFlashBag()->add('danger', 'Il est interdit de supprimer un groupe initial.' );
         }else{
-            $users = $role->getUsers();
-
-            if( isset($users[0]) ){
+            $users = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole( $role->getRole() );
+            
+            if( !is_null($users) ){
                 $message = 'Ce groupe n\'a pas pu être supprimé car il a encore des utilisateurs associés.';
                 $this->get('session')->getFlashBag()->add('danger', $message);
             }else{

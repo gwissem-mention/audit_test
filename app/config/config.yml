@@ -129,6 +129,9 @@ nodevo_mail:
     options:
         allowAdd: false
         allowDelete: false
+        mailAnap: #Tableaux des adresses mails copie caché de tout les mails envoyé par l'application sous la forme "adresse_mail: nom_affiché"
+            toto@yopmail.com: adresse1
+            toto2@yopmail.com: adresse2
 
 nodevo_menu:
     options:
