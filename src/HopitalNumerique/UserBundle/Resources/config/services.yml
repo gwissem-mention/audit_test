@@ -6,6 +6,8 @@ parameters:
     hopitalnumerique_user.manager.user.class: HopitalNumerique\UserBundle\Manager\UserManager
     hopitalnumerique_user.form.type.user: HopitalNumerique\UserBundle\Form\Type\UserType
     hopitalnumerique_user.grid.user.class: HopitalNumerique\UserBundle\Grid\UserGrid
+    #Mot-de-passe
+    hopitalnumerique_user.form.type.motdepasse: HopitalNumerique\UserBundle\Form\Type\MotDePasseType
     #Contractualisation
     hopitalnumerique_user.manager.contractualisation.class: HopitalNumerique\UserBundle\Manager\ContractualisationManager
     hopitalnumerique_user.grid.contractualisation.class: HopitalNumerique\UserBundle\Grid\ContractualisationGrid
@@ -43,6 +45,13 @@ services:
     hopitalnumerique_user.options.user:
         class: %hopitalnumerique_user.options_config.class%
         arguments: ["%hopital_numerique_user.options%"]
+    #MotDePasse:
+    #--Formulaire    
+    hopitalnumerique_user.form.type.motdepasse:
+        class: %hopitalnumerique_user.form.type.motdepasse%
+        arguments: ["@hopitalnumerique_user.manager.user", "@validator", "@security.context"]
+        tags:
+            - { name: form.type, alias: nodevo_user_motdepasse }
 
     #Contractualisation
     #--Manager
