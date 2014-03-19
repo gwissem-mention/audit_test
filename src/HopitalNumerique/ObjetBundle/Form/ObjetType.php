@@ -49,9 +49,10 @@ class ObjetType extends AbstractType
                 'property' => 'name',
                 'multiple' => true,
                 'required' => false,
-                'label'    => 'Interdire l\'accès au groupes',
+                'label'    => 'Interdire l\'accès aux groupes',
                 'attr'     => array( 'placeholder' => 'Selectionnez le ou les rôles qui auront accès à cet objet' )
             ))
+                    
             ->add('types', 'genemu_jqueryselect2_entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'      => 'libelle',

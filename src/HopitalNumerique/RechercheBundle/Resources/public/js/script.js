@@ -365,3 +365,10 @@ function handleRequeteSave( r, id )
         }
     });
 }
+
+function cleanRequest(){
+    $('.arbo-requete li').each( function(){
+        removeElement( $(this) );
+    });
+    updateResultats();
+}
