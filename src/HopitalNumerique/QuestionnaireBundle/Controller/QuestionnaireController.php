@@ -259,18 +259,31 @@ class QuestionnaireController extends Controller
                     
                     //Mise à jour de la réponse dans le tableau des réponses
                     $reponses[$idQuestion] = $reponse;
-                }                
+                }
 
                 //Envoie du mail à l'utilisateur pour l'aleter de la validation de sa candidature
                 switch ($questionnaire->getNomMinifie())
                 {
                 	case 'expert':
-                        $mail = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertMail($user);
-                        $this->get('mailer')->send($mail);
+                	    //Expert
+                        $mailExpert = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertMail($user);
+                        $this->get('mailer')->send($mailExpert);
                 	    break;
                 	case 'ambassadeur':
-                        $mail = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurMail($user);
-                        $this->get('mailer')->send($mail);
+                	    //Ambassadeur
+                        $mailAmbassadeur = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurMail($user);
+                        $this->get('mailer')->send($mailAmbassadeur);
+                        
+                        //CMSI
+                        $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
+                        //$CMSI = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('region' => $user->getRegion(), 'actif' => 3));
+                        $CMSI = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => 11));
+                        $variablesTemplate = array(
+                        	'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
+                            'questionnaire' => $candidature
+                        );
+                        $mailCMSI = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurCMSIMail($CMSI, $variablesTemplate);
+                        $this->get('mailer')->send($mailCMSI);
                 	    break;
                 	default:
                 	    throw new \Exception('Ce type de questionnaire ne possède pas de mail en base.');

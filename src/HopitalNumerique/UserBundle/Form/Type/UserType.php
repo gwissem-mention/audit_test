@@ -53,7 +53,7 @@ class UserType extends AbstractType
         $builder->add('username', 'text', array(
                 'max_length' => $this->_constraints['username']['maxlength'],
                 'required'   => true, 
-                'label'      => 'Nom d\'utilisateur',
+                'label'      => 'Nom de compte',
                 'attr'       => array('class' => $this->_constraints['username']['class'] )
             ));
 

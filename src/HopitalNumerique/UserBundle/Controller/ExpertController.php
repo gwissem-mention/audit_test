@@ -174,7 +174,7 @@ class ExpertController extends Controller
         $this->get('hopitalnumerique_user.manager.refus_candidature')->save($refusCandidature);
         
         //Envoie du mail de validation de la candidature
-        $mail = $this->get('nodevo_mail.manager.mail')->sendRefusCandidatureExpertMail($user, $texteRefus);
+        $mail = $this->get('nodevo_mail.manager.mail')->sendRefusCandidatureExpertMail($user, array('message' => $texteRefus));
         $this->get('mailer')->send($mail);
         
         $this->get('session')->getFlashBag()->add( 'success' ,  'La candidature au poste '. $questionnaire->getNomMinifie() .' a été refusé.' );
