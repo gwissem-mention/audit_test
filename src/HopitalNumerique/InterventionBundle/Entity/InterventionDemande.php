@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
  * Entité d'une demande d'intervention.
@@ -872,6 +873,50 @@ class InterventionDemande
         return null;
     }
 
+    /**
+     * Retourne la liste des IDs de régions où sont présents les établissements rattachés à cette demande.
+     * 
+     * @return integer[] IDs des régions où sont présents les établissements rattachés
+     */
+    public function getEtablissementsRattachesRegionsIds()
+    {
+        $regionsIds = array();
+        
+        foreach ($this->getEtablissementsRattachesRegions() as $region)
+            $regionsIds[] = $region->getId();
+
+        return $regionsIds;
+    }
+    /**
+     * Retourne la liste des régions où sont présents les établissements rattachés à cette demande.
+     * 
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference[] Régions où sont présents les établissements rattachés
+     */
+    private function getEtablissementsRattachesRegions()
+    {
+        $regions = array();
+        
+        foreach ($this->etablissements as $etablissement)
+        {
+            if ($etablissement->getRegion() != null)
+            {
+                $regionDejaPresente = false;
+                foreach ($regions as $region)
+                {
+                    if ($region->getId() == $etablissement->getRegion()->getId())
+                    {
+                        $regionDejaPresente = true;
+                        break;
+                    }
+                }
+                if (!$regionDejaPresente)
+                    $regions[] = $etablissement->getRegion();
+            }
+        }
+        
+        return $regions;
+    }
+    
     /**
      * Retourne si l'état de l'intervention est Demande initiale.
      * 

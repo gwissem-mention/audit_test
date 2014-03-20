@@ -8,15 +8,16 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-    <script type="text/javascript">
-        {% if interventionDemande.etablissements|length > 0 %}{% spaceless %}
-            HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.setRegion({{ interventionDemande.etablissements[0].region.id }});
+
+    {% if interventionDemande.etablissements|length > 0 %}{% spaceless %}
+        <script type="text/javascript">
+            HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initRegions([{{ interventionDemande.etablissementsRattachesRegionsIds|join(',') }}]);
             {% for etablissement in interventionDemande.etablissements %}
                 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS.push({{ etablissement.id }});
             {% endfor %}
             HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REFERENT_INITIAL_ID = {{ interventionDemande.referent.id }};
-        {% endspaceless %}{% endif %}
-    </script>
+        </script>
+    {% endspaceless %}{% endif %}
 {% endblock %}
 
 {% block pageTitre %}Modifier une intervention{% endblock %}
@@ -31,40 +32,15 @@
         <form method="post" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireEdition) }}>
             {% form_theme interventionDemandeFormulaireEdition 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
 
-            {{ form_javascript(interventionDemandeFormulaireEdition) }}
-
-            {{ form_widget(interventionDemandeFormulaireEdition) }}
-
-            
             <div class="form-group">
-                <label class="col-md-4 control-label">Type d'intervention</label>
-                <div class="col-md-8"><div class="form-control">{{ interventionDemande.interventionType.libelle }}</div></div>
-                <div class="col-md-4"><div class="help-block"></div></div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label">Référent</label>
+                <label class="col-md-4 control-label">Demandeur</label>
                 <div class="col-md-8"><div class="form-control">{{ interventionDemande.referent.appellation }}</div></div>
                 <div class="col-md-4"><div class="help-block"></div></div>
             </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label">Objets</label>
-                <div class="col-md-8"><div class="form-control">
-                    {% for objet in interventionDemande.objets %}
-                        <div>{{ objet.titre }}</div>
-                    {% endfor %}
-                </div></div>
-                <div class="col-md-4"><div class="help-block"></div></div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label">Champ libre</label>
-                <div class="col-md-8"><div class="form-control">{{ interventionDemande.champLibre }}</div></div>
-                <div class="col-md-4"><div class="help-block"></div></div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label">Informations pour la prise de rendez-vous (échéance, disponibilités, etc)</label>
-                <div class="col-md-8"><div class="form-control">{{ interventionDemande.rdvInformations }}</div></div>
-                <div class="col-md-4"><div class="help-block"></div></div>
-            </div>
+            
+            {{ form_javascript(interventionDemandeFormulaireEdition) }}
+
+            {{ form_widget(interventionDemandeFormulaireEdition) }}
 
             <div class="boutons">
                 <input type="submit" class="btn btn-success submit" value="Enregistrer les modifications">

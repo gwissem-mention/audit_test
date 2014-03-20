@@ -44,11 +44,7 @@ class CmsiType extends InterventionDemandeCmsiType
                 'label' => 'Ambassadeur',
                 'required' => true
             ))
-            ->remove('interventionType')
             ->remove('referent')
-            ->remove('objets')
-            ->remove('champLibre')
-            ->remove('rdvInformations')
         ;
     }
 
