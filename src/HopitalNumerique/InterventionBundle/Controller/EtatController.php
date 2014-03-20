@@ -26,8 +26,16 @@ class EtatController extends Controller
      */
     public function ajaxChangeAction(InterventionDemande $interventionDemande, Reference $interventionEtat)
     {
-        if ($this->_changeEtatPourCmsi($interventionDemande, $interventionEtat) || $this->_changeEtatPourAmbassadeur($interventionDemande, $interventionEtat))
+        $messageJustificationChangementEtat = null;
+        if ($this->get('request')->isMethod('POST'))
+            $messageJustificationChangementEtat = ($this->get('request')->request->get('message') != '' ? $this->get('request')->request->get('message') : null);
+
+        //if ($this->_changeEtatPourCmsi($interventionDemande, $interventionEtat, $messageJustificationChangementEtat) || $this->_changeEtatPourAmbassadeur($interventionDemande, $interventionEtat, $messageJustificationChangementEtat))
+        if ($this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $interventionEtat, $messageJustificationChangementEtat))
+        {
+            $this->get('session')->getFlashBag()->add('success', 'L\'état de la demande d\'intervention a été modifié.');
             return new Response(1);
+        }
 
         $this->get('session')->getFlashBag()->add('danger', 'L\'état de la demande d\'intervention n\'a pu être modifié.');
         return new Response(0);
@@ -40,7 +48,7 @@ class EtatController extends Controller
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat Le nouvel état de la demande d'intervention
      * @return boolean VRAI ssi l'état a été modifié
      */
-    private function _changeEtatPourCmsi(InterventionDemande $interventionDemande, Reference $interventionEtat)
+    /*private function _changeEtatPourCmsi(InterventionDemande $interventionDemande, Reference $interventionEtat)
     {
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
@@ -86,7 +94,7 @@ class EtatController extends Controller
         }
         
         return false;
-    }
+    }*/
     /**
      * Vérifie et change l'état d'une demande d'intervention pour un ambassadeur.
      *
@@ -94,7 +102,7 @@ class EtatController extends Controller
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat Le nouvel état de la demande d'intervention
      * @return boolean VRAI ssi l'état a été modifié
      */
-    private function _changeEtatPourAmbassadeur(InterventionDemande $interventionDemande, Reference $interventionEtat)
+    /*private function _changeEtatPourAmbassadeur(InterventionDemande $interventionDemande, Reference $interventionEtat)
     {
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
     
@@ -129,7 +137,7 @@ class EtatController extends Controller
         }
     
         return false;
-    }
+    }*/
     
     /**
      * Envoie le bon courriel selon le nouvel état d'intervention.
@@ -138,7 +146,7 @@ class EtatController extends Controller
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $nouvelInterventionEtat Le nouvel état de la demande d'intervention
      * @return void
      */
-    private function _envoieCourriel(InterventionDemande $interventionDemande, Reference $nouvelInterventionEtat)
+    /*private function _envoieCourriel(InterventionDemande $interventionDemande, Reference $nouvelInterventionEtat)
     {
         if ($nouvelInterventionEtat->getId() == InterventionEtat::getInterventionEtatRefusCmsiId())
             $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielEstRefuseCmsi($interventionDemande->getReferent(), $this->generateUrl('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
@@ -148,5 +156,5 @@ class EtatController extends Controller
             $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielEstRefuseAmbassadeur($interventionDemande->getCmsi(), $interventionDemande->getReferent(), $this->generateUrl('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
         elseif ($nouvelInterventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationAmbassadeurId())
             $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielEstAccepteAmbassadeur($interventionDemande->getCmsi(), $interventionDemande->getReferent(), $this->generateUrl('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
-    }
+    }*/
 }

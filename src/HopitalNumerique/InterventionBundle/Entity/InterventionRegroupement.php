@@ -1,13 +1,13 @@
 <?php
-
 namespace HopitalNumerique\InterventionBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Entité du regroupement d'interventions.
  *
  * @ORM\Table(name="hn_intervention_regroupement", indexes={@ORM\Index(name="fk_hn_intervention_has_hn_intervention_hn_intervention2", columns={"interv_regroupee_id"}), @ORM\Index(name="fk_hn_intervention_has_hn_intervention_hn_intervention1", columns={"interv_principale_id"}), @ORM\Index(name="fk_hn_intervention_regroupement_hn_intervention_regroupement_1", columns={"intervregtyp_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\InterventionBundle\Repository\InterventionRegroupementRepository")
  */
 class InterventionRegroupement
 {

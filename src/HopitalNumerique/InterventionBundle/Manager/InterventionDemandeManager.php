@@ -10,10 +10,12 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
  * Manager pour les demandes d'intervention.
@@ -39,6 +41,10 @@ class InterventionDemandeManager extends BaseManager
      */
     private $interventionEtatManager;
     /**
+     * @var \HopitalNumerique\InterventionBundle\Manager\InterventionEvaluationEtatManager Le manager de l'entité InterventionEvaluationEtat
+     */
+    private $interventionEvaluationEtatManager;
+    /**
      * @var \HopitalNumerique\InterventionBundle\Manager\InterventionRegroupementManager Le manager de l'entité InterventionRegroupement
      */
     private $interventionRegroupementManager;
@@ -47,6 +53,12 @@ class InterventionDemandeManager extends BaseManager
      */
     private $interventionCourrielManager;
 
+    /**
+     * @var \HopitalNumerique\UserBundle\Entity\User L'utilisateur connecté
+     */
+    private $utilisateurConnecte;
+    
+    
     /**
      * Constructeur du manager gérant les demandes d'intervention.
      *
@@ -58,15 +70,18 @@ class InterventionDemandeManager extends BaseManager
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager $interventionCourrielManager Le manager de l'entité InterventionCourriel
      * @return void
      */
-    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, UserManager $userManager, InterventionEtatManager $interventionEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager)
+    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, UserManager $userManager, InterventionEtatManager $interventionEtatManager, InterventionEvaluationEtatManager $interventionEvaluationEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager)
     {
         parent::__construct($entityManager);
         $this->securityContext = $securityContext;
         $this->router = $router;
         $this->userManager = $userManager;
         $this->interventionEtatManager = $interventionEtatManager;
+        $this->interventionEvaluationEtatManager = $interventionEvaluationEtatManager;
         $this->interventionRegroupementManager = $interventionRegroupementManager;
         $this->interventionCourrielManager = $interventionCourrielManager;
+        
+        $this->utilisateurConnecte = $this->securityContext->getToken()->getUser();
     }
 
     /**
@@ -244,7 +259,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getGridDonnees_CmsiDemandesNouvelles()
     {
-        $interventionDemandes = $this->_repository->getGridDonnees_CmsiDemandesNouvelles($this->securityContext->getToken()->getUser());
+        $interventionDemandes = $this->_repository->getGridDonnees_CmsiDemandesNouvelles($this->utilisateurConnecte);
 
         return $interventionDemandes;
     }
@@ -255,7 +270,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getGridDonnees_CmsiDemandesTraitees()
     {
-        $interventionDemandes = $this->_repository->getGridDonnees_CmsiDemandesTraitees($this->securityContext->getToken()->getUser());
+        $interventionDemandes = $this->_repository->getGridDonnees_CmsiDemandesTraitees($this->utilisateurConnecte);
 
         return $interventionDemandes;
     }
@@ -266,7 +281,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getGridDonnees_DirecteurSuiviDemandes()
     {
-        $interventionDemandes = $this->_repository->getGridDonnees_DirecteurSuiviDemandes($this->securityContext->getToken()->getUser());
+        $interventionDemandes = $this->_repository->getGridDonnees_DirecteurSuiviDemandes($this->utilisateurConnecte);
     
         return $interventionDemandes;
     }
@@ -277,7 +292,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getGridDonnees_AmbassadeurDemandes()
     {
-        $interventionDemandes = $this->_repository->getGridDonnees_AmbassadeurDemandes($this->securityContext->getToken()->getUser());
+        $interventionDemandes = $this->_repository->getGridDonnees_AmbassadeurDemandes($this->utilisateurConnecte);
 
         return $interventionDemandes;
     }
@@ -288,7 +303,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getGridDonnees_EtablissementDemandes()
     {
-        $referent = $this->securityContext->getToken()->getUser();
+        $referent = $this->utilisateurConnecte;
         $interventionDemandes = $this->_repository->getGridDonnees_EtablissementDemandes($referent);
     
         return $interventionDemandes;
@@ -328,6 +343,8 @@ class InterventionDemandeManager extends BaseManager
         
         if ($nouvelAmbassadeur->getId() != $ancienAmbassadeur->getId())
         {
+            $this->changeAmbassadeurDemandesRegroupees($interventionDemande, $nouvelAmbassadeur);
+            
             if (!$interventionDemande->haveAncienAmbassadeur($ancienAmbassadeur))
                 $interventionDemande->addAncienAmbassadeur($ancienAmbassadeur);
             $interventionDemande->setAmbassadeur($nouvelAmbassadeur);
@@ -343,10 +360,175 @@ class InterventionDemandeManager extends BaseManager
                 $nouvelAmbassadeur,
                 $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true)
             );
+            
+            
 
             return true;
         }
         
         return false;
     }
+    /**
+     * Change l'ambassadeur des demandes d'intervention regroupées d'une demande.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention principale des demandes regroupées dont il faut changer également l'ambassadeur
+     * @param \HopitalNumerique\UserBundle\Entity\User $nouvelAmbassadeur Le nouvel ambassadeur de la demande d'intervention
+     * @return void
+     */
+    private function changeAmbassadeurDemandesRegroupees(InterventionDemande $interventionDemande, User $nouvelAmbassadeur)
+    {
+        $interventionRegroupements = $this->interventionRegroupementManager->findBy(array('interventionDemandePrincipale' => $interventionDemande));
+    
+        foreach ($interventionRegroupements as $interventionRegroupement)
+        {
+            $this->changeAmbassadeur($interventionRegroupement->getInterventionDemandeRegroupee(), $nouvelAmbassadeur);
+        }
+    }
+
+
+    /**
+     * Vérifie et change l'état d'une demande d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut modifier l'état d'intervention
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat Le nouvel état de la demande d'intervention
+     * @param string|null $messageJustificationChangementEtat Message de justification (refus) de changement d'état
+     * @return boolean VRAI ssi l'état a été modifié
+     */
+    public function changeEtat(InterventionDemande $interventionDemande, Reference $interventionEtat, $messageJustificationChangementEtat)
+    {
+        $this->changeEtatInterventionDemandesRegroupees($interventionDemande, $interventionEtat, $messageJustificationChangementEtat);
+
+        if ($this->utilisateurConnecte->hasRoleCmsi())
+            return $this->changeEtatPourCmsi($interventionDemande, $interventionEtat, $messageJustificationChangementEtat);
+        else if ($this->utilisateurConnecte->hasRoleAmbassadeur())
+            return $this->changeEtatPourAmbassadeur($interventionDemande, $interventionEtat, $messageJustificationChangementEtat);
+        
+        return false;
+    }
+    
+    /**
+     * Change l'état des demandes d'intervention regroupées d'une demande.
+     * 
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention principale des demandes regroupées dont il faut changer également l'état
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat Le nouvel état de la demande d'intervention
+     * @param string|null $messageJustificationChangementEtat Message de justification (refus) de changement d'état
+     * @return void
+     */
+    private function changeEtatInterventionDemandesRegroupees(InterventionDemande $interventionDemande, Reference $interventionEtat, $messageJustificationChangementEtat)
+    {
+        $interventionRegroupements = $this->interventionRegroupementManager->findBy(array('interventionDemandePrincipale' => $interventionDemande));
+
+        foreach ($interventionRegroupements as $interventionRegroupement)
+        {
+            $this->changeEtat($interventionRegroupement->getInterventionDemandeRegroupee(), $interventionEtat, $messageJustificationChangementEtat);
+        }
+    }
+    
+    
+    /**
+     * Vérifie et change l'état d'une demande d'intervention pour un CMSI.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut modifier l'état d'intervention
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat Le nouvel état de la demande d'intervention
+     * @param string|null $messageJustificationChangementEtat Message de justification (refus) de changement d'état
+     * @return boolean VRAI ssi l'état a été modifié
+     */
+    private function changeEtatPourCmsi(InterventionDemande $interventionDemande, Reference $interventionEtat, $messageJustificationChangementEtat)
+    {
+        if ($interventionDemande->interventionEtatEstDemandeInitiale() || $interventionDemande->interventionEtatEstAttenteCmsi())
+        {
+            if ($interventionEtat->getId() == InterventionEtat::getInterventionEtatAttenteCmsiId())
+            {
+                $interventionDemande->setInterventionEtat($interventionEtat);
+                $interventionDemande->setCmsiDateDerniereRelance(new \DateTime());
+                $this->save($interventionDemande);
+
+                return true;
+            }
+            else if (in_array($interventionEtat->getId(), array(InterventionEtat::getInterventionEtatAcceptationCmsiId(), InterventionEtat::getInterventionEtatRefusCmsiId())))
+            {
+                $interventionDemande->setInterventionEtat($interventionEtat);
+                $interventionDemande->setCmsiDateChoix(new \DateTime());
+                if ($interventionEtat->getId() == InterventionEtat::getInterventionEtatRefusCmsiId())
+                {
+                    if ($messageJustificationChangementEtat != null)
+                        $interventionDemande->setRefusMessage($messageJustificationChangementEtat);
+                }
+
+                $interventionDemande->setAmbassadeurDateDerniereRelance(new \DateTime());
+                $this->save($interventionDemande);
+
+                if ($interventionEtat->getId() == InterventionEtat::getInterventionEtatRefusCmsiId())
+                    $this->interventionCourrielManager->envoiCourrielEstRefuseCmsi($interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+                else if ($interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiId())
+                    $this->interventionCourrielManager->envoiCourrielDemandeAcceptationAmbassadeur($interventionDemande->getAmbassadeur(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Vérifie et change l'état d'une demande d'intervention pour un ambassadeur.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut modifier l'état d'intervention
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat Le nouvel état de la demande d'intervention
+     * @param string|null $messageJustificationChangementEtat Message de justification (refus) de changement d'état
+     * @return boolean VRAI ssi l'état a été modifié
+     */
+    private function changeEtatPourAmbassadeur(InterventionDemande $interventionDemande, Reference $interventionEtat, $messageJustificationChangementEtat)
+    {
+        if ($interventionDemande->interventionEtatEstAcceptationCmsi())
+        {
+            if (in_array($interventionEtat->getId(), array(InterventionEtat::getInterventionEtatAcceptationAmbassadeurId(), InterventionEtat::getInterventionEtatRefusAmbassadeurId())))
+            {
+                $interventionDemande->setInterventionEtat($interventionEtat);
+                $interventionDemande->setAmbassadeurDateChoix(new \DateTime());
+                if ($interventionEtat->getId() == InterventionEtat::getInterventionEtatRefusAmbassadeurId())
+                {
+                    if ($messageJustificationChangementEtat != null)
+                        $interventionDemande->setRefusMessage($messageJustificationChangementEtat);
+                }
+                else if ($interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationAmbassadeurId())
+                {
+                    $interventionDemande->setEvaluationEtat($this->interventionEvaluationEtatManager->getInterventionEvaluationEtatAEvaluer());
+                }
+
+                $this->save($interventionDemande);
+                
+                if ($interventionEtat->getId() == InterventionEtat::getInterventionEtatRefusAmbassadeurId())
+                    $this->interventionCourrielManager->envoiCourrielEstRefuseAmbassadeur($interventionDemande->getCmsi(), $interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+                elseif ($interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationAmbassadeurId())
+                    $this->interventionCourrielManager->envoiCourrielEstAccepteAmbassadeur($interventionDemande->getCmsi(), $interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+                
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    // @TODO #690, actuellement, les courriels sont également envoyés aux interventions regroupées, s'il ne faut plus, il faudra pê réutiliser la fonction ci-dessous
+    /**
+     * Envoie le bon courriel selon le nouvel état d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont l'état d'intervention change
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $nouvelInterventionEtat Le nouvel état de la demande d'intervention
+     * @return void
+     */
+    /*private function _envoieCourriel(InterventionDemande $interventionDemande, Reference $nouvelInterventionEtat)
+    {
+        if ($nouvelInterventionEtat->getId() == InterventionEtat::getInterventionEtatRefusCmsiId())
+            $this->interventionCourrielManager->envoiCourrielEstRefuseCmsi($interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+        else if ($nouvelInterventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiId())
+            $this->interventionCourrielManager->envoiCourrielDemandeAcceptationAmbassadeur($interventionDemande->getAmbassadeur(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+        else
+            
+            
+            
+            if ($nouvelInterventionEtat->getId() == InterventionEtat::getInterventionEtatRefusAmbassadeurId())
+            $this->interventionCourrielManager->envoiCourrielEstRefuseAmbassadeur($interventionDemande->getCmsi(), $interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+        elseif ($nouvelInterventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationAmbassadeurId())
+            $this->interventionCourrielManager->envoiCourrielEstAccepteAmbassadeur($interventionDemande->getCmsi(), $interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+    }*/
 }

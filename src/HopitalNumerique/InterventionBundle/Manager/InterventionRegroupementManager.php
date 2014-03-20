@@ -17,12 +17,15 @@ class InterventionRegroupementManager extends BaseManager
     protected $_class = 'HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement';
 
     /**
-     * @todo COMMENTER
+     * Retourne si une demande d'intervention est une demande qui a été regroupée ou non.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention à vérifiée
+     * @return boolean VRAI ssi la demande d'intervention est une demande qui a été regroupée
      */
     public function estInterventionDemandeRegroupee(InterventionDemande $interventionDemande)
     {
-        $interventionRegroupements = $this->_repository->findBy(array('interventionDemandeRegroupee' => $interventionDemande));
-        
-        return (count($interventionRegroupements) > 0);
+        return $this->_repository->estInterventionDemandeRegroupee($interventionDemande);
+        /*$interventionRegroupements = $this->_repository->findBy(array('interventionDemandeRegroupee' => $interventionDemande));
+        return (count($interventionRegroupements) > 0);*/
     }
 }

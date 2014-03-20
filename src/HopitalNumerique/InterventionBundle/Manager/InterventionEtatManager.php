@@ -6,8 +6,8 @@
  */
 namespace HopitalNumerique\InterventionBundle\Manager;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
 /**
  * Manager pour les états d'intervention.
@@ -15,19 +15,19 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 class InterventionEtatManager
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager $referenceManager Manager de Reference
      */
-    private $container;
+    private $referenceManager;
 
     /**
      * Constructeur du manager gérant les états d'intervention.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
+     * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager $referenceManager Manager de Reference
      * @return void
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ReferenceManager $referenceManager)
     {
-        $this->container = $container;
+        $this->referenceManager = $referenceManager;
     }
 
     /**
@@ -128,7 +128,6 @@ class InterventionEtatManager
      */
     private function findOneById($referenceid)
     {
-        return $this->container->get('hopitalnumerique_reference.manager.reference')->findOneById($referenceid);
+        return $this->referenceManager->findOneById($referenceid);
     }
-
 }
