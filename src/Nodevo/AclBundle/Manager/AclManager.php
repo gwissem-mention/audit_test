@@ -167,7 +167,7 @@ class AclManager extends BaseManager
             return VoterInterface::ACCESS_GRANTED;
 
         if( $user === 'anon.' )
-            $roles = $this->_container->get('nodevo_role.manager.role')->findOneBy(array('role'=>'ROLE_ANONYME_10'));
+            $roles = $this->_container->get('nodevo_role.manager.role')->findOneBy(array('role'=>'ROLE_ANONYME_0'));
         else{
             if( $user->hasRole('ROLE_ADMINISTRATEUR_1') )
                 return VoterInterface::ACCESS_GRANTED;
