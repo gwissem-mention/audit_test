@@ -42,8 +42,17 @@ class DemandesTraiteesGrid extends Grid implements IGrid
             }
         );
         $this->addColonne($colonneRegroupements);
-        
+
         $colonneDemandeurInformations = new Column\TextColumn('demandeurInformations', 'Demandeur');
+        $colonneDemandeurInformations->manipulateRenderCell(
+            function($value, $row, $router) {
+                return
+                '<strong>'.$row->getField('referentNom').' '.$row->getField('referentPrenom').'</strong>'.
+                ($row->getField('referentEtablissementNom') != null ? '<br>'.$row->getField('referentEtablissementNom').' - '.$row->getField('referentEtablissementFiness') : '').
+                ($row->getField('referentRegionLibelle') != null ? '<br>'.$row->getField('referentRegionLibelle') : '')
+                ;
+            }
+        );
         $colonneDemandeurInformations->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneDemandeurInformations);
         

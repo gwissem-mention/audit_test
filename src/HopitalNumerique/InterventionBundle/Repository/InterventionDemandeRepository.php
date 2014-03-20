@@ -131,7 +131,11 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' - \', referentEtablissement.finess, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
+                'referent.nom AS referentNom',
+                'referent.prenom AS referentPrenom',
+                'referentEtablissement.nom AS referentEtablissementNom',
+                'referentEtablissement.finess AS referentEtablissementFiness',
+                'referentRegion.libelle AS referentRegionLibelle',
                 'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurRegion.libelle) AS ambassadeurInformations',
                 'objet.id AS objetId',
                 'GROUP_CONCAT(objet.titre) AS objetsInformations',
@@ -142,8 +146,8 @@ class InterventionDemandeRepository extends EntityRepository
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
                 // Référent
                 ->innerJoin('interventionDemande.referent', 'referent')
-                ->innerJoin('referent.etablissementRattachementSante', 'referentEtablissement')
-                ->innerJoin('referent.region', 'referentRegion')
+                    ->leftJoin('referent.etablissementRattachementSante', 'referentEtablissement')
+                    ->leftJoin('referent.region', 'referentRegion')
                 // Ambassadeur
                 ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
                 ->innerJoin('ambassadeur.region', 'ambassadeurRegion')
@@ -185,7 +189,11 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' - \', referentEtablissement.finess, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
+                'referent.nom AS referentNom',
+                'referent.prenom AS referentPrenom',
+                'referentEtablissement.nom AS referentEtablissementNom',
+                'referentEtablissement.finess AS referentEtablissementFiness',
+                'referentRegion.libelle AS referentRegionLibelle',
                 'interventionInitiateur.type AS interventionInitiateurType',
                 'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurRegion.libelle) AS ambassadeurInformations',
                 'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
@@ -199,8 +207,8 @@ class InterventionDemandeRepository extends EntityRepository
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
                 // Référent
                 ->innerJoin('interventionDemande.referent', 'referent')
-                ->innerJoin('referent.etablissementRattachementSante', 'referentEtablissement')
-                ->innerJoin('referent.region', 'referentRegion')
+                ->leftJoin('referent.etablissementRattachementSante', 'referentEtablissement')
+                ->leftJoin('referent.region', 'referentRegion')
                 // Initiateur
                 ->innerJoin('interventionDemande.interventionInitiateur', 'interventionInitiateur')
                 // Ambassadeur
@@ -244,7 +252,11 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
         ->select(
             'interventionDemande.id AS id',
-            'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' - \', referentEtablissement.finess, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
+            'referent.nom AS referentNom',
+            'referent.prenom AS referentPrenom',
+            'referentEtablissement.nom AS referentEtablissementNom',
+            'referentEtablissement.finess AS referentEtablissementFiness',
+            'referentRegion.libelle AS referentRegionLibelle',
             'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurEtablissement.nom, \' - \', ambassadeurEtablissement.finess, \' (\', ambassadeurRegion.libelle, \')\') AS ambassadeurInformations',
             'interventionInitiateur.type AS interventionInitiateurType',
             'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
@@ -259,10 +271,8 @@ class InterventionDemandeRepository extends EntityRepository
                 ->setParameter('directeur', $directeur)
         // Référent
         ->innerJoin('interventionDemande.referent', 'referent')
-        ->innerJoin('referent.etablissementRattachementSante', 'referentEtablissement')
-            //->andWhere('referentEtablissement = :directeurEtablissement')
-                //->setParameter('directeurEtablissement', $directeur->getEtablissementRattachementSante())
-        ->innerJoin('referent.region', 'referentRegion')
+            ->leftJoin('referent.etablissementRattachementSante', 'referentEtablissement')
+            ->leftJoin('referent.region', 'referentRegion')
         // Ambassadeur
         ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
         ->innerJoin('ambassadeur.etablissementRattachementSante', 'ambassadeurEtablissement')
@@ -309,7 +319,11 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' - \', referentEtablissement.finess, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
+                'referent.nom AS referentNom',
+                'referent.prenom AS referentPrenom',
+                'referentEtablissement.nom AS referentEtablissementNom',
+                'referentEtablissement.finess AS referentEtablissementFiness',
+                'referentRegion.libelle AS referentRegionLibelle',
                 'interventionInitiateur.type AS interventionInitiateurType',
                 'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
                 'interventionEtat.libelle AS interventionEtatLibelle',
@@ -321,8 +335,8 @@ class InterventionDemandeRepository extends EntityRepository
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
                 // Référent
                 ->innerJoin('interventionDemande.referent', 'referent')
-                ->innerJoin('referent.etablissementRattachementSante', 'referentEtablissement')
-                ->innerJoin('referent.region', 'referentRegion')
+                    ->leftJoin('referent.etablissementRattachementSante', 'referentEtablissement')
+                    ->leftJoin('referent.region', 'referentRegion')
                 // Initiateur
                 ->innerJoin('interventionDemande.interventionInitiateur', 'interventionInitiateur')
                 // État de l'intervention
