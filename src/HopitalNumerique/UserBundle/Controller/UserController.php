@@ -44,8 +44,6 @@ class UserController extends Controller
     
     /**
      * Affichage du formulaire d'utilisateur
-     * 
-     * @param integer $id Identifiant de l'utilisateur
      */
     public function informationsPersonnellesAction( )
     {        
@@ -55,6 +53,52 @@ class UserController extends Controller
         $this->_informationsPersonnelles = true;
              
         return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User/Front:informations_personnelles.html.twig');
+    }
+    
+    /**
+     * Affichage du formulaire de modification du mot de passe
+     *
+     * @param integer $id Identifiant de l'utilisateur
+     */
+    public function motDePasseAction( )
+    {
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        //Création du formulaire via le service
+        $form = $this->createForm('nodevo_user_motdepasse', $user);
+        
+        $view = 'HopitalNumeriqueUserBundle:User/Front:motdepasse.html.twig';
+        
+        $request = $this->get('request');
+        
+        // Si l'utilisateur soumet le formulaire
+        if ('POST' == $request->getMethod()) {
+        
+            // On bind les données du form
+            $form->handleRequest($request);
+            
+            //si le formulaire est valide
+            if ($form->isValid())
+            {
+                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+                $this->get('session')->getFlashBag()->add('danger', 'Vérification de l\'ancien mot de passe non fait !');
+                
+                return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
+                
+                
+                
+                //Mise à jour / création de l'utilisateur
+                $this->get('fos_user.user_manager')->updateUser( $user );
+        
+                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+                $this->get('session')->getFlashBag()->add('success', 'Mot de passe mis à jour.');
+                
+        	    return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
+            }
+        }
+        
+        return $this->_renderView( $view , $form, $user);
     }
     
 
@@ -266,7 +310,7 @@ class UserController extends Controller
                             'id'                  => 'id', 
                             'nom'                 => 'Nom', 
                             'prenom'              => 'Prénom', 
-                            'username'            => 'Nom d\'utilisateur', 
+                            'username'            => 'Nom de compte', 
                             'email'               => 'Adresse e-mail',
                             'etat.libelle'        => 'Etat',
                             'region.libelle'      => 'Région',
