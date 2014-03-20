@@ -91,7 +91,7 @@ class EtablissementManager
         {
             $etablissementsListeFormatee[] = array(
                 'id' => $etablissement->getId(),
-                'nom' => $etablissement->getNom()
+                'appellation' => $etablissement->getAppellation()
             );
         }
     

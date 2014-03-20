@@ -73,11 +73,11 @@ class DemandesGrid extends Grid implements IGrid
             function($value, $row, $router) {
                 if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
                 {
-                    return '<a class="btn btn-warning" href="'.$router->generate('hopital_numerique_intervention_evaluation_nouveau', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-edit"></span></a>';
+                    return '<a class="btn btn-warning" title="Évaluer la demande" href="'.$router->generate('hopital_numerique_intervention_evaluation_nouveau', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-edit"></span></a>';
                 }
                 else if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
                 {
-                    return '<a class="btn btn-success" href="'.$router->generate('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-check"></span></a>';
+                    return '<a class="btn btn-success" title="Voir l\'évaluation" href="'.$router->generate('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-check"></span></a>';
                 }
                 return '';
             }

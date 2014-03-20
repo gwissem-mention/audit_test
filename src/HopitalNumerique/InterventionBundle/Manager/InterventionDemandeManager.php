@@ -508,28 +508,4 @@ class InterventionDemandeManager extends BaseManager
 
         return false;
     }
-    
-    // @TODO #690, actuellement, les courriels sont également envoyés aux interventions regroupées, s'il ne faut plus, il faudra pê réutiliser la fonction ci-dessous
-    /**
-     * Envoie le bon courriel selon le nouvel état d'intervention.
-     *
-     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont l'état d'intervention change
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $nouvelInterventionEtat Le nouvel état de la demande d'intervention
-     * @return void
-     */
-    /*private function _envoieCourriel(InterventionDemande $interventionDemande, Reference $nouvelInterventionEtat)
-    {
-        if ($nouvelInterventionEtat->getId() == InterventionEtat::getInterventionEtatRefusCmsiId())
-            $this->interventionCourrielManager->envoiCourrielEstRefuseCmsi($interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
-        else if ($nouvelInterventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiId())
-            $this->interventionCourrielManager->envoiCourrielDemandeAcceptationAmbassadeur($interventionDemande->getAmbassadeur(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
-        else
-            
-            
-            
-            if ($nouvelInterventionEtat->getId() == InterventionEtat::getInterventionEtatRefusAmbassadeurId())
-            $this->interventionCourrielManager->envoiCourrielEstRefuseAmbassadeur($interventionDemande->getCmsi(), $interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
-        elseif ($nouvelInterventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationAmbassadeurId())
-            $this->interventionCourrielManager->envoiCourrielEstAccepteAmbassadeur($interventionDemande->getCmsi(), $interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
-    }*/
 }

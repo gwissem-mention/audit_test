@@ -36,7 +36,7 @@ class DemandesTraiteesGrid extends Grid implements IGrid
             function($value, $row, $router) {
                 if (intval($row->getField('nombreRegroupements')) > 0)
                 {
-                    return '<img src="/bundles/hopitalnumeriquecore/img/common-sprite/users.png" width="16" height="14">';
+                    return '<img src="/bundles/hopitalnumeriquecore/img/common-sprite/users.png" width="16" height="14" title="Demandes regroupées">';
                 }
                 return '';
             }

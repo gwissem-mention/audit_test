@@ -35,7 +35,7 @@
                 <div class="col-md-4">Référent</div>
                 <div class="col-md-8">
                     {{ interventionDemande.referent.appellation }}
-                    <br>{{ interventionDemande.referent.etablissementRattachementSante.nom }}, {{ interventionDemande.referent.region.libelle }}
+                    <br>{{ interventionDemande.referent.etablissementRattachementSante.appellation }}, {{ interventionDemande.referent.region.libelle }}
                 </div>
             </div>
             {% if app.user.hasRoleCmsi or (app.user.hasRoleAmbassadeur and interventionDemande.interventionEtatEstAcceptationCmsi) %}
@@ -153,10 +153,10 @@
                 <div class="col-md-4">Établissements rattachés</div>
                 <div class="col-md-8">
                     {% for interventionRegroupement in interventionRegroupements %}
-                        <div><a href="{{ path('hopital_numerique_intervention_demande_voir', { id:interventionRegroupement.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a> {{ interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante.nom }}</div>
+                        <div><a href="{{ path('hopital_numerique_intervention_demande_voir', { id:interventionRegroupement.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a> {{ interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante.appellation }}</div>
                     {% endfor %}
                     {% for etablissement in etablissementsRattachesNonRegroupes %}
-                        <div>{{ etablissement.nom }}</div>
+                        <div>{{ etablissement.appellation }}</div>
                     {% endfor %}
                 </div>
             </div>

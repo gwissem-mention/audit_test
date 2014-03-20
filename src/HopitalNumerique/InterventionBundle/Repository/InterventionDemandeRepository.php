@@ -131,7 +131,7 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
+                'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' - \', referentEtablissement.finess, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
                 'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurRegion.libelle) AS ambassadeurInformations',
                 'objet.id AS objetId',
                 'GROUP_CONCAT(objet.titre) AS objetsInformations',
@@ -157,35 +157,16 @@ class InterventionDemandeRepository extends EntityRepository
                 ->setParameter('interventionEtatDemandeInitiale', InterventionEtat::getInterventionEtatDemandeInitialeId())
                 ->setParameter('interventionEtatAttenteCmsi', InterventionEtat::getInterventionEtatAttenteCmsiId())
             ->andWhere(
-                    $requete->expr()->notIn(
-                            'interventionDemande',
-                            $requeteDemandesGroupees->getDQL()
-                    )
+                $requete->expr()->notIn(
+                    'interventionDemande',
+                    $requeteDemandesGroupees->getDQL()
+                )
             )
             ->orderBy('interventionDemande.dateCreation', 'DESC')
             ->groupBy('interventionDemande.id')
         ;
 
         return $requete->getQUery()->getResult();
-        
-        
-        
-        
-        /*$interventionDemandeId = null;
-        foreach ($requete->getQUery()->getResult() as $resultat)
-        {
-            // Demande suivante
-            if ($resultat['id'] != $interventionDemandeId)
-            {
-                $interventionDemandeId = $resultat['id'];
-                $demandesInitiales[] = $resultat;
-                $demandesInitiales[count($demandesInitiales) - 1]['objetsInformations'] = '';
-            }
-            if ($resultat['objetId'] != null)
-                $demandesInitiales[count($demandesInitiales) - 1]['objetsInformations'] .= '<div>'.$resultat['objetTitre'].'</div>';
-        }
-        
-        return $demandesInitiales;*/
     }
     /**
      * Récupère les données du grid des demandes d'intervention traitées pour le CMSI sous forme de tableau correctement formaté
@@ -204,7 +185,7 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
+                'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' - \', referentEtablissement.finess, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
                 'interventionInitiateur.type AS interventionInitiateurType',
                 'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurRegion.libelle) AS ambassadeurInformations',
                 'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
@@ -263,8 +244,8 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
         ->select(
             'interventionDemande.id AS id',
-            'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
-            'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurEtablissement.nom, \' (\', ambassadeurRegion.libelle, \')\') AS ambassadeurInformations',
+            'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' - \', referentEtablissement.finess, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
+            'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurEtablissement.nom, \' - \', ambassadeurEtablissement.finess, \' (\', ambassadeurRegion.libelle, \')\') AS ambassadeurInformations',
             'interventionInitiateur.type AS interventionInitiateurType',
             'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
             'interventionEtat.libelle AS interventionEtatLibelle',
@@ -328,7 +309,7 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
+                'CONCAT(\'<strong>\', referent.nom, \' \', referent.prenom, \'</strong><br>\', referentEtablissement.nom, \' - \', referentEtablissement.finess, \' (\', referentRegion.libelle, \')\') AS demandeurInformations',
                 'interventionInitiateur.type AS interventionInitiateurType',
                 'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
                 'interventionEtat.libelle AS interventionEtatLibelle',

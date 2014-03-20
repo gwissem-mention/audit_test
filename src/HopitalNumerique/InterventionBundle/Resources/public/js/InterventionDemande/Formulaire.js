@@ -199,22 +199,6 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampAutre
  * @param array etablissementsRegroupesParTypeOrganisme Liste des établissements regroupés par type d'organisme à afficher.
  * @return void
  */
-/*HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements = function(etablissementsRegroupesParTypeOrganisme)
-{
-    var etablissementSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements');
-    var etablissementsSelectHtml = '';
-
-    $.each(etablissementsRegroupesParTypeOrganisme, function(index, etablissementsRegroupes) {
-        etablissementsSelectHtml += '<optgroup label="' + etablissementsRegroupes.typeOrganisme.libelle + '">';
-            $.each(etablissementsRegroupes.etablissements, function(index, etablissement) {
-                etablissementsSelectHtml += '<option value="' + etablissement.id + '">' + etablissement.nom + '</option>';
-            });
-        etablissementsSelectHtml += '</optgroup>';
-    });
-
-    $(etablissementSelect).html(etablissementsSelectHtml);
-    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initAutresEtablissementsInitiaux();
-};*/
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements = function(etablissements)
 {
     var etablissementSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements');
@@ -222,7 +206,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutres
 
     etablissementsSelectHtml += '<optgroup label="' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.getRegionNom() + '">';
     $.each(etablissements, function(index, etablissement) {
-        etablissementsSelectHtml += '<option value="' + etablissement.id + '">' + etablissement.nom + '</option>';
+        etablissementsSelectHtml += '<option value="' + etablissement.id + '">' + etablissement.appellation + '</option>';
     });
     etablissementsSelectHtml += '</optgroup>';
 

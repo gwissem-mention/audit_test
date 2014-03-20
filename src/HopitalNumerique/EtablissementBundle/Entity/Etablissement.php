@@ -347,4 +347,13 @@ class Etablissement
         return $this->codepostal;
     }
 
+    /**
+     * Retourne l'appellation de l'établissement pour l'affichage (nom - FINESS).
+     * 
+     * @return string Appellation de l'établissement
+     */
+    public function getAppellation()
+    {
+        return $this->nom.' - '.$this->finess;
+    }
 }
