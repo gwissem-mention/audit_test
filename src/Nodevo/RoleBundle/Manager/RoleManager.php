@@ -112,7 +112,7 @@ class RoleManager extends BaseManager
     {
         $user  = $this->_securityContext->getToken()->getUser();
         if( $user === 'anon.')
-            $role = 'ROLE_ANONYME_0';
+            $role = 'ROLE_ANONYME_10';
         else{
             //on récupère le rôle de l'user connecté
             $roles = $user->getRoles();
