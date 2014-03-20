@@ -40,7 +40,7 @@ class UserGrid extends Grid implements IGrid
         $arrayRolesDateContractualisation = $this->_arrayRolesDateContractualisation;
         
         $this->addColonne( new Column\DateColumn('dateInscription', 'Date d\'inscription') );        
-        $this->addColonne( new Column\TextColumn('username', 'Nom de compte') );
+        $this->addColonne( new Column\TextColumn('username', 'Nom du compte') );
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('prenom', 'Prénom') );
         $this->addColonne( new Column\TextColumn('email', 'Adresse e-mail') );
