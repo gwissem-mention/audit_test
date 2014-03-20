@@ -6,8 +6,9 @@
  */
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
 
 /**
  * Manager pour le formulaire utilisateur propre aux demandes d'intervention.
@@ -15,19 +16,31 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
 class UserManager
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
+     * @var \HopitalNumerique\UserBundle\Manager\UserManager Le manager de l'entité User
      */
-    private $container;
+    private $userManager;
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager Manager de Reference
+     */
+    private $referenceManager;
+    /**
+     * @var \HopitalNumerique\EtablissementBundle\Manager\EtablissementManager Manager de Etablissement
+     */
+    private $etablissementManager;
 
     /**
      * Constructeur du manager gérant les formulaires utilisateurs.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
+     * @param \HopitalNumerique\UserBundle\Manager\UserManager $userManager Le manager de l'entité User
+     * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager $referenceManager Manager de Reference
+     * @param \HopitalNumerique\EtablissementBundle\Manager\EtablissementManager $etablissementManager Manager de Etablissement
      * @return void
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(\HopitalNumerique\UserBundle\Manager\UserManager $userManager, ReferenceManager $referenceManager, EtablissementManager $etablissementManager)
     {
-        $this->container = $container;
+        $this->userManager = $userManager;
+        $this->referenceManager = $referenceManager;
+        $this->etablissementManager = $etablissementManager;
     }
 
     /**
@@ -37,7 +50,7 @@ class UserManager
      */
     public function getCivilitesChoices()
     {
-        return $this->container->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CIVILITE'));
+        return $this->referenceManager->findBy(array('code' => 'CIVILITE'));
     }
     /**
      * Retourne la liste des titres pour les listes de formulaire.
@@ -46,7 +59,7 @@ class UserManager
      */
     public function getTitresChoices()
     {
-        return $this->container->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'TITRE'));
+        return $this->referenceManager->findBy(array('code' => 'TITRE'));
     }
     /**
      * Retourne la liste des régions pour les listes de formulaire.
@@ -55,8 +68,7 @@ class UserManager
      */
     public function getRegionsChoices()
     {
-        return $this->container->get('hopitalnumerique_reference.manager.reference')
-                ->findBy(array('code' => 'REGION'), array('libelle' => 'ASC'));
+        return $this->referenceManager->findBy(array('code' => 'REGION'), array('libelle' => 'ASC'));
     }
     /**
      * Retourne la liste des départements pour les listes de formulaire.
@@ -65,8 +77,7 @@ class UserManager
      */
     public function getDepartementsChoices()
     {
-        return $this->container->get('hopitalnumerique_reference.manager.reference')
-                ->findBy(array('code' => 'DEPARTEMENT'), array('libelle' => 'ASC'));
+        return $this->referenceManager->findBy(array('code' => 'DEPARTEMENT'), array('libelle' => 'ASC'));
     }
     /**
      * Retourne la liste des établissements pour les listes de formulaire.
@@ -75,7 +86,7 @@ class UserManager
      */
     public function getEtablissementsChoices()
     {
-        return $this->container->get('hopitalnumerique_etablissement.manager.etablissement')->findAll();
+        return $this->etablissementManager->findAll();
     }
     /**
      * Retourne la liste des fonctions dans l'établissement de santé pour les listes de formulaire.
@@ -84,8 +95,7 @@ class UserManager
      */
     public function getFonctionsEtablissementSanteChoices()
     {
-        return $this->container->get('hopitalnumerique_reference.manager.reference')
-                ->findBy(array('code' => 'FONCTION_ES'), array('libelle' => 'ASC'));
+        return $this->referenceManager->findBy(array('code' => 'FONCTION_ES'), array('libelle' => 'ASC'));
     }
     /**
      * Retourne la liste des utilisateurs pour les listes de formulaire.
@@ -94,7 +104,7 @@ class UserManager
      */
     public function getUsersChoices()
     {
-        return $this->container->get('hopitalnumerique_user.manager.user')->findBy(array('enabled' => true));
+        return $this->userManager->findBy(array('enabled' => true));
     }
     /**
      * Retourne la liste des ambassadeurs pour les listes de formulaire.
@@ -104,8 +114,8 @@ class UserManager
      */
     public function getAmbassadeursChoices(Reference $region)
     {
-        return $this->container->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndDomaine($region);
-        /*return $this->container->get('hopitalnumerique_user.manager.user')->findBy(array(
+        return $this->userManager->getAmbassadeursByRegionAndDomaine($region);
+        /*return $this->userManager->findBy(array(
             'enabled' => true,
             'region' => $region
         ));*/
@@ -117,7 +127,7 @@ class UserManager
      */
     public function getReferentsChoices()
     {
-        return $this->container->get('hopitalnumerique_user.manager.user')->getUsersGroupeEtablissement();
+        return $this->userManager->getUsersGroupeEtablissement();
     }
 
     
@@ -130,7 +140,7 @@ class UserManager
      */
     public function jsonUsers(array $criteres)
     {
-        $users = $this->container->get('hopitalnumerique_user.manager.user')->findBy($criteres);
+        $users = $this->userManager->findBy($criteres);
         $usersListeFormatee = array();
 
         foreach ($users as $user)
@@ -148,7 +158,7 @@ class UserManager
      */
     public function jsonReferents(array $criteres)
     {
-        $users = $this->container->get('hopitalnumerique_user.manager.user')->getUsersGroupeEtablissement($criteres);
+        $users = $this->userManager->getUsersGroupeEtablissement($criteres);
         $usersListeFormatee = array();
 
         foreach ($users as $user)

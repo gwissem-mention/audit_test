@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Nodevo\MailBundle\Entity\Mail;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\InterventionBundle\Entity\InterventionCourriel;
+use Nodevo\MailBundle\Manager\MailManager;
 
 /**
  * Manager pour les envois de courriels concernant les interventions.
@@ -17,9 +18,13 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionCourriel;
 class InterventionCourrielManager
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface Container de l'application
+     * @var \Nodevo\MailBundle\Manager\MailManager Manager de Mail
      */
-    private $container;
+    private $mailManager;
+    /**
+     * @var \Swift_Mailer Service d'envoi de courriels
+     */
+    private $mailer;
     /**
      * @var \Twig_Environment Environnement Twig de l'application
      */
@@ -28,13 +33,15 @@ class InterventionCourrielManager
     /**
      * Constructeur du manager gérant les demandes d'intervention.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
+     * @param \Nodevo\MailBundle\Manager\MailManager $mailManager Manager de Mail
+     * @param \Swift_Mailer $mailer Service d'envoi de courriels
      * @param \Twig_Environment $twig L'environnement Twig de l'application
      * @return void
      */
-    public function __construct(ContainerInterface $container, \Twig_Environment $twig)
+    public function __construct(MailManager $mailManager, \Swift_Mailer $mailer, \Twig_Environment $twig)
     {
-        $this->container = $container;
+        $this->mailManager = $mailManager;
+        $this->mailer = $mailer;
         $this->twig = $twig;
     }
 
@@ -46,7 +53,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielCreation(User $utilisateurEtablissement)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielCreationId());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielCreationId());
 
         $this->envoiCourriel($courriel, $utilisateurEtablissement);
     }
@@ -59,7 +66,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielDemandeAcceptationAmbassadeur(User $ambassadeur, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielAcceptationAmbassadeurId());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielAcceptationAmbassadeurId());
 
         $this->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionDemandeUrl));
     }
@@ -72,7 +79,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielDemandeAcceptationCmsi(User $cmsi, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielAcceptationCmsiId());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielAcceptationCmsiId());
 
         $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionDemandeUrl));
     }
@@ -84,7 +91,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielAlerteReferent(User $referentEtablissement)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielAlerteReferentId());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielAlerteReferentId());
 
         $this->envoiCourriel($courriel, $referentEtablissement);
     }
@@ -96,7 +103,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielEstAccepteCmsi(User $referentEtablissement)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielEstAccepteeCmsiId());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielEstAccepteeCmsiId());
 
         $this->envoiCourriel($courriel, $referentEtablissement);
     }
@@ -109,7 +116,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielEstRefuseCmsi(User $referentEtablissement, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielEstRefuseeCmsiId());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielEstRefuseeCmsiId());
 
         $this->envoiCourriel($courriel, $referentEtablissement, array('l' => $interventionDemandeUrl));
     }
@@ -122,7 +129,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielInvitationEvaluationReferent(User $referentEtablissement, $interventionEvaluationUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielInvitationEvaluationReferentId());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielInvitationEvaluationReferentId());
     
         $this->envoiCourriel($courriel, $referentEtablissement, array('l' => $interventionEvaluationUrl));
     }
@@ -136,7 +143,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielChangementAmbassadeur(array $destinataires, User $nouvelAmbassadeur, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielChangementAmbassadeurId());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielChangementAmbassadeurId());
     
         foreach ($destinataires as $destinataire)
         {
@@ -156,7 +163,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielEstAccepteAmbassadeur(User $cmsi, User $referent, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielEstAccepteeAmbassadeurId());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielEstAccepteeAmbassadeurId());
     
         $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionDemandeUrl));
         $this->envoiCourriel($courriel, $referent, array('l' => $interventionDemandeUrl));
@@ -171,7 +178,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielEstRefuseAmbassadeur(User $cmsi, User $referent, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielEstRefuseeAmbassadeurId());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielEstRefuseeAmbassadeurId());
     
         $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionDemandeUrl));
         $this->envoiCourriel($courriel, $referent, array('l' => $interventionDemandeUrl));
@@ -185,7 +192,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielRelanceAmbassadeur1(User $ambassadeur, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielRelanceAmbassadeur1Id());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielRelanceAmbassadeur1Id());
     
         $this->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionDemandeUrl));
     }
@@ -198,7 +205,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielRelanceAmbassadeur2(User $ambassadeur, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielRelanceAmbassadeur2Id());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielRelanceAmbassadeur2Id());
     
         $this->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionDemandeUrl));
     }
@@ -213,7 +220,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielRelanceAmbassadeurCloture(User $cmsi, User $ambassadeur, User $referent, $interventionDemandeUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielRelanceAmbassadeurClotureId());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielRelanceAmbassadeurClotureId());
     
         $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionDemandeUrl));
         $this->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionDemandeUrl));
@@ -229,7 +236,7 @@ class InterventionCourrielManager
      */
     public function envoiCourrielEvaluationRemplie(User $cmsi, User $ambassadeur, $interventionEvaluationUrl)
     {
-        $courriel = $this->container->get('nodevo_mail.manager.mail')->findOneById(InterventionCourriel::getInterventionCourrielEvaluationRemplieId());
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielEvaluationRemplieId());
     
         $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionEvaluationUrl));
         $this->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionEvaluationUrl));
@@ -254,7 +261,7 @@ class InterventionCourrielManager
             ->setFrom(array($mail->getExpediteurMail() => $mail->getExpediteurName()))
             ->setTo($destinataire->getEmail())
             ->setBody($courrielCorps, 'text/html');
-        $this->container->get('mailer')->send($courriel);
+        $this->mailer->send($courriel);
     }
     /**
      * Retourne le corps du courriel.

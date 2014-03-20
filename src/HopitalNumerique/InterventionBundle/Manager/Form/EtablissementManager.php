@@ -5,7 +5,7 @@
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
@@ -14,19 +14,19 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
 class EtablissementManager
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
+     * @var \HopitalNumerique\EtablissementBundle\Manager\EtablissementManager Manager de Etablissement
      */
-    private $container;
+    private $etablissementManager;
 
     /**
      * Constructeur du manager des établissements pour les formulaires utilisateurs.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
+     * @param \HopitalNumerique\EtablissementBundle\Manager\EtablissementManager $etablissementManager Manager de Etablissement
      * @return void
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(\HopitalNumerique\EtablissementBundle\Manager\EtablissementManager $etablissementManager)
     {
-        $this->container = $container;
+        $this->etablissementManager = $etablissementManager;
     }
 
     /**
@@ -41,7 +41,7 @@ class EtablissementManager
         if ($region != null)
             $etablissementsFiltre['region'] = $region;
 
-        $etablissements = $this->container->get('hopitalnumerique_etablissement.manager.etablissement')->findAll($etablissementsFiltre);
+        $etablissements = $this->etablissementManager->findAll($etablissementsFiltre);
 
         return $etablissements;
     }
@@ -54,22 +54,22 @@ class EtablissementManager
      */
     public function jsonEtablissementsRegroupesParTypeOrganisme(array $criteres)
     {
-        $etablissementsRegroupesParTypeOrganisme = $this->container->get('hopitalnumerique_etablissement.manager.etablissement')
-                ->getEtablissementsRegroupesParTypeOrganisme($criteres);
+        $etablissementsRegroupesParTypeOrganisme = $this->etablissementManager->getEtablissementsRegroupesParTypeOrganisme($criteres);
         $etablissementsListeFormatee = array();
 
         foreach ($etablissementsRegroupesParTypeOrganisme as $etablissementsRegroupes)
         {
             $etablissementsListeFormatee[] = array(
-                    'typeOrganisme' => array(
-                    'id' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']->getId()
-                            : '0'),
-                    'libelle' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']
-                                    ->getLibelle() : '')), 'etablissements' => array());
+                'typeOrganisme' => array(
+                'id' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']->getId() : '0'),
+                'libelle' => ($etablissementsRegroupes['typeOrganisme'] != null ? $etablissementsRegroupes['typeOrganisme']->getLibelle() : '')), 'etablissements' => array()
+            );
             foreach ($etablissementsRegroupes['etablissements'] as $etablissement)
             {
                 $etablissementsListeFormatee[count($etablissementsListeFormatee) - 1]['etablissements'][] = array(
-                        'id' => $etablissement->getId(), 'nom' => $etablissement->getNom());
+                    'id' => $etablissement->getId(),
+                    'nom' => $etablissement->getNom()
+                );
             }
         }
 
@@ -84,7 +84,7 @@ class EtablissementManager
      */
     public function jsonEtablissements(array $criteres)
     {
-        $etablissements = $this->container->get('hopitalnumerique_etablissement.manager.etablissement')->findBy($criteres);
+        $etablissements = $this->etablissementManager->findBy($criteres);
         $etablissementsListeFormatee = array();
     
         foreach ($etablissements as $etablissement)
@@ -97,5 +97,4 @@ class EtablissementManager
     
         return json_encode($etablissementsListeFormatee);
     }
-    
 }

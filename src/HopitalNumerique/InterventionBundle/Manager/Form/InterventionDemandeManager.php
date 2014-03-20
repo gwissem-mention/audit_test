@@ -6,9 +6,10 @@
  */
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 
 /**
  * Manager pour le formulaire des demandes d'intervention.
@@ -16,19 +17,25 @@ use HopitalNumerique\UserBundle\Entity\User;
 class InterventionDemandeManager
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager Manager de Reference
      */
-    private $container;
+    private $referenceManager;
+    /**
+     * @var \HopitalNumerique\ObjetBundle\Manager\ObjetManager Manager de Objet
+     */
+    private $objetManager;
 
     /**
      * Constructeur du manager gérant les formulaires de demandes d'intervention.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
+     * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager $referenceManager Manager de Reference
+     * @param \HopitalNumerique\ObjetBundle\Manager\ObjetManager $objetManager Manager de Objet
      * @return void
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ReferenceManager $referenceManager, ObjetManager $objetManager)
     {
-        $this->container = $container;
+        $this->referenceManager = $referenceManager;
+        $this->objetManager = $objetManager;
     }
 
     /**
@@ -38,7 +45,7 @@ class InterventionDemandeManager
      */
     public function getInterventionTypesChoices()
     {
-        return $this->container->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'TYPE_INTERVENTION'));
+        return $this->referenceManager->findBy(array('code' => 'TYPE_INTERVENTION'));
     }
     /**
      * Retourne la liste des objets pour les listes de formulaire.
@@ -48,8 +55,6 @@ class InterventionDemandeManager
      */
     public function getObjetsChoices(User $ambassadeur)
     {
-        return $this->container->get('hopitalnumerique_objet.manager.objet')->getObjetsByAmbassadeur($ambassadeur);
-        
-        
+        return $this->objetManager->getObjetsByAmbassadeur($ambassadeur);
     }
 }
