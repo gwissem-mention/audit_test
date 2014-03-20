@@ -310,7 +310,7 @@ class UserController extends Controller
                             'id'                  => 'id', 
                             'nom'                 => 'Nom', 
                             'prenom'              => 'Prénom', 
-                            'username'            => 'Nom de compte', 
+                            'username'            => 'Nom du compte', 
                             'email'               => 'Adresse e-mail',
                             'etat.libelle'        => 'Etat',
                             'region.libelle'      => 'Région',
