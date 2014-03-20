@@ -63,8 +63,8 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initChamps = f
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormulaireCreation = function()
 {
-    var objetsChamp = $('#hopitalnumerique_interventionbundle_interventiondemande_etablissement_objets');
-    var objetsChampEngineValidator = $('#s2id_hopitalnumerique_interventionbundle_interventiondemande_etablissement_objets ul.select2-choices');
+    var objetsChamp = $('select.hopitalnumerique_interventionbundle_interventiondemande_objets');
+    var objetsChampEngineValidator = $('div.hopitalnumerique_interventionbundle_interventiondemande_objets ul.select2-choices');
     
     if ($(objetsChamp).val() == null)
     {
@@ -155,28 +155,25 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.setRegion = fu
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements = function()
 {
-    //HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampAutresEtablissements();
-    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampReferents();
-    
     if (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.listeRegionsExiste())
     {
         var regionId = parseInt($('select.hopitalnumerique_interventionbundle_interventiondemande_region option:selected').attr('value'));
 
         if (regionId != 0 && HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REGIONS_CHOISIES[regionId] == undefined)
         {
+            var loaderAjax = $('.panel_form').nodevoLoader().start();
+            
             $.getJSON(
                 '/compte-hn/intervention/etablissement/etablissements/json',
                 {
                     region:regionId
                 },
-                /*function(etablissementsRegroupesParTypeOrganisme)
-                {
-                    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements(etablissementsRegroupesParTypeOrganisme);
-                }*/
                 function(etablissements)
                 {
                     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REGIONS_CHOISIES[regionId] = HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.getRegionNom();
                     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutresEtablissements(etablissements);
+                    
+                    loaderAjax.finished();
                 }
             );
         }
@@ -203,6 +200,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutres
 {
     var etablissementSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements');
     var etablissementsSelectHtml = $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements').html();
+    var etablissementsSelectionnesIds = $(etablissementSelect).select2('val');
 
     etablissementsSelectHtml += '<optgroup label="' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.getRegionNom() + '">';
     $.each(etablissements, function(index, etablissement) {
@@ -212,6 +210,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampAutres
 
 
     $(etablissementSelect).html(etablissementsSelectHtml);
+    $(etablissementSelect).select2('val', etablissementsSelectionnesIds);
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initAutresEtablissementsInitiaux();
 };
 /**
@@ -274,6 +273,8 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeRefere
     
         if (autresEtablissementsIds.length > 0)
         {
+            var loaderAjax = $('.panel_form').nodevoLoader().start();
+            
             $.getJSON(
                 '/compte-hn/intervention/referents/json',
                 {
@@ -282,6 +283,8 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeRefere
                 function(users)
                 {
                     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampReferents(users);
+
+                    loaderAjax.finished();
                 }
             );
         }

@@ -98,7 +98,8 @@ class InterventionDemandeType extends AbstractType
                 'label' => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
                 'class' => 'HopitalNumeriqueObjetBundle:Objet',
                 'property' => 'titre',
-                'multiple' => true
+                'multiple' => true,
+                'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_objets')
             ))
             ->add('description', 'textarea', array(
                 'label' => 'Description succinte de mon projet',

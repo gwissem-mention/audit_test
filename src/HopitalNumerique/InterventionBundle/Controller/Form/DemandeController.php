@@ -74,6 +74,8 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
     {
         if ($this->get('request')->isMethod('POST'))
         {
+            print_r($_POST);die();
+            
             $interventionDemandeFormulaire->bind($this->get('request'));
 
             if ($interventionDemandeFormulaire->isValid())
