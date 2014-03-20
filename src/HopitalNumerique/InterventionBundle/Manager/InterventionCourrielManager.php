@@ -6,11 +6,12 @@
  */
 namespace HopitalNumerique\InterventionBundle\Manager;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Nodevo\MailBundle\Entity\Mail;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\InterventionBundle\Entity\InterventionCourriel;
+use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use Nodevo\MailBundle\Manager\MailManager;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
 /**
  * Manager pour les envois de courriels concernant les interventions.
@@ -21,6 +22,10 @@ class InterventionCourrielManager
      * @var \Nodevo\MailBundle\Manager\MailManager Manager de Mail
      */
     private $mailManager;
+    /**
+     * @var \Symfony\Bundle\FrameworkBundle\Routing\Router Router de l'application
+     */
+    private $router;
     /**
      * @var \Swift_Mailer Service d'envoi de courriels
      */
@@ -35,13 +40,15 @@ class InterventionCourrielManager
      *
      * @param \Nodevo\MailBundle\Manager\MailManager $mailManager Manager de Mail
      * @param \Swift_Mailer $mailer Service d'envoi de courriels
+     * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router Router de l'application
      * @param \Twig_Environment $twig L'environnement Twig de l'application
      * @return void
      */
-    public function __construct(MailManager $mailManager, \Swift_Mailer $mailer, \Twig_Environment $twig)
+    public function __construct(MailManager $mailManager, \Swift_Mailer $mailer, Router $router, \Twig_Environment $twig)
     {
         $this->mailManager = $mailManager;
         $this->mailer = $mailer;
+        $this->router = $router;
         $this->twig = $twig;
     }
 
@@ -241,8 +248,23 @@ class InterventionCourrielManager
         $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionEvaluationUrl));
         $this->envoiCourriel($courriel, $ambassadeur, array('l' => $interventionEvaluationUrl));
     }
-    
-    
+    /**
+     * Envoi le courriel d'annulation d'une demande par un établissement.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $utilisateurEtablissement L'utilisateur demandeur
+     * @return void
+     */
+    public function envoiCourrielEstAnnuleEtablissement(InterventionDemande $interventionDemande)
+    {
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielEstAnnuleeEtablissementId());
+
+        $interventionDemandeUrl = $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true);
+        $this->envoiCourriel($courriel, $interventionDemande->getCmsi(), array('l' => $interventionDemandeUrl));
+        if ($interventionDemande->interventionEtatEstAcceptationCmsi())
+            $this->envoiCourriel($courriel, $interventionDemande->getAmbassadeur(), array('l' => $interventionDemandeUrl));
+    }
+
+
     /**
      * Envoi un courriel concernant les interventions.
      * 

@@ -7,6 +7,7 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Entité d'une demande d'intervention.
@@ -898,6 +899,33 @@ class InterventionDemande
     {
         return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiId());
     }
+    /**
+     * Retourne si l'état de l'intervention est Validé par l'ambassadeur.
+     *
+     * @return boolean VRAI ssi l'état de l'intervention est Validé par l'ambassadeur
+     */
+    public function interventionEtatEstAcceptationAmbassadeur()
+    {
+        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationAmbassadeurId());
+    }
+    /**
+     * Retourne si l'état de l'intervention est Terminé.
+     *
+     * @return boolean VRAI ssi l'état de l'intervention est Terminé
+     */
+    public function interventionEtatEstTermine()
+    {
+        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatTermineId());
+    }
+    /**
+     * Retourne si l'état de l'intervention est Clôturé.
+     *
+     * @return boolean VRAI ssi l'état de l'intervention est Clôturé
+     */
+    public function interventionEtatEstCloture()
+    {
+        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatClotureId());
+    }
 
     /**
      * Retourne si l'état de l'évaluation est À évaluer.
@@ -916,5 +944,19 @@ class InterventionDemande
     public function evaluationEtatEstEvalue()
     {
         return ($this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId());
+    }
+
+    /**
+     * Retourne si l'utilisateur d'un établissement peut annuler cette demande d'intervention.
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User $utilisateur L'utilisateur de l'établissement qui souhaite annuler la demande
+     * @return VRAI ssi l'utilisateur peut annuler la demande d'intervention
+     */
+    public function etablissementPeutAnnulerDemande(User $utilisateur)
+    {
+        if (!$utilisateur->hasRoleCmsi() && !$utilisateur->hasRoleAmbassadeur())
+            if (!$this->interventionEtatEstAcceptationAmbassadeur() && !$this->interventionEtatEstTermine() && !$this->interventionEtatEstCloture())
+                return true;
+        return false;
     }
 }

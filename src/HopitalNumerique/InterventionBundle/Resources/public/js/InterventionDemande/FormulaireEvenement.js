@@ -68,10 +68,14 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initA
 HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initInterventionEtat_Click = function()
 {
     var boutonModificationInterventionEtatRefus = $('button[data-intervention-etat-refus]');
+    var boutonModificationInterventionEtatAnnulation = $('button[data-intervention-etat-annulation]');
     var autresBoutonsModificationInterventionEtat = $('button[data-intervention-etat]');
     
     $(boutonModificationInterventionEtatRefus).click(function() {
         HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventionEtatRefus(parseInt($(this).attr('data-intervention-etat-refus')));
+    });
+    $(boutonModificationInterventionEtatAnnulation).click(function() {
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventionEtatAnnulation(parseInt($(this).attr('data-intervention-etat-annulation')));
     });
     $(autresBoutonsModificationInterventionEtat).click(function() {
         HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.enregistreInterventionEtat(parseInt($(this).attr('data-intervention-etat')));

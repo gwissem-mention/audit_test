@@ -120,6 +120,15 @@ class InterventionEtatManager
     {
         return $this->findOneById(InterventionEtat::getInterventionEtatClotureId());
     }
+    /**
+     * Retourne l'état d'intervention correspondant à Demande annulée.
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference Référence de l'état d'intervention correspondant à Demande annulée
+     */
+    public function getInterventionEtatAnnulationEtablissement()
+    {
+        return $this->findOneById(InterventionEtat::getInterventionEtatAnnulationEtablissementId());
+    }
 
     /**
      * Récupère un état d'intervention par rapport à son référence ID.

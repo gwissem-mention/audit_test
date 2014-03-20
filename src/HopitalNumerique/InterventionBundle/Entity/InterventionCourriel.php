@@ -68,6 +68,10 @@ class InterventionCourriel extends Mail
      * @var integer ID du courriel de l'évaluation remplie
      */
     private static $COURRIEL_EVALUATION_REMPLIE_ID = 22;
+    /**
+     * @var integer ID du courriel d'annulation d'une demande par un établissement
+     */
+    private static $COURRIEL_INTERVENTION_DEMANDE_EST_ANNULEE_ETABLISSEMENT_ID = 25;
     
     
     /**
@@ -195,5 +199,14 @@ class InterventionCourriel extends Mail
     public static function getInterventionCourrielEvaluationRemplieId()
     {
         return self::$COURRIEL_EVALUATION_REMPLIE_ID;
+    }
+    /**
+     * Retourne l'ID du courriel d'annulation d'une demande par un établissement.
+     *
+     * @return integer ID du courriel d'annulation d'une demande par un établissement
+     */
+    public static function getInterventionCourrielEstAnnuleeEtablissementId()
+    {
+        return self::$COURRIEL_INTERVENTION_DEMANDE_EST_ANNULEE_ETABLISSEMENT_ID;
     }
 }

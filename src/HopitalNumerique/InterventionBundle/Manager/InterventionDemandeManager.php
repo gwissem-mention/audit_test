@@ -403,10 +403,8 @@ class InterventionDemandeManager extends BaseManager
             return $this->changeEtatPourCmsi($interventionDemande, $interventionEtat, $messageJustificationChangementEtat);
         else if ($this->utilisateurConnecte->hasRoleAmbassadeur())
             return $this->changeEtatPourAmbassadeur($interventionDemande, $interventionEtat, $messageJustificationChangementEtat);
-        
-        return false;
+        else return $this->changeEtatPourEtablissement($interventionDemande);
     }
-    
     /**
      * Change l'état des demandes d'intervention regroupées d'une demande.
      * 
@@ -420,12 +418,8 @@ class InterventionDemandeManager extends BaseManager
         $interventionRegroupements = $this->interventionRegroupementManager->findBy(array('interventionDemandePrincipale' => $interventionDemande));
 
         foreach ($interventionRegroupements as $interventionRegroupement)
-        {
             $this->changeEtat($interventionRegroupement->getInterventionDemandeRegroupee(), $interventionEtat, $messageJustificationChangementEtat);
-        }
     }
-    
-    
     /**
      * Vérifie et change l'état d'une demande d'intervention pour un CMSI.
      *
@@ -506,6 +500,25 @@ class InterventionDemandeManager extends BaseManager
             }
         }
 
+        return false;
+    }
+    /**
+     * Vérifie et change l'état d'une demande d'intervention pour Annulé.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut modifier l'état d'intervention
+     * @return boolean VRAI ssi l'état a été modifié
+     */
+    private function changeEtatPourEtablissement(InterventionDemande $interventionDemande)
+    {
+        if ($interventionDemande->etablissementPeutAnnulerDemande($this->utilisateurConnecte))
+        {
+            $interventionDemande->setInterventionEtat($this->interventionEtatManager->getInterventionEtatAnnulationEtablissement());
+            $this->save($interventionDemande);
+
+            $this->interventionCourrielManager->envoiCourrielEstAnnuleEtablissement($interventionDemande);
+
+            return true;
+        }
         return false;
     }
 }

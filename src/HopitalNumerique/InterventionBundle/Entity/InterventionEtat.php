@@ -72,6 +72,10 @@ class InterventionEtat
      * @var integer ID de l'état Clôturée
      */
     private static $INTERVENTION_ETAT_CLOTURE = 23;
+    /**
+     * @var integer ID de l'état Demande annulée
+     */
+    private static $INTERVENTION_ETAT_ANNULATION_ETABLISSEMENT = 300;
 
     /**
      * Retourne l'ID de la référence correspondant à Demande initiale.
@@ -162,5 +166,14 @@ class InterventionEtat
     public static function getInterventionEtatClotureId()
     {
         return self::$INTERVENTION_ETAT_CLOTURE;
+    }
+    /**
+     * Retourne l'ID de la référence correspondant à Demande annulée.
+     *
+     * @return integer ID de la référence correspondant à Demande annulée
+     */
+    public static function getInterventionEtatAnnulationEtablissementId()
+    {
+        return self::$INTERVENTION_ETAT_ANNULATION_ETABLISSEMENT;
     }
 }

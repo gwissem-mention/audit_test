@@ -347,4 +347,35 @@ INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `qu
 
 
 
+/* RLE - 20/03/2014
+   DEV -> PROD
+   Interventions*/
+
+INSERT INTO `hn_reference` (
+`ref_id` ,
+`parent_id` ,
+`ref_libelle` ,
+`ref_code` ,
+`ref_etat` ,
+`ref_dictionnaire` ,
+`ref_recherche` ,
+`ref_lock` ,
+`ref_order`
+)
+VALUES (
+'300', NULL , 'Annulée par l''établissement', 'ETAT_DEMANDE_INTERVENTION', '3', '0', '0', '1', '1'
+);
+
+
+INSERT INTO `core_mail` (
+`mail_id` ,
+`mail_objet` ,
+`mail_description` ,
+`mail_expediteur_mail` ,
+`mail_expediteur_name` ,
+`mail_body`
+)
+VALUES (
+'25', '[HOPITALNUMERIQUE] - Annulation d''intervention par un ES', 'Annulation d''intervention par un ES', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, La demande a été annulée par l''ES %l Cordialement,'
+);
 

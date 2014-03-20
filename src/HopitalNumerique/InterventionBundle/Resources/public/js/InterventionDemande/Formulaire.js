@@ -77,9 +77,9 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormula
 }
 
 /**
- * Modifie l'état de la demande d'intervention en refusé CMSI.
+ * Modifie l'état de la demande d'intervention en refusé.
  * 
- * @param integer interventionEtatId L'ID du nouvel état de la demande d'intervention (refusé CMSI)
+ * @param integer interventionEtatId L'ID du nouvel état de la demande d'intervention
  * @return void
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventionEtatRefus = function(interventionEtatId)
@@ -97,6 +97,20 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventio
     });
 };
 /**
+ * Modifie l'état de la demande d'intervention en annulé.
+ * 
+ * @param integer interventionEtatId L'ID du nouvel état de la demande d'intervention
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventionEtatAnnulation = function(interventionEtatId)
+{
+    apprise('Confirmez-vous l\'annulation de la demande ?', { verify:true, textYes:'Oui', textNo:'Non' }, function(reponse)
+    {
+        if (reponse)
+            HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.enregistreInterventionEtat(interventionEtatId);
+    });
+};
+/**
  * Enregistre l'état de la demande d'intervention.
  * 
  * @param integer interventionEtatId L'ID du nouvel état de la demande d'intervention
@@ -107,6 +121,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.enregistreInte
     var changementEtatUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
     
     $.ajax(changementEtatUrl, {
+        method:'POST',
         success:function() {
             Nodevo_Web.rechargePage();
         }
