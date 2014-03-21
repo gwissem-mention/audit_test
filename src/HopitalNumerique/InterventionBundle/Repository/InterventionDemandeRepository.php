@@ -253,58 +253,62 @@ class InterventionDemandeRepository extends EntityRepository
         $requete = $this->_em->createQueryBuilder();
     
         $requete
-        ->select(
-            'interventionDemande.id AS id',
-            'referent.nom AS referentNom',
-            'referent.prenom AS referentPrenom',
-            'referentEtablissement.nom AS referentEtablissementNom',
-            'referentEtablissement.finess AS referentEtablissementFiness',
-            'referentRegion.libelle AS referentRegionLibelle',
-            'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurEtablissement.nom, \' - \', ambassadeurEtablissement.finess, \' (\', ambassadeurRegion.libelle, \')\') AS ambassadeurInformations',
-            'interventionInitiateur.type AS interventionInitiateurType',
-            'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
-            'interventionEtat.libelle AS interventionEtatLibelle',
-            'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
-            'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
-            'evaluationEtat.id AS evaluationEtatId',
-            'remboursementEtat.libelle AS remboursementEtatLibelle'
-        )
-        ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+            ->select(
+                'interventionDemande.id AS id',
+                'referent.nom AS referentNom',
+                'referent.prenom AS referentPrenom',
+                'referentEtablissement.nom AS referentEtablissementNom',
+                'referentEtablissement.finess AS referentEtablissementFiness',
+                'referentRegion.libelle AS referentRegionLibelle',
+                'CONCAT(\'<strong>\', ambassadeur.nom, \' \', ambassadeur.prenom, \'</strong><br>\', ambassadeurEtablissement.nom, \' - \', ambassadeurEtablissement.finess, \' (\', ambassadeurRegion.libelle, \')\') AS ambassadeurInformations',
+                'interventionInitiateur.type AS interventionInitiateurType',
+                'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
+                'interventionEtat.libelle AS interventionEtatLibelle',
+                'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
+                'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
+                'evaluationEtat.id AS evaluationEtatId',
+                'remboursementEtat.libelle AS remboursementEtatLibelle',
+                'COUNT(interventionRegroupement) AS nombreRegroupements'
+            )
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
             ->where('interventionDemande.directeur = :directeur')
                 ->setParameter('directeur', $directeur)
-        // Référent
-        ->innerJoin('interventionDemande.referent', 'referent')
-            ->leftJoin('referent.etablissementRattachementSante', 'referentEtablissement')
-            ->leftJoin('referent.region', 'referentRegion')
-        // Ambassadeur
-        ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
-        ->innerJoin('ambassadeur.etablissementRattachementSante', 'ambassadeurEtablissement')
-        ->innerJoin('ambassadeur.region', 'ambassadeurRegion')
-        // Initiateur
-        ->innerJoin('interventionDemande.interventionInitiateur', 'interventionInitiateur')
-        // État de l'intervention
-        ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
-        // État de l'évaluation
-        ->leftJoin('interventionDemande.evaluationEtat', 'evaluationEtat')
-        // État du remboursement
-        ->leftJoin('interventionDemande.remboursementEtat', 'remboursementEtat')
-        ->andWhere("
-            interventionEtat.id = :interventionEtatAcceptationCmsi
-            OR interventionEtat.id = :interventionEtatAcceptationCmsiRelance1
-            OR interventionEtat.id = :interventionEtatAcceptationCmsiRelance2
-            OR interventionEtat.id = :interventionEtatRefusAmbassadeur
-            OR interventionEtat.id = :interventionEtatAcceptationAmbassadeur
-            OR interventionEtat.id = :interventionEtatTermine
-            OR interventionEtat.id = :interventionEtatCloture
-        ")
-            ->setParameter('interventionEtatAcceptationCmsi', InterventionEtat::getInterventionEtatAcceptationCmsiId())
-            ->setParameter('interventionEtatAcceptationCmsiRelance1', InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id())
-            ->setParameter('interventionEtatAcceptationCmsiRelance2', InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id())
-            ->setParameter('interventionEtatRefusAmbassadeur', InterventionEtat::getInterventionEtatRefusAmbassadeurId())
-            ->setParameter('interventionEtatAcceptationAmbassadeur', InterventionEtat::getInterventionEtatAcceptationAmbassadeurId())
-            ->setParameter('interventionEtatTermine', InterventionEtat::getInterventionEtatTermineId())
-            ->setParameter('interventionEtatCloture', InterventionEtat::getInterventionEtatClotureId())
+            // Référent
+            ->innerJoin('interventionDemande.referent', 'referent')
+                ->leftJoin('referent.etablissementRattachementSante', 'referentEtablissement')
+                ->leftJoin('referent.region', 'referentRegion')
+            // Ambassadeur
+            ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
+            ->innerJoin('ambassadeur.etablissementRattachementSante', 'ambassadeurEtablissement')
+            ->innerJoin('ambassadeur.region', 'ambassadeurRegion')
+            // Initiateur
+            ->innerJoin('interventionDemande.interventionInitiateur', 'interventionInitiateur')
+            // État de l'intervention
+            ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
+                ->andWhere("
+                    interventionEtat.id = :interventionEtatAcceptationCmsi
+                    OR interventionEtat.id = :interventionEtatAcceptationCmsiRelance1
+                    OR interventionEtat.id = :interventionEtatAcceptationCmsiRelance2
+                    OR interventionEtat.id = :interventionEtatRefusAmbassadeur
+                    OR interventionEtat.id = :interventionEtatAcceptationAmbassadeur
+                    OR interventionEtat.id = :interventionEtatTermine
+                    OR interventionEtat.id = :interventionEtatCloture
+                ")
+                    ->setParameter('interventionEtatAcceptationCmsi', InterventionEtat::getInterventionEtatAcceptationCmsiId())
+                    ->setParameter('interventionEtatAcceptationCmsiRelance1', InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id())
+                    ->setParameter('interventionEtatAcceptationCmsiRelance2', InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id())
+                    ->setParameter('interventionEtatRefusAmbassadeur', InterventionEtat::getInterventionEtatRefusAmbassadeurId())
+                    ->setParameter('interventionEtatAcceptationAmbassadeur', InterventionEtat::getInterventionEtatAcceptationAmbassadeurId())
+                    ->setParameter('interventionEtatTermine', InterventionEtat::getInterventionEtatTermineId())
+                    ->setParameter('interventionEtatCloture', InterventionEtat::getInterventionEtatClotureId())
+            // État de l'évaluation
+            ->leftJoin('interventionDemande.evaluationEtat', 'evaluationEtat')
+            // État du remboursement
+            ->leftJoin('interventionDemande.remboursementEtat', 'remboursementEtat')
+            // Regroupement
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement', Join::WITH, 'interventionDemande.id = interventionRegroupement.interventionDemandePrincipale')
             ->orderBy('interventionDemande.dateCreation', 'DESC')
+            ->groupBy('interventionDemande.id')
         ;
     
         return $requete->getQUery()->getResult();

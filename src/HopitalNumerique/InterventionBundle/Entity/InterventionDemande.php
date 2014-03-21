@@ -182,7 +182,7 @@ class InterventionDemande
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ref_intervention_type_id", referencedColumnName="ref_id")
+     *   @ORM\JoinColumn(name="ref_intervention_type_id", referencedColumnName="ref_id", nullable=false)
      * })
      * @Assert\NotNull(message="Un type d'intervention doit être choisi.")
      * @Nodevo\Javascript(class="validate[required]")
