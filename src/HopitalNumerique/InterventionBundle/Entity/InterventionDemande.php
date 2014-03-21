@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement;
 
 /**
  * Entité d'une demande d'intervention.
@@ -1025,12 +1026,13 @@ class InterventionDemande
      * Retourne si l'utilisateur d'un établissement peut annuler cette demande d'intervention.
      * 
      * @param \HopitalNumerique\UserBundle\Entity\User $utilisateur L'utilisateur de l'établissement qui souhaite annuler la demande
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement[] $interventionRegroupements Les regroupements d'interventions dont cette demande d'intervention est la principale
      * @return VRAI ssi l'utilisateur peut annuler la demande d'intervention
      */
-    public function etablissementPeutAnnulerDemande(User $utilisateur)
+    public function etablissementPeutAnnulerDemande(User $utilisateur, array $interventionRegroupements)
     {
         if (!$utilisateur->hasRoleCmsi() && !$utilisateur->hasRoleAmbassadeur())
-            if (!$this->interventionEtatEstAcceptationAmbassadeur() && !$this->interventionEtatEstTermine() && !$this->interventionEtatEstCloture())
+            if (count($interventionRegroupements) == 0 && !$this->interventionEtatEstAcceptationAmbassadeur() && !$this->interventionEtatEstTermine() && !$this->interventionEtatEstCloture())
                 return true;
         return false;
     }
