@@ -300,20 +300,15 @@ VALUES (
    Interventions
 
 UPDATE `core_ressource` SET `res_nom` = 'FrontOffice - Accès à la sollicitation des ambassadeurs',
-`res_pattern` = '/^\\/(registre-ambassadeurs|intervention)/' WHERE `core_ressource`.`res_id` =15;*/
 `res_pattern` = '/^\\/(registre-ambassadeurs|intervention)/' WHERE `core_ressource`.`res_id` =15;
-
-
-
-
-
+`res_pattern` = '/^\\/(registre-ambassadeurs|intervention)/' WHERE `core_ressource`.`res_id` =15;*/
 
 /* RLE - 17/03/2014
    DEV -> PROD
-   Interventions*/
+   Interventions
 
-UPDATE `core_ressource` SET `res_pattern` = '/^\\/(registre-ambassadeurs|compte-hn\\/intervention)/' WHERE `core_ressource`.`res_id` =15;
-
+UPDATE `core_ressource` SET `res_pattern` = '/^\\/(registre-ambassadeurs|compte-hn\\/intervention)/' WHERE `core_ressource`.`res_id` =15;*/
+/*
 INSERT INTO `core_ressource` (
 `res_id` ,
 `res_nom` ,
@@ -323,13 +318,11 @@ INSERT INTO `core_ressource` (
 )
 VALUES (
 '20', 'FrontOffice - Gestion des intervention', '/^\\/compte-hn\\/intervention/demandes/liste', '20', '2'
-);
-
-
+);*/
 
 /* RLE - 17/03/2014
    DEV -> PROD
-   Interventions*/
+   Interventions
 
 INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`) VALUES
 (34, 3, 6, 'Date de l''intervention', 1, NULL, 1, 'evaluation_intervention_date', NULL),
@@ -343,13 +336,11 @@ INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `qu
 (31, 3, 5, 'Estimez-vous utile d''avoir sollicité cet ambassadeur ?', 0, NULL, 8, 'evaluation_utilite_ambassadeur', 'OUI_NON'),
 (32, 3, 5, 'Les modalités pratiques d''organisation de cette intervention étaient-elles satisfaisantes ?', 0, NULL, 10, 'evaluation_modalites', 'NOTE_EVALUATION'),
 (33, 3, 2, 'Avez-vous des suggestions d''amélioration ou des remarques dont vous souhaiteriez nous faire part ?', 0, NULL, 11, 'evaluation_ameliorations', NULL);
-
-
-
+*/
 
 /* RLE - 20/03/2014
    DEV -> PROD
-   Interventions*/
+   Interventions
 
 INSERT INTO `hn_reference` (
 `ref_id` ,
@@ -366,7 +357,6 @@ VALUES (
 '307', NULL , 'Annulée par l''établissement', 'ETAT_DEMANDE_INTERVENTION', '3', '0', '0', '1', '1'
 );
 
-
 INSERT INTO `core_mail` (
 `mail_id` ,
 `mail_objet` ,
@@ -377,5 +367,5 @@ INSERT INTO `core_mail` (
 )
 VALUES (
 '25', '[HOPITALNUMERIQUE] - Annulation d''intervention par un ES', 'Annulation d''intervention par un ES', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u, La demande a été annulée par l''ES %l Cordialement,'
-);
+);*/
 
