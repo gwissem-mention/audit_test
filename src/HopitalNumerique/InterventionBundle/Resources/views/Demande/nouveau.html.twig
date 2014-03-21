@@ -67,11 +67,10 @@
                 <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
                 {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
                 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label class="col-md-4 control-label">Ambassadeur</label>
-                    <div class="col-md-8"><div class="form-control">{{ ambassadeur.appellation }}</div></div>
-                    <div class="col-md-4"><div class="help-block"></div></div>
-                </div>
+                    <div class="col-md-8"><input class="form-control" type="text" value="{{ ambassadeur.appellation }}" readonly="readonly"></div>
+                </div> -->
                 
                 {{ form_javascript(interventionDemandeFormulaireNouveau) }}
     

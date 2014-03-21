@@ -42,7 +42,8 @@ class CmsiType extends InterventionDemandeCmsiType
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
                 'property' => 'appellation',
                 'label' => 'Ambassadeur',
-                'required' => true
+                'required' => true,
+                'read_only' => false
             ))
             ->remove('referent')
         ;

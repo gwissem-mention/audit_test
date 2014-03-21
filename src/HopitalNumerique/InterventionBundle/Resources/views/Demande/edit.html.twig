@@ -34,12 +34,10 @@
 
             <div class="form-group">
                 <label class="col-md-4 control-label">Demandeur</label>
-                <div class="col-md-8"><div class="form-control">{{ interventionDemande.referent.appellation }}</div></div>
-                <div class="col-md-4"><div class="help-block"></div></div>
+                <div class="col-md-8"><input class="form-control" type="text" value="{{ interventionDemande.referent.appellation }}" readonly="readonly"></div>
             </div>
             
             {{ form_javascript(interventionDemandeFormulaireEdition) }}
-
             {{ form_widget(interventionDemandeFormulaireEdition) }}
 
             <div class="boutons">

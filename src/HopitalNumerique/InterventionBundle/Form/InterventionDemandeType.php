@@ -55,6 +55,14 @@ class InterventionDemandeType extends AbstractType
         
         $builder
             //->add('referent', $this->container->get('hopitalnumerique_intervention.type.user'))
+            ->add('ambassadeur', 'entity', array(
+                'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getAmbassadeursChoices($this->container->get('security.context')->getToken()->getUser()->getRegion()),
+                'class' => 'HopitalNumerique\UserBundle\Entity\User',
+                'property' => 'appellation',
+                'label' => 'Ambassadeur',
+                'required' => true,
+                'read_only' => true
+            ))
             ->add('interventionType', 'entity', array(
                 'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_intervention_demande')->getInterventionTypesChoices(),
                 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
@@ -116,6 +124,11 @@ class InterventionDemandeType extends AbstractType
             ->add('rdvInformations', 'textarea', array(
                 'label' => 'Informations pour la prise de rendez-vous (échéance, disponibilités, etc)',
                 'required' => false
+            ))
+            ->add('cmsiCommentaire', 'textarea', array(
+                'label' => 'Commentaire CMSI',
+                'required' => false,
+                'read_only' => true
             ));
     }
 

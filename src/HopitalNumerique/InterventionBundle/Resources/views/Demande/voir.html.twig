@@ -195,6 +195,12 @@
                     {{ interventionDemande.rdvInformations }}
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-4">Commentaire CMSI</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.cmsiCommentaire }}
+                </div>
+            </div>
             
             {% if interventionDemande.refusMessage != null %}
                 <hr>
@@ -281,7 +287,7 @@
                     </div>
 
                 {% elseif interventionDemande.etablissementPeutAnnulerDemande(app.user) %}
-                    <button type="button" data-intervention-etat-annulation="{{ InterventionEtat.interventionEtatAnnulationEtablissementId }}" class="btn btn-default btn-warning">Annuler</button>
+                    <button type="button" data-intervention-etat-annulation="{{ InterventionEtat.interventionEtatAnnulationEtablissementId }}" class="btn btn-default btn-warning">Annuler ma demande</button>
                 {% endif %}
                 
             </div>

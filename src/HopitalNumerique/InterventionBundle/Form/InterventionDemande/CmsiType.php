@@ -45,7 +45,11 @@ class CmsiType extends InterventionDemandeType
                 'label' => 'Rattacher des établissements à ma demande, parmi',
                 'required' => false,
                 'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements')))
-            ->remove('description')->remove('difficulteDescription');
+            ->add('cmsiCommentaire', 'textarea', array(
+                    'label' => 'Commentaire CMSI',
+                    'required' => false,
+                    'read_only' => false
+            ));
     }
 
     /**

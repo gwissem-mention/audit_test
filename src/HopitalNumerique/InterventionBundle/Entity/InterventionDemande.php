@@ -79,42 +79,49 @@ class InterventionDemande
     /**
      * @var string
      *
-     * @ORM\Column(name="interv_autres_etablissements", type="text", nullable=true)
+     * @ORM\Column(name="interv_autres_etablissements", type="text", columnDefinition="TEXT", nullable=true)
      */
     private $autresEtablissements;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="interv_description", type="text", nullable=true)
+     * @ORM\Column(name="interv_description", type="text", columnDefinition="TEXT", nullable=true)
      */
     private $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="interv_difficulte_description", type="text", nullable=true)
+     * @ORM\Column(name="interv_difficulte_description", type="text", columnDefinition="TEXT", nullable=true)
      */
     private $difficulteDescription;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="interv_champ_libre", type="text", nullable=true)
+     * @ORM\Column(name="interv_champ_libre", type="text", columnDefinition="TEXT", nullable=true)
      */
     private $champLibre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="interv_rdv_informations", type="text", nullable=true)
+     * @ORM\Column(name="interv_rdv_informations", type="text", columnDefinition="TEXT", nullable=true)
      */
     private $rdvInformations;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="interv_refus_message", type="text", nullable=true)
+     * @ORM\Column(name="interv_cmsi_commentaire", type="text", columnDefinition="TEXT", nullable=true)
+     */
+    private $cmsiCommentaire;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="interv_refus_message", type="text", columnDefinition="TEXT", nullable=true)
      */
     private $refusMessage;
 
@@ -530,7 +537,30 @@ class InterventionDemande
     {
         return $this->refusMessage;
     }
-
+    
+    /**
+     * Set cmsiCommentaire
+     *
+     * @param string $cmsiCommentaire
+     * @return InterventionDemande
+     */
+    public function setCmsiCommentaire($cmsiCommentaire)
+    {
+        $this->cmsiCommentaire = $cmsiCommentaire;
+    
+        return $this;
+    }
+    
+    /**
+     * Get cmsiCommentaire
+     *
+     * @return string
+     */
+    public function getCmsiCommentaire()
+    {
+        return $this->cmsiCommentaire;
+    }
+    
     /**
      * Set referent
      *
