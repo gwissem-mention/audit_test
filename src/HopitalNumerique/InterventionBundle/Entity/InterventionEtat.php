@@ -75,7 +75,7 @@ class InterventionEtat
     /**
      * @var integer ID de l'état Demande annulée
      */
-    private static $INTERVENTION_ETAT_ANNULATION_ETABLISSEMENT = 307;
+    private static $INTERVENTION_ETAT_ANNULATION_ETABLISSEMENT = 309;
 
     /**
      * Retourne l'ID de la référence correspondant à Demande initiale.
