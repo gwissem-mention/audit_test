@@ -394,6 +394,15 @@ class InterventionDemandeRepository extends EntityRepository
      */
     public function getGridDonnees_EtablissementDemandes(User $referent)
     {
+        // Ignorer les demandes groupées
+        $requeteDemandesGroupees = $this->_em->createQueryBuilder()
+            ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementIgnore')
+            ->where('interventionRegroupementIgnore.interventionDemandeRegroupee.referent = :referent')
+                ->andWhere('interventionRegroupementIgnore.interventionDemandeRegroupee.referent = :referent')
+                ->setParameter('referent', $referent)
+            ;
+        
         $requete = $this->_em->createQueryBuilder()
             ->select(
                 'interventionDemande.id AS id',
@@ -421,7 +430,13 @@ class InterventionDemandeRepository extends EntityRepository
             ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement', Join::WITH, 'interventionDemande.id = interventionRegroupement.interventionDemandePrincipale');
 
             $requete->where('interventionDemande.referent = :referent')
-                ->setParameter('referent', $referent);
+                ->setParameter('referent', $referent)
+                ->andWhere(
+                    $requete->expr()->notIn(
+                        'interventionDemande',
+                        $requeteDemandesGroupees->getDQL()
+                    )
+                );
 
         $requete->orderBy('interventionDemande.dateCreation', 'DESC')
             ->groupBy('interventionDemande.id');
