@@ -4,7 +4,7 @@
  */
 namespace HopitalNumerique\InterventionBundle\Grid\Cmsi;
 
-use Nodevo\GridBundle\Grid\Grid;
+use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
 use Nodevo\GridBundle\Grid\IGrid;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
@@ -13,17 +13,15 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 /**
  * Configuration du grid des nouvelles demandes d'intervention pour le CMSI.
  */
-class DemandesNouvellesGrid extends Grid implements IGrid
+class DemandesNouvellesGrid extends DemandesAbstractGrid
 {
     /**
      * Set la config propre au Grid des demandes d'intervention (Source + config par défaut)
      */
     public function setConfig()
     {
-        $this->setSource('hopitalnumerique_intervention.manager.intervention_demande');
+        parent::setConfig();
         $this->setFunctionName('getGridDonnees_CmsiDemandesNouvelles');
-        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
-        $this->setNoDataMessage('- Aucune intervention à afficher -');
     }
 
     /**
@@ -31,27 +29,13 @@ class DemandesNouvellesGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        $colonneRegroupements = new Column\TextColumn('nombreRegroupements', '');
-        $colonneRegroupements->setFilterable(false)->setSortable(false);
-        $colonneRegroupements->manipulateRenderCell(
-            function($value, $row, $router) {
-                if (intval($row->getField('nombreRegroupements')) > 0)
-                {
-                    return '<img src="/bundles/hopitalnumeriquecore/img/common-sprite/users.png" width="16" height="14" title="Demandes regroupées">';
-                }
-                return '';
-            }
-        );
-        $this->addColonne($colonneRegroupements);
+        parent::setColumns();
         
         $colonneDemandeurInformations = new Column\TextColumn('demandeurInformations', 'Demandeur');
         $colonneDemandeurInformations->manipulateRenderCell(
-            function($value, $row, $router) {
-                return
-                    '<strong>'.$row->getField('referentNom').' '.$row->getField('referentPrenom').'</strong>'.
-                    ($row->getField('referentEtablissementNom') != null ? '<br>'.$row->getField('referentEtablissementNom').' - '.$row->getField('referentEtablissementFiness') : '').
-                    ($row->getField('referentRegionLibelle') != null ? '<br>'.$row->getField('referentRegionLibelle') : '')
-                ;
+            function($value, $row, $router)
+            {
+                return DemandesAbstractGrid::renderCellReferent($value, $row, $router);
             }
         );
         $colonneDemandeurInformations->setFilterable(false)->setSortable(false);

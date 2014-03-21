@@ -4,17 +4,16 @@
  */
 namespace HopitalNumerique\InterventionBundle\Grid\Etablissement;
 
-use Nodevo\GridBundle\Grid\Grid;
+use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
 use Nodevo\GridBundle\Grid\IGrid;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
-use HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur;
 
 /**
  * Configuration du grid des demandes d'intervention pour l'établissement.
  */
-class DemandesGrid extends Grid implements IGrid
+class DemandesGrid extends DemandesAbstractGrid
 {
     /**
      * Set la config propre au Grid des demandes d'intervention (Source + config par défaut)
@@ -34,33 +33,14 @@ class DemandesGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        $colonneRegroupements = new Column\TextColumn('nombreRegroupements', '');
-        $colonneRegroupements->setFilterable(false)->setSortable(false);
-        $colonneRegroupements->manipulateRenderCell(
-            function($value, $row, $router) {
-                if (intval($row->getField('nombreRegroupements')) > 0)
-                {
-                    return '<img src="/bundles/hopitalnumeriquecore/img/common-sprite/users.png" width="16" height="14" title="Demandes regroupées">';
-                }
-                return '';
-            }
-        );
-        $this->addColonne($colonneRegroupements);
+        parent::setColumns();
 
         $colonneInitiateur = new Column\TextColumn('interventionInitiateurId', '');
         $colonneInitiateur->setAlign('center');
         $colonneInitiateur->manipulateRenderCell(
-                function($value, $row, $router) {
-                    if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurCmsiId())
-                    {
-                        return '<span class="glyphicon glyphicon-user" title="Initié par '.$row->getField('interventionInitiateurType').'"></span>';
-                    }
-                    else if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurEtablissementId())
-                    {
-                        return '<span class="glyphicon glyphicon-home" title="Initié par '.$row->getField('interventionInitiateurType').'"></span>';
-                    }
-                    return '';
-                }
+            function($value, $row, $router) {
+                return DemandesAbstractGrid::renderCellInitiateur($value, $row, $router);
+            }
         );
         $this->addColonne($colonneInitiateur->setFilterable(false)->setSortable(false));
 
@@ -76,18 +56,7 @@ class DemandesGrid extends Grid implements IGrid
         $colonneDateChoix->setFilterable(false)->setSortable(false);
         $colonneDateChoix->manipulateRenderCell(
             function($value, $row, $router) {
-                $dateChoix = '';
-                if ($row->getField('cmsiDateChoixLibelle') != null)
-                {
-                    $dateChoixCmsi = new \DateTime($row->getField('cmsiDateChoixLibelle'));
-                    $dateChoix .= '<div>CMSI : '.$dateChoixCmsi->format('d/m/Y').'</div>';
-                }
-                if ($row->getField('ambassadeurDateChoixLibelle') != null)
-                {
-                    $dateChoixAmbassadeur = new \DateTime($row->getField('ambassadeurDateChoixLibelle'));
-                    $dateChoix .= '<div>Ambassadeur : '.$dateChoixAmbassadeur->format('d/m/Y').'</div>';
-                }
-                return $dateChoix;
+                return DemandesAbstractGrid::renderCellDateChoix($value, $row, $router);
             }
         );
         $this->addColonne($colonneDateChoix);

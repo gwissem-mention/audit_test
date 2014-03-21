@@ -4,7 +4,7 @@
  */
 namespace HopitalNumerique\InterventionBundle\Grid\Directeur;
 
-use Nodevo\GridBundle\Grid\Grid;
+use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
 use Nodevo\GridBundle\Grid\IGrid;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
@@ -13,7 +13,7 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
 /**
  * Configuration du grid des demandes d'intervention pour le directeur.
  */
-class SuiviDemandesGrid extends Grid implements IGrid
+class SuiviDemandesGrid extends DemandesAbstractGrid
 {
     /**
      * Set la config propre au Grid des demandes d'intervention (Source + config par défaut)
@@ -31,27 +31,12 @@ class SuiviDemandesGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        $colonneRegroupements = new Column\TextColumn('nombreRegroupements', '');
-        $colonneRegroupements->setFilterable(false)->setSortable(false);
-        $colonneRegroupements->manipulateRenderCell(
-            function($value, $row, $router) {
-                if (intval($row->getField('nombreRegroupements')) > 0)
-                {
-                    return '<img src="/bundles/hopitalnumeriquecore/img/common-sprite/users.png" width="16" height="14" title="Demandes regroupées">';
-                }
-                return '';
-            }
-        );
-        $this->addColonne($colonneRegroupements);
+        parent::setColumns();
         
         $colonneDemandeurInformations = new Column\TextColumn('demandeurInformations', 'Demandeur');
         $colonneDemandeurInformations->manipulateRenderCell(
             function($value, $row, $router) {
-                return
-                    '<strong>'.$row->getField('referentNom').' '.$row->getField('referentPrenom').'</strong>'.
-                    ($row->getField('referentEtablissementNom') != null ? '<br>'.$row->getField('referentEtablissementNom').' - '.$row->getField('referentEtablissementFiness') : '').
-                    ($row->getField('referentRegionLibelle') != null ? '<br>'.$row->getField('referentRegionLibelle') : '')
-                ;
+                return DemandesAbstractGrid::renderCellReferent($value, $row, $router);
             }
         );
         $colonneDemandeurInformations->setFilterable(false)->setSortable(false);
@@ -73,13 +58,14 @@ class SuiviDemandesGrid extends Grid implements IGrid
         $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneInterventionEtatLibelle);
        
-        $colonneCmsiDateChoixLibelle = new Column\DateColumn('cmsiDateChoixLibelle', 'CMSI');
-        $colonneCmsiDateChoixLibelle->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneCmsiDateChoixLibelle);
-       
-        $colonneAmbassadeurDateChoixLibelle = new Column\DateColumn('ambassadeurDateChoixLibelle', 'Ambassadeur');
-        $colonneAmbassadeurDateChoixLibelle->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneAmbassadeurDateChoixLibelle);
+        $colonneDateChoix = new Column\TextColumn('dateChoix', 'Date choix');
+        $colonneDateChoix->setFilterable(false)->setSortable(false);
+        $colonneDateChoix->manipulateRenderCell(
+            function($value, $row, $router) {
+                return DemandesAbstractGrid::renderCellDateChoix($value, $row, $router);
+            }
+        );
+        $this->addColonne($colonneDateChoix);
 
         $colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
         $colonneEvaluation->setFilterable(false)->setSortable(false);

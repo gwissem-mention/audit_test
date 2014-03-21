@@ -28,7 +28,7 @@ HopitalNumeriqueInterventionBundle_InterventionEvaluationFormulaireCreation.init
  */
 HopitalNumeriqueInterventionBundle_InterventionEvaluationFormulaireCreation.initChamps = function()
 {
-    var interventionDateChamp = $('input#nodevo_questionnaire_questionnaire_date_23_evaluation_intervention_date');
+    var interventionDateChamp = $('input.question-type-date');
     var aujourdhui = new Date();
     
     $(interventionDateChamp).val(aujourdhui.toISOString().slice(0, 10));
