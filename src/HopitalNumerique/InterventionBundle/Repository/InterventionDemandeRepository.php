@@ -394,12 +394,14 @@ class InterventionDemandeRepository extends EntityRepository
      */
     public function getGridDonnees_EtablissementDemandes(User $referent)
     {
-        // Ignorer les demandes groupées
+        // Ignorer les demandes groupées pour un même référence
         $requeteDemandesGroupees = $this->_em->createQueryBuilder()
             ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
             ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementIgnore')
-            ->where('interventionRegroupementIgnore.interventionDemandeRegroupee.referent = :referent')
-                ->andWhere('interventionRegroupementIgnore.interventionDemandeRegroupee.referent = :referent')
+                ->innerJoin('interventionRegroupementIgnore.interventionDemandeRegroupee', 'interventionDemandeRegroupee')
+                    ->andWhere('interventionDemandeRegroupee.referent = :referent')
+                ->innerJoin('interventionRegroupementIgnore.interventionDemandePrincipale', 'interventionDemandePrincipale')
+                    ->andWhere('interventionDemandePrincipale.referent = :referent')
                 ->setParameter('referent', $referent)
             ;
         
