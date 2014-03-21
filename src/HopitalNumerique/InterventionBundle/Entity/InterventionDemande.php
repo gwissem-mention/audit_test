@@ -1002,6 +1002,15 @@ class InterventionDemande
     {
         return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatClotureId());
     }
+    /**
+     * Retourne si l'état de l'intervention est Annulé par l'établissement.
+     *
+     * @return boolean VRAI ssi l'état de l'intervention est Annulé par l'établissement
+     */
+    public function interventionEtatEstAnnuleEtablissement()
+    {
+        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAnnulationEtablissementId());
+    }
 
     /**
      * Retourne si l'état de l'évaluation est À évaluer.
@@ -1032,7 +1041,7 @@ class InterventionDemande
     public function etablissementPeutAnnulerDemande(User $utilisateur, array $interventionRegroupements)
     {
         if (!$utilisateur->hasRoleCmsi() && !$utilisateur->hasRoleAmbassadeur())
-            if (count($interventionRegroupements) == 0 && !$this->interventionEtatEstAcceptationAmbassadeur() && !$this->interventionEtatEstTermine() && !$this->interventionEtatEstCloture())
+            if (count($interventionRegroupements) == 0 && !$this->interventionEtatEstAcceptationAmbassadeur() && !$this->interventionEtatEstTermine() && !$this->interventionEtatEstCloture() && !$this->interventionEtatEstAnnuleEtablissement())
                 return true;
         return false;
     }

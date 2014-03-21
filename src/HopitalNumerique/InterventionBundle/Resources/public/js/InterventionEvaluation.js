@@ -3,11 +3,11 @@
  * 
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
-var HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation = function() {};
+var HopitalNumeriqueInterventionBundle_InterventionEvaluation = function() {};
 
 
 $(document).ready(function() {
-    HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.init();
+    HopitalNumeriqueInterventionBundle_InterventionEvaluation.init();
 });
 
 
@@ -16,10 +16,10 @@ $(document).ready(function() {
  * 
  * @return void
  */
-HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.init = function()
+HopitalNumeriqueInterventionBundle_InterventionEvaluation.init = function()
 {
-    HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluationEvenement.init();
-    HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.initChamps();
+    HopitalNumeriqueInterventionBundle_InterventionEvaluationEvenement.init();
+    HopitalNumeriqueInterventionBundle_InterventionEvaluation.initChamps();
 };
 
 /**
@@ -27,9 +27,11 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.in
  * 
  * @return void
  */
-HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.initChamps = function()
+HopitalNumeriqueInterventionBundle_InterventionEvaluation.initChamps = function()
 {
-    $('input#nodevo_questionnaire_questionnaire_date_23_evaluation_intervention_date').datepicker({
+    var interventionDateChamp = $('input#nodevo_questionnaire_questionnaire_date_23_evaluation_intervention_date');
+    
+    $(interventionDateChamp).datepicker({
         dateFormat:'yy-mm-dd'
     });
 };
@@ -38,7 +40,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.in
  * 
  * @return void
  */
-HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.setAutresEtablissements = function(autresEtablissements)
+HopitalNumeriqueInterventionBundle_InterventionEvaluation.setAutresEtablissements = function(autresEtablissements)
 {
     var autresEtablissementsChamp = $('textarea#nodevo_questionnaire_questionnaire_textarea_25_evaluation_autres_etablissements');
     $(autresEtablissementsChamp).val('');
@@ -58,7 +60,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.se
  * @param integer interventionDemandeId L'ID de la demande d'intervention
  * @return boolean FAUX pour ne pas que la page avec le grid se recharge
  */
-HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.relance = function(interventionDemandeId)
+HopitalNumeriqueInterventionBundle_InterventionEvaluation.relance = function(interventionDemandeId)
 {
     apprise('Confirmez-vous l\'envoi d\'une relance pour cette demande d\'intervention ?', { verify:true, textYes:'Oui', textNo:'Non' }, function(reponse)
     {

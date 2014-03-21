@@ -66,7 +66,7 @@ class QuestionnaireType extends AbstractType
         ));
         
         //Récupération du questionnaire
-        $questions = $this->_managerQuestionnaire->getQuestionsReponses($idQuestionnaire, $idUser);
+        $questions = $this->_managerQuestionnaire->getQuestionsReponses($idQuestionnaire, $idUser, (isset($options['label_attr']['paramId']) ? $options['label_attr']['paramId'] : null));
 
         //Construction du formulaire en fonction des questions + chargement des réponses si il y en a
         $builder = $this->_constructBuilder($builder, $questions, $questionnaire, $options); 
@@ -98,7 +98,7 @@ class QuestionnaireType extends AbstractType
     private function _constructBuilder(FormBuilderInterface $builder, $questions, $questionnaire, $options)
     {        
         //Réponse de la question courante
-        $reponseCourante;
+        $reponseCourante = null;
         
         //Création des questions
         foreach ($questions as $question)

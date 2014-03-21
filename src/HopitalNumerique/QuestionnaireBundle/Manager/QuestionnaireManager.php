@@ -25,9 +25,9 @@ class QuestionnaireManager extends BaseManager
         $this->_questionnaireArray = isset($options['idRoles']) ? $options['idRoles'] : array();
     }
     
-    public function getQuestionsReponses( $idQuestionnaire, $idUser )
+    public function getQuestionsReponses( $idQuestionnaire, $idUser, $paramId = null )
     {
-        return $this->getRepository()->getQuestionsReponses( $idQuestionnaire , $idUser );
+        return $this->getRepository()->getQuestionsReponses( $idQuestionnaire , $idUser, $paramId );
     }
     
     /**

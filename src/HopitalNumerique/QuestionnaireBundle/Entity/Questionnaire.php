@@ -154,4 +154,18 @@ class Questionnaire
     {
         return $this->questions;
     }
+
+    /**
+     * Retourne une question du questionnaire par rapport à son ID.
+     * 
+     * @param integer $questionId L'ID de la question à récupérer
+     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Question|null La question de l'ID ou NIL si non trouvé
+     */
+    public function getQuestionById($questionId)
+    {
+        foreach ($this->questions as $question)
+            if ($questionId == $question->getId())
+                return $question;
+        return null;
+    }
 }

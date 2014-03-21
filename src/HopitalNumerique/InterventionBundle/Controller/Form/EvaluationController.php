@@ -63,7 +63,8 @@ class EvaluationController extends Controller
                 'idUser'           => $user->getId(),
                 'idQuestionnaire'  => $questionnaire->getId(),
                 'readOnly'         => $readOnly,
-                'interventionDemande' => $interventionDemande
+                'interventionDemande' => $interventionDemande,
+                'paramId' => $interventionDemande->getId()
             )
         ));
         $request = $this->get('request');

@@ -3,7 +3,7 @@
  * 
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
-var HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluationEvenement = function() {};
+var HopitalNumeriqueInterventionBundle_InterventionEvaluationEvenement = function() {};
 
 
 /**
@@ -11,9 +11,9 @@ var HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluatio
  * 
  * @return void
  */
-HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluationEvenement.init = function()
+HopitalNumeriqueInterventionBundle_InterventionEvaluationEvenement.init = function()
 {
-    HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluationEvenement.initRelance_click();
+    HopitalNumeriqueInterventionBundle_InterventionEvaluationEvenement.initRelance_click();
 };
 
 
@@ -22,12 +22,12 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluationEve
  * 
  * @return void
  */
-HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluationEvenement.initRelance_click = function()
+HopitalNumeriqueInterventionBundle_InterventionEvaluationEvenement.initRelance_click = function()
 {
     var relanceBoutons = $('button[data-evaluation-demande]');
     
     relanceBoutons.click(function() {
         var interventionDemandeId = parseInt($(this).attr('data-evaluation-demande'));
-        return HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.relance(interventionDemandeId);
+        return HopitalNumeriqueInterventionBundle_InterventionEvaluation.relance(interventionDemandeId);
     });
 };

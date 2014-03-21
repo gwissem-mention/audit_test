@@ -74,7 +74,7 @@ class EvaluationController extends Controller
         {
             $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
 
-            return $this->render('HopitalNumeriqueInterventionBundle:Evaluation:nouveau.html.twig', array(
+            return $this->render('HopitalNumeriqueInterventionBundle:Evaluation:voir.html.twig', array(
                 'interventionDemande'=> $interventionDemande,
                 'etablissements' => $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesEtRegroupes($interventionDemande),
                 'questionnaire'=> $questionnaire,

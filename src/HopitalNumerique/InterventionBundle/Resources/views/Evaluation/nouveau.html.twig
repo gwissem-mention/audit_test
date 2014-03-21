@@ -13,6 +13,7 @@
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-intervention-evaluation-nouveau.js"
         'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation/FormulaireCreation.js'
         'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation/Evenement.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -23,7 +24,7 @@
             var etablissements = new Array();
             {% for etablissement in etablissements %}etablissements.push("{{ etablissement.nom }}");{% endfor %}
             $(document).ready(function() {
-                HopitalNumeriqueInterventionBundle_InterventionDemande_InterventionEvaluation.setAutresEtablissements(etablissements);
+                HopitalNumeriqueInterventionBundle_InterventionEvaluation.setAutresEtablissements(etablissements);
             });
         </script>
     {% endif %}

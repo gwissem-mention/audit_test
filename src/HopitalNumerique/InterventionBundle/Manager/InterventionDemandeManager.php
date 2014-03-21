@@ -428,9 +428,9 @@ class InterventionDemandeManager extends BaseManager
     {
         $this->changeEtatInterventionDemandesRegroupees($interventionDemande, $interventionEtat, $messageJustificationChangementEtat);
 
-        if ($this->utilisateurConnecte->hasRoleCmsi())
+        if ($this->utilisateurConnecte->hasRoleCmsi() && $interventionDemande->getCmsi()->getId() == $this->utilisateurConnecte->getId())
             return $this->changeEtatPourCmsi($interventionDemande, $interventionEtat, $messageJustificationChangementEtat);
-        else if ($this->utilisateurConnecte->hasRoleAmbassadeur())
+        else if ($this->utilisateurConnecte->hasRoleAmbassadeur() && $interventionDemande->getAmbassadeur()->getId() == $this->utilisateurConnecte->getId())
             return $this->changeEtatPourAmbassadeur($interventionDemande, $interventionEtat, $messageJustificationChangementEtat);
         else return $this->changeEtatPourEtablissement($interventionDemande);
     }
@@ -539,7 +539,9 @@ class InterventionDemandeManager extends BaseManager
      */
     private function changeEtatPourEtablissement(InterventionDemande $interventionDemande)
     {
-        if ($interventionDemande->etablissementPeutAnnulerDemande($this->utilisateurConnecte))
+        $interventionRegroupements = $this->interventionRegroupementManager->findBy(array('interventionDemandePrincipale' => $interventionDemande));
+        
+        if ($interventionDemande->etablissementPeutAnnulerDemande($this->utilisateurConnecte, $interventionRegroupements))
         {
             $interventionDemande->setInterventionEtat($this->interventionEtatManager->getInterventionEtatAnnulationEtablissement());
             $this->save($interventionDemande);

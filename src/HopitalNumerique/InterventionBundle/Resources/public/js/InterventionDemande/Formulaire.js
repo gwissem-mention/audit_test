@@ -57,6 +57,17 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initChamps = f
 
 
 /**
+ * Cache les boutons d'action.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.cacheBoutonsAction = function()
+{
+    $('div.panel_boutons').css({ visibility:'hidden' });
+};
+
+
+/**
  * Vérifie, avant soumission, le formulaire de création d'une nouvelle demande d'intervention.
  * 
  * @return boolean VRAI ssi le formulaire est valide
@@ -74,7 +85,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormula
     else $(objetsChampEngineValidator).validationEngine('hide');
 
     return true;
-}
+};
 
 /**
  * Modifie l'état de la demande d'intervention en refusé.
@@ -84,6 +95,9 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormula
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventionEtatRefus = function(interventionEtatId)
 {
+    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.cacheBoutonsAction();
+    var loaderAjax = $('.panel_form_visu').nodevoLoader().start();
+    
     var changementEtatUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
 
     $.ajax(changementEtatUrl, {
@@ -92,6 +106,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventio
             message:$('textarea#etat_intervention_refus_justification').val()
         },
         success:function() {
+            loaderAjax.finished();
             Nodevo_Web.rechargePage();
         }
     });
@@ -118,11 +133,15 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventio
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.enregistreInterventionEtat = function(interventionEtatId)
 {
+    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.cacheBoutonsAction();
+    var loaderAjax = $('.panel_form_visu').nodevoLoader().start();
+    
     var changementEtatUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
     
     $.ajax(changementEtatUrl, {
         method:'POST',
         success:function() {
+            loaderAjax.finished();
             Nodevo_Web.rechargePage();
         }
     });
@@ -405,6 +424,8 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.changeAmbassad
         {
             if (reponse)
             {
+                HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.cacheBoutonsAction();
+                
                 var loaderAjax = $('.panel_form_visu').nodevoLoader().start();
                 var changementAmbassadeurUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/ambassadeur/' + nouvelAmbassadeurId + '/change'; 
             

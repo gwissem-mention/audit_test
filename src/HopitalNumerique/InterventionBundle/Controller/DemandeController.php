@@ -41,6 +41,7 @@ class DemandeController extends Controller
         }
         
         $interventionRegroupements = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->findBy(array('interventionDemandePrincipale' => $interventionDemande));
+
         $vueParametres = array(
             'interventionDemande' => $interventionDemande,
             'interventionDemandeEstRegroupee' => $interventionDemandeEstRegroupee,

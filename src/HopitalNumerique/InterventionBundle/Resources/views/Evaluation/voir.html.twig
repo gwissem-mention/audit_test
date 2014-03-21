@@ -1,9 +1,18 @@
 {% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-intervention-evaluation-voir.css"
+        'bundles/hopitalnumeriqueintervention/css/evaluation.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
 {% block pageTitre %}Évaluation{% endblock %}
 
 {% block chapoDescription %}
-    <p>Tu vois, là-bas, les champs de blé ? Je ne mange pas de pain. Le blé pour moi est inutile. Les champs de blé ne me rappellent rien. Et ça, c'est triste ! Mais tu as des cheveux couleur d'or. Alors ce sera merveilleux quand tu m'auras apprivoisé ! Le blé, qui est doré, me fera souvenir de toi. Et j'aimerai le bruit du vent dans le blé...</p>
+    <p>123</p>
 {% endblock %}
 
 {% block contenu %}
