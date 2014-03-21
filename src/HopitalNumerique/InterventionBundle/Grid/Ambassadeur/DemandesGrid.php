@@ -97,9 +97,9 @@ class DemandesGrid extends Grid implements IGrid
 
         //$this->addColonne(new Column\TextColumn('remboursementEtatLibelle', 'Remboursement'));
 
-        $colonneRemboursementMontant = new Column\TextColumn('remboursementMontant', 'Montant');
+        /*$colonneRemboursementMontant = new Column\TextColumn('remboursementMontant', 'Montant');
         $colonneRemboursementMontant->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneRemboursementMontant);
+        $this->addColonne($colonneRemboursementMontant);*/
     }
 
     /**
