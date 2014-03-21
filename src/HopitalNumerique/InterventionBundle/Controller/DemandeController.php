@@ -34,7 +34,7 @@ class DemandeController extends Controller
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         $interventionDemandeEstRegroupee = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->estInterventionDemandeRegroupee($interventionDemande);
         
-        if ($utilisateurConnecte->hasRoleAmbassadeur() && $utilisateurConnecte->getId() != $interventionDemande->getAmbassadeur()->getId())
+        if (!$this->get('hopitalnumerique_intervention.manager.intervention_demande')->peutVoir($interventionDemande))
         {
             $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à visualiser cette demande.');
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));

@@ -171,10 +171,10 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
             $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_edition_cmsi', $this->interventionDemande, array('interventionDemande' => $this->interventionDemande));
         }
 
-        if ($interventionDemandeFormulaire == null)
+        if ($interventionDemandeFormulaire == null || !$this->get('hopitalnumerique_intervention.manager.intervention_demande')->peutEditer($this->interventionDemande))
         {
             $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à éditer cette demande d\'intervention.');
-                    return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 
         $this->_gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire);

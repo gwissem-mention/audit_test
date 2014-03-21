@@ -175,6 +175,34 @@ class InterventionDemandeManager extends BaseManager
     }
     
     /**
+     * Retourne si l'utilisateur connecté peut visualiser une demande d'intervention ou non.
+     * 
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionDemande $interventionDemande La demande d'intervention à visualiser
+     * @return boolean VRAI ssi l'utilisateur connecté peut visualiser la demande d'intervention
+     */
+    public function peutVoir(InterventionDemande $interventionDemande)
+    {
+        return (
+            ($this->utilisateurConnecte->hasRoleCmsi() && $this->utilisateurConnecte->getId() == $interventionDemande->getCmsi()->getId())
+            || ($this->utilisateurConnecte->hasRoleAmbassadeur() && $this->utilisateurConnecte->getId() == $interventionDemande->getAmbassadeur()->getId())
+            || ($this->utilisateurConnecte->hasRoleDirecteur() && $interventionDemande->getDirecteur() != null && $this->utilisateurConnecte->getId() == $interventionDemande->getDirecteur()->getId())
+            || ($this->utilisateurConnecte->getId() == $interventionDemande->getReferent()->getId())
+        );
+    }
+    /**
+     * Retourne si l'utilisateur connecté peut éditer une demande d'intervention ou non.
+     * 
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionDemande $interventionDemande La demande d'intervention à éditer
+     * @return boolean VRAI ssi l'utilisateur connecté peut éditer la demande d'intervention
+     */
+    public function peutEditer(InterventionDemande $interventionDemande)
+    {
+        return (
+            ($this->utilisateurConnecte->hasRoleCmsi() && $this->utilisateurConnecte->getId() == $interventionDemande->getCmsi()->getId())
+        );
+    }
+    
+    /**
      * Envoie les relances pour les demandes d'intervention non traitées.
      * 
      * @return void
