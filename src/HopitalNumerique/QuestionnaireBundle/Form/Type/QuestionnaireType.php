@@ -172,13 +172,19 @@ class QuestionnaireType extends AbstractType
             	    ));
             	    break;
             	case 'date':
+            	    if (isset($attr['class']))
+            	        $attr['class'] = $attr['class'].' question-type-date';
+            	    else  $attr['class'] = 'question-type-date';
+            	    if (!is_null($question->getVerifJS()))
+            	        $attr['class'] = $attr['class'].' '.$question->getVerifJS();
+
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'text', array(
         	            'required'   => $question->getObligatoire(),
         	            'label'      => $question->getLibelle(),
         	            'mapped'     => false,
         	            'read_only'  => $this->_readOnly,
         	            'disabled'   => $this->_readOnly,
-        	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
+        	            'attr'       => $attr,
         	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
             	    ));
             	    break;

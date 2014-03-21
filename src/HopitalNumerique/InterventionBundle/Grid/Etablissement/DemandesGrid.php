@@ -62,19 +62,40 @@ class DemandesGrid extends Grid implements IGrid
                     return '';
                 }
         );
+        $this->addColonne($colonneInitiateur->setFilterable(false)->setSortable(false));
 
         $colonneAmbassadeur = new Column\TextColumn('ambassadeurInformations', 'Ambassadeur');
         $colonneCreation = new Column\DateColumn('dateCreationLibelle', 'Création');
         $colonneEtat = new Column\TextColumn('interventionEtatLibelle', 'État');
-        $colonneChoixCMSI = new Column\DateColumn('cmsiDateChoixLibelle', 'CMSI');
-        $colonneChoixAmbassadeur = new Column\DateColumn('ambassadeurDateChoixLibelle', 'Ambassadeur');
         
-        $this->addColonne($colonneInitiateur->setFilterable(false)->setSortable(false));        
         $this->addColonne($colonneAmbassadeur->setFilterable(false)->setSortable(false));       
         $this->addColonne($colonneCreation->setFilterable(false)->setSortable(false));       
-        $this->addColonne($colonneEtat->setFilterable(false)->setSortable(false));       
-        $this->addColonne($colonneChoixCMSI->setFilterable(false)->setSortable(false));       
-        $this->addColonne($colonneChoixAmbassadeur->setFilterable(false)->setSortable(false));
+        $this->addColonne($colonneEtat->setFilterable(false)->setSortable(false));
+
+        $colonneDateChoix = new Column\TextColumn('dateChoix', 'Date choix');
+        $colonneDateChoix->setFilterable(false)->setSortable(false);
+        $colonneDateChoix->manipulateRenderCell(
+            function($value, $row, $router) {
+                $dateChoix = '';
+                if ($row->getField('cmsiDateChoixLibelle') != null)
+                {
+                    $dateChoixCmsi = new \DateTime($row->getField('cmsiDateChoixLibelle'));
+                    $dateChoix .= '<div>CMSI : '.$dateChoixCmsi->format('d/m/Y').'</div>';
+                }
+                if ($row->getField('ambassadeurDateChoixLibelle') != null)
+                {
+                    $dateChoixAmbassadeur = new \DateTime($row->getField('ambassadeurDateChoixLibelle'));
+                    $dateChoix .= '<div>Ambassadeur : '.$dateChoixAmbassadeur->format('d/m/Y').'</div>';
+                }
+                return $dateChoix;
+            }
+        );
+        $this->addColonne($colonneDateChoix);
+        
+        /*$colonneChoixCMSI = new Column\DateColumn('cmsiDateChoixLibelle', 'CMSI');
+        $this->addColonne($colonneChoixCMSI->setFilterable(false)->setSortable(false));
+        $colonneChoixAmbassadeur = new Column\DateColumn('ambassadeurDateChoixLibelle', 'Ambassadeur');
+        $this->addColonne($colonneChoixAmbassadeur->setFilterable(false)->setSortable(false));*/
         
         
         

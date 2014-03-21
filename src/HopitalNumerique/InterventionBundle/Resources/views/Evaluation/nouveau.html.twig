@@ -12,6 +12,7 @@
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-intervention-evaluation-nouveau.js"
+        'bundles/hopitalnumeriquequestionnaire/js/script.js'
         'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation.js'
         'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation/FormulaireCreation.js'
         'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation/Evenement.js'

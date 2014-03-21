@@ -1,4 +1,9 @@
 $(document).ready(function() {
+    
+    $('input.question-type-date').datepicker({
+        dateFormat:'yy-mm-dd'
+    });
+    
 	//gestion du bouton delete : changement du fichier uploadé
     $('.deleteUploadedFile').on('click',function(){
         $(this).hide();

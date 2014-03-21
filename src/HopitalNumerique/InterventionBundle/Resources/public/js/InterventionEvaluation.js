@@ -29,11 +29,11 @@ HopitalNumeriqueInterventionBundle_InterventionEvaluation.init = function()
  */
 HopitalNumeriqueInterventionBundle_InterventionEvaluation.initChamps = function()
 {
-    var interventionDateChamp = $('input#nodevo_questionnaire_questionnaire_date_23_evaluation_intervention_date');
+    /*var interventionDateChamp = $('input#nodevo_questionnaire_questionnaire_date_23_evaluation_intervention_date');
     
     $(interventionDateChamp).datepicker({
         dateFormat:'yy-mm-dd'
-    });
+    });*/
 };
 /**
  * Initialise les champs du formulaire d'initialisation des évaluations.
