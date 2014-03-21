@@ -154,7 +154,14 @@
                 <div class="col-md-4">Établissements rattachés</div>
                 <div class="col-md-8">
                     {% for interventionRegroupement in interventionRegroupements %}
-                        <div><a href="{{ path('hopital_numerique_intervention_demande_voir', { id:interventionRegroupement.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a> {{ interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante.appellation }}</div>
+                        <div>
+                            <a href="{{ path('hopital_numerique_intervention_demande_voir', { id:interventionRegroupement.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                            {% if interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante is not null %}
+                                 {{ interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante.appellation }}
+                            {% else %}
+                                {{ interventionRegroupement.interventionDemandeRegroupee.referent.autreStructureRattachementSante }}
+                            {% endif %}
+                        </div>
                     {% endfor %}
                     {% for etablissement in etablissementsRattachesNonRegroupes %}
                         <div>{{ etablissement.appellation }}</div>

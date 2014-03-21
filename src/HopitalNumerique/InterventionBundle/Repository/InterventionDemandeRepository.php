@@ -427,12 +427,18 @@ class InterventionDemandeRepository extends EntityRepository
             ->select('IDENTITY(interventionRegroupement.interventionDemandeRegroupee)')
             ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement')
         ;
+        $requeteDemandesGroupementsPrincipales = $this->_em->createQueryBuilder()
+            ->select('IDENTITY(interventionRegroupementPrincipal.interventionDemandePrincipale)')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementPrincipal')
+        ;
     
         $requete = $this->_em->createQueryBuilder();
         $requete->select('interventionDemande')
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
             ->where('interventionDemande.id != :interventionDemandeCourante')
                 ->setParameter('interventionDemandeCourante', $interventionDemande->getId())
+            ->andWhere('interventionDemande.cmsi = :cmsi')
+                ->setParameter('cmsi', $interventionDemande->getCmsi())
             ->andWhere('interventionDemande.interventionEtat = :interventionEtatDemandeInitiale OR interventionDemande.interventionEtat = :interventionEtatAttenteCmsi')
                 ->setparameter('interventionEtatDemandeInitiale', InterventionEtat::getInterventionEtatDemandeInitialeId())
                 ->setparameter('interventionEtatAttenteCmsi', InterventionEtat::getInterventionEtatAttenteCmsiId())
@@ -440,6 +446,12 @@ class InterventionDemandeRepository extends EntityRepository
                 $requete->expr()->notIn(
                     'interventionDemande',
                     $requeteDemandesGroupees->getDQL()
+                )
+            )
+            ->andWhere(
+                $requete->expr()->notIn(
+                    'interventionDemande',
+                    $requeteDemandesGroupementsPrincipales->getDQL()
                 )
             )
             ->leftJoin('interventionDemande.objets', 'objet');
@@ -470,6 +482,10 @@ class InterventionDemandeRepository extends EntityRepository
             ->select('IDENTITY(interventionRegroupement.interventionDemandeRegroupee)')
             ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement')
         ;
+        $requeteDemandesGroupementsPrincipales = $this->_em->createQueryBuilder()
+            ->select('IDENTITY(interventionRegroupementPrincipal.interventionDemandePrincipale)')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementPrincipal')
+        ;
 
         $requete = $this->_em->createQueryBuilder();
         $requete->select('interventionDemande')
@@ -478,10 +494,18 @@ class InterventionDemandeRepository extends EntityRepository
                 ->setParameter('ambassadeur', $interventionDemande->getAmbassadeur())
             ->andWhere('interventionDemande.id != :interventionDemandeCourante')
                 ->setParameter('interventionDemandeCourante', $interventionDemande->getId())
+            ->andWhere('interventionDemande.cmsi = :cmsi')
+                ->setParameter('cmsi', $interventionDemande->getCmsi())
             ->andWhere(
                 $requete->expr()->notIn(
                     'interventionDemande',
                     $requeteDemandesGroupees->getDQL()
+                )
+            )
+            ->andWhere(
+                $requete->expr()->notIn(
+                    'interventionDemande',
+                    $requeteDemandesGroupementsPrincipales->getDQL()
                 )
             )
             ->andWhere('interventionDemande.interventionEtat = :interventionEtatDemandeInitiale OR interventionDemande.interventionEtat = :interventionEtatAttenteCmsi')
