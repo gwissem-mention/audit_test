@@ -123,8 +123,8 @@ class InterventionDemandeRepository extends EntityRepository
     public function getGridDonnees_CmsiDemandesNouvelles(User $cmsi)
     {
         $requeteDemandesGroupees = $this->_em->createQueryBuilder()
-            ->select('IDENTITY(interventionRegroupement.interventionDemandeRegroupee)')
-            ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement')
+            ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementIgnore')
             ;
         
         $requete = $this->_em->createQueryBuilder();
@@ -141,7 +141,8 @@ class InterventionDemandeRepository extends EntityRepository
                 'GROUP_CONCAT(objet.titre) AS objetsInformations',
                 'interventionEtat.id AS interventionEtatId',
                 'interventionEtat.libelle AS interventionEtatLibelle',
-                'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle'
+                'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
+                'COUNT(interventionRegroupement) AS nombreRegroupements'
             )
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
                 // Référent
@@ -155,6 +156,8 @@ class InterventionDemandeRepository extends EntityRepository
                 ->leftJoin('interventionDemande.objets', 'objet')
                 // État
                 ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
+                // Regroupement
+                ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement', Join::WITH, 'interventionDemande.id = interventionRegroupement.interventionDemandePrincipale')
             ->where('interventionDemande.cmsi = :cmsi')
                 ->setParameter('cmsi', $cmsi)
             ->andWhere('interventionEtat.id = :interventionEtatDemandeInitiale OR interventionEtat.id = :interventionEtatAttenteCmsi')
@@ -181,8 +184,8 @@ class InterventionDemandeRepository extends EntityRepository
     public function getGridDonnees_CmsiDemandesTraitees(User $cmsi)
     {
         $requeteDemandesGroupees = $this->_em->createQueryBuilder()
-            ->select('IDENTITY(interventionRegroupement2.interventionDemandeRegroupee)')
-            ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement2')
+            ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementIgnore')
             ;
         
         $requete = $this->_em->createQueryBuilder();

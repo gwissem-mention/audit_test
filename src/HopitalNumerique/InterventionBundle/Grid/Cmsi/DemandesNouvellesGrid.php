@@ -31,6 +31,19 @@ class DemandesNouvellesGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
+        $colonneRegroupements = new Column\TextColumn('nombreRegroupements', '');
+        $colonneRegroupements->setFilterable(false)->setSortable(false);
+        $colonneRegroupements->manipulateRenderCell(
+            function($value, $row, $router) {
+                if (intval($row->getField('nombreRegroupements')) > 0)
+                {
+                    return '<img src="/bundles/hopitalnumeriquecore/img/common-sprite/users.png" width="16" height="14" title="Demandes regroupées">';
+                }
+                return '';
+            }
+        );
+        $this->addColonne($colonneRegroupements);
+        
         $colonneDemandeurInformations = new Column\TextColumn('demandeurInformations', 'Demandeur');
         $colonneDemandeurInformations->manipulateRenderCell(
             function($value, $row, $router) {

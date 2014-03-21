@@ -126,7 +126,9 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         }
 
         $this->interventionDemande->setCmsi($cmsi);
-        $this->interventionDemande->setDirecteur($this->get('hopitalnumerique_user.manager.user')->getDirecteur(array('etablissementRattachementSante' => $this->interventionDemande->getReferent()->getEtablissementRattachementSante(), 'enabled' => true)));
+        
+        if ($this->interventionDemande->getReferent()->getEtablissementRattachementSante() != null)
+            $this->interventionDemande->setDirecteur($this->get('hopitalnumerique_user.manager.user')->getDirecteur(array('etablissementRattachementSante' => $this->interventionDemande->getReferent()->getEtablissementRattachementSante(), 'enabled' => true)));
         $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
 
         return true;
@@ -170,7 +172,10 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         }
 
         if ($interventionDemandeFormulaire == null)
-            throw new InterventionException('Vous n\'êtes pas autorisé à éditer cette demande d\'intervention.');
+        {
+            $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à éditer cette demande d\'intervention.');
+                    return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        }
 
         $this->_gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire);
 

@@ -66,14 +66,8 @@
             <form method="post" id="form_intervention_demande_nouveau" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
                 <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
                 {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
-                
-                <!-- <div class="form-group">
-                    <label class="col-md-4 control-label">Ambassadeur</label>
-                    <div class="col-md-8"><input class="form-control" type="text" value="{{ ambassadeur.appellation }}" readonly="readonly"></div>
-                </div> -->
-                
+
                 {{ form_javascript(interventionDemandeFormulaireNouveau) }}
-    
                 {{ form_widget(interventionDemandeFormulaireNouveau) }}
                 
                 <div class="boutons">

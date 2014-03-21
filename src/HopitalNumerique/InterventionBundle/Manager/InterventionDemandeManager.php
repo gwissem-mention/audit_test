@@ -101,7 +101,7 @@ class InterventionDemandeManager extends BaseManager
             $etablissementEstPresent = false;
             foreach ($interventionRegroupements as $interventionRegroupement)
             {
-                if ($etablissement->getId() == $interventionRegroupement->getInterventionDemandeRegroupee()->getReferent()->getEtablissementRattachementSante()->getId())
+                if ($interventionRegroupement->getInterventionDemandeRegroupee()->getReferent()->getEtablissementRattachementSante() != null && $etablissement->getId() == $interventionRegroupement->getInterventionDemandeRegroupee()->getReferent()->getEtablissementRattachementSante()->getId())
                 {
                     $etablissementEstPresent = true;
                     break;
@@ -127,7 +127,8 @@ class InterventionDemandeManager extends BaseManager
 
         foreach ($interventionRegroupements as $interventionRegroupement)
         {
-            $etablissements[] = $interventionRegroupement->getInterventionDemandeRegroupee()->getReferent()->getEtablissementRattachementSante();
+            if ($interventionRegroupement->getInterventionDemandeRegroupee()->getReferent()->getEtablissementRattachementSante() != null)
+                $etablissements[] = $interventionRegroupement->getInterventionDemandeRegroupee()->getReferent()->getEtablissementRattachementSante();
         }
 
         foreach ($interventionDemande->getEtablissements() as $etablissement)
