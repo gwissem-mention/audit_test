@@ -44,7 +44,7 @@ class ObjetType extends AbstractType
                               ->orderBy('ref.order', 'ASC');
                 }
             ))
-            ->add('roles', 'genemu_jqueryselect2_entity', array(
+            ->add('roles', 'entity', array(
                 'class'    => 'NodevoRoleBundle:Role',
                 'property' => 'name',
                 'multiple' => true,
