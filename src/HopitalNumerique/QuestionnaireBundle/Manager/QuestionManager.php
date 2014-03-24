@@ -3,6 +3,7 @@
 namespace HopitalNumerique\QuestionnaireBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
 /**
  * Manager de l'entité Contractualisation.
@@ -38,5 +39,20 @@ class QuestionManager extends BaseManager
             
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
         return __ROOT_DIRECTORY__.'/files/'.$labelQuestionnaire;
+    }
+
+    /**
+     * Retourne une question du questionnaire par rapport à son ID.
+     *
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Le questionnaire sur lequel récupérer la question
+     * @param integer $questionId L'ID de la question à récupérer
+     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Question|null La question de l'ID ou NIL si non trouvé
+     */
+    public function getQuestionById(Questionnaire $questionnaire, $questionId)
+    {
+        foreach ($questionnaire->getQuestions() as $question)
+            if ($questionId == $question->getId())
+                return $question;
+        return null;
     }
 }
