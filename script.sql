@@ -6,16 +6,16 @@
 ---------------------------------------------------------------------------------------------
 /* GME - 13/02/2014
    PROD -> DEV
-   Lorem ipsum */
+   Lorem ipsum 
 
 INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`) VALUES
-(26, '[HOPITALNUMERIQUE] - Mot de passe perdu', 'Mail de réinitialisation du mot de passe', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\n\nVotre mot de passe a été réinitialisé, merci de cliquer sur le lien suivant pour continuer : %url \n\nCordialement,');
+(26, '[HOPITALNUMERIQUE] - Mot de passe perdu', 'Mail de réinitialisation du mot de passe', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\n\nVotre mot de passe a été réinitialisé, merci de cliquer sur le lien suivant pour continuer : %url \n\nCordialement,');*/
 
 
 ---------------------------------------------------------------------------------------------
 /* RLE - 13/02/2014
    PROD -> DEV
-   Lorem ipsum */
+   Lorem ipsum 
 
 INSERT INTO `core_menu_item` (
 `itm_id` ,
@@ -124,7 +124,7 @@ INSERT INTO `core_menu_item` (
 )
 VALUES (
 NULL , '73', '4', 'Lire une évaluation d''une demande d''intervention', 'hopital_numerique_intervention_evaluation_voir', NULL , '0', NULL , NULL , '0', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '5'
-);
+);*/
 
 ---------------------------------------------------------------------------------------------
 /* QSO - 24/03/2014
