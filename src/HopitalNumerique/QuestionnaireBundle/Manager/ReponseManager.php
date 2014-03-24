@@ -126,7 +126,6 @@ class ReponseManager extends BaseManager
     public function getUploadRootDir( $labelQuestionnaire )
     {
         if(!file_exists(__ROOT_DIRECTORY__.'/files/'.$labelQuestionnaire))
-            //throw new \Exception('Le dossier ' . __ROOT_DIRECTORY__.'/files/'.$labelQuestionnaire . ' n\'existe pas.');
             return null;
     
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés

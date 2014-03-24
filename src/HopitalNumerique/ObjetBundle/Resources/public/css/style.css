@@ -1,6 +1,7 @@
 /* Edit Objet */
 ul.list-unstyled{margin-bottom:0;}
 .loader .loaderIcon{background-image: url('../images/big_ajax_loader.gif') !important;width:66px;height:66px; }
+.toggleType{position: absolute;top: 30px; left:425px;}
 
     /* Tab Objet*/
     #objet .uploadedFile{display: block; margin-top: 7px}

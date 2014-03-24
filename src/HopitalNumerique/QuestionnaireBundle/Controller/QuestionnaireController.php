@@ -5,7 +5,6 @@ namespace HopitalNumerique\QuestionnaireBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire as HopiQuestionnaire;
-use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 

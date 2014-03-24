@@ -134,6 +134,19 @@ $(document).ready(function() {
         }
     });
 
+    //Toogle d'ajout seulement
+    $('.toggleType').toggles( { on : true, width:80, text : { on : 'Objet', off : 'Article' } } ).on('toggle', function (e, active) {
+        if (active) { //type = objet
+            $('#hopitalnumerique_objet_objet_isArticle').val(0);
+            $('.blocSynthese').slideDown();
+            $('.resumeLabel').html('Résumé');
+        } else { //type = article
+            $('#hopitalnumerique_objet_objet_isArticle').val(1);
+            $('.blocSynthese').slideUp();
+            $('.resumeLabel').html('Texte de l\'article');
+        }
+    });
+
     $("#hopitalnumerique_objet_objet_roles").nSelect({
         formatNoMatches : function(){ return 'Aucune donnée trouvée'; }
     });

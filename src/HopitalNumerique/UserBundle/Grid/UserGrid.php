@@ -5,9 +5,6 @@ use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\IGrid;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
-//Classe php externe dans le bundle Tools de nodevo
-use Nodevo\ToolsBundle\Tools as NodevoTools;
-use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
  * Configuration du Grid User

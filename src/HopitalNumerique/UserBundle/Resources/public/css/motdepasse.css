@@ -1,0 +1,4 @@
+#form_edit_motdepasse form{ background: #f4f4f4; padding:60px 35px 15px 35px; position: relative;}
+#form_edit_motdepasse form label{ color:#333333; font-size: 14px }
+#form_edit_motdepasse form .champ-obligatoire{color: #5d5d5d;width: 139px; height: 4px; position: absolute; top: -20px; right: 0px;font-style:italic; font-size:12px;}
+#form_edit_motdepasse form .champ-obligatoire .etoile{color: #e01958;}

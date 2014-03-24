@@ -145,7 +145,11 @@ NULL , '73', '4', 'Lire une évaluation d''une demande d''intervention', 'hopita
 );
 
 ---------------------------------------------------------------------------------------------
-/* QSO - 13/02/2014
+/* QSO - 24/03/2014
    PROD -> DEV
-   Lorem ipsum */
-
+   Update objets -> publication */
+UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_name` = 'Gestion des publications' WHERE `core_menu_item`.`itm_id` = 46; 
+UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_name` = 'Ajouter une publication' WHERE `core_menu_item`.`itm_id` = 47; 
+UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_name` = 'Editer une publication' WHERE `core_menu_item`.`itm_id` = 48; 
+UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_name` = 'Fiche publication' WHERE `core_menu_item`.`itm_id` = 49; 
+UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_name` = 'Recherche - vue publication' WHERE `core_menu_item`.`itm_id` = 79;

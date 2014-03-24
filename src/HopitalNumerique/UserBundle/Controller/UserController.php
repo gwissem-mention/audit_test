@@ -2,12 +2,7 @@
 namespace HopitalNumerique\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Nodevo\ToolsBundle\Tools\Chaine;
-use Nodevo\RoleBundle\Entity\Role;
-use HopitalNumerique\QuestionnaireBundle\Manager;
-use HopitalNumerique;
 
 /**
  * Controller des utilisateurs
@@ -74,30 +69,36 @@ class UserController extends Controller
         
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-        
             // On bind les données du form
             $form->handleRequest($request);
             
             //si le formulaire est valide
             if ($form->isValid())
             {
-                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add('danger', 'Vérification de l\'ancien mot de passe non fait !');
+                $factory = $this->get('security.encoder_factory');
+                $encoder = $factory->getEncoder($user);
                 
-                return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
+                //Vérifie si le mot de passe entré dans le formulaire correspondant au mot de passe de l'utilisateur
+                if($encoder->isPasswordValid($user->getPassword(), $form->get("oldPassword")->getData(), $user->getSalt()))
+                {
+                    //Mise à jour / création de l'utilisateur
+                    $this->get('fos_user.user_manager')->updateUser( $user );
+
+                    // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+                    $this->get('session')->getFlashBag()->add('success', 'Mot de passe mis à jour.');
+                    
+                    return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
+                }
+                else
+                {
+                    // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+                    $this->get('session')->getFlashBag()->add('danger', 'L\'ancien mot de passe saisi est incorrect.');
+                    
+                    return $this->redirect( $this->generateUrl('hopital_numerique_user_motdepasse') );
+                }
                 
-                
-                
-                //Mise à jour / création de l'utilisateur
-                $this->get('fos_user.user_manager')->updateUser( $user );
-        
-                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add('success', 'Mot de passe mis à jour.');
-                
-        	    return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
             }
         }
-        
         return $this->_renderView( $view , $form, $user);
     }
     
@@ -135,9 +136,6 @@ class UserController extends Controller
 
         return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig' );
     }
-    
-    
-    
     
     /**
      * Affichage de la fiche d'un utilisateur
@@ -210,7 +208,7 @@ class UserController extends Controller
             $where['typeOrganisme'] = $idTypeEtablissement;
         }
         
-        $etablissements       = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( $where );
+        $etablissements = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( $where );
     
         return $this->render('HopitalNumeriqueUserBundle:User:etablissements.html.twig', array(
                 'etablissements' => $etablissements
@@ -340,6 +338,10 @@ class UserController extends Controller
     {        
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $user);
+        
+        //Si on est en FO dans informations personelles, on affiche pas le mot de passe. Il est géré dans un autre formulaire
+        if($this->_informationsPersonnelles)
+            $form->remove('plainPassword');
 
         $request = $this->get('request');
         
@@ -496,7 +498,6 @@ class UserController extends Controller
                 	    return $this->redirect( $this->generateUrl('hopital_numerique_user_edit', array( 'id' => $user->getId())) );
                 	    break;
                 }
-                //return $this->redirect( ( $do == 'save-close' ? $this->generateUrl('hopital_numerique_user_homepage') : $this->generateUrl('hopital_numerique_user_edit', array( 'id' => $user->getId() ) ) ) );
             }
         }
         

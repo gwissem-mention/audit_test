@@ -2,11 +2,7 @@
 namespace HopitalNumerique\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Nodevo\ToolsBundle\Tools\Chaine;
-use Nodevo\RoleBundle\Entity\Role;
-use HopitalNumerique\QuestionnaireBundle\Manager;
 use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 
 /**

@@ -250,7 +250,7 @@ class MailManager extends BaseManager
      *
      * @return string
      */
-    private function _replaceContent( $content, $user, $options)
+    private function _ReplaceContent( $content, $user, $options)
     {
         //Si il y a des variables spécifique dans le template courant
         if(!empty($options))
@@ -261,8 +261,6 @@ class MailManager extends BaseManager
                 $variableARemplacer = '%' . $key;
                 //Remplacement de la mise en forme
                 $message = nl2br($option);
-                //Remplacement des sauts de lignes
-                $message2 = str_replace(array("\r\n", "\n", "\r"),'<br />',$message);
                 //Mise à jour du body du mail
                 $content = str_replace($variableARemplacer, $message, $content);
             }
@@ -286,7 +284,7 @@ class MailManager extends BaseManager
      * 
      * @return Swift_Message objet \Swift pour l'envoie du mail
      */
-    private function _generationMail( $user, $mail, $options = array() )
+    private function _GenerationMail( $user, $mail, $options = array() )
     {        
         //prepare content
         $content         = $this->_replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user, $options);
