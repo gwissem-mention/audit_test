@@ -8,7 +8,6 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire as HopiQuestionnai
 use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\DBAL\Types\VarDateTimeType;
 
 /**
  * Controller des Questionnaire

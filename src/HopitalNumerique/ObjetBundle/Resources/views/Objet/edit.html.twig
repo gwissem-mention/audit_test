@@ -52,10 +52,10 @@
 {% block toolbarButton %}
     {% if objet.id %}
         <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_cancel', { 'id': objet.id }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+        <a class="btn btn-default" href="{{ path('hopital_numerique_recherche_publication_objet', { 'id': objet.id }) }}" target="_blank" title="Prévisualiser"><i class="fa fa-eye"></i></a>
     {% else %}
         <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     {% endif %}
-    <a class="btn btn-default" href="{{ path('hopital_numerique_recherche_publication_objet', { 'id': objet.id }) }}" target="blank" title="Retour à la liste"><i class="fa fa-eye"></i></a>
     <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
     <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
     {% if objet.id %}
