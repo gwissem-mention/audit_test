@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -132,21 +131,26 @@ class ObjetController extends Controller
     /**
      * Action appelée dans le plugin "Publication" pour tinymce
      */
-    public function getObjetsAction(){
+    public function getObjetsAction()
+    {
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
         $return = array();
-        $ids = array();
+        $ids    = array();
+
         foreach( $objets as $one ){
             $ids[] = $one->getId();
         }
+
         $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjets($ids);
-        foreach( $objets as $one ){
+        foreach( $objets as $one ) {
             $return[] = array(
                 "text" => $one->getTitre(), "value" => "PUBLICATION:" . $one->getId()
             );
+
             if( !isset($contenus[ $one->getId() ]) || count( $contenus[ $one->getId() ] ) <= 0 ){
                 continue;
             }
+
             foreach( $contenus[ $one->getId() ] as $content ){
                 $return[] = array(
                     "text" => "|--" . $content->titre, "value" => "INFRADOC:" . $content->id
@@ -178,7 +182,8 @@ class ObjetController extends Controller
      * 
      * @return void
      */
-    private function getObjetsChilds( &$return, $objet, $level = 1 ){
+    private function getObjetsChilds( &$return, $objet, $level = 1 )
+    {
         if( count($objet->childs) > 0 ){
             foreach( $objet->childs as $child ){
                 $texte = str_pad($child->titre, strlen($child->titre) + ($level*3), "|--", STR_PAD_LEFT);
@@ -208,7 +213,6 @@ class ObjetController extends Controller
 
             //Vérification de la présence rôle et des types
             $formTypes = $form->get("types")->getData();
-//            $formType  = !is_null($formTypes) ? $formTypes[0] : null;
 
             if( is_null($formTypes) ) {
                 $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un type d\'objet.' );
@@ -228,6 +232,11 @@ class ObjetController extends Controller
                 //si l'alias est vide, on le génère depuis le titre
                 $tool = new Chaine( ( $objet->getAlias() == '' ? $objet->getTitre() : $objet->getAlias() ) );
                 $objet->setAlias( $tool->minifie() );
+
+                //if not new : reinit isArticle
+                if( !$new ){
+                    
+                }
 
                 //Test if alias already exist
                 if( $this->get('hopitalnumerique_objet.manager.objet')->testAliasExist( $objet, $new ) ){

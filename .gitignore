@@ -9,9 +9,6 @@
 /vendor/
 /bin/
 
-#Mac OSX 
-.DS_Store
-
 #Net Beans
 .buildpath
 .project

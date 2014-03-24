@@ -74,8 +74,21 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.cacheBoutonsAc
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormulaireCreation = function()
 {
+    var formulaireVerification = HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampObjets();
+    var formulaireVerification = (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampEtablissements() && formulaireVerification);
+    
+    return formulaireVerification;
+};
+/**
+ * Vérifie, avant soumission, le champ Objets du formulaire de demande d'intervention.
+ * 
+ * @return boolean VRAI ssi le champ est valide
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampObjets = function()
+{
     var objetsChamp = $('select.hopitalnumerique_interventionbundle_interventiondemande_objets');
-    var objetsChampEngineValidator = $('div.hopitalnumerique_interventionbundle_interventiondemande_objets ul.select2-choices');
+    //var objetsChampEngineValidator = $('div.hopitalnumerique_interventionbundle_interventiondemande_objets ul.select2-choices');
+    var objetsChampEngineValidator = $($('div#s2id_' + $('select.hopitalnumerique_interventionbundle_interventiondemande_objets').prop('id')));
     
     if ($(objetsChamp).val() == null)
     {
@@ -86,6 +99,32 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormula
 
     return true;
 };
+/**
+ * Vérifie, avant soumission, le champ Établissements du formulaire de demande d'intervention.
+ * 
+ * @return boolean VRAI ssi le champ est valide
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampEtablissements = function()
+{
+    // Obligatoire que pour le CMSI
+    var objetsChamp = $('select#hopitalnumerique_interventionbundle_interventiondemande_cmsi_etablissements');
+    
+    if ($(objetsChamp).size() > 0)
+    {
+        //var objetsChampEngineValidator = $('div.hopitalnumerique_interventionbundle_interventiondemande_etablissements ul.select2-choices');
+        var objetsChampEngineValidator = $('div#s2id_hopitalnumerique_interventionbundle_interventiondemande_cmsi_etablissements');
+        
+        if ($(objetsChamp).val() == null)
+        {
+            $(objetsChampEngineValidator).validationEngine('showPrompt', '* Ce champ est requis', 'red', 'topRight', true);
+            return false;
+        }
+        else $(objetsChampEngineValidator).validationEngine('hide');
+    }
+
+    return true;
+};
+
 
 /**
  * Modifie l'état de la demande d'intervention en refusé.

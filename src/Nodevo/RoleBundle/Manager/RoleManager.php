@@ -79,7 +79,6 @@ class RoleManager extends BaseManager
 
         /**
          * Ajout de l'id en fin de code
-         * @todo  : pas super propre, à revoir surement
          */
         if( $code !== false){
             $role->setRole($code . $role->getId() );

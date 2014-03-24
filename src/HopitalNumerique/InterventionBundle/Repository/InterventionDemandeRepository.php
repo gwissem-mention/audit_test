@@ -398,7 +398,7 @@ class InterventionDemandeRepository extends EntityRepository
      */
     public function getGridDonnees_EtablissementDemandes(User $referent)
     {
-        // Ignorer les demandes groupées pour un même référence
+        // Ignorer les demandes groupées pour un même référent
         $requeteDemandesGroupees = $this->_em->createQueryBuilder()
             ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
             ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementIgnore')

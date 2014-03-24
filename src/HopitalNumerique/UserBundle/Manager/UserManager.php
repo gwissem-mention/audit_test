@@ -3,7 +3,6 @@
 namespace HopitalNumerique\UserBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
-use Symfony\Component\Security\Core\User\UserInterface;
 use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 
 class UserManager extends BaseManager

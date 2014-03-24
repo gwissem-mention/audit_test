@@ -2,12 +2,14 @@
 namespace HopitalNumerique\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+<<<<<<< HEAD
 use Nodevo\ToolsBundle\Tools\Chaine;
 use Nodevo\RoleBundle\Entity\Role;
 use HopitalNumerique\QuestionnaireBundle\Manager;
 use HopitalNumerique\UserBundle\Entity\User;
+=======
+>>>>>>> ef706232cccf25a8fe8e74d9dbbce3d2203d6085
 
 /**
  * Controller des utilisateurs
@@ -213,7 +215,7 @@ class UserController extends Controller
             $where['typeOrganisme'] = $idTypeEtablissement;
         }
         
-        $etablissements       = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( $where );
+        $etablissements = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( $where );
     
         return $this->render('HopitalNumeriqueUserBundle:User:etablissements.html.twig', array(
                 'etablissements' => $etablissements

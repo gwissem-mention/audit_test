@@ -9,14 +9,9 @@ use Nodevo\MenuBundle\Entity\Menu;
 
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\Common\Collections\Criteria;
-use Symfony\Component\HttpFoundation\Response;
-
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Manager de l'entité Menu
- * 
- * @author Emmanuel Da Fonseca<edafonseca@nodevo.com>
  */
 class MenuManager extends BaseManager
 {
