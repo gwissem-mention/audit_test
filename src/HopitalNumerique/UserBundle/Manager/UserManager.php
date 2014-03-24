@@ -169,6 +169,19 @@ class UserManager extends BaseManager
         return $this->getRepository()->findUsersByRole($role)->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * Retourne le premier utilisateur correspondant au role et à la région demandés
+     *
+     * @param string $role      Le rôle demandé
+     * @param int    $idRegion  Region demandée
+     *
+     * @return array
+     */
+    public function findUsersByRoleAndRegion( $idregion, $role )
+    {
+        return $this->getRepository()->findUsersByRoleAndRegion($idregion, $role)->getQuery()->getOneOrNullResult();
+    }
+
 
 
 

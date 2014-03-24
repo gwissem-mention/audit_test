@@ -132,7 +132,11 @@ $(document).ready(function() {
         } else {
             $('#hopitalnumerique_objet_objet_modified').val(0);
         }
-    });    
+    });
+
+    $("#hopitalnumerique_objet_objet_roles").nSelect({
+        formatNoMatches : function(){ return 'Aucune donnée trouvée'; }
+    });
 });
 
 //met un loader sur le formulaire et sauvegarde automatiquement le formulaire objet

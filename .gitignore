@@ -17,6 +17,11 @@
 .project
 .settings
 
+#SublimeText
+hopitalnumerique.sublime-project
+hopitalnumerique.sublime-workspace
+composer.sublime-workspace
+
 #Windows
 .thumbs
 

@@ -268,8 +268,11 @@ class MailManager extends BaseManager
             }
         }
         
-        $content = str_replace('%u', $user->getPrenom() . ' ' . $user->getNom(), $content);
-        $content = str_replace('%p', $user->getPlainPassword(), $content);
+        if(!is_null($user))
+        {
+            $content = str_replace('%u', $user->getPrenom() . ' ' . $user->getNom(), $content);
+            $content = str_replace('%p', $user->getPlainPassword(), $content);            
+        }
    
         return $content;
     }

@@ -8,7 +8,6 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire as HopiQuestionnai
 use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\DBAL\Types\VarDateTimeType;
 
 /**
  * Controller des Questionnaire
@@ -276,8 +275,7 @@ class QuestionnaireController extends Controller
                         
                         //CMSI
                         $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
-                        //$CMSI = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('region' => $user->getRegion(), 'actif' => 3));
-                        $CMSI = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => 11));
+                        $CMSI = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');
                         $variablesTemplate = array(
                         	'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
                             'questionnaire' => $candidature
