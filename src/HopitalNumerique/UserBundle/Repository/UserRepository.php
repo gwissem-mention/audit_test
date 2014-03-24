@@ -201,6 +201,28 @@ class UserRepository extends EntityRepository
         return $qb;
     }
 
+    /**
+     * Retourne le premier utilisateur correspondant au role et à la région demandés
+     *
+     * @param string $role      Le rôle demandé
+     * @param int    $idRegion  Region demandée
+     *
+     * @return QueryBuilder
+     */
+    public function findUsersByRoleAndRegion( $idRegion, $role )
+    {
+        $qb = $this->_em->createQueryBuilder();
+    
+        $qb->select('user')
+        ->from('HopitalNumeriqueUserBundle:User', 'user')
+        ->where('user.roles LIKE :role')
+        ->setParameter('role', '%'.$role.'%')
+        ->andWhere('user.region = :idRegion')
+        ->setParameter('idRegion', $idRegion)
+        ->andWhere('user.enabled = 1');
+    
+        return $qb;
+    }
 
 
 
