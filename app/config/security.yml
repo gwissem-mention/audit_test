@@ -32,7 +32,7 @@ security:
                 check_path: account_login_check
                 provider: fos_userbundle
                 remember_me:  true
-                always_use_default_target_path : true
+                always_use_default_target_path : false
                 default_target_path: hopital_numerique_user_informations_personnelles
                 use_referer : true
                 csrf_provider: form.csrf_provider
@@ -52,7 +52,7 @@ security:
                 check_path: fos_user_security_check
                 provider: fos_userbundle
                 remember_me:  true
-                always_use_default_target_path : true
+                always_use_default_target_path : false
                 default_target_path: hopital_numerique_admin_homepage
                 use_referer : true
                 csrf_provider: form.csrf_provider
@@ -73,7 +73,7 @@ security:
                 check_path: account_login_check
                 provider: fos_userbundle
                 remember_me:  true
-                always_use_default_target_path : true
+                always_use_default_target_path : false
                 default_target_path: hopital_numerique_user_informations_personnelles 
                 use_referer : true
                 csrf_provider: form.csrf_provider
