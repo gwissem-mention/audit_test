@@ -49,6 +49,11 @@ class CmsiType extends InterventionDemandeType
                     'label' => 'Commentaire CMSI',
                     'required' => false,
                     'read_only' => false
+            ))
+            ->add('autresEtablissements', 'textarea', array(
+                'label' => 'Attacher d\'autres établissements à ma demande',
+                'required' => true,
+                'attr' => array('class' => 'validate[required]')
             ));
     }
 
