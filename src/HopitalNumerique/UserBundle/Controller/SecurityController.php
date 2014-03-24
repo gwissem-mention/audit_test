@@ -13,7 +13,7 @@ class SecurityController extends BaseController
     /**
      * {@inheritDoc}
      */
-    public function renderLogin(array $data)
+    protected function renderLogin(array $data)
     {
         //Si il n'y a pas d'utilisateur connecté on affiche le login
         if(!$this->container->get('security.context')->isGranted('ROLE_USER'))
