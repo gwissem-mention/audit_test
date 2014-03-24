@@ -27,6 +27,8 @@ DELETE FROM `core_mail` WHERE `core_mail`.`mail_id` = 23;
 INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`) VALUES
 (24, '[HOPITALNUMERIQUE] - Candidature ambassadeur', 'Nouvelle candidature ambassadeur / Envoie CMSI', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\n\n %candidat vient de soumettre une candidature ambassadeur. \n\nVoici ses informations : \n%candidature \n\nCordialement,');
 
+UPDATE `core_ressource` SET `res_pattern` = '/^\\/compte-hn\\/(informations-personnelles|mot-de-passe)/' WHERE `core_ressource`.`res_id` = 18;
+
 
 ---------------------------------------------------------------------------------------------
 /* RLE - 13/02/2014
