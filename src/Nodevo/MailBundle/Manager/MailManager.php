@@ -74,7 +74,7 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(1);
         
-        return $this->_generationMail($user, $mail);
+        return $this->_GenerationMail($user, $mail);
     }  
 
     /**
@@ -88,7 +88,7 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(2);
         
-        return $this->_generationMail($user, $mail);
+        return $this->_GenerationMail($user, $mail);
     }
     
     /**
@@ -102,7 +102,7 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(8);
         
-        return $this->_generationMail($user, $mail);
+        return $this->_GenerationMail($user, $mail);
     }
     
     /**
@@ -116,7 +116,7 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(9);
     
-        return $this->_generationMail($user, $mail);
+        return $this->_GenerationMail($user, $mail);
     }
     
     /**
@@ -131,7 +131,7 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(24);
     
-        return $this->_generationMail($user, $mail, $options);
+        return $this->_GenerationMail($user, $mail, $options);
     }
     
 
@@ -147,7 +147,7 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(11);
     
-        return $this->_generationMail($user, $mail);
+        return $this->_GenerationMail($user, $mail);
     }
     
     /**
@@ -161,7 +161,7 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(12);
     
-        return $this->_generationMail($user, $mail);
+        return $this->_GenerationMail($user, $mail);
     }
     
     /**
@@ -176,7 +176,7 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(13);
     
-        return $this->_generationMail($user, $mail, $options);
+        return $this->_GenerationMail($user, $mail, $options);
     }
     
     /**
@@ -191,7 +191,7 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(14);
     
-        return $this->_generationMail($user, $mail, $options);
+        return $this->_GenerationMail($user, $mail, $options);
     }
    
     /**
@@ -287,7 +287,7 @@ class MailManager extends BaseManager
     private function _GenerationMail( $user, $mail, $options = array() )
     {        
         //prepare content
-        $content         = $this->_replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user, $options);
+        $content         = $this->_ReplaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user, $options);
         $templateFile    = "NodevoMailBundle::template.mail.html.twig";
         $templateContent = $this->_twig->loadTemplate($templateFile);
     
