@@ -165,7 +165,8 @@ class UserType extends AbstractType
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ro')
                                   ->where('ro.etat != :etat')
-                                  ->setParameter('etat', 4);
+                                  ->setParameter('etat', 4)
+                                  ->orderBy('ro.name');
                     },
                     'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
                 ));
