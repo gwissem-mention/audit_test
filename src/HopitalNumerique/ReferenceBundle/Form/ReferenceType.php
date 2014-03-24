@@ -11,12 +11,10 @@ use Doctrine\ORM\EntityRepository;
 class ReferenceType extends AbstractType
 {
     private $_constraints = array();
-    private $_manager;
 
     public function __construct($manager, $validator)
     {
         $this->_constraints = $manager->getConstraints( $validator );
-        //$this->_manager     = $manager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)

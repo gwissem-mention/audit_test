@@ -257,7 +257,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                        <label for="hopitalnumerique_objet_objet_resume"><span class="resumeLabel">Résumé</span> <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
+                                        <label for="hopitalnumerique_objet_objet_resume">{% if objet.getIsArticle() %}Texte de l'article{% else %}Résumé{% endif %} <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
                                     </div>
                                     <div class="col-md-12">
                                         {{ form_widget(form.resume) }}
@@ -268,7 +268,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group blocSynthese {% if objet.id and objet.getIsArticle() %}hide{% endif %}">
+                                <div class="form-group blocSynthese {% if objet.getIsArticle() %}hide{% endif %}">
                                     <div class="col-md-12">
                                         <label for="hopitalnumerique_objet_objet_synthese">Synthèse</label>
                                     </div>
@@ -318,6 +318,8 @@
             {% endif %}
             <input type="hidden" id="getObjets" value="{{path('hopitalnumerique_objet_objet_getObjets')}}" />
             <input type="hidden" id="objet-file-url" value="{{path('hopitalnumerique_objet_objet_isFileExist')}}" />
+            <input type="hidden" id="objet-addobjet-url" value="{{path('hopitalnumerique_objet_objet_add')}}" />
+            <input type="hidden" id="objet-addarticle-url" value="{{path('hopitalnumerique_objet_objet_add', {'type':2})}}" />
         </div>
     </div>
 {% endblock %}

@@ -4,8 +4,8 @@ hopitalnumerique_objet_objet:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:index" }
 
 hopitalnumerique_objet_objet_add:
-    pattern:  /objet/add
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:add" }
+    pattern:  /objet/add/{type}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:add", type:1 }
 
 hopitalnumerique_objet_objet_isFileExist:
     pattern:  /objet/isFileExist
