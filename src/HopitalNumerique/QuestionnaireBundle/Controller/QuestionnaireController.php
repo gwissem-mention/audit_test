@@ -276,8 +276,8 @@ class QuestionnaireController extends Controller
                         
                         //CMSI
                         $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
-                        //$CMSI = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('region' => $user->getRegion(), 'actif' => 3));
-                        $CMSI = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => 11));
+                        $CMSI = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('region' => $user->getRegion(), 'actif' => 3));
+                        //$CMSI = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => 11));
                         $variablesTemplate = array(
                         	'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
                             'questionnaire' => $candidature
