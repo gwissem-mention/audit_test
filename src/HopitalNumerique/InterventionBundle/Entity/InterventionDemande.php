@@ -222,10 +222,10 @@ class InterventionDemande
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interv")
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinTable(name="hn_intervention_ambassadeur_historique",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id")
+     *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
      *     @ORM\JoinColumn(name="ambassadeur_ancien_id", referencedColumnName="usr_id")
@@ -237,10 +237,10 @@ class InterventionDemande
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="HopitalNumerique\EtablissementBundle\Entity\Etablissement", inversedBy="interv")
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\EtablissementBundle\Entity\Etablissement")
      * @ORM\JoinTable(name="hn_intervention_etablissement_rattache",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id")
+     *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
      *     @ORM\JoinColumn(name="eta_id", referencedColumnName="eta_id")
@@ -252,10 +252,10 @@ class InterventionDemande
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet", inversedBy="interv")
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet")
      * @ORM\JoinTable(name="hn_intervention_objet",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id")
+     *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
      *     @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")
@@ -265,6 +265,16 @@ class InterventionDemande
      */
     private $objets;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InterventionRegroupement", mappedBy="interventionDemandePrincipale", cascade={"persist", "remove" })
+     */
+    private $interventionRegroupementsDemandesPrincipales;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InterventionRegroupement", mappedBy="interventionDemandeRegroupee", cascade={"persist", "remove" })
+     */
+    private $interventionRegroupementsDemandesRegroupees;
+    
     /**
      * Constructor
      */

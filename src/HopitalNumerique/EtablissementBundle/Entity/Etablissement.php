@@ -155,7 +155,7 @@ class Etablissement
         return sprintf('%s - %s', $this->nom, $this->finess);
     }
     
-    // v -------- Utilisateur  -------- v    
+    // v -------- Utilisateur  -------- v
 
     public function __construct()
     {

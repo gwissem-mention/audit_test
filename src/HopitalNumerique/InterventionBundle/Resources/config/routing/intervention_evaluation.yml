@@ -1,6 +1,6 @@
 hopital_numerique_intervention_evaluation_nouveau:
     pattern:  /demande/{interventionDemande}/evaluation/nouveau
-    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Evaluation:nouveau" }
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Evaluation:nouveau", interventionDemande: 0 }
     requirements:
         interventionDemande: \d+
 
@@ -12,7 +12,7 @@ hopital_numerique_intervention_evaluation_form:
 
 hopital_numerique_intervention_evaluation_voir:
     pattern:  /demande/{interventionDemande}/evaluation/voir
-    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Evaluation:voir" }
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Evaluation:voir", interventionDemande: 0 }
     requirements:
         interventionDemande: \d+
 

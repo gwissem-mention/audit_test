@@ -421,6 +421,25 @@ class User extends BaseUser
      * @Nodevo\Javascript(class="validate[required]")
      */
     protected $termsAccepted;
+    
+    
+    // ------- Interventions -------
+    /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="referent", cascade={"persist", "remove" })
+     */
+    protected $interventionDemandesReferent;
+    /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="ambassadeur", cascade={"persist", "remove" })
+     */
+    protected $interventionDemandesAmbassadeur;
+    /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="cmsi", cascade={"persist", "remove" })
+     */
+    protected $interventionDemandesCmsi;
+    /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="directeur", cascade={"persist", "remove" })
+     */
+    protected $interventionDemandesDirecteur;
 
     /**
      * Constructor

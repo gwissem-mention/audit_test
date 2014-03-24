@@ -202,7 +202,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
             if ($interventionDemandeFormulaire->isValid())
             {
                 $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
-                $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été modifiée et sera étudiée.');
+                $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été modifiée.');
             }
             else
             {
