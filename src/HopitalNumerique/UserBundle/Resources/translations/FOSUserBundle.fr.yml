@@ -11,6 +11,9 @@ group:
         created: Le groupe a été créé
         deleted: Le groupe a été supprimé
 
+#Temps de session expirée
+"Your session has timed out, or you have disabled cookies.": Votre session a expirée ou vous avez désactivé vos cookies.
+
 # Security
 "Bad credentials": Nom du compte ou mot de passe incorrect.
 
