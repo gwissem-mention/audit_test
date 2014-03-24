@@ -222,13 +222,13 @@ class InterventionDemande
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interv")
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="anciennesInterventionsDemandesAmbassadeur", cascade={"remove" })
      * @ORM\JoinTable(name="hn_intervention_ambassadeur_historique",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id")
+     *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id", onDelete="CASCADE")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="ambassadeur_ancien_id", referencedColumnName="usr_id")
+     *     @ORM\JoinColumn(name="ambassadeur_ancien_id", referencedColumnName="usr_id", onDelete="CASCADE")
      *   }
      * )
      */
@@ -265,6 +265,16 @@ class InterventionDemande
      */
     private $objets;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InterventionRegroupement", mappedBy="interventionDemandePrincipale", cascade={"persist", "remove" })
+     */
+    private $interventionRegroupementsDemandesPrincipales;
+
+    /**
+     * @ORM\OneToMany(targetEntity="InterventionRegroupement", mappedBy="interventionDemandeRegroupee", cascade={"persist", "remove" })
+     */
+    private $interventionRegroupementsDemandesRegroupees;
+    
     /**
      * Constructor
      */

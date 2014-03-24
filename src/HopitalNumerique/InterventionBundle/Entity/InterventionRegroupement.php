@@ -12,6 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
 class InterventionRegroupement
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="intervreg_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+    
+    /**
      * @var \InterventionRegroupementType
      *
      * @ORM\ManyToOne(targetEntity="InterventionRegroupementType")
@@ -24,9 +33,7 @@ class InterventionRegroupement
     /**
      * @var \InterventionDemande
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="InterventionDemande")
+     * @ORM\ManyToOne(targetEntity="InterventionDemande", inversedBy="interventionRegroupementsDemandesPrincipales")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="interv_principale_id", referencedColumnName="interv_id")
      * })
@@ -36,9 +43,7 @@ class InterventionRegroupement
     /**
      * @var \InterventionDemande
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="InterventionDemande")
+     * @ORM\ManyToOne(targetEntity="InterventionDemande", inversedBy="interventionRegroupementsDemandesRegroupees")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="interv_regroupee_id", referencedColumnName="interv_id")
      * })
