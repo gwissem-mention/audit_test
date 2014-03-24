@@ -3,7 +3,6 @@
 namespace HopitalNumerique\UserBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
-use HopitalNumerique\UserBundle\Entity\RefusCandidature;
 
 /**
  * Manager de l'entité Contractualisation.
