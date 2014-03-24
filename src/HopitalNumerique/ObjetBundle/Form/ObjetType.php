@@ -62,8 +62,10 @@ class ObjetType extends AbstractType
                 'attr'          => array( 'placeholder' => 'Selectionnez le ou les types de cet objet' ),
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
-                              ->andWhere('ref.code = :etat','ref.id != 175')
-                              ->setParameter('etat', 'CATEGORIE_OBJET')
+                              ->andWhere('ref.id != 175', 'ref.id != 188')
+                              ->andWhere('ref.code = :objet OR ref.code = :article')
+                              ->setParameter('objet', 'CATEGORIE_OBJET')
+                              ->setParameter('article', 'CATEGORIE_ARTICLE')
                               ->orderBy('ref.parent, ref.order', 'ASC');
                 }
             ))
@@ -160,7 +162,7 @@ class ObjetType extends AbstractType
                 'mapped'   => false
             ))
             ->add('isArticle', 'hidden', array(
-                'data' => 0
+                
             ));
     }
 

@@ -233,6 +233,11 @@ class ObjetController extends Controller
                 $tool = new Chaine( ( $objet->getAlias() == '' ? $objet->getTitre() : $objet->getAlias() ) );
                 $objet->setAlias( $tool->minifie() );
 
+                //if not new : reinit isArticle
+                if( !$new ){
+                    
+                }
+
                 //Test if alias already exist
                 if( $this->get('hopitalnumerique_objet.manager.objet')->testAliasExist( $objet, $new ) ){
                     $this->get('session')->getFlashBag()->add('danger', 'Cet Alias existe déjà.' );

@@ -203,8 +203,10 @@ class Objet
      *         "application/xls", 
      *         "application/x-xls", 
      *         "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
-     *         "application/vnd.ms-powerpoint", 
      *         "application/vnd.openxmlformats-officedocument.presentationml.presentation", 
+     *         "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+     *         "application/vnd.openxmlformats-officedocument.presentationml.slide",
+     *         "application/vnd.ms-powerpoint",
      *         "image/gif", 
      *         "image/jpeg", 
      *         "image/png", 
@@ -224,7 +226,7 @@ class Objet
      * )
      */
     public $file;
-
+    
     /**
      * @Assert\File(
      *     maxSize = "10M",
@@ -236,8 +238,10 @@ class Objet
      *         "application/xls", 
      *         "application/x-xls", 
      *         "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
-     *         "application/vnd.ms-powerpoint", 
      *         "application/vnd.openxmlformats-officedocument.presentationml.presentation", 
+     *         "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+     *         "application/vnd.openxmlformats-officedocument.presentationml.slide",
+     *         "application/vnd.ms-powerpoint",
      *         "image/gif", 
      *         "image/jpeg", 
      *         "image/png", 
