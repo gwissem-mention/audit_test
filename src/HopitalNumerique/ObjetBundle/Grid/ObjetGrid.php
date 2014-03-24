@@ -29,8 +29,13 @@ class ObjetGrid extends Grid implements IGrid
     public function setColumns()
     {
         $this->addColonne( new Column\TextColumn('titre', 'Titre') );
-        $this->addColonne( new Column\TextColumn('types','Types') );
+        $this->addColonne( new Column\TextColumn('types','Catégories') );
         
+        $isArticleColumn = new Column\BooleanColumn('isArticle', 'Article');
+        $isArticleColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
+        $isArticleColumn->setSize( 90 );
+        $this->addColonne( $isArticleColumn );
+
         $infraColumn = new Column\BooleanColumn('isInfraDoc', 'Infra-doc');
         $infraColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
         $infraColumn->setSize( 90 );

@@ -144,9 +144,6 @@ class ContractualisationController extends Controller
      */
     public function listeAction( $idUser )
     {
-        //récupération de l'utilisateur
-        $user = $this->get('hopitalnumerique_user.manager.user')->findOneById($idUser);
-        
         //récupération des contractualisations
         $contractualisations = $this->get('hopitalnumerique_user.manager.contractualisation')->findBy(array('user' => $idUser));
         

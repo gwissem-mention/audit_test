@@ -18,6 +18,8 @@ class ObjetType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $datas = $options['data'] ;
+        
         $builder
             ->add('titre', 'text', array(
                 'max_length' => $this->_constraints['titre']['maxlength'],
@@ -50,23 +52,32 @@ class ObjetType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'label'    => 'Interdire l\'accès au groupes',
-                'attr'     => array( 'placeholder' => 'Selectionnez le ou les rôles qui auront accès à cet objet' )
+                'attr'     => array( 'placeholder' => 'Selectionnez le ou les rôles qui auront accès à cette publication' )
             ))
             ->add('types', 'genemu_jqueryselect2_entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'      => 'libelle',
                 'required'      => true,
                 'multiple'      => true,
-                'label'         => 'Type d\'objet',
+                'label'         => 'Catégorie',
                 'group_by'      => 'parentName',
-                'attr'          => array( 'placeholder' => 'Selectionnez le ou les types de cet objet' ),
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                              ->andWhere('ref.id != 175', 'ref.id != 188')
-                              ->andWhere('ref.code = :objet OR ref.code = :article')
-                              ->setParameter('objet', 'CATEGORIE_OBJET')
-                              ->setParameter('article', 'CATEGORIE_ARTICLE')
-                              ->orderBy('ref.parent, ref.order', 'ASC');
+                'attr'          => array( 'placeholder' => 'Selectionnez le ou les catégories de cette publication' ),
+                'query_builder' => function(EntityRepository $er) use ($datas) {
+                    $qb = $er->createQueryBuilder('ref');
+
+                    //cas objet existe + is ARTICLE
+                    if( $datas->getIsArticle() ){
+                        $qb->andWhere('ref.id != 188','ref.code = :article')
+                           ->setParameter('article', 'CATEGORIE_ARTICLE');
+                    //cas objet existe + is OBJET
+                    }elseif( !$datas->getIsArticle() ) {
+                        $qb->andWhere('ref.id != 175','ref.code = :objet')
+                           ->setParameter('objet', 'CATEGORIE_OBJET');
+                    }
+
+                    $qb->orderBy('ref.parent, ref.order', 'ASC');
+
+                    return $qb;
                 }
             ))
             ->add('synthese', 'textarea', array(
@@ -80,12 +91,12 @@ class ObjetType extends AbstractType
             ))
             ->add('file', 'file', array(
                 'required' => false, 
-                'label'    => 'Fichier objet 1'
+                'label'    => 'Fichier 1'
             ))
             ->add('path', 'hidden')
             ->add('file2', 'file', array(
                 'required' => false, 
-                'label'    => 'Fichier objet 2'
+                'label'    => 'Fichier 2'
             ))
             ->add('path2', 'hidden')
             ->add('references', 'entity', array(
@@ -101,7 +112,7 @@ class ObjetType extends AbstractType
                 'required' => false,
                 'multiple' => true,
                 'label'    => 'Ambassadeurs concernés',
-                'attr'     => array( 'placeholder' => 'Selectionnez le ou les ambassadeurs qui sont concernés par cet objet' ),
+                'attr'     => array( 'placeholder' => 'Selectionnez le ou les ambassadeurs qui sont concernés par cette publication' ),
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('user')
                               ->where('user.roles LIKE :ambassadeur')
