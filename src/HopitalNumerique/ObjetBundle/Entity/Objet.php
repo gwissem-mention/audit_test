@@ -619,7 +619,7 @@ class Objet
      *
      * @return boolean $isArticle
      */
-    public function getIsArticle()
+    public function isArticle()
     {
         return $this->isArticle;
     }
@@ -629,7 +629,7 @@ class Objet
      *
      * @param boolean $isArticle
      */
-    public function setIsArticle($isArticle)
+    public function setArticle($isArticle)
     {
         $this->isArticle = $isArticle;
     }

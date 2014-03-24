@@ -53,13 +53,13 @@ class RequeteController extends Controller
         //s'il n'existe pas encore de requête pour cet utilisateur, on met celle la en requête par défaut
         $tmp = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user ) );
         if( !$tmp )
-            $requete->setIsDefault( true );
+            $requete->setDefault( true );
 
         $this->get('hopitalnumerique_recherche.manager.requete')->save( $requete );
 
         $path = $this->generateUrl('hopital_numerique_recherche_homepage_requete', array('id'=>$requete->getId()));
 
-        return new Response('{"success":true, "id":'.$requete->getId().', "nom":"'.$requete->getNom().'", "path":"'.$path.'","add":'.$add.', "def":'.( $requete->getIsDefault() ? 1 : 0 ).'}', 200);
+        return new Response('{"success":true, "id":'.$requete->getId().', "nom":"'.$requete->getNom().'", "path":"'.$path.'","add":'.$add.', "def":'.( $requete->isDefault() ? 1 : 0 ).'}', 200);
     }
 
     /**
@@ -70,7 +70,7 @@ class RequeteController extends Controller
     public function deleteAction($id)
     {
         $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'id' => $id ) );
-        $default = $requete->getIsDefault();
+        $default = $requete->isDefault();
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -82,7 +82,7 @@ class RequeteController extends Controller
         if($default){
             $newRequete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user) );
             if($newRequete){
-                $newRequete->setIsDefault(true);
+                $newRequete->setDefault(true);
                 $this->get('hopitalnumerique_recherche.manager.requete')->save( $newRequete );
             }
         }
@@ -125,7 +125,7 @@ class RequeteController extends Controller
         $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->findBy( array( 'user' => $user ) );
         foreach($requetes as $requete){
             $isDefault = $requete->getId() == $id ? true : false;
-            $requete->setIsDefault( $isDefault );
+            $requete->setDefault( $isDefault );
         }
         $this->get('hopitalnumerique_recherche.manager.requete')->save( $requetes );
 

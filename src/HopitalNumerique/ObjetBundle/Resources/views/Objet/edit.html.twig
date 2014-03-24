@@ -73,7 +73,7 @@
                 <div class="options">
                     <ul class="nav nav-tabs">
                         <li {% if not infra %}class="active"{% endif %}><a href="#objet" data-toggle="tab">Publication</a></li>
-                        {% if objet.id and not objet.getIsArticle() %}
+                        {% if objet.id and not objet.isArticle() %}
                             <li class="{% if infra %}active{% endif %}"><a href="#infra" data-toggle="tab">Infra-documentaire</a></li>
                         {% endif %}
                     </ul>
@@ -230,7 +230,7 @@
                                 </div>
                             </div>
                             <div class="col-md-8">
-                                <div class="form-group {% if not objet.id or (objet.id and objet.getIsArticle()) %}hide{% endif %}">
+                                <div class="form-group {% if not objet.id or (objet.id and objet.isArticle()) %}hide{% endif %}">
                                     <label class="col-md-11" >Notifier la mise à jour ?</label>
                                     <div class="col-md-1">
                                         <div class="pull-right toggle toggle-success"></div>
@@ -239,7 +239,7 @@
                                         {{ form_widget(form.modified) }}
                                     </div>
                                 </div>
-                                <div class="form-group {% if not objet.id or (objet.id and objet.getIsArticle()) %}hide{% endif %}">
+                                <div class="form-group {% if not objet.id or (objet.id and objet.isArticle()) %}hide{% endif %}">
                                     <label class="col-md-2" for="hopitalnumerique_objet_objet_references">Références</label>
                                     <div class="col-md-10">
                                         <a href="{{path('hopitalnumerique_objet_reference_objet_own', {'id':objet.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-eye"></i></a>
@@ -257,7 +257,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                        <label for="hopitalnumerique_objet_objet_resume">{% if objet.getIsArticle() %}Texte de l'article{% else %}Résumé{% endif %} <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
+                                        <label for="hopitalnumerique_objet_objet_resume">{% if objet.isArticle() %}Texte de l'article{% else %}Résumé{% endif %} <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
                                     </div>
                                     <div class="col-md-12">
                                         {{ form_widget(form.resume) }}
@@ -268,7 +268,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group blocSynthese {% if objet.getIsArticle() %}hide{% endif %}">
+                                <div class="form-group blocSynthese {% if objet.isArticle() %}hide{% endif %}">
                                     <div class="col-md-12">
                                         <label for="hopitalnumerique_objet_objet_synthese">Synthèse</label>
                                     </div>

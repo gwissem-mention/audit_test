@@ -11,16 +11,15 @@ class ItemType extends AbstractType
 {
     private $_constraints = array();
     private $_routes      = array();
+    private $_allRoutes   = array();
 
     public function __construct( $manager, $validator, $router )
     {
         $this->_constraints = $manager->getConstraints( $validator );
+        $this->_allRoutes   = $router->getRouteCollection()->all();
 
-        $collection = $router->getRouteCollection();
-        $allRoutes  = $collection->all();
-
-        foreach( $allRoutes as $key => $one ) {
-            if ( $key[0] != '_' ) {          
+        foreach( $this->_allRoutes as $key => $one ) {
+            if ( $key[0] != '_' ) {
                 $splitetKey = explode("_",$key);
                 $groupKey   = (count($splitetKey) >= 2) ? $splitetKey[0]."_".$splitetKey[1] : $key;
                 
@@ -31,6 +30,8 @@ class ItemType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $datas = $options['data'];
+
         $builder
             ->add('name', 'text', array(
                 'max_length' => $this->_constraints['name']['maxlength'],
@@ -45,16 +46,19 @@ class ItemType extends AbstractType
                 'empty_value' => ' - ',
                 'label'       => 'Route',
                 'required'    => false
-            ))
+            ));
 
-            ->add('routeAbsolute', 'checkbox', array(
-                'required' => false,
-                'label'    => 'Route absolue',
-                'attr'     => array( 'class'=> 'checkbox' )
-            ))
+        //Handle Route Parameters
+        $builder->add('routeParameters', new ParamsType( $this->_allRoutes[$datas->getRoute()], $datas->getRouteParameters()), array(
+            'required' => false, 
+            'label'    => 'Paramètres de la route sélectionnée',
+            'mapped' => false,
+            'data_class' => null
+        ));
 
+        $builder
             ->add('uri', 'text', array(
-                'max_length' => $this->_constraints['uri']['maxlength'], 
+                'max_length' => $this->_constraints['uri']['maxlength'],
                 'required'   => false, 
                 'label'      => 'URI'
             ))

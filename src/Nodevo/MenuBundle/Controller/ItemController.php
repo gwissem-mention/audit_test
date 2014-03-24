@@ -109,8 +109,7 @@ class ItemController extends Controller
                 $new = is_null($item->getId()) ? true : false;
 
                 //on manipule les paramètres de la route
-                $routeParametres = $this->_getPostRouteParametres();
-                $item->setRouteParameters( (count($routeParametres) == 0) ? null : json_encode($routeParametres) );
+                $item->setRouteParameters( $this->getPostRouteParametres( $request ) );
 
                 // On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('nodevo_menu.manager.item')->save($item);
@@ -141,14 +140,15 @@ class ItemController extends Controller
      * 
      * @return array Tableau associatif NomParametre => ValeurParametre
      */
-    private function _getPostRouteParametres()
+    private function getPostRouteParametres( $request )
     {
-        $routeParametres = array();
-        
-        foreach ($this->getRequest()->request->all() as $parametreName => $parametreValeur)
-            if (substr($parametreName, 0, 29) == 'nodevo_menu_item_route_param_')
-                $routeParametres[substr($parametreName, 29)] = $parametreValeur;
-        
-        return($routeParametres);
+        $datas           = $request->request->get('nodevo_menu_item');
+        $routeParameters = $datas['routeParameters'];
+        $params          = array();
+
+        foreach($routeParameters as $key => $val)
+            $params[ str_replace('routeParameters_', '', $key) ] = $val;
+
+        return json_encode($params);
     }
 }
