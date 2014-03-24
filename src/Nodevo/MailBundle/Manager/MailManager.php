@@ -193,6 +193,21 @@ class MailManager extends BaseManager
     
         return $this->_GenerationMail($user, $mail, $options);
     }
+    
+    /**
+     * Envoi un mail de recréation du mot de passe
+     *
+     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : 'nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendResetPasswordMail( $user, $options )
+    {
+        $mail = $this->findOneById(26);
+    
+        return $this->_GenerationMail($user, $mail, $options);
+    }
    
     /**
      * Retourne un email de test

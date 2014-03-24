@@ -1,6 +1,10 @@
 fos_user_security:
     prefix:   /admin
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    
+fos_user_registration:
+    prefix:   /compte-hn/mot-de-passe-perdu
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
 
 # ----- Front Office -----
 
