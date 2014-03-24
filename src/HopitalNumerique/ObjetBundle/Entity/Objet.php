@@ -3,7 +3,6 @@
 namespace HopitalNumerique\ObjetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;

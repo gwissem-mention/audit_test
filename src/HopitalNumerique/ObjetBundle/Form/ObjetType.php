@@ -158,6 +158,9 @@ class ObjetType extends AbstractType
             ))
             ->add('modified', 'hidden', array(
                 'mapped'   => false
+            ))
+            ->add('isArticle', 'hidden', array(
+                'data' => 0
             ));
     }
 
