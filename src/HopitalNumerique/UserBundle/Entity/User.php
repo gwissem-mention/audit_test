@@ -440,7 +440,6 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="directeur", cascade={"persist", "remove" })
      */
     protected $interventionDemandesDirecteur;
-    protected $anciennesInterventionsDemandesAmbassadeur;
 
     /**
      * Constructor
