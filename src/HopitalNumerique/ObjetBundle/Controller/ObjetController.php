@@ -49,9 +49,12 @@ class ObjetController extends Controller
     /**
      * Affiche le formulaire d'ajout de Objet.
      */
-    public function addAction()
+    public function addAction( $type )
     {
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->createEmpty();
+
+        if( $type == 2 )
+            $objet->setIsArticle(true);
 
         return $this->_renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig' );
     }
@@ -233,11 +236,6 @@ class ObjetController extends Controller
                 $tool = new Chaine( ( $objet->getAlias() == '' ? $objet->getTitre() : $objet->getAlias() ) );
                 $objet->setAlias( $tool->minifie() );
 
-                //if not new : reinit isArticle
-                if( !$new ){
-                    
-                }
-
                 //Test if alias already exist
                 if( $this->get('hopitalnumerique_objet.manager.objet')->testAliasExist( $objet, $new ) ){
                     $this->get('session')->getFlashBag()->add('danger', 'Cet Alias existe déjà.' );
@@ -249,6 +247,10 @@ class ObjetController extends Controller
                     ));
                 }
 
+                //Object security isArticle = false
+                if( is_null($objet->getIsArticle()) )
+                    $objet->setisArticle( false );
+                
                 //Met à jour la date de modification
                 $notify = $form->get("modified")->getData();
                 if( $notify === "1")

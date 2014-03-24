@@ -135,18 +135,16 @@ $(document).ready(function() {
     });
 
     //Toogle d'ajout seulement
-    $('.toggleType').toggles( { on : true, width:80, text : { on : 'Objet', off : 'Article' } } ).on('toggle', function (e, active) {
+    type = !$('#hopitalnumerique_objet_objet_isArticle').val();
+    $('.toggleType').toggles( { on : type, width:80, text : { on : 'Objet', off : 'Article' } } ).on('toggle', function (e, active) {
         if (active) { //type = objet
-            $('#hopitalnumerique_objet_objet_isArticle').val(0);
-            $('.blocSynthese').slideDown();
-            $('.resumeLabel').html('Résumé');
+            window.location = $('#objet-addobjet-url').val();
         } else { //type = article
-            $('#hopitalnumerique_objet_objet_isArticle').val(1);
-            $('.blocSynthese').slideUp();
-            $('.resumeLabel').html('Texte de l\'article');
+            window.location = $('#objet-addarticle-url').val();
         }
     });
 
+    //reprise du select2 avec le plugin nodevo : sélectionner tout
     $("#hopitalnumerique_objet_objet_roles").nSelect({
         formatNoMatches : function(){ return 'Aucune donnée trouvée'; }
     });
