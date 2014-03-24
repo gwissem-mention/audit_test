@@ -164,7 +164,7 @@ class ContenuManager extends BaseManager
      */
     public function getPrefix($contenu)
     {
-        return $this->getPrefix( $contenu, '' );
+        return $this->getPrefixRecursif( $contenu, '' );
     }
 
     /**
@@ -242,12 +242,12 @@ class ContenuManager extends BaseManager
      *
      * @return string
      */
-    private function getPrefix( $contenu, $prefix )
+    private function getPrefixRecursif( $contenu, $prefix )
     {
         $prefix = $contenu->getOrder() . '.' . $prefix;
 
         if( !is_null($contenu->getParent()) )
-            $prefix = $this->getPrefix($contenu->getParent(), $prefix);
+            $prefix = $this->getPrefixRecursif($contenu->getParent(), $prefix);
         
         return $prefix;
     }

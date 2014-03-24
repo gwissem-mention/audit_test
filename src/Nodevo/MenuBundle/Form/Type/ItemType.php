@@ -50,9 +50,9 @@ class ItemType extends AbstractType
 
         //Handle Route Parameters
         $builder->add('routeParameters', new ParamsType( $this->_allRoutes[$datas->getRoute()], $datas->getRouteParameters()), array(
-            'required' => false, 
-            'label'    => 'Paramètres de la route sélectionnée',
-            'mapped' => false,
+            'required'   => false, 
+            'label'      => 'Paramètres de la route sélectionnée',
+            'mapped'     => false,
             'data_class' => null
         ));
 
