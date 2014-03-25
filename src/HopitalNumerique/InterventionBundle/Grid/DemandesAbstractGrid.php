@@ -35,10 +35,10 @@ abstract class DemandesAbstractGrid extends Grid implements IGrid
         $colonneRegroupements->setFilterable(false)->setSortable(false);
         $colonneRegroupements->manipulateRenderCell(
             function($value, $row, $router) {
-                if (intval($row->getField('nombreRegroupements')) > 0)
-                {
-                    return '<img src="/bundles/hopitalnumeriquecore/img/common-sprite/users.png" width="16" height="14" title="Demandes regroupées">';
-                }
+                if (intval($row->getField('nombreDemandesRegroupees')) > 0)
+                    return '<img src="/bundles/hopitalnumeriqueintervention/img/regroupement_principale.png" width="16" height="14" title="Demande principale">';
+                if (intval($row->getField('nombreDemandesPrincipales')) > 0)
+                    return '<img src="/bundles/hopitalnumeriqueintervention/img/regroupement_groupee.png" width="16" height="14" title="Demande regroupée">';
                 return '';
             }
         );
