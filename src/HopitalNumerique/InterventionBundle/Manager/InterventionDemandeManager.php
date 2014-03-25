@@ -89,17 +89,16 @@ class InterventionDemandeManager extends BaseManager
      * Retourne les établissements rattachés et qui n'ont pas été regroupés (pour éviter les doublons lors de l'affichage).
      *
      * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionDemande $interventionDemande La demande d'intervention des établissements
-     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionRegroupement[] $interventionRegroupements Les regroupements d'intervention
      * @return \HopitalNumerique\EtablissementBundle\Entity\Etablissement[] Les établissements rattachés et non regroupés
      */
-    public function findEtablissementsRattachesNonRegroupes(InterventionDemande $interventionDemande, array $interventionRegroupements)
+    public function findEtablissementsRattachesNonRegroupes(InterventionDemande $interventionDemande)
     {
         $etablissements = array();
         
         foreach ($interventionDemande->getEtablissements() as $etablissement)
         {
             $etablissementEstPresent = false;
-            foreach ($interventionRegroupements as $interventionRegroupement)
+            foreach ($interventionDemande->getInterventionRegroupementsDemandesRegroupees() as $interventionRegroupement)
             {
                 if ($interventionRegroupement->getInterventionDemandeRegroupee()->getReferent()->getEtablissementRattachementSante() != null && $etablissement->getId() == $interventionRegroupement->getInterventionDemandeRegroupee()->getReferent()->getEtablissementRattachementSante()->getId())
                 {
@@ -186,7 +185,9 @@ class InterventionDemandeManager extends BaseManager
             ($this->utilisateurConnecte->hasRoleCmsi() && $this->utilisateurConnecte->getId() == $interventionDemande->getCmsi()->getId())
             || ($this->utilisateurConnecte->hasRoleAmbassadeur() && $this->utilisateurConnecte->getId() == $interventionDemande->getAmbassadeur()->getId())
             || ($this->utilisateurConnecte->hasRoleDirecteur() && $interventionDemande->getDirecteur() != null && $this->utilisateurConnecte->getId() == $interventionDemande->getDirecteur()->getId())
+            // Établissement toujours par défaut
             || ($this->utilisateurConnecte->getId() == $interventionDemande->getReferent()->getId())
+            || $this->interventionRegroupementManager->interventionRegroupementsDemandePrincipaleHaveReferent($interventionDemande, $this->utilisateurConnecte)
         );
     }
     /**
@@ -200,6 +201,20 @@ class InterventionDemandeManager extends BaseManager
         return (
             ($this->utilisateurConnecte->hasRoleCmsi() && $this->utilisateurConnecte->getId() == $interventionDemande->getCmsi()->getId())
         );
+    }
+    /**
+     * Retourne si l'utilisateur d'un établissement peut annuler cette demande d'intervention.
+     *
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionDemande $interventionDemande La demande d'intervention
+     * @param \HopitalNumerique\UserBundle\Entity\User $utilisateur L'utilisateur de l'établissement qui souhaite annuler la demande
+     * @return VRAI ssi l'utilisateur peut annuler la demande d'intervention
+     */
+    public function etablissementPeutAnnulerDemande(InterventionDemande $interventionDemande, User $utilisateur)
+    {
+        if (!$utilisateur->hasRoleCmsi() && !$utilisateur->hasRoleAmbassadeur())
+            if (count($interventionDemande->getInterventionRegroupementsDemandesRegroupees()) == 0 && !$interventionDemande->interventionEtatEstAcceptationAmbassadeur() && !$interventionDemande->interventionEtatEstTermine() && !$interventionDemande->interventionEtatEstCloture() && !$interventionDemande->interventionEtatEstAnnuleEtablissement())
+                return true;
+        return false;
     }
     
     /**
@@ -539,9 +554,7 @@ class InterventionDemandeManager extends BaseManager
      */
     private function changeEtatPourEtablissement(InterventionDemande $interventionDemande)
     {
-        $interventionRegroupements = $this->interventionRegroupementManager->findBy(array('interventionDemandePrincipale' => $interventionDemande));
-        
-        if ($interventionDemande->etablissementPeutAnnulerDemande($this->utilisateurConnecte, $interventionRegroupements))
+        if ($this->etablissementPeutAnnulerDemande($interventionDemande, $this->utilisateurConnecte))
         {
             $interventionDemande->setInterventionEtat($this->interventionEtatManager->getInterventionEtatAnnulationEtablissement());
             $this->save($interventionDemande);

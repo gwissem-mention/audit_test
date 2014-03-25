@@ -266,12 +266,16 @@ class InterventionDemande
     private $objets;
 
     /**
-     * @ORM\OneToMany(targetEntity="InterventionRegroupement", mappedBy="interventionDemandePrincipale", cascade={"persist", "remove" })
+     * @var \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement[]
+     * 
+     * @ORM\OneToMany(targetEntity="InterventionRegroupement", mappedBy="interventionDemandeRegroupee", cascade={"persist", "remove" })
      */
     private $interventionRegroupementsDemandesPrincipales;
 
     /**
-     * @ORM\OneToMany(targetEntity="InterventionRegroupement", mappedBy="interventionDemandeRegroupee", cascade={"persist", "remove" })
+     * @var \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement[]
+     * 
+     * @ORM\OneToMany(targetEntity="InterventionRegroupement", mappedBy="interventionDemandePrincipale", cascade={"persist", "remove" })
      */
     private $interventionRegroupementsDemandesRegroupees;
     
@@ -880,6 +884,27 @@ class InterventionDemande
     }
 
     /**
+     * Get InterventionRegroupementsDemandesPrincipales
+     *
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement
+     */
+    public function getInterventionRegroupementsDemandesPrincipales()
+    {
+        return $this->interventionRegroupementsDemandesPrincipales;
+    }
+    /**
+     * Get InterventionRegroupementsDemandesRegroupees
+     *
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement
+     */
+    public function getInterventionRegroupementsDemandesRegroupees()
+    {
+        return $this->interventionRegroupementsDemandesRegroupees;
+    }
+    
+    
+    
+    /**
      * Retourne si la demande d'intervention a déjà eu un ambassadeur.
      * 
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur à vérifier parmi les anciens
@@ -1039,20 +1064,5 @@ class InterventionDemande
     public function evaluationEtatEstEvalue()
     {
         return ($this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId());
-    }
-
-    /**
-     * Retourne si l'utilisateur d'un établissement peut annuler cette demande d'intervention.
-     * 
-     * @param \HopitalNumerique\UserBundle\Entity\User $utilisateur L'utilisateur de l'établissement qui souhaite annuler la demande
-     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement[] $interventionRegroupements Les regroupements d'interventions dont cette demande d'intervention est la principale
-     * @return VRAI ssi l'utilisateur peut annuler la demande d'intervention
-     */
-    public function etablissementPeutAnnulerDemande(User $utilisateur, array $interventionRegroupements)
-    {
-        if (!$utilisateur->hasRoleCmsi() && !$utilisateur->hasRoleAmbassadeur())
-            if (count($interventionRegroupements) == 0 && !$this->interventionEtatEstAcceptationAmbassadeur() && !$this->interventionEtatEstTermine() && !$this->interventionEtatEstCloture() && !$this->interventionEtatEstAnnuleEtablissement())
-                return true;
-        return false;
     }
 }
