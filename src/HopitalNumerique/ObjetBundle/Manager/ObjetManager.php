@@ -5,6 +5,7 @@ namespace HopitalNumerique\ObjetBundle\Manager;
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Manager de l'entité Objet.
@@ -12,6 +13,20 @@ use Doctrine\Common\Collections\Criteria;
 class ObjetManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Objet';
+    protected $_contenuManager;
+
+    /**
+     * Construct 
+     *
+     * @param EntityManager  $em      Entity Mangager de doctrine
+     * @param ContenuManager $manager ContenuManager
+     */
+    public function __construct( EntityManager $em, ContenuManager $manager )
+    {
+        parent::__construct($em);
+
+        $this->_contenuManager = $manager;
+    }
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
@@ -22,7 +37,7 @@ class ObjetManager extends BaseManager
     {
         $results = $this->getRepository()->getDatasForGrid( $condition );
 
-        return $this->_rearangeForTypes( $results );
+        return $this->rearangeForTypes( $results );
     }
 
     /**
@@ -34,7 +49,7 @@ class ObjetManager extends BaseManager
     {
         $results = $this->getRepository()->getDatasForGridAmbassadeur( $condition );
         
-        return $this->_rearangeForTypes( $results );
+        return $this->rearangeForTypes( $results );
     }
 
     /**
@@ -124,7 +139,7 @@ class ObjetManager extends BaseManager
                 $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
         }
         
-        $this->_formatReferencesOwn( $return );
+        $this->formatReferencesOwn( $return );
         
         return $return;
     }
@@ -231,6 +246,51 @@ class ObjetManager extends BaseManager
         return false;
     }
 
+    /**
+     * Retourne l'arbo Objets -> contenus
+     *
+     * @return array
+     */
+    public function getObjetsAndContenuArbo()
+    {
+        //get objets and IDS
+        $objets = $this->findAll();
+        $ids    = array();
+        foreach( $objets as $one )
+            $ids[] = $one->getId();
+
+        //get Contenus
+        $datas    = $this->_contenuManager->getArboForObjet($ids);
+        $contenus = array();
+        foreach( $datas as $one ) {
+            if( $one->objet != null )
+                $contenus[ $one->objet ][] = $one;
+        }
+
+        //formate datas
+        foreach( $objets as $one ) {
+            $results[] = array(
+                "text" => $one->getTitre(), "value" => "PUBLICATION:" . $one->getId()
+            );
+
+            if( !isset($contenus[ $one->getId() ]) || count( $contenus[ $one->getId() ] ) <= 0 )
+                continue;
+
+            foreach( $contenus[ $one->getId() ] as $content ){
+                $results[] = array(
+                    "text" => "|--" . $content->titre, "value" => "INFRADOC:" . $content->id
+                );
+                $this->getObjetsChilds($results, $content, 2);
+            }
+        }
+
+        return $results;
+    }
+
+
+
+
+
 
 
 
@@ -245,13 +305,35 @@ class ObjetManager extends BaseManager
 
 
     /**
+     * Ajoute les enfants de $objet dans $return, formatées en fonction de $level
+     * 
+     * @param array    $return
+     * @param stdClass $objet
+     * @param integer  $level
+     * 
+     * @return void
+     */
+    private function getObjetsChilds( &$return, $objet, $level = 1 )
+    {
+        if( count($objet->childs) > 0 ){
+            foreach( $objet->childs as $child ){
+                $texte = str_pad($child->titre, strlen($child->titre) + ($level*3), "|--", STR_PAD_LEFT);
+                $return[] = array(
+                    "text" => $texte, "value" => "INFRADOC:" . $child->id
+                );
+                $this->getObjetsChilds($return, $child, $level + 1);
+            }
+        }
+    }
+
+    /**
      * Réarrange les objets pour afficher correctement les types
      *
      * @param array $results Les résultats de la requete
      *
      * @return array
      */
-    private function _rearangeForTypes( $results )
+    private function rearangeForTypes( $results )
     {
         $objets  = array();
 
@@ -267,13 +349,13 @@ class ObjetManager extends BaseManager
     }
     
     /**
-     * [_formatReferencesOwn description]
+     * [formatReferencesOwn description]
      *
      * @param  [type] $retour [description]
      *
      * @return [type]
      */
-    private function _formatReferencesOwn( &$retour )
+    private function formatReferencesOwn( &$retour )
     {
         foreach( $retour as $key => $one ){
             $retour[ $key ]['childs'] = $this->getChilds($retour, $one);

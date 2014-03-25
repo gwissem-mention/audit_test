@@ -11,7 +11,7 @@ services:
     #managers
     hopitalnumerique_objet.manager.objet:
         class: %hopitalnumerique_objet.manager.objet.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_objet.manager.contenu"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 

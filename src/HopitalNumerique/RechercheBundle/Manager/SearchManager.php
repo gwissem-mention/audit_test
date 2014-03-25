@@ -54,7 +54,7 @@ class SearchManager extends BaseManager
                 if( $results ){
                     $tmp = array();
                     foreach( $results as $one) {
-                        $objet = $this->_formateObjet( $one, $role );
+                        $objet = $this->formateObjet( $one, $role );
                         if( !is_null($objet) )
                             $tmp[ $objet['id'] ] = $objet;
                     }
@@ -69,7 +69,7 @@ class SearchManager extends BaseManager
                 if( $results ) {
                     $tmp = array();
                     foreach( $results as $one) {
-                        $contenu = $this->_formateContenu( $one, $role );
+                        $contenu = $this->formateContenu( $one, $role );
                         if( !is_null($contenu) )
                             $tmp[ $contenu['id'] ] = $contenu;
                     }
@@ -155,7 +155,7 @@ class SearchManager extends BaseManager
      *
      * @return stdClass
      */
-    private function _formateContenu( $one, $role )
+    private function formateContenu( $one, $role )
     {
         //Références
         $item            = array();
@@ -188,7 +188,7 @@ class SearchManager extends BaseManager
         $item['type']   = array();
 
         //get Categ and Type
-        $tmp = $this->_getTypeAndCateg( $objet );
+        $tmp = $this->getTypeAndCateg( $objet );
         $item['type']  = $tmp['type'];
         $item['categ'] = $tmp['categ'];
 
@@ -203,10 +203,10 @@ class SearchManager extends BaseManager
      * 
      * @return stdClass
      */
-    private function _formateObjet( $one, $role )
+    private function formateObjet( $one, $role )
     {
         //Références
-        $item          = array();
+        $item            = array();
         $item['primary'] = $one->getPrimary();
 
         //objet
@@ -233,7 +233,7 @@ class SearchManager extends BaseManager
         $item['resume'] = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
         
         //get Categ and Type
-        $tmp = $this->_getTypeAndCateg( $objet );
+        $tmp = $this->getTypeAndCateg( $objet );
         $item['type']  = $tmp['type'];
         $item['categ'] = $tmp['categ'];
         
@@ -247,7 +247,7 @@ class SearchManager extends BaseManager
      *
      * @return array
      */
-    private function _getTypeAndCateg( $objet )
+    private function getTypeAndCateg( $objet )
     {
         $type  = array();
         $categ = '';

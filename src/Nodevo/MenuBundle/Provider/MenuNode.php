@@ -32,13 +32,13 @@ class MenuNode implements NodeInterface
 
     public function setOptions( $item )
     {
-        $routeParametres = null;
+        $routeParameters = null;
         if ($item->getRouteParameters() != null)
-            $routeParametres = json_decode($item->getRouteParameters(), true);
-        
+            $routeParameters = json_decode($item->getRouteParameters(), true);
+     
         $this->_options = array(
             'route'              => $item->getRoute(),
-            'routeParameters'    => $routeParametres,                     //Besoin d'un tableau associatif
+            'routeParameters'    => $routeParameters,                     //Besoin d'un tableau associatif
             'routeAbsolute'      => $item->getRouteAbsolute(),
             'uri'                => $item->getUri(),
             'label'              => null,

@@ -96,7 +96,7 @@ class Requete
      * @param boolean $isDefault
      * @return Requete
      */
-    public function setIsDefault($isDefault)
+    public function setDefault($isDefault)
     {
         $this->isDefault = $isDefault;
 
@@ -108,7 +108,7 @@ class Requete
      *
      * @return boolean 
      */
-    public function getIsDefault()
+    public function isDefault()
     {
         return $this->isDefault;
     }

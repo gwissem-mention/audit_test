@@ -135,7 +135,7 @@ $(document).ready(function() {
     });
 
     //Toogle d'ajout seulement
-    type = !$('#hopitalnumerique_objet_objet_isArticle').val();
+    type = !$('#hopitalnumerique_objet_objet_article').val();
     $('.toggleType').toggles( { on : type, width:80, text : { on : 'Objet', off : 'Article' } } ).on('toggle', function (e, active) {
         if (active) { //type = objet
             window.location = $('#objet-addobjet-url').val();

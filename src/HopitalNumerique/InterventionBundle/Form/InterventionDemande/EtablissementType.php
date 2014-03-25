@@ -10,8 +10,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemandeType;
 use HopitalNumerique\InterventionBundle\Form\UserType;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Validator\Validator;
+use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
+use HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager as FormInterventionDemandeManager;
+use HopitalNumerique\InterventionBundle\Manager\Form\UserManager as FormUserManager;
+use HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager as FormEtablissementManager;
 
 /**
  * Formulaire d'une demande d'intervention spécifique à un établissement.
@@ -21,12 +25,17 @@ class EtablissementType extends InterventionDemandeType
     /**
      * Constructeur du formulaire de demande d'intervention à un établissement.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
+     * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
+     * @param \Symfony\Component\Validator\Validator $validator Validator
+     * @param \Nodevo\InterventionBundle\Manager\InterventionDemandeManager $interventionDemandeManager Manager InterventionDemande
+     * @param \Nodevo\InterventionBundle\Manager\Form\InterventionDemandeManager $formInterventionDemandeManager Manager Form\InterventionDemande
+     * @param \Nodevo\InterventionBundle\Manager\Form\UserManager $formUserManager Manager Form\User
+     * @param \Nodevo\InterventionBundle\Manager\Form\EtablissementManager $formEtablissementManager Manager Form\Etablissement
      * @return void
      */
-    public function __construct(ContainerInterface $container, Validator $validator)
+    public function __construct(SecurityContext $securityContext, Validator $validator, InterventionDemandeManager $interventionDemandeManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
     {
-        parent::__construct($container, $validator);
+        parent::__construct($securityContext, $validator, $interventionDemandeManager, $formInterventionDemandeManager, $formUserManager, $formEtablissementManager);
     }
 
     /**
