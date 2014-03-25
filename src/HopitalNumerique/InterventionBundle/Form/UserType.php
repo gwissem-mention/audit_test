@@ -81,13 +81,14 @@ class UserType extends AbstractType
                                 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference', 'property' => 'libelle',
                                 'required' => true,
                                 'attr' => array('class' => 'hopitalnumerique_interventionbundle_user_region')))
-                ->add('departement', 'entity',
-                        array('label' => 'Département', 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
-                                'property' => 'libelle',
-                                //@todo Obligé forcément de tout récupérer pour la validation
-                                'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')
-                                        ->getDepartementsChoices(), 'required' => true,
-                                'attr' => array('class' => 'hopitalnumerique_interventionbundle_user_departement')))
+                ->add('departement', 'entity', array(
+                    'label' => 'Département',
+                    'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
+                    'property' => 'libelle',
+                    'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getDepartementsChoices(),
+                    'required' => true,
+                    'attr' => array('class' => 'hopitalnumerique_interventionbundle_user_departement')
+                ))
                 ->add('etablissementRattachementSante', 'entity',
                         array(
                                 'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_etablissement')
