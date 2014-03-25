@@ -34,18 +34,18 @@
             {% if app.user|checkAuthorization( path('nodevo_acl_modify') ) %}{% set write = true %}{% else %}{% set write = false %}{% endif %}
 
             <div class="panel-body" >
-                <div>
-                    <table class="nodevo-acls table table-striped table-hover">
+                <div id="groupes-initiaux">
+                    <table class="nodevo-acls">
 	                    <tr>
-	                        <td id="firstTd">
+	                        <td id="firstTd-initiaux">
 	                        </td>
 	                        <td>
-	                            <div id="divHeader" style="overflow:hidden;width:1000px;">
+	                            <div id="divHeader-initiaux" style="overflow:hidden;width:775px;">
 	                                <table>
 	                                    <tr>
 				                            {% for role in roles.initiaux %}
-	                                            <td style="min-width:110px">
-					                                <div class="tableHeader">{{role.name}}</div>
+	                                            <td style="min-width:110px; text-align:center;">
+					                                <div class="tableHeader"><strong>{{role.name}}</strong></div>
 	                                            </td>
 				                            {% endfor %}
 							            </tr>
@@ -55,28 +55,28 @@
 	                    </tr>
 	                    <tr>
 	                        <td valign="top">
-	                            <div id="firstcol" style="overflow: hidden;height:635px">
-	                                <table style="width:250px; cellspacing:0; cellpadding:0" >
+	                            <div id="firstcol-initiaux" style="overflow: hidden;height:520px">
+	                                <table class="table-striped" style="width:250px; cellspacing:0; cellpadding:0;border:1px;" >
                                         {% for ressource in ressources %}
                                             <tr>
-                                               <td class="tableFirstCol" style="height:65px">{{ressource.nom}}</td>
+                                               <td class="tableFirstCol-initiaux" style="height:65px"><span><strong>{{ressource.nom}}</strong></span></td>
                                             </tr>
                                         {% endfor %}
 	                                </table>
 	                            </div>
 	                        </td>
 	                        <td valign="top">
-	                            <div id="table_div" style="overflow: scroll;width:1015px;height:650px;position:relative" onscroll="fnScroll()" >
-	                                <table cellspacing="0" cellpadding="0" >
+	                            <div id="table_div-initiaux" style="overflow: scroll;width:790px;height:535px;position:relative" onscroll="fnScrollInitiaux()" >
+	                                <table class="table-striped" cellspacing="0" cellpadding="0" >
                                         {% for ressource in ressources %}
                                             {# Pour la premiere ligne du tableau, on ajoute l'id firstTr, sinon un tr classique #}
 	                                        {% if 1 == loop.index %}
-				                               <tr id='firstTr' style="width:1015px">
+				                               <tr id='firstTr-initiaux' style="width:790px">
 			                                {% else %}
-			                                    <tr style="width:1015px">
+			                                    <tr style="width:790px">
 	                                        {% endif %}
                                             {% for role in roles.initiaux %}
-		                                        <td style="align:center;height:65px; min-width:110px">
+		                                        <td style="align:center;height:65px; min-width:110px; text-align:center;">
 		                                            <div class="btn-group">
 		                                                {% if ressource.type == 1 %}
 			                                                {% if acls[ressource.id][role.id]['read'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
@@ -114,41 +114,76 @@
             </div>
 
             <div class="panel-body" >
-                <div>
-                    <table class="nodevo-acls table table-striped table-hover" style="width:{{ (roles.nonInitiaux|length * 130) + 235 }}px" >
-                        <thead>
-                            <tr>
-                                <th></th>
-                                {% for role in roles.nonInitiaux %}
-                                    <th align="center" width="130px" >
-                                        {{role.name}}
-                                    </th>
-                                {% endfor %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for ressource in ressources %}
-                                <tr>
-                                    <td>{{ressource.nom}}</td>
-                                    {% for role in roles.nonInitiaux %}
-                                        <td align="center">
-                                            <div class="btn-group">
-                                                {% if acls[ressource.id][role.id]['read'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
-                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Lecture" data-type="1" data-ressource="{{ressource.id}}" data-role="{{role.id}}" >
-                                                    <i class="fa fa-eye"></i>
-                                                </div>
-                                                
-                                                {% if acls[ressource.id][role.id]['write'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
-                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Ecriture" data-type="2" data-ressource="{{ressource.id}}" data-role="{{role.id}}" >
-                                                    <i class="fa fa-edit"></i>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <div id="groupes-non-initiaux">
+                    <table class="nodevo-acls">
+	                    <tr style="height:65px;">
+	                        <td id="firstTd-non-initiaux">
+	                        </td>
+	                        <td>
+	                            <div id="divHeader-non-initiaux" style="overflow:hidden;width:775px;">
+	                                <table>
+	                                    <tr>
+				                            {% for role in roles.nonInitiaux %}
+	                                            <td style="min-width:110px; text-align:center;">
+					                                <div class="tableHeader"><strong>{{role.name}}</strong></div>
+	                                            </td>
+				                            {% endfor %}
+							            </tr>
+							        </table>
+							    </div>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td valign="top">
+	                            <div id="firstcol-non-initiaux" style="overflow: hidden;height:520px">
+	                                <table class="table-striped" style="width:250px; cellspacing:0; cellpadding:0" >
+                                        {% for ressource in ressources %}
+                                            <tr>
+                                               <td class="tableFirstCol-non-initiaux" style="height:65px"><span><strong>{{ressource.nom}}</strong></span></td>
+                                            </tr>
+                                        {% endfor %}
+	                                </table>
+	                            </div>
+	                        </td>
+	                        <td valign="top">
+	                            <div id="table_div-non-initiaux" style="overflow: scroll;width:790px;height:535px;position:relative" onscroll="fnScrollNonInitiaux()" >
+	                                <table class="table-striped" cellspacing="0" cellpadding="0" >
+                                        {% for ressource in ressources %}
+                                            {# Pour la premiere ligne du tableau, on ajoute l'id firstTr, sinon un tr classique #}
+	                                        {% if 1 == loop.index %}
+				                               <tr id='firstTr-non-initiaux' style="width:790px">
+			                                {% else %}
+			                                    <tr style="width:790px">
+	                                        {% endif %}
+                                            {% for role in roles.nonInitiaux %}
+		                                        <td style="height:65px; min-width:110px; max-width:110px;text-align:center">
+		                                            <div class="btn-group">
+		                                                {% if ressource.type == 1 %}
+			                                                {% if acls[ressource.id][role.id]['read'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
+			                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Lecture" data-type="1" data-ressource="{{ressource.id}}" data-role="{{role.id}}" >
+			                                                    <i class="fa fa-eye"></i>
+			                                                </div>
+			                                                
+			                                                {% if acls[ressource.id][role.id]['write'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
+			                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Ecriture" data-type="2" data-ressource="{{ressource.id}}" data-role="{{role.id}}" >
+			                                                    <i class="fa fa-edit"></i>
+			                                                </div>
+		                                                {% else %}
+			                                                {% if acls[ressource.id][role.id]['write'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
+			                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Accès" data-type="2" data-ressource="{{ ressource.id }}" data-role="{{ role.id }}">
+			                                                    <i class="fa fa-edit"></i>
+			                                                </div>
+		                                                {% endif %}
+		                                            </div>
+		                                        </td>
+			                                {% endfor %}
+			                                </tr>
+                                        {% endfor %}
+				                     </table>
+				                 </div>
+	                        </td>
+	                    </tr>
+	                </table>
                 </div>
             </div>
         </div>
