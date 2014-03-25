@@ -129,7 +129,7 @@ class InterventionDemande
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interventionDemandesReferent")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="referent_id", referencedColumnName="usr_id")
      * })
@@ -140,7 +140,7 @@ class InterventionDemande
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interventionDemandesAmbassadeur")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ambassadeur_id", referencedColumnName="usr_id")
      * })
@@ -150,7 +150,7 @@ class InterventionDemande
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interventionDemandesCmsi")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="cmsi_id", referencedColumnName="usr_id")
      * })
@@ -160,7 +160,7 @@ class InterventionDemande
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interventionDemandesDirecteur")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="directeur_id", referencedColumnName="usr_id")
      * })
@@ -266,16 +266,16 @@ class InterventionDemande
     private $objets;
 
     /**
-     * @var \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement[]
-     * 
-     * @ORM\OneToMany(targetEntity="InterventionRegroupement", mappedBy="interventionDemandeRegroupee", cascade={"persist", "remove" })
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement", mappedBy="interventionDemandeRegroupee", cascade={"persist", "remove" })
      */
     private $interventionRegroupementsDemandesPrincipales;
 
     /**
-     * @var \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement[]
-     * 
-     * @ORM\OneToMany(targetEntity="InterventionRegroupement", mappedBy="interventionDemandePrincipale", cascade={"persist", "remove" })
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement", mappedBy="interventionDemandePrincipale", cascade={"persist", "remove"})
      */
     private $interventionRegroupementsDemandesRegroupees;
     

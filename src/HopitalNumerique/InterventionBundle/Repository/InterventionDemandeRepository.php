@@ -142,7 +142,8 @@ class InterventionDemandeRepository extends EntityRepository
                 'interventionEtat.id AS interventionEtatId',
                 'interventionEtat.libelle AS interventionEtatLibelle',
                 'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
-                'COUNT(interventionRegroupement) AS nombreRegroupements'
+                'COUNT(interventionRegroupementRegroupee) AS nombreDemandesRegroupees',
+                'COUNT(interventionRegroupementPrincipale) AS nombreDemandesPrincipales'
             )
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
                 // Référent
@@ -156,8 +157,9 @@ class InterventionDemandeRepository extends EntityRepository
                 ->leftJoin('interventionDemande.objets', 'objet')
                 // État
                 ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
-                // Regroupement
-                ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement', Join::WITH, 'interventionDemande.id = interventionRegroupement.interventionDemandePrincipale')
+            // Regroupements
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementRegroupee', Join::WITH, 'interventionDemande.id = interventionRegroupementRegroupee.interventionDemandePrincipale')
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementPrincipale', Join::WITH, 'interventionDemande.id = interventionRegroupementPrincipale.interventionDemandeRegroupee')
             ->where('interventionDemande.cmsi = :cmsi')
                 ->setParameter('cmsi', $cmsi)
             ->andWhere('interventionEtat.id = :interventionEtatDemandeInitiale OR interventionEtat.id = :interventionEtatAttenteCmsi')
@@ -205,7 +207,8 @@ class InterventionDemandeRepository extends EntityRepository
                 'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
                 'evaluationEtat.libelle AS evaluationEtatLibelle',
                 'remboursementEtat.libelle AS remboursementEtatLibelle',
-                'COUNT(interventionRegroupement) AS nombreRegroupements'
+                'COUNT(interventionRegroupementRegroupee) AS nombreDemandesRegroupees',
+                'COUNT(interventionRegroupementPrincipale) AS nombreDemandesPrincipales'
             )
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
                 // Référent
@@ -223,8 +226,9 @@ class InterventionDemandeRepository extends EntityRepository
                 ->leftJoin('interventionDemande.evaluationEtat', 'evaluationEtat')
                 // État du remboursement
                 ->leftJoin('interventionDemande.remboursementEtat', 'remboursementEtat')
-                // Regroupement
-                ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement', Join::WITH, 'interventionDemande.id = interventionRegroupement.interventionDemandePrincipale')
+            // Regroupements
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementRegroupee', Join::WITH, 'interventionDemande.id = interventionRegroupementRegroupee.interventionDemandePrincipale')
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementPrincipale', Join::WITH, 'interventionDemande.id = interventionRegroupementPrincipale.interventionDemandeRegroupee')
             ->where('interventionDemande.cmsi = :cmsi')
                 ->setParameter('cmsi', $cmsi)
             ->andWhere('interventionEtat.id != :interventionEtatDemandeInitiale AND interventionEtat.id != :interventionEtatAttenteCmsi')
@@ -268,7 +272,8 @@ class InterventionDemandeRepository extends EntityRepository
                 'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
                 'evaluationEtat.id AS evaluationEtatId',
                 'remboursementEtat.libelle AS remboursementEtatLibelle',
-                'COUNT(interventionRegroupement) AS nombreRegroupements'
+                'COUNT(interventionRegroupementRegroupee) AS nombreDemandesRegroupees',
+                'COUNT(interventionRegroupementPrincipale) AS nombreDemandesPrincipales'
             )
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
             ->where('interventionDemande.directeur = :directeur')
@@ -305,8 +310,9 @@ class InterventionDemandeRepository extends EntityRepository
             ->leftJoin('interventionDemande.evaluationEtat', 'evaluationEtat')
             // État du remboursement
             ->leftJoin('interventionDemande.remboursementEtat', 'remboursementEtat')
-            // Regroupement
-            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement', Join::WITH, 'interventionDemande.id = interventionRegroupement.interventionDemandePrincipale')
+            // Regroupements
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementRegroupee', Join::WITH, 'interventionDemande.id = interventionRegroupementRegroupee.interventionDemandePrincipale')
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementPrincipale', Join::WITH, 'interventionDemande.id = interventionRegroupementPrincipale.interventionDemandeRegroupee')
             ->orderBy('interventionDemande.dateCreation', 'DESC')
             ->groupBy('interventionDemande.id')
         ;
@@ -343,7 +349,8 @@ class InterventionDemandeRepository extends EntityRepository
                 'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
                 'evaluationEtat.id AS evaluationEtatId',
                 'remboursementEtat.libelle AS remboursementEtatLibelle',
-                'COUNT(interventionRegroupement) AS nombreRegroupements'
+                'COUNT(interventionRegroupementRegroupee) AS nombreDemandesRegroupees',
+                'COUNT(interventionRegroupementPrincipale) AS nombreDemandesPrincipales'
             )
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
                 // Référent
@@ -358,8 +365,9 @@ class InterventionDemandeRepository extends EntityRepository
                 ->leftJoin('interventionDemande.evaluationEtat', 'evaluationEtat')
                 // État du remboursement
                 ->leftJoin('interventionDemande.remboursementEtat', 'remboursementEtat')
-                // Regroupement
-                ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement', Join::WITH, 'interventionDemande.id = interventionRegroupement.interventionDemandePrincipale')
+            // Regroupements
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementRegroupee', Join::WITH, 'interventionDemande.id = interventionRegroupementRegroupee.interventionDemandePrincipale')
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementPrincipale', Join::WITH, 'interventionDemande.id = interventionRegroupementPrincipale.interventionDemandeRegroupee')
             ->where('interventionDemande.ambassadeur = :ambassadeur')
                 ->setParameter('ambassadeur', $ambassadeur)
             ->andWhere(
@@ -420,7 +428,8 @@ class InterventionDemandeRepository extends EntityRepository
                 'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
                 'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
                 'evaluationEtat.id AS evaluationEtatId',
-                'COUNT(interventionRegroupement) AS nombreRegroupements'
+                'COUNT(interventionRegroupementRegroupee) AS nombreDemandesRegroupees',
+                'COUNT(interventionRegroupementPrincipale) AS nombreDemandesPrincipales'
             )
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
             // Référent
@@ -432,8 +441,9 @@ class InterventionDemandeRepository extends EntityRepository
             ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
             // État de l'évaluation
             ->leftJoin('interventionDemande.evaluationEtat', 'evaluationEtat')
-            // Regroupement
-            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupement', Join::WITH, 'interventionDemande.id = interventionRegroupement.interventionDemandePrincipale');
+            // Regroupements
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementRegroupee', Join::WITH, 'interventionDemande.id = interventionRegroupementRegroupee.interventionDemandePrincipale')
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementPrincipale', Join::WITH, 'interventionDemande.id = interventionRegroupementPrincipale.interventionDemandeRegroupee');
 
             $requete->where('interventionDemande.referent = :referent')
                 ->setParameter('referent', $referent)
