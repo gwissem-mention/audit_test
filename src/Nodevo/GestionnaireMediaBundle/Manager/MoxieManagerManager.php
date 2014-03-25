@@ -43,8 +43,8 @@ class MoxieManagerManager
             define('MOXIEMANAGER_FILESYSTEM_EXTENSIONS', $this->container->getParameter('nodevo_gestionnaire_media.moxie_manager.extensions_autorisees'));
             define('MOXIEMANAGER_GENERAL_LANGUAGE', $this->container->get('nodevo_gestionnaire_media.service.moxie_manager')->getLangue());
             define('MOXIEMANAGER_JS_BASE_URL', $this->container->get('request')->server->get('DOCUMENT_ROOT').$this->container->get('templating.helper.assets')->getUrl('bundles/nodevogestionnairemedia/js/moxiemanager'));
-    
-            require_once(dirname(__FILE__).'/../DependencyInjection/moxiemanager/api.php');
+
+            require_once($this->container->get('kernel')->locateResource('@NodevoGestionnaireMediaBundle/DependencyInjection/moxiemanager/api.php'));
         }
     }
 }
