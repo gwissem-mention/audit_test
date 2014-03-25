@@ -10,8 +10,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemande\CmsiType as InterventionDemandeCmsiType;
 use HopitalNumerique\InterventionBundle\Form\UserType;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Validator\Validator;
+use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
+use HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager as FormInterventionDemandeManager;
+use HopitalNumerique\InterventionBundle\Manager\Form\UserManager as FormUserManager;
+use HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager as FormEtablissementManager;
 
 /**
  * Formulaire d'édition d'une demande d'intervention spécifique au CMSI.
@@ -21,12 +25,17 @@ class CmsiType extends InterventionDemandeCmsiType
     /**
      * Constructeur du formulaire d'édition de demande d'intervention spécifique au CMSI.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Container de l'application
+     * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
+     * @param \Symfony\Component\Validator\Validator $validator Validator
+     * @param \Nodevo\InterventionBundle\Manager\InterventionDemandeManager $interventionDemandeManager Manager InterventionDemande
+     * @param \Nodevo\InterventionBundle\Manager\Form\InterventionDemandeManager $formInterventionDemandeManager Manager Form\InterventionDemande
+     * @param \Nodevo\InterventionBundle\Manager\Form\UserManager $formUserManager Manager Form\User
+     * @param \Nodevo\InterventionBundle\Manager\Form\EtablissementManager $formEtablissementManager Manager Form\Etablissement
      * @return void
      */
-    public function __construct(ContainerInterface $container, Validator $validator)
+    public function __construct(SecurityContext $securityContext, Validator $validator, InterventionDemandeManager $interventionDemandeManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
     {
-        parent::__construct($container, $validator);
+        parent::__construct($securityContext, $validator, $interventionDemandeManager, $formInterventionDemandeManager, $formUserManager, $formEtablissementManager);
     }
 
     /**
@@ -38,7 +47,7 @@ class CmsiType extends InterventionDemandeCmsiType
         parent::buildForm($builder, $options);
         $builder
             ->add('ambassadeur', 'entity', array(
-                'choices' => $this->container->get('hopitalnumerique_intervention.manager.form_user')->getAmbassadeursChoices($this->container->get('security.context')->getToken()->getUser()->getRegion()),
+                'choices' => $this->formUserManager->getAmbassadeursChoices($this->utilisateurConnecte->getRegion()),
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
                 'property' => 'appellation',
                 'label' => 'Ambassadeur',
