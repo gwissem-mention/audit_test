@@ -8,7 +8,7 @@
             {% if objets %} 
                 <ul style="padding-left:10px">
 	                {% for objet in objets %}
-	                    <li><a href="{{path('hopital_numerique_recherche_publication_objet',{'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a></li>
+	                    <li><a href="{{path('hopital_numerique_publication_publication_objet',{'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a></li>
 	                {% endfor %}
                 </ul>
             {% else %}

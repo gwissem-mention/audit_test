@@ -1,6 +1,6 @@
 <?php
 
-namespace HopitalNumerique\RechercheBundle\Controller;
+namespace HopitalNumerique\PublicationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -24,7 +24,7 @@ class PublicationController extends Controller
         $contenus = $objet->getIsInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
 
         //render
-        return $this->render('HopitalNumeriqueRechercheBundle:Publication:objet.html.twig', array(
+        return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
             'types'        => $types,
             'contenus'     => $contenus,
@@ -55,7 +55,7 @@ class PublicationController extends Controller
         $contenus = $objet->getIsInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
 
         //render
-        return $this->render('HopitalNumeriqueRechercheBundle:Publication:objet.html.twig', array(
+        return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
             'contenus'     => $contenus,
             'types'        => $types,
@@ -65,6 +65,53 @@ class PublicationController extends Controller
             'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() )
         ));
     }
+
+    /**
+     * Article Action
+     */
+    public function articleAction($categorie, $id, $alias)
+    {
+        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
+
+        //Si l'user connecté à le rôle requis pour voir l'objet
+        if( $this->checkAuthorization( $objet ) === false )
+            return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+
+        //Types objet
+        $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
+
+        //render
+        return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
+            'objet'        => $objet,
+            'types'        => $types,
+            'contenus'     => array(),
+            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
+            'ambassadeurs' => array()
+        ));
+    }
+
+    /**
+     * Affiche la synthèse de l'objet dans une grande popin
+     */
+    public function syntheseAction($id)
+    {
+        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
+
+        //test si l'user connecté à le rôle requis pour voir la synthèse
+        $role   = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+        $params = array();
+        if( $this->get('hopitalnumerique_objet.manager.objet')->checkAccessToObjet($role, $objet) )
+            $params['objet'] = $objet;
+        
+        return $this->render('HopitalNumeriquePublicationBundle:Publication:synthese.html.twig', $params);
+    }
+
+
+
+
+
+
+
 
 
 
@@ -82,10 +129,7 @@ class PublicationController extends Controller
     {
         //get connected user and his region
         $user   = $this->get('security.context')->getToken()->getUser();
-        if( $user === 'anon.')
-            $region = false;
-        else
-            $region = $user->getRegion();
+        $region = $user === 'anon.' ? false : $user->getRegion();
 
         return $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndProduction( $region, $objet );
     }
@@ -99,11 +143,12 @@ class PublicationController extends Controller
      */
     private function checkAuthorization( $objet )
     {
-        $role = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+        $role    = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+        $message = 'Vous n\'avez pas accès à cette publication.';
 
         //test si l'user connecté à le rôle requis pour voir l'objet
         if( !$this->get('hopitalnumerique_objet.manager.objet')->checkAccessToObjet($role, $objet) ) {
-            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas accès à cette publication.' );
+            $this->get('session')->getFlashBag()->add('warning', $message );
             return false;
         }
 
@@ -111,19 +156,19 @@ class PublicationController extends Controller
 
         //test si l'objet est publié
         if( !is_null($objet->getDateDebutPublication()) && $today < $objet->getDateDebutPublication() ){
-            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas accès à cette publication.' );
+            $this->get('session')->getFlashBag()->add('warning', $message );
             return false;
         }
 
         //test si l'objet est toujours publié
         if( !is_null($objet->getDateFinPublication()) && $today > $objet->getDateFinPublication() ){
-            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas accès à cette publication.' );
+            $this->get('session')->getFlashBag()->add('warning', $message );
             return false;
         }
 
         //test si l'objet est actif : état actif === 3
         if( $objet->getEtat()->getId() != 3 ){
-            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas accès à cette publication.' );
+            $this->get('session')->getFlashBag()->add('warning', $message );
             return false;
         }
 

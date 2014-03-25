@@ -35,9 +35,21 @@ class ObjetManager extends BaseManager
      */
     public function getDatasForGrid( $condition = null )
     {
-        $results = $this->getRepository()->getDatasForGrid( $condition );
+        $results = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
 
         return $this->rearangeForTypes( $results );
+    }
+
+    /**
+     * Retourne la liste des objets selon le/les types
+     *
+     * @param array $types Les types à filtrer
+     *
+     * @return array
+     */
+    public function getObjetsByTypes( $types )
+    {
+        return $this->getRepository()->getObjetsByTypes( $types )->getQuery()->getResult();
     }
 
     /**
@@ -47,7 +59,7 @@ class ObjetManager extends BaseManager
      */
     public function getDatasForGridAmbassadeur( $condition = null )
     {
-        $results = $this->getRepository()->getDatasForGridAmbassadeur( $condition );
+        $results = $this->getRepository()->getDatasForGridAmbassadeur( $condition )->getQuery()->getResult();
         
         return $this->rearangeForTypes( $results );
     }
@@ -151,7 +163,7 @@ class ObjetManager extends BaseManager
      */
     public function getObjetsByAmbassadeur( $idUser )
     { 
-        return $this->getRepository()->getObjetsByAmbassadeur( $idUser );
+        return $this->getRepository()->getObjetsByAmbassadeur( $idUser )->getQuery()->getResult();
     }
 
     /**
@@ -251,10 +263,10 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getObjetsAndContenuArbo()
+    public function getObjetsAndContenuArbo( $types = null )
     {
         //get objets and IDS
-        $objets = $this->findAll();
+        $objets = is_null($types) ? $this->findAll() : $this->getObjetsByTypes( $types );
         $ids    = array();
         foreach( $objets as $one )
             $ids[] = $one->getId();
@@ -287,9 +299,27 @@ class ObjetManager extends BaseManager
         return $results;
     }
 
+    /**
+     * Retorune l'arbo des articles
+     *
+     * @return array
+     */
+    public function getArticlesArbo( $types )
+    {
+        //get objets
+        $objets = $this->getObjetsByTypes( $types );
 
+        //formate datas
+        foreach( $objets as $one ) {
+            $results[] = array(
+                "text" => $one->getTitre(), "value" => "ARTICLE:" . $one->getId()
+            );
+        }
 
+        return $results;
+    }
 
+    
 
 
 

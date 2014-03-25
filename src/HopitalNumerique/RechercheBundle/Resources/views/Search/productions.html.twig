@@ -4,16 +4,16 @@
     </div>
     <div class="col-md-2">
         {% if objet['synthese'] is not null %}
-            <a class="synthese fancybox.iframe" href="{{path('hopital_numerique_recherche_synthese',{'id':objet['synthese']})}}">synthèse</a>
+            <a class="synthese fancybox.iframe" href="{{path('hopital_numerique_publication_synthese',{'id':objet['synthese']})}}">synthèse</a>
         {% endif %}
     </div>
     <div class="col-md-12">
         {% if objet['objet'] is not null %}
             {# Contenu #}
-            <h4><a href="{{path('hopital_numerique_recherche_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >{{objet['titre']}}</a></h4>
+            <h4><a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >{{objet['titre']}}</a></h4>
         {% else %}
             {# Objet #}
-            <h4><a href="{{path('hopital_numerique_recherche_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >{{objet['titre']}}</a></h4>
+            <h4><a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >{{objet['titre']}}</a></h4>
         {% endif %}
     </div>
     <div class="col-md-12">

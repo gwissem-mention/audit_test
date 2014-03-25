@@ -147,15 +147,24 @@ class ObjetController extends Controller
     /**
      * POPIN : liste des publication (utilisé dans le menu item)
      */
-    public function getPublicationsAction()
+    public function getPublicationsAction($articles)
     {
-        $arbo = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo();
+        if( $articles == 1 ){
+            $types = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code'=>'CATEGORIE_OBJET'));
+            $arbo = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo( $types );
+        }else{
+            $types = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code'=>'CATEGORIE_ARTICLE'));
+            $arbo  = $this->get('hopitalnumerique_objet.manager.objet')->getArticlesArbo( $types );
+        }
 
         return $this->render('HopitalNumeriqueObjetBundle:Objet:getPublications.html.twig', array(
             'objets' => $arbo
         ));
     }
 
+    /**
+     * Génère les données requises pour les paramètres de l'url (type publication)
+     */
     public function getPublicationDetailsForMenuAction()
     {
         $publication = explode(':', $this->get('request')->request->get('publication') );
@@ -166,7 +175,7 @@ class ObjetController extends Controller
                 $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $publication[1]) );
 
                 //set URL to select
-                $result['url'] = 'hopital_numerique_recherche_publication_objet';
+                $result['url'] = 'hopital_numerique_publication_publication_objet';
 
                 //set params for URL
                 $result['id']    = $objet->getId();
@@ -176,18 +185,38 @@ class ObjetController extends Controller
                 $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $publication[1]) );
 
                 //set URL to select
-                $result['url'] = 'hopital_numerique_recherche_publication_contenu';
+                $result['url'] = 'hopital_numerique_publication_publication_contenu';
 
                 //set params for URL
                 $result['id']     = $contenu->getObjet()->getId();
                 $result['alias']  = $contenu->getObjet()->getAlias();
                 $result['idc']    = $contenu->getId();
                 $result['aliasc'] = $contenu->getAlias();
+            }else if( $publication[0] === 'ARTICLE' ) {
+                $objet     = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $publication[1]) );
+                $types     = $objet->getTypes();
+                $type      = $types[0];
+                $categorie = '';
+
+                if( $parent = $type->getParent() )
+                    $categorie .= $parent->getLibelle().'-';
+                $categorie .= $type->getLibelle();
+
+                //clean categ
+                $tool = new Chaine( $categorie );
+
+                //set URL to select
+                $result['url'] = 'hopital_numerique_publication_publication_article';
+
+                //set params for URL
+                $result['id']        = $objet->getId();
+                $result['alias']     = $objet->getAlias();
+                $result['categorie'] = $tool->minifie();
+
             }else
                 $result['success'] = false;
         }else
             $result['success'] = false;
-        
         
         return new Response(json_encode($result), 200);
     }

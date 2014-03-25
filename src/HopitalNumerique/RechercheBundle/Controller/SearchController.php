@@ -67,20 +67,4 @@ class SearchController extends Controller
             'objets' => $objets
         ));
     }
-
-    /**
-     * Affiche la synthèse de l'objet dans une grande popin
-     */
-    public function syntheseAction($id)
-    {
-        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
-
-        //test si l'user connecté à le rôle requis pour voir la synthèse
-        $role   = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
-        $params = array();
-        if( $this->get('hopitalnumerique_objet.manager.objet')->checkAccessToObjet($role, $objet) )
-            $params['objet'] = $objet;
-        
-        return $this->render('HopitalNumeriqueRechercheBundle:Search:synthese.html.twig', $params);
-    }
 }

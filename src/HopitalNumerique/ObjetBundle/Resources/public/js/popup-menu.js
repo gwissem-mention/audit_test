@@ -5,6 +5,13 @@ $(document).ready(function() {
         'type'      : 'ajax',
         'href'      : $('#objets-liste-url').val()
     });
+
+    $('.selectArticle').fancybox({
+        'padding'   : 0,
+        'scrolling' : 'no',
+        'type'      : 'ajax',
+        'href'      : $('#articles-liste-url').val()
+    });
 });
 
 /**
@@ -21,9 +28,22 @@ function savePublication()
         dataType : 'json',
         success  : function( data ){
             $('#nodevo_menu_item_route option[value="'+data.url+'"]').prop('selected', true);
+            html = '';
 
-            //Common part for Objet and Contenu
-            html = '<div class="form-group">';
+            //Only For Article
+            if ( data.url == 'hopital_numerique_publication_publication_article' ) {
+                html += '<div class="form-group">';
+                    html += '<label for="nodevo_menu_item_routeParameters_routeParameters_categorie" class="col-md-3 control-label">';
+                        html += 'categorie';
+                    html += '</label>';
+                    html += '<div class="col-md-9">';
+                        html += '<input type="text" id="nodevo_menu_item_routeParameters_routeParameters_categorie" name="nodevo_menu_item[routeParameters][routeParameters_categorie]" class="form-control" value="'+data.categorie+'" >';
+                    html += '</div>';
+                html += '</div>';
+            }
+
+            //Common part for Objet / Contenu / Articles
+            html += '<div class="form-group">';
                 html += '<label for="nodevo_menu_item_routeParameters_routeParameters_id" class="col-md-3 control-label">';
                     html += 'id';
                 html += '</label>';
@@ -41,7 +61,7 @@ function savePublication()
             html += '</div>';
 
             //Only For Contenu (infra doc)
-            if(data.url == 'hopital_numerique_recherche_publication_contenu'){
+            if(data.url == 'hopital_numerique_publication_publication_contenu'){
                 html += '<div class="form-group">';
                     html += '<label for="nodevo_menu_item_routeParameters_routeParameters_idc" class="col-md-3 control-label">';
                         html += 'idc';
@@ -61,7 +81,9 @@ function savePublication()
             }
 
             $('#nodevo_menu_item_routeParameters').html( html );
-
+            $('#nodevo_menu_item_routeParameters').parent().parent().slideDown();
+            $('#nodevo_menu_item_uri').val('');
+            
             $.fancybox.close(true);
         }
     });
