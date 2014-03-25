@@ -16,8 +16,8 @@ hopitalnumerique_objet_objet_getObjets:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getObjets" }
 
 hopitalnumerique_objet_objet_getPublications:
-    pattern:  /objet/getPublications
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getPublications" }
+    pattern:  /objet/getPublications/{articles}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getPublications", articles:1 }
 
 hopitalnumerique_objet_objet_getPublicationDetailsForMenu:
     pattern:  /objet/getPublicationDetailsForMenu

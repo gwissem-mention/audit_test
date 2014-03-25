@@ -12,7 +12,7 @@ class ObjetRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
-     * @return array
+     * @return QueryBuilder
      */
     public function getDatasForGrid()
     {
@@ -23,13 +23,13 @@ class ObjetRepository extends EntityRepository
             ->leftJoin('obj.types','refTypes')
             ->leftJoin('obj.lockedBy','user');
             
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
 
     /**
      * Récupère les données du grid pour un ambassadeur sous forme de tableau correctement formaté
      *
-     * @return array
+     * @return QueryBuilder
      */
     public function getDatasForGridAmbassadeur( $idAmbassadeur )
     {
@@ -41,13 +41,13 @@ class ObjetRepository extends EntityRepository
             ->where('refUser.id = :idAmbassadeur')
             ->setParameter('idAmbassadeur', $idAmbassadeur->value );
         
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
     
     /**
      * Récupère les objets pour un ambassadeur passé en param
      *
-     * @return array
+     * @return QueryBuilder
      */
     public function getObjetsByAmbassadeur( $idAmbassadeur )
     {
@@ -59,6 +59,25 @@ class ObjetRepository extends EntityRepository
             ->where('refUser.id = :idAmbassadeur')
             ->setParameter('idAmbassadeur', $idAmbassadeur );
         
-        return $qb->getQuery()->getResult();
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des objets selon le/les types
+     *
+     * @param array $types Les types à filtrer
+     *
+     * @return QueryBuilder
+     */
+    public function getObjetsByTypes( $types )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('obj')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->leftJoin('obj.types','refTypes')
+            ->where('refTypes.id IN (:types)')
+            ->setParameter('types', $types );
+        
+        return $qb;
     }
 }

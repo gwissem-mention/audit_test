@@ -2,14 +2,14 @@
     {% if objet['objet'] is not null %}
         {# Contenu #}
         <h4>
-            <a href="{{path('hopital_numerique_recherche_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >
+            <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >
                 {{objet['titre']}}
             </a>
         </h4>
     {% else %}
         {# Objet #}
         <h4>
-            <a href="{{path('hopital_numerique_recherche_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
+            <a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
                 {{objet['titre']}}
             </a>
         </h4>

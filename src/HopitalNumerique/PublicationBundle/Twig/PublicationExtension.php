@@ -1,5 +1,5 @@
 <?php
-namespace HopitalNumerique\RechercheBundle\Twig;
+namespace HopitalNumerique\PublicationBundle\Twig;
 
 class PublicationExtension extends \Twig_Extension
 {

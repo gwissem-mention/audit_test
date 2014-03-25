@@ -51,8 +51,8 @@
             </div>
 
             <div class="panel-body" >
-                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
-                
+                {% form_theme form 'NodevoMenuBundle:Item/Theme:theme.default.html.twig' %}
+
                 {{ form_start(form) }}
                     {{ form_row(form.name) }}
                     {{ form_row(form.route) }}

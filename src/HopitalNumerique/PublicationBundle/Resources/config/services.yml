@@ -1,0 +1,12 @@
+parameters:
+    hopitalnumerique_publication.twig.publication.class: HopitalNumerique\PublicationBundle\Twig\PublicationExtension
+    #Options
+    hopital_numerique_publication.options:
+
+services:
+    #Extension Twig
+    hopitalnumerique_publication.twig.publication_extension:
+        class: %hopitalnumerique_publication.twig.publication.class%
+        arguments : ["@hopitalnumerique_objet.manager.objet", "@hopitalnumerique_objet.manager.contenu"]
+        tags:
+            - { name: twig.extension }

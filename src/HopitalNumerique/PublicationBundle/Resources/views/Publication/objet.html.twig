@@ -7,22 +7,22 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-recherche-publication-index.css" filter="cssrewrite"
-        'bundles/hopitalnumeriquerecherche/css/publication.css'
+    {% stylesheets output="compiled/hopitalnumerique-publication-publication-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquepublication/css/style.css'
         'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
         'bundles/hopitalnumeriqueobjet/css/wysiwyg.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
     
-    <link rel="stylesheet" href="{{ asset('bundles/hopitalnumeriquerecherche/css/publication-print.css') }}" type="text/css" media="print" />
+    <link rel="stylesheet" href="{{ asset('bundles/hopitalnumeriquepublication/css/style-print.css') }}" type="text/css" media="print" />
 {% endblock %}
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-recherche-publication-index.js"
+    {% javascripts output="compiled/hopitalnumerique-publication-publication-index.js"
         'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
-        'bundles/hopitalnumeriquerecherche/js/publication.js'
+        'bundles/hopitalnumeriquepublication/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -32,7 +32,7 @@
     {% if objet.isInfraDoc %}
         <div id="sommaire" class="closed">
             <div class="content" style="display:none">
-                <a class="resume" href="{{path('hopital_numerique_recherche_publication_objet', {'id':objet.id,'alias':objet.alias})}}">Résumé</a>
+                <a class="resume" href="{{path('hopital_numerique_publication_publication_objet', {'id':objet.id,'alias':objet.alias})}}">Résumé</a>
                 <h3 class="violet">Sommaire</h3>
                 <ul>
                     {% for one in contenus %}
@@ -40,7 +40,7 @@
                     {% endfor %}
                 </ul>
                 {% if objet.synthese is not null %}
-                <a class="resume downloadLink synthese fancybox.iframe" style="width:90px;text-align:left" href="{{path('hopital_numerique_recherche_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
+                <a class="resume downloadLink synthese fancybox.iframe" style="width:90px;text-align:left" href="{{path('hopital_numerique_publication_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
                 {% endif %}
             </div>
         </div>
@@ -88,7 +88,7 @@
                     
                     <div class="clearfix"></div>
                     {% if objet.synthese is not null %}
-                        <a class="downloadLink readmore synthese fancybox.iframe" href="{{path('hopital_numerique_recherche_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
+                        <a class="downloadLink readmore synthese fancybox.iframe" href="{{path('hopital_numerique_publication_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
                     {% endif %}
 
                     <div class="clearfix"></div>
@@ -154,7 +154,7 @@
 {% macro buildTree(one, objet) %}
     <li>
         {% if one.hasContent %}
-            <a href="{{path('hopital_numerique_recherche_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':one.id,'aliasc':one.alias})}}" >{{one.order ~ ' ' ~ one.titre}} </a>
+            <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':one.id,'aliasc':one.alias})}}" >{{one.order ~ ' ' ~ one.titre}} </a>
         {% else %}
             <p>{{one.order ~ ' ' ~ one.titre}}</p>
         {% endif %}

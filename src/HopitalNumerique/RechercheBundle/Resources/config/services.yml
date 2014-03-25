@@ -1,7 +1,6 @@
 parameters:
     hopitalnumerique_recherche.manager.search.class: HopitalNumerique\RechercheBundle\Manager\SearchManager
     hopitalnumerique_recherche.manager.requete.class: HopitalNumerique\RechercheBundle\Manager\RequeteManager
-    hopitalnumerique_recherche.twig.publication.class: HopitalNumerique\RechercheBundle\Twig\PublicationExtension
 
 services:
     hopitalnumerique_recherche.manager.search:
@@ -13,10 +12,3 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
-
-    #Extension Twig
-    hopitalnumerique_recherche.twig.publication_extension:
-        class: %hopitalnumerique_recherche.twig.publication.class%
-        arguments : ["@hopitalnumerique_objet.manager.objet", "@hopitalnumerique_objet.manager.contenu"]
-        tags:
-            - { name: twig.extension }

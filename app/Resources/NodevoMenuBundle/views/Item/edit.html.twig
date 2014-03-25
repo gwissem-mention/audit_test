@@ -34,8 +34,6 @@
 {% endblock %}
 
 {% block toolbarButton %}
-    <div class="btn btn-default selectPublication">Selectionner une publication</div>
-
     {% if item.menu %}
         <a href="{{path('nodevo_menu_item', {'id':item.menu.id})}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     {% else %}
@@ -60,7 +58,26 @@
                 
                 {{ form_start(form) }}
                     {{ form_row(form.name) }}
-                    {{ form_row(form.route) }}
+                    
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Selectionner</label>
+                        <div class="col-md-6">
+                            <div class="btn btn-default selectPublication">Un objet</div>
+                            <div class="btn btn-default selectArticle">Un article</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">ou une Route</label>
+                        <div class="col-md-6">
+                            {{ form_widget(form.route) }}
+                        </div>
+                        <div class="col-md-3">
+                            <div class="help-block">
+                                {{ form_errors(form.route) }}
+                            </div>
+                        </div>
+                    </div>
                     
                     <div class="form-group">
                         {{ form_label(form.routeParameters) }}
@@ -75,7 +92,19 @@
                     </div>
 
                     {#{{ form_row(form.routeAbsolute) }}#}
-                    {{ form_row(form.uri) }}
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">ou une URI</label>
+                        <div class="col-md-6">
+                            {{ form_widget(form.uri) }}
+                        </div>
+                        <div class="col-md-3">
+                            <div class="help-block">
+                                {{ form_errors(form.uri) }}
+                            </div>
+                        </div>
+                    </div>
+
                     {{ form_row(form.display) }}
                     {{ form_row(form.displayChildren) }}
                     {{ form_row(form.parent) }}
@@ -102,5 +131,6 @@
     </div>
 
     <input type="hidden" id="objets-liste-url" value="{{path('hopitalnumerique_objet_objet_getPublications')}}" />
+    <input type="hidden" id="articles-liste-url" value="{{path('hopitalnumerique_objet_objet_getPublications', {'articles':'2'})}}" />
     <input type="hidden" id="objets-details-menu-url" value="{{path('hopitalnumerique_objet_objet_getPublicationDetailsForMenu')}}" />
 {% endblock %}
