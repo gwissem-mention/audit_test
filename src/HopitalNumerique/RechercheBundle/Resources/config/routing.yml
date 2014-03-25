@@ -14,7 +14,7 @@ hopital_numerique_recherche_getresults:
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:getResults }
 
 hopital_numerique_recherche_synthese:
-    pattern:  /synthese/{id}
+    pattern:  /publication/synthese/{id}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:Search:synthese", id:1 }
     requirements:
         id: \d+
@@ -29,6 +29,12 @@ hopital_numerique_recherche_publication_objet:
 hopital_numerique_recherche_publication_contenu:
     pattern:  /publication/{id}-{alias}/{idc}-{aliasc}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:Publication:contenu", id:1, idc:1, alias:alias, aliasc:aliasc}
+    requirements:
+        id: \d+
+
+hopital_numerique_recherche_publication_article:
+    pattern:  /publication/{categorie}/{id}-{alias}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:Publication:article", categorie:categorie, id:1, alias:alias }
     requirements:
         id: \d+
 
