@@ -13,7 +13,7 @@ INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `i
 (NULL, 68, 3, 'Requêtes de recherche', 'hopital_numerique_requete_homepage', NULL, 0, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 3),
 (NULL, 68, 3, 'Outils d''autodiagnostic', NULL, NULL, 0, '#', NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 4),
 (NULL, 68, 3, 'Les formations', NULL, NULL, 0, '#', NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 5),
-(NULL, 68, 3, 'Les interventions', NULL, NULL, 0, '#', NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 6),
+(NULL, 68, 3, 'Les interventions', NULL, NULL, 0, 'hopital_numerique_intervention_demande_liste', NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 6),
 (NULL, 68, 3, 'Echanger avec l''ANAP', NULL, NULL, 0, '#', NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 7),
 (NULL, 68, 3, 'Candidature pour devenir ambassadeur', 'hopitalnumerique_user_ambassadeur_front_edit', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 8),
 (NULL, 68, 3, 'Candidature pour devenir expert', 'hopitalnumerique_user_expert_front_edit', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 9),
