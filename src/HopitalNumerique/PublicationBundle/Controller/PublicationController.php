@@ -77,16 +77,10 @@ class PublicationController extends Controller
         if( $this->checkAuthorization( $objet ) === false )
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
 
-        //Types objet
-        $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
-
         //render
-        return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
+        return $this->render('HopitalNumeriquePublicationBundle:Publication:articles.html.twig', array(
             'objet'        => $objet,
-            'types'        => $types,
-            'contenus'     => array(),
-            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
-            'ambassadeurs' => array()
+            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() )
         ));
     }
 
