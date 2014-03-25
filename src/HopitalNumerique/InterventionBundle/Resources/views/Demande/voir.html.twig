@@ -153,7 +153,7 @@
             <div class="row">
                 <div class="col-md-4">Établissements rattachés</div>
                 <div class="col-md-8">
-                    {% for interventionRegroupement in interventionRegroupements %}
+                    {% for interventionRegroupement in interventionDemande.interventionRegroupementsDemandesRegroupees %}
                         <div>
                             <a href="{{ path('hopital_numerique_intervention_demande_voir', { id:interventionRegroupement.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
                             {% if interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante is not null %}
@@ -293,7 +293,7 @@
                       </div>
                     </div>
 
-                {% elseif interventionDemande.etablissementPeutAnnulerDemande(app.user, interventionRegroupements) %}
+                {% elseif etablissementPeutAnnulerDemande %}
                     <button type="button" data-intervention-etat-annulation="{{ InterventionEtat.interventionEtatAnnulationEtablissementId }}" class="btn btn-default btn-warning">Annuler ma demande</button>
                 {% endif %}
                 

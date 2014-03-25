@@ -8,6 +8,7 @@ namespace HopitalNumerique\InterventionBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Manager pour les regroupements d'interventions.
@@ -24,8 +25,21 @@ class InterventionRegroupementManager extends BaseManager
      */
     public function estInterventionDemandeRegroupee(InterventionDemande $interventionDemande)
     {
-        return $this->_repository->estInterventionDemandeRegroupee($interventionDemande);
-        /*$interventionRegroupements = $this->_repository->findBy(array('interventionDemandeRegroupee' => $interventionDemande));
-        return (count($interventionRegroupements) > 0);*/
+        return (count($interventionDemande->getInterventionRegroupementsDemandesPrincipales()) > 0);
+    }
+    
+    /**
+     * Retourne si une des demandes principales des regroupements d'intervention a ce référent.
+     *
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement\InterventionDemande $interventionDemande La demande d'intervention possédant les regroupements à vérifier
+     * @param \HopitalNumerique\UserBundle\Entity\User $referent Référent à vérifier
+     * @return boolean VRAI ssi le référent est présent dans une demande principale.
+     */
+    public function interventionRegroupementsDemandePrincipaleHaveReferent(InterventionDemande $interventionDemande, User $referent)
+    {
+        foreach ($interventionDemande->getInterventionRegroupementsDemandesPrincipales() as $interventionRegroupementsDemandePrincipale)
+        if ($interventionRegroupementsDemandePrincipale->getInterventionDemandePrincipale()->getReferent()->getId() == $referent->getId())
+            return true;
+        return false;
     }
 }

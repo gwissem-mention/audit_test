@@ -34,20 +34,18 @@ class DemandeController extends Controller
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         $interventionDemandeEstRegroupee = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->estInterventionDemandeRegroupee($interventionDemande);
         
-        if (!$this->get('hopitalnumerique_intervention.manager.intervention_demande')->peutVoir($interventionDemande))
+        if (!$this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->peutVoir($interventionDemande))
         {
             $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à visualiser cette demande.');
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
-        
-        $interventionRegroupements = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->findBy(array('interventionDemandePrincipale' => $interventionDemande));
 
         $vueParametres = array(
             'interventionDemande' => $interventionDemande,
             'interventionDemandeEstRegroupee' => $interventionDemandeEstRegroupee,
             'InterventionEtat' => new InterventionEtat(),
-            'interventionRegroupements' => $interventionRegroupements,
-            'etablissementsRattachesNonRegroupes' => $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesNonRegroupes($interventionDemande, $interventionRegroupements)
+            'etablissementsRattachesNonRegroupes' => $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesNonRegroupes($interventionDemande),
+            'etablissementPeutAnnulerDemande' => $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->etablissementPeutAnnulerDemande($interventionDemande, $utilisateurConnecte)
         );
         
         if ($utilisateurConnecte->hasRoleAmbassadeur())
