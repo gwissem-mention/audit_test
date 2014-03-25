@@ -59,7 +59,7 @@
 	                                <table style="width:250px; cellspacing:0; cellpadding:0" >
                                         {% for ressource in ressources %}
                                             <tr>
-                                               <td class="tableFirstCol" style="height:60px">{{ressource.nom}}</td>
+                                               <td class="tableFirstCol" style="height:65px">{{ressource.nom}}</td>
                                             </tr>
                                         {% endfor %}
 	                                </table>
@@ -76,7 +76,7 @@
 			                                    <tr style="width:1015px">
 	                                        {% endif %}
                                             {% for role in roles.initiaux %}
-		                                        <td style="align:center;height:60px; min-width:110px">
+		                                        <td style="align:center;height:65px; min-width:110px">
 		                                            <div class="btn-group">
 		                                                {% if ressource.type == 1 %}
 			                                                {% if acls[ressource.id][role.id]['read'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
