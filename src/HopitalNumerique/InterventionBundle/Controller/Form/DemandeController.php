@@ -41,8 +41,6 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
             $this->get('session')->getFlashBag()->add('danger', 'L\'utilisateur choisi n\'est pas un ambassadeur.');
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
-        
-        ini_set('memory_limit', '256M');
 
         $this->utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         $this->interventionDemande = new InterventionDemande();
@@ -160,8 +158,6 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      */
     public function editAction(InterventionDemande $id)
     {
-        ini_set('memory_limit', '256M');
-
         $this->utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         $this->interventionDemande = $id;
         $interventionDemandeFormulaire = null;
