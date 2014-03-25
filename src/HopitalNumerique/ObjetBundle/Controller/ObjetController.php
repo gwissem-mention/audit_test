@@ -247,6 +247,10 @@ class ObjetController extends Controller
                     ));
                 }
 
+                //Object security isArticle = false
+                if( is_null($objet->getIsArticle()) )
+                    $objet->setisArticle( false );
+                
                 //Met à jour la date de modification
                 $notify = $form->get("modified")->getData();
                 if( $notify === "1")

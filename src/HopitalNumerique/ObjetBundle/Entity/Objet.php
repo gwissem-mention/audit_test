@@ -194,70 +194,14 @@ class Objet
 
     /**
      * @Assert\File(
-     *     maxSize = "10M",
-     *     mimeTypes = { 
-     *         "application/pdf", 
-     *         "application/x-pdf", 
-     *         "application/vnd.ms-excel", 
-     *         "application/msword", 
-     *         "application/xls", 
-     *         "application/x-xls", 
-     *         "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
-     *         "application/vnd.openxmlformats-officedocument.presentationml.presentation", 
-     *         "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
-     *         "application/vnd.openxmlformats-officedocument.presentationml.slide",
-     *         "application/vnd.ms-powerpoint",
-     *         "image/gif", 
-     *         "image/jpeg", 
-     *         "image/png", 
-     *         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
-     *         "application/zip",
-     *         "application/vnd.oasis.opendocument.text ",
-     *         "application/vnd.oasis.opendocument.graphics",
-     *         "application/vnd.oasis.opendocument.presentation",
-     *         "application/vnd.oasis.opendocument.spreadsheet",
-     *         "application/vnd.oasis.opendocument.chart",
-     *         "application/vnd.oasis.opendocument.formula",
-     *         "application/vnd.oasis.opendocument.database",
-     *         "application/vnd.oasis.opendocument.image",
-     *         "application/vnd.openofficeorg.extension"
-     *     },
-     *     mimeTypesMessage = "Choisissez un fichier valide (PDF, EXCEL, WORD, POWER POINT, ZIP, IMAGE)"
+     *     maxSize = "10M"
      * )
      */
     public $file;
     
     /**
      * @Assert\File(
-     *     maxSize = "10M",
-     *     mimeTypes = { 
-     *         "application/pdf", 
-     *         "application/x-pdf", 
-     *         "application/vnd.ms-excel", 
-     *         "application/msword", 
-     *         "application/xls", 
-     *         "application/x-xls", 
-     *         "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
-     *         "application/vnd.openxmlformats-officedocument.presentationml.presentation", 
-     *         "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
-     *         "application/vnd.openxmlformats-officedocument.presentationml.slide",
-     *         "application/vnd.ms-powerpoint",
-     *         "image/gif", 
-     *         "image/jpeg", 
-     *         "image/png", 
-     *         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
-     *         "application/zip",
-     *         "application/vnd.oasis.opendocument.text ",
-     *         "application/vnd.oasis.opendocument.graphics",
-     *         "application/vnd.oasis.opendocument.presentation",
-     *         "application/vnd.oasis.opendocument.spreadsheet",
-     *         "application/vnd.oasis.opendocument.chart",
-     *         "application/vnd.oasis.opendocument.formula",
-     *         "application/vnd.oasis.opendocument.database",
-     *         "application/vnd.oasis.opendocument.image",
-     *         "application/vnd.openofficeorg.extension"
-     *     },
-     *     mimeTypesMessage = "Choisissez un fichier valide (PDF, EXCEL, WORD, POWER POINT, ZIP, IMAGE)"
+     *     maxSize = "10M"
      * )
      */
     public $file2;
