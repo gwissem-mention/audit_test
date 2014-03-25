@@ -20,16 +20,18 @@ class ParamsType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $pattern = '/\{([a-zA-Z]+)\}/';
-        preg_match_all($pattern, $this->_route->getPattern(), $matches);
+        if( $this->_route ) {
+            $pattern = '/\{([a-zA-Z]+)\}/';
+            preg_match_all($pattern, $this->_route->getPattern(), $matches);
 
-        if( isset($matches[1]) ){
-            foreach( $matches[1] as $param ){
-                $builder->add('routeParameters_'.$param, 'text', array(
-                    'label'  => $param,
-                    'mapped' => false,
-                    'data'   => isset($this->_params[$param]) ? $this->_params[$param] : ''
-                ));
+            if( isset($matches[1]) ){
+                foreach( $matches[1] as $param ){
+                    $builder->add('routeParameters_'.$param, 'text', array(
+                        'label'  => $param,
+                        'mapped' => false,
+                        'data'   => isset($this->_params[$param]) ? $this->_params[$param] : ''
+                    ));
+                }
             }
         }
 

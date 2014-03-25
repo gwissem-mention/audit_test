@@ -49,7 +49,8 @@ class ItemType extends AbstractType
             ));
 
         //Handle Route Parameters
-        $builder->add('routeParameters', new ParamsType( $this->_allRoutes[$datas->getRoute()], $datas->getRouteParameters()), array(
+        $route = isset($this->_allRoutes[$datas->getRoute()]) ? $this->_allRoutes[$datas->getRoute()] : null;
+        $builder->add('routeParameters', new ParamsType( $route, $datas->getRouteParameters()), array(
             'required'   => false, 
             'label'      => 'Paramètres de la route sélectionnée',
             'mapped'     => false,
