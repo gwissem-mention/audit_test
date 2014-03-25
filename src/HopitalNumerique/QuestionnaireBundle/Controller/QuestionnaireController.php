@@ -275,12 +275,15 @@ class QuestionnaireController extends Controller
                         //CMSI
                         $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
                         $CMSI = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');
-                        $variablesTemplate = array(
-                        	'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
-                            'questionnaire' => $candidature
-                        );
-                        $mailCMSI = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurCMSIMail($CMSI, $variablesTemplate);
-                        $this->get('mailer')->send($mailCMSI);
+                        if(!is_null($CMSI))
+                        {
+                            $variablesTemplate = array(
+                            	'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
+                                'questionnaire' => $candidature
+                            );
+                            $mailCMSI = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurCMSIMail($CMSI, $variablesTemplate);
+                            $this->get('mailer')->send($mailCMSI);                            
+                        }
                 	    break;
                 	default:
                 	    throw new \Exception('Ce type de questionnaire ne possède pas de mail en base.');
