@@ -38,7 +38,8 @@ class EtablissementType extends InterventionDemandeType
         parent::buildForm($builder, $options);
         $builder
             ->remove('ambassadeur')
-            ->remove('referent');
+            ->remove('referent')
+            ->remove('cmsiCommentaire');
     }
 
     /**
