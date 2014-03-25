@@ -14,7 +14,7 @@ class PublicationController extends Controller
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
 
         //Si l'user connecté à le rôle requis pour voir l'objet
-        if( $this->_checkAuthorization( $objet ) === false )
+        if( $this->checkAuthorization( $objet ) === false )
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
         
         //Types objet
@@ -29,7 +29,7 @@ class PublicationController extends Controller
             'types'        => $types,
             'contenus'     => $contenus,
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
-            'ambassadeurs' => $this->_getAmbassadeursConcernes( $objet->getId() )
+            'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() )
         ));
     }
 
@@ -41,7 +41,7 @@ class PublicationController extends Controller
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
 
         //Si l'user connecté à le rôle requis pour voir l'objet
-        if( $this->_checkAuthorization( $objet ) === false )
+        if( $this->checkAuthorization( $objet ) === false )
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
 
         //on récupère le contenu
@@ -62,7 +62,7 @@ class PublicationController extends Controller
             'contenu'      => $contenu,
             'prefix'       => $prefix,
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() ),
-            'ambassadeurs' => $this->_getAmbassadeursConcernes( $objet->getId() )
+            'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() )
         ));
     }
 
@@ -78,7 +78,7 @@ class PublicationController extends Controller
      *
      * @return array
      */
-    private function _getAmbassadeursConcernes( $objet )
+    private function getAmbassadeursConcernes( $objet )
     {
         //get connected user and his region
         $user   = $this->get('security.context')->getToken()->getUser();
@@ -97,7 +97,7 @@ class PublicationController extends Controller
      *
      * @return boolean
      */
-    private function _checkAuthorization( $objet )
+    private function checkAuthorization( $objet )
     {
         $role = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
 

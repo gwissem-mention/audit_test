@@ -126,7 +126,7 @@ VALUES (
 NULL , '73', '4', 'Lire une évaluation d''une demande d''intervention', 'hopital_numerique_intervention_evaluation_voir', NULL , '0', NULL , NULL , '0', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '5'
 );*/
 
-UPDATE `hn_questionnaire_question` SET `que_obligatoire` = '0' WHERE `hn_questionnaire_question`.`que_id` =25;
+/*UPDATE `hn_questionnaire_question` SET `que_obligatoire` = '0' WHERE `hn_questionnaire_question`.`que_id` =25;*/
 
 ---------------------------------------------------------------------------------------------
 /* QSO - 24/03/2014

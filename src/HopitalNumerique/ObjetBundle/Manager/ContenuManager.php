@@ -16,9 +16,9 @@ class ContenuManager extends BaseManager
     protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Contenu';
 
     /**
-     * Retourne l'arbo des contenu de l'objet
+     * Retourne l'arbo des contenu de l'objet (ou des objets)
      *
-     * @param integer $id ID de l'objet
+     * @param integer|array $id ID de(s) l'objet(s)
      *
      * @return array
      */
@@ -31,33 +31,7 @@ class ContenuManager extends BaseManager
         $parents  = $datas->matching( $criteria );
         
         //call recursive function to handle all datas
-        return $this->_getArboRecursive($datas, $parents, array(), '' );
-    }
-    /**
-     * 
-     * Retourne l'arbo des contenu de l'objet
-     *
-     * @param array $id ID de l'objet
-     *
-     * @return array
-     */
-    public function getArboForObjets( $ids )
-    {
-        $datas = new ArrayCollection( $this->getRepository()->getArboForObjets( $ids )->getQuery()->getResult() );
-
-        //Récupère uniquement les premiers parents
-        $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );
-        $parents  = $datas->matching( $criteria );
-        
-        //call recursive function to handle all datas
-        $elems  = $this->_getArboRecursive($datas, $parents, array(), '' );
-        $return = array();
-        foreach( $elems as $one ){
-            if( $one->objet != null ){
-                $return[ $one->objet ][] = $one;
-            }
-        }
-        return $return;
+        return $this->getArboRecursive($datas, $parents, array(), '' );
     }
 
     /**
@@ -126,7 +100,7 @@ class ContenuManager extends BaseManager
                 $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
         }
         
-        $this->_formatReferencesOwn( $return );
+        $this->formatReferencesOwn( $return );
         
         return $return;
     }
@@ -164,7 +138,7 @@ class ContenuManager extends BaseManager
      */
     public function getPrefix($contenu)
     {
-        return $this->_getPrefix( $contenu, '' );
+        return $this->getPrefixRecursif( $contenu, '' );
     }
 
     /**
@@ -227,6 +201,13 @@ class ContenuManager extends BaseManager
 
 
 
+
+
+
+
+
+
+
     /**
      * Retourne le prefix du contenu
      *
@@ -235,12 +216,12 @@ class ContenuManager extends BaseManager
      *
      * @return string
      */
-    private function _getPrefix( $contenu, $prefix )
+    private function getPrefixRecursif( $contenu, $prefix )
     {
         $prefix = $contenu->getOrder() . '.' . $prefix;
 
         if( !is_null($contenu->getParent()) )
-            $prefix = $this->_getPrefix($contenu->getParent(), $prefix);
+            $prefix = $this->getPrefixRecursif($contenu->getParent(), $prefix);
         
         return $prefix;
     }
@@ -254,7 +235,7 @@ class ContenuManager extends BaseManager
      *
      * @return array
      */
-    private function _getArboRecursive( ArrayCollection $items, $elements, $tab, $numeroChapitre )
+    private function getArboRecursive( ArrayCollection $items, $elements, $tab, $numeroChapitre )
     {        
         foreach($elements as $element)
         {
@@ -274,7 +255,7 @@ class ContenuManager extends BaseManager
             //add childs : filter items with current element
             $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $element ))->orderBy( array( "order" => Criteria::ASC ) );
             $childs       = $items->matching( $criteria );
-            $item->childs = $this->_getArboRecursive($items, $childs, array(), $chapitre );
+            $item->childs = $this->getArboRecursive($items, $childs, array(), $chapitre );
 
             //add current item to big table
             $tab[] = $item;
@@ -285,34 +266,34 @@ class ContenuManager extends BaseManager
     }
     
     /**
-     * [_formatReferencesOwn description]
+     * [formatReferencesOwn description]
      *
      * @param  [type] $retour [description]
      *
      * @return [type]
      */
-    private function _formatReferencesOwn ( &$retour )
+    private function formatReferencesOwn ( &$retour )
     {
         foreach( $retour as $key => $one ) {
-            $retour[ $key ]['childs'] = $this->_getChilds($retour, $one);
+            $retour[ $key ]['childs'] = $this->getChilds($retour, $one);
         }
     }
     
     /**
-     * [_getChilds description]
+     * [getChilds description]
      *
      * @param  [type] $retour [description]
      * @param  [type] $elem   [description]
      *
      * @return [type]
      */
-    private function _getChilds ( &$retour, $elem )
+    private function getChilds ( &$retour, $elem )
     {
         if( isset( $elem['childs'] ) && count($elem['childs']) ) {
             $childs = array();
             foreach( $elem["childs"] as $key => $one ) {
                 $childs[ $one ] = $retour[ $one ];
-                $petitsEnfants  = $this->_getChilds($retour, $childs[ $one ]);
+                $petitsEnfants  = $this->getChilds($retour, $childs[ $one ]);
                 if( $petitsEnfants ){
                     $childs[ $one ]['childs'] = $petitsEnfants;
                     unset( $retour[ $one ] );

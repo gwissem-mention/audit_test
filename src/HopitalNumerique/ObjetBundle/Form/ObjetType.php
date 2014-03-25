@@ -66,11 +66,11 @@ class ObjetType extends AbstractType
                     $qb = $er->createQueryBuilder('ref');
 
                     //cas objet existe + is ARTICLE
-                    if( $datas->getIsArticle() ){
+                    if( $datas->isArticle() ){
                         $qb->andWhere('ref.id != 188','ref.code = :article')
                            ->setParameter('article', 'CATEGORIE_ARTICLE');
                     //cas objet existe + is OBJET
-                    }elseif( !$datas->getIsArticle() ) {
+                    }elseif( !$datas->isArticle() ) {
                         $qb->andWhere('ref.id != 175','ref.code = :objet')
                            ->setParameter('objet', 'CATEGORIE_OBJET');
                     }
@@ -172,7 +172,7 @@ class ObjetType extends AbstractType
             ->add('modified', 'hidden', array(
                 'mapped'   => false
             ))
-            ->add('isArticle', 'hidden', array(
+            ->add('article', 'hidden', array(
                 
             ));
     }
