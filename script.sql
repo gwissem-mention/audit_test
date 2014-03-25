@@ -136,6 +136,14 @@ NULL , '73', '4', 'Lire une évaluation d''une demande d''intervention', 'hopita
 
 /*UPDATE `hn_questionnaire_question` SET `que_obligatoire` = '0' WHERE `hn_questionnaire_question`.`que_id` =25;*/
 
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES
+(NULL, 68, 3, 'Lire une demande d''intervention', 'hopital_numerique_intervention_demande_voir', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+(NULL, 68, 3, 'Suivi des demandes d''intervention', 'hopital_numerique_intervention_demande_suivi_demandes', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+(NULL, 68, 3, 'Nouvelle demande d''intervention', 'hopital_numerique_intervention_demande_nouveau', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+(NULL, 68, 3, 'Nouvelle évaluation d''un demande d''intervention', 'hopital_numerique_intervention_evaluation_nouveau', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+(NULL, 68, 3, 'Édition d''une demande d''intervention', 'hopital_numerique_intervention_demande_edit', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+(NULL, 68, 3, 'Lire une évaluation d''une demande d''intervention', 'hopital_numerique_intervention_evaluation_voir', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1);
+
 ---------------------------------------------------------------------------------------------
 /* QSO - 24/03/2014
    PROD -> DEV
