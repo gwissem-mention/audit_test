@@ -6,10 +6,18 @@
 ---------------------------------------------------------------------------------------------
 /* GME - 13/02/2014
    PROD -> DEV
-   Lorem ipsum 
+   Lorem ipsum */
 
-INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`) VALUES
-(26, '[HOPITALNUMERIQUE] - Mot de passe perdu', 'Mail de réinitialisation du mot de passe', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\n\nVotre mot de passe a été réinitialisé, merci de cliquer sur le lien suivant pour continuer : %url \n\nCordialement,');*/
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES
+(NULL, 68, 3, 'Informations personnelles', 'hopital_numerique_user_informations_personnelles', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+(NULL, 68, 3, 'Requêtes de recherche', 'hopital_numerique_requete_homepage', NULL, 0, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 3),
+(NULL, 68, 3, 'Outils d''autodiagnostic', NULL, NULL, 0, '#', NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 4),
+(NULL, 68, 3, 'Les formations', NULL, NULL, 0, '#', NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 5),
+(NULL, 68, 3, 'Les interventions', NULL, NULL, 0, '#', NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 6),
+(NULL, 68, 3, 'Echanger avec l''ANAP', NULL, NULL, 0, '#', NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 7),
+(NULL, 68, 3, 'Candidature pour devenir ambassadeur', 'hopitalnumerique_user_ambassadeur_front_edit', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 8),
+(NULL, 68, 3, 'Candidature pour devenir expert', 'hopitalnumerique_user_expert_front_edit', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 9),
+(NULL, 68, 3, 'Modication mot de passe', 'hopital_numerique_user_motdepasse', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 2);
 
 
 ---------------------------------------------------------------------------------------------
