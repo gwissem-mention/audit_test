@@ -4,6 +4,7 @@
     Gestion des habilitations
 {% endblock %}
 
+{#         'bundles/nodevotools/ScrollTable/scrollTable.js'#}
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/nodevo-acl-acl-index.js"
@@ -34,47 +35,75 @@
 
             <div class="panel-body" >
                 <div>
-                    <table class="nodevo-acls table table-striped table-hover" style="width:{{ (roles.initiaux|length * 130) + 235 }}px" >
-                        <thead>
-                            <tr>
-                                <th></th>
-                                {% for role in roles.initiaux %}
-                                    <th align="center" width="130px">
-                                        {{role.name}}
-                                    </th>
-                                {% endfor %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for ressource in ressources %}
-                                <tr>
-                                    <td>{{ressource.nom}}</td>
-                                    {% for role in roles.initiaux %}
-                                        <td align="center">
-                                            <div class="btn-group">
-                                                {% if ressource.type == 1 %}
-                                                {% if acls[ressource.id][role.id]['read'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
-                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Lecture" data-type="1" data-ressource="{{ressource.id}}" data-role="{{role.id}}" >
-                                                    <i class="fa fa-eye"></i>
-                                                </div>
-                                                
-                                                {% if acls[ressource.id][role.id]['write'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
-                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Ecriture" data-type="2" data-ressource="{{ressource.id}}" data-role="{{role.id}}" >
-                                                    <i class="fa fa-edit"></i>
-                                                </div>
-                                                {% else %}
-                                                {% if acls[ressource.id][role.id]['write'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
-                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Accès" data-type="2" data-ressource="{{ ressource.id }}" data-role="{{ role.id }}">
-                                                    <i class="fa fa-edit"></i>
-                                                </div>
-                                                {% endif %}
-                                            </div>
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <table class="nodevo-acls table table-striped table-hover">
+	                    <tr>
+	                        <td id="firstTd">
+	                        </td>
+	                        <td>
+	                            <div id="divHeader" style="overflow:hidden;width:1000px;">
+	                                <table>
+	                                    <tr>
+				                            {% for role in roles.initiaux %}
+	                                            <td style="min-width:110px">
+					                                <div class="tableHeader">{{role.name}}</div>
+	                                            </td>
+				                            {% endfor %}
+							            </tr>
+							        </table>
+							    </div>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td valign="top">
+	                            <div id="firstcol" style="overflow: hidden;height:635px">
+	                                <table style="width:250px; cellspacing:0; cellpadding:0" >
+                                        {% for ressource in ressources %}
+                                            <tr>
+                                               <td class="tableFirstCol" style="height:60px">{{ressource.nom}}</td>
+                                            </tr>
+                                        {% endfor %}
+	                                </table>
+	                            </div>
+	                        </td>
+	                        <td valign="top">
+	                            <div id="table_div" style="overflow: scroll;width:1015px;height:650px;position:relative" onscroll="fnScroll()" >
+	                                <table cellspacing="0" cellpadding="0" >
+                                        {% for ressource in ressources %}
+                                            {# Pour la premiere ligne du tableau, on ajoute l'id firstTr, sinon un tr classique #}
+	                                        {% if 1 == loop.index %}
+				                               <tr id='firstTr' style="width:1015px">
+			                                {% else %}
+			                                    <tr style="width:1015px">
+	                                        {% endif %}
+                                            {% for role in roles.initiaux %}
+		                                        <td style="align:center;height:60px; min-width:110px">
+		                                            <div class="btn-group">
+		                                                {% if ressource.type == 1 %}
+			                                                {% if acls[ressource.id][role.id]['read'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
+			                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Lecture" data-type="1" data-ressource="{{ressource.id}}" data-role="{{role.id}}" >
+			                                                    <i class="fa fa-eye"></i>
+			                                                </div>
+			                                                
+			                                                {% if acls[ressource.id][role.id]['write'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
+			                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Ecriture" data-type="2" data-ressource="{{ressource.id}}" data-role="{{role.id}}" >
+			                                                    <i class="fa fa-edit"></i>
+			                                                </div>
+		                                                {% else %}
+			                                                {% if acls[ressource.id][role.id]['write'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
+			                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Accès" data-type="2" data-ressource="{{ ressource.id }}" data-role="{{ role.id }}">
+			                                                    <i class="fa fa-edit"></i>
+			                                                </div>
+		                                                {% endif %}
+		                                            </div>
+		                                        </td>
+			                                {% endfor %}
+			                                </tr>
+                                        {% endfor %}
+				                     </table>
+				                 </div>
+	                        </td>
+	                    </tr>
+	                </table>
                 </div>
             </div>
         </div>

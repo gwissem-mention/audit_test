@@ -29,3 +29,9 @@ jQuery(document).ready(function() {
         });
     });
 });
+
+//function to support scrolling of title and first column
+fnScroll = function(){
+  $('#divHeader').scrollLeft($('#table_div').scrollLeft());
+  $('#firstcol').scrollTop($('#table_div').scrollTop());
+}
