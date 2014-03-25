@@ -5,8 +5,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Doctrine\ORM\EntityRepository;
-
 class ParamsType extends AbstractType
 {
     private $_params = array();
