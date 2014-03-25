@@ -65,8 +65,7 @@ class InterventionEvaluationManager
     public function utilisateurPeutEvaluer(InterventionDemande $interventionDemande, User $utilisateur)
     {
         return (
-            // Il ne s'agit pas d'une demande qui a été regroupée
-            (count($interventionDemande->getInterventionRegroupementsDemandesPrincipales()) == 0)
+            !$interventionDemande->estDemandeRegroupee()
             && ($interventionDemande->getEvaluationEtat() != null && $interventionDemande->evaluationEtatEstAEvaluer())
             && ($interventionDemande->getReferent()->getId() == $utilisateur->getId())
         );
@@ -81,8 +80,7 @@ class InterventionEvaluationManager
     public function utilisateurPeutVisualiser(InterventionDemande $interventionDemande, User $utilisateur)
     {
         return (
-            // Il ne s'agit pas d'une demande qui a été regroupée
-            (count($interventionDemande->getInterventionRegroupementsDemandesPrincipales()) == 0)
+            !$interventionDemande->estDemandeRegroupee()
             && $interventionDemande->evaluationEtatEstEvalue()
             &&
             (

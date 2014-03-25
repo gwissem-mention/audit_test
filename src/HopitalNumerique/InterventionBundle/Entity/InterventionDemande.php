@@ -921,6 +921,16 @@ class InterventionDemande
         return false;
     }
     
+    /**
+     * Retourne si la demande d'intervention a été regroupée (possède donc une demande principale).
+     * 
+     * @return boolean VRAI ssi la demande d'intervention a été regroupée
+     */
+    public function estDemandeRegroupee()
+    {
+        return (count($this->interventionRegroupementsDemandesPrincipales) > 0);
+    }
+
     
     /**
      * Retourne la date butoir pour le refus, validation ou mise en attente de la demande d'intervention par le CMSI.
