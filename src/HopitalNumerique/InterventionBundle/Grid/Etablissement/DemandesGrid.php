@@ -60,26 +60,29 @@ class DemandesGrid extends DemandesAbstractGrid
             }
         );
         $this->addColonne($colonneDateChoix);
-        
-        /*$colonneChoixCMSI = new Column\DateColumn('cmsiDateChoixLibelle', 'CMSI');
-        $this->addColonne($colonneChoixCMSI->setFilterable(false)->setSortable(false));
-        $colonneChoixAmbassadeur = new Column\DateColumn('ambassadeurDateChoixLibelle', 'Ambassadeur');
-        $this->addColonne($colonneChoixAmbassadeur->setFilterable(false)->setSortable(false));*/
-        
-        
-        
 
         $colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
         $colonneEvaluation->setAlign('center');
         $colonneEvaluation->manipulateRenderCell(
-            function($value, $row, $router) {
-                if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
+            function($value, $row, $router)
+            {
+                if (intval($row->getField('nombreDemandesPrincipales')) == 0)
                 {
-                    return '<a class="btn btn-warning" title="Évaluer la demande" href="'.$router->generate('hopital_numerique_intervention_evaluation_nouveau', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-edit"></span></a>';
+                    if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
+                    {
+                        return '<a class="btn btn-warning" title="Évaluer la demande" href="'.$router->generate('hopital_numerique_intervention_evaluation_nouveau', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-edit"></span></a>';
+                    }
+                    else if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
+                    {
+                        return '<a class="btn btn-success" title="Voir l\'évaluation" href="'.$router->generate('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-check"></span></a>';
+                    }
                 }
-                else if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
+                else
                 {
-                    return '<a class="btn btn-success" title="Voir l\'évaluation" href="'.$router->generate('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-check"></span></a>';
+                    if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
+                    {
+                        return '<button disabled class="btn btn-success"><span class="glyphicon glyphicon-check"></span></button>';
+                    }
                 }
                 return '';
             }

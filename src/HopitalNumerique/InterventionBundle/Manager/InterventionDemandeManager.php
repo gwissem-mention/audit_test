@@ -439,7 +439,7 @@ class InterventionDemandeManager extends BaseManager
      * @param string|null $messageJustificationChangementEtat Message de justification (refus) de changement d'état
      * @return boolean VRAI ssi l'état a été modifié
      */
-    public function changeEtat(InterventionDemande $interventionDemande, Reference $interventionEtat, $messageJustificationChangementEtat)
+    public function changeEtat(InterventionDemande $interventionDemande, Reference $interventionEtat, $messageJustificationChangementEtat = null)
     {
         $this->changeEtatInterventionDemandesRegroupees($interventionDemande, $interventionEtat, $messageJustificationChangementEtat);
 
@@ -447,7 +447,7 @@ class InterventionDemandeManager extends BaseManager
             return $this->changeEtatPourCmsi($interventionDemande, $interventionEtat, $messageJustificationChangementEtat);
         else if ($this->utilisateurConnecte->hasRoleAmbassadeur() && $interventionDemande->getAmbassadeur()->getId() == $this->utilisateurConnecte->getId())
             return $this->changeEtatPourAmbassadeur($interventionDemande, $interventionEtat, $messageJustificationChangementEtat);
-        else return $this->changeEtatPourEtablissement($interventionDemande);
+        else return $this->changeEtatPourEtablissement($interventionDemande, $interventionEtat);
     }
     /**
      * Change l'état des demandes d'intervention regroupées d'une demande.
@@ -459,9 +459,7 @@ class InterventionDemandeManager extends BaseManager
      */
     private function changeEtatInterventionDemandesRegroupees(InterventionDemande $interventionDemande, Reference $interventionEtat, $messageJustificationChangementEtat)
     {
-        $interventionRegroupements = $this->interventionRegroupementManager->findBy(array('interventionDemandePrincipale' => $interventionDemande));
-
-        foreach ($interventionRegroupements as $interventionRegroupement)
+        foreach ($interventionDemande->getInterventionRegroupementsDemandesRegroupees() as $interventionRegroupement)
             $this->changeEtat($interventionRegroupement->getInterventionDemandeRegroupee(), $interventionEtat, $messageJustificationChangementEtat);
     }
     /**
@@ -550,13 +548,19 @@ class InterventionDemandeManager extends BaseManager
      * Vérifie et change l'état d'une demande d'intervention pour Annulé.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut modifier l'état d'intervention
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat Le nouvel état de la demande d'intervention
      * @return boolean VRAI ssi l'état a été modifié
      */
-    private function changeEtatPourEtablissement(InterventionDemande $interventionDemande)
+    private function changeEtatPourEtablissement(InterventionDemande $interventionDemande, Reference $interventionEtat)
     {
-        if ($this->etablissementPeutAnnulerDemande($interventionDemande, $this->utilisateurConnecte))
+        if ($interventionEtat->getId() == InterventionEtat::getInterventionEtatTermineId())
         {
-            $interventionDemande->setInterventionEtat($this->interventionEtatManager->getInterventionEtatAnnulationEtablissement());
+            $interventionDemande->setInterventionEtat($interventionEtat);
+            $this->save($interventionDemande);
+        }
+        else if ($this->etablissementPeutAnnulerDemande($interventionDemande, $this->utilisateurConnecte) && $interventionEtat->getId() == InterventionEtat::getInterventionEtatAnnulationEtablissementId())
+        {
+            $interventionDemande->setInterventionEtat($interventionEtat);
             $this->save($interventionDemande);
 
             $this->interventionCourrielManager->envoiCourrielEstAnnuleEtablissement($interventionDemande);
@@ -565,4 +569,33 @@ class InterventionDemandeManager extends BaseManager
         }
         return false;
     }
+
+
+    /**
+     * Vérifie et change l'état d'une évaluation de demande d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut modifier l'état de l'évaluation
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEvaluationEtat Le nouvel état de l'évaluation
+     * @return boolean VRAI ssi l'état a été modifié
+     */
+    public function changeEvaluationEtat(InterventionDemande $interventionDemande, Reference $interventionEvaluationEtat)
+    {
+        $this->changeEvaluationEtatInterventionDemandesRegroupees($interventionDemande, $interventionEvaluationEtat);
+
+        $interventionDemande->setEvaluationEtat($interventionEvaluationEtat);
+        $this->save($interventionDemande);
+    }
+    /**
+     * Change l'état dévaluation des demandes d'intervention regroupées d'une demande.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention principale des demandes regroupées dont il faut changer également l'état d'évaluation
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEvaluationEtat Le nouvel état de l'évaluation
+     * @return void
+     */
+    private function changeEvaluationEtatInterventionDemandesRegroupees(InterventionDemande $interventionDemande, Reference $interventionEvaluationEtat)
+    {
+        foreach ($interventionDemande->getInterventionRegroupementsDemandesRegroupees() as $interventionRegroupement)
+            $this->changeEvaluationEtat($interventionRegroupement->getInterventionDemandeRegroupee(), $interventionEvaluationEtat);
+    }
+    
 }

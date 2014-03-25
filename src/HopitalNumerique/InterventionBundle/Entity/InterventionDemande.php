@@ -275,7 +275,7 @@ class InterventionDemande
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement", mappedBy="interventionDemandePrincipale", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement", mappedBy="interventionDemandePrincipale", cascade={"persist", "remove"})
      */
     private $interventionRegroupementsDemandesRegroupees;
     

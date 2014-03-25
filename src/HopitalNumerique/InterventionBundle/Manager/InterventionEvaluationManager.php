@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
 use HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Manager pour les évaluations des demandes d'intervention.
@@ -53,6 +54,48 @@ class InterventionEvaluationManager
         $this->utilisateurConnecte = $this->securityContext->getToken()->getUser();
     }
 
+    
+    /**
+     * Indique si l'utilisateur peut évaluer une demande d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention à évaluer
+     * @param \HopitalNumerique\UserBundle\Entity\User $utilisateur L'utilisateur qui souhaite évaluer
+     * @return boolean VRAI ssi l'utilisateur peut évaluer la demande
+     */
+    public function utilisateurPeutEvaluer(InterventionDemande $interventionDemande, User $utilisateur)
+    {
+        return (
+            // Il ne s'agit pas d'une demande qui a été regroupée
+            (count($interventionDemande->getInterventionRegroupementsDemandesPrincipales()) == 0)
+            && ($interventionDemande->getEvaluationEtat() != null && $interventionDemande->evaluationEtatEstAEvaluer())
+            && ($interventionDemande->getReferent()->getId() == $utilisateur->getId())
+        );
+    }
+    /**
+     * Indique si l'utilisateur peut lire une demande d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention à lire
+     * @param \HopitalNumerique\UserBundle\Entity\User $utilisateur L'utilisateur qui souhaite lire l'évaluation
+     * @return boolean VRAI ssi l'utilisateur peut lire l'évaluation de la demande
+     */
+    public function utilisateurPeutVisualiser(InterventionDemande $interventionDemande, User $utilisateur)
+    {
+        return (
+            // Il ne s'agit pas d'une demande qui a été regroupée
+            (count($interventionDemande->getInterventionRegroupementsDemandesPrincipales()) == 0)
+            && $interventionDemande->evaluationEtatEstEvalue()
+            &&
+            (
+                ($interventionDemande->getReferent()->getId() == $utilisateur->getId())
+                || ($interventionDemande->getDirecteur() != null && $interventionDemande->getDirecteur()->getId() == $utilisateur->getId())
+                || ($interventionDemande->getAmbassadeur()->getId() == $utilisateur->getId())
+                || ($interventionDemande->getCmsi()->getId() == $utilisateur->getId())
+                || ($utilisateur->getRegion() != null && $interventionDemande->getCmsi()->getRegion() != null && $utilisateur->getRegion()->getId() == $interventionDemande->getCmsi()->getRegion()->getId())
+            )
+        );
+    }
+    
+    
     /**
      * Envoie une relance au référent pour remplir l'évaluation de la demande d'intervention.
      *

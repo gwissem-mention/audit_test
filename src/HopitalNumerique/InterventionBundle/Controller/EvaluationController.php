@@ -27,15 +27,9 @@ class EvaluationController extends Controller
     {
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
-        if (
-            $utilisateurConnecte->getId() == $interventionDemande->getReferent()->getId()
-            && ($interventionDemande->getEvaluationEtat() != null && $interventionDemande->getEvaluationEtat()->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
-        )
+        if ($this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation')->utilisateurPeutEvaluer($interventionDemande, $utilisateurConnecte))
         {
             $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
-            //$questionnaireReponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($questionnaire->getId(), $utilisateurConnecte->getId(), true);
-            //$themeQuestionnaire = empty($questionnaireReponses) ? 'horizontal' : 'horizontal_readonly';
-            //$readOnly = (in_array('ROLE_AMBASSADEUR_7', $utilisateurConnecte->getRoles()) || !empty($questionnaireReponses));
 
             return $this->render('HopitalNumeriqueInterventionBundle:Evaluation:nouveau.html.twig', array(
                 'interventionDemande'=> $interventionDemande,
@@ -62,15 +56,7 @@ class EvaluationController extends Controller
     {
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
-        if (
-            $interventionDemande->evaluationEtatEstEvalue()
-            && (
-                $utilisateurConnecte->getId() == $interventionDemande->getAmbassadeur()->getId()
-                || $utilisateurConnecte->getId() == $interventionDemande->getReferent()->getId()
-                || $utilisateurConnecte->getId() == $interventionDemande->getCmsi()->getId()
-                || ($utilisateurConnecte->getRegion() != null && $interventionDemande->getCmsi()->getRegion() != null && $utilisateurConnecte->getRegion()->getId() == $interventionDemande->getCmsi()->getRegion()->getId())
-            )
-        )
+        if ($this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation')->utilisateurPeutVisualiser($interventionDemande, $utilisateurConnecte))
         {
             $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
 
@@ -82,13 +68,6 @@ class EvaluationController extends Controller
                     'themeQuestionnaire' => 'vertical_readonly'
                 )
             ));
-            
-            /*return $this->render(
-                'HopitalNumeriqueInterventionBundle:Evaluation:voir.html.twig',
-                array(
-                    'interventionDemande' => $interventionDemande
-                )
-            );*/
         }
         
         $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à visualiser cette évaluation.');

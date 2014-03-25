@@ -19,6 +19,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class EvaluationController extends Controller
 {
     /**
+     * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté actuellement
+     */
+    private $utilisateurConnecte;
+    
+    /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
      *
      * @param HopiUser          $user               Utilisateur courant
@@ -29,7 +34,8 @@ class EvaluationController extends Controller
      */
     public function editAction(InterventionDemande $interventionDemande)
     {
-        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
+        $this->utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
+
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
 
         return $this->_renderForm(
@@ -55,7 +61,7 @@ class EvaluationController extends Controller
         $questionnaire    = $options['questionnaire'];
         $interventionDemande = $options['interventionDemande'];
         $user = $interventionDemande->getReferent();
-        $readOnly = (!$interventionDemande->evaluationEtatEstAEvaluer());
+        $readOnly = (!$interventionDemande->evaluationEtatEstAEvaluer() || !$this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation')->utilisateurPeutEvaluer($interventionDemande, $this->utilisateurConnecte));
     
         //Création du formulaire via le service
         $form = $this->createForm('nodevo_questionnaire_questionnaire', $questionnaire, array(
@@ -97,11 +103,6 @@ class EvaluationController extends Controller
                         $idQuestion = 26;
                         $param = implode(',', $param);
                     }
-                    /*elseif ($key == 'intervention_objets_26_evaluation_productions')
-                    {
-                        $idQuestion = 26;
-                        $param = implode(',', $param);
-                    }*/
 
                     //Si l'id de la question n'a pas été récupéré alors on ne sauvegarde pas la question (exemple avec le cas particulier du token du formulaire)
                     if (0 === $idQuestion || '' === $idQuestion || '_token' === $key)
@@ -135,14 +136,11 @@ class EvaluationController extends Controller
                     //Mise à jour de la réponse dans le tableau des réponses
                     $reponses[$idQuestion] = $reponse;
                 }
-    
-                //Envoie du mail à l'utilisateur pour l'aleter de la validation de sa candidature
+
                 
-                
-                $interventionDemande->setInterventionEtat($this->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatTermine());
-                $interventionDemande->setEvaluationEtat($this->get('hopitalnumerique_intervention.manager.intervention_evaluation_etat')->getInterventionEvaluationEtatEvalue());
-                $this->get('hopitalnumerique_intervention.manager.intervention_demande')->save($interventionDemande);
- 
+                $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatTermine());
+                $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEvaluationEtat($interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation_etat')->getInterventionEvaluationEtatEvalue());
+
                 $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielEvaluationRemplie($interventionDemande->getCmsi(), $interventionDemande->getAmbassadeur(), $this->generateUrl('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $interventionDemande->getId()), true));
                 
                 $this->get('session')->getFlashBag()->add('success', 'Votre évaluation a été enregistrée, merci.');
