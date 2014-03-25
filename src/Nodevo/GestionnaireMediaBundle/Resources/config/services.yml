@@ -11,7 +11,7 @@ services:
     # Managers
     nodevo_gestionnaire_media.manager.moxie_manager:
         class: "%nodevo_gestionnaire_media.manager.moxie_manager.class%"
-        arguments: ["@service_container"]
+        arguments: ["@kernel", "@security.context", "@nodevo_gestionnaire_media.service.moxie_manager", "@nodevo_acl.manager.acl", "%nodevo_gestionnaire_media.moxie_manager.media.dossiers%", "%nodevo_gestionnaire_media.moxie_manager.extensions_autorisees%"]
     # services
     nodevo_gestionnaire_media.service.moxie_manager:
         class: "%nodevo_gestionnaire_media.service.moxie_manager.class%"

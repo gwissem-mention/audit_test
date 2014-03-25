@@ -31,7 +31,7 @@ class MoxieManagerController extends Controller
      */
     public function apiAction()
     {
-        $this->get('nodevo_gestionnaire_media.manager.moxie_manager')->appelleApi();
+        $this->get('nodevo_gestionnaire_media.manager.moxie_manager')->appelleApi($this->container->get('request')->server->get('DOCUMENT_ROOT'), $this->container->get('request')->server->get('DOCUMENT_ROOT').$this->container->get('templating.helper.assets')->getUrl('bundles/nodevogestionnairemedia/js/moxiemanager'), $this->container->get('request')->attributes->get('_route'));
 
         return new Response();
     }
