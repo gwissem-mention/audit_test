@@ -143,7 +143,7 @@ class ItemController extends Controller
     private function getPostRouteParametres( $request )
     {
         $datas           = $request->request->get('nodevo_menu_item');
-        $routeParameters = $datas['routeParameters'];
+        $routeParameters = isset($datas['routeParameters']) ? $datas['routeParameters'] : array();
         $params          = array();
 
         foreach($routeParameters as $key => $val)

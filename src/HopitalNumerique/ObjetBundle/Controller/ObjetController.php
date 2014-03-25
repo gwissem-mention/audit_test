@@ -136,67 +136,88 @@ class ObjetController extends Controller
      */
     public function getObjetsAction()
     {
-        $objets = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
-        $return = array();
-        $ids    = array();
+        $arbo = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo();
 
-        foreach( $objets as $one ){
-            $ids[] = $one->getId();
-        }
-
-        $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjets($ids);
-        foreach( $objets as $one ) {
-            $return[] = array(
-                "text" => $one->getTitre(), "value" => "PUBLICATION:" . $one->getId()
-            );
-
-            if( !isset($contenus[ $one->getId() ]) || count( $contenus[ $one->getId() ] ) <= 0 ){
-                continue;
-            }
-
-            foreach( $contenus[ $one->getId() ] as $content ){
-                $return[] = array(
-                    "text" => "|--" . $content->titre, "value" => "INFRADOC:" . $content->id
-                );
-                $this->getObjetsChilds($return, $content, 2);
-            }
-        }
         return $this->render('HopitalNumeriqueObjetBundle:Objet:getObjets.html.twig', array(
-            'objet' => $return,
+            'objet' => $arbo,
             'texte' => $this->get('request')->request->get('texte')
         ));
     }
 
-
-
-
-
-
-
-
-
-
     /**
-     * Ajoute les enfants de $objet dans $return, formatées en fonction de $level
-     * 
-     * @param array    $return
-     * @param stdClass $objet
-     * @param integer  $level
-     * 
-     * @return void
+     * POPIN : liste des publication (utilisé dans le menu item)
      */
-    private function getObjetsChilds( &$return, $objet, $level = 1 )
+    public function getPublicationsAction()
     {
-        if( count($objet->childs) > 0 ){
-            foreach( $objet->childs as $child ){
-                $texte = str_pad($child->titre, strlen($child->titre) + ($level*3), "|--", STR_PAD_LEFT);
-                $return[] = array(
-                    "text" => $texte, "value" => "INFRADOC:" . $child->id
-                );
-                $this->getObjetsChilds($return, $child, $level + 1);
-            }
-        }
+        $arbo = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo();
+
+        return $this->render('HopitalNumeriqueObjetBundle:Objet:getPublications.html.twig', array(
+            'objets' => $arbo
+        ));
     }
+
+    public function getPublicationDetailsForMenuAction()
+    {
+        $publication = explode(':', $this->get('request')->request->get('publication') );
+        $result      = array('success' => true);
+
+        if( isset($publication[0]) && isset($publication[1]) ) {
+            if( $publication[0] === 'PUBLICATION' ) {
+                $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $publication[1]) );
+
+                //set URL to select
+                $result['url'] = 'hopital_numerique_recherche_publication_objet';
+
+                //set params for URL
+                $result['id']    = $objet->getId();
+                $result['alias'] = $objet->getAlias();
+
+            } else if( $publication[0] === 'INFRADOC' ) {
+                $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $publication[1]) );
+
+                //set URL to select
+                $result['url'] = 'hopital_numerique_recherche_publication_contenu';
+
+                //set params for URL
+                $result['id']     = $contenu->getObjet()->getId();
+                $result['alias']  = $contenu->getObjet()->getAlias();
+                $result['idc']    = $contenu->getId();
+                $result['aliasc'] = $contenu->getAlias();
+            }else
+                $result['success'] = false;
+        }else
+            $result['success'] = false;
+        
+        
+        return new Response(json_encode($result), 200);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
 
     /**
      * Effectue le render du formulaire Objet.
@@ -248,8 +269,8 @@ class ObjetController extends Controller
                 }
 
                 //Object security isArticle = false
-                if( is_null($objet->getIsArticle()) )
-                    $objet->setisArticle( false );
+                if( is_null($objet->isArticle()) )
+                    $objet->setArticle( false );
                 
                 //Met à jour la date de modification
                 $notify = $form->get("modified")->getData();

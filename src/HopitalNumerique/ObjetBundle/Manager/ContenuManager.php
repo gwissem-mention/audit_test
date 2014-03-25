@@ -16,9 +16,9 @@ class ContenuManager extends BaseManager
     protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Contenu';
 
     /**
-     * Retourne l'arbo des contenu de l'objet
+     * Retourne l'arbo des contenu de l'objet (ou des objets)
      *
-     * @param integer $id ID de l'objet
+     * @param integer|array $id ID de(s) l'objet(s)
      *
      * @return array
      */
@@ -32,32 +32,6 @@ class ContenuManager extends BaseManager
         
         //call recursive function to handle all datas
         return $this->getArboRecursive($datas, $parents, array(), '' );
-    }
-    /**
-     * 
-     * Retourne l'arbo des contenu de l'objet
-     *
-     * @param array $id ID de l'objet
-     *
-     * @return array
-     */
-    public function getArboForObjets( $ids )
-    {
-        $datas = new ArrayCollection( $this->getRepository()->getArboForObjets( $ids )->getQuery()->getResult() );
-
-        //Récupère uniquement les premiers parents
-        $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );
-        $parents  = $datas->matching( $criteria );
-        
-        //call recursive function to handle all datas
-        $elems  = $this->getArboRecursive($datas, $parents, array(), '' );
-        $return = array();
-        foreach( $elems as $one ){
-            if( $one->objet != null ){
-                $return[ $one->objet ][] = $one;
-            }
-        }
-        return $return;
     }
 
     /**
