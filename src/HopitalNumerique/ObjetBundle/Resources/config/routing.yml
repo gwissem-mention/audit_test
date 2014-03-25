@@ -15,6 +15,14 @@ hopitalnumerique_objet_objet_getObjets:
     pattern:  /objet/getObjets
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getObjets" }
 
+hopitalnumerique_objet_objet_getPublications:
+    pattern:  /objet/getPublications
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getPublications" }
+
+hopitalnumerique_objet_objet_getPublicationDetailsForMenu:
+    pattern:  /objet/getPublicationDetailsForMenu
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getPublicationDetailsForMenu" }
+
 hopitalnumerique_objet_objet_cancel:
     pattern:  /objet/cancel/{id}/{message}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:cancel", message:null }
@@ -78,7 +86,7 @@ hopitalnumerique_objet_reference_objet:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:objet", id:1 }
     requirements:
         id: \d+
-        
+
 hopitalnumerique_objet_reference_objet_own:
     pattern:  /objet/reference/objet-own/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:objetOwn", id:1 }

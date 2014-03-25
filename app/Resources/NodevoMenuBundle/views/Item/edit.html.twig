@@ -7,6 +7,8 @@
         'bundles/nodevomenu/js/itemForm.js'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        'bundles/hopitalnumeriqueobjet/js/popup-menu.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -17,6 +19,7 @@
     {% stylesheets output="compiled/nodevo-menu-item-edit.css" filter="cssrewrite"
         'bundles/nodevoadmin/css/bootstrap-iconpicker.min.css'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -31,6 +34,8 @@
 {% endblock %}
 
 {% block toolbarButton %}
+    <div class="btn btn-default selectPublication">Selectionner une publication</div>
+
     {% if item.menu %}
         <a href="{{path('nodevo_menu_item', {'id':item.menu.id})}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     {% else %}
@@ -95,4 +100,7 @@
             </div>
         </div>
     </div>
+
+    <input type="hidden" id="objets-liste-url" value="{{path('hopitalnumerique_objet_objet_getPublications')}}" />
+    <input type="hidden" id="objets-details-menu-url" value="{{path('hopitalnumerique_objet_objet_getPublicationDetailsForMenu')}}" />
 {% endblock %}
