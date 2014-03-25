@@ -194,11 +194,15 @@ class QuestionnaireType extends AbstractType
             	        $objetsOptions[$objet->getId()] = $objet->getTitre();
             	    
             	    $objetIdsSelectionnees = array();
-            	    // @TODO : Ne rechercher que la bonne réponse et non toutes
             	    $reponses = $this->_managerReponse->reponsesByQuestionnaireByUser($questionnaire->getId(), $interventionDemande->getReferent()->getId(), true, $interventionDemande->getId());
-            	    if (isset($reponses[$question->getId()]))
+            	    $reponse = $this->_managerReponse->findOneBy(array(
+            	        'question' => $question,
+            	        'user' => $interventionDemande->getReferent(),
+            	        'paramId' => $interventionDemande->getId()
+            	    ));
+            	    if ($reponse != null)
             	    {
-            	        $objetIdsSelectionnees = explode(',', $reponses[$question->getId()]->getReponse());
+            	        $objetIdsSelectionnees = explode(',', $reponse->getReponse());
             	    }
             	    else // Tout coché par défaut
             	    {
