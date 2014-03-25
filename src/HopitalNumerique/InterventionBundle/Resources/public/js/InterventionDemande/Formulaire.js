@@ -37,6 +37,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.init = functio
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init();
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initChamps();
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements();
+    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majActivationTransfertAmbassadeur();
 };
 
 /**
@@ -448,6 +449,21 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initReferentIn
 };
 
 
+/**
+ * Active ou désactive le bouton de transfert d'un ambassadeur en fonction de l'ambassadeur choisi.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majActivationTransfertAmbassadeur = function()
+{
+    var nouvelAmbassadeurOptionSelectionnee = $('select#intervention_demande_ambassadeur_change option:selected');
+    if ($(nouvelAmbassadeurOptionSelectionnee).size() > 0)
+    {
+        var nouvelAmbassadeurId = parseInt($(nouvelAmbassadeurOptionSelectionnee).val());
+        
+        $('#intervention_demande_ambassadeur_bouton').attr('disabled', (nouvelAmbassadeurId == 0));
+    }
+};
 /**
  * Change l'ambassadeur de la demande d'intervention.
  * 
