@@ -21,7 +21,7 @@ class InterventionRegroupement
     private $id;
     
     /**
-     * @var \InterventionRegroupementType
+     * @var \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType
      *
      * @ORM\ManyToOne(targetEntity="InterventionRegroupementType")
      * @ORM\JoinColumns({
@@ -31,22 +31,18 @@ class InterventionRegroupement
     private $interventionRegroupementType;
 
     /**
-     * @var \InterventionDemande
+     * @var \HopitalNumerique\InterventionBundle\Entity\InterventionDemande
      *
-     * @ORM\ManyToOne(targetEntity="InterventionDemande", inversedBy="interventionRegroupementsDemandesPrincipales")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="interv_principale_id", referencedColumnName="interv_id")
-     * })
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", inversedBy="interventionRegroupementsDemandesRegroupees")
+     * @ORM\JoinColumn(name="interv_principale_id", referencedColumnName="interv_id")
      */
     private $interventionDemandePrincipale;
 
     /**
-     * @var \InterventionDemande
+     * @var \HopitalNumerique\InterventionBundle\Entity\InterventionDemande
      *
-     * @ORM\ManyToOne(targetEntity="InterventionDemande", inversedBy="interventionRegroupementsDemandesRegroupees")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="interv_regroupee_id", referencedColumnName="interv_id")
-     * })
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", inversedBy="interventionRegroupementsDemandesPrincipales")
+     * @ORM\JoinColumn(name="interv_regroupee_id", referencedColumnName="interv_id")
      */
     private $interventionDemandeRegroupee;
 
