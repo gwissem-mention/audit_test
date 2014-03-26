@@ -25,7 +25,7 @@ hopital_numerique_publication_publication_article:
 
 #Actualités
 hopital_numerique_publication_actualite:
-    pattern:  /actualites
+    pattern:  /actualites/
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:index"}
 
 hopital_numerique_publication_actualite_categorie:
