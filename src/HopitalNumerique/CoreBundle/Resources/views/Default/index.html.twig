@@ -16,9 +16,13 @@
 {% block body %}
     <div id="homepage" >
         <div class="home-left col-md-5" >
-            <img src="/{{article.image}}" alt="Article Home" />
+            {% if article.image %}
+                <img src="/{{article.image}}" alt="Article Home" />
+            {% endif %}
             <h4>{{article.titre}}</h4>
-            {{article.resume}}
+            <p>
+                {{article.resume}}
+            </p>
             <a href="{{path('hopital_numerique_publication_publication_article',{'id':article.id, 'alias':article.alias, 'categorie':article.categories})}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> En savoir plus</a>
 
             <h3 class="violet">Actualités</h3>

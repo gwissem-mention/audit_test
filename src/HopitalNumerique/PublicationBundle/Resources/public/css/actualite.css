@@ -2,10 +2,12 @@
 
 /* Colonne right */
     #actualites .actu{margin-top:35px;}
+    #actualites .actu:first-child{margin-top:0;}
     #actualites .actu h3{font-size: 24px; font-weight: normal; color:#333333;margin:0;}
     #actualites .actu h4{font-size: 12px; font-weight: normal; color:#6f3596; text-transform: uppercase; margin:0;}
     #actualites .actu p{font-size: 13px; color: #777777}
     #actualites .actu p a{font-size: 13px; color: #000000; margin-top:5px; text-decoration: underline;}
+    #actualites .actu p a i{margin-top:4px;}
     #actualites .actu .actu-image{width:160px; height: 120px; margin-right: 10px }
 
 /* Colonne left */
