@@ -6,6 +6,7 @@ use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
+use \Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
  * Manager de l'entité Objet.
@@ -328,15 +329,58 @@ class ObjetManager extends BaseManager
      */
     public function getActualitesByCategorie( $categories )
     {
-        $articles = $this->getObjetsByTypes( $categories );
+        $articles   = $this->getObjetsByTypes( $categories );
+        $actualites = array();
 
+        foreach($articles as $article) {
+            $actu = new \stdClass;
 
+            $actu->id    = $article->getId();
+            $actu->titre = $article->getTitre();
+            $actu->alias = $article->getAlias();
 
+            //resume
+            $tab = explode('<!-- pagebreak -->', $article->getResume());
+            $actu->resume = html_entity_decode(strip_tags($tab[0]));
+
+            //types
+            $types            = $article->getTypes();
+            $actu->types      = $this->formatteTypes( $types );
+
+            //catégories
+            $types     = $article->getTypes();
+            $type      = $types[0];
+            $categorie = '';
+            if( $parent = $type->getParent() )
+                $categorie .= $parent->getLibelle().'-';
+            $categorie .= $type->getLibelle();
+            $tool             = new Chaine( $categorie );
+            $actu->categories = $tool->minifie();
+
+            $actualites[] = $actu;
+        }
 
         return $actualites;
     }
     
+    /**
+     * Retourne les catégories qui ont des articles
+     *
+     * @param array $allCategories Liste des catégories
+     *
+     * @return array
+     */
+    public function getCategoriesWithArticles( $allCategories )
+    {
+        $categories = array();
+        foreach($allCategories as $one) {
+            $articles = $this->getObjetsByTypes( array($one) );
+            if( count($articles) > 0)
+                $categories[] = $one;
+        }
 
+        return $categories;
+    }
 
 
 

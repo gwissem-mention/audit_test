@@ -1,0 +1,8 @@
+<div class="actus">
+    <ul>
+        <li class="first"><a href="{{path('hopital_numerique_publication_actualite')}}">Toute l'actualité</a></li>
+        {% for categorie in categories %}
+            <li><a href="{{path('hopital_numerique_publication_actualite_categorie',{'id':categorie.id,'libelle':categorie.libelle})}}">{{categorie.libelle}}</a></li>
+        {% endfor %}
+    </ul>
+</div>

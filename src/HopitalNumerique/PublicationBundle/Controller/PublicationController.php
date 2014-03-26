@@ -90,7 +90,7 @@ class PublicationController extends Controller
         return $this->render('HopitalNumeriquePublicationBundle:Publication:articles.html.twig', array(
             'objet'      => $objet,
             'meta'       => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
-            'menu'       => $item->getMenu()->getAlias(),
+            'menu'       => $item ? $item->getMenu()->getAlias() : null,
             'categories' => $categories
         ));
     }

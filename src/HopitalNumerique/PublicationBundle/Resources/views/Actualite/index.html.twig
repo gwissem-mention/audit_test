@@ -18,25 +18,18 @@
             <p class="titre">Hôpital <br />Numérique</p>
             {{ knp_menu_render('menu-sub-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriquePublicationBundle::menu.html.twig'}) }}
 
-            <div class="actus">
-                <ul>
-                    <li class="first"><a href="#">Toute l'actualité</a></li>
-                    {% for categorie in categories %}
-                        <li><a href="#">{{categorie.libelle}}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
+            {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites")) }}
         </div>
         <div class="col-md-9" >
             <div class="col-md-12">
                 {% for actu in actualites %}
                     <div class="actu">
-                        <h4>categ</h4>
+                        <h4>{{actu.types}}</h4>
                         <h3>{{actu.titre}}</h3>
                         <p>
-                            {{actu.resume|raw}}
+                            {{actu.resume}}
                             <br />
-                            > <a href="#">Lire la suite</a>
+                            > <a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">Lire la suite</a>
                         </p>
                     </div>
                 {% endfor %}

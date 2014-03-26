@@ -11,13 +11,43 @@ class ActualiteController extends Controller
     public function indexAction()
     {
         //on récupère les actus
-        $categories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
+        $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
+        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories );
+
+        //render
+        return $this->render('HopitalNumeriquePublicationBundle:Actualite:index.html.twig', array(
+            'actualites' => $actualites
+        ));
+    }
+
+    /**
+     * Article Action
+     */
+    public function categorieAction($id, $libelle)
+    {
+        //on récupère les actus
+        $categories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $id) );
         $actualites = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $categories );
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Actualite:index.html.twig', array(
-            'categories' => $categories,
             'actualites' => $actualites
+        ));
+    }
+
+    /**
+     * Partial render : bloc liste des actualités colonne left
+     */
+    public function actualitesAction()
+    {
+        $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
+
+        //Show categ with articles only
+        $categories = $this->get('hopitalnumerique_objet.manager.objet')->getCategoriesWithArticles( $allCategories );
+
+        //render
+        return $this->render('HopitalNumeriquePublicationBundle:Actualite:actualites.html.twig', array(
+            'categories' => $categories
         ));
     }
 }
