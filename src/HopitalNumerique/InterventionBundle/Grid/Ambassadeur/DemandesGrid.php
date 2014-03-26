@@ -5,7 +5,6 @@
 namespace HopitalNumerique\InterventionBundle\Grid\Ambassadeur;
 
 use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
-use Nodevo\GridBundle\Grid\IGrid;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
@@ -21,7 +20,7 @@ class DemandesGrid extends DemandesAbstractGrid
     public function setConfig()
     {
         $this->setSource('hopitalnumerique_intervention.manager.intervention_demande');
-        $this->setFunctionName('getGridDonnees_AmbassadeurDemandes');
+        $this->setFunctionName('getGridDonneesAmbassadeurDemandes');
         $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setNoDataMessage('- Aucune intervention à afficher -');
     }

@@ -5,11 +5,9 @@ namespace HopitalNumerique\InterventionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement;
 
 /**
  * Entité d'une demande d'intervention.
@@ -921,6 +919,16 @@ class InterventionDemande
         return false;
     }
     
+    /**
+     * Retourne si la demande d'intervention a été regroupée (possède donc une demande principale).
+     * 
+     * @return boolean VRAI ssi la demande d'intervention a été regroupée
+     */
+    public function estDemandeRegroupee()
+    {
+        return (count($this->interventionRegroupementsDemandesPrincipales) > 0);
+    }
+
     
     /**
      * Retourne la date butoir pour le refus, validation ou mise en attente de la demande d'intervention par le CMSI.

@@ -5,7 +5,6 @@
 namespace HopitalNumerique\InterventionBundle\Grid\Cmsi;
 
 use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
-use Nodevo\GridBundle\Grid\IGrid;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
@@ -21,7 +20,7 @@ class DemandesNouvellesGrid extends DemandesAbstractGrid
     public function setConfig()
     {
         parent::setConfig();
-        $this->setFunctionName('getGridDonnees_CmsiDemandesNouvelles');
+        $this->setFunctionName('getGridDonneesCmsiDemandesNouvelles');
     }
 
     /**

@@ -9,7 +9,6 @@ namespace HopitalNumerique\InterventionBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
-use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**

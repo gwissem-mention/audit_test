@@ -302,9 +302,9 @@ class InterventionDemandeManager extends BaseManager
      * 
      * @return array Les données pour le grid des nouvelles demandes d'intervention
      */
-    public function getGridDonnees_CmsiDemandesNouvelles()
+    public function getGridDonneesCmsiDemandesNouvelles()
     {
-        $interventionDemandes = $this->_repository->getGridDonnees_CmsiDemandesNouvelles($this->utilisateurConnecte);
+        $interventionDemandes = $this->_repository->getGridDonneesCmsiDemandesNouvelles($this->utilisateurConnecte);
 
         return $interventionDemandes;
     }
@@ -313,9 +313,9 @@ class InterventionDemandeManager extends BaseManager
      * 
      * @return array Les données pour le grid des demandes d'intervention traitées
      */
-    public function getGridDonnees_CmsiDemandesTraitees()
+    public function getGridDonneesCmsiDemandesTraitees()
     {
-        $interventionDemandes = $this->_repository->getGridDonnees_CmsiDemandesTraitees($this->utilisateurConnecte);
+        $interventionDemandes = $this->_repository->getGridDonneesCmsiDemandesTraitees($this->utilisateurConnecte);
 
         return $interventionDemandes;
     }
@@ -324,9 +324,9 @@ class InterventionDemandeManager extends BaseManager
      *
      * @return array Les données pour le grid des demandes d'intervention
      */
-    public function getGridDonnees_DirecteurSuiviDemandes()
+    public function getGridDonneesDirecteurSuiviDemandes()
     {
-        $interventionDemandes = $this->_repository->getGridDonnees_DirecteurSuiviDemandes($this->utilisateurConnecte);
+        $interventionDemandes = $this->_repository->getGridDonneesDirecteurSuiviDemandes($this->utilisateurConnecte);
     
         return $interventionDemandes;
     }
@@ -335,9 +335,9 @@ class InterventionDemandeManager extends BaseManager
      * 
      * @return array Les données pour le grid des demandes d'intervention
      */
-    public function getGridDonnees_AmbassadeurDemandes()
+    public function getGridDonneesAmbassadeurDemandes()
     {
-        $interventionDemandes = $this->_repository->getGridDonnees_AmbassadeurDemandes($this->utilisateurConnecte);
+        $interventionDemandes = $this->_repository->getGridDonneesAmbassadeurDemandes($this->utilisateurConnecte);
 
         return $interventionDemandes;
     }
@@ -346,10 +346,10 @@ class InterventionDemandeManager extends BaseManager
      *
      * @return array Les données pour le grid des demandes d'intervention
      */
-    public function getGridDonnees_EtablissementDemandes()
+    public function getGridDonneesEtablissementDemandes()
     {
         $referent = $this->utilisateurConnecte;
-        $interventionDemandes = $this->_repository->getGridDonnees_EtablissementDemandes($referent);
+        $interventionDemandes = $this->_repository->getGridDonneesEtablissementDemandes($referent);
     
         return $interventionDemandes;
     }

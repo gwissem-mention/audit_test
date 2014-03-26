@@ -11,10 +11,6 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
-use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Component\Form\Form;
-use HopitalNumerique\InterventionBundle\Exception\InterventionException;
-use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -54,10 +50,7 @@ class DemandeController extends Controller
                 'region' => $interventionDemande->getCmsi()->getRegion()
             ));
         }
-        else if (
-            $utilisateurConnecte->hasRoleCmsi()
-            && ($interventionDemande->interventionEtatEstDemandeInitiale() || $interventionDemande->interventionEtatEstAttenteCmsi())
-        )
+        else if ($this->container->get('hopitalnumerique_intervention.manager.intervention_regroupement')->utilisateurPeutRegrouperDemandes($interventionDemande, $utilisateurConnecte))
         {
             if (!$interventionDemandeEstRegroupee)
             {
