@@ -27,28 +27,24 @@ class ContactController extends Controller
     public function indexAction()
     {
         //Récupération de l'entité passée en paramètre
-        $contractualisation = $this->get('hopitalnumerique_user.manager.contractualisation')->findOneBy( array('id' => $id) );
-
-        $type_autres = $this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idTypeAutres');
+        $contact = $this->get('nodevo_contact.manager.contact')->createEmpty();
         
-        return $this->_renderForm('hopitalnumerique_user_contractualisation', $contractualisation, 'HopitalNumeriqueUserBundle:Contractualisation:edit.html.twig', array(
-                'type_autres' => $type_autres,
-        ));
+        return $this->_renderForm('nodevo_contact_contact', $contact, 'NodevoContactBundle:Contact:index.html.twig');
     }
     
     /**
      * Effectue le render du formulaire Contractualisation.
      *
-     * @param string             $formName           Nom du service associé au formulaire
-     * @param Contractualisation $contractualisation Entité Contractualisation
-     * @param string             $view               Chemin de la vue ou sera rendu le formulaire
+     * @param string  $formName Nom du service associé au formulaire
+     * @param Contact $contact  Entité Contractualisation
+     * @param string  $view     Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $contractualisation, $view, $parametres = array() )
+    private function renderForm( $formName, $contact, $view, $parametres = array() )
     {
         //Création du formulaire via le service
-        $form = $this->createForm( $formName, $contractualisation);
+        $form = $this->createForm( $formName, $contact);
     
         $request = $this->get('request');
     

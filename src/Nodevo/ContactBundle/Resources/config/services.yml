@@ -1,3 +1,21 @@
 parameters:
-    #Options
-    nodevo_contact.options:
+    #Permet d'avoir une valeur par défaut et/ou d'etre surchargé par le config.yml de app/config
+    nodevo_contact.options: ~
+    #Contact
+    nodevo_contact.manager.contact.class: Nodevo\ContactBundle\Manager\ContactManager
+    nodevo_contact.form.type.contact: Nodevo\ContactBundle\Form\Type\ContactType
+
+services:
+    #Contact:
+    #--Manager
+    nodevo_contact.manager.contact:
+        class: "%nodevo_contact.manager.contact.class%"
+        arguments: ["@doctrine.orm.entity_manager", "%nodevo_contact.options%"]
+        calls:
+            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
+    #--Type
+    nodevo_contact.form.type.contact:
+        class: "%nodevo_contact.form.type.contact%"
+        arguments: ["@nodevo_contact.manager.contact", "@validator"]
+        tags:
+            - { name: form.type, alias: nodevo_contact_contact }
