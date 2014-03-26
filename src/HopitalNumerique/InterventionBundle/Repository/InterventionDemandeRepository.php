@@ -120,7 +120,7 @@ class InterventionDemandeRepository extends EntityRepository
      * @param \HopitalNumerique\UserBundle\Entity\User $cmsi Le CMSI des demandes d'intervention
      * @return array
      */
-    public function getGridDonnees_CmsiDemandesNouvelles(User $cmsi)
+    public function getGridDonneesCmsiDemandesNouvelles(User $cmsi)
     {
         $requeteDemandesGroupees = $this->_em->createQueryBuilder()
             ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
@@ -183,7 +183,7 @@ class InterventionDemandeRepository extends EntityRepository
      * @param \HopitalNumerique\UserBundle\Entity\User $cmsi Le CMSI des demandes d'intervention
      * @return array
      */
-    public function getGridDonnees_CmsiDemandesTraitees(User $cmsi)
+    public function getGridDonneesCmsiDemandesTraitees(User $cmsi)
     {
         $requeteDemandesGroupees = $this->_em->createQueryBuilder()
             ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
@@ -252,7 +252,7 @@ class InterventionDemandeRepository extends EntityRepository
      * @param \HopitalNumerique\UserBundle\Entity\User $directeur Le directeur des demandes d'intervention
      * @return array
      */
-    public function getGridDonnees_DirecteurSuiviDemandes(User $directeur)
+    public function getGridDonneesDirecteurSuiviDemandes(User $directeur)
     {
         $requete = $this->_em->createQueryBuilder();
     
@@ -325,7 +325,7 @@ class InterventionDemandeRepository extends EntityRepository
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur des demandes d'intervention
      * @return array
      */
-    public function getGridDonnees_AmbassadeurDemandes(User $ambassadeur)
+    public function getGridDonneesAmbassadeurDemandes(User $ambassadeur)
     {
         $requeteDemandesGroupees = $this->_em->createQueryBuilder()
             ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
@@ -404,8 +404,10 @@ class InterventionDemandeRepository extends EntityRepository
      * @param \HopitalNumerique\UserBundle\Entity\User $referent Le référent de l'établissement des demandes d'intervention
      * @return array
      */
-    public function getGridDonnees_EtablissementDemandes(User $referent)
+    public function getGridDonneesEtablissementDemandes(User $referent)
     {
+        $demandesDoublonsIdsAvecMemeDemandePrincipale = $this->getDemandesDoublonsIdsAvecMemeDemandePrincipale($referent);
+        
         // Ignorer les demandes groupées pour un même référent
         $requeteDemandesGroupees = $this->_em->createQueryBuilder()
             ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
@@ -453,13 +455,16 @@ class InterventionDemandeRepository extends EntityRepository
                     'interventionDemande',
                     $requeteDemandesGroupees->getDQL()
                 )
-            )
-            ->andWhere(
+            );
+        if (count($demandesDoublonsIdsAvecMemeDemandePrincipale) > 0)
+        {
+            $requete->andWhere(
                 $requete->expr()->notIn(
                     'interventionDemande',
                     $this->getDemandesDoublonsIdsAvecMemeDemandePrincipale($referent)
                 )
             );
+        }
 
         $requete->orderBy('interventionDemande.dateCreation', 'DESC')
             ->addGroupBy('interventionDemande.id')
