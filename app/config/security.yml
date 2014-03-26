@@ -24,8 +24,8 @@ security:
             security: false
 
         # Si on essaye d'accéder à l'url  /compte-hn, on redirige vers le form /compte-hn/login
-        comptehn:
-            pattern: ^/compte-hn
+        frontoffice_connecte:
+            pattern: ^/(compte-hn|registre-ambassadeurs)
             anonymous: false
             form_login:
                 login_path: account_login
