@@ -15,9 +15,11 @@ class DefaultController extends Controller
         $type      = $types[0];
         $categorie = '';
 
-        if( $parent = $type->getParent() )
-            $categorie .= $parent->getLibelle().'-';
-        $categorie .= $type->getLibelle();
+        if($type) {
+            if( $parent = $type->getParent() )
+                $categorie .= $parent->getLibelle().'-';
+            $categorie .= $type->getLibelle();
+        }
 
         //clean categ
         $tool = new Chaine( $categorie );

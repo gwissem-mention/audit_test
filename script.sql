@@ -31,6 +31,3 @@ INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `i
 (98, NULL, 5, 'Projets', 'hopital_numerique_publication_publication_article', '{"categorie":"article","id":"1","alias":"article-front"}', NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 3),
 (99, NULL, 5, 'Equipe', 'hopital_numerique_publication_publication_article', '{"categorie":"article","id":"1","alias":"article-front"}', NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 4);
 
-INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES 
-(NULL, '65', 3, 'Actualités', 'hopital_numerique_publication_actualite', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1);
-
