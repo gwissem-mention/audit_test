@@ -248,7 +248,10 @@ function updateResultats()
         type    : 'POST',
         success : function( data ){
             $('#resultats').html( data );
-            $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
+            if( $('#nbResults').val() <= 1 )
+                $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultat)' );
+            else
+                $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
         }
     });
     

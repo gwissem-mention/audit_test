@@ -21,3 +21,5 @@ ul.list-unstyled{margin-bottom:0;}
 #panel-references .tableContent thead .checkAll{display: block; margin: 0 auto}
 #panel-references .panel-footer{margin:0;}
 #panel-references .toggle-slide .toggle-off,#panel-references .toggle-slide .toggle-off.active{background: #2D78D5}
+
+input[type="date"]{min-width: 145px}
