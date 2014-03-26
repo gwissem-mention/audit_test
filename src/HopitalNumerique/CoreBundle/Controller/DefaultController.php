@@ -3,26 +3,12 @@
 namespace HopitalNumerique\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use \Nodevo\ToolsBundle\Tools\Chaine;
 
 class DefaultController extends Controller
 {
     public function indexAction()
     {
-        $article = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => 1) );
-
-        /* Get catégorie for route */
-        $types     = $article->getTypes();
-        $type      = $types[0];
-        $categorie = '';
-
-        if($type) {
-            if( $parent = $type->getParent() )
-                $categorie .= $parent->getLibelle().'-';
-            $categorie .= $type->getLibelle();
-        }
-        //clean categ
-        $tool = new Chaine( $categorie );
+        $article = $this->get('hopitalnumerique_objet.manager.objet')->getArticleHome();
 
         //get actus
         $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
@@ -30,7 +16,6 @@ class DefaultController extends Controller
 
         return $this->render('HopitalNumeriqueCoreBundle:Default:index.html.twig', array(
             'article'    => $article,
-            'categorie'  => $tool->minifie(),
             'actualites' => $actualites
         ));
     }
