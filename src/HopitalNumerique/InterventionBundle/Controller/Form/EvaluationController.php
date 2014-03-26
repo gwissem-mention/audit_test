@@ -127,10 +127,7 @@ class EvaluationController extends Controller
                     {
                         $reponse->setReference($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $param)));
                     }
-    
-                    //Test ajout ou edition
-                    $new = is_null($reponse->getId()) ? true : false;
-    
+
                     //Mise à jour de la réponse dans le tableau des réponses
                     $reponses[$idQuestion] = $reponse;
                 }

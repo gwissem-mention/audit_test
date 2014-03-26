@@ -115,10 +115,6 @@ class UserManager
     public function getAmbassadeursChoices(Reference $region)
     {
         return $this->userManager->getAmbassadeursByRegionAndDomaine($region);
-        /*return $this->userManager->findBy(array(
-            'enabled' => true,
-            'region' => $region
-        ));*/
     }
     /**
      * Retourne la liste des référents pour les listes de formulaire.

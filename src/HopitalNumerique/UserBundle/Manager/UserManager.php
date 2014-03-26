@@ -181,20 +181,6 @@ class UserManager extends BaseManager
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
     /**
      * Retourne un unique CMSI.
@@ -215,26 +201,6 @@ class UserManager extends BaseManager
     public function getDirecteur(array $criteres)
     {
         return $this->getRepository()->getDirecteur($criteres);
-    }
-    /**
-     * Retourne une liste de CMSIs.
-     *
-     * @param array $criteres Filtres à appliquer sur la liste
-     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des CMSIs
-     */
-    private function getCmsis(array $criteres)
-    {
-        return $this->getRepository()->getCmsis($criteres);
-    }
-    /**
-     * Retourne une liste de directeurs.
-     *
-     * @param array $criteres Filtres à appliquer sur la liste
-     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des directeurs
-     */
-    private function getDirecteurs(array $criteres)
-    {
-        return $this->getRepository()->getDirecteurs($criteres);
     }
     /**
      * Retourne une liste d'ambassadeurs.

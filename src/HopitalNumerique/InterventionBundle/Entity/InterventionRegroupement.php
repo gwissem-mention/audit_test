@@ -47,6 +47,16 @@ class InterventionRegroupement
     private $interventionDemandeRegroupee;
 
     /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    /**
      * Set interventionRegroupementType
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType $interventionRegroupementType

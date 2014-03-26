@@ -66,7 +66,8 @@ class DemandesGrid extends DemandesAbstractGrid
         $colonneEvaluation->setFilterable(false)->setSortable(false);
         $colonneEvaluation->setAlign('center');
         $colonneEvaluation->manipulateRenderCell(
-            function($value, $row, $router) {
+            function($value, $row, $router)
+            {
                 if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
                 {
                     return '<button class="btn btn-warning btn-xs" data-evaluation-demande="'.$row->getField('id').'" title="Envoyer une relance"><span class="glyphicon glyphicon-send"></span></button>';
@@ -79,12 +80,6 @@ class DemandesGrid extends DemandesAbstractGrid
             }
         );
         $this->addColonne($colonneEvaluation);
-
-        //$this->addColonne(new Column\TextColumn('remboursementEtatLibelle', 'Remboursement'));
-
-        /*$colonneRemboursementMontant = new Column\TextColumn('remboursementMontant', 'Montant');
-        $colonneRemboursementMontant->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneRemboursementMontant);*/
     }
 
     /**

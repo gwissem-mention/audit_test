@@ -68,8 +68,6 @@ class DemandesTraiteesGrid extends DemandesAbstractGrid
         $colonneEvaluationEtatLibelle = new Column\TextColumn('evaluationEtatLibelle', 'Éval.');
         $colonneEvaluationEtatLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneEvaluationEtatLibelle);
-
-        //$this->addColonne(new Column\TextColumn('remboursementEtatLibelle', 'Remboursement'));
     }
 
     /**
@@ -85,10 +83,6 @@ class DemandesTraiteesGrid extends DemandesAbstractGrid
      */
     public function setMassActions()
     {
-        /*$this->addMassAction(new Action\DeleteMass('HopitalNumeriqueUserBundle:User:DeleteMass'));
-        $this->addMassAction(new Action\Export\CsvMass('HopitalNumeriqueUserBundle:User:ExportCsv'));
-
-        $this->addMassAction(new Action\ActionMass('Activer', 'HopitalNumeriqueUserBundle:User:ActiverMass'));
-        $this->addMassAction(new Action\ActionMass('Désactiver', 'HopitalNumeriqueUserBundle:User:DesactiverMass'));*/
+        
     }
 }

@@ -83,12 +83,6 @@ class SuiviDemandesGrid extends DemandesAbstractGrid
             }
         );
         $this->addColonne($colonneEvaluation);
-
-        //$this->addColonne(new Column\TextColumn('remboursementEtatLibelle', 'Remboursement'));
-
-        /*$colonneRemboursementMontant = new Column\TextColumn('remboursementMontant', 'Montant');
-        $colonneRemboursementMontant->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneRemboursementMontant);*/
     }
 
     /**

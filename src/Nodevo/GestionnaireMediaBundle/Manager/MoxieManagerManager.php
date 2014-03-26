@@ -69,9 +69,9 @@ class MoxieManagerManager
     {
         if ($this->aclManager->checkAuthorization($route, $this->securityContext->getToken()->getUser()))
         {
-            $moxieManagerDossiers = $this->dossiersMedia;
-            for ($i = 0; $i < count($moxieManagerDossiers); $i++)
-                $moxieManagerDossiers[$i] = $documentRoot.$moxieManagerDossiers[$i];
+            $moxieManagerDossiers = array();
+            foreach ($this->dossiersMedia as $dossierMedia)
+                $moxieManagerDossiers[] = $documentRoot.$dossierMedia;
         
             define('MOXIEMANAGER_FILESYSTEM_ROOTPATH', implode(';', $moxieManagerDossiers));
             define('MOXIEMANAGER_FILESYSTEM_EXTENSIONS', $this->extensionsAutorisees);

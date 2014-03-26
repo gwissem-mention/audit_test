@@ -600,10 +600,7 @@ class InterventionDemandeRepository extends EntityRepository
                 ->setparameter('interventionEtatAttenteCmsi', InterventionEtat::getInterventionEtatAttenteCmsiId())
             ->orderBy('interventionDemande.dateCreation', 'ASC')
         ;
-        
-        //foreach ($requete->getQuery()->getResult() as $resultat)
-        //    echo $resultat->getId().'<br>';
-        
+
         return $requete->getQuery()->getResult();
     }
 }
