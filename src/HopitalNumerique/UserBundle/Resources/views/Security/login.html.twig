@@ -4,6 +4,15 @@
     {{ parent() }} - Login
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/login_backoffice.js"
+        'bundles/hopitalnumeriqueuser/js/User/login_backoffice.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block fos_user_content %}
     <div class="panel-body">
         <h4 class="text-center" style="margin-bottom: 25px;">Connectez-vous</h4>

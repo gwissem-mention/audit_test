@@ -4,6 +4,16 @@
 {% block title %}{{parent()}} - Connexion{% endblock %}
 {% block metadesc %}Connectez-vous à votre compte "Mon Hôpital Numérique" pour accéder aux outils proposés par l'ANAP{% endblock %}
 
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/login_backoffice.js"
+        'bundles/hopitalnumeriqueuser/js/User/login_frontoffice.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-account-security-login.css" filter="cssrewrite"
