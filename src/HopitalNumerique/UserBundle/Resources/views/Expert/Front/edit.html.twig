@@ -31,7 +31,7 @@
 		{# Include des données de contractualisation #}
 	    {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
 
-	    {% set informationsManquantes = user|informationsManquantes %}
+	    {% set informationsManquantes = user|informationsManquantes(questionnaire.nom) %}
 	
         {% if optionRenderForm.readOnly == false and informationsManquantes.ok %}
 		    <div class="col-md-10 col-md-offset-2">

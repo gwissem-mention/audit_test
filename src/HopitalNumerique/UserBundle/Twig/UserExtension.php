@@ -18,23 +18,28 @@ class UserExtension extends \Twig_Extension
     /**
      * Vérifie que l'utilisateur a bien renseignés certains champs
      *
-     * @param User $user User a vérifier
+     * @param User   $user                 User a vérifier
+     * @param string $questionnaireLibelle Questionnaire qui nécessite la vérification
      *
      * @return boolean
      */
-    public function informationsManquantes( $user )
-    {        
-        $resultat = array('ok' => array());       
+    public function informationsManquantes( $user, $questionnaireLibelle = '' )
+    {
+        $resultat = array('ok' => array());
         
         //Pour chacun des éléments ci-dessous, si sa valeur correspondante est nulle alors on créé un tableau contenant le label à afficher
         $resultat['telephoneDirect']       = (is_null($user->getTelephoneDirect())) ? array('label' => 'Téléphone direct') : array();
         $resultat['region']                = (is_null($user->getRegion())) ? array('label' => 'Région') : array();
         $resultat['departement']           = (is_null($user->getDepartement())) ? array('label' => 'Département') : array();
-        //Si 'etablissement de rattachement' n'est pas renseigné on vérifie le 'autre structure' 
-        $resultat['rattachementSante']     = (is_null($user->getEtablissementRattachementSante())) ? (is_null($user->getAutreStructureRattachementSante()) ? array('label' => 'Etablissement de rattachement / Autre structure de rattachement') : array()) : array();
-        $resultat['fonctionEtablissement'] = (is_null($user->getFonctionDansEtablissementSante())) ? array('label' => 'Fonction dans l\'établissement') : array();
-        $resultat['profilEtablissement']   = (is_null($user->getProfilEtablissementSante())) ? array('label' => 'Profil de l\'établissement') : array();
-        $resultat['raisonInscription']     = (is_null($user->getRaisonInscriptionSante())) ? array('label' => 'Raison inscription') : array();
+        //Obligatoire uniquement pour l'ambassadeur
+        if('Ambassadeur' === $questionnaireLibelle)
+        {
+            //Si 'etablissement de rattachement' n'est pas renseigné on vérifie le 'autre structure' 
+            $resultat['rattachementSante']     = (is_null($user->getEtablissementRattachementSante())) ? (is_null($user->getAutreStructureRattachementSante()) ? array('label' => 'Etablissement de rattachement / Autre structure de rattachement') : array()) : array();
+            $resultat['fonctionEtablissement'] = (is_null($user->getFonctionDansEtablissementSante())) ? array('label' => 'Fonction dans l\'établissement') : array();
+            $resultat['profilEtablissement']   = (is_null($user->getProfilEtablissementSante())) ? array('label' => 'Profil de l\'établissement') : array();
+            $resultat['raisonInscription']     = (is_null($user->getRaisonInscriptionSante())) ? array('label' => 'Raison inscription') : array();
+        }
         
         //Si l'un des éléments ci-dessus est manquant
         foreach ($resultat as $res)
