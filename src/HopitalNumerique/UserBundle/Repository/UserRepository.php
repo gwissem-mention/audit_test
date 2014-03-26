@@ -225,30 +225,6 @@ class UserRepository extends EntityRepository
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
     /**
      * Retourne un unique CMSI.
@@ -284,26 +260,7 @@ class UserRepository extends EntityRepository
             return $utilisateurs[0];
         return null;
     }
-    /**
-     * Retourne une liste de CMSIs.
-     * 
-     * @param array $criteres Filtres à appliquer sur la liste
-     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des CMSIs
-     */
-    public function getCmsis(array $criteres)
-    {
-        return $this->findByRole(Role::$ROLE_CMSI_LABEL, $criteres);
-    }
-    /**
-     * Retourne une liste de directeurs.
-     * 
-     * @param array $criteres Filtres à appliquer sur la liste
-     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des directeurs
-     */
-    public function getDirecteurs(array $criteres)
-    {
-        return $this->findByRole(Role::$ROLE_DIRECTEUR_LABEL, $criteres);
-    }
+
     /**
      * Retourne une liste d'ambassadeurs.
      *
