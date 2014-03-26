@@ -20,7 +20,7 @@ class DemandesGrid extends DemandesAbstractGrid
     public function setConfig()
     {
         $this->setSource('hopitalnumerique_intervention.manager.intervention_demande');
-        $this->setFunctionName('getGridDonnees_EtablissementDemandes');
+        $this->setFunctionName('getGridDonneesEtablissementDemandes');
         $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setNoDataMessage('- Aucune intervention à afficher -');
         $this->setDefaultLimit( 1000);

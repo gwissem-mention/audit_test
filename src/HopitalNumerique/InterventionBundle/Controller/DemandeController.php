@@ -50,10 +50,7 @@ class DemandeController extends Controller
                 'region' => $interventionDemande->getCmsi()->getRegion()
             ));
         }
-        else if (
-            $utilisateurConnecte->hasRoleCmsi()
-            && ($interventionDemande->interventionEtatEstDemandeInitiale() || $interventionDemande->interventionEtatEstAttenteCmsi())
-        )
+        else if ($this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->utilisateurPeutRegrouperDemandes($interventionDemande, $utilisateurConnecte))
         {
             if (!$interventionDemandeEstRegroupee)
             {

@@ -20,7 +20,7 @@ class DemandesNouvellesGrid extends DemandesAbstractGrid
     public function setConfig()
     {
         parent::setConfig();
-        $this->setFunctionName('getGridDonnees_CmsiDemandesNouvelles');
+        $this->setFunctionName('getGridDonneesCmsiDemandesNouvelles');
     }
 
     /**
