@@ -401,7 +401,7 @@ class ObjetManager extends BaseManager
 
         //resume
         $tab = explode('<!-- pagebreak -->', $article->getResume());
-        $item->resume = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+        $item->resume = $tab[0];
 
         return $item;
     }
