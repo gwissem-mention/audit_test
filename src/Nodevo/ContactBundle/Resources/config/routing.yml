@@ -1,3 +1,7 @@
-nodevo_contact_homepage:
-    pattern:  /totoland
-    defaults: { _controller: NodevoContactBundle:Default:index }
+nodevo_contact_edit:
+    pattern:  /contact
+    defaults: { _controller: NodevoContactBundle:Contact:index }
+
+index:
+    pattern: /contact
+    defaults: { _controller: NodevoContactBundle:Contact:index }
