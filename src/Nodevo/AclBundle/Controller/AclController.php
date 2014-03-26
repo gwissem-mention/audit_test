@@ -13,7 +13,7 @@ class AclController extends Controller
     public function indexAction()
     {
         $roles      = $this->get('nodevo_role.manager.role')->findAllOrdered('name');
-        $ressources = $this->get('nodevo_acl.manager.ressource')->findAllOrdered();
+        $ressources = $this->get('nodevo_acl.manager.ressource')->findAllOrdered('nom');
         $acls       = $this->get('nodevo_acl.manager.acl')->getAsArray($ressources, $roles);
         $roles      = $this->get('nodevo_role.manager.role')->reformateRolesForAcls( $roles );
 
