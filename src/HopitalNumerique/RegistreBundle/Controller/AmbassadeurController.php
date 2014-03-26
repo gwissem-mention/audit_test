@@ -13,9 +13,10 @@ class AmbassadeurController extends Controller
     {
         //get connected user and Ambassadeurs
         $user = $this->get('security.context')->getToken()->getUser();
-
+        
         //get User Role
-        $roles  = $user->getRoles();
+        //Si il n'y pas d'utilisateur connecté, le tableau de role est vide
+        $roles  = 'anon.' === $user ? array() : $user->getRoles();
         $isCMSI = in_array('ROLE_ARS_CMSI_4', $roles) ? true : false;
 
         //get region ( if not specified, get user's region)
