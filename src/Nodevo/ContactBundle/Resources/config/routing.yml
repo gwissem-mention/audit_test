@@ -1,3 +1,0 @@
-nodevo_contact_homepage:
-    pattern:  /fezezafezafaezfaezfezafafazfaezfazefaezfazefaezfazfzaefaezfazefazefaaezfazefaezfaezfeza
-    defaults: { _controller: NodevoContactBundle:Default:index }
