@@ -1,6 +1,6 @@
 <?php
 
-namespace HopitalNumerique\AdminBundle\Controller;
+namespace Nodevo\ContactBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -11,6 +11,6 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', array());
+        return $this->render('NodevoContactBundle:Default:index.html.twig', array());
     }
 }

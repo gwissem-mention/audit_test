@@ -1,0 +1,3 @@
+nodevo_contact_homepage:
+    pattern:  /
+    defaults: { _controller: NodevoContactBundle:Default:index }
