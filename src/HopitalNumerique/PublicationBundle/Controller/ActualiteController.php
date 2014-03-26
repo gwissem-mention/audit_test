@@ -12,7 +12,8 @@ class ActualiteController extends Controller
     {
         //on récupère les actus
         $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
-        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories );
+        $role          = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role );
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Actualite:index.html.twig', array(
@@ -27,7 +28,8 @@ class ActualiteController extends Controller
     {
         //on récupère les actus
         $categories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $id) );
-        $actualites = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $categories );
+        $role       = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+        $actualites = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $categories, $role );
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Actualite:index.html.twig', array(

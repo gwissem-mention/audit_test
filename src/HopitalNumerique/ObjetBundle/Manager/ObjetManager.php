@@ -327,29 +327,31 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getActualitesByCategorie( $categories, $limit = 0 )
+    public function getActualitesByCategorie( $categories, $role, $limit = 0 )
     {
         $articles   = $this->getObjetsByTypes( $categories, $limit );
         $actualites = array();
 
         foreach($articles as $article) {
-            $actu = new \stdClass;
+            if( $this->checkAccessToObjet($role, $article) ) {
+                $actu = new \stdClass;
 
-            $actu->id    = $article->getId();
-            $actu->titre = $article->getTitre();
-            $actu->alias = $article->getAlias();
-            $actu->image = $article->getWebPath() ? $article->getWebPath() : false;
+                $actu->id    = $article->getId();
+                $actu->titre = $article->getTitre();
+                $actu->alias = $article->getAlias();
+                $actu->image = $article->getWebPath() ? $article->getWebPath() : false;
 
-            //resume
-            $tab = explode('<!-- pagebreak -->', $article->getResume());
-            $actu->resume = html_entity_decode(strip_tags($tab[0]));
+                //resume
+                $tab = explode('<!-- pagebreak -->', $article->getResume());
+                $actu->resume = html_entity_decode(strip_tags($tab[0]));
 
-            //types / catégories
-            $types            = $article->getTypes();
-            $actu->types      = $this->formatteTypes( $types );
-            $actu->categories = $this->getCategorieForUrl( $article->getTypes() );
+                //types / catégories
+                $types            = $article->getTypes();
+                $actu->types      = $this->formatteTypes( $types );
+                $actu->categories = $this->getCategorieForUrl( $article->getTypes() );
 
-            $actualites[] = $actu;
+                $actualites[] = $actu;
+            }
         }
 
         return $actualites;
@@ -367,8 +369,15 @@ class ObjetManager extends BaseManager
         $categories = array();
         foreach($allCategories as $one) {
             $articles = $this->getObjetsByTypes( array($one) );
-            if( count($articles) > 0)
-                $categories[] = $one;
+            if( count($articles) > 0){
+                $categ = new \stdClass;
+                $categ->id = $one->getId();
+
+                $libelle = new Chaine( $one->getLibelle() );
+                $categ->libelle = $libelle->minifie();
+
+                $categories[] = $categ;
+            }
         }
 
         return $categories;
@@ -396,6 +405,10 @@ class ObjetManager extends BaseManager
 
         return $item;
     }
+
+
+
+
 
 
 

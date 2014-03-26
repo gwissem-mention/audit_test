@@ -5,7 +5,7 @@
     #actualites .actu h3{font-size: 24px; font-weight: normal; color:#333333;margin:0;}
     #actualites .actu h4{font-size: 12px; font-weight: normal; color:#6f3596; text-transform: uppercase; margin:0;}
     #actualites .actu p{font-size: 13px; color: #777777}
-    #actualites .actu p a{font-size: 13px; color: #7a7a7a; text-decoration: underline;}
+    #actualites .actu p a{font-size: 13px; color: #000000; margin-top:5px; text-decoration: underline;}
     #actualites .actu .actu-image{width:160px; height: 120px; margin-right: 10px }
 
 /* Colonne left */

@@ -53,6 +53,7 @@
     /* Colonne right */
         #articles .print{position: absolute; right:0; top : 0; z-index: 5}
         #articles h3{font-size: 24px; font-weight: bold; margin:5px 0 20px 0; color:#333333;}
+        #articles h4{font-size: 18px; font-weight: normal; margin:0;text-transform: uppercase;color:#6f3596;}
 
     /* Colonne left */
         #articles p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
