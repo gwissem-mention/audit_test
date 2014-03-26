@@ -48,9 +48,9 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getObjetsByTypes( $types )
+    public function getObjetsByTypes( $types, $limit = 0 )
     {
-        return $this->getRepository()->getObjetsByTypes( $types )->getQuery()->getResult();
+        return $this->getRepository()->getObjetsByTypes( $types, $limit )->getQuery()->getResult();
     }
 
     /**
@@ -327,9 +327,9 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getActualitesByCategorie( $categories )
+    public function getActualitesByCategorie( $categories, $limit = 0 )
     {
-        $articles   = $this->getObjetsByTypes( $categories );
+        $articles   = $this->getObjetsByTypes( $categories, $limit );
         $actualites = array();
 
         foreach($articles as $article) {
@@ -338,24 +338,16 @@ class ObjetManager extends BaseManager
             $actu->id    = $article->getId();
             $actu->titre = $article->getTitre();
             $actu->alias = $article->getAlias();
+            $actu->image = $article->getWebPath() ? $article->getWebPath() : false;
 
             //resume
             $tab = explode('<!-- pagebreak -->', $article->getResume());
             $actu->resume = html_entity_decode(strip_tags($tab[0]));
 
-            //types
+            //types / catégories
             $types            = $article->getTypes();
             $actu->types      = $this->formatteTypes( $types );
-
-            //catégories
-            $types     = $article->getTypes();
-            $type      = $types[0];
-            $categorie = '';
-            if( $parent = $type->getParent() )
-                $categorie .= $parent->getLibelle().'-';
-            $categorie .= $type->getLibelle();
-            $tool             = new Chaine( $categorie );
-            $actu->categories = $tool->minifie();
+            $actu->categories = $this->getCategorieForUrl( $article->getTypes() );
 
             $actualites[] = $actu;
         }
@@ -382,6 +374,28 @@ class ObjetManager extends BaseManager
         return $categories;
     }
 
+    /**
+     * Retourne l'objet article pour la page d'accueil
+     *
+     * @return stdClass
+     */
+    public function getArticleHome()
+    {
+        $article = $this->findOneBy( array('id' => 1) );
+        $item    = new \stdClass;
+        
+        $item->id         = $article->getId();
+        $item->titre      = $article->getTitre();
+        $item->alias      = $article->getAlias();
+        $item->image      = $article->getWebPath() ? $article->getWebPath() : false;
+        $item->categories = $this->getCategorieForUrl( $article->getTypes() );
+
+        //resume
+        $tab = explode('<!-- pagebreak -->', $article->getResume());
+        $item->resume = html_entity_decode(strip_tags($tab[0]));
+
+        return $item;
+    }
 
 
 
@@ -392,7 +406,26 @@ class ObjetManager extends BaseManager
 
 
 
+    /**
+     * Formatte les types de l'objet pour les URLS (catégorie param)
+     *
+     * @param array $types Les types de l'objet
+     *
+     * @return string
+     */
+    private function getCategorieForUrl( $types )
+    {
+        $type      = $types[0];
+        $categorie = '';
 
+        if( $parent = $type->getParent() )
+            $categorie .= $parent->getLibelle().'-';
+        $categorie .= $type->getLibelle();
+
+        $tool = new Chaine( $categorie );
+
+        return $tool->minifie();
+    }
 
     /**
      * Ajoute les enfants de $objet dans $return, formatées en fonction de $level

@@ -69,15 +69,19 @@ class ObjetRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getObjetsByTypes( $types )
+    public function getObjetsByTypes( $types, $limit = 0 )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->leftJoin('obj.types','refTypes')
             ->where('refTypes.id IN (:types)')
+            ->orderBy('obj.dateCreation', 'DESC')
             ->setParameter('types', $types );
         
+        if( $limit !== 0 )
+            $qb->setMaxResults($limit);
+
         return $qb;
     }
 }

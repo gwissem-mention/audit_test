@@ -67,8 +67,8 @@
         #articles .actus{background: #f6f6f6; border-radius: 5px; padding:10px;}
         #articles .actus ul{list-style: none; padding:0;}
         #articles .actus ul li{background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
-        #articles .actus ul li a{display: block; color: #777777; font-size: 13px; padding:6px 0}
-        #articles .actus ul li.first a{font-weight: bold;}
+        #articles .actus ul li a{display: block; color: #777777; font-size: 13px; padding:0}
+        #articles .actus ul li.first a{font-weight: bold; padding:6px 0}
         #articles .actus ul li:hover a{color:#6f3596;}
 
 /**
