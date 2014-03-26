@@ -4,6 +4,7 @@ namespace Nodevo\MailBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Manager de l'entité Mail.
@@ -23,6 +24,8 @@ class MailManager extends BaseManager
      * @var array() Tableau clé: Nom affiché => valeur : Adresse mail
      */
     private $_mailAnap;
+    private $_router;
+    private $_request;
 
     /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails
@@ -30,16 +33,18 @@ class MailManager extends BaseManager
      * @param EntityManager $em Entity      Manager de Doctrine
      * @param Array         $options        Tableau d'options
      */
-    public function __construct(EntityManager $em, \Twig_Environment $twig, $options = array())
-    {
+    public function __construct(EntityManager $em, \Twig_Environment $twig, $router, $options = array())
+    {        
         parent::__construct($em);
 
         $this->_twig           = $twig;
+        $this->_router         = $router;
+        $this->_request        = Request::createFromGlobals();
         $this->_allowAdd       = isset($options['allowAdd'])        ? $options['allowAdd']          : true;
         $this->_allowDelete    = isset($options['allowDelete'])     ? $options['allowDelete']       : true;
         $this->_nomExpediteur  = isset($options['nomExpediteur'])   ? $options['nomExpediteur']     : '';        
         $this->_mailExpediteur = isset($options['mailExpediteur'])  ? $options['mailExpediteur']    : '';
-        $this->_destinataire   = isset($options['destinataire'])    ? $options['destinataire']      : '';      
+        $this->_destinataire   = isset($options['destinataire'])    ? $options['destinataire']      : '';
         $this->_mailAnap       = isset($options['mailAnap'])        ? $options['mailAnap']          : array();
     }
 
@@ -266,7 +271,7 @@ class MailManager extends BaseManager
      * @return string
      */
     private function replaceContent( $content, $user, $options)
-    {
+    {        
         //Si il y a des variables spécifique dans le template courant
         if(!empty($options))
         {
@@ -284,9 +289,11 @@ class MailManager extends BaseManager
         if(!is_null($user))
         {
             $content = str_replace('%u', $user->getPrenom() . ' ' . $user->getNom(), $content);
-            $content = str_replace('%p', $user->getPlainPassword(), $content);            
+            $content = str_replace('%p', $user->getPlainPassword(), $content);
         }
-   
+        
+        $content = str_replace('%s', '<a href="'. $this->_request->getUriForPath($this->_router->generate('hopital_numerique_homepage')) .'" target="_blank" >Hopital Numérique</a>', $content);
+
         return $content;
     }
     
