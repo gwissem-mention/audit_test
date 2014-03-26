@@ -1,23 +1,33 @@
+#Publications
 hopital_numerique_publication_synthese:
-    pattern:  /synthese/{id}
+    pattern:  /publication/synthese/{id}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:synthese", id:1 }
     requirements:
         id: \d+
 
 hopital_numerique_publication_publication_objet:
-    pattern:  /{id}-{alias}
+    pattern:  /publication/{id}-{alias}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:objet", id:1, alias:alias }
     requirements:
         id: \d+
 
 hopital_numerique_publication_publication_contenu:
-    pattern:  /{id}-{alias}/{idc}-{aliasc}
+    pattern:  /publication/{id}-{alias}/{idc}-{aliasc}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:contenu", id:1, idc:1, alias:alias, aliasc:aliasc}
     requirements:
         id: \d+
 
 hopital_numerique_publication_publication_article:
-    pattern:  /{categorie}/{id}-{alias}
+    pattern:  /publication/{categorie}/{id}-{alias}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:article", categorie:categorie, id:1, alias:alias }
     requirements:
         id: \d+
+
+#Actualités
+hopital_numerique_publication_actualite:
+    pattern:  /actualites
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:index"}
+
+hopital_numerique_publication_actualite_categorie:
+    pattern:  /actualites/{categorie}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:categorie"}

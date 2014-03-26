@@ -83,11 +83,15 @@ class PublicationController extends Controller
         $routeParams = json_encode($request->get('_route_params'));
         $item        = $this->get('nodevo_menu.manager.item')->findOneBy( array('route'=>$routeName, 'routeParameters'=>$routeParams) );
 
+        //on récupère les actus
+        $categories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:articles.html.twig', array(
-            'objet' => $objet,
-            'meta'  => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
-            'menu'  => $item->getMenu()->getAlias()
+            'objet'      => $objet,
+            'meta'       => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
+            'menu'       => $item->getMenu()->getAlias(),
+            'categories' => $categories
         ));
     }
 

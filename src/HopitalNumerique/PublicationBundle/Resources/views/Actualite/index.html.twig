@@ -1,0 +1,47 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Actualites{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-publication-actualite-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquepublication/css/actualite.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div id="actualites">
+        <div class="col-md-3">
+            <p class="titre">Hôpital <br />Numérique</p>
+            {{ knp_menu_render('menu-sub-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriquePublicationBundle::menu.html.twig'}) }}
+
+            <div class="actus">
+                <ul>
+                    <li class="first"><a href="#">Toute l'actualité</a></li>
+                    {% for categorie in categories %}
+                        <li><a href="#">{{categorie.libelle}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9" >
+            <div class="col-md-12">
+                {% for actu in actualites %}
+                    <div class="actu">
+                        <h4>categ</h4>
+                        <h3>{{actu.titre}}</h3>
+                        <p>
+                            {{actu.resume|raw}}
+                            <br />
+                            > <a href="#">Lire la suite</a>
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endblock %}

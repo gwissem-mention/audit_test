@@ -13,7 +13,7 @@ hopital_numerique_registre:
 
 hopital_numerique_publication:
     resource: "@HopitalNumeriquePublicationBundle/Resources/config/routing.yml"
-    prefix:   /publication
+    prefix:   /
 
 hopital_numerique_account:
     resource: "@HopitalNumeriqueAccountBundle/Resources/config/routing.yml"

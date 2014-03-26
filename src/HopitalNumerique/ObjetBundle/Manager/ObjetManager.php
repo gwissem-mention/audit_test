@@ -319,6 +319,22 @@ class ObjetManager extends BaseManager
         return $results;
     }
 
+    /**
+     * Retourne la liste des actualités des catégories passées en paramètre
+     *
+     * @param array $categories Les catégories
+     *
+     * @return array
+     */
+    public function getActualitesByCategorie( $categories )
+    {
+        $articles = $this->getObjetsByTypes( $categories );
+
+
+
+
+        return $actualites;
+    }
     
 
 

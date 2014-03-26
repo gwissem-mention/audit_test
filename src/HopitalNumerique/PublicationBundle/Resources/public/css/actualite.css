@@ -1,0 +1,25 @@
+#actualites{margin-top: 20px; position: relative}
+
+/* Colonne right */
+    #actualites .actu h3{font-size: 24px; font-weight: normal; color:#333333;margin:10px 0;}
+    #actualites .actu h4{font-size: 12px; font-weight: normal; color:#6f3596; text-transform: uppercase; margin:0;}
+    #actualites .actu p{font-size: 13px; color: #777777}
+    #actualites .actu p a{font-size: 13px; color: #7a7a7a; text-decoration: underline;}
+
+/* Colonne left */
+    #actualites p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
+    /* Sous-menu */
+    #actualites #sous-menu{list-style:none; padding:0; margin-bottom: 20px}
+    #actualites #sous-menu li{border-top:1px solid #f0f0f0; background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
+    #actualites #sous-menu li a{padding:5px 0; display: block}
+    #actualites #sous-menu li a span{color:#777777; font-size: 13px; }
+    #actualites #sous-menu li.active a span,#actualites #sous-menu li:hover a span{color:#6f3596;}
+    #actualites #sous-menu li.last{border-bottom:1px solid #f0f0f0; }
+
+    /* Liste des catégories */
+    #actualites .actus{background: #f6f6f6; border-radius: 5px; padding:10px;}
+    #actualites .actus ul{list-style: none; padding:0;}
+    #actualites .actus ul li{background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
+    #actualites .actus ul li a{display: block; color: #777777; font-size: 13px; padding:6px 0}
+    #actualites .actus ul li.first a{font-weight: bold;}
+    #actualites .actus ul li:hover a{color:#6f3596;}

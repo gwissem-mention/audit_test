@@ -154,3 +154,12 @@ UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_name` = 'Editer une pu
 UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_name` = 'Fiche publication' WHERE `core_menu_item`.`itm_id` = 49; 
 UPDATE `wwwhopitalnumeriquecom`.`core_menu_item` SET `itm_name` = 'Recherche - vue publication' WHERE `core_menu_item`.`itm_id` = 79;*/
 
+INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`) VALUES (NULL, 'FrontOffice - Actualités', '/^\\/actualites/', '21', '1');
+
+
+
+
+
+
+
+
