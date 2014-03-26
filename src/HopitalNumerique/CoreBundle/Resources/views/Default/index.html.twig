@@ -23,21 +23,16 @@
 
             <h3 class="violet">Actualités</h3>
             <div class="actus">
-                <div class="actu">
-                    <h6>Categorie</h6>
-                    <h5>Lorem ipsum dolor sit amet</h5>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.
-                    </p>
-                </div>
-                <div class="actu">
-                    <h6>Categorie</h6>
-                    <h5>Lorem ipsum dolor sit amet</h5>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. elit, sed do eiusmod tempor incididunt ut labore et dolore. 
-                    </p>
-                </div>
-                <a href="#" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Voir toutes les actualités</a>
+                {% for actu in actualites %}
+                    <div class="actu">
+                        <h6>{{actu.types}}</h6>
+                        <h5>{{actu.titre}}</h5>
+                        <p>
+                            {{actu.resume}}
+                        </p>
+                    </div>
+                {% endfor %}
+                <a href="{{path('hopital_numerique_publication_actualite')}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Voir toutes les actualités</a>
             </div>
         </div>
         

@@ -48,9 +48,9 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getObjetsByTypes( $types )
+    public function getObjetsByTypes( $types, $limit = 0 )
     {
-        return $this->getRepository()->getObjetsByTypes( $types )->getQuery()->getResult();
+        return $this->getRepository()->getObjetsByTypes( $types, $limit )->getQuery()->getResult();
     }
 
     /**
@@ -327,9 +327,9 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getActualitesByCategorie( $categories )
+    public function getActualitesByCategorie( $categories, $limit = 0 )
     {
-        $articles   = $this->getObjetsByTypes( $categories );
+        $articles   = $this->getObjetsByTypes( $categories, $limit );
         $actualites = array();
 
         foreach($articles as $article) {
@@ -338,6 +338,7 @@ class ObjetManager extends BaseManager
             $actu->id    = $article->getId();
             $actu->titre = $article->getTitre();
             $actu->alias = $article->getAlias();
+            $actu->image = $article->getWebPath() ? $article->getWebPath() : false;
 
             //resume
             $tab = explode('<!-- pagebreak -->', $article->getResume());

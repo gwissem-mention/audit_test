@@ -11,6 +11,7 @@ class DefaultController extends Controller
     {
         $article = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => 1) );
 
+        /* Get catégorie for route */
         $types     = $article->getTypes();
         $type      = $types[0];
         $categorie = '';
@@ -20,13 +21,17 @@ class DefaultController extends Controller
                 $categorie .= $parent->getLibelle().'-';
             $categorie .= $type->getLibelle();
         }
-
         //clean categ
         $tool = new Chaine( $categorie );
 
+        //get actus
+        $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
+        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, 2 );
+
         return $this->render('HopitalNumeriqueCoreBundle:Default:index.html.twig', array(
-            'article'   => $article,
-            'categorie' => $tool->minifie()
+            'article'    => $article,
+            'categorie'  => $tool->minifie(),
+            'actualites' => $actualites
         ));
     }
 }
