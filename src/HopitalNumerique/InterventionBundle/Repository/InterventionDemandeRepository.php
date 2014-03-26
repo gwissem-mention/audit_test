@@ -416,7 +416,7 @@ class InterventionDemandeRepository extends EntityRepository
                     ->andWhere('interventionDemandePrincipale.referent = :referent')
                 ->setParameter('referent', $referent)
             ;
-        
+
         $requete = $this->_em->createQueryBuilder()
             ->select(
                 'interventionDemande.id AS id',
@@ -443,21 +443,53 @@ class InterventionDemandeRepository extends EntityRepository
             ->leftJoin('interventionDemande.evaluationEtat', 'evaluationEtat')
             // Regroupements
             ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementRegroupee', Join::WITH, 'interventionDemande.id = interventionRegroupementRegroupee.interventionDemandePrincipale')
-            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementPrincipale', Join::WITH, 'interventionDemande.id = interventionRegroupementPrincipale.interventionDemandeRegroupee');
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementPrincipale', Join::WITH, 'interventionDemande.id = interventionRegroupementPrincipale.interventionDemandeRegroupee')
+        ;
 
-            $requete->where('interventionDemande.referent = :referent')
-                ->setParameter('referent', $referent)
-                ->andWhere(
-                    $requete->expr()->notIn(
-                        'interventionDemande',
-                        $requeteDemandesGroupees->getDQL()
-                    )
-                );
+        $requete->where('interventionDemande.referent = :referent')
+            ->setParameter('referent', $referent)
+            ->andWhere(
+                $requete->expr()->notIn(
+                    'interventionDemande',
+                    $requeteDemandesGroupees->getDQL()
+                )
+            )
+            ->andWhere(
+                $requete->expr()->notIn(
+                    'interventionDemande',
+                    $this->getDemandesDoublonsIdsAvecMemeDemandePrincipale($referent)
+                )
+            );
 
         $requete->orderBy('interventionDemande.dateCreation', 'DESC')
-            ->groupBy('interventionDemande.id');
+            ->addGroupBy('interventionDemande.id')
+            ;
 
         return $requete->getQUery()->getResult();
+    }
+    /**
+     * Retourne les IDs des demandes d'intervention doublons (pas le premier résultat trouvé) qui possèdent la même demande d'intervention principale.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $referent Le référent de l'établissement des demandes d'intervention
+     * @return integer[] Les IDs des demandes doublons avec la même demande principale
+     */
+    private function getDemandesDoublonsIdsAvecMemeDemandePrincipale(User $referent)
+    {
+        $demandesDoublonsAvecMemeDemandePrincipaleIds = array();
+        
+        $requeteDemandesDoublonsAvecMemeDemandePrincipale = $this->_em->createQueryBuilder()
+            ->select('IDENTITY(interventionRegroupementDoublonsAvecMemeDemandePrincipale.interventionDemandeRegroupee) AS demandeDoublonId')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementDoublonsAvecMemeDemandePrincipale')
+                ->innerJoin('interventionRegroupementDoublonsAvecMemeDemandePrincipale.interventionDemandeRegroupee', 'interventionDoublonsDemandeRegroupee')
+                    ->andWhere('interventionDoublonsDemandeRegroupee.referent = :referent')
+                        ->setParameter('referent', $referent)
+            ->orderBy('interventionDoublonsDemandeRegroupee.id', 'ASC')
+            ->setFirstResult(1)
+        ;
+        foreach ($requeteDemandesDoublonsAvecMemeDemandePrincipale->getQuery()->getResult() as $demandeDoublon)
+            $demandesDoublonsAvecMemeDemandePrincipaleIds[] = $demandeDoublon['demandeDoublonId'];
+
+        return $demandesDoublonsAvecMemeDemandePrincipaleIds;
     }
 
     
