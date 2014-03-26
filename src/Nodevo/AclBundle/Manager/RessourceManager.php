@@ -26,10 +26,10 @@ class RessourceManager extends BaseManager
     public function getRessourceMatchingUrl( $url )
     {
         $ressources = $this->findAll();
-
         foreach( $ressources as $ressource ) {
             $pattern = $ressource->getPattern();
-            preg_match($pattern, $url, $matches);
+
+            preg_match($pattern, $url, $matches);            
 
             if (!empty($matches))
                 break;
