@@ -136,7 +136,7 @@ NULL , '73', '4', 'Lire une évaluation d''une demande d''intervention', 'hopita
 
 /*UPDATE `hn_questionnaire_question` SET `que_obligatoire` = '0' WHERE `hn_questionnaire_question`.`que_id` =25;*/
 
-UPDATE `core_menu_item` SET `itm_route` = 'hopital_numerique_intervention_demande_liste' WHERE `core_menu_item`.`itm_id` =73;
+/*UPDATE `core_menu_item` SET `itm_route` = 'hopital_numerique_intervention_demande_liste' WHERE `core_menu_item`.`itm_id` =73;
 UPDATE `core_menu_item` SET `itm_uri` = NULL WHERE `core_menu_item`.`itm_id` =73;
 
 UPDATE `core_menu_item` SET `itm_route` = 'hopital_numerique_intervention_demande_liste' WHERE `core_menu_item`.`itm_id` =91;
@@ -156,7 +156,7 @@ INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `i
 (NULL, 68, 3, 'Nouvelle demande d''intervention', 'hopital_numerique_intervention_demande_nouveau', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
 (NULL, 68, 3, 'Nouvelle évaluation d''un demande d''intervention', 'hopital_numerique_intervention_evaluation_nouveau', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
 (NULL, 68, 3, 'Édition d''une demande d''intervention', 'hopital_numerique_intervention_demande_edit', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
-(NULL, 68, 3, 'Lire une évaluation d''une demande d''intervention', 'hopital_numerique_intervention_evaluation_voir', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1);
+(NULL, 68, 3, 'Lire une évaluation d''une demande d''intervention', 'hopital_numerique_intervention_evaluation_voir', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1);*/
 
 
 ---------------------------------------------------------------------------------------------
