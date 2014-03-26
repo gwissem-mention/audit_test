@@ -21,7 +21,7 @@
             {% endif %}
             <h4>{{article.titre}}</h4>
             <p>
-                {{article.resume}}
+                {{article.resume|raw}}
             </p>
             <a href="{{path('hopital_numerique_publication_publication_article',{'id':article.id, 'alias':article.alias, 'categorie':article.categories})}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> En savoir plus</a>
 
