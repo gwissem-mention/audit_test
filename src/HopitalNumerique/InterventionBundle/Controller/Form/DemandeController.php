@@ -50,7 +50,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
             $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_cmsi', $this->interventionDemande, array('interventionDemande' => $this->interventionDemande));
         else $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_etablissement', $this->interventionDemande, array('interventionDemande' => $this->interventionDemande));
 
-        if ($this->_gereEnvoiFormulaireDemandeNouveau($interventionDemandeFormulaire))
+        if ($this->gereEnvoiFormulaireDemandeNouveau($interventionDemandeFormulaire))
             return $this->redirect($this->generateUrl('hopital_numerique_intervention_demande_liste'));
 
         return $this->render(
@@ -68,7 +68,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      * @param \Symfony\Component\Form\Form $interventionDemandeFormulaire Formulaire de la demande d'intervention
      * @return boolean VRAI ssi le formulaire est validé
      */
-    private function _gereEnvoiFormulaireDemandeNouveau($interventionDemandeFormulaire)
+    private function gereEnvoiFormulaireDemandeNouveau($interventionDemandeFormulaire)
     {
         if ($this->get('request')->isMethod('POST'))
         {
@@ -76,10 +76,10 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
 
             if ($interventionDemandeFormulaire->isValid())
             {
-                if (!$this->_enregistreNouvelleDemande())
+                if (!$this->enregistreNouvelleDemande())
                     return false;
 
-                $this->_envoieCourrielsNouvelleDemande();
+                $this->envoieCourrielsNouvelleDemande();
 
                 $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été enregistrée et sera étudiée.');
                 return true;
@@ -96,7 +96,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      * 
      * @return boolean VRAI ssi la demande est enregistrée
      */
-    private function _enregistreNouvelleDemande()
+    private function enregistreNouvelleDemande()
     {
         $this->interventionDemande->setDateCreation(new \DateTime());
 
@@ -136,7 +136,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      *
      * @return void
      */
-    private function _envoieCourrielsNouvelleDemande()
+    private function envoieCourrielsNouvelleDemande()
     {
         if ($this->utilisateurConnecte->hasRoleCmsi())
         {
@@ -173,7 +173,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 
-        $this->_gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire);
+        $this->gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire);
 
         return $this->render(
             'HopitalNumeriqueInterventionBundle:Demande:edit.html.twig',
@@ -189,7 +189,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      * @param \Symfony\Component\Form\Form $interventionDemandeFormulaire Formulaire de la demande d'intervention
      * @return void
      */
-    private function _gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire)
+    private function gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire)
     {
         if ($this->get('request')->isMethod('POST'))
         {

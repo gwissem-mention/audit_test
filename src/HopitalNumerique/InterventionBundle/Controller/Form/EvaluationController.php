@@ -38,7 +38,7 @@ class EvaluationController extends Controller
 
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
 
-        return $this->_renderForm(
+        return $this->renderForm(
             array(
                 'interventionDemande' => $interventionDemande,
                 'questionnaire' => $questionnaire
@@ -56,7 +56,7 @@ class EvaluationController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm($options, $view)
+    private function renderForm($options, $view)
     {
         $questionnaire    = $options['questionnaire'];
         $interventionDemande = $options['interventionDemande'];
