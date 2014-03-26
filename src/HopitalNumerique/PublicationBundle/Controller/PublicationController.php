@@ -77,10 +77,17 @@ class PublicationController extends Controller
         if( $this->checkAuthorization( $objet ) === false )
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
 
+        //on récupère l'item de menu courant
+        $request     = $this->get('request');
+        $routeName   = $request->get('_route');
+        $routeParams = json_encode($request->get('_route_params'));
+        $item        = $this->get('nodevo_menu.manager.item')->findOneBy( array('route'=>$routeName, 'routeParameters'=>$routeParams) );
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:articles.html.twig', array(
-            'objet'        => $objet,
-            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() )
+            'objet' => $objet,
+            'meta'  => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
+            'menu'  => $item->getMenu()->getAlias()
         ));
     }
 
