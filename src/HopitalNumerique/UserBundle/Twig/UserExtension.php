@@ -32,7 +32,7 @@ class UserExtension extends \Twig_Extension
         $resultat['region']                = (is_null($user->getRegion())) ? array('label' => 'Région') : array();
         $resultat['departement']           = (is_null($user->getDepartement())) ? array('label' => 'Département') : array();
         //Obligatoire uniquement pour l'ambassadeur
-        if('Ambassadeur' === $questionnaireLibelle)
+        if('Expert' !== $questionnaireLibelle)
         {
             //Si 'etablissement de rattachement' n'est pas renseigné on vérifie le 'autre structure' 
             $resultat['rattachementSante']     = (is_null($user->getEtablissementRattachementSante())) ? (is_null($user->getAutreStructureRattachementSante()) ? array('label' => 'Etablissement de rattachement / Autre structure de rattachement') : array()) : array();
