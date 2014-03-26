@@ -6,7 +6,6 @@
  */
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
 
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;

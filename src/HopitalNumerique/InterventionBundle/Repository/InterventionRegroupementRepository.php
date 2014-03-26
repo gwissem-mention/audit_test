@@ -7,7 +7,6 @@
 namespace HopitalNumerique\InterventionBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 
 /**
  * InterventionRegroupementRepository

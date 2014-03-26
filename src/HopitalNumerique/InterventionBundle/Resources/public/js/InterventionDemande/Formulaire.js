@@ -514,7 +514,6 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.regroupeInterv
             var interventionRegroupementUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/regroupement/' + interventionRegroupementType + '/' + interventionRegroupeeId + '/regroupe';
             
             $.ajax(interventionRegroupementUrl, {
-                method:'POST',
                 success:function(reponse) {
                     if (reponse != '1')
                         alert('Le regroupement ne s\est pas fait.');

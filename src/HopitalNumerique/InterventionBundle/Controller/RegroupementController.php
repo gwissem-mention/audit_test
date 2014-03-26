@@ -28,11 +28,7 @@ class RegroupementController extends Controller
     {
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
-        if (
-            $this->get('request')->isMethod('POST')
-            && $utilisateurConnecte->hasRoleCmsi()
-            && ($interventionDemandePrincipale->interventionEtatEstDemandeInitiale() || $interventionDemandePrincipale->interventionEtatEstAttenteCmsi())
-        )
+        if ($this->container->get('hopitalnumerique_intervention.manager.intervention_regroupement')->utilisateurPeutRegrouperDemande($interventionDemandePrincipale, $interventionDemandeRegroupee, $utilisateurConnecte))
         {
             $interventionRegroupement = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->createEmpty();
             $interventionRegroupement->setInterventionDemandePrincipale($interventionDemandePrincipale);

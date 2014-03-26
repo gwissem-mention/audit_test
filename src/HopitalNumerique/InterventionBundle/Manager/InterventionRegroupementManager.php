@@ -17,6 +17,31 @@ class InterventionRegroupementManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement';
 
+    /** Indique si l'utilisateur peut regrouper des demandes d'intervention.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandePrincipale La demande d'intervention principale
+     * @param \HopitalNumerique\UserBundle\Entity\User $utilisateur L'utilisateur qui souhaite regrouper
+     * @return boolean VRAI ssi l'utilisateur peut regrouper la demande
+     */
+    public function utilisateurPeutRegrouperDemandes(InterventionDemande $interventionDemandePrincipale, User $utilisateur)
+    {
+        return (
+            $utilisateur->hasRoleCmsi()
+            && ($interventionDemandePrincipale->interventionEtatEstDemandeInitiale() || $interventionDemandePrincipale->interventionEtatEstAttenteCmsi())
+        );
+    }
+    /** Indique si l'utilisateur peut regrouper une demande d'intervention en particulier.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandePrincipale La demande d'intervention principale
+     * * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandeARegrouper La demande d'intervention à regrouper
+     * @param \HopitalNumerique\UserBundle\Entity\User $utilisateur L'utilisateur qui souhaite regrouper
+     * @return boolean VRAI ssi l'utilisateur peut regrouper la demande
+     */
+    public function utilisateurPeutRegrouperDemande(InterventionDemande $interventionDemandePrincipale, InterventionDemande $interventionDemandeARegrouper, User $utilisateur)
+    {
+        return $this->utilisateurPeutRegrouperDemandes($interventionDemandePrincipale, $utilisateur);
+    }
+    
     /**
      * Retourne si une demande d'intervention est une demande qui a été regroupée ou non.
      *

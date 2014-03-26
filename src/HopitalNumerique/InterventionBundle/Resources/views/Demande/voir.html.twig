@@ -31,6 +31,40 @@
 
         <div class="panel panel_form_visu">
 
+            {% if app.user.hasRoleCmsi == false and app.user.hasRoleAmbassadeur == false and interventionDemande.estDemandeRegroupee %}
+                <h2>Votre demande à été regroupée avec une autre intervention :</h2>
+                {% for interventionRegroupementDemandePrincipale in interventionDemande.interventionRegroupementsDemandesPrincipales %}
+                    <div class="row">
+                        <div class="col-md-4">Établissement référent</div>
+                        <div class="col-md-8">
+                            {% if interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.etablissementRattachementSante is not null %}
+                                {{ interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.etablissementRattachementSante.appellation }}
+                            {% else %}
+                                {{ interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.autreStructureRattachementSante }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">Établissements du groupement</div>
+                        <div class="col-md-8">
+                            {% for interventionRegroupementDemandeRegroupee in interventionRegroupementDemandePrincipale.interventionDemandePrincipale.interventionRegroupementsDemandesRegroupees %}
+                                <p>
+                                    {% if interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.id != interventionDemande.id and app.user.id == interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.id %}
+                                        <a href="{{ path('hopital_numerique_intervention_demande_voir', { id:interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    {% endif %}
+                                    {% if interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.etablissementRattachementSante is not null %}
+                                        {{ interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.etablissementRattachementSante.appellation }}
+                                    {% else %}
+                                        {{ interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.autreStructureRattachementSante }}
+                                    {% endif %}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <hr>
+            {% endif %}
+        
             <div class="row">
                 <div class="col-md-4">Demandeur</div>
                 <div class="col-md-8">

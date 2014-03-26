@@ -10,8 +10,6 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use HopitalNumerique\InterventionBundle\Form\UserType;
-use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Validator\Validator;
 use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager as FormInterventionDemandeManager;
