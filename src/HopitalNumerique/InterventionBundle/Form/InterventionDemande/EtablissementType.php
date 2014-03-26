@@ -7,9 +7,7 @@
 namespace HopitalNumerique\InterventionBundle\Form\InterventionDemande;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemandeType;
-use HopitalNumerique\InterventionBundle\Form\UserType;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Validator\Validator;
 use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;

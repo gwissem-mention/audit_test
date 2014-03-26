@@ -6,13 +6,9 @@
  */
 namespace HopitalNumerique\InterventionBundle\Controller\Form;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Component\Form\Form;
-use HopitalNumerique\InterventionBundle\Exception\InterventionException;
-use Nodevo\RoleBundle\Entity\Role;
 
 /**
  * Contrôleur des formulaires de demandes d'intervention.

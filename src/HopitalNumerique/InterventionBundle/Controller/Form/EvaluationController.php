@@ -9,8 +9,6 @@ namespace HopitalNumerique\InterventionBundle\Controller\Form;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
-use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
-use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**

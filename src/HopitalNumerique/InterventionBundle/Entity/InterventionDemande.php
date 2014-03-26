@@ -5,11 +5,9 @@ namespace HopitalNumerique\InterventionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement;
 
 /**
  * Entité d'une demande d'intervention.

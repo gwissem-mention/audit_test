@@ -7,7 +7,6 @@
 namespace HopitalNumerique\InterventionBundle\Manager;
 
 use Symfony\Component\Security\Core\SecurityContext;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
@@ -39,7 +38,6 @@ class InterventionEvaluationManager
     /**
      * Constructeur du manager gérant les évaluations des demandes d'intervention.
      *
-     * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
      * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
      * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router Router de l'application
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager $interventionCourrielManager Le manager de l'entité InterventionCourriel
