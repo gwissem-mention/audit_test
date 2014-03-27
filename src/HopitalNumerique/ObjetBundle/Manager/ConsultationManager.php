@@ -2,6 +2,7 @@
 namespace HopitalNumerique\ObjetBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Manager de l'entité Consultation.
@@ -11,7 +12,13 @@ class ConsultationManager extends BaseManager
     protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Consultation';
     protected $_securityContext;
 
-    public function __construct($em, $securityContext)
+    /**
+     * Construct
+     *
+     * @param EntityManager   $em              Entity Mangager de doctrine
+     * @param SecurityContext $securityContext Security Context
+     */
+    public function __construct(EntityManager $em, $securityContext)
     {
         parent::__construct($em);
         $this->_securityContext = $securityContext;

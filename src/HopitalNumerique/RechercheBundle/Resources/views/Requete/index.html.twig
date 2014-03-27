@@ -20,36 +20,31 @@
     {% endjavascripts %}
 {% endblock %}
 
+{% block headerTitle %}Requêtes de recherche{% endblock %}
+{% block headerDesc %}Gérer mes Requêtes de recherches{% endblock %}
+
 {% block content %}
     <div id="requetes">
-        <i class="fa fa-2x fa-search violet pull-left"></i>
-        <h4 class="pull-left violet">Requêtes de recherche</h4>
-        <p class="sous-titre">
-            Gérer mes Requêtes de recherches
-        </p>
-        
-        <div class="liste">
-            {% for requete in requetes %}
-                <div class="ligne requete-{{requete.id}}" >
-                    <div class="default {% if requete.isDefault %}active{% endif %}" data-link="{{path('hopital_numerique_requete_toggle',{'id':requete.id})}}" >
-                        <i class="fa {% if requete.isDefault %}fa-star{% endif %}"></i>
-                    </div>
-
-                    <p {% if requete.isDefault %}class="violet"{% endif %} >{{requete.nom|capitalize}}</p>
-
-                    <div class="actions pull-right">
-                        <div class="fa fa-edit" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
-                        <div class="fa fa-times-circle" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
-                    </div>
-
-                    <div class="clearfix"></div>
+        {% for requete in requetes %}
+            <div class="ligne requete-{{requete.id}}" >
+                <div class="default {% if requete.isDefault %}active{% endif %}" data-link="{{path('hopital_numerique_requete_toggle',{'id':requete.id})}}" >
+                    <i class="fa {% if requete.isDefault %}fa-star{% endif %}"></i>
                 </div>
-            {% else %}
-                <div class="ligne">
-                    <p> - Aucune requête de recherche enregistrée - </p>
-                    <div class="clearfix"></div>
+
+                <p {% if requete.isDefault %}class="violet"{% endif %} >{{requete.nom|capitalize}}</p>
+
+                <div class="actions pull-right">
+                    <div class="fa fa-edit" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-times-circle" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
                 </div>
-            {% endfor %}
-        </div>
+
+                <div class="clearfix"></div>
+            </div>
+        {% else %}
+            <div class="ligne">
+                <p> - Aucune requête de recherche enregistrée - </p>
+                <div class="clearfix"></div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
