@@ -6,7 +6,7 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-nodevo-contact-layout.css" filter="cssrewrite"
+    {% stylesheets output="compiled/nodevo-contact-layout.css" filter="cssrewrite"
         'bundles/hopitalnumeriqueaccount/css/layout.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />

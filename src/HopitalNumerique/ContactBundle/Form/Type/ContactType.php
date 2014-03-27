@@ -27,11 +27,6 @@ class ContactType extends NodevoContactType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-
-        /*echo '‹pre›';
-        \Doctrine\Common\Util\Debug::dump($this->_constraints);
-        die();*/
         parent::buildForm($builder, $options);
         
         $builder

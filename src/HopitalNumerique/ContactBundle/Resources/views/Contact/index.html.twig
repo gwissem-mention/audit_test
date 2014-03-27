@@ -1,10 +1,10 @@
-{% extends 'HopitalNumeriqueAccountBundle:Formulaire:layout.html.twig' %}
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-user-expert-edit.css" filter="cssrewrite"
+    {% stylesheets output="compiled/hopitalnumerique-contact-index.css" filter="cssrewrite"
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
-        'bundles/hopitalnumeriqueuser/css/specificationUser.css'
+        'bundles/hopitalnumeriquecontact/css/contact.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -20,22 +20,35 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block pageTitre %}Lorem ipsum dolor sit amet{% endblock %}
-
-{% block chapoDescription %}
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tincidunt purus nec adipiscing. Cras eu nisi dolor. Vestibulum laoreet mi at quam dictum, vitae iaculis metus elementum. Aliquam ut ante non ligula sollicitudin vulputate. Nullam mattis vulputate sem ut placerat. Ut ac vulputate diam. Aenean suscipit lobortis tortor sit amet pharetra. Suspendisse placerat mauris non fringilla mollis. Nulla non eleifend est. Mauris ac tincidunt dolor. Mauris venenatis sit amet eros in rutrum. Ut erat sapien, viverra id dui in.</p>
-{% endblock %}
-
-{% block contenu %}
+{% block body %}
     <div class="panel">
-        <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
-        {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
-        {{ form_javascript(form) }}
-        {{ form(form) }}
-    
-        <div class="col-md-10 col-md-offset-2">
-            <input onclick="$('form').submit();" class="btn btn-success col-md-4 pull-right submit questionnaire_submit" value="{{ 'envoyer'|capitalize }}" type="button"/>
-        </div>
-		<div class="clearfix"></div>
+        <div id="contact">
+	        {% block chapo %}
+	            <div class="chapo">
+	                <h1 class="violet">Lorem ipsum dolor sit amet</h1>
+	                <div class="description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tincidunt purus nec adipiscing. Cras eu nisi dolor. Vestibulum laoreet mi at quam dictum, vitae iaculis metus elementum. Aliquam ut ante non ligula sollicitudin vulputate. Nullam mattis vulputate sem ut placerat. Ut ac vulputate diam. Aenean suscipit lobortis tortor sit amet pharetra. Suspendisse placerat mauris non fringilla mollis. Nulla non eleifend est. Mauris ac tincidunt dolor. Mauris venenatis sit amet eros in rutrum. Ut erat sapien, viverra id dui in.</p></div>
+	            </div>
+	        {% endblock %}
+	        
+	        {% if block('barreActions') is not empty %}
+	            <div class="actions">
+	                {% block barreActions %}{% endblock %}
+	            </div>
+	        {% endif %}
+	        
+	        <div id="contact_form">
+	            <div class="panel">
+			        <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+			        {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+			        {{ form_javascript(form) }}
+			        {{ form(form) }}
+			    
+			        <div class="col-md-10 col-md-offset-2">
+			            <input onclick="$('form').submit();" class="btn btn-success col-md-4 pull-right submit" value="{{ 'envoyer'|upper }}" type="button"/>
+			        </div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
     </div>
 {% endblock %}
