@@ -454,10 +454,7 @@ class Grid
          * @return array            Tableau des données regroupées
          */
         private function _regroupementParentEnfant( $datas )
-        {        
-            //Tableau des données regroupées par parent enfant
-            $datasRegroupees = array();
-            
+        {
             //Récupère l'ensemble des données dans un ArrayCollection
             $datasArrayCollection = new ArrayCollection( $datas );
             
