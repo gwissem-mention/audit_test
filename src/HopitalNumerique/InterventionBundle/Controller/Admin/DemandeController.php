@@ -9,7 +9,7 @@ namespace HopitalNumerique\InterventionBundle\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * Contrôleur des demandes d'intervention.
+ * Contrôleur des demandes d'intervention pour la console administrative.
  */
 class DemandeController extends Controller
 {
