@@ -3,10 +3,7 @@
 namespace Nodevo\ToolsBundle\Generator;
 
 use Sensio\Bundle\GeneratorBundle\Generator\Generator as Generator;
-
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\Filesystem\Filesystem;
-
 use Doctrine\Common\Persistence\Mapping\AbstractClassMetadataFactory;
 
 class DataFixturesGenerator extends Generator

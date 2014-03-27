@@ -7,7 +7,6 @@ use Knp\Menu\NodeInterface;
 use Knp\Menu\Loader\LoaderInterface;
 
 use Symfony\Component\Security\Core\SecurityContextInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
  * BreadcrumbNodeLoader

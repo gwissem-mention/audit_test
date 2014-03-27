@@ -6,9 +6,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Controller des utilisateurs
- * 
- * @author Quentin SOMAZZI
- * @copyright Nodevo
  */
 class UserController extends Controller
 {    

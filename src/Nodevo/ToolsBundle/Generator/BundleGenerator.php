@@ -3,8 +3,6 @@
 namespace Nodevo\ToolsBundle\Generator;
 
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\DependencyInjection\Container;
-
 use Sensio\Bundle\GeneratorBundle\Generator\BundleGenerator as Generator;
 
 /**

@@ -3,8 +3,6 @@
 namespace HopitalNumerique\ObjetBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use \Nodevo\ToolsBundle\Tools\Chaine;
 

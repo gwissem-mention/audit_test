@@ -8,7 +8,6 @@ use Nodevo\AclBundle\Entity\Acl;
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
