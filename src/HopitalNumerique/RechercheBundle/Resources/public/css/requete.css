@@ -1,13 +1,11 @@
 #requetes{background: #f8f8f8; padding:15px;}
-#requetes h4{font-size: 14px; font-weight: bold; margin:4px 0 0 0;}
-#requetes p.sous-titre{font-size: 12px; font-weight: bold; color:#333333;padding:15px 0 10px 0;margin:0; clear:both;}
-#requetes .liste .ligne{background: #ffffff; border-radius: 5px; border:1px solid #ecebeb; padding: 7px 10px; margin:2px 0;}
-#requetes .liste .ligne .default{width:16px;height: 16px; float: left;}
-#requetes .liste .ligne .default:hover i{ cursor: pointer; }
-#requetes .liste .ligne .default.active:hover i{ cursor: inherit; }
-#requetes .liste .ligne .default:hover i:before{content: "\f006";}
-#requetes .liste .ligne .default:hover i.fa-star:before{content: "\f005";}
-#requetes .liste .ligne p{margin:0 0 0 7px;color:#333333;font-size: 13px;float:left;}
-#requetes .liste .ligne p.violet{color:#6f3596;}
-#requetes .liste .ligne .actions div{color:#c0bebe;cursor: pointer}
-#requetes .liste .ligne .actions div:hover{color:#000000;}
+#requetes .ligne{background: #ffffff; border-radius: 5px; border:1px solid #ecebeb; padding: 7px 10px; margin:2px 0;}
+#requetes .ligne .default{width:16px;height: 16px; float: left;}
+#requetes .ligne .default:hover i{ cursor: pointer; }
+#requetes .ligne .default.active:hover i{ cursor: inherit; }
+#requetes .ligne .default:hover i:before{content: "\f006";}
+#requetes .ligne .default:hover i.fa-star:before{content: "\f005";}
+#requetes .ligne p{margin:0 0 0 7px;color:#333333;font-size: 13px;float:left;}
+#requetes .ligne p.violet{color:#6f3596;}
+#requetes .ligne .actions div{color:#c0bebe;cursor: pointer}
+#requetes .ligne .actions div:hover{color:#000000;}

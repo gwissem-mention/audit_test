@@ -191,6 +191,11 @@ class Objet
     protected $references;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="objet", cascade={"persist", "remove" })
+     */
+    protected $consultations;
+
+    /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="objets")
      * @ORM\JoinTable(name="hn_objet_ambassadeur",
      *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")},
@@ -806,6 +811,29 @@ class Objet
     public function setReferences(\Doctrine\Common\Collections\ArrayCollection $references)
     {        
         $this->references = $references;
+    
+        return $this;
+    }
+
+    /**
+     * Get consultations
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $consultations
+     */
+    public function getConsultations()
+    {
+        return $this->consultations;
+    }
+
+    /**
+     * Set consultations
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $consultations
+     * @return Objet
+     */
+    public function setConsultations(\Doctrine\Common\Collections\ArrayCollection $consultations)
+    {        
+        $this->consultations = $consultations;
     
         return $this;
     }
