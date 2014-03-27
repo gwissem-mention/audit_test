@@ -29,7 +29,7 @@ class ContactController extends Controller
         //Récupération de l'entité passée en paramètre
         $contact = $this->get('nodevo_contact.manager.contact')->createEmpty();
         
-        return $this->_renderForm('nodevo_contact_contact', $contact, 'NodevoContactBundle:Contact:index.html.twig');
+        return $this->renderForm('nodevo_contact_contact', $contact, 'NodevoContactBundle:Contact:index.html.twig');
     }
     
     /**
@@ -49,20 +49,20 @@ class ContactController extends Controller
         $request = $this->get('request');
     
         // Si l'utilisateur soumet le formulaire
-        if ('POST' == $request->getMethod()) {
+        if ('POST' == $request->getMethod()) 
+        {
             // On bind les données du form
             $form->handleRequest($request);
     
             //si le formulaire est valide
-            if ($form->isValid()) {
-                //test ajout ou edition
-                $new = is_null($contractualisation->getId()) ? true : false;
+            if ($form->isValid()) 
+            {
     
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
-                $this->get('hopitalnumerique_user.manager.contractualisation')->save($contractualisation);
+                $this->get('nodevo_contact.manager.contact')->save($contact);
     
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Contractualisation ' . ($new ? 'ajouté.' : 'mis à jour.') );
+                $this->get('session')->getFlashBag()->add( 'success' , 'Votre message a bien été envoyé, nous vous recontacterons prochainement.' );
     
                 //Sauvegarde / Sauvegarde + quitte
                 $do = $request->request->get('do');
@@ -72,9 +72,7 @@ class ContactController extends Controller
     
         $array = array_merge(array(
                 'form'               => $form->createView(),
-                'contractualisation' => $contractualisation,
-                'user'               => $contractualisation->getUser(),
-                'options'            => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($contractualisation->getUser())
+                'contact'            => $contact
         ), $parametres);
     
         return $this->render( $view , $array);

@@ -32,7 +32,19 @@ class ContactType extends AbstractType
                 'required' => true, 
                 'label'    => 'Prenom',
                 'attr'        => array('class' => $this->_constraints['prenom']['class'] ),
-            ));
+            ))
+            ->add('nom', 'text', array(
+                'required' => true, 
+                'label'    => 'Nom',
+                'attr'        => array('class' => $this->_constraints['nom']['class'] ),
+            ))
+            ->add('mail', 'text', array(
+                'required' => true, 
+                'label'    => 'Adresse mail',
+                'attr'        => array('class' => $this->_constraints['mail']['class'] ),
+            ))
+            
+            ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

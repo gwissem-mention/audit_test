@@ -1,7 +1,3 @@
-nodevo_contact:
-    resource: "@NodevoContactBundle/Resources/config/routing.yml"
-    prefix:   /
-
 # Bundles Hopital Numérique : partie Front
 hopital_numerique_core:
     resource: "@HopitalNumeriqueCoreBundle/Resources/config/routing.yml"
@@ -102,3 +98,7 @@ nodevo_admin:
 nodevo_mail:
     resource: "@NodevoMailBundle/Resources/config/routing.yml"
     prefix:   /admin
+    
+nodevo_contact:
+    resource: "@NodevoContactBundle/Resources/config/routing.yml"
+    prefix:   /

@@ -29,21 +29,30 @@ class Contact
     /**
      * @var string
      *
-     * @ORM\Column(name="chapeau", type="text")
-     */
-    private $chapeau;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="prenom", type="string", length=50)
+     * @Assert\NotBlank(message="Le prénom ne peut pas être vide.")
+     * @Assert\Length(
+     *      min = "1",
+     *      max = "50",
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le prénom.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le prénom."
+     * )
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
+     * @ORM\Column(name="contact_prenom", type="string", length=50, options = {"comment" = "Prénom de la personne qui a contacté"})
      */
     private $prenom;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="nom", type="string", length=50)
+     * 
+     *@Assert\NotBlank(message="Le nom ne peut pas être vide.")
+     * @Assert\Length(
+     *      min = "1",
+     *      max = "50",
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
+     * )
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
+     * @ORM\Column(name="contact_nom", type="string", length=50)
      */
     private $nom;
 

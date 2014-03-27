@@ -39,6 +39,7 @@ assetic:
         - NodevoAclBundle
         - NodevoRoleBundle
         - NodevoMailBundle
+        - NodevoContactBundle
         - HopitalNumeriqueInterventionBundle
         - HopitalNumeriqueUserBundle
         - HopitalNumeriqueReferenceBundle

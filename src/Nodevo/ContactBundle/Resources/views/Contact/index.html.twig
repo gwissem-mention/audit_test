@@ -1,7 +1,21 @@
-{% extends "::base.html.twig" %}
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
 
-{% block title %}NodevoContactBundle:Contact:index{% endblock %}
+{# Référencement #}
+{% block title %}{{parent()}} - Contact{% endblock %}
+{% block metadesc %}Connectez-vous à votre compte "Mon Hôpital Numérique" pour accéder aux outils proposés par l'ANAP{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-nodevo-contact-layout.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueaccount/css/layout.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
 
 {% block body %}
-<h1>Welcome to the Contact:index page</h1>
+    <div class="panel-body" >
+	    {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+	    {{ form(form) }}
+	</div>
 {% endblock %}
