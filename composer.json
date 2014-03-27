@@ -1,12 +1,16 @@
 {
     "name": "nodevo/hopitalnumerique",
-    "license": "NODEVO",
+    "license": "proprietary",
     "type": "project",
     "description": "Site Hopital Numérique",
     "authors": [
         {
             "name": "Quentin SOMAZZI",
             "email": "qsomazzi@nodevo.com"
+        },
+        {
+            "name": "Gaetan MELCHILSEN",
+            "email": "gmelchilsen@nodevo.com"
         }
     ],
     "autoload": {

@@ -39,26 +39,26 @@ $(document).ready(function() {
 
     //Gestion de la suppression de critères dans la requete
     $('.arbo-requete span').on("click", function(e){
-        clicks++; //count clicks
+        // clicks++; //count clicks
 
-        //do nothing on single click
-        if(clicks === 1) {
-            timer = setTimeout(function() {
-                //do nothing
-                clicks = 0; //after action performed, reset counter
-            }, DELAY);
-        //remove click
-        } else {
-            clearTimeout(timer); //prevent single-click action
+        // //do nothing on single click
+        // if(clicks === 1) {
+        //     timer = setTimeout(function() {
+        //         //do nothing
+        //         clicks = 0; //after action performed, reset counter
+        //     }, DELAY);
+        // //remove click
+        // } else {
+        //     clearTimeout(timer); //prevent single-click action
             removeElement( $(this).parent() ); //remove element from DEST
             updateResultats();
             
-            clicks = 0; //after action performed, reset counter
-        }
-    })
-    .on("dblclick", function(e){
-        e.preventDefault(); //cancel system double-click event
+        //     clicks = 0; //after action performed, reset counter
+        // }
     });
+    // .on("dblclick", function(e){
+    //     e.preventDefault(); //cancel system double-click event
+    // });
 
     //toggle des paramètres de la requete
     $('.requete h2').on('click', function(){
