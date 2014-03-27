@@ -48,4 +48,24 @@ class Contact extends NodevoContact
      * @ORM\Column(name="contact_fonction_strucutre", type="string", length=255, nullable=true, options = {"comment" = "Fonction au sein de la structure"})
      */
     protected $fonctionStructure;
+
+    /**
+     * Get fonctionStructure
+     *
+     * @return string $fonctionStructure
+     */
+    public function getFonctionStructure()
+    {
+        return $this->fonctionStructure;
+    }
+    
+    /**
+     * Set fonctionStructure
+     *
+     * @param string $fonctionStructure
+     */
+    public function setFonctionStructure($fonctionStructure)
+    {
+        $this->fonctionStructure = $fonctionStructure;
+    }
 }

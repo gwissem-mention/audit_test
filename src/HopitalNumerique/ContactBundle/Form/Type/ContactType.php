@@ -12,6 +12,8 @@ class ContactType extends NodevoContactType
 
     public function __construct($manager, $validator)
     {
+        parent::__construct($manager, $validator);
+
         $this->_constraints = $manager->getConstraints( $validator );
     }
     
@@ -25,14 +27,19 @@ class ContactType extends NodevoContactType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+
+        /*echo '‹pre›';
+        \Doctrine\Common\Util\Debug::dump($this->_constraints);
+        die();*/
         parent::buildForm($builder, $options);
         
         $builder
-        ->add('fonctionDansEtablissementSante', 'text', array(
-                    'max_length' => $this->_constraints['fonctionDansEtablissementSante']['maxlength'],
+        ->add('fonctionStructure', 'text', array(
+                    'max_length' => $this->_constraints['fonctionStructure']['maxlength'],
                     'required'   => false,
                     'label'      => 'Fonction dans l\'établissement',
-                    'attr'       => array('class' => $this->_constraints['fonctionDansEtablissementSante']['class'])
+                    'attr'       => array('class' => $this->_constraints['fonctionStructure']['class'])
             ))
         ;
     }

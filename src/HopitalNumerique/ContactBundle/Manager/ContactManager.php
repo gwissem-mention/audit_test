@@ -10,9 +10,4 @@ use Nodevo\ContactBundle\Manager\ContactManager as NodevoContactManager;
 class ContactManager extends NodevoContactManager
 {
     protected $_class = 'HopitalNumerique\ContactBundle\Entity\Contact';
-    
-    public function getConstraints($validator)
-    {
-        parent::getConstraints($validator);
-    }
 }
