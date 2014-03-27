@@ -27,21 +27,28 @@ class ConsultationManager extends BaseManager
     /**
      * On met l'objet en consulté (création si first visite, ou update de la date)
      *
-     * @param Objet $objet La publication visitée
+     * @param Objet $objet     La publication visitée
+     * @param bool  $isContenu Is contenu ?
      *
      * @return empty
      */
-    public function consulted($objet)
+    public function consulted($objet, $isContenu = false)
     {
         $user = $this->_securityContext->getToken()->getUser();
 
         if( $user != "anon.") {
-            $consultation = $this->findOneBy( array('objet'=>$objet, 'user'=>$user) );
+            $consultation = $isContenu ? $this->findOneBy( array('contenu'=>$objet, 'user'=>$user) ) : $this->findOneBy( array('objet'=>$objet, 'user'=>$user) );
 
             //new
             if( is_null($consultation) ){
                 $consultation = $this->createEmpty();
-                $consultation->setobjet( $objet );
+
+                if( $isContenu ){
+                    $consultation->setContenu( $objet );
+                    $consultation->setObjet( $objet->getObjet() );
+                }else
+                    $consultation->setObjet( $objet );
+                
                 $consultation->setUser( $user );
             //update
             }else

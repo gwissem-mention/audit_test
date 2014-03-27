@@ -1,4 +1,4 @@
-    div#tableau-de-bord div.panel h2 { color:#6F3596;font-size:14px;font-weight:bold;margin:0px;padding:20px 20px 20px 20px;text-transform:uppercase; }
+
     div#tableau-de-bord div.panel div.boutons { padding:0px 0px 10px 0px;text-align:right; }
         div#tableau-de-bord div.panel div.boutons button, div#tableau-de-bord div.panel div.boutons input { text-transform:uppercase; }
 /* <-- Barre avec les actions/boutons */
@@ -84,13 +84,13 @@ div#tableau-de-bord div.panel_boutons { background-color:transparent !important;
     #tableau-de-bord .content .questionnaire_submit{margin: 0px 0px 15px 0px;}
 
     /* Header*/
-    #tableau-de-bord .content div.header-account { background-color:#f8f8f8;background-image:url('/bundles/hopitalnumeriqueintervention/img/chapo.png');background-position:19px 7px;background-repeat:no-repeat;padding:14px 18px 4px 18px;margin:0px 0px 20px 0px }
+    #tableau-de-bord .content div.header-account { background-color:#f8f8f8;background-image:url('/bundles/hopitalnumeriqueintervention/img/chapo.png');background-position:19px 7px;background-repeat:no-repeat;padding:15px 20px 15px 20px;margin:0px 0px 20px 0px }
     #tableau-de-bord .content div.header-account h1 { font-size:14px;font-weight:bold;margin:0px;padding:0px 0px 10px 40px;text-transform:uppercase; }
     #tableau-de-bord .content div.header-account div.description { font-size:13px; }
     #tableau-de-bord .content div.header-account div.description p { margin:8px 0px;padding:0px; }
     
     /* Panel */
     #tableau-de-bord .content div.panel { background-color:#f8f8f8;border-color:#e3e3e3;border-radius:0px;border-width:1px;margin:30px 0px 0px 0px; }
-    
+    #tableau-de-bord .content div.panel h2 { color:#6F3596;font-size:14px;font-weight:bold;margin:0px;padding:20px;text-transform:uppercase; }    
 
 

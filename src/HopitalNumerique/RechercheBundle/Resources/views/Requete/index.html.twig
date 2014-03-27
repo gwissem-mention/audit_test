@@ -20,11 +20,14 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block headerTitle %}Requêtes de recherche{% endblock %}
-{% block headerDesc %}Gérer mes Requêtes de recherches{% endblock %}
+{% block headerTitle %}Lorem ipsum{% endblock %}
+{% block headerDesc %} 
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga, fugit, qui, earum omnis corrupti ipsum dolores provident doloremque vero ab velit officia sit assumenda similique itaque ex eum neque voluptates? 
+{% endblock %}
 
 {% block content %}
-    <div id="requetes">
+    <h2 class="requeteTitle" >Gérer mes Requêtes de recherches</h2>
+    <div class="requetes">
         {% for requete in requetes %}
             <div class="ligne requete-{{requete.id}}" >
                 <div class="default {% if requete.isDefault %}active{% endif %}" data-link="{{path('hopital_numerique_requete_toggle',{'id':requete.id})}}" >
@@ -43,6 +46,32 @@
         {% else %}
             <div class="ligne">
                 <p> - Aucune requête de recherche enregistrée - </p>
+                <div class="clearfix"></div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h2 class="requeteTitle" >Mes productions consultés</h2>
+    <div class="requetes">
+        {% for consultation in consultations %}
+            <div class="ligne consultation-{{consultation.id}}" >
+                {% if not consultation.contenu %}
+                    <a href="{{path('hopital_numerique_publication_publication_objet', {'id':consultation.objet.id, 'alias':consultation.objet.alias})}}" >
+                        {{consultation.objet.titre|capitalize}}
+                    </a>
+                {% else %}
+                    <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':consultation.objet.id, 'alias':consultation.objet.alias,'idc':consultation.contenu.id, 'aliasc':consultation.contenu.alias})}}" >
+                        {{consultation.contenu.titre|capitalize}}
+                    </a>
+                {% endif %}
+                
+                <div class="actions pull-right">
+                    <div class="fa fa-times-circle" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_consultation_delete', {'id':consultation.id})}}')"></div>
+                </div>
+            </div>
+        {% else %}
+            <div class="ligne">
+                <p> - Aucune publication consultée - </p>
                 <div class="clearfix"></div>
             </div>
         {% endfor %}

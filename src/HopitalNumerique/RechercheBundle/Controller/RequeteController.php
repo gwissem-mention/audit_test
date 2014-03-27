@@ -16,10 +16,11 @@ class RequeteController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
 
         //get requetes
-        $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->findBy( array( 'user' => $user ) );
+        $requetes      = $this->get('hopitalnumerique_recherche.manager.requete')->findBy( array( 'user' => $user ) );
+        $consultations = $this->get('hopitalnumerique_objet.manager.consultation')->findBy( array('user' => $user ) );
 
         if( $indexVue )
-            return $this->render('HopitalNumeriqueRechercheBundle:Requete:index.html.twig', array('requetes' => $requetes));
+            return $this->render('HopitalNumeriqueRechercheBundle:Requete:index.html.twig', array('requetes' => $requetes, 'consultations' => $consultations));
         else
             return $this->render('HopitalNumeriqueRechercheBundle:Requete:mesrequetes.html.twig', array('requetes' => $requetes));
     }
