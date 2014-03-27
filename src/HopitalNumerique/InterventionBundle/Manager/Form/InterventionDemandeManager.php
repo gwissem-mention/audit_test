@@ -47,6 +47,15 @@ class InterventionDemandeManager
         return $this->referenceManager->findBy(array('code' => 'TYPE_INTERVENTION'));
     }
     /**
+     * Retourne la liste des états d'intervention pour les listes de formulaire.
+     *
+     * @return array Liste des états d'intervention pour les listes de formulaire
+     */
+    public function getInterventionEtatsChoices()
+    {
+        return $this->referenceManager->findBy(array('code' => 'ETAT_DEMANDE_INTERVENTION'));
+    }
+    /**
      * Retourne la liste des objets pour les listes de formulaire.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur pour le filtre

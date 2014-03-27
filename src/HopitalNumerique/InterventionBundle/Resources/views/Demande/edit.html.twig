@@ -27,7 +27,7 @@
 {% endblock %}
 
 {% block contenu %}
-    <div class="panel panel_form" id="intervention_panel_edition">
+    <div class="panel panel_form panel_intervention_edition" id="intervention_demande_panel">
         
         <form method="post" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireEdition) }}>
             {% form_theme interventionDemandeFormulaireEdition 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}

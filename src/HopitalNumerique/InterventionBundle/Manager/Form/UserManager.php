@@ -159,7 +159,11 @@ class UserManager
 
         foreach ($users as $user)
         {
-            $usersListeFormatee[] = array('id' => $user->getId(), 'nom' => $user->getNom(), 'prenom' => $user->getPrenom());
+            $usersListeFormatee[] = array(
+                'id' => $user->getId(),
+                'nom' => $user->getNom(),
+                'prenom' => $user->getPrenom()
+            );
         }
 
         return json_encode($usersListeFormatee);

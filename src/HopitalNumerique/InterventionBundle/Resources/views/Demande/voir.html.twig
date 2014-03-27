@@ -29,7 +29,7 @@
 
 {% block contenu %}
 
-        <div class="panel panel_form_visu">
+        <div class="panel panel_form_visu" id="intervention_demande_panel">
 
             {% if app.user.hasRoleCmsi == false and app.user.hasRoleAmbassadeur == false and interventionDemande.estDemandeRegroupee %}
                 <h2>Votre demande à été regroupée avec une autre intervention :</h2>

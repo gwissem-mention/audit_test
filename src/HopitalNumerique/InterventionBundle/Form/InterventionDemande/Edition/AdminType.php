@@ -58,8 +58,8 @@ class AdminType extends InterventionDemandeType
                 'class' => 'HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur',
                 'property' => 'type',
                 'label' => 'Initiateur de la demande',
-                'required' => true,
-                'read_only' => false
+                'required' => false,
+                'read_only' => true
             ))
             ->add('dateCreation', 'text', array(
                 'label' => 'Date',
@@ -68,10 +68,32 @@ class AdminType extends InterventionDemandeType
                 'required' => false,
                 'read_only' => true
             ))
+            ->add('interventionEtat', 'entity', array(
+                'choices' => $this->formInterventionDemandeManager->getInterventionEtatsChoices(),
+                'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
+                'property' => 'libelle',
+                'label' => 'État actuel',
+                'required' => true,
+                'read_only' => false
+            ))
+            ->add('cmsi', 'text', array(
+                'label' => 'CMSI',
+                'mapped' => false,
+                'data' => $this->interventionDemande->getCmsi()->getAppellation(),
+                'required' => false,
+                'read_only' => true
+            ))
         ;
         parent::buildForm($builder, $options);
-        $builder
-            ->remove('referent')
+        $builder->add('ambassadeur', 'entity', array(
+                'choices' => $this->formUserManager->getAmbassadeursChoices($this->utilisateurConnecte->getRegion()),
+                'class' => 'HopitalNumerique\UserBundle\Entity\User',
+                'property' => 'appellation',
+                'label' => 'Ambassadeur',
+                'required' => true,
+                'read_only' => false
+            ))
+            //->remove('referent')
         ;
     }
 

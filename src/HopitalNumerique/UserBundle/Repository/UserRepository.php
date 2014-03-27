@@ -134,10 +134,10 @@ class UserRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user')
-        ->from('HopitalNumeriqueUserBundle:User', 'user')
-        ->andWhere('user.roles LIKE :role')
-        ->andWhere('user.enabled = 1')
-        ->setParameter('role', '%ROLE_ES_8%');
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->andWhere('user.enabled = 1')
+            ->andWhere('user.roles LIKE :role')
+            ->setParameter('role', '%ROLE_ES_8%');
         
         foreach ($criteres as $critereChamp => $critereValeur)
         {

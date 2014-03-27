@@ -28,7 +28,7 @@ class InterventionDemandeType extends AbstractType
     /**
      * @var \HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager Manager Form\InterventionDemande
      */
-    private $formInterventionDemandeManager;
+    protected $formInterventionDemandeManager;
     /**
      * @var \HopitalNumerique\InterventionBundle\Manager\Form\UserManager Manager Form\User
      */

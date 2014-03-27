@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
 
-#intervention_panel_edition {}
-    #intervention_panel_edition div.form-group {}
-        #intervention_panel_edition div.form-group div.form-control { height:auto;min-height:36px; }
+.panel_intervention_edition {}
+    .panel_intervention_edition div.form-group {}
+        .panel_intervention_edition div.form-group div.form-control { height:auto;min-height:36px; }
