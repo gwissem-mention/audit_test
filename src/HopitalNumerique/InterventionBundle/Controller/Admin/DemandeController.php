@@ -22,10 +22,6 @@ class DemandeController extends Controller
     {
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
-        if ($utilisateurConnecte->hasRoleCmsi())
-            return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/cmsi.html.twig');
-        else if ($utilisateurConnecte->hasRoleAmbassadeur())
-            return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/ambassadeur.html.twig');
-        else return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/etablissement.html.twig');
+        return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/etablissement.html.twig');
     }
 }

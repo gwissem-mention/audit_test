@@ -1431,12 +1431,12 @@
             "source": {
                 "type": "git",
                 "url": "https://bitbucket.org/nodevo/web_symfony_bdl_moxiemanager.git",
-                "reference": "1d015bbf8c25620c3116be5b500818f87e3345c6"
+                "reference": "8e4f5dd7471042e5776eb23954a75ce3e2231fa6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://bitbucket.org/nodevo/web_symfony_bdl_moxiemanager/get/1d015bbf8c25620c3116be5b500818f87e3345c6.zip",
-                "reference": "1d015bbf8c25620c3116be5b500818f87e3345c6",
+                "url": "https://bitbucket.org/nodevo/web_symfony_bdl_moxiemanager/get/8e4f5dd7471042e5776eb23954a75ce3e2231fa6.zip",
+                "reference": "8e4f5dd7471042e5776eb23954a75ce3e2231fa6",
                 "shasum": ""
             },
             "require": {
@@ -1460,7 +1460,7 @@
                 "moxie",
                 "moxiemanager"
             ],
-            "time": "2014-03-26 16:19:37"
+            "time": "2014-03-26 17:00:04"
         },
         {
             "name": "pagerfanta/pagerfanta",
