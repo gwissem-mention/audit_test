@@ -146,6 +146,13 @@ class Objet
     private $isArticle;
 
     /**
+     * @var string
+     * 
+     * @ORM\Column(name="obj_vignette", type="string", length=255, options = {"comment" = "Vignette de l objet"}, nullable=true)
+     */
+    private $vignette;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="obj_locked_by", referencedColumnName="usr_id")
      */
@@ -218,6 +225,7 @@ class Objet
         $this->isInfraDoc   = false;
         $this->isArticle    = false;
         $this->lock         = false;
+        $this->vignette     = null;
         $this->roles        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->types        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ambassadeurs = new \Doctrine\Common\Collections\ArrayCollection();
@@ -578,6 +586,26 @@ class Objet
         $this->isArticle = $isArticle;
     }
     
+    /**
+     * Get vignette
+     *
+     * @return string $vignette
+     */
+    public function getVignette()
+    {
+        return $this->vignette;
+    }
+    
+    /**
+     * Set vignette
+     *
+     * @param string $vignette
+     */
+    public function setVignette($vignette)
+    {
+        $this->vignette = $vignette;
+    }
+
     /**
      * Get lockedBy
      *
