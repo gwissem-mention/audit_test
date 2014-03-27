@@ -22,7 +22,7 @@ services:
     #AclVoter
     security.access.acl_voter:
         class:      Nodevo\AclBundle\Security\Authorization\Voter\AclVoter
-        arguments:  ["@nodevo_acl.manager.acl"]
+        arguments:  ["@nodevo_acl.manager.acl", "@request_stack"]
         public:     false
         tags:
             -       { name: security.voter }

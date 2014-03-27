@@ -12,7 +12,8 @@ class ActualiteController extends Controller
     {
         //on récupère les actus
         $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
-        $role          = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+        $user          = $this->get('security.context')->getToken()->getUser();
+        $role          = $this->get('nodevo_role.manager.role')->getUserRole($user);
         $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role );
 
         //render
@@ -28,7 +29,8 @@ class ActualiteController extends Controller
     {
         //on récupère les actus
         $categories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $id) );
-        $role       = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+        $user       = $this->get('security.context')->getToken()->getUser();
+        $role       = $this->get('nodevo_role.manager.role')->getUserRole($user);
         $actualites = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $categories, $role );
 
         //render

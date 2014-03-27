@@ -54,7 +54,7 @@ class AclVoter implements VoterInterface
         //récupère la liste des rôles de l'user connecté
         if($token->getUser() != 'anon.') {
             //récupère l'url demandée
-            $url = $requestStack->getCurrentRequest()->getRequestUri();
+            $url = $this->_requestStack->getCurrentRequest()->getRequestUri();
 
             //on vérifie que l'user connecté à accès à la route demandée
             return $this->_aclManager->checkAuthorization( $url , $token->getUser() );
