@@ -12,6 +12,12 @@
     "autoload": {
         "psr-0": { "": "src/" }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://bitbucket.org/nodevo/web_symfony_bdl_moxiemanager.git"
+        }
+    ],
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "~2.4",
@@ -35,7 +41,8 @@
         "genemu/form-bundle": "2.2.*",
         "igorw/file-serve-bundle": "~1.0",
         "doctrine/doctrine-fixtures-bundle": "dev-master",
-        "beberlei/DoctrineExtensions": "dev-master"
+        "beberlei/DoctrineExtensions": "dev-master",
+        "nodevo/gestionnaire-media": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

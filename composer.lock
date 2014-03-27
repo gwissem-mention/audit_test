@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "d7339ddedce876f40d21244fbf6c738f",
+    "hash": "0553d2ccc4c27d9f09d720ad750253ac",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -1425,6 +1425,44 @@
             "time": "2014-03-23 19:50:26"
         },
         {
+            "name": "nodevo/gestionnaire-media",
+            "version": "dev-master",
+            "target-dir": "Nodevo/GestionnaireMediaBundle",
+            "source": {
+                "type": "git",
+                "url": "https://bitbucket.org/nodevo/web_symfony_bdl_moxiemanager.git",
+                "reference": "1d015bbf8c25620c3116be5b500818f87e3345c6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://bitbucket.org/nodevo/web_symfony_bdl_moxiemanager/get/1d015bbf8c25620c3116be5b500818f87e3345c6.zip",
+                "reference": "1d015bbf8c25620c3116be5b500818f87e3345c6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Nodevo\\GestionnaireMediaBundle": ""
+                }
+            },
+            "authors": [
+                {
+                    "name": "Rémi Leclerc",
+                    "email": "rleclerc@nodevo.com"
+                }
+            ],
+            "description": "Intégration d'un gestionnaire de média",
+            "homepage": "https://bitbucket.org/nodevo/web_symfony_bdl_moxiemanager",
+            "keywords": [
+                "moxie",
+                "moxiemanager"
+            ],
+            "time": "2014-03-26 16:19:37"
+        },
+        {
             "name": "pagerfanta/pagerfanta",
             "version": "dev-master",
             "source": {
@@ -2250,7 +2288,8 @@
         "white-october/pagerfanta-bundle": 20,
         "pagerfanta/pagerfanta": 20,
         "doctrine/doctrine-fixtures-bundle": 20,
-        "beberlei/doctrineextensions": 20
+        "beberlei/doctrineextensions": 20,
+        "nodevo/gestionnaire-media": 20
     },
     "platform": {
         "php": ">=5.3.3"

@@ -22,7 +22,7 @@ class AppKernel extends Kernel
             new Nodevo\MenuBundle\NodevoMenuBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Liip\DoctrineCacheBundle\LiipDoctrineCacheBundle(),
-            new APY\DataGridBundle\APYDataGridBundle(), 
+            new APY\DataGridBundle\APYDataGridBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
             new HopitalNumerique\UserBundle\HopitalNumeriqueUserBundle(),
             new Nodevo\RoleBundle\NodevoRoleBundle(),
@@ -39,12 +39,12 @@ class AppKernel extends Kernel
             new HopitalNumerique\QuestionnaireBundle\HopitalNumeriqueQuestionnaireBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new Nodevo\ErrorsBundle\NodevoErrorsBundle(),
-            new Nodevo\GestionnaireMediaBundle\NodevoGestionnaireMediaBundle(),
             new HopitalNumerique\AccountBundle\HopitalNumeriqueAccountBundle(),
             new HopitalNumerique\InterventionBundle\HopitalNumeriqueInterventionBundle(),
             new HopitalNumerique\RechercheBundle\HopitalNumeriqueRechercheBundle(),
             new HopitalNumerique\RegistreBundle\HopitalNumeriqueRegistreBundle(),
             new HopitalNumerique\PublicationBundle\HopitalNumeriquePublicationBundle(),
+            new Nodevo\GestionnaireMediaBundle\NodevoGestionnaireMediaBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

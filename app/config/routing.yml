@@ -79,10 +79,6 @@ nodevo_acl:
     resource: "@NodevoAclBundle/Resources/config/routing.yml"
     prefix:   /admin
 
-nodevo_gestionnaire_media:
-    resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"
-    prefix:   /admin/media
-
 nodevo_role:
     resource: "@NodevoRoleBundle/Resources/config/routing.yml"
     prefix:   /admin
@@ -98,3 +94,7 @@ nodevo_admin:
 nodevo_mail:
     resource: "@NodevoMailBundle/Resources/config/routing.yml"
     prefix:   /admin
+
+nodevo_gestionnaire_media:
+    resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"
+    prefix:   /admin/media
