@@ -3,7 +3,6 @@
 namespace Nodevo\ToolsBundle\Command;
 
 use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineEntityCommand;
-use Sensio\Bundle\GeneratorBundle\Generator\DoctrineEntityGenerator;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\DialogHelper;
 
 use Nodevo\ToolsBundle\Generator\EntityGenerator;
