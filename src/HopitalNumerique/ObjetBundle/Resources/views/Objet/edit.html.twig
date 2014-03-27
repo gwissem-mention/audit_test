@@ -48,7 +48,6 @@
         NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
         NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
     </script>
-    
 {% endblock %}
 
 {% block toolbarButton %}
@@ -105,7 +104,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="form-group" style="margin-bottom:0">
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}" style="margin-bottom:0">
                                     {{ form_label(form.file) }}
                                     <div class="col-md-9">
                                         {% if objet.getAbsolutePath(true) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
@@ -120,7 +119,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="help-block">
@@ -130,7 +129,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" style="margin-bottom:0">
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}" style="margin-bottom:0">
                                     {{ form_label(form.file2) }}
                                     <div class="col-md-9">
                                         {% if objet.getAbsolutePath(false) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
@@ -145,7 +144,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="help-block">
@@ -155,6 +154,23 @@
                                     </div>
                                 </div>
                                 
+                                <div class="vignetteBlock {% if not objet.isArticle() %}hide{% endif %}">
+                                    {{ form_label(form.vignette) }}
+                                    <div class="col-md-9">
+                                        <div class="row input-group" >
+                                            {{ form_widget(form.vignette) }}
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-info" onclick="moxman.browse({fields: 'hopitalnumerique_objet_objet_vignette'});">Parcourir</button>
+                                            </div>    
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9 col-md-offset-3">
+                                        <div class="help-block">
+                                            {{ form_errors(form.vignette) }}
+                                        </div>
+                                    </div>
+                                </div>
+
                                 {{ form_row(form.ambassadeurs) }}
 
                                 <div class="form-group">

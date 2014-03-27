@@ -7,6 +7,7 @@ ul.list-unstyled{margin-bottom:0;}
     #objet .uploadedFile{display: block; margin-top: 7px}
     #objet .deleteUploadedFile{margin-top:7px;}
     #objet .manageReferences{margin-left : 10px;}
+    #objet .vignetteBlock .input-group{padding-left:5px;}
 
     /* Tab Infra-documentaire */
     #infra .addContenu{position:absolute; right: 28px; z-index: 200}

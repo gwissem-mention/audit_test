@@ -28,7 +28,7 @@
 {% macro buildTree(reference) %}
     {% for ref in reference  %}
     <li>
-        {{ref.nom}}
+        <span class="{% if ref.primary %}text-success{% endif %}">{{ref.nom}}</span>
         {% if ref.childs is defined %}
             <ul>
                 {{ _self.buildTree(ref.childs) }}
