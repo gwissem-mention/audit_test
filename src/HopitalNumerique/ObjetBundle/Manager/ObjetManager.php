@@ -337,7 +337,7 @@ class ObjetManager extends BaseManager
                 $actu->id    = $article->getId();
                 $actu->titre = $article->getTitre();
                 $actu->alias = $article->getAlias();
-                $actu->image = $article->getWebPath() ? $article->getWebPath() : false;
+                $actu->image = $article->getVignette() ? $article->getVignette() : false;
 
                 //resume
                 $tab = explode('<!-- pagebreak -->', $article->getResume());
