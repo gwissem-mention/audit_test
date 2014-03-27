@@ -33,7 +33,7 @@ class ReferenceController extends Controller
 
         //get references and selected references as One Array
         $references = $this->get('hopitalnumerique_objet.manager.objet')->getReferencesOwn($objet);
-        
+
         return $this->render('HopitalNumeriqueObjetBundle:Reference:manage-own.html.twig', array(
             'references' => $references,
             'objet'      => true,
@@ -71,10 +71,6 @@ class ReferenceController extends Controller
             'contenu'    => $id
         ));
     }
-
-
-
-
 
     public function saveObjetAction( $id )
     {
