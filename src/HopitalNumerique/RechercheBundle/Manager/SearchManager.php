@@ -55,7 +55,7 @@ class SearchManager extends BaseManager
                     $tmp = array();
                     foreach( $results as $one) {
                         $objet = $this->formateObjet( $one, $role );
-                        if( !is_null($objet) )
+                        if( !is_null($objet) && $objet['categ'] != '' )
                             $tmp[ $objet['id'] ] = $objet;
                     }
 
@@ -70,7 +70,7 @@ class SearchManager extends BaseManager
                     $tmp = array();
                     foreach( $results as $one) {
                         $contenu = $this->formateContenu( $one, $role );
-                        if( !is_null($contenu) )
+                        if( !is_null($contenu) && $contenu['categ'] != '' )
                             $tmp[ $contenu['id'] ] = $contenu;
                     }
 

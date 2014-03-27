@@ -62,7 +62,7 @@ class SearchController extends Controller
         //on prépare la session
         $session = $this->getRequest()->getSession();
         $session->set('requete-refs', json_encode($references) );
-        
+
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(
             'objets' => $objets
         ));
