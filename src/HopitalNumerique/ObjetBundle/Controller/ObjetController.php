@@ -31,7 +31,6 @@ class ObjetController extends Controller
 
         //On récupère l'user connecté et son role
         $user  = $this->get('security.context')->getToken()->getUser();
-
         
         //si l'user connecté est propriétaire de l'objet ou si l'user est admin : unlock autorisé
         if( $user->hasRole('ROLE_ADMINISTRATEUR_1') || $objet->getLockedBy() == $user ) {
