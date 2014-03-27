@@ -11,9 +11,8 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
  * Contact
- *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="Nodevo\ContactBundle\Repository\ContactRepository")
+ * 
+ * @ORM\MappedSuperclass
  */
 class Contact
 {
@@ -24,7 +23,7 @@ class Contact
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -39,7 +38,7 @@ class Contact
      * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
      * @ORM\Column(name="contact_prenom", type="string", length=50, options = {"comment" = "Prénom de la personne qui a contacté"})
      */
-    private $prenom;
+    protected $prenom;
 
     /**
      * @var string
@@ -54,7 +53,7 @@ class Contact
      * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
      * @ORM\Column(name="contact_nom", type="string", length=50)
      */
-    private $nom;
+    protected $nom;
 
     /**
      * @var string
@@ -70,28 +69,28 @@ class Contact
      * )
      * @Nodevo\Javascript(class="validate[required,custom[email]]")
      */
-    private $mail;
+    protected $mail;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ville", type="string", length=50)
      */
-    private $ville;
+    protected $ville;
 
     /**
      * @var string
      *
      * @ORM\Column(name="telephone", type="string", length=14)
      */
-    private $telephone;
+    protected $telephone;
 
     /**
      * @var string
      *
      * @ORM\Column(name="message", type="text")
      */
-    private $message;
+    protected $message;
 
 
     /**
@@ -104,28 +103,6 @@ class Contact
         return $this->id;
     }
 
-    /**
-     * Set chapeau
-     *
-     * @param string $chapeau
-     * @return Contact
-     */
-    public function setChapeau($chapeau)
-    {
-        $this->chapeau = $chapeau;
-
-        return $this;
-    }
-
-    /**
-     * Get chapeau
-     *
-     * @return string 
-     */
-    public function getChapeau()
-    {
-        return $this->chapeau;
-    }
 
     /**
      * Set string

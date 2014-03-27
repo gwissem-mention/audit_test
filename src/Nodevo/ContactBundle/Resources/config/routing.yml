@@ -1,3 +1,0 @@
-nodevo_contact_edit:
-    pattern:  /contact
-    defaults: { _controller: "NodevoContactBundle:Contact:index" }

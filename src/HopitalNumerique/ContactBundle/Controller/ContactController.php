@@ -1,23 +1,11 @@
 <?php
 
-/**
- * Controller de Contact
- *
- * @author Gaetan MELCHILSEN
- * @copyright Nodevo
- */
-namespace Nodevo\ContactBundle\Controller;
+namespace HopitalNumerique\ContactBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Nodevo\ContactBundle\Controller\ContactController as NodevoController;
 
-/**
- * Controller de Contact
- *
- * @author Gaetan MELCHILSEN
- * @copyright Nodevo
- */
-class ContactController extends Controller
-{    
+class ContactController extends NodevoController
+{
     /**
      * Controller de Contact
      *
@@ -27,9 +15,9 @@ class ContactController extends Controller
     public function indexAction()
     {
         //Récupération de l'entité passée en paramètre
-        $contact = $this->get('nodevo_contact.manager.contact')->createEmpty();
+        $contact = $this->get('hopital_numerique_contact.manager.contact')->createEmpty();
         
-        return $this->renderForm('nodevo_contact_contact', $contact, 'NodevoContactBundle:Contact:index.html.twig');
+        return $this->renderForm('hopital_numerique_contact_contact', $contact, 'NodevoContactBundle:Contact:index.html.twig');
     }
     
     /**
@@ -59,7 +47,7 @@ class ContactController extends Controller
             {
     
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
-                $this->get('nodevo_contact.manager.contact')->save($contact);
+                $this->get('hopital_numerique_contact.manager.contact')->save($contact);
     
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 $this->get('session')->getFlashBag()->add( 'success' , 'Votre message a bien été envoyé, nous vous recontacterons prochainement.' );
