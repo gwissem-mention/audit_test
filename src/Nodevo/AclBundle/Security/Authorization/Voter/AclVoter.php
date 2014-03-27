@@ -1,20 +1,27 @@
 <?php 
 namespace Nodevo\AclBundle\Security\Authorization\Voter;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Nodevo\AclBundle\Manager\AclManager;
+
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class AclVoter implements VoterInterface
 {
+    private $_aclManager;
+    private $_requestStack;
+
     /**
      * On initialise le Voter avec un container (utilisé pour les services et l'appel du manager)
      *
-     * @param ContainerInterface $container Container
+     * @param AclManager    $aclManager     Manager des acls
+     * @param RequestStack  $requestStack   RequestStack
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(AclManager $aclManager, RequestStack $requestStack)
     {
-        $this->container = $container;
+        $this->_aclManager = $aclManager;
+        $this->_requestStack = $requestStack;
     }
 
     /**
@@ -47,10 +54,10 @@ class AclVoter implements VoterInterface
         //récupère la liste des rôles de l'user connecté
         if($token->getUser() != 'anon.') {
             //récupère l'url demandée
-            $url = $this->container->get('request')->getRequestUri();
+            $url = $requestStack->getCurrentRequest()->getRequestUri();
 
             //on vérifie que l'user connecté à accès à la route demandée
-            return $this->container->get('nodevo_acl.manager.acl')->checkAuthorization( $url , $token->getUser() );
+            return $this->_aclManager->checkAuthorization( $url , $token->getUser() );
         }else
             return VoterInterface::ACCESS_ABSTAIN;
     }

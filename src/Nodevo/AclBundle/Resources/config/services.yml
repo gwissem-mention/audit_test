@@ -9,7 +9,7 @@ services:
     #Managers
     nodevo_acl.manager.acl:
         class: %nodevo_acl.manager.acl.class%
-        arguments: ["@doctrine.orm.entity_manager", @service_container, "%nodevo_acl.options%"]
+        arguments: ["@doctrine.orm.entity_manager", "@nodevo_acl.manager.ressource", "@nodevo_role.manager.role", "%nodevo_acl.options%"]
         calls:
             - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
@@ -22,7 +22,7 @@ services:
     #AclVoter
     security.access.acl_voter:
         class:      Nodevo\AclBundle\Security\Authorization\Voter\AclVoter
-        arguments:  [@service_container]
+        arguments:  ["@nodevo_acl.manager.acl"]
         public:     false
         tags:
             -       { name: security.voter }

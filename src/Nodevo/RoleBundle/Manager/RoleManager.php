@@ -103,7 +103,7 @@ class RoleManager extends BaseManager
      *
      * @return string
      */
-    public function getConnectedUserRole()
+    public function getUserRole(User $user)
     {
         $user  = $this->_securityContext->getToken()->getUser();
         if( $user === 'anon.')
