@@ -11,7 +11,6 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', array());
     }
 }
