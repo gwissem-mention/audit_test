@@ -154,13 +154,24 @@
                                     </div>
                                 </div>
                                 
-                                <div class="{% if not objet.isArticle() %}hide{% endif %}">
-                                    {{ form_row(form.vignette) }}
-
-                                    <script type="text/javascript">
-                                        NodevoGestionnaireMediaBundle_MoxieManager.affiche({fields: 'hopitalnumerique_objet_objet_vignette'});
-                                    </script>
+                                <div class="vignetteBlock {% if not objet.isArticle() %}hide{% endif %}">
+                                    {{ form_label(form.vignette) }}
+                                    <div class="col-md-9">
+                                        <div class="row input-group" >
+                                            {{ form_widget(form.vignette) }}
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-info" onclick="moxman.browse({fields: 'hopitalnumerique_objet_objet_vignette'});">Parcourir</button>
+                                            </div>    
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9 col-md-offset-3">
+                                        <div class="help-block">
+                                            {{ form_errors(form.vignette) }}
+                                        </div>
+                                    </div>
                                 </div>
+
+
 
                                 {{ form_row(form.ambassadeurs) }}
 
