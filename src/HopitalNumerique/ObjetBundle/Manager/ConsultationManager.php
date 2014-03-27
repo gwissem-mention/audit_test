@@ -25,6 +25,18 @@ class ConsultationManager extends BaseManager
     }
 
     /**
+     * Retourne les dernières consultations de l'user $user
+     *
+     * @param User $user L'user connecté
+     *
+     * @return array
+     */
+    public function getLastsConsultations( $user )
+    {
+        return $this->getRepository()->getLastsConsultations( $user )->getQuery()->getResult();
+    }
+
+    /**
      * On met l'objet en consulté (création si first visite, ou update de la date)
      *
      * @param Objet $objet     La publication visitée
@@ -37,7 +49,7 @@ class ConsultationManager extends BaseManager
         $user = $this->_securityContext->getToken()->getUser();
 
         if( $user != "anon.") {
-            $consultation = $isContenu ? $this->findOneBy( array('contenu'=>$objet, 'user'=>$user) ) : $this->findOneBy( array('objet'=>$objet, 'user'=>$user) );
+            $consultation = $isContenu ? $this->findOneBy( array( 'objet'=>$objet->getObjet(), 'contenu'=>$objet, 'user'=>$user) ) : $this->findOneBy( array('objet'=>$objet, 'user'=>$user, 'contenu'=>null) );
 
             //new
             if( is_null($consultation) ){

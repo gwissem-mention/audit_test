@@ -17,7 +17,7 @@ class RequeteController extends Controller
 
         //get requetes
         $requetes      = $this->get('hopitalnumerique_recherche.manager.requete')->findBy( array( 'user' => $user ) );
-        $consultations = $this->get('hopitalnumerique_objet.manager.consultation')->findBy( array('user' => $user ) );
+        $consultations = $this->get('hopitalnumerique_objet.manager.consultation')->getLastsConsultations( $user );
 
         if( $indexVue )
             return $this->render('HopitalNumeriqueRechercheBundle:Requete:index.html.twig', array('requetes' => $requetes, 'consultations' => $consultations));
