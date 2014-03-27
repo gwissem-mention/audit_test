@@ -3,12 +3,7 @@
 namespace Nodevo\MenuBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
-use Nodevo\MenuBundle\Entity\Item;
-
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\PersistentCollection;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class ItemManager extends BaseManager
 {

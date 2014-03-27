@@ -4,12 +4,8 @@ namespace Nodevo\RoleBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
 /**
  * Manager de l'entité Role
- * 
- * @author Quentin SOMAZZI
  */
 class RoleManager extends BaseManager
 {

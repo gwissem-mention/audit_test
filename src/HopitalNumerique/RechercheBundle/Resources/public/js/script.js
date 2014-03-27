@@ -39,25 +39,8 @@ $(document).ready(function() {
 
     //Gestion de la suppression de critères dans la requete
     $('.arbo-requete span').on("click", function(e){
-        clicks++; //count clicks
-
-        //do nothing on single click
-        if(clicks === 1) {
-            timer = setTimeout(function() {
-                //do nothing
-                clicks = 0; //after action performed, reset counter
-            }, DELAY);
-        //remove click
-        } else {
-            clearTimeout(timer); //prevent single-click action
-            removeElement( $(this).parent() ); //remove element from DEST
-            updateResultats();
-            
-            clicks = 0; //after action performed, reset counter
-        }
-    })
-    .on("dblclick", function(e){
-        e.preventDefault(); //cancel system double-click event
+        removeElement( $(this).parent() ); //remove element from DEST
+        updateResultats();
     });
 
     //toggle des paramètres de la requete
@@ -248,9 +231,12 @@ function updateResultats()
         type    : 'POST',
         success : function( data ){
             $('#resultats').html( data );
-            if( $('#nbResults').val() <= 1 )
+            if( $('#nbResults').val() <= 1 ){
                 $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultat)' );
-            else
+                
+                if( $('#nbResults').val() == 0)
+                    $('#resultats').html('');
+            }else
                 $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
         }
     });
@@ -369,7 +355,11 @@ function handleRequeteSave( r, id )
     });
 }
 
-function cleanRequest(){
+/**
+ * Bouton qui permet de clear les éléments filtrés
+ */
+function cleanRequest()
+{
     $('.arbo-requete li').each( function(){
         removeElement( $(this) );
     });

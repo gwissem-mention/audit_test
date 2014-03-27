@@ -3,11 +3,7 @@
 namespace Nodevo\MenuBundle\Provider;
 
 use Knp\Menu\FactoryInterface;
-use Knp\Menu\ItemInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class MenuProvider implements MenuProviderInterface
 {

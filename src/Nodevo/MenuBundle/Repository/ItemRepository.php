@@ -3,7 +3,6 @@
 namespace Nodevo\MenuBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Nodevo\MenuBundle\Entity\Item;
 
 /**
  * MenuRepository

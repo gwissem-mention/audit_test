@@ -2,9 +2,6 @@
 
 /**
  * Formulaire d'édition/ajout des utilisateurs
- * 
- * @author Quentin SOMAZZI
- * @copyright Nodevo
  */
 namespace HopitalNumerique\UserBundle\Form\Type;
 
