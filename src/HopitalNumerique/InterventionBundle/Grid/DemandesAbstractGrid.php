@@ -75,6 +75,29 @@ abstract class DemandesAbstractGrid extends Grid implements IGrid
         ;
     }
     /**
+     * Fonction de rendu de la cellule Ambassadeur.
+     * 
+     * @return string Le contenu de la cellule Ambassadeur
+     */
+    public static function renderCellAmbassadeur($value, $row, $router)
+    {
+        return
+            '<strong>'.$row->getField('ambassadeurNom').' '.$row->getField('ambassadeurPrenom').'</strong>'.
+            ($row->getField('ambassadeurRegionLibelle') != null ? '<br>'.$row->getField('ambassadeurRegionLibelle') : '')
+        ;
+    }
+    /**
+     * Fonction de rendu de la cellule CMSI.
+     * 
+     * @return string Le contenu de la cellule CMSI
+     */
+    public static function renderCellCmsi($value, $row, $router)
+    {
+        return
+            '<strong>'.$row->getField('cmsiNom').' '.$row->getField('cmsiPrenom').'</strong>'
+        ;
+    }
+    /**
      * Fonction de rendu de la cellule Date choix.
      * 
      * @return string Le contenu de la cellule Date choix

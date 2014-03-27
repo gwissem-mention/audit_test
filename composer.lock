@@ -1431,7 +1431,7 @@
             "source": {
                 "type": "git",
                 "url": "ssh://git@bitbucket.org:22/nodevo/web_symfony_bdl_moxiemanager.git",
-                "reference": "8e4f5dd7471042e5776eb23954a75ce3e2231fa6"
+                "reference": "042d7df50be5dafd814b93937b4823447671e981"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -1454,7 +1454,7 @@
                 "moxie",
                 "moxiemanager"
             ],
-            "time": "2014-03-26 17:00:04"
+            "time": "2014-03-27 11:04:55"
         },
         {
             "name": "pagerfanta/pagerfanta",

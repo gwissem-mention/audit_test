@@ -20,8 +20,20 @@ class DemandeController extends Controller
      */
     public function listeAction()
     {
-        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
-        
-        return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/etablissement.html.twig');
+        $gridDemandes = $this->get('hopitalnumerique_intervention.grid.admin.intervention_demandes');
+
+        return $gridDemandes->render('HopitalNumeriqueInterventionBundle:Admin/Demande:liste.html.twig');
+    }
+    
+    /**
+     * Action pour la liste des demandes d'intervention.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response La vue de la liste des demandes d'intervention
+     */
+    public function gridDemandesAction()
+    {
+        $interventionDemandesGrille = $this->get('hopitalnumerique_intervention.grid.admin.intervention_demandes');
+    
+        return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Admin/demandes.html.twig');
     }
 }

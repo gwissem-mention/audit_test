@@ -1,0 +1,50 @@
+{% extends 'HopitalNumeriqueInterventionBundle:Admin/Form:layout.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-intervention-demande-admin-edit.js"
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/Formulaire.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/FormulaireEvenement.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% if interventionDemande.etablissements|length > 0 %}{% spaceless %}
+        <script type="text/javascript">
+            HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initRegions([{{ interventionDemande.etablissementsRattachesRegionsIds|join(',') }}]);
+            {% for etablissement in interventionDemande.etablissements %}
+                HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS.push({{ etablissement.id }});
+            {% endfor %}
+            HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REFERENT_INITIAL_ID = {{ interventionDemande.referent.id }};
+        </script>
+    {% endspaceless %}{% endif %}
+{% endblock %}
+
+{% block h1Title %}Éditer une intervention{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopital_numerique_intervention_admin_liste') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div id="intervention_demande_form_submit" class="btn btn-default" title="Enregistrer"><i class="fa fa-save"></i></div>
+{% endblock %}
+
+{% block body %}
+    
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body">
+                <form method="post" id="form_intervention_demande_edition" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireEdition) }}>
+                    {% form_theme interventionDemandeFormulaireEdition 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
+
+                    {{ form_javascript(interventionDemandeFormulaireEdition) }}
+                    {{ form_widget(interventionDemandeFormulaireEdition) }}
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

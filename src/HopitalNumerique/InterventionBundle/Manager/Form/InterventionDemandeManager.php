@@ -38,9 +38,9 @@ class InterventionDemandeManager
     }
 
     /**
-     * Retourne la liste des civilités pour les listes de formulaire.
+     * Retourne la liste des types d'intervention pour les listes de formulaire.
      *
-     * @return array Liste des civilités pour les listes de formulaire
+     * @return array Liste des types d'intervention pour les listes de formulaire
      */
     public function getInterventionTypesChoices()
     {

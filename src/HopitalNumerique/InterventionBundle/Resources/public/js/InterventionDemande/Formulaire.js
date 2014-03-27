@@ -73,7 +73,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.cacheBoutonsAc
  * 
  * @return boolean VRAI ssi le formulaire est valide
  */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormulaireCreation = function()
+HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormulaire = function()
 {
     var formulaireVerification = HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampObjets();
     var formulaireVerification = (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampEtablissements() && formulaireVerification);

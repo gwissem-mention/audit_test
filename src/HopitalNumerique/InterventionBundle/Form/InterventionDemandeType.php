@@ -26,15 +26,15 @@ class InterventionDemandeType extends AbstractType
      */
     private $_constraints = array();
     /**
-     * @var \Nodevo\InterventionBundle\Manager\Form\InterventionDemandeManager Manager Form\InterventionDemande
+     * @var \HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager Manager Form\InterventionDemande
      */
     private $formInterventionDemandeManager;
     /**
-     * @var \Nodevo\InterventionBundle\Manager\Form\UserManager Manager Form\User
+     * @var \HopitalNumerique\InterventionBundle\Manager\Form\UserManager Manager Form\User
      */
     protected $formUserManager;
     /**
-     * @var \Nodevo\InterventionBundle\Manager\Form\EtablissementManager Manager Form\Etablissement
+     * @var \HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager Manager Form\Etablissement
      */
     protected $formEtablissementManager;
 
@@ -42,6 +42,10 @@ class InterventionDemandeType extends AbstractType
      * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
      */
     protected $utilisateurConnecte;
+    /**
+     * @var \HopitalNumerique\InterventionBundle\Manager\InterventionDemande La demande d'intervention ouverte
+     */
+    protected $interventionDemande;
 
     /**
      * Constructeur du formulaire de demande d'intervention.
@@ -70,7 +74,7 @@ class InterventionDemandeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $interventionDemande = $options['interventionDemande'];
+        $this->interventionDemande = $options['interventionDemande'];
         
         $builder
             ->add('ambassadeur', 'entity', array(
@@ -121,7 +125,7 @@ class InterventionDemandeType extends AbstractType
                 'required' => false
             ))
             ->add('objets', 'entity', array(
-                'choices' => $this->formInterventionDemandeManager->getObjetsChoices($interventionDemande->getAmbassadeur()),
+                'choices' => $this->formInterventionDemandeManager->getObjetsChoices($this->interventionDemande->getAmbassadeur()),
                 'label' => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
                 'class' => 'HopitalNumeriqueObjetBundle:Objet',
                 'property' => 'titre',
