@@ -95,6 +95,6 @@ nodevo_mail:
     resource: "@NodevoMailBundle/Resources/config/routing.yml"
     prefix:   /admin
 
-nodevo_gestionnaire_media:
-    resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"
-    prefix:   /admin/media
+#nodevo_gestionnaire_media:
+#    resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"
+#    prefix:   /admin/media
