@@ -394,7 +394,7 @@ class ObjetManager extends BaseManager
         $item->id         = $article->getId();
         $item->titre      = $article->getTitre();
         $item->alias      = $article->getAlias();
-        $item->image      = $article->getWebPath() ? $article->getWebPath() : false;
+        $item->image      = $article->getVignette() ? $article->getVignette() : false;
         $item->categories = $this->getCategorieForUrl( $article->getTypes() );
 
         //resume
