@@ -61,13 +61,7 @@ class AdminType extends InterventionDemandeType
                 'required' => false,
                 'read_only' => true
             ))
-            ->add('referent', 'entity', array(
-                'choices' => $this->formUserManager->getReferentsChoices(),
-                'class' => 'HopitalNumerique\UserBundle\Entity\User',
-                'label' => 'Demandeur',
-                'required' => true,
-                'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_referent '.$this->_constraints['referent']['class'])
-            ))
+            ->add('referent', 'text') // Initialisé correctement après l'appel de la méthode mère
             ->add('dateCreation', 'text', array(
                 'label' => 'Date',
                 'mapped' => false,
@@ -90,14 +84,7 @@ class AdminType extends InterventionDemandeType
                 'required' => false,
                 'read_only' => true
             ))
-            ->add('ambassadeur', 'entity', array(
-                'choices' => $this->formUserManager->getAmbassadeursChoices($this->utilisateurConnecte->getRegion()),
-                'class' => 'HopitalNumerique\UserBundle\Entity\User',
-                'property' => 'appellation',
-                'label' => 'Ambassadeur',
-                'required' => true,
-                'read_only' => false
-            ))
+            ->add('ambassadeur', 'entity') // Initialisé correctement après l'appel de la méthode mère
             ->add('cmsiDateChoix', 'text', array(
                 'label' => 'Choix CMSI',
                 'mapped' => false,
@@ -116,7 +103,24 @@ class AdminType extends InterventionDemandeType
 
         parent::buildForm($builder, $options);
 
-        $builder->add('cmsiCommentaire', 'textarea', array(
+        $builder
+            ->add('referent', 'text', array(
+                'label' => 'Demandeur',
+                'mapped' => false,
+                'data' => $this->interventionDemande->getReferent()->getAppellation().
+                    ($this->interventionDemande->getReferent()->getEtablissementRattachementSante() != null ? $this->interventionDemande->getReferent()->getEtablissementRattachementSante()->getAppellation() : $this->interventionDemande->getReferent()->getAutreStructureRattachementSante()),
+                'required' => false,
+                'read_only' => true
+            ))
+            ->add('ambassadeur', 'entity', array(
+                    'choices' => $this->formUserManager->getAmbassadeursChoices($this->utilisateurConnecte->getRegion()),
+                    'class' => 'HopitalNumerique\UserBundle\Entity\User',
+                    'property' => 'appellation',
+                    'label' => 'Ambassadeur',
+                    'required' => true,
+                    'read_only' => false
+            ))
+            ->add('cmsiCommentaire', 'textarea', array(
                 'label' => 'Commentaire CMSI',
                 'required' => false,
                 'read_only' => false
