@@ -9,7 +9,7 @@ hopitalnumerique_objet_objet_add:
     pattern:  /objet/add/{type}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:add", type:1 }
     requirements:
-        _method: GET
+        _method: GET|POST
 
 hopitalnumerique_objet_objet_isFileExist:
     pattern:  /objet/isFileExist
@@ -68,7 +68,7 @@ hopitalnumerique_objet_contenu_add:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:add", id:1 }
     requirements:
         id: \d+
-        _method: GET
+        _method: GET|POST
 
 hopitalnumerique_objet_contenu_edit:
     pattern:  /objet/contenu/edit/{id}
