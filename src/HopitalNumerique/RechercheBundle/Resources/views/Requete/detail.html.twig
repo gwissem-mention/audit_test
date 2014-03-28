@@ -1,0 +1,26 @@
+<ol class="arbo-requete">
+    {{ _self.buildTree(elements, 0) }}
+</ol>
+
+<input type="hidden" id="requete-refs" value="{{refs}}" />
+<script type="text/javascript" >handleRefs()</script>
+
+{# Construit le système de parents > enfants des catégories #}
+{% macro buildTree(elements, level) %}
+    {% for element in elements  %}
+        {% if level == 1 and element.childs %}
+            <li class="hide childs level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
+        {% else %}
+            <li class="hide level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
+        {% endif %}
+            <span>{{element.libelle}}</span>
+            {% if element.childs %}
+                <ol>
+                    {% for child in element.childs %}
+                        {{ _self.buildTree(child, level+1 ) }}
+                    {% endfor %}
+                </ol>
+            {% endif %}
+        </li>
+    {% endfor %}
+{% endmacro %}

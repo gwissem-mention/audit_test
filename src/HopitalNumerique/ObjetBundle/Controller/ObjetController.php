@@ -31,7 +31,6 @@ class ObjetController extends Controller
 
         //On récupère l'user connecté et son role
         $user  = $this->get('security.context')->getToken()->getUser();
-
         
         //si l'user connecté est propriétaire de l'objet ou si l'user est admin : unlock autorisé
         if( $user->hasRole('ROLE_ADMINISTRATEUR_1') || $objet->getLockedBy() == $user ) {
@@ -280,7 +279,7 @@ class ObjetController extends Controller
             //si le formulaire est valide
             if ($form->isValid()) {
                 //test ajout ou edition
-                $new = is_null($objet->getId()) ? true : false;
+                $new = is_null($objet->getId());
 
                 //si l'alias est vide, on le génère depuis le titre
                 $tool = new Chaine( ( $objet->getAlias() == '' ? $objet->getTitre() : $objet->getAlias() ) );

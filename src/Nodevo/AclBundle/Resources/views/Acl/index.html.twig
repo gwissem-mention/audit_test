@@ -91,7 +91,7 @@
 		                                                {% else %}
 			                                                {% if acls[ressource.id][role.id]['write'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
 			                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Accès" data-type="2" data-ressource="{{ ressource.id }}" data-role="{{ role.id }}">
-			                                                    <i class="fa fa-edit"></i>
+			                                                    <i class="fa fa-eye"></i>
 			                                                </div>
 		                                                {% endif %}
 		                                            </div>
@@ -171,7 +171,7 @@
 		                                                {% else %}
 			                                                {% if acls[ressource.id][role.id]['write'] == 1 %}{% set statut = 'btn-success' %}{% else %}{% set statut = 'btn-default' %}{% endif %}
 			                                                <div class="btn {{statut}} {% if role.id == 1 or not write %}disabled{% endif %}" title="Accès" data-type="2" data-ressource="{{ ressource.id }}" data-role="{{ role.id }}">
-			                                                    <i class="fa fa-edit"></i>
+			                                                    <i class="fa fa-eye"></i>
 			                                                </div>
 		                                                {% endif %}
 		                                            </div>

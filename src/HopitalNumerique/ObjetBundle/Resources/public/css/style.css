@@ -7,7 +7,6 @@ ul.list-unstyled{margin-bottom:0;}
     #objet .uploadedFile{display: block; margin-top: 7px}
     #objet .deleteUploadedFile{margin-top:7px;}
     #objet .manageReferences{margin-left : 10px;}
-    #objet .vignetteBlock .input-group{padding-left:5px;}
 
     /* Tab Infra-documentaire */
     #infra .addContenu{position:absolute; right: 28px; z-index: 200}
@@ -20,7 +19,10 @@ ul.list-unstyled{margin-bottom:0;}
 #panel-references{padding:0;}
 #panel-references .tableContent{overflow-y:scroll; height:485px}
 #panel-references .tableContent thead .checkAll{display: block; margin: 0 auto}
+#panel-references .tableContent .level1{background: #34495e}
+#panel-references .tableContent .level1 td{color: #ffffff; font-size: 16px; font-weight: bold}
+#panel-references .tableContent .level2{background: #D8D8D8}
+#panel-references .tableContent .level3{background: #E6E6E6}
 #panel-references .panel-footer{margin:0;}
-#panel-references .toggle-slide .toggle-off,#panel-references .toggle-slide .toggle-off.active{background: #2D78D5}
 
 input[type="date"]{min-width: 145px}

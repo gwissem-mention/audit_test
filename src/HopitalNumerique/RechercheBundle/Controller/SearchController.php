@@ -54,7 +54,8 @@ class SearchController extends Controller
     public function getResultsAction()
     {
         //On récupère le role de l'user connecté
-        $role = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
 
         $references = $this->get('request')->request->get('references');
         $objets     = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role );
@@ -62,7 +63,7 @@ class SearchController extends Controller
         //on prépare la session
         $session = $this->getRequest()->getSession();
         $session->set('requete-refs', json_encode($references) );
-        
+
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(
             'objets' => $objets
         ));

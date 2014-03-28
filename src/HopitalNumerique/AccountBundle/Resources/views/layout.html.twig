@@ -24,7 +24,22 @@
         </div>
         
         <div class="content col-md-9">
-            {% block content %}{% endblock %}
+            {% block header %}
+                <div class="header-account">
+                    <h1 class="violet">{% block headerTitle %}{% endblock %}</h1>
+                    <div class="description">{% block headerDesc %}{% endblock %}</div>
+                </div>
+            {% endblock %}
+            
+            {% if block('barreActions') is not empty %}
+                <div class="actions">
+                    {% block barreActions %}{% endblock %}
+                </div>
+            {% endif %}
+            
+            <div class="panel">
+                {% block content %}{% endblock %}
+            </div>
 
             <div class="clearfix"></div>
         </div>

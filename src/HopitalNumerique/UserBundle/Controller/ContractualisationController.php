@@ -178,7 +178,7 @@ class ContractualisationController extends Controller
             //si le formulaire est valide
             if ($form->isValid()) {
                 //test ajout ou edition
-                $new = is_null($contractualisation->getId()) ? true : false;
+                $new = is_null($contractualisation->getId());
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_user.manager.contractualisation')->save($contractualisation);

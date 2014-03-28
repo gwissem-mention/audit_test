@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueAccountBundle:Formulaire:layout.html.twig' %}
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -24,6 +24,6 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block title %}{% block pageTitre %}{% endblock %} / Intervention - {{ parent() }}{% endblock %}
+{% block title %}{% block headerTitle %}{% endblock %} / Intervention - {{ parent() }}{% endblock %}
 
 {% block barreActions %}<a class="btn btn-default back" href="{{ path('hopital_numerique_intervention_demande_liste') }}"><span class="fa fa-reply"></span></a>{% endblock %}

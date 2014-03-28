@@ -42,7 +42,7 @@ class EntityGenerator extends Generator
 
         $class = new ClassMetadataInfo($entityClass);
         
-        $class->customRepositoryClassName = $bundle->getNamespace().'\\Repository\\'.$entity.'Repository'; //$entityClass.'Repository';
+        $class->customRepositoryClassName = $bundle->getNamespace().'\\Repository\\'.$entity.'Repository';
         $class->mapField(array('fieldName' => 'id', 'type' => 'integer', 'id' => true));
         $class->setIdGeneratorType(ClassMetadataInfo::GENERATOR_TYPE_AUTO);
         foreach ($fields as $field) {

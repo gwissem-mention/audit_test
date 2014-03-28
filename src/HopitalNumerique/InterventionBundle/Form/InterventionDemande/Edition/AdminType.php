@@ -107,7 +107,7 @@ class AdminType extends InterventionDemandeType
             ->add('referent', 'text', array(
                 'label' => 'Demandeur',
                 'mapped' => false,
-                'data' => $this->interventionDemande->getReferent()->getAppellation().
+                'data' => $this->interventionDemande->getReferent()->getAppellation().' '.
                     ($this->interventionDemande->getReferent()->getEtablissementRattachementSante() != null ? $this->interventionDemande->getReferent()->getEtablissementRattachementSante()->getAppellation() : $this->interventionDemande->getReferent()->getAutreStructureRattachementSante()),
                 'required' => false,
                 'read_only' => true

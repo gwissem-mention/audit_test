@@ -10,12 +10,10 @@ use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 class RoleManager extends BaseManager
 {
     protected $_class = '\Nodevo\RoleBundle\Entity\Role';
-    protected $_securityContext;
 
-    public function __construct($em, $securityContext)
+    public function __construct($em)
     {
         parent::__construct($em);
-        $this->_securityContext = $securityContext;
     }
 
     /**
@@ -99,16 +97,18 @@ class RoleManager extends BaseManager
     }
 
     /**
-     * Retourne le Role de l'user connecté
+     * Retourne le Role du user
+     *
+     * @param $user Utilisateur : soit une string, soit un objet FOS\UserBundle\Entity\User
      *
      * @return string
      */
-    public function getConnectedUserRole()
+    public function getUserRole($user)
     {
-        $user  = $this->_securityContext->getToken()->getUser();
-        if( $user === 'anon.')
+        if( $user === 'anon.' )
             $role = 'ROLE_ANONYME_10';
-        else{
+        else
+        {
             //on récupère le rôle de l'user connecté
             $roles = $user->getRoles();
             $role  = $roles[0];
