@@ -1164,4 +1164,14 @@ class User extends BaseUser
     {
         return ($this->etat != null && $this->etat->getId() == self::$ETAT_ACTIF_ID);
     }
+	
+	/**
+     * Get email
+     *
+     * @return string $email
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
 }
