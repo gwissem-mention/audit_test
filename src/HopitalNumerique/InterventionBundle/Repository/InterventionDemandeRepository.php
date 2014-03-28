@@ -205,7 +205,7 @@ class InterventionDemandeRepository extends EntityRepository
                 'interventionEtat.libelle AS interventionEtatLibelle',
                 'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
                 'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
-                'evaluationEtat.libelle AS evaluationEtatLibelle',
+                'evaluationEtat.id AS evaluationEtatId',
                 'remboursementEtat.libelle AS remboursementEtatLibelle',
                 'COUNT(interventionRegroupementRegroupee) AS nombreDemandesRegroupees',
                 'COUNT(interventionRegroupementPrincipale) AS nombreDemandesPrincipales'
@@ -496,7 +496,74 @@ class InterventionDemandeRepository extends EntityRepository
 
         return $demandesDoublonsAvecMemeDemandePrincipaleIds;
     }
+    /**
+     * Retourne les données formatées pour la création du grid des demandes d'intervention pour l'administration.
+     *
+     * @return array Les données pour le grid des demandes d'intervention
+     */
+    public function getGridDonneesAdminDemandes()
+    {
+        $requete = $this->_em->createQueryBuilder();
 
+        $requete
+            ->select(
+                'interventionDemande.id AS id',
+                'interventionInitiateur.id AS interventionInitiateurId',
+                'COUNT(interventionRegroupementRegroupee) AS nombreDemandesRegroupees',
+                'COUNT(interventionRegroupementPrincipale) AS nombreDemandesPrincipales',
+                'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
+                'interventionEtat.libelle AS interventionEtatLibelle',
+                
+                'cmsi.nom AS cmsiNom',
+                'cmsi.prenom AS cmsiPrenom',
+                'ambassadeur.nom AS ambassadeurNom',
+                'ambassadeur.prenom AS ambassadeurPrenom',
+                'ambassadeurRegion.libelle AS ambassadeurRegionLibelle',
+                'referent.nom AS referentNom',
+                'referent.prenom AS referentPrenom',
+                'referentEtablissement.nom AS referentEtablissementNom',
+                'referentEtablissement.finess AS referentEtablissementFiness',
+                'referentRegion.libelle AS referentRegionLibelle',
+
+                'GROUP_CONCAT(objet.titre) AS objetsInformations',
+                'interventionType.libelle AS interventionTypeLibelle',
+                'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
+                'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
+                'evaluationEtat.libelle AS evaluationEtatLibelle',
+                'remboursementEtat.libelle AS remboursementEtatLibelle'
+            )
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+            // Initiateur
+            ->innerJoin('interventionDemande.interventionInitiateur', 'interventionInitiateur')
+            // État de l'intervention
+            ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
+            // CMSI
+            ->innerJoin('interventionDemande.cmsi', 'cmsi')
+            // Ambassadeur
+            ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
+                ->leftJoin('ambassadeur.region', 'ambassadeurRegion')
+            // Référent
+            ->innerJoin('interventionDemande.referent', 'referent')
+                ->leftJoin('referent.etablissementRattachementSante', 'referentEtablissement')
+                ->leftJoin('referent.region', 'referentRegion')
+            // Objets
+            ->leftJoin('interventionDemande.objets', 'objet')
+            // État de l'intervention
+            ->innerJoin('interventionDemande.interventionType', 'interventionType')
+            // État de l'évaluation
+            ->leftJoin('interventionDemande.evaluationEtat', 'evaluationEtat')
+            // État du remboursement
+            ->leftJoin('interventionDemande.remboursementEtat', 'remboursementEtat')
+            // Regroupements
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementRegroupee', Join::WITH, 'interventionDemande.id = interventionRegroupementRegroupee.interventionDemandePrincipale')
+            ->leftJoin('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementPrincipale', Join::WITH, 'interventionDemande.id = interventionRegroupementPrincipale.interventionDemandeRegroupee')
+            ->orderBy('interventionDemande.dateCreation', 'DESC')
+            ->groupBy('interventionDemande.id')
+        ;
+    
+        return $requete->getQUery()->getResult();
+    }
+    
     
     /**
      * Retourne les demandes d'intervention similaire par rapport aux objets d'une demande d'intervention.

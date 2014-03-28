@@ -4,6 +4,7 @@ parameters:
     hopitalnumerique_intervention.grid.directeur.intervention_suivi_demandes.class: HopitalNumerique\InterventionBundle\Grid\Directeur\SuiviDemandesGrid
     hopitalnumerique_intervention.grid.ambassadeur.intervention_demandes.class: HopitalNumerique\InterventionBundle\Grid\Ambassadeur\DemandesGrid
     hopitalnumerique_intervention.grid.etablissement.intervention_demandes.class: HopitalNumerique\InterventionBundle\Grid\Etablissement\DemandesGrid
+    hopitalnumerique_intervention.grid.admin.intervention_demandes.class: HopitalNumerique\InterventionBundle\Grid\Admin\DemandesGrid
 
 services:
     hopitalnumerique_intervention.grid.cmsi.intervention_demandes_nouvelles:
@@ -20,4 +21,7 @@ services:
         arguments: ["@service_container"]
     hopitalnumerique_intervention.grid.etablissement.intervention_demandes:
         class: "%hopitalnumerique_intervention.grid.etablissement.intervention_demandes.class%"
+        arguments: ["@service_container"]
+    hopitalnumerique_intervention.grid.admin.intervention_demandes:
+        class: "%hopitalnumerique_intervention.grid.admin.intervention_demandes.class%"
         arguments: ["@service_container"]

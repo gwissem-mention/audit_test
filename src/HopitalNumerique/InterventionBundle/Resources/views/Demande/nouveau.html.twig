@@ -34,7 +34,8 @@
 {% block barreActions %}{% endblock %}
 
 {% block content %}
-    <div class="panel_form">
+    <div class="panel_form" id="intervention_demande_panel">
+
         {% set informationsManquantes = app.user|informationsManquantes %}
 
         {% if app.user.hasRoleCmsi == false and (not informationsManquantes.ok) %}

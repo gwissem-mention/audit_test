@@ -445,7 +445,8 @@ class UserController extends Controller
                     {
                         //--Frontoffice-- Informations personnelles
                         //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
-                        $roleUserConnectedLabel = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+                        $connectedUser = $this->get('security.context')->getToken()->getUser();
+                        $roleUserConnectedLabel = $this->get('nodevo_role.manager.role')->getUserRole($connectedUser);
                         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => $roleUserConnectedLabel));
                         $user->setRoles( array( $role ) );
                         

@@ -113,7 +113,8 @@ class PublicationController extends Controller
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
 
         //test si l'user connecté à le rôle requis pour voir la synthèse
-        $role   = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+        $user   = $this->get('security.context')->getToken()->getUser();
+        $role   = $this->get('nodevo_role.manager.role')->getUserRole($user);
         $params = array();
         if( $this->get('hopitalnumerique_objet.manager.objet')->checkAccessToObjet($role, $objet) )
             $params['objet'] = $objet;
@@ -158,7 +159,8 @@ class PublicationController extends Controller
      */
     private function checkAuthorization( $objet )
     {
-        $role    = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+        $user    = $this->get('security.context')->getToken()->getUser();
+        $role    = $this->get('nodevo_role.manager.role')->getUserRole($user);
         $message = 'Vous n\'avez pas accès à cette publication.';
 
         //test si l'user connecté à le rôle requis pour voir l'objet

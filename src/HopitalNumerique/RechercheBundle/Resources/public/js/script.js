@@ -27,8 +27,12 @@ $(document).ready(function() {
                 $(".requete h2").addClass('ropen');
             }
 
+            //remove Cookie after each Ref Added/Removed
+            $.removeCookie('showMorePointsDurs');
+            $.removeCookie('showMoreProductions');
+            
             if( !$(this).parent().hasClass('level0') )
-                updateResultats();
+                updateResultats( false );
 
             clicks = 0; //after action performed, reset counter
         }
@@ -40,7 +44,12 @@ $(document).ready(function() {
     //Gestion de la suppression de critères dans la requete
     $('.arbo-requete span').on("click", function(e){
         removeElement( $(this).parent() ); //remove element from DEST
-        updateResultats();
+
+        //remove Cookie after each Ref Added/Removed
+        $.removeCookie('showMorePointsDurs');
+        $.removeCookie('showMoreProductions');
+            
+        updateResultats( false );
     });
 
     //toggle des paramètres de la requete
@@ -80,7 +89,7 @@ function handleRequestForRecherche()
         });
     });
 
-    updateResultats();
+    updateResultats( false );
 }
 
 /**
@@ -218,7 +227,7 @@ function showItemOriginRecursive( item )
 /**
  * Met à jour les résulats trouvés en fonction des paramètres de la requête
  */
-function updateResultats()
+function updateResultats( cleanSession )
 {
     var loader = $('#resultats').nodevoLoader().start();
     
@@ -226,40 +235,53 @@ function updateResultats()
     $.ajax({
         url  : $('#resultats-url').val(),
         data : {
-            references : getReferences()
+            references   : getReferences(),
+            cleanSession : cleanSession
         },
         type    : 'POST',
         success : function( data ){
             $('#resultats').html( data );
-            if( $('#nbResults').val() <= 1 ){
+            if( $('#nbResults').val() == 0){
+                $('.requete h2').html( 'Requête de recherche' );
+                $('#resultats').html('');
+            }else if( $('#nbResults').val() == 1 ){
                 $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultat)' );
-                
-                if( $('#nbResults').val() == 0)
-                    $('#resultats').html('');
             }else
                 $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
+
+            loader.finished();
         }
     });
-    
-    loader.finished();
 }
 
 /**
  * Gestion du bouton Plus de résultats
  */
-function showMore(that)
+function showMore(that, btn)
 {
     toHide       = 2;
     elementsLeft = 0;
+    cookieName   = (btn == 1) ? 'showMorePointsDurs' : 'showMoreProductions';
+
+    //set Default value if not exist
+    if( $.cookie(cookieName) == undefined )
+        $.cookie(cookieName, 2);
+
+    //get cookie val
+    showMoreCookieVal = $.cookie(cookieName);
 
     $(that).parent().find('.results > div:hidden').each(function(){
         if( toHide != 0){
             $(this).slideDown();
             toHide = toHide - 1;
+            showMoreCookieVal++;
         }else
             elementsLeft = elementsLeft + 1;
     });
-    
+
+    //Maj Cookie val
+    $.cookie(cookieName, showMoreCookieVal );
+
     if (elementsLeft == 0)
         $(that).remove();
 }
@@ -363,5 +385,6 @@ function cleanRequest()
     $('.arbo-requete li').each( function(){
         removeElement( $(this) );
     });
-    updateResultats();
+
+    updateResultats( true );
 }

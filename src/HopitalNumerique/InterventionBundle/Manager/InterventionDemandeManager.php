@@ -353,6 +353,17 @@ class InterventionDemandeManager extends BaseManager
     
         return $interventionDemandes;
     }
+    /**
+     * Retourne les données formatées pour la création du grid des demandes d'intervention pour l'administration.
+     *
+     * @return array Les données pour le grid des demandes d'intervention
+     */
+    public function getGridDonneesAdminDemandes()
+    {
+        $interventionDemandes = $this->_repository->getGridDonneesAdminDemandes();
+
+        return $interventionDemandes;
+    }
     
     /**
      * Retourne les demandes d'intervention similaire par rapport à l'ambassadeur d'une demande d'intervention.

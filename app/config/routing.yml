@@ -64,6 +64,9 @@ hopital_numerique_objet:
     resource: "@HopitalNumeriqueObjetBundle/Resources/config/routing.yml"
     prefix:   /admin
 
+hopital_numerique_intervention_admin:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/admin.yml"
+    prefix:   /admin/intervention
 
 # Bundles Hopital Numérique : partie Admin ET partie Front
 hopital_numerique_user:

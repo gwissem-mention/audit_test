@@ -31,7 +31,7 @@ class Consultation
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="Objet", inversedBy="references")
+     * @ORM\ManyToOne(targetEntity="Objet", inversedBy="consultations")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
      */
     private $objet;
@@ -39,7 +39,7 @@ class Consultation
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="references")
+     * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="consultations")
      * @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE", nullable=true)
      */
     private $contenu;
