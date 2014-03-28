@@ -33,6 +33,10 @@ class SearchController extends Controller
             }else{
                 $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'isDefault' => true ) );
                 $refs    = $requete ? json_encode($requete->getRefs()) : '[]';
+
+                //set requete id in session
+                if( $requete )
+                    $session->set('requete-id', $requete->getId());
             }
         //on charge la requete demandée explicitement
         }else{
