@@ -64,7 +64,8 @@ class SearchController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
 
-        $references = $this->get('request')->request->get('references');
+        $request    = $this->get('request');
+        $references = $request->request->get('references');
         $objets     = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role );
         
         //on prépare la session
@@ -72,17 +73,16 @@ class SearchController extends Controller
         $session->set('requete-refs', json_encode($references) );
 
         //clean requete ID
-        $cleanSession = $this->get('request')->request->get('cleanSession');
+        $cleanSession = $request->request->get('cleanSession');
         if( $cleanSession !== "false" )
             $session->set('requete-id', null);
 
         //get Cookies Stuff
-        $request = $this->get('request');
         $cookies = $request->cookies;
 
         //set Cookies vals
-        $showMorePointsDurs  = $cookies->has('showMorePointsDurs') ? $cookies->get('showMorePointsDurs') : 2;
-        $showMoreProductions = $cookies->has('showMoreProductions') ? $cookies->get('showMoreProductions') : 2;
+        $showMorePointsDurs  = $cookies->has('showMorePointsDurs')  ? intval($cookies->get('showMorePointsDurs'))  : 2;
+        $showMoreProductions = $cookies->has('showMoreProductions') ? intval($cookies->get('showMoreProductions')) : 2;
 
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(
             'objets'              => $objets,
