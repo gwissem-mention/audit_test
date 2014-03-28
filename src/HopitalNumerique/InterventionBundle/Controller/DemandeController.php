@@ -61,6 +61,8 @@ class DemandeController extends Controller
             }
         }
         
+        $this->container->get('hopitalnumerique_intervention.service.demande.etat_type_derniere_demande')->setDerniereDemandeOuverte($interventionDemande);
+        
         return $this->render(
             'HopitalNumeriqueInterventionBundle:Demande:voir.html.twig',
             $vueParametres
@@ -77,7 +79,16 @@ class DemandeController extends Controller
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
         if ($utilisateurConnecte->hasRoleCmsi())
-            return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/cmsi.html.twig');
+        {
+            $derniereDemandeEstEtatTypeDemandeTraiteeCmsi = $this->container->get('hopitalnumerique_intervention.service.demande.etat_type_derniere_demande')->derniereDemandeEstEtatTypeDemandeTraiteeCmsi();
+            
+            return $this->render(
+                'HopitalNumeriqueInterventionBundle:Demande:Listes/cmsi.html.twig',
+                array(
+                    'derniereDemandeEstEtatTypeDemandeTraiteeCmsi' => $derniereDemandeEstEtatTypeDemandeTraiteeCmsi
+                )
+            );
+        }
         else if ($utilisateurConnecte->hasRoleAmbassadeur())
             return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/ambassadeur.html.twig');
         else return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/etablissement.html.twig');
