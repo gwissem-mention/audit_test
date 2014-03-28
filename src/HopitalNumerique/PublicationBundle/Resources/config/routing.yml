@@ -4,30 +4,38 @@ hopital_numerique_publication_synthese:
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:synthese", id:1 }
     requirements:
         id: \d+
+        _method: get
 
 hopital_numerique_publication_publication_objet:
     pattern:  /publication/{id}-{alias}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:objet", id:1, alias:alias }
     requirements:
         id: \d+
+        _method: get
 
 hopital_numerique_publication_publication_contenu:
     pattern:  /publication/{id}-{alias}/{idc}-{aliasc}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:contenu", id:1, idc:1, alias:alias, aliasc:aliasc}
     requirements:
         id: \d+
+        _method: get
 
 hopital_numerique_publication_publication_article:
     pattern:  /publication/{categorie}/{id}-{alias}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:article", categorie:categorie, id:1, alias:alias }
     requirements:
         id: \d+
+        _method: get
 
 #Actualités
 hopital_numerique_publication_actualite:
     pattern:  /actualites
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:index"}
+    requirements:
+        _method: get
 
 hopital_numerique_publication_actualite_categorie:
     pattern:  /actualites/{id}-{libelle}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:categorie", id:1, libelle:libelle}
+    requirements:
+        _method: get

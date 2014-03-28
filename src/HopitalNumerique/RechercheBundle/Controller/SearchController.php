@@ -19,6 +19,10 @@ class SearchController extends Controller
         //on prépare la session
         $session = $this->getRequest()->getSession();
 
+        //si on à charger une requete, on load la bonne url
+        if ( is_null($id) && !is_null($session->get('requete-id')) )
+            return $this->redirect( $this->generateUrl('hopital_numerique_recherche_homepage_requete', array('id'=>$session->get('requete-id'))) );
+
         //on essaye de charger la requete par défaut
         if ( is_null($id) ){
             //si on a quelque chose en session, on charge la session
@@ -34,6 +38,9 @@ class SearchController extends Controller
         }else{
             $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'id' => $id ) );
             $refs    = $requete ? json_encode($requete->getRefs()) : '[]';
+
+            //set requete id in session
+            $session->set('requete-id', $id);
         }
 
         if( $refs == 'null' )
@@ -57,20 +64,25 @@ class SearchController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
 
-        $references = $this->get('request')->request->get('references');
+        $request    = $this->get('request');
+        $references = $request->request->get('references');
         $objets     = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role );
         
         //on prépare la session
         $session = $this->getRequest()->getSession();
         $session->set('requete-refs', json_encode($references) );
 
+        //clean requete ID
+        $cleanSession = $request->request->get('cleanSession');
+        if( $cleanSession !== "false" )
+            $session->set('requete-id', null);
+
         //get Cookies Stuff
-        $request = $this->get('request');
         $cookies = $request->cookies;
 
         //set Cookies vals
-        $showMorePointsDurs  = $cookies->has('showMorePointsDurs') ? $cookies->get('showMorePointsDurs') : 2;
-        $showMoreProductions = $cookies->has('showMoreProductions') ? $cookies->get('showMoreProductions') : 2;
+        $showMorePointsDurs  = $cookies->has('showMorePointsDurs')  ? intval($cookies->get('showMorePointsDurs'))  : 2;
+        $showMoreProductions = $cookies->has('showMoreProductions') ? intval($cookies->get('showMoreProductions')) : 2;
 
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(
             'objets'              => $objets,

@@ -1,4 +1,4 @@
-<div class="row" {% if count > showMorePointsDurs %}style="display:none"{% endif %} >
+<div class="row" {% if count >= showMorePointsDurs %}style="display:none"{% endif %} >
     <div class="col-md-10">
         {% if objet['objet'] is not null %}
             {# Contenu #}

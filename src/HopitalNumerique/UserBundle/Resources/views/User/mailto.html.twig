@@ -1,0 +1,13 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Liste des utilisateurs
+{% endblock %}
+
+{% block body %}
+Ouverture du client de messagerie...
+<script>
+	window.document.location = '{{ mailto }}';
+	history.back();
+</script>
+{% endblock %}

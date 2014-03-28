@@ -28,11 +28,11 @@ $(document).ready(function() {
             }
 
             //remove Cookie after each Ref Added/Removed
-            $.removeCookie('showMorePointsDurs');
-            $.removeCookie('showMoreProductions');
+            $.removeCookie('showMorePointsDurs', { path: '/' });
+            $.removeCookie('showMoreProductions', { path: '/' });
             
             if( !$(this).parent().hasClass('level0') )
-                updateResultats();
+                updateResultats( false );
 
             clicks = 0; //after action performed, reset counter
         }
@@ -46,10 +46,10 @@ $(document).ready(function() {
         removeElement( $(this).parent() ); //remove element from DEST
 
         //remove Cookie after each Ref Added/Removed
-        $.removeCookie('showMorePointsDurs');
-        $.removeCookie('showMoreProductions');
+        $.removeCookie('showMorePointsDurs', { path: '/' });
+        $.removeCookie('showMoreProductions', { path: '/' });
             
-        updateResultats();
+        updateResultats( false );
     });
 
     //toggle des paramètres de la requete
@@ -89,7 +89,7 @@ function handleRequestForRecherche()
         });
     });
 
-    updateResultats();
+    updateResultats( false );
 }
 
 /**
@@ -227,7 +227,7 @@ function showItemOriginRecursive( item )
 /**
  * Met à jour les résulats trouvés en fonction des paramètres de la requête
  */
-function updateResultats()
+function updateResultats( cleanSession )
 {
     var loader = $('#resultats').nodevoLoader().start();
     
@@ -235,7 +235,8 @@ function updateResultats()
     $.ajax({
         url  : $('#resultats-url').val(),
         data : {
-            references : getReferences()
+            references   : getReferences(),
+            cleanSession : cleanSession
         },
         type    : 'POST',
         success : function( data ){
@@ -264,7 +265,7 @@ function showMore(that, btn)
 
     //set Default value if not exist
     if( $.cookie(cookieName) == undefined )
-        $.cookie(cookieName, 2);
+        $.cookie(cookieName, 2, {path: '/' });
 
     //get cookie val
     showMoreCookieVal = $.cookie(cookieName);
@@ -279,7 +280,7 @@ function showMore(that, btn)
     });
 
     //Maj Cookie val
-    $.cookie(cookieName, showMoreCookieVal );
+    $.cookie(cookieName, showMoreCookieVal, {path: '/' } );
 
     if (elementsLeft == 0)
         $(that).remove();
@@ -384,5 +385,10 @@ function cleanRequest()
     $('.arbo-requete li').each( function(){
         removeElement( $(this) );
     });
-    updateResultats();
+
+    $.removeCookie('showMorePointsDurs', { path: '/' });
+    $.removeCookie('showMoreProductions', { path: '/' });
+
+
+    updateResultats( true );
 }
