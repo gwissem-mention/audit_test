@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueAccountBundle:Formulaire:layout.html.twig' %}
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
 
 {% block stylesheets %}
     {{parent()}}
@@ -31,94 +31,92 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block pageTitre %}Lorem ipsum dolor sit amet{% endblock %}
+{% block headerTitle %}Lorem ipsum dolor sit amet{% endblock %}
 
-{% block chapoDescription %}
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tincidunt purus nec adipiscing. Cras eu nisi dolor. Vestibulum laoreet mi at quam dictum, vitae iaculis metus elementum. Aliquam ut ante non ligula sollicitudin vulputate. Nullam mattis vulputate sem ut placerat. Ut ac vulputate diam. Aenean suscipit lobortis tortor sit amet pharetra. Suspendisse placerat mauris non fringilla mollis. Nulla non eleifend est. Mauris ac tincidunt dolor. Mauris venenatis sit amet eros in rutrum. Ut erat sapien, viverra id dui in.</p>
+{% block headerDesc %}
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tincidunt purus nec adipiscing. Cras eu nisi dolor. Vestibulum laoreet mi at quam dictum, vitae iaculis metus elementum. Aliquam ut ante non ligula sollicitudin vulputate. Nullam mattis vulputate sem ut placerat. Ut ac vulputate diam. Aenean suscipit lobortis tortor sit amet pharetra. Suspendisse placerat mauris non fringilla mollis. Nulla non eleifend est. Mauris ac tincidunt dolor. Mauris venenatis sit amet eros in rutrum. Ut erat sapien, viverra id dui in.
 {% endblock %}
 
-{% block contenu %}
-    <div class="panel">
-		<div id="form_edit_user">
-		    <div id="form_edit_informations_personnelles">
-	            {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
-	                {{ form_start(form) }}
-	                    {{ form_javascript(form) }}
-	                    <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
-	                    <div class="background-violet"></div>
-	
-	                    {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
-	                    <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_front_departements_informationsPersonelles')}}" />
-	                    <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_front_etablissements_informationsPersonelles')}}" />
-	                    
-	                    {# Formulaire : #}
-			            <div class="form-group">
-	                        <label class="control-label col-md-4">Nom du compte</label>
-	                        <div class="username col-md-7">{{ user.username }}</div>
-	                    </div>
-		                <div class="clearfix"></div>		                
-	                    {{ form_row(form.civilite) }}
-	                    {{ form_row(form.titre) }}
-	                    {{ form_row(form.nom) }}
-	                    {{ form_row(form.prenom) }}
-	                    {{ form_row(form.email) }}
-	                    {{ form_row(form.telephoneDirect) }}
-	                    {{ form_row(form.telephonePortable) }}
-	                    {{ form_row(form.contactAutre) }}
-	                    
-		                {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
-		                    {{ form_row(form.region, {'attr':{'disabled':'disabled', 'readonly':'readonly'}}) }}
-		                    {{ form_row(form.departement, {'attr':{'disabled':'disabled', 'readonly':'readonly'}}) }}
-	                    {% else %}
-		                    {{ form_row(form.region) }}
-		                    {{ form_row(form.departement) }}
-		                {% endif %}
-	                    
-	                    <div class="hide">
-	                        {{ form_row(form.etat) }}  
-	                    </div>
-	                    
-	                    {# Le role ARS CMSI ne voit ces informations ci-dessous #}
-		                {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
-	                        <div class="hide">		                
-		                {% endif %}
-	                    <div id="etablissement_sante">
-		                    <h4 class="violet">Vous êtes un établissement de santé</h4>
-		                    {{ form_row(form.statutEtablissementSante) }}
-		                    {{ form_row(form.etablissementRattachementSante) }}
-		                    {{ form_row(form.autreStructureRattachementSante) }}
-		                    {{ form_row(form.profilEtablissementSante) }}
-		                    {{ form_row(form.fonctionDansEtablissementSante) }}
-		                    {{ form_row(form.raisonInscriptionSante) }}
-	                    </div>
-	
-	                    <div id="autre_etablissement_sante">
-		                    <h4 class="violet">Vous êtes une structure autre qu'un établissement de santé</h4>
-		                    {{ form_row(form.nomStructure) }}
-		                    {{ form_row(form.fonctionStructure) }}
-		                    {{ form_row(form.raisonInscriptionStructure) }}
-	                    </div>
-	                    
-		                {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
-	                        </div>		                
-		                {% endif %}		                
-	                {# Permet de mettre à la ligne le submit #}
-		                <div class="clearfix"></div>
-	                    <div class="form-group">
-		                    <div class="col-md-10 col-md-offset-2">
-			                   <input onclick="$('#do').val('information-personnelles');sauvegardeFormulaire();" class="btn btn-success pull-right submit" value="ENREGISTRER MES MODIFICATIONS" type="button" />
-		                </div>
+{% block content %}
+	<div id="form_edit_user">
+	    <div id="form_edit_informations_personnelles">
+            {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
+                {{ form_start(form) }}
+                    {{ form_javascript(form) }}
+                    <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+                    <div class="background-violet"></div>
+
+                    {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
+                    <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_front_departements_informationsPersonelles')}}" />
+                    <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_front_etablissements_informationsPersonelles')}}" />
+                    
+                    {# Formulaire : #}
+		            <div class="form-group">
+                        <label class="control-label col-md-4">Nom du compte</label>
+                        <div class="username col-md-7">{{ user.username }}</div>
+                    </div>
+	                <div class="clearfix"></div>		                
+                    {{ form_row(form.civilite) }}
+                    {{ form_row(form.titre) }}
+                    {{ form_row(form.nom) }}
+                    {{ form_row(form.prenom) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.telephoneDirect) }}
+                    {{ form_row(form.telephonePortable) }}
+                    {{ form_row(form.contactAutre) }}
+                    
+	                {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
+	                    {{ form_row(form.region, {'attr':{'disabled':'disabled', 'readonly':'readonly'}}) }}
+	                    {{ form_row(form.departement, {'attr':{'disabled':'disabled', 'readonly':'readonly'}}) }}
+                    {% else %}
+	                    {{ form_row(form.region) }}
+	                    {{ form_row(form.departement) }}
+	                {% endif %}
+                    
+                    <div class="hide">
+                        {{ form_row(form.etat) }}  
+                    </div>
+                    
+                    {# Le role ARS CMSI ne voit ces informations ci-dessous #}
+	                {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
+                        <div class="hide">		                
+	                {% endif %}
+                    <div id="etablissement_sante">
+	                    <h4 class="violet">Vous êtes un établissement de santé</h4>
+	                    {{ form_row(form.statutEtablissementSante) }}
+	                    {{ form_row(form.etablissementRattachementSante) }}
+	                    {{ form_row(form.autreStructureRattachementSante) }}
+	                    {{ form_row(form.profilEtablissementSante) }}
+	                    {{ form_row(form.fonctionDansEtablissementSante) }}
+	                    {{ form_row(form.raisonInscriptionSante) }}
+                    </div>
+
+                    <div id="autre_etablissement_sante">
+	                    <h4 class="violet">Vous êtes une structure autre qu'un établissement de santé</h4>
+	                    {{ form_row(form.nomStructure) }}
+	                    {{ form_row(form.fonctionStructure) }}
+	                    {{ form_row(form.raisonInscriptionStructure) }}
+                    </div>
+                    
+	                {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
+                        </div>		                
+	                {% endif %}		                
+                {# Permet de mettre à la ligne le submit #}
+	                <div class="clearfix"></div>
+                    <div class="form-group">
+	                    <div class="col-md-10 col-md-offset-2">
+		                   <input onclick="$('#do').val('information-personnelles');sauvegardeFormulaire();" class="btn btn-success pull-right submit" value="ENREGISTRER MES MODIFICATIONS" type="button" />
 	                </div>
-	                    
-	                    <div class="hide">
-	                        {{ form_row(form.username) }}  
-	                    </div>
-	                    
-	                    <div class="hide">
-	                        {{ form_row(form.roles) }}  
-	                    </div>
-	            {{ form_end(form) }}
-	        </div>
+                </div>
+                    
+                    <div class="hide">
+                        {{ form_row(form.username) }}  
+                    </div>
+                    
+                    <div class="hide">
+                        {{ form_row(form.roles) }}  
+                    </div>
+            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}

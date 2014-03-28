@@ -23,6 +23,9 @@ class PublicationController extends Controller
         //get Contenus : for sommaire
         $contenus = $objet->getIsInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
 
+        //set Consultation entry
+        $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $objet );
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
@@ -53,6 +56,9 @@ class PublicationController extends Controller
 
         //get Contenus : for sommaire
         $contenus = $objet->getIsInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
+
+        //set Consultation entry
+        $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $contenu, true );
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(

@@ -22,7 +22,7 @@
     #publication .print{position: absolute; right:0; top : 0; z-index: 5}
     #publication h4{font-size: 16px; font-weight: normal; margin:0;text-transform: uppercase;}
     #publication h4.objetTitre{font-weight: bold}
-    #publication h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; color:#333333;}
+    #publication h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; color:#333333;width:90%}
     #publication .col-md-4 div.wrapper{border:1px solid #e2e2e2; padding:10px 20px 0;margin-top:10px;}
     #publication .col-md-4 div.wrapper a.downloadLink{color:#070707; font-size: 13px; font-weight: normal; margin-bottom: 10px}
     #publication .col-md-4 div.wrapper a.synthese{background: url('../img/synthese-violet.png') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 104px; font-weight: normal; margin-bottom: 10px}

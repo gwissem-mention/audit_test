@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityRepository;
 
 class QuestionnaireType extends AbstractType
 {
-    private $idQuestionnaire;
     private $_readOnly = false;
     private $_managerReponse;
     private $_managerQuestion;
@@ -42,9 +41,9 @@ class QuestionnaireType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $idUser = (isset($options['label_attr']['idUser']) && !is_null($options['label_attr']['idUser'])) ? $options['label_attr']['idUser'] : 0;
+        $idUser          = (isset($options['label_attr']['idUser']) && !is_null($options['label_attr']['idUser'])) ? $options['label_attr']['idUser'] : 0;
         $idQuestionnaire = (isset($options['label_attr']['idQuestionnaire']) && !is_null($options['label_attr']['idQuestionnaire'])) ? $options['label_attr']['idQuestionnaire'] : 0;        
-        $questionnaire = $this->_managerQuestionnaire->findOneBy(array('id' => $idQuestionnaire));
+        $questionnaire   = $this->_managerQuestionnaire->findOneBy(array('id' => $idQuestionnaire));
         
        /*
         * Tableau de la route de redirection sous la forme :
@@ -131,7 +130,7 @@ class QuestionnaireType extends AbstractType
             	            'read_only'  => $this->_readOnly,
             	            'disabled'   => $this->_readOnly,
             	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => 'checkbox ' . $question->getVerifJS() ),
-            	            'data'       => is_null($reponseCourante) ? false : ('1' === $reponseCourante->getReponse() ? true : false)
+            	            'data'       => is_null($reponseCourante) ? false : ('1' === $reponseCourante->getReponse())
             	    ));
             	    break;
             	//Les entity ne sont prévues que pour des entités de Référence (TODO : mettre en base la class et le property ?)

@@ -25,7 +25,7 @@
                 {% for actu in actualites %}
                     <div class="actu">
                         {% if actu.image %}
-                            <img src="/{{actu.image}}" alt="vignette" class="pull-left actu-image" />
+                            <img src="{{actu.image}}" alt="vignette" class="pull-left actu-image" />
                         {% endif %}
                         <h4>{{actu.types}}</h4>
                         <h3>{{actu.titre}}</h3>

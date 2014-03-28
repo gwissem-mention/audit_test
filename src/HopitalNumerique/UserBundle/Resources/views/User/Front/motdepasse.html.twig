@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueAccountBundle:Formulaire:layout.html.twig' %}
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
 
 {% block stylesheets %}
     {{parent()}}
@@ -20,38 +20,36 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block pageTitre %}Lorem ipsum dolor sit amet{% endblock %}
+{% block headerTitle %}Lorem ipsum dolor sit amet{% endblock %}
 
-{% block chapoDescription %}
+{% block headerDesc %}
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tincidunt purus nec adipiscing. Cras eu nisi dolor. Vestibulum laoreet mi at quam dictum, vitae iaculis metus elementum. Aliquam ut ante non ligula sollicitudin vulputate. Nullam mattis vulputate sem ut placerat. Ut ac vulputate diam. Aenean suscipit lobortis tortor sit amet pharetra. Suspendisse placerat mauris non fringilla mollis. Nulla non eleifend est. Mauris ac tincidunt dolor. Mauris venenatis sit amet eros in rutrum. Ut erat sapien, viverra id dui in.</p>
 {% endblock %}
 
-{% block contenu %}
-    <div class="panel">
-        <div id="form_edit_user">
-            <div id="form_edit_motdepasse">
-                {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
-                {{ form_start(form) }}
-                    {{ form_javascript(form) }}
-	                <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
-	                
-                    <div class="col-md-12">
-                        {{ form_row(form.oldPassword) }}
+{% block content %}
+    <div id="form_edit_user">
+        <div id="form_edit_motdepasse">
+            {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
+            {{ form_start(form) }}
+                {{ form_javascript(form) }}
+                <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+                
+                <div class="col-md-12">
+                    {{ form_row(form.oldPassword) }}
+                </div>
+                <div class="col-md-12">
+                    {{ form_row(form.plainPassword) }}
+                </div>
+                <div class="col-md-12">
+                    {# Permet de mettre à la ligne le submit #}
+                    <div class="form-group">
+                        <div class="col-md-10 col-md-offset-2">
+                            <input onclick="$('form').submit();" class="btn btn-success pull-right submit" value="ENREGISTRER NOUVEAU MOT DE PASSE" type="button" />
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        {{ form_row(form.plainPassword) }}
-                    </div>
-                    <div class="col-md-12">
-	                    {# Permet de mettre à la ligne le submit #}
-	                    <div class="form-group">
-	                        <div class="col-md-10 col-md-offset-2">
-	                            <input onclick="$('form').submit();" class="btn btn-success pull-right submit" value="ENREGISTRER NOUVEAU MOT DE PASSE" type="button" />
-	                        </div>
-	                    </div>
-                    </div>
-	                <div class="clearfix"></div>
-                {{ form_end(form) }}
-            </div>
+                </div>
+                <div class="clearfix"></div>
+            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}
