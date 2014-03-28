@@ -27,6 +27,10 @@ $(document).ready(function() {
                 $(".requete h2").addClass('ropen');
             }
 
+            //remove Cookie after each Ref Added/Removed
+            $.removeCookie('showMorePointsDurs');
+            $.removeCookie('showMoreProductions');
+            
             if( !$(this).parent().hasClass('level0') )
                 updateResultats();
 
@@ -40,6 +44,11 @@ $(document).ready(function() {
     //Gestion de la suppression de critères dans la requete
     $('.arbo-requete span').on("click", function(e){
         removeElement( $(this).parent() ); //remove element from DEST
+
+        //remove Cookie after each Ref Added/Removed
+        $.removeCookie('showMorePointsDurs');
+        $.removeCookie('showMoreProductions');
+            
         updateResultats();
     });
 
@@ -247,19 +256,31 @@ function updateResultats()
 /**
  * Gestion du bouton Plus de résultats
  */
-function showMore(that)
+function showMore(that, btn)
 {
     toHide       = 2;
     elementsLeft = 0;
+    cookieName   = (btn == 1) ? 'showMorePointsDurs' : 'showMoreProductions';
+
+    //set Default value if not exist
+    if( $.cookie(cookieName) == undefined )
+        $.cookie(cookieName, 2);
+
+    //get cookie val
+    showMoreCookieVal = $.cookie(cookieName);
 
     $(that).parent().find('.results > div:hidden').each(function(){
         if( toHide != 0){
             $(this).slideDown();
             toHide = toHide - 1;
+            showMoreCookieVal++;
         }else
             elementsLeft = elementsLeft + 1;
     });
-    
+
+    //Maj Cookie val
+    $.cookie(cookieName, showMoreCookieVal );
+
     if (elementsLeft == 0)
         $(that).remove();
 }
