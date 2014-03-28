@@ -21,11 +21,8 @@ class DemandesGrid extends DemandesAbstractGrid
     {
         parent::setConfig();
         $this->setFunctionName('getGridDonneesAdminDemandes');
-        //$this->setDefaultFilters(array('interventionInitiateurId', 'nombreDemandesRegroupees', 'nombreDemandesPrincipales'));
-
-        /*$userColumn = new Column\BlankColumn('nombreDemandesRegroupees');
-        $userColumn->setVisibleForSource(true);
-        $this->addColonne( $userColumn );*/
+        
+        $this->ignoreColonnes(array('interventionInitiateurId', 'nombreDemandesRegroupees', 'nombreDemandesPrincipales', 'cmsiNom', 'cmsiPrenom', 'ambassadeurNom', 'ambassadeurPrenom', 'ambassadeurRegionLibelle', 'referentNom', 'referentPrenom', 'referentEtablissementNom', 'referentEtablissementFiness', 'referentRegionLibelle', 'cmsiDateChoixLibelle', 'ambassadeurDateChoixLibelle'));
     }
 
     /**
@@ -35,11 +32,9 @@ class DemandesGrid extends DemandesAbstractGrid
     {
         parent::setColumns();
         
-        $colonneInterventionInitiateurType = new Column\BlankColumn('interventionInitiateurId', '');
-        $this->addColonne($colonneInterventionInitiateurType);
-
         $colonneInterventionInitiateurType = new Column\TextColumn('interventionInitiateurType', '');
         $colonneInterventionInitiateurType->setAlign('center');
+        $colonneInterventionInitiateurType->setFilterable(false);
         $colonneInterventionInitiateurType->manipulateRenderCell(
             function($value, $row, $router) {
                 return DemandesAbstractGrid::renderCellInitiateur($value, $row, $router);

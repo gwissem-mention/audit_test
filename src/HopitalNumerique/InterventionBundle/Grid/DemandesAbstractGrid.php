@@ -62,6 +62,30 @@ abstract class DemandesAbstractGrid extends Grid implements IGrid
     }
 
     /**
+     * Ignore plusieurs colonne (ne pas afficher dans le filtre).
+     *
+     * @param string[] $colonneLabels Identifiant des colonnes
+     * @return void
+     */
+    protected function ignoreColonnes($colonneLabels)
+    {
+        foreach ($colonneLabels as $colonneLabel)
+            $this->ignoreColonne($colonneLabel);
+    }
+    /**
+     * Ignore une colonne (ne pas afficher dans le filtre).
+     * 
+     * @param string $colonneLabel Identifiant de la colonne
+     * @return void
+     */
+    private function ignoreColonne($colonneLabel)
+    {
+        $colonneAIgnorer = new Column\BlankColumn($colonneLabel);
+        $colonneAIgnorer->setVisibleForSource(true);
+        $this->addColonne($colonneAIgnorer);
+    }
+    
+    /**
      * Fonction de rendu de la cellule Référent (ou Demandeur).
      * 
      * @return string Le contenu de la cellule Référent
