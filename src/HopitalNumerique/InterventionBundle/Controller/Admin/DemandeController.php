@@ -36,4 +36,19 @@ class DemandeController extends Controller
     
         return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Admin/demandes.html.twig');
     }
+    /**
+     * Suppression des demandes d'intervention de la liste.
+     *
+     * @param integer[] $primaryKeys Les ID des demandes d'intervention sélectionnées par l'utilisateur
+     * @return \Component\HttpFoundation\RedirectResponse Redirection vers la liste
+     */
+    public function gridSupprimeMassAction(array $primaryKeys)
+    {
+        $interventionDemandes = $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->findBy(array('id' => $primaryKeys));
+        $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->delete($interventionDemandes);
+        
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+        
+        return $this->redirect( $this->generateUrl('hopital_numerique_intervention_admin_liste'));
+    }
 }

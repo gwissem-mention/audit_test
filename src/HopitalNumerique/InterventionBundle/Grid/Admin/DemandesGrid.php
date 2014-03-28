@@ -21,6 +21,11 @@ class DemandesGrid extends DemandesAbstractGrid
     {
         parent::setConfig();
         $this->setFunctionName('getGridDonneesAdminDemandes');
+        //$this->setDefaultFilters(array('interventionInitiateurId', 'nombreDemandesRegroupees', 'nombreDemandesPrincipales'));
+
+        /*$userColumn = new Column\BlankColumn('nombreDemandesRegroupees');
+        $userColumn->setVisibleForSource(true);
+        $this->addColonne( $userColumn );*/
     }
 
     /**
@@ -29,6 +34,9 @@ class DemandesGrid extends DemandesAbstractGrid
     public function setColumns()
     {
         parent::setColumns();
+        
+        $colonneInterventionInitiateurType = new Column\BlankColumn('interventionInitiateurId', '');
+        $this->addColonne($colonneInterventionInitiateurType);
 
         $colonneInterventionInitiateurType = new Column\TextColumn('interventionInitiateurType', '');
         $colonneInterventionInitiateurType->setAlign('center');
@@ -104,6 +112,6 @@ class DemandesGrid extends DemandesAbstractGrid
      */
     public function setMassActions()
     {
-        
+        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueInterventionBundle:Admin/Demande:gridSupprimeMass') );
     }
 }

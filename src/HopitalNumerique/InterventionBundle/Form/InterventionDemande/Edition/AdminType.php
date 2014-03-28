@@ -61,6 +61,13 @@ class AdminType extends InterventionDemandeType
                 'required' => false,
                 'read_only' => true
             ))
+            ->add('referent', 'entity', array(
+                'choices' => $this->formUserManager->getReferentsChoices(),
+                'class' => 'HopitalNumerique\UserBundle\Entity\User',
+                'label' => 'Demandeur',
+                'required' => true,
+                'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_referent '.$this->_constraints['referent']['class'])
+            ))
             ->add('dateCreation', 'text', array(
                 'label' => 'Date',
                 'mapped' => false,
@@ -83,9 +90,7 @@ class AdminType extends InterventionDemandeType
                 'required' => false,
                 'read_only' => true
             ))
-        ;
-        parent::buildForm($builder, $options);
-        $builder->add('ambassadeur', 'entity', array(
+            ->add('ambassadeur', 'entity', array(
                 'choices' => $this->formUserManager->getAmbassadeursChoices($this->utilisateurConnecte->getRegion()),
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
                 'property' => 'appellation',
@@ -93,7 +98,45 @@ class AdminType extends InterventionDemandeType
                 'required' => true,
                 'read_only' => false
             ))
-            //->remove('referent')
+            ->add('cmsiDateChoix', 'text', array(
+                'label' => 'Choix CMSI',
+                'mapped' => false,
+                'data' => ($this->interventionDemande->getCmsiDateChoix() != null ? $this->interventionDemande->getCmsiDateChoix()->format('d/m/Y') : ''),
+                'required' => false,
+                'read_only' => true
+            ))
+            ->add('ambassadeurDateChoix', 'text', array(
+                'label' => 'Choix ambassadeur',
+                'mapped' => false,
+                'data' => ($this->interventionDemande->getAmbassadeurDateChoix() != null ? $this->interventionDemande->getAmbassadeurDateChoix()->format('d/m/Y') : ''),
+                'required' => false,
+                'read_only' => true
+            ))
+        ;
+
+        parent::buildForm($builder, $options);
+
+        $builder->add('cmsiCommentaire', 'textarea', array(
+                'label' => 'Commentaire CMSI',
+                'required' => false,
+                'read_only' => false
+            ))
+            ->add('evaluationEtat', 'entity', array(
+                'choices' => $this->formInterventionDemandeManager->getEvaluationEtatsChoices(),
+                'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
+                'property' => 'libelle',
+                'label' => 'État de l\'évaluation',
+                'required' => false,
+                'read_only' => false
+            ))
+            ->add('remboursementEtat', 'entity', array(
+                'choices' => $this->formInterventionDemandeManager->getRemboursementEtatsChoices(),
+                'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
+                'property' => 'libelle',
+                'label' => 'État du remboursement',
+                'required' => false,
+                'read_only' => false
+            ))
         ;
     }
 

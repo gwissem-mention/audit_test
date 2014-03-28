@@ -522,4 +522,4 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.regroupeInterv
             });
         }
     });
-}
+};

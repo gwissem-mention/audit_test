@@ -1,6 +1,6 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
-{% use 'HopitalNumeriqueInterventionBundle:Grid:config.html.twig' %}
+{% use 'HopitalNumeriqueInterventionBundle:Admin/Grid:config.html.twig' %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -10,13 +10,6 @@
 {% block javascripts %}
     {{ parent() }}
     {{ block('grid_javascripts') }}
-    
-    {% javascripts output="compiled/hopitalnumerique-intervention-demande-liste.js"
-        'bundles/nodevogrid/js/Grid.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    
 {% endblock %}
 
 {% block h1Title %}
@@ -25,4 +18,5 @@
 
 {% block body %}
     {{ grid(grid, _self) }}
+    {% block grid_filters %}{% endblock grid_filters%}
 {% endblock %}

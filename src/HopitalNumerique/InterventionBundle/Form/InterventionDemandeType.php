@@ -19,12 +19,12 @@ use HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager as For
 /**
  * Formulaire d'une demande d'intervention.
  */
-class InterventionDemandeType extends AbstractType
+abstract class InterventionDemandeType extends AbstractType
 {
     /**
      * @var array Pour la validation du formulaire
      */
-    private $_constraints = array();
+    protected $_constraints = array();
     /**
      * @var \HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager Manager Form\InterventionDemande
      */

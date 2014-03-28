@@ -56,6 +56,24 @@ class InterventionDemandeManager
         return $this->referenceManager->findBy(array('code' => 'ETAT_DEMANDE_INTERVENTION'));
     }
     /**
+     * Retourne la liste des états des évaluations d'intervention pour les listes de formulaire.
+     *
+     * @return array Liste des états des évaluations d'intervention pour les listes de formulaire
+     */
+    public function getEvaluationEtatsChoices()
+    {
+        return $this->referenceManager->findBy(array('code' => 'ETAT_EVALUATION'));
+    }
+    /**
+     * Retourne la liste des états des remboursements d'intervention pour les listes de formulaire.
+     *
+     * @return array Liste des états des remboursements d'intervention pour les listes de formulaire
+     */
+    public function getRemboursementEtatsChoices()
+    {
+        return $this->referenceManager->findBy(array('code' => 'ETAT_REMBOURSEMENT'));
+    }
+    /**
      * Retourne la liste des objets pour les listes de formulaire.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur pour le filtre
