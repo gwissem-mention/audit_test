@@ -2,18 +2,29 @@
 hopital_numerique_recherche_homepage:
     pattern:  /recherche-par-referencement/
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index}
+    requirements:
+        _method: get
 
 hopital_numerique_recherche_homepage_requete:
     pattern:  /recherche-par-referencement/requete/{id}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index, id:null}
     requirements: 
         id: \d+
+        _method: get
 
 hopital_numerique_recherche_getresults:
     pattern:  /recherche-par-referencement/get-results
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:getResults }
+    requirements:
+        _method: get
 
 #URLs concernant les requêtes de recherche
+hopital_numerique_requete_detail:
+    pattern:  /requetes/detail/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:detail }
+    requirements:
+        _method: get
+
 hopital_numerique_requete_save:
     pattern:  /requetes/save
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:save }
@@ -47,7 +58,3 @@ hopital_numerique_requete_consultation_delete:
     requirements: 
         id: \d+
         _method: post|delete
-
-hopital_numerique_requete_detail:
-    pattern:  /requetes/detail/{id}
-    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:detail }
