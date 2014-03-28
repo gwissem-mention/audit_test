@@ -16,10 +16,11 @@ class RequeteController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
 
         //get requetes
-        $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->findBy( array( 'user' => $user ) );
+        $requetes      = $this->get('hopitalnumerique_recherche.manager.requete')->findBy( array( 'user' => $user ) );
+        $consultations = $this->get('hopitalnumerique_objet.manager.consultation')->getLastsConsultations( $user );
 
         if( $indexVue )
-            return $this->render('HopitalNumeriqueRechercheBundle:Requete:index.html.twig', array('requetes' => $requetes));
+            return $this->render('HopitalNumeriqueRechercheBundle:Requete:index.html.twig', array('requetes' => $requetes, 'consultations' => $consultations));
         else
             return $this->render('HopitalNumeriqueRechercheBundle:Requete:mesrequetes.html.twig', array('requetes' => $requetes));
     }
@@ -132,5 +133,21 @@ class RequeteController extends Controller
         $this->get('session')->getFlashBag()->add('info', 'Requête par défaut modifiée avec succès.' );
 
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopital_numerique_requete_homepage').'"}', 200);
+    }
+
+    /**
+     * Toggle Default d'une requete (AJAX)
+     *
+     * @param integer $id ID de la requete à toggle
+     */
+    public function detailAction($id)
+    {
+        $requete  = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'id' => $id ) );
+        $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
+
+        return $this->render('HopitalNumeriqueRechercheBundle:Requete:detail.html.twig', array(
+            'refs'     => json_encode($requete->getRefs()),
+            'elements' => $elements['CATEGORIES_RECHERCHE']
+        ));
     }
 }

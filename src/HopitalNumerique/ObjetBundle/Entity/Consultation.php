@@ -37,6 +37,14 @@ class Consultation
     private $objet;
 
     /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="references")
+     * @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE", nullable=true)
+     */
+    private $contenu;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="cln_date_last_consulted", type="datetime", options = {"comment" = "Date de dernière consultation de l objet par l user"})
@@ -78,6 +86,26 @@ class Consultation
         $this->objet = $objet;
     }
 
+    /**
+     * Get contenu
+     *
+     * @return \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu
+     */
+    public function getContenu()
+    {
+        return $this->contenu;
+    }
+    
+    /**
+     * Set contenu
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu
+     */
+    public function setContenu(\HopitalNumerique\ObjetBundle\Entity\Contenu $contenu)
+    {
+        $this->contenu = $contenu;
+    }
+    
     /**
      * Get user
      *
