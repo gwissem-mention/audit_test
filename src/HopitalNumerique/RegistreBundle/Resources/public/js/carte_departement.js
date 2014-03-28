@@ -8,13 +8,14 @@ var HopitalNumerique_CarteFrance = function() {};
  */
 HopitalNumerique_CarteFrance.afficheCarteFrance = function(donneesParRegion)
 {
-    var frenchMap = new Raphael(document.getElementById('canvas_france'), 240, 350);
+	var couleurDefaut = "#FFFFFF";
+    var frenchMap     = new Raphael(document.getElementById('canvas_france'), 240, 350);
 
     frenchMap.setViewBox(0, 0, 810, 1100, true); 
 
     // Les styles visuels pour toutes les régions
     var attr = {
-        fill              : "#FFFFFF", /* Couleur de remplissage par defaut */
+        fill              : couleurDefaut, /* Couleur de remplissage par defaut */
         stroke            : "#6f3596", /* Couleur des bordures par defaut */
         "stroke-width"    : 1,
         "stroke-linejoin" : "round"
@@ -79,16 +80,29 @@ HopitalNumerique_CarteFrance.afficheCarteFrance = function(donneesParRegion)
     region.mayotte.attr({title: 'Mayotte',href:"#54"});
     
     var current = null, i = 1;
-    var url     =  $('#registre-region-url').val();
 
     for (var state in region) 
     {
-        region[state].color = "#6f3596";
-        
-        (function (st, state) 
+    	//Pour chaque région, on récupère la couleur et l'ordre d'affichage envoyés en param
+        if (donneesParRegion[state])
         {
-            st[0].style.cursor = "pointer";
+            region[state].color = "#6f3596";
             
+            if (donneesParRegion[state].couleur != null)
+            {
+                if (Dataviz.AFFICHE_ANIMATIONS)
+                    region[state].animate(Raphael.animation({ fill: donneesParRegion[state].couleur }, 500).delay(donneesParRegion[state].groupe * Dataviz.AFFICHAGE_ELEMENT_DUREE));
+                else region[state].attr({ fill: donneesParRegion[state].couleur });
+            }
+            //region[state].attr({title: donneesParRegion[state].nom + '\n' + donneesParRegion[state].valeur + ' entreprises' });
+            if (donneesParRegion[state].infobulle != null)
+            {
+                region[state].attr({ title:donneesParRegion[state].infobulle });
+            }
+        }        
+
+        (function (st, state) {
+            st[0].style.cursor = "pointer";
             st[0].onmouseover = function () {
                 $(this).attr('fillOriginal', $(this).attr('fill'));
                 st.attr({fill: st.color});
@@ -100,14 +114,39 @@ HopitalNumerique_CarteFrance.afficheCarteFrance = function(donneesParRegion)
                 $(this).removeAttr('fillOriginal')
                 frenchMap.safari();
             };
-
-            st[0].onclick = function () {
-                window.location = url + '/' + $(this).parent().attr('href').replace('#','') + '/' + $('#domaines_liste').val();
-            };
-
-            i++;
-        })(region[state], state);
+        	
+            st[0].onclick = clickRegion(state);
+         })(region[state], state);
+        
     }
     
     $(document).trigger('carteReady');
+}
+
+/**
+ * Permet d'ajouter / retirer la région sur laquelle on vient de cliquer
+ */
+function clickRegion( region ){
+    //Récupération des régions sélectionnées
+    var regionsSelectionneesJSON = $('#selected-region').val();
+    
+    //Decodage du JSON
+    var regionsSelectionnes = JSON.parse(regionsSelectionneesJSON);
+    
+    //On vérifie si la région sur laquelle on a cliqué fait partie des régions sélectionnées
+    if(jQuery.inArray(region,regionsSelectionnes))
+	{
+    	//On le supprime du tableau
+    	regionsSelectionnes = jQuery.grep(regionsSelectionnes, function(value) {
+    		  return value != region;
+    		});
+	}
+    else
+	{
+    	//On l'ajoute
+    	regionsSelectionnes.push(region);
+	}
+    
+    //Puis rechargement de l'input avec les regions selectionnées en JSON
+    $('#selected-region').val(JSON.stringify(regionsSelectionnes));
 }
