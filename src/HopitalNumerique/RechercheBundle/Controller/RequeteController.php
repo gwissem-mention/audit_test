@@ -134,4 +134,20 @@ class RequeteController extends Controller
 
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopital_numerique_requete_homepage').'"}', 200);
     }
+
+    /**
+     * Toggle Default d'une requete (AJAX)
+     *
+     * @param integer $id ID de la requete à toggle
+     */
+    public function detailAction($id)
+    {
+        $requete  = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'id' => $id ) );
+        $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
+
+        return $this->render('HopitalNumeriqueRechercheBundle:Requete:detail.html.twig', array(
+            'refs'     => json_encode($requete->getRefs()),
+            'elements' => $elements['CATEGORIES_RECHERCHE']
+        ));
+    }
 }

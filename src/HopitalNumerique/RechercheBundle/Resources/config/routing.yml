@@ -47,3 +47,7 @@ hopital_numerique_requete_consultation_delete:
     requirements: 
         id: \d+
         _method: post|delete
+
+hopital_numerique_requete_detail:
+    pattern:  /requetes/detail/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:detail }

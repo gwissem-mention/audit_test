@@ -25,6 +25,6 @@ class ConsultationRepository extends EntityRepository
                     ->leftJoin('clt.objet','obj')
                     ->andWhere('clt.user = :user')
                     ->setParameter('user', $user )
-                    ->orderBy('clt.dateLastConsulted', 'ASC');
+                    ->orderBy('clt.dateLastConsulted', 'DESC');
     }
 }

@@ -17,7 +17,7 @@ $(document).ready(function() {
 /**
  * Reprise de la fonction ADMIN:deletewithConfirm
  */
-function deleteWithConfirm(path)
+function deleteWithConfirm( path )
 {
     apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
         if(r) { 
@@ -53,4 +53,49 @@ function editRequete( path )
             });
         }
     });
+}
+
+/**
+ * Affiche les détail de la requete enregistrée
+ */
+function showDetails( path )
+{
+    $.fancybox.open( path , {
+        type     : "ajax",
+        autoSize : false,
+        width    : 800,
+        height   : '66%'
+    });
+}
+
+/**
+ * Prend en compte la requete par défaut ou la requete active
+ */
+function handleRefs()
+{
+    refs = $.parseJSON( $('#requete-refs').val() );
+
+    $.each(refs, function(key, val){
+        $.each(val.reverse(), function( key, item ){
+            element = $('.arbo-requete .element-'+item);
+            if( $(element).hasClass('hide') ){
+                //affiche l'élément
+                showElementRecursive( $(element) );
+
+                //si c'est un parent, on show ces enfants (NON recursif)
+                $(element).find('li.hide').removeClass('hide');
+            }
+        });
+    });
+}
+
+/**
+ * Affiche l'élément en mode récursif
+ */
+function showElementRecursive( destItem )
+{
+    $(destItem).removeClass('hide');
+
+    if ( $(destItem).parent().parent().hasClass('hide') )
+        showElementRecursive( $(destItem).parent().parent() );
 }
