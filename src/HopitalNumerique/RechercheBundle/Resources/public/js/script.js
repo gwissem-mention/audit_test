@@ -32,7 +32,7 @@ $(document).ready(function() {
             $.removeCookie('showMoreProductions');
             
             if( !$(this).parent().hasClass('level0') )
-                updateResultats();
+                updateResultats( false );
 
             clicks = 0; //after action performed, reset counter
         }
@@ -49,7 +49,7 @@ $(document).ready(function() {
         $.removeCookie('showMorePointsDurs');
         $.removeCookie('showMoreProductions');
             
-        updateResultats();
+        updateResultats( false );
     });
 
     //toggle des paramètres de la requete
@@ -89,7 +89,7 @@ function handleRequestForRecherche()
         });
     });
 
-    updateResultats();
+    updateResultats( false );
 }
 
 /**
@@ -227,7 +227,7 @@ function showItemOriginRecursive( item )
 /**
  * Met à jour les résulats trouvés en fonction des paramètres de la requête
  */
-function updateResultats()
+function updateResultats( cleanSession )
 {
     var loader = $('#resultats').nodevoLoader().start();
     
@@ -235,7 +235,8 @@ function updateResultats()
     $.ajax({
         url  : $('#resultats-url').val(),
         data : {
-            references : getReferences()
+            references   : getReferences(),
+            cleanSession : cleanSession
         },
         type    : 'POST',
         success : function( data ){
@@ -384,5 +385,6 @@ function cleanRequest()
     $('.arbo-requete li').each( function(){
         removeElement( $(this) );
     });
-    updateResultats();
+
+    updateResultats( true );
 }
