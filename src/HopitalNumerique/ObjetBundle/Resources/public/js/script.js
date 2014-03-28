@@ -307,3 +307,42 @@ function uploadContenu()
         }
     });
 }
+
+//Gère le collapse dans la pop-in des références
+function manageCollapse(element, way)
+{
+    childs = $(element).parent().parent().data('childs');
+    level  = $(element).parent().parent().data('level') + 1;
+
+    $.each(childs,function(key, val){
+        if( way === 'collapse' )
+            $('.ref-'+val).slideUp();
+        else{
+            if ( $('.ref-'+val).data('level') == level){
+                $('.ref-'+val).slideDown();
+                $('.ref-'+val+' .btn i').removeClass('fa-arrow-down').addClass('fa-arrow-right');
+            }
+        }
+    });
+
+    $(element).find('i').toggleClass('fa-arrow-down fa-arrow-right');
+}
+
+//Met à jour le nombre d'enfants sélectionés dans la popin
+function updateNbChilds()
+{
+    $('#references-tab .ref').each(function(){
+        childs    = $(this).data('childs');
+        nbChecked = 0;
+
+        if( childs.length > 0 ) {
+            $.each(childs,function(key, val){
+
+                if ( $('.ref-'+val+' .checkbox').prop('checked') )
+                    nbChecked++
+            });
+        }
+
+        $(this).find('.nbChilds').html( nbChecked );
+    })
+}
