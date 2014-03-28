@@ -5,7 +5,7 @@
         <div class="results">
             {% set count = 1 %}
             {% for objet in objets if objet['categ'] == "point-dur" %}
-                {% include 'HopitalNumeriqueRechercheBundle:Search:points-durs.html.twig' with {'objet': objet, 'count':count} %}
+                {% include 'HopitalNumeriqueRechercheBundle:Search:points-durs.html.twig' with {'objet': objet, 'count':count, 'showMorePointsDurs' : showMorePointsDurs } %}
                 {% set count = count + 1 %}
             {% else %}
                 <p> - Aucun point dur trouvé - </p>
@@ -13,8 +13,8 @@
             <div class="clearfix"></div>
         </div>
     </div>
-    {% if count > 3 %}
-        <div class="btn btn-default btn-xs showMore" onclick="showMore(this);" >Plus de résultats</div>
+    {% if count > showMorePointsDurs %}
+        <div class="btn btn-default btn-xs showMore" onclick="showMore(this, 1);" >Plus de résultats</div>
     {% endif %}
 </div>
 
@@ -25,15 +25,15 @@
         <div class="results">
             {% set count = 1 %}
             {% for objet in objets if objet['categ'] == "production" %}
-                {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count} %}
+                {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : showMoreProductions } %}
                 {% set count = count + 1 %}
             {% else %}
                 <p> - Aucune production trouvée - </p>
             {% endfor %}
         </div>
     </div>
-    {% if count > 3 %}
-        <div class="btn btn-default btn-xs showMore" onclick="showMore(this);" >Plus de résultats</div>
+    {% if count > showMoreProductions %}
+        <div class="btn btn-default btn-xs showMore" onclick="showMore(this, 2);" >Plus de résultats</div>
     {% endif %}
 </div>
 

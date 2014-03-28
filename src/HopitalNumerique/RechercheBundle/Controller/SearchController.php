@@ -64,8 +64,18 @@ class SearchController extends Controller
         $session = $this->getRequest()->getSession();
         $session->set('requete-refs', json_encode($references) );
 
+        //get Cookies Stuff
+        $request = $this->get('request');
+        $cookies = $request->cookies;
+
+        //set Cookies vals
+        $showMorePointsDurs  = $cookies->has('showMorePointsDurs') ? $cookies->get('showMorePointsDurs') : 2;
+        $showMoreProductions = $cookies->has('showMoreProductions') ? $cookies->get('showMoreProductions') : 2;
+
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(
-            'objets' => $objets
+            'objets'              => $objets,
+            'showMorePointsDurs'  => $showMorePointsDurs,
+            'showMoreProductions' => $showMoreProductions
         ));
     }
 }
