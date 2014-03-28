@@ -1,0 +1,29 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-intervention-evaluation-voir.css"
+        'bundles/hopitalnumeriqueintervention/css/evaluation.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopital_numerique_intervention_admin_liste') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block h1Title %}
+    Évaluation
+{% endblock %}
+
+{% block body %}
+    {{ render(controller(
+        "HopitalNumeriqueInterventionBundle:Form/Evaluation:edit",
+        {
+            interventionDemande:interventionDemande,
+            questionnaire:questionnaire,
+            optionRenderForm:optionRenderForm
+        }
+    )) }}
+{% endblock %}

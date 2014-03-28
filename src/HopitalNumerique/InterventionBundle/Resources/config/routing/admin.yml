@@ -7,3 +7,9 @@ hopital_numerique_intervention_admin_demande_edit:
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Form/Demande:edit", id: 0 }
     requirements:
         id: \d+
+
+hopital_numerique_intervention_admin_evaluation_voir:
+    pattern:  /demande/{interventionDemande}/evaluation/voir
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Evaluation:voir", interventionDemande: 0 }
+    requirements:
+        interventionDemande: \d+

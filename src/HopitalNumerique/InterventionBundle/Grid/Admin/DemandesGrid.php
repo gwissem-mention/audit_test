@@ -86,9 +86,25 @@ class DemandesGrid extends DemandesAbstractGrid
             }
         );
         $this->addColonne($colonneDateChoix);
-        
-        $colonneEvaluationEtatLibelle = new Column\TextColumn('evaluationEtatLibelle', 'Éval.');
-        $this->addColonne($colonneEvaluationEtatLibelle);
+
+        $colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
+        $colonneEvaluation->setFilterable(false)->setSortable(false);
+        $colonneEvaluation->setAlign('center');
+        $colonneEvaluation->manipulateRenderCell(
+            function($value, $row, $router)
+            {
+                if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
+                {
+                    return '<span title="À évaluer" class="glyphicon glyphicon-time"></span>';
+                }
+                else if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
+                {
+                    return '<a class="btn btn-info glyphicon glyphicon-eye-open" href="'.$router->generate('hopital_numerique_intervention_admin_evaluation_voir', array('interventionDemande' => $row->getField('id'))).'"></a>';
+                }
+                return '';
+            }
+        );
+        $this->addColonne($colonneEvaluation);
         
         $colonneRemboursementEtatLibelle = new Column\TextColumn('remboursementEtatLibelle', 'Remboursement');
         $this->addColonne($colonneRemboursementEtatLibelle);

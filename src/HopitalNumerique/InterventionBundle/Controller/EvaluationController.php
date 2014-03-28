@@ -62,7 +62,6 @@ class EvaluationController extends Controller
 
             return $this->render('HopitalNumeriqueInterventionBundle:Evaluation:voir.html.twig', array(
                 'interventionDemande'=> $interventionDemande,
-                'etablissements' => $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesEtRegroupes($interventionDemande),
                 'questionnaire'=> $questionnaire,
                 'optionRenderForm'=> array(
                     'themeQuestionnaire' => 'vertical_readonly'

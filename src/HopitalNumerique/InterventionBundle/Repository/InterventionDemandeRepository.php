@@ -529,7 +529,7 @@ class InterventionDemandeRepository extends EntityRepository
                 'interventionType.libelle AS interventionTypeLibelle',
                 'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
                 'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
-                'evaluationEtat.libelle AS evaluationEtatLibelle',
+                'evaluationEtat.id AS evaluationEtatId',
                 'remboursementEtat.libelle AS remboursementEtatLibelle'
             )
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
