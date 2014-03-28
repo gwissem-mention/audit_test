@@ -231,17 +231,17 @@ function updateResultats()
         type    : 'POST',
         success : function( data ){
             $('#resultats').html( data );
-            if( $('#nbResults').val() <= 1 ){
+            if( $('#nbResults').val() == 0){
+                $('.requete h2').html( 'Requête de recherche' );
+                $('#resultats').html('');
+            }else if( $('#nbResults').val() == 1 ){
                 $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultat)' );
-                
-                if( $('#nbResults').val() == 0)
-                    $('#resultats').html('');
             }else
                 $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
+
+            loader.finished();
         }
     });
-    
-    loader.finished();
 }
 
 /**
