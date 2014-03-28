@@ -3,57 +3,57 @@ hopitalnumerique_objet_objet:
     pattern:  /objet
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:index" }
     requirements:
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_objet_add:
     pattern:  /objet/add/{type}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:add", type:1 }
     requirements:
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_objet_isFileExist:
     pattern:  /objet/isFileExist
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:isFileExist" }
     requirements:
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_objet_getObjets:
     pattern:  /objet/getObjets
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getObjets" }
     requirements:
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_objet_getPublications:
     pattern:  /objet/getPublications/{articles}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getPublications", articles:1 }
     requirements:
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_objet_getPublicationDetailsForMenu:
     pattern:  /objet/getPublicationDetailsForMenu
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getPublicationDetailsForMenu" }
     requirements:
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_objet_cancel:
     pattern:  /objet/cancel/{id}/{message}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:cancel", message:null }
     requirements:
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_objet_show:
     pattern:  /objet/show/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:show", id:1 }
     requirements:
         id: \d+
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_objet_edit:
     pattern:  /objet/edit/{id}/{infra}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:edit", id:1, infra:0  }
     requirements:
         id: \d+
-        _method: get
+        _method: GET|POST
 
 hopitalnumerique_objet_objet_delete:
     pattern:  /objet/delete/{id}.{_format}
@@ -68,14 +68,14 @@ hopitalnumerique_objet_contenu_add:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:add", id:1 }
     requirements:
         id: \d+
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_contenu_edit:
     pattern:  /objet/contenu/edit/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:edit", id:1}
     requirements:
         id: \d+
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_contenu_delete:
     pattern:  /objet/contenu/delete/{id}.{_format}
@@ -89,19 +89,19 @@ hopitalnumerique_objet_contenu_uploadparse:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:uploadParse", id:1 }
     requirements: 
         id: \d+
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_contenu_upload:
     pattern:  /objet/contenu/upload
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:upload" }
     requirements:
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_contenu_reorder:
     pattern:  /objet/contenu/reorder
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:reorder" }
     requirements:
-        _method: get
+        _method: GET
 
 #partie reference
 hopitalnumerique_objet_reference_objet:
@@ -109,38 +109,38 @@ hopitalnumerique_objet_reference_objet:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:objet", id:1 }
     requirements:
         id: \d+
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_reference_objet_own:
     pattern:  /objet/reference/objet-own/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:objetOwn", id:1 }
     requirements:
         id: \d+
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_reference_objet_save:
     pattern:  /objet/reference/save/objet/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:saveObjet" }
     requirements:
         id: \d+
-        _method: get
+        _method: POST
 
 hopitalnumerique_objet_reference_contenu:
     pattern:  /objet/reference/contenu/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:contenu", id:1 }
     requirements:
         id: \d+
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_reference_contenu_own:
     pattern:  /objet/reference/contenu_own/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:contenuOwn", id:1 }
     requirements:
         id: \d+
-        _method: get
+        _method: GET
 
 hopitalnumerique_objet_reference_contenu_save:
     pattern:  /objet/reference/save/contenu
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:saveContenu" }
     requirements:
-        _method: get
+        _method: POST
