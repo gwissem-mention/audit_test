@@ -1,15 +1,14 @@
-/**
- * Classe permettant d'afficher et gérer les graphiques dans les blocs.
- */
-var HopitalNumerique_CarteFrance = function() {};
+$(document).ready(function() {
+	afficheCarteFrance($('#selected-region').val());
+});
 
 /**
  * Fonction permettant de créer et d'afficher la carte de la france en svg
  */
-HopitalNumerique_CarteFrance.afficheCarteFrance = function(donneesParRegion)
-{
+function afficheCarteFrance(donneesParRegion)
+{	
 	var couleurDefaut = "#FFFFFF";
-    var frenchMap     = new Raphael(document.getElementById('canvas_france'), 240, 350);
+    var frenchMap     = new Raphael(document.getElementById('canvas_france'), 240, 350, { width:400,height:300 });
 
     frenchMap.setViewBox(0, 0, 810, 1100, true); 
 
@@ -80,6 +79,10 @@ HopitalNumerique_CarteFrance.afficheCarteFrance = function(donneesParRegion)
     region.mayotte.attr({title: 'Mayotte',href:"#54"});
     
     var current = null, i = 1;
+    
+
+    
+	alert("Débugger cette partie : 85");
 
     for (var state in region) 
     {

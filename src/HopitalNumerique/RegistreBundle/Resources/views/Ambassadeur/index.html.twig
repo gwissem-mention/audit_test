@@ -24,9 +24,6 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-    <script type="text/javascript">
-        HopitalNumerique_CarteFrance.afficheCarteFrance({{ regions.regionsSelected|raw }});
-    </script>
 {% endblock %}
 
 {% block body %}
@@ -51,7 +48,7 @@
                 {# Carte de france #}
                 <div id="canvas_france" style="width:100%;" ></div>
 
-                <input type="hidden" id="selected-region" value="{{regions.regionsSelected}}" />
+                <input type="hidden" id="selected-region" value="{{regions.regionsSelected|raw}}" />
                 <p class="titre">Par zones géographiques</p>
             </div>
         </div>
