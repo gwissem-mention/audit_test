@@ -130,7 +130,7 @@ class QuestionnaireType extends AbstractType
             	            'read_only'  => $this->_readOnly,
             	            'disabled'   => $this->_readOnly,
             	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => 'checkbox ' . $question->getVerifJS() ),
-            	            'data'       => is_null($reponseCourante) ? false : ('1' === $reponseCourante->getReponse() ? true : false)
+            	            'data'       => is_null($reponseCourante) ? false : ('1' === $reponseCourante->getReponse())
             	    ));
             	    break;
             	//Les entity ne sont prévues que pour des entités de Référence (TODO : mettre en base la class et le property ?)

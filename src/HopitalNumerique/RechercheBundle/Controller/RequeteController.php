@@ -125,7 +125,7 @@ class RequeteController extends Controller
         //get requetes
         $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->findBy( array( 'user' => $user ) );
         foreach($requetes as $requete){
-            $isDefault = $requete->getId() == $id ? true : false;
+            $isDefault = ($requete->getId() == $id);
             $requete->setDefault( $isDefault );
         }
         $this->get('hopitalnumerique_recherche.manager.requete')->save( $requetes );

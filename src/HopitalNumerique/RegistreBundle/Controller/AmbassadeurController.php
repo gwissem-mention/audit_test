@@ -17,7 +17,7 @@ class AmbassadeurController extends Controller
         //get User Role
         //Si il n'y pas d'utilisateur connecté, le tableau de role est vide
         $roles  = 'anon.' === $user ? array() : $user->getRoles();
-        $isCMSI = in_array('ROLE_ARS_CMSI_4', $roles) ? true : false;
+        $isCMSI = in_array('ROLE_ARS_CMSI_4', $roles);
 
         //get region ( if not specified, get user's region)
         $region = is_null($region) ? $user->getRegion() : $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $region) );
@@ -27,7 +27,7 @@ class AmbassadeurController extends Controller
         
         //test if user is authorized to contact Ambassadeurs
         if( $isCMSI )
-            $allowContact = ($user->getRegion() && $region && $region->getId() == $user->getRegion()->getId()) ? true : false;
+            $allowContact = ($user->getRegion() && $region && $region->getId() == $user->getRegion()->getId());
         else
             $allowContact = true;
 

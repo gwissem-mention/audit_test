@@ -216,9 +216,10 @@ class ReferenceManager extends BaseManager
             $ref->id       = $child->id;
             $ref->nom      = $sep . $child->code . ' - ' . $child->libelle;
             $ref->selected = false;
-            $ref->primary  = true;
+            $ref->primary  = false;
             $ref->childs   = null;
             $ref->parents  = json_encode($parent);
+            $ref->level    = $level;
 
             //add element parent first
             $this->_tabReferences[ $child->id ] = $ref;
