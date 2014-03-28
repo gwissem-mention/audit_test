@@ -22,7 +22,7 @@ class DemandesGrid extends DemandesAbstractGrid
         parent::setConfig();
         $this->setFunctionName('getGridDonneesAdminDemandes');
         
-        $this->ignoreColonnes(array('interventionInitiateurId', 'nombreDemandesRegroupees', 'nombreDemandesPrincipales', 'cmsiNom', 'cmsiPrenom', 'ambassadeurNom', 'ambassadeurPrenom', 'ambassadeurRegionLibelle', 'referentNom', 'referentPrenom', 'referentEtablissementNom', 'referentEtablissementFiness', 'referentRegionLibelle', 'cmsiDateChoixLibelle', 'ambassadeurDateChoixLibelle'));
+        $this->ignoreColonnes(array('interventionInitiateurId', 'nombreDemandesRegroupees', 'nombreDemandesPrincipales', 'ambassadeurRegionLibelle', 'referentEtablissementNom', 'referentEtablissementFiness', 'referentRegionLibelle', 'cmsiDateChoixLibelle', 'ambassadeurDateChoixLibelle'));
     }
 
     /**
@@ -48,7 +48,7 @@ class DemandesGrid extends DemandesAbstractGrid
         $colonneInterventionEtatLibelle = new Column\TextColumn('interventionEtatLibelle', 'État');
         $this->addColonne($colonneInterventionEtatLibelle);
         
-        $colonneCmsiInformations = new Column\TextColumn('cmsiInformations', 'CMSI');
+        $colonneCmsiInformations = new Column\TextColumn('cmsi_nom', 'CMSI');
         $colonneCmsiInformations->manipulateRenderCell(
             function($value, $row, $router) {
                 return DemandesAbstractGrid::renderCellCmsi($value, $row, $router);
@@ -56,7 +56,7 @@ class DemandesGrid extends DemandesAbstractGrid
         );
         $this->addColonne($colonneCmsiInformations);
         
-        $colonneAmbassadeurInformations = new Column\TextColumn('ambassadeurInformations', 'Ambassadeur');
+        $colonneAmbassadeurInformations = new Column\TextColumn('ambassadeur_nom', 'Ambassadeur');
         $colonneAmbassadeurInformations->manipulateRenderCell(
             function($value, $row, $router) {
                 return DemandesAbstractGrid::renderCellAmbassadeur($value, $row, $router);
@@ -64,7 +64,7 @@ class DemandesGrid extends DemandesAbstractGrid
         );
         $this->addColonne($colonneAmbassadeurInformations);
         
-        $colonneDemandeurInformations = new Column\TextColumn('demandeurInformations', 'Demandeur');
+        $colonneDemandeurInformations = new Column\TextColumn('demandeur_nom', 'Demandeur');
         $colonneDemandeurInformations->manipulateRenderCell(
             function($value, $row, $router) {
                 return DemandesAbstractGrid::renderCellReferent($value, $row, $router);

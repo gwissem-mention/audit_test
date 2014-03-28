@@ -93,7 +93,7 @@ abstract class DemandesAbstractGrid extends Grid implements IGrid
     public static function renderCellReferent($value, $row, $router)
     {
         return
-            '<strong>'.$row->getField('referentNom').' '.$row->getField('referentPrenom').'</strong>'.
+            '<strong>'.$row->getField('referent_nom').'</strong>'.
             ($row->getField('referentEtablissementNom') != null ? '<br>'.$row->getField('referentEtablissementNom').' - '.$row->getField('referentEtablissementFiness') : '').
             ($row->getField('referentRegionLibelle') != null ? '<br>'.$row->getField('referentRegionLibelle') : '')
         ;
@@ -106,7 +106,7 @@ abstract class DemandesAbstractGrid extends Grid implements IGrid
     public static function renderCellAmbassadeur($value, $row, $router)
     {
         return
-            '<strong>'.$row->getField('ambassadeurNom').' '.$row->getField('ambassadeurPrenom').'</strong>'.
+            '<strong>'.$row->getField('ambassadeur_nom').'</strong>'.
             ($row->getField('ambassadeurRegionLibelle') != null ? '<br>'.$row->getField('ambassadeurRegionLibelle') : '')
         ;
     }
@@ -118,7 +118,7 @@ abstract class DemandesAbstractGrid extends Grid implements IGrid
     public static function renderCellCmsi($value, $row, $router)
     {
         return
-            '<strong>'.$row->getField('cmsiNom').' '.$row->getField('cmsiPrenom').'</strong>'
+            '<strong>'.$row->getField('cmsi_nom').'</strong>'
         ;
     }
     /**

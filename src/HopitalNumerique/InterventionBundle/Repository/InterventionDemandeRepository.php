@@ -131,8 +131,7 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'referent.nom AS referentNom',
-                'referent.prenom AS referentPrenom',
+                'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
                 'referentEtablissement.finess AS referentEtablissementFiness',
                 'referentRegion.libelle AS referentRegionLibelle',
@@ -194,8 +193,7 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'referent.nom AS referentNom',
-                'referent.prenom AS referentPrenom',
+                'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
                 'referentEtablissement.finess AS referentEtablissementFiness',
                 'referentRegion.libelle AS referentRegionLibelle',
@@ -259,8 +257,7 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'referent.nom AS referentNom',
-                'referent.prenom AS referentPrenom',
+                'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
                 'referentEtablissement.finess AS referentEtablissementFiness',
                 'referentRegion.libelle AS referentRegionLibelle',
@@ -337,8 +334,7 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
-                'referent.nom AS referentNom',
-                'referent.prenom AS referentPrenom',
+                'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
                 'referentEtablissement.finess AS referentEtablissementFiness',
                 'referentRegion.libelle AS referentRegionLibelle',
@@ -514,13 +510,10 @@ class InterventionDemandeRepository extends EntityRepository
                 'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
                 'interventionEtat.libelle AS interventionEtatLibelle',
                 
-                'cmsi.nom AS cmsiNom',
-                'cmsi.prenom AS cmsiPrenom',
-                'ambassadeur.nom AS ambassadeurNom',
-                'ambassadeur.prenom AS ambassadeurPrenom',
+                'CONCAT(cmsi.nom, \' \', cmsi.prenom) AS cmsi_nom',
+                'CONCAT(ambassadeur.nom, \' \', ambassadeur.prenom) AS ambassadeur_nom',
                 'ambassadeurRegion.libelle AS ambassadeurRegionLibelle',
-                'referent.nom AS referentNom',
-                'referent.prenom AS referentPrenom',
+                'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
                 'referentEtablissement.finess AS referentEtablissementFiness',
                 'referentRegion.libelle AS referentRegionLibelle',
