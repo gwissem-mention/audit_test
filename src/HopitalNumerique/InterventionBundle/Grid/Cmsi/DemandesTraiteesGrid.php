@@ -7,6 +7,7 @@ namespace HopitalNumerique\InterventionBundle\Grid\Cmsi;
 use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
 
 /**
  * Configuration du grid des demandes d'intervention traitées pour le CMSI.
@@ -63,9 +64,24 @@ class DemandesTraiteesGrid extends DemandesAbstractGrid
         );
         $this->addColonne($colonneDateChoix);
         
-        $colonneEvaluationEtatLibelle = new Column\TextColumn('evaluationEtatLibelle', 'Éval.');
-        $colonneEvaluationEtatLibelle->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneEvaluationEtatLibelle);
+        $colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
+        $colonneEvaluation->setFilterable(false)->setSortable(false);
+        $colonneEvaluation->setAlign('center');
+        $colonneEvaluation->manipulateRenderCell(
+            function($value, $row, $router)
+            {
+                if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
+                {
+                    return '<span title="À évaluer" class="glyphicon glyphicon-time"></span>';
+                }
+                else if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
+                {
+                    return '<a class="btn btn-info btn-xs" href="'.$router->generate('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-eye-open"></span></a>';
+                }
+                return '';
+            }
+        );
+        $this->addColonne($colonneEvaluation);
     }
 
     /**

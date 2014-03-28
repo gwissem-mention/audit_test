@@ -205,7 +205,7 @@ class InterventionDemandeRepository extends EntityRepository
                 'interventionEtat.libelle AS interventionEtatLibelle',
                 'CONCAT(interventionDemande.cmsiDateChoix, \'\') AS cmsiDateChoixLibelle',
                 'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
-                'evaluationEtat.libelle AS evaluationEtatLibelle',
+                'evaluationEtat.id AS evaluationEtatId',
                 'remboursementEtat.libelle AS remboursementEtatLibelle',
                 'COUNT(interventionRegroupementRegroupee) AS nombreDemandesRegroupees',
                 'COUNT(interventionRegroupementPrincipale) AS nombreDemandesPrincipales'
