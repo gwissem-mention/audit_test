@@ -3,7 +3,7 @@
     <div class="wrapper-results">
         <div class="background-violet"></div>
         <div class="results">
-            {% set count = 1 %}
+            {% set count = 0 %}
             {% for objet in objets if objet['categ'] == "point-dur" %}
                 {% include 'HopitalNumeriqueRechercheBundle:Search:points-durs.html.twig' with {'objet': objet, 'count':count, 'showMorePointsDurs' : showMorePointsDurs } %}
                 {% set count = count + 1 %}
@@ -13,6 +13,7 @@
             <div class="clearfix"></div>
         </div>
     </div>
+
     {% if count > showMorePointsDurs %}
         <div class="btn btn-default btn-xs showMore" onclick="showMore(this, 1);" >Plus de résultats</div>
     {% endif %}
@@ -23,7 +24,7 @@
     <div class="wrapper-results">
         <div class="background-rose"></div>
         <div class="results">
-            {% set count = 1 %}
+            {% set count = 0 %}
             {% for objet in objets if objet['categ'] == "production" %}
                 {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : showMoreProductions } %}
                 {% set count = count + 1 %}
