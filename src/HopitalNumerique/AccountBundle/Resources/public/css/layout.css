@@ -15,6 +15,7 @@ div#tableau-de-bord div.tab-content { background-color:#f6f6f6;border-color:#e3e
     div#tableau-de-bord div.active {}
 /* --> */
 /* <-- Grid */
+div.panel_grid { padding:5px 5px 0px 5px; }
 div#tableau-de-bord div.grid-search { background-color:#6F3596;padding:0px; }
     div#tableau-de-bord div.grid-search div.panel { background-color:transparent !important;border-width:0px !important;margin:0px !important; }
         div#tableau-de-bord div.grid-search div.panel div.panel-heading { border-width:0px;padding:4px 10px; }
