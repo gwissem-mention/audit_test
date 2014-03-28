@@ -24,6 +24,9 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    <script type="text/javascript">
+        Dataviz_BlocGraphique.afficheCarteFrance('{{ graphique.typeCarte }}',{{ graphique.donnees|raw }}, '#b6b6b6');
+    </script>
 {% endblock %}
 
 {% block body %}
