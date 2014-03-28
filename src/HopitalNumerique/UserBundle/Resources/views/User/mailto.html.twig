@@ -6,8 +6,10 @@
 
 {% block body %}
 Ouverture du client de messagerie...
+<p>Si votre client de messagerie ne s'ouvre pas, <a href="{{ mailto }}">cliquez ici</a>.</p>
+<p><a href="javascript:history.back();">Retour &agrave; la liste des utilisateurs</a></p>
 <script>
 	window.document.location = '{{ mailto }}';
-	history.back();
+	//history.back();
 </script>
 {% endblock %}
