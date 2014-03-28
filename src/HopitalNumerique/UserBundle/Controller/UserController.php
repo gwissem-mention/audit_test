@@ -321,14 +321,42 @@ class UserController extends Controller
         return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $users, $kernelCharset );
     }
 
+	/**
+     * Envoyer un mail aux utilisateurs
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function EnvoyerMailMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1)
+            $users = $this->get('hopitalnumerique_user.manager.user')->findAll();
+        else
+            $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        
+        //get emails
+        $list = array();
+        foreach($users as $user)
+            if($user->getEmail() != "")
+                $list[] = $user->getEmail();
 
-
-
-
-
-
-
-
+        //to
+        $to = $this->get('security.context')->getToken()->getUser()->getEmail();
+        
+        //bcc list
+        $bcc = join(';', $list);
+        
+        //mailto
+        //return $this->redirect("mailto:".$to."?bcc=".$bcc);
+        
+        return $this->render('HopitalNumeriqueUserBundle:User:mailto.html.twig', array(
+            'mailto' => 'mailto:'.$to.'?bcc='.$bcc
+        ));
+    }
+	
     /**
      * Effectue le render du formulaire Utilisateur
      *

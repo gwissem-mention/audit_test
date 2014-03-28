@@ -100,5 +100,7 @@ class UserGrid extends Grid implements IGrid
 
         $this->addMassAction( new Action\ActionMass('Activer','HopitalNumeriqueUserBundle:User:ActiverMass') );
         $this->addMassAction( new Action\ActionMass('Désactiver','HopitalNumeriqueUserBundle:User:DesactiverMass') );
+		
+		$this->addMassAction( new Action\ActionMass('Envoyer un mail','HopitalNumeriqueUserBundle:User:EnvoyerMailMass') );
     }
 }
