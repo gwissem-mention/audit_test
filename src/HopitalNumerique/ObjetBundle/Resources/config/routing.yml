@@ -3,7 +3,7 @@ hopitalnumerique_objet_objet:
     pattern:  /objet
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:index" }
     requirements:
-        _method: GET
+        _method: GET|POST
 
 hopitalnumerique_objet_objet_add:
     pattern:  /objet/add/{type}

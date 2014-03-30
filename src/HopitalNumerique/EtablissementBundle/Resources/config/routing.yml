@@ -3,7 +3,7 @@ hopitalnumerique_etablissement:
     pattern:  /etablissement/
     defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:index" }
     requirements:
-        _method: GET
+        _method: GET|POST
 
 hopitalnumerique_etablissement_add:
     pattern:  /etablissement/add
