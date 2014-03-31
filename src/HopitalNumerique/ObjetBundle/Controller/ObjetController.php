@@ -61,7 +61,7 @@ class ObjetController extends Controller
     /**
      * Affiche le formulaire d'édition de Objet.
      */
-    public function editAction( $id, $infra )
+    public function editAction( $id, $infra, $toRef )
     {   
         //Récupération de l'entité passée en paramètre
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
@@ -78,7 +78,13 @@ class ObjetController extends Controller
         //get Contenus
         $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id );
 
-        return $this->_renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig', $contenus, $infra );
+        $options = array(
+            'contenus' => $contenus,
+            'infra'    => $infra,
+            'toRef'    => $toRef
+        );
+
+        return $this->_renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig', $options );
     }
 
     /**
@@ -250,7 +256,7 @@ class ObjetController extends Controller
     /**
      * Effectue le render du formulaire Objet.
      */
-    private function _renderForm( $formName, $objet, $view, $contenus = array(), $infra = false )
+    private function _renderForm( $formName, $objet, $view, $options = array() )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $objet);
@@ -271,8 +277,9 @@ class ObjetController extends Controller
                 return $this->render( $view , array(
                     'form'     => $form->createView(),
                     'objet'    => $objet,
-                    'contenus' => $contenus,
-                    'infra'    => $infra
+                    'contenus' => isset($options['contenus']) ? $options['contenus'] : array(),
+                    'infra'    => isset($options['infra'])    ? $options['infra']    : false,
+                    'toRef'    => isset($options['toRef'])    ? $options['toRef']    : false,
                 ));
             }
 
@@ -291,8 +298,9 @@ class ObjetController extends Controller
                     return $this->render( $view , array(
                         'form'     => $form->createView(),
                         'objet'    => $objet,
-                        'contenus' => $contenus,
-                        'infra'    => $infra
+                        'contenus' => isset($options['contenus']) ? $options['contenus'] : array(),
+                        'infra'    => isset($options['infra'])    ? $options['infra']    : false,
+                        'toRef'    => isset($options['toRef'])    ? $options['toRef']    : false,
                     ));
                 }
 
@@ -323,8 +331,9 @@ class ObjetController extends Controller
         return $this->render( $view , array(
             'form'     => $form->createView(),
             'objet'    => $objet,
-            'contenus' => $contenus,
-            'infra'    => $infra
+            'contenus' => isset($options['contenus']) ? $options['contenus'] : array(),
+            'infra'    => isset($options['infra'])    ? $options['infra']    : false,
+            'toRef'    => isset($options['toRef'])    ? $options['toRef']    : false,
         ));
     }
 }
