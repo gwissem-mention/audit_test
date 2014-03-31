@@ -28,7 +28,8 @@
 {% endblock %}
 
 {% block content %}
-        <div class="panel_form_visu">
+        <div class="panel_form_visu" id="intervention_demande_panel">
+
             {% if app.user.hasRoleCmsi == false and app.user.hasRoleAmbassadeur == false and interventionDemande.estDemandeRegroupee %}
                 <h2>Votre demande à été regroupée avec une autre intervention :</h2>
                 {% for interventionRegroupementDemandePrincipale in interventionDemande.interventionRegroupementsDemandesPrincipales %}

@@ -198,7 +198,7 @@ class ReferenceManager extends BaseManager
         $sep = '';
         if( $level > 1 ) {
             for( $i = 2; $i <= $level; $i++ )
-                $sep .= '|--';
+                $sep .= '|----';
             $sep .= ' ';
         }
 
@@ -215,10 +215,12 @@ class ReferenceManager extends BaseManager
             $ref           = new \stdClass;
             $ref->id       = $child->id;
             $ref->nom      = $sep . $child->code . ' - ' . $child->libelle;
+            $ref->libelle  = $sep . $child->libelle;
             $ref->selected = false;
-            $ref->primary  = true;
+            $ref->primary  = false;
             $ref->childs   = null;
             $ref->parents  = json_encode($parent);
+            $ref->level    = $level;
 
             //add element parent first
             $this->_tabReferences[ $child->id ] = $ref;
@@ -226,7 +228,7 @@ class ReferenceManager extends BaseManager
             //if childs
             if ( !empty($child->childs) ){
                 //met à jour le tab parent
-                $tmp = $parent;
+                $tmp   = $parent;
                 $tmp[] = $child->id;
 
                 //on met à jour sa liste d'enfants
@@ -234,7 +236,8 @@ class ReferenceManager extends BaseManager
 
                 //récupère temporairement l'élément que l'on vien d'ajouter
                 $tmp = $this->_tabReferences[ $child->id ];
-                $tmp->childs = json_encode( $newChilds );
+                $tmp->childs   = json_encode( $newChilds );
+                $tmp->nbChilds = count( $newChilds );
 
                 //on remet l'élément parent à sa place
                 $this->_tabReferences[ $child->id ] = $tmp;

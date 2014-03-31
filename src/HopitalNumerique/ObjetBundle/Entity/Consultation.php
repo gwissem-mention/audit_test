@@ -31,10 +31,18 @@ class Consultation
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="Objet", inversedBy="references")
+     * @ORM\ManyToOne(targetEntity="Objet", inversedBy="consultations")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
      */
     private $objet;
+
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="consultations")
+     * @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE", nullable=true)
+     */
+    private $contenu;
 
     /**
      * @var \DateTime
@@ -78,6 +86,26 @@ class Consultation
         $this->objet = $objet;
     }
 
+    /**
+     * Get contenu
+     *
+     * @return \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu
+     */
+    public function getContenu()
+    {
+        return $this->contenu;
+    }
+    
+    /**
+     * Set contenu
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu
+     */
+    public function setContenu(\HopitalNumerique\ObjetBundle\Entity\Contenu $contenu)
+    {
+        $this->contenu = $contenu;
+    }
+    
     /**
      * Get user
      *

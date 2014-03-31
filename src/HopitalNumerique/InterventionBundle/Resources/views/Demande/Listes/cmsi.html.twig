@@ -2,14 +2,17 @@
 
 {% block content %}
 
-    <ul class="nav nav-tabs">
-       <li class="active"><a href="#demandesNouvelles" data-toggle="tab">Liste des nouvelles demandes</a></li>
-       <li><a href="#demandesTraitees" data-toggle="tab">Liste des demandes traitées</a></li>
-    </ul>
+    <div class="panel_grid">
+        <ul class="nav nav-tabs">
+        <li{% if derniereDemandeEstEtatTypeDemandeTraiteeCmsi == false %} class="active"{% endif %}><a href="#demandesNouvelles" data-toggle="tab">Liste des nouvelles demandes</a></li>
+        <li{% if derniereDemandeEstEtatTypeDemandeTraiteeCmsi == true %} class="active"{% endif %}><a href="#demandesTraitees" data-toggle="tab">Liste des demandes traitées</a></li>
+        </ul>
 
-    <div class="tab-content">
-        <div class="tab-pane fade in active" id="demandesNouvelles">{{ render(path("hopital_numerique_intervention_grid_cmsi_demandes_nouvelles")) }}</div>
-        <div class="tab-pane fade" id="demandesTraitees">{{ render(path("hopital_numerique_intervention_grid_cmsi_demandes_traitees")) }}</div>
+        <div class="tab-content">
+            <div class="tab-pane fade{% if derniereDemandeEstEtatTypeDemandeTraiteeCmsi == false %} in active{% endif %}" id="demandesNouvelles">{{ render(path("hopital_numerique_intervention_grid_cmsi_demandes_nouvelles")) }}</div>
+            <div class="tab-pane fade{% if derniereDemandeEstEtatTypeDemandeTraiteeCmsi == true %} in active{% endif %}" id="demandesTraitees">{{ render(path("hopital_numerique_intervention_grid_cmsi_demandes_traitees")) }}</div>
+        </div>
+        <div class="clearfix"></div>
     </div>
 
 {% endblock %}

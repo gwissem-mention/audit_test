@@ -19,16 +19,13 @@ class EvaluationController extends Controller
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté actuellement
      */
-    private $utilisateurConnecte;
+    protected $utilisateurConnecte;
     
     /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
      *
-     * @param HopiUser          $user               Utilisateur courant
-     * @param HopiQuestionnaire $questionnaire      Questionnaire à afficher
-     * @param string            $themeQuestionnaire Theme de formulaire utilisé
-     *
-     * @return Ambigous <\HopitalNumerique\QuestionnaireBundle\Controller\Form, \Symfony\Component\HttpFoundation\RedirectResponse, \Symfony\Component\HttpFoundation\Response>
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande Demande d'intervention de l'évaluation à afficher
+     * @return \Symfony\Component\HttpFoundation\Response Vue du formulaire d'évaluation
      */
     public function editAction(InterventionDemande $interventionDemande)
     {
@@ -54,7 +51,7 @@ class EvaluationController extends Controller
      *
      * @return Form | redirect
      */
-    private function renderForm($options, $view)
+    protected function renderForm($options, $view)
     {
         $questionnaire    = $options['questionnaire'];
         $interventionDemande = $options['interventionDemande'];

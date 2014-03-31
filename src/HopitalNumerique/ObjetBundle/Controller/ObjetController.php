@@ -279,7 +279,7 @@ class ObjetController extends Controller
             //si le formulaire est valide
             if ($form->isValid()) {
                 //test ajout ou edition
-                $new = is_null($objet->getId()) ? true : false;
+                $new = is_null($objet->getId());
 
                 //si l'alias est vide, on le génère depuis le titre
                 $tool = new Chaine( ( $objet->getAlias() == '' ? $objet->getTitre() : $objet->getAlias() ) );

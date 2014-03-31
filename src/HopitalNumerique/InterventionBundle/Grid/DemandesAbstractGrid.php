@@ -62,6 +62,30 @@ abstract class DemandesAbstractGrid extends Grid implements IGrid
     }
 
     /**
+     * Ignore plusieurs colonne (ne pas afficher dans le filtre).
+     *
+     * @param string[] $colonneLabels Identifiant des colonnes
+     * @return void
+     */
+    protected function ignoreColonnes($colonneLabels)
+    {
+        foreach ($colonneLabels as $colonneLabel)
+            $this->ignoreColonne($colonneLabel);
+    }
+    /**
+     * Ignore une colonne (ne pas afficher dans le filtre).
+     * 
+     * @param string $colonneLabel Identifiant de la colonne
+     * @return void
+     */
+    private function ignoreColonne($colonneLabel)
+    {
+        $colonneAIgnorer = new Column\BlankColumn($colonneLabel);
+        $colonneAIgnorer->setVisibleForSource(true);
+        $this->addColonne($colonneAIgnorer);
+    }
+    
+    /**
      * Fonction de rendu de la cellule Référent (ou Demandeur).
      * 
      * @return string Le contenu de la cellule Référent
@@ -69,9 +93,32 @@ abstract class DemandesAbstractGrid extends Grid implements IGrid
     public static function renderCellReferent($value, $row, $router)
     {
         return
-            '<strong>'.$row->getField('referentNom').' '.$row->getField('referentPrenom').'</strong>'.
+            '<strong>'.$row->getField('referent_nom').'</strong>'.
             ($row->getField('referentEtablissementNom') != null ? '<br>'.$row->getField('referentEtablissementNom').' - '.$row->getField('referentEtablissementFiness') : '').
             ($row->getField('referentRegionLibelle') != null ? '<br>'.$row->getField('referentRegionLibelle') : '')
+        ;
+    }
+    /**
+     * Fonction de rendu de la cellule Ambassadeur.
+     * 
+     * @return string Le contenu de la cellule Ambassadeur
+     */
+    public static function renderCellAmbassadeur($value, $row, $router)
+    {
+        return
+            '<strong>'.$row->getField('ambassadeur_nom').'</strong>'.
+            ($row->getField('ambassadeurRegionLibelle') != null ? '<br>'.$row->getField('ambassadeurRegionLibelle') : '')
+        ;
+    }
+    /**
+     * Fonction de rendu de la cellule CMSI.
+     * 
+     * @return string Le contenu de la cellule CMSI
+     */
+    public static function renderCellCmsi($value, $row, $router)
+    {
+        return
+            '<strong>'.$row->getField('cmsi_nom').'</strong>'
         ;
     }
     /**

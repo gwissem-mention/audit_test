@@ -18,7 +18,7 @@ framework:
     trusted_proxies: ~
     session:
         handler_id:  ~
-        cookie_lifetime: 3600
+        cookie_lifetime: 36000
     fragments:       ~
     http_method_override: true
 

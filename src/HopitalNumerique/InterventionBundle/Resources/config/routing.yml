@@ -44,4 +44,7 @@ hopital_numerique_intervention_grid_ambassadeur_demandes:
 hopital_numerique_intervention_grid_etablissement_demandes:
     pattern: /demandes/grid/etablissement
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:gridEtablissementDemandes" }
+hopital_numerique_intervention_grid_admin_demandes:
+    pattern: /demandes/grid/admin
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Demande:gridDemandes" }
 #-->

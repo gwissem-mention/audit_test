@@ -253,7 +253,7 @@ class QuestionnaireController extends Controller
                     }
     
                     //Test ajout ou edition
-                    $new = is_null($reponse->getId()) ? true : false;
+                    $new = is_null($reponse->getId());
                     
                     //Mise à jour de la réponse dans le tableau des réponses
                     $reponses[$idQuestion] = $reponse;

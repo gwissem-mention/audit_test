@@ -1,9 +1,10 @@
 hopital_numerique_account_homepage:
     pattern:  /
     defaults: { _controller: HopitalNumeriqueAccountBundle:Default:index }
+    requirements:
+        _method: GET
 
 # Connexion
-
 account_login:
     pattern:  /connexion
     defaults: { _controller: FOSUserBundle:Security:login }
@@ -34,3 +35,5 @@ fos_user_resetting:
 hopital_numerique_requete_homepage:
     pattern:  /requetes/{indexVue}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:index, indexVue:true }
+    requirements:
+        _method: GET|POST

@@ -12,12 +12,31 @@ var HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement =
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init = function()
 {
+    HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initBoutonSoumission_Click();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initFormulaireCreation_Submit();
+    HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initFormulaireEdition_Submit();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initRegion_Change();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initAutresEtablissements_Change();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initInterventionEtat_Click();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initAmbassadeur_Change();
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initInterventionRegroupement_Click();
+};
+
+/**
+ * Initialise l'événement du clic sur un bouton pour envoyer le questionnaire.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initBoutonSoumission_Click = function()
+{
+    var FormulaireBoutonSoumission = $('#intervention_demande_form_submit');
+
+    $(FormulaireBoutonSoumission).click(function() {
+        if ($('form#form_intervention_demande_nouveau').size() > 0)
+            $('form#form_intervention_demande_nouveau').submit();
+        else if ($('form#form_intervention_demande_edition').size() > 0)
+            $('form#form_intervention_demande_edition').submit();
+    });
 };
 
 /**
@@ -30,9 +49,22 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initF
     var demandeCreationFormulaire = $('form#form_intervention_demande_nouveau');
 
     $(demandeCreationFormulaire).submit(function() {
-        return HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormulaireCreation();
+        return HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormulaire();
     });
-}
+};
+/**
+ * Initialise l'événement de soumission du formulaire d'édition d'une demande d'intervention.
+ * 
+ * @return void
+ */
+HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initFormulaireEdition_Submit = function()
+{
+    var demandeEditionFormulaire = $('form#form_intervention_demande_edition');
+
+    $(demandeEditionFormulaire).submit(function() {
+        return HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormulaire();
+    });
+};
 
 /**
  * Initialisation de l'événement d'un changement de région.

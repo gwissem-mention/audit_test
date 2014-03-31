@@ -38,13 +38,40 @@ class InterventionDemandeManager
     }
 
     /**
-     * Retourne la liste des civilités pour les listes de formulaire.
+     * Retourne la liste des types d'intervention pour les listes de formulaire.
      *
-     * @return array Liste des civilités pour les listes de formulaire
+     * @return array Liste des types d'intervention pour les listes de formulaire
      */
     public function getInterventionTypesChoices()
     {
         return $this->referenceManager->findBy(array('code' => 'TYPE_INTERVENTION'));
+    }
+    /**
+     * Retourne la liste des états d'intervention pour les listes de formulaire.
+     *
+     * @return array Liste des états d'intervention pour les listes de formulaire
+     */
+    public function getInterventionEtatsChoices()
+    {
+        return $this->referenceManager->findBy(array('code' => 'ETAT_DEMANDE_INTERVENTION'));
+    }
+    /**
+     * Retourne la liste des états des évaluations d'intervention pour les listes de formulaire.
+     *
+     * @return array Liste des états des évaluations d'intervention pour les listes de formulaire
+     */
+    public function getEvaluationEtatsChoices()
+    {
+        return $this->referenceManager->findBy(array('code' => 'ETAT_EVALUATION'));
+    }
+    /**
+     * Retourne la liste des états des remboursements d'intervention pour les listes de formulaire.
+     *
+     * @return array Liste des états des remboursements d'intervention pour les listes de formulaire
+     */
+    public function getRemboursementEtatsChoices()
+    {
+        return $this->referenceManager->findBy(array('code' => 'ETAT_REMBOURSEMENT'));
     }
     /**
      * Retourne la liste des objets pour les listes de formulaire.
