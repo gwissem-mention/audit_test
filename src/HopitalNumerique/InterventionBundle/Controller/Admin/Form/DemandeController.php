@@ -6,6 +6,7 @@
  */
 namespace HopitalNumerique\InterventionBundle\Controller\Admin\Form;
 
+use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -70,5 +71,24 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
                 $this->get('session')->getFlashBag()->add('danger', 'Le formulaire n\'est pas valide.');
             }
         }
+    }
+
+    /**
+     * Suppression d'une demande d'intervention.
+     *
+     * @param integer $id ID de l'utilisateur
+     */
+    public function supprimeAction(InterventionDemande $id)
+    {
+        $interventionDemande = $id;
+        $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->delete($interventionDemande);
+        $this->container->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+    
+        $reponseJson = json_encode(array(
+            'success' => true,
+            'url' => $this->generateUrl('hopital_numerique_intervention_admin_liste')
+        ));
+    
+        return new Response($reponseJson);
     }
 }

@@ -116,6 +116,8 @@ class DemandesGrid extends DemandesAbstractGrid
     public function setActionsButtons()
     {
         $this->addActionButton(new Action\EditButton('hopital_numerique_intervention_admin_demande_edit'));
+        $this->addActionButton(new Action\ShowButton('hopital_numerique_intervention_admin_demande_voir'));
+        $this->addActionButton(new Action\DeleteButton('hopital_numerique_intervention_admin_demande_delete'));
     }
 
     /**
