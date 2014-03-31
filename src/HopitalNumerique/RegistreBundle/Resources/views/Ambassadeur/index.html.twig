@@ -17,6 +17,7 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-registre-ambassadeur-index.js"
+        'bundles/nodevotools/js/json.js'
         'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
         'bundles/hopitalnumeriqueregistre/js/raphael.js'
         'bundles/hopitalnumeriqueregistre/js/carte_departement.js'
@@ -48,8 +49,12 @@
                 {# Carte de france #}
                 <div id="canvas_france" style="width:100%;" ></div>
 
-                <input type="hidden" id="selected-region" value="{{regions.regionsSelected|raw}}" />{{regions.regionsSelected|raw}}
-                <p class="titre">Par zones géographiques</p>
+                <span onclick="selectionnerToutesRegions();" class="link violet col-md-12" title="Sélectionner tout">> Sélectionner tout</span>
+                <span onclick="deselectionnerToutesRegions();" class="link violet col-md-12" title="Désélectionner tout">> Désélectionner tout</span>
+                <input type="hidden" id="selected-region" value='{{regions.regionsSelected|raw}}' />
+                <div onclick='appliquerRegionsSelectionnees();' class="btn background-rose col-md-12" title="Appliquer le nouveau filtre">Filtrer les ambassadeurs</div>
+                <input type="hidden" id="hopital_numerique_registre_edit_session" value='{{path('hopital_numerique_registre_edit_session')}}' />
+				<div class="clearfix"></div>
             </div>
         </div>
         
@@ -73,8 +78,11 @@
 			                    <div class="col-md-12">
 				                    <h4 class="violet">{{region.libelle}}</h4>
 				                </div>
+				                {# Permet de vérifier si un ambassadeur est présent pour la région #}
+				                {% set ambassadeurExisteRegion = false %}
 				                {% for ambassadeur in ambassadeurs %}
 				                    {% if ambassadeur.region.id == region.id %}
+				                        {% set ambassadeurExisteRegion = true %}
 					                    <div class="fiche col-md-6">
 					                        <div class="content">
 					                            <h5>{{ambassadeur.prenom|capitalize ~ ' ' ~ ambassadeur.nom|capitalize}}</h5>
@@ -95,6 +103,12 @@
 					                    </div>
 				                    {% endif %}
 				                {% endfor %}
+				                {# Affichage dans le cas où il n'y ait aucun ambassadeur pour cette région #}
+				                {% if not ambassadeurExisteRegion %}
+				                    <div class="col-md-12">
+				                        - Aucun ambassadeur pour cette région - 
+				                    </div>
+				                {% endif %}
 			                {% else %}
 			                    <div class="col-md-12">
 			                        - Aucune régions sélectionnées - 

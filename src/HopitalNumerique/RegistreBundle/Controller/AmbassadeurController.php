@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RegistreBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Nodevo\ToolsBundle\Tools\Chaine as NodevoChaine;
 
@@ -29,11 +30,35 @@ class AmbassadeurController extends Controller
         //On prépare la session
         $session = $this->getRequest()->getSession();
         
+// $session->remove('registre-ambassadeur-region');
+        
         //Si on a quelque chose en session, on charge la session
         if( !is_null($session->get('registre-ambassadeur-region')) )
         {
-            $regionsJSON  = $session->get('registre-ambassadeur-region');
-            $regions      = json_decode($regionsJSON);
+            //Récupération des régions en session
+            $regionsJSON    = $session->get('registre-ambassadeur-region');
+            //Decodage du JSOn pour avoir un tableau php
+            $libellesRegion = json_decode($regionsJSON);
+                        
+            //Récupération de l'ensemble des régions car dans les sessions sont stockés les libellés, il nous faut les entités
+            $allRegions = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array('code' => 'REGION'), array('libelle' => 'ASC'));
+            
+            foreach ($allRegions as $region)
+            {
+                //Récupère le nom de la région pour le minifier
+                $libelleRegion = new NodevoChaine($region->getLibelle());
+                
+                //Si la région fait parti des régions passées en session
+                if(in_array($libelleRegion->minifie(''), $libellesRegion))
+                {
+                    $regions[] = $region;
+                }
+                //Cas particulier de l'océan indien
+                if('oceanindien' === $libelleRegion->minifie('') && (in_array('mayotte', $libellesRegion) || in_array('reunion', $libellesRegion)))
+                {
+                    $regions[] = $region;
+                }
+            }
         }
         //Sinon on charge la région de l'utilisateur
         else
@@ -47,13 +72,19 @@ class AmbassadeurController extends Controller
             //sinon on récupère sa région courante
             else
             {
-                die('die');
                 //Récupère le nom de la région pour le minifier
                 $libelleRegion = new NodevoChaine($user->getRegion()->getLibelle());
 
-//                 $regionsJSON    = json_encode(array($libelleRegion->getChaine()));
-                die($libelleRegion->getChaine());
-                $regions = array($user->getRegion());
+                $regions        = array($user->getRegion());
+                //Cas particulier de l'océan indien
+                if("oceanindien" === $libelleRegion->minifie(''))
+                {
+                    $regionsJSON    = json_encode(array('mayotte','reunion'));
+                }
+                else 
+                {
+                    $regionsJSON    = json_encode(array($libelleRegion->minifie('')));
+                }
             }
         }
         
@@ -62,12 +93,12 @@ class AmbassadeurController extends Controller
         {
             $ambassadeurs = array_merge($ambassadeurs, $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndDomaine( $region, $domaine ));
         }
+
+        $session->set('registre-ambassadeur-region', $regionsJSON );
     
         //get liste des domaines fonctionnels
         $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS') );
-        
-        \Doctrine\Common\Util\Debug::dump($regionsJSON);die('die');
-    
+
         return $this->render('HopitalNumeriqueRegistreBundle:Ambassadeur:index.html.twig', array(
                 'user'            => array(
                     'user'   => $user,
@@ -83,6 +114,22 @@ class AmbassadeurController extends Controller
                      'regionsSelected'  => $regionsJSON
                 )
         ));
+    }
+    
+    /*
+     * Met à jour la session de l'utilisateur avec les régions sélectionnées
+     */
+    public function editerSessionAction()
+    {
+        $domaine = $this->get('request')->request->get('domaine');
+        $regionJSON = $this->get('request')->request->get('regionJSON');
+        
+        //On prépare la session
+        $session = $this->getRequest()->getSession();
+
+        $session->set('registre-ambassadeur-region', $regionJSON );
+        
+        return new Response('{"success":true, "url" : "'.$this->generateUrl( 'hopital_numerique_registre_homepage', array('domaine' => $domaine) ).'"}', 200);
     }
 
     /**
