@@ -21,7 +21,7 @@ class PublicationController extends Controller
         $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
 
         //get Contenus : for sommaire
-        $contenus = $objet->getIsInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
+        $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
 
         //set Consultation entry
         $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $objet );
@@ -55,7 +55,7 @@ class PublicationController extends Controller
         $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
 
         //get Contenus : for sommaire
-        $contenus = $objet->getIsInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
+        $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
 
         //set Consultation entry
         $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $contenu, true );

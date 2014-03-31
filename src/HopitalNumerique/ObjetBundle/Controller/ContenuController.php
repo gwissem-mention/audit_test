@@ -35,8 +35,8 @@ class ContenuController extends Controller
         $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
 
         //set objet as infra doc
-        if( !$objet->getIsInfraDoc() ){
-            $objet->setIsInfraDoc( true );
+        if( !$objet->isInfraDoc() ){
+            $objet->setInfraDoc( true );
             $this->get('hopitalnumerique_objet.manager.objet')->save( $objet );
         }
 
@@ -80,7 +80,7 @@ class ContenuController extends Controller
 
         //si aucun contenus, on met l'infradoc à false
         if( empty($contenus) ) {
-            $objet->setIsInfraDoc( false );
+            $objet->setInfraDoc( false );
             $this->get('hopitalnumerique_objet.manager.objet')->save( $objet );
         }
 
@@ -135,8 +135,8 @@ class ContenuController extends Controller
         $result = $this->get('hopitalnumerique_objet.manager.contenu')->parseCsv( $csv, $objet );
         
         if($result) {
-            if( !$objet->getIsInfraDoc() ){
-                $objet->setIsInfraDoc( true );
+            if( !$objet->isInfraDoc() ){
+                $objet->setInfraDoc( true );
                 $this->get('hopitalnumerique_objet.manager.objet')->save( $objet );
             }
 
