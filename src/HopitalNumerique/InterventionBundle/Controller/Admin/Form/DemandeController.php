@@ -38,8 +38,12 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         $interventionDemandeFormulaire = null;
 
         $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_edition_admin', $this->interventionDemande, array('interventionDemande' => $this->interventionDemande));
+        if ($this->gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire))
+        {
+            $do = $this->container->get('request')->request->get('do');
 
-        $this->gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire);
+            return $this->redirect($do == 'save-close' ? $this->generateUrl('hopital_numerique_intervention_admin_liste') : $this->generateUrl('hopital_numerique_intervention_admin_demande_edit', array('id' => $this->interventionDemande->getId())));
+        }
 
         return $this->render(
             'HopitalNumeriqueInterventionBundle:Admin/Demande:edit.html.twig',
@@ -53,7 +57,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      * Gère l'enregistrement des données du formulaire d'édition d'une demande d'intervention.
      *
      * @param \Symfony\Component\Form\Form $interventionDemandeFormulaire Formulaire de la demande d'intervention
-     * @return void
+     * @return boolean VRAI ssi l'enregistrement s'est effectué
      */
     private function gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire)
     {
@@ -65,12 +69,12 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
             {
                 $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
                 $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été modifiée.');
+                return true;
             }
-            else
-            {
-                $this->get('session')->getFlashBag()->add('danger', 'Le formulaire n\'est pas valide.');
-            }
+            else $this->get('session')->getFlashBag()->add('danger', 'Le formulaire n\'est pas valide.');
         }
+        
+        return false;
     }
 
     /**

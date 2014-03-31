@@ -24,6 +24,7 @@ INSERT INTO `core_ressource` (
 VALUES (
 '23', 'BackOffice - Gestion des interventions', '/^\\/admin\\/intervention/', '23', '1'
 );
+UPDATE `core_menu_item` SET `itm_name` = 'Éditer une intervention' WHERE `core_menu_item`.`itm_id` =105;
 
 ---------------------------------------------------------------------------------------------
 /* QSO - 24/03/2014

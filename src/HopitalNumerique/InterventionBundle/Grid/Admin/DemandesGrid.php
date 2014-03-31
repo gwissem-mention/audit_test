@@ -64,7 +64,7 @@ class DemandesGrid extends DemandesAbstractGrid
         );
         $this->addColonne($colonneAmbassadeurInformations);
         
-        $colonneDemandeurInformations = new Column\TextColumn('demandeur_nom', 'Demandeur');
+        $colonneDemandeurInformations = new Column\TextColumn('referent_nom', 'Demandeur');
         $colonneDemandeurInformations->manipulateRenderCell(
             function($value, $row, $router) {
                 return DemandesAbstractGrid::renderCellReferent($value, $row, $router);

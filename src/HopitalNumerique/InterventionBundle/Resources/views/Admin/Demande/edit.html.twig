@@ -24,7 +24,8 @@
 
 {% block toolbarButton %}
     <a class="btn btn-default" href="{{ path('hopital_numerique_intervention_admin_liste') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
-    <div id="intervention_demande_form_submit" class="btn btn-default" title="Enregistrer"><i class="fa fa-save"></i></div>
+    <div data-form-submit="enregistre" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div data-form-submit="enregistre ferme" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
 {% endblock %}
 
 {% block body %}
@@ -36,13 +37,13 @@
             </div>
 
             <div class="panel-body" id="intervention_demande_panel">
-                <form method="post" id="form_intervention_demande_edition" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireEdition) }}>
+                {{ form_start(interventionDemandeFormulaireEdition, { attr:{ id:'form_intervention_demande_edition', class:'form-horizontal toValidate', novalidate:'novalidate' }}) }}
                     {% form_theme interventionDemandeFormulaireEdition 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
 
                     {{ form_javascript(interventionDemandeFormulaireEdition) }}
                     {{ form_widget(interventionDemandeFormulaireEdition) }}
 
-                </form>
+                {{ form_end(interventionDemandeFormulaireEdition) }}
             </div>
         </div>
     </div>
