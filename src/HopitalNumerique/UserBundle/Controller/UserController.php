@@ -222,6 +222,14 @@ class UserController extends Controller
      */
     public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        //check connected user ACL
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if( $this->get('nodevo_acl.manager.acl')->checkAuthorization( $this->generateUrl('hopital_numerique_user_delete', array('id'=>1)) , $user ) == -1 ){
+            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas les droits suffisants pour supprimer des utilisateurs.' );
+            return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
+        }
+
         //get all selected Users
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
         $this->get('hopitalnumerique_user.manager.user')->delete( $users );
@@ -241,6 +249,14 @@ class UserController extends Controller
      */
     public function desactiverMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        //check connected user ACL
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if( $this->get('nodevo_acl.manager.acl')->checkAuthorization( $this->generateUrl('hopital_numerique_user_delete', array('id'=>1)) , $user ) == -1 ){
+            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas les droits suffisants pour désactiver des utilisateurs.' );
+            return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
+        }
+
         //get all selected Users
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
 
@@ -264,6 +280,14 @@ class UserController extends Controller
      */
     public function activerMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        //check connected user ACL
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if( $this->get('nodevo_acl.manager.acl')->checkAuthorization( $this->generateUrl('hopital_numerique_user_delete', array('id'=>1)) , $user ) == -1 ){
+            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas les droits suffisants pour activer des utilisateurs.' );
+            return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
+        }
+
         //get all selected Users
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
 
