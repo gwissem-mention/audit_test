@@ -72,6 +72,10 @@ class InterventionCourriel extends Mail
      * @var integer ID du courriel d'annulation d'une demande par un établissement
      */
     private static $COURRIEL_INTERVENTION_DEMANDE_EST_ANNULEE_ETABLISSEMENT_ID = 25;
+    /**
+     * @var integer ID du courriel de relance d'une demande en attente CMSI
+     */
+    private static $COURRIEL_INTERVENTION_DEMANDE_RELANCE_ATTENTE_CMSI_ID = 27;
     
     
     /**
@@ -208,5 +212,14 @@ class InterventionCourriel extends Mail
     public static function getInterventionCourrielEstAnnuleeEtablissementId()
     {
         return self::$COURRIEL_INTERVENTION_DEMANDE_EST_ANNULEE_ETABLISSEMENT_ID;
+    }
+    /**
+     * Retourne l'ID du courriel d'annulation d'une demande par un établissement.
+     *
+     * @return integer ID du courriel d'annulation d'une demande par un établissement
+     */
+    public static function getInterventionCourrielRelanceAttenteCmsiId()
+    {
+        return self::$COURRIEL_INTERVENTION_DEMANDE_RELANCE_ATTENTE_CMSI_ID;
     }
 }

@@ -165,9 +165,9 @@ class DemandeController extends Controller
     }
 
     /**
-     * Action appelée par le CRON.
+     * Action appelée par le CRON qui peut être appelé n'importe quand.
      * 
-     * @param integer $id Identifiant de sécurité
+     * @param string $id Identifiant de sécurité
      * @return \Symfony\Component\HttpFoundation\Response Vide
      */
     public function cronAction($id)
@@ -178,6 +178,22 @@ class DemandeController extends Controller
             $this->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceInterventionDemandes();
         }
         
+        return new Response();
+    }
+    
+    /**
+     * CRON qui doit appelé une fois par jour.
+     *
+     * @param string $id Identifiant de sécurité
+     * @return \Symfony\Component\HttpFoundation\Response Vide
+     */
+    public function cronQuotidienAction($id)
+    {
+        if ($id == 'ilnyapasdefumeesansfeu')
+        {
+            $this->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceSimple();
+        }
+    
         return new Response();
     }
 }
