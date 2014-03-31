@@ -91,10 +91,19 @@ class DemandeController extends Controller
      */
     public function gridSupprimeMassAction(array $primaryKeys)
     {
-        $interventionDemandes = $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->findBy(array('id' => $primaryKeys));
-        $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->delete($interventionDemandes);
+        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+        if ($this->container->get('nodevo_acl.manager.acl')->checkAuthorization($this->generateUrl('hopital_numerique_intervention_admin_demande_delete', array('id' => 0)), $utilisateurConnecte) != -1)
+        {
+            $interventionDemandes = $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->findBy(array('id' => $primaryKeys));
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->delete($interventionDemandes);
+            
+            $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+        }
+        else
+        {
+            $this->get('session')->getFlashBag()->add('warning', 'Vous ne possédez pas les droits nécessaires pour supprimer des interventions.');
+        }
         
         return $this->redirect( $this->generateUrl('hopital_numerique_intervention_admin_liste'));
     }

@@ -125,6 +125,9 @@ class DemandesGrid extends DemandesAbstractGrid
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueInterventionBundle:Admin/Demande:gridSupprimeMass') );
+        $utilisateurConnecte = $this->_container->get('security.context')->getToken()->getUser();
+        
+        if ($this->_container->get('nodevo_acl.manager.acl')->checkAuthorization($this->_container->get('router')->generate('hopital_numerique_intervention_admin_demande_delete', array('id' => 0)), $utilisateurConnecte) != -1)
+            $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueInterventionBundle:Admin/Demande:gridSupprimeMass') );
     }
 }
