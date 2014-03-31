@@ -49,20 +49,20 @@ class MailManager extends BaseManager
     }
 
     /**
-    * L'ajout de mail est-il autorisé ?
-    * 
-    * @return boolean
-    */
+     * L'ajout de mail est-il autorisé ?
+     * 
+     * @return boolean
+     */
     public function isAllowedToAdd()
     {
         return $this->_allowAdd;
     }
 
     /**
-    * La suppression de mail est-elle autorisée ?
-    * 
-    * @return boolean
-    */
+     * La suppression de mail est-elle autorisée ?
+     * 
+     * @return boolean
+     */
     public function isAllowedToDelete()
     {
         return $this->_allowDelete;
@@ -139,8 +139,6 @@ class MailManager extends BaseManager
         return $this->generationMail($user, $mail, $options);
     }
     
-
-
     /**
      * Envoi un mail de validation de candidature expert
      *

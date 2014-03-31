@@ -47,7 +47,25 @@
 
             <div class="panel-body">
                 {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
-                {{ form(form) }}
+                {{ form_start(form) }}
+                    {{ form_row(form.objet) }}
+                    {{ form_row(form.description) }}
+                    {{ form_row(form.expediteurMail) }}
+                    {{ form_row(form.expediteurName) }}
+                    {{ form_row(form.body) }}
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label required">Variables disponibles</label>
+                        <div class="col-md-6">
+                            <p class="text-muted" style="margin-top:8px">
+                                {% for key,value in mail.params %}
+                                    {{ key }} : {{ value }} {% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+
+                {{ form_end(form) }}
             </div>
         </div>
     </div>
