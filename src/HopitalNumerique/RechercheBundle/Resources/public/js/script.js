@@ -10,7 +10,7 @@ $(document).ready(function() {
             that  = this;
             timer = setTimeout(function() {
                 $(that).parent().toggleClass("active");
-                $(that).parent().find('i').toggleClass("fa-chevron-down fa-chevron-right");
+                $(that).parent().find('i.pull-right').toggleClass("fa-chevron-down fa-chevron-right");
                 $(that).parent().find('ol:first').slideToggle({duration: 200});
 
                 clicks = 0; //after action performed, reset counter
@@ -39,6 +39,25 @@ $(document).ready(function() {
     })
     .on("dblclick", function(e){
         e.preventDefault(); //cancel system double-click event
+    });
+
+    //Gestion du simple click sur le petit +
+    $('#origin li i.fa-plus').on("click", function(e){
+        success = selectElement( $(this).parent() ); //add element to DEST
+        //placeholder management
+        if( success && showPlaceholder){
+            $(".placeholder").hide();
+            showPlaceholder = false;
+            $("#dest").removeClass('hide');
+            $(".requete h2").addClass('ropen');
+        }
+
+        //remove Cookie after each Ref Added/Removed
+        $.removeCookie('showMorePointsDurs', { path: '/' });
+        $.removeCookie('showMoreProductions', { path: '/' });
+        
+        if( !$(this).parent().hasClass('level0') )
+            updateResultats( false );
     });
 
     //Gestion de la suppression de critères dans la requete
