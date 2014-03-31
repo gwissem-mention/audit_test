@@ -80,9 +80,7 @@ function afficheCarteFrance(donneesParRegion)
     
     var current = null, i = 1;
     
-
-    
-	alert("Débugger cette partie : 85");
+    alert('debug !'); console.log(donneesParRegion);
 
     for (var state in region) 
     {
