@@ -192,6 +192,11 @@ class SearchManager extends BaseManager
         $item['type']  = $tmp['type'];
         $item['categ'] = $tmp['categ'];
 
+        //status (new/updated/datecreation)
+        $item['new']     = false;
+        $item['updated'] = false;
+        $item['created'] = $objet->getDateCreation();
+
         return $item;
     }
 
@@ -237,6 +242,11 @@ class SearchManager extends BaseManager
         $item['type']  = $tmp['type'];
         $item['categ'] = $tmp['categ'];
         
+        //status (new/updated/datecreation)
+        $item['new']     = false;
+        $item['updated'] = false;
+        $item['created'] = $objet->getDateCreation();
+
         return $item;
     }
 

@@ -69,4 +69,57 @@ class ConsultationManager extends BaseManager
             $this->save( $consultation );
         }
     }
+
+    /**
+     * Met à jour le tableau d'objets/contenus avec les prod consultées par l'user connecté
+     *
+     * @param array $objets Liste des objets/contenus concernés
+     *
+     * @return array
+     */
+    public function updateObjetsWithConnectedUser( $objets )
+    {
+        $user = $this->_securityContext->getToken()->getUser();
+
+        if( $user != "anon.") {
+            //get date Inscription user
+            $dateInscription = $user->getDateInscription();
+
+            //get consulted objets and formate them
+            $results   = $this->getLastsConsultations( $user );
+            $consulted = array('objets' => array(), 'contenus' => array() );
+            foreach($results as $one){
+                //Cas objet
+                if( is_null($one->getContenu()) ) {
+                    //Si la date de dernière mise à jour de l'objet est postérieure à la dernière consultation de l'objet : Notif updated
+                    $consulted['objets'][ $one->getObjet()->getId() ] = $one->getObjet()->getDateModification() > $one->getDateLastConsulted();
+                //Cas contenu
+                }else{
+                    //Si la date de dernière mise à jour du contenu est postérieure à la dernière consultation du contenu : Notif updated
+                    $consulted['contenus'][ $one->getContenu()->getId() ] = $one->getContenu()->getDateModification() > $one->getDateLastConsulted();
+                }
+            }
+
+            //Parcours des objets retournés par la recherche
+            foreach($objets as &$objet)
+            {
+                $id          = $objet['id'];
+                $isConsulted = false;
+                $type        = is_null($objet['objet']) ? 'objets' : 'contenus';
+    
+                //la publication fait partie des publications déjà consultées par l'utilisateur
+                if( isset( $consulted[$type][ $id ] ) ){
+                    $isConsulted      = true;
+                    $objet['updated'] = $consulted[$type][ $id ];
+                }
+
+                //Si la publication n'a jamais été consulté ET
+                //Si la date de création de l'objet est postérieure à la date d'inscription de l'utilisateur : Notif new
+                if( $isConsulted === false && ($objet['created'] > $dateInscription) )
+                    $objet['new'] = true;
+            }
+        }
+        
+        return $objets;
+    }
 }

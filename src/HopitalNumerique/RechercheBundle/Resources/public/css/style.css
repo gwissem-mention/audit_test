@@ -62,6 +62,8 @@
 
 /* Résultats */
     #recherche #resultats{ margin-top: 20px; }
+    #recherche #resultats .fa-refresh{ color:#3da20b; }
+
     /* Points Dur*/
         #resultats #pointsdurs{padding:0;}
         #resultats #pointsdurs h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal}
