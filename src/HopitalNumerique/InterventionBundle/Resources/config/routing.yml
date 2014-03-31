@@ -28,6 +28,10 @@ hopital_numerique_intervention_demande_cron:
     pattern:  /cron/{id}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:cron" }
 
+hopital_numerique_intervention_demande_cron_quotidien:
+    pattern:  /cron-quotidien/{id}
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:cronQuotidien" }
+
 #<-- Vues Grid
 hopital_numerique_intervention_grid_cmsi_demandes_nouvelles:
     pattern: /demandes/grid/cmsi/nouvelles

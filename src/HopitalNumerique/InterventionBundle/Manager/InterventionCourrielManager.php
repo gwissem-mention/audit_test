@@ -251,7 +251,7 @@ class InterventionCourrielManager
     /**
      * Envoi le courriel d'annulation d'une demande par un établissement.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $utilisateurEtablissement L'utilisateur demandeur
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention annulée
      * @return void
      */
     public function envoiCourrielEstAnnuleEtablissement(InterventionDemande $interventionDemande)
@@ -262,6 +262,19 @@ class InterventionCourrielManager
         $this->envoiCourriel($courriel, $interventionDemande->getCmsi(), array('l' => $interventionDemandeUrl));
         if ($interventionDemande->interventionEtatEstAcceptationCmsi())
             $this->envoiCourriel($courriel, $interventionDemande->getAmbassadeur(), array('l' => $interventionDemandeUrl));
+    }
+    /**
+     * Envoi le courriel de relance d'une demande d'intervention en attente CMSI.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention en attente CMSI
+     * @return void
+     */
+    public function envoiCourrielRelanceAttenteCmsi(InterventionDemande $interventionDemande)
+    {
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielRelanceAttenteCmsiId());
+    
+        $interventionDemandeUrl = $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true);
+        $this->envoiCourriel($courriel, $interventionDemande->getCmsi(), array('l' => $interventionDemandeUrl));
     }
 
 
