@@ -122,9 +122,10 @@ class MenuManager extends BaseManager
      */
     private function _refreshItemOrder( PersistentCollection $items, Item $item = null)
     {
-        $childs = $this->_getItemChildsFromCollection($items, $item);
-
-        for ($i=0; $i < count($childs); $i++) { 
+        $childs   = $this->_getItemChildsFromCollection($items, $item);
+        $nbChilds = count($childs);
+        
+        for ($i=0; $i < $nbChilds; $i++) { 
             $childs[$i]->setOrder($i+1);
             $this->_refreshItemOrder($items, $childs[$i]);
         }
