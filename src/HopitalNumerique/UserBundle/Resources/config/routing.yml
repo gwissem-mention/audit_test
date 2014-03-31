@@ -137,11 +137,6 @@ hopitalnumerique_user_contractualisation_archiver:
     requirements:
         id: \d+
 
-#Contractualisation - ajax
-hopitalnumerique_user_contractualisation_isFileExist:
-    pattern:  /admin/user/contractualisation/isFileExist
-    defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:isFileExist" }
-
 #Contractualisation - liste
 hopitalnumerique_user_contractualisation_liste:
     pattern:  /admin/user/contractualisation/liste/{idUser}
@@ -161,20 +156,6 @@ hopitalnumerique_user_expert_fiche:
     defaults: { _controller: HopitalNumeriqueUserBundle:Expert:show, idUser: 1 }
     requirements:
         idUser: \d+
-
-hopitalnumerique_user_expert_download:
-    pattern: /admin/user/expert/dowload/{id}
-    defaults: { _controller: HopitalNumeriqueUserBundle:Expert:dowload, id: 1 }
-    requirements:
-        id: \d+
-
-hopitalnumerique_user_expert_deleteAll:
-    pattern: /admin/user/expert/{idUser}/{idQuestionnaire}
-    defaults: { _controller: HopitalNumeriqueUserBundle:Expert:deleteAll, _format: json, idUser: 1, idQuestionnaire: 1 }
-    requirements:
-        idUser: \d+
-        idQuestionnaire: \d+
-        _method: post|delete
 
 hopitalnumerique_user_expert_validationCandidature:
     pattern: /admin/user/expert/validation/{user}
@@ -205,14 +186,6 @@ hopitalnumerique_user_ambassadeur_fiche:
     defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:show, idUser: 1 }
     requirements:
         idUser: \d+
-
-hopitalnumerique_user_ambassadeur_deleteAll:
-    pattern: /admin/user/ambassadeur/deleteAll/{idUser}/{idQuestionnaire}
-    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:deleteAll, _format: json, idUser: 1, idQuestionnaire: 1 }
-    requirements:
-        idUser: \d+
-        idQuestionnaire: \d+
-        _method: post|delete
 
 hopitalnumerique_user_ambassadeur_validationCandidature:
     pattern: /admin/user/ambassadeur/validation/{user}

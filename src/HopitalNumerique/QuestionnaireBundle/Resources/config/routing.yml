@@ -16,10 +16,6 @@ hopitalnumerique_questionnaire_edit:
         user: \d+  
         questionnaire: \d+
 
-hopitalnumerique_questionnaire_delete_all:
-    pattern: /admin/questionnaire/deleteAll
-    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:deleteAll" }
-
 #Question
 
 #Réponse

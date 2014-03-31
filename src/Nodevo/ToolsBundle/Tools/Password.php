@@ -38,18 +38,19 @@ class Password
     public function crypte($string, $pass)
     {
         srand((double)microtime()*1000000);
-        $key = md5(rand(0,32000));
-        $cpt = 0;
-        $tmp = "";
+        $key    = md5(rand(0,32000));
+        $cpt    = 0;
+        $tmp    = "";
+        $length = strlen($string);
 
-        for ( $i = 0; $i < strlen($string); $i++ ) {
+        for ( $i = 0; $i < $length; $i++ ) {
             if ( $cpt == strlen($key) )
               $cpt = 0;
 
             $tmp.= substr($key,$cpt,1) . (substr($string,$i,1) ^ substr($key,$cpt,1) );
             $cpt++;
         }
-        return base64_encode( $this->_generationCle($tmp, $pass) );
+        return base64_encode( $this->generationCle($tmp, $pass) );
     }
 
     /**
@@ -62,10 +63,11 @@ class Password
      */
     public function decrypte($string, $pass)
     {
-        $string = $this->_generationCle(base64_decode($string),$pass);
+        $string = $this->generationCle(base64_decode($string),$pass);
         $tmp    = "";
+        $length = strlen($string);
 
-        for ( $i = 0; $i < strlen($string); $i++ ){
+        for ( $i = 0; $i < $length; $i++ ){
             $md5 = substr($string,$i,1);
             $i++;
             $tmp.= (substr($string,$i,1) ^ $md5);
@@ -84,13 +86,14 @@ class Password
      *
      * @return String Cle
      */
-    private function _generationCle($string, $key)
+    private function generationCle($string, $key)
     {
-        $key = md5($key);
-        $cpt = 0;
-        $tmp = "";
-
-        for ( $i = 0; $i < strlen($string); $i++ ){
+        $key    = md5($key);
+        $cpt    = 0;
+        $tmp    = "";
+        $length = strlen($string);
+        
+        for ( $i = 0; $i < $length; $i++ ){
             if ( $cpt == strlen($key) )
                 $cpt=0;
 
