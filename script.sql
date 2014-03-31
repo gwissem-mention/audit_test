@@ -14,35 +14,14 @@
    PROD -> DEV
    Lorem ipsum */
 
-INSERT INTO `core_ressource` (
-`res_id` ,
-`res_nom` ,
-`res_pattern` ,
-`res_order` ,
-`res_type`
-)
-VALUES (
-'23', 'BackOffice - Gestion des interventions', '/^\\/admin\\/intervention/', '23', '1'
-);
-UPDATE `core_menu_item` SET `itm_name` = 'Éditer une intervention' WHERE `core_menu_item`.`itm_id` =105;
-INSERT INTO `core_menu_item` (
-`itm_id` ,
-`itm_parent` ,
-`mnu_menu` ,
-`itm_name` ,
-`itm_route` ,
-`itm_route_parameters` ,
-`itm_route_absolute` ,
-`itm_uri` ,
-`itm_icon` ,
-`itm_display` ,
-`itm_display_children` ,
-`itm_role` ,
-`itm_order`
-)
-VALUES (
-NULL , '104', '1', 'Voir une intervention', 'hopital_numerique_intervention_admin_demande_voir', NULL , '0', NULL , NULL , '1', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '3'
-);
+ALTER TABLE `hn_intervention_demande` DROP FOREIGN KEY `FK_6DEA57304F81EDEA` ;
+ALTER TABLE `hn_intervention_regroupement` DROP FOREIGN KEY `FK_39B795AD7DDE15` ;
+ALTER TABLE `hn_intervention_regroupement` DROP FOREIGN KEY `FK_39B795B56A61A6` ;
+ALTER TABLE `hn_intervention_regroupement` DROP FOREIGN KEY `FK_39B7952B07AECF` ;
+ALTER TABLE `hn_intervention_etablissement_rattache` DROP FOREIGN KEY `FK_DA1B4928C7F0ABC4` ;
+ALTER TABLE `hn_intervention_ambassadeur_historique` DROP FOREIGN KEY `FK_1D720677C7F0ABC4` ;
+ALTER TABLE `hn_intervention_evaluation` DROP FOREIGN KEY `FK_64C51B55C7F0ABC4` ;
+ALTER TABLE `hn_intervention_objet` DROP FOREIGN KEY `FK_7845C1B3C7F0ABC4` ;
 
 ---------------------------------------------------------------------------------------------
 /* QSO - 24/03/2014
