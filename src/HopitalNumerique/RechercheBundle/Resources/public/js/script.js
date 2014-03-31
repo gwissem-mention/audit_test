@@ -42,7 +42,7 @@ $(document).ready(function() {
     });
 
     //Gestion du simple click sur le petit +
-    $('#origin li i.fa-plus').on("click", function(e){
+    $('#origin li i.fa-plus-circle').on("click", function(e){
         success = selectElement( $(this).parent() ); //add element to DEST
         //placeholder management
         if( success && showPlaceholder){
