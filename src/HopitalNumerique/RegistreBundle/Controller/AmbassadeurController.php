@@ -6,44 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Nodevo\ToolsBundle\Tools\Chaine as NodevoChaine;
 
 class AmbassadeurController extends Controller
-{
-    /**
-     * Index Action
-     */
-    public function _indexAction( $region = null, $domaine = null )
-    {
-        //get connected user and Ambassadeurs
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        //get User Role
-        //Si il n'y pas d'utilisateur connecté, le tableau de role est vide
-        $roles  = 'anon.' === $user ? array() : $user->getRoles();
-        $isCMSI = in_array('ROLE_ARS_CMSI_4', $roles);
-
-        //get region ( if not specified, get user's region)
-        $region = is_null($region) ? $user->getRegion() : $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $region) );
-        
-        //get ambassadeurs liste
-        $ambassadeurs = $region ? $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndDomaine( $region, $domaine ) : array();
-        
-        //test if user is authorized to contact Ambassadeurs
-        if( $isCMSI )
-            $allowContact = ($user->getRegion() && $region && $region->getId() == $user->getRegion()->getId());
-        else
-            $allowContact = true;
-
-        //get liste des domaines fonctionnels
-        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS') );
-
-        return $this->render('HopitalNumeriqueRegistreBundle:Ambassadeur:index.html.twig', array(
-            'ambassadeurs'    => $ambassadeurs,
-            'domaines'        => $domaines,
-            'domaineSelected' => $domaine,
-            'allowContact'    => $allowContact,
-            'region'          => $region ? $region : null
-        ));
-    }
-    
+{    
     /**
      * Index Action
      */
@@ -84,10 +47,12 @@ class AmbassadeurController extends Controller
             //sinon on récupère sa région courante
             else
             {
+                die('die');
                 //Récupère le nom de la région pour le minifier
                 $libelleRegion = new NodevoChaine($user->getRegion()->getLibelle());
 
-                $regionsJSON    = json_encode(array($libelleRegion));
+//                 $regionsJSON    = json_encode(array($libelleRegion->getChaine()));
+                die($libelleRegion->getChaine());
                 $regions = array($user->getRegion());
             }
         }
@@ -100,6 +65,8 @@ class AmbassadeurController extends Controller
     
         //get liste des domaines fonctionnels
         $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS') );
+        
+        \Doctrine\Common\Util\Debug::dump($regionsJSON);die('die');
     
         return $this->render('HopitalNumeriqueRegistreBundle:Ambassadeur:index.html.twig', array(
                 'user'            => array(
