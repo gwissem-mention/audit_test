@@ -138,6 +138,25 @@ class MailManager extends BaseManager
     
         return $this->generationMail($user, $mail, $options);
     }
+
+    /**
+     * Envoi un mail de confirmation de candidature expert
+     *
+     * @param User  $users   Utilisateurs qui recevront l'email
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendCandidatureExpertAdminMail( $users, $options )
+    {
+        $mail = $this->findOneById(28);
+    
+        $toSend = array();
+        foreach($users as $user)
+            $toSend[] = $this->generationMail($user, $mail, $options);
+        
+        return $toSend;
+    }
     
     /**
      * Envoi un mail de validation de candidature expert
