@@ -195,7 +195,7 @@ class SearchManager extends BaseManager
         //status (new/updated/datecreation)
         $item['new']     = false;
         $item['updated'] = false;
-        $item['created'] = $objet->getDateCreation();
+        $item['created'] = $contenu->getDateCreation();
 
         return $item;
     }
