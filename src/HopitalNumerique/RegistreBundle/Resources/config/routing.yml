@@ -1,19 +1,25 @@
 hopital_numerique_registre_homepage:
-    pattern:  /registre-ambassadeurs/{region}/{domaine}
-    defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:index, region:null, domaine:null }
+    pattern:  /registre-ambassadeurs/{domaine}
+    defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:index, domaine:null }
     requirements:
-        _method: get
+        _method: GET
+        
+hopital_numerique_registre_edit_session:
+    pattern:  /registre-ambassadeurs/editer-session
+    defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:editerSession }
+    requirements:
+        _method: POST
 
 hopital_numerique_registre_ambassadeur_objets:
     pattern:  /registre-ambassadeurs/show/objets/{id}
     defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:objets }
     requirements:
         id: \d+
-        _method: get
+        _method: GET
 
 hopital_numerique_registre_ambassadeur_domaines:
     pattern:  /registre-ambassadeurs/show/domaines/{id}
     defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:domaines }
     requirements:
         id: \d+
-        _method: get
+        _method: GET
