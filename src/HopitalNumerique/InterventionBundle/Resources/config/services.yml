@@ -13,4 +13,4 @@ services:
         arguments: ["@session"]
     hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs:
         class: "%hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs.class%"
-        arguments: ["@logger"]
+        arguments: ["@logger", "@session"]
