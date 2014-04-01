@@ -11,7 +11,7 @@ class AmbassadeurController extends Controller
     /**
      * Index Action
      */
-    public function indexAction($domaine = null )
+    public function indexAction( $domaine = null )
     {
         //Liste des régions sélectionnées
         $regions      = array();
@@ -29,8 +29,6 @@ class AmbassadeurController extends Controller
         
         //On prépare la session
         $session = $this->getRequest()->getSession();
-        
-// $session->remove('registre-ambassadeur-region');
         
         //Si on a quelque chose en session, on charge la session
         if( !is_null($session->get('registre-ambassadeur-region')) )

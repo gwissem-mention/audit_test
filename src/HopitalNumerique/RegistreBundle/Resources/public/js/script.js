@@ -44,7 +44,7 @@ function selectionnerToutesRegions()
     $('#canvas_france').empty();
     
     //la recrée avec toutes les régions supprimées
-    afficheCarteFrance(regionJSON);
+    afficheCarteFrance(regionJSON, true);
 }
 
 /**
