@@ -53,7 +53,7 @@ div#tableau-de-bord div.panel_form_visu { font-size:13px;padding:0px 0px 20px 6p
         div#tableau-de-bord div.panel_form_visu div.row div.col-md-8 {}
 /* --> */
 /* <-- Boutons */
-div#tableau-de-bord div.panel_boutons { background-color:transparent !important;border-width:0px !important;box-shadow:0px 0px 0px #fff;text-align:center; }
+div#tableau-de-bord div.panel_boutons { background-color:transparent !important;border-width:0px !important;box-shadow:0px 0px 0px #fff;padding:0px 0px 20px 0px;text-align:center; }
     div#tableau-de-bord div.panel_boutons button { background-position:center center;color:#fff;font-size:12px;font-weight:bold;margin:0px 4px;padding:8px 0px;text-shadow:0px 0px 0px #fff;text-transform:uppercase;width:160px; }
       div#tableau-de-bord div.panel_boutons button.btn-acceptation { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-acceptation-fond.png); }
       div#tableau-de-bord div.panel_boutons button.btn-refus { background-image:url(/bundles/hopitalnumeriquecore/img/common-sprite/bouton-refus-fond.png); }
