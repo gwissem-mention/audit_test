@@ -76,11 +76,12 @@
 				        {% if regions.regions %}
 			                {% for region in regions.regions %}
 			                    <div class="col-md-12">
-				                    <h4 class="violet">{{region.libelle}}</h4>
+			                         {# Ajout du nom de la région + nombre ambassadeur concerné sous la forme : "Nom région ( Nb ambassadeur(s) )" #}
+				                    <h4 class="violet">{{region.libelle}} ( {{ ambassadeurs[region.id]|length }} ambassadeur{% if ambassadeurs[region.id]|length > 1%}s{% endif %} )</h4>
 				                </div>
 				                {# Permet de vérifier si un ambassadeur est présent pour la région #}
 				                {% set ambassadeurExisteRegion = false %}
-				                {% for ambassadeur in ambassadeurs %}
+				                {% for ambassadeur in ambassadeurs[region.id] %}
 				                    {% if ambassadeur.region.id == region.id %}
 				                        {% set ambassadeurExisteRegion = true %}
 					                    <div class="fiche col-md-6">
@@ -97,7 +98,7 @@
 					                            <span class="col-md-12"><a class="link violet fancybox.ajax" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Domaines fonctionnels</a></span>
 					                            <span class="col-md-12"><a class="link violet fancybox.ajax" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a></span>
 					
-					                            <span class="col-md-12"><a class="btn background-violet {% if not (user.user.region.id == ambassadeur.region.id) and (user.isCMSI) %}disabled{% endif %}" href="{% if not ((user.user.region.id == ambassadeur.region.id) and (user.isCMSI)) %}#{% else %}{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}{% endif %}">Solliciter cet ambassadeur</a></span>
+					                            <span class="col-md-12"><a class="btn background-violet {% if (user.isCMSI) and not (user.user.region.id == ambassadeur.region.id) %}disabled{% endif %}" href="{% if (user.isCMSI) and not ((user.user.region.id == ambassadeur.region.id)) %}#{% else %}{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}{% endif %}">Solliciter cet ambassadeur</a></span>
 					                            <div class="clearfix"></div>
 					                        </div>
 					                    </div>
@@ -105,8 +106,8 @@
 				                {% endfor %}
 				                {# Affichage dans le cas où il n'y ait aucun ambassadeur pour cette région #}
 				                {% if not ambassadeurExisteRegion %}
-				                    <div class="col-md-12">
-				                        - Aucun ambassadeur pour cette région - 
+				                    <div class="aucune-fiche col-md-6">
+				                        <div class="content">- Aucun ambassadeur pour cette région -</div>
 				                    </div>
 				                {% endif %}
 			                {% else %}

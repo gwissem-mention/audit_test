@@ -65,7 +65,7 @@ class AmbassadeurController extends Controller
             //Si l'utilisateur courant n'a pas de région renseigné on le prévient qu'il n'y aura aucune région selectionné par défaut
             if(is_null($user->getRegion()))
             {
-                $this->get('session')->getFlashBag()->add( 'info' , 'Vous n\'avez pas renseigné votre région.');
+                $regionsJSON = json_encode(array());
             }
             //sinon on récupère sa région courante
             else
@@ -89,9 +89,14 @@ class AmbassadeurController extends Controller
         //Pour l'ensemble des régions sélectionnées, récupération des ambassadeurs
         foreach ($regions as $region)
         {
-            $ambassadeurs = array_merge($ambassadeurs, $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndDomaine( $region, $domaine ));
+            if(!array_key_exists($region->getId(), $ambassadeurs))
+            {
+                $ambassadeurs[$region->getId()] = array();
+            }
+            
+            $ambassadeurs[$region->getId()] = array_merge($ambassadeurs[$region->getId()], $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndDomaine( $region, $domaine ));
         }
-
+        
         $session->set('registre-ambassadeur-region', $regionsJSON );
     
         //get liste des domaines fonctionnels
