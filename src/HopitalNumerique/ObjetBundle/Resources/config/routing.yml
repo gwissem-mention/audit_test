@@ -21,7 +21,7 @@ hopitalnumerique_objet_objet_getObjets:
     pattern:  /objet/getObjets
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getObjets" }
     requirements:
-        _method: GET
+        _method: GET|POST
 
 hopitalnumerique_objet_objet_getPublications:
     pattern:  /objet/getPublications/{articles}
