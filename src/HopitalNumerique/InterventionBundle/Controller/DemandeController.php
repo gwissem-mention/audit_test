@@ -172,7 +172,7 @@ class DemandeController extends Controller
      */
     public function cronAction($id)
     {
-        if ($id == 'leschiensnefontpasdeschats')
+        if ($id == 'FHFURJYIHOLPMFKVIDUESQGEUDRCTUFT')
         {
             $this->get('hopitalnumerique_intervention.manager.intervention_demande')->majInterventionEtatsDesInterventionDemandes();
             $this->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceInterventionDemandes();
@@ -189,7 +189,7 @@ class DemandeController extends Controller
      */
     public function cronQuotidienAction($id)
     {
-        if ($id == 'ilnyapasdefumeesansfeu')
+        if ($id == 'FLFTRJYPVGLPMMVGIDUEOFCEUDCVBUPA')
         {
             $this->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceSimple();
         }
