@@ -79,7 +79,7 @@ class QuestionnaireController extends Controller
      * @return Ambigous <\HopitalNumerique\QuestionnaireBundle\Controller\Form, \Symfony\Component\HttpFoundation\RedirectResponse, \Symfony\Component\HttpFoundation\Response>
      */
     public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $optionRenderForm = array())
-    {      
+    {
         $readOnly           = array_key_exists('readOnly', $optionRenderForm) ? $optionRenderForm['readOnly'] : false;
         $routeRedirection   = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect'] : '';
         $themeQuestionnaire = array_key_exists('themeQuestionnaire', $optionRenderForm) ? $optionRenderForm['themeQuestionnaire'] : 'default';
@@ -101,7 +101,6 @@ class QuestionnaireController extends Controller
         );
     }
 
-        
     /**
      * Effectue le render des formulaires de Questionnaire
      *
@@ -262,32 +261,47 @@ class QuestionnaireController extends Controller
                 //Envoie du mail à l'utilisateur pour l'aleter de la validation de sa candidature
                 switch ($questionnaire->getNomMinifie())
                 {
-                	case 'expert':
-                	    //Expert
+                    case 'expert':
+                        //Expert
                         $mailExpert = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertMail($user);
                         $this->get('mailer')->send($mailExpert);
-                	    break;
-                	case 'ambassadeur':
-                	    //Ambassadeur
+
+                        //send Mail to all admins
+                        $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
+                        $admins      = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole('ROLE_ADMINISTRATEUR_1');
+                        if(!is_null($admins))
+                        {
+                            $variablesTemplate = array(
+                                'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
+                                'questionnaire' => $candidature
+                            );
+                            $mailsAdmins = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertAdminMail($admins, $variablesTemplate);
+                            foreach($mailsAdmins as $mailAdmins)
+                                $this->get('mailer')->send($mailAdmins);
+                        }
+
+                        break;
+                    case 'ambassadeur':
+                        //Ambassadeur
                         $mailAmbassadeur = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurMail($user);
                         $this->get('mailer')->send($mailAmbassadeur);
                         
                         //CMSI
                         $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
-                        $CMSI = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');
+                        $CMSI        = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');
                         if(!is_null($CMSI))
                         {
                             $variablesTemplate = array(
-                            	'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
+                                'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
                                 'questionnaire' => $candidature
                             );
                             $mailCMSI = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurCMSIMail($CMSI, $variablesTemplate);
-                            $this->get('mailer')->send($mailCMSI);                            
+                            $this->get('mailer')->send($mailCMSI);
                         }
-                	    break;
-                	default:
-                	    throw new \Exception('Ce type de questionnaire ne possède pas de mail en base.');
-                	    break;
+                        break;
+                    default:
+                        throw new \Exception('Ce type de questionnaire ne possède pas de mail en base.');
+                        break;
                 }
                 
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Votre candidature au poste ' . $questionnaire->getNomMinifie() . ' a bien été envoyée, nous reviendrons vers vous dans les plus brefs délais.' );
@@ -308,5 +322,4 @@ class QuestionnaireController extends Controller
                 'theme'         => $this->_themeQuestionnaire
         ));
     }
-    
 }

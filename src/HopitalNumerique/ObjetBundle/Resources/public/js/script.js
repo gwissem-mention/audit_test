@@ -151,7 +151,7 @@ $(document).ready(function() {
 });
 
 $(window).load(function(){
-    if( $('#toRef').val() ){
+    if( $('#toRef').val() != "0" ){
         $('.manageReferences.edit').delay(800).click();
     }
 });
