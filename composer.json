@@ -1,17 +1,27 @@
 {
     "name": "nodevo/hopitalnumerique",
-    "license": "NODEVO",
+    "license": "proprietary",
     "type": "project",
     "description": "Site Hopital Numérique",
     "authors": [
         {
             "name": "Quentin SOMAZZI",
             "email": "qsomazzi@nodevo.com"
+        },
+        {
+            "name": "Gaetan MELCHILSEN",
+            "email": "gmelchilsen@nodevo.com"
         }
     ],
     "autoload": {
         "psr-0": { "": "src/" }
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "ssh://git@bitbucket.org:22/nodevo/web_symfony_bdl_moxiemanager.git"
+        }
+    ],
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "~2.4",
@@ -35,7 +45,8 @@
         "genemu/form-bundle": "2.2.*",
         "igorw/file-serve-bundle": "~1.0",
         "doctrine/doctrine-fixtures-bundle": "dev-master",
-        "beberlei/DoctrineExtensions": "dev-master"
+        "beberlei/DoctrineExtensions": "dev-master",
+        "nodevo/gestionnaire-media": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

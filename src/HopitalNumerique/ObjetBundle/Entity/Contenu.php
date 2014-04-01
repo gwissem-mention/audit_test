@@ -70,6 +70,13 @@ class Contenu
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="con_date_creation", type="datetime", options = {"comment" = "Date de création du contenu"})
+     */
+    private $dateCreation;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="con_date_modification", type="datetime", nullable=true, options = {"comment" = "Date de modification du contenu"})
      */
     private $dateModification;
@@ -92,16 +99,22 @@ class Contenu
     protected $objet;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="contenu", cascade={"persist", "remove" })
+     */
+    protected $consultations;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
-        $this->titre      = 'Nouveau contenu';
-        $this->alias      = 'nouveau-contenu';
-        $this->contenu    = '';
-        $this->parent     = null;
-        $this->order      = 0;
-        $this->references = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dateCreation = new \DateTime();
+        $this->titre        = 'Nouveau contenu';
+        $this->alias        = 'nouveau-contenu';
+        $this->contenu      = '';
+        $this->parent       = null;
+        $this->order        = 0;
+        $this->references   = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -264,6 +277,29 @@ class Contenu
     }
 
     /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Contenu
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
      * Set dateModification
      *
      * @param \DateTime $dateModification
@@ -284,5 +320,28 @@ class Contenu
     public function getDateModification()
     {
         return $this->dateModification;
-    }  
+    }
+
+    /**
+     * Get consultations
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $consultations
+     */
+    public function getConsultations()
+    {
+        return $this->consultations;
+    }
+
+    /**
+     * Set consultations
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $consultations
+     * @return Objet
+     */
+    public function setConsultations(\Doctrine\Common\Collections\ArrayCollection $consultations)
+    {        
+        $this->consultations = $consultations;
+    
+        return $this;
+    }
 }

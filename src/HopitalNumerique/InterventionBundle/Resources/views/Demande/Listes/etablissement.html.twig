@@ -1,7 +1,10 @@
 {% extends 'HopitalNumeriqueInterventionBundle:Demande:liste.html.twig' %}
 
-{% block contenu %}
+{% block content %}
 
-    {{ render(path("hopital_numerique_intervention_grid_etablissement_demandes")) }}
+    <div class="panel_grid">
+        {{ render(path("hopital_numerique_intervention_grid_etablissement_demandes")) }}
+        <div class="clearfix"></div>
+    </div>
 
 {% endblock %}

@@ -22,7 +22,8 @@ class ReferenceController extends Controller
         return $this->render('HopitalNumeriqueObjetBundle:Reference:manage.html.twig', array(
             'references' => $references,
             'objet'      => true,
-            'contenu'    => 'null'
+            'contenu'    => 'null',
+            'titre'      => $objet->getTitre()
         ));
     }
     
@@ -33,7 +34,7 @@ class ReferenceController extends Controller
 
         //get references and selected references as One Array
         $references = $this->get('hopitalnumerique_objet.manager.objet')->getReferencesOwn($objet);
-        
+
         return $this->render('HopitalNumeriqueObjetBundle:Reference:manage-own.html.twig', array(
             'references' => $references,
             'objet'      => true,
@@ -53,7 +54,8 @@ class ReferenceController extends Controller
         return $this->render('HopitalNumeriqueObjetBundle:Reference:manage.html.twig', array(
             'references' => $references,
             'objet'      => 'false',
-            'contenu'    => $id
+            'contenu'    => $id,
+            'titre'      => $contenu->getTitre()
         ));
     }
 
@@ -71,10 +73,6 @@ class ReferenceController extends Controller
             'contenu'    => $id
         ));
     }
-
-
-
-
 
     public function saveObjetAction( $id )
     {

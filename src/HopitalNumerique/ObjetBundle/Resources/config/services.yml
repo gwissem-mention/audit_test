@@ -6,6 +6,7 @@ parameters:
     hopitalnumerique_objet.form.contenu.class: HopitalNumerique\ObjetBundle\Form\ContenuType
     hopitalnumerique_objet.manager.refobjet.class: HopitalNumerique\ObjetBundle\Manager\RefObjetManager
     hopitalnumerique_objet.manager.refcontenu.class: HopitalNumerique\ObjetBundle\Manager\RefContenuManager
+    hopitalnumerique_objet.manager.consultation.class: HopitalNumerique\ObjetBundle\Manager\ConsultationManager
 
 services:
     #managers
@@ -30,6 +31,12 @@ services:
     hopitalnumerique_objet.manager.refcontenu:
         class: %hopitalnumerique_objet.manager.refcontenu.class%
         arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_objet.manager.consultation:
+        class: %hopitalnumerique_objet.manager.consultation.class%
+        arguments: ["@doctrine.orm.entity_manager","@security.context"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 

@@ -44,7 +44,7 @@ class Requete
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")
+     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
      */
     private $user;
 

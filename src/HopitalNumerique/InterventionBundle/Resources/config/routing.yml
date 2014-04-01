@@ -24,10 +24,6 @@ hopital_numerique_intervention_demande_edit:
     requirements:
         id: \d+
 
-hopital_numerique_intervention_demande_cron:
-    pattern:  /cron/{id}
-    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:cron" }
-
 #<-- Vues Grid
 hopital_numerique_intervention_grid_cmsi_demandes_nouvelles:
     pattern: /demandes/grid/cmsi/nouvelles
@@ -44,4 +40,7 @@ hopital_numerique_intervention_grid_ambassadeur_demandes:
 hopital_numerique_intervention_grid_etablissement_demandes:
     pattern: /demandes/grid/etablissement
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:gridEtablissementDemandes" }
+hopital_numerique_intervention_grid_admin_demandes:
+    pattern: /demandes/grid/admin
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Demande:gridDemandes" }
 #-->

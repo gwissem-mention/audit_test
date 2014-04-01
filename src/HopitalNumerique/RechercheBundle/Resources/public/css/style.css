@@ -35,7 +35,7 @@
     #recherche #origin li{position: relative;}
     #recherche #origin li.level0{background: #703695 url('../img/level0.png') no-repeat 95% 15px; }
     #recherche #origin li.level0.active{background: #703695 url('../img/level0-active.png') no-repeat 95% 15px;}
-    #recherche #origin li.level0 span{padding:15px 10px 10px 18px; width: 100%; display: block; cursor:pointer; text-transform: uppercase; color: #ffffff; font-size: 16px; font-weight: bold}
+    #recherche #origin li.level0 span{padding:15px 10px 10px 17px; width: 100%; display: block; cursor:pointer; text-transform: uppercase; color: #ffffff; font-size: 16px; font-weight: bold}
     #recherche #origin li.level0 ol{display: none; }
 
     /* 1er niveau de sous-catégories */
@@ -45,20 +45,25 @@
     #recherche #origin li.level0 ol li.level1.empty{background: #f4f4f4;}
     #recherche #origin li.level0 ol li.level1.active span{color:#703695; font-weight: bold}
     #recherche #origin li.level0 ol li.level1 span{ font-weight: bold; font-size: 12px; color:#000000; text-transform: none; padding:10px 30px 10px 15px;}
+    #recherche #origin li.level0 ol li.level1 i.pull-left{ margin:12px 5px 0 15px;cursor: pointer}
     #recherche #origin li.level0 ol li.level1 ol{display: none;}
 
     /* 2nd niveau de sous-catégories */
     #recherche #origin li.level0 ol li.level1 ol li.level2{}
     #recherche #origin li.level0 ol li.level1 ol li.level2.active span{color:#703695;}
     #recherche #origin li.level0 ol li.level1 ol li.level2 span{color:#070707; font-weight: normal; padding:5px 15px 5px 30px;}
-    #recherche #origin li.level0 ol li.level1 ol li.level2 i{color:#070707; position: absolute; right: 10px; top:7px;}
+    #recherche #origin li.level0 ol li.level1 ol li.level2 i.pull-right{color:#070707; position: absolute; right: 10px; top:7px;}
+    #recherche #origin li.level0 ol li.level1 ol li.level2 i.pull-left{ margin:6px 5px 0 30px;cursor: pointer}
     #recherche #origin li.level0 ol li.level1 ol li.level2 ol{display: none;padding-left:20px;}
 
+    /* 3ème niveau de sous-catégories */
     #recherche #origin li.level0 ol li.level1 ol li.level2 ol li.level3{}
     #recherche #origin li.level0 ol li.level1 ol li.level2 ol li.level3 span{font-style:italic; color:#070707; }
 
 /* Résultats */
     #recherche #resultats{ margin-top: 20px; }
+    #recherche #resultats .fa-refresh{ color:#3da20b; }
+
     /* Points Dur*/
         #resultats #pointsdurs{padding:0;}
         #resultats #pointsdurs h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal}

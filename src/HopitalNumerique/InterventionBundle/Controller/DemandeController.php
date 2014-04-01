@@ -61,6 +61,8 @@ class DemandeController extends Controller
             }
         }
         
+        $this->container->get('hopitalnumerique_intervention.service.demande.etat_type_derniere_demande')->setDerniereDemandeOuverte($interventionDemande);
+        
         return $this->render(
             'HopitalNumeriqueInterventionBundle:Demande:voir.html.twig',
             $vueParametres
@@ -77,7 +79,16 @@ class DemandeController extends Controller
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
         if ($utilisateurConnecte->hasRoleCmsi())
-            return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/cmsi.html.twig');
+        {
+            $derniereDemandeEstEtatTypeDemandeTraiteeCmsi = $this->container->get('hopitalnumerique_intervention.service.demande.etat_type_derniere_demande')->derniereDemandeEstEtatTypeDemandeTraiteeCmsi();
+            
+            return $this->render(
+                'HopitalNumeriqueInterventionBundle:Demande:Listes/cmsi.html.twig',
+                array(
+                    'derniereDemandeEstEtatTypeDemandeTraiteeCmsi' => $derniereDemandeEstEtatTypeDemandeTraiteeCmsi
+                )
+            );
+        }
         else if ($utilisateurConnecte->hasRoleAmbassadeur())
             return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/ambassadeur.html.twig');
         else return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/etablissement.html.twig');
@@ -154,19 +165,37 @@ class DemandeController extends Controller
     }
 
     /**
-     * Action appelée par le CRON.
+     * Action appelée par le CRON qui peut être appelé n'importe quand.
      * 
-     * @param integer $id Identifiant de sécurité
+     * @param string $id Identifiant de sécurité
      * @return \Symfony\Component\HttpFoundation\Response Vide
      */
     public function cronAction($id)
     {
-        if ($id == 'leschiensnefontpasdeschats')
+        if ($id == 'FHFURJYIHOLPMFKVIDUESQGEUDRCTUFT')
         {
-            $this->get('hopitalnumerique_intervention.manager.intervention_demande')->majInterventionEtatsDesInterventionDemandes();
-            $this->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceInterventionDemandes();
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->majInterventionEtatsDesInterventionDemandes();
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceInterventionDemandes();
+            return new Response($this->container->get('hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs')->getHtml().'<p>Fin du traitement : OK.</p>');
         }
         
-        return new Response();
+        return new Response('Clef invalide.');
+    }
+    
+    /**
+     * CRON qui doit appelé une fois par jour.
+     *
+     * @param string $id Identifiant de sécurité
+     * @return \Symfony\Component\HttpFoundation\Response Vide
+     */
+    public function cronQuotidienAction($id)
+    {
+        if ($id == 'FLFTRJYPVGLPMMVGIDUEOFCEUDCVBUPA')
+        {
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceSimple();
+            return new Response($this->container->get('hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs')->getHtml().'<p>Fin du traitement : OK.</p>');
+        }
+    
+        return new Response('Clef invalide.');
     }
 }

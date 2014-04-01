@@ -146,6 +146,13 @@ class Objet
     private $isArticle;
 
     /**
+     * @var string
+     * 
+     * @ORM\Column(name="obj_vignette", type="string", length=255, options = {"comment" = "Vignette de l objet"}, nullable=true)
+     */
+    private $vignette;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="obj_locked_by", referencedColumnName="usr_id")
      */
@@ -184,6 +191,11 @@ class Objet
     protected $references;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="objet", cascade={"persist", "remove" })
+     */
+    protected $consultations;
+
+    /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="objets")
      * @ORM\JoinTable(name="hn_objet_ambassadeur",
      *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")},
@@ -218,6 +230,7 @@ class Objet
         $this->isInfraDoc   = false;
         $this->isArticle    = false;
         $this->lock         = false;
+        $this->vignette     = null;
         $this->roles        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->types        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ambassadeurs = new \Doctrine\Common\Collections\ArrayCollection();
@@ -541,7 +554,7 @@ class Objet
      * @param boolean $isInfraDoc
      * @return Objet
      */
-    public function setIsInfraDoc($isInfraDoc)
+    public function setInfraDoc($isInfraDoc)
     {
         $this->isInfraDoc = $isInfraDoc;
 
@@ -553,7 +566,7 @@ class Objet
      *
      * @return boolean 
      */
-    public function getIsInfraDoc()
+    public function isInfraDoc()
     {
         return $this->isInfraDoc;
     }
@@ -578,6 +591,26 @@ class Objet
         $this->isArticle = $isArticle;
     }
     
+    /**
+     * Get vignette
+     *
+     * @return string $vignette
+     */
+    public function getVignette()
+    {
+        return $this->vignette;
+    }
+    
+    /**
+     * Set vignette
+     *
+     * @param string $vignette
+     */
+    public function setVignette($vignette)
+    {
+        $this->vignette = $vignette;
+    }
+
     /**
      * Get lockedBy
      *
@@ -778,6 +811,29 @@ class Objet
     public function setReferences(\Doctrine\Common\Collections\ArrayCollection $references)
     {        
         $this->references = $references;
+    
+        return $this;
+    }
+
+    /**
+     * Get consultations
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $consultations
+     */
+    public function getConsultations()
+    {
+        return $this->consultations;
+    }
+
+    /**
+     * Set consultations
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $consultations
+     * @return Objet
+     */
+    public function setConsultations(\Doctrine\Common\Collections\ArrayCollection $consultations)
+    {        
+        $this->consultations = $consultations;
     
         return $this;
     }

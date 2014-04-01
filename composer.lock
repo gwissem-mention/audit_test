@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "d7339ddedce876f40d21244fbf6c738f",
+    "hash": "e0e9aa687ebeacefbaf9fcb6fac5d140",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Abhoryo/APYDataGridBundle.git",
-                "reference": "799c8ae156ac2d64c55045012fd0cc5aeeb1f78f"
+                "reference": "c215f7be42ea45a7403e037c4a6240ae0a058c8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Abhoryo/APYDataGridBundle/zipball/799c8ae156ac2d64c55045012fd0cc5aeeb1f78f",
-                "reference": "799c8ae156ac2d64c55045012fd0cc5aeeb1f78f",
+                "url": "https://api.github.com/repos/Abhoryo/APYDataGridBundle/zipball/c215f7be42ea45a7403e037c4a6240ae0a058c8b",
+                "reference": "c215f7be42ea45a7403e037c4a6240ae0a058c8b",
                 "shasum": ""
             },
             "require": {
@@ -62,7 +62,7 @@
                 "datagrid",
                 "symfony"
             ],
-            "time": "2014-03-26 09:22:22"
+            "time": "2014-03-29 11:56:46"
         },
         {
             "name": "beberlei/DoctrineExtensions",
@@ -1423,6 +1423,38 @@
             "time": "2014-03-23 19:50:26"
         },
         {
+            "name": "nodevo/gestionnaire-media",
+            "version": "dev-master",
+            "target-dir": "Nodevo/GestionnaireMediaBundle",
+            "source": {
+                "type": "git",
+                "url": "ssh://git@bitbucket.org:22/nodevo/web_symfony_bdl_moxiemanager.git",
+                "reference": "042d7df50be5dafd814b93937b4823447671e981"
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Nodevo\\GestionnaireMediaBundle": ""
+                }
+            },
+            "authors": [
+                {
+                    "name": "Rémi Leclerc",
+                    "email": "rleclerc@nodevo.com"
+                }
+            ],
+            "description": "Intégration d'un gestionnaire de média",
+            "homepage": "https://bitbucket.org/nodevo/web_symfony_bdl_moxiemanager",
+            "keywords": [
+                "moxie",
+                "moxiemanager"
+            ],
+            "time": "2014-03-27 11:04:55"
+        },
+        {
             "name": "pagerfanta/pagerfanta",
             "version": "dev-master",
             "source": {
@@ -2236,7 +2268,8 @@
         "white-october/pagerfanta-bundle": 20,
         "pagerfanta/pagerfanta": 20,
         "doctrine/doctrine-fixtures-bundle": 20,
-        "beberlei/doctrineextensions": 20
+        "beberlei/doctrineextensions": 20,
+        "nodevo/gestionnaire-media": 20
     },
     "platform": {
         "php": ">=5.3.3"

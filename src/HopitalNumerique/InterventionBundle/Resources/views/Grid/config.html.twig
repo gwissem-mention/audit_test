@@ -1,7 +1,5 @@
 {% use 'NodevoGridBundle::grid.config.html.twig' %}
 
-
-
 {% block grid_column_cell %}{%- spaceless %}
     {% if column.filterable and column.searchOnClick %}
         {% set sourceValue = sourceValue is defined ? sourceValue : row.field(column.id) %}

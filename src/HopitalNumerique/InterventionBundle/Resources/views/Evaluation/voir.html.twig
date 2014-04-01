@@ -9,25 +9,19 @@
     {% endstylesheets %}
 {% endblock %}
 
-{% block pageTitre %}Évaluation{% endblock %}
+{% block headerTitle %}Évaluation{% endblock %}
 
-{% block chapoDescription %}
+{% block headerDesc %}
     <p>123</p>
 {% endblock %}
 
-{% block contenu %}
-
-    <div class="panel">
-
-        {{ render(controller(
-            "HopitalNumeriqueInterventionBundle:Form/Evaluation:edit",
-            {
-                interventionDemande:interventionDemande,
-                questionnaire:questionnaire,
-                optionRenderForm:optionRenderForm
-            }
-        )) }}
-
-    </div>
-
+{% block content %}
+    {{ render(controller(
+        "HopitalNumeriqueInterventionBundle:Form/Evaluation:edit",
+        {
+            interventionDemande:interventionDemande,
+            questionnaire:questionnaire,
+            optionRenderForm:optionRenderForm
+        }
+    )) }}
 {% endblock %}

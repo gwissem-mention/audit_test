@@ -7,6 +7,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Tools\Export\ClassMetadataExporter;
 
 /**
  * Generates entities.
@@ -41,7 +42,7 @@ class EntityGenerator extends Generator
 
         $class = new ClassMetadataInfo($entityClass);
         
-        $class->customRepositoryClassName = $bundle->getNamespace().'\\Repository\\'.$entity.'Repository'; //$entityClass.'Repository';
+        $class->customRepositoryClassName = $bundle->getNamespace().'\\Repository\\'.$entity.'Repository';
         $class->mapField(array('fieldName' => 'id', 'type' => 'integer', 'id' => true));
         $class->setIdGeneratorType(ClassMetadataInfo::GENERATOR_TYPE_AUTO);
         foreach ($fields as $field) {

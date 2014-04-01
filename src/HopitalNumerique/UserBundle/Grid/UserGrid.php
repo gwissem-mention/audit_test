@@ -56,7 +56,7 @@ class UserGrid extends Grid implements IGrid
         $contractualisationColumn->setAlign('center');
         //Affichage de l'icone uniquement si le role fait parti de $arrayRolesDateContractualisation
         $contractualisationColumn->manipulateRenderCell(
-            function($value, $row, $router) use ($arrayRolesDateContractualisation) {
+            function($value, $row) use ($arrayRolesDateContractualisation) {
                 $roles = $row->getField('roles');
                 return in_array( reset($roles), $arrayRolesDateContractualisation, true ) ? ($value ? 'true' : 'false') : null;
             }
@@ -100,5 +100,7 @@ class UserGrid extends Grid implements IGrid
 
         $this->addMassAction( new Action\ActionMass('Activer','HopitalNumeriqueUserBundle:User:ActiverMass') );
         $this->addMassAction( new Action\ActionMass('Désactiver','HopitalNumeriqueUserBundle:User:DesactiverMass') );
+		
+		$this->addMassAction( new Action\ActionMass('Envoyer un mail','HopitalNumeriqueUserBundle:User:EnvoyerMailMass') );
     }
 }

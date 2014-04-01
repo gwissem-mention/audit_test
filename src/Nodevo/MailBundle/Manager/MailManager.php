@@ -4,7 +4,7 @@ namespace Nodevo\MailBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Manager de l'entité Mail.
@@ -25,7 +25,7 @@ class MailManager extends BaseManager
      */
     private $_mailAnap;
     private $_router;
-    private $_request;
+    private $_requestStack;
 
     /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails
@@ -33,13 +33,13 @@ class MailManager extends BaseManager
      * @param EntityManager $em Entity      Manager de Doctrine
      * @param Array         $options        Tableau d'options
      */
-    public function __construct(EntityManager $em, \Twig_Environment $twig, $router, $options = array())
+    public function __construct(EntityManager $em, \Twig_Environment $twig, $router, RequestStack $requestStack, $options = array())
     {        
         parent::__construct($em);
 
         $this->_twig           = $twig;
         $this->_router         = $router;
-        $this->_request        = Request::createFromGlobals();
+        $this->_requestStack   = $requestStack;
         $this->_allowAdd       = isset($options['allowAdd'])        ? $options['allowAdd']          : true;
         $this->_allowDelete    = isset($options['allowDelete'])     ? $options['allowDelete']       : true;
         $this->_nomExpediteur  = isset($options['nomExpediteur'])   ? $options['nomExpediteur']     : '';        
@@ -49,20 +49,20 @@ class MailManager extends BaseManager
     }
 
     /**
-    * L'ajout de mail est-il autorisé ?
-    * 
-    * @return boolean
-    */
+     * L'ajout de mail est-il autorisé ?
+     * 
+     * @return boolean
+     */
     public function isAllowedToAdd()
     {
         return $this->_allowAdd;
     }
 
     /**
-    * La suppression de mail est-elle autorisée ?
-    * 
-    * @return boolean
-    */
+     * La suppression de mail est-elle autorisée ?
+     * 
+     * @return boolean
+     */
     public function isAllowedToDelete()
     {
         return $this->_allowDelete;
@@ -138,9 +138,26 @@ class MailManager extends BaseManager
     
         return $this->generationMail($user, $mail, $options);
     }
+
+    /**
+     * Envoi un mail de confirmation de candidature expert
+     *
+     * @param User  $users   Utilisateurs qui recevront l'email
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendCandidatureExpertAdminMail( $users, $options )
+    {
+        $mail = $this->findOneById(28);
     
-
-
+        $toSend = array();
+        foreach($users as $user)
+            $toSend[] = $this->generationMail($user, $mail, $options);
+        
+        return $toSend;
+    }
+    
     /**
      * Envoi un mail de validation de candidature expert
      *
@@ -292,7 +309,7 @@ class MailManager extends BaseManager
             $content = str_replace('%p', $user->getPlainPassword(), $content);
         }
         
-        $content = str_replace('%s', '<a href="'. $this->_request->getUriForPath($this->_router->generate('hopital_numerique_homepage')) .'" target="_blank" >Hopital Numérique</a>', $content);
+        $content = str_replace('%s', '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('hopital_numerique_homepage')) .'" target="_blank" >Hopital Numérique</a>', $content);
 
         return $content;
     }

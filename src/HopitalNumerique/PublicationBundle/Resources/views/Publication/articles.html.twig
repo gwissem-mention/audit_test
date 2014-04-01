@@ -43,7 +43,10 @@
         {% endif %}
             <div class="btn btn-default print" onclick="print();"><i class="fa fa-print"></i></div>
             <div class="col-md-12">
-                <h3>{{objet.titre}}</h3>
+                {% if types != 'Article' %}
+                    <h4>{{types}}</h4>
+                {% endif %}
+                <h1>{{objet.titre}}</h1>
             </div>
             <div class="col-md-12">
                 {{objet.resume|parsePublication|raw}}

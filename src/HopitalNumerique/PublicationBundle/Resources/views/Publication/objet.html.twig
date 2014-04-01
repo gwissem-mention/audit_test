@@ -56,7 +56,7 @@
         {# Cas Contenu #}
         {% if contenu is defined %}
             <div class="col-md-12">
-                <h3>{{objet.titre ~ ' - ' ~ prefix ~ ' ' ~ contenu.titre}}</h3>
+                <h1>{{objet.titre ~ ' - ' ~ prefix ~ ' ' ~ contenu.titre}}</h1>
             </div>
             
             <div class="col-md-12">
@@ -65,7 +65,7 @@
         {# Cas Objet #}
         {% else %}
             <div class="col-md-12">
-                <h3>{{objet.titre}}{% if objet.getIsInfraDoc %} - Résumé{% endif %}</h3>
+                <h1>{{objet.titre}}{% if objet.isInfraDoc %} - Résumé{% endif %}</h1>
             </div>
             
             <div class="col-md-12">

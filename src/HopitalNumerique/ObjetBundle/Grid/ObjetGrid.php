@@ -62,6 +62,17 @@ class ObjetGrid extends Grid implements IGrid
     {
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_objet_objet_show' ) );
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_objet_objet_edit' ) );
+
+        //Goto Refs
+        $referencesButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_objet_objet_edit');
+        $referencesButton->setRouteParameters( array('id', 'infra'=>0, 'toRef'=>1) );
+        $referencesButton->setAttributes( array('class'=>'btn btn-primary fa fa-cog','title' => 'Accès direct aux références') );
+        $referencesButton->manipulateRender(function($action, $row) {
+            return !$row->getField('isArticle') ? $action : null;
+        });
+        $this->addActionButton( $referencesButton );
+
+        //Delete
         $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_objet_objet_delete' ) );
 
         //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée

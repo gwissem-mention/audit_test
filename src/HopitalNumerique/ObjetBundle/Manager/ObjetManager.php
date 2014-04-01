@@ -3,8 +3,6 @@
 namespace HopitalNumerique\ObjetBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use \Nodevo\ToolsBundle\Tools\Chaine;
 
@@ -166,15 +164,18 @@ class ObjetManager extends BaseManager
     { 
         return $this->getRepository()->getObjetsByAmbassadeur( $idUser )->getQuery()->getResult();
     }
-
+    
     /**
      * Retourne la liste des objets non maitrisés par l'ambassadeur
-     * 
-     * @param integer $id Id de l'ambassadeur
+     *
+     * @param integer $id    Id de l'ambassadeur
+     * @param array   $types Liste des types
+     *
+     * @return array
      */
-    public function getObjetsNonMaitrises( $id )
+    public function getObjetsNonMaitrises( $id, $types )
     { 
-        $results = $this->findAll();
+        $results = $this->getObjetsByTypes( $types );
         $objets  = array();
 
         foreach ($results as $one)
@@ -327,29 +328,31 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getActualitesByCategorie( $categories, $limit = 0 )
+    public function getActualitesByCategorie( $categories, $role, $limit = 0 )
     {
         $articles   = $this->getObjetsByTypes( $categories, $limit );
         $actualites = array();
 
         foreach($articles as $article) {
-            $actu = new \stdClass;
+            if( $this->checkAccessToObjet($role, $article) ) {
+                $actu = new \stdClass;
 
-            $actu->id    = $article->getId();
-            $actu->titre = $article->getTitre();
-            $actu->alias = $article->getAlias();
-            $actu->image = $article->getWebPath() ? $article->getWebPath() : false;
+                $actu->id    = $article->getId();
+                $actu->titre = $article->getTitre();
+                $actu->alias = $article->getAlias();
+                $actu->image = $article->getVignette() ? $article->getVignette() : false;
 
-            //resume
-            $tab = explode('<!-- pagebreak -->', $article->getResume());
-            $actu->resume = html_entity_decode(strip_tags($tab[0]));
+                //resume
+                $tab = explode('<!-- pagebreak -->', $article->getResume());
+                $actu->resume = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
 
-            //types / catégories
-            $types            = $article->getTypes();
-            $actu->types      = $this->formatteTypes( $types );
-            $actu->categories = $this->getCategorieForUrl( $article->getTypes() );
+                //types / catégories
+                $types            = $article->getTypes();
+                $actu->types      = $this->formatteTypes( $types );
+                $actu->categories = $this->getCategorieForUrl( $article->getTypes() );
 
-            $actualites[] = $actu;
+                $actualites[] = $actu;
+            }
         }
 
         return $actualites;
@@ -367,8 +370,15 @@ class ObjetManager extends BaseManager
         $categories = array();
         foreach($allCategories as $one) {
             $articles = $this->getObjetsByTypes( array($one) );
-            if( count($articles) > 0)
-                $categories[] = $one;
+            if( count($articles) > 0){
+                $categ = new \stdClass;
+                $categ->id = $one->getId();
+
+                $libelle = new Chaine( $one->getLibelle() );
+                $categ->libelle = $libelle->minifie();
+
+                $categories[] = $categ;
+            }
         }
 
         return $categories;
@@ -387,15 +397,19 @@ class ObjetManager extends BaseManager
         $item->id         = $article->getId();
         $item->titre      = $article->getTitre();
         $item->alias      = $article->getAlias();
-        $item->image      = $article->getWebPath() ? $article->getWebPath() : false;
+        $item->image      = $article->getVignette() ? $article->getVignette() : false;
         $item->categories = $this->getCategorieForUrl( $article->getTypes() );
 
         //resume
         $tab = explode('<!-- pagebreak -->', $article->getResume());
-        $item->resume = html_entity_decode(strip_tags($tab[0]));
+        $item->resume = $tab[0];
 
         return $item;
     }
+
+
+
+
 
 
 

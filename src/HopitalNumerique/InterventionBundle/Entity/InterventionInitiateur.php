@@ -17,7 +17,7 @@ class InterventionInitiateur
     /**
      * @var integer
      *
-     * @ORM\Column(columnDefinition="TINYINT(3) UNSIGNED NOT NULL", name="intervinit_id", nullable=false)
+     * @ORM\Column(type="smallint", name="intervinit_id", nullable=false, options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

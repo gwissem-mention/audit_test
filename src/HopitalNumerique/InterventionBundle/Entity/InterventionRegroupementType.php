@@ -23,7 +23,7 @@ class InterventionRegroupementType
     /**
      * @var integer
      *
-     * @ORM\Column(columnDefinition="TINYINT(3) UNSIGNED NOT NULL", name="intervregtyp_id", nullable=false)
+     * @ORM\Column(type="smallint", name="intervregtyp_id", nullable=false, options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

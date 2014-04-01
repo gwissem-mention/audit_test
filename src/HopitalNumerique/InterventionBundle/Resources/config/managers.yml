@@ -7,13 +7,14 @@ parameters:
     hopitalnumerique_intervention.manager.intervention_initiateur.class: HopitalNumerique\InterventionBundle\Manager\InterventionInitiateurManager
     hopitalnumerique_intervention.manager.intervention_regroupement.class: HopitalNumerique\InterventionBundle\Manager\InterventionRegroupementManager
     hopitalnumerique_intervention.manager.form_intervention_demande.class: HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager
+    hopitalnumerique_intervention.manager.form_intervention_initiateur.class: HopitalNumerique\InterventionBundle\Manager\Form\InterventionInitiateurManager
     hopitalnumerique_intervention.manager.form_user.class: HopitalNumerique\InterventionBundle\Manager\Form\UserManager
     hopitalnumerique_intervention.manager.form_etablissement.class: HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager
 
 services:
     hopitalnumerique_intervention.manager.intervention_courriel:
         class: "%hopitalnumerique_intervention.manager.intervention_courriel.class%"
-        arguments: ["@nodevo_mail.manager.mail", "@mailer", "@router", "@twig"]
+        arguments: ["@nodevo_mail.manager.mail", "@mailer", "@router", "@twig", "@logger"]
     hopitalnumerique_intervention.manager.intervention_demande:
         class: "%hopitalnumerique_intervention.manager.intervention_demande.class%"
         arguments: ["@doctrine.orm.entity_manager", "@security.context", "@router", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_intervention.manager.intervention_etat", "@hopitalnumerique_intervention.manager.intervention_evaluation_etat", "@hopitalnumerique_intervention.manager.intervention_regroupement", "@hopitalnumerique_intervention.manager.intervention_courriel"]
@@ -35,6 +36,9 @@ services:
     hopitalnumerique_intervention.manager.form_intervention_demande:
         class: "%hopitalnumerique_intervention.manager.form_intervention_demande.class%"
         arguments: ["@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_objet.manager.objet"]
+    hopitalnumerique_intervention.manager.form_intervention_initiateur:
+        class: "%hopitalnumerique_intervention.manager.form_intervention_initiateur.class%"
+        arguments: ["@hopitalnumerique_intervention.manager.intervention_initiateur"]
     hopitalnumerique_intervention.manager.form_user:
         class: "%hopitalnumerique_intervention.manager.form_user.class%"
         arguments: ["@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_etablissement.manager.etablissement"]

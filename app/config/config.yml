@@ -17,8 +17,9 @@ framework:
     trusted_hosts:   ~
     trusted_proxies: ~
     session:
+        name: hopitalnumerique
         handler_id:  ~
-        cookie_lifetime: 3600
+        cookie_lifetime: 36000
     fragments:       ~
     http_method_override: true
 
@@ -33,13 +34,13 @@ assetic:
     use_controller: false
     bundles:
         - NodevoAdminBundle
-        - NodevoGestionnaireMediaBundle
         - NodevoMenuBundle
         - NodevoGridBundle
         - NodevoAclBundle
         - NodevoRoleBundle
         - NodevoMailBundle
         - NodevoContactBundle
+        - NodevoGestionnaireMediaBundle
         - HopitalNumeriqueInterventionBundle
         - HopitalNumeriqueUserBundle
         - HopitalNumeriqueReferenceBundle

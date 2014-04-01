@@ -99,6 +99,11 @@ class ObjetType extends AbstractType
                 'label'    => 'Fichier 2'
             ))
             ->add('path2', 'hidden')
+            ->add('vignette', 'text', array(
+                'required' => false,
+                'label'    => 'Vignette',
+                'attr'     => array('readonly'=>'readonly')
+            ))
             ->add('references', 'entity', array(
                 'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',

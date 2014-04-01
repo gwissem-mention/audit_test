@@ -48,7 +48,6 @@
         NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
         NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
     </script>
-    
 {% endblock %}
 
 {% block toolbarButton %}
@@ -105,7 +104,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="form-group" style="margin-bottom:0">
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}" style="margin-bottom:0">
                                     {{ form_label(form.file) }}
                                     <div class="col-md-9">
                                         {% if objet.getAbsolutePath(true) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
@@ -120,7 +119,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="help-block">
@@ -130,7 +129,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" style="margin-bottom:0">
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}" style="margin-bottom:0">
                                     {{ form_label(form.file2) }}
                                     <div class="col-md-9">
                                         {% if objet.getAbsolutePath(false) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
@@ -145,7 +144,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="help-block">
@@ -155,8 +154,37 @@
                                     </div>
                                 </div>
                                 
-                                {{ form_row(form.ambassadeurs) }}
+                                <div class="vignetteBlock form-group {% if not objet.isArticle() %}hide{% endif %}">
+                                    {{ form_label(form.vignette) }}
+                                    <div class="col-md-9">
+                                        <div class="input-group" >
+                                            {{ form_widget(form.vignette) }}
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-info" onclick="moxman.browse({fields: 'hopitalnumerique_objet_objet_vignette', no_host: true});">Parcourir</button>
+                                            </div>    
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9 col-md-offset-3">
+                                        <div class="help-block">
+                                            {{ form_errors(form.vignette) }}
+                                        </div>
+                                    </div>
 
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
+                                    {{ form_label(form.ambassadeurs) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.ambassadeurs) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.ambassadeurs) }}
+                                        </div>
+                                    </div>
+                                </div>
+    
                                 <div class="form-group">
                                     {{ form_label(form.commentaires) }}
                                     <div class="col-md-5">
@@ -243,7 +271,7 @@
                                     <label class="col-md-2" for="hopitalnumerique_objet_objet_references">Références</label>
                                     <div class="col-md-10">
                                         <a href="{{path('hopitalnumerique_objet_reference_objet_own', {'id':objet.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-eye"></i></a>
-                                        <a href="{{path('hopitalnumerique_objet_reference_objet', {'id':objet.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
+                                        <a href="{{path('hopitalnumerique_objet_reference_objet', {'id':objet.id})}}" class="manageReferences edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
                                         <p class="text-muted text-right pull-right"><span class="nbRefs">{% if not objet.id %}0{% else %}{{objet.references|length}}{% endif %}</span> éléments référencés</p>
                                     </div>
                                     <div class="col-md-10 hide">
@@ -312,6 +340,7 @@
                 <input type="hidden" id="add-contenu-url" value="{{path('hopitalnumerique_objet_contenu_add', {'id':objet.id})}}" />
                 <input type="hidden" id="reorder-objet-url" value="{{path('hopitalnumerique_objet_contenu_reorder')}}" />
                 <input type="hidden" id="objet-id" value="{{objet.id}}" />
+                <input type="hidden" id="toRef" value="{{toRef}}" />
                 <input type="hidden" id="save-references-objet-url" value="{{path('hopitalnumerique_objet_reference_objet_save',{'id':objet.id})}}" />
                 <input type="hidden" id="parse-upload-url" value="{{path('hopitalnumerique_objet_contenu_uploadparse',{'id':objet.id})}}" />
                 <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_objet_reference_contenu_save')}}" />

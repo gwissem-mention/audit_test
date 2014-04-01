@@ -5,6 +5,7 @@
     {% stylesheets output="compiled/hopitalnumerique-recherche-requete-index.css" filter="cssrewrite"
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriquerecherche/css/requete.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -14,42 +15,68 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-recherche-requete-index.js"
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
         'bundles/hopitalnumeriquerecherche/js/requete.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 
+{% block headerTitle %}Lorem ipsum{% endblock %}
+{% block headerDesc %} 
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga, fugit, qui, earum omnis corrupti ipsum dolores provident doloremque vero ab velit officia sit assumenda similique itaque ex eum neque voluptates? </p>
+{% endblock %}
+
 {% block content %}
-    <div id="requetes">
-        <i class="fa fa-2x fa-search violet pull-left"></i>
-        <h4 class="pull-left violet">Requêtes de recherche</h4>
-        <p class="sous-titre">
-            Gérer mes Requêtes de recherches
-        </p>
-        
-        <div class="liste">
-            {% for requete in requetes %}
-                <div class="ligne requete-{{requete.id}}" >
-                    <div class="default {% if requete.isDefault %}active{% endif %}" data-link="{{path('hopital_numerique_requete_toggle',{'id':requete.id})}}" >
-                        <i class="fa {% if requete.isDefault %}fa-star{% endif %}"></i>
-                    </div>
-
-                    <p {% if requete.isDefault %}class="violet"{% endif %} >{{requete.nom|capitalize}}</p>
-
-                    <div class="actions pull-right">
-                        <div class="fa fa-edit" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
-                        <div class="fa fa-times-circle" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
-                    </div>
-
-                    <div class="clearfix"></div>
+    <h2 class="requeteTitle" >Gérer mes Requêtes de recherches</h2>
+    <div class="requetes">
+        {% for requete in requetes %}
+            <div class="ligne requete-{{requete.id}}" >
+                <div class="default {% if requete.isDefault %}active{% endif %}" data-link="{{path('hopital_numerique_requete_toggle',{'id':requete.id})}}" >
+                    <i class="fa {% if requete.isDefault %}fa-star{% endif %}"></i>
                 </div>
-            {% else %}
-                <div class="ligne">
-                    <p> - Aucune requête de recherche enregistrée - </p>
-                    <div class="clearfix"></div>
+
+                <p {% if requete.isDefault %}class="violet"{% endif %} >{{requete.nom|capitalize}}</p>
+
+                <div class="actions pull-right">
+                    <div class="fa fa-eye" onclick="showDetails('{{path('hopital_numerique_requete_detail',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-edit" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-times-circle" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
                 </div>
-            {% endfor %}
-        </div>
+
+                <div class="clearfix"></div>
+            </div>
+        {% else %}
+            <div class="ligne">
+                <p> - Aucune requête de recherche enregistrée - </p>
+                <div class="clearfix"></div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h2 class="requeteTitle" >Mes publications consultés</h2>
+    <div class="requetes">
+        {% for consultation in consultations %}
+            <div class="ligne consultation-{{consultation.id}}" >
+                {% if not consultation.contenu %}
+                    <a href="{{path('hopital_numerique_publication_publication_objet', {'id':consultation.objet.id, 'alias':consultation.objet.alias})}}" >
+                        {% if consultation.objet.getDateModification() > consultation.getDateLastConsulted() %}<i class="fa fa-refresh"></i>{% endif %}{{consultation.objet.titre|capitalize}}
+                    </a>
+                {% else %}
+                    <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':consultation.objet.id, 'alias':consultation.objet.alias,'idc':consultation.contenu.id, 'aliasc':consultation.contenu.alias})}}" >
+                        {% if consultation.contenu.getDateModification() > consultation.getDateLastConsulted() %}<i class="fa fa-refresh"></i>{% endif %}{{consultation.contenu.titre|capitalize}}
+                    </a>
+                {% endif %}
+                
+                <div class="actions pull-right">
+                    <div class="fa fa-times-circle" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_consultation_delete', {'id':consultation.id})}}')"></div>
+                </div>
+            </div>
+        {% else %}
+            <div class="ligne">
+                <p> - Aucune publication consultée - </p>
+                <div class="clearfix"></div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

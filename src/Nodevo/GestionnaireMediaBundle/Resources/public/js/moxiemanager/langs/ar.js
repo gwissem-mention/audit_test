@@ -1,1 +1,0 @@
-tinymce.addI18n('ar',{"Insert file":"\u0627\u062f\u062e\u0644 \u0627\u0644\u0645\u0644\u0641","moxiemanager_insert":"\u0627\u062f\u062e\u0644 \u0627\u0644\u0645\u0644\u0641"});

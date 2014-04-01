@@ -25,17 +25,16 @@
     </script>
 {% endblock %}
 
-{% block pageTitre %}Nouvelle intervention{% endblock %}
+{% block headerTitle %}Nouvelle intervention{% endblock %}
 
-{% block chapoDescription %}
+{% block headerDesc %}
     <p>Tu vois, là-bas, les champs de blé ? Je ne mange pas de pain. Le blé pour moi est inutile. Les champs de blé ne me rappellent rien. Et ça, c'est triste ! Mais tu as des cheveux couleur d'or. Alors ce sera merveilleux quand tu m'auras apprivoisé ! Le blé, qui est doré, me fera souvenir de toi. Et j'aimerai le bruit du vent dans le blé...</p>
 {% endblock %}
 
 {% block barreActions %}{% endblock %}
 
-{% block contenu %}
-    <div class="panel panel_form">
-
+{% block content %}
+    <div class="panel_form" id="intervention_demande_panel">
 
         {% set informationsManquantes = app.user|informationsManquantes %}
 
@@ -64,7 +63,6 @@
         {% endif %} 
     
         {% if (informationsManquantes.ok or app.user.hasRoleCmsi) %}
-
             <form method="post" id="form_intervention_demande_nouveau" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
                 <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
                 {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
@@ -76,9 +74,6 @@
                     <input type="submit" class="btn btn-success submit" value="Valider ma demande">
                 </div>
             </form>
-
         {% endif %}
-
-
     </div>
 {% endblock %}

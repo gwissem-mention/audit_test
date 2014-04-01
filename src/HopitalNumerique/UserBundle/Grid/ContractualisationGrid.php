@@ -39,8 +39,6 @@ class ContractualisationGrid extends Grid implements IGrid
         $archiverColonne = new Column\BooleanColumn('archiver', 'Document archivé');
         $archiverColonne->setValues( array( 1 => 'Oui', 0 => 'Non') );
         $this->addColonne( $archiverColonne->setSize(150) );
-
-        //$this->addColonne( new Column\BlankColumn('archiver') );
     }
 
     /**

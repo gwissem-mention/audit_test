@@ -59,10 +59,11 @@ class EvaluationController extends Controller
         if ($this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation')->utilisateurPeutVisualiser($interventionDemande, $utilisateurConnecte))
         {
             $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
+            
+            $this->container->get('hopitalnumerique_intervention.service.demande.etat_type_derniere_demande')->setDerniereDemandeOuverte($interventionDemande);
 
             return $this->render('HopitalNumeriqueInterventionBundle:Evaluation:voir.html.twig', array(
                 'interventionDemande'=> $interventionDemande,
-                'etablissements' => $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesEtRegroupes($interventionDemande),
                 'questionnaire'=> $questionnaire,
                 'optionRenderForm'=> array(
                     'themeQuestionnaire' => 'vertical_readonly'

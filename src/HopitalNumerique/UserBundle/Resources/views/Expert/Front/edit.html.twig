@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueAccountBundle:Formulaire:layout.html.twig' %}
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
 
 {% block stylesheets %}
     {{parent()}}
@@ -20,24 +20,22 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block pageTitre %}Lorem ipsum dolor sit amet{% endblock %}
+{% block headerTitle %}Lorem ipsum dolor sit amet{% endblock %}
 
-{% block chapoDescription %}
+{% block headerDesc %}
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tincidunt purus nec adipiscing. Cras eu nisi dolor. Vestibulum laoreet mi at quam dictum, vitae iaculis metus elementum. Aliquam ut ante non ligula sollicitudin vulputate. Nullam mattis vulputate sem ut placerat. Ut ac vulputate diam. Aenean suscipit lobortis tortor sit amet pharetra. Suspendisse placerat mauris non fringilla mollis. Nulla non eleifend est. Mauris ac tincidunt dolor. Mauris venenatis sit amet eros in rutrum. Ut erat sapien, viverra id dui in.</p>
 {% endblock %}
 
-{% block contenu %}
-    <div class="panel">
-		{# Include des données de contractualisation #}
-	    {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
+{% block content %}
+    {# Include des données de contractualisation #}
+    {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
 
-	    {% set informationsManquantes = user|informationsManquantes(questionnaire.nom) %}
-	
-        {% if optionRenderForm.readOnly == false and informationsManquantes.ok %}
-		    <div class="col-md-10 col-md-offset-2">
-		        <input id="submit_candidature" onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit questionnaire_submit" value="ENVOYER MA CANDIDATURE" type="button"/>
-		    </div>
-			<div class="clearfix"></div>
-		{% endif %}
-    </div>
+    {% set informationsManquantes = user|informationsManquantes(questionnaire.nom) %}
+
+    {% if optionRenderForm.readOnly == false and informationsManquantes.ok %}
+        <div class="col-md-10 col-md-offset-2">
+            <input id="submit_candidature" onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit questionnaire_submit" value="ENVOYER MA CANDIDATURE" type="button"/>
+        </div>
+        <div class="clearfix"></div>
+    {% endif %}
 {% endblock %}

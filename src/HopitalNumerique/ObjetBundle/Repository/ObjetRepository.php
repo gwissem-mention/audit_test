@@ -75,7 +75,18 @@ class ObjetRepository extends EntityRepository
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->leftJoin('obj.types','refTypes')
-            ->where('refTypes.id IN (:types)')
+            ->where('refTypes.id IN (:types)','obj.etat = 3')
+            ->andWhere(
+                $qb->expr()->orx(
+                    $qb->expr()->isNull('obj.dateDebutPublication'),
+                    $qb->expr()->lte('obj.dateDebutPublication', ':today')
+                ),
+                $qb->expr()->orx(
+                    $qb->expr()->isNull('obj.dateFinPublication'),
+                    $qb->expr()->gte('obj.dateFinPublication', ':today')
+                )
+            )
+            ->setParameter('today', new \DateTime() )
             ->orderBy('obj.dateCreation', 'DESC')
             ->setParameter('types', $types );
         

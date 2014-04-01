@@ -1,4 +1,4 @@
-<div class="row" {% if count > 2 %}style="display:none"{% endif %} >
+<div class="row" {% if count >= showMoreProductions %}style="display:none"{% endif %} >
     <div class="col-md-10">
         <h5>{{objet['type']}}</h5>
     </div>
@@ -8,13 +8,21 @@
         {% endif %}
     </div>
     <div class="col-md-12">
-        {% if objet['objet'] is not null %}
-            {# Contenu #}
-            <h4><a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >{{objet['titre']}}</a></h4>
-        {% else %}
-            {# Objet #}
-            <h4><a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >{{objet['titre']}}</a></h4>
-        {% endif %}
+        <h4>
+            {% if objet['updated'] %}
+                <i class="fa fa-refresh"></i>
+            {% elseif objet['new'] %}
+                <i class="fa fa-bullhorn rose"></i>
+            {% endif %}
+
+            {% if objet['objet'] is not null %}
+                <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >
+            {% else %}
+                <a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
+            {% endif %}
+                {{objet['titre']}}
+            </a>
+        </h4>
     </div>
     <div class="col-md-12">
         <p>{{ objet['resume']|trim }} <span class="rose">[...]</span></p>

@@ -4,11 +4,11 @@ namespace Nodevo\AclBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use Nodevo\AclBundle\Entity\Acl;
+use Nodevo\AclBundle\Manager\RessourceManager;
+use Nodevo\RoleBundle\Manager\RoleManager;
 
 use Doctrine\ORM\EntityManager;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
@@ -19,20 +19,23 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 class AclManager extends BaseManager
 {
     protected   $_class         = '\Nodevo\AclBundle\Entity\Acl';
-    private     $_container;
+    private     $_ressourceManager;
+    private     $_roleManager;
     private     $_writeWords    = array();
 
     /**
      * Construct extension : we need to have the Container here
      *
-     * @param EntityManager      $em        Entity Mangager de doctrine
-     * @param ContainerInterface $container Container : permet d'appeller des services
+     * @param EntityManager         $em                 Entity Mangager de doctrine
+     * @param RessourceManager      $ressourceManager   Manager des ressources
+     * @param RoleManager           $roleManager        Manager des roles
      */
-    public function __construct( EntityManager $em, ContainerInterface $container, $options = array() )
+    public function __construct( EntityManager $em, RessourceManager $ressourceManager, RoleManager $roleManager, $options = array() )
     {
         parent::__construct($em);
 
-        $this->_container = $container;
+        $this->_ressourceManager    = $ressourceManager;
+        $this->_roleManager         = $roleManager;
 
         $this->_setOptions($options);
     }
@@ -167,16 +170,16 @@ class AclManager extends BaseManager
             return VoterInterface::ACCESS_GRANTED;
 
         if( $user === 'anon.' )
-            $roles = $this->_container->get('nodevo_role.manager.role')->findOneBy(array('role'=>'ROLE_ANONYME_10'));
+            $roles = $this->_roleManager->findOneBy(array('role'=>'ROLE_ANONYME_10'));
         else{
             if( $user->hasRole('ROLE_ADMINISTRATEUR_1') )
                 return VoterInterface::ACCESS_GRANTED;
 
-            $roles = $this->_container->get('nodevo_role.manager.role')->findBy(array('role'=> $user->getRoles() ));
+            $roles = $this->_roleManager->findBy(array('role'=> $user->getRoles() ));
         }
         
         //search in DB ressource matching this url
-        $ressource = $this->_container->get('nodevo_acl.manager.ressource')->getRessourceMatchingUrl( $url );
+        $ressource = $this->_ressourceManager->getRessourceMatchingUrl( $url );
 
         //si on ne match aucune ressource, on bloque l'accès.
         if( is_null($ressource) )

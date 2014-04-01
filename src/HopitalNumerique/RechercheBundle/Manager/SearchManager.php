@@ -55,7 +55,7 @@ class SearchManager extends BaseManager
                     $tmp = array();
                     foreach( $results as $one) {
                         $objet = $this->formateObjet( $one, $role );
-                        if( !is_null($objet) )
+                        if( !is_null($objet) && $objet['categ'] != '' )
                             $tmp[ $objet['id'] ] = $objet;
                     }
 
@@ -70,7 +70,7 @@ class SearchManager extends BaseManager
                     $tmp = array();
                     foreach( $results as $one) {
                         $contenu = $this->formateContenu( $one, $role );
-                        if( !is_null($contenu) )
+                        if( !is_null($contenu) && $contenu['categ'] != '' )
                             $tmp[ $contenu['id'] ] = $contenu;
                     }
 
@@ -192,6 +192,11 @@ class SearchManager extends BaseManager
         $item['type']  = $tmp['type'];
         $item['categ'] = $tmp['categ'];
 
+        //status (new/updated/datecreation)
+        $item['new']     = false;
+        $item['updated'] = false;
+        $item['created'] = $contenu->getDateCreation();
+
         return $item;
     }
 
@@ -237,6 +242,11 @@ class SearchManager extends BaseManager
         $item['type']  = $tmp['type'];
         $item['categ'] = $tmp['categ'];
         
+        //status (new/updated/datecreation)
+        $item['new']     = false;
+        $item['updated'] = false;
+        $item['created'] = $objet->getDateCreation();
+
         return $item;
     }
 

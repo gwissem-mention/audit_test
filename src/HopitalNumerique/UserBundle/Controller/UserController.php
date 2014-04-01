@@ -6,9 +6,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Controller des utilisateurs
- * 
- * @author Quentin SOMAZZI
- * @copyright Nodevo
  */
 class UserController extends Controller
 {    
@@ -31,7 +28,7 @@ class UserController extends Controller
             //Récupération de l'utilisateur passé en param
             $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
              
-            return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User/Front:inscription.html.twig');
+            return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User/Front:inscription.html.twig');
         }
     
         return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
@@ -40,14 +37,14 @@ class UserController extends Controller
     /**
      * Affichage du formulaire d'utilisateur
      */
-    public function informationsPersonnellesAction( )
-    {        
+    public function informationsPersonnellesAction()
+    {
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
         
         $this->_informationsPersonnelles = true;
              
-        return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User/Front:informations_personnelles.html.twig');
+        return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User/Front:informations_personnelles.html.twig');
     }
     
     /**
@@ -55,7 +52,7 @@ class UserController extends Controller
      *
      * @param integer $id Identifiant de l'utilisateur
      */
-    public function motDePasseAction( )
+    public function motDePasseAction()
     {
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
@@ -121,7 +118,7 @@ class UserController extends Controller
     {
         $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
 
-        return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig' );
+        return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig' );
     }
 
     /**
@@ -134,7 +131,7 @@ class UserController extends Controller
         //Récupération de l'utilisateur passé en param
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig' );
+        return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig' );
     }
     
     /**
@@ -145,7 +142,7 @@ class UserController extends Controller
     public function showAction( $id )
     {
         //Récupération de l'utilisateur passé en param
-        $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
+        $user  = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
         $roles = $this->get('nodevo_role.manager.role')->findIn( $user->getRoles() );
 
         return $this->render('HopitalNumeriqueUserBundle:User:show.html.twig', array(
@@ -225,6 +222,14 @@ class UserController extends Controller
      */
     public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        //check connected user ACL
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if( $this->get('nodevo_acl.manager.acl')->checkAuthorization( $this->generateUrl('hopital_numerique_user_delete', array('id'=>1)) , $user ) == -1 ){
+            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas les droits suffisants pour supprimer des utilisateurs.' );
+            return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
+        }
+
         //get all selected Users
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
         $this->get('hopitalnumerique_user.manager.user')->delete( $users );
@@ -244,6 +249,14 @@ class UserController extends Controller
      */
     public function desactiverMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        //check connected user ACL
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if( $this->get('nodevo_acl.manager.acl')->checkAuthorization( $this->generateUrl('hopital_numerique_user_delete', array('id'=>1)) , $user ) == -1 ){
+            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas les droits suffisants pour désactiver des utilisateurs.' );
+            return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
+        }
+
         //get all selected Users
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
 
@@ -267,6 +280,14 @@ class UserController extends Controller
      */
     public function activerMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        //check connected user ACL
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if( $this->get('nodevo_acl.manager.acl')->checkAuthorization( $this->generateUrl('hopital_numerique_user_delete', array('id'=>1)) , $user ) == -1 ){
+            $this->get('session')->getFlashBag()->add('warning', 'Vous n\'avez pas les droits suffisants pour activer des utilisateurs.' );
+            return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
+        }
+
         //get all selected Users
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
 
@@ -324,7 +345,42 @@ class UserController extends Controller
         return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $users, $kernelCharset );
     }
 
+	/**
+     * Envoyer un mail aux utilisateurs
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function EnvoyerMailMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1)
+            $users = $this->get('hopitalnumerique_user.manager.user')->findAll();
+        else
+            $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        
+        //get emails
+        $list = array();
+        foreach($users as $user)
+            if($user->getEmail() != "")
+                $list[] = $user->getEmail();
 
+        //to
+        $to = $this->get('security.context')->getToken()->getUser()->getEmail();
+        
+        //bcc list
+        $bcc = join(';', $list);
+        
+        //mailto
+        //return $this->redirect("mailto:".$to."?bcc=".$bcc);
+        
+        return $this->render('HopitalNumeriqueUserBundle:User:mailto.html.twig', array(
+            'mailto' => 'mailto:'.$to.'?bcc='.$bcc
+        ));
+    }
+	
     /**
      * Effectue le render du formulaire Utilisateur
      *
@@ -334,7 +390,7 @@ class UserController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $user, $view )
+    private function renderForm( $formName, $user, $view )
     {        
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $user);
@@ -413,7 +469,8 @@ class UserController extends Controller
                     {
                         //--Frontoffice-- Informations personnelles
                         //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
-                        $roleUserConnectedLabel = $this->get('nodevo_role.manager.role')->getConnectedUserRole();
+                        $connectedUser = $this->get('security.context')->getToken()->getUser();
+                        $roleUserConnectedLabel = $this->get('nodevo_role.manager.role')->getUserRole($connectedUser);
                         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => $roleUserConnectedLabel));
                         $user->setRoles( array( $role ) );
                         

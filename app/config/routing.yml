@@ -1,7 +1,3 @@
-hopital_numerique_contact:
-    resource: "@HopitalNumeriqueContactBundle/Resources/config/routing.yml"
-    prefix:   /
-
 # Bundles Hopital Numérique : partie Front
 hopital_numerique_core:
     resource: "@HopitalNumeriqueCoreBundle/Resources/config/routing.yml"
@@ -27,6 +23,10 @@ hopital_numerique_intervention:
     resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing.yml"
     prefix:   /compte-hn/intervention
 
+hopital_numerique_intervention_cron:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/cron.yml"
+    prefix:   /intervention
+
 hopital_numerique_intervention_etablissement:
     resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/etablissement.yml"
     prefix:   /compte-hn/intervention/etablissement
@@ -50,6 +50,10 @@ hopital_numerique_intervention_regroupement:
 hopital_numerique_intervention_user:
     resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/user.yml"
     prefix:   /compte-hn/intervention
+    
+hopital_numerique_contact:
+    resource: "@HopitalNumeriqueContactBundle/Resources/config/routing.yml"
+    prefix:   /
 
 # Bundles Hopital Numérique : partie Admin
 hopital_numerique_reference:
@@ -68,6 +72,9 @@ hopital_numerique_objet:
     resource: "@HopitalNumeriqueObjetBundle/Resources/config/routing.yml"
     prefix:   /admin
 
+hopital_numerique_intervention_admin:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/admin.yml"
+    prefix:   /admin/intervention
 
 # Bundles Hopital Numérique : partie Admin ET partie Front
 hopital_numerique_user:
@@ -82,10 +89,6 @@ hopital_numerique_questionnaire:
 nodevo_acl:
     resource: "@NodevoAclBundle/Resources/config/routing.yml"
     prefix:   /admin
-
-nodevo_gestionnaire_media:
-    resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"
-    prefix:   /admin/media
 
 nodevo_role:
     resource: "@NodevoRoleBundle/Resources/config/routing.yml"
@@ -106,3 +109,7 @@ nodevo_mail:
 nodevo_contact:
     resource: "@NodevoContactBundle/Resources/config/routing.yml"
     prefix:   /
+
+nodevo_gestionnaire_media:
+    resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"
+    prefix:   /admin/media

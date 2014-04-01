@@ -22,6 +22,7 @@
         'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/hopitalnumeriquerecherche/js/jquery.cookie.js'
         'bundles/hopitalnumeriquerecherche/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -100,7 +101,12 @@
         {% else %}
             <li class="{{liClass}} level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
         {% endif %}
-            <span>{{element.libelle}}</span>
+            {% if level != 0 and class == 'cliquable' %}
+                <i class="fa fa-plus-circle pull-left"></i>
+            {% endif %}
+            <span>
+                {{element.libelle}}
+            </span>
             {% if element.childs %}
                 {% if level == 2 and class == 'cliquable' %}
                     <i class="fa fa-chevron-right pull-right"></i>

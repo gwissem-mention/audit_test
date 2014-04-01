@@ -34,7 +34,7 @@ class InterventionDemande
     /**
      * @var integer
      *
-     * @ORM\Column(name="interv_id", type="integer", nullable=false)
+     * @ORM\Column(name="interv_id", type="integer", nullable=false, options={"unsigned":true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

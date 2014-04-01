@@ -1,1 +1,0 @@
-tinymce.addI18n('ca',{"Insert file":"Inserir arxiu","moxiemanager_insert":"Inserir arxiu"});
