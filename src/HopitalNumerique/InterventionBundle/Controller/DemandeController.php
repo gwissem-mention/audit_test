@@ -174,11 +174,12 @@ class DemandeController extends Controller
     {
         if ($id == 'FHFURJYIHOLPMFKVIDUESQGEUDRCTUFT')
         {
-            $this->get('hopitalnumerique_intervention.manager.intervention_demande')->majInterventionEtatsDesInterventionDemandes();
-            $this->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceInterventionDemandes();
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->majInterventionEtatsDesInterventionDemandes();
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceInterventionDemandes();
+            return new Response($this->container->get('hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs')->getHtml().'<p>Fin du traitement : OK.</p>');
         }
         
-        return new Response();
+        return new Response('Clef invalide.');
     }
     
     /**
@@ -191,9 +192,10 @@ class DemandeController extends Controller
     {
         if ($id == 'FLFTRJYPVGLPMMVGIDUEOFCEUDCVBUPA')
         {
-            $this->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceSimple();
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceSimple();
+            return new Response($this->container->get('hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs')->getHtml().'<p>Fin du traitement : OK.</p>');
         }
     
-        return new Response();
+        return new Response('Clef invalide.');
     }
 }
