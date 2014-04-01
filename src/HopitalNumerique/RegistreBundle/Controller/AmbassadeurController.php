@@ -65,7 +65,7 @@ class AmbassadeurController extends Controller
             //Si l'utilisateur courant n'a pas de région renseigné on le prévient qu'il n'y aura aucune région selectionné par défaut
             if(is_null($user->getRegion()))
             {
-                $this->get('session')->getFlashBag()->add( 'info' , 'Vous n\'avez pas renseigné votre région.');
+                $regionsJSON = json_encode(array());
             }
             //sinon on récupère sa région courante
             else
