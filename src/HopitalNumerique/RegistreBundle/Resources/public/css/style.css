@@ -2,7 +2,7 @@
 #registre-ambassadeur h3 a{font-size: 11px; color:#000000; display: block; background: url('../img/tdb.png') no-repeat right; padding-right: 30px; height: 22px; padding-top:11px; font-weight: normal}
 
 /* Partie map */
-#registre-ambassadeur .map{background: #f8f8f8; padding:15px 10px; }
+#registre-ambassadeur .map{background: #f8f8f8; padding:15px 10px; width:262px; height:530px }
 #registre-ambassadeur .map .btn{color:#ffffff;font-size: 14px; font-weight: bold; display: block; margin: 20px 0 5px; }
 #registre-ambassadeur .map span{cursor:pointer; }
 #registre-ambassadeur .map a.btn{color:#ffffff;font-size: 14px; font-weight: bold; display: block; margin: 5px 0; }
