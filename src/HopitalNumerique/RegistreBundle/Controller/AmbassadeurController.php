@@ -89,9 +89,14 @@ class AmbassadeurController extends Controller
         //Pour l'ensemble des régions sélectionnées, récupération des ambassadeurs
         foreach ($regions as $region)
         {
-            $ambassadeurs = array_merge($ambassadeurs, $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndDomaine( $region, $domaine ));
+            if(!array_key_exists($region->getId(), $ambassadeurs))
+            {
+                $ambassadeurs[$region->getId()] = array();
+            }
+            
+            $ambassadeurs[$region->getId()] = array_merge($ambassadeurs[$region->getId()], $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndDomaine( $region, $domaine ));
         }
-
+        
         $session->set('registre-ambassadeur-region', $regionsJSON );
     
         //get liste des domaines fonctionnels
