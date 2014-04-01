@@ -33,7 +33,7 @@ hopitalnumerique_objet_objet_getPublicationDetailsForMenu:
     pattern:  /objet/getPublicationDetailsForMenu
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getPublicationDetailsForMenu" }
     requirements:
-        _method: GET
+        _method: GET|POST
 
 hopitalnumerique_objet_objet_cancel:
     pattern:  /objet/cancel/{id}/{message}

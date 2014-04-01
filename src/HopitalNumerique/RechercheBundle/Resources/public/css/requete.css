@@ -10,9 +10,13 @@
 .requetes .ligne .default:hover i.fa-star:before{content: "\f005";}
 .requetes .ligne p{margin:0 0 0 7px;color:#333333;font-size: 13px;float:left;}
 .requetes .ligne p.violet{color:#6f3596;}
+.requetes .ligne p i{margin-left:5px;}
 .requetes .ligne a{margin:0 0 0 7px;color:#333333;font-size: 13px}
 .requetes .ligne .actions div{color:#c0bebe;cursor: pointer}
+.requetes .ligne .actions div.active{color:#B4DC00;}
+.requetes .ligne .actions div.inactive{color:#de0d4d;}
 .requetes .ligne .actions div:hover{color:#000000;}
+
 .requetes .ligne .fa-refresh {margin-right: 5px}
 
 /* Popup details */
@@ -22,3 +26,8 @@ ol.arbo-requete li.level0 span{ text-transform: uppercase; color: #703695; font-
 ol.arbo-requete li.level0 ol li.level1 span{ text-transform: none; color: #000000; font-size: 12px; font-weight: bold }
 ol.arbo-requete li.level0 ol li.level1 ol li.level2 span{ font-size: 12px; font-weight: normal; color:#070707; }
 ol.arbo-requete li.level0 ol li.level1 ol li.level2 ol li.level3 span{ font-style:italic; color:#070707; }
+
+/* Popup mails */
+#popin-mails{margin:0;}
+#popin-mails .toggle{margin-top:5px}
+#popin-mails .btn{margin-right:10px}
