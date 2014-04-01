@@ -1,7 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
 {% block h1Title %}
-    Domaines fonctionnels maitrisés
+    Domaines fonctionnels maîtrisés
 {% endblock %}
 
 {% block javascripts %}
@@ -46,7 +46,7 @@
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maîtrisées</a>
                             </li>
                             <li class="active" >
-                                <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Domaines fonctionnels maitrisés</a>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Domaines fonctionnels maîtrisés</a>
                             </li>
                         {% endif %}
                     </ul>

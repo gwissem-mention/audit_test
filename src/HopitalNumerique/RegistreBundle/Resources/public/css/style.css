@@ -3,6 +3,9 @@
 
 /* Partie map */
 #registre-ambassadeur .map{background: #f8f8f8; padding:15px 10px; }
+#registre-ambassadeur .map .btn{color:#ffffff;font-size: 14px; font-weight: bold; display: block; margin: 20px 0 5px; }
+#registre-ambassadeur .map span{cursor:pointer; }
+#registre-ambassadeur .map a.btn{color:#ffffff;font-size: 14px; font-weight: bold; display: block; margin: 5px 0; }
 #registre-ambassadeur .map p.titre{color:#4b4a49; font-size: 13px; font-weight: bold}
 #registre-ambassadeur .map #domaines_liste{width: 100%}
 
