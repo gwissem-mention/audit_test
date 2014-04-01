@@ -164,15 +164,18 @@ class ObjetManager extends BaseManager
     { 
         return $this->getRepository()->getObjetsByAmbassadeur( $idUser )->getQuery()->getResult();
     }
-
+    
     /**
      * Retourne la liste des objets non maitrisés par l'ambassadeur
-     * 
-     * @param integer $id Id de l'ambassadeur
+     *
+     * @param integer $id    Id de l'ambassadeur
+     * @param array   $types Liste des types
+     *
+     * @return array
      */
-    public function getObjetsNonMaitrises( $id )
+    public function getObjetsNonMaitrises( $id, $types )
     { 
-        $results = $this->findAll();
+        $results = $this->getObjetsByTypes( $types );
         $objets  = array();
 
         foreach ($results as $one)
