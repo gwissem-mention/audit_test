@@ -181,8 +181,6 @@ class ReferenceManager extends BaseManager
 
 
 
-
-
     /**
      * Converti l'arbo sous forme de tableau unique avec l'arbo représentée dans le nom de l'élément
      * On remplis ici un tableau global, pour écomiser des ressources via un array_merge et conserver les cléfs

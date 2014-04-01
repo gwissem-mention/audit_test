@@ -1,5 +1,9 @@
 <div id="pointsdurs" class="col-md-12">
-    <h3>Points Durs</h3>
+    {% set count = 0 %}
+    {% for objet in objets if objet['categ'] == "point-dur" %}
+        {% set count = count + 1 %}
+    {% endfor %}
+    <h3>Points Durs ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h3>
     <div class="wrapper-results">
         <div class="background-violet"></div>
         <div class="results">
@@ -20,7 +24,11 @@
 </div>
 
 <div id="productions" class="col-md-12">
-    <h3>Productions</h3>
+    {% set count = 0 %}
+    {% for objet in objets if objet['categ'] == "production" %}
+        {% set count = count + 1 %}
+    {% endfor %}
+    <h3>Productions ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h3>
     <div class="wrapper-results">
         <div class="background-rose"></div>
         <div class="results">

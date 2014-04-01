@@ -12,6 +12,7 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionCourriel;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use Nodevo\MailBundle\Manager\MailManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use HopitalNumerique\InterventionBundle\DependencyInjection\Demande\EnvoiCourrielsAffichageLogs;
 
 /**
  * Manager pour les envois de courriels concernant les interventions.
@@ -34,6 +35,10 @@ class InterventionCourrielManager
      * @var \Twig_Environment Environnement Twig de l'application
      */
     private $twig;
+    /**
+     * @var \HopitalNumerique\InterventionBundle\DependencyInjection\Demande\EnvoiCourrielsAffichageLogs Service de logs des envois de courriel
+     */
+    private $envoiCourrielsAffichageLogs;
 
     /**
      * Constructeur du manager gérant les demandes d'intervention.
@@ -42,14 +47,16 @@ class InterventionCourrielManager
      * @param \Swift_Mailer $mailer Service d'envoi de courriels
      * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router Router de l'application
      * @param \Twig_Environment $twig L'environnement Twig de l'application
+     * @param \HopitalNumerique\InterventionBundle\DependencyInjection\Demande\EnvoiCourrielsAffichageLogs $envoiCourrielsAffichageLogs Service de logs des envois de courriel
      * @return void
      */
-    public function __construct(MailManager $mailManager, \Swift_Mailer $mailer, Router $router, \Twig_Environment $twig)
+    public function __construct(MailManager $mailManager, \Swift_Mailer $mailer, Router $router, \Twig_Environment $twig, EnvoiCourrielsAffichageLogs $envoiCourrielsAffichageLogs)
     {
         $this->mailManager = $mailManager;
         $this->mailer = $mailer;
         $this->router = $router;
         $this->twig = $twig;
+        $this->envoiCourrielsAffichageLogs = $envoiCourrielsAffichageLogs;
     }
 
     /**
@@ -297,6 +304,8 @@ class InterventionCourrielManager
             ->setTo($destinataire->getEmail())
             ->setBody($courrielCorps, 'text/html');
         $this->mailer->send($courriel);
+        
+        $this->envoiCourrielsAffichageLogs->addLog('Courriel "'.$mail->getObjet().'" envoyé à '.$destinataire->getAppellation()."\n");
     }
     /**
      * Retourne le corps du courriel.

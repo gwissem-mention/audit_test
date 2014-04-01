@@ -74,13 +74,14 @@ h3{font-size: 20px}
     #mesrequetes ul li a{color:#070707; font-size: 12px; border-top:1px solid #c9c9c9; display: block; padding:5px 10px;}
     #mesrequetes ul li:first-child a{ border-top:0; }
     #mesrequetes ul li:hover a{color:#6f3596;font-weight: bold}
-    #mesrequetes ul li a i{margin-right: 5px; font-size: 0.7em;}
+    #mesrequetes ul li a i{margin-left: 5px;}
+    #mesrequetes ul li a i.fa-star{margin-right: 5px; font-size: 0.7em;margin-left: 0px;}
 
 /* FORM */
     input.checkbox {width:16px; height:16px;}
 
 
-/* BLOCK RESPONSIVB : to delete */
+/* BLOCK RESPONSIVE : to delete */
 @media screen and (max-width: 1000px) {
     #body { display:none; }
 }

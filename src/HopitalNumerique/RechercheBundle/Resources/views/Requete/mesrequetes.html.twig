@@ -2,7 +2,13 @@
     {% for requete in requetes %}
         <li>
             <a href="{{path('hopital_numerique_recherche_homepage_requete',{'id':requete.id})}}">
-                <i class="fa fa-circle {% if requete.isDefault %}violet{% else %}fa-inverse{% endif %}" ></i>{{requete.nom|capitalize}}
+                <i class="fa fa-star {% if requete.isDefault %}violet{% else %}fa-inverse{% endif %}" ></i>{{requete.nom|capitalize}}
+                {% if requete.isNew %}
+                    <i class="fa fa-bullhorn"></i>
+                {% endif %}
+                {% if requete.isUpdated %}
+                    <i class="fa fa-refresh"></i>
+                {% endif %}
             </a>
         </li>
     {% else %}

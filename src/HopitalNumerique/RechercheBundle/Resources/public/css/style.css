@@ -62,7 +62,6 @@
 
 /* Résultats */
     #recherche #resultats{ margin-top: 20px; }
-    #recherche #resultats .fa-refresh{ color:#3da20b; }
 
     /* Points Dur*/
         #resultats #pointsdurs{padding:0;}
@@ -73,6 +72,7 @@
         #resultats #pointsdurs .wrapper-results .results h4 a{color:#703695; font-size: 18px; font-weight: bold; }
         #resultats #pointsdurs .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top: 10px; display: block; height: 18px; text-align: right}
         #resultats #pointsdurs .wrapper-results .results p{font-size: 13px; color:#070707; }
+        #resultats #pointsdurs .wrapper-results .results .fa-refresh{ color:#3da20b; }
 
     /* Productions */
         #resultats #productions{ margin-top: 30px; }
@@ -84,6 +84,7 @@
         #resultats #productions .wrapper-results .results h5{color:#b71c8b; font-size: 13px; font-weight: normal; text-transform: uppercase; margin-bottom: 5px}
         #resultats #productions .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top:10px; display: block; height: 18px; text-align: right}
         #resultats #productions .wrapper-results .results p{font-size: 13px; color:#070707; }
+        #resultats #productions .wrapper-results .results .fa-refresh{ color:#3da20b; }
 
     /* Ressources externes */
         #resultats #ressources{ margin-top:25px; padding:10px;}
