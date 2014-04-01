@@ -8,5 +8,5 @@ class NodevoContactBundle extends Bundle
 {
     public function getParent()
     {
-    }    
+    }
 }
