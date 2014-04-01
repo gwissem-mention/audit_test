@@ -91,9 +91,16 @@ class Mail
      */
     private $body;
 
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="mail_params", type="json_array")
+     */
+    private $params;
+
     public function __construct()
     {
-
+        $this->params = array();
     }
 
     /**
@@ -219,5 +226,25 @@ class Mail
     public function getBody()
     {
         return $this->body;
+    }
+
+    /**
+     * Get params
+     *
+     * @return array $params
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+    
+    /**
+     * Set params
+     *
+     * @param array $params
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
     }
 }

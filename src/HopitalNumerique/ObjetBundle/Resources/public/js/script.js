@@ -150,6 +150,12 @@ $(document).ready(function() {
     });
 });
 
+$(window).load(function(){
+    if( $('#toRef').val() != "0" ){
+        $('.manageReferences.edit').delay(800).click();
+    }
+});
+
 //met un loader sur le formulaire et sauvegarde automatiquement le formulaire objet
 function saveAutomatique()
 {

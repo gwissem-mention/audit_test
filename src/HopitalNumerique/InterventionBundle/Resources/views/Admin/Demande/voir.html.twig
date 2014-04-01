@@ -1,0 +1,226 @@
+{% extends 'HopitalNumeriqueInterventionBundle:Admin/Form:layout.html.twig' %}
+
+{% block h1Title %}Intervention{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopital_numerique_intervention_admin_liste') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+
+    <div class="panel panel-midnightblue">
+        <div class="panel-heading">
+            <h4>Détails de la demande</h4>
+        </div>
+        <div class="panel-body" >
+        
+            {% if interventionDemande.estDemandeRegroupee %}
+                <h3>Cette demande à été regroupée</h3>
+                {% for interventionRegroupementDemandePrincipale in interventionDemande.interventionRegroupementsDemandesPrincipales %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group"><div class="row">
+                                <div class="col-md-4"><strong>Établissement référent</strong></div>
+                                <div class="col-md-8">
+                                    <a href="{{ path('hopital_numerique_intervention_admin_demande_voir', { id:interventionRegroupementDemandePrincipale.interventionDemandePrincipale.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    {% if interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.etablissementRattachementSante is not null %}
+                                        {{ interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.etablissementRattachementSante.appellation }}
+                                    {% else %}
+                                        {{ interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.autreStructureRattachementSante }}
+                                    {% endif %}
+                                </div>
+                            </div></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group"><div class="row">
+                                <div class="col-md-4"><strong>Établissements du groupement</strong></div>
+                                <div class="col-md-8">
+                                    {% for interventionRegroupementDemandeRegroupee in interventionRegroupementDemandePrincipale.interventionDemandePrincipale.interventionRegroupementsDemandesRegroupees %}
+                                        <p>
+                                            {% if interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.id != interventionDemande.id %}
+                                                <a href="{{ path('hopital_numerique_intervention_admin_demande_voir', { id:interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                            {% endif %}
+                                            {% if interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.etablissementRattachementSante is not null %}
+                                                {{ interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.etablissementRattachementSante.appellation }}
+                                            {% else %}
+                                                {{ interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.autreStructureRattachementSante }}
+                                            {% endif %}
+                                        </p>
+                                    {% endfor %}
+                                </div>
+                            </div></div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <hr>
+            {% endif %}
+            
+            <div class="row">
+                <div class="col-md-6">
+                
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Initiateur de la demande</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.interventionInitiateur.type }}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Demandeur</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.referent.appellation }}
+                            {% if interventionDemande.referent.etablissementRattachementSante is not null %}<br>{{ interventionDemande.referent.etablissementRattachementSante.appellation }}{% endif %}
+                            {% if interventionDemande.referent.region is not null %}<br>{{ interventionDemande.referent.region.libelle }}{% endif %}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Date</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.dateCreation|date('m/d/Y') }}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>État actuel</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.interventionEtat.libelle }}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>CMSI</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.cmsi.appellation }}
+                            {% if interventionDemande.cmsi.region is not null %}
+                                <br>{{ interventionDemande.cmsi.region.libelle }}
+                            {% endif %}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Ambassadeur</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.ambassadeur.appellation }}
+                            <br>{{ interventionDemande.ambassadeur.region.libelle }}
+                        </div>
+                    </div></div>
+                    {% if interventionDemande.directeur is not null %}
+                        <div class="form-group"><div class="row">
+                            <div class="col-md-4"><strong>Directeur</strong></div>
+                            <div class="col-md-8">
+                                {{ interventionDemande.directeur.appellation }}
+                                {% if interventionDemande.directeur.region is not null %}
+                                    <br>{{ interventionDemande.directeur.region.libelle }}
+                                {% endif %}
+                            </div>
+                        </div></div>
+                    {% endif %}
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Choix du CMSI</strong></div>
+                        <div class="col-md-8">
+                            {% if interventionDemande.cmsiDateChoix != null %}{{ interventionDemande.cmsiDateChoix|date('m/d/Y') }}{% endif %}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Choix de l'ambassadeur</strong></div>
+                        <div class="col-md-8">
+                            {% if interventionDemande.ambassadeurDateChoix != null %}{{ interventionDemande.ambassadeurDateChoix|date('m/d/Y') }}{% endif %}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Type d'intervention</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.interventionType.libelle }}
+                        </div>
+                    </div></div>
+                
+                </div>
+                <div class="col-md-6">
+                
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Établissements rattachés</strong></div>
+                        <div class="col-md-8">
+                            {% for interventionRegroupement in interventionDemande.interventionRegroupementsDemandesRegroupees %}
+                                <div>
+                                    <a href="{{ path('hopital_numerique_intervention_admin_demande_voir', { id:interventionRegroupement.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    {% if interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante is not null %}
+                                         {{ interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante.appellation }}
+                                    {% else %}
+                                        {{ interventionRegroupement.interventionDemandeRegroupee.referent.autreStructureRattachementSante }}
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            {% for etablissement in etablissementsRattachesNonRegroupes %}
+                                <div>{{ etablissement.appellation }}</div>
+                            {% endfor %}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Autres établissements</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.autresEtablissements }}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Objets</strong></div>
+                        <div class="col-md-8">
+                            {% for objet in interventionDemande.objets %}
+                                <div>{{ objet.titre }}</div>
+                            {% endfor %}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Description succinte du projet</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.description }}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Description de la difficulté</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.difficulteDescription }}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Champ libre</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.champLibre }}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Informations de rendez-vous</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.rdvInformations }}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Commentaire CMSI</strong></div>
+                        <div class="col-md-8">
+                            {{ interventionDemande.cmsiCommentaire }}
+                        </div>
+                    </div></div>
+                    {% if interventionDemande.refusMessage != null %}
+                        <div class="form-group"><div class="row">
+                            <div class="col-md-4"><strong>Motif du refus</strong></div>
+                            <div class="col-md-8">
+                                {{ interventionDemande.refusMessage }}
+                            </div>
+                        </div></div>
+                    {% endif %}
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>État de l'évaluation</strong></div>
+                        <div class="col-md-8">
+                            {% if interventionDemande.evaluationEtat != null %}{{ interventionDemande.evaluationEtat.libelle }}{% endif %}
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>État du remboursement</strong></div>
+                        <div class="col-md-8">
+                            {% if interventionDemande.remboursementEtat != null %}{{ interventionDemande.remboursementEtat.libelle }}{% endif %}
+                        </div>
+                    </div></div>
+                
+                </div>
+            </div>            
+
+            
+        </div>
+    </div>
+
+{% endblock %}

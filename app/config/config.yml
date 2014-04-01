@@ -17,6 +17,7 @@ framework:
     trusted_hosts:   ~
     trusted_proxies: ~
     session:
+        name: hopitalnumerique
         handler_id:  ~
         cookie_lifetime: 36000
     fragments:       ~

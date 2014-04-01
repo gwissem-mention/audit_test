@@ -166,7 +166,8 @@ class AmbassadeurController extends Controller
      */
     public function addObjetAction( $id )
     {
-        $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsNonMaitrises( $id );
+        $types  = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code'=>'CATEGORIE_OBJET'));
+        $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsNonMaitrises( $id, $types );
         
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:add_objet.html.twig', array(
             'objets'      => $objets,

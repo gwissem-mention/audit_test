@@ -306,9 +306,10 @@ class ReferenceManager extends BaseManager
      */
     private function refreshReferentielOrder( ArrayCollection $referentiels, Reference $referentiel = null)
     {
-        $childs = $this->getReferentielChildsFromCollection($referentiels, $referentiel);
-        
-        for ($i=0; $i < count($childs); $i++) { 
+        $childs   = $this->getReferentielChildsFromCollection($referentiels, $referentiel);
+        $nbChilds = count($childs);
+
+        for ($i=0; $i < $nbChilds; $i++) { 
             $childs[$i]->setOrder($i+1);
             $this->save($childs[$i]);
             $this->refreshReferentielOrder($referentiels, $childs[$i]);

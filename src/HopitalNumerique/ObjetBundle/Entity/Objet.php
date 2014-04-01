@@ -554,7 +554,7 @@ class Objet
      * @param boolean $isInfraDoc
      * @return Objet
      */
-    public function setIsInfraDoc($isInfraDoc)
+    public function setInfraDoc($isInfraDoc)
     {
         $this->isInfraDoc = $isInfraDoc;
 
@@ -566,7 +566,7 @@ class Objet
      *
      * @return boolean 
      */
-    public function getIsInfraDoc()
+    public function isInfraDoc()
     {
         return $this->isInfraDoc;
     }

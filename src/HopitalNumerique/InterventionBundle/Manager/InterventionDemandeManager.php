@@ -298,6 +298,28 @@ class InterventionDemandeManager extends BaseManager
     }
     
     /**
+     * Envoie des simples relances (aucun enregistrement en base de données).
+     * 
+     * @return void
+     */
+    public function relanceSimple()
+    {
+        $this->relanceSimpleInterventionDemandesEnAttenteCmsi();
+    }
+    /**
+     * Envoie les relances pour les demandes d'intervention en attente CMSI non traitées.
+     *
+     * @return void
+     */
+    private function relanceSimpleInterventionDemandesEnAttenteCmsi()
+    {
+        $interventionDemandes = $this->_repository->findBy(array('interventionEtat' => $this->interventionEtatManager->getInterventionEtatAttenteCmsi()));
+        
+        foreach ($interventionDemandes as $interventionDemande)
+            $this->interventionCourrielManager->envoiCourrielRelanceAttenteCmsi($interventionDemande);
+    }
+    
+    /**
      * Retourne les données formatées pour la création du grid des nouvelles demandes d'intervention pour le CMSI.
      * 
      * @return array Les données pour le grid des nouvelles demandes d'intervention

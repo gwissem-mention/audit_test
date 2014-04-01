@@ -22,7 +22,8 @@ class ReferenceController extends Controller
         return $this->render('HopitalNumeriqueObjetBundle:Reference:manage.html.twig', array(
             'references' => $references,
             'objet'      => true,
-            'contenu'    => 'null'
+            'contenu'    => 'null',
+            'titre'      => $objet->getTitre()
         ));
     }
     
@@ -53,7 +54,8 @@ class ReferenceController extends Controller
         return $this->render('HopitalNumeriqueObjetBundle:Reference:manage.html.twig', array(
             'references' => $references,
             'objet'      => 'false',
-            'contenu'    => $id
+            'contenu'    => $id,
+            'titre'      => $contenu->getTitre()
         ));
     }
 

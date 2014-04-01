@@ -3,6 +3,9 @@ $(document).ready(function() {
         'padding'   : 0,
         'scrolling' : 'no',
         'type'      : 'ajax',
+        'width'     : '50%',
+        'autoSize'  : false,
+        'height'    : '210px',
         'href'      : $('#objets-liste-url').val()
     });
 
@@ -10,6 +13,9 @@ $(document).ready(function() {
         'padding'   : 0,
         'scrolling' : 'no',
         'type'      : 'ajax',
+        'width'     : '50%',
+        'autoSize'  : false,
+        'height'    : '210px',
         'href'      : $('#articles-liste-url').val()
     });
 });

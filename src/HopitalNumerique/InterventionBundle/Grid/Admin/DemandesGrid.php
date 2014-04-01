@@ -64,7 +64,7 @@ class DemandesGrid extends DemandesAbstractGrid
         );
         $this->addColonne($colonneAmbassadeurInformations);
         
-        $colonneDemandeurInformations = new Column\TextColumn('demandeur_nom', 'Demandeur');
+        $colonneDemandeurInformations = new Column\TextColumn('referent_nom', 'Demandeur');
         $colonneDemandeurInformations->manipulateRenderCell(
             function($value, $row, $router) {
                 return DemandesAbstractGrid::renderCellReferent($value, $row, $router);
@@ -116,6 +116,8 @@ class DemandesGrid extends DemandesAbstractGrid
     public function setActionsButtons()
     {
         $this->addActionButton(new Action\EditButton('hopital_numerique_intervention_admin_demande_edit'));
+        $this->addActionButton(new Action\ShowButton('hopital_numerique_intervention_admin_demande_voir'));
+        $this->addActionButton(new Action\DeleteButton('hopital_numerique_intervention_admin_demande_delete'));
     }
 
     /**
@@ -123,6 +125,9 @@ class DemandesGrid extends DemandesAbstractGrid
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueInterventionBundle:Admin/Demande:gridSupprimeMass') );
+        $utilisateurConnecte = $this->_container->get('security.context')->getToken()->getUser();
+        
+        if ($this->_container->get('nodevo_acl.manager.acl')->checkAuthorization($this->_container->get('router')->generate('hopital_numerique_intervention_admin_demande_delete', array('id' => 0)), $utilisateurConnecte) != -1)
+            $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueInterventionBundle:Admin/Demande:gridSupprimeMass') );
     }
 }

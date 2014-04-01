@@ -70,6 +70,13 @@ class Contenu
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="con_date_creation", type="datetime", options = {"comment" = "Date de création du contenu"})
+     */
+    private $dateCreation;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="con_date_modification", type="datetime", nullable=true, options = {"comment" = "Date de modification du contenu"})
      */
     private $dateModification;
@@ -101,12 +108,13 @@ class Contenu
      */
     public function __construct()
     {
-        $this->titre      = 'Nouveau contenu';
-        $this->alias      = 'nouveau-contenu';
-        $this->contenu    = '';
-        $this->parent     = null;
-        $this->order      = 0;
-        $this->references = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dateCreation = new \DateTime();
+        $this->titre        = 'Nouveau contenu';
+        $this->alias        = 'nouveau-contenu';
+        $this->contenu      = '';
+        $this->parent       = null;
+        $this->order        = 0;
+        $this->references   = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -266,6 +274,29 @@ class Contenu
     public function setObjet(Objet $objet)
     {
         $this->objet = $objet;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Contenu
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
     }
 
     /**

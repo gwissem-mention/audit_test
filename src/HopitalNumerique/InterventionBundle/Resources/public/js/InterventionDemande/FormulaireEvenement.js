@@ -29,9 +29,12 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init 
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initBoutonSoumission_Click = function()
 {
-    var FormulaireBoutonSoumission = $('#intervention_demande_form_submit');
+    var FormulaireBoutonSoumission = $('[data-form-submit]');
 
     $(FormulaireBoutonSoumission).click(function() {
+        if ($(this).attr('data-form-submit').indexOf('ferme') > -1)
+            $('#do').val('save-close');
+        
         if ($('form#form_intervention_demande_nouveau').size() > 0)
             $('form#form_intervention_demande_nouveau').submit();
         else if ($('form#form_intervention_demande_edition').size() > 0)

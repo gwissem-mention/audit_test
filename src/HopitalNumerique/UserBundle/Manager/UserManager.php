@@ -164,7 +164,7 @@ class UserManager extends BaseManager
      */
     public function findUsersByRole( $role )
     {
-        return $this->getRepository()->findUsersByRole($role)->getQuery()->getOneOrNullResult();
+        return $this->getRepository()->findUsersByRole($role)->getQuery()->getResult();
     }
 
     /**

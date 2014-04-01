@@ -54,7 +54,7 @@ class MailController extends Controller
         $mail = $this->get('nodevo_mail.manager.mail')->findOneBy( array( 'id' => $id) );
 
         return $this->render('NodevoMailBundle:Mail:show.html.twig', array(
-            'mail' => $mail,
+            'mail'        => $mail,
             'allowDelete' => $this->get('nodevo_mail.manager.mail')->isAllowedToDelete()
         ));
     }
