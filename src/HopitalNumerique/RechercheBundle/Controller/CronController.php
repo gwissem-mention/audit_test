@@ -11,6 +11,9 @@ class CronController extends Controller
      */
     public function requetesAction($id)
     {
+        $context = $this->container->get('router')->getContext();
+        $urlSite = $context->getScheme() . '://' . $context->getHost().$context->getBaseUrl();
+
         if ($id == 'FHFURJYIHOLPMFKVIDUESQGEUDRCTUFT')
         {
             $users = $this->get('hopitalnumerique_user.manager.user')->findAll();
@@ -29,22 +32,41 @@ class CronController extends Controller
                     $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $requete->getRefs(), $role );
                     $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
 
-                    //handles objets
+                    //prepare somes vars
                     $requeteNew     = false;
                     $requeteUpdated = false;
+                    $news           = '';
+                    $updateds       = '';
+
+                    //handles objets
                     foreach($objets as $objet)
                     {
                         //si l'objet est nouveau : la requete doit etre taggué nouvelle
                         if( $objet['new'] === true && !$requeteNew )
+                        {
                             $requeteNew = true;
+                            
+                            if( !is_null($objet['objet']) )
+                                $url = $this->generateUrl('hopital_numerique_publication_publication_contenu', array('id'=>$objet['objet'], 'alias'=>$objet['aliasO'], 'idc'=>$objet['id'], 'aliasc'=>$objet['aliasC']) );
+                            else
+                                $url = $this->generateUrl('hopital_numerique_publication_publication_contenu', array('id'=>$objet['id'], 'alias'=>$objet['alias']) );
+
+                            $news .= '<li><a target="_blank" href="'.$urlSite.$url.'" >'.ucfirst($objet['titre']).'</a></li>';
+                        }
 
                         //si l'objet est mis à jour : la requete doit etre taggué mise à jour
                         if( $objet['updated'] === true && !$requeteUpdated )
+                        {
                             $requeteUpdated = true;
-                            
-                        //si la requete est à la fois nouvelle ET mise à jour, on passe à la requete suivante
-                        if( $requeteNew && $requeteUpdated )
-                            break;
+
+                            if( !is_null($objet['objet']) )
+                                $url = $this->generateUrl('hopital_numerique_publication_publication_contenu', array('id'=>$objet['objet'], 'alias'=>$objet['aliasO'], 'idc'=>$objet['id'], 'aliasc'=>$objet['aliasC']) );
+                            else
+                                $url = $this->generateUrl('hopital_numerique_publication_publication_contenu', array('id'=>$objet['id'], 'alias'=>$objet['alias']) );
+
+                            $updateds .= '<li><a target="_blank" href="'.$urlSite.$url.'" >'.ucfirst($objet['titre']).'</a></li>';
+                        }
+
                     }
 
                     //update Requete entity
@@ -54,11 +76,19 @@ class CronController extends Controller
                     //check if User has to be notified
                     if( $requete->isUserNotified() ) {
                         $today = new \DateTime();
-                        
-                        if( $requete->getDateDebut() > $today && $today < $requete->getDateFin() )
+
+                        if( $requete->getDateDebut() < $today && $today < $requete->getDateFin() )
                         {
-                            $mail = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, array('requete'=>$requete->getNom()) );
+                            //format listes and build Options
+                            $options                           = array();
+                            $options['nouvellespublications']  = count($news) >= 1     ? '<ul>'.$news.'</ul>'     : '<ul><li> - Aucune nouvelle publication - </li></ul>';
+                            $options['misesajourpublications'] = count($updateds) >= 1 ? '<ul>'.$updateds.'</ul>' : '<ul><li> - Aucune publication mise à jour - </li></ul>';
+                            $options['requete']                = ucfirst($requete->getNom());
+
+                            //send mail
+                            $mail = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options );
                             $this->get('mailer')->send($mail);
+                            var_dump('mail send to : ' . $user->getEmail() );
                         }
                     }
                 }
