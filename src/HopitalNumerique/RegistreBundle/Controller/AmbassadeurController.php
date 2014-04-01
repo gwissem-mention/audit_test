@@ -119,7 +119,8 @@ class AmbassadeurController extends Controller
      */
     public function editerSessionAction()
     {
-        $domaine = $this->get('request')->request->get('domaine');
+        $domaine = intval($this->get('request')->request->get('domaine'));
+        
         $regionJSON = $this->get('request')->request->get('regionJSON');
         
         //On prépare la session
@@ -127,7 +128,11 @@ class AmbassadeurController extends Controller
 
         $session->set('registre-ambassadeur-region', $regionJSON );
         
-        return new Response('{"success":true, "url" : "'.$this->generateUrl( 'hopital_numerique_registre_homepage', array('domaine' => $domaine) ).'"}', 200);
+        //Si il n'y a pas de domaine fonctionnel sélectionné, ne pas passer un param null permet d'éviter le "/0" à la fin de l'url
+        if(0 != $domaine)
+            return new Response('{"success":true, "url" : "'.$this->generateUrl( 'hopital_numerique_registre_homepage', array('domaine' => $domaine) ).'"}', 200);
+        else
+            return new Response('{"success":true, "url" : "'.$this->generateUrl( 'hopital_numerique_registre_homepage' ).'"}', 200);
     }
 
     /**

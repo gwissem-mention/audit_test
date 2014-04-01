@@ -4,7 +4,8 @@ $(document).ready(function() {
 
 /**
  * Fonction permettant de créer et d'afficher la carte de la france en svg
- * @param JSON donneesParRegionJSON Tableau des données pour l'affichage de la carte 
+ * @param JSON    donneesParRegionJSON Tableau des données pour l'affichage de la carte 
+ * @param boolean remplissage          Permet de savoir si on passe par le "Selectionner tout" ou au chargement de la page
  */
 function afficheCarteFrance(donneesParRegionJSON, remplissage)
 {	

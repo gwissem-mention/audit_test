@@ -5,10 +5,6 @@ $(document).ready(function() {
         'autoSize'  : true,
         'scrolling' : 'yes'
     });
-    
-    $('#domaines_liste').change(function(){
-        window.location.href = $(this).data('url') + "/" + $(this).val();
-    });
 });
 
 $(document).bind("carteReady", function(){
