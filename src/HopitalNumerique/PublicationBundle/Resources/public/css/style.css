@@ -52,6 +52,7 @@
     #articles{margin-top: 20px; position: relative}
     /* Colonne right */
         #articles .print{position: absolute; right:0; top : 0; z-index: 5}
+        #articles .buttons .col-md-1{padding-right:0;}
         #articles h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; color:#333333;}
         #articles h4{font-size: 16px; font-weight: normal; margin:0;text-transform: uppercase;color:#6f3596;}
 

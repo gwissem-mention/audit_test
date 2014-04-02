@@ -47,8 +47,10 @@
                 {% endif %}
                 <h1>{{objet.titre}}</h1>
             </div>
-            <div class="col-md-1">
-                <div class="btn btn-default" onclick="print();"><i class="fa fa-print"></i></div>
+            <div class="buttons">
+	            <div class="col-md-1">
+	                <div class="btn btn-default pull-right" onclick="print();"><i class="fa fa-print"></i></div>
+	            </div>
             </div>
             <div class="col-md-12">
                 {{objet.resume|parsePublication|raw}}
