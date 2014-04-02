@@ -66,7 +66,6 @@ class CronController extends Controller
 
                             $updateds .= '<li><a target="_blank" href="'.$urlSite.$url.'" >'.ucfirst($objet['titre']).'</a></li>';
                         }
-
                     }
 
                     //update Requete entity
@@ -81,23 +80,25 @@ class CronController extends Controller
                         {
                             //format listes and build Options
                             $options                           = array();
-                            $options['nouvellespublications']  = count($news) >= 1     ? '<ul>'.$news.'</ul>'     : '<ul><li> - Aucune nouvelle publication - </li></ul>';
-                            $options['misesajourpublications'] = count($updateds) >= 1 ? '<ul>'.$updateds.'</ul>' : '<ul><li> - Aucune publication mise à jour - </li></ul>';
+                            $options['nouvellespublications']  = count($news) > 0     ? '<ul>'.$news.'</ul>'     : '<ul><li> - Aucune nouvelle publication - </li></ul>';
+                            $options['misesajourpublications'] = count($updateds) > 0 ? '<ul>'.$updateds.'</ul>' : '<ul><li> - Aucune publication mise à jour - </li></ul>';
                             $options['requete']                = ucfirst($requete->getNom());
 
                             //send mail
                             $mail = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options );
                             $this->get('mailer')->send($mail);
-                            var_dump('mail send to : ' . $user->getEmail() );
+                            $this->get('hopitalnumerique_recherche.service.logger.cronlogger')->addLog('mail send to : ' . $user->getEmail() );
                         }
                     }
                 }
 
                 //save
                 $this->get('hopitalnumerique_recherche.manager.requete')->save( $requetes );
-            }            
+            }
+
+            return new Response($this->get('hopitalnumerique_recherche.service.logger.cronlogger')->getHtml().'<p>Fin du traitement : OK.</p>');
         }
         
-        return new Response();
+        return new Response('Clef invalide.');
     }
 }
