@@ -260,10 +260,11 @@ function updateResultats( cleanSession )
         type    : 'POST',
         success : function( data ){
             $('#resultats').html( data );
-            if( $('#nbResults').val() == 0){
+
+            if( $('#dest li:not(.hide)').length == 0){
                 $('.requete h2').html( 'Requête de recherche' );
                 $('#resultats').html('');
-            }else if( $('#nbResults').val() == 1 ){
+            }else if( $('#nbResults').val() == 1 || $('#nbResults').val() == 0 ){
                 $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultat)' );
             }else
                 $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
