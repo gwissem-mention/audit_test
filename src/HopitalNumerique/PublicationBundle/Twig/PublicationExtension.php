@@ -36,7 +36,7 @@ class PublicationExtension extends \Twig_Extension
      */
     public function parsePublication($content)
     {
-        $pattern = '/\[([a-zA-Z]+)\:(\d+)\;([a-zA-Z]+)\;([a-zA-Z0-9]+)\]/';
+        $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )+)\;([a-zA-Z0-9]+)\]/';
         preg_match_all($pattern, $content, $matches);
          
         // matches[0] tableau des chaines completes trouvée
@@ -55,7 +55,10 @@ class PublicationExtension extends \Twig_Extension
                         $replacement = "<a href=\"javascript:alert('Cette publication n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
 
                     $pattern = $matches[0][$key];
+                    
+                    
                     $content = str_replace($pattern, $replacement, $content);
+                    
                 break;
               case 'INFRADOC':
                 //cas contenu
