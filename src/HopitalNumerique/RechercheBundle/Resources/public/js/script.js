@@ -408,6 +408,8 @@ function cleanRequest()
     $.removeCookie('showMorePointsDurs', { path: '/' });
     $.removeCookie('showMoreProductions', { path: '/' });
 
+    $('.requeteNom').html('');
+    $('.requeteNom').data('id', '');
 
     updateResultats( true );
 }
