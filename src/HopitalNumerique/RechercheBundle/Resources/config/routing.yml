@@ -3,14 +3,14 @@ hopital_numerique_recherche_homepage:
     pattern:  /recherche-par-referencement/
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index}
     requirements:
-        _method: GET
+        _method: GET|POST
 
 hopital_numerique_recherche_homepage_requete:
     pattern:  /recherche-par-referencement/requete/{id}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index, id:null}
     requirements: 
         id: \d+
-        _method: GET
+        _method: GET|POST
 
 hopital_numerique_recherche_getresults:
     pattern:  /recherche-par-referencement/get-results
@@ -77,4 +77,4 @@ hopital_numerique_cron_requetes:
     pattern:  /cron-requetes/{id}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Cron:requetes}
     requirements:
-        _method: GET
+        _method: GET|POST
