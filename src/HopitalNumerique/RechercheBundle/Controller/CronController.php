@@ -66,7 +66,6 @@ class CronController extends Controller
 
                             $updateds .= '<li><a target="_blank" href="'.$urlSite.$url.'" >'.ucfirst($objet['titre']).'</a></li>';
                         }
-
                     }
 
                     //update Requete entity
@@ -81,8 +80,8 @@ class CronController extends Controller
                         {
                             //format listes and build Options
                             $options                           = array();
-                            $options['nouvellespublications']  = count($news) >= 1     ? '<ul>'.$news.'</ul>'     : '<ul><li> - Aucune nouvelle publication - </li></ul>';
-                            $options['misesajourpublications'] = count($updateds) >= 1 ? '<ul>'.$updateds.'</ul>' : '<ul><li> - Aucune publication mise à jour - </li></ul>';
+                            $options['nouvellespublications']  = count($news) > 0     ? '<ul>'.$news.'</ul>'     : '<ul><li> - Aucune nouvelle publication - </li></ul>';
+                            $options['misesajourpublications'] = count($updateds) > 0 ? '<ul>'.$updateds.'</ul>' : '<ul><li> - Aucune publication mise à jour - </li></ul>';
                             $options['requete']                = ucfirst($requete->getNom());
 
                             //send mail
