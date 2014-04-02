@@ -282,20 +282,36 @@ class ObjetManager extends BaseManager
         }
 
         //formate datas
-        foreach( $objets as $one ) {
-            $results[] = array(
-                "text" => $one->getTitre(), "value" => "PUBLICATION:" . $one->getId()
-            );
-
-            if( !isset($contenus[ $one->getId() ]) || count( $contenus[ $one->getId() ] ) <= 0 )
-                continue;
-
-            foreach( $contenus[ $one->getId() ] as $content ){
+        foreach( $objets as $one ) 
+        {
+            //Traitement pour Article
+            if($one->isArticle())
+            {
                 $results[] = array(
-                    "text" => "|--" . $content->titre, "value" => "INFRADOC:" . $content->id
+                        "text"  => $one->getTitre(),
+                        "value" => "ARTICLE:" . $one->getId()
                 );
-                $this->getObjetsChilds($results, $content, 2);
             }
+            //Traitement pour Publication et Infradoc
+            else 
+            {
+                $results[] = array(
+                        "text"  => $one->getTitre(),
+                        "value" => "PUBLICATION:" . $one->getId()
+                );
+                
+                if( !isset($contenus[ $one->getId() ]) || count( $contenus[ $one->getId() ] ) <= 0 )
+                    continue;
+                
+                foreach( $contenus[ $one->getId() ] as $content ){
+                    $results[] = array(
+                            "text"  => "|--" . $content->titre,
+                            "value" => "INFRADOC:" . $content->id
+                    );
+                    $this->getObjetsChilds($results, $content, 2);
+                }
+            }
+            
         }
 
         return $results;

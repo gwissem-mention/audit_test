@@ -41,10 +41,19 @@ class SearchController extends Controller
         //on charge la requete demandée explicitement
         }else{
             $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'id' => $id ) );
-            $refs    = $requete ? json_encode($requete->getRefs()) : '[]';
 
-            //set requete id in session
-            $session->set('requete-id', $id);
+            if( $requete ) {
+                $refs = json_encode($requete->getRefs());
+
+                //update request
+                $requete->setNew( false );
+                $requete->setUpdated( false );
+                $this->get('hopitalnumerique_recherche.manager.requete')->save($requete);
+
+                //set requete id in session
+                $session->set('requete-id', $id);
+            }else
+                return $this->redirect( $this->generateUrl('hopital_numerique_recherche_homepage_requete') );
         }
 
         if( $refs == 'null' )
@@ -71,7 +80,7 @@ class SearchController extends Controller
         $request    = $this->get('request');
         $references = $request->request->get('references');
         $objets     = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role );
-        $objets     = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets );
+        $objets     = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
 
         //on prépare la session
         $session = $this->getRequest()->getSession();

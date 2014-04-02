@@ -232,6 +232,21 @@ class MailManager extends BaseManager
     }
    
     /**
+     * Envoi un mail de notification de la requete
+     *
+     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendNotificationRequete( $user, $options )
+    {
+        $mail = $this->findOneById(29);
+    
+        return $this->generationMail($user, $mail, $options);
+    }
+
+    /**
      * Retourne un email de test
      *
      * @param  [type] $id   [description]

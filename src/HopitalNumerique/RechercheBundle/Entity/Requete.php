@@ -24,16 +24,51 @@ class Requete
     /**
      * @var string
      *
-     * @ORM\Column(name="req_nom", type="string", length=128)
+     * @ORM\Column(name="req_nom", type="string", length=128, options = {"comment" = "Nom de la requete"})
      */
     private $nom;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="req_isDefault", type="boolean")
+     * @ORM\Column(name="req_isDefault", type="boolean", options = {"comment" = "La requete est-elle celle par default ?"})
      */
     private $isDefault;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="req_isNew", type="boolean", options = {"comment" = "Un element de la requete est taggue comme nouveau ?"})
+     */
+    private $isNew;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="req_isUpdated", type="boolean", options = {"comment" = "Un element de la requete est taggue comme mis a jour ?"})
+     */
+    private $isUpdated;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="req_isUserNotified", type="boolean", options = {"comment" = "L utilisateur a demande d etre notifie sur cette requete"})
+     */
+    private $isUserNotified;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="obj_date_debut", type="datetime", options = {"comment" = "Date de debut de la notification"}, nullable=true)
+     */
+    private $dateDebut;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="obj_date_fin", type="datetime", options = {"comment" = "Date de fin de la notification"}, nullable=true)
+     */
+    private $dateFin;
 
     /**
      * @var array
@@ -53,8 +88,13 @@ class Requete
      */
     public function __construct()
     {
-        $this->isDefault = false;
-        $this->refs      = array();
+        $this->isDefault      = false;
+        $this->isNew          = false;
+        $this->isUpdated      = false;
+        $this->isUserNotified = false;
+        $this->dateDebut      = null;
+        $this->dateFin        = null;
+        $this->refs           = array();
     }
 
     /**
@@ -114,6 +154,106 @@ class Requete
     }
 
     /**
+     * Get isNew
+     *
+     * @return boolean $isNew
+     */
+    public function isNew()
+    {
+        return $this->isNew;
+    }
+    
+    /**
+     * Set isNew
+     *
+     * @param boolean $isNew
+     */
+    public function setNew($isNew)
+    {
+        $this->isNew = $isNew;
+    }
+    
+    /**
+     * Get isUpdated
+     *
+     * @return boolean $isUpdated
+     */
+    public function isUpdated()
+    {
+        return $this->isUpdated;
+    }
+    
+    /**
+     * Set isUpdated
+     *
+     * @param boolean $isUpdated
+     */
+    public function setUpdated($isUpdated)
+    {
+        $this->isUpdated = $isUpdated;
+    }
+    
+    /**
+     * Get isUserNotified
+     *
+     * @return boolean $isUserNotified
+     */
+    public function isUserNotified()
+    {
+        return $this->isUserNotified;
+    }
+    
+    /**
+     * Set isUserNotified
+     *
+     * @param boolean $isUserNotified
+     */
+    public function setUserNotified($isUserNotified)
+    {
+        $this->isUserNotified = $isUserNotified;
+    }
+    
+    /**
+     * Get dateDebut
+     *
+     * @return DateTime $dateDebut
+     */
+    public function getDateDebut()
+    {
+        return $this->dateDebut;
+    }
+    
+    /**
+     * Set dateDebut
+     *
+     * @param DateTime $dateDebut
+     */
+    public function setDateDebut($dateDebut)
+    {
+        $this->dateDebut = $dateDebut;
+    }
+    
+    /**
+     * Get dateFin
+     *
+     * @return DateTime $dateFin
+     */
+    public function getDateFin()
+    {
+        return $this->dateFin;
+    }
+    
+    /**
+     * Set dateFin
+     *
+     * @param DateTime $dateFin
+     */
+    public function setDateFin($dateFin)
+    {
+        $this->dateFin = $dateFin;
+    }
+    
+    /**
      * Set refs
      *
      * @param array $refs
@@ -155,5 +295,4 @@ class Requete
     {
         $this->user = $user;
     }
-    
 }

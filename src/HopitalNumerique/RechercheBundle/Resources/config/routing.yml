@@ -1,4 +1,4 @@
-# URLs de recherche
+#Recherche
 hopital_numerique_recherche_homepage:
     pattern:  /recherche-par-referencement/
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index}
@@ -18,7 +18,7 @@ hopital_numerique_recherche_getresults:
     requirements:
         _method: POST
 
-#URLs concernant les requêtes de recherche
+#Requêtes de recherche
 hopital_numerique_requete_detail:
     pattern:  /requetes/detail/{id}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:detail }
@@ -52,9 +52,29 @@ hopital_numerique_requete_toggle:
         id: \d+
         _method: POST
 
+hopital_numerique_requete_mail:
+    pattern:  /requetes/mail/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:mail, id:1}
+    requirements: 
+        id: \d+
+        _method: GET
+
+hopital_numerique_requete_mail_notified:
+    pattern:  /requetes/getNotified/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:getNotified }
+    requirements:
+        _method: POST
+
 hopital_numerique_requete_consultation_delete:
     pattern:  /requetes/consultation/delete/{id}.{_format}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Consultation:delete, id:1, _format:json }
     requirements: 
         id: \d+
         _method: POST|DELETE
+
+#CRON
+hopital_numerique_cron_requetes:
+    pattern:  /cron-requetes/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Cron:requetes}
+    requirements:
+        _method: GET

@@ -77,10 +77,8 @@ class ConsultationManager extends BaseManager
      *
      * @return array
      */
-    public function updateObjetsWithConnectedUser( $objets )
+    public function updateObjetsWithConnectedUser( $objets, $user )
     {
-        $user = $this->_securityContext->getToken()->getUser();
-
         if( $user != "anon.") {
             //get date Inscription user
             $dateInscription = $user->getDateInscription();

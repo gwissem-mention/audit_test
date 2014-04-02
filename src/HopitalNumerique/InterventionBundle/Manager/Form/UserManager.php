@@ -109,10 +109,10 @@ class UserManager
     /**
      * Retourne la liste des ambassadeurs pour les listes de formulaire.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $region La région des ambassadeurs
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference|null $region La région des ambassadeurs
      * @return array Liste des ambassadeurs pour les listes de formulaire
      */
-    public function getAmbassadeursChoices(Reference $region)
+    public function getAmbassadeursChoices($region)
     {
         return $this->userManager->getAmbassadeursByRegionAndDomaine($region);
     }

@@ -1,6 +1,8 @@
-<ol class="arbo-requete">
-    {{ _self.buildTree(elements, 0) }}
-</ol>
+<div style="padding:15px" >
+    <ol class="arbo-requete">
+        {{ _self.buildTree(elements, 0) }}
+    </ol>
+</div>
 
 <input type="hidden" id="requete-refs" value="{{refs}}" />
 <script type="text/javascript" >handleRefs()</script>

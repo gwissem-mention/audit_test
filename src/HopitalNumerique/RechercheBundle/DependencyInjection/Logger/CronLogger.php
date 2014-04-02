@@ -1,23 +1,21 @@
 <?php
 /**
- * Classe affichant les logs des courriels qui ont été envoyés.
- * 
- * @author Rémi Leclerc <rleclerc@nodevo.com>
+ * Classe affichant les logs du cron requetes
  */
-namespace HopitalNumerique\InterventionBundle\DependencyInjection\Demande;
+namespace HopitalNumerique\RechercheBundle\DependencyInjection\Logger;
 
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
- * Classe affichant les logs des courriels qui ont été envoyés.
+ * Classe affichant les logs du cron requete
  */
-class EnvoiCourrielsAffichageLogs
+class CronLogger
 {
     /**
      * @var string Nom de la session qui contient les logs d'envois de courriel
      */
-    private static $LOG_SESSION_NOM = 'hn_envoicourriels';
+    private $sessionName = 'hn_cronrequte';
     
     /**
      * @var \Symfony\Bridge\Monolog\Logger Logger de l'application
@@ -37,10 +35,10 @@ class EnvoiCourrielsAffichageLogs
      */
     public function __construct(Logger $logger, Session $session)
     {
-        $this->logger = $logger;
+        $this->logger  = $logger;
         $this->session = $session;
         
-        $this->session->set(self::$LOG_SESSION_NOM, array());
+        $this->session->set($this->sessionName, array());
     }
     
     /**
@@ -52,10 +50,11 @@ class EnvoiCourrielsAffichageLogs
     {
         $this->logger->info($message);
         
-        $logsExistants = $this->session->get(self::$LOG_SESSION_NOM);
+        $logsExistants   = $this->session->get($this->sessionName);
         $logsExistants[] = $message;
-        $this->session->set(self::$LOG_SESSION_NOM, $logsExistants);
+        $this->session->set($this->sessionName, $logsExistants);
     }
+
     /**
      * Retourne l'affichage des logs en HTML.
      * 
@@ -65,7 +64,7 @@ class EnvoiCourrielsAffichageLogs
     {
         $courrielsLogs = $this->getLogs();
         
-        echo '<h1>Envoi des courriels</h1>';
+        echo '<h1>Cron requete</h1>';
         if (count($courrielsLogs) > 0)
         {
             echo '<ul>';
@@ -73,8 +72,9 @@ class EnvoiCourrielsAffichageLogs
                 echo '<li>'.$courrielLog.'</li>';
             echo '</ul>';
         }
-        else echo '<p>Aucune courriel envoyé.</p>';
+        else echo '<p>Aucune mail envoyé.</p>';
     }
+    
     /**
      * Retourne la liste des logs qui concernent l'envoi des courriels.
      * 
@@ -82,6 +82,6 @@ class EnvoiCourrielsAffichageLogs
      */
     private function getLogs()
     {
-        return $this->session->get(self::$LOG_SESSION_NOM);
+        return $this->session->get($this->sessionName);
     }
 }

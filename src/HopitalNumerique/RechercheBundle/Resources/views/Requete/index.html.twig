@@ -6,6 +6,7 @@
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriquerecherche/css/requete.css'
         'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
+        'bundles/nodevoadmin/plugins/form-toggle/toggles.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -16,6 +17,7 @@
     {% javascripts output="compiled/hopitalnumerique-recherche-requete-index.js"
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        'bundles/nodevoadmin/plugins/form-toggle/toggle.min.js'
         'bundles/hopitalnumeriquerecherche/js/requete.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -36,9 +38,18 @@
                     <i class="fa {% if requete.isDefault %}fa-star{% endif %}"></i>
                 </div>
 
-                <p {% if requete.isDefault %}class="violet"{% endif %} >{{requete.nom|capitalize}}</p>
+                <p {% if requete.isDefault %}class="violet"{% endif %} >
+                    {{requete.nom|capitalize}}
+                    {% if requete.isNew %}
+                        <i class="fa fa-bullhorn"></i>
+                    {% endif %}
+                    {% if requete.isUpdated %}
+                        <i class="fa fa-refresh"></i>
+                    {% endif %}
+                </p>
 
                 <div class="actions pull-right">
+                    <div class="fa fa-envelope {% if requete.isUserNotified %}active{% else %}inactive{% endif %}" onclick="showDetails('{{path('hopital_numerique_requete_mail',{'id':requete.id})}}')"></div>
                     <div class="fa fa-eye" onclick="showDetails('{{path('hopital_numerique_requete_detail',{'id':requete.id})}}')"></div>
                     <div class="fa fa-edit" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
                     <div class="fa fa-times-circle" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
