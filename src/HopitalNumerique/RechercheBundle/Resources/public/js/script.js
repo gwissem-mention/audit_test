@@ -413,4 +413,6 @@ function cleanRequest()
     $('.requeteNom').data('id', '');
 
     updateResultats( true );
+
+    history.pushState({ path: this.path }, '', $('#search-homepage-url').val() );
 }
