@@ -7,9 +7,25 @@
         <form action="#" class="form-horizontal">
             <div class="form-group">
                 <div class="col-md-12">
+                    <label class="col-md-4 control-label" for="toggle">Être notifié des mises à jours ?</label>
+                    <div class="col-md-1">
+                        <div class="toggle toggle-success" ></div>
+                    </div>
+                    <input type="hidden" id="toggle" value="{{requete.isUserNotified}}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-8 col-md-offset-4">
+                    <p>
+                        Si vous voulez être notifié durant une période spécifiez une date de début et de fin de notification.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
                     <label class="col-md-4 control-label" for="dateDebut">Date de début</label>
                     <div class="col-md-8">
-                        <input type="text" id="dateDebut" class="form-control" value="{{requete.dateDebut|date('d/m/Y')}}" />
+                        <input type="text" id="dateDebut" class="form-control" value="{% if requete.dateDebut %}{{requete.dateDebut|date('d/m/Y')}}{% endif %}" />
                     </div>
                 </div>
             </div>
@@ -17,17 +33,8 @@
                 <div class="col-md-12">
                     <label class="col-md-4 control-label" for="dateFin">Date de fin</label>
                     <div class="col-md-8">
-                        <input type="text" id="dateFin" class="form-control" value="{{requete.dateFin|date('d/m/Y')}}" />
+                        <input type="text" id="dateFin" class="form-control" value="{% if requete.dateFin %}{{requete.dateFin|date('d/m/Y')}}{% endif %}" />
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-12">
-                    <label class="col-md-4 control-label" for="toggle">Être notifié des mises à jours ?</label>
-                    <div class="col-md-1">
-                        <div class="toggle toggle-success" ></div>
-                    </div>
-                    <input type="hidden" id="toggle" value="{{requete.isUserNotified}}" />
                 </div>
             </div>
         </form>
