@@ -43,7 +43,7 @@ class Questionnaire
     private $questions;
     
     /**
-     * @ORM\OneToMany(targetEntity="HopitalNumerique\UserBundle\Entity\RefusCandidature", mappedBy="user", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\UserBundle\Entity\RefusCandidature", mappedBy="questionnaire", cascade={"persist", "remove" })
      */
     protected $refusCandidature;
     
