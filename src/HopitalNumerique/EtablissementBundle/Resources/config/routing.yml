@@ -50,4 +50,4 @@ hopitalnumerique_etablissement_archiver:
     defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:archiver" }
     requirements:
         id: \d+
-        _method: GET
+        _method: GET|POST
