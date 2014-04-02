@@ -41,12 +41,16 @@
             </div>
             <div class="col-md-9" >
         {% endif %}
-            <div class="btn btn-default print" onclick="print();"><i class="fa fa-print"></i></div>
-            <div class="col-md-12">
+            <div class="col-md-11">
                 {% if types != 'Article' %}
                     <h4>{{types}}</h4>
                 {% endif %}
                 <h1>{{objet.titre}}</h1>
+            </div>
+            <div class="buttons">
+	            <div class="col-md-1">
+	                <div class="btn btn-default pull-right" onclick="print();"><i class="fa fa-print"></i></div>
+	            </div>
             </div>
             <div class="col-md-12">
                 {{objet.resume|parsePublication|raw}}
