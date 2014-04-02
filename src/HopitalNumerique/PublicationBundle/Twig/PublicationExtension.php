@@ -73,6 +73,21 @@ class PublicationExtension extends \Twig_Extension
                 $pattern = $matches[0][$key];
                 $content = str_replace($pattern, $replacement, $content);
                 break;
+              case 'ARTICLE':
+                    //cas Objet
+                    $objet = $this->_managerObjet->findOneBy( array( 'id' => $matches[2][$key] ) );
+                    $target = $matches[4][$key] == "1" ? "target='_blank'" : "";
+                    if($objet)
+                        $replacement = '<a href="/publication/article/'.$matches[2][$key].'-' . $objet->getAlias() . '" '.$target.'>' . $matches[3][$key] . '</a>';
+                    else
+                        $replacement = "<a href=\"javascript:alert('Cet article n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
+
+                    $pattern = $matches[0][$key];
+                    
+                    
+                    $content = str_replace($pattern, $replacement, $content);
+                    
+                break;
             }
           }
         }
