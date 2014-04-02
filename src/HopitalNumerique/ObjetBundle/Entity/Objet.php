@@ -859,7 +859,6 @@ class Objet
      */
     public function getTypeMime( $firstFile = true )
     {
-        $return = "";
         if( $firstFile ){
             $path = $this->path;
         } else {
