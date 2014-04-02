@@ -88,16 +88,18 @@ class CronController extends Controller
                             //send mail
                             $mail = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options );
                             $this->get('mailer')->send($mail);
-                            var_dump('mail send to : ' . $user->getEmail() );
+                            $this->get('hopitalnumerique_recherche.service.logger.cronlogger')->addLog('mail send to : ' . $user->getEmail() );
                         }
                     }
                 }
 
                 //save
                 $this->get('hopitalnumerique_recherche.manager.requete')->save( $requetes );
-            }            
+            }
+
+            return new Response($this->get('hopitalnumerique_recherche.service.logger.cronlogger')->getHtml().'<p>Fin du traitement : OK.</p>');
         }
         
-        return new Response();
+        return new Response('Clef invalide.');
     }
 }
