@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ContactBundle\Form\Type;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Nodevo\ContactBundle\Form\Type\ContactType as NodevoContactType;
@@ -36,6 +37,22 @@ class ContactType extends NodevoContactType
                     'label'      => 'Fonction dans l\'établissement',
                     'attr'       => array('class' => $this->_constraints['fonctionStructure']['class'])
             ))
+
+        ->add('civilite', 'entity', array(
+                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property'      => 'libelle',
+                    'required'      => true,
+                    'label'         => 'Civilite',
+                    'empty_value'   => ' - ',
+                    'attr'          => array('class' => $this->_constraints['civilite']['class'] ),
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('ref')
+                            ->where('ref.code = :etat')
+                            ->setParameter('etat', 'CIVILITE')
+                            ->orderBy('ref.order', 'ASC');
+                    }
+            ))
+        
         ;
     }
     

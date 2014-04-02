@@ -31,17 +31,70 @@ class ContactType extends AbstractType
             ->add('prenom', 'text', array(
                 'required' => true, 
                 'label'    => 'Prenom',
-                'attr'        => array('class' => $this->_constraints['prenom']['class'] ),
+                'attr'        => array(
+                        'class' => $this->_constraints['prenom']['class'],
+                        'placeholder' => 'Votre prénom'
+                ),
             ))
             ->add('nom', 'text', array(
                 'required' => true, 
                 'label'    => 'Nom',
-                'attr'        => array('class' => $this->_constraints['nom']['class'] ),
+                'attr'        => array(
+                        'class' => $this->_constraints['nom']['class'],
+                        'placeholder' => 'Votre nom'
+                ),
             ))
-            ->add('mail', 'text', array(
-                'required' => true, 
-                'label'    => 'Adresse mail',
-                'attr'        => array('class' => $this->_constraints['mail']['class'] ),
+            ->add('mail', 'repeated', array(
+                    'type'           => 'text',
+                    'invalid_message' => 'Ces deux champs doivent être identiques.',
+                    'required'       => true,
+                    'first_options'  => array(
+                            'label' => 'Adresse mail',
+                            'attr' => array(
+                                    'autocomplete' => 'off',
+                                    'class' => $this->_constraints['mail']['class'],
+                                    'placeholder' => 'Votre adresse mail'
+                            )),
+                    'second_options' => array(
+                            'label' => 'Confirmer l\'adresse mail',
+                            'attr' => array(
+                                    'autocomplete' => 'off',
+                                    'class' => $this->_constraints['mail']['class'],
+                                    'placeholder' => 'Confirmation de votre adresse mail'
+                            ))
+            ))
+            ->add('pays', 'text', array(
+                    'required' => false,
+                    'label'    => 'Pays',
+                    'attr'        => array(
+                            'class' => $this->_constraints['pays']['class'],
+                            'placeholder' => 'Votre pays'
+                    ),
+            ))
+            ->add('ville', 'text', array(
+                    'required' => false,
+                    'label'    => 'Ville',
+                    'attr'        => array(
+                            'class' => $this->_constraints['ville']['class'],
+                            'placeholder' => 'Votre ville' 
+                    ),
+            ))
+            ->add('telephone', 'text', array(
+                    'required' => false,
+                    'label'    => 'Téléphone',
+                    'attr'        => array(
+                            'class' => $this->_constraints['telephone']['class'], 
+                            'data-mask' => $this->_constraints['telephone']['mask'],
+                            'placeholder' => 'XX XX XX XX XX'
+                    ),
+            ))
+            ->add('message', 'textarea', array(
+                    'required' => true,
+                    'label'    => 'Message',
+                    'attr'        => array(
+                            'class' => $this->_constraints['message']['class'],
+                        'placeholder' => 'Votre prénom' 
+                    ),
             ))
             
             ;

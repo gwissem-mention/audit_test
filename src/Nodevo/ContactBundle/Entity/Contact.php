@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
@@ -19,7 +18,7 @@ class Contact
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="contact_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -58,7 +57,6 @@ class Contact
     /**
      * @var string
      *
-     * @ORM\Column(name="mail", type="string", length=255)
      * @Assert\NotBlank(message="L'adresse éléctronique ne peut pas être vide.")
      * @Assert\Regex(pattern= "/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]{2,}[.][a-zA-Z]{2,3}$/")
      * @Assert\Length(
@@ -68,27 +66,53 @@ class Contact
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom de compte."
      * )
      * @Nodevo\Javascript(class="validate[required,custom[email]]")
+     * @ORM\Column(name="contact_mail", type="string", length=255)
      */
     protected $mail;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="ville", type="string", length=50)
+     * 
+     * @Assert\Length(
+     *      max = "50",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le pays."
+     * )
+     * @Nodevo\Javascript(class="validate[maxSize[50]]")
+     * @ORM\Column(name="contact_pays", type="string", length=50)
+     */
+    protected $pays;
+
+    /**
+     * @var string
+     * 
+     * @Assert\Length(
+     *      max = "50",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans la ville."
+     * )
+     * @Nodevo\Javascript(class="validate[maxSize[50]]")
+     * @ORM\Column(name="contact_ville", type="string", length=50)
      */
     protected $ville;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="telephone", type="string", length=14)
+     * @Assert\Length(
+     *      min = "14",
+     *      max = "14",
+     *      minMessage="Le numéro de téléphone direct doit être respecter le format XX XX XX XX XX.",
+     *      maxMessage="Le numéro de téléphone direct doit être respecter le format XX XX XX XX XX."
+     * )
+     * @Nodevo\Javascript(class="validate[minSize[14],maxSize[14]],custom[phone]", mask="99 99 99 99 99")
+     * @ORM\Column(name="contact_telephone", type="string", length=14, nullable=true, options = {"comment" = "Téléphone de l utilisateur"})
      */
     protected $telephone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="message", type="text")
+     * @Assert\NotBlank(message="Le massage de contact ne doit pas être vide.")
+     * @Nodevo\Javascript(class="validate[required]]")
+     * @ORM\Column(name="contact_message", type="text")
      */
     protected $message;
 
@@ -101,30 +125,6 @@ class Contact
     public function getId()
     {
         return $this->id;
-    }
-
-
-    /**
-     * Set string
-     *
-     * @param string $string
-     * @return Contact
-     */
-    public function setString($string)
-    {
-        $this->string = $string;
-
-        return $this;
-    }
-
-    /**
-     * Get string
-     *
-     * @return string 
-     */
-    public function getString()
-    {
-        return $this->string;
     }
 
     /**
@@ -217,6 +217,29 @@ class Contact
     public function getVille()
     {
         return $this->ville;
+    }
+    
+    /**
+     * Set pays
+     *
+     * @param string $pays
+     * @return Contact
+     */
+    public function setPays($pays)
+    {
+        $this->pays = pays;
+    
+        return $this;
+    }
+    
+    /**
+     * Get pays
+     *
+     * @return string
+     */
+    public function getPays()
+    {
+        return $this->pays;
     }
 
     /**
