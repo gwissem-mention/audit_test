@@ -63,14 +63,14 @@ class ContactType extends AbstractType
                                     'placeholder' => 'Confirmation de votre adresse mail'
                             ))
             ))
-            ->add('pays', 'text', array(
-                    'required' => false,
-                    'label'    => 'Pays',
-                    'attr'        => array(
-                            'class' => $this->_constraints['pays']['class'],
-                            'placeholder' => 'Votre pays'
-                    ),
-            ))
+//             ->add('pays', 'text', array(
+//                     'required' => false,
+//                     'label'    => 'Pays',
+//                     'attr'        => array(
+//                             'class' => $this->_constraints['pays']['class'],
+//                             'placeholder' => 'Votre pays'
+//                     ),
+//             ))
             ->add('ville', 'text', array(
                     'required' => false,
                     'label'    => 'Ville',

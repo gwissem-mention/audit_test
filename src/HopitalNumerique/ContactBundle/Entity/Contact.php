@@ -43,17 +43,28 @@ class Contact extends NodevoContact
     /**
      * @var string
      * 
-     * @Assert\NotBlank(message="Le nom ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "1",
-     *      max = "50",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
+     *      min = "5",
+     *      max = "5",
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le code postal.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le code postal."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
-     * @ORM\Column(name="contact_nom", type="string", length=50)
+     * @Nodevo\Javascript(class="validate[minSize[5],maxSize[5]]")
+     * @ORM\Column(name="contact_codepostal", type="string", length=5)
      */
     protected $codepostal;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
+     * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id")
+     */
+    protected $region;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
+     * @ORM\JoinColumn(name="ref_departement", referencedColumnName="ref_id")
+     */
+    protected $departement;
 
     /**
      * Get fonctionStructure
@@ -96,5 +107,74 @@ class Contact extends NodevoContact
             $this->civilite = $civilite;
         else
             $this->civilite = null;
+    }
+
+    /**
+     * Set codepostal
+     *
+     * @param string $codepostal
+     * @return Contact
+     */
+    public function setCodepostal($codepostal)
+    {
+        $this->codepostal = $codepostal;
+
+        return $this;
+    }
+
+    /**
+     * Get codepostal
+     *
+     * @return string 
+     */
+    public function getCodepostal()
+    {
+        return $this->codepostal;
+    }
+    
+    /**
+     * Get region
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $region
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+    
+    /**
+     * Set region
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $region
+     */
+    public function setRegion($region)
+    {
+        if($region instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+            $this->region = $region;
+        else
+            $this->region = null;
+    }
+    
+    /**
+     * Get département
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
+     */
+    public function getDepartement()
+    {
+        return $this->departement;
+    }
+    
+    /**
+     * Set département
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
+     */
+    public function setDepartement($departement)
+    {
+        if($departement instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+            $this->departement = $departement;
+        else
+            $this->departement = null;
     }
 }

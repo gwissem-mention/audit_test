@@ -32,26 +32,66 @@ class ContactType extends NodevoContactType
         
         $builder
         ->add('fonctionStructure', 'text', array(
-                    'max_length' => $this->_constraints['fonctionStructure']['maxlength'],
-                    'required'   => false,
-                    'label'      => 'Fonction dans l\'établissement',
-                    'attr'       => array('class' => $this->_constraints['fonctionStructure']['class'])
-            ))
+                'max_length' => $this->_constraints['fonctionStructure']['maxlength'],
+                'required'   => false,
+                'label'      => 'Fonction dans l\'établissement',
+                'attr'       => array(
+                        'class' => $this->_constraints['fonctionStructure']['class'],
+                        'placeholder' => 'Votre fonction dans l\'établissement'
+                )
+        ))
 
         ->add('civilite', 'entity', array(
-                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'property'      => 'libelle',
-                    'required'      => true,
-                    'label'         => 'Civilite',
-                    'empty_value'   => ' - ',
-                    'attr'          => array('class' => $this->_constraints['civilite']['class'] ),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                            ->where('ref.code = :etat')
-                            ->setParameter('etat', 'CIVILITE')
-                            ->orderBy('ref.order', 'ASC');
-                    }
-            ))
+                'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property'      => 'libelle',
+                'required'      => true,
+                'label'         => 'Civilite',
+                'empty_value'   => ' - ',
+                'attr'          => array('class' => $this->_constraints['civilite']['class'] ),
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('ref')
+                        ->where('ref.code = :etat')
+                        ->setParameter('etat', 'CIVILITE')
+                        ->orderBy('ref.order', 'ASC');
+                }
+        ))
+        ->add('codepostal', 'text', array(
+            'required' => false, 
+            'label'    => 'Code Postal',
+            'attr'        => array(
+                    'class' => $this->_constraints['codepostal']['class'],
+                    'placeholder' => 'Votre Code Postal'
+            ),
+        ))
+        
+        ->add('region', 'entity', array(
+                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property'    => 'libelle',
+                'required'    => false,
+                'label'       => 'Région',
+                'empty_value' => ' - ',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('ref')
+                    ->where('ref.code = :etat')
+                    ->setParameter('etat', 'REGION')
+                    ->orderBy('ref.order', 'ASC');
+                }
+        ))
+        
+        ->add('departement', 'entity', array(
+                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property'    => 'libelle',
+                'required'    => false,
+                'label'       => 'Département',
+                'empty_value' => ' - ',
+                'attr'        => array(),
+                'query_builder' => function(EntityRepository $er) use($options) {
+                    return $er->createQueryBuilder('ref')
+                    ->where('ref.code = :etat')
+                    ->setParameter('etat', 'DEPARTEMENT')
+                    ->orderBy('ref.libelle', 'ASC');
+                }
+        ))
         
         ;
     }
