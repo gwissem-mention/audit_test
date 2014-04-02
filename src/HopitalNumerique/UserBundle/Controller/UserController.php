@@ -373,9 +373,6 @@ class UserController extends Controller
         //bcc list
         $bcc = join(';', $list);
         
-        //mailto
-        //return $this->redirect("mailto:".$to."?bcc=".$bcc);
-        
         return $this->render('HopitalNumeriqueUserBundle:User:mailto.html.twig', array(
             'mailto' => 'mailto:'.$to.'?bcc='.$bcc
         ));
