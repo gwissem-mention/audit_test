@@ -1,6 +1,7 @@
 parameters:
     hopitalnumerique_recherche.manager.search.class: HopitalNumerique\RechercheBundle\Manager\SearchManager
     hopitalnumerique_recherche.manager.requete.class: HopitalNumerique\RechercheBundle\Manager\RequeteManager
+    hopitalnumerique_recherche.service.logger.cronlogger.class: HopitalNumerique\RechercheBundle\DependencyInjection\Logger\CronLogger
 
 services:
     hopitalnumerique_recherche.manager.search:
@@ -12,3 +13,7 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_recherche.service.logger.cronlogger:
+        class: "%hopitalnumerique_recherche.service.logger.cronlogger.class%"
+        arguments: ["@logger", "@session"]
