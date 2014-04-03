@@ -245,6 +245,45 @@ class MailManager extends BaseManager
     
         return $this->generationMail($user, $mail, $options);
     }
+    
+    /**
+     * Envoi un mail de contact
+     *
+     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendContactMail( $users, $options )
+    {
+        $mail = $this->findOneById(30);
+        
+        //tableau de SwiftMessage a envoyé
+        $mailsToSend = array();
+        
+        foreach ($users as $user)
+        {
+            //prepare content
+            $content         = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user, $options);
+            $expediteurMail  = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getExpediteurMail()), $user, $options);
+            $expediteurName  = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getExpediteurName()), $user, $options);
+            $content         = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user, $options);
+            $templateFile    = "NodevoMailBundle::template.mail.html.twig";
+            $templateContent = $this->_twig->loadTemplate($templateFile);
+            
+            // Render the whole template including any layouts etc
+            $body = $templateContent->render( array("content" => $content) );
+            
+            $mailsToSend[] = \Swift_Message::newInstance()
+                                ->setSubject ( $mail->getObjet() )
+                                ->setFrom ( array($expediteurMail => $expediteurName ) )
+                                ->setTo ( $user->getEmail() )
+                                ->setBcc( $this->_mailAnap )
+                                ->setBody ( $body, 'text/html' );
+        }
+        
+        return $mailsToSend;
+    }
 
     /**
      * Retourne un email de test

@@ -1,3 +1,5 @@
 hopital_numerique_contact_homepage:
     pattern:  /contact
-    defaults: { _controller: HopitalNumeriqueContactBundle:Contact:index }
+    defaults: { _controller: "HopitalNumeriqueContactBundle:Contact:index" }
+    requirements:
+        _method: GET|POST

@@ -75,24 +75,26 @@ class Contact
      * 
      * @Assert\Length(
      *      max = "50",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le pays."
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans la ville."
      * )
      * @Nodevo\Javascript(class="validate[maxSize[50]]")
-     * @ORM\Column(name="contact_pays", type="string", length=50)
+     * @ORM\Column(name="contact_ville", type="string", nullable=true, length=50)
      */
-    protected $pays;
-
+    protected $ville;
+    
     /**
      * @var string
      * 
      * @Assert\Length(
-     *      max = "50",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans la ville."
+     *      min = "5",
+     *      max = "5",
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le code postal.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le code postal."
      * )
-     * @Nodevo\Javascript(class="validate[maxSize[50]]")
-     * @ORM\Column(name="contact_ville", type="string", length=50)
+     * @Nodevo\Javascript(class="validate[minSize[5],maxSize[5]]")
+     * @ORM\Column(name="contact_codepostal", nullable=true, type="string", length=5)
      */
-    protected $ville;
+    protected $codepostal;
 
     /**
      * @var string
@@ -220,29 +222,6 @@ class Contact
     }
     
     /**
-     * Set pays
-     *
-     * @param string $pays
-     * @return Contact
-     */
-    public function setPays($pays)
-    {
-        $this->pays = pays;
-    
-        return $this;
-    }
-    
-    /**
-     * Get pays
-     *
-     * @return string
-     */
-    public function getPays()
-    {
-        return $this->pays;
-    }
-
-    /**
      * Set telephone
      *
      * @param string $telephone
@@ -286,5 +265,28 @@ class Contact
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * Set codepostal
+     *
+     * @param string $codepostal
+     * @return Contact
+     */
+    public function setCodepostal($codepostal)
+    {
+        $this->codepostal = $codepostal;
+    
+        return $this;
+    }
+    
+    /**
+     * Get codepostal
+     *
+     * @return string
+     */
+    public function getCodepostal()
+    {
+        return $this->codepostal;
     }
 }

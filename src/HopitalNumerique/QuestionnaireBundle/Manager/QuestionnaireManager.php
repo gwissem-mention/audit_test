@@ -62,6 +62,13 @@ class QuestionnaireManager extends BaseManager
         return $res;
     }
     
+    /**
+     * Renvoie une chaine de caractère correspondant aux données du formulaire soumis
+     * 
+     * @param array(HopitalNumerique\QuestionnaireBundle\Entity\Reponse) $reponses
+     * 
+     * @return string Affichage du formulaire
+     */
     public function getQuestionnaireFormateMail($reponses)
     {
         $candidature = '<ul>';

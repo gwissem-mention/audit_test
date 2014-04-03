@@ -27,7 +27,7 @@
 {% endblock %}
 
 {% block content %}
-    {# Include des données de contractualisation #}
+    {# Include des Contractualisation #}
     {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
 
     {% set informationsManquantes = user|informationsManquantes(questionnaire.nom) %}

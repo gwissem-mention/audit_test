@@ -41,28 +41,14 @@ class Contact extends NodevoContact
     protected $civilite;
     
     /**
-     * @var string
-     * 
-     * @Assert\Length(
-     *      min = "5",
-     *      max = "5",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le code postal.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le code postal."
-     * )
-     * @Nodevo\Javascript(class="validate[minSize[5],maxSize[5]]")
-     * @ORM\Column(name="contact_codepostal", type="string", length=5)
-     */
-    protected $codepostal;
-    
-    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
-     * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id")
+     * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id", nullable=true)
      */
     protected $region;
     
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
-     * @ORM\JoinColumn(name="ref_departement", referencedColumnName="ref_id")
+     * @ORM\JoinColumn(name="ref_departement", referencedColumnName="ref_id", nullable=true)
      */
     protected $departement;
 
@@ -107,29 +93,6 @@ class Contact extends NodevoContact
             $this->civilite = $civilite;
         else
             $this->civilite = null;
-    }
-
-    /**
-     * Set codepostal
-     *
-     * @param string $codepostal
-     * @return Contact
-     */
-    public function setCodepostal($codepostal)
-    {
-        $this->codepostal = $codepostal;
-
-        return $this;
-    }
-
-    /**
-     * Get codepostal
-     *
-     * @return string 
-     */
-    public function getCodepostal()
-    {
-        return $this->codepostal;
     }
     
     /**

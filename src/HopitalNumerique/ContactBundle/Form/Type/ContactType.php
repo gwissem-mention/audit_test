@@ -36,8 +36,7 @@ class ContactType extends NodevoContactType
                 'required'   => false,
                 'label'      => 'Fonction dans l\'établissement',
                 'attr'       => array(
-                        'class' => $this->_constraints['fonctionStructure']['class'],
-                        'placeholder' => 'Votre fonction dans l\'établissement'
+                        'class' => $this->_constraints['fonctionStructure']['class']
                 )
         ))
 
@@ -54,14 +53,6 @@ class ContactType extends NodevoContactType
                         ->setParameter('etat', 'CIVILITE')
                         ->orderBy('ref.order', 'ASC');
                 }
-        ))
-        ->add('codepostal', 'text', array(
-            'required' => false, 
-            'label'    => 'Code Postal',
-            'attr'        => array(
-                    'class' => $this->_constraints['codepostal']['class'],
-                    'placeholder' => 'Votre Code Postal'
-            ),
         ))
         
         ->add('region', 'entity', array(

@@ -91,6 +91,7 @@ security:
 
     # On Gère rien ici, tout est authorisé en anonymous car les ACLs sont gérés depuis le NodevoAclBundle
     access_control:
+        - { path: ^/contact, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
