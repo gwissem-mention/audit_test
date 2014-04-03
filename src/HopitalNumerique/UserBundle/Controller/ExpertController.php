@@ -43,6 +43,7 @@ class ExpertController extends Controller
                 'user'               => $user,
                 'optionRenderForm'   => array(
                         'readOnly'           => $readOnly,
+                        'envoieDeMail'       => true,
                         'themeQuestionnaire' => $themeQuestionnaire,
                         'routeRedirect'      => json_encode(array(
                                 'quit' => array(
@@ -92,6 +93,7 @@ class ExpertController extends Controller
                 'user'          => $user,
                 'options'       => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
                 'optionRenderForm'   => array(
+                        'envoieDeMail'       => false,
                         'routeRedirect'      => json_encode(array(
                             'quit' => array(
                                 'route'     => 'hopital_numerique_user_homepage',

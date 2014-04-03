@@ -34,6 +34,13 @@ class QuestionnaireController extends Controller
      * @var string
      */
     private $_themeQuestionnaire;
+
+    /**
+     * Envoie d'un mail de confirmation
+     *
+     * @var boolean
+     */
+    private $_envoieDeMail;
     
     /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
@@ -47,9 +54,10 @@ class QuestionnaireController extends Controller
      */
     public function editFrontAction( HopiUser $user, HopiQuestionnaire $questionnaire, $optionRenderForm = array())
     {
-        $readOnly           = array_key_exists('readOnly', $optionRenderForm) ? $optionRenderForm['readOnly'] : false;
-        $routeRedirection   = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect'] : '';
-        $themeQuestionnaire = array_key_exists('themeQuestionnaire', $optionRenderForm) ? $optionRenderForm['themeQuestionnaire'] : 'default';
+        $readOnly            = array_key_exists('readOnly', $optionRenderForm) ? $optionRenderForm['readOnly'] : false;
+        $routeRedirection    = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect'] : '';
+        $themeQuestionnaire  = array_key_exists('themeQuestionnaire', $optionRenderForm) ? $optionRenderForm['themeQuestionnaire'] : 'default';
+        $this->_envoieDeMail = array_key_exists('envoieDeMail', $optionRenderForm) ? $optionRenderForm['envoieDeMail'] : true;
     
         //Si le tableau n'est pas vide on le récupère
         if(!is_null($routeRedirection))
@@ -259,49 +267,52 @@ class QuestionnaireController extends Controller
                 }
 
                 //Envoie du mail à l'utilisateur pour l'aleter de la validation de sa candidature
-                switch ($questionnaire->getNomMinifie())
+                if($this->_envoieDeMail)
                 {
-                    case 'expert':
-                        //Expert
-                        $mailExpert = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertMail($user);
-                        $this->get('mailer')->send($mailExpert);
-
-                        //send Mail to all admins
-                        $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
-                        $admins      = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole('ROLE_ADMINISTRATEUR_1');
-                        if(!is_null($admins))
-                        {
-                            $variablesTemplate = array(
-                                'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
-                                'questionnaire' => $candidature
-                            );
-                            $mailsAdmins = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertAdminMail($admins, $variablesTemplate);
-                            foreach($mailsAdmins as $mailAdmins)
-                                $this->get('mailer')->send($mailAdmins);
-                        }
-
-                        break;
-                    case 'ambassadeur':
-                        //Ambassadeur
-                        $mailAmbassadeur = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurMail($user);
-                        $this->get('mailer')->send($mailAmbassadeur);
-                        
-                        //CMSI
-                        $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
-                        $CMSI        = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');
-                        if(!is_null($CMSI))
-                        {
-                            $variablesTemplate = array(
-                                'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
-                                'questionnaire' => $candidature
-                            );
-                            $mailCMSI = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurCMSIMail($CMSI, $variablesTemplate);
-                            $this->get('mailer')->send($mailCMSI);
-                        }
-                        break;
-                    default:
-                        throw new \Exception('Ce type de questionnaire ne possède pas de mail en base.');
-                        break;
+                    switch ($questionnaire->getNomMinifie())
+                    {
+                        case 'expert':
+                            //Expert
+                            $mailExpert = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertMail($user);
+                            $this->get('mailer')->send($mailExpert);
+    
+                            //send Mail to all admins
+                            $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
+                            $admins      = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole('ROLE_ADMINISTRATEUR_1');
+                            if(!is_null($admins))
+                            {
+                                $variablesTemplate = array(
+                                    'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
+                                    'questionnaire' => $candidature
+                                );
+                                $mailsAdmins = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertAdminMail($admins, $variablesTemplate);
+                                foreach($mailsAdmins as $mailAdmins)
+                                    $this->get('mailer')->send($mailAdmins);
+                            }
+    
+                            break;
+                        case 'ambassadeur':
+                            //Ambassadeur
+                            $mailAmbassadeur = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurMail($user);
+                            $this->get('mailer')->send($mailAmbassadeur);
+                            
+                            //CMSI
+                            $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
+                            $CMSI        = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');
+                            if(!is_null($CMSI))
+                            {
+                                $variablesTemplate = array(
+                                    'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
+                                    'questionnaire' => $candidature
+                                );
+                                $mailCMSI = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurCMSIMail($CMSI, $variablesTemplate);
+                                $this->get('mailer')->send($mailCMSI);
+                            }
+                            break;
+                        default:
+                            throw new \Exception('Ce type de questionnaire ne possède pas de mail en base.');
+                            break;
+                    }
                 }
                 
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Votre candidature au poste ' . $questionnaire->getNomMinifie() . ' a bien été envoyée, nous reviendrons vers vous dans les plus brefs délais.' );
