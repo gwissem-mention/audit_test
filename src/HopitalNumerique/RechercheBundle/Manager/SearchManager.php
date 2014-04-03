@@ -183,7 +183,6 @@ class SearchManager extends BaseManager
 
         //clean resume (pagebreak)
         $tab = explode('<!-- pagebreak -->', $contenu->getContenu());
-        //$item['resume'] = html_entity_decode(strip_tags($tab[0]), ENT_COMPAT | ENT_HTML401, 'UTF-8');
         $item['resume'] = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
         $item['type']   = array();
 

@@ -89,7 +89,7 @@ hopitalnumerique_objet_contenu_uploadparse:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:uploadParse", id:1 }
     requirements: 
         id: \d+
-        _method: GET
+        _method: GET|POST
 
 hopitalnumerique_objet_contenu_upload:
     pattern:  /objet/contenu/upload
