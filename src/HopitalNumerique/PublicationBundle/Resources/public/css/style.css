@@ -74,6 +74,9 @@
         #articles .actus ul li:hover a{color:#6f3596;}
 
 /* Autres résultats */
+    #autresResultats h2{display: block}
+    #autresResultats h2.open{background: url('../img/panel-open.png') no-repeat right center}
+    #autresResultats h2.closed{background: url('../img/panel-close.png') no-repeat right center}
     #autresResultats .separator{height: 20px}
 
     /* Caroussel common */
@@ -101,7 +104,7 @@
 
     #autresResultats .bottom h3{color:#ffffff; font-size: 18px; font-weight: bold; display: block; margin-left:30px; margin-top:15px;height: 25px; padding-left:35px; padding-top: 2px }
     #autresResultats #ressources h3{background: url('../img/ressources.png') no-repeat left center; }
-    #autresResultats #forum h3{background: url('../img/forum.png') no-repeat left center; }
+    #autresResultats #forum h3{background: url('../img/forum.png') no-repeat left center; padding-left: 45px}
     #autresResultats .bottom .results h4{margin-bottom: 5px; margin-top: 5px; text-transform: none; }
     #autresResultats .bottom .results h4 a{color: #ffffff; font-size: 14px; font-weight: bold; }
     #autresResultats .bottom .results p{color: #ffffff; font-size: 12px; font-weight: normal; height: 75px; overflow-y:auto;} 

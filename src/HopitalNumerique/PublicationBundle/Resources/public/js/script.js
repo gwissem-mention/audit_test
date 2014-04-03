@@ -38,4 +38,9 @@ $(document).ready(function() {
         if( pos != undefined )
             $(this).find('.carousel-indicators li.pos-'+pos).addClass('active');
     });
+
+    $('#autresResultats h2').click(function(){
+        $(this).toggleClass('open closed');
+        $('#autresResultats .row').slideToggle();
+    });
 });
