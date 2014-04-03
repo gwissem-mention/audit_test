@@ -1,9 +1,9 @@
 <div class="item {% if count == 1 %}active{% endif %}" >
     <h4>
         {% if objet['updated'] %}
-            <i class="fa fa-refresh fa-inverse"></i>
+            <span class="label label-success">MaJ</span>
         {% elseif objet['new'] %}
-            <i class="fa fa-bullhorn fa-inverse"></i>
+            <span class="label label-danger">Nouveau</span>
         {% endif %}
 
         {% if objet['objet'] is not null %}

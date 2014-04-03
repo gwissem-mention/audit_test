@@ -20,8 +20,8 @@
 .requetes .ligne .fa-refresh {margin-right: 5px}
 
 /* Popup details */
-ol.arbo-requete{padding:0; margin-top:15px;list-style: none}
-ol.arbo-requete ol{padding-left: 30px}
+ol.arbo-requete{padding:0; margin-top:15px;list-style-type: none}
+ol.arbo-requete ol{padding-left: 30px; list-style-type: none}
 ol.arbo-requete li.level0 span{ text-transform: uppercase; color: #703695; font-size: 16px; font-weight: bold }
 ol.arbo-requete li.level0 ol li.level1 span{ text-transform: none; color: #000000; font-size: 12px; font-weight: bold }
 ol.arbo-requete li.level0 ol li.level1 ol li.level2 span{ font-size: 12px; font-weight: normal; color:#070707; }
