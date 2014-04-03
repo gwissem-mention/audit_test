@@ -190,8 +190,8 @@ class SearchManager extends BaseManager
                 }
 
                 //objet never found
-                if( count($toAdd) == 0 ){
-                    for($i = 0; $i < 10; $i++)
+                if( count($toAdd) != 10 ){
+                    for($i = 0; $i < (10-count($toAdd)); $i++)
                         $toAdd[] = $categ[$i];
                 }
 
