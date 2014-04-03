@@ -62,7 +62,7 @@
 
 /* Résultats */
     #recherche #resultats{ margin-top: 20px; }
-    #recherche #resultats span.label{ font-size:10px; line-height: 2; }
+    #recherche #resultats span.label{ font-size:9px; line-height: 2; vertical-align: top }
 
     /* Points Dur*/
         #resultats #pointsdurs{padding:0;}

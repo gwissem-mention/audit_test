@@ -21,4 +21,21 @@ $(document).ready(function() {
         $(this).toggleClass('closed open');
         $(this).find('.content').toggle();
     });
+
+    // Met en place le carousel
+    $('.carousel').carousel({
+        interval : 50000000
+    });
+
+    // Met en place la pagination
+    $('.carousel').each(function(){
+        if( $(this).find('.carousel-inner .item.active').length == 0 ){
+            $(this).find('.carousel-inner .item:first').addClass('active');
+            pos = 1;
+        }else
+            pos = $(this).find('.carousel-inner .item.active').data('pos');
+
+        if( pos != undefined )
+            $(this).find('.carousel-indicators li.pos-'+pos).addClass('active');
+    });
 });

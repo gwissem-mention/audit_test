@@ -58,6 +58,10 @@ class RequeteController extends Controller
 
         $this->get('hopitalnumerique_recherche.manager.requete')->save( $requete );
 
+        //update Session
+        $session = $this->getRequest()->getSession();
+        $session->set('requete-id', $requete->getId() );
+
         $path = $this->generateUrl('hopital_numerique_recherche_homepage_requete', array('id'=>$requete->getId()));
 
         return new Response('{"success":true, "id":'.$requete->getId().', "nom":"'.ucfirst($requete->getNom()).'", "path":"'.$path.'","add":'.$add.', "def":'.( $requete->isDefault() ? 1 : 0 ).'}', 200);

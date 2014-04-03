@@ -29,6 +29,7 @@ class PublicationController extends Controller
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
+            'objets'       => $this->getObjetsFromRecherche( $objet ),
             'types'        => $types,
             'contenus'     => $contenus,
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
@@ -63,6 +64,7 @@ class PublicationController extends Controller
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
+            'objets'       => $this->getObjetsFromRecherche( $contenu ),
             'contenus'     => $contenus,
             'types'        => $types,
             'contenu'      => $contenu,
@@ -131,8 +133,29 @@ class PublicationController extends Controller
 
 
 
+    /**
+     * Récupère les objets de la recherche et filtre sur 10 résulats maxi par catégorie
+     *
+     * @param Objet|Contenu $publication La publication (Objet ou Contenu)
+     *
+     * @return array
+     */
+    private function getObjetsFromRecherche( $publication )
+    {
+        //get Recherche results
+        $session = $this->getRequest()->getSession();
+        $refs    = json_decode($session->get('requete-refs'), true);
 
+        //On récupère le role de l'user connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+        $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
 
+        //on récupère sa recherche
+        $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $refs, $role );
+        $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
+        
+        return $this->get('hopitalnumerique_recherche.manager.search')->formatForPublication( $objets, $publication );
+    }
 
     /**
      * Retourne la liste des ambassadeurs concernés par la production

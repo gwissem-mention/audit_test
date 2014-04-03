@@ -134,6 +134,74 @@ class SearchManager extends BaseManager
         return $meta;
     }
 
+    /**
+     * Formatte les objets issues de la recherche : ne récupére que 10 résultats (autour de l'élément sélectionné)
+     *
+     * @param array         $objets      Liste des objets
+     * @param Objet|Contenu $publication La publication (objet|contenu)
+     *
+     * @return array
+     */
+    public function formatForPublication($objets, $publication)
+    {
+        $results = array();
+        foreach($objets as $item)
+            $results[ $item['categ'] ][] = $item;
+
+        $tabToReturn = array();
+        foreach($results as $categ) {
+            if( count($categ) > 10 ){
+                $i         = 1;
+                $maxResult = null;
+                $toAdd     = array();
+
+                foreach ($categ as $item) {
+                    //objet Found here
+                    if( (is_null($item['objet']) && $item['id'] == $publication->getId()) || (!is_null($item['objet']) && $item['id'] == $publication->getId()) ) {
+
+                        //si i < 5 : on prend ceux d'avant, et on met à jour le max result
+                        if( $i < 5 ){
+                            $maxResult = $i + (10 - $i);
+
+                            //on ajoute tous ceux d'avant
+                            for($j = 1; $j <= $i; $j++)
+                                $toAdd[] = $categ[$j];
+                        }
+
+                        //si i > 5 : on prend les 5 d'avants, et on met à jour le max result pour prendre les 5 suivants
+                        if( $i >= 5 ){
+                            $maxResult = $i + 5;
+
+                            //on ajoute les 5 d'avant
+                            for($j = ($i-5); $j < $i; $j++)
+                                $toAdd[] = $categ[$j];
+                        }
+                    //Objet found before
+                    }else if( !is_null($maxResult) ){
+                        if ( $i <= $maxResult )
+                            $toAdd[] = $item;
+
+                        //on break une fois 10 atteint
+                        if( $i == $maxResult )
+                            break;
+                    }
+
+                    $i++;
+                }
+
+                //objet never found
+                if( count($toAdd) == 0 ){
+                    for($i = 0; $i < 10; $i++)
+                        $toAdd[] = $categ[$i];
+                }
+
+                $tabToReturn = array_merge( $toAdd, $tabToReturn);
+            }else
+                $tabToReturn = array_merge( $categ, $tabToReturn);
+        }
+
+        return $tabToReturn;
+    }
 
 
 
