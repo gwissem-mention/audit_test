@@ -91,7 +91,7 @@ class Requete
         $this->isDefault      = false;
         $this->isNew          = false;
         $this->isUpdated      = false;
-        $this->isUserNotified = false;
+        $this->isUserNotified = true;
         $this->dateDebut      = null;
         $this->dateFin        = null;
         $this->refs           = array();

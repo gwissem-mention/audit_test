@@ -18,15 +18,17 @@
 #homepage .home-right p{font-size: 13px; text-align: justify; margin:0;}
 
 #homepage .home-right .recherche{  }
+#homepage .home-right .recherche a{ display:block; background-color: #df0d4e; padding:30px; }
+#homepage .home-right .recherche:hover a{ text-decoration: none; background-color: #CB072D; }
 #homepage .home-right .recherche .icone{ background-position: -202px -33px; width: 96px; height: 96px; margin:0 auto 10px; }
-#homepage .home-right .recherche > div{ background-color: #df0d4e; padding:30px; }
-#homepage .home-right .recherche:hover > div{ background-color: #CB072D; }
-#homepage .home-right .recherche a{text-align: center; font-size: 24px; font-weight: bold; display: block; width: 100%; margin-bottom: 15px; color: #ffffff; text-transform: uppercase;}
+#homepage .home-right .recherche h3{text-align: center; font-size: 24px; font-weight: bold; margin:0 0 15px 0; color: #ffffff; text-transform: uppercase;}
+#homepage .home-right .recherche p{color: #ffffff;}
 #homepage .home-right .forum{ }
+#homepage .home-right .forum a{ display:block; background-color: #b1138a; padding:30px;}
+#homepage .home-right .forum:hover a{text-decoration: none; background-color: #8d0b63; }
 #homepage .home-right .forum .icone{ background-position: -102px -33px; width: 96px; height: 96px; margin:0 auto 10px; }
-#homepage .home-right .forum div{ background-color: #b1138a; padding:30px;}
-#homepage .home-right .forum:hover div{ background-color: #8d0b63; }
-#homepage .home-right .forum a{text-align: center; font-size: 24px; font-weight: bold; display: block; width: 100%; margin-bottom: 15px; color: #ffffff; text-transform: uppercase;}
+#homepage .home-right .forum h3{text-align: center; font-size: 24px; font-weight: bold; margin:0 0 15px 0; color: #ffffff; text-transform: uppercase;}
+#homepage .home-right .forum p{color: #ffffff;}
 
 #homepage .home-right .creation-compte{ margin-top: 25px; }
 #homepage .home-right .creation-compte .icone { width: 96px; height: 96px; background-position: -2px -33px; }

@@ -73,15 +73,15 @@ class CronController extends Controller
                     $requete->setUpdated( $requeteUpdated );
 
                     //check if User has to be notified
-                    if( $requete->isUserNotified() ) {
+                    if( $requete->isUserNotified() && ($requeteNew || $requeteUpdated) ) {
                         $today = new \DateTime();
 
-                        if( $requete->getDateDebut() < $today && $today < $requete->getDateFin() )
+                        if( ( is_null($requete->getDateDebut()) || $requete->getDateDebut() < $today ) && (is_null($requete->getDateFin()) || $today < $requete->getDateFin()) )
                         {
                             //format listes and build Options
                             $options                           = array();
-                            $options['nouvellespublications']  = count($news) > 0     ? '<ul>'.$news.'</ul>'     : '<ul><li> - Aucune nouvelle publication - </li></ul>';
-                            $options['misesajourpublications'] = count($updateds) > 0 ? '<ul>'.$updateds.'</ul>' : '<ul><li> - Aucune publication mise à jour - </li></ul>';
+                            $options['nouvellespublications']  = $requeteNew     ? '<ul>'.$news.'</ul>'     : '<ul><li> - Aucune nouvelle publication - </li></ul>';
+                            $options['misesajourpublications'] = $requeteUpdated ? '<ul>'.$updateds.'</ul>' : '<ul><li> - Aucune publication mise à jour - </li></ul>';
                             $options['requete']                = ucfirst($requete->getNom());
 
                             //send mail

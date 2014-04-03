@@ -62,6 +62,7 @@
 
 /* Résultats */
     #recherche #resultats{ margin-top: 20px; }
+    #recherche #resultats span.label{ font-size:10px; line-height: 2; }
 
     /* Points Dur*/
         #resultats #pointsdurs{padding:0;}
@@ -92,7 +93,7 @@
         #resultats #ressources .results{padding:0 15px;height:149px;}
         #resultats #ressources .results h4{margin-bottom: 5px; margin-top: 5px }
         #resultats #ressources .results h4 a{color: #ffffff; font-size: 14px; font-weight: bold; }
-        #resultats #ressources .results p{color: #ffffff; font-size: 12px; font-weight: normal; height: 85px; overflow-y:auto;}
+        #resultats #ressources .results p{color: #ffffff; font-size: 12px; font-weight: normal; height: 65px; overflow-y:auto;}
         #resultats #ressources .results p.noresult{margin-top:29px;}
         #resultats #ressources .results .carousel-indicators{bottom: 0}
         #resultats #ressources .results .carousel-inner{margin-left:25px;width:244px;}
