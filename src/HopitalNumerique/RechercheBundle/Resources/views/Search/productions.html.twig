@@ -10,9 +10,9 @@
     <div class="col-md-12">
         <h4>
             {% if objet['updated'] %}
-                <i class="fa fa-refresh"></i>
+                <span class="label label-success">MaJ</span>
             {% elseif objet['new'] %}
-                <i class="fa fa-bullhorn rose"></i>
+                <span class="label label-danger">Nouveau</span>
             {% endif %}
 
             {% if objet['objet'] is not null %}

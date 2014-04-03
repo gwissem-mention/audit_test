@@ -52,8 +52,10 @@ class SearchController extends Controller
 
                 //set requete id in session
                 $session->set('requete-id', $id);
-            }else
+            }else{
+                $session->set('requete-id', null);
                 return $this->redirect( $this->generateUrl('hopital_numerique_recherche_homepage_requete') );
+            }
         }
 
         if( $refs == 'null' )
