@@ -11,8 +11,11 @@ class AmbassadeurController extends Controller
     /**
      * Index Action
      */
-    public function indexAction( $domaine = null )
+    public function indexAction()
     {
+        //Domaine sélectionné
+        $domaine = null;
+        
         //Liste des régions sélectionnées
         $regions      = array();
         
@@ -30,7 +33,12 @@ class AmbassadeurController extends Controller
         //On prépare la session
         $session = $this->getRequest()->getSession();
         
-        //Si on a quelque chose en session, on charge la session
+        //Chargement des domaines sauvegardés en session
+        if( !is_null($session->get('registre-ambassadeur-domaine')) )
+        {            
+            $domaine = intval($session->get('registre-ambassadeur-domaine'));
+        }
+        //Chargement des régions sauvegardées en session
         if( !is_null($session->get('registre-ambassadeur-region')) )
         {
             //Récupération des régions en session
@@ -132,12 +140,10 @@ class AmbassadeurController extends Controller
         $session = $this->getRequest()->getSession();
 
         $session->set('registre-ambassadeur-region', $regionJSON );
+
+        $session->set('registre-ambassadeur-domaine', $domaine );
         
-        //Si il n'y a pas de domaine fonctionnel sélectionné, ne pas passer un param null permet d'éviter le "/0" à la fin de l'url
-        if(0 != $domaine)
-            return new Response('{"success":true, "url" : "'.$this->generateUrl( 'hopital_numerique_registre_homepage', array('domaine' => $domaine) ).'"}', 200);
-        else
-            return new Response('{"success":true, "url" : "'.$this->generateUrl( 'hopital_numerique_registre_homepage' ).'"}', 200);
+        return new Response('{"success":true, "url" : "'.$this->generateUrl( 'hopital_numerique_registre_homepage' ).'"}', 200);
     }
 
     /**
