@@ -51,7 +51,7 @@
     /* 2nd niveau de sous-catégories */
     #recherche #origin li.level0 ol li.level1 ol li.level2{}
     #recherche #origin li.level0 ol li.level1 ol li.level2.active span{color:#703695;}
-    #recherche #origin li.level0 ol li.level1 ol li.level2 span{color:#070707; font-weight: normal; padding:5px 15px 5px 30px;}
+    #recherche #origin li.level0 ol li.level1 ol li.level2 span{color:#070707; font-weight: normal; padding:5px 15px 5px 30px; position: relative; z-index: 5}
     #recherche #origin li.level0 ol li.level1 ol li.level2 i.pull-right{color:#070707; position: absolute; right: 10px; top:7px;}
     #recherche #origin li.level0 ol li.level1 ol li.level2 i.pull-left{ margin:6px 5px 0 30px;cursor: pointer}
     #recherche #origin li.level0 ol li.level1 ol li.level2 ol{display: none;padding-left:20px;}
