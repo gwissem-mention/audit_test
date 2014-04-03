@@ -174,7 +174,13 @@ class ObjetManager extends BaseManager
      * @return array
      */
     public function getObjetsNonMaitrises( $id, $types )
-    { 
+    {
+        //Remove Points Dur et Ressources Externes
+        foreach($types as $key => $type){
+            if( $type->getId() == 183 || $type->getId() == 184)
+                unset($types[$key]);
+        }
+
         $results = $this->getObjetsByTypes( $types );
         $objets  = array();
 
