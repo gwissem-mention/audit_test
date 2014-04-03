@@ -50,6 +50,10 @@ hopital_numerique_intervention_regroupement:
 hopital_numerique_intervention_user:
     resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/user.yml"
     prefix:   /compte-hn/intervention
+    
+hopital_numerique_contact:
+    resource: "@HopitalNumeriqueContactBundle/Resources/config/routing.yml"
+    prefix:   /
 
 # Bundles Hopital Numérique : partie Admin
 hopital_numerique_reference:
@@ -101,6 +105,10 @@ nodevo_admin:
 nodevo_mail:
     resource: "@NodevoMailBundle/Resources/config/routing.yml"
     prefix:   /admin
+    
+nodevo_contact:
+    resource: "@NodevoContactBundle/Resources/config/routing.yml"
+    prefix:   /
 
 nodevo_gestionnaire_media:
     resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"

@@ -95,18 +95,6 @@
                 </div>
             </div>
         {% endif %}
-
-        {# Prod utile ? #}
-        {#<div class="col-md-4">
-            <div class="wrapper" >
-                
-            </div>
-        </div>#}
-
-        {# Commentaires #}
-        {#<div class="col-md-12 commentaires">
-            <h2>3 commentaires</h2>
-        </div>#}
         
         {# Autres résultats de recherche#}
         <div class="col-md-12" id="autresResultats" >
@@ -156,6 +144,13 @@
                                 {{ambassadeur.etablissementRattachementSante.nom}}
                             {% else %}
                                 {{ambassadeur.autreStructureRattachementSante}}
+                            {% endif %}
+                        </p>
+                        <p class="fonction">
+                            {% if ambassadeur.fonctionDansEtablissementSante %}
+                                {{ambassadeur.fonctionDansEtablissementSante}}
+                            {% else %}
+                                {{ambassadeur.fonctionStructure}}
                             {% endif %}
                         </p>
                         <a class="btn background-violet" href="{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}">Solliciter cet ambassadeur</a>
