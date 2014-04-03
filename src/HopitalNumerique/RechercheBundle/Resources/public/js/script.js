@@ -386,11 +386,12 @@ function handleRequeteSave( r, id )
                 $('.requeteNom').html( data.nom ).slideDown();
                 $('.requeteNom').data('id', data.id);
                 if( data.add ){
-                    if( data.def == '1' )
+                    if( data.def == '1' ){
                         selected = 'violet';
-                    else
+                        $('#mesrequetes ul li').remove();
+                    }else
                         selected = 'fa-inverse';
-                    $('#mesrequetes ul').append('<li><a href="'+data.path+'" ><i class="fa fa-circle '+selected+'"></i>'+data.nom+'</a></li>');
+                    $('#mesrequetes ul').append('<li><a href="'+data.path+'" ><i class="fa fa-star '+selected+'"></i>'+data.nom+'</a></li>');
                 }
             }
         }

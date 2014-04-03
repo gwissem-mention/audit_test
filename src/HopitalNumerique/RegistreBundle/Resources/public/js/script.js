@@ -29,7 +29,7 @@ function selectionnerToutesRegions()
                    'bourgogne','bretagne','centre','corse',
                    'champagneardenne','franchecomte','hautenormandie','iledefrance'
                    ,'languedocroussillon','limousin','lorraine','midipyrenees',
-                   'nordpasdecalais','provencealpescotedazur','paysdeloire','picardie',
+                   'nordpasdecalais','provencealpescotedazur','paysdelaloire','picardie',
                    'poitoucharentes','rhonealpes','guadeloupe','martinique',
                    'martinique','reunion','guyane','mayotte'];
     
@@ -65,6 +65,8 @@ function deselectionnerToutesRegions()
  */
 function appliquerRegionsSelectionnees()
 {
+	$('#btn_appliquer_filtre').addClass('disabled');
+	
     $.ajax({
         url  : $('#hopital_numerique_registre_edit_session').val(),
         data : {
