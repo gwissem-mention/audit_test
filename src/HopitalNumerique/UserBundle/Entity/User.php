@@ -343,7 +343,7 @@ class User extends BaseUser
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_raison_inscription_sante", referencedColumnName="ref_id")
      */
-    protected $raisonInscriptionSante;    
+    protected $raisonInscriptionSante;
 
     // v -------- Onglet : Vous êtes un établissement de santé -------- v
     
@@ -392,7 +392,7 @@ class User extends BaseUser
     /**
      * @ORM\OneToMany(targetEntity="Contractualisation", mappedBy="user", cascade={"persist", "remove" })
      */
-    protected $contractualisations;  
+    protected $contractualisations;
 
     /**
      * @var boolean

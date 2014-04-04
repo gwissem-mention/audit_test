@@ -6,6 +6,8 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-contact-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
         'bundles/hopitalnumeriquecontact/css/contact.css'
@@ -17,6 +19,7 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-user-expert-editer.js"
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/nodevocontact/js/jquery.maskedinput.min.js'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
@@ -49,6 +52,8 @@
 			        
 	                {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
                     <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_front_departements')}}" />
+	                {# Input hidden permettant de stocker la route pour le refresh de établissement en ajax #}
+	                <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_front_etablissements')}}" />
                     
                     {# Création du formulaire #}
 			        {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
@@ -63,6 +68,9 @@
 			            {{ form_row(form.departement) }}
 			            {{ form_row(form.codepostal) }}
 			            {{ form_row(form.ville) }}
+			            {{ form_row(form.statutEtablissementSante) }}
+			            {{ form_row(form.etablissementRattachementSante) }}
+			            {{ form_row(form.autreStructureRattachementSante) }}
 			            {{ form_row(form.fonctionStructure) }}
 			            {{ form_row(form.message) }}
 			    
