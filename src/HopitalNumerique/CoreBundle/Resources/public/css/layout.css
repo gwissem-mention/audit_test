@@ -2,6 +2,7 @@
 body{ background: #E5E5E5;}
 #body{margin:0 auto; background: white; max-width: 1196px}
 #content{background: white;padding-bottom: 30px;position: relative; }
+#mobileNotReady{display: none; background: white; padding:20px; border:1px solid black; width: 500px; margin:0 auto;}
 .common-sprite { background-image: url('../img/common-sprite.png'); background-repeat: no-repeat; display: block; }
 a, a:hover, a:active {color:#6f3596}
 a.readmore{display: block; color:#000000; font-family: Arial; font-weight: bold}
@@ -84,6 +85,7 @@ h3{font-size: 20px}
 /* BLOCK RESPONSIVE : to delete */
 @media screen and (max-width: 1000px) {
     #body { display:none; }
+    #mobileNotReady{display: block;}
 }
 
 /*!

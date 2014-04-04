@@ -19,3 +19,4 @@ UPDATE `core_menu_item` SET `itm_route` = 'hopital_numerique_contact_homepage', 
 /* QSO - 24/03/2014
    PROD -> DEV
    Lorem ipsum */
+ 
