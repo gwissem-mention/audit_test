@@ -216,7 +216,7 @@ class AmbassadeurController extends Controller
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
 
         //Changement du rôle à ambassadeur de l'utilisateur
-        $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_AMBASSADEUR_7'));        
+        $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_AMBASSADEUR_7'));
         $user->setRoles( array( $role ) );
 
         //Envoie du mail de validation de la candidature

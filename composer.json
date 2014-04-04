@@ -38,14 +38,14 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "knplabs/knp-menu": "2.0.*@dev",
         "knplabs/knp-menu-bundle": "2.0.*@dev",
-        "liip/doctrine-cache-bundle": "dev-master",
-        "apy/datagrid-bundle": "dev-master",
+        "liip/doctrine-cache-bundle": "~1.0",
+        "apy/datagrid-bundle": "~2.2",
         "white-october/pagerfanta-bundle": "2.1.*@dev",
         "pagerfanta/pagerfanta": "1.0.*@dev",
         "genemu/form-bundle": "2.2.*",
         "igorw/file-serve-bundle": "~1.0",
         "doctrine/doctrine-fixtures-bundle": "dev-master",
-        "beberlei/DoctrineExtensions": "dev-master",
+        "beberlei/DoctrineExtensions": "v0.1",
         "nodevo/gestionnaire-media": "dev-master"
     },
     "scripts": {

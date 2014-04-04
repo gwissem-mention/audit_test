@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\InterventionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType;
 
 /**
  * Entité d'un type de regroupement d'intervention.
