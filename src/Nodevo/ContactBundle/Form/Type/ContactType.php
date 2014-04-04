@@ -90,7 +90,8 @@ class ContactType extends AbstractType
                     'required' => true,
                     'label'    => 'Message',
                     'attr'        => array(
-                            'class' => $this->_constraints['message']['class']
+                            'class' => $this->_constraints['message']['class'],
+                            'rows'   => 8
                     ),
             ))
             

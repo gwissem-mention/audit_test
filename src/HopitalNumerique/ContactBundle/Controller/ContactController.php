@@ -21,10 +21,7 @@ class ContactController extends NodevoController
         $view = 'NodevoContactBundle:Contact:index.html.twig';
         $routeRedirection = 'hopital_numerique_homepage';
         
-        //$return : tableau de la création de la vue
-        $return = $this->renderForm( $formName , $contact, $view, $routeRedirection );
-        
-        return $this->render($return['view'], $return['array']);
+        return $this->renderForm( $formName , $contact, $view, $routeRedirection );
     }
     
     /**
@@ -84,9 +81,6 @@ class ContactController extends NodevoController
                 'contact'            => $contact
         ), $parametres);
     
-        return array( 
-                'view'  => $view,
-                'array' => $array
-        );
+        return $this->render( $view , $array);
     }
 }

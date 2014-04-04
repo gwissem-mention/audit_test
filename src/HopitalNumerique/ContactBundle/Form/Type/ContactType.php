@@ -83,7 +83,38 @@ class ContactType extends NodevoContactType
                     ->orderBy('ref.libelle', 'ASC');
                 }
         ))
+
+        ->add('statutEtablissementSante', 'entity', array(
+                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property'    => 'libelle',
+                'required'    => false,
+                'label'       => 'Type d\'établissement',
+                'empty_value' => ' - ',
+                'attr'        => array('class' => 'etablissement_sante'),
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('ref')
+                    ->where('ref.code = :etat')
+                    ->setParameter('etat', 'CONTEXTE_TYPE_ES')
+                    ->orderBy('ref.libelle', 'ASC');
+                }
+        ))
         
+        ->add('etablissementRattachementSante', 'genemu_jqueryselect2_entity', array(
+                'class'         => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+                'property'      => 'usersAffichage',
+                'multiple'      => false,
+                'required'      => false,
+                'label'         => 'Etablissement de rattachement',
+                'empty_value'   => ' - ',
+                'attr'        => array('class' => 'etablissement_sante')
+        ))
+
+        ->add('autreStructureRattachementSante', 'text', array(
+                'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
+                'required'   => false,
+                'label'      => 'Autre structure de rattachement',
+                'attr'       => array('class' => $this->_constraints['autreStructureRattachementSante']['class'] . ' etablissement_sante' )
+        ))
         ;
     }
     

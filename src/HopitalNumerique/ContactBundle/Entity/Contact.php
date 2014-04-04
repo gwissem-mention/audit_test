@@ -50,6 +50,31 @@ class Contact extends NodevoContact
      * @ORM\JoinColumn(name="ref_departement", referencedColumnName="ref_id", nullable=true)
      */
     protected $departement;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
+     * @ORM\JoinColumn(name="ref_statut_etablissement_sante", referencedColumnName="ref_id")
+     */
+    protected $statutEtablissementSante;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\EtablissementBundle\Entity\Etablissement", inversedBy="usersRattachement", cascade={"persist"})
+     * @ORM\JoinColumn(name="eta_etablissement_rattachement_sante", referencedColumnName="eta_id")
+     */
+    protected $etablissementRattachementSante;
+    
+    /**
+     * @var string
+     * @Assert\Length(
+     *      min = "1",
+     *      max = "255",
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'autre structure de rattachement.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'autre structure de rattachement."
+     * )
+     * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
+     * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Autre structure de rattachement santé de l utilisateur"})
+     */
+    protected $autreStructureRattachementSante;
 
     /**
      * Get fonctionStructure
@@ -138,5 +163,71 @@ class Contact extends NodevoContact
             $this->departement = $departement;
         else
             $this->departement = null;
+    }
+    
+    /**
+     * Set statutEtablissementSante
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $statutEtablissementSante
+     */
+    public function setStatutEtablissementSante($statutEtablissementSante)
+    {
+        if($statutEtablissementSante instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+            $this->statutEtablissementSante = $statutEtablissementSante;
+        else
+            $this->statutEtablissementSante = null;
+    }
+    
+    /**
+     * Get statutEtablissementSante
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $statutEtablissementSante
+     */
+    public function getStatutEtablissementSante()
+    {
+        return $this->statutEtablissementSante;
+    }
+    
+    /**
+     * Get etablissementRattachementSante
+     *
+     * @return string $etablissementRattachementSante
+     */
+    public function getEtablissementRattachementSante()
+    {
+        return $this->etablissementRattachementSante;
+    }
+    
+    /**
+     * Set etablissementRattachementSante
+     *
+     * @param string $etablissementRattachementSante
+     */
+    public function setEtablissementRattachementSante($etablissementRattachementSante)
+    {
+        if($etablissementRattachementSante instanceof \HopitalNumerique\EtablissementBundle\Entity\Etablissement )
+            $this->etablissementRattachementSante = $etablissementRattachementSante;
+        else
+            $this->etablissementRattachementSante = null;
+    }
+    
+    /**
+     * Get autreStructureRattachementSante
+     *
+     * @return string $autreStructureRattachementSante
+     */
+    public function getAutreStructureRattachementSante()
+    {
+        return $this->autreStructureRattachementSante;
+    }
+    
+    /**
+     * Set autreStructureRattachementSante
+     *
+     * @param string $autreStructureRattachementSante
+     */
+    public function setAutreStructureRattachementSante($autreStructureRattachementSante)
+    {
+        $this->autreStructureRattachementSante = $autreStructureRattachementSante;
     }
 }
