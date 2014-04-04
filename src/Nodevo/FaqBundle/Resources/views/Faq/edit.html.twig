@@ -47,9 +47,27 @@
             </div>
 
             <div class="panel-body">
-                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                {% form_theme form 'NodevoFaqBundle::form.html.twig' %}
                 {{ form_start(form) }}
                     {{ form_javascript(form) }}
+                    <div class="col-md-4">
+                        {{ form_row(form.question) }}
+                        {{ form_row(form.categorie) }}
+                        {{ form_row(form.order) }}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                                {{ form_label(form.reponse) }}
+                            <div class="col-md-12">
+                                {{ form_widget(form.reponse) }}
+                            </div>
+                            <div class="col-md-12">
+                                <div class="help-block">
+                                    {{ form_errors(form.reponse) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {{ form_end(form) }}
             </div>
         </div>

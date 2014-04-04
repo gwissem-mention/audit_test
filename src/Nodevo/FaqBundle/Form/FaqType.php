@@ -6,8 +6,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Doctrine\ORM\EntityRepository;
-
 class FaqType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -19,7 +17,11 @@ class FaqType extends AbstractType
             ))
             ->add('reponse', 'textarea', array(
                 'required'   => true, 
-                'label'      => 'Réponse'
+                'label'      => 'Réponse',
+                'label_attr' => array('class'=>'col-md-12')
+            ))
+            ->add('order', 'integer', array(
+                'label' => 'Ordre d\'affichage'
             ))
             ->add('categorie', 'genemu_jqueryselect2_entity', array(
                 'class'         => 'NodevoFaqBundle:Categorie',

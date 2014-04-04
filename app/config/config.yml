@@ -53,6 +53,7 @@ assetic:
         - HopitalNumeriqueRechercheBundle
         - HopitalNumeriqueRegistreBundle
         - HopitalNumeriquePublicationBundle
+        - HopitalNumeriqueFaqBundle
         - FOSUserBundle
     filters:
         cssrewrite: ~

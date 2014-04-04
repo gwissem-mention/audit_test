@@ -27,7 +27,7 @@ class FaqController extends Controller
     {
         $faq = $this->get('nodevo_faq.manager.faq')->createEmpty();
 
-        return $this->_renderForm('nodevo_faq_faq', $faq, 'NodevoFaqBundle:Faq:edit.html.twig' );
+        return $this->renderForm('nodevo_faq_faq', $faq, 'NodevoFaqBundle:Faq:edit.html.twig' );
     }
 
     /**
@@ -40,7 +40,7 @@ class FaqController extends Controller
         //Récupération de l'entité passée en paramètre
         $faq = $this->get('nodevo_faq.manager.faq')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('nodevo_faq_faq', $faq, 'NodevoFaqBundle:Faq:edit.html.twig' );
+        return $this->renderForm('nodevo_faq_faq', $faq, 'NodevoFaqBundle:Faq:edit.html.twig' );
     }
 
     /**
@@ -96,7 +96,7 @@ class FaqController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $faq, $view )
+    private function renderForm( $formName, $faq, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $faq);
