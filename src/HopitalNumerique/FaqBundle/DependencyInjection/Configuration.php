@@ -1,6 +1,6 @@
 <?php
 
-namespace Nodevo\FaqBundle\DependencyInjection;
+namespace HopitalNumerique\FaqBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -18,12 +18,13 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root('nodevo_faq');
+        $rootNode    = $treeBuilder->root('hopital_numerique_faq');
 
         $rootNode
             ->children()
                 ->variableNode('options')->end()
-            ->end();
+            ->end()
+        ;
 
         return $treeBuilder;
     }

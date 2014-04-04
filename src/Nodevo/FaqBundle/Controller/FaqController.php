@@ -80,6 +80,13 @@ class FaqController extends Controller
 
 
 
+
+
+
+
+
+
+
     /**
      * Effectue le render du formulaire Faq.
      *
@@ -111,7 +118,7 @@ class FaqController extends Controller
                 $this->get('nodevo_faq.manager.faq')->save($faq);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Faq ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Elément de FAQ ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
                 
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');
@@ -120,8 +127,8 @@ class FaqController extends Controller
         }
 
         return $this->render( $view , array(
-            'form'             => $form->createView(),
-            'faq' => $faq
+            'form' => $form->createView(),
+            'faq'  => $faq
         ));
     }
 }

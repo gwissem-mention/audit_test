@@ -1,31 +1,31 @@
 nodevo_faq_faq:
-    pattern:  /faq
+    pattern:  /admin/faq
     defaults: { _controller: "NodevoFaqBundle:Faq:index" }
     requirements:
         _method: GET|POST
 
 nodevo_faq_faq_add:
-    pattern:  /faq/add
+    pattern:  /admin/faq/add
     defaults: { _controller: "NodevoFaqBundle:Faq:add" }
     requirements:
         _method: GET|POST
 
 nodevo_faq_faq_show:
-    pattern:  /faq/show/{id}
+    pattern:  /admin/faq/show/{id}
     defaults: { _controller: "NodevoFaqBundle:Faq:show", id:1 }
     requirements:
         id: \d+
         _method: GET
 
 nodevo_faq_faq_edit:
-    pattern:  /faq/edit/{id}
+    pattern:  /admin/faq/edit/{id}
     defaults: { _controller: "NodevoFaqBundle:Faq:edit", id:1 }
     requirements:
         id: \d+
         _method: GET|POST
 
 nodevo_faq_faq_delete:
-    pattern:  /faq/delete/{id}.{_format}
+    pattern:  /admin/faq/delete/{id}.{_format}
     defaults: { _controller: "NodevoFaqBundle:Faq:delete", _format: json }
     requirements: 
         id: \d+

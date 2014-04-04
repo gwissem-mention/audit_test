@@ -1,6 +1,6 @@
 <?php
 
-namespace Nodevo\FaqBundle\DependencyInjection;
+namespace HopitalNumerique\FaqBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class NodevoFaqExtension extends Extension
+class HopitalNumeriqueFaqExtension extends Extension
 {
     /**
      * {@inheritDoc}
@@ -26,6 +26,8 @@ class NodevoFaqExtension extends Extension
         $loader->load('services.yml');        
         
         if (isset($config['options']))
-            $container->setParameter('nodevo_faq.options', $config['options']);
+        {
+            $container->setParameter('hopital_numerique_faq.options', $config['options']);
+        }
     }
 }
