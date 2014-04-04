@@ -1,0 +1,21 @@
+parameters:
+    #Permet d'avoir une valeur par défaut et/ou d'etre surchargé par le config.yml de app/config
+    hopital_numerique_contact.options: ~
+    #Contact
+    hopital_numerique_contact.manager.contact.class: HopitalNumerique\ContactBundle\Manager\ContactManager
+    hopital_numerique_contact.form.type.contact: HopitalNumerique\ContactBundle\Form\Type\ContactType
+
+services:
+    #Contact:
+    #--Manager
+    hopital_numerique_contact.manager.contact:
+        class: "%hopital_numerique_contact.manager.contact.class%"
+        arguments: ["@doctrine.orm.entity_manager", "%hopital_numerique_contact.options%"]
+        calls:
+            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
+    #--Type
+    hopital_numerique_contact.form.type.contact:
+        class: "%hopital_numerique_contact.form.type.contact%"
+        arguments: ["@hopital_numerique_contact.manager.contact", "@validator"]
+        tags:
+            - { name: form.type, alias: hopital_numerique_contact_contact }

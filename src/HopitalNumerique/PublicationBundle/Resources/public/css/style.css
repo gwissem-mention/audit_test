@@ -46,6 +46,7 @@
     #ambassadeurs .ambassadeur p{ margin-bottom:0px; }
     #ambassadeurs .ambassadeur .nom{font-size: 14px; font-weight: bold; color:#020202;}
     #ambassadeurs .ambassadeur .etab{font-size: 14px; color:#4c4c4c;}
+    #ambassadeurs .ambassadeur .fonction{font-size: 14px; color: #4c4c4c;}
     #ambassadeurs .ambassadeur a.btn{color:#ffffff;font-size: 14px; font-weight: bold; display: block; margin:15px auto 0;}
 
 /* Bloc Articles */

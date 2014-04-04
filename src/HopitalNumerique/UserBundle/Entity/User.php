@@ -451,7 +451,6 @@ class User extends BaseUser
         $this->objets       = new \Doctrine\Common\Collections\ArrayCollection();
         $this->username     = '';
         $this->enabled      = 1;
-        $this->sexe         = array();
         $this->civilite     = array();
         $this->lock         = false;
         $this->archiver     = false;

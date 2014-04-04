@@ -26,8 +26,6 @@ class FaqGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        //field, titre, isSortable, size
-        $this->addColonne( new Column\TextColumn('id', 'Id') );
         $this->addColonne( new Column\TextColumn('question', 'Question') );
         $this->addColonne( new Column\TextColumn('reponse', 'Reponse') );        
     }
