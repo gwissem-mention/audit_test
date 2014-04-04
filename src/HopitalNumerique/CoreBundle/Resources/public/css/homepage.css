@@ -17,14 +17,14 @@
 #homepage .home-right{ color:#ffffff; }
 #homepage .home-right p{font-size: 13px; text-align: justify; margin:0;}
 
-#homepage .home-right .recherche{  }
-#homepage .home-right .recherche a{ display:block; background-color: #df0d4e; padding:30px; }
+#homepage .home-right .recherche{ height: 282px; }
+#homepage .home-right .recherche a{ display:block; background-color: #df0d4e; padding:30px; height: 100%; }
 #homepage .home-right .recherche:hover a{ text-decoration: none; background-color: #CB072D; }
 #homepage .home-right .recherche .icone{ background-position: -202px -33px; width: 96px; height: 96px; margin:0 auto 10px; }
 #homepage .home-right .recherche h3{text-align: center; font-size: 24px; font-weight: bold; margin:0 0 15px 0; color: #ffffff; text-transform: uppercase;}
 #homepage .home-right .recherche p{color: #ffffff;}
-#homepage .home-right .forum{ }
-#homepage .home-right .forum a{ display:block; background-color: #b1138a; padding:30px;}
+#homepage .home-right .forum{ height: 282px; }
+#homepage .home-right .forum a{ display:block; background-color: #b1138a; padding:30px; height: 100%;}
 #homepage .home-right .forum:hover a{text-decoration: none; background-color: #8d0b63; }
 #homepage .home-right .forum .icone{ background-position: -102px -33px; width: 96px; height: 96px; margin:0 auto 10px; }
 #homepage .home-right .forum h3{text-align: center; font-size: 24px; font-weight: bold; margin:0 0 15px 0; color: #ffffff; text-transform: uppercase;}
@@ -35,6 +35,7 @@
 #homepage .home-right .creation-compte > div{ padding:30px; background: #9abc0d }
 #homepage .home-right .creation-compte:hover > div{ background: #779f08 }
 #homepage .home-right .creation-compte p{ color :#ffffff; font-size: 13px; text-align: justify; }
+#homepage .home-right .creation-compte ul li{ color :#ffffff; font-size: 13px; text-align: justify; }
 #homepage .home-right .creation-compte p.titre{ font-size: 24px; font-weight: bold; margin-bottom: 15px}
 #homepage .home-right .creation-compte .buttons{margin-top:10px;}
 #homepage .home-right .creation-compte .buttons .signup{margin-right:10px;}

@@ -37,9 +37,12 @@
                 </div>
             {% endif %}
             
+            
             <div class="panel">
                 {% block content %}{% endblock %}
             </div>
+            
+            {% block footerDesc %}{% endblock %}
 
             <div class="clearfix"></div>
         </div>

@@ -31,13 +31,13 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block headerTitle %}Lorem ipsum dolor sit amet{% endblock %}
+{% block headerTitle %}Renseignez vos informations personnelles{% endblock %}
 
 {% block headerDesc %}
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tincidunt purus nec adipiscing. Cras eu nisi dolor. Vestibulum laoreet mi at quam dictum, vitae iaculis metus elementum. Aliquam ut ante non ligula sollicitudin vulputate. Nullam mattis vulputate sem ut placerat. Ut ac vulputate diam. Aenean suscipit lobortis tortor sit amet pharetra. Suspendisse placerat mauris non fringilla mollis. Nulla non eleifend est. Mauris ac tincidunt dolor. Mauris venenatis sit amet eros in rutrum. Ut erat sapien, viverra id dui in.</p>
+    <p><strong>Attention :</strong> Si vous êtes expert ou ambassadeur, informez l'ANAP avant de modifier les données contractuelles (nom, prénom, établissement, etc).</p>
 {% endblock %}
 
-{% block content %}
+{% block content%}
 	<div id="form_edit_user">
 	    <div id="form_edit_informations_personnelles">
             {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
@@ -119,4 +119,17 @@
             {{ form_end(form) }}
         </div>
     </div>
+{% endblock %}
+
+{% block footerDesc %}
+	<div class="panel">
+	   <div id ="footerDesc">
+			<p>
+				Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».
+			</p>
+			<p>
+				Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
+			</p>
+		</div>
+	</div>
 {% endblock %}

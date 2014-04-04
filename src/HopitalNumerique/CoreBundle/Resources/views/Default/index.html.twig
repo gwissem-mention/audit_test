@@ -51,7 +51,7 @@
                         <div class="common-sprite icone"></div>
                         <h3>Recherche</h3>
                         <p>
-                            Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum.
+                            Vous trouverez des questions communes aux établissements de santé, des productions apportant des réponses et des fils de discussion sur le forum
                         </p>
                     </a>
                 </div>
@@ -60,7 +60,7 @@
                         <div class="common-sprite icone"></div>
                         <h3>Forum</h3>
                         <p>
-                            Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum.
+                            Pour consulter et participer à des discussions thématiques
                         </p>
                     </a>
                 </div>
@@ -76,11 +76,13 @@
                             {% if app.user %}
                                 <p class="titre">Tableau de bord</p>
                                 <p>
-                                    Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum, omnes pari sorte sunt bellatores seminudi coloratis.
+                                    Le tableau de bord correspond à votre espace personnel. Il vous permet de :
                                 </p>
-                                <p>
-                                    Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum, omnes pari sorte sunt bellatores seminudi.
-                                </p>
+                                <ul>
+                                    <li>consulter et modifier vos données personnelles</li>
+                                    <li>gérer vos critères d'accès aux productions</li>
+                                    <li>en fonction de votre profil, de participer au projet d'accompagnement de l'ANAP (devenir ambassadeur ou expert, solliciter l'intervention d'un ambassadeur, etc)</li>
+                                </ul>
 
                                 <div class="buttons pull-right">
                                     <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-default pull-right">Accès au tableau de bord</a>
@@ -88,12 +90,13 @@
                             {% else %}
                                 <p class="titre">Creation de compte</p>
                                 <p>
-                                    Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum, omnes pari sorte sunt bellatores seminudi coloratis.
+                                    En créant un compte sur la plateforme, vous pourrez :
                                 </p>
-                                <p>
-                                    Apud has gentes, quarum exordiens initium ab Assyriis ad Nili cataractas porrigitur et confinia Blemmyarum, omnes pari sorte sunt bellatores seminudi.
-                                </p>
-
+                                <ul>
+                                    <li>simplifier votre recherche par rapport à vos différents besoins</li>
+                                    <li>être informé de la mise à jour récente sur des documents déjà consultés</li>
+                                    <li>participer au projet d'accompagnement de l'ANAP (devenir ambassadeur ou expert, solliciter l'intervention d'un ambassadeur, etc)</li>
+                                </ul>
                                 <div class="buttons pull-right">
                                     <a href="{{path('account_login')}}" class="btn btn-default pull-right login">Connexion</a>
                                     <a href="{{path('hopital_numerique_user_inscription')}}" class="btn btn-default pull-right signup">Création de compte</a>
