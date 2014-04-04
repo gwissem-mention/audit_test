@@ -31,4 +31,3 @@ hopitalnumerique_reponse_deleteAll:
     requirements:
         user: \d+ 
         questionnaire: \d+
-        _method: POST|DELETE
