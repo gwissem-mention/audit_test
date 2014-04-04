@@ -305,7 +305,7 @@ abstract class Manager
         fclose($outstream);
 
         // Charset and Length
-        $charset = 'ISO-8859-1'; //'UTF-8';
+        $charset = 'ISO-8859-1';
         if ($charset != $kernelCharset && function_exists('mb_strlen')) {
             $content  = mb_convert_encoding($content, $charset, $kernelCharset);
             $filesize = mb_strlen($content, '8bit');

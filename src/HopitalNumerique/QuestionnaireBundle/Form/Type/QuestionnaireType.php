@@ -65,7 +65,7 @@ class QuestionnaireType extends AbstractType
         $questions = $this->_managerQuestionnaire->getQuestionsReponses($idQuestionnaire, $idUser, (isset($options['label_attr']['paramId']) ? $options['label_attr']['paramId'] : null));
 
         //Construction du formulaire en fonction des questions + chargement des réponses si il y en a
-        $builder = $this->_constructBuilder($builder, $questions, $questionnaire, $options); 
+        $builder = $this->constructBuilder($builder, $questions, $questionnaire, $options); 
     }
     
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -91,7 +91,7 @@ class QuestionnaireType extends AbstractType
      * 
      * @return FormBuilderInterface Le builder avec tous les champs
      */
-    private function _constructBuilder(FormBuilderInterface $builder, $questions, $questionnaire, $options)
+    private function constructBuilder(FormBuilderInterface $builder, $questions, $questionnaire, $options)
     {        
         //Réponse de la question courante
         $reponseCourante = null;

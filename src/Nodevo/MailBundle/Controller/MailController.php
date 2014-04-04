@@ -31,7 +31,7 @@ class MailController extends Controller
     {
         $mail = $this->get('nodevo_mail.manager.mail')->createEmpty();
 
-        return $this->_renderForm('nodevo_mail_mail', $mail, 'NodevoMailBundle:Mail:edit.html.twig' );
+        return $this->renderForm('nodevo_mail_mail', $mail, 'NodevoMailBundle:Mail:edit.html.twig' );
     }
 
     /**
@@ -42,7 +42,7 @@ class MailController extends Controller
         //Récupération de l'entité passée en paramètre
         $mail = $this->get('nodevo_mail.manager.mail')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('nodevo_mail_mail', $mail, 'NodevoMailBundle:Mail:edit.html.twig' );
+        return $this->renderForm('nodevo_mail_mail', $mail, 'NodevoMailBundle:Mail:edit.html.twig' );
     }
 
     /**
@@ -85,7 +85,7 @@ class MailController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $mail, $view )
+    private function renderForm( $formName, $mail, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $mail);
@@ -115,8 +115,8 @@ class MailController extends Controller
         }
 
         return $this->render( $view , array(
-            'form' => $form->createView(),
-            'mail' => $mail,
+            'form'        => $form->createView(),
+            'mail'        => $mail,
             'allowDelete' => $this->get('nodevo_mail.manager.mail')->isAllowedToDelete()
         ));
     }

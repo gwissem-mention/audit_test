@@ -54,7 +54,7 @@ class ContenuController extends Controller
         //Récupération de l'entité passée en paramètre
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $id) );
         
-        return $this->_renderForm('hopitalnumerique_objet_contenu', $contenu, 'HopitalNumeriqueObjetBundle:Contenu:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_objet_contenu', $contenu, 'HopitalNumeriqueObjetBundle:Contenu:edit.html.twig' );
     }
 
     /**
@@ -104,7 +104,7 @@ class ContenuController extends Controller
     {
         //get datas serialzed
         $datas = $this->get('request')->request->get('datas');
-        $this->_reorderElements( $datas, null );
+        $this->reorderElements( $datas, null );
 
         //return success.true si le fichier existe deja
         return new Response('{"success":true}', 200);
@@ -165,7 +165,7 @@ class ContenuController extends Controller
      *
      * @return empty
      */
-    private function _reorderElements( $elements, $parent )
+    private function reorderElements( $elements, $parent )
     {
         $order = 1;
 
@@ -178,7 +178,7 @@ class ContenuController extends Controller
             $order++;
 
             if( isset($element['children']) )
-                $this->_reorderElements( $element['children'], $contenu );
+                $this->reorderElements( $element['children'], $contenu );
         }
     }
 
@@ -191,7 +191,7 @@ class ContenuController extends Controller
      *
      * @return Response
      */
-    private function _renderForm( $formName, $contenu, $view )
+    private function renderForm( $formName, $contenu, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $contenu);

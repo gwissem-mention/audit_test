@@ -324,7 +324,7 @@ class Reference
     public function getArboName()
     {
         //retourne le niveau de profondeur de l'élément courent
-        $level = $this->_getLevel( 0, $this );
+        $level = $this->getLevel( 0, $this );
         $sep   = '';
 
         //selon le level de profondeur, le séparateur change
@@ -359,11 +359,11 @@ class Reference
      *
      * @return integer
      */
-    private function _getLevel( $currentLevel, $ref )
+    private function getLevel( $currentLevel, $ref )
     {
         $currentLevel++;
         if( $ref->getParent() )
-            $currentLevel = $this->_getLevel( $currentLevel, $ref->getParent() );
+            $currentLevel = $this->getLevel( $currentLevel, $ref->getParent() );
 
         return $currentLevel;
     }

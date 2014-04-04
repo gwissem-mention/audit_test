@@ -66,7 +66,7 @@ class QuestionnaireController extends Controller
         //Récupération du thème de formulaire
         $this->_themeQuestionnaire = $themeQuestionnaire;
     
-        return $this->_renderForm('nodevo_questionnaire_questionnaire',
+        return $this->renderForm('nodevo_questionnaire_questionnaire',
                 array(
                         'questionnaire'    => $questionnaire,
                         'user'             => $user,
@@ -99,7 +99,7 @@ class QuestionnaireController extends Controller
         //Récupération du thème de formulaire
         $this->_themeQuestionnaire = $themeQuestionnaire;
         
-        return $this->_renderForm('nodevo_questionnaire_questionnaire',
+        return $this->renderForm('nodevo_questionnaire_questionnaire',
                 array(
                         'questionnaire'    => $questionnaire,
                         'user'             => $user,
@@ -108,6 +108,13 @@ class QuestionnaireController extends Controller
                 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit.html.twig'
         );
     }
+
+
+
+
+
+
+
 
     /**
      * Effectue le render des formulaires de Questionnaire
@@ -118,7 +125,7 @@ class QuestionnaireController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $options, $view )
+    private function renderForm( $formName, $options, $view )
     {
         $user             = $options['user'];
         $readOnly         = $options['readOnly'];

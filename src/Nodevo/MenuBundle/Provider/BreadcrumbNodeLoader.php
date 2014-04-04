@@ -18,6 +18,14 @@ class BreadcrumbNodeLoader implements LoaderInterface
     private $container;
     private $_rootNode;
 
+    /**
+     * [__construct description]
+     *
+     * @param FactoryInterface         $factory   [description]
+     * @param SecurityContextInterface $security  [description]
+     * @param [type]                   $container [description]
+     * @param array                    $options   [description]
+     */
     public function __construct(FactoryInterface $factory, SecurityContextInterface $security, $container, $options = array())
     {
         $this->factory   = $factory;
@@ -26,6 +34,13 @@ class BreadcrumbNodeLoader implements LoaderInterface
         $this->_rootNode = isset($options['rootNode']) ? $options['breadcrumbRouteRacine'] : '';
     }
 
+    /**
+     * [getMenu description]
+     *
+     * @param  [type] $data [description]
+     *
+     * @return [type]
+     */
     public function getMenu($data)
     {
         $nodes = $this->load($data);
@@ -33,7 +48,7 @@ class BreadcrumbNodeLoader implements LoaderInterface
         $menu = clone $nodes;
         $menu->setChildren(array());
 
-        $options = $data->getOptions();
+        $options          = $data->getOptions();
         $options['route'] = $this->_rootNode;
 
         $item = $this->factory->createItem($data->getName(), $options);
@@ -42,11 +57,18 @@ class BreadcrumbNodeLoader implements LoaderInterface
 
         $menu->addChild($item);
         
-        $this->_addChildren($menu, $nodes);
+        $this->addChildren($menu, $nodes);
 
         return $menu;
     }
 
+    /**
+     * [load description]
+     *
+     * @param  [type] $data [description]
+     *
+     * @return [type]
+     */
     public function load($data)
     {
         if (!$data instanceof NodeInterface)
@@ -68,12 +90,25 @@ class BreadcrumbNodeLoader implements LoaderInterface
         return $item;   
     }
 
+    /**
+     * [supports description]
+     *
+     * @param  [type] $data [description]
+     *
+     * @return [type]
+     */
     public function supports($data)
     {
         return $data instanceof NodeInterface;
     }
 
-    private function _addChildren($menu, $nodes)
+    /**
+     * [addChildren description]
+     *
+     * @param [type] $menu  [description]
+     * @param [type] $nodes [description]
+     */
+    private function addChildren($menu, $nodes)
     {
         foreach ($nodes->getChildren() as $childNode) 
         {            
@@ -85,7 +120,7 @@ class BreadcrumbNodeLoader implements LoaderInterface
                 $menu->addChild($child);
             }
 
-            $this->_addChildren($menu, $nodes->getChild($childNode->getName()));
+            $this->addChildren($menu, $nodes->getChild($childNode->getName()));
         }
     }
 }

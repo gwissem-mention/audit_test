@@ -56,7 +56,7 @@ class ReferenceController extends Controller
             }
         }
 
-        return $this->_renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
     }
 
     /**
@@ -67,7 +67,7 @@ class ReferenceController extends Controller
         //Récupération de l'entité passée en paramètre
         $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
     }
 
     /**
@@ -130,7 +130,7 @@ class ReferenceController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $reference, $view )
+    private function renderForm( $formName, $reference, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $reference);

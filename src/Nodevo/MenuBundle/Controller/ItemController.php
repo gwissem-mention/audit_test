@@ -32,7 +32,7 @@ class ItemController extends Controller
         $menu = $this->get('nodevo_menu.manager.menu')->findOneById($id);
         $item->setMenu( $menu );
 
-        return $this->_renderForm('nodevo_menu_item', $item, 'NodevoMenuBundle:Item:edit.html.twig' );
+        return $this->renderForm('nodevo_menu_item', $item, 'NodevoMenuBundle:Item:edit.html.twig' );
     }
 
     /**
@@ -44,7 +44,7 @@ class ItemController extends Controller
     {
         $item = $this->get('nodevo_menu.manager.item')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('nodevo_menu_item', $item, 'NodevoMenuBundle:Item:edit.html.twig' );
+        return $this->renderForm('nodevo_menu_item', $item, 'NodevoMenuBundle:Item:edit.html.twig' );
     }
 
     /**
@@ -89,7 +89,7 @@ class ItemController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $item, $view )
+    private function renderForm( $formName, $item, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $item);
