@@ -3,12 +3,16 @@
 {{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}:
     pattern:  /{{ route_name_prefix }}
     defaults: { _controller: "{{ bundle }}:{{ entity }}:index" }
+    requirements: 
+        _method: GET|POST
 {% endif %}
 
 {% if 'new' in actions %}
 {{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{ route_name_prefix }}_add:
     pattern:  /{{ route_name_prefix }}/add
     defaults: { _controller: "{{ bundle }}:{{ entity }}:add" }
+    requirements: 
+        _method: GET|POST
 {% endif %}
 
 {% if 'show' in actions %}
@@ -17,6 +21,7 @@
     defaults: { _controller: "{{ bundle }}:{{ entity }}:show" }
     requirements:
         id: \d+
+        _method: GET
 {% endif %}
 
 {% if 'edit' in actions %}
@@ -25,6 +30,7 @@
     defaults: { _controller: "{{ bundle }}:{{ entity }}:edit" }
     requirements:
         id: \d+
+        _method: GET|POST
 {% endif %}
 
 {% if 'delete' in actions %}
@@ -33,6 +39,5 @@
     defaults: { _controller: "{{ bundle }}:{{ entity }}:delete", _format: json }
     requirements: 
         id: \d+
-        _method: post|delete
+        _method: POST|DELETE
 {% endif %}
-
