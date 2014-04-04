@@ -21,7 +21,10 @@ class ContactController extends NodevoController
         $view = 'NodevoContactBundle:Contact:index.html.twig';
         $routeRedirection = 'hopital_numerique_homepage';
         
-        return $this->renderForm( $formName , $contact, $view, $routeRedirection );
+        //$return : tableau de la création de la vue
+        $return = $this->renderForm( $formName , $contact, $view, $routeRedirection );
+        
+        return $this->render($return['view'], $return['array']);
     }
     
     /**
@@ -50,9 +53,7 @@ class ContactController extends NodevoController
             
             //si le formulaire est valide
             if ($form->isValid()) 
-            {    
-                //\Doctrine\Common\Util\Debug::dump($contact);die('die');
-                
+            {
                 //send Mail to all admins
                 $formContact = $this->get('hopitalnumerique_contact.manager.contact')->getContactFormateMail($contact);
                 $admins      = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole('ROLE_ADMINISTRATEUR_1');
@@ -83,6 +84,9 @@ class ContactController extends NodevoController
                 'contact'            => $contact
         ), $parametres);
     
-        return $this->render( $view , $array);
+        return array( 
+                'view'  => $view,
+                'array' => $array
+        );
     }
 }

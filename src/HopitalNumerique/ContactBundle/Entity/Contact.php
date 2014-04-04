@@ -7,7 +7,6 @@ use Nodevo\ContactBundle\Entity\Contact as NodevoContact;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 
