@@ -77,6 +77,35 @@ class MailController extends Controller
     }
 
     /**
+     * Test d'envoi d'un Mail.
+     */
+    public function sendTestAction( $id )
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $mail = $this->get('nodevo_mail.manager.mail')->getMessageTest( $id, $user );
+
+        $this->get('mailer')->send($mail);
+
+        $message = 'Message de test envoyé à '.$this->get('nodevo_mail.manager.mail')->getDestinataire();
+        $this->get('session')->getFlashBag()->add('info', $message);
+
+        return $this->redirect($this->generateUrl('nodevo_mail_mail_show', array( 'id' => $id)));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
      * Effectue le render du formulaire Mail.
      *
      * @param string $formName Nom du service associé au formulaire
@@ -119,22 +148,5 @@ class MailController extends Controller
             'mail'        => $mail,
             'allowDelete' => $this->get('nodevo_mail.manager.mail')->isAllowedToDelete()
         ));
-    }
-
-    /**
-     * Test d'envoi d'un Mail.
-     *
-     */
-    public function sendTestAction( $id )
-    {
-        $user = $this->get('security.context')->getToken()->getUser();
-        $mail = $this->get('nodevo_mail.manager.mail')->getMessageTest( $id, $user );
-
-        $this->get('mailer')->send($mail);
-
-        $message = 'Message de test envoyé à '.$this->get('nodevo_mail.manager.mail')->getDestinataire();
-        $this->get('session')->getFlashBag()->add('info', $message);
-
-        return $this->redirect($this->generateUrl('nodevo_mail_mail_show', array( 'id' => $id)));
     }
 }
