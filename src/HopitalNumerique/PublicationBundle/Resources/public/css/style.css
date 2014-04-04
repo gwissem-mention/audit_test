@@ -75,19 +75,20 @@
         #articles .actus ul li:hover a{color:#6f3596;}
 
 /* Autres résultats */
-    #autresResultats h2{display: block}
-    #autresResultats h2.open{background: url('../img/panel-open.png') no-repeat right center}
-    #autresResultats h2.closed{background: url('../img/panel-close.png') no-repeat right center}
+    #autresResultats h2{display: block; margin-bottom:15px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer}
+    #autresResultats h2.open{background-position: right -38px;}
+    #autresResultats h2.closed{background-position: right -5px; }
     #autresResultats .separator{height: 20px}
 
     /* Caroussel common */
-    #autresResultats .carousel-indicators{bottom: 0; width: 95%; left:0; margin: 0 14px}
+    #autresResultats .carousel-indicators{bottom: 0; width: 95%; left:0; margin: 0 15px 10px}
     #autresResultats .carousel-indicators li{background-color:#d2d1d1; }
     #autresResultats .carousel-indicators .active{background-color:#703695 }
     #autresResultats .carousel-inner{margin-left:25px;width:475px;}
-    #autresResultats .carousel-control{width:1%;}
+    #autresResultats .carousel-control{width:2%;}
     #autresResultats .carousel-control.right {background: none}
     #autresResultats .carousel-control.left {background: none}
+    #autresResultats .carousel-control span{top:30%;}
     #autresResultats .results{padding:0 15px;height:150px;}
     #autresResultats .results p.noresult{margin-top:29px;}
     #autresResultats span.label{font-size: 9px;line-height: 2; vertical-align: top}
@@ -97,7 +98,7 @@
     #autresResultats .top h3{color:#333333; font-size: 18px; font-weight: bold; display: block; margin-left:30px; margin-top:15px;background: url('../img/autre.png') no-repeat left center; height: 25px; padding-left:35px; padding-top: 2px }
     #autresResultats .top .results h4{margin-bottom: 5px; margin-top: 5px; text-transform: none; }
     #autresResultats .top .results h4 a{color: #333333; font-size: 14px; font-weight: bold; }
-    #autresResultats .top .results p{color: #333333; font-size: 12px; font-weight: normal; height: 75px; overflow-y:auto;} 
+    #autresResultats .top .results p{color: #333333; font-size: 12px; font-weight: normal; height: 90px; overflow-y:auto;margin-bottom:0;} 
 
     /* Ressources externes et forum*/
     #autresResultats #ressources{border:1px solid #DE0D4D;}
