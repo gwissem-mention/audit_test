@@ -58,7 +58,7 @@ class MotDePasseType extends AbstractType
                         'invalid_message' => 'Ces deux champs doivent être identiques.',
                         'required'       => true,
                         'first_options'  => array('label' => 'Mot de passe', 'attr' => array('autocomplete' => 'off', 'class' => 'validate[required]') ),
-                        'second_options' => array('label' => 'Confirmer le mot de passe', 'attr' => array('autocomplete' => 'off', 'class' => 'validate[required]') )
+                        'second_options' => array('label' => 'Confirmer le mot de passe', 'attr' => array('autocomplete' => 'off', 'class' => 'validate[required, equals[nodevo_user_motdepasse_plainPassword_first]]') )
                 ));                
     }
 

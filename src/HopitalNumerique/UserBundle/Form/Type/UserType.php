@@ -84,7 +84,7 @@ class UserType extends AbstractType
                         'invalid_message' => 'Ces deux champs doivent être identiques.',
                         'required'       => true,
                         'first_options'  => array('label' => 'Mot de passe', 'attr' => array('autocomplete' => 'off') ),
-                        'second_options' => array('label' => 'Confirmer le mot de passe', 'attr' => array('autocomplete' => 'off') )
+                        'second_options' => array('label' => 'Confirmer le mot de passe', 'attr' => array('autocomplete' => 'off', 'class' => 'form-control validate[equals[nodevo_user_user_plainpassword_first]') )
                 ));
             }
 

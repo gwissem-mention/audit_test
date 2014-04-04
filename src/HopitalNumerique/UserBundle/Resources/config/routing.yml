@@ -12,6 +12,8 @@ fos_user_registration:
 hopital_numerique_user_inscription:
     pattern:  /compte-hn/inscription
     defaults: { _controller: HopitalNumeriqueUserBundle:User:inscription }
+    requirements:
+        _method: GET|POST
 
 hopital_numerique_user_informations_personnelles:
     pattern:  /compte-hn/informations-personnelles    
@@ -35,6 +37,8 @@ hopital_numerique_user_front_etablissements_informationsPersonelles:
 hopital_numerique_user_motdepasse:
     pattern:  /compte-hn/mot-de-passe
     defaults: { _controller: HopitalNumeriqueUserBundle:User:motDePasse }
+    requirements:
+        _method: GET|POST
 
 #Utilisateur - ajax
 hopital_numerique_user_front_departements:
