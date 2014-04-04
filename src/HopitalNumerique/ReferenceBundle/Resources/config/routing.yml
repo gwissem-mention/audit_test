@@ -27,4 +27,4 @@ hopitalnumerique_reference_reference_delete:
     defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:delete", _format: json }
     requirements: 
         id: \d+
-        _method:POST|DELETE
+        _method: POST|DELETE

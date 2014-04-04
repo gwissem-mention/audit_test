@@ -23,7 +23,7 @@ hopitalnumerique_etablissement_delete:
     defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:delete", _format: json}
     requirements:
         id: \d+
-        _method:POST|DELETE
+        _method: POST|DELETE
 
 hopitalnumerique_etablissement_departements:
     pattern:  /etablissement/departements
