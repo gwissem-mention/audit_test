@@ -96,7 +96,7 @@ class UserController extends Controller
                 
             }
         }
-        return $this->_renderView( $view , $form, $user);
+        return $this->customRenderView( $view , $form, $user);
     }
     
 
@@ -425,7 +425,7 @@ class UserController extends Controller
                     if(is_null($role)) {
                         $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un groupe associé.');
                     
-                        return $this->_renderView( $view , $form, $user);
+                        return $this->customRenderView( $view , $form, $user);
                     }                    
                 }
             }
@@ -508,7 +508,7 @@ class UserController extends Controller
                     if( ! is_null($result) ) {
                         $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe ARS-CMSI pour cette région.' );
                 
-                        return $this->_renderView( $view , $form, $user);
+                        return $this->customRenderView( $view , $form, $user);
                     }
                 }
                 else if ( null == $user->getRegion() )
@@ -517,7 +517,7 @@ class UserController extends Controller
                     if( $role->getRole() == 'ROLE_ARS_CMSI_4' || $role->getRole() == 'ROLE_AMBASSADEUR_7') {
                         $this->get('session')->getFlashBag()->add('danger', 'Il est obligatoire de choisir une région pour le groupe sélectionné.' );
                         
-                        return $this->_renderView( $view , $form, $user);
+                        return $this->customRenderView( $view , $form, $user);
                     }
                 }
                 
@@ -528,7 +528,7 @@ class UserController extends Controller
                     if( ! is_null($result) ) {
                         $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe Direction générale pour cet établissement.');
                     
-                        return $this->_renderView( $view , $form, $user);
+                        return $this->customRenderView( $view , $form, $user);
                     }
                 }
                 
@@ -564,10 +564,10 @@ class UserController extends Controller
             }
         }
         
-        return $this->_renderView( $view , $form, $user);
+        return $this->customRenderView( $view , $form, $user);
     }
 
-    private function _renderView( $view, $form, $user )
+    private function customRenderView( $view, $form, $user )
     {
         return $this->render( $view , array(
             'form'    => $form->createView(),
