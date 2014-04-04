@@ -7,6 +7,6 @@ services:
     #Extension Twig
     hopitalnumerique_publication.twig.publication_extension:
         class: %hopitalnumerique_publication.twig.publication.class%
-        arguments : ["@hopitalnumerique_objet.manager.objet", "@hopitalnumerique_objet.manager.contenu"]
+        arguments : ["@service_container"]
         tags:
             - { name: twig.extension }
