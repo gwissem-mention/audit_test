@@ -133,7 +133,7 @@ abstract class InterventionDemandeType extends AbstractType
                 'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_objets')
             ))
             ->add('description', 'textarea', array(
-                'label' => 'Description succinte de mon projet',
+                'label' => 'Description succincte de mon projet',
                 'required' => false
             ))
             ->add('difficulteDescription', 'textarea', array(
