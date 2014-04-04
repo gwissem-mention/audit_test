@@ -19,7 +19,6 @@ hopital_numerique_intervention_admin_demande_delete:
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Form/Demande:supprime", _format: json}
     requirements:
         id: \d+
-        _method: post|delete
 
 hopital_numerique_intervention_admin_evaluation_voir:
     pattern:  /demande/{interventionDemande}/evaluation/voir

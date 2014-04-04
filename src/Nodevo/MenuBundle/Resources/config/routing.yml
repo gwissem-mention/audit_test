@@ -2,28 +2,22 @@
 nodevo_menu_menu:
     pattern: /menu
     defaults: { _controller: NodevoMenuBundle:Menu:index }
-    requirements:
-        _method: POST|GET
 
 nodevo_menu_menu_add:
     pattern:  /menu/add
     defaults: { _controller: NodevoMenuBundle:Menu:add }
-    requirements:
-        _method: POST|GET
 
 nodevo_menu_menu_edit:
     pattern: /menu/edit/{id}
     defaults: { _controller: NodevoMenuBundle:Menu:edit, id: 1}
     requirements:
         id: \d+
-        _method: POST|GET
 
 nodevo_menu_menu_delete:
     pattern: /menu/delete/{id}.{_format}
     defaults: { _controller: NodevoMenuBundle:Menu:delete, _format: json }
     requirements:
         id: \d+
-        _method: POST|DELETE
 
 # Items
 nodevo_menu_item:
@@ -31,25 +25,21 @@ nodevo_menu_item:
     defaults: { _controller: NodevoMenuBundle:Item:index, id: 1 }
     requirements:
         id: \d+
-        _method: POST|GET
 
 nodevo_menu_item_add:
     pattern: /menu/item/add/{id}
     defaults: { _controller: NodevoMenuBundle:Item:add, id: 1 }
     requirements:
         id: \d+
-        _method: POST|GET
 
 nodevo_menu_item_edit:
     pattern: /menu/item/edit/{id}
     defaults: { _controller: NodevoMenuBundle:Item:edit, id: 1 }
     requirements:
         id: \d+
-        _method: POST|GET
 
 nodevo_menu_item_delete:
     pattern: /menu/item/delete/{id}.{_format}
     defaults: { _controller: NodevoMenuBundle:Item:delete, _format: json }
     requirements:
         id: \d+
-        _method:  POST|DELETE

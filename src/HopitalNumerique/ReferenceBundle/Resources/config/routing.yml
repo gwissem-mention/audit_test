@@ -1,38 +1,29 @@
 hopitalnumerique_reference_reference:
     pattern:  /reference/
     defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:index" }
-    requirements: 
-        _method: GET|POST
 
 hopitalnumerique_reference_sitemap:
     pattern:  /reference/arbo
     defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:sitemap" }
-    requirements: 
-        _method: GET
 
 hopitalnumerique_reference_reference_add:
     pattern:  /reference/add/{id}/{mod}
     defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:add", id: null, mod: null }
-    requirements: 
-        _method: GET|POST
 
 hopitalnumerique_reference_reference_edit:
     pattern:  /reference/edit/{id}
     defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:edit", id:1 }
     requirements:
         id: \d+
-        _method: GET|POST
 
 hopitalnumerique_reference_reference_show:
     pattern:  /reference/show/{id}
     defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:show", id:1 }
     requirements:
         id: \d+
-        _method: GET
 
 hopitalnumerique_reference_reference_delete:
     pattern:  /reference/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:delete", _format: json }
     requirements: 
         id: \d+
-        _method: POST|DELETE
