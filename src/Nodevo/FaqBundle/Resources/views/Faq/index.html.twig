@@ -14,14 +14,13 @@
 {% endblock %}
 
 {% block h1Title %}
-    Gestion des Faq
+    Gestion des éléments de la FAQ
 {% endblock %}
 
 {% block toolbarButton %}
-    <a class="btn btn-default" href="{{ path('nodevo_faq_faq_add') }}" title="Ajouter un Faq"><i class="fa fa-plus"></i></a>
+    <a class="btn btn-default" href="{{ path('nodevo_faq_faq_add') }}" title="Ajouter un élément dans la FAQ"><i class="fa fa-plus"></i></a>
 {% endblock %}
 
 {% block body %}
     {{ grid(grid, _self) }}
 {% endblock %}
-

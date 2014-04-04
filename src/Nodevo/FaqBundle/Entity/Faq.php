@@ -36,6 +36,13 @@ class Faq
     private $reponse;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="faq_order", type="integer", options = {"comment" = "Ordre de l element"})
+     */
+    private $order;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Categorie", cascade={"persist"})
      * @ORM\JoinColumn(name="cat_id", referencedColumnName="cat_id", onDelete="CASCADE")
      */
@@ -43,7 +50,7 @@ class Faq
 
     public function __construct()
     {
-
+        $this->order = 0;
     }
 
     /**
@@ -100,6 +107,26 @@ class Faq
     public function getReponse()
     {
         return $this->reponse;
+    }
+
+    /**
+     * Get order
+     *
+     * @return integer $order
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+    
+    /**
+     * Set order
+     *
+     * @param integer $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
     }
 
     /**

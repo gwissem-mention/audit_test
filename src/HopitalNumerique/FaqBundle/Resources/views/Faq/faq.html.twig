@@ -1,7 +1,46 @@
-{% extends "::base.html.twig" %}
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
 
-{% block title %}HopitalNumeriqueFaqBundle:Faq:index{% endblock %}
+{# Référencement #}
+{% block title %}{{parent()}} - FAQ{% endblock %}
+{% block metadesc %}La Foire aux Questions du site Hopital Numérique{% endblock %}
+{% block metakeywords %}faq{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-faq-faq-faq.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquefaq/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-faq-faq-faq.js"
+        'bundles/hopitalnumeriquefaq/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
 
 {% block body %}
-<h1>Welcome to the Faq:index page</h1>
+    <div id="faq">
+        <div class="col-md-12">
+            <h1>FAQ</h1>
+            <p class="intro" >
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente, obcaecati, pariatur, est dolorum magni quasi dolores iste illum reprehenderit omnis quod temporibus praesentium quo dignissimos eos illo facilis quae voluptate!
+            </p>
+        </div>
+
+        {% for element in elements %}
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading closed">{{element.question}}</div>
+                    <div class="panel-body" style="display:none;">
+                        {{element.reponse|raw}}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
