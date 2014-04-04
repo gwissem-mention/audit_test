@@ -81,6 +81,7 @@ hopital_numerique_user_delete:
     defaults: { _controller: HopitalNumeriqueUserBundle:User:delete, _format: json}
     requirements:
         id: \d+
+        _method:POST|DELETE
 
 #Utilisateur - ajax
 hopital_numerique_user_departements:
@@ -127,6 +128,7 @@ hopitalnumerique_user_contractualisation_delete:
     defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:delete", _format: json }
     requirements: 
         id: \d+
+        _method:POST|DELETE
 
 #Contractualisation - archiver
 hopitalnumerique_user_contractualisation_archiver:

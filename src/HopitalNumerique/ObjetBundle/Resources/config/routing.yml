@@ -44,6 +44,7 @@ hopitalnumerique_objet_objet_delete:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:delete", _format: json }
     requirements: 
         id: \d+
+        _method:POST|DELETE
 
 #partie Contenu
 hopitalnumerique_objet_contenu_add:
@@ -63,6 +64,7 @@ hopitalnumerique_objet_contenu_delete:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:delete", _format: json }
     requirements: 
         id: \d+
+        _method:POST|DELETE
 
 hopitalnumerique_objet_contenu_uploadparse:
     pattern:  /objet/contenu/upload/parse/{id}

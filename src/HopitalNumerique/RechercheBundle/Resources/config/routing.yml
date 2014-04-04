@@ -27,6 +27,7 @@ hopital_numerique_requete_delete:
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:delete, id:1, _format:json }
     requirements: 
         id: \d+
+        _method:POST|DELETE
 
 hopital_numerique_requete_edit:
     pattern:  /requetes/edit/{id}
@@ -55,6 +56,7 @@ hopital_numerique_requete_consultation_delete:
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Consultation:delete, id:1, _format:json }
     requirements: 
         id: \d+
+        _method:POST|DELETE
 
 #CRON
 hopital_numerique_cron_requetes:
