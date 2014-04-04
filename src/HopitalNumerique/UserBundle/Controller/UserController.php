@@ -528,7 +528,7 @@ class UserController extends Controller
                     $user->setEnabled( 1 );
                 else
                     $user->setEnabled( 0 );
-
+                
                 //Mise à jour / création de l'utilisateur
                 $this->get('fos_user.user_manager')->updateUser( $user );
                 

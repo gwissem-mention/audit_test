@@ -23,7 +23,6 @@ class EvaluationController extends Controller
      */
     public function voirAction(InterventionDemande $interventionDemande)
     {
-        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
 
         return $this->render('HopitalNumeriqueInterventionBundle:Admin/Evaluation:voir.html.twig', array(

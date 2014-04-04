@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation;
-use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
 
 /**
  * Contrôleur des évalutions des demandes d'intervention.

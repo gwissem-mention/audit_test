@@ -7,7 +7,6 @@
  */
 namespace HopitalNumerique\InterventionBundle\DependencyInjection\Demande;
 
-use Symfony\Component\HttpFoundation\Session\Session;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 
 /**

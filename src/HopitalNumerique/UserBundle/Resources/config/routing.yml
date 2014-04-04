@@ -16,14 +16,20 @@ hopital_numerique_user_inscription:
 hopital_numerique_user_informations_personnelles:
     pattern:  /compte-hn/informations-personnelles    
     defaults: { _controller: HopitalNumeriqueUserBundle:User:informationsPersonnelles }
+    requirements:
+        _method: GET|POST
 
 hopital_numerique_user_front_departements_informationsPersonelles:
     pattern:  /compte-hn/informations-personnelles/departements
     defaults: { _controller: HopitalNumeriqueUserBundle:User:ajaxEditDepartements }
+    requirements:
+        _method: POST
 
 hopital_numerique_user_front_etablissements_informationsPersonelles:
     pattern:  /compte-hn/informations-personnelles/etablissements
     defaults: { _controller: HopitalNumeriqueUserBundle:User:ajaxEditEtablissements }
+    requirements:
+        _method: POST
 
 #Modication de mot de passe
 hopital_numerique_user_motdepasse:
