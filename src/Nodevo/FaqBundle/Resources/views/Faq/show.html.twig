@@ -1,0 +1,37 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Fiche Faq
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('nodevo_faq_faq') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if faq.id %}
+        <a href="{{ path('nodevo_faq_faq_edit', { 'id': faq.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                <p>
+                    <strong>Id : </strong>
+                    {{ faq.id }}
+                </p>
+                <p>
+                    <strong>Question : </strong>
+                    {{ faq.question }}
+                </p>
+                <p>
+                    <strong>Reponse : </strong>
+                    {{ faq.reponse }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
