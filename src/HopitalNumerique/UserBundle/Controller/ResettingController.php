@@ -40,7 +40,10 @@ class ResettingController extends BaseController
         }
         
         //Création de l'url de reset de mot de passe
-        $options = array('url' => $this->container->get('router')->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), true));
+        $options = array(
+                'url' => $this->container->get('router')->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), true),
+                'nom' => $user->getUsername()
+        );
         $mailReset = $this->container->get('nodevo_mail.manager.mail')->sendResetPasswordMail($user, $options);
         $this->container->get('mailer')->send($mailReset);
         
