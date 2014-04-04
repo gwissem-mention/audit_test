@@ -68,10 +68,10 @@ class Grid
     public function render( $vue, $params = array() )
     {
         //Initialize the grid with the conf
-        $this->_initConfig();
-        $this->_initColonnes();
-        $this->_initSource();
-        $this->_initMassActions();
+        $this->initConfig();
+        $this->initColonnes();
+        $this->initSource();
+        $this->initMassActions();
 
         //return the grid object
         return $this->_grid->getGridResponse( $vue, $params );
@@ -250,7 +250,7 @@ class Grid
         /**
          * Initialise les colonnes du grid
          */
-        private function _initColonnes()
+        private function initColonnes()
         {
             //récupère les colonnes configurés par l'utilisateur et les boutons d'Action
             $this->setActionsButtons();
@@ -289,7 +289,7 @@ class Grid
         /**
          * Initialise la configuration par rapport à la classe
          */
-        private function _initConfig()
+        private function initConfig()
         {
             //récupère la config utilisateur
             $this->setConfig();
@@ -313,7 +313,7 @@ class Grid
         /**
          * Ajoute la source des données en fonction du type de la source $_sourceType
          */
-        private function _initSource()
+        private function initSource()
         {
             switch ($this->_sourceType) {
                 case self::SOURCE_TYPE_DOCUMENT:
@@ -330,7 +330,7 @@ class Grid
 
                     if( !empty($datas) && !is_null($datas[0]['id']) ){
                         if( !is_null($this->_fieldParentRecursive) && !is_null($this->_fieldLabelRecursive) )
-                            $datas = $this->_rearengeForRecursive( $datas );
+                            $datas = $this->rearengeForRecursive( $datas );
                     }else
                         $datas = array();
 
@@ -366,7 +366,7 @@ class Grid
 
             //Si on est en source Entity : on met à jour les colonnes au lieu de les ajouter
             if($this->_sourceType == self::SOURCE_TYPE_ENTITY)
-                $this->_manageColumnsForEntitySource();
+                $this->manageColumnsForEntitySource();
         }
 
         /**
@@ -374,7 +374,7 @@ class Grid
          *
          * @return empty
          */
-        private function _initMassActions()
+        private function initMassActions()
         {
             //Récupère les mass actions de la config du grid
             $this->setMassActions();
@@ -388,7 +388,7 @@ class Grid
          *
          * @return empty
          */
-        private function _manageColumnsForEntitySource()
+        private function manageColumnsForEntitySource()
         {
             foreach($this->_colonnes as $colonne) {
                 //get column with ID
@@ -410,7 +410,7 @@ class Grid
          *
          * @return array
          */
-        private function _rearengeForRecursive( $datas )
+        private function rearengeForRecursive( $datas )
         {
             //Création d'un tableau ayant pour clé le véritable id de l'item
             foreach ($datas as $key => $data)
@@ -420,10 +420,10 @@ class Grid
             foreach ($datas as $key => $data)
             {
                 if(NULL !== $data[$this->_fieldParentRecursive])
-                    $datas = $this->_gestionAffichageSousItems( $key, $datas, $datasById, $datasById[$data['id']] );
+                    $datas = $this->gestionAffichageSousItems( $key, $datas, $datasById, $datasById[$data['id']] );
             }
             
-            return $this->_regroupementParentEnfant($datas);
+            return $this->regroupementParentEnfant($datas);
         }
 
         /**
@@ -434,14 +434,14 @@ class Grid
          * @param array $datasById  Tableau des permettant de recupérer un item en fonction de son Id
          * @param array $parentData Tableau contenant les données de l'item parent de l'item courant
          */
-        private function _gestionAffichageSousItems( $key, $datas, $datasById, $parentData )
+        private function gestionAffichageSousItems( $key, $datas, $datasById, $parentData )
         {    
             if( NULL != $parentData[$this->_fieldParentRecursive])
             {
                 $datas[$key][$this->_fieldLabelRecursive] = '|--- ' . $datas[$key][$this->_fieldLabelRecursive];
 
                 $parentData = $datasById[$parentData[$this->_fieldParentRecursive]];
-                $datas      = $this->_gestionAffichageSousItems( $key, $datas, $datasById, $parentData );
+                $datas      = $this->gestionAffichageSousItems( $key, $datas, $datasById, $parentData );
             }
             
             return $datas;
@@ -453,7 +453,7 @@ class Grid
          * @param array $datas      Tableau des données à regrouper
          * @return array            Tableau des données regroupées
          */
-        private function _regroupementParentEnfant( $datas )
+        private function regroupementParentEnfant( $datas )
         {
             //Récupère l'ensemble des données dans un ArrayCollection
             $datasArrayCollection = new ArrayCollection( $datas );
@@ -462,7 +462,7 @@ class Grid
             $criteria = Criteria::create()->where(Criteria::expr()->eq($this->_fieldParentRecursive, null) );
             $parents  = $datasArrayCollection->matching( $criteria )->toArray();
             
-            return $this->_rangeEnfants($parents, $datasArrayCollection );
+            return $this->rangeEnfants($parents, $datasArrayCollection );
         }
         
         /**
@@ -473,7 +473,7 @@ class Grid
          * 
          * @return array Tableau du niveau parent/enfant courant trié
          */
-        private function _rangeEnfants( $items, $datasArrayCollection)
+        private function rangeEnfants( $items, $datasArrayCollection)
         {
             $tab = array();
 
@@ -486,7 +486,7 @@ class Grid
                 $enfants  = $datasArrayCollection->matching( $criteria )->toArray();
 
                 //range les éléments
-                $tab = array_merge( $tab, $this->_rangeEnfants($enfants, $datasArrayCollection) );
+                $tab = array_merge( $tab, $this->rangeEnfants($enfants, $datasArrayCollection) );
             }
             
             return $tab;

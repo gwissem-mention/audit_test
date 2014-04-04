@@ -95,12 +95,12 @@ class UserGrid extends Grid implements IGrid
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueUserBundle:User:DeleteMass') );
-        $this->addMassAction( new Action\Export\CsvMass('HopitalNumeriqueUserBundle:User:ExportCsv') );
+        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueUserBundle:User:deleteMass') );
+        $this->addMassAction( new Action\Export\CsvMass('HopitalNumeriqueUserBundle:User:exportCsv') );
 
-        $this->addMassAction( new Action\ActionMass('Activer','HopitalNumeriqueUserBundle:User:ActiverMass') );
-        $this->addMassAction( new Action\ActionMass('Désactiver','HopitalNumeriqueUserBundle:User:DesactiverMass') );
+        $this->addMassAction( new Action\ActionMass('Activer','HopitalNumeriqueUserBundle:User:activerMass') );
+        $this->addMassAction( new Action\ActionMass('Désactiver','HopitalNumeriqueUserBundle:User:desactiverMass') );
 		
-		$this->addMassAction( new Action\ActionMass('Envoyer un mail','HopitalNumeriqueUserBundle:User:EnvoyerMailMass') );
+		$this->addMassAction( new Action\ActionMass('Envoyer un mail','HopitalNumeriqueUserBundle:User:envoyerMailMass') );
     }
 }

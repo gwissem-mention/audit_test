@@ -39,7 +39,7 @@ class ContractualisationController extends Controller
         $contractualisation->setUser( $user );
         $type_autres = $this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idTypeAutres');
 
-        return $this->_renderForm('hopitalnumerique_user_contractualisation', $contractualisation, 'HopitalNumeriqueUserBundle:Contractualisation:edit.html.twig', array(
+        return $this->renderForm('hopitalnumerique_user_contractualisation', $contractualisation, 'HopitalNumeriqueUserBundle:Contractualisation:edit.html.twig', array(
                 'type_autres' => $type_autres,
             ));
     }
@@ -54,7 +54,7 @@ class ContractualisationController extends Controller
 
         $type_autres = $this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idTypeAutres');
         
-        return $this->_renderForm('hopitalnumerique_user_contractualisation', $contractualisation, 'HopitalNumeriqueUserBundle:Contractualisation:edit.html.twig', array(
+        return $this->renderForm('hopitalnumerique_user_contractualisation', $contractualisation, 'HopitalNumeriqueUserBundle:Contractualisation:edit.html.twig', array(
                 'type_autres' => $type_autres,
             ));
     }
@@ -163,7 +163,7 @@ class ContractualisationController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $contractualisation, $view, $parametres = array() )
+    private function renderForm( $formName, $contractualisation, $view, $parametres = array() )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $contractualisation);

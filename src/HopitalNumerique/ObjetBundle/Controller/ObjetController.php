@@ -55,7 +55,7 @@ class ObjetController extends Controller
         if( $type == 2 )
             $objet->setArticle(true);
 
-        return $this->_renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig' );
     }
 
     /**
@@ -84,7 +84,7 @@ class ObjetController extends Controller
             'toRef'    => $toRef
         );
 
-        return $this->_renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig', $options );
+        return $this->renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig', $options );
     }
 
     /**
@@ -256,7 +256,7 @@ class ObjetController extends Controller
     /**
      * Effectue le render du formulaire Objet.
      */
-    private function _renderForm( $formName, $objet, $view, $options = array() )
+    private function renderForm( $formName, $objet, $view, $options = array() )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $objet);

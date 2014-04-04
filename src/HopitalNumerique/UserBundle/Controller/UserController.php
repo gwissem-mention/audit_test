@@ -307,7 +307,7 @@ class UserController extends Controller
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
      */
-    public function ExportCsvAction( $primaryKeys, $allPrimaryKeys )
+    public function exportCsvAction( $primaryKeys, $allPrimaryKeys )
     {
         //get all selected Users
 		if($allPrimaryKeys == 1)
@@ -353,7 +353,7 @@ class UserController extends Controller
      *
      * @return Redirect
      */
-    public function EnvoyerMailMassAction( $primaryKeys, $allPrimaryKeys )
+    public function envoyerMailMassAction( $primaryKeys, $allPrimaryKeys )
     {
         //get all selected Users
         if($allPrimaryKeys == 1)
@@ -378,6 +378,15 @@ class UserController extends Controller
         ));
     }
 	
+
+
+
+
+
+
+
+
+    
     /**
      * Effectue le render du formulaire Utilisateur
      *

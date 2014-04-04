@@ -16,6 +16,6 @@
 {% endblock method_body %}
 
 {% block method_return %}
-        return $this->_renderForm('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{entity|lower}}', ${{entity|lower}}, '{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:edit.html.twig' );
+        return $this->renderForm('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}_{{entity|lower}}', ${{entity|lower}}, '{{ bundle }}:{{ entity|replace({'\\': '/'}) }}:edit.html.twig' );
 {% endblock method_return %}
     }

@@ -26,7 +26,7 @@ class RoleController extends Controller
     {
         $role = $this->get('nodevo_role.manager.role')->createEmpty();
 
-        return $this->_renderForm('nodevo_role_role', $role, 'NodevoRoleBundle:Role:edit.html.twig' );
+        return $this->renderForm('nodevo_role_role', $role, 'NodevoRoleBundle:Role:edit.html.twig' );
     }
 
     /**
@@ -38,7 +38,7 @@ class RoleController extends Controller
     {
         $role = $this->get('nodevo_role.manager.role')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('nodevo_role_role', $role, 'NodevoRoleBundle:Role:edit.html.twig' );
+        return $this->renderForm('nodevo_role_role', $role, 'NodevoRoleBundle:Role:edit.html.twig' );
     }
 
     /**
@@ -98,7 +98,7 @@ class RoleController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $role, $view )
+    private function renderForm( $formName, $role, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $role);

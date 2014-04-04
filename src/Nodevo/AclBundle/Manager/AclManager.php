@@ -18,10 +18,10 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
  */
 class AclManager extends BaseManager
 {
-    protected   $_class         = '\Nodevo\AclBundle\Entity\Acl';
+    protected   $_class = '\Nodevo\AclBundle\Entity\Acl';
     private     $_ressourceManager;
     private     $_roleManager;
-    private     $_writeWords    = array();
+    private     $_writeWords = array();
 
     /**
      * Construct extension : we need to have the Container here
@@ -34,27 +34,10 @@ class AclManager extends BaseManager
     {
         parent::__construct($em);
 
-        $this->_ressourceManager    = $ressourceManager;
-        $this->_roleManager         = $roleManager;
+        $this->_ressourceManager = $ressourceManager;
+        $this->_roleManager      = $roleManager;
 
-        $this->_setOptions($options);
-    }
-
-    /**
-    * Gère les options passées en paramètre
-    *
-    * @param options Tableau d'options
-    */
-    private function _setOptions($options = array())
-    {
-        if (isset($options['writeWords']) && is_array($options['writeWords']))
-        {
-            $this->_writeWords = $options['writeWords'];
-        }
-        else
-        {
-            $this->_writeWords = array();
-        }
+        $this->setOptions($options);
     }
 
     /**
@@ -205,5 +188,26 @@ class AclManager extends BaseManager
             return $acl->getWrite() ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_DENIED;
 
         return $acl->getRead() ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_DENIED;
+    }
+
+
+
+
+
+
+
+
+
+    /**
+     * Gère les options passées en paramètre
+     *
+     * @param options Tableau d'options
+     */
+    private function setOptions($options = array())
+    {
+        if (isset($options['writeWords']) && is_array($options['writeWords']))
+            $this->_writeWords = $options['writeWords'];
+        else
+            $this->_writeWords = array();
     }
 }

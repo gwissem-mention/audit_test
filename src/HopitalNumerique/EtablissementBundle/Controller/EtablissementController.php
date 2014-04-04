@@ -27,7 +27,7 @@ class EtablissementController extends Controller
     {
         $etablissement = $this->get('hopitalnumerique_etablissement.manager.etablissement')->createEmpty();
 
-        return $this->_renderForm('hopitalnumerique_etablissement_etablissement', $etablissement, 'HopitalNumeriqueEtablissementBundle:Etablissement:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_etablissement_etablissement', $etablissement, 'HopitalNumeriqueEtablissementBundle:Etablissement:edit.html.twig' );
     }
     
     /**
@@ -40,7 +40,7 @@ class EtablissementController extends Controller
         //Récupération de l'etablissement passé en param
         $etablissement = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('hopitalnumerique_etablissement_etablissement', $etablissement, 'HopitalNumeriqueEtablissementBundle:Etablissement:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_etablissement_etablissement', $etablissement, 'HopitalNumeriqueEtablissementBundle:Etablissement:edit.html.twig' );
     }
 
     /**
@@ -132,7 +132,7 @@ class EtablissementController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $etablissement, $view )
+    private function renderForm( $formName, $etablissement, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $etablissement);
