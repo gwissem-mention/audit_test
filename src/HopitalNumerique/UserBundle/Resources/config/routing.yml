@@ -44,10 +44,14 @@ hopital_numerique_user_motdepasse:
 hopital_numerique_user_front_departements:
     pattern:  /compte-hn/inscription/departements
     defaults: { _controller: HopitalNumeriqueUserBundle:User:ajaxEditDepartements }
+    requirements:
+        _method: POST
 
 hopital_numerique_user_front_etablissements:
     pattern:  /compte-hn/inscription/etablissements
     defaults: { _controller: HopitalNumeriqueUserBundle:User:ajaxEditEtablissements }
+    requirements:
+        _method: POST
 
 #Expert
 hopitalnumerique_user_expert_front_edit:
@@ -55,6 +59,7 @@ hopitalnumerique_user_expert_front_edit:
     defaults: { _controller: "HopitalNumeriqueUserBundle:Expert:editFront", id: 1 }
     requirements:
         id: \d+
+        _method: GET
 
 #Ambassadeur
 hopitalnumerique_user_ambassadeur_front_edit:
@@ -62,6 +67,7 @@ hopitalnumerique_user_ambassadeur_front_edit:
     defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:editFront", id: 1 }
     requirements:
         id: \d+
+        _method: GET
 
 # ----- Back Office -----
 
@@ -69,38 +75,48 @@ hopitalnumerique_user_ambassadeur_front_edit:
 hopital_numerique_user_homepage:
     pattern:  /admin/user
     defaults: { _controller: HopitalNumeriqueUserBundle:User:index }
+    requirements:
+        _method: GET|POST
 
 hopital_numerique_user_add:
     pattern:  /admin/user/add
     defaults: { _controller: HopitalNumeriqueUserBundle:User:add }
+    requirements:
+        _method: GET|POST
 
 hopital_numerique_user_edit:
     pattern: /admin/user/edit/{id}
     defaults: { _controller: HopitalNumeriqueUserBundle:User:edit, id: 1 }
     requirements:
         id: \d+
+        _method: GET|POST
 
 hopital_numerique_user_show:
     pattern: /admin/user/show/{id}
     defaults: { _controller: HopitalNumeriqueUserBundle:User:show, id: 1}
     requirements:
         id: \d+
+        _method: GET
 
 hopital_numerique_user_delete:
     pattern: /admin/user/delete/{id}.{_format}
     defaults: { _controller: HopitalNumeriqueUserBundle:User:delete, _format: json}
     requirements:
         id: \d+
-        _method: post|delete
+        _method: POST|DELETE
 
 #Utilisateur - ajax
 hopital_numerique_user_departements:
     pattern:  /admin/user/departements
     defaults: { _controller: HopitalNumeriqueUserBundle:User:ajaxEditDepartements }
+    requirements:
+        _method: POST
 
 hopital_numerique_user_etablissements:
     pattern:  /admin/user/etablissements
     defaults: { _controller: HopitalNumeriqueUserBundle:User:ajaxEditEtablissements }
+    requirements:
+        _method: POST
 
 #Contractualisation
 hopitalnumerique_user_contractualisation:
@@ -108,37 +124,42 @@ hopitalnumerique_user_contractualisation:
     defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:index", id: 1 }
     requirements:
         id: \d+
+        _method: GET|POST
 
 hopitalnumerique_user_contractualisation_add:
     pattern:  /admin/user/contractualisation/add/{id}
     defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:add", id: 1  }
     requirements:
         id: \d+
+        _method: GET|POST
 
 hopitalnumerique_user_contractualisation_show:
     pattern:  /admin/user/contractualisation/show/{id}
     defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:show", id: 1 }
     requirements:
         id: \d+
+        _method: GET
 
 hopitalnumerique_user_contractualisation_dowload:
     pattern:  /admin/user/contractualisation/dowload/{id}
     defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:dowload", id: 1 }
     requirements:
         id: \d+
+        _method: GET
 
 hopitalnumerique_user_contractualisation_edit:
     pattern:  /admin/user/contractualisation/edit/{id}
     defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:edit", id: 1 }
     requirements:
         id: \d+
+        _method: GET|POST
 
 hopitalnumerique_user_contractualisation_delete:
     pattern:  /admin/user/contractualisation/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:delete", _format: json }
     requirements: 
         id: \d+
-        _method: post|delete
+        _method: POST|DELETE
 
 #Contractualisation - archiver
 hopitalnumerique_user_contractualisation_archiver:
@@ -146,6 +167,7 @@ hopitalnumerique_user_contractualisation_archiver:
     defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:archiver", _format: json }
     requirements:
         id: \d+
+        _method: GET|POST
 
 #Contractualisation - liste
 hopitalnumerique_user_contractualisation_liste:
@@ -153,36 +175,42 @@ hopitalnumerique_user_contractualisation_liste:
     defaults: { _controller: "HopitalNumeriqueUserBundle:Contractualisation:liste", id: 1 }
     requirements:
         idUser: \d+
+        _method: GET|POST
 
 #Expert
 hopitalnumerique_user_expert_edit:
     pattern:  /admin/user/expert/edit/{id}
     defaults: { _controller: "HopitalNumeriqueUserBundle:Expert:edit", id: 1 }
     requirements:
-        id: \d+        
+        id: \d+     
+        _method: GET|POST   
 
 hopitalnumerique_user_expert_fiche:
     pattern: /admin/user/expert/show/{idUser}
     defaults: { _controller: HopitalNumeriqueUserBundle:Expert:show, idUser: 1 }
     requirements:
         idUser: \d+
+        _method: GET
 
 hopitalnumerique_user_expert_validationCandidature:
     pattern: /admin/user/expert/validation/{user}
     defaults: { _controller: HopitalNumeriqueUserBundle:Expert:validationCandidature, _format: json, user: 1}
     requirements:
         user: \d+
-        _method: post
+        _method: POST
 
 hopitalnumerique_user_expert_refusCandidature:
     pattern: /admin/user/expert/refus/{user}
     defaults: { _controller: HopitalNumeriqueUserBundle:Expert:refusCandidature, _format: json, user: 1}
     requirements:
         user: \d+
+        _method: POST
 
 hopitalnumerique_user_expert_messageRefusCandidature:
     pattern: /admin/user/expert/messagerefus
     defaults: { _controller: HopitalNumeriqueUserBundle:Expert:messageRefusCandidature}
+    requirements:
+        _method: GET|POST
 
 #Ambassadeur
 hopitalnumerique_user_ambassadeur_edit:
@@ -190,36 +218,41 @@ hopitalnumerique_user_ambassadeur_edit:
     defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:edit", id: 1 }
     requirements:
         id: \d+
+        _method: GET|POST
 
 hopitalnumerique_user_ambassadeur_fiche:
     pattern: /admin/user/ambassadeur/show/{idUser}
     defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:show, idUser: 1 }
     requirements:
         idUser: \d+
+        _method: GET|POST
 
 hopitalnumerique_user_ambassadeur_validationCandidature:
     pattern: /admin/user/ambassadeur/validation/{user}
     defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:validationCandidature, _format: json, user: 1}
     requirements:
         user: \d+
-        _method: post
+        _method: POST
 
 hopitalnumerique_user_ambassadeur_refusCandidature:
     pattern: /admin/user/ambassadeur/refus/{user}
     defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:refusCandidature, _format: json, user: 1}
     requirements:
         user: \d+
-        _method: post
+        _method: POST
 
 hopitalnumerique_user_ambassadeur_messageRefusCandidature:
     pattern: /admin/user/ambassadeur/messagerefus
     defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:messageRefusCandidature}
+    requirements:
+        _method: GET|POST
 
 hopitalnumerique_user_ambassadeur_liste_objets:
     pattern:  /admin/user/ambassadeur/listeobjets/{id}
     defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:listeObjets", id: 1 }
     requirements:
         id: \d+
+        _method: GET|POST
 
 hopitalnumerique_user_ambassadeur_objets:
     pattern:  /admin/user/ambassadeur/objets/{id}
@@ -259,3 +292,5 @@ hopitalnumerique_user_ambassadeur_domainesFonctionnels:
 hopitalnumerique_user_ambassadeur_savedomaine:
     pattern: /admin/user/ambassadeur/saveDomaine
     defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:saveDomaine, _format: json }
+    requirements:
+        _method: POST|GET

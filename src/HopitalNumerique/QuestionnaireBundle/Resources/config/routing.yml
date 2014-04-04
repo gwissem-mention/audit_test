@@ -7,6 +7,7 @@ hopitalnumerique_questionnaire_edit_front:
     requirements:
         user: \d+  
         questionnaire: \d+
+        _method: GET|POST
 
 # Back-office
 hopitalnumerique_questionnaire_edit:
@@ -15,6 +16,7 @@ hopitalnumerique_questionnaire_edit:
     requirements:
         user: \d+  
         questionnaire: \d+
+        _method: GET|POST
 
 #Question
 
@@ -24,6 +26,7 @@ hopitalnumerique_reponse_download:
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Reponse:dowloadReponse" }
     requirements:
         reponse: \d+ 
+        _method: GET
 
 hopitalnumerique_reponse_deleteAll:
     pattern: /admin/reponse/deleteAll/{user}/{questionnaire}.{_format}
@@ -31,4 +34,4 @@ hopitalnumerique_reponse_deleteAll:
     requirements:
         user: \d+ 
         questionnaire: \d+  
-        _method: post|delete
+        _method: POST|DELETE
