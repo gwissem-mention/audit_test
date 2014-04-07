@@ -36,6 +36,7 @@ class Grid
     protected $_fieldLabelRecursive  = null;
     protected $_showIdColumn         = false;
     protected $_functionName         = 'getDatasForGrid';
+    protected $_persistence          = true;
 
     //colonnes
     protected $_colonnes         = array();
@@ -176,6 +177,16 @@ class Grid
         {
             $this->_defaultLimit = $default;
         }
+
+        /**
+         * Active la persistence des filtres / tri
+         *
+         * @param boolean $persistence Est-ce que l'on conserve les filtres/tri ?
+         */
+        protected function setPersistence( $persistence = true )
+        {
+            $this->_persistence = $persistence;
+        }
         
         /**
          * Set les limits de pagination
@@ -308,6 +319,9 @@ class Grid
 
             //Message lorsque filtrer no Results
             $this->_grid->setNoResultMessage( $this->_noResultMessage );
+
+            //Active la persistence 
+            $this->_grid->setPersistence( $this->_persistence );
         }
 
         /**
