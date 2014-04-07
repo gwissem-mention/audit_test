@@ -136,28 +136,26 @@
         <div id="ambassadeurs" class="closed">
             <div class="content" style="display:none">
                 <h3 class="violet">Les ambassadeurs</h3>
-                <div class="scroll-content">
-                    {% for ambassadeur in ambassadeurs %}
-                        <div class="ambassadeur">
-                            <p class="nom">{{ambassadeur.prenom|capitalize ~ ' ' ~ ambassadeur.nom|capitalize}}</p>
-                            <p class="etab">
-                                {% if ambassadeur.etablissementRattachementSante %}
-                                    {{ambassadeur.etablissementRattachementSante.nom}}
-                                {% else %}
-                                    {{ambassadeur.autreStructureRattachementSante}}
-                                {% endif %}
-                            </p>
-                            <p class="fonction">
-                                {% if ambassadeur.fonctionDansEtablissementSante %}
-                                    {{ambassadeur.fonctionDansEtablissementSante}}
-                                {% else %}
-                                    {{ambassadeur.fonctionStructure}}
-                                {% endif %}
-                            </p>
-                            <a class="btn background-violet" href="{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}">Solliciter cet ambassadeur</a>
-                        </div>
-                    {% endfor %}
-                </div>
+                {% for ambassadeur in ambassadeurs %}
+                    <div class="ambassadeur">
+                        <p class="nom">{{ambassadeur.prenom|capitalize ~ ' ' ~ ambassadeur.nom|capitalize}}</p>
+                        <p class="etab">
+                            {% if ambassadeur.etablissementRattachementSante %}
+                                {{ambassadeur.etablissementRattachementSante.nom}}
+                            {% else %}
+                                {{ambassadeur.autreStructureRattachementSante}}
+                            {% endif %}
+                        </p>
+                        <p class="fonction">
+                            {% if ambassadeur.fonctionDansEtablissementSante %}
+                                {{ambassadeur.fonctionDansEtablissementSante}}
+                            {% else %}
+                                {{ambassadeur.fonctionStructure}}
+                            {% endif %}
+                        </p>
+                        <a class="btn background-violet" href="{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}">Solliciter cet ambassadeur</a>
+                    </div>
+                {% endfor %}
                 <a href="{{ path('hopital_numerique_registre_homepage') }}" class="readmore"><i class="common-sprite common-sprite-arrow"></i>Accès à l'annuaire des ambassadeurs</a>
             </div>
         </div>
