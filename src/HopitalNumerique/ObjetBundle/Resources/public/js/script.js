@@ -92,7 +92,6 @@ $(document).ready(function() {
         });
     });
 
-
     //Création et gestion de l'arborescence du sommaire
     $('#sommaire').nestable({'maxDepth':10,'group':0}).on('change', function() {
         var serializedDatas = $(this).nestable('serialize');

@@ -55,7 +55,11 @@ class ObjetController extends Controller
         if( $type == 2 )
             $objet->setArticle(true);
 
-        return $this->renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig' );
+        $options = array(
+            'toRef' => 0
+        );
+
+        return $this->renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig', $options );
     }
 
     /**
