@@ -43,4 +43,9 @@ $(document).ready(function() {
         $(this).toggleClass('open closed');
         $('#autresResultats .row').slideToggle();
     });
+
+    //Style WYSIWYG custom : titre pliable
+    $('h2 .titre_depliable').click(function(){
+        $(this).parent().next('p').slideToggle();
+    })
 });
