@@ -4,3 +4,4 @@ img{ margin: 5px 10px 0 0; }
 .sur_titre{font-size: 13px;font-weight: normal;margin: 13px 0 -20px 0;text-transform: uppercase;color: #5d5d5d; display: block}
 .citation{font-style: italic; font-size: 14px;}
 .legende{font-size: 10px}
+.titre_depliable{font-size:20px; color: #6f3596; background: #D5D5D5;cursor:pointer;width: 100%; display: block; padding: 10px 5px}
