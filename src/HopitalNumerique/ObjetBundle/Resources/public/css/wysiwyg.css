@@ -1,3 +1,6 @@
-.intro{font-weight: bold; font-size: 13px; color:#070707;}
 img{ margin: 5px 10px 0 0; }
+.intro{font-weight: bold; font-size: 13px; color:#070707;}
 .note_bas_de_page{font-size: 10px;}
+.sur_titre{color:#6f3596; font-weight: bold}
+.citation{text-align: center; font-style: italic; font-size: 14px;}
+.legende{text-align: center; font-size: 10px}

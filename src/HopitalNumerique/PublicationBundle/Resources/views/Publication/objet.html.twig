@@ -32,31 +32,33 @@
     {% if objet.isInfraDoc %}
         <div id="sommaire" class="closed">
             <div class="content" style="display:none">
-                <a class="resume" href="{{path('hopital_numerique_publication_publication_objet', {'id':objet.id,'alias':objet.alias})}}">Résumé</a>
+                {% if objet.synthese is not null %}
+                    <a class="resume downloadLink synthese fancybox.iframe" style="width:90px;text-align:left" href="{{path('hopital_numerique_publication_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
+                {% endif %}
                 <h3 class="violet">Sommaire</h3>
                 <ul>
                     {% for one in contenus %}
                         {{ _self.buildTree(one, objet) }}
                     {% endfor %}
                 </ul>
-                {% if objet.synthese is not null %}
-                <a class="resume downloadLink synthese fancybox.iframe" style="width:90px;text-align:left" href="{{path('hopital_numerique_publication_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
-                {% endif %}
             </div>
         </div>
         <div id="publication" class="with-sommaire">
     {% else %}
         <div id="publication">
     {% endif %}
-        <a class="btn btn-default back" href="{{path('hopital_numerique_recherche_homepage')}}"><i class="fa fa-reply"></i></a>
-        <div class="btn btn-default print" onclick="print();"><i class="fa fa-print"></i></div>
-        <div class="col-md-12">
-            <h4 class="violet" >{{types}}</h4>
+        <div class="col-md-10">
+            <h4 class="gris" >{{types}}</h4>
+        </div>
+        <div class="col-md-2">
+            <div class="btn btn-sm btn-default print pull-right" onclick="print();"><i class="fa fa-print"></i></div>
+            <a class="btn btn-sm btn-default back pull-right" href="{{path('hopital_numerique_recherche_homepage')}}"><i class="fa fa-reply"></i></a>
         </div>
         {# Cas Contenu #}
         {% if contenu is defined %}
             <div class="col-md-12">
-                <h1>{{objet.titre ~ ' - ' ~ prefix ~ ' ' ~ contenu.titre}}</h1>
+                <a class="objetLink rose" href="{{path('hopital_numerique_publication_publication_objet', {'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a>
+                <h1 class="violet">{{prefix ~ ' ' ~ contenu.titre}}</h1>
             </div>
             
             <div class="col-md-12">
@@ -65,7 +67,7 @@
         {# Cas Objet #}
         {% else %}
             <div class="col-md-12">
-                <h1>{{objet.titre}}{% if objet.isInfraDoc %} - Résumé{% endif %}</h1>
+                <h1 class="violet">{{objet.titre}}</h1>
             </div>
             
             <div class="col-md-12">
