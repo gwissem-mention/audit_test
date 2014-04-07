@@ -40,8 +40,9 @@ h3{font-size: 20px}
 
 /* FOOTER */
     #footer{background:#f6f6f6; width: 100%; height: 100px; padding-top:24px;}
-    #footer .menu-footer{ width: 640px; margin:0 auto; list-style: none; padding:0;}
-    #footer .menu-footer li a{color:#5d5d5d; display: block; float: left; padding:0 6px; text-transform: uppercase; border-right: 1px solid #5d5d5d}
+    #footer .menu-footer{ width:100%; margin:0 auto; list-style: none; padding:0; display: inline-block; text-align: center;}
+    #footer .menu-footer li{display: inline-block; text-align: center;}
+    #footer .menu-footer li a{color:#5d5d5d; display: block; padding:0 6px; text-transform: uppercase; border-right: 1px solid #5d5d5d}
     #footer .menu-footer li.last a{border :0;}
 
 /* MENU */
