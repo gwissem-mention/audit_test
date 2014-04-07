@@ -196,14 +196,9 @@ class UserController extends Controller
         $idTypeEtablissement  = $this->get('request')->request->get('idTypeEtablissement');
         //Par défaut le département est obligatoire
         $where = array(
-        	'departement' => $idDepartement
+        	'departement'   => $idDepartement,
+            'typeOrganisme' => $idTypeEtablissement
         );
-        
-        //Si il y a un type établissement on rajoute filtre
-        if(!empty($idTypeEtablissement))
-        {
-            $where['typeOrganisme'] = $idTypeEtablissement;
-        }
         
         $etablissements = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( $where );
     
