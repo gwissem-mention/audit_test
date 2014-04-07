@@ -53,18 +53,21 @@ class ContactController extends NodevoController
             {
                 //send Mail to all admins
                 $formContact = $this->get('hopitalnumerique_contact.manager.contact')->getContactFormateMail($contact);
-                $admins      = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole('ROLE_ADMINISTRATEUR_1');
-                if(!is_null($admins))
-                {
-                    $variablesTemplate = array(
-                            'nomexpediteur'  => $contact->getCivilite()->getLibelle() . ' ' .$contact->getPrenom() . ' ' . $contact->getNom(),
-                            'mailexpediteur' => $contact->getMail(),
-                            'contact'        => $formContact
-                    );
-                    $mailsAdmins = $this->get('nodevo_mail.manager.mail')->sendContactMail($admins, $variablesTemplate);
-                    foreach($mailsAdmins as $mailAdmins)
-                        $this->get('mailer')->send($mailAdmins);
-                }
+                
+                //Récupération des destinataires dans le fichier de config
+                $mailsContact = $this->get('hopitalnumerique_contact.manager.contact')->getMailsContact();
+                
+                $variablesTemplate = array(
+                        'nomdestinataire'  => '',
+                        'maildestinataire' => '',
+                        'nomexpediteur'    => $contact->getCivilite()->getLibelle() . ' ' .$contact->getPrenom() . ' ' . $contact->getNom(),
+                        'mailexpediteur'   => $contact->getMail(),
+                        'contact'          => $formContact
+                );
+                $mailsAEnvoyer = $this->get('nodevo_mail.manager.mail')->sendContactMail($mailsContact, $variablesTemplate);
+
+                foreach($mailsAEnvoyer as $mailAEnvoyer)
+                    $this->get('mailer')->send($mailAEnvoyer);
                 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopital_numerique_contact.manager.contact')->save($contact);

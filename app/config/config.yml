@@ -157,3 +157,10 @@ hopital_numerique_questionnaire:
         idRoles:
             expert: 1
             ambassadeur: 2
+
+hopital_numerique_contact:
+    options:
+        mailsContact: #"adresse_mail: nom_affiché"
+            qsomazzi@nodevo.com: Hey quand un ?
+            gmelchilsen@nodevo.com: Gaëtanfanfan
+            tdauriac@nodevo.com: Tôt-mat Dos-ric-rac 

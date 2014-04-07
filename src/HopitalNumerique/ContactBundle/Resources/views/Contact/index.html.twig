@@ -31,56 +31,55 @@
 {% endblock %}
 
 {% block body %}
-    <div class="panel">
-        <div id="contact">
-	        {% block chapo %}
-	            <div class="chapo">
-	                <h1 class="violet">Lorem ipsum dolor sit amet</h1>
-	                <div class="description"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla luctus tincidunt purus nec adipiscing. Cras eu nisi dolor. Vestibulum laoreet mi at quam dictum, vitae iaculis metus elementum. Aliquam ut ante non ligula sollicitudin vulputate. Nullam mattis vulputate sem ut placerat. Ut ac vulputate diam. Aenean suscipit lobortis tortor sit amet pharetra. Suspendisse placerat mauris non fringilla mollis. Nulla non eleifend est. Mauris ac tincidunt dolor. Mauris venenatis sit amet eros in rutrum. Ut erat sapien, viverra id dui in.</p></div>
-	            </div>
-	        {% endblock %}
-	        
-	        {% if block('barreActions') is not empty %}
-	            <div class="actions">
-	                {% block barreActions %}{% endblock %}
-	            </div>
-	        {% endif %}
-	        
-	        <div id="contact_form">
-	            <div class="panel">
-			        <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
-			        
+    <div class="col-md-10 col-md-offset-1" id="inscription">
+        <div id="contact_form">  
+            <h3>Contact</h3>
+                {# Création du formulaire #}
+                {% form_theme form 'HopitalNumeriqueUserBundle:User/Theme:theme.inscription.html.twig' %}
+	            {{ form_javascript(form) }}
+		        {{ form_start(form, { 'action': path('hopital_numerique_contact_homepage') }) }}
+		        
+                    <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+                    <div class="background-rose"></div>
+                    {#<div class="background-violet"></div>#}
+                    
 	                {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
-                    <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_front_departements')}}" />
+	                <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_front_departements')}}" />
 	                {# Input hidden permettant de stocker la route pour le refresh de établissement en ajax #}
 	                <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_front_etablissements')}}" />
-                    
-                    {# Création du formulaire #}
-			        {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
-			        {{ form_javascript(form) }}
-			        {{ form_start(form, { 'action': path('hopital_numerique_contact_homepage') }) }}
-			            {{ form_row(form.civilite) }}
-			            {{ form_row(form.prenom) }}
-			            {{ form_row(form.nom) }}
-			            {{ form_row(form.telephone) }}
-			            {{ form_row(form.mail) }}
-			            {{ form_row(form.region) }}
-			            {{ form_row(form.departement) }}
-			            {{ form_row(form.codepostal) }}
-			            {{ form_row(form.ville) }}
-			            {{ form_row(form.statutEtablissementSante) }}
-			            {{ form_row(form.etablissementRattachementSante) }}
-			            {{ form_row(form.autreStructureRattachementSante) }}
-			            {{ form_row(form.fonctionStructure) }}
-			            {{ form_row(form.message) }}
-			    
-			        {{ form_end(form) }}
-			        <div class="col-md-9">
-			            <input onclick="$('form').submit();" class="btn btn-success col-md-2 pull-right submit" value="{{ 'envoyer'|upper }}" type="button"/>
-			        </div>
+                  
+		            {{ form_row(form.civilite) }}
+		            {{ form_row(form.prenom) }}
+		            {{ form_row(form.nom) }}
+		            {{ form_row(form.telephone) }}
+		            {{ form_row(form.mail) }}
+		            {{ form_row(form.region) }}
+		            {{ form_row(form.departement) }}
+		            {{ form_row(form.codepostal) }}
+		            {{ form_row(form.ville) }}
+		            {{ form_row(form.statutEtablissementSante) }}
+		            {{ form_row(form.etablissementRattachementSante) }}
+		            {{ form_row(form.autreStructureRattachementSante) }}
+		            {{ form_row(form.fonctionStructure) }}
+		            {{ form_row(form.message) }}
+			            
 					<div class="clearfix"></div>
-				</div>
-			</div>
+                    <div class="form-group">
+				        <div class="col-md-10 col-md-offset-2">
+				            <input onclick="$('form').submit();" class="btn btn-success col-md-2 pull-right submit" value="{{ 'envoyer'|upper }}" type="button"/>
+			        </div>
+		        </div>
+		        {{ form_end(form) }}
+        </div>
+    
+	   <div id ="footerDesc">
+			<p>
+				Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».
+			</p>
+			<p>
+				Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
+			</p>
 		</div>
+		<div class="clearfix"></div>
     </div>
 {% endblock %}

@@ -90,9 +90,9 @@ div#tableau-de-bord div.panel_boutons { background-color:transparent !important;
     #tableau-de-bord .content div.header-account div.description { font-size:13px; }
     #tableau-de-bord .content div.header-account div.description p { margin:8px 0px;padding:0px; }
     
-    /* Panel */
+    /* Panel - Corps */
     #tableau-de-bord .content div.panel { background-color:#f8f8f8;border-color:#e3e3e3;border-radius:0px;border-width:1px;margin:30px 0px 0px 0px; }
     #tableau-de-bord .content div.panel h2 { color:#6F3596;font-size:14px;font-weight:bold;margin:0px;padding:20px;text-transform:uppercase; }
     
-    /* Header*/
+    /* Panel - Footer */
     #tableau-de-bord .content div#footerDesc { font-size:11px; padding:10px; font-style:italic; }

@@ -1,19 +1,11 @@
-#contact .chapo {}
-#contact .chapo .description{}
-
-#contact .actions {}
-
-#contact .panel{margin: 0;}
-
-#contact div.chapo { background-color:#f8f8f8;background-image:url(/bundles/hopitalnumeriqueintervention/img/chapo.png);background-position:19px 7px;background-repeat:no-repeat;margin:0px 0px 25px 0px;padding:14px 18px 4px 18px; }
-#contact div.chapo h1 { color:#6F3596;font-size:14px;font-weight:bold;margin:0px;padding:0px 0px 10px 40px;text-transform:uppercase; }
-#contact div.chapo div.description { font-size:11px; }
-#contact div.chapo div.description p { margin:8px 0px;padding:0px; }
-
-#contact #contact_form {position:relative;}
-#contact #contact_form .champ-obligatoire{color: #5d5d5d;width: 139px; height: 4px; position: absolute; top: -20px; right: 0px;font-style:italic; font-size:12px;}
-#contact #contact_form .champ-obligatoire .etoile{color: #e01958;}
-#contact #contact_form label{ color:#333333; font-size: 14px }
-#contact #contact_form .form_vertical_row{ margin: 10px 0px;}
-#contact #contact_form .inputUpload {border:0; padding:0;}
-#contact .submit {margin: 0 0 15px 0;}
+#contact_form{}
+#contact_form h3{ color:#070707; font-size: 18px; font-weight: bold; margin: 40px 0 18px;}
+#contact_form form{ background: #f4f4f4; padding:60px 35px 15px 35px; position: relative; border:1px solid #e3e3e3;}
+#contact_form form .background-violet{width: 214px; height: 4px; position: absolute; top: 0; left: 0;}
+#contact_form form .background-rose{ background:#de0d4d; width: 214px; height: 4px; position: absolute; top: 0; left: 0;}
+#contact_form form label{ color:#333333; font-size: 14px }
+#contact_form form .champ-obligatoire{color: #5d5d5d;width: 139px; height: 4px; position: absolute; top: -20px; right: 0px;font-style:italic; font-size:12px;}
+#contact_form form .champ-obligatoire .etoile{color: #e01958;}
+#contact_form form .resetPass{display:block; font-size: 13px; color: #a3a3a3; margin-top: 20px}
+#contact_form form h4{ text-align:left; padding: 30px 0px 10px 0px; }
+#footerDesc { background-color:#f8f8f8;border:1px solid #e3e3e3;margin:30px 0px 0px 0px;font-size:11px; padding:10px; font-style:italic; }

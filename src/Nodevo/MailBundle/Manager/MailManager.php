@@ -42,7 +42,7 @@ class MailManager extends BaseManager
         $this->_requestStack   = $requestStack;
         $this->_allowAdd       = isset($options['allowAdd'])        ? $options['allowAdd']          : true;
         $this->_allowDelete    = isset($options['allowDelete'])     ? $options['allowDelete']       : true;
-        $this->_nomExpediteur  = isset($options['nomExpediteur'])   ? $options['nomExpediteur']     : '';        
+        $this->_nomExpediteur  = isset($options['nomExpediteur'])   ? $options['nomExpediteur']     : '';
         $this->_mailExpediteur = isset($options['mailExpediteur'])  ? $options['mailExpediteur']    : '';
         $this->_destinataire   = isset($options['destinataire'])    ? $options['destinataire']      : '';
         $this->_mailAnap       = isset($options['mailAnap'])        ? $options['mailAnap']          : array();
@@ -249,7 +249,7 @@ class MailManager extends BaseManager
     /**
      * Envoi un mail de contact
      *
-     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $user    Utilisateurs qui recevras l'email
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
@@ -261,13 +261,16 @@ class MailManager extends BaseManager
         //tableau de SwiftMessage a envoyé
         $mailsToSend = array();
         
-        foreach ($users as $user)
+        foreach ($users as $recepteurMail => $recepteurName)
         {
+            $options["nomdestinataire"]  = $recepteurName;
+            $options["maildestinataire"] = $recepteurMail;
+            
             //prepare content
-            $content         = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user, $options);
-            $expediteurMail  = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getExpediteurMail()), $user, $options);
-            $expediteurName  = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getExpediteurName()), $user, $options);
-            $content         = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user, $options);
+            $content         = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), NULL , $options);
+            $expediteurMail  = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getExpediteurMail()), NULL, $options);
+            $expediteurName  = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getExpediteurName()), NULL, $options);
+            $content         = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), NULL, $options);
             $templateFile    = "NodevoMailBundle::template.mail.html.twig";
             $templateContent = $this->_twig->loadTemplate($templateFile);
             
@@ -277,7 +280,7 @@ class MailManager extends BaseManager
             $mailsToSend[] = \Swift_Message::newInstance()
                                 ->setSubject ( $mail->getObjet() )
                                 ->setFrom ( array($expediteurMail => $expediteurName ) )
-                                ->setTo ( $user->getEmail() )
+                                ->setTo ( array($recepteurMail => $recepteurName) )
                                 ->setBcc( $this->_mailAnap )
                                 ->setBody ( $body, 'text/html' );
         }
