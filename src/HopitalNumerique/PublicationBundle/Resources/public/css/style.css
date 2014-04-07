@@ -42,12 +42,13 @@
     #ambassadeurs.closed{ background: url('../img/ambassadeurs.png') no-repeat center 254px; cursor: pointer ; width: 33px}
     #ambassadeurs.open{ z-index:20; background: #ffffff; padding:15px; border:1px solid #e2e2e2}
     #ambassadeurs h3{font-size: 23px;margin-top: 0px; font-weight:bold; }
-    #ambassadeurs .ambassadeur{ background: #F8F8F8; padding:20px; margin-bottom: 10px}
-    #ambassadeurs .ambassadeur p{ margin-bottom:0px; }
-    #ambassadeurs .ambassadeur .nom{font-size: 14px; font-weight: bold; color:#020202;}
-    #ambassadeurs .ambassadeur .etab{font-size: 14px; color:#4c4c4c;}
-    #ambassadeurs .ambassadeur .fonction{font-size: 14px; color: #4c4c4c;}
-    #ambassadeurs .ambassadeur a.btn{color:#ffffff;font-size: 14px; font-weight: bold; display: block; margin:15px auto 0;}
+    #ambassadeurs .scroll-content{}
+    #ambassadeurs .scroll-content .ambassadeur{ background: #F8F8F8; padding:20px; margin-bottom: 10px}
+    #ambassadeurs .scroll-content .ambassadeur p{ margin-bottom:0px; }
+    #ambassadeurs .scroll-content .ambassadeur .nom{font-size: 14px; font-weight: bold; color:#020202;}
+    #ambassadeurs .scroll-content .ambassadeur .etab{font-size: 14px; color:#4c4c4c;}
+    #ambassadeurs .scroll-content .ambassadeur .fonction{font-size: 14px; color: #4c4c4c;}
+    #ambassadeurs .scroll-content .ambassadeur a.btn{color:#ffffff;font-size: 14px; font-weight: bold; display: block; margin:15px auto 0;}
 
 /* Bloc Articles */
     #articles{margin-top: 20px; position: relative}
