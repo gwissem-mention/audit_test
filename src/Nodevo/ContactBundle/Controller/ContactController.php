@@ -29,7 +29,7 @@ class ContactController extends Controller
         //Récupération de l'entité passée en paramètre
         $contact = $this->get('nodevo_contact.manager.contact')->createEmpty();
         
-        return $this->renderForm('nodevo_contact_contact', $contact, 'NodevoContactBundle:Contact:index.html.twig');
+        return $this->renderForm('nodevo_contact_contact', $contact,'', 'NodevoContactBundle:Contact:index.html.twig');
     }
     
     /**
@@ -41,7 +41,7 @@ class ContactController extends Controller
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $contact, $view, $parametres = array() )
+    private function renderForm( $formName, $contact, $view, $routeRedirection, $parametres = array() )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $contact);
