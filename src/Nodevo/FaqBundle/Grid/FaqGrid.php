@@ -17,8 +17,6 @@ class FaqGrid extends Grid implements IGrid
      */
     public function setConfig()
     {
-        // $this->setSource( 'nodevo_faq.manager.faq' );
-        $this->setSourceType( self::SOURCE_TYPE_ENTITY );
         $this->setSource( 'NodevoFaqBundle:Faq' );
         $this->setNoDataMessage('Aucun élément de la FAQ à afficher.');
     }
@@ -28,10 +26,14 @@ class FaqGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
+        $categorieColumn = new Column\AssocColumn('categorie.name', 'Catégorie');
+        $categorieColumn->setSize(100);
+        $this->addColonne( $categorieColumn );
+        
         $this->addColonne( new Column\TextColumn('question', 'Question') );
         $this->addColonne( new Column\TextColumn('reponse', 'Reponse') );
-        $this->addColonne( new Column\TextColumn('categorie.name', 'Catégorie') );
 
+        /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('order') );
     }
 

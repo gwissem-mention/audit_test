@@ -49,14 +49,4 @@ class EtablissementManager extends BaseManager
         
         return $etablissementsRegroupesParTypeOrganisme;
     }
-    
-    /**
-     * Override : Récupère les données pour le grid sous forme de tableau
-     *
-     * @return array
-     */
-    public function getDatasForGrid( $condition = null )
-    {
-        return $this->getRepository()->getDatasForGrid( $condition );
-    }
 }
