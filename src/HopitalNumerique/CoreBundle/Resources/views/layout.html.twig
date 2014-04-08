@@ -38,7 +38,7 @@
 
     <body>
         <div id="mobileNotReady">
-            <a href="http://www.anap.fr/">
+            <a href="http://www.anap.fr/" target="_blank">
                 <img style="margin:10px auto; width:130px; display:block" src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" />
             </a>
             <div class="clearfix"></div>
@@ -47,11 +47,11 @@
 
         <div class="row" id="body">
             <div id="header">
-                <a href="{{path('hopital_numerique_homepage')}}">
+                <a href="http://www.anap.fr/" target="_blank">
                     <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
                 </a>
                 <div id="titre" class="pull-left">
-                    <div class="h1"><span class="violet">Mon</span> Hôpital <span class="gris">Numérique</span></div>
+                    <a href="{{path('hopital_numerique_homepage')}}" class="h1"><span class="violet">Mon</span> Hôpital <span class="gris">Numérique</span></a>
                     <div class="h2" class="gris">Accompagnement pour l’atteinte des cibles d’usage</div>
                 </div>
                 
@@ -77,8 +77,10 @@
                     {% endif %}
                 </div>
                 
-                <img src="{{asset('bundles/hopitalnumeriquecore/img/hn.jpg')}}" alt="HOPITAL NUMERIQUE" id="logoHn" class="pull-right" />
-
+                <a href="http://www.sante.gouv.fr/le-programme-hopital-numerique.html" class="pull-right" id="logoHn" target="_blank">
+                    <img src="{{asset('bundles/hopitalnumeriquecore/img/hn.jpg')}}" alt="HOPITAL NUMERIQUE" />    
+                </a>
+                
                 <p class="violet pull-right align-right">
                     Ce projet s’inscrit dans le cadre du programme
                 </p>

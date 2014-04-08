@@ -99,19 +99,22 @@
         {% endif %}
         
         {# Autres résultats de recherche#}
+        {% if contenu is not defined %}
+            {% set contenu = false %}
+        {% endif %}
         <div class="col-md-12" id="autresResultats" >
             <h2 class="open">Autres résultats de votre requête de recherche</h2>
             <div class="row">
                 <div class="col-md-6">
                     <div id="points-durs" class="top" >
                         <h3>Points durs</h3>
-                        {{ _self.buildCarousel(objet, objets, '- Aucun point dur trouvé -', 'point-dur') }}
+                        {{ _self.buildCarousel(objet, objets, contenu, '- Aucun point dur trouvé -', 'point-dur') }}
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div id="production" class="top" >
                         <h3>Productions</h3>
-                        {{ _self.buildCarousel(objet, objets, '- Aucune production trouvée -', 'production') }}
+                        {{ _self.buildCarousel(objet, objets, contenu, '- Aucune production trouvée -', 'production') }}
                     </div>
                 </div>
             </div>
@@ -120,13 +123,13 @@
                 <div class="col-md-6">
                     <div id="ressources" class="bottom background-rose" >
                         <h3>Ressources externes</h3>
-                        {{ _self.buildCarousel(objet, objets, '- Aucune ressource externe trouvée -', 'ressource') }}
+                        {{ _self.buildCarousel(objet, objets, contenu, '- Aucune ressource externe trouvée -', 'ressource') }}
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div id="forum" class="bottom background-violet" >
                         <h3>Forum</h3>
-                        {{ _self.buildCarousel(objet, objets, '- Aucun fil de discussion du forum trouvé -', 'forum') }}
+                        {{ _self.buildCarousel(objet, objets, contenu, '- Aucun fil de discussion du forum trouvé -', 'forum') }}
                     </div>
                 </div>
             </div>
@@ -181,7 +184,7 @@
     </li>
 {% endmacro %}
 
-{% macro buildCarousel(objet, objets, emptyMessage, key) %}
+{% macro buildCarousel(objet, objets, contenu, emptyMessage, key) %}
 <div id="{{key}}-slides" class="results carousel slide" data-ride="carousel" >
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
@@ -202,14 +205,14 @@
                     {% else %}
                         <a href="{{path('hopital_numerique_publication_publication_objet', {'id':item['id'],'alias':item['alias']})}}" >
                     {% endif %}
-                        {{item['titre']}}
+                        {{item['titre']}}{% if item['objet'] is not null %}<small> - Extrait d'une production</small>{% endif %}
                     </a>
                 </h4>
 
                 <p>{{ item['resume']|trim }}</p>
             </div>
             
-            {% if (item['objet'] is not null and item['objet'] == objet.id) or (item['objet'] is null and item['id'] == objet.id) %}
+            {% if (contenu != false and item['objet'] is not null and item['id'] == contenu.id) or (contenu == false and item['objet'] is null and item['id'] == objet.id) %}
                 {% set active = ' active' %}
             {% else %}
                 {% set active = '' %}

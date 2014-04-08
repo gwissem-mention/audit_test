@@ -25,6 +25,7 @@ h3{font-size: 20px}
     #header #logoAnap { margin:25px 78px 14px 55px;  }
     #header #titre{ margin-top: 27px; width: 350px;  }
     #header #titre .h1, #header #titre .h1 span{ font-size:25px; text-transform: uppercase; margin:0; padding: 0; font-family: 'Viga', sans-serif}
+    #header #titre .h1:hover{color: inherit;}
     #header #titre .h2{ font-size: 11px; text-transform: uppercase; padding: 0; margin:0;}
     #header .connexion{position: absolute; right:0; bottom:0; z-index: 5}
     #header .connexion a{display: block; color:black;margin-right: 18px; text-transform: uppercase; font-size: 10px; width: 130px}
@@ -35,7 +36,7 @@ h3{font-size: 20px}
     #header .loggedUser p .common-sprite-user-red{ width: 14px; height: 13px; background-position: -320px -33px; float: left; margin-right: 5px }
     #header .loggedUser p .nom{ padding-left:20px; margin-bottom: 10px}
     #header .loggedUser .infos{font-size: 10px; position: absolute; bottom: 14px;}
-    #header #logoHn{margin:3px 0 0 10px;}
+    #header #logoHn{margin:3px 0 0 10px;display: block}
     #header p.violet{width:93px;font-size: 9px; font-weight: 600; margin-top: 30px;line-height: 12px}
 
 /* FOOTER */

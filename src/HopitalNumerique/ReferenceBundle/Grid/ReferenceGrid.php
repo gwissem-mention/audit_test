@@ -71,7 +71,6 @@ class ReferenceGrid extends Grid implements IGrid
         $button->setRouteParameters( array('id') );
         $button->setAttributes( array('class'=>'btn btn-warning fa fa-level-down','title' => 'Ajouter comme enfant') );
         $this->addActionButton( $button );
-
     }
 
     /**

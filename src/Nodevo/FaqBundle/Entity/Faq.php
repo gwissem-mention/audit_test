@@ -3,6 +3,7 @@
 namespace Nodevo\FaqBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * Faq
@@ -45,6 +46,8 @@ class Faq
     /**
      * @ORM\ManyToOne(targetEntity="Categorie", cascade={"persist"})
      * @ORM\JoinColumn(name="cat_id", referencedColumnName="cat_id", onDelete="CASCADE")
+     * 
+     * @GRID\Column(field="categorie.name", filter="select", selectFrom="source", operatorsVisible=false)
      */
     protected $categorie;
 
