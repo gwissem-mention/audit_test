@@ -28,7 +28,15 @@
 {% block headerTitle %}Nouvelle intervention{% endblock %}
 
 {% block headerDesc %}
-    <p>Tu vois, là-bas, les champs de blé ? Je ne mange pas de pain. Le blé pour moi est inutile. Les champs de blé ne me rappellent rien. Et ça, c'est triste ! Mais tu as des cheveux couleur d'or. Alors ce sera merveilleux quand tu m'auras apprivoisé ! Le blé, qui est doré, me fera souvenir de toi. Et j'aimerai le bruit du vent dans le blé...</p>
+    {% if app.user.hasRoleCmsi %}
+        <p>
+            Remplissez le formulaire ci-après si vous souhaitez solliciter l'intervention d'un ambassadeur dans votre établissement. Après l'acceptation de votre demande par l'ambassadeur de votre région, ce dernier contactera le ou les établissements pour planifier son intervention. Un mail vous parviendra lorsque l'évaluation de l'intervention sera disponible sur la plateforme.
+        </p>
+    {% else %}
+        <p>
+            Remplissez le formulaire ci-après si vous souhaitez solliciter l'intervention d'un ambassadeur dans votre établissement. Après l'acceptation de votre demande par le CMSI et l'ambassadeur de votre région, ce dernier vous contactera afin d'organiser son intervention. Une fois l'intervention réalisée, vous serez sollicités par mail pour l'évaluer.
+        </p>
+    {% endif %}
 {% endblock %}
 
 {% block barreActions %}{% endblock %}

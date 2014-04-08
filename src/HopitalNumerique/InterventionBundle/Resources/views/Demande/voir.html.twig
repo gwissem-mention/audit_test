@@ -24,7 +24,23 @@
 {% block headerTitle %}Détail de la demande{% endblock %}
 
 {% block headerDesc %}
-    <p>Tu vois, là-bas, les champs de blé ? Je ne mange pas de pain. Le blé pour moi est inutile. Les champs de blé ne me rappellent rien. Et ça, c'est triste ! Mais tu as des cheveux couleur d'or. Alors ce sera merveilleux quand tu m'auras apprivoisé ! Le blé, qui est doré, me fera souvenir de toi. Et j'aimerai le bruit du vent dans le blé...</p>
+    {% if app.user.hasRoleCmsi %}
+        <p>Vous visualisez une demande initiale d'intervention d'un ambassadeur. Vous pouvez :</p>
+        <ul>
+            <li>Accepter : l'ambassadeur sera averti par mail et afin de valider à son tour la demande.</li>
+            <li>Refuser : la demande sera annulée, le demandeur sera averti par mail.</li>
+            <li>Mettre en attente : la demande est en attente de validation. Vous en serez avertis par mail.</li>
+        </ul>
+    {% elseif app.user.hasRoleAmbassadeur %}
+        <p>Vous visualisez une demande d'intervention validée par le CMSI. Vous pouvez :</p>
+        <ul>
+            <li>la transférer à un autre ambassadeur.</li>
+            <li>l'accepter : vous pourrez planifier l'intervention avec l'établissement.</li>
+            <li>la refuser.</li>
+        </ul>
+    {% else %}
+        <p>Vous visualisez une intervention dont votre établissement fait l'objet. Si ellle n'a pas encore eu lieu, vous pouvez l'annuler en cliquant sur "Annuler ma demande".</p>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
