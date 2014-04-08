@@ -272,7 +272,7 @@ function {{ grid.hash }}_markAll(select)
         {% else %}
             <select{% if multiple %} multiple="multiple"{% endif %} name="{{ grid.hash }}[{{ column.id }}][from][]" class="form-control grid-filter-select-query-from" id="{{ grid.hash }}__{{ column.id }}__query__from" {% if submitOnChange is sameas(true) %}onchange="return {{ grid.hash }}_submitForm(event, this.form);"{% endif%} {{ ( op == isNullOperator or op == isNotNullOperator ) ? 'style="display: none;" disabled="disabled"' : '' }}>
                 <option value="">&nbsp;</option>
-                {% for key, value in column.values %}
+                {% for key, value in column.values|sort %}
                     <option value="{{ key }}"{% if key in from %} selected="selected"{% endif %}>{{ value }}</option>
                 {% endfor %}
             </select>
@@ -324,16 +324,19 @@ function {{ grid.hash }}_markAll(select)
             <div class="grid_footer">
             {% if grid.isPagerSectionVisible %}
                 {{ grid_pager(grid) }}
+                <div class="total">{{grid.totalCount}} lignes</div>
                 {% block grid_pager_results_perpage %}
-                <div class="affnbreelement pull-right">
-                {{ 'Afficher'|trans }}
-                <select class="form-control" onchange="return {{ grid.hash }}_resultsPerPage(this.value);">
-                {% for key, value in grid.limits %}
-                    <option value="{{ key }}"{% if (key == grid.limit) %} selected="selected"{% endif %}>{{ value }}</option>
-                {% endfor %}
-                </select> {{ 'Items per page'|trans }}
-                </div>
+                    <div class="affnbreelement pull-right">
+                        {{ 'Afficher'|trans }}
+                        <select class="form-control" onchange="return {{ grid.hash }}_resultsPerPage(this.value);">
+                            {% for key, value in grid.limits %}
+                                <option value="{{ key }}"{% if (key == grid.limit) %} selected="selected"{% endif %}>{{ value }}</option>
+                            {% endfor %}
+                        </select> {{ 'Items per page'|trans }}
+                    </div>
                 {% endblock grid_pager_results_perpage %}
+            {% else %}
+                <div class="total">{{grid.totalCount}} lignes</div>
             {% endif %}
             {% if grid.exports|length > 0 %}
                 {{ grid_exports(grid) }}

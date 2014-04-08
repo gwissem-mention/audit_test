@@ -42,12 +42,15 @@ class ObjetGrid extends Grid implements IGrid
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize( 80 );
+        $etatColonne->setFilterType('select');
+        $etatColonne->setSelectFrom('source');
+        $etatColonne->setOperatorsVisible( false );
         $this->addColonne( $etatColonne );
 
         $this->addColonne( new Column\DateColumn('dateCreation', 'Date de création') );
 
         $dateColonne = new Column\DateColumn('dateModification', 'Date de dernière mise à jour');
-        $dateColonne->setSize( 210 );
+        $dateColonne->setSize( 180 );
         $this->addColonne( $dateColonne );
         
         $this->addColonne( new Column\LockedColumn() );

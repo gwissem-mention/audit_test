@@ -34,6 +34,9 @@ class ReferenceGrid extends Grid implements IGrid
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize( 80 );
+        $etatColonne->setFilterType('select');
+        $etatColonne->setSelectFrom('source');
+        $etatColonne->setOperatorsVisible( false );
         $this->addColonne( $etatColonne );
 
         $this->addColonne( new Column\OrderColumn() );
