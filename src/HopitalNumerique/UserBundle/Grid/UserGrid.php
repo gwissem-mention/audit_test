@@ -57,8 +57,9 @@ class UserGrid extends Grid implements IGrid
             }
         );
         $roleColumn->setFilterType('select');
-        $roleColumn->setSelectFrom('source');
+        $roleColumn->setSelectFrom('values');
         $roleColumn->setOperatorsVisible( false );
+        $roleColumn->setValues( $roles );
         $this->addColonne( $roleColumn );
         
         $contractualisationColumn = new Column\TextColumn('contra', 'À jour');
