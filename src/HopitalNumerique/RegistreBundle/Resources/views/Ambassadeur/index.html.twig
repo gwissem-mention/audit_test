@@ -86,7 +86,7 @@
 				                        {% set ambassadeurExisteRegion = true %}
 					                    <div class="fiche col-md-6">
 					                        <div class="content">
-					                            <h5>{{ambassadeur.prenom|capitalize ~ ' ' ~ ambassadeur.nom|capitalize}}</h5>
+					                            <h5>{{ambassadeur.prenom|title ~ ' ' ~ ambassadeur.nom|title}}</h5>
 					                            
 					                                {% if ambassadeur.etablissementRattachementSante %}
 					                                   <div class="etab" title="{% if ambassadeur.etablissementRattachementSante.ville is not null %}{{ ambassadeur.etablissementRattachementSante.ville }}{% if ambassadeur.etablissementRattachementSante.codepostal is not null %} ({{ ambassadeur.etablissementRattachementSante.codepostal }}){% endif %}{% endif %}">    
