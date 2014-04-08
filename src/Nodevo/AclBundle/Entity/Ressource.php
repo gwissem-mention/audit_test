@@ -42,6 +42,13 @@ class Ressource
      */
     private $order;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="res_type", type="integer", options = {"comment" = "Type de la ressource : 1 multiple, 2 simple", "default" : "1"})
+     */
+    private $type;
+
     public function __construct()
     {
         $this->order = 1;
@@ -98,6 +105,8 @@ class Ressource
     public function setPattern($pattern)
     {
         $this->pattern = $pattern;
+        
+        return $this;
     }
 
     /**
@@ -118,5 +127,31 @@ class Ressource
     public function setOrder($order)
     {
         $this->order = $order;
+        
+        return $this;
+    }
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     * 
+     * @return Ressource
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer 
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

@@ -1,0 +1,68 @@
+<div class="panel panel-midnightblue" id="popin-mails" >
+    <div class="panel-heading" >
+        <h4>{{requete.nom}} - Notifications par mail</h4>
+    </div>
+
+    <div class="panel-body" >
+        <form action="#" class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label class="col-md-4 control-label" for="toggle">Être notifié des mises à jours ?</label>
+                    <div class="col-md-1">
+                        <div class="toggle toggle-success" ></div>
+                    </div>
+                    <input type="hidden" id="toggle" value="{{requete.isUserNotified}}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-8 col-md-offset-4">
+                    <p>
+                        Si vous voulez être notifié durant une période spécifiez une date de début et de fin de notification.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label class="col-md-4 control-label" for="dateDebut">Date de début</label>
+                    <div class="col-md-8">
+                        <input type="text" id="dateDebut" class="form-control" value="{% if requete.dateDebut %}{{requete.dateDebut|date('d/m/Y')}}{% endif %}" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label class="col-md-4 control-label" for="dateFin">Date de fin</label>
+                    <div class="col-md-8">
+                        <input type="text" id="dateFin" class="form-control" value="{% if requete.dateFin %}{{requete.dateFin|date('d/m/Y')}}{% endif %}" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="panel-footer" >
+        <div class="row">
+            <div class="btn-toolbar pull-right">
+                <div onclick="getNotifiedRequete('{{path('hopital_numerique_requete_mail_notified',{'id':requete.id})}}');" class="btn-primary btn" >Enregistrer</div>
+                <div onclick="$.fancybox.close(true);" class="btn-danger btn" >Fermer</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" >
+    $(document).ready(function() {
+        $('#dateFin, #dateDebut').datepicker({
+            dateFormat:'dd/mm/yy'
+        });
+
+        //Toggle notif mise à jour
+        $('.toggle').toggles( { on : $('#toggle').val(), text : { on : 'OUI', off : 'NON' } } ).on('toggle', function (e, active) {
+            if (active) {
+                $('#toggle').val(1);
+            } else {
+                $('#toggle').val(0);
+            }
+        });
+    });
+</script>

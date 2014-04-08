@@ -1,0 +1,65 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - {% if contenu is defined %}{{objet.titre ~ ' - ' ~ prefix ~ ' ' ~ contenu.titre}}{% else %}{{objet.titre}}{% endif %}{% endblock %}
+{% block metadesc %}{{meta['desc']}}{% endblock %}
+{% block metakeywords %}{{meta['keywords']|join(', ')}}{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-publication-publication-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquepublication/css/style.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
+        'bundles/hopitalnumeriqueobjet/css/wysiwyg.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+    
+    <link rel="stylesheet" href="{{ asset('bundles/hopitalnumeriquepublication/css/style-print.css') }}" type="text/css" media="print" />
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-publication-publication-index.js"
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        'bundles/hopitalnumeriquepublication/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="articles">
+        {% if menu == "menu-footer-front" %}
+            <div class="col-md-12">
+        {% else %}
+            <div class="col-md-3">
+                <p class="titre">Hôpital <br />Numérique</p>
+                {{ knp_menu_render('menu-sub-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriquePublicationBundle::menu.html.twig'}) }}
+
+                {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites")) }}
+            </div>
+            <div class="col-md-9" >
+        {% endif %}
+            {% if types != 'Article' %}
+                <div class="col-md-10">
+                    <h4 class="gris" >{{types}}</h4>
+                </div>
+                <div class="col-md-2">
+                    <div class="btn btn-sm btn-default pull-right" onclick="print();"><i class="fa fa-print"></i></div>
+                </div>
+                <div class="col-md-12">
+            {% else %}
+                <div class="col-md-12">
+                <div class="btn btn-sm btn-default pull-right" onclick="print();"><i class="fa fa-print"></i></div>
+            {% endif %}
+                <h1 class="violet">{{objet.titre}}</h1>
+            </div>
+
+            <div class="col-md-12">
+                {{objet.resume|parsePublication|raw}}
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endblock %}

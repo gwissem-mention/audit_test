@@ -1,0 +1,41 @@
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-user-expert-edit.css" filter="cssrewrite"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+        'bundles/hopitalnumeriqueuser/css/specificationUser.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-user-expert-editer.js"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block headerTitle %}Candidature expert{% endblock %}
+
+{% block headerDesc %}
+    <p>Si vous souhaitez devenir expert de l'ANAP, remplissez le formulaire ci-après. Un mail de confirmation vous sera envoyé. Après étude de votre candidature, une réponse vous sera communiquée dans les plus brefs délais.</p>
+{% endblock %}
+
+{% block content %}
+    {# Include des Contractualisation #}
+    {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
+
+    {% set informationsManquantes = user|informationsManquantes(questionnaire.nom) %}
+
+    {% if optionRenderForm.readOnly == false and informationsManquantes.ok %}
+        <div class="col-md-10 col-md-offset-2">
+            <input id="submit_candidature" onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit questionnaire_submit" value="ENVOYER MA CANDIDATURE" type="button"/>
+        </div>
+        <div class="clearfix"></div>
+    {% endif %}
+{% endblock %}

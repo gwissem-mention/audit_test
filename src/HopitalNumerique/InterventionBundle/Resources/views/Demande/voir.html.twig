@@ -1,0 +1,351 @@
+{% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-intervention-demande-voir.css" %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-intervention-demande-voir.js"
+        'bundles/nodevotools/Nodevo/js/Web.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/Formulaire.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/FormulaireEvenement.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID = {{ interventionDemande.id }};
+    </script>
+{% endblock %}
+
+{% block headerTitle %}Détail de la demande{% endblock %}
+
+{% block headerDesc %}
+    {% if app.user.hasRoleCmsi %}
+        <p>Vous visualisez une demande initiale d'intervention d'un ambassadeur. Vous pouvez :</p>
+        <ul>
+            <li>Accepter : l'ambassadeur sera averti par mail et afin de valider à son tour la demande.</li>
+            <li>Refuser : la demande sera annulée, le demandeur sera averti par mail.</li>
+            <li>Mettre en attente : la demande est en attente de validation. Vous en serez avertis par mail.</li>
+        </ul>
+    {% elseif app.user.hasRoleAmbassadeur %}
+        <p>Vous visualisez une demande d'intervention validée par le CMSI. Vous pouvez :</p>
+        <ul>
+            <li>la transférer à un autre ambassadeur.</li>
+            <li>l'accepter : vous pourrez planifier l'intervention avec l'établissement.</li>
+            <li>la refuser.</li>
+        </ul>
+    {% else %}
+        <p>Vous visualisez une intervention dont votre établissement fait l'objet. Si ellle n'a pas encore eu lieu, vous pouvez l'annuler en cliquant sur "Annuler ma demande".</p>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+        <div class="panel_form_visu" id="intervention_demande_panel">
+
+            {% if app.user.hasRoleCmsi == false and app.user.hasRoleAmbassadeur == false and interventionDemande.estDemandeRegroupee %}
+                <h2>Votre demande à été regroupée avec une autre intervention :</h2>
+                {% for interventionRegroupementDemandePrincipale in interventionDemande.interventionRegroupementsDemandesPrincipales %}
+                    <div class="row">
+                        <div class="col-md-4">Établissement référent</div>
+                        <div class="col-md-8">
+                            {% if interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.etablissementRattachementSante is not null %}
+                                {{ interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.etablissementRattachementSante.appellation }}
+                            {% else %}
+                                {{ interventionRegroupementDemandePrincipale.interventionDemandePrincipale.referent.autreStructureRattachementSante }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">Établissements du groupement</div>
+                        <div class="col-md-8">
+                            {% for interventionRegroupementDemandeRegroupee in interventionRegroupementDemandePrincipale.interventionDemandePrincipale.interventionRegroupementsDemandesRegroupees %}
+                                <p>
+                                    {% if interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.id != interventionDemande.id and app.user.id == interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.id %}
+                                        <a href="{{ path('hopital_numerique_intervention_demande_voir', { id:interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    {% endif %}
+                                    {% if interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.etablissementRattachementSante is not null %}
+                                        {{ interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.etablissementRattachementSante.appellation }}
+                                    {% else %}
+                                        {{ interventionRegroupementDemandeRegroupee.interventionDemandeRegroupee.referent.autreStructureRattachementSante }}
+                                    {% endif %}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <hr>
+            {% endif %}
+        
+            <div class="row">
+                <div class="col-md-4">Demandeur</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.referent.appellation }}
+                    {% if interventionDemande.referent.etablissementRattachementSante is not null %}<br>{{ interventionDemande.referent.etablissementRattachementSante.appellation }}{% endif %}
+                    {% if interventionDemande.referent.region is not null %}<br>{{ interventionDemande.referent.region.libelle }}{% endif %}
+                </div>
+            </div>
+            {% if app.user.hasRoleCmsi or (app.user.hasRoleAmbassadeur and interventionDemande.interventionEtatEstAcceptationCmsi) %}
+                <div class="row">
+                    <div class="col-md-4">Ambassadeur</div>
+                    <div class="col-md-8">
+                        {% if app.user.hasRoleCmsi %}
+                            {{ interventionDemande.ambassadeur.appellation }}
+                            <br>{{ interventionDemande.ambassadeur.region.libelle }}
+                        {% elseif app.user.hasRoleAmbassadeur %}
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <select class="form-control" id="intervention_demande_ambassadeur_change">
+                                        {% for ambassadeur in ambassadeurs %}
+                                            <option {% if interventionDemande.ambassadeur.id == ambassadeur.id %}value="0" selected="selected"{% else %}value="{{ ambassadeur.id }}"{% endif %}>{{ ambassadeur.appellation }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-primary" id="intervention_demande_ambassadeur_bouton" onclick="HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.changeAmbassadeur();">Transférer</button>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-4">CMSI</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.cmsi.appellation }}
+                    {% if interventionDemande.cmsi.region is not null %}
+                        <br>{{ interventionDemande.cmsi.region.libelle }}
+                    {% endif %}
+                </div>
+            </div>
+            {% if interventionDemande.directeur is not null %}
+                <div class="row">
+                    <div class="col-md-4">Directeur</div>
+                    <div class="col-md-8">
+                        {{ interventionDemande.directeur.appellation }}
+                        {% if interventionDemande.directeur.region is not null %}
+                            <br>{{ interventionDemande.directeur.region.libelle }}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            
+            <hr>
+            
+            <div class="row">
+                <div class="col-md-4">Type d'intervention</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.interventionType.libelle }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">État de l'intervention</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.interventionEtat.libelle }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">État de l'évaluation</div>
+                <div class="col-md-8">
+                    {% if interventionDemande.evaluationEtat != null %}{{ interventionDemande.evaluationEtat.libelle }}{% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">État du remboursement</div>
+                <div class="col-md-8">
+                    {% if interventionDemande.remboursementEtat != null %}{{ interventionDemande.remboursementEtat.libelle }}{% endif %}
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="row">
+                <div class="col-md-4">Initiateur</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.interventionInitiateur.type }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Date de création</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.dateCreation|date('m/d/Y') }}
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">Objets</div>
+                <div class="col-md-8">
+                    {% for objet in interventionDemande.objets %}
+                        <div>{{ objet.titre }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">Date de choix du CMSI</div>
+                <div class="col-md-8">
+                    {% if interventionDemande.cmsiDateChoix != null %}{{ interventionDemande.cmsiDateChoix|date('m/d/Y') }}{% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Date de choix de l'ambassadeur</div>
+                <div class="col-md-8">
+                    {% if interventionDemande.ambassadeurDateChoix != null %}{{ interventionDemande.ambassadeurDateChoix|date('m/d/Y') }}{% endif %}
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="row">
+                <div class="col-md-4">Établissements rattachés</div>
+                <div class="col-md-8">
+                    {% for interventionRegroupement in interventionDemande.interventionRegroupementsDemandesRegroupees %}
+                        <div>
+                            <a href="{{ path('hopital_numerique_intervention_demande_voir', { id:interventionRegroupement.interventionDemandeRegroupee.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                            {% if interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante is not null %}
+                                 {{ interventionRegroupement.interventionDemandeRegroupee.referent.etablissementRattachementSante.appellation }}
+                            {% else %}
+                                {{ interventionRegroupement.interventionDemandeRegroupee.referent.autreStructureRattachementSante }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    {% for etablissement in etablissementsRattachesNonRegroupes %}
+                        <div>{{ etablissement.appellation }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">Autres établissements</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.autresEtablissements }}
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="row">
+                <div class="col-md-4">Description</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.description }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Description de la difficulté</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.difficulteDescription }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Champ libre</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.champLibre }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Informations de rendez-vous</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.rdvInformations }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">Commentaire CMSI</div>
+                <div class="col-md-8">
+                    {{ interventionDemande.cmsiCommentaire }}
+                </div>
+            </div>
+            
+            {% if interventionDemande.refusMessage != null %}
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">Motif du refus</div>
+                    <div class="col-md-8">
+                        {{ interventionDemande.refusMessage }}
+                    </div>
+                </div>
+            {% endif %}
+        
+        </div>
+        
+        {% if interventionsSimilairesParObjets is defined %}
+            {% if interventionsSimilairesParObjets|length > 0 %}
+                <div class="panel">
+                    <h2>Interventions similaires par objets</h2>
+                    {% include "HopitalNumeriqueInterventionBundle:Demande/Listes:interventionsSimilaires.html.twig" with { interventionsSimilaires:interventionsSimilairesParObjets, interventionRegroupementType:interventionRegroupementTypeObjetId } %}
+                </div>
+            {% endif %}
+        {% endif %}
+        
+        {% if interventionsSimilairesParAmbassadeur is defined %}
+            {% if interventionsSimilairesParAmbassadeur|length > 0 %}
+                <div class="panel">
+                    <h2>Interventions similaires par ambassadeur</h2>
+                    {% include "HopitalNumeriqueInterventionBundle:Demande/Listes:interventionsSimilaires.html.twig" with { interventionsSimilaires:interventionsSimilairesParAmbassadeur, interventionRegroupementType:interventionRegroupementTypeAmbassadeurId } %}
+                </div>
+            {% endif %}
+        {% endif %}
+        
+        {% if interventionDemandeEstRegroupee == false %}
+            <div class="panel panel_boutons">
+                {% if app.user.hasRoleCmsi and (interventionDemande.interventionEtatEstDemandeInitiale or interventionDemande.interventionEtatEstAttenteCmsi) %}
+                
+                    <button type="button" data-intervention-etat="{{ InterventionEtat.InterventionEtatAcceptationCmsiId }}" class="btn btn-default btn-acceptation">Accepter</button>
+                    <button type="button" class="btn btn-default btn-refus" data-toggle="modal" data-target="#modal_etat_intervention_refus_cmsi">Refuser</button>
+                    {% if false == interventionDemande.interventionEtatEstAttenteCmsi %}
+                        <button type="button" data-intervention-etat="{{ InterventionEtat.InterventionEtatAttenteCmsiId }}" class="btn btn-default btn-attente">Mettre en attente</button>
+                    {% endif %}
+                    
+                    <div class="modal fade" id="modal_etat_intervention_refus_cmsi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Refuser la demande</h4>
+                          </div>
+                          <div class="modal-body">
+                            <p>Si vous le souhaitez, vous pouvez justifier votre refus avant de le valider :</p>
+                            <textarea class="form-control" id="etat_intervention_refus_justification"></textarea>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                            <button type="button" class="btn btn-danger" data-intervention-etat-refus="{{ InterventionEtat.InterventionEtatRefusCmsiId }}">Valider le refus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                {% elseif app.user.hasRoleAmbassadeur and interventionDemande.interventionEtatEstAcceptationCmsi %}
+                
+                    <button type="button" data-intervention-etat="{{ InterventionEtat.InterventionEtatAcceptationAmbassadeurId }}" class="btn btn-default btn-acceptation">Accepter</button>
+                    <button type="button" class="btn btn-default btn-refus" data-toggle="modal" data-target="#modal_etat_intervention_refus_ambassadeur">Refuser</button>
+                    
+                    
+                    <div class="modal fade" id="modal_etat_intervention_refus_ambassadeur" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Refuser la demande</h4>
+                          </div>
+                          <div class="modal-body">
+                            <p>Si vous le souhaitez, vous pouvez justifier votre refus avant de le valider :</p>
+                            <textarea class="form-control" id="etat_intervention_refus_justification"></textarea>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                            <button type="button" class="btn btn-danger" data-intervention-etat-refus="{{ InterventionEtat.InterventionEtatRefusAmbassadeurId }}">Valider le refus</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                {% elseif etablissementPeutAnnulerDemande %}
+                    <button type="button" data-intervention-etat-annulation="{{ InterventionEtat.interventionEtatAnnulationEtablissementId }}" class="btn btn-default btn-warning">Annuler ma demande</button>
+                {% endif %}
+                
+            </div>
+        {% endif %}
+{% endblock %}

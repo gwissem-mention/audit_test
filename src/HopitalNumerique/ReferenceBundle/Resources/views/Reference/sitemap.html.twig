@@ -3,6 +3,15 @@
 {% block h1Title %}
     Arborescence du référentiel générique
 {% endblock %}
+    
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-reference-reference-sitemap.js"
+        'bundles/hopitalnumeriquereference/js/sitemap.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
 
 {% block stylesheets %}
     {{parent()}}
@@ -14,7 +23,7 @@
 {% endblock %}
 
 {% block toolbarButton %}
-    <a href="javascript:print();" class="btn btn-default" title="Imprimer"><i class="fa fa-print"></i></a>
+    <a href="javascript:printRef();" class="btn btn-default" title="Imprimer"><i class="fa fa-print"></i></a>
     <a href="{{path('hopitalnumerique_reference_reference')}}" class="btn btn-default" title="Afficher la vue liste"><i class="fa fa-list"></i></a>
 {% endblock %}
 

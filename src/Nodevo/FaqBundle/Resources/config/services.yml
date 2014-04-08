@@ -1,0 +1,23 @@
+parameters:
+    #Options
+    nodevo_faq.options:parameters:
+    nodevo_faq.manager.faq.class: Nodevo\FaqBundle\Manager\FaqManager
+    nodevo_faq.grid.faq.class: Nodevo\FaqBundle\Grid\FaqGrid
+    nodevo_faq.form.faq.class: Nodevo\FaqBundle\Form\FaqType
+
+services:
+    nodevo_faq.manager.faq:
+        class: %nodevo_faq.manager.faq.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    nodevo_faq.grid.faq:
+        class: %nodevo_faq.grid.faq.class%
+        arguments: ["@service_container"]
+
+    nodevo_faq.form.faq:
+        class: %nodevo_faq.form.faq.class%
+        arguments: ["@nodevo_faq.manager.faq", "@validator"]
+        tags:
+            - { name: form.type, alias: nodevo_faq_faq }

@@ -9,13 +9,15 @@
 /vendor/
 /bin/
 
-#Mac OSX 
-.DS_Store
-
 #Net Beans
 .buildpath
 .project
 .settings
+
+#SublimeText
+hopitalnumerique.sublime-project
+hopitalnumerique.sublime-workspace
+composer.sublime-workspace
 
 #Windows
 .thumbs

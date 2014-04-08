@@ -1,0 +1,24 @@
+<table cellpadding="1" cellspacing="0" class="table table_interventions_similaires">
+    <tr>
+        <th>Demandeur</th>
+        <th>Date de création</th>
+        <th></th>
+    </tr>
+    {% for interventionSimilaire in interventionsSimilaires %}
+        <tr>
+            <td>
+                {{ interventionSimilaire.referent.appellation }}
+                {% if interventionSimilaire.referent.etablissementRattachementSante is not null %}
+                <br>{{ interventionSimilaire.referent.etablissementRattachementSante.nom }}{% if interventionSimilaire.referent.region is defined %}, {{ interventionSimilaire.referent.region.libelle }}{% endif %}
+                {% endif %}
+            </td>
+            <td>{{ interventionSimilaire.dateCreation|date('m/d/Y') }}</td>
+            <td>
+                <div class="btn-group">
+                    <a target="_blank" class="btn btn-info btn-sm" href="{{ path('hopital_numerique_intervention_demande_voir', { id:interventionSimilaire.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                    <button class="btn btn-success btn-sm" data-intervention-regroupement-type="{{ interventionRegroupementType }}" data-intervention-similaire="{{ interventionSimilaire.id }}" title="Regrouper"><span class="glyphicon glyphicon-plus"></span></button>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

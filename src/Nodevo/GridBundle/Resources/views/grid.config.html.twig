@@ -18,7 +18,7 @@
     {% endjavascripts %}
 {% endblock %}
 
-{# Actions de masse  : TODO #}
+{# Actions de masse #}
 {% block grid_actions %}
     <div class="mass-actions">
         <div class="btn-group">
@@ -40,7 +40,7 @@
         {% spaceless %}
         <div class="grid_massactions pull-right form-group">
             <input type="hidden" id="{{ grid.hash }}_mass_action_all" name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION_ALL_KEYS_SELECTED') }}]" value="0" />
-            <div class="col-md-8">
+            <div class="pull-left" style="margin-right:10px" >
                 <select name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION') }}]" class="form-control">
                     <option value="-1">Sélectionner une action</option>
                     {% for key, massAction in grid.massActions %}
@@ -48,7 +48,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="btn btn-default col-md-4 submit" >{{ 'Submit Action'|trans }}</div>
+            <div class="btn btn-default pull-left submit" >{{ 'Submit Action'|trans }}</div>
         </div>
         {% endspaceless %}
     </div>
@@ -84,6 +84,7 @@ function {{ grid.hash }}_markVisible(select)
     return false;
 }
 {% endblock grid_scripts_mark_visible %}
+
 {% block grid_scripts_mark_all %}
 function {{ grid.hash }}_markAll(select)
 {
@@ -271,7 +272,7 @@ function {{ grid.hash }}_markAll(select)
         {% else %}
             <select{% if multiple %} multiple="multiple"{% endif %} name="{{ grid.hash }}[{{ column.id }}][from][]" class="form-control grid-filter-select-query-from" id="{{ grid.hash }}__{{ column.id }}__query__from" {% if submitOnChange is sameas(true) %}onchange="return {{ grid.hash }}_submitForm(event, this.form);"{% endif%} {{ ( op == isNullOperator or op == isNotNullOperator ) ? 'style="display: none;" disabled="disabled"' : '' }}>
                 <option value="">&nbsp;</option>
-                {% for key, value in column.values %}
+                {% for key, value in column.values|sort %}
                     <option value="{{ key }}"{% if key in from %} selected="selected"{% endif %}>{{ value }}</option>
                 {% endfor %}
             </select>
@@ -288,14 +289,19 @@ function {{ grid.hash }}_markAll(select)
 {% endblock grid_column_filter_type_select %}
 
 {% block grid_column_lock_cell %}
-    <span class="grid_lock_{{ value }}" >{{value}}</span>
+    <span class="grid_lock_{{ row.getField(column.id)|default('0') }}" >{{value}}</span>
 {% endblock grid_column_lock_cell %}
+
+{% block grid_column_boolean_cell %}
+    <span class="grid_boolean_{{ row.getField(column.id)|default('0') }}" >{{value}}</span>
+{% endblock grid_column_boolean_cell %}
 
 {# Block grid : génère toute la structure du grid #}
 {% block grid %}
     {# Block des filtres #}
     {% if grid.totalCount > 0 or grid.isFiltered or grid.noDataMessage is sameas(false) %}
-        {{ grid_search(grid, _self) }}
+        {#{{ grid_search(grid, _self) }} #} 
+        {{ block('grid_search') }}  
     {% endif %}
 
     {# Block grid #}
@@ -318,16 +324,19 @@ function {{ grid.hash }}_markAll(select)
             <div class="grid_footer">
             {% if grid.isPagerSectionVisible %}
                 {{ grid_pager(grid) }}
+                <div class="total">{{grid.totalCount}} lignes</div>
                 {% block grid_pager_results_perpage %}
-                <div class="affnbreelement pull-right">
-                {{ 'Afficher'|trans }}
-                <select class="form-control" onchange="return {{ grid.hash }}_resultsPerPage(this.value);">
-                {% for key, value in grid.limits %}
-                    <option value="{{ key }}"{% if (key == grid.limit) %} selected="selected"{% endif %}>{{ value }}</option>
-                {% endfor %}
-                </select> {{ 'Items per page'|trans }}
-                </div>
+                    <div class="affnbreelement pull-right">
+                        {{ 'Afficher'|trans }}
+                        <select class="form-control" onchange="return {{ grid.hash }}_resultsPerPage(this.value);">
+                            {% for key, value in grid.limits %}
+                                <option value="{{ key }}"{% if (key == grid.limit) %} selected="selected"{% endif %}>{{ value }}</option>
+                            {% endfor %}
+                        </select> {{ 'Items per page'|trans }}
+                    </div>
                 {% endblock grid_pager_results_perpage %}
+            {% else %}
+                <div class="total">{{grid.totalCount}} lignes</div>
             {% endif %}
             {% if grid.exports|length > 0 %}
                 {{ grid_exports(grid) }}

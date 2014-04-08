@@ -1,0 +1,102 @@
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-requete-index.css" filter="cssrewrite"
+        'bundles/nodevoadmin/plugins/apprise/apprise.css'
+        'bundles/hopitalnumeriquerecherche/css/requete.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
+        'bundles/nodevoadmin/plugins/form-toggle/toggles.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-recherche-requete-index.js"
+        'bundles/nodevoadmin/plugins/apprise/apprise.js'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        'bundles/nodevoadmin/plugins/form-toggle/toggle.min.js'
+        'bundles/hopitalnumeriquerecherche/js/requete.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block headerTitle %}requêtes de recherche{% endblock %}
+{% block headerDesc %} 
+    <p>
+        A partir des menus déroulants situés à gauhe de l'écran, vous pourrez :
+	    <ul>
+		    <li>choisir d'être prévenu de la mise à jour des documents</li>
+		    <li>consulter les critères d'une requête</li>
+		    <li>supprimer une requête ou la renommer</li>
+		    <li>supprimer un document déjà consulté</li>
+	    </ul>
+    </p>
+    
+{% endblock %}
+
+{% block content %}
+    <h2 class="requeteTitle" >Gérer mes Requêtes de recherches</h2>
+    <div class="requetes">
+        {% for requete in requetes %}
+            <div class="ligne requete-{{requete.id}}" >
+                <div {% if not requete.isDefault %}title="Mettre par défaut"{% endif %} class="default {% if requete.isDefault %}active{% endif %}" data-link="{{path('hopital_numerique_requete_toggle',{'id':requete.id})}}" >
+                    <i class="fa {% if requete.isDefault %}fa-star{% endif %}"></i>
+                </div>
+
+                <p {% if requete.isDefault %}class="violet"{% endif %} >
+                    {{requete.nom|capitalize}}
+                    {% if requete.isNew %}
+                        <span class="label label-danger">Nouveau</span>
+                    {% endif %}
+                    {% if requete.isUpdated %}
+                        <span class="label label-success">MaJ</span>
+                    {% endif %}
+                </p>
+
+                <div class="actions pull-right">
+                    <div class="fa fa-envelope {% if requete.isUserNotified %}active{% else %}inactive{% endif %}" title="Notifications" onclick="showDetails('{{path('hopital_numerique_requete_mail',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-eye" title="Voir le détail" onclick="showDetails('{{path('hopital_numerique_requete_detail',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-edit" title="Editer" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        {% else %}
+            <div class="ligne">
+                <p> - Aucune requête de recherche enregistrée - </p>
+                <div class="clearfix"></div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h2 class="requeteTitle" >Mes publications consultés</h2>
+    <div class="requetes">
+        {% for consultation in consultations %}
+            <div class="ligne consultation-{{consultation.id}}" >
+                {% if not consultation.contenu %}
+                    <a href="{{path('hopital_numerique_publication_publication_objet', {'id':consultation.objet.id, 'alias':consultation.objet.alias})}}" >
+                        {% if consultation.objet.getDateModification() > consultation.getDateLastConsulted() %}<i class="fa fa-refresh"></i>{% endif %}{{consultation.objet.titre|capitalize}}
+                    </a>
+                {% else %}
+                    <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':consultation.objet.id, 'alias':consultation.objet.alias,'idc':consultation.contenu.id, 'aliasc':consultation.contenu.alias})}}" >
+                        {% if consultation.contenu.getDateModification() > consultation.getDateLastConsulted() %}<i class="fa fa-refresh"></i>{% endif %}{{consultation.contenu.titre|capitalize}}
+                    </a>
+                {% endif %}
+                
+                <div class="actions pull-right">
+                    <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_consultation_delete', {'id':consultation.id})}}')"></div>
+                </div>
+            </div>
+        {% else %}
+            <div class="ligne">
+                <p> - Aucune publication consultée - </p>
+                <div class="clearfix"></div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

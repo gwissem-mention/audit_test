@@ -4,25 +4,16 @@ namespace Nodevo\RoleBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
 /**
  * Manager de l'entité Role
- * 
- * @author Quentin SOMAZZI
  */
 class RoleManager extends BaseManager
 {
     protected $_class = '\Nodevo\RoleBundle\Entity\Role';
 
-    /**
-     * Retourne les données sous forme de tableau
-     *
-     * @return array
-     */
-    public function getDatasForGrid( $condition = null )
+    public function __construct($em)
     {
-        return $this->getRepository()->getDatasForGrid( $condition );
+        parent::__construct($em);
     }
 
     /**
@@ -72,12 +63,47 @@ class RoleManager extends BaseManager
 
         /**
          * Ajout de l'id en fin de code
-         * @todo  : pas super propre, à revoir surement
          */
         if( $code !== false){
             $role->setRole($code . $role->getId() );
             $this->_em->persist($role);
             $this->_em->flush();
         }
+    }
+
+    /**
+     * Retourne les roles sous forme de tableau
+     *
+     * @return array
+     */
+    public function getRolesAsArray()
+    {
+        $datas = $this->findAll();
+        $roles = array();
+        foreach($datas as $data)
+            $roles[ $data->getRole() ] = $data->getName();
+
+        return $roles;
+    }
+
+    /**
+     * Retourne le Role du user
+     *
+     * @param $user Utilisateur : soit une string, soit un objet FOS\UserBundle\Entity\User
+     *
+     * @return string
+     */
+    public function getUserRole($user)
+    {
+        if( $user === 'anon.' )
+            $role = 'ROLE_ANONYME_10';
+        else
+        {
+            //on récupère le rôle de l'user connecté
+            $roles = $user->getRoles();
+            $role  = $roles[0];
+        }
+
+        return $role;
     }
 }

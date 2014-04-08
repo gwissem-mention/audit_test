@@ -1,7 +1,0 @@
-parameters:
-    nodevo_gestionnaire_media.moxie_manager.media.dossiers:
-        - /medias
-    nodevo_gestionnaire_media.moxie_manager.langue.defaut: fr
-    nodevo_gestionnaire_media.moxie_manager.langue.langues_disponibles:
-        - fr
-        - en

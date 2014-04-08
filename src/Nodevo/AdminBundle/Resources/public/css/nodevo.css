@@ -3,7 +3,10 @@
 .inputUpload .form-control {border:0; padding:5px 0;}
 
 /* Gestion des habilitations */
+.nodevo-acls {margin:10px;}
 .nodevo-acls th{text-align: center}
+.nodevo-acls td {padding: 0px}
+.nodevo-acls td span{padding: 5px}
 
 /* Onglet d'options du template */
 .panel-heading .options .nav-tabs li.active a:hover {cursor: Pointer;}
@@ -12,3 +15,6 @@
 .pagination { float:left; margin: 10px 0; }
 .affnbreelement { margin: 10px 0px 0px 10px; padding: 0px; }
 .affnbreelement .form-control { width: auto; display: inline-block; color: #4f8edc; }
+
+/* formulaire */
+input.checkbox {width:16px; height:16px;}

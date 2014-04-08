@@ -2,21 +2,22 @@
 
 namespace Nodevo\ToolsBundle\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-
 use Sensio\Bundle\GeneratorBundle\Command\GeneratorCommand;
-
 use Nodevo\ToolsBundle\Generator\DataFixturesGenerator;
 
 class FixturesCommand extends GeneratorCommand
 {
 	protected $generator;
 
+    /**
+     * [configure description]
+     *
+     * @return [type]
+     */
 	protected function configure()
 	{
 		$this
@@ -29,6 +30,14 @@ class FixturesCommand extends GeneratorCommand
 		;
 	}
 
+    /**
+     * [execute description]
+     *
+     * @param  InputInterface  $input  [description]
+     * @param  OutputInterface $output [description]
+     *
+     * @return [type]
+     */
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
         $bundle;
@@ -49,8 +58,9 @@ class FixturesCommand extends GeneratorCommand
         // Récupération des entités présentes dans ce bundle
         foreach ($em->getMetadataFactory()->getAllMetadata() as $meta) {
             $allEntities[] = array(
-            	'entity' => $meta, 
-            	'shortName' => $em->getMetadataFactory()->getReflectionService()->getClassShortName($meta->getName()));
+                'entity'    => $meta, 
+                'shortName' => $em->getMetadataFactory()->getReflectionService()->getClassShortName($meta->getName())
+            );
         }
 
         // Récupération des associations de chaque entité
@@ -70,8 +80,8 @@ class FixturesCommand extends GeneratorCommand
             }
         }
 
-        $allEntities = $this->_determineOrder($allEntities, $dependencies);
-        $entities = $this->_filtreEntities($allEntities, $bundle->getNamespace());     
+        $allEntities = $this->determineOrder($allEntities, $dependencies);
+        $entities    = $this->filtreEntities($allEntities, $bundle->getNamespace());
 
         if (count($entities) == 0)
         {
@@ -86,7 +96,7 @@ class FixturesCommand extends GeneratorCommand
 
         $erase = $input->getOption('erase') == 1;
         
-        $generator = $this->getGenerator();
+        $generator         = $this->getGenerator();
         $generatedFixtures = $generator->generate($bundle, $entities, $em->getMetadataFactory(), $erase);
         
         if (count($generatedFixtures) > 0)
@@ -105,6 +115,14 @@ class FixturesCommand extends GeneratorCommand
         }        
 	}
 
+    /**
+     * [interact description]
+     *
+     * @param  InputInterface  $input  [description]
+     * @param  OutputInterface $output [description]
+     *
+     * @return [type]
+     */
 	protected function interact(InputInterface $input, OutputInterface $output)
 	{
 		$dialog = $this->getDialogHelper();
@@ -120,7 +138,9 @@ class FixturesCommand extends GeneratorCommand
             '',
         ));
 
-        $bundle = $dialog->askAndValidate($output, $dialog->getQuestion('The Bundle shortcut name', $input->getOption('bundle')), array('Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateBundleName'), false, $input->getOption('bundle'));
+        $bundleNames = array_keys($this->getContainer()->get('kernel')->getBundles());
+
+        $bundle = $dialog->askAndValidate($output, $dialog->getQuestion('The Bundle shortcut name', $input->getOption('bundle')), array('Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateBundleName'), false, $input->getOption('bundle'), $bundleNames);
         $input->setOption('bundle', $bundle);
 
         $erase = $dialog->askConfirmation($output, $dialog->getQuestion('Erase existing fixtures (yes, no)?', 'yes', '?'), true);
@@ -155,7 +175,7 @@ class FixturesCommand extends GeneratorCommand
     /**
     * Filtre les entités pour ne retenir que celle qui appartiennent au bundle choisi par l'utilisateur
     */
-    private function _filtreEntities($entities, $bundleNamespace)
+    private function filtreEntities($entities, $bundleNamespace)
     {
         $result = array();
 
@@ -174,16 +194,17 @@ class FixturesCommand extends GeneratorCommand
     /*
     * Affecte un ordre de génération à chaque entité en fonction de sa dépendance aux autres entités
     */
-    private function _determineOrder($allEntities, $dependencies){
-        $orders                 = array();
+    private function determineOrder($allEntities, $dependencies)
+    {
+        $orders = array();
 
         foreach ($allEntities as $entity){
             $doctrineEntity = $entity['entity'];
 
-            $orders[$doctrineEntity->getName()] = $this->_updateOrder($doctrineEntity->getName(), $dependencies);
+            $orders[$doctrineEntity->getName()] = $this->updateOrder($doctrineEntity->getName(), $dependencies);
         }
 
-        $orders = $this->_reorderArray($orders);
+        $orders = $this->reorderArray($orders);
 
         foreach ($allEntities as $key => $entity){
             $allEntities[$key]['order'] = $orders[$entity['entity']->getName()];
@@ -195,13 +216,13 @@ class FixturesCommand extends GeneratorCommand
     /*
     * Modifie l'ordre de génération d'une entité ( une entité doit être générée après toutes les entités vers lesquelles elle a une association de type many-to-one )
     */
-    private function _updateOrder($entity, $dependencies)
+    private function updateOrder($entity, $dependencies)
     {
         $maxOrder = 1;
 
         if (isset($dependencies[$entity])) {
             foreach ($dependencies[$entity] as $dependency) {
-                $order = $this->_updateOrder($dependency, $dependencies);
+                $order = $this->updateOrder($dependency, $dependencies);
 
                 if ($order >= $maxOrder)
                     $maxOrder = $order + 1;
@@ -214,7 +235,8 @@ class FixturesCommand extends GeneratorCommand
     /*
     * Ordonne le tableau d'ordres pour obtenir une suite continue
     */
-    private function _reorderArray($orders){
+    private function reorderArray($orders)
+    {
         asort($orders);
 
         $order = 1;

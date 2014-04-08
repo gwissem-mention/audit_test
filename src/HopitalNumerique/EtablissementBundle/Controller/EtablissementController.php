@@ -3,7 +3,6 @@
 namespace HopitalNumerique\EtablissementBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -28,7 +27,7 @@ class EtablissementController extends Controller
     {
         $etablissement = $this->get('hopitalnumerique_etablissement.manager.etablissement')->createEmpty();
 
-        return $this->_renderForm('hopitalnumerique_etablissement_etablissement', $etablissement, 'HopitalNumeriqueEtablissementBundle:Etablissement:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_etablissement_etablissement', $etablissement, 'HopitalNumeriqueEtablissementBundle:Etablissement:edit.html.twig' );
     }
     
     /**
@@ -41,7 +40,7 @@ class EtablissementController extends Controller
         //Récupération de l'etablissement passé en param
         $etablissement = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('hopitalnumerique_etablissement_etablissement', $etablissement, 'HopitalNumeriqueEtablissementBundle:Etablissement:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_etablissement_etablissement', $etablissement, 'HopitalNumeriqueEtablissementBundle:Etablissement:edit.html.twig' );
     }
 
     /**
@@ -133,7 +132,7 @@ class EtablissementController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $etablissement, $view )
+    private function renderForm( $formName, $etablissement, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $etablissement);
@@ -149,7 +148,7 @@ class EtablissementController extends Controller
             //si le formulaire est valide
             if ($form->isValid()) {
                 //test ajout ou edition
-                $new = is_null($etablissement->getId()) ? true : false;
+                $new = is_null($etablissement->getId());
 
                 // On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_etablissement.manager.etablissement')->save($etablissement);

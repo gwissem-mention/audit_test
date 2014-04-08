@@ -1,0 +1,31 @@
+{% extends 'HopitalNumeriqueInterventionBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-intervention-evaluation-voir.css"
+        'bundles/hopitalnumeriqueintervention/css/evaluation.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block headerTitle %}Évaluation{% endblock %}
+
+{% block headerDesc %}
+    {% if app.user.hasRoleAmbassadeur %}
+        <p>Vous trouverez ci-dessous les évaluations des interventions de l'ambassadeur dans les établissements.</p>
+    {% else %}
+        <p>Vous trouverez ci-dessous vos évaluations de l'intervention de l'ambassadeur dans votre établissement.</p>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {{ render(controller(
+        "HopitalNumeriqueInterventionBundle:Form/Evaluation:edit",
+        {
+            interventionDemande:interventionDemande,
+            questionnaire:questionnaire,
+            optionRenderForm:optionRenderForm
+        }
+    )) }}
+{% endblock %}

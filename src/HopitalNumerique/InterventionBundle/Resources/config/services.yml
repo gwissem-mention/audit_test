@@ -1,0 +1,16 @@
+imports:
+    - { resource: managers.yml }
+    - { resource: formulaires.yml }
+    - { resource: grids.yml }
+
+parameters:
+    hopitalnumerique_intervention.service.demande.etat_type_derniere_demande.class: HopitalNumerique\InterventionBundle\DependencyInjection\Demande\EtatTypeDerniereDemande
+    hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs.class: HopitalNumerique\InterventionBundle\DependencyInjection\Demande\EnvoiCourrielsAffichageLogs
+
+services:
+    hopitalnumerique_intervention.service.demande.etat_type_derniere_demande:
+        class: "%hopitalnumerique_intervention.service.demande.etat_type_derniere_demande.class%"
+        arguments: ["@session"]
+    hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs:
+        class: "%hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs.class%"
+        arguments: ["@logger", "@session"]

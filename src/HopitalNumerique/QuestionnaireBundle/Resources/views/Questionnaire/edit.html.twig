@@ -1,3 +1,21 @@
-{% form_theme form 'NodevoAdminBundle::form.html.twig' %}
-{{ form_javascript(form) }}
-{{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}
+{% block javascripts %}
+    {% javascripts output="compiled/hopitalnumerique-questionnaire-questionnaire-edit.js"
+        'bundles/hopitalnumeriquequestionnaire/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {% stylesheets output="compiled/hopitalnumerique-questionnaire-questionnaire-edit.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquequestionnaire/css/questionnaire.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+<div id="form_questionnaire_back">
+	{% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
+	{{ form_javascript(form) }}
+	{{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}
+</div>

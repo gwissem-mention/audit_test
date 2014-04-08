@@ -1,0 +1,49 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% block subject %}
+{% autoescape false %}
+{{ 'resetting.email.subject'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
+{% endautoescape %}
+{% endblock %}
+{% block body_text %}
+{% autoescape false %}
+{{ 'resetting.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
+{% endautoescape %}
+{% endblock %}
+{% block body_html %}
+<style type="text/css">
+span { color: #868686;font-size: 12px; text-decoration: none; }
+div, table, tr, td { font-family: Arial; font-weight: normal; }
+a { color: #6C3694; text-decoration: none; }
+a:hover { color: #6C3694; text-decoration: underline; }
+.normal { font-family: Arial; font-weight: bold; }
+</style>
+<table width="100%;">
+    <tr class="normal">
+        <img style="margin-left:5px; float:left;" src="{{app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/hopitalnumeriquecore/img/hopitalnumerique.jpg')}}"></img>
+        <img style="float:right;" src="{{app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}"></img>
+        <br style="clear:both;" />
+    </tr>
+    <tr>
+        <span style="width: 100%; margin-top:10px; display:block;background:url('{{app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/nodevomail/img/barre-grise.jpg')}}'); background-repeat: repeat-x;">&nbsp;</span>
+        <br />
+    </tr>
+    <tr>
+        <body>
+            <p>Bonjour {{user.prenom}} {{user.nom}} !</p>
+
+			<p>Pour réinitialiser votre mot de passe, merci de vous rendre sur <span><a href="{{confirmationUrl}}">{{confirmationUrl}}</a></span> afin de renseigner votre nouveau mot de passe.</p>
+
+			<p>Cordialement,</p>
+        </body>
+    </tr>
+    <tr>
+        &nbsp;
+    </tr>
+    <tr>
+        &nbsp;
+    </tr>
+    <tr>
+        <p class="normal"><img src="{{app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/hopitalnumeriquecore/img/common-sprite/users.jpg')}}"></img> <span>L'équipe Hôpital Numérique</span></p>
+    </tr>
+</table>
+{% endblock %}

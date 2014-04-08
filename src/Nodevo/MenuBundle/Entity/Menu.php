@@ -31,12 +31,12 @@ class Menu
      * @var string
      * @Assert\NotBlank(message="Le nom ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "100",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[100]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[100]]")
      * @ORM\Column(name="mnu_name", type="string", length=100, options = {"comment" = "Nom du menu"})
      */
     private $name;
@@ -45,12 +45,12 @@ class Menu
      * @var string
      * @Assert\NotBlank(message="L'alias ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'alias.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'alias."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="mnu_alias", type="string", length=255, options = {"comment" = "Alias du menu"})
      */
     private $alias;

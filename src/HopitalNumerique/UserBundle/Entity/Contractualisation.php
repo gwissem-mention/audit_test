@@ -3,10 +3,10 @@
 namespace HopitalNumerique\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
@@ -31,6 +31,7 @@ class Contractualisation
      *     mimeTypes = {"application/pdf", "application/x-pdf"},
      *     mimeTypesMessage = "Le fichier doit être un PDF."
      * )
+     * @Nodevo\Javascript(class="validate[required]")
      */
     public $file;
     
@@ -45,12 +46,12 @@ class Contractualisation
      * @var string
      * @Assert\NotBlank(message="Le nom ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="ctn_nom_document", type="string", length=255, options = {"comment" = "Nom du document pdf utilisateur"})
      */
     protected $nomDocument;
@@ -74,6 +75,8 @@ class Contractualisation
      * @ORM\JoinColumn(name="ref_type_document", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="Le type de document ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
+     *
+     * @GRID\Column(field="typeDocument.libelle")
      */
     protected $typeDocument;    
 

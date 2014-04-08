@@ -11,12 +11,10 @@ use Doctrine\ORM\EntityRepository;
 class ReferenceType extends AbstractType
 {
     private $_constraints = array();
-    private $_manager;
 
     public function __construct($manager, $validator)
     {
         $this->_constraints = $manager->getConstraints( $validator );
-        //$this->_manager     = $manager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -42,6 +40,8 @@ class ReferenceType extends AbstractType
                 'attr'       => array('class' => $this->_constraints['libelle']['class'] )
             ))
             ->add('code', 'text', array(
+                //'class'      => 'HopitalNumeriqueReferenceBundle:Reference',
+                //'property'   => 'code',
                 'max_length' => $this->_constraints['code']['maxlength'],
                 'required'   => true, 
                 'label'      => 'Code',
@@ -63,12 +63,12 @@ class ReferenceType extends AbstractType
             ->add('dictionnaire', 'checkbox', array(
                 'required' => false,
                 'label'    => 'Fait parti du dictionnaire de référencement',
-                'attr'     => array()
+                'attr'     => array( 'class'=> 'checkbox' )
             ))
             ->add('recherche', 'checkbox', array(
                 'required' => false,
                 'label'    => 'Présent dans les champs du moteur de recherche',
-                'attr'     => array()
+                'attr'     => array( 'class'=> 'checkbox' )
             ))
             ->add('parent', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',

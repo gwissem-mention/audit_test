@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -32,9 +31,12 @@ class ContenuController extends Controller
         //save contenu
         $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
 
+        $contenu->setAlias( $contenu->getId() . '_contenu' );
+        $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
+
         //set objet as infra doc
-        if( !$objet->getIsInfraDoc() ){
-            $objet->setIsInfraDoc( true );
+        if( !$objet->isInfraDoc() ){
+            $objet->setInfraDoc( true );
             $this->get('hopitalnumerique_objet.manager.objet')->save( $objet );
         }
 
@@ -52,7 +54,7 @@ class ContenuController extends Controller
         //Récupération de l'entité passée en paramètre
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $id) );
         
-        return $this->_renderForm('hopitalnumerique_objet_contenu', $contenu, 'HopitalNumeriqueObjetBundle:Contenu:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_objet_contenu', $contenu, 'HopitalNumeriqueObjetBundle:Contenu:edit.html.twig' );
     }
 
     /**
@@ -78,7 +80,7 @@ class ContenuController extends Controller
 
         //si aucun contenus, on met l'infradoc à false
         if( empty($contenus) ) {
-            $objet->setIsInfraDoc( false );
+            $objet->setInfraDoc( false );
             $this->get('hopitalnumerique_objet.manager.objet')->save( $objet );
         }
 
@@ -102,7 +104,7 @@ class ContenuController extends Controller
     {
         //get datas serialzed
         $datas = $this->get('request')->request->get('datas');
-        $this->_reorderElements( $datas, null );
+        $this->reorderElements( $datas, null );
 
         //return success.true si le fichier existe deja
         return new Response('{"success":true}', 200);
@@ -133,8 +135,8 @@ class ContenuController extends Controller
         $result = $this->get('hopitalnumerique_objet.manager.contenu')->parseCsv( $csv, $objet );
         
         if($result) {
-            if( !$objet->getIsInfraDoc() ){
-                $objet->setIsInfraDoc( true );
+            if( !$objet->isInfraDoc() ){
+                $objet->setInfraDoc( true );
                 $this->get('hopitalnumerique_objet.manager.objet')->save( $objet );
             }
 
@@ -163,7 +165,7 @@ class ContenuController extends Controller
      *
      * @return empty
      */
-    private function _reorderElements( $elements, $parent )
+    private function reorderElements( $elements, $parent )
     {
         $order = 1;
 
@@ -176,7 +178,7 @@ class ContenuController extends Controller
             $order++;
 
             if( isset($element['children']) )
-                $this->_reorderElements( $element['children'], $contenu );
+                $this->reorderElements( $element['children'], $contenu );
         }
     }
 
@@ -189,7 +191,7 @@ class ContenuController extends Controller
      *
      * @return Response
      */
-    private function _renderForm( $formName, $contenu, $view )
+    private function renderForm( $formName, $contenu, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $contenu);
@@ -202,6 +204,7 @@ class ContenuController extends Controller
             $titre   = $request->request->get('titre');
             $alias   = $request->request->get('alias');
             $content = $request->request->get('contenu');
+            $notify  = $request->request->get('notify');
 
             //error si le titre est vide
             if($titre == '')
@@ -210,6 +213,9 @@ class ContenuController extends Controller
             //set Form datas
             $contenu->setTitre( $titre );
             $contenu->setContenu( $content );
+
+            if( $notify === "1")
+                $contenu->setDateModification( new \DateTime() );
 
             //on régénère l'alias à chaque fois
             $tool = ( $alias == '' || $alias == 'nouveau-contenu' ) ? new Chaine( $titre ) : new Chaine( $alias );

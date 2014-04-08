@@ -4,7 +4,6 @@ namespace Nodevo\MenuBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 
 class ItemController extends Controller
 {
@@ -33,7 +32,7 @@ class ItemController extends Controller
         $menu = $this->get('nodevo_menu.manager.menu')->findOneById($id);
         $item->setMenu( $menu );
 
-        return $this->_renderForm('nodevo_menu_item', $item, 'NodevoMenuBundle:Item:edit.html.twig' );
+        return $this->renderForm('nodevo_menu_item', $item, 'NodevoMenuBundle:Item:edit.html.twig' );
     }
 
     /**
@@ -45,7 +44,7 @@ class ItemController extends Controller
     {
         $item = $this->get('nodevo_menu.manager.item')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('nodevo_menu_item', $item, 'NodevoMenuBundle:Item:edit.html.twig' );
+        return $this->renderForm('nodevo_menu_item', $item, 'NodevoMenuBundle:Item:edit.html.twig' );
     }
 
     /**
@@ -90,7 +89,7 @@ class ItemController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $item, $view )
+    private function renderForm( $formName, $item, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $item);
@@ -110,8 +109,7 @@ class ItemController extends Controller
                 $new = is_null($item->getId()) ? true : false;
 
                 //on manipule les paramètres de la route
-                $routeParametres = $this->_getPostRouteParametres();
-                $item->setRouteParameters( (count($routeParametres) == 0) ? null : json_encode($routeParametres) );
+                $item->setRouteParameters( $this->getPostRouteParametres( $request ) );
 
                 // On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('nodevo_menu.manager.item')->save($item);
@@ -142,14 +140,15 @@ class ItemController extends Controller
      * 
      * @return array Tableau associatif NomParametre => ValeurParametre
      */
-    private function _getPostRouteParametres()
+    private function getPostRouteParametres( $request )
     {
-        $routeParametres = array();
-        
-        foreach ($this->getRequest()->request->all() as $parametreName => $parametreValeur)
-            if (substr($parametreName, 0, 29) == 'nodevo_menu_item_route_param_')
-                $routeParametres[substr($parametreName, 29)] = $parametreValeur;
-        
-        return($routeParametres);
+        $datas           = $request->request->get('nodevo_menu_item');
+        $routeParameters = isset($datas['routeParameters']) ? $datas['routeParameters'] : array();
+        $params          = array();
+
+        foreach($routeParameters as $key => $val)
+            $params[ str_replace('routeParameters_', '', $key) ] = $val;
+
+        return json_encode($params);
     }
 }

@@ -5,5 +5,3 @@ nodevo_acl:
 nodevo_acl_modify:
     pattern: /acl/modify.{_format}
     defaults: { _controller: NodevoAclBundle:Acl:modify, _format:json }
-    requirements:
-        _method:  post

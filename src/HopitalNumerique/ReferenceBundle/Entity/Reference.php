@@ -20,6 +20,8 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  */
 class Reference
 {
+    private static $STATUT_ACTIF_ID = 3;
+    
     /**
      * @var integer
      *
@@ -33,12 +35,12 @@ class Reference
      * @var string
      * @Assert\NotBlank(message="Le libellé ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le libellé.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le libellé."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="ref_libelle", type="string", length=255, options = {"comment" = "Libellé de la référence"})
      */
     protected $libelle;
@@ -47,12 +49,12 @@ class Reference
      * @var string
      * @Assert\NotBlank(message="Le code ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le code.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le code."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="ref_code", type="string", length=255, options = {"comment" = "Code de la référence"})
      */
     protected $code;
@@ -322,7 +324,7 @@ class Reference
     public function getArboName()
     {
         //retourne le niveau de profondeur de l'élément courent
-        $level = $this->_getLevel( 0, $this );
+        $level = $this->getLevel( 0, $this );
         $sep   = '';
 
         //selon le level de profondeur, le séparateur change
@@ -357,12 +359,22 @@ class Reference
      *
      * @return integer
      */
-    private function _getLevel( $currentLevel, $ref )
+    private function getLevel( $currentLevel, $ref )
     {
         $currentLevel++;
         if( $ref->getParent() )
-            $currentLevel = $this->_getLevel( $currentLevel, $ref->getParent() );
+            $currentLevel = $this->getLevel( $currentLevel, $ref->getParent() );
 
         return $currentLevel;
+    }
+
+    /**
+     * Retourne l'ID pour le statut actif.
+     * 
+     * @return integer ID pour le statut actif
+     */
+    public static function getStatutActifId()
+    {
+        return self::$STATUT_ACTIF_ID;
     }
 }

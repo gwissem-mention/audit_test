@@ -3,7 +3,6 @@
 namespace Nodevo\MenuBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class MenuController extends Controller
@@ -25,7 +24,7 @@ class MenuController extends Controller
     {
         $menu = $this->get('nodevo_menu.manager.menu')->createEmpty();
 
-        return $this->_renderForm('nodevo_menu_menu', $menu, 'NodevoMenuBundle:Menu:edit.html.twig' );
+        return $this->renderForm('nodevo_menu_menu', $menu, 'NodevoMenuBundle:Menu:edit.html.twig' );
     }
 
     /**
@@ -38,7 +37,7 @@ class MenuController extends Controller
         //Récupération de l'menu passé en param
         $menu = $this->get('nodevo_menu.manager.menu')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('nodevo_menu_menu', $menu, 'NodevoMenuBundle:Menu:edit.html.twig' );
+        return $this->renderForm('nodevo_menu_menu', $menu, 'NodevoMenuBundle:Menu:edit.html.twig' );
     }
 
     /**
@@ -72,7 +71,7 @@ class MenuController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $menu, $view )
+    private function renderForm( $formName, $menu, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $menu);

@@ -1,0 +1,29 @@
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-intervention.css" filter="cssrewrite"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+        'bundles/hopitalnumeriqueintervention/css/intervention.css'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+        'bundles/nodevoadmin/plugins/apprise/apprise.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-intervention.js"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
+        'bundles/nodevoadmin/plugins/apprise/apprise.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block title %}{% block headerTitle %}{% endblock %} / Intervention - {{ parent() }}{% endblock %}
+
+{% block barreActions %}<a class="btn btn-default back" href="{{ path('hopital_numerique_intervention_demande_liste') }}"><span class="fa fa-reply"></span></a>{% endblock %}

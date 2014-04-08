@@ -4,18 +4,20 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Hopital Numérique">
+        <meta name="description" content="{% block metadesc %}Mon Hôpital Numérique{% endblock %}">
+        <meta name="keywords" content="{% block metakeywords %}{% endblock %}">
         <meta name="author" content="NODEVO">
 
-        <title>{% block title %}Hopital Numérique{% endblock %}</title>
+        <title>{% block title %}Mon Hôpital Numérique{% endblock %}</title>
 
-        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
             {% stylesheets output="compiled/main-front.css" filter="cssrewrite"
                 'bundles/hopitalnumeriquecore/css/bootstrap.min.css'
                 'bundles/hopitalnumeriquecore/css/bootstrap-theme.min.css'
-                'bundles/hopitalnumeriquecore/css/style.css'
+                'bundles/hopitalnumeriquecore/css/layout.css'
+                'bundles/hopitalnumeriquecore/js/jqueryui.min.css'
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
@@ -24,36 +26,123 @@
         {% block javascripts %}
             {% javascripts output="compiled/main-front.js"
                 'bundles/hopitalnumeriquecore/js/jquery-1.11.0.min.js'
+                'bundles/hopitalnumeriquecore/js/jqueryui-1.10.3.min.js'
+                'bundles/hopitalnumeriquecore/js/jqueryui-fr.js'
                 'bundles/hopitalnumeriquecore/js/bootstrap.min.js'
+                'bundles/hopitalnumeriquecore/js/script.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
         {% endblock %}
+        <script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+			ga('create', 'UA-49829801-1', 'monhopitalnumerique.fr');
+			ga('send', 'pageview');
+		</script>
     </head>
 
     <body>
-        <div id="body">
+        <div id="mobileNotReady">
+            <a href="http://www.anap.fr/" target="_blank">
+                <img style="margin:10px auto; width:130px; display:block" src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" />
+            </a>
+            <div class="clearfix"></div>
+            <p class="text-center">La plateforme Hôpital Numérique n'est pas encore disponible sur mobile.</p>
+        </div>
+
+        <div class="row" id="body">
             <div id="header">
-                <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
+                <a href="http://www.anap.fr/" target="_blank">
+                    <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
+                </a>
                 <div id="titre" class="pull-left">
-                    <h1>Mon Hôpital Numérique</h1>
-                    <h2>Plateforme d'accompagnement hôpital numérique</h2>    
+                    <a href="{{path('hopital_numerique_homepage')}}" class="h1"><span class="violet">Mon</span> Hôpital <span class="gris">Numérique</span></a>
+                    <div class="h2" class="gris">Accompagnement pour l’atteinte des cibles d’usage</div>
                 </div>
-            </div>
-            <div id="content">
-                {% block body %}{% endblock %}
-            </div>
-            <div id="footer">
                 
+                <div class="loggedUser pull-right">
+                    {% if app.user %}
+                        {% if app.user.nom or app.user.prenom %}
+                            <p>
+                                <i class="common-sprite common-sprite-user-red"></i>
+                                {{ app.user.prenom|capitalize }}
+                            </p>
+                            <p>
+                                <span class="nom">{{ app.user.nom|capitalize }}</span>
+                            </p>
+                        {% else %}
+                            <p>
+                                <i class="common-sprite common-sprite-user-red"></i>
+                                {{ app.user.username|capitalize }}
+                            </p>
+                        {% endif %}
+                        <a class="infos rose" href="{{path('hopital_numerique_user_informations_personnelles')}}"> > Tableau de bord</a>
+                    {% else %}
+                        <a class="infos rose" href="{{path('hopital_numerique_user_inscription')}}"> > Inscription</a>
+                    {% endif %}
+                </div>
+                
+                <a href="http://www.sante.gouv.fr/le-programme-hopital-numerique.html" class="pull-right" id="logoHn" target="_blank">
+                    <img src="{{asset('bundles/hopitalnumeriquecore/img/hn.jpg')}}" alt="HOPITAL NUMERIQUE" />    
+                </a>
+                
+                <p class="violet pull-right align-right">
+                    Ce projet s’inscrit dans le cadre du programme
+                </p>
+                
+                <div class="connexion">
+                    {% if app.user %}
+                        <a href="{{path('account_logout')}}">Déconnexion <i class="common-sprite common-sprite-close" ></i></a>
+                    {% else %}
+                        <a href="{{path('account_login')}}"><i class="common-sprite common-sprite-user" ></i>Identification</a>
+                    {% endif %}
+                </div>
+
+                <div class="common-sprite common-sprite-header"></div>
+            </div>
+            <div class="col-md-12" id="content">
+                {% if app.request.attributes.get('_route') != 'hopital_numerique_homepage' %}
+                    {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+                    <div class="clearfix"></div>
+                {% endif %}
+                {{ block('flashBags') }}
+                {% if error is defined and error %}
+                    <div class="alert nalert-warning" onclick="$(this).slideUp();" >
+                        {{ error|trans({}, 'FOSUserBundle') }}
+                    </div>
+                {% endif %}
+                {% if invalid_username is defined %}
+                    <div class="alert nalert-warning" onclick="$(this).slideUp();" >
+                        {{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}
+                    </div>
+                {% endif %}
+                {% block body %}{% endblock %}
+                <div class="clearfix"></div>
+            </div>
+            <div class="col-md-12" id="footer">
+                {{ knp_menu_render('menu-footer-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
             </div>
         </div>
+
+        {% if app.user and app.user|checkAuthorization( path('hopital_numerique_requete_homepage') ) %}
+            <div id="mesrequetes" class="closed">
+                <div class="content" style="display:none">
+                    <h3 class="violet">Mes requêtes de recherche</h3>
+                    {{ render(controller("HopitalNumeriqueRechercheBundle:Requete:index", {'indexVue':false} )) }}
+                    <a href="{{path('hopital_numerique_requete_homepage')}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Gérer mes requêtes</a>
+                </div>
+            </div>
+        {% endif %}
     </body>
 </html>
 
 {% block flashBags %}
     {% for type, messages in app.session.flashBag.all %}
         {% for message in messages %}
-            <div class="alert alert-block alert-{{type}}" onclick="$(this).slideUp();">
+            <div class="alert alert-block nalert-{{type}}" onclick="$(this).slideUp();">
                 {{ message }}
             </div>
         {% endfor %}

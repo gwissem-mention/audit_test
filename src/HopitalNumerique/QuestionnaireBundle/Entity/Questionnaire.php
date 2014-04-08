@@ -32,7 +32,7 @@ class Questionnaire
     /**
      * @var boolean
      *
-     * @ORM\Column(name="qst_lock", type="boolean", options = {"comment" = "Verrouillage du quesionnaire ?"})
+     * @ORM\Column(name="qst_lock", type="boolean", options = {"comment" = "Verrouillage du questionnaire ?"})
      */
     private $lock;
 
@@ -41,6 +41,11 @@ class Questionnaire
      * @ORM\OrderBy({"ordre" = "ASC"})
      */
     private $questions;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\UserBundle\Entity\RefusCandidature", mappedBy="questionnaire", cascade={"persist", "remove" })
+     */
+    protected $refusCandidature;
     
     /**
      * Constructor

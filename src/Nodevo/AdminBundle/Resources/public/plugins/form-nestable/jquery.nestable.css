@@ -44,11 +44,14 @@
 
 /* Action buttons on the right */
 .dd3-actions { position: absolute; margin: 0; right: 0; top: 0; width: 60px; text-indent: 100%; white-space: nowrap; overflow: hidden; height: 30px;}
-.dd3-actions .dd3-cog { height: 30px; position:relative; border: 1px solid #aaa;background: #2D78D5;border-top-right-radius: 0;border-bottom-right-radius: 0;display: block; width: 30px}
-.dd3-actions .dd3-cog:before { content: '\f013'; font-family: 'FontAwesome'; display: block; position: absolute; left: 0; top: 5px; width: 100%; text-align: center; text-indent: 0; color: #fff; font-size: 12px; font-weight: normal; }
-.dd3-actions .dd3-cog:hover { background: #4f8edc; }
+.dd3-actions .dd3-cog, .dd3-actions .dd3-eye { height: 30px; position:relative; border: 1px solid #aaa;background: #2D78D5;border-top-right-radius: 0;border-bottom-right-radius: 0;display: block; width: 30px}
+.dd3-actions .dd3-cog:before, .dd3-actions .dd3-eye:before { font-family: 'FontAwesome'; display: block; position: absolute; left: 0; top: 5px; width: 100%; text-align: center; text-indent: 0; color: #fff; font-size: 12px; font-weight: normal; }
+.dd3-actions .dd3-cog:hover, .dd3-actions .dd3-eye:hover { background: #4f8edc; }
+.dd3-actions .dd3-cog:before{ content: '\f013'; }
+.dd3-actions .dd3-eye:before{ content: '\f06e'; }
 
 .dd3-actions .dd3-trash { cursor:pointer; height: 30px; position:relative; border: 1px solid #aaa;background: #cd1919;border-top-right-radius: 0;border-bottom-right-radius: 0;display: block; width: 30px}
 .dd3-actions .dd3-trash:before { content: '\f014'; font-family: 'FontAwesome'; display: block; position: absolute; left: 0; top: 5px; width: 100%; text-align: center; text-indent: 0; color: #fff; font-size: 12px; font-weight: normal; }
 .dd3-actions .dd3-trash:hover { background: #df1b1b; }
 
+.dd4{ width: 90px; }

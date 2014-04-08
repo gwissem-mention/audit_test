@@ -1,0 +1,65 @@
+{% extends 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
+
+{% block form_row %}
+    {% spaceless %}
+        <div class="form-group">
+                {{ form_label(form) }}
+            <div class="col-md-8">
+                {{ form_widget(form) }}
+            </div>
+            <div class="col-md-4">
+                <div class="help-block">
+                    {{ form_errors(form) }}
+                </div>
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}
+
+{# {% block form_row %}#}
+{#     {% spaceless %}#}
+{# 	    {% if form.vars.block_prefixes.1 == 'checkbox' %}	        #}
+{# 	        <div class="form-group">#}
+{# 		        {% if label is not sameas(false) %}#}
+{# 		            {% if not compound %}#}
+{# 		                {% set label_attr = label_attr|merge({'for': id}) %}#}
+{# 		            {% endif %}#}
+{# 		            {% if required %}#}
+{# 		                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-md-4 control-label') ~ ' required')|trim}) %}#}
+{# 		            {% else %}#}
+{# 		                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-md-4 control-label'))|trim}) %}#}
+{# 		            {% endif %}#}
+{# 		            {% if label is empty %}#}
+{# 		                {% set label = name|humanize %}#}
+{# 		            {% endif %}#}
+{# 		            <a href="#"><label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>#}
+{# 		            {{ label|trans({}, translation_domain) }}#}
+{# 		            {% if required %}#}
+{# 		                <span style="color:red;font-size:10px" title="Ce champ est requis">*</span>#}
+{# 		            {% endif %}#}
+{# 		            </label></a>#}
+{# 		        {% endif %}#}
+{# 	            <div class="col-md-8">#}
+{# 	                {{ form_widget(form) }}#}
+{# 	            </div>#}
+{# 	            <div class="col-md-4">#}
+{# 	                <div class="help-block">#}
+{# 	                    {{ form_errors(form) }}#}
+{# 	                </div>#}
+{# 	            </div>#}
+{# 	        </div>#}
+{#         {% else %}#}
+{# 	        <div class="form-group">#}
+{# 	                {{ form_label(form) }}#}
+{# 	            <div class="col-md-8">#}
+{# 	                {{ form_widget(form) }}#}
+{# 	            </div>#}
+{# 	            <div class="col-md-4">#}
+{# 	                <div class="help-block">#}
+{# 	                    {{ form_errors(form) }}#}
+{# 	                </div>#}
+{# 	            </div>#}
+{# 	        </div>#}
+{#         {% endif %}#}
+{#     {% endspaceless %}#}
+{# {% endblock form_row %}#}

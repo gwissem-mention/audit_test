@@ -1,0 +1,53 @@
+{% extends 'HopitalNumeriqueInterventionBundle:Form:layout.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-intervention-demande-edit.js"
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/Formulaire.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/FormulaireEvenement.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% if interventionDemande.etablissements|length > 0 %}{% spaceless %}
+        <script type="text/javascript">
+            HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initRegions([{{ interventionDemande.etablissementsRattachesRegionsIds|join(',') }}]);
+            {% for etablissement in interventionDemande.etablissements %}
+                HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS.push({{ etablissement.id }});
+            {% endfor %}
+            HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.REFERENT_INITIAL_ID = {{ interventionDemande.referent.id }};
+        </script>
+    {% endspaceless %}{% endif %}
+{% endblock %}
+
+{% block headerTitle %}Modifier une intervention{% endblock %}
+{% block headerDesc %}
+    <p>Vous visualisez une demande initiale d'intervention d'un ambassadeur. Vous pouvez modifier la demande en :</p>
+    <ul>
+        <li>changeant d'ambassadeur,</li>
+        <li>associant d'autres établissements à la demande,</li>
+        <li>modifiant les productions de l'intervention.</li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div class="panel_form" id="intervention_demande_panel">
+
+        <form method="post" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireEdition) }}>
+            {% form_theme interventionDemandeFormulaireEdition 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">Demandeur</label>
+                <div class="col-md-8"><input class="form-control" type="text" value="{{ interventionDemande.referent.appellation }}" readonly="readonly"></div>
+            </div>
+            
+            {{ form_javascript(interventionDemandeFormulaireEdition) }}
+            {{ form_widget(interventionDemandeFormulaireEdition) }}
+
+            <div class="boutons">
+                <input type="submit" class="btn btn-success submit" value="Enregistrer les modifications">
+            </div>
+        </form>
+
+    </div>
+{% endblock %}

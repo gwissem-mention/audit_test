@@ -21,6 +21,7 @@ class ReferenceGrid extends Grid implements IGrid
     {
         $this->setSource( 'hopitalnumerique_reference.manager.reference' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setAffichageRecursif( 'idParent', 'libelle' );
     }
 
     /**
@@ -33,20 +34,26 @@ class ReferenceGrid extends Grid implements IGrid
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize( 80 );
+        $etatColonne->setFilterType('select');
+        $etatColonne->setSelectFrom('source');
+        $etatColonne->setOperatorsVisible( false );
         $this->addColonne( $etatColonne );
 
         $this->addColonne( new Column\OrderColumn() );
 
         $dictionnaireColumn = new Column\BooleanColumn('dictionnaire', 'Dictionnaire');
         $dictionnaireColumn->setValues( array( 1 => 'Présent dans le dictionnaire de référencement', 0 => 'Absent du dictionnaire') );
+        $dictionnaireColumn->setSize( 100 );
         $this->addColonne( $dictionnaireColumn );
 
         $rechercheColumn = new Column\BooleanColumn('recherche', 'Recherche');
         $rechercheColumn->setValues( array( 1 => 'Présent dans les champs du moteur de recherche', 0 => 'Absent des champs du moteur de recherche') );
+        $rechercheColumn->setSize( 100 );
         $this->addColonne( $rechercheColumn );
 
         $this->addColonne( new Column\LockedColumn() );
 
+        /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('idParent') );
     }
 
@@ -59,10 +66,16 @@ class ReferenceGrid extends Grid implements IGrid
         $this->addActionButton( new Action\EditButton('hopitalnumerique_reference_reference_edit') );
         $this->addActionButton( new Action\DeleteButton('hopitalnumerique_reference_reference_delete') );
 
+        //Boutton d'ajout d'un référentiel avec le même code par défaut
+        $button = new RowAction('', 'hopitalnumerique_reference_reference_add');
+        $button->setRouteParameters( array('id','mod' => 'code') );
+        $button->setAttributes( array('class'=>'btn btn-warning fa fa-plus','title' => 'Ajouter comme code') );
+        $this->addActionButton( $button );
+
         //Boutton d'ajout d'un référentiel avec parent par défaut
         $button = new RowAction('', 'hopitalnumerique_reference_reference_add');
         $button->setRouteParameters( array('id') );
-        $button->setAttributes( array('class'=>'btn btn-warning fa fa-plus','title' => 'Ajouter comme enfant') );
+        $button->setAttributes( array('class'=>'btn btn-warning fa fa-level-down','title' => 'Ajouter comme enfant') );
         $this->addActionButton( $button );
     }
 

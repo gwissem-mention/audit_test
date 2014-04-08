@@ -31,12 +31,12 @@ class Mail
      * @var string
      * @Assert\NotBlank(message="L'objet ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'objet.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'objet."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="mail_objet", type="string", length=255, options = {"comment" = "Objet du mail"})
      */
     private $objet;
@@ -45,12 +45,12 @@ class Mail
      * @var string
      * @Assert\NotBlank(message="La description ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans la description.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans la description."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="mail_description", type="string", length=255, options = {"comment" = "Description du mail"})
      */
     private $description;
@@ -59,12 +59,12 @@ class Mail
      * @var string
      * @Assert\NotBlank(message="Le mail de l'expéditeur ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le mail de l'expéditeur.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le mail de l'expéditeur."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="mail_expediteur_mail", type="string", length=255, options = {"comment" = "Adresse mail de l expéditeur"})
      */
     private $expediteurMail;
@@ -73,12 +73,12 @@ class Mail
      * @var string
      * @Assert\NotBlank(message="Le nom de l'expéditeur ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom de l'expéditeur.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom de l'expéditeur."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="mail_expediteur_name", type="string", length=255, options = {"comment" = "Nom de l expéditeur"})
      */
     private $expediteurName;
@@ -91,9 +91,16 @@ class Mail
      */
     private $body;
 
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="mail_params", type="json_array")
+     */
+    private $params;
+
     public function __construct()
     {
-
+        $this->params = array();
     }
 
     /**
@@ -219,5 +226,25 @@ class Mail
     public function getBody()
     {
         return $this->body;
+    }
+
+    /**
+     * Get params
+     *
+     * @return array $params
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+    
+    /**
+     * Set params
+     *
+     * @param array $params
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
     }
 }

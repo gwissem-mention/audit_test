@@ -5,8 +5,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Doctrine\ORM\EntityRepository;
-
 class ContenuType extends AbstractType
 {
     private $_constraints = array();
@@ -35,6 +33,9 @@ class ContenuType extends AbstractType
                 'required' => true, 
                 'label'    => 'Contenu',
                 'attr'     => array('class' => $this->_constraints['contenu']['class'] )
+            ))
+            ->add('modified', 'hidden', array(
+                'mapped' => false
             ));
     }
 

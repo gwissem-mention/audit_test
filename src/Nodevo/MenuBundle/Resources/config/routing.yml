@@ -18,7 +18,6 @@ nodevo_menu_menu_delete:
     defaults: { _controller: NodevoMenuBundle:Menu:delete, _format: json }
     requirements:
         id: \d+
-        _method: post|delete
 
 # Items
 nodevo_menu_item:
@@ -44,4 +43,3 @@ nodevo_menu_item_delete:
     defaults: { _controller: NodevoMenuBundle:Item:delete, _format: json }
     requirements:
         id: \d+
-        _method:  post|delete

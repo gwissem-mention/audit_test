@@ -23,13 +23,13 @@ class ObjetRepository extends EntityRepository
             ->leftJoin('obj.types','refTypes')
             ->leftJoin('obj.lockedBy','user');
             
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
-
+    
     /**
      * Récupère les données du grid pour un ambassadeur sous forme de tableau correctement formaté
      *
-     * @return array
+     * @return QueryBuilder
      */
     public function getDatasForGridAmbassadeur( $idAmbassadeur )
     {
@@ -41,23 +41,58 @@ class ObjetRepository extends EntityRepository
             ->where('refUser.id = :idAmbassadeur')
             ->setParameter('idAmbassadeur', $idAmbassadeur->value );
         
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
     
     /**
      * Récupère les objets pour un ambassadeur passé en param
      *
-     * @return array
+     * @return QueryBuilder
      */
     public function getObjetsByAmbassadeur( $idAmbassadeur )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-            ->leftJoin('obj.ambassadeurs','user', 'WITH', 'user.id = :idAmbassadeur')
-            ->setParameter('idAmbassadeur', $idAmbassadeur);
-            
+            ->leftJoin('obj.types','refTypes')
+            ->leftJoin('obj.ambassadeurs','refUser')
+            ->where('refUser.id = :idAmbassadeur')
+            ->setParameter('idAmbassadeur', $idAmbassadeur );
         
-        return $qb->getQuery()->getResult();
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des objets selon le/les types
+     *
+     * @param array $types Les types à filtrer
+     *
+     * @return QueryBuilder
+     */
+    public function getObjetsByTypes( $types, $limit = 0 )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('obj')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->leftJoin('obj.types','refTypes')
+            ->where('refTypes.id IN (:types)','obj.etat = 3')
+            ->andWhere(
+                $qb->expr()->orx(
+                    $qb->expr()->isNull('obj.dateDebutPublication'),
+                    $qb->expr()->lte('obj.dateDebutPublication', ':today')
+                ),
+                $qb->expr()->orx(
+                    $qb->expr()->isNull('obj.dateFinPublication'),
+                    $qb->expr()->gte('obj.dateFinPublication', ':today')
+                )
+            )
+            ->setParameter('today', new \DateTime() )
+            ->orderBy('obj.dateCreation', 'DESC')
+            ->setParameter('types', $types );
+        
+        if( $limit !== 0 )
+            $qb->setMaxResults($limit);
+
+        return $qb;
     }
 }

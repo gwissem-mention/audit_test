@@ -4,11 +4,11 @@ namespace Nodevo\AclBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 use Nodevo\AclBundle\Entity\Acl;
+use Nodevo\AclBundle\Manager\RessourceManager;
+use Nodevo\RoleBundle\Manager\RoleManager;
 
 use Doctrine\ORM\EntityManager;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
@@ -18,20 +18,26 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
  */
 class AclManager extends BaseManager
 {
-    protected $_class = '\Nodevo\AclBundle\Entity\Acl';
-    private $_container;
+    protected   $_class = '\Nodevo\AclBundle\Entity\Acl';
+    private     $_ressourceManager;
+    private     $_roleManager;
+    private     $_writeWords = array();
 
     /**
      * Construct extension : we need to have the Container here
      *
-     * @param EntityManager      $em        Entity Mangager de doctrine
-     * @param ContainerInterface $container Container : permet d'appeller des services
+     * @param EntityManager         $em                 Entity Mangager de doctrine
+     * @param RessourceManager      $ressourceManager   Manager des ressources
+     * @param RoleManager           $roleManager        Manager des roles
      */
-    public function __construct( EntityManager $em, ContainerInterface $container )
+    public function __construct( EntityManager $em, RessourceManager $ressourceManager, RoleManager $roleManager, $options = array() )
     {
         parent::__construct($em);
 
-        $this->_container = $container;
+        $this->_ressourceManager = $ressourceManager;
+        $this->_roleManager      = $roleManager;
+
+        $this->setOptions($options);
     }
 
     /**
@@ -96,8 +102,11 @@ class AclManager extends BaseManager
             $result = $acl->getWrite() ? false : true;
             $acl->setWrite( $result );
             //si on donne directement l'accès en écriture, on donne aussi l'accès en lecture
-            if($result)
+            if( $acl->getRessource()->getType() == 2 ){
+                $acl->setRead( $result );
+            } elseif($result){
                 $acl->setRead( true );
+            }
         }
 
         $this->save( $acl );
@@ -140,20 +149,27 @@ class AclManager extends BaseManager
      */
     public function checkAuthorization( $url, $user )
     {
-        //get Roles binded to the User
-        $roles = $user->getRoles();
-        if( $roles[0]->getId() == 1 )
+        if( $url === '#' || $url === '/' || substr($url, 0, 11) === 'javascript:')
             return VoterInterface::ACCESS_GRANTED;
 
+        if( $user === 'anon.' )
+            $roles = $this->_roleManager->findOneBy(array('role'=>'ROLE_ANONYME_10'));
+        else{
+            if( $user->hasRole('ROLE_ADMINISTRATEUR_1') )
+                return VoterInterface::ACCESS_GRANTED;
+
+            $roles = $this->_roleManager->findBy(array('role'=> $user->getRoles() ));
+        }
+        
         //search in DB ressource matching this url
-        $ressource = $this->_container->get('nodevo_acl.manager.ressource')->getRessourceMatchingUrl( $url );
+        $ressource = $this->_ressourceManager->getRessourceMatchingUrl( $url );
 
         //si on ne match aucune ressource, on bloque l'accès.
         if( is_null($ressource) )
             return VoterInterface::ACCESS_DENIED;
 
         //search if Acl matching role and Ressource exist
-        $acl = $this->findOneBy( array('role' => $roles[0], 'ressource' => $ressource) );
+        $acl = $this->findOneBy( array('role' => $roles, 'ressource' => $ressource) );
 
         //if no acl matching exist, access denied
         if ( is_null($acl) )
@@ -162,7 +178,7 @@ class AclManager extends BaseManager
         $wordFind = false;
 
         //check Write access
-        $writeWords = array('create', 'edit', 'delete', 'modify', 'new', 'update', 'add');
+        $writeWords = array_merge(array('create', 'edit', 'delete', 'modify', 'new', 'update', 'add'), $this->_writeWords);
         foreach($writeWords as $word) {
             if( strpos($url, $word) )
                 $wordFind = true;
@@ -170,17 +186,28 @@ class AclManager extends BaseManager
 
         if( $wordFind )
             return $acl->getWrite() ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_DENIED;
-        
-        //check Read access
-        $readWords = array('show', 'view', 'liste', 'list');
-        foreach( $readWords as $word ) {
-            if( strpos($url, $word) )
-                $wordFind = true;
-        }
-        
-        if( $wordFind )
-            return $acl->getRead() ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_DENIED;
 
         return $acl->getRead() ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_DENIED;
+    }
+
+
+
+
+
+
+
+
+
+    /**
+     * Gère les options passées en paramètre
+     *
+     * @param options Tableau d'options
+     */
+    private function setOptions($options = array())
+    {
+        if (isset($options['writeWords']) && is_array($options['writeWords']))
+            $this->_writeWords = $options['writeWords'];
+        else
+            $this->_writeWords = array();
     }
 }

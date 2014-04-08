@@ -9,19 +9,13 @@ use Nodevo\MenuBundle\Entity\Menu;
 
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\Common\Collections\Criteria;
-use Symfony\Component\HttpFoundation\Response;
-
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Manager de l'entité Menu
- * 
- * @author Emmanuel Da Fonseca<edafonseca@nodevo.com>
  */
 class MenuManager extends BaseManager
 {
     protected $_class = '\Nodevo\MenuBundle\Entity\Menu';
-    private   $_tree  = null;
 
     /**
      * Récupérer une instance de menu via son Alias
@@ -44,7 +38,7 @@ class MenuManager extends BaseManager
     {
         //refresh item order
         $items = $menu->getItems();
-        $this->_refreshItemOrder($items);   
+        $this->refreshItemOrder($items);   
         $this->save($menu);
 
         //refresh cache
@@ -74,7 +68,7 @@ class MenuManager extends BaseManager
             $itemsCollection = $menu->getItems();
 
             $tree = new MenuNode();
-            $tree = $this->_addNodeChilds( $tree, $itemsCollection, null );
+            $tree = $this->addNodeChilds( $tree, $itemsCollection, null );
 
             $cached_data = $tree;
 
@@ -85,15 +79,6 @@ class MenuManager extends BaseManager
         return $cached_data;
     }
 
-    /**
-     * Override : Récupère les données pour le grid sous forme de tableau
-     *
-     * @return array
-     */
-    public function getDatasForGrid( $condition = null )
-    {        
-        return $this->getRepository()->getDatasForGrid( $condition );
-    } 
 
 
 
@@ -108,16 +93,16 @@ class MenuManager extends BaseManager
      * @param PersistentCollection $collection [description]
      * @param Item                 $node       [description]
      */
-    private function _addNodeChilds( MenuNode $tree, PersistentCollection $collection, Item $node = null)
+    private function addNodeChilds( MenuNode $tree, PersistentCollection $collection, Item $node = null)
     {
         $collection->initialize();
 
-        $childs = $this->_getItemChildsFromCollection($collection, $node);
+        $childs = $this->getItemChildsFromCollection($collection, $node);
 
         foreach( $childs as $one ) {
             $menuNode = new MenuNode( $one );
             $tree->addChildren($menuNode);
-            $this->_addNodeChilds( $menuNode, $collection, $one );
+            $this->addNodeChilds( $menuNode, $collection, $one );
         }
 
         return $tree;
@@ -126,20 +111,21 @@ class MenuManager extends BaseManager
     /*
      * Raffraîchit l'ordre des items enfants d'un $item
      */
-    private function _refreshItemOrder( PersistentCollection $items, Item $item = null)
+    private function refreshItemOrder( PersistentCollection $items, Item $item = null)
     {
-        $childs = $this->_getItemChildsFromCollection($items, $item);
-
-        for ($i=0; $i < count($childs); $i++) { 
+        $childs   = $this->getItemChildsFromCollection($items, $item);
+        $nbChilds = count($childs);
+        
+        for ($i=0; $i < $nbChilds; $i++) { 
             $childs[$i]->setOrder($i+1);
-            $this->_refreshItemOrder($items, $childs[$i]);
+            $this->refreshItemOrder($items, $childs[$i]);
         }
     }
 
     /*
      * Récupère dans une collection d'$items tous les items qui ont pour parent $parent
      */
-    private function _getItemChildsFromCollection( PersistentCollection $items, Item $parent = null)
+    private function getItemChildsFromCollection( PersistentCollection $items, Item $parent = null)
     {
         //si le parent n'existe pas, on filtre dans la collection pour récupérer TOUS les items SANS parents
         if (null === $parent){

@@ -1,0 +1,38 @@
+<style type="text/css">
+    @media print {
+        *{width: 100% !important; border:none;background-color :#fff; font-family :Serif;font-size :12pt;}
+        #body, .panel-footer { display:none; }
+        .fancybox-wrap{top:0 !important; left:0 !important;}
+        @page{ margin: 1cm .5cm; size: portrait; }
+        #mesrequetes{width: 0}
+    }
+</style>
+
+<link rel="stylesheet" href="{{asset('bundles/hopitalnumeriquecore/css/bootstrap.min.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{asset('bundles/hopitalnumeriquecore/css/bootstrap-theme.min.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{asset('bundles/hopitalnumeriquecore/css/layout.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{asset('bundles/hopitalnumeriquerecherche/css/style.css')}}" type="text/css" />
+
+<div class="panel" id="synthese-ajax" >
+    <div class="panel-heading">
+        <h4 class="violet">{{objet.titre}} - Synthèse</h4>
+    </div>
+
+    <div class="panel-body" >
+        <div class="content">
+            {% if objet %}
+                {{objet.synthese|raw}}
+            {% else %}
+                Vous n'avez pas les droits nécessaires pour accéder à cette publication.
+            {% endif %}
+        </div>
+
+        <div class="panel-footer" >
+            <div class="row">
+                <div class="btn-toolbar pull-right">
+                    <div onclick="print();" class="btn-info btn">Imprimer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

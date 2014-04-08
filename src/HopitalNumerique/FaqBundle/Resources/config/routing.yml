@@ -1,0 +1,8 @@
+_parent:
+    resource: "@NodevoFaqBundle/Resources/config/routing.yml"
+
+hopitalnumerique_faq_homepage:
+    pattern: /faq
+    defaults: { _controller: HopitalNumeriqueFaqBundle:Faq:faq }
+    requirements:
+        _method: GET

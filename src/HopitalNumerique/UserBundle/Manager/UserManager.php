@@ -2,22 +2,26 @@
 
 namespace HopitalNumerique\UserBundle\Manager;
 
-use Nodevo\UserBundle\Manager\UserManager as BaseManager;
-use Symfony\Component\Security\Core\User\UserInterface;
-use HopitalNumerique;
+use Nodevo\AdminBundle\Manager\Manager as BaseManager;
 
 class UserManager extends BaseManager
 {
     protected $_class = '\HopitalNumerique\UserBundle\Entity\User';
     protected $_managerReponse;
+    protected $_managerQuestionnaire;
+    protected $_managerRefusCandidature;    
+    protected $_options;
 
-    public function __construct($managerUser, $managerReponse)
+    public function __construct($managerUser, $managerReponse, $managerQuestionnaire, $managerRefusCandidature)
     {
         parent::__construct($managerUser);
         //Récupération des managers Réponses et Questionnaire
-        $this->_managerReponse = $managerReponse;
+        $this->_managerReponse       = $managerReponse;
+        $this->_managerQuestionnaire = $managerQuestionnaire;
+        $this->_managerRefusCandidature = $managerRefusCandidature;
+        $this->_options              = array();
     }
-    
+
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
      *
@@ -26,12 +30,12 @@ class UserManager extends BaseManager
     public function getDatasForGrid( $condition = null )
     {
         $users = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
-        
-        $idExpert      = HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('expert');
-        $idAmbassadeur = HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur');
+
+        $idExpert      = $this->_managerQuestionnaire->getQuestionnaireId('expert');
+        $idAmbassadeur = $this->_managerQuestionnaire->getQuestionnaireId('ambassadeur');
         
         //Récupération des questionnaires et users
-        $questionnaireByUser = $this->_managerReponse->reponseExiste($idExpert, $idAmbassadeur);        
+        $questionnaireByUser = $this->_managerReponse->reponseExiste($idExpert, $idAmbassadeur);
         
         $aujourdHui = new \DateTime('now');
         
@@ -39,35 +43,161 @@ class UserManager extends BaseManager
         $interval    = new \DateInterval('P1M');
         $interval->m = -1;
         
+        $refusCandidature = $this->_managerRefusCandidature->getRefusCandidatureByQuestionnaire();
+        
         //Pour chaque utilisateur, set la contractualisation à jour
         foreach ($users as $key => $user)
         {              
             //Récupération des questionnaires rempli par l'utilisateur courant
             $questionnairesByUser = key_exists($user['id'], $questionnaireByUser) ? $questionnaireByUser[$user['id']] : array();
             
-            //Vérification de réponses pour le questionnaire expert
-            $users[$key]['expert'] = in_array($idExpert, $questionnairesByUser);
+            //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
+            $users[$key]['expert'] = (in_array($idExpert, $questionnairesByUser) 
+                                        && !in_array('ROLE_EXPERT_6', $user["roles"]) 
+                                        && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idExpert, $refusCandidature));
             
-            //Vérification de réponses pour le questionnaire ambassadeur
-            $users[$key]['ambassadeur'] = in_array($idAmbassadeur, $questionnairesByUser);           
+            //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
+            $users[$key]['ambassadeur'] = (in_array($idAmbassadeur, $questionnairesByUser) 
+                                        && !in_array('ROLE_AMBASSADEUR_7', $user["roles"]) 
+                                        && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idAmbassadeur, $refusCandidature));
             
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);
-            $users[$key]['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui ? true : false) : false;            
+            $users[$key]['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui) : false;
         }
         
         return $users;
     }
 
     /**
-     * Retourne la liste des établissements autres
+     * Modifie l'état de tous les users
      *
-     * @param stdClass $condition condition
+     * @param array     $users Liste des utilisateurs
+     * @param Reference $ref   RefStatut à mettre
+     *
+     * @return empty
+     */
+    public function toogleState( $users, $ref )
+    {
+        foreach($users as $user) {
+            $user->setEtat( $ref );
+            $user->setEnabled( ($ref->getId() == 3 ? 1 : 0) );
+            $this->_em->persist( $user );
+        }
+
+        //save
+        $this->_em->flush();
+    }
+
+    /**
+     * On cherche a savoir si un user existe avec le role et la région de l'user modifié
+     *
+     * @param User $user L'utilisateur modifié
+     *
+     * @return boolean
+     */
+    public function userExistForRoleArs( $user )
+    {
+        return $this->getRepository()->userExistForRoleArs( $user )->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * On cherche a savoir si un user existe avec le role et la région de l'user modifié
+     *
+     * @param User $user L'utilisateur modifié
+     *
+     * @return boolean
+     */
+    public function userExistForRoleDirection( $user )
+    {
+        return $this->getRepository()->userExistForRoleDirection( $user )->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * Retourne la liste des ambassadeurs de la région et du domaine
+     *
+     * @param Reference $region  La région filtrée
+     * @param integer   $domaine Le domaine fonctionnel
      *
      * @return array
      */
-    public function getDatasForGridEtablissement( $condition = null )
+    public function getAmbassadeursByRegionAndDomaine( $region, $domaine = null )
     {
-        return $this->getRepository()->getDatasForGridEtablissement()->getQuery()->getResult();
+        return $this->getRepository()->getAmbassadeursByRegionAndDomaine( $region, $domaine )->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne la liste des ambassadeurs de la région et de la publication
+     *
+     * @param Reference $region La région filtrée
+     * @param Objet     $objet  La publication
+     *
+     * @return array
+     */
+    public function getAmbassadeursByRegionAndProduction( $region, $objet )
+    {
+        return $this->getRepository()->getAmbassadeursByRegionAndProduction( $region, $objet )->getQuery()->getResult();
+    }
+    public function getUsersGroupeEtablissement($criteres = array())
+    {
+        return $this->getRepository()->getUsersGroupeEtablissement($criteres)->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne la liste des utilisateurs possédant le role demandé
+     *
+     * @param string $role Le rôle demandé
+     *
+     * @return array
+     */
+    public function findUsersByRole( $role )
+    {
+        return $this->getRepository()->findUsersByRole($role)->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne le premier utilisateur correspondant au role et à la région demandés
+     *
+     * @param string $role      Le rôle demandé
+     * @param int    $idRegion  Region demandée
+     *
+     * @return array
+     */
+    public function findUsersByRoleAndRegion( $idregion, $role )
+    {
+        return $this->getRepository()->findUsersByRoleAndRegion($idregion, $role)->getQuery()->getOneOrNullResult();
+    }
+
+
+    
+    /**
+     * Retourne un unique CMSI.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User|null Un CMSI si trouvé, sinon NIL
+     */
+    public function getCmsi(array $criteres)
+    {
+        return $this->getRepository()->getCmsi($criteres);
+    }
+    /**
+     * Retourne un unique directeur.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User|null Un directeur si trouvé, sinon NIL
+     */
+    public function getDirecteur(array $criteres)
+    {
+        return $this->getRepository()->getDirecteur($criteres);
+    }
+    /**
+     * Retourne une liste d'ambassadeurs.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des ambassadeurs
+     */
+    public function getAmbassadeurs(array $criteres)
+    {
+        return $this->getRepository()->getAmbassadeurs($criteres);
     }
 }

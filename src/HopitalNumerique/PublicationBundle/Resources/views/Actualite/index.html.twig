@@ -1,0 +1,45 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Actualites{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-publication-actualite-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquepublication/css/actualite.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div id="actualites">
+        <div class="col-md-3">
+            <p class="titre">Hôpital <br />Numérique</p>
+            {{ knp_menu_render('menu-sub-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriquePublicationBundle::menu.html.twig'}) }}
+
+            {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites")) }}
+        </div>
+        <div class="col-md-9" >
+            <div class="col-md-12">
+                {% for actu in actualites %}
+                    <div class="actu">
+                        {% if actu.image %}
+                            <img src="{{actu.image}}" alt="vignette" class="pull-left actu-image" />
+                        {% endif %}
+                        <h4>{{actu.types}}</h4>
+                        <h3>{{actu.titre}}</h3>
+                        <p>
+                            {{actu.resume}}
+                            <br />
+                            <a class="readmore" href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">
+                                <i class="common-sprite common-sprite-arrow"></i> Lire la suite
+                            </a>
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endblock %}

@@ -21,6 +21,7 @@ class ObjetGrid extends Grid implements IGrid
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('Aucun Objet à afficher.');
         $this->showIDColumn( true );
+        $this->setFilterIdColumn( true );
     }
 
     /**
@@ -29,24 +30,32 @@ class ObjetGrid extends Grid implements IGrid
     public function setColumns()
     {
         $this->addColonne( new Column\TextColumn('titre', 'Titre') );
-        $this->addColonne( new Column\TextColumn('types','Types') );
+        $this->addColonne( new Column\TextColumn('types','Catégories') );
         
+        $isArticleColumn = new Column\BooleanColumn('isArticle', 'Article');
+        $isArticleColumn->setSize( 90 );
+        $this->addColonne( $isArticleColumn );
+
         $infraColumn = new Column\BooleanColumn('isInfraDoc', 'Infra-doc');
-        $infraColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
-        $infraColumn->setSize( 80 );
+        $infraColumn->setSize( 90 );
         $this->addColonne( $infraColumn );
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize( 80 );
+        $etatColonne->setFilterType('select');
+        $etatColonne->setSelectFrom('source');
+        $etatColonne->setOperatorsVisible( false );
         $this->addColonne( $etatColonne );
 
         $this->addColonne( new Column\DateColumn('dateCreation', 'Date de création') );
 
         $dateColonne = new Column\DateColumn('dateModification', 'Date de dernière mise à jour');
-        $dateColonne->setSize( 210 );
+        $dateColonne->setSize( 180 );
         $this->addColonne( $dateColonne );
         
         $this->addColonne( new Column\LockedColumn() );
+
+        /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('lockedBy') );
     }
 
@@ -57,6 +66,17 @@ class ObjetGrid extends Grid implements IGrid
     {
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_objet_objet_show' ) );
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_objet_objet_edit' ) );
+
+        //Goto Refs
+        $referencesButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_objet_objet_edit');
+        $referencesButton->setRouteParameters( array('id', 'infra'=>0, 'toRef'=>1) );
+        $referencesButton->setAttributes( array('class'=>'btn btn-primary fa fa-cog','title' => 'Accès direct aux références') );
+        $referencesButton->manipulateRender(function($action, $row) {
+            return !$row->getField('isArticle') ? $action : null;
+        });
+        $this->addActionButton( $referencesButton );
+
+        //Delete
         $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_objet_objet_delete' ) );
 
         //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée

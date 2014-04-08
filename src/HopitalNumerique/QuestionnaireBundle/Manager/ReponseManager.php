@@ -16,9 +16,9 @@ class ReponseManager extends BaseManager
      *
      * @return array
      */
-    public function reponsesByQuestionnaireByUser( $idQuestionnaire, $idUser, $orderByQuestion = false )
+    public function reponsesByQuestionnaireByUser( $idQuestionnaire, $idUser, $orderByQuestion = false, $paramId = null )
     {
-        $reponses = $this->getRepository()->reponsesByQuestionnaireByUser( $idQuestionnaire , $idUser )->getResult();
+        $reponses = $this->getRepository()->reponsesByQuestionnaireByUser( $idQuestionnaire , $idUser, $paramId )->getResult();
         
         //Si on le spécifie, $reponses prendra en clé l'id de la question
         if($orderByQuestion)
@@ -46,6 +46,9 @@ class ReponseManager extends BaseManager
     
     /**
      * Récupère les réponses pour l'utilisateur en fonction du questionnaire passés en param
+     * 
+     * @param int $idExpert      Identifiant du questionnaire expert
+     * @param int $idAmbassadeur Identifiant du questionnaire ambassadeur
      *
      * @return array Tableau sous la forme array(utilisateur => array(questionnaireId))
      */
@@ -81,11 +84,51 @@ class ReponseManager extends BaseManager
     {
         $reponses = $this->getRepository()->reponsesByQuestionnaireByUser( $idQuestionnaire , $idUser )->getResult();
         
-        $this->delete($reponses);
+        foreach($reponses as $key => $reponse)
+        {
+            if('file' === $reponse->getQuestion()->getTypeQuestion()->getLibelle())
+            {
+                $file = $this->getUploadRootDir($reponse->getQuestion()->getQuestionnaire()->getNomMinifie()) . '/' . $reponse->getReponse();
+                
+                if (file_exists($file) )
+                    unlink($file);
+            }
+        }
         
-//         foreach ($reponses as $reponse)
-//         {
-//             $this->delete($reponses);
-//         }
+        $this->delete($reponses);
+    }
+    
+    /**
+     * Téléchargement des fichiers attaché au questionnaire expert.
+     *
+     * @param int $id Id de la réponse du fichier à télécharger
+     */
+    public function download( $id )
+    {
+        //Récupération de l'entité en fonction du paramètre
+        $reponse = $this->findOneBy( array( 'id' => $id) );
+        
+        $options = array(
+                'serve_filename' => $reponse->getReponse(),
+                'absolute_path' => false,
+                'inline' => false,
+        );
+        
+        return $options;
+    }
+    
+    /**
+     * Retourne la path de l'endroit où on doit upload un fichier
+     *
+     * @param string $questionnaire
+     * @return string Chemin root du fichier à uploader
+     */
+    public function getUploadRootDir( $labelQuestionnaire )
+    {
+        if(!file_exists(__ROOT_DIRECTORY__.'/files/'.$labelQuestionnaire))
+            return null;
+    
+        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
+        return __ROOT_DIRECTORY__.'/files/'.$labelQuestionnaire;
     }
 }

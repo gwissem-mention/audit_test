@@ -1,0 +1,62 @@
+#Recherche
+hopital_numerique_recherche_homepage:
+    pattern:  /recherche-par-referencement/
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index}
+
+hopital_numerique_recherche_homepage_requete:
+    pattern:  /recherche-par-referencement/requete/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index, id:null}
+    requirements: 
+        id: \d+
+
+hopital_numerique_recherche_getresults:
+    pattern:  /recherche-par-referencement/get-results
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:getResults }
+
+#Requêtes de recherche
+hopital_numerique_requete_detail:
+    pattern:  /requetes/detail/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:detail }
+
+hopital_numerique_requete_save:
+    pattern:  /requetes/save
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:save }
+
+hopital_numerique_requete_delete:
+    pattern:  /requetes/delete/{id}.{_format}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:delete, id:1, _format:json }
+    requirements: 
+        id: \d+
+
+hopital_numerique_requete_edit:
+    pattern:  /requetes/edit/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:edit, id:1}
+    requirements: 
+        id: \d+
+
+hopital_numerique_requete_toggle:
+    pattern:  /requetes/toggle/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:toggle, id:1}
+    requirements: 
+        id: \d+
+
+hopital_numerique_requete_mail:
+    pattern:  /requetes/mail/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:mail, id:1}
+    requirements: 
+        id: \d+
+
+hopital_numerique_requete_mail_notified:
+    pattern:  /requetes/getNotified/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:getNotified }
+
+hopital_numerique_requete_consultation_delete:
+    pattern:  /requetes/consultation/delete/{id}.{_format}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Consultation:delete, id:1, _format:json }
+    requirements: 
+        id: \d+
+
+#CRON
+hopital_numerique_cron_requetes:
+    pattern:  /cron-requetes/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Cron:requetes}

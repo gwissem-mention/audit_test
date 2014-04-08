@@ -40,26 +40,29 @@
                 <div class="options">
                     <ul class="nav nav-tabs">
                         <li>
-						    <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Données de caractérisation</a>
+						    <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Caractérisation</a>
 						</li>
                         {% if user.id is not null and (options.expert or options.ambassadeur) %}
 							<li class="active">
-							    <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Données de contractualisation</a>
+							    <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Contractualisation</a>
 							</li>
 						{% endif %}
                         {% if user.id is not null and (options.expert or options.expert_form) %}
 							<li>
-							    <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature pour devenir expert</a>
+							    <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature expert</a>
 							</li>
 						{% endif %}
                         {% if user.id is not null and (options.ambassadeur or options.ambassadeur_form) %}
 							<li>
-							    <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature pour devenir ambassadeur</a>
+							    <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature ambassadeur</a>
 							</li>
 						{% endif %}
                         {% if user.id is not null and options.ambassadeur %}
                             <li>
-                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maitrisés</a>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maîtrisées</a>
+                            </li>
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Domaines maîtrisés</a>
                             </li>
                         {% endif %}
                     </ul>
@@ -70,8 +73,8 @@
 	            <div class="sous_options">
 	                <div class="btn-toolbar">	                    
 					    <a class="btn btn-default" href="{{ path('hopitalnumerique_user_contractualisation', { 'id': contractualisation.user.id }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
-					    <div onclick="sauvegardeFormulaire();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
-					    <div onclick="$('#do').val('save-close');sauvegardeFormulaire();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+					    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+					    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
 					    {% if contractualisation.id %}
 					        <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_user_contractualisation_delete', { 'id': contractualisation.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
 					    {% endif %}
@@ -93,7 +96,7 @@
                             </div>
 
                             {% if contractualisation.getAbsolutePath() is not null %}
-                                <span class="uploadedFile">{{contractualisation.path}}</span>
+                                <a class="uploadedFile" href="{{path('hopitalnumerique_user_contractualisation_dowload', {'id': contractualisation.id })}}">{{contractualisation.path}}</a>
                                 <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" ><i class="fa fa-trash-o"></i></div>
                             {% endif %}
                         </div>
@@ -111,6 +114,7 @@
                         {% endif %}
                     {% endif %}
                     <input type="hidden" id="id-contractualisation" value="{% if contractualisation is defined and contractualisation is not null %}{{ contractualisation.id }}{% endif %}" />
+                    <input type="hidden" id="hopitalnumerique_user_contractualisation_typeAutres" value="{{ type_autres }}" />
                 {{ form_end(form) }}
             </div>
         </div>

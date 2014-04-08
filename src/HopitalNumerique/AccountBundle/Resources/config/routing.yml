@@ -1,0 +1,27 @@
+hopital_numerique_account_homepage:
+    pattern:  /
+    defaults: { _controller: HopitalNumeriqueAccountBundle:Default:index }
+
+# Connexion
+account_login:
+    pattern:  /connexion
+    defaults: { _controller: FOSUserBundle:Security:login }
+
+account_login_check:
+    pattern:  /login_check
+    defaults: { _controller: FOSUserBundle:Security:check }
+
+account_logout:
+    pattern:  /deconnexion
+    defaults: { _controller: FOSUserBundle:Security:logout }
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /mot-de-passe-perdu
+
+# Inscription
+
+#Requetes de recherche
+hopital_numerique_requete_homepage:
+    pattern:  /requetes/{indexVue}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:index, indexVue:true }

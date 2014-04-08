@@ -11,25 +11,35 @@
                 <div class="col-md-1">
                     <label class="control-label">Titre <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-5">
                     {{ form_widget(form.titre) }}
                 </div>
                 <div class="col-md-1">
                     <label class="control-label">Alias</label>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-5">
                     {{ form_widget(form.alias) }}
                 </div>
-                <div class="col-md-8 col-md-offset-1 errorTitre">
+                <div class="col-md-5 col-md-offset-1 errorTitre">
                     <div class="help-block"><p class="text-danger"></p></div>
                 </div>
-                <div class="col-md-2 col-md-offset-1 errorAlias">
+                <div class="col-md-5 col-md-offset-1 errorAlias">
                     <div class="help-block"><p class="text-danger"></p></div>
                 </div>
             </div>
             
             {{ form_row(form.contenu) }}
 
+            <div class="form-group">
+                <label class="col-md-11" >Notifier la mise à jour ?</label>
+                <div class="col-md-1">
+                    <div class="pull-right toggle toggle-success"></div>
+                </div>
+                <div class="col-md-10 hide">
+                    {{ form_widget(form.modified) }}
+                </div>
+            </div>
+    
             <div class="panel-footer">
                 <div class="row">
                     <div class="btn-toolbar pull-right">
@@ -47,11 +57,54 @@
 </div>
 
 <script>
-    tinymce.init({
-        selector  : "textarea",
-        theme     : "modern",
-        theme_url : '/bundles/nodevoadmin/plugins/tinymce/themes/modern/theme.min.js',
-        skin_url  : '/bundles/nodevoadmin/plugins/tinymce/skins/lightgray',
-        height    : 260
+    $(document).ready(function() {
+        //Toggle notif mise à jour
+        $('.toggle').toggles( { on : false, text : { on : 'OUI', off : 'NON' } } ).on('toggle', function (e, active) {
+            if (active) {
+                $('#hopitalnumerique_objet_contenu_modified').val(1);
+            } else {
+                $('#hopitalnumerique_objet_contenu_modified').val(0);
+            }
+        });
+        tinymce.PluginManager.load('table', '/bundles/nodevoadmin/plugins/tinymce/plugins/table/plugin.min.js');
+        tinymce.PluginManager.load('code', '/bundles/nodevoadmin/plugins/tinymce/plugins/code/plugin.min.js');
+        tinymce.PluginManager.load('pagebreak', '/bundles/nodevoadmin/plugins/tinymce/plugins/pagebreak/plugin.min.js');
+        tinymce.PluginManager.load('importcss', '/bundles/nodevoadmin/plugins/tinymce/plugins/importcss/plugin.min.js');
+        tinymce.PluginManager.load('textcolor', '/bundles/hopitalnumeriqueobjet/js/ObjetTextColor/plugin.min.js');
+        tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/ObjetAddPublication2/plugin.min.js');
+        tinymce.PluginManager.load('image', '/bundles/nodevoadmin/plugins/tinymce/plugins/image/plugin.min.js');
+        tinymce.PluginManager.load('link', '/bundles/nodevoadmin/plugins/tinymce/plugins/link/plugin.min.js');
+        NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
+        
+        tinyMCE.init({
+            selector     : "textarea",
+            theme        : "modern",
+            theme_url    : '/bundles/nodevoadmin/plugins/tinymce/themes/modern/theme.min.js',
+            skin_url     : '/bundles/nodevoadmin/plugins/tinymce/skins/lightgray',
+            plugins      : 'moxiemanager image table code textcolor pagebreak importcss link publication',
+            height       : 210,
+            menubar      : false,
+            content_css  : '/bundles/hopitalnumeriqueobjet/css/wysiwyg.css',
+            toolbar1     : "code | undo redo cut copy paste | pagebreak | link | publication | insertfile image ",
+            toolbar2     : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
+            style_formats: [
+                {title: 'Titres', items: [
+                    {title: 'Titre 2', block: 'h2'},
+                    {title: 'Titre 3', block: 'h3'},
+                    {title: 'Titre 4', block: 'h4'},
+                    {title: 'Titre 5', block: 'h5'},
+                    {title: 'Titre 6', block: 'h6'}
+                ]},
+                {title: 'Blocs', items: [
+                    {title: 'Paragraphe', block: 'p'}
+                ]}
+            ],
+            importcss_append: true,
+            importcss_groups: [
+                {title: 'Styles personnalisés'}
+            ],
+            relative_urls:false,
+            urlPublication : "/admin/objet/getObjets"
+        });
     });
 </script>

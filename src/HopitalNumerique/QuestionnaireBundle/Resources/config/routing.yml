@@ -1,14 +1,33 @@
+#Questionnaire
+
+# Front-office
+hopitalnumerique_questionnaire_edit_front:
+    pattern:  /compte-hn/questionnaire/edit/{user}/{questionnaire}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", user: 1, questionnaire: 1 }
+    requirements:
+        user: \d+  
+        questionnaire: \d+
+
+# Back-office
 hopitalnumerique_questionnaire_edit:
-    pattern:  /questionnaire/edit/{user}/{questionnaire}
+    pattern:  /admin/questionnaire/edit/{user}/{questionnaire}
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", user: 1, questionnaire: 1 }
     requirements:
         user: \d+  
         questionnaire: \d+
 
-hopitalnumerique_questionnaire_delete_all:
-    pattern: /questionnaire/deleteAll
-    defaults: { _controller: HopitalNumeriqueQuestionnaireBundle:Questionnaire:deleteAll }
+#Question
 
-hopitalnumerique_questionnaire_download:
-    pattern: /questionnaire/download
-    defaults: { _controller: HopitalNumeriqueQuestionnaireBundle:Questionnaire:download }
+#Réponse
+hopitalnumerique_reponse_download:
+    pattern: /admin/reponse/download/{reponse}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Reponse:dowloadReponse" }
+    requirements:
+        reponse: \d+ 
+
+hopitalnumerique_reponse_deleteAll:
+    pattern: /admin/reponse/deleteAll/{user}/{questionnaire}.{_format}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Reponse:deleteAll", _format: json}
+    requirements:
+        user: \d+ 
+        questionnaire: \d+

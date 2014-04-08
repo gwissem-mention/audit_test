@@ -18,6 +18,8 @@ class ObjetType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $datas = $options['data'] ;
+        
         $builder
             ->add('titre', 'text', array(
                 'max_length' => $this->_constraints['titre']['maxlength'],
@@ -44,27 +46,38 @@ class ObjetType extends AbstractType
                               ->orderBy('ref.order', 'ASC');
                 }
             ))
-            ->add('roles', 'genemu_jqueryselect2_entity', array(
+            ->add('roles', 'entity', array(
                 'class'    => 'NodevoRoleBundle:Role',
                 'property' => 'name',
                 'multiple' => true,
                 'required' => false,
                 'label'    => 'Interdire l\'accès au groupes',
-                'attr'     => array( 'placeholder' => 'Selectionnez le ou les rôles qui auront accès à cet objet' )
+                'attr'     => array( 'placeholder' => 'Selectionnez le ou les rôles qui auront accès à cette publication' )
             ))
-            ->add('types', 'entity', array(
+            ->add('types', 'genemu_jqueryselect2_entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'      => 'libelle',
                 'required'      => true,
                 'multiple'      => true,
-                'label'         => 'Type d\'objet',
+                'label'         => 'Catégorie',
                 'group_by'      => 'parentName',
-                'attr'          => array( 'placeholder' => 'Selectionnez le ou les types de cet objet' ),
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                              ->andWhere('ref.code = :etat', 'ref.id != 175', 'ref.id != 176', 'ref.id != 179')
-                              ->setParameter('etat', 'TYPE_OBJET')
-                              ->orderBy('ref.parent, ref.order', 'ASC');
+                'attr'          => array( 'placeholder' => 'Selectionnez le ou les catégories de cette publication' ),
+                'query_builder' => function(EntityRepository $er) use ($datas) {
+                    $qb = $er->createQueryBuilder('ref');
+
+                    //cas objet existe + is ARTICLE
+                    if( $datas->isArticle() ){
+                        $qb->andWhere('ref.id != 188','ref.code = :article')
+                           ->setParameter('article', 'CATEGORIE_ARTICLE');
+                    //cas objet existe + is OBJET
+                    }elseif( !$datas->isArticle() ) {
+                        $qb->andWhere('ref.id != 175','ref.code = :objet')
+                           ->setParameter('objet', 'CATEGORIE_OBJET');
+                    }
+
+                    $qb->orderBy('ref.parent, ref.order', 'ASC');
+
+                    return $qb;
                 }
             ))
             ->add('synthese', 'textarea', array(
@@ -78,9 +91,19 @@ class ObjetType extends AbstractType
             ))
             ->add('file', 'file', array(
                 'required' => false, 
-                'label'    => 'Fichier objet'
+                'label'    => 'Fichier 1'
             ))
             ->add('path', 'hidden')
+            ->add('file2', 'file', array(
+                'required' => false, 
+                'label'    => 'Fichier 2'
+            ))
+            ->add('path2', 'hidden')
+            ->add('vignette', 'text', array(
+                'required' => false,
+                'label'    => 'Vignette',
+                'attr'     => array('readonly'=>'readonly')
+            ))
             ->add('references', 'entity', array(
                 'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
@@ -90,45 +113,72 @@ class ObjetType extends AbstractType
             ))
             ->add('ambassadeurs', 'entity', array(
                 'class'    => 'HopitalNumeriqueUserBundle:User',
-                'property' => 'prenomNom',
+                'property' => 'nomPrenom',
                 'required' => false,
                 'multiple' => true,
                 'label'    => 'Ambassadeurs concernés',
-                'attr'     => array( 'placeholder' => 'Selectionnez le ou les ambassadeurs qui sont concernés par cet objet' ),
+                'attr'     => array( 'placeholder' => 'Selectionnez le ou les ambassadeurs qui sont concernés par cette publication' ),
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('user')
-                              ->leftJoin('user.roles', 'role')
-                              ->where('role.role = :ambassadeur')
-                              ->setParameter('ambassadeur','ROLE_AMBASSADEUR_7');
+                              ->where('user.roles LIKE :ambassadeur')
+                              ->setParameter('ambassadeur','%ROLE_AMBASSADEUR_7%')
+                              ->orderBy('user.nom');
                 }
             ))
             ->add('commentaires', 'checkbox', array(
-                'required' => false,
-                'label'    => 'Commentaires autorisés'
+                'required'   => false,
+                'label'      => 'Commentaires autorisés',
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                ),
+                'attr'       => array( 'class'=> 'checkbox' )
             ))
             ->add('notes', 'checkbox', array(
-                'required' => false,
-                'label'    => 'Notes autorisés'
+                'required'   => false,
+                'label'      => 'Notes autorisés',
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                ),
+                'attr'       => array( 'class'=> 'checkbox' )
             ))
             ->add('dateCreation', 'genemu_jquerydate', array(
-                'required' => true, 
-                'label'    => 'Date de création',
-                'widget'   => 'single_text'
+                'required'   => true, 
+                'label'      => 'Date de création',
+                'widget'     => 'single_text',
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                )
             ))
             ->add('dateDebutPublication', 'genemu_jquerydate', array(
-                'required' => false, 
-                'label'    => 'Début de publication',
-                'widget'   => 'single_text'
+                'required'   => false, 
+                'label'      => 'Début de publication',
+                'widget'     => 'single_text',
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                )
             ))
             ->add('dateFinPublication', 'genemu_jquerydate', array(
-                'required' => false, 
-                'label'    => 'Fin de publication',
-                'widget'   => 'single_text'
+                'required'   => false, 
+                'label'      => 'Fin de publication',
+                'widget'     => 'single_text',
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                )
             ))
-            ->add('dateModification', 'genemu_jquerydate', array(
-                'required' => false, 
-                'label'    => 'Date de modification',
-                'widget'   => 'single_text'
+            ->add('dateModification', 'date', array(
+                'required'   => false, 
+                'widget'     => 'single_text',
+                'label'      => 'Date de dernière modification notifiée',
+                'attr'       => array('readonly' => 'readonly'),
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                )
+            ))
+            ->add('modified', 'hidden', array(
+                'mapped'   => false
+            ))
+            ->add('article', 'hidden', array(
+                
             ));
     }
 

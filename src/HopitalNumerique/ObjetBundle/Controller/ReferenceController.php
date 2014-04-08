@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -23,6 +22,22 @@ class ReferenceController extends Controller
         return $this->render('HopitalNumeriqueObjetBundle:Reference:manage.html.twig', array(
             'references' => $references,
             'objet'      => true,
+            'contenu'    => 'null',
+            'titre'      => $objet->getTitre()
+        ));
+    }
+    
+    public function objetOwnAction( $id )
+    {
+        //Récupération de l'objet passée en paramètre
+        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
+
+        //get references and selected references as One Array
+        $references = $this->get('hopitalnumerique_objet.manager.objet')->getReferencesOwn($objet);
+
+        return $this->render('HopitalNumeriqueObjetBundle:Reference:manage-own.html.twig', array(
+            'references' => $references,
+            'objet'      => true,
             'contenu'    => 'null'
         ));
     }
@@ -39,13 +54,25 @@ class ReferenceController extends Controller
         return $this->render('HopitalNumeriqueObjetBundle:Reference:manage.html.twig', array(
             'references' => $references,
             'objet'      => 'false',
-            'contenu'    => $id
+            'contenu'    => $id,
+            'titre'      => $contenu->getTitre()
         ));
     }
 
+    public function contenuOwnAction( $id )
+    {
+        //Récupération du contenu passée en paramètre
+        $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $id) );
 
-
-
+        //get references and selected references as One Array
+        $references = $this->get('hopitalnumerique_objet.manager.contenu')->getReferencesOwn($contenu);
+        
+        return $this->render('HopitalNumeriqueObjetBundle:Reference:manage-own.html.twig', array(
+            'references' => $references,
+            'objet'      => 'false',
+            'contenu'    => $id
+        ));
+    }
 
     public function saveObjetAction( $id )
     {

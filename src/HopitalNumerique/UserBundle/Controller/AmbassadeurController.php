@@ -2,11 +2,7 @@
 namespace HopitalNumerique\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Nodevo\ToolsBundle\Tools\Chaine;
-use Nodevo\RoleBundle\Entity\Role;
-use HopitalNumerique\QuestionnaireBundle\Manager;
 use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 
 /**
@@ -17,24 +13,78 @@ use HopitalNumerique\UserBundle\Entity\User as HopiUser;
  */
 class AmbassadeurController extends Controller
 {
+    //---- Front Office ------
     /**
      * Affichage du formulaire d'utilisateur
      * 
      * @param integer $id Identifiant de l'utilisateur
      */
-    public function editAction( HopiUser $user )
-    {        
+    public function editFrontAction( )
+    {
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+        
         //Récupération du questionnaire de l'expert
-        $idQuestionnaireExpert = Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur');
-        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
+        $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
+        $questionnaire              = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
+        
+        //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
+        $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
 
-        return $this->render('HopitalNumeriqueUserBundle:Expert:edit.html.twig',array(
-                'questionnaire' => $questionnaire,
-                'user'          => $user,
-                'options' => $this->_gestionAffichageOnglet($user)
+        $themeQuestionnaire = empty($reponses) ? 'vertical' : 'vertical_readonly';
+        //readonly si il y a des réponses dans le questionnaire ou que le role courant de l'utilisateur est ambassadeur
+        $readOnly = (in_array('ROLE_AMBASSADEUR_7', $user->getRoles()) || !empty($reponses));
+
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur/Front:edit.html.twig',array(
+            'questionnaire'      => $questionnaire,
+            'user'               => $user,
+            'optionRenderForm'   => array(
+                'readOnly'           => $readOnly,
+                'envoieDeMail'       => true,
+                'themeQuestionnaire' => $themeQuestionnaire,
+                'routeRedirect'      => json_encode(array(
+                    'quit' => array(
+                        'route'     => 'hopitalnumerique_user_ambassadeur_front_edit',
+                        'arguments' => array()
+                    )
+                ))
+            )
         ));
     }
-
+    
+    //---- Back Office ------
+    /**
+     * Affichage du formulaire d'utilisateur
+     *
+     * @param integer $id Identifiant de l'utilisateur
+     */
+     public function editAction( HopiUser $user )
+     {
+        //Récupération du questionnaire de l'expert
+        $idQuestionnaireExpert = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
+        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
+    
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:edit.html.twig',array(
+            'questionnaire' => $questionnaire,
+                'user'             => $user,
+                'options'          => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
+                'optionRenderForm' => array(
+                    'envoieDeMail'  => false,
+                    'routeRedirect' => json_encode(array(
+                        'quit' => array(
+                            'route'     => 'hopital_numerique_user_homepage',
+                            'arguments' => array()
+                        ),
+                        'sauvegarde' => array(
+                            'route'     => 'hopitalnumerique_user_ambassadeur_edit',
+                            'arguments' => array(
+                                'id' => $user->getId()
+                            )
+                        )
+                    ))
+                )
+        ));
+    }
 
     /**
      * Affichage de la fiche des réponses au questionnaire ambassadeur d'un utilisateur
@@ -44,7 +94,7 @@ class AmbassadeurController extends Controller
     public function showAction( $idUser )
     {
         //Récupération du questionnaire de l'expert
-        $idQuestionnaireAmbassadeur = Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur');
+        $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
     
         //Récupération de l'utilisateur passé en param
         $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $idQuestionnaireAmbassadeur , $idUser );
@@ -61,7 +111,7 @@ class AmbassadeurController extends Controller
      * @param integer $idUser          ID de l'utilisateur
      */
     public function listeObjetsAction( $idUser )
-    {    
+    {
         //Récupération de l'utilisateur passé en param
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByAmbassadeur($idUser);
     
@@ -88,23 +138,8 @@ class AmbassadeurController extends Controller
 
         return $grid->render('HopitalNumeriqueUserBundle:Ambassadeur:objets.html.twig',array(
             'user'    => $user,
-            'options' => $this->_gestionAffichageOnglet($user)
+            'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user)
         ));
-    }
-
-    /**
-     * Suppression de toutes les réponses de l'utilisateur pour le questionnaire passé en param
-     *
-     * @param int $idUser
-     * @param int $idQuestionnaire
-     */
-    public function deleteAllAction( $idUser, $idQuestionnaire )
-    {
-        $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAll( $idUser, $idQuestionnaire);
-        
-        $this->get('session')->getFlashBag()->add( 'success' ,  'Le questionnaire d\'ambassadeur a été vidé.' );
-
-        return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_user_ambassadeur_edit', array('id' => $idUser)).'"}', 200);
     }
 
     /**
@@ -133,7 +168,8 @@ class AmbassadeurController extends Controller
      */
     public function addObjetAction( $id )
     {
-        $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsNonMaitrises( $id );
+        $types  = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code'=>'CATEGORIE_OBJET'));
+        $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsNonMaitrises( $id, $types );
         
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:add_objet.html.twig', array(
             'objets'      => $objets,
@@ -163,67 +199,142 @@ class AmbassadeurController extends Controller
         $this->get('session')->getFlashBag()->add( 'success' ,  'Les productions ont été liées à l\'ambassadeur.' );
 
         return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_user_ambassadeur_objets', array('id' => $id)).'"}', 200);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }  
 
     /**
-     * Fonction permettant d'envoyer un tableau d'option à la vue pour vérifier le role de l'utilisateur
+     * Validation de la candidature de l'utilisateur pour le questionnaire
      *
-     * @param User $user
-     * @return array
+     * @param int $user
      */
-    private function _gestionAffichageOnglet( $user )
+    public function validationCandidatureAction( HopiUser $user )
     {
-        $roles = $user->getRoles();
-        $options = array(
-                'ambassadeur' => false,
-                'expert'      => false
-        );
-
-        //Récupération du questionnaire de l'expert
-        $idQuestionnaireExpert = Manager\QuestionnaireManager::_getQuestionnaireId('expert');
+        $routeRedirection = $this->get('request')->request->get('routeRedirection');
+        $routeRedirection = json_decode($routeRedirection, true);
+        
         //Récupération du questionnaire de l'ambassadeur
-        $idQuestionnaireAmbassadeur = Manager\QuestionnaireManager::_getQuestionnaireId('ambassadeur');
-        
-        //Récupération des réponses du questionnaire expert de l'utilisateur courant
-        $reponsesExpert      = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireExpert, $user->getId());
-        //Récupération des réponses du questionnaire ambassadeur de l'utilisateur courant
-        $reponsesAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireAmbassadeur, $user->getId());
+        $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
+        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
 
-        //Si il y a des réponses correspondant au questionnaire du groupe alors on donne l'accès
-        $options['expert_form']      = !empty($reponsesExpert);
-        $options['ambassadeur_form'] = !empty($reponsesAmbassadeur);
+        //Changement du rôle à ambassadeur de l'utilisateur
+        $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_AMBASSADEUR_7'));
+        $user->setRoles( array( $role ) );
+
+        //Envoie du mail de validation de la candidature
+        $mail = $this->get('nodevo_mail.manager.mail')->sendValidationCandidatureAmbassadeurMail($user);
+        $this->get('mailer')->send($mail);
         
-        //Dans tout les cas si l'utilisateur a le bon groupe on lui donne l'accès
-        foreach ($roles as $key => $role)
-        {
-            switch ($role->getRole())
-            {
-                case 'ROLE_EXPERT_6':
-                    $options['expert'] = true;
-                    break;
-                case 'ROLE_AMBASSADEUR_7':
-                    $options['ambassadeur'] = true;
-                    break;
-                default:
-                    break;
-            }
-        }
+        //Mise à jour / création de l'utilisateur
+        $this->get('fos_user.user_manager')->updateUser( $user );
     
-        return $options;
+        $this->get('session')->getFlashBag()->add( 'success' ,  'La candidature au poste '. $questionnaire->getNomMinifie() .' a été validé.' );
+    
+        return new Response('{"success":true, "url" : "'.$this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']).'"}', 200);
+    }
+    
+    /**
+     * Refus de la candidature de l'utilisateur pour le questionnaire
+     *
+     * @param int $idUser
+     * @param int $idQuestionnaire
+     */
+    public function refusCandidatureAction( HopiUser $user )
+    {
+        $routeRedirection = $this->get('request')->request->get('routeRedirection');
+        $routeRedirection = json_decode($routeRedirection, true);
+        
+        //Texte du refus entré dans la fancybox
+        $texteRefus = $this->get('request')->request->get('texteRefus');
+
+        //Récupération du questionnaire de l'ambassadeur
+        $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
+        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
+        
+        //Ajout en base du message de refus
+        $refusCandidature = $this->get('hopitalnumerique_user.manager.refus_candidature')->createEmpty();
+        $refusCandidature->setQuestionnaire($questionnaire);
+        $refusCandidature->setUser($user);
+        //Récupère l'utilsateur connecté
+        $refusCandidature->setUserOrigineRefus($this->get('security.context')->getToken()->getUser());
+        $refusCandidature->setMotifRefus($texteRefus);
+        $refusCandidature->setDateRefus(new \DateTime());
+        
+        $this->get('hopitalnumerique_user.manager.refus_candidature')->save($refusCandidature);
+        
+        //Envoie du mail de validation de la candidature
+        $mail = $this->get('nodevo_mail.manager.mail')->sendRefusCandidatureAmbassadeurMail($user, array('message' => $texteRefus));
+        $this->get('mailer')->send($mail);
+        
+        $this->get('session')->getFlashBag()->add( 'success' ,  'La candidature au poste '. $questionnaire->getNomMinifie() .' a été refusé.' );
+        
+        return new Response('{"success":true, "url" : "'.$this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']).'"}', 200);
+    }
+
+    /**
+     * POP-IN de message de refus
+     */
+    public function messageRefusCandidatureAction()
+    {
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:popin_refus_candidature.html.twig');
+    }
+
+    /**
+     * Page de gestion des domaines fonctionnels de l'user
+     *
+     * @param integer $id ID de l'user
+     *
+     * @return View
+     */
+    public function domainesFonctionnelsAction( $id )
+    {
+        //Récupération de l'utilisateur passé en param
+        $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
+
+        //récupération des domaines fonctionnels
+        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->getDomainesForUser($user);
+
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:domaines-fonctionnels.html.twig', array(
+            'user'     => $user,
+            'options'  => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
+            'domaines' => $domaines
+        ));
+    }
+
+    /**
+     * Sauvegarde AJAX de la liaison domaine + ambassadeur
+     */
+    public function saveDomaineAction()
+    {
+        //get posted vars
+        $id       = $this->get('request')->request->get('id');
+        $domaines = $this->get('request')->request->get('domaines');
+
+        //bind ambassadeur
+        $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
+        
+        //bind objects
+        $refDomaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $domaines ) );
+        $user->setDomaines( $refDomaines );
+        $this->get('hopitalnumerique_user.manager.user')->save( $user );
+        
+        $this->get('session')->getFlashBag()->add( 'success' ,  'Les domaines fonctionnels de l\'utilisateur ont été mis à jour.' );
+
+        return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_user_ambassadeur_domainesFonctionnels', array('id' => $id)).'"}', 200);
+    }
+
+    /**
+     * Liste des domaines de l'user : Fiche
+     *
+     * @param integer $idUser ID de l'utilisateur
+     */
+    public function listeDomainesAction( $idUser )
+    {
+        //bind ambassadeur
+        $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $idUser) );
+
+        $domaines = count($user->getDomaines()) >= 1 ? $user->getDomaines() : false;
+
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:liste-domaines.html.twig', array(
+            'domaines' => $domaines
+        ));
     }
 }

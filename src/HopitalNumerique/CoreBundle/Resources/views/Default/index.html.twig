@@ -1,5 +1,114 @@
 {% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
 
+{# Référencement #}
+{% block title %}{{parent()}} - Accueil{% endblock %}
+{% block metadesc %}Page d'accueil{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-core-default-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquecore/css/homepage.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
 {% block body %}
-    Homepage Front
+    <div id="homepage" >
+        <div class="home-left col-md-5" >
+            {% if article.image %}
+                <img src="{{article.image}}" alt="Article Home" />
+            {% endif %}
+            <h1>{{article.titre}}</h1>
+            <p>
+                {{article.resume|raw}}
+            </p>
+
+            <h3 class="violet">Actualités</h3>
+            <div class="actus">
+                {% if actualites %}
+                    {% for actu in actualites %}
+                        <div class="actu">
+                            <h6>{{actu.types}}</h6>
+                            <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
+                            <p>
+                                {{actu.resume}}
+                            </p>
+                        </div>
+                    {% endfor %}
+                    <a href="{{path('hopital_numerique_publication_actualite')}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Voir toutes les actualités</a>
+                {% else %}
+                - Aucunes actualités - 
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="col-md-7 home-right" >
+            <div class="row">
+                <div class="recherche col-md-6">
+                    <a href="{{path('hopital_numerique_recherche_homepage')}}" class="background-rose">
+                        <div class="common-sprite icone"></div>
+                        <h3>Recherche</h3>
+                        <p>
+                            Vous trouverez des questions communes aux établissements de santé, des productions apportant des réponses et des fils de discussion sur le forum
+                        </p>
+                    </a>
+                </div>
+                <div class="forum col-md-6">
+                    <a href="javascript:alert('Forum Hôpital Numérique bientôt disponible.');">
+                        <div class="common-sprite icone"></div>
+                        <h3>Forum</h3>
+                        <p>
+                            Pour consulter et participer à des discussions thématiques
+                        </p>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="creation-compte col-md-12">
+                    <div>
+                        <div class="col-md-3">
+                            <div class="common-sprite icone"></div>
+                        </div>
+                        <div class="col-md-9">
+                            {% if app.user %}
+                                <p class="titre">Tableau de bord</p>
+                                <p>
+                                    Le tableau de bord correspond à votre espace personnel. Il vous permet de :
+                                </p>
+                                <ul>
+                                    <li>consulter et modifier vos données personnelles</li>
+                                    <li>gérer vos critères d'accès aux productions</li>
+                                    <li>en fonction de votre profil, de participer au projet d'accompagnement de l'ANAP (devenir ambassadeur ou expert, solliciter l'intervention d'un ambassadeur, etc)</li>
+                                </ul>
+
+                                <div class="buttons pull-right">
+                                    <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-default pull-right">Accès au tableau de bord</a>
+                                </div>
+                            {% else %}
+                                <p class="titre">Creation de compte</p>
+                                <p>
+                                    En créant un compte sur la plateforme, vous pourrez :
+                                </p>
+                                <ul>
+                                    <li>simplifier votre recherche par rapport à vos différents besoins</li>
+                                    <li>être informé de la mise à jour récente sur des documents déjà consultés</li>
+                                    <li>participer au projet d'accompagnement de l'ANAP (devenir ambassadeur ou expert, solliciter l'intervention d'un ambassadeur, etc)</li>
+                                </ul>
+                                <div class="buttons pull-right">
+                                    <a href="{{path('account_login')}}" class="btn btn-default pull-right login">Connexion</a>
+                                    <a href="{{path('hopital_numerique_user_inscription')}}" class="btn btn-default pull-right signup">Création de compte</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
 {% endblock %}

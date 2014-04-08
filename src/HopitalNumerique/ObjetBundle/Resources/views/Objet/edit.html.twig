@@ -2,9 +2,9 @@
 
 {% block h1Title %}
     {% if objet.id %}
-        Editer un Objet
+        Editer une publication
     {% else %}
-        Ajouter un Objet
+        Ajouter une publication <div class="toggleType toggle-success"></div>
     {% endif %}
 {% endblock %}
 
@@ -13,6 +13,7 @@
     {% stylesheets output="compiled/hopitalnumerique-objet-objet-edit.css" filter="cssrewrite"
         'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
         'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+        'bundles/hopitalnumeriqueuser/js/nSelect/style.css'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
         'bundles/nodevoadmin/plugins/form-nestable/jquery.nestable.css'
         'bundles/hopitalnumeriqueobjet/css/style.css'
@@ -27,6 +28,7 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-objet-objet-edit.js"
         'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
+        'bundles/hopitalnumeriqueuser/js/nSelect/nSelect.min.js'
         'bundles/nodevotools/js/json.js'
         'bundles/nodevoadmin/plugins/tinymce/tinymce.min.js'
         'bundles/nodevoadmin/plugins/tinymce/tinymce.fr_FR.js'
@@ -46,12 +48,12 @@
         NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
         NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
     </script>
-    
 {% endblock %}
 
 {% block toolbarButton %}
     {% if objet.id %}
         <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_cancel', { 'id': objet.id }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+        <a class="btn btn-default" href="{{ path('hopital_numerique_publication_publication_objet', { 'id': objet.id }) }}" target="_blank" title="Prévisualiser"><i class="fa fa-eye"></i></a>
     {% else %}
         <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     {% endif %}
@@ -69,8 +71,8 @@
                 <h4>Informations</h4>
                 <div class="options">
                     <ul class="nav nav-tabs">
-                        <li {% if not infra %}class="active"{% endif %}><a href="#objet" data-toggle="tab">Objet</a></li>
-                        {% if objet.id %}
+                        <li {% if not infra %}class="active"{% endif %}><a href="#objet" data-toggle="tab">Publication</a></li>
+                        {% if objet.id and not objet.isArticle() %}
                             <li class="{% if infra %}active{% endif %}"><a href="#infra" data-toggle="tab">Infra-documentaire</a></li>
                         {% endif %}
                     </ul>
@@ -90,24 +92,34 @@
                                 {{ form_row(form.alias) }}
                                 {{ form_row(form.etat) }}
                                 {{ form_row(form.roles) }}
-                                {{ form_row(form.types) }}
+                                <div class="form-group">
+                                    {{ form_label(form.types) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(form.types) }}
+                                    </div>
+                                    <div class="col-md-9 col-md-offset-3">
+                                        <div class="help-block">
+                                            {{ form_errors(form.types) }}
+                                        </div>
+                                    </div>
+                                </div>
                                 
-                                <div class="form-group" style="margin-bottom:0">
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}" style="margin-bottom:0">
                                     {{ form_label(form.file) }}
                                     <div class="col-md-9">
-                                        {% if objet.getAbsolutePath() is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
+                                        {% if objet.getAbsolutePath(true) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
                                         <div class="inputUpload" style="display:{{visibility}}">
                                             {{ form_widget(form.file) }}    
                                         </div>
 
-                                        {% if objet.getAbsolutePath() is not null %}
-                                            <a class="uploadedFile pull-left" href="/{{objet.getWebPath()}}" target="_blank">{{objet.path}}</a>
-                                            <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" ><i class="fa fa-trash-o"></i></div>
+                                        {% if objet.getAbsolutePath(true) is not null %}
+                                            <a class="uploadedFile pull-left" href="/{{objet.getWebPath(true)}}" target="_blank">{{objet.path}}</a>
+                                            <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" data-path="hopitalnumerique_objet_objet_path" ><i class="fa fa-trash-o"></i></div>
                                         {% endif %}
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="help-block">
@@ -117,19 +129,149 @@
                                     </div>
                                 </div>
 
-                                {{ form_row(form.ambassadeurs) }}
-                                {{ form_row(form.commentaires) }}
-                                {{ form_row(form.notes) }}
-                                {{ form_row(form.dateCreation) }}
-                                {{ form_row(form.dateDebutPublication) }}
-                                {{ form_row(form.dateFinPublication) }}
-                                {{ form_row(form.dateModification) }}
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}" style="margin-bottom:0">
+                                    {{ form_label(form.file2) }}
+                                    <div class="col-md-9">
+                                        {% if objet.getAbsolutePath(false) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
+                                        <div class="inputUpload" style="display:{{visibility}}">
+                                            {{ form_widget(form.file2) }}    
+                                        </div>
+
+                                        {% if objet.getAbsolutePath(false) is not null %}
+                                            <a class="uploadedFile pull-left" href="/{{objet.getWebPath(false)}}" target="_blank">{{objet.path2}}</a>
+                                            <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" data-path="hopitalnumerique_objet_objet_path2" ><i class="fa fa-trash-o"></i></div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="help-block">
+                                                {{ form_errors(form.file2) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="vignetteBlock form-group {% if not objet.isArticle() %}hide{% endif %}">
+                                    {{ form_label(form.vignette) }}
+                                    <div class="col-md-9">
+                                        <div class="input-group" >
+                                            {{ form_widget(form.vignette) }}
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-info" onclick="moxman.browse({fields: 'hopitalnumerique_objet_objet_vignette', no_host: true});">Parcourir</button>
+                                            </div>    
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9 col-md-offset-3">
+                                        <div class="help-block">
+                                            {{ form_errors(form.vignette) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
+                                    {{ form_label(form.ambassadeurs) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.ambassadeurs) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.ambassadeurs) }}
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group">
+                                    {{ form_label(form.commentaires) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.commentaires) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.commentaires) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    {{ form_label(form.notes) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.notes) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.notes) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    {{ form_label(form.dateCreation) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.dateCreation) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.dateCreation) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    {{ form_label(form.dateDebutPublication) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.dateDebutPublication) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.dateDebutPublication) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    {{ form_label(form.dateFinPublication) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.dateFinPublication) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.dateFinPublication) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    {{ form_label(form.dateModification) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.dateModification) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.dateModification) }}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-8">
-                                <div class="form-group {% if not objet.id %}hide{% endif %}">
+                                <div class="form-group {% if not objet.id or (objet.id and objet.isArticle()) %}hide{% endif %}">
+                                    <label class="col-md-11" >Notifier la mise à jour ?</label>
+                                    <div class="col-md-1">
+                                        <div class="pull-right toggle toggle-success"></div>
+                                    </div>
+                                    <div class="col-md-10 hide">
+                                        {{ form_widget(form.modified) }}
+                                    </div>
+                                </div>
+                                <div class="form-group {% if not objet.id or (objet.id and objet.isArticle()) %}hide{% endif %}">
                                     <label class="col-md-2" for="hopitalnumerique_objet_objet_references">Références</label>
                                     <div class="col-md-10">
-                                        <a href="{{path('hopitalnumerique_objet_reference_objet', {'id':objet.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
+                                        <a href="{{path('hopitalnumerique_objet_reference_objet_own', {'id':objet.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-eye"></i></a>
+                                        <a href="{{path('hopitalnumerique_objet_reference_objet', {'id':objet.id})}}" class="manageReferences edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
                                         <p class="text-muted text-right pull-right"><span class="nbRefs">{% if not objet.id %}0{% else %}{{objet.references|length}}{% endif %}</span> éléments référencés</p>
                                     </div>
                                     <div class="col-md-10 hide">
@@ -143,6 +285,19 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12">
+                                        <label for="hopitalnumerique_objet_objet_resume">{% if objet.isArticle() %}Texte de l'article{% else %}Résumé{% endif %} <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{ form_widget(form.resume) }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="help-block">
+                                            {{ form_errors(form.resume) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group blocSynthese {% if objet.isArticle() %}hide{% endif %}">
+                                    <div class="col-md-12">
                                         <label for="hopitalnumerique_objet_objet_synthese">Synthèse</label>
                                     </div>
                                     <div class="col-md-12">
@@ -151,19 +306,6 @@
                                     <div class="col-md-12">
                                         <div class="help-block">
                                             {{ form_errors(form.synthese) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <label for="hopitalnumerique_objet_objet_resume">Résumé <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
-                                    </div>
-                                    <div class="col-md-12">
-                                        {{ form_widget(form.resume) }}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="help-block">
-                                            {{ form_errors(form.resume) }}
                                         </div>
                                     </div>
                                 </div>
@@ -202,7 +344,11 @@
                 <input type="hidden" id="parse-upload-url" value="{{path('hopitalnumerique_objet_contenu_uploadparse',{'id':objet.id})}}" />
                 <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_objet_reference_contenu_save')}}" />
             {% endif %}
+            <input type="hidden" id="toRef" value="{{toRef}}" />
+            <input type="hidden" id="getObjets" value="{{path('hopitalnumerique_objet_objet_getObjets')}}" />
             <input type="hidden" id="objet-file-url" value="{{path('hopitalnumerique_objet_objet_isFileExist')}}" />
+            <input type="hidden" id="objet-addobjet-url" value="{{path('hopitalnumerique_objet_objet_add')}}" />
+            <input type="hidden" id="objet-addarticle-url" value="{{path('hopitalnumerique_objet_objet_add', {'type':2})}}" />
         </div>
     </div>
 {% endblock %}
@@ -214,8 +360,9 @@
             <a href="{{path('hopitalnumerique_objet_contenu_edit', {'id': contenu.id })}}" class="fancybox.ajax" >{{contenu.order ~ ' ' ~ contenu.titre}}</a>
             <p class="text-muted pull-right"><span>{{contenu.references}}</span> éléments référencés</p>
         </div>
-        <div class="dd3-actions">
+        <div class="dd3-actions dd4">
             <div onclick="deleteContenu( {{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_delete', {'id':contenu.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+            <a href="{{path('hopitalnumerique_objet_reference_contenu_own', {'id':contenu.id})}}" class="pull-right dd3-eye manageReferences fancybox.ajax"><i class="fa fa-eye"></i></a>
             <a href="{{path('hopitalnumerique_objet_reference_contenu', {'id':contenu.id})}}" class="pull-right dd3-cog manageReferences fancybox.ajax"><i class="fa fa-cog"></i></a>
         </div>
         

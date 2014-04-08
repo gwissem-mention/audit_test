@@ -1,6 +1,7 @@
 /* Edit Objet */
 ul.list-unstyled{margin-bottom:0;}
 .loader .loaderIcon{background-image: url('../images/big_ajax_loader.gif') !important;width:66px;height:66px; }
+.toggleType{position: absolute;top: 30px; left:425px;}
 
     /* Tab Objet*/
     #objet .uploadedFile{display: block; margin-top: 7px}
@@ -12,11 +13,16 @@ ul.list-unstyled{margin-bottom:0;}
     #infra .reloadContenu{position:absolute; right: 75px; z-index: 200}
     #infra .uploadSommaire{position:absolute; right: 125px; z-index: 200}
     #infra fieldset{position: relative;}
-    #infra #sommaire .text-muted {margin-right: 60px}
+    #infra #sommaire .text-muted {margin-right: 90px}
 
 /* fancybox References */
 #panel-references{padding:0;}
-#panel-references .tableContent{overflow-y:scroll; height:485px}
+#panel-references .tableContent{overflow-y:scroll; height:470px}
 #panel-references .tableContent thead .checkAll{display: block; margin: 0 auto}
+#panel-references .tableContent .level1{background: #34495e}
+#panel-references .tableContent .level1 td{color: #ffffff; font-size: 16px; font-weight: bold}
+#panel-references .tableContent .level2{background: #D8D8D8}
+#panel-references .tableContent .level3{background: #E6E6E6}
 #panel-references .panel-footer{margin:0;}
-#panel-references .toggle-slide .toggle-off,#panel-references .toggle-slide .toggle-off.active{background: #2D78D5}
+
+input[type="date"]{min-width: 145px}

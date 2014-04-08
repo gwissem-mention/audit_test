@@ -1,0 +1,19 @@
+<div class="panel" style="margin:0" >
+    <div class="panel-heading">
+        <h4 class="violet" style="margin-bottom:0" >Outils maîtrisés par l'ambassadeur</h4>
+    </div>
+
+    <div class="panel-body" style="padding-top:0" >
+        <div class="col-md-12 fancybox-popin">
+            {% if objets %} 
+                <ul style="padding-left:10px">
+	                {% for objet in objets %}
+	                    <li><a href="{{path('hopital_numerique_publication_publication_objet',{'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a></li>
+	                {% endfor %}
+                </ul>
+            {% else %}
+	            - Pour l'instant cet ambassadeur n'est référencé sur aucun outil -
+            {% endif %}           
+        </div>
+    </div>
+</div>

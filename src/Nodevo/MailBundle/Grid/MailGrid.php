@@ -15,16 +15,16 @@ class MailGrid extends Grid implements IGrid
     private $_allowDelete;
 
     /**
-    * Constructeur du grid, on lui passe le conteneur de services, un booléen si la suppression des mails est autorisée
-    *
-    * @param container Le conteneur de services
-    * @param allowDelete La suppression de mail est-elle autorisée ?
-    */
-    public function __construct($container, $allowDelete = true)
+     * Constructeur du grid, on lui passe le conteneur de services, un booléen si la suppression des mails est autorisée
+     *
+     * @param container Le conteneur de services
+     * @param options Tableau d'options
+     */
+    public function __construct($container, $options = array())
     {
         parent::__construct( $container );
 
-        $this->_allowDelete = $allowDelete;
+        $this->_allowDelete = $options['allowDelete'];
     }
 
     /**
@@ -33,6 +33,7 @@ class MailGrid extends Grid implements IGrid
     public function setConfig()
     {
         $this->setSource( 'NodevoMailBundle:Mail' );
+        $this->setButtonSize(43);
         $this->setNoDataMessage('Aucun E-Mail à afficher.');
     }
 
@@ -44,10 +45,11 @@ class MailGrid extends Grid implements IGrid
         $this->addColonne( new Column\TextColumn('objet', 'Objet') );
         $this->addColonne( new Column\TextColumn('description', 'Description') );
 
-
+        /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('expediteurMail') );
         $this->addColonne( new Column\BlankColumn('expediteurName') );
         $this->addColonne( new Column\BlankColumn('body') );
+        $this->addColonne( new Column\BlankColumn('params') );
     }
 
     /**

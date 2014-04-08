@@ -11,9 +11,9 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-user-user-edit.css" filter="cssrewrite"
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
         'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
         'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -48,26 +48,29 @@
                 <div class="options">
                     <ul class="nav nav-tabs">
                         <li class="active">
-						    <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Données de caractérisation</a>
+						    <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Caractérisation</a>
 						</li>
                         {% if user.id is not null and (options.expert or options.ambassadeur)  %}
 							<li>
-							    <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Données de contractualisation</a>
+							    <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Contractualisation</a>
 							</li>
 						{% endif %}
                         {% if user.id is not null and (options.expert or options.expert_form) %}
 							<li>
-							    <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature pour devenir expert</a>
+							    <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature expert</a>
 							</li>
 						{% endif %}
                         {% if user.id is not null and (options.ambassadeur or options.ambassadeur_form) %}
 							<li>
-							    <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature pour devenir ambassadeur</a>
+							    <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature ambassadeur</a>
 							</li>
 						{% endif %}
                         {% if user.id is not null and options.ambassadeur %}
                             <li>
-                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maitrisés</a>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maîtrisées</a>
+                            </li>
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Domaines maîtrisés</a>
                             </li>
                         {% endif %}
                     </ul>
@@ -77,6 +80,7 @@
             <div class="panel-body" >
                 {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
                 {{ form_start(form) }}
+                    {{ form_errors(form) }}
 
                     {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
                     <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_departements')}}" />
@@ -85,10 +89,10 @@
                     {# Formulaire : #}
                     {{ form_row(form.civilite) }}
                     {{ form_row(form.titre) }}
-                    {{ form_row(form.username) }}
                     {{ form_row(form.nom) }}
                     {{ form_row(form.prenom) }}
                     {{ form_row(form.email) }}
+                    {{ form_row(form.username) }}
                     {{ form_row(form.plainPassword) }}
                     {{ form_row(form.telephoneDirect) }}
                     {{ form_row(form.telephonePortable) }}
@@ -119,8 +123,9 @@
 
                                         {{ form_row(form.statutEtablissementSante) }}
                                         {{ form_row(form.etablissementRattachementSante) }}
-                                        {{ form_row(form.autreStructureRattacheementSante) }}
-                                        {{ form_row(form.fonctionEtablissementSante) }}
+                                        {{ form_row(form.autreStructureRattachementSante) }}
+                                        {{ form_row(form.profilEtablissementSante) }}
+                                        {{ form_row(form.fonctionDansEtablissementSante) }}
                                         {{ form_row(form.raisonInscriptionSante) }}
 
                                     </div>
@@ -144,7 +149,7 @@
                         </div>
                     </div>
                 {{ form_end(form) }}
-	        </div>            
+	        </div>
         </div>
     </div>
 {% endblock %}

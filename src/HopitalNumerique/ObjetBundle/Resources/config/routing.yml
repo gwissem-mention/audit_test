@@ -4,12 +4,24 @@ hopitalnumerique_objet_objet:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:index" }
 
 hopitalnumerique_objet_objet_add:
-    pattern:  /objet/add
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:add" }
+    pattern:  /objet/add/{type}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:add", type:1 }
 
 hopitalnumerique_objet_objet_isFileExist:
     pattern:  /objet/isFileExist
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:isFileExist" }
+
+hopitalnumerique_objet_objet_getObjets:
+    pattern:  /objet/getObjets
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getObjets" }
+
+hopitalnumerique_objet_objet_getPublications:
+    pattern:  /objet/getPublications/{articles}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getPublications", articles:1 }
+
+hopitalnumerique_objet_objet_getPublicationDetailsForMenu:
+    pattern:  /objet/getPublicationDetailsForMenu
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:getPublicationDetailsForMenu" }
 
 hopitalnumerique_objet_objet_cancel:
     pattern:  /objet/cancel/{id}/{message}
@@ -22,8 +34,8 @@ hopitalnumerique_objet_objet_show:
         id: \d+
 
 hopitalnumerique_objet_objet_edit:
-    pattern:  /objet/edit/{id}/{infra}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:edit", id:1, infra:0  }
+    pattern:  /objet/edit/{id}/{infra}/{toRef}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:edit", id:1, infra:0, toRef:0  }
     requirements:
         id: \d+
 
@@ -32,7 +44,6 @@ hopitalnumerique_objet_objet_delete:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:delete", _format: json }
     requirements: 
         id: \d+
-        _method: post|delete
 
 #partie Contenu
 hopitalnumerique_objet_contenu_add:
@@ -52,7 +63,6 @@ hopitalnumerique_objet_contenu_delete:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:delete", _format: json }
     requirements: 
         id: \d+
-        _method: post|delete
 
 hopitalnumerique_objet_contenu_uploadparse:
     pattern:  /objet/contenu/upload/parse/{id}
@@ -75,6 +85,12 @@ hopitalnumerique_objet_reference_objet:
     requirements:
         id: \d+
 
+hopitalnumerique_objet_reference_objet_own:
+    pattern:  /objet/reference/objet-own/{id}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:objetOwn", id:1 }
+    requirements:
+        id: \d+
+
 hopitalnumerique_objet_reference_objet_save:
     pattern:  /objet/reference/save/objet/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:saveObjet" }
@@ -84,6 +100,12 @@ hopitalnumerique_objet_reference_objet_save:
 hopitalnumerique_objet_reference_contenu:
     pattern:  /objet/reference/contenu/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:contenu", id:1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_objet_reference_contenu_own:
+    pattern:  /objet/reference/contenu_own/{id}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:contenuOwn", id:1 }
     requirements:
         id: \d+
 

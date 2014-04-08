@@ -1,2 +1,7 @@
-.style-1{font-family: 'Open sans';font-weight: 300;line-height: 49px;font-size: 49px;}
-.style-2{text-decoration: underline; color: #b01389;}
+img{ margin: 5px 10px 0 0; }
+.intro{font-weight: bold; font-size: 13px; color:#070707;}
+.note_bas_de_page{font-size: 10px;}
+.sur_titre{font-size: 13px;font-weight: normal;margin: 13px 0 -20px 0;text-transform: uppercase;color: #5d5d5d; display: block}
+.citation{font-style: italic; font-size: 14px;}
+.legende{font-size: 10px}
+.titre_depliable{font-size:20px; color: #6f3596; background: #D5D5D5;cursor:pointer;width: 100%; display: block; padding: 10px 5px}

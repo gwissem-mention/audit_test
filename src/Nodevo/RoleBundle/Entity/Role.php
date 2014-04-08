@@ -4,6 +4,7 @@ namespace Nodevo\RoleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Role\RoleInterface;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,7 +19,11 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  * @UniqueEntity(fields="name", message="Ce groupe existe déjà.")
  */
 class Role implements RoleInterface
-{    
+{
+    public static $ROLE_CMSI_LABEL        = 'ROLE_ARS_CMSI_4';
+    public static $ROLE_DIRECTEUR_LABEL   = 'ROLE_ES_DIRECTION_GENERALE_5';
+    public static $ROLE_AMBASSADEUR_LABEL = 'ROLE_AMBASSADEUR_7';
+    
     /**
      * @var integer
      *
@@ -32,12 +37,12 @@ class Role implements RoleInterface
      * @var string
      * @Assert\NotBlank(message="Le nom ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="ro_name", type="string", length=255, options = {"comment" = "Nom du groupe"})
      */
     protected $name;
@@ -59,17 +64,13 @@ class Role implements RoleInterface
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_etat", referencedColumnName="ref_id")
+     *
+     * @GRID\Column(field="etat.libelle")
      */
     protected $etat;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", mappedBy="roles")
-     */
-    protected $users;
-
     public function __construct()
     {
-        $this->users   = new \Doctrine\Common\Collections\ArrayCollection();
         $this->initial = false;
     }
 
@@ -178,51 +179,5 @@ class Role implements RoleInterface
     public function getEtat()
     {
         return $this->etat;
-    }
-
-    /**
-     * Add user
-     *
-     * @param \HopitalNumerique\userBundle\Entity\User $user
-     * @return Db
-     */
-    public function addUser(\HopitalNumerique\userBundle\Entity\User $user)
-    {
-        $this->users[] = $user;
-    
-        return $this;
-    }
-
-    /**
-     * Remove user
-     *
-     * @param \HopitalNumerique\userBundle\Entity\User $user
-     */
-    public function removeUser(\HopitalNumerique\userBundle\Entity\User $user)
-    {
-        $this->users->removeElement($user);
-    }
-
-    /**
-     * Set users
-     *
-     * @param \Doctrine\Common\Collections\Collection $users
-     * @return Db
-     */
-    public function setUsers(\Doctrine\Common\Collections\Collection $users)
-    {
-        $this->users = $users;
-    
-        return $this;
-    }
-
-    /**
-     * Get users
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUsers()
-    {
-        return $this->users;
     }
 }

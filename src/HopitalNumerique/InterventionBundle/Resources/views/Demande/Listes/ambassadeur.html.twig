@@ -1,0 +1,21 @@
+{% extends 'HopitalNumeriqueInterventionBundle:Demande:liste.html.twig' %}
+
+{% block headerDesc %}
+    <p>Vous pouvez consulter ci-dessous un récapitulatif de vos interventions en établissement. L'état d'une intervention vous renseigne sur son avancement et sur l'action attendue :</p>
+    <ul>
+        <li>Acceptée par le CMSI : vous pouvez accepter, refuser ou transmettre la demande à un autre ambassadeur.</li>
+        <li>Acceptée par l'ambassadeur : vous pouvez mettre en place votre intervention dans l'établissement. Son évaluation sera ensuite réalisée par l'établissement sur la plateforme. Vous pouvez relancer l'établissement pour son action en cliquant sur la case "Eval".</li>
+        <li>Terminée : vous pouvez consulter le résultat de l'évaluation de votre intervention en cliquant sur la case "Eval".</li>
+    </ul>
+    
+    {% if app.user.hasRoleDirecteur %}<h3><a href="{{ path('hopital_numerique_intervention_demande_suivi_demandes') }}">&gt; Suivre l'activité des ambassadeurs de mon établissement</a></h3>{% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="panel_grid">
+        {{ render(path("hopital_numerique_intervention_grid_ambassadeur_demandes")) }}
+        <div class="clearfix"></div>
+    </div>
+
+{% endblock %}

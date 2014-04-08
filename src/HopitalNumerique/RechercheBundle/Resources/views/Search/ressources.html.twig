@@ -1,0 +1,19 @@
+<div class="item {% if count == 1 %}active{% endif %}" >
+    <h4>
+        {% if objet['updated'] %}
+            <span class="label label-success">MaJ</span>
+        {% elseif objet['new'] %}
+            <span class="label label-danger">Nouveau</span>
+        {% endif %}
+
+        {% if objet['objet'] is not null %}
+            <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >
+        {% else %}
+            <a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
+        {% endif %}
+            {{objet['titre']}}
+        </a>
+    </h4>
+
+    <p>{{ objet['resume']|trim }} <span class="rose">[...]</span></p>
+</div>

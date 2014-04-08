@@ -1,0 +1,85 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{% block metadesc %}Page de contact{% endblock %}
+{% block metakeywords %}contact{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-contact-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+        'bundles/hopitalnumeriquecontact/css/contact.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-contact-index.js"
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/nodevocontact/js/jquery.maskedinput.min.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+        'bundles/hopitalnumeriquecontact/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-10 col-md-offset-1" id="inscription">
+        <div id="contact_form">  
+            <h3>Contact</h3>
+                {# Création du formulaire #}
+                {% form_theme form 'HopitalNumeriqueUserBundle:User/Theme:theme.inscription.html.twig' %}
+	            {{ form_javascript(form) }}
+		        {{ form_start(form, { 'action': path('hopital_numerique_contact_homepage') }) }}
+		        
+                    <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+                    <div class="background-rose"></div>
+                    {#<div class="background-violet"></div>#}
+                    
+	                {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
+	                <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_front_departements')}}" />
+	                {# Input hidden permettant de stocker la route pour le refresh de établissement en ajax #}
+	                <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_front_etablissements')}}" />
+                  
+		            {{ form_row(form.civilite) }}
+		            {{ form_row(form.prenom) }}
+		            {{ form_row(form.nom) }}
+		            {{ form_row(form.telephone) }}
+		            {{ form_row(form.mail) }}
+		            {{ form_row(form.region) }}
+		            {{ form_row(form.departement) }}
+		            {{ form_row(form.codepostal) }}
+		            {{ form_row(form.ville) }}
+		            {{ form_row(form.statutEtablissementSante) }}
+		            {{ form_row(form.etablissementRattachementSante) }}
+		            {{ form_row(form.autreStructureRattachementSante) }}
+		            {{ form_row(form.fonctionStructure) }}
+		            {{ form_row(form.message) }}
+			            
+					<div class="clearfix"></div>
+                    <div class="form-group">
+				        <div class="col-md-10 col-md-offset-2">
+				            <input onclick="$('form').submit();" class="btn btn-success col-md-2 pull-right submit" value="{{ 'envoyer'|upper }}" type="button"/>
+			        </div>
+		        </div>
+		        {{ form_end(form) }}
+        </div>
+    
+	   <div id ="footerDesc">
+			<p>
+				Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».
+			</p>
+			<p>
+				Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
+			</p>
+		</div>
+		<div class="clearfix"></div>
+    </div>
+{% endblock %}

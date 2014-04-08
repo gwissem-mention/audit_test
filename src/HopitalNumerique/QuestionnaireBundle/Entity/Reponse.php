@@ -4,11 +4,6 @@ namespace HopitalNumerique\QuestionnaireBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-//Asserts Stuff
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
-
 /**
  * Reponse
  *
@@ -55,6 +50,14 @@ class Reponse
      */
     protected $reference;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="param_id", type="integer", nullable=true, options = {"comment" = "Éventuelle clef étrangère"})
+     */
+    private $paramId;
+    
+    
     /**
      * Get id
      *
@@ -157,6 +160,27 @@ class Reponse
             $this->reference = null;
     }
 
+    /**
+     * Get paramId
+     *
+     * @return integer $paramId
+     */
+    public function getParamId()
+    {
+        return $this->paramId;
+    }
+    
+    /**
+     * Set paramId
+     *
+     * @param integer $paramId
+     */
+    public function setParamId($paramId)
+    {
+        $this->paramId = $paramId;
+    }
+    
+    
     // ---------------------Test de file---------------------------------
     public $file;
 }

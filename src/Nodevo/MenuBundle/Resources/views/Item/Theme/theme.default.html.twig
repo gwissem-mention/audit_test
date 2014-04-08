@@ -1,0 +1,21 @@
+{% extends 'NodevoAdminBundle::form.html.twig' %}
+
+{% block form_widget_compound %}
+{% spaceless %}
+    <div {{ block('widget_container_attributes') }}>
+        {% if form.parent is empty %}
+            {{ form_errors(form) }}
+        {% endif %}
+        {% for child in form %}
+            <div class="form-group">
+                AAA
+                {{ form_label(child) }}
+                <div class="col-md-9">
+                    {{ form_widget(child) }}
+                </div>
+            </div>
+        {% endfor %}
+        {{ form_rest(form) }}
+    </div>
+{% endspaceless %}
+{% endblock form_widget_compound %}

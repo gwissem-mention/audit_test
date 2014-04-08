@@ -16,10 +16,9 @@ class EtablissementGrid extends Grid implements IGrid
     */
     public function setConfig()
     {
-        $this->setSource( 'hopitalnumerique_user.manager.user' );
-        $this->setFunctionName('getDatasForGridEtablissement');
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setSource( 'HopitalNumeriqueUserBundle:User' );
         $this->setNoDataMessage('Aucun établissement "autre" référencé.');
+        $this->setButtonSize(43);
     }
 
     /**
@@ -27,15 +26,45 @@ class EtablissementGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        $this->addColonne( new Column\TextColumn('username', 'Nom d\'utilisateur') );
+        $this->addColonne( new Column\TextColumn('username', 'Nom du compte') );
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('prenom', 'Prénom') );
-        $this->addColonne( new Column\TextColumn('region', 'Région') );
-        $this->addColonne( new Column\TextColumn('autreStructureRattacheementSante', 'Etablissement autre') );
+        
+        $regionColonne = new Column\AssocColumn('region.libelle', 'Région');
+        $regionColonne->setSize( 150 );
+        $this->addColonne( $regionColonne );
+
+        $this->addColonne( new Column\TextColumn('autreStructureRattachementSante', 'Etablissement autre') );
 
         $archiverColonne = new Column\BooleanColumn('archiver', 'Archivé');
-        $archiverColonne->setValues( array( 1 => 'Oui', 0 => 'Non') );
-        $this->addColonne( $archiverColonne->setSize(150) );
+        $archiverColonne->setSize(100);
+        $this->addColonne( $archiverColonne );
+
+        /* Colonnes inactives */
+        $this->addColonne( new Column\BlankColumn('email') );
+        $this->addColonne( new Column\BlankColumn('enabled') );
+        $this->addColonne( new Column\BlankColumn('password') );
+        $this->addColonne( new Column\BlankColumn('confirmationToken') );
+        $this->addColonne( new Column\BlankColumn('locked') );
+        $this->addColonne( new Column\BlankColumn('expiresAt') );
+        $this->addColonne( new Column\BlankColumn('credentialsExpired') );
+        $this->addColonne( new Column\BlankColumn('dateInscription') );
+        $this->addColonne( new Column\BlankColumn('telephonePortable') );
+        $this->addColonne( new Column\BlankColumn('nomStructure') );
+        $this->addColonne( new Column\BlankColumn('lock') );
+        $this->addColonne( new Column\BlankColumn('usernameCanonical') );
+        $this->addColonne( new Column\BlankColumn('emailCanonical') );
+        $this->addColonne( new Column\BlankColumn('salt') );
+        $this->addColonne( new Column\BlankColumn('lastLogin') );
+        $this->addColonne( new Column\BlankColumn('passwordRequestedAt') );
+        $this->addColonne( new Column\BlankColumn('expired') );
+        $this->addColonne( new Column\BlankColumn('roles') );
+        $this->addColonne( new Column\BlankColumn('credentialsExpireAt') );
+        $this->addColonne( new Column\BlankColumn('telephoneDirect') );
+        $this->addColonne( new Column\BlankColumn('contactAutre') );
+        $this->addColonne( new Column\BlankColumn('fonctionDansEtablissementSante') );
+        $this->addColonne( new Column\BlankColumn('fonctionStructure') );
+        $this->addColonne( new Column\BlankColumn('credentialsExpireAt') );
     }
 
     /**
@@ -44,6 +73,7 @@ class EtablissementGrid extends Grid implements IGrid
     public function setActionsButtons()
     {
         $this->addActionButton( new Action\ShowButton( 'hopital_numerique_user_show' ) );
+        $this->addActionButton( new Action\EditButton( 'hopital_numerique_user_edit' ) );
 
         //Custom Archive button : Affiche le bouton archiver
         $archiveButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_etablissement_archiver');

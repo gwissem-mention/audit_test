@@ -1,0 +1,30 @@
+<div class="row" {% if showMoreProductions is defined and count >= showMoreProductions %}style="display:none"{% endif %} >
+    <div class="col-md-10">
+        <h5>{{objet['type']}}</h5>
+    </div>
+    <div class="col-md-2">
+        {% if objet['synthese'] is not null %}
+            <a class="synthese fancybox.iframe" href="{{path('hopital_numerique_publication_synthese',{'id':objet['synthese']})}}">synthèse</a>
+        {% endif %}
+    </div>
+    <div class="col-md-12">
+        <h4>
+            {% if objet['updated'] %}
+                <span class="label label-success">MaJ</span>
+            {% elseif objet['new'] %}
+                <span class="label label-danger">Nouveau</span>
+            {% endif %}
+
+            {% if objet['objet'] is not null %}
+                <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >
+            {% else %}
+                <a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
+            {% endif %}
+                {{objet['titre']}}{% if objet['objet'] is not null %}<small class="violet"> - Extrait d'une production</small>{% endif %}
+            </a>
+        </h4>
+    </div>
+    <div class="col-md-12">
+        <p>{{ objet['resume']|trim }} <span class="rose">[...]</span></p>
+    </div>
+</div>

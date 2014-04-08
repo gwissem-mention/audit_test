@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\ReferenceBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -36,20 +35,28 @@ class ReferenceController extends Controller
     /**
      * Affiche le formulaire d'ajout de Reference.
      */
-    public function addAction( $id = null )
+    public function addAction( $id = null, $mod = null )
     {
         $reference = $this->get('hopitalnumerique_reference.manager.reference')->createEmpty();
 
-        if( !is_null($id) ){
-            $parent = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $id) );
+        if( !is_null($id)){
+            $referenceBase = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $id) );
 
-            if ( $parent->getLock() )
-                $this->get('session')->getFlashBag()->add('warning', 'Attention, l\'élément que vous avez choisi est verrouillé, il ne peut donc pas être sélectionné comme Item parent.' );
-            else
-                $reference->setParent( $parent );
+            if (!is_null($mod)){
+                $reference->setCode( $referenceBase->getCode() );
+                if( $referenceBase->getParent() ){
+                    $reference->setParent( $referenceBase->getParent() );
+                }
+            } else {
+                if ( $referenceBase->getLock() ){
+                    $this->get('session')->getFlashBag()->add('warning', 'Attention, l\'élément que vous avez choisi est verrouillé, il ne peut donc pas être sélectionné comme Item parent.' );
+                } else {
+                    $reference->setParent( $referenceBase );
+                }
+            }
         }
 
-        return $this->_renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
     }
 
     /**
@@ -60,7 +67,7 @@ class ReferenceController extends Controller
         //Récupération de l'entité passée en paramètre
         $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
     }
 
     /**
@@ -123,7 +130,7 @@ class ReferenceController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $reference, $view )
+    private function renderForm( $formName, $reference, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $reference);
@@ -149,10 +156,9 @@ class ReferenceController extends Controller
                 }
                 
                 //test ajout ou edition
-                $new = is_null($reference->getId()) ? true : false;
+                $new = is_null($reference->getId());
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
-                $this->get('hopitalnumerique_reference.manager.reference')->updateOrder($reference);
                 $this->get('hopitalnumerique_reference.manager.reference')->save($reference);
                 $this->get('hopitalnumerique_reference.manager.reference')->refreshOrder($oldParent);
                 $this->get('hopitalnumerique_reference.manager.reference')->refreshOrder($reference->getParent());

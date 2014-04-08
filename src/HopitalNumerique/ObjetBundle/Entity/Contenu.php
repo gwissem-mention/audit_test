@@ -31,12 +31,12 @@ class Contenu
      * @var string
      * @Assert\NotBlank(message="Le titre ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage = "Il doit y avoir au moins {{ limit }} caractères dans le titre.",
      *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans le titre."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="con_titre", type="string", length=255, options = {"comment" = "Titre du contenu"})
      */
     protected $titre;
@@ -68,33 +68,53 @@ class Contenu
     protected $contenu;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="con_date_creation", type="datetime", options = {"comment" = "Date de création du contenu"})
+     */
+    private $dateCreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="con_date_modification", type="datetime", nullable=true, options = {"comment" = "Date de modification du contenu"})
+     */
+    private $dateModification;
+
+    /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\RefContenu", mappedBy="contenu", cascade={"persist", "remove" })
      */
     protected $references;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="contenus", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Contenu", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="con_id", onDelete="CASCADE")
      */
     protected $parent = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Objet", inversedBy="objets", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Objet", cascade={"persist"})
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
      */
     protected $objet;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="contenu", cascade={"persist", "remove" })
+     */
+    protected $consultations;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
-        $this->titre      = 'Nouveau contenu';
-        $this->alias      = 'nouveau-contenu';
-        $this->contenu    = '';
-        $this->parent     = null;
-        $this->order      = 0;
-        $this->references = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dateCreation = new \DateTime();
+        $this->titre        = 'Nouveau contenu';
+        $this->alias        = 'nouveau-contenu';
+        $this->contenu      = '';
+        $this->parent       = null;
+        $this->order        = 0;
+        $this->references   = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -254,5 +274,74 @@ class Contenu
     public function setObjet(Objet $objet)
     {
         $this->objet = $objet;
-    }   
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Contenu
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set dateModification
+     *
+     * @param \DateTime $dateModification
+     * @return Objet
+     */
+    public function setDateModification($dateModification)
+    {
+        $this->dateModification = $dateModification;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModification
+     *
+     * @return \DateTime 
+     */
+    public function getDateModification()
+    {
+        return $this->dateModification;
+    }
+
+    /**
+     * Get consultations
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $consultations
+     */
+    public function getConsultations()
+    {
+        return $this->consultations;
+    }
+
+    /**
+     * Set consultations
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $consultations
+     * @return Objet
+     */
+    public function setConsultations(\Doctrine\Common\Collections\ArrayCollection $consultations)
+    {        
+        $this->consultations = $consultations;
+    
+        return $this;
+    }
 }

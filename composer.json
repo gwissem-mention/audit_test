@@ -1,17 +1,27 @@
 {
     "name": "nodevo/hopitalnumerique",
-    "license": "NODEVO",
+    "license": "proprietary",
     "type": "project",
     "description": "Site Hopital Numérique",
     "authors": [
         {
             "name": "Quentin SOMAZZI",
             "email": "qsomazzi@nodevo.com"
+        },
+        {
+            "name": "Gaetan MELCHILSEN",
+            "email": "gmelchilsen@nodevo.com"
         }
     ],
     "autoload": {
         "psr-0": { "": "src/" }
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "ssh://git@bitbucket.org:22/nodevo/web_symfony_bdl_moxiemanager.git"
+        }
+    ],
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "~2.4",
@@ -25,16 +35,18 @@
         "sensio/framework-extra-bundle": "~3.0",
         "sensio/generator-bundle": "~2.3",
         "incenteev/composer-parameter-handler": "~2.0",
-        "friendsofsymfony/user-bundle": "*",
+        "friendsofsymfony/user-bundle": "~2.0@dev",
         "knplabs/knp-menu": "2.0.*@dev",
         "knplabs/knp-menu-bundle": "2.0.*@dev",
-        "liip/doctrine-cache-bundle": "dev-master",
-        "apy/datagrid-bundle": "dev-master",
+        "liip/doctrine-cache-bundle": "~1.0",
+        "apy/datagrid-bundle": "~2.2",
         "white-october/pagerfanta-bundle": "2.1.*@dev",
         "pagerfanta/pagerfanta": "1.0.*@dev",
         "genemu/form-bundle": "2.2.*",
         "igorw/file-serve-bundle": "~1.0",
-        "doctrine/doctrine-fixtures-bundle": "dev-master"
+        "doctrine/doctrine-fixtures-bundle": "~2.2",
+        "beberlei/DoctrineExtensions": "v0.1",
+        "nodevo/gestionnaire-media": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

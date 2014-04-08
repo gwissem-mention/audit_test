@@ -17,9 +17,9 @@ class ContractualisationGrid extends Grid implements IGrid
      */
     public function setConfig()
     {
-        $this->setSource( 'hopitalnumerique_user.manager.contractualisation' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setSource( 'HopitalNumeriqueUserBundle:Contractualisation' );
         $this->setNoDataMessage('Aucun fichier de contractualisation à afficher.');
+        $this->setButtonSize(43);
     }
 
     /**
@@ -31,16 +31,18 @@ class ContractualisationGrid extends Grid implements IGrid
         $this->addColonne( new Column\TextColumn('nomDocument', 'Nom document') );
         
         $colonneDate = new Column\DateColumn('dateRenouvellement', 'Date renouvellement');
-        $this->addColonne( $colonneDate->setSize(170) );     
+        $colonneDate->setSize(170);
+        $this->addColonne( $colonneDate );     
 
-        $typeDocumentColonne = new Column\TextColumn('typeDocument', 'Type de document');
+        $typeDocumentColonne = new Column\AssocColumn('typeDocument.libelle', 'Type de document');
         $this->addColonne( $typeDocumentColonne );
 
         $archiverColonne = new Column\BooleanColumn('archiver', 'Document archivé');
-        $archiverColonne->setValues( array( 1 => 'Oui', 0 => 'Non') );
-        $this->addColonne( $archiverColonne->setSize(150) );
+        $archiverColonne->setSize(150);
+        $this->addColonne( $archiverColonne );
 
-        //$this->addColonne( new Column\BlankColumn('archiver') );
+        /* Colonnes inactives */
+        $this->addColonne( new Column\BlankColumn('path') );
     }
 
     /**

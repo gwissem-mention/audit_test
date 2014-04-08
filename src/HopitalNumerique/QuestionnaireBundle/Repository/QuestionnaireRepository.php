@@ -17,17 +17,27 @@ class QuestionnaireRepository extends EntityRepository
      *
      * @return array
      */
-    public function getQuestionsReponses( $idQuestionnaire, $idUser )
+    public function getQuestionsReponses( $idQuestionnaire, $idUser, $paramId )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('questionnaire, question, reponse')
         ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Question', 'question')
         ->innerJoin('question.questionnaire', 'questionnaire' ,'WITH' , 'questionnaire.id = :idQuestionnaire')
-        ->setParameter('idQuestionnaire', $idQuestionnaire )
-        ->leftJoin('question.reponses', 'reponse', 'WITH' , 'reponse.user = :idUser ')
-//         ->innerJoin('reponse.user', 'user' , 'WITH' , 'user.id = :idUser')
-        ->setParameter('idUser', $idUser )
-        ->orderBy('question.ordre');
+        ->setParameter('idQuestionnaire', $idQuestionnaire );
+        
+        if ($paramId != null)
+        {
+            $qb->leftJoin('question.reponses', 'reponse', 'WITH' , 'reponse.user = :idUser AND reponse.paramId = :paramId')
+                ->setParameter('idUser', $idUser)
+                ->setParameter('paramId', $paramId);
+        }
+        else
+        {
+            $qb->leftJoin('question.reponses', 'reponse', 'WITH' , 'reponse.user = :idUser ')
+    //         ->innerJoin('reponse.user', 'user' , 'WITH' , 'user.id = :idUser')
+            ->setParameter('idUser', $idUser );
+        }
+        $qb->orderBy('question.ordre');
                 
         return $qb->getQuery()->getResult();
     }

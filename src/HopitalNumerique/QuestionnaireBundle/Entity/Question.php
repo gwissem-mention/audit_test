@@ -4,11 +4,6 @@ namespace HopitalNumerique\QuestionnaireBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-//Asserts Stuff
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
-
 /**
  * Question
  *
@@ -32,16 +27,6 @@ class Question
      * @ORM\Column(name="que_alias", type="string", length=60, options = {"comment" = "Alias de la question"})
      */
     protected $alias;
-    
-    /**
-     * @Assert\NotBlank(message="Le fichier ne peut pas être vide.")
-     * @Assert\File(
-     *     maxSize = "10M",
-     *     mimeTypes = {"application/pdf", "application/x-pdf"},
-     *     mimeTypesMessage = "Choisissez un fichier PDF valide"
-     * )
-     */
-    public $file;
 
     /**
      * @var string
@@ -53,7 +38,7 @@ class Question
     /**
      * @var string
      *
-     * @ORM\Column(name="que_reference_param_tri", type="string", length=50, nullable=true, options = {"comment" = "Code de la référence si le type est une entité"})
+     * @ORM\Column(name="que_reference_param_tri", type="string", length=50, nullable=true, options = {"comment" = "Code de la référence si le type est une entitée"})
      */
     protected $referenceParamTri;
 

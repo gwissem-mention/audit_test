@@ -1,0 +1,24 @@
+{% if domaines %}
+    <div class="panel panel-default gray">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseDomaines" class="collapsed" id="domaines_collapse">
+                <div class="panel-heading"><h4>Domaines maîtrisés</h4></div>
+            </a>
+            <div id="collapseDomaines" class="collapse" style="height: 0px;">
+
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <ul>
+                            {% for domaine in domaines %}
+                                <li>
+                                    <div class="form-group">
+                                        {{domaine.libelle}}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

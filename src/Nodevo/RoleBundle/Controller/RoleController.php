@@ -1,7 +1,6 @@
 <?php
 namespace Nodevo\RoleBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -27,7 +26,7 @@ class RoleController extends Controller
     {
         $role = $this->get('nodevo_role.manager.role')->createEmpty();
 
-        return $this->_renderForm('nodevo_role_role', $role, 'NodevoRoleBundle:Role:edit.html.twig' );
+        return $this->renderForm('nodevo_role_role', $role, 'NodevoRoleBundle:Role:edit.html.twig' );
     }
 
     /**
@@ -39,7 +38,7 @@ class RoleController extends Controller
     {
         $role = $this->get('nodevo_role.manager.role')->findOneBy( array('id' => $id) );
 
-        return $this->_renderForm('nodevo_role_role', $role, 'NodevoRoleBundle:Role:edit.html.twig' );
+        return $this->renderForm('nodevo_role_role', $role, 'NodevoRoleBundle:Role:edit.html.twig' );
     }
 
     /**
@@ -68,9 +67,9 @@ class RoleController extends Controller
         if( $role->getInitial() ){
             $this->get('session')->getFlashBag()->add('danger', 'Il est interdit de supprimer un groupe initial.' );
         }else{
-            $users = $role->getUsers();
-
-            if( isset($users[0]) ){
+            $users = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole( $role->getRole() );
+            
+            if( !is_null($users) ){
                 $message = 'Ce groupe n\'a pas pu être supprimé car il a encore des utilisateurs associés.';
                 $this->get('session')->getFlashBag()->add('danger', $message);
             }else{
@@ -99,7 +98,7 @@ class RoleController extends Controller
      *
      * @return Form | redirect
      */
-    private function _renderForm( $formName, $role, $view )
+    private function renderForm( $formName, $role, $view )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $role);

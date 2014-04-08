@@ -7,6 +7,7 @@
 {% block toolbarButton %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     {% if objet.id %}
+        <a class="btn btn-default" href="{{ path('hopital_numerique_publication_publication_objet', { 'id': objet.id }) }}" target="_blank" title="Prévisualiser"><i class="fa fa-eye"></i></a>
         <a href="{{ path('hopitalnumerique_objet_objet_edit', { 'id': objet.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
     {% endif %}
 {% endblock %}

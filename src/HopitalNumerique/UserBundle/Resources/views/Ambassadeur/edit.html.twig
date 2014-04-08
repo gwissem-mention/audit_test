@@ -8,6 +8,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-user-ambassadeur-edit.css" filter="cssrewrite"
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -16,8 +17,9 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-user-ambassadeur-edit.js"
-        'bundles/hopitalnumeriqueuser/js/Expert/script.js'
+    {% javascripts output="compiled/hopitalnumerique-user-ambassadeur-edition.js"
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        'bundles/hopitalnumeriqueuser/js/Ambassadeur/script.js'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
         'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
     %}
@@ -36,26 +38,29 @@
                 <div class="options">
                     <ul class="nav nav-tabs">
                         <li>
-						    <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Données de caractérisation</a>
-						</li>
+                            <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Caractérisation</a>
+                        </li>
                         {% if user.id is not null and (options.expert or options.ambassadeur)  %}
-							<li>
-							    <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Données de contractualisation</a>
-							</li>
-						{% endif %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Contractualisation</a>
+                            </li>
+                        {% endif %}
                         {% if user.id is not null and (options.expert or options.expert_form) %}
-							<li>
-							    <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature pour devenir expert</a>
-							</li>
-						{% endif %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature expert</a>
+                            </li>
+                        {% endif %}
                         {% if user.id is not null and (options.ambassadeur or options.ambassadeur_form) %}
-							<li class="active">
-							    <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature pour devenir ambassadeur</a>
-							</li>
-						{% endif %}
+                            <li class="active">
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature ambassadeur</a>
+                            </li>
+                        {% endif %}
                         {% if user.id is not null and options.ambassadeur %}
                             <li>
-                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maitrisés</a>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maîtrisées</a>
+                            </li>
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Domaines maîtrisés</a>
                             </li>
                         {% endif %}
                     </ul>
@@ -63,16 +68,23 @@
             </div>
 
             <div class="panel-body" >
-	            <div class="sous_options">
-	                <div class="btn-toolbar">
-					    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
-					    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
-	                    <div onclick='deleteWithConfirm("{{path('hopitalnumerique_user_ambassadeur_deleteAll', {'idUser':user.id, 'idQuestionnaire':questionnaire.id})}}" );' class="btn btn-default" title="Suppression des réponses de ce questionnaire"><i class="fa fa-trash-o"></i></div>
-	                </div>
-	            </div>
-                {# Include des données de contractualisation #}
-                {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire} )) }}
-	        </div>            
+                <div class="sous_options">
+                    <div class="btn-toolbar">
+                        {% if user.id is not null and options.ambassadeur_form and not options.ambassadeur %}
+                            <div onclick='validerCandidature("{{path('hopitalnumerique_user_ambassadeur_validationCandidature', {'user':user.id})}}" );' class="btn btn-default" title="Validation de la candidature"><i class="fa fa-check-circle"></i></div>
+                            <a class="btn btn-default fancybox.ajax" href="{{path('hopitalnumerique_user_ambassadeur_messageRefusCandidature')}}" title="Refus de la candidature" id="refusCandidature" ><i class="fa fa-minus-circle"></i></a>
+                        {% endif %}
+                        <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+                        <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+                        <div onclick='deleteAllReponses("{{path('hopitalnumerique_reponse_deleteAll', {'user':user.id, 'questionnaire':questionnaire.id})}}" );' class="btn btn-default" title="Suppression des réponses de ce questionnaire"><i class="fa fa-trash-o"></i></div>
+
+                        <input id="questionnaire_route_redirection" type="hidden" value='{{ optionRenderForm.routeRedirect|raw }}'>
+                        <input id="refus-candidature-url" type="hidden" value='{{path('hopitalnumerique_user_ambassadeur_refusCandidature', {'user':user.id})}}'>
+                    </div>
+                </div>
+                {# Include des Contractualisation #}
+                {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
+            </div>           
         </div>
     </div>
 {% endblock %}

@@ -7,6 +7,7 @@
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-user-contractualisation-index.css" filter="cssrewrite"
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
+        'bundles/hopitalnumeriqueuser/css/grid.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -33,26 +34,29 @@
                 <div class="options">
                     <ul class="nav nav-tabs">
                         <li>
-						    <a href="{{path('hopital_numerique_user_edit', {'id':utilisateur.id})}}">Données de caractérisation</a>
+						    <a href="{{path('hopital_numerique_user_edit', {'id':utilisateur.id})}}">Caractérisation</a>
 						</li>
                         {% if utilisateur.id is not null and (options.expert or options.ambassadeur) %}
 							<li class="active">
-							    <a href="{{path('hopitalnumerique_user_contractualisation', {'id':utilisateur.id})}}">Données de contractualisation</a>
+							    <a href="{{path('hopitalnumerique_user_contractualisation', {'id':utilisateur.id})}}">Contractualisation</a>
 							</li>
 						{% endif %}
                         {% if utilisateur.id is not null and (options.expert or options.expert_form) %}
 							<li>
-							    <a href="{{path('hopitalnumerique_user_expert_edit', {'id':utilisateur.id})}}">Candidature pour devenir expert</a>
+							    <a href="{{path('hopitalnumerique_user_expert_edit', {'id':utilisateur.id})}}">Candidature expert</a>
 							</li>
 						{% endif %}
                         {% if utilisateur.id is not null and (options.ambassadeur or options.ambassadeur_form) %}
 							<li>
-							    <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':utilisateur.id})}}">Candidature pour devenir ambassadeur</a>
+							    <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':utilisateur.id})}}">Candidature ambassadeur</a>
 							</li>
 						{% endif %}
                         {% if utilisateur.id is not null and options.ambassadeur %}
                             <li>
-                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':utilisateur.id})}}">Productions maitrisés</a>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':utilisateur.id})}}">Productions maîtrisées</a>
+                            </li>
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':utilisateur.id})}}">Domaines maîtrisés</a>
                             </li>
                         {% endif %}
                     </ul>

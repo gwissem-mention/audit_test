@@ -12,21 +12,26 @@ class ContenuRepository extends EntityRepository
     /**
      * Retourne tous les elements de contenu pour l'objet $id
      *
-     * @param integer $id ID de l'objet
+     * @param integer|array $id ID de(s) l'objet(s)
      *
      * @return array
      */
     public function getArboForObjet( $id )
     {
-        return $this->_em->createQueryBuilder()
-                         //->select('con.id, con.titre, refParent.id as parent, con.order')
-                         ->select('con')
-                         ->from('\HopitalNumerique\ObjetBundle\Entity\Contenu', 'con')
-                         ->leftJoin('con.objet','obj')
-                         //->leftJoin('con.parent','refParent')
-                         ->where('obj.id = :id')
-                         ->orderBy('con.parent, con.order')
-                         ->setParameter('id', $id);
+        $qb = $this->_em->createQueryBuilder()
+                        ->select('con')
+                        ->from('\HopitalNumerique\ObjetBundle\Entity\Contenu', 'con')
+                        ->leftJoin('con.objet','obj');
+
+        if( is_array($id) )
+            $qb->where('obj.id IN (:id)');
+        else
+            $qb->where('obj.id = :id');
+
+        $qb->orderBy('con.parent, con.order')
+           ->setParameter('id', $id);
+
+        return $qb;
     }
 
     /**

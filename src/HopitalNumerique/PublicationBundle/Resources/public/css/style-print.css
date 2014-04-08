@@ -1,0 +1,6 @@
+*{width: 100% !important; border:none;background-color :#fff; font-family :Serif;font-size :12pt;}
+@page{ margin: 1 cm .5cm; size: portrait; }
+#header, #footer, #menu, #sommaire, .col-md-4, .print {display: none}
+img{ width:auto !important }
+#publication .btn { display:none !important; }
+#articles p.titre, #articles #sous-menu, #articles .actus{display: none}

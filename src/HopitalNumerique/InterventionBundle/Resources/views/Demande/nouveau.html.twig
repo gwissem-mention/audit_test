@@ -1,0 +1,87 @@
+{% extends 'HopitalNumeriqueInterventionBundle:Form:layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-intervention-demande-nouveau.css"
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-intervention-demande-nouveau.js"
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/Formulaire.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/FormulaireEvenement.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+        {% if interventionDemande.etablissements|length > 0 %}{% spaceless %}
+            {% for etablissement in interventionDemande.etablissements %}
+                HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS.push({{ etablissement.id }});
+            {% endfor %}
+        {% endspaceless %}{% endif %}
+    </script>
+{% endblock %}
+
+{% block headerTitle %}Nouvelle intervention{% endblock %}
+
+{% block headerDesc %}
+    {% if app.user.hasRoleCmsi %}
+        <p>
+            Remplissez le formulaire ci-après si vous souhaitez solliciter l'intervention d'un ambassadeur dans votre établissement. Après l'acceptation de votre demande par l'ambassadeur de votre région, ce dernier contactera le ou les établissements pour planifier son intervention. Un mail vous parviendra lorsque l'évaluation de l'intervention sera disponible sur la plateforme.
+        </p>
+    {% else %}
+        <p>
+            Remplissez le formulaire ci-après si vous souhaitez solliciter l'intervention d'un ambassadeur dans votre établissement. Après l'acceptation de votre demande par le CMSI et l'ambassadeur de votre région, ce dernier vous contactera afin d'organiser son intervention. Une fois l'intervention réalisée, vous serez sollicités par mail pour l'évaluer.
+        </p>
+    {% endif %}
+{% endblock %}
+
+{% block barreActions %}{% endblock %}
+
+{% block content %}
+    <div class="panel_form" id="intervention_demande_panel">
+
+        {% set informationsManquantes = app.user|informationsManquantes %}
+
+        {% if app.user.hasRoleCmsi == false and (not informationsManquantes.ok) %}
+            <div class="informations_manquantes col-md-12">
+                {% for key,informationManquante in informationsManquantes %}
+                    {# Affichage de la 'légende' #}         
+                    {% if 'ok' == key %}
+                        <span class="legende rose">
+                            <strong>Certaines données sont nécessaires pour la création d'une demande d'intervention, veuillez renseigner les <a href="{{path('hopital_numerique_user_informations_personnelles')}}">données personnelles</a> suivantes :</strong>
+                        </span>
+                    {% endif %}
+                    {% if informationManquante is not empty %}
+                        <ul class="rose">
+                            {% if informationManquante is not null %}
+                                <li><span class="champ_manquant"><strong>{{ informationManquante.label }}</strong></span></li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+                {% endfor %}
+            </div>      
+            <div class="col-md-12 text-right button_donnees_personnelles">
+               <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-success" title="Données personnelles">{{ 'données personnelles'|upper }}</i></a>
+            </div>
+            <div class="clearfix"></div>
+        {% endif %} 
+    
+        {% if (informationsManquantes.ok or app.user.hasRoleCmsi) %}
+            <form method="post" id="form_intervention_demande_nouveau" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(interventionDemandeFormulaireNouveau) }}>
+                <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+                {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
+
+                {{ form_javascript(interventionDemandeFormulaireNouveau) }}
+                {{ form_widget(interventionDemandeFormulaireNouveau) }}
+                
+                <div class="boutons">
+                    <input type="submit" class="btn btn-success submit" value="Valider ma demande">
+                </div>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

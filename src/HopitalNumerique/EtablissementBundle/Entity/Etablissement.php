@@ -3,6 +3,7 @@
 namespace HopitalNumerique\EtablissementBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -31,12 +32,12 @@ class Etablissement
      * @var string
      * @Assert\NotBlank(message="Le nom ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="eta_nom", type="string", length=255, options = {"comment" = "Nom de l établissement"})
      */
     private $nom;
@@ -59,6 +60,8 @@ class Etablissement
      * @ORM\JoinColumn(name="ref_type_organisme", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="Le type d'organisme ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
+     *
+     * @GRID\Column(field="typeOrganisme.libelle")
      */
     private $typeOrganisme;
 
@@ -67,6 +70,8 @@ class Etablissement
      * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="La civilité ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
+     *
+     * @GRID\Column(field="region.libelle")
      */
     private $region;
 
@@ -75,6 +80,8 @@ class Etablissement
      * @ORM\JoinColumn(name="ref_departement", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="La civilité ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
+     *
+     * @GRID\Column(field="departement.libelle")
      */
     private $departement;
 
@@ -82,12 +89,12 @@ class Etablissement
      * @var string
      * @Assert\NotBlank(message="L'adresse ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "512",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'adresse.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'adresse."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[512]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[512]]")
      * @ORM\Column(name="eta_adresse", type="string", length=512, options = {"comment" = "Adresse de l établissement"})
      */
     private $adresse;
@@ -96,12 +103,12 @@ class Etablissement
      * @var string
      * @Assert\NotBlank(message="La ville ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans la ville.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans la ville."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="eta_ville", type="string", length=255, options = {"comment" = "Ville de l établissement"})
      */
     private $ville;
@@ -155,7 +162,7 @@ class Etablissement
         return sprintf('%s - %s', $this->nom, $this->finess);
     }
     
-    // v -------- Utilisateur  -------- v    
+    // v -------- Utilisateur  -------- v
 
     public function __construct()
     {
@@ -347,4 +354,13 @@ class Etablissement
         return $this->codepostal;
     }
 
+    /**
+     * Retourne l'appellation de l'établissement pour l'affichage (nom - FINESS).
+     * 
+     * @return string Appellation de l'établissement
+     */
+    public function getAppellation()
+    {
+        return $this->nom.' - '.$this->finess;
+    }
 }

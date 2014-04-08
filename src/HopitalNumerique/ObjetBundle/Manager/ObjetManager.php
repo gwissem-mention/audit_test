@@ -3,8 +3,8 @@
 namespace HopitalNumerique\ObjetBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManager;
+use \Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
  * Manager de l'entité Objet.
@@ -12,6 +12,20 @@ use Doctrine\Common\Collections\Criteria;
 class ObjetManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Objet';
+    protected $_contenuManager;
+
+    /**
+     * Construct 
+     *
+     * @param EntityManager  $em      Entity Mangager de doctrine
+     * @param ContenuManager $manager ContenuManager
+     */
+    public function __construct( EntityManager $em, ContenuManager $manager )
+    {
+        parent::__construct($em);
+
+        $this->_contenuManager = $manager;
+    }
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
@@ -20,9 +34,21 @@ class ObjetManager extends BaseManager
      */
     public function getDatasForGrid( $condition = null )
     {
-        $results = $this->getRepository()->getDatasForGrid( $condition );
+        $results = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
 
-        return $this->_rearangeForTypes( $results );
+        return $this->rearangeForTypes( $results );
+    }
+
+    /**
+     * Retourne la liste des objets selon le/les types
+     *
+     * @param array $types Les types à filtrer
+     *
+     * @return array
+     */
+    public function getObjetsByTypes( $types, $limit = 0 )
+    {
+        return $this->getRepository()->getObjetsByTypes( $types, $limit )->getQuery()->getResult();
     }
 
     /**
@@ -32,9 +58,9 @@ class ObjetManager extends BaseManager
      */
     public function getDatasForGridAmbassadeur( $condition = null )
     {
-        $results = $this->getRepository()->getDatasForGridAmbassadeur( $condition );
+        $results = $this->getRepository()->getDatasForGridAmbassadeur( $condition )->getQuery()->getResult();
         
-        return $this->_rearangeForTypes( $results );
+        return $this->rearangeForTypes( $results );
     }
 
     /**
@@ -81,7 +107,6 @@ class ObjetManager extends BaseManager
     public function getReferences($objet, $references)
     {
         $selectedReferences = $objet->getReferences();
-        $disabledChilds     = array();
 
         //applique les références 
         foreach( $selectedReferences as $selected )
@@ -93,21 +118,41 @@ class ObjetManager extends BaseManager
             $ref->selected = true;
             $ref->primary  = $selected->getPrimary();
 
-            //si on est un enfant et que l'on est présent dans le tableau disabled childs, on devient disabled (car notre parent est sélectionné)
-            if( in_array($ref->id, $disabledChilds))
-                $ref->disabled = true;
-
-            //si y'a des enfants, on ajoute les ids dans les disabledChilds
-            if( !is_null($ref->childs) ){
-                $childs         = json_decode($ref->childs);
-                $disabledChilds = array_unique( array_merge($disabledChilds, $childs) );
-            }
-
             //on remet l'élément à sa place
             $references[ $selected->getReference()->getId() ] = $ref;
         }
         
         return $references;
+    }
+
+    /**
+     * Formatte les références sous forme d'un unique tableau
+     *
+     * @param objet $objet      Objet concerné
+     * @param array $references Liste des références de type dictionnaire
+     *
+     * @return array
+     */
+    public function getReferencesOwn($objet)
+    {
+        $return = array();
+        $selectedReferences = $objet->getReferences();
+
+        //applique les références 
+        foreach( $selectedReferences as $selected ){
+            $reference = $selected->getReference();
+
+            //on remet l'élément à sa place
+            $return[ $reference->getId() ]['nom']     = $reference->getCode() . " - " . $reference->getLibelle();
+            $return[ $reference->getId() ]['primary'] = $selected->getPrimary();
+            
+            if( $reference->getParent() )
+                $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
+        }
+        
+        $this->formatReferencesOwn( $return );
+        
+        return $return;
     }
     
     /**
@@ -117,17 +162,26 @@ class ObjetManager extends BaseManager
      */
     public function getObjetsByAmbassadeur( $idUser )
     { 
-        return $this->getRepository()->getObjetsByAmbassadeur( $idUser );
+        return $this->getRepository()->getObjetsByAmbassadeur( $idUser )->getQuery()->getResult();
     }
-
+    
     /**
      * Retourne la liste des objets non maitrisés par l'ambassadeur
-     * 
-     * @param integer $id Id de l'ambassadeur
+     *
+     * @param integer $id    Id de l'ambassadeur
+     * @param array   $types Liste des types
+     *
+     * @return array
      */
-    public function getObjetsNonMaitrises( $id )
-    { 
-        $results = $this->findAll();
+    public function getObjetsNonMaitrises( $id, $types )
+    {
+        //Remove Points Dur et Ressources Externes
+        foreach($types as $key => $type){
+            if( $type->getId() == 183 || $type->getId() == 184)
+                unset($types[$key]);
+        }
+
+        $results = $this->getObjetsByTypes( $types );
         $objets  = array();
 
         foreach ($results as $one)
@@ -144,14 +198,234 @@ class ObjetManager extends BaseManager
             }
 
             if( $add ) {
-                $objet           = new \stdClass;
-                $objet->id       = $one->getId();
-                $objet->titre    = $one->getTitre();
-                $objets[] = $objet;
+                $objet        = new \stdClass;
+                $objet->id    = $one->getId();
+                $objet->titre = $one->getTitre();
+                $objets[]     = $objet;
             }
         }
 
         return $objets;
+    }
+
+    /**
+     * Vérifie que le rôle ne fait pas partie de la liste des rôles exclus
+     *
+     * @param string $role  Rôle de l'user connecté
+     * @param Objet  $objet L'entitée Objet
+     *
+     * @return boolean
+     */
+    public function checkAccessToObjet($role, $objet)
+    {
+        //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
+        $roles = $objet->getRoles();
+        foreach($roles as $restrictedRole){
+            //on "break" en retournant null, l'objet n'est pas ajouté
+            if( $restrictedRole->getRole() == $role)
+                return false;
+        }
+
+        return true;
+    }
+    
+    /**
+     * Formatte les types d'objet sous forme d'une chaine de caractère avec le séparateur $sep
+     *
+     * @param array  $types Types de l'objet
+     * @param string $sep   Séparateur pour l'implode
+     *
+     * @return string
+     */
+    public function formatteTypes( $types, $sep = ' ♦ ' )
+    {
+        $tabType  = array();
+        foreach ($types as $type)
+            $tabType[] = $type->getLibelle();
+
+        return implode($sep, $tabType);
+    }
+
+    /**
+     * [testAliasExist description]
+     *
+     * @param  [type] $objet [description]
+     * @param  [type] $new   [description]
+     *
+     * @return [type]
+     */
+    public function testAliasExist( $objet, $new )
+    {
+        $alias = $this->findOneBy( array( 'alias'=>$objet->getAlias() ) );
+
+        if( $alias && $new === true )
+            return true;
+        elseif( $alias && $new === false && $alias->getId() != $objet->getId() )
+            return true;
+        
+        return false;
+    }
+
+    /**
+     * Retourne l'arbo Objets -> contenus
+     *
+     * @return array
+     */
+    public function getObjetsAndContenuArbo( $types = null )
+    {
+        //get objets and IDS
+        $objets = is_null($types) ? $this->findAll() : $this->getObjetsByTypes( $types );
+        $ids    = array();
+        foreach( $objets as $one )
+            $ids[] = $one->getId();
+
+        //get Contenus
+        $datas    = $this->_contenuManager->getArboForObjet($ids);
+        $contenus = array();
+        foreach( $datas as $one ) {
+            if( $one->objet != null )
+                $contenus[ $one->objet ][] = $one;
+        }
+
+        //formate datas
+        foreach( $objets as $one ) 
+        {
+            //Traitement pour Article
+            if($one->isArticle())
+            {
+                $results[] = array(
+                        "text"  => $one->getTitre(),
+                        "value" => "ARTICLE:" . $one->getId()
+                );
+            }
+            //Traitement pour Publication et Infradoc
+            else 
+            {
+                $results[] = array(
+                        "text"  => $one->getTitre(),
+                        "value" => "PUBLICATION:" . $one->getId()
+                );
+                
+                if( !isset($contenus[ $one->getId() ]) || count( $contenus[ $one->getId() ] ) <= 0 )
+                    continue;
+                
+                foreach( $contenus[ $one->getId() ] as $content ){
+                    $results[] = array(
+                            "text"  => "|--" . $content->titre,
+                            "value" => "INFRADOC:" . $content->id
+                    );
+                    $this->getObjetsChilds($results, $content, 2);
+                }
+            }
+            
+        }
+
+        return $results;
+    }
+
+    /**
+     * Retorune l'arbo des articles
+     *
+     * @return array
+     */
+    public function getArticlesArbo( $types )
+    {
+        //get objets
+        $objets = $this->getObjetsByTypes( $types );
+
+        //formate datas
+        foreach( $objets as $one ) {
+            $results[] = array(
+                "text" => $one->getTitre(), "value" => "ARTICLE:" . $one->getId()
+            );
+        }
+
+        return $results;
+    }
+
+    /**
+     * Retourne la liste des actualités des catégories passées en paramètre
+     *
+     * @param array $categories Les catégories
+     *
+     * @return array
+     */
+    public function getActualitesByCategorie( $categories, $role, $limit = 0 )
+    {
+        $articles   = $this->getObjetsByTypes( $categories, $limit );
+        $actualites = array();
+
+        foreach($articles as $article) {
+            if( $this->checkAccessToObjet($role, $article) ) {
+                $actu = new \stdClass;
+
+                $actu->id    = $article->getId();
+                $actu->titre = $article->getTitre();
+                $actu->alias = $article->getAlias();
+                $actu->image = $article->getVignette() ? $article->getVignette() : false;
+
+                //resume
+                $tab = explode('<!-- pagebreak -->', $article->getResume());
+                $actu->resume = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+
+                //types / catégories
+                $types            = $article->getTypes();
+                $actu->types      = $this->formatteTypes( $types );
+                $actu->categories = $this->getCategorieForUrl( $article->getTypes() );
+
+                $actualites[] = $actu;
+            }
+        }
+
+        return $actualites;
+    }
+    
+    /**
+     * Retourne les catégories qui ont des articles
+     *
+     * @param array $allCategories Liste des catégories
+     *
+     * @return array
+     */
+    public function getCategoriesWithArticles( $allCategories )
+    {
+        $categories = array();
+        foreach($allCategories as $one) {
+            $articles = $this->getObjetsByTypes( array($one) );
+            if( count($articles) > 0)
+            {
+                $categ          = new \stdClass;
+                $categ->id      = $one->getId();
+                $categ->libelle = $one->getLibelle();
+
+                $categories[] = $categ;
+            }
+        }
+
+        return $categories;
+    }
+
+    /**
+     * Retourne l'objet article pour la page d'accueil
+     *
+     * @return stdClass
+     */
+    public function getArticleHome()
+    {
+        $article = $this->findOneBy( array('id' => 1) );
+        $item    = new \stdClass;
+        
+        $item->id         = $article->getId();
+        $item->titre      = $article->getTitre();
+        $item->alias      = $article->getAlias();
+        $item->image      = $article->getVignette() ? $article->getVignette() : false;
+        $item->categories = $this->getCategorieForUrl( $article->getTypes() );
+
+        //resume
+        $tab = explode('<!-- pagebreak -->', $article->getResume());
+        $item->resume = $tab[0];
+
+        return $item;
     }
 
 
@@ -161,6 +435,55 @@ class ObjetManager extends BaseManager
 
 
 
+
+
+
+
+
+
+    /**
+     * Formatte les types de l'objet pour les URLS (catégorie param)
+     *
+     * @param array $types Les types de l'objet
+     *
+     * @return string
+     */
+    private function getCategorieForUrl( $types )
+    {
+        $type      = $types[0];
+        $categorie = '';
+
+        if( $parent = $type->getParent() )
+            $categorie .= $parent->getLibelle().'-';
+        $categorie .= $type->getLibelle();
+
+        $tool = new Chaine( $categorie );
+
+        return $tool->minifie();
+    }
+
+    /**
+     * Ajoute les enfants de $objet dans $return, formatées en fonction de $level
+     * 
+     * @param array    $return
+     * @param stdClass $objet
+     * @param integer  $level
+     * 
+     * @return void
+     */
+    private function getObjetsChilds( &$return, $objet, $level = 1 )
+    {
+        if( count($objet->childs) > 0 ){
+            foreach( $objet->childs as $child ){
+                $texte = str_pad($child->titre, strlen($child->titre) + ($level*3), "|--", STR_PAD_LEFT);
+                $return[] = array(
+                    "text" => $texte, "value" => "INFRADOC:" . $child->id
+                );
+                $this->getObjetsChilds($return, $child, $level + 1);
+            }
+        }
+    }
+
     /**
      * Réarrange les objets pour afficher correctement les types
      *
@@ -168,7 +491,7 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    private function _rearangeForTypes( $results )
+    private function rearangeForTypes( $results )
     {
         $objets  = array();
 
@@ -181,5 +504,47 @@ class ObjetManager extends BaseManager
         }
 
         return array_values($objets);
+    }
+    
+    /**
+     * [formatReferencesOwn description]
+     *
+     * @param  [type] $retour [description]
+     *
+     * @return [type]
+     */
+    private function formatReferencesOwn( &$retour )
+    {
+        foreach( $retour as $key => $one ){
+            $retour[ $key ]['childs'] = $this->getChilds($retour, $one);
+        }
+    }
+    
+    /**
+     * [getChilds description]
+     *
+     * @param  [type] $retour [description]
+     * @param  [type] $elem   [description]
+     *
+     * @return [type]
+     */
+    private function getChilds(&$retour, $elem)
+    {
+        if( isset( $elem['childs'] ) && count($elem['childs']) ){
+            $childs = array();
+            foreach( $elem["childs"] as $key => $one ){
+                $childs[ $one ] = $retour[ $one ];
+                $petitsEnfants  = $this->getChilds($retour, $childs[ $one ]);
+                if( $petitsEnfants ){
+                    $childs[ $one ]['childs'] = $petitsEnfants;
+                    unset( $retour[ $one ] );
+                } else {
+                    unset( $retour[ $one ] );
+                }
+            }
+            return $childs;
+        } else {
+            return false;
+        }
     }
 }

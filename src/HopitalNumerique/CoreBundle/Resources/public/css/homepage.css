@@ -1,0 +1,41 @@
+#homepage{ margin-top: 30px }
+
+/* Block Gauche */
+#homepage .home-left{ }
+#homepage .home-left > img{ width: 100%}
+#homepage .home-left h1{color:#333333; font-size: 14px; font-weight: bold;}
+#homepage .home-left p{color:#777777; font-size: 12px;}
+#homepage .home-left h3{ font-size: 18px; font-weight: bold; margin-top: 28px;}
+#homepage .home-left .actus{ width: 100% }
+#homepage .home-left .actus .actu { font-size: 12px; margin-top: 20px }
+#homepage .home-left .actus .actu h5{ font-weight: bold; font-size: 16px; color:#000000; margin: 0 0 10px 0;}
+#homepage .home-left .actus .actu h6{ font-size: 10px; color:#b01389; text-transform: uppercase; margin:0 0 3px 0;}
+#homepage .home-left .actus .actu p{ color:#4c4c4c; }
+#homepage .home-left .actus .readmore{margin-top: 20px}
+
+/* Block Droit */
+#homepage .home-right{ color:#ffffff; }
+#homepage .home-right p{font-size: 13px; text-align: justify; margin:0;}
+
+#homepage .home-right .recherche{ height: 282px; }
+#homepage .home-right .recherche a{ display:block; background-color: #df0d4e; padding:30px; height: 100%; }
+#homepage .home-right .recherche:hover a{ text-decoration: none; background-color: #CB072D; }
+#homepage .home-right .recherche .icone{ background-position: -202px -33px; width: 96px; height: 96px; margin:0 auto 10px; }
+#homepage .home-right .recherche h3{text-align: center; font-size: 24px; font-weight: bold; margin:0 0 15px 0; color: #ffffff; text-transform: uppercase;}
+#homepage .home-right .recherche p{color: #ffffff;}
+#homepage .home-right .forum{ height: 282px; }
+#homepage .home-right .forum a{ display:block; background-color: #b1138a; padding:30px; height: 100%;}
+#homepage .home-right .forum:hover a{text-decoration: none; background-color: #8d0b63; }
+#homepage .home-right .forum .icone{ background-position: -102px -33px; width: 96px; height: 96px; margin:0 auto 10px; }
+#homepage .home-right .forum h3{text-align: center; font-size: 24px; font-weight: bold; margin:0 0 15px 0; color: #ffffff; text-transform: uppercase;}
+#homepage .home-right .forum p{color: #ffffff;}
+
+#homepage .home-right .creation-compte{ margin-top: 25px; }
+#homepage .home-right .creation-compte .icone { width: 96px; height: 96px; background-position: -2px -33px; }
+#homepage .home-right .creation-compte > div{ padding:30px; background: #9abc0d }
+#homepage .home-right .creation-compte:hover > div{ background: #779f08 }
+#homepage .home-right .creation-compte p{ color :#ffffff; font-size: 13px; text-align: justify; }
+#homepage .home-right .creation-compte ul li{ color :#ffffff; font-size: 13px; text-align: justify; }
+#homepage .home-right .creation-compte p.titre{ font-size: 24px; font-weight: bold; margin-bottom: 15px}
+#homepage .home-right .creation-compte .buttons{margin-top:10px;}
+#homepage .home-right .creation-compte .buttons .signup{margin-right:10px;}

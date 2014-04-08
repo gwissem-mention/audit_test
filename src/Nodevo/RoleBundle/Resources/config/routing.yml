@@ -23,4 +23,3 @@ nodevo_role_delete:
     defaults: { _controller: "NodevoRoleBundle:Role:delete", _format: json }
     requirements:
         idItem: \d+
-        _method: post|delete

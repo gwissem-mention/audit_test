@@ -30,7 +30,8 @@ class ContractualisationType extends AbstractType
         $builder
             ->add('file', 'file', array(
                 'required' => true, 
-                'label'    => 'Fichier objet'
+                'label'    => 'Fichier objet',
+                'attr'        => array('class' => $this->_constraints['file']['class'] ),
             ))
             ->add('path', 'hidden')
             ->add('nomDocument', 'text', array(
@@ -61,8 +62,8 @@ class ContractualisationType extends AbstractType
             ->add('archiver', 'checkbox', array(
                 'required' => false, 
                 'label'    => 'Archiver le document ?',
-                'attr'     => array()//array('class' => $this->_constraints['archiver']['class'] )
-            ))       ;
+                'attr'     => array( 'class' => 'checkbox' )//array('class' => $this->_constraints['archiver']['class'] )
+            ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

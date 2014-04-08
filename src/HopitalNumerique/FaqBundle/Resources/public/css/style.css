@@ -1,0 +1,5 @@
+#faq{}
+#faq p.intro{margin-bottom: 20px}
+#faq .panel-heading{color:#703695;cursor: pointer; font-weight: bold}
+#faq .panel-heading.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
+#faq .panel-heading.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}

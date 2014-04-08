@@ -3,6 +3,7 @@
 namespace HopitalNumerique\QuestionnaireBundle\Manager;
 
 use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Manager de l'entité Contractualisation.
@@ -11,14 +12,22 @@ class QuestionnaireManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire';
 
-    protected static $_questionnaireArray = array(
-    	'expert'     => 1,
-    	'ambassadeur' => 2
-    );
-    
-    public function getQuestionsReponses( $idQuestionnaire, $idUser )
+    protected $_questionnaireArray = array();
+    	
+    /**
+     * Constructeur du manager
+     *
+     * @param EntityManager $em Entity Manager de Doctrine
+     */
+    public function __construct( EntityManager $em, $options = array() )
     {
-        return $this->getRepository()->getQuestionsReponses( $idQuestionnaire , $idUser );
+        parent::__construct($em);
+        $this->_questionnaireArray = isset($options['idRoles']) ? $options['idRoles'] : array();
+    }
+    
+    public function getQuestionsReponses( $idQuestionnaire, $idUser, $paramId = null )
+    {
+        return $this->getRepository()->getQuestionsReponses( $idQuestionnaire , $idUser, $paramId );
     }
     
     /**
@@ -27,10 +36,10 @@ class QuestionnaireManager extends BaseManager
      * @param string $label Nom du questionnaire
      * @return id du questionnaire si il existe, sinon 0
      */
-    public static function _getQuestionnaireId($label)
+    public function getQuestionnaireId($label)
     {
-        if(key_exists($label, self::$_questionnaireArray))
-            return self::$_questionnaireArray[$label];
+        if(key_exists($label, $this->_questionnaireArray))
+            return $this->_questionnaireArray[$label];
         else 
              throw new \Exception('Le label \''. $label .'\' ne correspond à aucun questionnaire dans le QuestionnaireManager. Liste des labels attentu : ' . self::_getLabelsQuestionnaire() );
     }
@@ -40,16 +49,46 @@ class QuestionnaireManager extends BaseManager
      * 
      * @return string
      */
-    public static function _getLabelsQuestionnaire()
+    public function getLabelsQuestionnaire()
     {
         //Variable de return
         $res = '';
         
-        foreach (self::$_questionnaireArray as $label => $id)
+        foreach ($this->_questionnaireArray as $label => $id)
         {
             $res .= '\'' . $label . '\' ';
         }
         
         return $res;
+    }
+    
+    /**
+     * Renvoie une chaine de caractère correspondant aux données du formulaire soumis
+     * 
+     * @param array(HopitalNumerique\QuestionnaireBundle\Entity\Reponse) $reponses
+     * 
+     * @return string Affichage du formulaire
+     */
+    public function getQuestionnaireFormateMail($reponses)
+    {
+        $candidature = '<ul>';
+        foreach ($reponses as $key => $reponse)
+        {
+            switch($reponse->getQuestion()->getTypeQuestion()->getLibelle())
+            {
+            	case 'entity':
+            	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . $reponse->getReference()->getLibelle() . "</li>";
+            	    break;
+            	case 'checkbox':
+            	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . ('1' == $reponse->getReponse() ? 'Oui' : 'Non' ). "</li>";
+            	    break;
+            	default:
+            	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . $reponse->getReponse() . "</li>";
+            	    break;
+            }
+        }
+        $candidature .= '</ul>';
+        
+        return $candidature;
     }
 }

@@ -1,0 +1,75 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/nodevo-faq-faq-edit.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/nodevo-faq-faq-edit.js"
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
+        'bundles/nodevoadmin/plugins/tinymce/tinymce.min.js'
+        'bundles/nodevoadmin/plugins/tinymce/tinymce.fr_FR.js'
+        'bundles/nodevofaq/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block h1Title %}
+    {% if faq.id %}
+        Editer un élément de la FAQ
+    {% else %}
+        Ajouter un élément dans la FAQ
+    {% endif %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('nodevo_faq_faq') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+    {% if faq.id %}
+        <div onclick='deleteWithConfirm("{{ path('nodevo_faq_faq_delete', { 'id': faq.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body">
+                {% form_theme form 'NodevoFaqBundle::form.html.twig' %}
+                {{ form_start(form) }}
+                    {{ form_javascript(form) }}
+                    <div class="col-md-4">
+                        {{ form_row(form.question) }}
+                        {{ form_row(form.categorie) }}
+                        {{ form_row(form.order) }}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                                {{ form_label(form.reponse) }}
+                            <div class="col-md-12">
+                                {{ form_widget(form.reponse) }}
+                            </div>
+                            <div class="col-md-12">
+                                <div class="help-block">
+                                    {{ form_errors(form.reponse) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

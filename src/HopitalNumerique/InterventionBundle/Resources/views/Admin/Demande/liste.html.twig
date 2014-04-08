@@ -1,0 +1,22 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% use 'HopitalNumeriqueInterventionBundle:Admin/Grid:config.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('grid_stylesheets') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ block('grid_javascripts') }}
+{% endblock %}
+
+{% block h1Title %}
+    Les interventions
+{% endblock %}
+
+{% block body %}
+    {{ grid(grid, _self) }}
+    {% block grid_filters %}{% endblock grid_filters%}
+{% endblock %}

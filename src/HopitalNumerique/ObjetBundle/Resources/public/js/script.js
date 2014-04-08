@@ -1,44 +1,29 @@
 $(document).ready(function() {
-    //Custom initialisation : Ce champ est particulier car on doit directement manipuler l'affichage des données au chargement 
-    $("#hopitalnumerique_objet_objet_types").select2();
-
-    //si il y a des valeurs par défaut
-    if( $("#hopitalnumerique_objet_objet_types").select2('data').length >= 1 )
-        manageOptionDisabled( $("#hopitalnumerique_objet_objet_types").select2('data')[0] );
-
-    //Sélection d'un element dans la liste déroulante implique le Disable de certains attributs
-    $("#hopitalnumerique_objet_objet_types").on("change", function(e) {
-        //Si on AJOUTE un ELEMENT
-        if ( e.added )
-            manageOptionDisabled( e.added );
-            
-        //si aucun element dans la liste : select All
-        if( e.val.length === 0 )
-            $("#hopitalnumerique_objet_objet_types option").attr('disabled',false);
-    });
-
     tinymce.PluginManager.load('table', '/bundles/nodevoadmin/plugins/tinymce/plugins/table/plugin.min.js');
     tinymce.PluginManager.load('code', '/bundles/nodevoadmin/plugins/tinymce/plugins/code/plugin.min.js');
     tinymce.PluginManager.load('pagebreak', '/bundles/nodevoadmin/plugins/tinymce/plugins/pagebreak/plugin.min.js');
     tinymce.PluginManager.load('importcss', '/bundles/nodevoadmin/plugins/tinymce/plugins/importcss/plugin.min.js');
     tinymce.PluginManager.load('textcolor', '/bundles/hopitalnumeriqueobjet/js/ObjetTextColor/plugin.min.js');
+    tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/ObjetAddPublication2/plugin.min.js');
     tinymce.PluginManager.load('image', '/bundles/nodevoadmin/plugins/tinymce/plugins/image/plugin.min.js');
+    tinymce.PluginManager.load('link', '/bundles/nodevoadmin/plugins/tinymce/plugins/link/plugin.min.js');
+    tinymce.PluginManager.load('media', '/bundles/nodevoadmin/plugins/tinymce/plugins/media/plugin.min.js');
     NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
 
-    //Save auto : toutes les 5 minutes  
-    //setInterval(saveAutomatique, 300000);
-
+    //Save auto : toutes les 10 minutes  
+    //setInterval(saveAutomatique, 600000);
+    
     tinyMCE.init({
         selector     : "textarea",
         theme        : "modern",
         theme_url    : '/bundles/nodevoadmin/plugins/tinymce/themes/modern/theme.min.js',
         skin_url     : '/bundles/nodevoadmin/plugins/tinymce/skins/lightgray',
-        plugins      : 'moxiemanager image table code textcolor pagebreak importcss',
-        height       : 190,
+        plugins      : 'moxiemanager image table code textcolor pagebreak importcss link publication media',
+        height       : 210,
         menubar      : false,
         content_css  : '/bundles/hopitalnumeriqueobjet/css/wysiwyg.css',
-        toolbar1     : "code | undo redo cut copy paste | pagebreak",
-        toolbar2     : "insertfile image | styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
+        toolbar1     : "code | undo redo cut copy paste | pagebreak | link | publication | insertfile image media ",
+        toolbar2     : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
         style_formats: [
             {title: 'Titres', items: [
                 {title: 'Titre 2', block: 'h2'},
@@ -46,23 +31,29 @@ $(document).ready(function() {
                 {title: 'Titre 4', block: 'h4'},
                 {title: 'Titre 5', block: 'h5'},
                 {title: 'Titre 6', block: 'h6'}
+            ]},
+            {title: 'Blocs', items: [
+                {title: 'Paragraphe', block: 'p'}
             ]}
         ],
         importcss_append: true,
         importcss_groups: [
             {title: 'Styles personnalisés'}
-        ]
+        ],
+        relative_urls:false,
+        urlPublication : "/admin/objet/getObjets"
     });
 
     //gestion du bouton delete : changement du fichier uploadé
     $('.deleteUploadedFile').on('click',function(){
-        $('.uploadedFile, .deleteUploadedFile ').hide();
-        $('.inputUpload').show();
-        $('#hopitalnumerique_objet_objet_path').val('');
+        $(this).hide();
+        $(this).parent().find('.uploadedFile').hide();
+        $(this).parent().find('.inputUpload').show();
+        $('#' + $(this).data('path') ) .val('');
     });
 
     //gestion du nom de fichier unique
-    $('#hopitalnumerique_objet_objet_file').on('change', function() {
+    $('#hopitalnumerique_objet_objet_file, #hopitalnumerique_objet_objet_file2').on('change', function() {
         $.ajax({
             url  : $('#objet-file-url').val(),
             data : {
@@ -101,12 +92,9 @@ $(document).ready(function() {
         });
     });
 
-
     //Création et gestion de l'arborescence du sommaire
     $('#sommaire').nestable({'maxDepth':10,'group':0}).on('change', function() {
         var serializedDatas = $(this).nestable('serialize');
-
-        //console.log( serializedDatas );
 
         $.ajax({
             url  : $('#reorder-objet-url').val(),
@@ -135,21 +123,37 @@ $(document).ready(function() {
     $('.reloadContenu').on('click',function(){
         var loader = $('body').nodevoLoader().start();
     })
+
+    //Toggle notif mise à jour
+    $('.toggle').toggles( { on : false, text : { on : 'OUI', off : 'NON' } } ).on('toggle', function (e, active) {
+        if (active) {
+            $('#hopitalnumerique_objet_objet_modified').val(1);
+        } else {
+            $('#hopitalnumerique_objet_objet_modified').val(0);
+        }
+    });
+
+    //Toogle d'ajout seulement
+    type = !$('#hopitalnumerique_objet_objet_article').val();
+    $('.toggleType').toggles( { on : type, width:80, text : { on : 'Objet', off : 'Article' } } ).on('toggle', function (e, active) {
+        if (active) { //type = objet
+            window.location = $('#objet-addobjet-url').val();
+        } else { //type = article
+            window.location = $('#objet-addarticle-url').val();
+        }
+    });
+
+    //reprise du select2 avec le plugin nodevo : sélectionner tout
+    $("#hopitalnumerique_objet_objet_roles").nSelect({
+        formatNoMatches : function(){ return 'Aucune donnée trouvée'; }
+    });
 });
 
-// Gère les options disable en fonction de l'origine (element ajouté ou initialisation du select)
-function manageOptionDisabled( origin )
-{
-    //si on a sélectionné un élément enfant : on lock tous les éléments parents
-    if( origin.element[0].parentElement.tagName == 'OPTGROUP') {
-        $("#hopitalnumerique_objet_objet_types > option").attr('disabled','disabled');
-        $("#hopitalnumerique_objet_objet_types > optgroup > option").attr('disabled',false);
-    //sinon, on a sélectionné un élément parent : on lock tous les enfants
-    }else{
-        $("#hopitalnumerique_objet_objet_types option").attr('disabled','disabled');
-        $("#hopitalnumerique_objet_objet_types > option:selected").attr('disabled',false);
+$(window).load(function(){
+    if( $('#toRef').val() != "0" ){
+        $('.manageReferences.edit').delay(800).click();
     }
-}
+});
 
 //met un loader sur le formulaire et sauvegarde automatiquement le formulaire objet
 function saveAutomatique()
@@ -171,6 +175,7 @@ function saveContenu()
             id      : idContenu,
             titre   : $('#hopitalnumerique_objet_contenu_titre').val(),
             alias   : $('#hopitalnumerique_objet_contenu_alias').val(),
+            notify  : $('#hopitalnumerique_objet_contenu_modified').val(),
             contenu : tinyMCE.get('hopitalnumerique_objet_contenu_contenu').getContent()
         },
         type     : 'POST',
@@ -292,30 +297,6 @@ function saveReferences( objet, idContenu )
     });
 }
 
-//checkbox de selection multiple
-function checkAllReferences()
-{
-    if( $('.checkAll').prop('checked') ){
-        $('#references-tab .checkbox').each(function(){
-            childs = $(this).parent().parent().data('childs');
-
-            if( childs.length > 0 ){
-                $.each(childs,function(key, val){
-                    $('.ref-'+val+' .checkbox').prop('checked','checked');
-                    $('.ref-'+val+' .checkbox').prop('disabled','disabled');
-                });
-            }
-
-            $(this).prop('checked', 'checked');
-        })
-    }else{
-        $('#references-tab .checkbox').each(function(){
-            $(this).prop('checked', false);
-            $(this).prop('disabled', '');
-        })
-    }
-}
-
 //Upload le contenu CSV et le transforme en sommaire
 function uploadContenu()
 {
@@ -330,4 +311,49 @@ function uploadContenu()
             window.location = data.url;
         }
     });
+}
+
+//Gère le collapse dans la pop-in des références
+function manageCollapse(element, way)
+{
+    childs = $(element).parent().parent().data('childs');
+    level  = $(element).parent().parent().data('level') + 1;
+
+    $.each(childs,function(key, val){
+        if( way === 'collapse' )
+            $('.ref-'+val).slideUp();
+        else{
+            if ( $('.ref-'+val).data('level') == level){
+                $('.ref-'+val).slideDown();
+                $('.ref-'+val+' .btn i').removeClass('fa-arrow-down').addClass('fa-arrow-right');
+            }
+        }
+    });
+
+    $(element).find('i').toggleClass('fa-arrow-down fa-arrow-right');
+}
+
+//Met à jour le nombre d'enfants sélectionés dans la popin
+function updateNbChilds()
+{
+    $('#references-tab .ref').each(function(){
+        childs			= $(this).data('childs');
+		parentLevel		= $(this).data('level');
+        nbChecked = 0;
+		nbChildsDirect = 0;
+		
+        if( childs.length > 0 ) {
+            $.each(childs,function(key, val){
+
+                if ( $('.ref-'+val+' .checkbox').prop('checked') && $('.ref-'+val).data('level') == parentLevel + 1 )
+                    nbChecked++
+				
+				if ( $('.ref-'+val).data('level') == parentLevel + 1 )
+                    nbChildsDirect++
+            });
+        }
+
+        $(this).find('.nbChilds').html( nbChecked );
+		$(this).find('.nbChildsDirect').html( nbChildsDirect );
+    })
 }

@@ -17,7 +17,7 @@ class ReponseRepository extends EntityRepository
      *
      * @return array
      */
-    public function reponsesByQuestionnaireByUser( $idQuestionnaire, $idUser )
+    public function reponsesByQuestionnaireByUser( $idQuestionnaire, $idUser , $paramId = null)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('reponse')
@@ -25,7 +25,15 @@ class ReponseRepository extends EntityRepository
         ->leftJoin('reponse.question', 'question')
         ->leftJoin('reponse.user', 'user')
         ->where( 'user.id = :idUser')
-        ->setParameter('idUser', $idUser )
+        ->setParameter('idUser', $idUser );
+        
+        if ($paramId != null)
+        {
+            $qb->andWhere('reponse.paramId = :paramId')
+                ->setParameter('paramId', $paramId);
+        }
+        
+        $qb->leftJoin('reponse.reference', 'reference')
         ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
         ->setParameter('idQuestionnaire', $idQuestionnaire )
         ->leftJoin('question.typeQuestion', 'typeQuestion');
@@ -55,6 +63,14 @@ class ReponseRepository extends EntityRepository
         return $qb->getQuery();
     }
     
+    /**
+     * Récupère les réponses pour l'utilisateur en fonction des questionnaires passés en param
+     * 
+     * @param int $idExpert      Identifiant du questionnaire expert
+     * @param int $idAmbassadeur Identifiant du questionnaire ambassadeur
+     *
+     * @return array Tableau sous la forme array(utilisateur => array(questionnaireId))
+     */
     public function reponseExiste($idExpert, $idAmbassadeur)
     {
         $qb = $this->_em->createQueryBuilder();

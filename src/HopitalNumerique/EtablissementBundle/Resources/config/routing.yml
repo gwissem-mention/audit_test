@@ -2,7 +2,6 @@
 hopitalnumerique_etablissement:
     pattern:  /etablissement/
     defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:index" }
-
 hopitalnumerique_etablissement_add:
     pattern:  /etablissement/add
     defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:add" }
@@ -24,7 +23,6 @@ hopitalnumerique_etablissement_delete:
     defaults: { _controller: "HopitalNumeriqueEtablissementBundle:Etablissement:delete", _format: json}
     requirements:
         id: \d+
-        _method: post|delete
 
 hopitalnumerique_etablissement_departements:
     pattern:  /etablissement/departements

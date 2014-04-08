@@ -1,0 +1,147 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Registre{% endblock %}
+{% block metadesc %}Registre des ambassadeurs{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-registre-ambassadeur-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueregistre/css/style.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-registre-ambassadeur-index.js"
+        'bundles/nodevotools/js/json.js'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        'bundles/hopitalnumeriqueregistre/js/raphael.js'
+        'bundles/hopitalnumeriqueregistre/js/carte_departement.js'
+        'bundles/hopitalnumeriqueregistre/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="registre-ambassadeur">
+        {# En-tête #}
+        <div class="col-md-12">
+            <h3 class="violet">Annuaire des ambassadeurs <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="pull-right">Tableau de bord</a> </h3>
+        </div> 
+        
+        {# Critère de recherche #}
+        <div class="col-md-3">
+            <h4 class="violet">Critères de recherche</h4>
+            <div class="map">
+                {# Liste déroulante : domaine #}
+                <p class="titre">Domaines fonctionnels</p>
+                <select name="domaines_liste" id="domaines_liste">
+                    <option value="0"> - </option>
+                    {% for domaine in domaines.domaines %}
+                        <option value="{{domaine.id}}" {% if domaines.domaineSelected == domaine.id %}selected="selected"{% endif %} >{{domaine.libelle}}</option>
+                    {% endfor %}
+                </select>
+                {# Carte de france #}
+                <div id="canvas_france" style="width:100%;" ></div>
+
+                <span onclick="selectionnerToutesRegions();" class="link violet col-md-12" title="Sélectionner tout">> Sélectionner tout</span>
+                <span onclick="deselectionnerToutesRegions();" class="link violet col-md-12" title="Désélectionner tout">> Désélectionner tout</span>
+                <input type="hidden" id="selected-region" value='{{regions.regionsSelected|raw}}' />
+                <div id="btn_appliquer_filtre" onclick='appliquerRegionsSelectionnees();' class="btn background-rose col-md-12" title="Appliquer le nouveau filtre">Activer la recherche</div>
+                <input type="hidden" id="hopital_numerique_registre_edit_session" value='{{path('hopital_numerique_registre_edit_session')}}' />
+				<div class="clearfix"></div>
+            </div>
+        </div>
+        
+        <div class="content col-md-9 no_padding">
+			{% block content %}
+			    <div class="annuaire_ambassadeur">
+			    
+			        {% block chapo %}
+		                <div class="col-md-12">
+				            <div class="chapo">
+				                <h1 class="violet">Annuaire des ambassadeurs</h1>
+				                <div class="description"><p>Vous êtes à la recherche d'un ambassadeur dans votre région? Cliquez sur la carte et la liste des ambassadeurs les plus proches de votre établissement apparaîtra. Vous pouvez également affiner votre recherche par domaine fonctionnel. Vous pourrez ensuite solliciter un ambassadeur en cliquant sur son profil. Remplissez ensuite le formulaire puis validez votre demande.</p></div>
+				            </div>
+			            </div>
+                        <div class="clearfix"></div>
+			        {% endblock %}
+			        
+			        {% block contenu %}
+				        {% if regions.regions %}
+			                {% for region in regions.regions %}
+			                    <div class="col-md-12">
+			                         {# Ajout du nom de la région + nombre ambassadeur concerné sous la forme : "Nom région ( Nb ambassadeur(s) )" #}
+				                    <h4 class="violet">{{region.libelle}} ( {{ ambassadeurs[region.id]|length }} ambassadeur{% if ambassadeurs[region.id]|length > 1%}s{% endif %} )</h4>
+				                </div>
+				                {# Permet de vérifier si un ambassadeur est présent pour la région #}
+				                {% set ambassadeurExisteRegion = false %}
+				                {% for ambassadeur in ambassadeurs[region.id] %}
+				                    {% if ambassadeur.region.id == region.id %}
+				                        {% set ambassadeurExisteRegion = true %}
+					                    <div class="fiche col-md-6">
+					                        <div class="content">
+					                            <h5>{{ambassadeur.prenom|title ~ ' ' ~ ambassadeur.nom|title}}</h5>
+					                            
+					                                {% if ambassadeur.etablissementRattachementSante %}
+					                                   <div class="etab" title="{% if ambassadeur.etablissementRattachementSante.ville is not null %}{{ ambassadeur.etablissementRattachementSante.ville }}{% if ambassadeur.etablissementRattachementSante.codepostal is not null %} ({{ ambassadeur.etablissementRattachementSante.codepostal }}){% endif %}{% endif %}">    
+					                                       {{ambassadeur.etablissementRattachementSante.nom}}
+				                                       </div>
+					                                {% else %}
+					                                   <div class="etab">
+					                                       {{ambassadeur.autreStructureRattachementSante}}
+				                                       </div>
+					                                {% endif %}
+					                            <div class="fonction">
+					                                {% if ambassadeur.fonctionDansEtablissementSante %}
+					                                    {{ambassadeur.fonctionDansEtablissementSante}}
+					                                {% else %}
+					                                    {{ambassadeur.fonctionStructure}}
+					                                {% endif %}
+					                            </div>
+					                            
+					                            <span class="col-md-12"><a class="link violet fancybox.ajax" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Domaines fonctionnels</a></span>
+					                            <span class="col-md-12"><a class="link violet fancybox.ajax" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a></span>
+					
+					                            <span class="col-md-12"><a class="btn background-violet {% if (user.isCMSI) and not (user.user.region.id == ambassadeur.region.id) %}disabled{% endif %}" href="{% if (user.isCMSI) and not ((user.user.region.id == ambassadeur.region.id)) %}#{% else %}{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}{% endif %}">Solliciter cet ambassadeur</a></span>
+					                            <div class="clearfix"></div>
+					                        </div>
+					                    </div>
+				                    {% endif %}
+				                {% endfor %}
+				                {# Affichage dans le cas où il n'y ait aucun ambassadeur pour cette région #}
+				                {% if not ambassadeurExisteRegion %}
+				                    <div class="aucune-fiche col-md-6">
+				                        <div class="content">- Aucun ambassadeur pour cette région -</div>
+				                    </div>
+				                {% endif %}
+			                {% else %}
+			                    <div class="col-md-12">
+			                        - Aucune régions sélectionnées - 
+			                    </div>
+			                {% endfor %}
+			            {% else %}
+			                <div class="col-md-12">
+			                    <h4 class="violet">Aucune région sélectionnée</h4>
+			                </div>
+			                <div class="col-md-12">
+			                    - Merci de sélectionner une région pour rechercher les ambassadeurs - 
+			                </div>
+			            {% endif %}
+		                <div class="clearfix"></div>
+                {% endblock contenu%}
+			        
+			    </div>
+			{% endblock content %}
+
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+{% endblock body %}

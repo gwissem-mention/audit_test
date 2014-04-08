@@ -15,7 +15,7 @@
 {% endblock phpdoc_method_header %}
      */
 {% block method_definition %}
-    private function _renderForm( $formName, ${{entity|lower}}, $view )
+    private function renderForm( $formName, ${{entity|lower}}, $view )
 {% endblock method_definition %}
     {
 {% block method_body %}
@@ -33,7 +33,7 @@
             //si le formulaire est valide
             if ($form->isValid()) {
                 //test ajout ou edition
-                $new = is_null(${{entity|lower}}->getId()) ? true : false;
+                $new = is_null(${{entity|lower}}->getId());
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}')->save(${{entity|lower}});

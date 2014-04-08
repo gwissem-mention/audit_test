@@ -1,0 +1,125 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Recherche{% endblock %}
+{% block metadesc %}Recherche{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-search-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquerecherche/css/style.css'
+        'bundles/nodevoadmin/plugins/apprise/apprise.css'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-recherche-search-index.js"
+        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        'bundles/nodevoadmin/plugins/apprise/apprise.js'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/hopitalnumeriquerecherche/js/jquery.cookie.js'
+        'bundles/hopitalnumeriquerecherche/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="recherche">
+        <div class="col-md-4">
+            <div id="origin">
+                <ol>
+                    {{ _self.buildTree(elements, 0, 'cliquable') }}
+                </ol>
+            </div>
+
+            {#<div class="input-group">
+                <input type="text" class="form-control" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                </span>
+            </div>#}
+        </div>
+
+        <div class="col-md-8">
+            <div class="requete">
+                <h2 class="violet {% if refs != '[]' %}ropen{% endif %}">Requête de recherche</h2>
+    
+                <div class="placeholder" {% if refs != '[]' %}style="display:none"{% endif %}>
+                    <p class="text-muted">Ici seront placés les critères de recherche que vous aurez choisis dans le référentiel à gauche. Pour voir le détail d'un critère, cliquer sur le texte ou le chevron. Pour choisir un critère, cliquer sur le signe + ou double cliquer sur le texte.</p>
+                    <p class="text-muted">Les résultats correspondant aux critères sont répartis en 4 catégories : les points durs (les questions communes aux établissements de santé), les productions ANAP, les productions externes à l'ANAP, et les fils de discussion au forum.</p>
+                    <p class="text-muted">Vous pouvez sauvegarder vos critères de recherche dans votre espace personnel.</p>
+                </div>
+
+                <div id="dest" {% if refs == '[]' %}class="hide"{% endif %} >
+                    <div class="requeteNom pull-right text-muted" {% if requete %}data-id="{{requete.id}}"{% else %}style="display:none" data-id=""{% endif %} >
+                        {% if requete %}{{requete.nom}}{% endif %}
+                    </div>
+
+                    {% if refs != '[]' %}
+                        <script type="text/javascript">showPlaceholder = false;</script>
+                    {% endif %}
+
+                    {% if not app.user or app.user|checkAuthorization( path('hopital_numerique_requete_homepage') ) %}
+                        <div class="btn btn-xs btn-success" onclick="saveRequest( '{{ app.user }}' );" >Enregistrer ma requête</div>
+                    {% endif %}
+                        <div class="btn btn-xs btn-success" onclick="cleanRequest();" >Réinitialiser ma requête</div>
+                    <hr />
+
+                    <ol class="arbo-requete">
+                        {{ _self.buildTree(elements, 0, 'hide') }}
+                    </ol>
+                </div>    
+            </div>
+            
+            <div id="resultats"></div>
+        </div>
+
+        <input type="hidden" id="search-homepage-url" value="{{path('hopital_numerique_recherche_homepage_requete')}}" />
+        <input type="hidden" id="resultats-url" value="{{path('hopital_numerique_recherche_getresults')}}" />
+        <input type="hidden" id="requete-save-url" value="{{path('hopital_numerique_requete_save')}}" />
+        <input type="hidden" id="requete-refs" value="{{refs}}" />
+
+        <div class="clearfix"></div>
+    </div>
+{% endblock %}
+
+{# Construit le système de parents > enfants des catégories #}
+{% macro buildTree(elements, level, class) %}
+    {% if level == 0 and class == 'cliquable' %}
+        {% set liClass = '' %}
+    {% else %}
+        {% set liClass = class %}
+    {% endif %}
+
+    {% for element in elements  %}
+        
+        {% if level == 1 and element.childs %}
+            <li class="{{liClass}} childs level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
+        {% else %}
+            <li class="{{liClass}} level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
+        {% endif %}
+            {% if level != 0 and class == 'cliquable' %}
+                <i class="fa fa-plus-circle pull-left"></i>
+            {% endif %}
+            <span>
+                {{element.libelle}}
+            </span>
+            {% if element.childs %}
+                {% if level == 2 and class == 'cliquable' %}
+                    <i class="fa fa-chevron-right pull-right"></i>
+                {% endif %}
+                <ol>
+                    {% for child in element.childs %}
+                        {{ _self.buildTree(child, level+1, class ) }}
+                    {% endfor %}
+                </ol>
+            {% endif %}
+        </li>
+    {% endfor %}
+{% endmacro %}

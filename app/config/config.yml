@@ -17,7 +17,9 @@ framework:
     trusted_hosts:   ~
     trusted_proxies: ~
     session:
+        name: hopitalnumerique
         handler_id:  ~
+        cookie_lifetime: 36000
     fragments:       ~
     http_method_override: true
 
@@ -32,18 +34,27 @@ assetic:
     use_controller: false
     bundles:
         - NodevoAdminBundle
-        - NodevoGestionnaireMediaBundle
-        - NodevoUserBundle
         - NodevoMenuBundle
         - NodevoGridBundle
         - NodevoAclBundle
         - NodevoRoleBundle
         - NodevoMailBundle
+        - NodevoFaqBundle
+        - NodevoContactBundle
+        - NodevoGestionnaireMediaBundle
+        - HopitalNumeriqueInterventionBundle
         - HopitalNumeriqueUserBundle
         - HopitalNumeriqueReferenceBundle
         - HopitalNumeriqueEtablissementBundle
         - HopitalNumeriqueCoreBundle
         - HopitalNumeriqueObjetBundle
+        - HopitalNumeriqueQuestionnaireBundle
+        - HopitalNumeriqueAccountBundle
+        - HopitalNumeriqueRechercheBundle
+        - HopitalNumeriqueRegistreBundle
+        - HopitalNumeriquePublicationBundle
+        - HopitalNumeriqueFaqBundle
+        - FOSUserBundle
     filters:
         cssrewrite: ~
 
@@ -60,7 +71,12 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
-        auto_mapping: true
+        entity_managers:
+          default:
+              auto_mapping: true
+              dql:
+                  string_functions:
+                      GROUP_CONCAT: DoctrineExtensions\Query\Mysql\GroupConcat
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -81,6 +97,14 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: HopitalNumerique\UserBundle\Entity\User
+    from_email:
+        address: admin@nodevo.com
+        sender_name: Administrateur
+    service:
+        mailer: fos_user.mailer.twig_swift
+    resetting:
+        email:
+            template: HopitalNumeriqueUserBundle:Resetting:email.txt.twig
 
 #KNP Menu Bundle
 knp_menu:
@@ -108,14 +132,35 @@ genemu_form:
 
 # Nodevo mail
 nodevo_mail:
-    autorisations:
+    options:
         allowAdd: false
         allowDelete: false
+        mailAnap: #Tableaux des adresses mails copie caché de tout les mails envoyé par l'application sous la forme "adresse_mail: nom_affiché"
+            toto@yopmail.com: adresse1
+            toto2@yopmail.com: adresse2
 
 nodevo_menu:
-    breadcrumb:
-        routeRacine: hopital_numerique_admin_homepage
+    options:
+        breadcrumbRouteRacine: hopital_numerique_admin_homepage
 
 # Gestion download fichiers sécurisé (pas dans /web)
 igorw_file_serve:
     base_dir: ~        # The default value is "%kernel.root_dir%"
+
+hopital_numerique_user:
+    options: 
+        idEtatActif: 3      #Ids de la table Référence
+        idTypeAutres : 10
+
+hopital_numerique_questionnaire:
+    options:
+        idRoles:
+            expert: 1
+            ambassadeur: 2
+
+hopital_numerique_contact:
+    options:
+        mailsContact: #"adresse_mail: nom_affiché"
+            qsomazzi@nodevo.com: Hey quand un ?
+            gmelchilsen@nodevo.com: Gaëtanfanfan
+            tdauriac@nodevo.com: Tôt-mat Dos-ric-rac 

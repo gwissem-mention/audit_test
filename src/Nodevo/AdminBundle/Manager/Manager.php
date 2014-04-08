@@ -133,12 +133,34 @@ abstract class Manager
      * Retourne la liste des éléments filtrés par le tableau de critères
      *
      * @param array $criteria Le tableau de critères array('field' => value)
-     *
+     * @param array $orderBy Order by
+     * @param integer $limit Limit
+     * @param integer $offset Offset
      * @return array
      */
-    public function findBy(array $criteria)
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        return $this->getRepository()->findBy($criteria);
+        return $this->getRepository()->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+    * Retourne les objets rôles présents dans le tableau de chaînes $roles
+    *
+    * @param array $roles Tableau de chaînes contenant les noms des roles
+    *
+    * @return array
+    */
+    public function findIn(array $roles)
+    {
+        $allRoles = $this->getRepository()->findAll();
+        $matchingRoles = array();
+
+        foreach ($allRoles as $role) {
+            if (in_array($role->getRole(), $roles, true))
+                $matchingRoles[] = $role;
+        }
+
+        return $matchingRoles;
     }
 
     /**
@@ -283,7 +305,7 @@ abstract class Manager
         fclose($outstream);
 
         // Charset and Length
-        $charset = 'UTF-8';
+        $charset = 'ISO-8859-1';
         if ($charset != $kernelCharset && function_exists('mb_strlen')) {
             $content  = mb_convert_encoding($content, $charset, $kernelCharset);
             $filesize = mb_strlen($content, '8bit');

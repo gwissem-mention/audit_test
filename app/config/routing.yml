@@ -1,8 +1,67 @@
-# Bundles Hopital Numérique
-hopital_numerique_user:
-    resource: "@HopitalNumeriqueUserBundle/Resources/config/routing.yml"
-    prefix:   /admin
+# Bundles Hopital Numérique : partie Front
+hopital_numerique_core:
+    resource: "@HopitalNumeriqueCoreBundle/Resources/config/routing.yml"
+    prefix:   /
 
+hopital_numerique_recherche:
+    resource: "@HopitalNumeriqueRechercheBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hopital_numerique_registre:
+    resource: "@HopitalNumeriqueRegistreBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hopital_numerique_publication:
+    resource: "@HopitalNumeriquePublicationBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hopital_numerique_account:
+    resource: "@HopitalNumeriqueAccountBundle/Resources/config/routing.yml"
+    prefix:   /compte-hn
+
+# vvvvv ---- GME 07/04/2014 : Fichiers de routing à revoir. Trop de d'appels : pas propre ---- vvvvv
+hopital_numerique_intervention:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing.yml"
+    prefix:   /compte-hn/intervention
+
+hopital_numerique_intervention_cron:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/cron.yml"
+    prefix:   /intervention
+
+hopital_numerique_intervention_etablissement:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/etablissement.yml"
+    prefix:   /compte-hn/intervention/etablissement
+
+hopital_numerique_intervention_etat:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/intervention_etat.yml"
+    prefix:   /compte-hn/intervention
+
+hopital_numerique_intervention_evaluation:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/intervention_evaluation.yml"
+    prefix:   /compte-hn/intervention
+
+hopital_numerique_intervention_reference:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/reference.yml"
+    prefix:   /compte-hn/intervention/reference
+
+hopital_numerique_intervention_regroupement:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/intervention_regroupement.yml"
+    prefix:   /compte-hn/intervention
+
+hopital_numerique_intervention_user:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/user.yml"
+    prefix:   /compte-hn/intervention
+# ^^^^^ ---- GME 07/04/2014 : Fichiers de routing à revoir. Trop de d'appels : pas propre ---- ^^^^^
+
+hopital_numerique_contact:
+    resource: "@HopitalNumeriqueContactBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hopital_numerique_faq:
+    resource: "@HopitalNumeriqueFaqBundle/Resources/config/routing.yml"
+    prefix:   /faq
+
+# Bundles Hopital Numérique : partie Admin
 hopital_numerique_reference:
     resource: "@HopitalNumeriqueReferenceBundle/Resources/config/routing.yml"
     prefix:   /admin
@@ -10,10 +69,6 @@ hopital_numerique_reference:
 hopital_numerique_etablissement:
     resource: "@HopitalNumeriqueEtablissementBundle/Resources/config/routing.yml"
     prefix:   /admin
-
-hopital_numerique_core:
-    resource: "@HopitalNumeriqueCoreBundle/Resources/config/routing.yml"
-    prefix:   /
 
 hopital_numerique_admin:
     resource: "@HopitalNumeriqueAdminBundle/Resources/config/routing.yml"
@@ -23,18 +78,23 @@ hopital_numerique_objet:
     resource: "@HopitalNumeriqueObjetBundle/Resources/config/routing.yml"
     prefix:   /admin
 
+hopital_numerique_intervention_admin:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/admin.yml"
+    prefix:   /admin/intervention
+
+# Bundles Hopital Numérique : partie Admin ET partie Front
+hopital_numerique_user:
+    resource: "@HopitalNumeriqueUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
 hopital_numerique_questionnaire:
     resource: "@HopitalNumeriqueQuestionnaireBundle/Resources/config/routing.yml"
-    prefix:   /admin
+    prefix:   /
 
 # Bundles Nodevo
 nodevo_acl:
     resource: "@NodevoAclBundle/Resources/config/routing.yml"
     prefix:   /admin
-    
-nodevo_gestionnaire_media:
-    resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"
-    prefix:   /admin/media
 
 nodevo_role:
     resource: "@NodevoRoleBundle/Resources/config/routing.yml"
@@ -51,3 +111,15 @@ nodevo_admin:
 nodevo_mail:
     resource: "@NodevoMailBundle/Resources/config/routing.yml"
     prefix:   /admin
+
+nodevo_contact:
+    resource: "@NodevoContactBundle/Resources/config/routing.yml"
+    prefix:   /
+
+nodevo_faq:
+    resource: "@NodevoFaqBundle/Resources/config/routing.yml"
+    prefix:   /
+
+nodevo_gestionnaire_media:
+    resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"
+    prefix:   /admin/media

@@ -18,39 +18,40 @@ class ReferenceManager extends BaseManager
     /**
      * Formate et retourne l'arborescence des références
      *
+     * @param  boolean $unlockedOnly     Retourne que les éléments non vérouillés
+     * @param  boolean $fromDictionnaire Retourne que les éléments présent dans le dictionnaire
+     * @param  boolean $fromRecherche    Retourne que les éléments présent dans la recherche
+     *
      * @return array
      */
-    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false )
+    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false )
     {
         //get All References, and convert to ArrayCollection
-        $datas = new ArrayCollection( $this->getRepository()->getArbo( $unlockedOnly, $fromDictionnaire ) );
+        $datas = new ArrayCollection( $this->getRepository()->getArbo( $unlockedOnly, $fromDictionnaire, $fromRecherche ) );
 
         //Récupère uniquement les premiers parents
         $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );
         $parents  = $datas->matching( $criteria );
         
         //call recursive function to handle all datas
-        return $this->_getArboRecursive($datas, $parents, array() );
+        return $this->getArboRecursive($datas, $parents, array() );
     }
     
-    public function getArboFormat( $unlockedOnly = false, $fromDictionnaire = false ){
-        $arbo = $this->getArbo($unlockedOnly, $fromDictionnaire);
+    /**
+     * Retourne l'arbo formatée
+     *
+     * @param  boolean $unlockedOnly     Retourne que les éléments non vérouillés
+     * @param  boolean $fromDictionnaire Retourne que les éléments présent dans le dictionnaire
+     * @param  boolean $fromRecherche    Retourne que les éléments présent dans la recherche
+     *
+     * @return array
+     */
+    public function getArboFormat( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false )
+    {
+        $arbo = $this->getArbo($unlockedOnly, $fromDictionnaire, $fromRecherche );
         return $this->formatArbo($arbo);
     }
     
-    public function formatArbo($arbo){
-        $retour = array();
-        foreach( $arbo as $key => $ref ){
-            $retour[ $ref->code ][ $key ]['libelle'] = $ref->libelle;
-            if( $ref->childs ){
-                $retour[ $ref->code ][ $key ]['childs'] = $this->formatArbo( $ref->childs );
-            } else {
-                $retour[ $ref->code ][ $key ]['childs'] = false;
-            }
-        }
-        return $retour;
-    }
-
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
      *
@@ -70,7 +71,7 @@ class ReferenceManager extends BaseManager
      */
     public function reorder( $options )
     {
-        $this->_reorderChilds( $this->getArbo( true ) );
+        $this->reorderChilds( $this->getArbo( true ) );
         $orderedOptions = array();
 
         foreach($this->_tabReferences as $orderedElement) {
@@ -88,6 +89,7 @@ class ReferenceManager extends BaseManager
      */
     public function updateOrder( Reference $referentiel )
     {
+        
         //get All References
         $datas = new ArrayCollection($this->getRepository()->findBy(array('lock'=>0)));
         
@@ -118,7 +120,7 @@ class ReferenceManager extends BaseManager
         //get All References
         $datas = new ArrayCollection($this->getRepository()->findBy( array( 'lock' => 0 ) ) );
         
-        $this->_refreshReferentielOrder($datas, $referentiel);
+        $this->refreshReferentielOrder($datas, $referentiel);
     }
 
     /**
@@ -128,10 +130,52 @@ class ReferenceManager extends BaseManager
      */
     public function getRefsForGestionObjets()
     {
-        $this->_convertAsFlatArray( $this->getArbo(false, true), 1 );
-
+        $this->convertAsFlatArray( $this->getArbo(false, true), 1, array() );
+        
         return $this->_tabReferences;
     }
+
+    /**
+     * Formatte la liste des domaines fonctionnels de l'user
+     *
+     * @param User $user User
+     *
+     * @return Array
+     */
+    public function getDomainesForUser ( $user )
+    {
+        $results = $this->findBy( array( 'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS') );
+
+        // on formatte les domaines de manière à les sélectionner plus simplement
+        $domaines = array();
+        foreach($results as $result){
+            $tmp           = new \stdClass;
+            $tmp->id       = $result->getId();
+            $tmp->libelle  = $result->getLibelle();
+            $tmp->selected = false;
+
+            $domaines[ $result->getId() ] = $tmp;
+        }
+
+        //on met en place ceux attribué à l'user
+        $userDomaines = $user->getDomaines();
+        foreach( $userDomaines as $one){
+            $tmp                       = $domaines[ $one->getId() ];
+            $tmp->selected             = true;
+            $domaines[ $one->getId() ] = $tmp;
+        }
+
+        return $domaines;
+    }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -146,20 +190,20 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    private function _convertAsFlatArray( $childs, $level )
+    private function convertAsFlatArray( $childs, $level, $parent )
     {
         //affiche le level sous forme de |--
         $sep = '';
         if( $level > 1 ) {
             for( $i = 2; $i <= $level; $i++ )
-                $sep .= '|--';
+                $sep .= '|----';
             $sep .= ' ';
         }
 
         //create Child Ids table : permet de lister les ID de tous les enfants de l'élément : selection récursive des références
         $childsIds = array();
 
-        //pour chaque element, on le traforme on objet simple avec son niveau de profondeur affiché dans le nom
+        //pour chaque element, on le transforme on objet simple avec son niveau de profondeur affiché dans le nom
         foreach($childs as $child)
         {
             //populate childsIds
@@ -169,22 +213,29 @@ class ReferenceManager extends BaseManager
             $ref           = new \stdClass;
             $ref->id       = $child->id;
             $ref->nom      = $sep . $child->code . ' - ' . $child->libelle;
+            $ref->libelle  = $sep . $child->libelle;
             $ref->selected = false;
-            $ref->primary  = true;
-            $ref->disabled = false;
+            $ref->primary  = false;
             $ref->childs   = null;
+            $ref->parents  = json_encode($parent);
+            $ref->level    = $level;
 
             //add element parent first
             $this->_tabReferences[ $child->id ] = $ref;
 
             //if childs
             if ( !empty($child->childs) ){
+                //met à jour le tab parent
+                $tmp   = $parent;
+                $tmp[] = $child->id;
+
                 //on met à jour sa liste d'enfants
-                $newChilds = $this->_convertAsFlatArray( $child->childs, $level + 1 );
+                $newChilds = $this->convertAsFlatArray( $child->childs, $level + 1, $tmp );
 
                 //récupère temporairement l'élément que l'on vien d'ajouter
                 $tmp = $this->_tabReferences[ $child->id ];
-                $tmp->childs = json_encode( $newChilds );
+                $tmp->childs   = json_encode( $newChilds );
+                $tmp->nbChilds = count( $newChilds );
 
                 //on remet l'élément parent à sa place
                 $this->_tabReferences[ $child->id ] = $tmp;
@@ -204,14 +255,14 @@ class ReferenceManager extends BaseManager
      *
      *  @return empty
      */
-    private function _reorderChilds( $childs )
+    private function reorderChilds( $childs )
     {
         foreach($childs as $child)
         {
             $this->_tabReferences[ '0' . $child->id ] = $child->id;
 
             if ( !empty($child->childs) )
-                $this->_reorderChilds( $child->childs );
+                $this->reorderChilds( $child->childs );
         }
     }
 
@@ -224,7 +275,7 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    private function _getArboRecursive( ArrayCollection $items, $elements, $tab)
+    private function getArboRecursive( ArrayCollection $items, $elements, $tab)
     {        
         foreach($elements as $element) {
             //construction de l'element current
@@ -237,7 +288,7 @@ class ReferenceManager extends BaseManager
             //add childs : filter items with current element
             $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $id))->orderBy(array("order"=>Criteria::ASC));
             $childs       = $items->matching( $criteria );
-            $item->childs = $this->_getArboRecursive($items, $childs, array() );
+            $item->childs = $this->getArboRecursive($items, $childs, array() );
 
             //add current item to big table
             $tab[] = $item;
@@ -253,14 +304,15 @@ class ReferenceManager extends BaseManager
      * @param ArrayCollection   $referentiels Les référentiels à ordonner
      * @param Reference         $referentiel  Le référentiel parent
      */
-    private function _refreshReferentielOrder( ArrayCollection $referentiels, Reference $referentiel = null)
+    private function refreshReferentielOrder( ArrayCollection $referentiels, Reference $referentiel = null)
     {
-        $childs = $this->_getReferentielChildsFromCollection($referentiels, $referentiel);
-        
-        for ($i=0; $i < count($childs); $i++) { 
+        $childs   = $this->getReferentielChildsFromCollection($referentiels, $referentiel);
+        $nbChilds = count($childs);
+
+        for ($i=0; $i < $nbChilds; $i++) { 
             $childs[$i]->setOrder($i+1);
             $this->save($childs[$i]);
-            $this->_refreshReferentielOrder($referentiels, $childs[$i]);
+            $this->refreshReferentielOrder($referentiels, $childs[$i]);
         }
     }
 
@@ -272,7 +324,7 @@ class ReferenceManager extends BaseManager
      *
      * @return $childs Les référentiels enfants de $parent
      */
-    private function _getReferentielChildsFromCollection( ArrayCollection $referentiels, Reference $parent = null)
+    private function getReferentielChildsFromCollection( ArrayCollection $referentiels, Reference $parent = null)
     {
         //si le parent n'existe pas, on filtre dans la collection pour récupérer TOUS les referentiels SANS parents
         if (null === $parent){
@@ -285,5 +337,27 @@ class ReferenceManager extends BaseManager
             $childs = $parent->getChildsFromCollection( $referentiels );
 
         return $childs;
+    }
+
+    /**
+     * Formatte de manière récursive l'arborescence des références
+     *
+     * @param array $arbo [description]
+     *
+     * @return array
+     */
+    private function formatArbo($arbo)
+    {
+        $retour = array();
+        foreach( $arbo as $key => $ref ){
+            $retour[ $ref->code ][ $key ]['libelle'] = $ref->libelle;
+            $retour[ $ref->code ][ $key ]['id']      = $ref->id;
+            if( $ref->childs ){
+                $retour[ $ref->code ][ $key ]['childs'] = $this->formatArbo( $ref->childs );
+            } else {
+                $retour[ $ref->code ][ $key ]['childs'] = false;
+            }
+        }
+        return $retour;
     }
 }

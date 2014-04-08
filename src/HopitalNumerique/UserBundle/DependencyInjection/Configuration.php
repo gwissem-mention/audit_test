@@ -16,9 +16,16 @@ class Configuration implements ConfigurationInterface
      * {@inheritDoc}
      */
     public function getConfigTreeBuilder()
-    {
+    {        
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('hopital_numerique_user');
+        
+        $rootNode
+            ->children()
+                ->variableNode('options')
+                ->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }

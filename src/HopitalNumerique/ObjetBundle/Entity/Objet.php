@@ -3,7 +3,6 @@
 namespace HopitalNumerique\ObjetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -33,12 +32,12 @@ class Objet
      * @var string
      * @Assert\NotBlank(message="Le titre ne peut pas être vide.")
      * @Assert\Length(
-     *      min = "3",
+     *      min = "1",
      *      max = "255",
      *      minMessage = "Il doit y avoir au moins {{ limit }} caractères dans le titre.",
      *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans le titre."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[3],maxSize[255]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="obj_titre", type="string", length=255, options = {"comment" = "Titre de l objet"})
      */
     private $titre;
@@ -75,6 +74,13 @@ class Objet
      * @ORM\Column(name="obj_path", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier lié à l objet"})
      */
     private $path;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="obj_path2", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier 2 lié à l objet"})
+     */
+    private $path2;
 
     /**
      * @var boolean
@@ -133,6 +139,20 @@ class Objet
     private $isInfraDoc;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="obj_isArticle", type="boolean", options = {"comment" = "L objet est un article ?"})
+     */
+    private $isArticle;
+
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="obj_vignette", type="string", length=255, options = {"comment" = "Vignette de l objet"}, nullable=true)
+     */
+    private $vignette;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="obj_locked_by", referencedColumnName="usr_id")
      */
@@ -171,6 +191,11 @@ class Objet
     protected $references;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="objet", cascade={"persist", "remove" })
+     */
+    protected $consultations;
+
+    /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="objets")
      * @ORM\JoinTable(name="hn_objet_ambassadeur",
      *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")},
@@ -181,36 +206,17 @@ class Objet
 
     /**
      * @Assert\File(
-     *     maxSize = "10M",
-     *     mimeTypes = { 
-     *         "application/pdf", 
-     *         "application/x-pdf", 
-     *         "application/vnd.ms-excel", 
-     *         "application/msword", 
-     *         "application/xls", 
-     *         "application/x-xls", 
-     *         "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
-     *         "application/vnd.ms-powerpoint", 
-     *         "application/vnd.openxmlformats-officedocument.presentationml.presentation", 
-     *         "image/gif", 
-     *         "image/jpeg", 
-     *         "image/png", 
-     *         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
-     *         "application/zip",
-     *         "application/vnd.oasis.opendocument.text ",
-     *         "application/vnd.oasis.opendocument.graphics",
-     *         "application/vnd.oasis.opendocument.presentation",
-     *         "application/vnd.oasis.opendocument.spreadsheet",
-     *         "application/vnd.oasis.opendocument.chart",
-     *         "application/vnd.oasis.opendocument.formula",
-     *         "application/vnd.oasis.opendocument.database",
-     *         "application/vnd.oasis.opendocument.image",
-     *         "application/vnd.openofficeorg.extension"
-     *     },
-     *     mimeTypesMessage = "Choisissez un fichier valide (PDF, EXCEL, WORD, POWER POINT, ZIP, IMAGE)"
+     *     maxSize = "10M"
      * )
      */
     public $file;
+    
+    /**
+     * @Assert\File(
+     *     maxSize = "10M"
+     * )
+     */
+    public $file2;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -222,7 +228,9 @@ class Objet
         $this->commentaires = true;
         $this->notes        = true;
         $this->isInfraDoc   = false;
+        $this->isArticle    = false;
         $this->lock         = false;
+        $this->vignette     = null;
         $this->roles        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->types        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ambassadeurs = new \Doctrine\Common\Collections\ArrayCollection();
@@ -338,8 +346,8 @@ class Objet
      */
     public function setPath($path)
     {
-        if( is_null($path) && file_exists($this->getAbsolutePath()) )
-            unlink($this->getAbsolutePath());
+        if( is_null($path) && file_exists($this->getAbsolutePath( true )) )
+            unlink($this->getAbsolutePath( true ));
 
         $this->path = $path;
 
@@ -354,6 +362,32 @@ class Objet
     public function getPath()
     {
         return $this->path;
+    }
+
+    /**
+     * Set path2
+     *
+     * @param string $path2
+     * @return Objet
+     */
+    public function setPath2($path2)
+    {
+        if( is_null($path2) && file_exists($this->getAbsolutePath( false )) )
+            unlink($this->getAbsolutePath( false ));
+
+        $this->path2 = $path2;
+
+        return $this;
+    }
+
+    /**
+     * Get path2
+     *
+     * @return string 
+     */
+    public function getPath2()
+    {
+        return $this->path2;
     }
 
     /**
@@ -520,7 +554,7 @@ class Objet
      * @param boolean $isInfraDoc
      * @return Objet
      */
-    public function setIsInfraDoc($isInfraDoc)
+    public function setInfraDoc($isInfraDoc)
     {
         $this->isInfraDoc = $isInfraDoc;
 
@@ -532,9 +566,49 @@ class Objet
      *
      * @return boolean 
      */
-    public function getIsInfraDoc()
+    public function isInfraDoc()
     {
         return $this->isInfraDoc;
+    }
+
+    /**
+     * Get isArticle
+     *
+     * @return boolean $isArticle
+     */
+    public function isArticle()
+    {
+        return $this->isArticle;
+    }
+    
+    /**
+     * Set isArticle
+     *
+     * @param boolean $isArticle
+     */
+    public function setArticle($isArticle)
+    {
+        $this->isArticle = $isArticle;
+    }
+    
+    /**
+     * Get vignette
+     *
+     * @return string $vignette
+     */
+    public function getVignette()
+    {
+        return $this->vignette;
+    }
+    
+    /**
+     * Set vignette
+     *
+     * @param string $vignette
+     */
+    public function setVignette($vignette)
+    {
+        $this->vignette = $vignette;
     }
 
     /**
@@ -741,14 +815,61 @@ class Objet
         return $this;
     }
 
-    public function getAbsolutePath()
+    /**
+     * Get consultations
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $consultations
+     */
+    public function getConsultations()
     {
-        return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+        return $this->consultations;
     }
 
-    public function getWebPath()
+    /**
+     * Set consultations
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $consultations
+     * @return Objet
+     */
+    public function setConsultations(\Doctrine\Common\Collections\ArrayCollection $consultations)
+    {        
+        $this->consultations = $consultations;
+    
+        return $this;
+    }
+
+    public function getAbsolutePath( $firstFile = true )
     {
-        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+        if( $firstFile )
+            return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+        else
+            return null === $this->path2 ? null : $this->getUploadRootDir().'/'.$this->path2;
+    }
+
+    public function getWebPath( $firstFile = true )
+    {
+        if( $firstFile )
+            return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+        else
+            return null === $this->path2 ? null : $this->getUploadDir().'/'.$this->path2;
+    }
+    
+    /**
+     * Fonction qui renvoie le type mime de la piece jointe 1 ou 2
+     */
+    public function getTypeMime( $firstFile = true )
+    {
+        if( $firstFile ){
+            $path = $this->path;
+        } else {
+            $path = $this->path2;
+        }
+        
+        if( !$path ){
+            return "";
+        }
+        
+        return substr($path, strrpos($path, ".") + 1);
     }
 
     public function getUploadRootDir()
@@ -770,10 +891,18 @@ class Objet
     {
         if (null !== $this->file){
             //delete Old File
-            if ( file_exists($this->getAbsolutePath()) )
-                unlink($this->getAbsolutePath());
+            if ( file_exists($this->getAbsolutePath( true )) )
+                unlink($this->getAbsolutePath( true ));
 
             $this->path = $this->file->getClientOriginalName();
+        }
+
+        if (null !== $this->file2){
+            //delete Old File
+            if ( file_exists($this->getAbsolutePath( false )) )
+                unlink($this->getAbsolutePath( false ));
+
+            $this->path2 = $this->file2->getClientOriginalName();
         }
     }
 
@@ -783,16 +912,22 @@ class Objet
      */
     public function upload()
     {
-        if (null === $this->file)
+        if ( null === $this->file && null === $this->file2 )
             return;
-
+        
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
-        // proprement l'entité d'être persistée dans la base de données si
-        // erreur il y a
-        $this->file->move($this->getUploadRootDir(), $this->path);
+        // proprement l'entité d'être persistée dans la base de données si erreur il y a   
+        
+        if ( null !== $this->file ){        
+            $this->file->move($this->getUploadRootDir(), $this->path);
+            unset($this->file);
+        }
 
-        unset($this->file);
+        if ( null !== $this->file2 ){
+            $this->file2->move($this->getUploadRootDir(), $this->path2);
+            unset($this->file2);
+        }
     }
 
     /**
@@ -800,7 +935,10 @@ class Objet
      */
     public function removeUpload()
     {
-        if ( $file = $this->getAbsolutePath() && file_exists( $this->getAbsolutePath() ) )
+        if ( $file = $this->getAbsolutePath( true ) && file_exists( $this->getAbsolutePath( true ) ) )
             unlink($file);
+
+        if ( $file2 = $this->getAbsolutePath( false ) && file_exists( $this->getAbsolutePath( false ) ) )
+            unlink($file2);
     }
 }
