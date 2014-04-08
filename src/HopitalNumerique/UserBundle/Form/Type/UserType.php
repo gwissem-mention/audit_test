@@ -168,36 +168,40 @@ class UserType extends AbstractType
                     'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
                 ));
 
-            $builder->add('region', 'entity', array(
-                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property'    => 'libelle',
-                'required'    => false,
-                'label'       => 'Région',
-                'empty_value' => ' - ',
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                              ->where('ref.code = :etat')
-                              ->setParameter('etat', 'REGION')
-                              ->orderBy('ref.order', 'ASC');
-                }
-            ))
-            
-            ->add('departement', 'entity', array(
-                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'property'    => 'libelle',
-                    'required'    => false,
-                    'label'       => 'Département',
-                    'empty_value' => ' - ',
-                    'attr'        => array(),
-                    'query_builder' => function(EntityRepository $er) use($options) {
-                        return $er->createQueryBuilder('ref')
+            //Si il y a un utilisateur connecté nous sommes en BO et que le role est CMSI
+            if( !($this->_securityContext->isGranted('ROLE_ARS_CMSI_4')) )
+            {
+                $builder->add('region', 'entity', array(
+                        'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                        'property'    => 'libelle',
+                        'required'    => false,
+                        'label'       => 'Région',
+                        'empty_value' => ' - ',
+                        'query_builder' => function(EntityRepository $er) {
+                            return $er->createQueryBuilder('ref')
+                            ->where('ref.code = :etat')
+                            ->setParameter('etat', 'REGION')
+                            ->orderBy('ref.order', 'ASC');
+                        }
+                ))
+                
+                ->add('departement', 'entity', array(
+                        'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                        'property'    => 'libelle',
+                        'required'    => false,
+                        'label'       => 'Département',
+                        'empty_value' => ' - ',
+                        'attr'        => array(),
+                        'query_builder' => function(EntityRepository $er) use($options) {
+                            return $er->createQueryBuilder('ref')
                             ->where('ref.code = :etat')
                             ->setParameter('etat', 'DEPARTEMENT')
-                            ->orderBy('ref.libelle', 'ASC');                        
-                    }
-            ))
+                            ->orderBy('ref.libelle', 'ASC');
+                        }
+                ));
+            }
             
-            ->add('etat', 'entity', array(
+            $builder->add('etat', 'entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'    => 'libelle',
                 'required'    => true,

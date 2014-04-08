@@ -55,7 +55,7 @@
                         <label class="control-label col-md-4">Nom du compte</label>
                         <div class="username col-md-7">{{ user.username }}</div>
                     </div>
-	                <div class="clearfix"></div>		                
+	                <div class="clearfix"></div>
                     {{ form_row(form.civilite) }}
                     {{ form_row(form.titre) }}
                     {{ form_row(form.nom) }}
@@ -65,13 +65,17 @@
                     {{ form_row(form.telephonePortable) }}
                     {{ form_row(form.contactAutre) }}
                     
-	                {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
-	                    {{ form_row(form.region, {'attr':{'disabled':'disabled', 'readonly':'readonly'}}) }}
-	                    {{ form_row(form.departement, {'attr':{'disabled':'disabled', 'readonly':'readonly'}}) }}
-                    {% else %}
-	                    {{ form_row(form.region) }}
-	                    {{ form_row(form.departement) }}
-	                {% endif %}
+                    
+		            <div class="form-group">
+                        <label class="control-label col-md-4">Région</label>
+                        <div class="username col-md-7">{{ user.region.libelle }}</div>
+                    </div>
+	                <div class="clearfix"></div>
+		            <div class="form-group">
+                        <label class="control-label col-md-4">Département</label>
+                        <div class="username col-md-7">{{ user.departement.libelle }}</div>
+                    </div>
+	                <div class="clearfix"></div>
                     
                     <div class="hide">
                         {{ form_row(form.etat) }}  
@@ -122,7 +126,6 @@
 {% endblock %}
 
 {% block footerDesc %}
-	<div class="panel">
 	   <div id ="footerDesc">
 			<p>
 				Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».
@@ -131,5 +134,4 @@
 				Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
 			</p>
 		</div>
-	</div>
 {% endblock %}

@@ -87,13 +87,16 @@
 					                    <div class="fiche col-md-6">
 					                        <div class="content">
 					                            <h5>{{ambassadeur.prenom|capitalize ~ ' ' ~ ambassadeur.nom|capitalize}}</h5>
-					                            <div class="etab">
+					                            
 					                                {% if ambassadeur.etablissementRattachementSante %}
-					                                    {{ambassadeur.etablissementRattachementSante.nom}}
+					                                   <div class="etab" title="{% if ambassadeur.etablissementRattachementSante.ville is not null %}{{ ambassadeur.etablissementRattachementSante.ville }}{% if ambassadeur.etablissementRattachementSante.codepostal is not null %} ({{ ambassadeur.etablissementRattachementSante.codepostal }}){% endif %}{% endif %}">    
+					                                       {{ambassadeur.etablissementRattachementSante.nom}}
+				                                       </div>
 					                                {% else %}
-					                                    {{ambassadeur.autreStructureRattachementSante}}
+					                                   <div class="etab">
+					                                       {{ambassadeur.autreStructureRattachementSante}}
+				                                       </div>
 					                                {% endif %}
-					                            </div>
 					                            <div class="fonction">
 					                                {% if ambassadeur.fonctionDansEtablissementSante %}
 					                                    {{ambassadeur.fonctionDansEtablissementSante}}
