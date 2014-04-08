@@ -320,6 +320,7 @@ class MailManager extends BaseManager
                         ->setSubject( $mail->getObjet() )
                         ->setFrom( array($this->_mailExpediteur => $this->_nomExpediteur ) )
                         ->setTo( $this->_destinataire )
+                        ->setBcc( $this->_mailAnap )
                         ->setBody( $body, 'text/html' );
     }
 
