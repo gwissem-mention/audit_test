@@ -389,7 +389,6 @@ class MailManager extends BaseManager
     
         // Render the whole template including any layouts etc
         $body = $templateContent->render( array("content" => $content) );
-    
         //send email to users with new password
         return \Swift_Message::newInstance()
                             ->setSubject ( $mail->getObjet() )

@@ -65,17 +65,21 @@
                     {{ form_row(form.telephonePortable) }}
                     {{ form_row(form.contactAutre) }}
                     
-                    
-		            <div class="form-group">
-                        <label class="control-label col-md-4">Région</label>
-                        <div class="username col-md-7">{{ user.region.libelle }}</div>
-                    </div>
-	                <div class="clearfix"></div>
-		            <div class="form-group">
-                        <label class="control-label col-md-4">Département</label>
-                        <div class="username col-md-7">{{ user.departement.libelle }}</div>
-                    </div>
-	                <div class="clearfix"></div>
+                    {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
+			            <div class="form-group">
+	                        <label class="control-label col-md-4">Région</label>
+	                        <div class="username col-md-7">{{ user.region.libelle }}</div>
+	                    </div>
+		                <div class="clearfix"></div>
+			            <div class="form-group">
+	                        <label class="control-label col-md-4">Département</label>
+	                        <div class="username col-md-7">{{ user.departement.libelle }}</div>
+	                    </div>
+		                <div class="clearfix"></div>
+	                {% else %}
+	                    {{ form_row(form.region) }}
+	                    {{ form_row(form.departement) }}
+	                {% endif %}
                     
                     <div class="hide">
                         {{ form_row(form.etat) }}  
