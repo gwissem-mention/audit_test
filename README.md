@@ -82,10 +82,21 @@ h2. 5. Conventions de nommage pour le projet
 ** Enregistrer (et pas sauvegarder)
 * Dans les vues de grid (titres des colonnes) et dans les formulaires ne pas préciser : Element du __  (ex : mettre *Nom* à la place de *Nom du groupe* )
 
-h2. 5. Droits sur les dossiers
+h2. 6. Droits sur les dossiers
 
 Les dossier suivants (et enfants) doivent être accessible en écriture pour l'utilisateur apache :
 - app/cache/
 - app/logs/
 - files/
 - web/medias
+
+h2. 7. Configuration des bundles
+
+Les mails lors de l'envoie d'un message de contact:
+
+    hopital_numerique_contact:
+        options:
+            mailsContact: #"adresse_mail: nom_affiché"
+                qsomazzi@nodevo.com: Quentin Sommazi
+                gmelchilsen@nodevo.com: Gaëtan Melchilsen
+                tdauriac@nodevo.com: Thomas Dauriac 
