@@ -101,6 +101,7 @@
     #autresResultats .top h3{color:#333333; font-size: 18px; font-weight: bold; display: block; margin-left:30px; margin-top:15px;background: url('../img/autre.png') no-repeat left center; height: 25px; padding-left:35px; padding-top: 2px }
     #autresResultats .top .results h4{margin-bottom: 5px; margin-top: 5px; text-transform: none; }
     #autresResultats .top .results h4 a{color: #333333; font-size: 14px; font-weight: bold; }
+    #autresResultats .top .results h4 a small{color: #333333;}
     #autresResultats .top .results p{color: #333333; font-size: 12px; font-weight: normal; height: 85px; overflow-y:auto;margin-bottom:0;} 
 
     /* Ressources externes et forum*/
