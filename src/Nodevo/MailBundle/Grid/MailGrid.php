@@ -32,7 +32,8 @@ class MailGrid extends Grid implements IGrid
      */
     public function setConfig()
     {
-        $this->setSource( 'NodevoMailBundle:Mail' );
+        $this->setSource( 'nodevo_mail.manager.mail' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('Aucun E-Mail à afficher.');
     }
 
@@ -44,10 +45,10 @@ class MailGrid extends Grid implements IGrid
         $this->addColonne( new Column\TextColumn('objet', 'Objet') );
         $this->addColonne( new Column\TextColumn('description', 'Description') );
 
-
         $this->addColonne( new Column\BlankColumn('expediteurMail') );
         $this->addColonne( new Column\BlankColumn('expediteurName') );
         $this->addColonne( new Column\BlankColumn('body') );
+        $this->addColonne( new Column\BlankColumn('params') );
     }
 
     /**

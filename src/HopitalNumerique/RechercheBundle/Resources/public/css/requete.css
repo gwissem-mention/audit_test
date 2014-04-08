@@ -11,6 +11,7 @@
 .requetes .ligne p{margin:0 0 0 7px;color:#333333;font-size: 13px;float:left;}
 .requetes .ligne p.violet{color:#6f3596;}
 .requetes .ligne p i{margin-left:5px;}
+.requetes .ligne p span.label{ font-size:9px; line-height: 2; vertical-align: top }
 .requetes .ligne a{margin:0 0 0 7px;color:#333333;font-size: 13px}
 .requetes .ligne .actions div{color:#c0bebe;cursor: pointer}
 .requetes .ligne .actions div.active{color:#B4DC00;}

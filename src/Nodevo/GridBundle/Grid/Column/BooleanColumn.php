@@ -13,8 +13,7 @@ class BooleanColumn extends ApyColumn
             'title'      => $title,
             'sortable'   => false,
             'source'     => true,
-            'filterable' => true,
-            'sortable'   => true
+            'filterable' => true
         ));
     }
 

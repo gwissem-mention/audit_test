@@ -24,7 +24,7 @@ class Grid
     protected $_grid                 = null;
     protected $_container            = null;
     protected $_source               = null;
-    protected $_sourceType           = self::SOURCE_TYPE_ENTITY;
+    protected $_sourceType           = self::SOURCE_TYPE_MANAGER;
     protected $_sourceCondition      = null;
     protected $_maxResults           = 1000;
     protected $_limits               = array(10, 20, 50, 100);
@@ -73,6 +73,8 @@ class Grid
         $this->initColonnes();
         $this->initSource();
         $this->initMassActions();
+
+        $source = $this->_grid->getSource();
 
         //return the grid object
         return $this->_grid->getGridResponse( $vue, $params );
@@ -213,7 +215,7 @@ class Grid
          *
          * @param integer $sourceType Type de la source
          */
-        protected function setSourceType( $sourceType = self::SOURCE_TYPE_ENTITY )
+        protected function setSourceType( $sourceType = self::SOURCE_TYPE_MANAGER )
         {
             $this->_sourceType = $sourceType;
         }
@@ -287,7 +289,7 @@ class Grid
             }
 
             //Ajout de la colonne ID
-            $idColumn = new Column\NumberColumn(array('id' => 'id', 'title' => 'ID', 'size' => 50, 'field' => 'id', 'source' => true, 'primary' => true, 'filterable' => false, 'sortable' =>false));
+            $idColumn = new Column\NumberColumn(array('id' => 'id', 'title' => 'ID', 'size' => 50, 'field' => 'id', 'source' => true, 'primary' => true, 'filterable' => true, 'sortable' =>false));
             array_unshift($this->_colonnes, $idColumn);
 
             if ( $this->_showIdColumn )
@@ -360,19 +362,6 @@ class Grid
                 case self::SOURCE_TYPE_ENTITY:
                 default:
                     $source = new Source\Entity( $this->_source );
-                    
-                    //manipulate a where condition
-                    if( !is_null($this->_sourceCondition) ) {
-                        $tableAlias = $source->getTableAlias();
-                        $value      = $this->_sourceCondition->value;
-                        $field      = $this->_sourceCondition->field;
-                    
-                        $source->manipulateQuery(function ($query) use ($tableAlias, $field, $value)
-                        {
-                            $query->where( $tableAlias . '.' . $field . ' = ' . $value );
-                        });
-                    }
-                    
                     break;
             }
 
