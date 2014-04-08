@@ -64,13 +64,11 @@ class UserGrid extends Grid implements IGrid
         $this->addColonne( $contractualisationColumn );
 
         $expertColumn = new Column\BooleanColumn('expert', 'Candidat expert');
-        $expertColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
         $expertColumn->setSize(90);
         $expertColumn->setSortable(true);
         $this->addColonne( $expertColumn );
 
         $ambassadeurColumn = new Column\BooleanColumn('ambassadeur', 'Candidat ambassadeur');
-        $ambassadeurColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
         $ambassadeurColumn->setSize(115);
         $ambassadeurColumn->setSortable(true);
         $this->addColonne( $ambassadeurColumn );

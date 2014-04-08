@@ -70,18 +70,6 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des établissements autres
-     *
-     * @param stdClass $condition condition
-     *
-     * @return array
-     */
-    public function getDatasForGridEtablissement( $condition = null )
-    {
-        return $this->getRepository()->getDatasForGridEtablissement()->getQuery()->getResult();
-    }
-
-    /**
      * Modifie l'état de tous les users
      *
      * @param array     $users Liste des utilisateurs

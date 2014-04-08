@@ -24,17 +24,18 @@ class Grid
     protected $_grid                 = null;
     protected $_container            = null;
     protected $_source               = null;
-    protected $_sourceType           = self::SOURCE_TYPE_MANAGER;
+    protected $_sourceType           = self::SOURCE_TYPE_ENTITY;
     protected $_sourceCondition      = null;
     protected $_maxResults           = 1000;
     protected $_limits               = array(10, 20, 50, 100);
     protected $_defaultLimit         = 20;
     protected $_noDataMessage        = ' - Aucun élément à afficher - ';
     protected $_noResultMessage      = ' - Aucun résultat à afficher - ';
-    protected $_buttonSize           = 60;
+    protected $_buttonSize           = 42;
     protected $_fieldParentRecursive = null;
     protected $_fieldLabelRecursive  = null;
     protected $_showIdColumn         = false;
+    protected $_filterIdColumn       = false;
     protected $_functionName         = 'getDatasForGrid';
     protected $_persistence          = true;
 
@@ -129,6 +130,16 @@ class Grid
         }
 
         /**
+         * Active le filtre de la colonne ID
+         *
+         * @param boolean $filter Is ID column filterable
+         */
+        protected function setFilterIdColumn( $filter )
+        {
+            $this->_filterIdColumn = $filter;
+        }
+
+        /**
          * Met en place l'affichage récursif du grid
          *
          * @param string $fieldParent Field de l'Id parent
@@ -145,7 +156,7 @@ class Grid
          *
          * @param integer $size Taille par défaut
          */
-        protected function setButtonSize( $size = 60 )
+        protected function setButtonSize( $size = 42 )
         {
             $this->_buttonSize = $size;
         }
@@ -215,7 +226,7 @@ class Grid
          *
          * @param integer $sourceType Type de la source
          */
-        protected function setSourceType( $sourceType = self::SOURCE_TYPE_MANAGER )
+        protected function setSourceType( $sourceType = self::SOURCE_TYPE_ENTITY )
         {
             $this->_sourceType = $sourceType;
         }
@@ -259,46 +270,7 @@ class Grid
     //////////////////////////////////////////////////////////
     //             PRIVATE INITIALISATION                   //
     //////////////////////////////////////////////////////////
-
-        /**
-         * Initialise les colonnes du grid
-         */
-        private function initColonnes()
-        {
-            //récupère les colonnes configurés par l'utilisateur et les boutons d'Action
-            $this->setActionsButtons();
-            $this->setColumns();
-
-            //parcours des colonnes visibles ( colonnes ajoutées par l'utilisateur dans son grid seulement )
-            foreach ($this->_colonnes as $one) {
-                if( !($one instanceof \Nodevo\GridBundle\Grid\Column\BlankColumn) )
-                    $this->_colonnesVisibles[] = $one->getField();
-            }
-
-            //Si il y a des boutons d'action, on ajoute la colonne
-            if( count($this->_buttons) > 0 ) {
-                $this->_colonnesVisibles[] = 'actions';
-
-                //Ajout des actions au grid
-                $actionsColumn = new Column\ActionsColumn('actions', '', $this->_buttons);
-                $actionsColumn->setSize( (count($this->_buttons) * $this->_buttonSize) );
-                $this->_colonnes[] = $actionsColumn;
-
-                if($this->_sourceType == self::SOURCE_TYPE_ENTITY)
-                    $this->_grid->addColumn( $actionsColumn );
-            }
-
-            //Ajout de la colonne ID
-            $idColumn = new Column\NumberColumn(array('id' => 'id', 'title' => 'ID', 'size' => 50, 'field' => 'id', 'source' => true, 'primary' => true, 'filterable' => true, 'sortable' =>false));
-            array_unshift($this->_colonnes, $idColumn);
-
-            if ( $this->_showIdColumn )
-                array_unshift($this->_colonnesVisibles, 'id');
-
-            //met à jour le grid avec les colonnes visibles
-            $this->_grid->setVisibleColumns( $this->_colonnesVisibles );
-        }
-
+    
         /**
          * Initialise la configuration par rapport à la classe
          */
@@ -324,6 +296,45 @@ class Grid
 
             //Active la persistence 
             $this->_grid->setPersistence( $this->_persistence );
+        }
+
+        /**
+         * Initialise les colonnes du grid
+         */
+        private function initColonnes()
+        {
+            //récupère les colonnes configurés par l'utilisateur et les boutons d'Action
+            $this->setActionsButtons();
+            $this->setColumns();
+
+            //parcours des colonnes visibles ( colonnes ajoutées par l'utilisateur dans son grid seulement )
+            foreach ($this->_colonnes as $one) {
+                if( !($one instanceof \Nodevo\GridBundle\Grid\Column\BlankColumn) )
+                    $this->_colonnesVisibles[] = $one->getField();
+            }
+
+            //Si il y a des boutons d'action, on ajoute la colonne
+            if( count($this->_buttons) > 0 ) {
+                $this->_colonnesVisibles[] = 'actions';
+
+                //Ajout des actions au grid
+                $actionsColumn = new Column\ActionsColumn('actions', '', $this->_buttons);
+                $actionsColumn->setSize( ((count($this->_buttons) * $this->_buttonSize)) + 22 );
+                $this->_colonnes[] = $actionsColumn;
+
+                if($this->_sourceType == self::SOURCE_TYPE_ENTITY)
+                    $this->_grid->addColumn( $actionsColumn );
+            }
+
+            //Ajout de la colonne ID
+            $idColumn = new Column\NumberColumn(array('id' => 'id', 'title' => 'ID', 'size' => 50, 'field' => 'id', 'source' => true, 'primary' => true, 'filterable' => $this->_filterIdColumn, 'sortable' =>false));
+            array_unshift($this->_colonnes, $idColumn);
+
+            if ( $this->_showIdColumn )
+                array_unshift($this->_colonnesVisibles, 'id');
+
+            //met à jour le grid avec les colonnes visibles
+            $this->_grid->setVisibleColumns( $this->_colonnesVisibles );
         }
 
         /**
@@ -393,16 +404,21 @@ class Grid
          */
         private function manageColumnsForEntitySource()
         {
-            foreach($this->_colonnes as $colonne) {
+            foreach($this->_colonnes as $colonne)
+            {
                 //get column with ID
                 $column = $this->_grid->getColumn( $colonne->getId() );
 
-                //repeat the configuration
+                //repeat the configuration : Bad stuff but we need to do this because columns are already set (by entity) so it's just an update
                 $column->setTitle( $colonne->getTitle() );
                 $column->setSize( $colonne->getSize() );
                 $column->setSortable( $colonne->isSortable() );
                 $column->setAlign( $colonne->getAlign() );
                 $column->setFilterable( $colonne->isFilterable() );
+                $column->setValues( $colonne->getValues() );
+                $column->setFilterType( $colonne->getFilterType() );
+                $column->setSelectFrom( $colonne->getSelectFrom() );
+                $column->setOperatorsVisible( $colonne->getOperatorsVisible() );
             }
         }
 
