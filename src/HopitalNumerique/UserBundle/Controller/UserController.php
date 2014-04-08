@@ -392,7 +392,7 @@ class UserController extends Controller
      * @return Form | redirect
      */
     private function renderForm( $formName, $user, $view )
-    {        
+    {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $user);
         
@@ -401,7 +401,7 @@ class UserController extends Controller
             $form->remove('plainPassword');
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
                         

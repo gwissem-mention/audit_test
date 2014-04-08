@@ -32,9 +32,10 @@ class ItemGrid extends Grid implements IGrid
 
         $displayColumn = new Column\BooleanColumn('display', 'Affiché');
         $displayColumn->setValues( array( 1 => 'Affiché', 0 => 'Non affiché') );
+        $displayColumn->setSize(80);
         $this->addColonne( $displayColumn );
 
-        //Ajouter une blank colonne pour les champs utilisés dans le traitement du manager mais non affichées dans le grid ( pas de filtres )
+        /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('idItemParent') );
     }
 

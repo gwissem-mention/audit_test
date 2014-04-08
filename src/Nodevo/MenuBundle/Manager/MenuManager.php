@@ -79,15 +79,6 @@ class MenuManager extends BaseManager
         return $cached_data;
     }
 
-    /**
-     * Override : Récupère les données pour le grid sous forme de tableau
-     *
-     * @return array
-     */
-    public function getDatasForGrid( $condition = null )
-    {        
-        return $this->getRepository()->getDatasForGrid( $condition );
-    } 
 
 
 

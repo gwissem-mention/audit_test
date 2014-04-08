@@ -16,8 +16,7 @@ class MenuGrid extends Grid implements IGrid
      */
     public function setConfig()
     {
-        $this->setSource( 'nodevo_menu.manager.menu' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setSource( 'NodevoMenuBundle:Menu' );
         $this->setNoDataMessage( 'Aucun élément de menu présent' );
     }
 
@@ -28,9 +27,9 @@ class MenuGrid extends Grid implements IGrid
     {
         $this->addColonne( new Column\TextColumn('name', 'Nom') );
         $this->addColonne( new Column\TextColumn('alias', 'Alias') );
-
         $this->addColonne( new Column\LockedColumn() );
 
+        /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('cssClass') );
         $this->addColonne( new Column\BlankColumn('cssId') );
     }

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -74,6 +75,8 @@ class Contractualisation
      * @ORM\JoinColumn(name="ref_type_document", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="Le type de document ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
+     *
+     * @GRID\Column(field="typeDocument.libelle")
      */
     protected $typeDocument;    
 

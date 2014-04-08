@@ -42,23 +42,6 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des établissement 'Autres'
-     *
-     * @return QueryBuilder
-     */
-    public function getDatasForGridEtablissement()
-    {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('user.id, user.username, user.nom, user.prenom, refRegion.libelle as region, user.archiver, user.autreStructureRattachementSante')
-            ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->leftJoin('user.region','refRegion')
-            ->where('user.autreStructureRattachementSante IS NOT NULL ')
-            ->orderBy('user.username');
-        
-        return $qb;
-    }
-
-    /**
      * On cherche a savoir si un user existe avec le role et la région de l'user modifié
      *
      * @param User $user L'utilisateur modifié

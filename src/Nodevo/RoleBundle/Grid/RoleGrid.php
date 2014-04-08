@@ -16,8 +16,7 @@ class RoleGrid extends Grid implements IGrid
      */
     public function setConfig()
     {
-        $this->setSource( 'nodevo_role.manager.role' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setSource( 'NodevoRoleBundle:Role' );
         $this->setDefaultLimit( 10 );
         $this->setLimits( array(5, 10, 15) );
     }
@@ -30,13 +29,15 @@ class RoleGrid extends Grid implements IGrid
         $this->addColonne( new Column\TextColumn('name', 'Nom') );
 
         $initialColumn = new Column\BooleanColumn('initial', 'Groupe Initial');
-        $initialColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
-        $initialColumn->setSize( 150 );
+        $initialColumn->setSize( 110 );
         $this->addColonne( $initialColumn );
 
-        $etatColonne = new Column\TextColumn('etat', 'Etat');
-        $etatColonne->setSize( 80 );
+        $etatColonne = new Column\AssocColumn('etat.libelle', 'Etat');
+        $etatColonne->setSize( 70 );
         $this->addColonne( $etatColonne );
+
+        /* Colonnes inactives */
+        $this->addColonne( new Column\BlankColumn('role') );
     }
 
     /**

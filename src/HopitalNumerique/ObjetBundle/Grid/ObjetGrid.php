@@ -21,6 +21,7 @@ class ObjetGrid extends Grid implements IGrid
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('Aucun Objet à afficher.');
         $this->showIDColumn( true );
+        $this->setFilterIdColumn( true );
     }
 
     /**
@@ -32,26 +33,29 @@ class ObjetGrid extends Grid implements IGrid
         $this->addColonne( new Column\TextColumn('types','Catégories') );
         
         $isArticleColumn = new Column\BooleanColumn('isArticle', 'Article');
-        $isArticleColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
         $isArticleColumn->setSize( 90 );
         $this->addColonne( $isArticleColumn );
 
         $infraColumn = new Column\BooleanColumn('isInfraDoc', 'Infra-doc');
-        $infraColumn->setValues( array( 1 => 'Oui', 0 => 'Non') );
         $infraColumn->setSize( 90 );
         $this->addColonne( $infraColumn );
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize( 80 );
+        $etatColonne->setFilterType('select');
+        $etatColonne->setSelectFrom('source');
+        $etatColonne->setOperatorsVisible( false );
         $this->addColonne( $etatColonne );
 
         $this->addColonne( new Column\DateColumn('dateCreation', 'Date de création') );
 
         $dateColonne = new Column\DateColumn('dateModification', 'Date de dernière mise à jour');
-        $dateColonne->setSize( 210 );
+        $dateColonne->setSize( 180 );
         $this->addColonne( $dateColonne );
         
         $this->addColonne( new Column\LockedColumn() );
+
+        /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('lockedBy') );
     }
 

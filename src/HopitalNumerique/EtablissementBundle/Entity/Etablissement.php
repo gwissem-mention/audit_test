@@ -3,6 +3,7 @@
 namespace HopitalNumerique\EtablissementBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -59,6 +60,8 @@ class Etablissement
      * @ORM\JoinColumn(name="ref_type_organisme", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="Le type d'organisme ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
+     *
+     * @GRID\Column(field="typeOrganisme.libelle")
      */
     private $typeOrganisme;
 
@@ -67,6 +70,8 @@ class Etablissement
      * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="La civilité ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
+     *
+     * @GRID\Column(field="region.libelle")
      */
     private $region;
 
@@ -75,6 +80,8 @@ class Etablissement
      * @ORM\JoinColumn(name="ref_departement", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="La civilité ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
+     *
+     * @GRID\Column(field="departement.libelle")
      */
     private $departement;
 

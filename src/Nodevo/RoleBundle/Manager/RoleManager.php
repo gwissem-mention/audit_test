@@ -17,16 +17,6 @@ class RoleManager extends BaseManager
     }
 
     /**
-     * Retourne les données sous forme de tableau
-     *
-     * @return array
-     */
-    public function getDatasForGrid( $condition = null )
-    {
-        return $this->getRepository()->getDatasForGrid( $condition );
-    }
-
-    /**
      * Retourne la liste des roles correctement formatés pour la gestion des habilitations
      *
      * @param array $datas Liste des roles non formatés

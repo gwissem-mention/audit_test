@@ -16,8 +16,7 @@ class EtablissementGrid extends Grid implements IGrid
      */
     public function setConfig()
     {
-        $this->setSource( 'hopitalnumerique_etablissement.manager.etablissement' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setSource( 'HopitalNumeriqueEtablissementBundle:Etablissement' );
     }
 
     /**
@@ -28,19 +27,19 @@ class EtablissementGrid extends Grid implements IGrid
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
 
         $finessColonne = new Column\TextColumn('finess', 'FINESS Geographique');
-        $finessColonne->setSize( 170 );
+        $finessColonne->setSize( 140 );
         $finessColonne->setSortable( false );
         $this->addColonne( $finessColonne );
 
-        $typeColonne = new Column\TextColumn('typeOrganisme', 'Type d\'organisme');
+        $typeColonne = new Column\AssocColumn('typeOrganisme.libelle', 'Type d\'organisme');
         $typeColonne->setSize( 140 );
         $this->addColonne( $typeColonne );
 
-        $regionColonne = new Column\TextColumn('region', 'Région');
+        $regionColonne = new Column\AssocColumn('region.libelle', 'Région');
         $regionColonne->setSize( 150 );
         $this->addColonne( $regionColonne );
 
-        $departementColonne = new Column\TextColumn('departement', 'Département');
+        $departementColonne = new Column\AssocColumn('departement.libelle', 'Département');
         $departementColonne->setSize( 200 );
         $this->addColonne( $departementColonne );
 
@@ -49,8 +48,11 @@ class EtablissementGrid extends Grid implements IGrid
         $this->addColonne( $villeColonne );
 
         $codepostalColonne = new Column\TextColumn('codepostal', 'Code Postal');
-        $codepostalColonne->setSize( 110 );
+        $codepostalColonne->setSize( 100 );
         $this->addColonne( $codepostalColonne );
+
+        /* Colonnes inactives */
+        $this->addColonne( new Column\BlankColumn('adresse') );
     }
 
     /**

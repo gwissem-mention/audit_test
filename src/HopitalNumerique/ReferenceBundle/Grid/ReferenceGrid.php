@@ -34,20 +34,26 @@ class ReferenceGrid extends Grid implements IGrid
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize( 80 );
+        $etatColonne->setFilterType('select');
+        $etatColonne->setSelectFrom('source');
+        $etatColonne->setOperatorsVisible( false );
         $this->addColonne( $etatColonne );
 
         $this->addColonne( new Column\OrderColumn() );
 
         $dictionnaireColumn = new Column\BooleanColumn('dictionnaire', 'Dictionnaire');
         $dictionnaireColumn->setValues( array( 1 => 'Présent dans le dictionnaire de référencement', 0 => 'Absent du dictionnaire') );
+        $dictionnaireColumn->setSize( 100 );
         $this->addColonne( $dictionnaireColumn );
 
         $rechercheColumn = new Column\BooleanColumn('recherche', 'Recherche');
         $rechercheColumn->setValues( array( 1 => 'Présent dans les champs du moteur de recherche', 0 => 'Absent des champs du moteur de recherche') );
+        $rechercheColumn->setSize( 100 );
         $this->addColonne( $rechercheColumn );
 
         $this->addColonne( new Column\LockedColumn() );
 
+        /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('idParent') );
     }
 
