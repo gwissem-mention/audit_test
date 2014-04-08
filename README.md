@@ -1,4 +1,4 @@
-h1.README
+h1. README
 
 > Rédigé par Quentin Somazzi le 19/01/2014.
 > MAJ par Gaëtan Melchilsen le 18/02/2014.
@@ -81,6 +81,9 @@ h2. 5. Conventions de nommage pour le projet
 ** Editer un __ : formulaire d'édition
 ** Enregistrer (et pas sauvegarder)
 * Dans les vues de grid (titres des colonnes) et dans les formulaires ne pas préciser : Element du __  (ex : mettre *Nom* à la place de *Nom du groupe* )
+* Les urls du projet doivent respecter la norme CamelCase (ex : addObjet et pas AddObjet)
+* Tous les fichiers compilés par Assetic doivent respecter la même convention de nommage : namespace-bundle-controller-action.(js|css)
+** Ex : hopitalnumerique-recherche-publication-index.css
 
 h2. 6. Droits sur les dossiers
 
@@ -90,13 +93,37 @@ Les dossier suivants (et enfants) doivent être accessible en écriture pour l'u
 - files/
 - web/medias
 
-h2. 7. Configuration des bundles
+h2. 7. Configuration des mails
 
-Les mails lors de l'envoie d'un message de contact:
+Dans app/config/config.yml :
 
+#Mails pour les CCI
+    Nodevo mail
+    nodevo_mail:
+       options:
+           allowAdd: false
+           allowDelete: false
+           mailAnap: #Tableaux des adresses mails copie caché de tout les mails envoyé par l'application sous la forme "adresse_mail: nom_affiché" 
+               toto@yopmail.com: adresse1
+               toto2@yopmail.com: adresse2
+Dans le cas où ce dernier n'est pas renseigné, un tableau vide est créé et ça ne plante pas.
+
+    Les mails lors de l'envoie d'un message de contact:
+    Contact
     hopital_numerique_contact:
         options:
             mailsContact: #"adresse_mail: nom_affiché"
                 qsomazzi@nodevo.com: Quentin Sommazi
                 gmelchilsen@nodevo.com: Gaëtan Melchilsen
-                tdauriac@nodevo.com: Thomas Dauriac 
+                tdauriac@nodevo.com: Thomas Dauriac
+
+h2. 8. CRON
+
+<pre># Envoie les relances des demandes d'intervention en cours de traitement (peut être appelé n'importe quand) et màj éventuellement l'état des demandes si la personne n'a pas répondu à temps
+0 0 * * * curl http://HN_BASE_URL/intervention/cron/FHFURJYIHOLPMFKVIDUESQGEUDRCTUFT</pre>
+
+<pre># Envoie les simples relances quotidiennes des demandes d'intervention en cours de traitement (doit être appelé après la précédente)
+0 1 * * * curl http://HN_BASE_URL/intervention/cron-quotidien/FLFTRJYPVGLPMMVGIDUEOFCEUDCVBUPA</pre>
+
+<pre># Envoie les notifications de mises à jour sur les objets des requêtes utilisateurs (effectue les mises à jour aussi)
+0 1 * * * curl http://HN_BASE_URL/cron-requetes/FHFURJYIHOLPMFKVIDUESQGEUDRCTUFT</pre>
