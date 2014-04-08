@@ -43,25 +43,25 @@
     <div class="requetes">
         {% for requete in requetes %}
             <div class="ligne requete-{{requete.id}}" >
-                <div class="default {% if requete.isDefault %}active{% endif %}" data-link="{{path('hopital_numerique_requete_toggle',{'id':requete.id})}}" >
+                <div {% if not requete.isDefault %}title="Mettre par défaut"{% endif %} class="default {% if requete.isDefault %}active{% endif %}" data-link="{{path('hopital_numerique_requete_toggle',{'id':requete.id})}}" >
                     <i class="fa {% if requete.isDefault %}fa-star{% endif %}"></i>
                 </div>
 
                 <p {% if requete.isDefault %}class="violet"{% endif %} >
                     {{requete.nom|capitalize}}
                     {% if requete.isNew %}
-                        <i class="fa fa-bullhorn"></i>
+                        <span class="label label-danger">Nouveau</span>
                     {% endif %}
                     {% if requete.isUpdated %}
-                        <i class="fa fa-refresh"></i>
+                        <span class="label label-success">MaJ</span>
                     {% endif %}
                 </p>
 
                 <div class="actions pull-right">
-                    <div class="fa fa-envelope {% if requete.isUserNotified %}active{% else %}inactive{% endif %}" onclick="showDetails('{{path('hopital_numerique_requete_mail',{'id':requete.id})}}')"></div>
-                    <div class="fa fa-eye" onclick="showDetails('{{path('hopital_numerique_requete_detail',{'id':requete.id})}}')"></div>
-                    <div class="fa fa-edit" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
-                    <div class="fa fa-times-circle" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-envelope {% if requete.isUserNotified %}active{% else %}inactive{% endif %}" title="Notifications" onclick="showDetails('{{path('hopital_numerique_requete_mail',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-eye" title="Voir le détail" onclick="showDetails('{{path('hopital_numerique_requete_detail',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-edit" title="Editer" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
                 </div>
 
                 <div class="clearfix"></div>
@@ -89,7 +89,7 @@
                 {% endif %}
                 
                 <div class="actions pull-right">
-                    <div class="fa fa-times-circle" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_consultation_delete', {'id':consultation.id})}}')"></div>
+                    <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_consultation_delete', {'id':consultation.id})}}')"></div>
                 </div>
             </div>
         {% else %}

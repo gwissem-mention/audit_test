@@ -392,12 +392,11 @@ class ObjetManager extends BaseManager
         $categories = array();
         foreach($allCategories as $one) {
             $articles = $this->getObjetsByTypes( array($one) );
-            if( count($articles) > 0){
-                $categ = new \stdClass;
-                $categ->id = $one->getId();
-
-                $libelle = new Chaine( $one->getLibelle() );
-                $categ->libelle = $libelle->minifie();
+            if( count($articles) > 0)
+            {
+                $categ          = new \stdClass;
+                $categ->id      = $one->getId();
+                $categ->libelle = $one->getLibelle();
 
                 $categories[] = $categ;
             }

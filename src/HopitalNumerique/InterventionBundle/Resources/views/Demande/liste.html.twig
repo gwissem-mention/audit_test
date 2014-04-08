@@ -24,8 +24,48 @@
 {% block headerTitle %}Les interventions{% endblock %}
 
 {% block headerDesc %}
-    <p>Devoir la vie à un malfaiteur, accepter cette dette et la rembourser, être, en dépit de soi-même, de plain-pied avec un repris de justice, et lui payer un service avec un autre service ; se laisser dire : Va-t'en, et lui dire à son tour : Sois libre ; sacrifier à des motifs personnels le devoir, cette obligation générale, et sentir dans ces motifs personnels quelque chose de général aussi, et de supérieur peut-être ; trahir la société pour rester fidèle à sa conscience ; que toutes ces absurdités se réalisassent et qu'elles vinssent s'accumuler sur lui-même, c'est ce dont il était atterré.</p>
-    
+    {% if app.user.hasRoleCmsi %}
+        <p>
+            Vous pouvez consulter ci-dessous un récapitulatif des interventions des ambassadeurs dans les établissements de votre région. L'état d'une intervention vous renseigne sur son avancement et sur l'action attendue :
+        </p>
+        <ul>
+            <li>Demande initiale : vous devez valider la demande en cliquant sur l'icône "afficher" pour une décision ou sur l'icône "éditer" pour une modification de la demande.</li>
+            <li>Acceptée par le CMSI : la demande est en attente de validation par l'ambassadeur concerné.</li>
+            <li>Acceptée par l'ambassadeur : l'ambassadeur doit mettre en place son intervention en établissement. Elle sera ensuite évaluée par l'établissement sur la plateforme.</li>
+            <li>Terminée : vous pouvez consulter l'évaluation de l'intervention en cliquant sur la case "Eval".</li>
+        </ul>
+    {% elseif app.user.hasRoleAmbassadeur %}
+        <p>
+            Vous pouvez consulter ci-dessous un récapitulatif de vos interventions en établissement. L'état d'une intervention vous renseigne sur son avancement et sur l'action attendue :
+        </p>
+        <ul>
+            <li>Acceptée par le CMSI : vous pouvez accepter, refuser ou transmettre la demande à un autre ambassadeur.</li>
+            <li>Acceptée par l'ambassadeur : vous pouvez mettre en place votre intervention dans l'établissement. Son évaluation sera ensuite réalisée par l'établissement sur la plateforme. Vous pouvez relancer l'établissement pour son action en cliquant sur la case "Eval".</li>
+            <li>Terminée : vous pouvez consulter le résultat de l'évaluation de votre intervention en cliquant sur la case "Eval".</li>
+        </ul>
+    {% elseif app.user.hasRoleDirecteur %}
+        <p>
+            Vous pouvez consulter ci-dessous un récapitulatif des interventions d'ambassadeurs concernant votre établissement. L'état d'une intervention vous renseigne sur son avancement et sur l'action attendue :
+        </p>
+        <ul>
+            <li>Demande initiale. La demande est à valider par le CMSI de la région.</li>
+            <li>Accepté par le CMSI. La demande est à accepter par l'ambassadeur concerné.</li>
+            <li>Accepté par l'ambassadeur. L'intervention est à mettre en place entre votre établissement et l'ambassadeur. Après l'intervention, l'établissement devra l'évaluer en cliquant sur la case "Eval".</li>
+        </ul>
+        <p>
+            Vous pouvez suivre les activités de vos collaborateurs engagés en tant qu'ambassadeurs auprès de l'ANAP. Pour cela, cliquez sur le lien ci-après.
+        </p>
+    {% else %}
+        <p>
+            Vous trouverez ci-dessous un récapitulatif des interventions des ambassadeurs dans votre établissement. L'état d'une intervention vous renseigne sur son avancement et sur l'action attendue :
+        </p>
+        <ul>
+            <li>Demande initiale : la demande est en cours de validation par le CMSI de la région.</li>
+            <li>Acceptée par le CMSI : la demande est en attente de réponse de l'ambassadeur concerné.</li>
+            <li>Acceptée par l'ambassadeur : l'intervention est à programmer avec l'ambassadeur. Une fois l'intervention réalisée, votre établissement devra l'évaluer en cliquant sur la case "Eval".</li>
+        </ul>
+    {% endif %}
+
     {% if app.user.hasRoleDirecteur %}<h3><a href="{{ path('hopital_numerique_intervention_demande_suivi_demandes') }}">&gt; Suivre l'activité des ambassadeurs de mon établissement</a></h3>{% endif %}
 {% endblock %}
 

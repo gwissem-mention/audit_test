@@ -12,7 +12,11 @@
 {% block headerTitle %}Évaluation{% endblock %}
 
 {% block headerDesc %}
-    <p>123</p>
+    {% if app.user.hasRoleAmbassadeur %}
+        <p>Vous trouverez ci-dessous les évaluations des interventions de l'ambassadeur dans les établissements.</p>
+    {% else %}
+        <p>Vous trouverez ci-dessous vos évaluations de l'intervention de l'ambassadeur dans votre établissement.</p>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
