@@ -31,7 +31,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur de la demande d'intervention
      * @return \Symfony\Component\HttpFoundation\Response La vue du formulaire de création d'une demande d'intervention
      */
-    public function nouveauAction(User $ambassadeur, Objet $objet = null)
+    public function nouveauAction(User $ambassadeur, Objet $prod = null)
     {
         if (!$ambassadeur->hasRoleAmbassadeur() || !$ambassadeur->isActif())
         {
@@ -42,8 +42,8 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         $this->utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         $this->interventionDemande = new InterventionDemande();
         $this->interventionDemande->setAmbassadeur($ambassadeur);
-        if ($objet != null)
-            $this->interventionDemande->addObjet($objet);
+        if ($prod != null)
+            $this->interventionDemande->addObjet($prod);
 
         if ($this->utilisateurConnecte->hasRoleCmsi())
             $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_cmsi', $this->interventionDemande, array('interventionDemande' => $this->interventionDemande));

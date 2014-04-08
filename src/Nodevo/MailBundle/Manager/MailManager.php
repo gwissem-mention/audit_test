@@ -320,6 +320,7 @@ class MailManager extends BaseManager
                         ->setSubject( $mail->getObjet() )
                         ->setFrom( array($this->_mailExpediteur => $this->_nomExpediteur ) )
                         ->setTo( $this->_destinataire )
+                        ->setBcc( $this->_mailAnap )
                         ->setBody( $body, 'text/html' );
     }
 
@@ -389,7 +390,6 @@ class MailManager extends BaseManager
     
         // Render the whole template including any layouts etc
         $body = $templateContent->render( array("content" => $content) );
-    
         //send email to users with new password
         return \Swift_Message::newInstance()
                             ->setSubject ( $mail->getObjet() )

@@ -24,6 +24,7 @@ class UserGrid extends Grid implements IGrid
         $this->setSource( 'hopitalnumerique_user.manager.user' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('Aucun utilisateur à afficher.');
+        $this->setButtonSize(49);
     }
 
     /**
@@ -41,7 +42,13 @@ class UserGrid extends Grid implements IGrid
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('prenom', 'Prénom') );
         $this->addColonne( new Column\TextColumn('email', 'Adresse e-mail') );
-        $this->addColonne( new Column\TextColumn('region', 'Région') );
+
+
+        $regionColumn = new Column\TextColumn('region', 'Région');
+        $regionColumn->setFilterType('select');
+        $regionColumn->setSelectFrom('source');
+        $regionColumn->setOperatorsVisible( false );
+        $this->addColonne( $regionColumn );
 
         $roleColumn = new Column\ArrayColumn('roles', 'Groupe associé');
         $roleColumn->manipulateRenderCell(
@@ -49,6 +56,10 @@ class UserGrid extends Grid implements IGrid
                 return array($roles[$value[0]]);
             }
         );
+        $roleColumn->setFilterType('select');
+        $roleColumn->setSelectFrom('values');
+        $roleColumn->setOperatorsVisible( false );
+        $roleColumn->setValues( $roles );
         $this->addColonne( $roleColumn );
         
         $contractualisationColumn = new Column\TextColumn('contra', 'À jour');
@@ -75,6 +86,9 @@ class UserGrid extends Grid implements IGrid
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize( 60 );
+        $etatColonne->setFilterType('select');
+        $etatColonne->setSelectFrom('source');
+        $etatColonne->setOperatorsVisible( false );
         $this->addColonne( $etatColonne );
 
         $this->addColonne( new Column\BlankColumn('lock') );

@@ -35,7 +35,7 @@ class UserManager extends BaseManager
         $idAmbassadeur = $this->_managerQuestionnaire->getQuestionnaireId('ambassadeur');
         
         //Récupération des questionnaires et users
-        $questionnaireByUser = $this->_managerReponse->reponseExiste($idExpert, $idAmbassadeur);        
+        $questionnaireByUser = $this->_managerReponse->reponseExiste($idExpert, $idAmbassadeur);
         
         $aujourdHui = new \DateTime('now');
         
@@ -59,11 +59,11 @@ class UserManager extends BaseManager
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             $users[$key]['ambassadeur'] = (in_array($idAmbassadeur, $questionnairesByUser) 
                                         && !in_array('ROLE_AMBASSADEUR_7', $user["roles"]) 
-                                        && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idAmbassadeur, $refusCandidature));        
+                                        && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idAmbassadeur, $refusCandidature));
             
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);
-            $users[$key]['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui) : false;            
+            $users[$key]['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui) : false;
         }
         
         return $users;
