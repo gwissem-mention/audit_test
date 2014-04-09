@@ -50,6 +50,13 @@ $(document).ready(function() {
             if ( !$(this).hasClass('titre_depliable') )
                 $(this).slideToggle();
         });
-        
+    });
+
+    //Default collapse all
+    $('h2 .titre_depliable').each(function(){
+        $(this).parent().nextAll().each(function(){
+            if ( !$(this).hasClass('titre_depliable') )
+                $(this).hide();
+        });
     })
 });
