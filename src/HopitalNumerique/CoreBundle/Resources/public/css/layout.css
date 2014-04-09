@@ -37,6 +37,7 @@ h3{font-size: 20px}
     #header .loggedUser p .nom{ padding-left:20px; margin-bottom: 10px}
     #header .loggedUser .infos{font-size: 10px; position: absolute; bottom: 14px;}
     #header #logoHn{margin:3px 0 0 10px;display: block}
+    #header #logoHn img{margin:0;}
     #header p.violet{width:93px;font-size: 9px; font-weight: 600; margin-top: 30px;line-height: 12px}
 
 /* FOOTER */
