@@ -29,7 +29,7 @@ class ContactType extends AbstractType
             ->add('prenom', 'text', array(
                 'max_length' => $this->_constraints['prenom']['maxlength'],
                 'required' => true, 
-                'label'    => 'Prenom',
+                'label'    => 'Prénom',
                 'attr'        => array(
                         'class' => $this->_constraints['prenom']['class']
                 ),
@@ -47,14 +47,14 @@ class ContactType extends AbstractType
                     'invalid_message' => 'Ces deux champs doivent être identiques.',
                     'required'       => true,
                     'first_options'  => array(
-                            'label' => 'Adresse mail',
+                            'label' => 'Adresse email',
                             'max_length' => $this->_constraints['mail']['maxlength'],
                             'attr' => array(
                                     'autocomplete' => 'off',
                                     'class' => $this->_constraints['mail']['class']
                             )),
                     'second_options' => array(
-                            'label' => 'Confirmer l\'adresse mail',
+                            'label' => 'Confirmer l\'adresse email',
                             'max_length' => $this->_constraints['mail']['maxlength'],
                             'attr' => array(
                                     'autocomplete' => 'off',
@@ -88,7 +88,7 @@ class ContactType extends AbstractType
             ))
             ->add('message', 'textarea', array(
                     'required' => true,
-                    'label'    => 'Message',
+                    'label'    => 'Votre message',
                     'attr'        => array(
                             'class' => $this->_constraints['message']['class'],
                             'rows'   => 8
