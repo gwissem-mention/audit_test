@@ -54,7 +54,7 @@ class ContactType extends AbstractType
                                     'class' => $this->_constraints['mail']['class']
                             )),
                     'second_options' => array(
-                            'label' => 'Confirmer l\'adresse mail',
+                            'label' => 'Confirmer l\'adresse email',
                             'max_length' => $this->_constraints['mail']['maxlength'],
                             'attr' => array(
                                     'autocomplete' => 'off',
