@@ -18,11 +18,11 @@ hopital_numerique_intervention_demande_nouveau:
     requirements:
         ambassadeur: \d+
 hopital_numerique_intervention_demande_nouveau_avec_objet:
-    pattern:  /demande/nouveau/{ambassadeur}/prod/{objet}
+    pattern:  /demande/nouveau/{ambassadeur}/prod/{prod}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Demande:nouveau", ambassadeur: 0 }
     requirements:
         ambassadeur: \d+
-        objet: \d+
+        prod: \d+
 
 hopital_numerique_intervention_demande_edit:
     pattern:  /demande/edit/{id}

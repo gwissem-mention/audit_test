@@ -329,7 +329,18 @@ class MailManager extends BaseManager
         return $this->_destinataire;
     }
 
-
+    public function sendInterventionMail(\Nodevo\MailBundle\Entity\Mail $mail, \HopitalNumerique\UserBundle\Entity\User $destinataire, $courrielCorps)
+    {
+        $courriel = \Swift_Message::newInstance()
+            ->setSubject($mail->getObjet())
+            ->setFrom(array($mail->getExpediteurMail() => $mail->getExpediteurName()))
+            ->setTo($destinataire->getEmail())
+            ->setBcc($this->_mailAnap)
+            ->setBody($courrielCorps, 'text/html')
+        ;
+        
+        return $courriel;
+    }
 
 
 

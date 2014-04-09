@@ -298,11 +298,7 @@ class InterventionCourrielManager
         $remplacements['u'] = $destinataire->getAppellation();
         $courrielCorps = $this->getCourrielCorps($mail, $remplacements);
 
-        $courriel = \Swift_Message::newInstance()
-            ->setSubject($mail->getObjet())
-            ->setFrom(array($mail->getExpediteurMail() => $mail->getExpediteurName()))
-            ->setTo($destinataire->getEmail())
-            ->setBody($courrielCorps, 'text/html');
+        $courriel = $this->mailManager->sendInterventionMail($mail, $destinataire, $courrielCorps);
         $this->mailer->send($courriel);
         
         $this->envoiCourrielsAffichageLogs->addLog('Courriel "'.$mail->getObjet().'" envoyé à '.$destinataire->getAppellation()."\n");
