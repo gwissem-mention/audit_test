@@ -15,6 +15,12 @@ class MailManager extends BaseManager
 
     private $_allowAdd;
     private $_allowDelete;
+    /**
+     * Envoie du mail en CCI à l'expediteur aussi
+     * 
+     * @var boolean
+     */
+    private $_expediteurEnCopie;
     private $_nomExpediteur;
     private $_mailExpediteur;
     private $_destinataire;
@@ -37,15 +43,16 @@ class MailManager extends BaseManager
     {        
         parent::__construct($em);
 
-        $this->_twig           = $twig;
-        $this->_router         = $router;
-        $this->_requestStack   = $requestStack;
-        $this->_allowAdd       = isset($options['allowAdd'])        ? $options['allowAdd']          : true;
-        $this->_allowDelete    = isset($options['allowDelete'])     ? $options['allowDelete']       : true;
-        $this->_nomExpediteur  = isset($options['nomExpediteur'])   ? $options['nomExpediteur']     : '';
-        $this->_mailExpediteur = isset($options['mailExpediteur'])  ? $options['mailExpediteur']    : '';
-        $this->_destinataire   = isset($options['destinataire'])    ? $options['destinataire']      : '';
-        $this->_mailAnap       = isset($options['mailAnap'])        ? $options['mailAnap']          : array();
+        $this->_twig               = $twig;
+        $this->_router             = $router;
+        $this->_requestStack       = $requestStack;
+        $this->_allowAdd           = isset($options['allowAdd'])          ? $options['allowAdd']          : true;
+        $this->_allowDelete        = isset($options['allowDelete'])       ? $options['allowDelete']       : true;
+        $this->_expediteurEnCopie  = isset($options['expediteurEnCopie']) ? $options['expediteurEnCopie'] : false;
+        $this->_nomExpediteur      = isset($options['nomExpediteur'])     ? $options['nomExpediteur']     : '';
+        $this->_mailExpediteur     = isset($options['mailExpediteur'])    ? $options['mailExpediteur']    : '';
+        $this->_destinataire       = isset($options['destinataire'])      ? $options['destinataire']      : '';
+        $this->_mailAnap           = isset($options['mailAnap'])          ? $options['mailAnap']          : array();
     }
 
     /**
@@ -276,12 +283,19 @@ class MailManager extends BaseManager
             
             // Render the whole template including any layouts etc
             $body = $templateContent->render( array("content" => $content) );
+
+            $from = array($expediteurMail => $expediteurName );
+            
+            if($this->_expediteurEnCopie)
+                $cci = array_merge( $this->_mailAnap, $from );
+            else
+                $cci = $this->_mailAnap;
             
             $mailsToSend[] = \Swift_Message::newInstance()
                                 ->setSubject ( $mail->getObjet() )
-                                ->setFrom ( array($expediteurMail => $expediteurName ) )
+                                ->setFrom ( $from )
                                 ->setTo ( array($recepteurMail => $recepteurName) )
-                                ->setBcc( $this->_mailAnap )
+                                ->setBcc( $cci )
                                 ->setBody ( $body, 'text/html' );
         }
         return $mailsToSend;
@@ -314,12 +328,19 @@ class MailManager extends BaseManager
         $this->_nomExpediteur  = ($this->_nomExpediteur == '')  ? $mail->getExpediteurName() : $this->_nomExpediteur;
         $this->_destinataire   = ($this->_destinataire == '')   ? $user->getEmail()          : $this->_destinataire;
         
+        $from = array($this->_mailExpediteur => $this->_nomExpediteur );
+        
+        if($this->_expediteurEnCopie)
+            $cci = array_merge( $this->_mailAnap, $from );
+        else
+            $cci = $this->_mailAnap;
+        
         //return test email
         return \Swift_Message::newInstance()
                         ->setSubject( $mail->getObjet() )
-                        ->setFrom( array($this->_mailExpediteur => $this->_nomExpediteur ) )
+                        ->setFrom( $from )
                         ->setTo( $this->_destinataire )
-                        ->setBcc( $this->_mailAnap )
+                        ->setBcc( $cci )
                         ->setBody( $body, 'text/html' );
     }
 
@@ -389,13 +410,22 @@ class MailManager extends BaseManager
         $content         = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user, $options);
         $templateFile    = "NodevoMailBundle::template.mail.html.twig";
         $templateContent = $this->_twig->loadTemplate($templateFile);
+        
+        $from = array($mail->getExpediteurMail() => $mail->getExpediteurName() );
+        
+        if($this->_expediteurEnCopie)
+            $cci = array_merge( $this->_mailAnap, $from );
+        else
+            $cci = $this->_mailAnap;
+        
+        var_dump($this->_expediteurEnCopie);die('die');
     
         // Render the whole template including any layouts etc
         $body = $templateContent->render( array("content" => $content) );
         //send email to users with new password
         return \Swift_Message::newInstance()
                             ->setSubject ( $mail->getObjet() )
-                            ->setFrom ( array($mail->getExpediteurMail() => $mail->getExpediteurName() ) )
+                            ->setFrom ( $from )
                             ->setTo ( $user->getEmail() )
                             ->setBcc( $this->_mailAnap )
                             ->setBody ( $body, 'text/html' );

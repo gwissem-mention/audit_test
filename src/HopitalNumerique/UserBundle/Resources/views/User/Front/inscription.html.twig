@@ -90,7 +90,8 @@
 				                {{ form_widget(form.termsAccepted) }}
 				            </div>
 				            <div class="col-md-8">
-				                <a href="#">{{ form_label(form.termsAccepted) }}</a>
+				                <div class="col-md-12">{{ form_label(form.termsAccepted) }}</div>
+				                <div class="col-md-12"><a target="_blank" href="{{path('hopital_numerique_publication_publication_article',{'id':twigOptions.conditionsGenerales.conditionsGenerales.id, 'alias':twigOptions.conditionsGenerales.conditionsGenerales.alias,'categorie':twigOptions.conditionsGenerales.categorie.libelle|lower})}}">Lien vers les CGU.</a></div>
 			                </div>
 				            <div class="col-md-4">
 				                <div class="help-block">

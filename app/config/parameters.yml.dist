@@ -13,3 +13,5 @@ parameters:
     
     locale: fr
     secret: '536ghdge7g&7hdjzy6g"gvxojheg'
+    
+    confighn_nodevomail_expediteurEnCopie: true
