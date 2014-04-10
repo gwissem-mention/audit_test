@@ -4,13 +4,13 @@ namespace HopitalNumerique\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
-use APY\DataGridBundle\Grid\Mapping as GRID;
+use Nodevo\RoleBundle\Entity\Role;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
-use Nodevo\RoleBundle\Entity\Role;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * User
