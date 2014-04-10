@@ -417,7 +417,7 @@ class MailManager extends BaseManager
         $templateContent = $this->_twig->loadTemplate($templateFile);
         
         $from = array($mail->getExpediteurMail() => $mail->getExpediteurName() );
-        
+                
         if($this->_expediteurEnCopie)
             $cci = array_merge( $this->_mailAnap, $from );
         else
@@ -430,7 +430,7 @@ class MailManager extends BaseManager
                             ->setSubject ( $mail->getObjet() )
                             ->setFrom ( $from )
                             ->setTo ( $user->getEmail() )
-                            ->setBcc( $this->_mailAnap )
+                            ->setBcc( $cci )
                             ->setBody ( $body, 'text/html' );
     }
 }
