@@ -1,26 +1,33 @@
 hopital_numerique_intervention_demande_liste:
     pattern:  /demandes/liste
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:liste" }
+    requirements:
+        _method:  GET
 
 hopital_numerique_intervention_demande_suivi_demandes:
     pattern:  /demandes/suivi-demandes
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:suiviDemandes" }
+    requirements:
+        _method:  GET
 
 hopital_numerique_intervention_demande_voir:
     pattern:  /demande/voir/{id}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:voir", id: 0 }
     requirements:
+        _method:  GET
         id: \d+
 
 hopital_numerique_intervention_demande_nouveau:
     pattern:  /demande/nouveau/{ambassadeur}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Demande:nouveau", ambassadeur: 0 }
     requirements:
+        _method:  GET
         ambassadeur: \d+
 hopital_numerique_intervention_demande_nouveau_avec_objet:
     pattern:  /demande/nouveau/{ambassadeur}/prod/{prod}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Demande:nouveau", ambassadeur: 0 }
     requirements:
+        _method:  GET
         ambassadeur: \d+
         prod: \d+
 
@@ -28,25 +35,38 @@ hopital_numerique_intervention_demande_edit:
     pattern:  /demande/edit/{id}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Demande:edit", id: 0 }
     requirements:
+        _method:  GET
         id: \d+
 
 #<-- Vues Grid
 hopital_numerique_intervention_grid_cmsi_demandes_nouvelles:
     pattern: /demandes/grid/cmsi/nouvelles
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:gridCmsiDemandesNouvelles" }
+    requirements:
+        _method:  GET
 hopital_numerique_intervention_grid_cmsi_demandes_traitees:
     pattern: /demandes/grid/cmsi/traitees
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:gridCmsiDemandesTraitees" }
+    requirements:
+        _method:  GET
 hopital_numerique_intervention_grid_directeur_suivi_demandes:
     pattern: /demandes/grid/directeur
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:gridDirecteurSuiviDemandes" }
+    requirements:
+        _method:  GET
 hopital_numerique_intervention_grid_ambassadeur_demandes:
     pattern: /demandes/grid/ambassadeur
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:gridAmbassadeurDemandes" }
+    requirements:
+        _method:  GET
 hopital_numerique_intervention_grid_etablissement_demandes:
     pattern: /demandes/grid/etablissement
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:gridEtablissementDemandes" }
+    requirements:
+        _method:  GET
 hopital_numerique_intervention_grid_admin_demandes:
     pattern: /demandes/grid/admin
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Demande:gridDemandes" }
+    requirements:
+        _method:  GET
 #-->

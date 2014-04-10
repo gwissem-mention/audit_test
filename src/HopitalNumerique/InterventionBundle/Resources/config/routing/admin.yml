@@ -1,27 +1,33 @@
 hopital_numerique_intervention_admin_liste:
     pattern:  /demandes/liste
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Demande:liste" }
+    requirements:
+        _method:  GET
 
 hopital_numerique_intervention_admin_demande_edit:
     pattern:  /demande/edit/{id}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Form/Demande:edit", id: 0 }
     requirements:
+        _method:  GET
         id: \d+
 
 hopital_numerique_intervention_admin_demande_voir:
     pattern:  /demande/show/{id}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Demande:voir", id: 0 }
     requirements:
+        _method:  GET
         id: \d+
 
 hopital_numerique_intervention_admin_demande_delete:
     pattern: /demande/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Form/Demande:supprime", _format: json}
     requirements:
+        _method:  GET
         id: \d+
 
 hopital_numerique_intervention_admin_evaluation_voir:
     pattern:  /demande/{interventionDemande}/evaluation/voir
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Evaluation:voir", interventionDemande: 0 }
     requirements:
+        _method:  GET
         interventionDemande: \d+

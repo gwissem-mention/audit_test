@@ -39,22 +39,10 @@ class DemandesGrid extends DemandesAbstractGrid
         );
         $this->addColonne($colonneInitiateur->setFilterable(false)->setSortable(false));
 
-        $colonneAmbassadeur = new Column\TextColumn('ambassadeurInformations', 'Ambassadeur');
-        $colonneCreation = new Column\DateColumn('dateCreationLibelle', 'Création');
-        $colonneEtat = new Column\TextColumn('interventionEtatLibelle', 'État');
-        
-        $this->addColonne($colonneAmbassadeur->setFilterable(false)->setSortable(false));       
-        $this->addColonne($colonneCreation->setFilterable(false)->setSortable(false));       
-        $this->addColonne($colonneEtat->setFilterable(false)->setSortable(false));
-
-        $colonneDateChoix = new Column\TextColumn('dateChoix', 'Date choix');
-        $colonneDateChoix->setFilterable(false)->setSortable(false);
-        $colonneDateChoix->manipulateRenderCell(
-            function($value, $row, $router) {
-                return DemandesAbstractGrid::renderCellDateChoix($value, $row, $router);
-            }
-        );
-        $this->addColonne($colonneDateChoix);
+        $this->addColonneAmbassadeur();
+        $this->addColonneDateCreation();
+        $this->addColonneInterventionEtat();
+        $this->addColonneDateChoix();
 
         $colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
         $colonneEvaluation->setAlign('center');

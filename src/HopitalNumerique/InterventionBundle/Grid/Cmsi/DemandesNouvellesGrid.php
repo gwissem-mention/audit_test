@@ -30,31 +30,15 @@ class DemandesNouvellesGrid extends DemandesAbstractGrid
     {
         parent::setColumns();
         
-        $colonneDemandeurInformations = new Column\TextColumn('demandeurInformations', 'Demandeur');
-        $colonneDemandeurInformations->manipulateRenderCell(
-            function($value, $row, $router)
-            {
-                return DemandesAbstractGrid::renderCellReferent($value, $row, $router);
-            }
-        );
-        $colonneDemandeurInformations->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneDemandeurInformations);
-        
-        $colonneAmbassadeurInformations = new Column\TextColumn('ambassadeurInformations', 'Ambassadeur');
-        $colonneAmbassadeurInformations->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneAmbassadeurInformations);
+        $this->addColonneDemandeur();
+        $this->addColonneAmbassadeur();
         
         $colonneObjetsInformations = new Column\TextColumn('objetsInformations', 'Objets');
         $colonneObjetsInformations->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneObjetsInformations);
         
-        $colonneInterventionEtatLibelle = new Column\TextColumn('interventionEtatLibelle', 'État');
-        $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneInterventionEtatLibelle);
-        
-        $colonneDateCreationLibelle = new Column\DateColumn('dateCreationLibelle', 'Création');
-        $colonneDateCreationLibelle->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneDateCreationLibelle);
+        $this->addColonneInterventionEtat();
+        $this->addColonneDateCreation();
 
         $colonneDateButoir = new Column\TextColumn('dateButoir', 'Date butoir');
         $colonneDateButoir->setAlign('center');

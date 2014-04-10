@@ -30,39 +30,12 @@ class SuiviDemandesGrid extends DemandesAbstractGrid
     {
         parent::setColumns();
         
-        $colonneDemandeurInformations = new Column\TextColumn('demandeurInformations', 'Demandeur');
-        $colonneDemandeurInformations->manipulateRenderCell(
-            function($value, $row, $router) {
-                return DemandesAbstractGrid::renderCellReferent($value, $row, $router);
-            }
-        );
-        $colonneDemandeurInformations->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneDemandeurInformations);
-        
-        $colonneAmbassadeurInformations = new Column\TextColumn('ambassadeurInformations', 'Ambassadeur');
-        $colonneAmbassadeurInformations->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneAmbassadeurInformations);
-        
-        $colonneInterventionInitiateurType = new Column\TextColumn('interventionInitiateurType', 'Initiateur');
-        $colonneInterventionInitiateurType->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneInterventionInitiateurType);
-        
-        $colonneDateCreationLibelle = new Column\TextColumn('dateCreationLibelle', 'Création');
-        $colonneDateCreationLibelle->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneDateCreationLibelle);
-        
-        $colonneInterventionEtatLibelle = new Column\TextColumn('interventionEtatLibelle', 'État');
-        $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
-        $this->addColonne($colonneInterventionEtatLibelle);
-       
-        $colonneDateChoix = new Column\TextColumn('dateChoix', 'Date choix');
-        $colonneDateChoix->setFilterable(false)->setSortable(false);
-        $colonneDateChoix->manipulateRenderCell(
-            function($value, $row, $router) {
-                return DemandesAbstractGrid::renderCellDateChoix($value, $row, $router);
-            }
-        );
-        $this->addColonne($colonneDateChoix);
+        $this->addColonneDemandeur();
+        $this->addColonneAmbassadeur();
+        $this->addColonneInterventionInitiateurType();
+        $this->addColonneDateCreation();
+        $this->addColonneInterventionEtat();
+        $this->addColonneDateChoix();
 
         $colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
         $colonneEvaluation->setFilterable(false)->setSortable(false);

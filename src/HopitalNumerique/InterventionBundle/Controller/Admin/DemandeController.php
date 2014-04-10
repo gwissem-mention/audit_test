@@ -9,12 +9,11 @@ namespace HopitalNumerique\InterventionBundle\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
-use HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType;
 
 /**
  * Contrôleur des demandes d'intervention pour la console administrative.
  */
-class DemandeController extends Controller
+class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\DemandeController
 {
     /**
      * Action pour la visualisation d'une demande d'intervention.
@@ -25,39 +24,12 @@ class DemandeController extends Controller
     public function voirAction(InterventionDemande $id)
     {
         $interventionDemande = $id;
-        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
-        $interventionDemandeEstRegroupee = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->estInterventionDemandeRegroupee($interventionDemande);
 
-        $vueParametres = array(
-                'interventionDemande' => $interventionDemande,
-                'interventionDemandeEstRegroupee' => $interventionDemandeEstRegroupee,
-                'InterventionEtat' => new InterventionEtat(),
-                'etablissementsRattachesNonRegroupes' => $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesNonRegroupes($interventionDemande),
-                'etablissementPeutAnnulerDemande' => $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->etablissementPeutAnnulerDemande($interventionDemande, $utilisateurConnecte)
-        );
-    
-        if ($utilisateurConnecte->hasRoleAmbassadeur())
-        {
-            $vueParametres['ambassadeurs'] = $this->get('hopitalnumerique_user.manager.user')->getAmbassadeurs(array(
-                    'region' => $interventionDemande->getCmsi()->getRegion()
-            ));
-        }
-        else if ($this->container->get('hopitalnumerique_intervention.manager.intervention_regroupement')->utilisateurPeutRegrouperDemandes($interventionDemande, $utilisateurConnecte))
-        {
-            if (!$interventionDemandeEstRegroupee)
-            {
-                $vueParametres['interventionsSimilairesParObjets'] = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getInterventionsSimilairesParObjets($interventionDemande);
-                $vueParametres['interventionsSimilairesParAmbassadeur'] = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getInterventionsSimilairesParAmbassadeur($interventionDemande);
-                $vueParametres['interventionRegroupementTypeObjetId'] = InterventionRegroupementType::getInterventionRegroupementTypeObjetId();
-                $vueParametres['interventionRegroupementTypeAmbassadeurId'] = InterventionRegroupementType::getInterventionRegroupementTypeAmbassadeurId();
-            }
-        }
-    
         $this->container->get('hopitalnumerique_intervention.service.demande.etat_type_derniere_demande')->setDerniereDemandeOuverte($interventionDemande);
-    
+
         return $this->render(
             'HopitalNumeriqueInterventionBundle:Admin/Demande:voir.html.twig',
-            $vueParametres
+            $this->getVueParametresVoir($interventionDemande)
         );
     }
     

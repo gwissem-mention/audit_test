@@ -2,6 +2,7 @@ hopital_numerique_intervention_regroupement_regroupe:
     pattern:  /demande/{interventionDemandePrincipale}/regroupement/{interventionRegroupementType}/{interventionDemandeRegroupee}/regroupe
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Regroupement:ajaxRegroupe" }
     requirements:
+        _method: GET
         interventionDemandePrincipale: \d+
         interventionRegroupementType: \d+
         interventionDemandeRegroupee: \d+
