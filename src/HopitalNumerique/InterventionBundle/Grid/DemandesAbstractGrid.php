@@ -84,6 +84,83 @@ abstract class DemandesAbstractGrid extends Grid implements IGrid
         $colonneAIgnorer->setVisibleForSource(true);
         $this->addColonne($colonneAIgnorer);
     }
+
+    /**
+     * Ajoute la colonne Demandeur.
+     * 
+     * @return void
+     */
+    protected function addColonneDemandeur()
+    {
+        $colonneDemandeurInformations = new Column\TextColumn('demandeurInformations', 'Demandeur');
+        $colonneDemandeurInformations->manipulateRenderCell(
+            function($value, $row, $router) {
+                return DemandesAbstractGrid::renderCellReferent($value, $row, $router);
+            }
+        );
+        $colonneDemandeurInformations->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneDemandeurInformations);
+    }
+    /**
+     * Ajoute la colonne Ambassadeur.
+     *
+     * @return void
+     */
+    protected function addColonneAmbassadeur()
+    {
+        $colonneAmbassadeurInformations = new Column\TextColumn('ambassadeurInformations', 'Ambassadeur');
+        $colonneAmbassadeurInformations->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneAmbassadeurInformations);
+    }
+    /**
+     * Ajoute la colonne InterventionInitiateurType.
+     * 
+     * @return void
+     */
+    protected function addColonneInterventionInitiateurType()
+    {
+        $colonneInterventionInitiateurType = new Column\TextColumn('interventionInitiateurType', 'Initiateur');
+        $colonneInterventionInitiateurType->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneInterventionInitiateurType);
+    }
+    /**
+     * Ajoute la colonne DateCreation.
+     * 
+     * @return void
+     */
+    protected function addColonneDateCreation()
+    {
+        $colonneDateCreationLibelle = new Column\DateColumn('dateCreationLibelle', 'Création');
+        $colonneDateCreationLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneDateCreationLibelle);
+    }
+    /**
+     * Ajoute la colonne InterventionEtat.
+     *
+     * @return void
+     */
+    protected function addColonneInterventionEtat()
+    {
+        $colonneInterventionEtatLibelle = new Column\TextColumn('interventionEtatLibelle', 'État');
+        $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
+        $this->addColonne($colonneInterventionEtatLibelle);
+    }
+    /**
+     * Ajoute la colonne DateChoix.
+     *
+     * @return void
+     */
+    protected function addColonneDateChoix()
+    {
+        $colonneDateChoix = new Column\TextColumn('dateChoix', 'Date choix');
+        $colonneDateChoix->setFilterable(false)->setSortable(false);
+        $colonneDateChoix->manipulateRenderCell(
+            function($value, $row, $router) {
+                return DemandesAbstractGrid::renderCellDateChoix($value, $row, $router);
+            }
+        );
+        $this->addColonne($colonneDateChoix);
+    }
     
     /**
      * Fonction de rendu de la cellule Référent (ou Demandeur).
