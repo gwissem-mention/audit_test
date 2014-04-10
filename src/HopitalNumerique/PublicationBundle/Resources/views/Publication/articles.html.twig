@@ -35,7 +35,7 @@
         {% else %}
             <div class="col-md-3">
                 <p class="titre">Hôpital <br />Numérique</p>
-                {{ knp_menu_render('menu-sub-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriquePublicationBundle::menu.html.twig'}) }}
+                {{ knp_menu_render('menu-sub-front', {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriquePublicationBundle::menu.html.twig'}) }}
 
                 {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites")) }}
             </div>

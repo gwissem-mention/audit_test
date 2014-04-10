@@ -302,6 +302,19 @@ class MailManager extends BaseManager
     }
 
     /**
+     * Envoie un courriel concernant les demandes d'intervention.
+     *
+     * @param \Nodevo\MailBundle\Entity\Mail $mail Le courriel à envoyer
+     * @param \HopitalNumerique\UserBundle\Entity\User $destinataire Le destinataire du message
+     * @param array $options Les paramètres à remplacer
+     * @return \Swift_Message Le message près à être envoyer
+     */
+    public function sendInterventionMail(\Nodevo\MailBundle\Entity\Mail $mail, \HopitalNumerique\UserBundle\Entity\User $destinataire, $options)
+    {
+        return $this->generationMail($destinataire, $mail, $options);
+    }
+    
+    /**
      * Retourne un email de test
      *
      * @param  [type] $id   [description]
@@ -348,14 +361,6 @@ class MailManager extends BaseManager
     {
         return $this->_destinataire;
     }
-
-    public function sendInterventionMail(\Nodevo\MailBundle\Entity\Mail $mail, \HopitalNumerique\UserBundle\Entity\User $destinataire, $options)
-    {
-        return $this->generationMail($destinataire, $mail, $options);
-    }
-
-
-
 
 
 

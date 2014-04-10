@@ -27,8 +27,6 @@ class DemandeController extends Controller
     public function voirAction(InterventionDemande $id)
     {
         $interventionDemande = $id;
-        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
-        $interventionDemandeEstRegroupee = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->estInterventionDemandeRegroupee($interventionDemande);
         
         if (!$this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->peutVoir($interventionDemande))
         {
@@ -36,18 +34,35 @@ class DemandeController extends Controller
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 
-        $vueParametres = array(
-            'interventionDemande' => $interventionDemande,
-            'interventionDemandeEstRegroupee' => $interventionDemandeEstRegroupee,
-            'InterventionEtat' => new InterventionEtat(),
-            'etablissementsRattachesNonRegroupes' => $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesNonRegroupes($interventionDemande),
-            'etablissementPeutAnnulerDemande' => $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->etablissementPeutAnnulerDemande($interventionDemande, $utilisateurConnecte)
-        );
+        $this->container->get('hopitalnumerique_intervention.service.demande.etat_type_derniere_demande')->setDerniereDemandeOuverte($interventionDemande);
         
+        return $this->render(
+            'HopitalNumeriqueInterventionBundle:Demande:voir.html.twig',
+            $this->getVueParametresVoir($interventionDemande)
+        );
+    }
+    /**
+     * Retourne les paramètres de la vue Voir.
+     * 
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande
+     * @return array Paramètres de la vue Voir
+     */
+    protected function getVueParametresVoir(InterventionDemande $interventionDemande)
+    {
+        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
+        $interventionDemandeEstRegroupee = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->estInterventionDemandeRegroupee($interventionDemande);
+        
+        $vueParametres = array(
+                'interventionDemande' => $interventionDemande,
+                'interventionDemandeEstRegroupee' => $interventionDemandeEstRegroupee,
+                'InterventionEtat' => new InterventionEtat(),
+                'etablissementsRattachesNonRegroupes' => $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesNonRegroupes($interventionDemande),
+                'etablissementPeutAnnulerDemande' => $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->etablissementPeutAnnulerDemande($interventionDemande, $utilisateurConnecte)
+        );
         if ($utilisateurConnecte->hasRoleAmbassadeur())
         {
             $vueParametres['ambassadeurs'] = $this->get('hopitalnumerique_user.manager.user')->getAmbassadeurs(array(
-                'region' => $interventionDemande->getCmsi()->getRegion()
+                    'region' => $interventionDemande->getCmsi()->getRegion()
             ));
         }
         else if ($this->container->get('hopitalnumerique_intervention.manager.intervention_regroupement')->utilisateurPeutRegrouperDemandes($interventionDemande, $utilisateurConnecte))
@@ -61,12 +76,7 @@ class DemandeController extends Controller
             }
         }
         
-        $this->container->get('hopitalnumerique_intervention.service.demande.etat_type_derniere_demande')->setDerniereDemandeOuverte($interventionDemande);
-        
-        return $this->render(
-            'HopitalNumeriqueInterventionBundle:Demande:voir.html.twig',
-            $vueParametres
-        );
+        return $vueParametres;
     }
 
     /**
