@@ -286,10 +286,7 @@ class MailManager extends BaseManager
 
             $from = array($expediteurMail => $expediteurName );
             
-            if($this->_expediteurEnCopie)
-                $cci = array_merge( $this->_mailAnap, $from );
-            else
-                $cci = $this->_mailAnap;
+            $cci = $this->_mailAnap;
             
             $mailsToSend[] = \Swift_Message::newInstance()
                                 ->setSubject ( $mail->getObjet() )

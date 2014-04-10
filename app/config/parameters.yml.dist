@@ -14,8 +14,18 @@ parameters:
     locale: fr
     secret: '536ghdge7g&7hdjzy6g"gvxojheg'
     
-    confighn_nodevomail_mailsAnap: #Tableaux des adresses mails copie caché de tout les mails envoyé par l'application sous la forme "adresse_mail: nom_affiché"
+    #Variables spécifiques aux différents postes physique (Prod - preprod - chaque poste de dev, ... )
+    
+    #Nodevo_Mail
+    #Tableaux des adresses mails copie caché de tout les mails envoyé par l'application sous la forme "adresse_mail: nom_affiché"
+    confighn_nodevomail_mailsAnap:
         adresse1@nodevo.com: adresse1
         adresse2@nodevo.com: adresse2
-    
+    #Permet de définir si tout les mails sont envoyé en copie à l'expéditeur pour en avoir une copie des "mails qu'il a envoyés"
     confighn_nodevomail_expediteurEnCopie: true
+    
+    #HopitalNumerique_Contact
+    confighn_hopitalnumerique_contact:
+        qsomazzi@nodevo.com: Quentin
+        gmelchilsen@nodevo.com: Gaëtan
+        tdauriac@nodevo.com: Thomas D.
