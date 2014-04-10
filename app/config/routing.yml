@@ -1,3 +1,7 @@
+hopital_numerique_module:
+    resource: "@HopitalNumeriqueModuleBundle/Resources/config/routing.yml"
+    prefix:   /
+
 # Bundles Hopital Numérique : partie Front
 hopital_numerique_core:
     resource: "@HopitalNumeriqueCoreBundle/Resources/config/routing.yml"
