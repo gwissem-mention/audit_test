@@ -13,15 +13,13 @@ class MenuProvider implements MenuProviderInterface
     protected $loader           = null;
     protected $breadcrumbLoader = null;
     protected $menuManager      = null;
-    protected $itemManager      = null;
     protected $_menuEntity      = null;
 
-    public function __construct($loader, $breadcrumbLoader, $menuManager, $itemManager)
+    public function __construct($loader, $breadcrumbLoader, $menuManager)
     {
         $this->loader           = $loader;
         $this->breadcrumbLoader = $breadcrumbLoader;
         $this->menuManager      = $menuManager;
-        $this->itemManager      = $itemManager;
     }
 
     /**
@@ -39,38 +37,35 @@ class MenuProvider implements MenuProviderInterface
      */
     public function get($name, array $options = array())
     {
-        $tree = $this->menuManager->getTree( $this->_menuEntity );
+        $tree   = $this->menuManager->getTree( $this->_menuEntity );
+        $type   = (isset($options['breadcrumb']) && $options['breadcrumb'] === 'yes') ? 'breadcrumb' : 'menu';
 
-        if (isset($options['breadcrumb']) && $options['breadcrumb'] === 'yes')
-        {
-            try {
-                $menu = $this->breadcrumbLoader->getMenu($tree);
-            } 
-            catch (\Exception $e) {
-                $tree   = $this->menuManager->getTree( $this->_menuEntity, true);
-                $menu   = $this->breadcrumbLoader->getMenu($tree);
-            }
-            
-            if ( !is_null($this->_menuEntity->getCssClass()) )
-                $menu->setChildrenAttribute('class', 'breadcrumb' );
-        }
-        else
-        {
-            //Si l'arbre ne peut pas se générer correctement alors on le force la regénération
-            try {
-                $menu = $this->loader->load($tree);
-            } 
-            catch (\Exception $e) {
-                $tree   = $this->menuManager->getTree( $this->_menuEntity, true);
-                $menu   = $this->loader->load($tree);
-            }
-
+        //Cas menu
+        if( $type == 'menu' ) {
             $class = !is_null($this->_menuEntity->getCssClass()) ? $this->_menuEntity->getCssClass() : '';
-            $menu->setChildrenAttribute('class', $class );
+            $id    = !is_null($this->_menuEntity->getCssId()) ? $this->_menuEntity->getCssId() : '';
 
-            $id = !is_null($this->_menuEntity->getCssId()) ? $this->_menuEntity->getCssId() : '';
-            $menu->setChildrenAttribute('id', $id );
+            //set Class for childrens
+            $this->loader->setClass($class);
+
+        //Cas fil d'ariane
+        }else{
+            $class = 'breadcrumb';
+            $id    = '';
         }
+
+        //Get Menu
+        try {
+            $menu = $type == 'menu' ? $this->loader->load($tree) : $this->breadcrumbLoader->getMenu($tree);
+        } 
+        catch (\Exception $e) {
+            $tree = $this->menuManager->getTree( $this->_menuEntity, true);
+            $menu = $type == 'menu' ? $this->loader->load($tree) : $this->breadcrumbLoader->getMenu($tree);
+        }
+        
+        //set Vars    
+        $menu->setChildrenAttribute('class', $class );
+        $menu->setChildrenAttribute('id', $id );
         
         return $menu;
     }

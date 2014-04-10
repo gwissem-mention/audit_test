@@ -109,7 +109,7 @@ fos_user:
 #KNP Menu Bundle
 knp_menu:
     twig:
-        template: knp_main_menu.html.twig
+        template: knp_menu.html.twig
     templating: true
     default_renderer: twig
 
