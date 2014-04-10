@@ -75,8 +75,6 @@ class Grid
         $this->initSource();
         $this->initMassActions();
 
-        $source = $this->_grid->getSource();
-
         //return the grid object
         return $this->_grid->getGridResponse( $vue, $params );
     }
