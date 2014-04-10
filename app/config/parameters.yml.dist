@@ -19,10 +19,9 @@ parameters:
     #Nodevo_Mail
     #Tableaux des adresses mails copie caché de tout les mails envoyé par l'application sous la forme "adresse_mail: nom_affiché"
     confighn_nodevomail_mailsAnap:
-        adresse1@nodevo.com: adresse1
-        adresse2@nodevo.com: adresse2
+        gmelchilsen@nodevo.com: adresse de copie
     #Permet de définir si tout les mails sont envoyé en copie à l'expéditeur pour en avoir une copie des "mails qu'il a envoyés"
-    confighn_nodevomail_expediteurEnCopie: true
+    confighn_nodevomail_expediteurEnCopie: false
     
     #HopitalNumerique_Contact
     confighn_hopitalnumerique_contact:
