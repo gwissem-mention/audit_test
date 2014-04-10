@@ -53,7 +53,6 @@ services:
             - @nodevo_menu.loader.node
             - @nodevo_menu.loader.breadcrumb.node
             - @nodevo_menu.manager.menu
-            - @nodevo_menu.manager.item
         tags:
           - { name: knp_menu.provider }
 

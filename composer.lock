@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "fddecc135a319a74f2ce7902d2348ce9",
+    "hash": "76ab4bb151be0641d49120ea0287bf38",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -830,12 +830,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "fa6022638e10342f5244181675e4bcd4955fc2ff"
+                "reference": "e4c000a9b19096be0135d0773b56f7c757c93542"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/fa6022638e10342f5244181675e4bcd4955fc2ff",
-                "reference": "fa6022638e10342f5244181675e4bcd4955fc2ff",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e4c000a9b19096be0135d0773b56f7c757c93542",
+                "reference": "e4c000a9b19096be0135d0773b56f7c757c93542",
                 "shasum": ""
             },
             "require": {
@@ -890,7 +890,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2014-04-05 11:45:34"
+            "time": "2014-04-08 21:21:16"
         },
         {
             "name": "genemu/form-bundle",
@@ -1123,12 +1123,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
-                "reference": "777f70f168cd49c0be27936d716fe57835eaa9ae"
+                "reference": "7d9bcdc29b49c3fc671a9c22885176f0ffe034c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/777f70f168cd49c0be27936d716fe57835eaa9ae",
-                "reference": "777f70f168cd49c0be27936d716fe57835eaa9ae",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/7d9bcdc29b49c3fc671a9c22885176f0ffe034c5",
+                "reference": "7d9bcdc29b49c3fc671a9c22885176f0ffe034c5",
                 "shasum": ""
             },
             "require": {
@@ -1179,7 +1179,7 @@
                 "menu",
                 "tree"
             ],
-            "time": "2014-04-05 12:43:14"
+            "time": "2014-04-08 20:25:33"
         },
         {
             "name": "knplabs/knp-menu-bundle",
@@ -1424,12 +1424,12 @@
         },
         {
             "name": "nodevo/gestionnaire-media",
-            "version": "dev-master",
+            "version": "1.0",
             "target-dir": "Nodevo/GestionnaireMediaBundle",
             "source": {
                 "type": "git",
                 "url": "ssh://git@bitbucket.org:22/nodevo/web_symfony_bdl_moxiemanager.git",
-                "reference": "042d7df50be5dafd814b93937b4823447671e981"
+                "reference": "e2138e0753104690f8ef97cd6f13f4c8a307eb8a"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -2268,8 +2268,7 @@
         "knplabs/knp-menu": 20,
         "knplabs/knp-menu-bundle": 20,
         "white-october/pagerfanta-bundle": 20,
-        "pagerfanta/pagerfanta": 20,
-        "nodevo/gestionnaire-media": 20
+        "pagerfanta/pagerfanta": 20
     },
     "platform": {
         "php": ">=5.3.3"

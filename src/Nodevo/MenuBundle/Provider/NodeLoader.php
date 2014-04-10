@@ -17,6 +17,7 @@ class NodeLoader implements LoaderInterface
     private $factory;
     private $security;
     private $container;
+    private $class = '';
 
     public function __construct(FactoryInterface $factory, SecurityContextInterface $security, $container )
     {
@@ -42,7 +43,11 @@ class NodeLoader implements LoaderInterface
         $haveChilds = false;
         foreach ($data->getChildren() as $childNode) {
             if ( $this->security->isGranted( $childNode->getRole() ) ){
-                if( !is_null($element = $this->load($childNode)) ){                    
+                if( !is_null($element = $this->load($childNode)) ){
+                    //set class for childrens ( if  set )
+                    $element->setChildrenAttribute('class', $this->class );
+
+                    //add elements
                     $item->addChild( $element );
                     $haveChilds = true;
                 }
@@ -59,5 +64,15 @@ class NodeLoader implements LoaderInterface
     public function supports($data)
     {
         return $data instanceof NodeInterface;
+    }
+
+    /**
+     * Set class
+     *
+     * @param string $class
+     */
+    public function setClass($class)
+    {
+        $this->class = $class;
     }
 }

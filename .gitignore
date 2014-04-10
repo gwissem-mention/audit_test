@@ -8,6 +8,8 @@
 /build/
 /vendor/
 /bin/
+/app/check.php
+/app/SymfonyRequirements.php
 
 #Net Beans
 .buildpath

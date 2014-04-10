@@ -109,7 +109,7 @@ fos_user:
 #KNP Menu Bundle
 knp_menu:
     twig:
-        template: knp_main_menu.html.twig
+        template: knp_menu.html.twig
     templating: true
     default_renderer: twig
 
@@ -135,9 +135,8 @@ nodevo_mail:
     options:
         allowAdd: false
         allowDelete: false
-        mailAnap: #Tableaux des adresses mails copie caché de tout les mails envoyé par l'application sous la forme "adresse_mail: nom_affiché"
-            toto@yopmail.com: adresse1
-            toto2@yopmail.com: adresse2
+        expediteurEnCopie: %confighn_nodevomail_expediteurEnCopie%
+        mailAnap: %confighn_nodevomail_mailsAnap%
 
 nodevo_menu:
     options:
@@ -160,7 +159,4 @@ hopital_numerique_questionnaire:
 
 hopital_numerique_contact:
     options:
-        mailsContact: #"adresse_mail: nom_affiché"
-            qsomazzi@nodevo.com: Hey quand un ?
-            gmelchilsen@nodevo.com: Gaëtanfanfan
-            tdauriac@nodevo.com: Tôt-mat Dos-ric-rac 
+        mailsContact: %confighn_hopitalnumerique_contact%
