@@ -14,4 +14,8 @@ parameters:
     locale: fr
     secret: '536ghdge7g&7hdjzy6g"gvxojheg'
     
+    confighn_nodevomail_mailsAnap: #Tableaux des adresses mails copie caché de tout les mails envoyé par l'application sous la forme "adresse_mail: nom_affiché"
+        adresse1@nodevo.com: adresse1
+        adresse2@nodevo.com: adresse2
+    
     confighn_nodevomail_expediteurEnCopie: true
