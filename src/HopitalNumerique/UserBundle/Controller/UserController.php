@@ -27,8 +27,20 @@ class UserController extends Controller
         {
             //Récupération de l'utilisateur passé en param
             $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
-             
-            return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User/Front:inscription.html.twig');
+            
+            //Tableau des options à passer à la vue twig
+            $options = array(
+                    //Récupération de l'article des conditions générales
+                    'conditionsGenerales' => array('conditionsGenerales' => $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => 264 )))
+            );
+            
+            //Récupérations de la liste des catégories des conditions générales
+            $categories = $options['conditionsGenerales']['conditionsGenerales']->getTypes();
+            
+            //Récupération de la première catégorie des conditions générales (en principe il ne devrait y en avoir qu'une)
+            $options['conditionsGenerales']['categorie'] = $categories[0];
+            
+            return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User/Front:inscription.html.twig', $options);
         }
     
         return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
@@ -388,10 +400,11 @@ class UserController extends Controller
      * @param string $formName Nom du service associé au formulaire
      * @param User   $entity   Entité utilisateur
      * @param string $view     Chemin de la vue ou sera rendu le formulaire
+     * @param array  $options  Tableaux d'options envoyé au formulaire
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $user, $view )
+    private function renderForm( $formName, $user, $view, $options = array() )
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $user);
@@ -560,15 +573,16 @@ class UserController extends Controller
             }
         }
         
-        return $this->customRenderView( $view , $form, $user);
+        return $this->customRenderView( $view , $form, $user, $options);
     }
 
-    private function customRenderView( $view, $form, $user )
+    private function customRenderView( $view, $form, $user, $options )
     {
         return $this->render( $view , array(
-            'form'    => $form->createView(),
-            'user'    => $user,
-            'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user)
+            'form'        => $form->createView(),
+            'user'        => $user,
+            'twigOptions' => $options,
+            'options'     => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user)
         ));
     }
 }
