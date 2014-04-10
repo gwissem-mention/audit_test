@@ -247,9 +247,9 @@ class MailManager extends BaseManager
     }
     
     /**
-     * Envoi un mail de contact
+     * Envoi un mail de contact (différent des autres envoie de mail)
      *
-     * @param array $user    Utilisateurs qui recevras l'email
+     * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
@@ -284,7 +284,6 @@ class MailManager extends BaseManager
                                 ->setBcc( $this->_mailAnap )
                                 ->setBody ( $body, 'text/html' );
         }
-        
         return $mailsToSend;
     }
 
