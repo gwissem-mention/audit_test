@@ -2,17 +2,20 @@ hopital_numerique_intervention_user_users:
     pattern:  /users/json
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:User:jsonUsers" }
     requirements:
+        _method: GET
         _format: json
 
 hopital_numerique_intervention_user_referents:
     pattern:  /referents/json
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:User:jsonReferents" }
     requirements:
+        _method: GET
         _format: json
 
 hopital_numerique_intervention_user_ambassadeur_change:
     pattern:  /demande/{interventionDemande}/ambassadeur/{nouvelAmbassadeur}/change
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:User:ajaxAmbassadeurChange" }
     requirements:
+        _method: GET
         interventionDemande: \d+
         nouvelAmbassadeur: \d+
