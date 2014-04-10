@@ -535,15 +535,16 @@ class UserController extends Controller
                 
                 //Mise à jour / création de l'utilisateur
                 $this->get('fos_user.user_manager')->updateUser( $user );
-                
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Utilisateur ' . $user->getUsername() . ($new ? ' ajouté.' : ' mis à jour.') ); 
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Utilisateur ' . $user->getUsername() . ($new ? ' ajouté.' : ' mis à jour.') );
                 
                 $do = $request->request->get('do');
                 
                 switch ($do)
                 {
                 	case 'inscription':
+                        $this->get('session')->getFlashBag()->add( 'danger' , 'Si vous ne recevez pas notre email de confirmation d’inscription, contenant votre mot de passe, merci de vérifier que l’adresse accompagnement-hn@anap.fr n’est pas considérée comme du spam auprès de votre serveur de messagerie.' ); 
                 	    return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
                 	    break;
                 	case 'information-personnelles':
