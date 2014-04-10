@@ -422,8 +422,6 @@ class MailManager extends BaseManager
             $cci = array_merge( $this->_mailAnap, $from );
         else
             $cci = $this->_mailAnap;
-        
-        var_dump($this->_expediteurEnCopie);die('die');
     
         // Render the whole template including any layouts etc
         $body = $templateContent->render( array("content" => $content) );
