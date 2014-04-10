@@ -107,10 +107,9 @@
                 <div class="common-sprite common-sprite-header"></div>
             </div>
             <div class="col-md-12" id="content">
-                {% if app.request.attributes.get('_route') != 'hopital_numerique_homepage' %}
-                    {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
-                    <div class="clearfix"></div>
-                {% endif %}
+                {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+                <div class="clearfix"></div>
+                
                 {{ block('flashBags') }}
                 {% if error is defined and error %}
                     <div class="alert nalert-warning" onclick="$(this).slideUp();" >

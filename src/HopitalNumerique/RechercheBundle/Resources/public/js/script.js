@@ -412,17 +412,21 @@ function handleRequeteSave( r, id )
  */
 function cleanRequest()
 {
-    $('.arbo-requete li').each( function(){
-        removeElement( $(this) );
+    apprise('Confirmer la réinitialisation de la requête ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+        if( r ){
+            $('.arbo-requete li').each( function(){
+                removeElement( $(this) );
+            });
+
+            $.removeCookie('showMorePointsDurs', { path: '/' });
+            $.removeCookie('showMoreProductions', { path: '/' });
+
+            $('.requeteNom').html('');
+            $('.requeteNom').data('id', '');
+
+            updateResultats( true );
+
+            history.pushState({ path: this.path }, '', $('#search-homepage-url').val() );
+        }
     });
-
-    $.removeCookie('showMorePointsDurs', { path: '/' });
-    $.removeCookie('showMoreProductions', { path: '/' });
-
-    $('.requeteNom').html('');
-    $('.requeteNom').data('id', '');
-
-    updateResultats( true );
-
-    history.pushState({ path: this.path }, '', $('#search-homepage-url').val() );
 }
