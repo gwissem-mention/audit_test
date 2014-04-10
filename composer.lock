@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "fddecc135a319a74f2ce7902d2348ce9",
+    "hash": "76ab4bb151be0641d49120ea0287bf38",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -1424,12 +1424,12 @@
         },
         {
             "name": "nodevo/gestionnaire-media",
-            "version": "dev-master",
+            "version": "1.0",
             "target-dir": "Nodevo/GestionnaireMediaBundle",
             "source": {
                 "type": "git",
                 "url": "ssh://git@bitbucket.org:22/nodevo/web_symfony_bdl_moxiemanager.git",
-                "reference": "042d7df50be5dafd814b93937b4823447671e981"
+                "reference": "e2138e0753104690f8ef97cd6f13f4c8a307eb8a"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -2268,8 +2268,7 @@
         "knplabs/knp-menu": 20,
         "knplabs/knp-menu-bundle": 20,
         "white-october/pagerfanta-bundle": 20,
-        "pagerfanta/pagerfanta": 20,
-        "nodevo/gestionnaire-media": 20
+        "pagerfanta/pagerfanta": 20
     },
     "platform": {
         "php": ">=5.3.3"
