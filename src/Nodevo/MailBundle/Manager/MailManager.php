@@ -343,17 +343,11 @@ class MailManager extends BaseManager
         
         $from = array($this->_mailExpediteur => $this->_nomExpediteur );
         
-        if($this->_expediteurEnCopie)
-            $cci = array_merge( $this->_mailAnap, $from );
-        else
-            $cci = $this->_mailAnap;
-        
         //return test email
         return \Swift_Message::newInstance()
                         ->setSubject( $mail->getObjet() )
                         ->setFrom( $from )
                         ->setTo( $this->_destinataire )
-                        ->setBcc( $cci )
                         ->setBody( $body, 'text/html' );
     }
 
