@@ -1,3 +1,23 @@
 parameters:
     #Options
-    hopital_numerique_module.options:
+    hopital_numerique_module.options:parameters:
+    hopitalnumerique_module.manager.module.class: HopitalNumerique\ModuleBundle\Manager\ModuleManager
+    hopitalnumerique_module.grid.module.class: HopitalNumerique\ModuleBundle\Grid\ModuleGrid
+    hopitalnumerique_module.form.module.class: HopitalNumerique\ModuleBundle\Form\ModuleType
+
+services:
+    hopitalnumerique_module.manager.module:
+        class: %hopitalnumerique_module.manager.module.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_module.grid.module:
+        class: %hopitalnumerique_module.grid.module.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_module.form.module:
+        class: %hopitalnumerique_module.form.module.class%
+        arguments: ["@hopitalnumerique_module.manager.module", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_module_module }

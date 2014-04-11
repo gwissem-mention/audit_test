@@ -1,0 +1,57 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Fiche Module
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if module.id %}
+        <a href="{{ path('hopitalnumerique_module_module_edit', { 'id': module.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                <p>
+                    <strong>Id : </strong>
+                    {{ module.id }}
+                </p>
+                <p>
+                    <strong>Titre : </strong>
+                    {{ module.titre }}
+                </p>
+                <p>
+                    <strong>Horairestype : </strong>
+                    {{ module.horairesType }}
+                </p>
+                <p>
+                    <strong>Lieu : </strong>
+                    {{ module.lieu }}
+                </p>
+                <p>
+                    <strong>Description : </strong>
+                    {{ module.description }}
+                </p>
+                <p>
+                    <strong>Nombreplacedisponible : </strong>
+                    {{ module.nombrePlaceDisponible }}
+                </p>
+                <p>
+                    <strong>Prerequis : </strong>
+                    {{ module.prerequis }}
+                </p>
+                <p>
+                    <strong>Path : </strong>
+                    {{ module.path }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

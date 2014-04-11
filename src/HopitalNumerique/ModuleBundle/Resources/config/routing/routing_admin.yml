@@ -1,0 +1,32 @@
+hopitalnumerique_module_module:
+    pattern:  /module
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:index" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_module_module_add:
+    pattern:  /module/add
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:add" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_module_module_show:
+    pattern:  /module/show/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:show" }
+    requirements:
+        id: \d+
+        _method: GET
+
+hopitalnumerique_module_module_edit:
+    pattern:  /module/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:edit" }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+hopitalnumerique_module_module_delete:
+    pattern:  /module/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
