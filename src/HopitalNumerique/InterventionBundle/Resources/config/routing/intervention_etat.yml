@@ -3,6 +3,6 @@ hopital_numerique_intervention_etat_change:
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Etat:ajaxChange" }
     requirements:
     requirements:
-        _method:  POST
+        _method: GET
         interventionDemande: \d+
         interventionEtat: \d+

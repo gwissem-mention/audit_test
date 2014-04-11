@@ -21,13 +21,13 @@ hopital_numerique_intervention_demande_nouveau:
     pattern:  /demande/nouveau/{ambassadeur}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Demande:nouveau", ambassadeur: 0 }
     requirements:
-        _method:  GET
+        _method:  GET|POST
         ambassadeur: \d+
 hopital_numerique_intervention_demande_nouveau_avec_objet:
     pattern:  /demande/nouveau/{ambassadeur}/prod/{prod}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Demande:nouveau", ambassadeur: 0 }
     requirements:
-        _method:  GET
+        _method:  GET|POST
         ambassadeur: \d+
         prod: \d+
 
@@ -35,6 +35,7 @@ hopital_numerique_intervention_demande_edit:
     pattern:  /demande/edit/{id}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Demande:edit", id: 0 }
     requirements:
+        _method:  GET|POST
         id: \d+
 
 #<-- Vues Grid
@@ -68,4 +69,18 @@ hopital_numerique_intervention_grid_admin_demandes:
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Demande:gridDemandes" }
     requirements:
         _method:  GET
+#-->
+
+#<-- Ajax
+hopital_numerique_intervention_demande_succes_ajax:
+    pattern: /succes
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:ajaxSucces" }
+    requirements:
+        _method: GET
+
+hopital_numerique_intervention_demande_erreur_ajax:
+    pattern: /erreur
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:ajaxErreur" }
+    requirements:
+        _method: GET
 #-->
