@@ -5,7 +5,6 @@
 namespace HopitalNumerique\InterventionBundle\Grid\Ambassadeur;
 
 use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
-use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
