@@ -2,5 +2,5 @@ hopital_numerique_intervention_reference_departements:
     pattern:  /departements/json
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Reference:jsonDepartements" }
     requirements:
-        _method: GET
+        _method:  GET|POST
         _format:  json
