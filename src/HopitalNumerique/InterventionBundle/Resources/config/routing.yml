@@ -70,3 +70,17 @@ hopital_numerique_intervention_grid_admin_demandes:
     requirements:
         _method:  GET
 #-->
+
+#<-- Ajax
+hopital_numerique_intervention_demande_succes_ajax:
+    pattern: /succes
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:ajaxSucces" }
+    requirements:
+        _method: GET
+
+hopital_numerique_intervention_demande_erreur_ajax:
+    pattern: /erreur
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Demande:ajaxErreur" }
+    requirements:
+        _method: GET
+#-->

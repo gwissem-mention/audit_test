@@ -208,4 +208,23 @@ class DemandeController extends Controller
     
         return new Response('Clef invalide.');
     }
+
+    /**
+     * Action appelée lors qu'une requête s'est effectuée avec succès en AJAX.
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response La vue du succès AJAX
+     */
+	public function ajaxSuccesAction()
+	{
+		return $this->render('HopitalNumeriqueInterventionBundle:Ajax:succes.html.twig');
+	}
+    /**
+     * Action appelée lors qu'une requête s'est effectuée avec erreur en AJAX.
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response La vue de l'erreur AJAX
+     */
+	public function ajaxErreurAction()
+	{
+		return $this->render('HopitalNumeriqueInterventionBundle:Ajax:erreur.html.twig');
+	}
 }
