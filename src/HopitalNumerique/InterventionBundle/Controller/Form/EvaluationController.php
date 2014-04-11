@@ -70,8 +70,16 @@ class EvaluationController extends Controller
         ));
         $request = $this->get('request');
 
-        if (!$readOnly && $request->isMethod('POST'))
+        if ($readOnly || !$request->isMethod('POST'))
         {
+            return $this->render( $view , array(
+                    'form'          => $form->createView(),
+                    'interventionDemande' => $interventionDemande,
+                    'questionnaire' => $questionnaire,
+                    'readOnly'          => $readOnly
+            ));
+        }
+
             $form->handleRequest($request);
 
             if ($form->isValid())
@@ -136,19 +144,11 @@ class EvaluationController extends Controller
                 $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielEvaluationRemplie($interventionDemande->getCmsi(), $interventionDemande->getAmbassadeur(), $this->generateUrl('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $interventionDemande->getId()), true));
                 
                 $this->get('session')->getFlashBag()->add('success', 'Votre évaluation a été enregistrée, merci.');
-
+    
                 //Mise à jour/création des réponses
                 $this->get('hopitalnumerique_questionnaire.manager.reponse')->save($reponses);
 
                 return $this->redirect($this->generateUrl('hopital_numerique_intervention_demande_liste'));
             }
-        }
-    
-        return $this->render( $view , array(
-            'form'          => $form->createView(),
-            'interventionDemande' => $interventionDemande,
-            'questionnaire' => $questionnaire,
-            'readOnly'          => $readOnly
-        ));
     }
 }
