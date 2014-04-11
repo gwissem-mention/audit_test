@@ -21,13 +21,11 @@ hopital_numerique_intervention_demande_nouveau:
     pattern:  /demande/nouveau/{ambassadeur}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Demande:nouveau", ambassadeur: 0 }
     requirements:
-        _method:  GET
         ambassadeur: \d+
 hopital_numerique_intervention_demande_nouveau_avec_objet:
     pattern:  /demande/nouveau/{ambassadeur}/prod/{prod}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Demande:nouveau", ambassadeur: 0 }
     requirements:
-        _method:  GET
         ambassadeur: \d+
         prod: \d+
 
