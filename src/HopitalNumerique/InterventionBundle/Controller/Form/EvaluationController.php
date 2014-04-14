@@ -150,5 +150,7 @@ class EvaluationController extends Controller
 
                 return $this->redirect($this->generateUrl('hopital_numerique_intervention_demande_liste'));
             }
+            
+            return $this->redirect($this->generateUrl('hopital_numerique_intervention_demande_liste'));
     }
 }
