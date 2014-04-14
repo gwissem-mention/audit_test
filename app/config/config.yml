@@ -48,6 +48,7 @@ assetic:
         - HopitalNumeriqueEtablissementBundle
         - HopitalNumeriqueCoreBundle
         - HopitalNumeriqueObjetBundle
+        - HopitalNumeriqueModuleBundle
         - HopitalNumeriqueQuestionnaireBundle
         - HopitalNumeriqueAccountBundle
         - HopitalNumeriqueRechercheBundle

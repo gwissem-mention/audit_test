@@ -41,7 +41,7 @@ class Module
     protected $titre;
     
     /**
-     * @Assert\NotBlank(message="Les productions ne peuvent pas être vide.")
+     * @Assert\NotBlank(message="Les productions ne peuvent pas être vides.")
      * @Nodevo\Javascript(class="validate[required]")
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet", inversedBy="modules")
      * @ORM\JoinTable(name="hn_module_objet",
@@ -145,12 +145,15 @@ class Module
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="reponses")
      * @ORM\JoinColumn(name="usr_formateur", referencedColumnName="usr_id", nullable=true)
+     * 
+     * @GRID\Column(field="formateur.nom", options = {"comment" = "Statut pointant sur la table reference avec le code ETAT du module"})
      */
     protected $formateur;
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_statut", referencedColumnName="ref_id")
+     * @Nodevo\Javascript(class="validate[required]")
      *
      * @GRID\Column(field="statut.libelle", options = {"comment" = "Statut pointant sur la table reference avec le code ETAT du module"})
      */

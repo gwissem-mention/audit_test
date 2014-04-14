@@ -27,14 +27,21 @@ class ModuleGrid extends Grid implements IGrid
     public function setColumns()
     {
         //field, titre, isSortable, size
-        $this->addColonne( new Column\TextColumn('id', 'Id') );
         $this->addColonne( new Column\TextColumn('titre', 'Titre') );
-        $this->addColonne( new Column\TextColumn('horairesType', 'Horairestype') );
-        $this->addColonne( new Column\TextColumn('lieu', 'Lieu') );
-        $this->addColonne( new Column\TextColumn('description', 'Description') );
-        $this->addColonne( new Column\TextColumn('nombrePlaceDisponible', 'Nombreplacedisponible') );
-        $this->addColonne( new Column\TextColumn('prerequis', 'Prerequis') );
-        $this->addColonne( new Column\TextColumn('path', 'Path') );        
+        
+        $productionColumn = new Column\ArrayColumn('productions', 'Productions concernées');
+        $productionColumn->setSize( 80 );
+        $productionColumn->setFilterType('select');
+        $productionColumn->setSelectFrom('source');
+        $productionColumn->setOperatorsVisible( false );
+        $this->addColonne($productionColumn);
+        
+        $statutColumn = new Column\TextColumn('statut', 'Statut');
+        $statutColumn->setSize( 80 );
+        $statutColumn->setFilterType('select');
+        $statutColumn->setSelectFrom('source');
+        $statutColumn->setOperatorsVisible( false );
+        $this->addColonne($statutColumn);
     }
 
     /**

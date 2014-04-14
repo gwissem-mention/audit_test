@@ -8,6 +8,28 @@
     {% endif %}
 {% endblock %}
 
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-module-edit.css" filter="cssrewrite"
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-module-edit.js"
+        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
+        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block toolbarButton %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
@@ -26,7 +48,8 @@
 
             <div class="panel-body">
                 {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
-                {{ form(form) }}
+                {{ form_javascript(form) }}
+		        {{ form(form) }}
             </div>
         </div>
     </div>

@@ -10,6 +10,13 @@ use Doctrine\ORM\EntityRepository;
 
 class ModuleType extends AbstractType
 {
+    private $_constraints = array();
+    
+    public function __construct($manager, $validator)
+    {
+        $this->_constraints = $manager->getConstraints( $validator );
+    }
+    
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -21,10 +28,17 @@ class ModuleType extends AbstractType
                             'class' => $this->_constraints['titre']['class']
                     ),
             ))
-            ->add('productions', 'text', array(
-                'max_length' => 255, 
-                'required'   => true, 
-                'label'      => 'productions'
+            ->add('productions', 'genemu_jqueryselect2_entity', array(
+                    'class'         => 'HopitalNumeriqueObjetBundle:Objet',
+                    'property'      => 'titre',
+                    'multiple'      => true,
+                    'required'      => true,
+                    'label'         => 'Productions concernées',
+                    'empty_value'   => ' - ',
+                    'attr'          => array('class' => 'productions'),
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->getProductionsActive();
+                    }
             ))
             ->add('duree', 'entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
@@ -32,7 +46,7 @@ class ModuleType extends AbstractType
                     'required'      => false,
                     'label'         => 'Durée',
                     'empty_value'   => ' - ',
-                    'attr'          => array('class' => $this->_constraints['duree']['class'] ),
+                    'attr'          => array(),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')
@@ -52,7 +66,6 @@ class ModuleType extends AbstractType
                     'required' => false,
                     'label'    => 'Lieu',
                     'attr'        => array(
-                            'class' => $this->_constraints['lieu']['class'],
                             'rows'   => 3
                     ),
             ))
@@ -60,7 +73,6 @@ class ModuleType extends AbstractType
                     'required' => false,
                     'label'    => 'Description',
                     'attr'        => array(
-                            'class' => $this->_constraints['description']['class'],
                             'rows'   => 3
                     ),
             ))
@@ -72,25 +84,34 @@ class ModuleType extends AbstractType
                     'required' => false,
                     'label'    => 'Prérequis',
                     'attr'        => array(
-                            'class' => $this->_constraints['prerequis']['class'],
                             'rows'   => 3
                     ),
             ))
-            ->add('path', 'text', array(
-                'max_length' => 255, 
-                'required'   => true, 
-                'label'      => 'path'
-            ))
             ->add('formateur', 'text', array(
                 'max_length' => 255, 
-                'required'   => true, 
-                'label'      => 'formateur'
+                'required'   => false, 
+                'label'      => 'Formateur'
             ))
-            ->add('statut', 'text', array(
-                'max_length' => 255, 
-                'required'   => true, 
-                'label'      => 'statut'
-            ))        ;
+            ->add('file', 'file', array(
+                'required' => false, 
+                'label'    => 'Pièce-jointe',
+                'attr'        => array(),
+            ))
+            ->add('path', 'hidden')
+            ->add('statut', 'entity', array(
+                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property'      => 'libelle',
+                    'required'      => true,
+                    'label'         => 'Statut',
+                    'empty_value'   => ' - ',
+                    'attr'          => array('class' => $this->_constraints['statut']['class'] ),
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('ref')
+                        ->where('ref.code = :etat')
+                        ->setParameter('etat', 'ETAT')
+                        ->orderBy('ref.order', 'ASC');
+                    }
+            ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

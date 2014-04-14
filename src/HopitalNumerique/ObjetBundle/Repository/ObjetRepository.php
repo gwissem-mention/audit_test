@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * ObjetRepository
@@ -93,6 +94,24 @@ class ObjetRepository extends EntityRepository
         if( $limit !== 0 )
             $qb->setMaxResults($limit);
 
+        return $qb;
+    }
+
+    /**
+     * Retourne l'ensemble des productions actives
+     */
+    public function getProductionsActive()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('obj')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->leftJoin('obj.types','refTypes')
+            ->innerJoin('refTypes.parent','refTypesParent')
+            ->innerJoin('obj.etat','etat')
+            ->where('refTypesParent.id = :idParent')->setParameter('idParent', 175 )
+            ->andWhere('etat.id = :idActif')->setParameter('idActif', 3 )
+            ->orderBy('obj.alias', 'ASC');
+        
         return $qb;
     }
 }
