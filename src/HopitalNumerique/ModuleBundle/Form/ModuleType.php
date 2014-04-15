@@ -77,8 +77,11 @@ class ModuleType extends AbstractType
                     ),
             ))
             ->add('nombrePlaceDisponible', 'integer', array(
-                'required'   => false, 
-                'label'      => 'Nombre de places disponibles',
+                    'required'   => false, 
+                    'label'      => 'Nombre de places disponibles',
+                    'attr'        => array(
+                            'class' => $this->_constraints['nombrePlaceDisponible']['class']
+                    )
             ))
             ->add('prerequis', 'textarea', array(
                     'required' => false,
@@ -87,15 +90,22 @@ class ModuleType extends AbstractType
                             'rows'   => 3
                     ),
             ))
-            ->add('formateur', 'text', array(
-                'max_length' => 255, 
-                'required'   => false, 
-                'label'      => 'Formateur'
+            ->add('formateur', 'genemu_jqueryselect2_entity', array(
+                    'class'         => 'HopitalNumeriqueUserBundle:User',
+                    'property'      => 'appellation',
+                    'multiple'      => false,
+                    'required'      => false,
+                    'label'         => 'Formateur',
+                    'empty_value'   => ' - ',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('user')
+                            ->where('user.enabled = ' . 1)
+                            ->orderBy('user.nom', 'ASC');
+                    }
             ))
             ->add('file', 'file', array(
-                'required' => false, 
-                'label'    => 'Pièce-jointe',
-                'attr'        => array(),
+                    'required' => false, 
+                    'label'    => 'Pièce-jointe'
             ))
             ->add('path', 'hidden')
             ->add('statut', 'entity', array(

@@ -41,7 +41,7 @@ class ContractualisationController extends Controller
 
         return $this->renderForm('hopitalnumerique_user_contractualisation', $contractualisation, 'HopitalNumeriqueUserBundle:Contractualisation:edit.html.twig', array(
                 'type_autres' => $type_autres,
-            ));
+        ));
     }
 
     /**

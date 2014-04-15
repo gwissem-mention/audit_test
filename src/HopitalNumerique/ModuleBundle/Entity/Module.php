@@ -3,6 +3,8 @@
 namespace HopitalNumerique\ModuleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,6 +29,16 @@ class Module
     protected $id;
 
     /**
+     * Liste des sessions liées au module
+     * 
+     * @var /HopitalNumerique/ModuleBundle/Entity/Session
+     * 
+     * @ORM\OneToMany(targetEntity="Session", mappedBy="module", cascade={"persist", "remove" })
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    protected $sessions;
+    
+    /**
      * @var string
      * @Assert\NotBlank(message="Le titre ne peut pas être vide.")
      * @Assert\Length(
@@ -41,13 +53,19 @@ class Module
     protected $titre;
     
     /**
+     * @var integer
+     * 
      * @Assert\NotBlank(message="Les productions ne peuvent pas être vides.")
      * @Nodevo\Javascript(class="validate[required]")
+     * 
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet", inversedBy="modules")
      * @ORM\JoinTable(name="hn_module_objet",
      *      joinColumns={ @ORM\JoinColumn(name="mod_id", referencedColumnName="mod_id")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")}
      * )
+     * @ORM\OrderBy({"titre" = "ASC"})
+     * 
+     * @GRID\Column(field="productions.titre")
      */
     protected $productions;
     
@@ -89,6 +107,7 @@ class Module
     /**
      * @var integer
      *
+     * @Nodevo\Javascript(class="validate[custom[integer],min[0]]")
      * @ORM\Column(name="mod_nombrePlaceDisponible", type="integer", nullable=true, options = {"comment" = "Nombre de places disponibles du module"})
      */
     protected $nombrePlaceDisponible;
@@ -164,7 +183,8 @@ class Module
      */
     public function __construct()
     {
-        $this->objets       = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sessions    = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->productions = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -442,6 +462,7 @@ class Module
      */
     public function setPath($path)
     {
+        die('tester cette partie !');
         if( is_null($path) && file_exists($this->getAbsolutePath()) )
             unlink($this->getAbsolutePath());
     

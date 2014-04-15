@@ -208,7 +208,7 @@ class UserRepository extends EntityRepository
     }
 
 
-    
+    /* vvvvvvvvvvvvvvvvvvvvvvvv Code de Rémi vvvvvvvvvvvvvvvvvvvvvvvvvvv */
     /**
      * Retourne un unique CMSI.
      *
@@ -278,4 +278,5 @@ class UserRepository extends EntityRepository
 
         return $requete->getQuery()->getResult();
     }
+    /* ^^^^^^^^^^^^^^^^^^^^^^ Code de Rémi ^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 }

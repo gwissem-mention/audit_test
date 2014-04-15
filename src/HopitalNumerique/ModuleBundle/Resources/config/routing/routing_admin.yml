@@ -1,3 +1,4 @@
+#Module
 hopitalnumerique_module_module:
     pattern:  /module
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:index" }
@@ -27,6 +28,43 @@ hopitalnumerique_module_module_edit:
 hopitalnumerique_module_module_delete:
     pattern:  /module/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+        
+
+#Session
+hopitalnumerique_module_module_session:
+    pattern:  /module/session/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:index",  id: 1}
+    requirements: 
+        _method: GET|POST
+        id: \d+
+
+hopitalnumerique_module_module_session_add:
+    pattern:  /module/session/add/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:add", id: 1 }
+    requirements: 
+        _method: GET|POST
+        id: \d+
+
+hopitalnumerique_module_module_session_show:
+    pattern:  /module/session/show/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:show", id: 1 }
+    requirements:
+        id: \d+
+        _method: GET
+
+hopitalnumerique_module_module_session_edit:
+    pattern:  /module/session/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:edit", id: 1 }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+hopitalnumerique_module_module_session_delete:
+    pattern:  /module/session/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:delete", _format: json }
     requirements: 
         id: \d+
         _method: POST|DELETE

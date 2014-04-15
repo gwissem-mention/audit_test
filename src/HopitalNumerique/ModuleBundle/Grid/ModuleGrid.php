@@ -17,8 +17,11 @@ class ModuleGrid extends Grid implements IGrid
      */
     public function setConfig()
     {
-        $this->setSource( 'HopitalNumeriqueModuleBundle:Module' );
-        $this->setNoDataMessage('Aucun Module à afficher.');
+        //Manager
+        $this->setSource( 'hopitalnumerique_module.manager.module' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        
+        $this->setNoDataMessage('Aucun module à afficher.');
     }
 
     /**
@@ -29,8 +32,8 @@ class ModuleGrid extends Grid implements IGrid
         //field, titre, isSortable, size
         $this->addColonne( new Column\TextColumn('titre', 'Titre') );
         
-        $productionColumn = new Column\ArrayColumn('productions', 'Productions concernées');
-        $productionColumn->setSize( 80 );
+        $productionColumn = new Column\TextColumn('prod_titre', 'Productions concernées');
+        $productionColumn->setSize( 400 );
         $productionColumn->setFilterType('select');
         $productionColumn->setSelectFrom('source');
         $productionColumn->setOperatorsVisible( false );
@@ -50,9 +53,10 @@ class ModuleGrid extends Grid implements IGrid
     public function setActionsButtons()
     {
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_module_module_show' ) );
+        $this->addActionButton( new Action\FilsButton('hopitalnumerique_module_module_session') );
+        $this->addActionButton( new Action\EditButton( 'hopitalnumerique_module_module_edit' ) );
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_module_module_edit' ) );
         $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_delete' ) );
-
     }
 
     /**

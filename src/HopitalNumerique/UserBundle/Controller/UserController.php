@@ -108,7 +108,7 @@ class UserController extends Controller
                 
             }
         }
-        return $this->customRenderView( $view , $form, $user);
+        $this->customRenderView( $view , $form, $user , $options);
     }
     
 
@@ -433,7 +433,7 @@ class UserController extends Controller
                     if(is_null($role)) {
                         $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un groupe associé.');
                     
-                        return $this->customRenderView( $view , $form, $user);
+                        $this->customRenderView( $view , $form, $user , $options);
                     }                    
                 }
             }
@@ -516,7 +516,7 @@ class UserController extends Controller
                     if( ! is_null($result) ) {
                         $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe ARS-CMSI pour cette région.' );
                 
-                        return $this->customRenderView( $view , $form, $user);
+                        return $this->customRenderView( $view , $form, $user , $options);
                     }
                 }
                 else if ( null == $user->getRegion() )
@@ -525,7 +525,7 @@ class UserController extends Controller
                     if( $role->getRole() == 'ROLE_ARS_CMSI_4' || $role->getRole() == 'ROLE_AMBASSADEUR_7') {
                         $this->get('session')->getFlashBag()->add('danger', 'Il est obligatoire de choisir une région pour le groupe sélectionné.' );
                         
-                        return $this->customRenderView( $view , $form, $user);
+                        $this->customRenderView( $view , $form, $user , $options);
                     }
                 }
                 
@@ -536,7 +536,7 @@ class UserController extends Controller
                     if( ! is_null($result) ) {
                         $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe Direction générale pour cet établissement.');
                     
-                        return $this->customRenderView( $view , $form, $user);
+                        $this->customRenderView( $view , $form, $user , $options);
                     }
                 }
                 

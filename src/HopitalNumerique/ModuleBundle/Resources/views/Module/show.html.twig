@@ -20,37 +20,59 @@
 
             <div class="panel-body" >
                 <p>
-                    <strong>Id : </strong>
-                    {{ module.id }}
-                </p>
-                <p>
-                    <strong>Titre : </strong>
+                    <strong>Titre du module : </strong>
                     {{ module.titre }}
                 </p>
                 <p>
-                    <strong>Horairestype : </strong>
-                    {{ module.horairesType }}
+                    <strong>Productions concernées : </strong>
+                    <ul>
+						{% for key,production in module.productions %}
+						    <li>{{ production.titre }}</li>
+						{% endfor %}
+					</ul>
                 </p>
-                <p>
-                    <strong>Lieu : </strong>
-                    {{ module.lieu }}
-                </p>
-                <p>
-                    <strong>Description : </strong>
-                    {{ module.description }}
-                </p>
-                <p>
-                    <strong>Nombreplacedisponible : </strong>
-                    {{ module.nombrePlaceDisponible }}
-                </p>
-                <p>
-                    <strong>Prerequis : </strong>
-                    {{ module.prerequis }}
-                </p>
-                <p>
-                    <strong>Path : </strong>
-                    {{ module.path }}
-                </p>
+                {% if module.duree is not empty and module.duree is not null %}
+	                <p>
+	                    <strong>Durée : </strong>
+	                    {{ module.duree.libelle }}
+	                </p>
+                {% endif %}
+                {% if module.horairesType is not empty and module.horairesType is not null %}
+	                <p>
+	                    <strong>Horaires type : </strong>
+	                    {{ module.horairesType }}
+	                </p>
+                {% endif %}
+                {% if module.lieu is not empty and module.lieu is not null %}
+		            <p>
+	                    <strong>Lieu : </strong>
+	                    {{ module.lieu }}
+	                </p>
+                {% endif %}
+                {% if module.nombrePlaceDisponible is not empty and module.nombrePlaceDisponible is not null %}
+	                <p>
+	                    <strong>Nombre de places disponibles : </strong>
+	                    {{ module.nombrePlaceDisponible }}
+	                </p>
+                {% endif %}
+                {% if module.description is not empty and module.description is not null %}
+	                <p>
+	                    <strong>Description : </strong>
+	                    {{ module.description }}
+	                </p>
+                {% endif %}
+                {% if module.prerequis is not empty and module.prerequis is not null %}
+	                <p>
+	                    <strong>Prérequis : </strong>
+	                    {{ module.prerequis }}
+	                </p>
+                {% endif %}
+                {% if module.formateur is not empty and module.formateur is not null %}
+	                <p>
+	                    <strong>Formateur : </strong>
+	                    {{ module.formateur.getAppellation() }}
+	                </p>
+                {% endif %}
             </div>
         </div>
     </div>

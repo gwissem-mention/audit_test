@@ -1,23 +1,52 @@
 parameters:
     #Options
     hopital_numerique_module.options:parameters:
+    #Modules
     hopitalnumerique_module.manager.module.class: HopitalNumerique\ModuleBundle\Manager\ModuleManager
     hopitalnumerique_module.grid.module.class: HopitalNumerique\ModuleBundle\Grid\ModuleGrid
     hopitalnumerique_module.form.module.class: HopitalNumerique\ModuleBundle\Form\ModuleType
+    #Sessions
+    hopitalnumerique_module.manager.session.class: HopitalNumerique\ModuleBundle\Manager\SessionManager
+    hopitalnumerique_module.grid.session.class: HopitalNumerique\ModuleBundle\Grid\SessionGrid
+    hopitalnumerique_module.form.session.class: HopitalNumerique\ModuleBundle\Form\SessionType
 
 services:
+    #Modules
+    #--Manager
     hopitalnumerique_module.manager.module:
         class: %hopitalnumerique_module.manager.module.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
+    #--Grid
     hopitalnumerique_module.grid.module:
         class: %hopitalnumerique_module.grid.module.class%
         arguments: ["@service_container"]
 
+    #--Formulaire
     hopitalnumerique_module.form.module:
         class: %hopitalnumerique_module.form.module.class%
         arguments: ["@hopitalnumerique_module.manager.module", "@validator"]
         tags:
             - { name: form.type, alias: hopitalnumerique_module_module }
+
+    #Sessions
+    #--Manager
+    hopitalnumerique_module.manager.session:
+        class: %hopitalnumerique_module.manager.session.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    #--Grid
+    hopitalnumerique_module.grid.session:
+        class: %hopitalnumerique_module.grid.session.class%
+        arguments: ["@service_container"]
+
+    #--Formulaire
+    hopitalnumerique_module.form.session:
+        class: %hopitalnumerique_module.form.session.class%
+        arguments: ["@hopitalnumerique_module.manager.session", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_module_session }

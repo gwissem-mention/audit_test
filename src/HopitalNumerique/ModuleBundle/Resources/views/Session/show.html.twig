@@ -1,0 +1,65 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Fiche Session
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module_session') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if session.id %}
+        <a href="{{ path('hopitalnumerique_module_module_session_edit', { 'id': session.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                <p>
+                    <strong>Id : </strong>
+                    {{ session.id }}
+                </p>
+                <p>
+                    <strong>Datesession : </strong>
+                    {{ session.dateSession }}
+                </p>
+                <p>
+                    <strong>Dateouvertureinscription : </strong>
+                    {{ session.dateOuvertureInscription }}
+                </p>
+                <p>
+                    <strong>Datefermetureinscription : </strong>
+                    {{ session.dateFermetureInscription }}
+                </p>
+                <p>
+                    <strong>Horaires : </strong>
+                    {{ session.horaires }}
+                </p>
+                <p>
+                    <strong>Lieu : </strong>
+                    {{ session.lieu }}
+                </p>
+                <p>
+                    <strong>Description : </strong>
+                    {{ session.description }}
+                </p>
+                <p>
+                    <strong>Nombreplacedisponible : </strong>
+                    {{ session.nombrePlaceDisponible }}
+                </p>
+                <p>
+                    <strong>Restrictionacces : </strong>
+                    {{ session.restrictionAcces }}
+                </p>
+                <p>
+                    <strong>Path : </strong>
+                    {{ session.path }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
