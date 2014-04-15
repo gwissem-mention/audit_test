@@ -317,7 +317,7 @@ class Grid
 
                 //Ajout des actions au grid
                 $actionsColumn = new Column\ActionsColumn('actions', '', $this->_buttons);
-                $actionsColumn->setSize( ((count($this->_buttons) * $this->_buttonSize)) + 22 );
+                $actionsColumn->setSize( ((count($this->_buttons) * $this->_buttonSize)) + 23 );
                 $this->_colonnes[] = $actionsColumn;
 
                 if($this->_sourceType == self::SOURCE_TYPE_ENTITY)
