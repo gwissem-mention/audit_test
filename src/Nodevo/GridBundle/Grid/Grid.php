@@ -457,7 +457,7 @@ class Grid
             {
                 $datas[$key][$this->_fieldLabelRecursive] = '|--- ' . $datas[$key][$this->_fieldLabelRecursive];
 
-                $parentData = $datasById[$parentData[$this->_fieldParentRecursive]];
+                $parentData = array_key_exists($this->_fieldParentRecursive,$parentData)  && array_key_exists($parentData[$this->_fieldParentRecursive], $datasById)? $datasById[$parentData[$this->_fieldParentRecursive]] : null;
                 $datas      = $this->gestionAffichageSousItems( $key, $datas, $datasById, $parentData );
             }
             
