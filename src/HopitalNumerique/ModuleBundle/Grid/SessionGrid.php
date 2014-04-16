@@ -46,7 +46,7 @@ class SessionGrid extends Grid implements IGrid
         $this->addColonne( $horaireColumn );
         
         $etatColumn = new Column\TextColumn('etat', 'Etat');
-        $etatColumn->setSize( 80 );
+        $etatColumn->setSize( 140 );
         $etatColumn->setFilterType('select');
         $etatColumn->setOperatorsVisible( false );
         $this->addColonne( $etatColumn );

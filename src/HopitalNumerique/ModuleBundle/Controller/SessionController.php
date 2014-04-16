@@ -13,19 +13,23 @@ class SessionController extends Controller
     /**
      * Affiche la liste des Session.
      */
-    public function indexAction()
+    public function indexAction(\HopitalNumerique\ModuleBundle\Entity\Module $module)
     {
         $grid = $this->get('hopitalnumerique_module.grid.session');
+        $grid->setSourceCondition('module', $module->getId());
 
-        return $grid->render('HopitalNumeriqueModuleBundle:Session:index.html.twig');
+        return $grid->render('HopitalNumeriqueModuleBundle:Session:index.html.twig', array('module' => $module));
     }
 
     /**
      * Affiche le formulaire d'ajout de Session.
      */
-    public function addAction()
+    public function addAction(\HopitalNumerique\ModuleBundle\Entity\Module $module)
     {
+        \Doctrine\Common\Util\Debug::dump($module);die('die');
+        
         $session = $this->get('hopitalnumerique_module.manager.session')->createEmpty();
+        $session->setModule( $module );
 
         return $this->renderForm('hopitalnumerique_module_session', $session, 'HopitalNumeriqueModuleBundle:Session:edit.html.twig' );
     }

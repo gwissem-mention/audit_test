@@ -162,7 +162,7 @@ class Module
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="reponses")
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_formateur", referencedColumnName="usr_id", nullable=true)
      * 
      * @GRID\Column(field="formateur.nom", options = {"comment" = "Statut pointant sur la table reference avec le code ETAT du module"})
