@@ -36,9 +36,6 @@ class ModuleGrid extends Grid implements IGrid
         
         $productionColumn = new Column\TextColumn('prod_titre', 'Productions concernées');
         $productionColumn->setSize( 400 );
-        $productionColumn->setFilterType('select');
-        $productionColumn->setSelectFrom('source');
-        $productionColumn->setOperatorsVisible( false );
         $this->addColonne($productionColumn);
         
         $statutColumn = new Column\TextColumn('statut', 'Statut');

@@ -13,14 +13,14 @@ hopitalnumerique_module_module_add:
 
 hopitalnumerique_module_module_show:
     pattern:  /module/show/{id}
-    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:show" }
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:show",  id: 1 }
     requirements:
         id: \d+
         _method: GET
 
 hopitalnumerique_module_module_edit:
     pattern:  /module/edit/{id}
-    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:edit" }
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:edit", id: 1 }
     requirements:
         id: \d+
         _method: GET|POST
@@ -36,7 +36,7 @@ hopitalnumerique_module_module_delete:
 #Session
 hopitalnumerique_module_module_session:
     pattern:  /module/session/{id}
-    defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:index",  id: 1}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:index", id: 1 }
     requirements: 
         _method: GET|POST
         id: \d+
