@@ -540,21 +540,23 @@ class Session
         //Si il y a bien un module renseigné
         if(!is_null($this->getModule()))
         {
+            $module = $this->getModule();
+            
             //Durée
-            if(!is_null($this->getModule()->getDuree()))
-                $this->setDuree($this->getModule()->getDuree());
+            if(!is_null($module->getDuree()))
+                $this->setDuree($module->getDuree());
             //Horaires
-            if(!empty($this->getModule()->getHorairesType()))
-                $this->setHoraires($this->getModule()->getHorairesType());
+            if(!empty($module->getHorairesType()))
+                $this->setHoraires($module->getHorairesType());
             //Lieu
-            if(!empty($this->getModule()->getLieu()))
-                $this->setLieu($this->getModule()->getLieu());
+            if(!empty($module->getLieu()))
+                $this->setLieu($module->getLieu());
             //Description
-            if(!empty($this->getModule()->getDescription()))
-                $this->setDescription($this->getModule()->getDescription());
+            if(!empty($module->getDescription()))
+                $this->setDescription($module->getDescription());
             //Nombre de places disponibles
-            if(!empty($this->getModule()->getNombrePlaceDisponible()))
-                $this->setNombrePlaceDisponible($this->getModule()->getNombrePlaceDisponible());
+            if(!empty($module->getNombrePlaceDisponible()))
+                $this->setNombrePlaceDisponible($module->getNombrePlaceDisponible());
         }
         
         return $this;
