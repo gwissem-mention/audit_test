@@ -542,20 +542,26 @@ class Session
         {
             $module = $this->getModule();
             
+            //Note GME : merci php 5.3 pour les variables temporaires
             //Durée
-            if(!is_null($module->getDuree()))
+            $duree = $module->getDuree();
+            if(!is_null($duree))
                 $this->setDuree($module->getDuree());
             //Horaires
-            if(!empty($module->getHorairesType()))
+            $horaire = $module->getHorairesType();
+            if(!empty($horaire))
                 $this->setHoraires($module->getHorairesType());
             //Lieu
-            if(!empty($module->getLieu()))
+            $lieu = $module->getLieu();
+            if(!empty($lieu))
                 $this->setLieu($module->getLieu());
             //Description
-            if(!empty($module->getDescription()))
+            $description = $module->getDescription();
+            if(!empty($description))
                 $this->setDescription($module->getDescription());
             //Nombre de places disponibles
-            if(!empty($module->getNombrePlaceDisponible()))
+            $nbPlaceDispo = $module->getNombrePlaceDisponible();
+            if(!empty($nbPlaceDispo))
                 $this->setNombrePlaceDisponible($module->getNombrePlaceDisponible());
         }
         

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block toolbarButton %}
-    <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module_session') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module_session', {'id' : session.module.id}) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     {% if session.id %}
         <a href="{{ path('hopitalnumerique_module_module_session_edit', { 'id': session.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
     {% endif %}
