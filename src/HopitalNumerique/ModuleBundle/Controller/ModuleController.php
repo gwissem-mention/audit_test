@@ -94,6 +94,32 @@ class ModuleController extends Controller
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_module_module').'"}', 200);
     }
 
+    /**
+     * Download le fichier de session.
+     *
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function dowloadAction( \HopitalNumerique\ModuleBundle\Entity\Module $module )
+    {
+        $options = array(
+                'serve_filename' => $module->getPath(),
+                'absolute_path'  => false,
+                'inline'         => false,
+        );
+    
+        if(file_exists($module->getUploadRootDir() . '/'. $module->getPath()))
+        {
+            return $this->get('igorw_file_serve.response_factory')->create( $module->getUploadRootDir() . '/'. $module->getPath(), 'application/pdf', $options);
+        }
+        else
+        {
+            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
+            $this->get('session')->getFlashBag()->add( ('danger') , 'Le document n\'existe plus sur le serveur.' );
+    
+            return $this->redirect( $this->generateUrl('hopitalnumerique_module_module') );
+        }
+    }
 
 
 
@@ -118,8 +144,8 @@ class ModuleController extends Controller
         $request = $this->get('request');
         
         // Si l'utilisateur soumet le formulaire
-        if ('POST' == $request->getMethod()) {
-            
+        if ('POST' == $request->getMethod()) 
+        {
             // On bind les données du form
             $form->handleRequest($request);
 
@@ -127,7 +153,7 @@ class ModuleController extends Controller
             if ($form->isValid()) {
                 //test ajout ou edition
                 $new = is_null($module->getId());
-
+                
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_module.manager.module')->save($module);
                 

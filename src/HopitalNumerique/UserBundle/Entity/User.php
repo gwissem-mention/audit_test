@@ -1154,7 +1154,23 @@ class User extends BaseUser
      */
     public function getAppellation()
     {
-        return ($this->civilite != null ? $this->civilite->getLibelle().' ' : '').$this->prenom.' '.$this->nom;
+        // ----Traitement pour transformer le prénom "Jean-luc robert" en "Jean-Luc Robert"
+        //Récupération du prénom
+        $prenom = strtolower($this->getPrenom());
+        //Découpage du prénom sur le tiret
+        $tempsPrenom = explode('-', $prenom);
+        //Unsset de la variable
+        $prenom = "";
+        //Pour chaque bout on met une MAJ sur la première lettre de chaque mot, si il y en plusieurs c'est qu'il y avait un -
+        foreach ($tempsPrenom as $key => $tempPrenom)
+        {
+            $prenom .= ("" !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
+        }
+        
+        // ----Mise en majuscule du nom
+        $nom = strtoupper($this->getNom());
+        
+        return ($this->civilite != null ? $this->civilite->getLibelle().' ' : '').$prenom.' '.$nom;
     }
 
     /**

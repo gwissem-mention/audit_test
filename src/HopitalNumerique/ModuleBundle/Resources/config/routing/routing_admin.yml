@@ -32,6 +32,11 @@ hopitalnumerique_module_module_delete:
         id: \d+
         _method: POST|DELETE
         
+hopitalnumerique_module_module_dowload:
+    pattern:  /module/dowload/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:download", id: 1 }
+    requirements:
+        id: \d+
 
 #Session
 hopitalnumerique_module_module_session:
@@ -68,3 +73,9 @@ hopitalnumerique_module_module_session_delete:
     requirements: 
         id: \d+
         _method: POST|DELETE
+        
+hopitalnumerique_module_module_session_dowload:
+    pattern:  /module/session/dowload/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:download", id: 1 }
+    requirements:
+        id: \d+

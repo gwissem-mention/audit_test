@@ -14,6 +14,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  *
  * @ORM\Table(name="hn_module_session")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ModuleBundle\Repository\SessionRepository")
+ * @ORM\HasLifecycleCallbacks
  * 
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
@@ -486,7 +487,7 @@ class Session
     
     public function getUploadDir()
     {
-        return 'web/medias/Modules/Sessions';
+        return 'web/medias/Sessions';
     }
     
     /**

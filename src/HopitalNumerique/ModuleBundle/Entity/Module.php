@@ -16,6 +16,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  *
  * @ORM\Table(name="hn_module")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ModuleBundle\Repository\ModuleRepository")
+ * @ORM\HasLifecycleCallbacks
  * 
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
@@ -465,7 +466,6 @@ class Module
      */
     public function setPath($path)
     {
-        die('tester cette partie !');
         if( is_null($path) && file_exists($this->getAbsolutePath()) )
             unlink($this->getAbsolutePath());
     
@@ -517,6 +517,7 @@ class Module
                 unlink($this->getAbsolutePath());
     
             $this->path = round(microtime(true) * 1000) . '_' . $this->file->getClientOriginalName();
+            
         }
     }
     

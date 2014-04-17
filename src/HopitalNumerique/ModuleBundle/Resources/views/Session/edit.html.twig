@@ -2,9 +2,9 @@
 
 {% block h1Title %}
     {% if session.id %}
-        Editer un Session
+        Editer une session
     {% else %}
-        Ajouter un Session
+        Ajouter une session
     {% endif %}
 {% endblock %}
 
@@ -55,18 +55,57 @@
 	                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
 	                {# Application des librairies JS sur le form : #}
 	                {{ form_javascript(form) }}
-			        <div class="form-group">
-			        <div class="titre row">
-			            <div class="col-md-3 text-right">
-	                        <label class="control-label">Module concerné</label>
+	                {{ form_start(form) }}
+	                    {# Application des librairies JS sur le form : #}
+	                    {{ form_javascript(form) }}
+	                    
+				        <div class="form-group">
+					        <div class="titre row">
+					            <div class="col-md-3 text-right">
+			                        <label class="control-label">Module concerné</label>
+			                    </div>
+					            <div class="col-md-6">
+			                        <strong>{{ session.module.titre }}</strong>
+			                    </div>
+			                </div>
+		                </div>
+			            <div class="clearfix"></div>
+	                    {# Formulaire : #}
+	                    {{ form_row(form.dateSession) }}
+	                    {{ form_row(form.dateOuvertureInscription) }}
+	                    {{ form_row(form.dateFermetureInscription) }}
+	                    {{ form_row(form.duree) }}
+	                    {{ form_row(form.horaires) }}
+	                    {{ form_row(form.lieu) }}
+	                    {{ form_row(form.description) }}
+	                    {{ form_row(form.nombrePlaceDisponible) }}
+	                    {{ form_row(form.restrictionAcces) }}
+	                    {# Gestion de l'upload #}
+	                    <div class="form-group">
+	                        {{ form_label(form.file) }}
+	                        <div class="col-md-6">
+	                            {% if session.getAbsolutePath() is not null %}
+	                                {% set visibility = 'none' %}
+	                            {% else %}
+	                                {% set visibility = 'block' %}
+	                            {% endif %}
+	                            <div class="inputUpload" style="display:{{visibility}}">
+	                                {{ form_widget(form.file) }}
+	                            </div>
+	
+	                            {% if session.getAbsolutePath() is not null %}
+	                                <a class="uploadedFile" href="{{path('hopitalnumerique_module_module_session_dowload', {'id': session.id })}}">{{session.path}}</a>
+	                                <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" ><i class="fa fa-trash-o"></i></div>
+	                            {% endif %}
+	                        </div>
+	                        <div class="col-md-3">
+	                            <div class="help-block error_file">
+	                                {{ form_errors(form.file) }}
+	                            </div>
+	                        </div>
 	                    </div>
-			            <div class="col-md-6">
-	                        <strong>{{ session.module.titre }}</strong>
-	                    </div>
-	                </div>
-	                </div>
-		            <div class="clearfix"></div>
-	                {{ form(form) }}
+	                    {{ form_row(form.etat) }}
+	                {{ form_end(form) }}
                 </div>
             </div>
         </div>

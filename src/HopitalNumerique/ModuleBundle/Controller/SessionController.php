@@ -99,6 +99,32 @@ class SessionController extends Controller
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_module_module_session').'"}', 200);
     }
 
+    /**
+     * Download le fichier de session.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function dowloadAction( \HopitalNumerique\ModuleBundle\Entity\Session $session )
+    {
+        $options = array(
+                'serve_filename' => $session->getPath(),
+                'absolute_path'  => false,
+                'inline'         => false,
+        );
+    
+        if(file_exists($session->getUploadRootDir() . '/'. $session->getPath()))
+        {
+            return $this->get('igorw_file_serve.response_factory')->create( $session->getUploadRootDir() . '/'. $session->getPath(), 'application/pdf', $options);
+        }
+        else
+        {
+            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
+            $this->get('session')->getFlashBag()->add( ('danger') , 'Le document n\'existe plus sur le serveur.' );
+    
+            return $this->redirect( $this->generateUrl('hopitalnumerique_module_module_session', array('id' => $session->getModule()->getId())) );
+        }
+    }
 
 
 
@@ -137,7 +163,7 @@ class SessionController extends Controller
                 $this->get('hopitalnumerique_module.manager.session')->save($session);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Session ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Session ' . ($new ? 'ajoutée.' : 'mise à jour.') ); 
                 
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');

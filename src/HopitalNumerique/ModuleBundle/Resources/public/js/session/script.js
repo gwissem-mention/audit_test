@@ -1,5 +1,14 @@
 $(document).ready(function() { 
 	
+	//Gestion du bouton delete : changement du fichier uploadé
+    $('.deleteUploadedFile').on('click',function(){
+        $('.uploadedFile, .deleteUploadedFile ').hide();
+        $('.uploadedFile').html('');
+        $('.inputUpload').show();
+        $('#hopitalnumerique_module_session_path').val('');
+        $('#hopitalnumerique_module_session_file').val('');
+    });
+	
 	//Charge la date de fin d'inscription en fonction de la date de la session
     $('#hopitalnumerique_module_session_dateSession').on('change', function() 
     {

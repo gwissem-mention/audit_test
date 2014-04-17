@@ -98,7 +98,7 @@ class ContractualisationController extends Controller
             $this->get('session')->getFlashBag()->add( ('danger') , 'Le document n\'existe plus sur le serveur.' );
 
             return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
-        }        
+        }
     }
 
     /**
@@ -172,6 +172,7 @@ class ContractualisationController extends Controller
         
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
+            
             // On bind les données du form
             $form->handleRequest($request);
 

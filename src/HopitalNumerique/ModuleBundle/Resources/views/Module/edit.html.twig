@@ -2,9 +2,9 @@
 
 {% block h1Title %}
     {% if module.id %}
-        Editer un Module
+        Editer un module
     {% else %}
-        Ajouter un Module
+        Ajouter un module
     {% endif %}
 {% endblock %}
 
@@ -63,6 +63,7 @@
                     {{ form_row(form.nombrePlaceDisponible) }}
                     {{ form_row(form.prerequis) }}
                     {{ form_row(form.formateur) }}
+                    {# Gestion de l'upload #}
                     <div class="form-group">
                         {{ form_label(form.file) }}
                         <div class="col-md-6">
@@ -76,7 +77,7 @@
                             </div>
 
                             {% if module.getAbsolutePath() is not null %}
-                                <a class="uploadedFile" href="{{path('hopitalnumerique_user_contractualisation_dowload', {'id': module.id })}}">{{module.path}}</a>
+                                <a class="uploadedFile" href="{{path('hopitalnumerique_module_module_dowload', {'id': module.id })}}">{{module.path}}</a>
                                 <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" ><i class="fa fa-trash-o"></i></div>
                             {% endif %}
                         </div>
