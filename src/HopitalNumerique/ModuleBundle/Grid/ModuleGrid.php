@@ -11,6 +11,9 @@ use APY\DataGridBundle\Grid\Action\RowAction;
 
 /**
  * Configuration du grid Module.
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
  */
 class ModuleGrid extends Grid implements IGrid
 {

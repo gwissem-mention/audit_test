@@ -7,6 +7,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Nodevo\ContactBundle\Form\Type\ContactType as NodevoContactType;
 
+/**
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
+ */
 class ContactType extends NodevoContactType
 {
     private $_constraints = array();

@@ -7,11 +7,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Module controller.
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
  */
 class ModuleController extends Controller
 {
     /**
      * Affiche la liste des Module.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function indexAction()
     {
@@ -22,6 +28,9 @@ class ModuleController extends Controller
 
     /**
      * Affiche le formulaire d'ajout de Module.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function addAction()
     {
@@ -34,6 +43,9 @@ class ModuleController extends Controller
      * Affiche le formulaire d'édition de Module.
      *
      * @param integer $id Id de Module.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function editAction( $id )
     {
@@ -47,6 +59,9 @@ class ModuleController extends Controller
      * Affiche le Module en fonction de son ID passé en paramètre.
      * 
      * @param integer $id Id de Module.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function showAction( $id )
     {
@@ -63,6 +78,9 @@ class ModuleController extends Controller
      * 
      * @param integer $id Id de Module.
      * METHOD = POST|DELETE
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function deleteAction( $id )
     {
@@ -88,6 +106,9 @@ class ModuleController extends Controller
      * @param string $view     Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     private function renderForm( $formName, $module, $view )
     {

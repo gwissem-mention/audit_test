@@ -14,6 +14,9 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  *
  * @ORM\Table(name="hn_module_session")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ModuleBundle\Repository\SessionRepository")
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
  */
 class Session
 {

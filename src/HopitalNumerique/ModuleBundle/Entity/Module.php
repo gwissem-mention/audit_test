@@ -16,6 +16,9 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  *
  * @ORM\Table(name="hn_module")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ModuleBundle\Repository\ModuleRepository")
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
  */
 class Module
 {

@@ -9,10 +9,11 @@ use Nodevo\ContactBundle\Entity\Contact as NodevoContact;
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
-
 /**
  * Contact
  *
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
  * @ORM\Table("hn_contact")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ContactBundle\Repository\ContactRepository")
  */

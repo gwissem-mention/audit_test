@@ -8,6 +8,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
+ */
 class ModuleType extends AbstractType
 {
     private $_constraints = array();

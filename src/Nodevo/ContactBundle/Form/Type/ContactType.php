@@ -6,6 +6,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
+ */
 class ContactType extends AbstractType
 {
     private $_constraints = array();

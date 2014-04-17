@@ -4,6 +4,12 @@ namespace HopitalNumerique\ContactBundle\Controller;
 
 use Nodevo\ContactBundle\Controller\ContactController as NodevoController;
 
+/**
+ * Controller de Contact
+ *
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
+ */
 class ContactController extends NodevoController
 {
     /**
@@ -34,6 +40,8 @@ class ContactController extends NodevoController
      * @param array   $parametres        Paramètres envoyés à la vue au besoin
      *
      * @return Form | redirect
+     * @author Gaetan MELCHILSEN 
+     * @copyright Nodevo
      */
     private function renderForm( $formName, $contact, $view, $routeRedirection,  $parametres = array() )
     {

@@ -6,6 +6,9 @@ use Nodevo\ContactBundle\Manager\ContactManager as NodevoContactManager;
 
 /**
  * Manager de l'entité Contractualisation.
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
  */
 class ContactManager extends NodevoContactManager
 {
@@ -13,6 +16,9 @@ class ContactManager extends NodevoContactManager
     /**
      * Adresses mails en Copie Caché de l'anap
      * @var array() Tableau clé: Nom affiché => valeur : Adresse mail
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     protected $_mailsContact;
     
@@ -21,6 +27,9 @@ class ContactManager extends NodevoContactManager
      *
      * @param EntityManager $em Entity      Manager de Doctrine
      * @param Array         $options        Tableau d'options
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function __construct($em, $options = array())
     {
@@ -33,6 +42,9 @@ class ContactManager extends NodevoContactManager
      * Renvoie la liste des mails dans le config.yml
      * 
      * @return array(string)
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function getMailsContact()
     {
@@ -45,6 +57,9 @@ class ContactManager extends NodevoContactManager
      * @param Contact $contact
      *
      * @return string Affichage du formulaire
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function getContactFormateMail($contact)
     {

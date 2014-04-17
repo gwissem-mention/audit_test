@@ -7,11 +7,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Session controller.
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
  */
 class SessionController extends Controller
 {
     /**
      * Affiche la liste des Session.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function indexAction(\HopitalNumerique\ModuleBundle\Entity\Module $module)
     {
@@ -23,6 +29,9 @@ class SessionController extends Controller
 
     /**
      * Affiche le formulaire d'ajout de Session.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function addAction(\HopitalNumerique\ModuleBundle\Entity\Module $module)
     {
@@ -39,6 +48,9 @@ class SessionController extends Controller
      * Affiche le formulaire d'édition de Session.
      *
      * @param integer $id Id de Session.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function editAction( $id )
     {
@@ -52,6 +64,9 @@ class SessionController extends Controller
      * Affiche le Session en fonction de son ID passé en paramètre.
      * 
      * @param integer $id Id de Session.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function showAction( $id )
     {
@@ -68,6 +83,9 @@ class SessionController extends Controller
      * 
      * @param integer $id Id de Session.
      * METHOD = POST|DELETE
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function deleteAction( $id )
     {
@@ -93,6 +111,9 @@ class SessionController extends Controller
      * @param string $view     Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     private function renderForm( $formName, $session, $view )
     {

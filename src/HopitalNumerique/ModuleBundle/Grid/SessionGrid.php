@@ -9,6 +9,9 @@ use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du grid Session.
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
  */
 class SessionGrid extends Grid implements IGrid
 {

@@ -6,6 +6,9 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * ModuleRepository
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
  */
 class ModuleRepository extends EntityRepository
 {
@@ -13,6 +16,9 @@ class ModuleRepository extends EntityRepository
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
      * @return array
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function getDatasForGrid()
     {
