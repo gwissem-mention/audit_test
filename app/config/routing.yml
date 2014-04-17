@@ -40,10 +40,6 @@ hopital_numerique_intervention_evaluation:
     resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/intervention_evaluation.yml"
     prefix:   /compte-hn/intervention
 
-hopital_numerique_intervention_reference:
-    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/reference.yml"
-    prefix:   /compte-hn/intervention/reference
-
 hopital_numerique_intervention_regroupement:
     resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/intervention_regroupement.yml"
     prefix:   /compte-hn/intervention

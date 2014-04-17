@@ -301,18 +301,4 @@ class InterventionCourrielManager
         
         $this->envoiCourrielsAffichageLogs->addLog('Courriel "'.$mail->getObjet().'" envoyé à '.$destinataire->getAppellation()."\n");
     }
-    /**
-     * Retourne le corps du courriel.
-     * 
-     * @param \Nodevo\MailBundle\Entity\Mail $mail Le courriel à envoyer
-     * @param array $remplacements Les textes dynamiques
-     * @return string Corps du courriel
-     */
-    private function getCourrielCorps(Mail $mail, $remplacements = array())
-    {
-        $courrielContenu = $mail->getBody();
-        foreach ($remplacements as $texteRecherche => $remplacement)
-            $courrielContenu = str_replace('%' . $texteRecherche, $remplacement, $courrielContenu);
-        return $this->twig->loadTemplate('NodevoMailBundle::template.mail.html.twig')->render(array("content" => $courrielContenu));
-    }
 }

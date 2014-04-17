@@ -8,7 +8,7 @@ hopital_numerique_intervention_admin_demande_edit:
     pattern:  /demande/edit/{id}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Form/Demande:edit", id: 0 }
     requirements:
-        _method:  GET
+        _method:  GET|POST
         id: \d+
 
 hopital_numerique_intervention_admin_demande_voir:
@@ -22,7 +22,7 @@ hopital_numerique_intervention_admin_demande_delete:
     pattern: /demande/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Form/Demande:supprime", _format: json}
     requirements:
-        _method:  GET
+        _method: GET|POST
         id: \d+
 
 hopital_numerique_intervention_admin_evaluation_voir:

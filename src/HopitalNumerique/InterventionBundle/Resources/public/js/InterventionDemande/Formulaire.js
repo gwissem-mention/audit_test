@@ -141,7 +141,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventio
     var changementEtatUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
 
     $.ajax(changementEtatUrl, {
-        method:'POST',
+        method:'GET',
         data:{
             message:$('textarea#etat_intervention_refus_justification').val()
         },
@@ -179,7 +179,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.enregistreInte
     var changementEtatUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/etat/' + interventionEtatId + '/change';
     
     $.ajax(changementEtatUrl, {
-        method:'POST',
+        method:'GET',
         success:function() {
             loaderAjax.finished();
             Nodevo_Web.rechargePage();
@@ -514,6 +514,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.regroupeInterv
             var interventionRegroupementUrl = '/compte-hn/intervention/demande/' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.INTERVENTION_DEMANDE_ID + '/regroupement/' + interventionRegroupementType + '/' + interventionRegroupeeId + '/regroupe';
             
             $.ajax(interventionRegroupementUrl, {
+                method:'POST',
                 success:function(reponse) {
                     if (reponse != '1')
                         alert('Le regroupement ne s\est pas fait.');

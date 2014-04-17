@@ -160,7 +160,4 @@ hopital_numerique_questionnaire:
 
 hopital_numerique_contact:
     options:
-        mailsContact: #"adresse_mail: nom_affiché"
-            qsomazzi@nodevo.com: Hey quand un ?
-            gmelchilsen@nodevo.com: Gaëtanfanfan
-            tdauriac@nodevo.com: Tôt-mat Dos-ric-rac 
+        mailsContact: %confighn_hopitalnumerique_contact%

@@ -2,14 +2,14 @@ hopital_numerique_intervention_evaluation_nouveau:
     pattern:  /demande/{interventionDemande}/evaluation/nouveau
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Evaluation:nouveau", interventionDemande: 0 }
     requirements:
-        _method:  GET
+        _method:  GET|POST
         interventionDemande: \d+
 
 hopital_numerique_intervention_evaluation_form:
     pattern:  /demande/{interventionDemande}/evaluation/form
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Form/Evaluation:edit" }
     requirements:
-        _method:  GET
+        _method:  GET|POST
         interventionDemande: \d+
 
 hopital_numerique_intervention_evaluation_voir:

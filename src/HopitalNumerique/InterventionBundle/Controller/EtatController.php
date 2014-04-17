@@ -25,18 +25,16 @@ class EtatController extends Controller
      */
     public function ajaxChangeAction(InterventionDemande $interventionDemande, Reference $interventionEtat)
     {
-        if ($this->get('request')->isMethod('POST'))
-        {
-            $messageJustificationChangementEtat = ($this->get('request')->request->get('message') != '' ? $this->get('request')->request->get('message') : null);
-
-            if ($this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $interventionEtat, $messageJustificationChangementEtat))
-            {
-                $this->get('session')->getFlashBag()->add('success', 'L\'état de la demande d\'intervention a été modifié.');
-                return new Response(1);
-            }
-        }
-
-        $this->get('session')->getFlashBag()->add('danger', 'L\'état de la demande d\'intervention n\'a pu être modifié.');
-        return new Response(0);
+    	if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
+    	{
+	        $messageJustificationChangementEtat = ($this->get('request')->request->get('message') != '' ? $this->get('request')->request->get('message') : null);
+	
+	        if ($this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $interventionEtat, $messageJustificationChangementEtat))
+	        {
+	            $this->get('session')->getFlashBag()->add('success', 'L\'état de la demande d\'intervention a été modifié.');
+	            return new Response(1);
+	        }
+    	}
+    	return new Response(0);
     }
 }
