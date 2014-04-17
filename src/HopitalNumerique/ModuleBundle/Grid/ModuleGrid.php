@@ -7,6 +7,8 @@ use Nodevo\GridBundle\Grid\IGrid;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
+use APY\DataGridBundle\Grid\Action\RowAction;
+
 /**
  * Configuration du grid Module.
  */
@@ -55,7 +57,13 @@ class ModuleGrid extends Grid implements IGrid
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_module_module_show' ) );
         $this->addActionButton( new Action\FilsButton('hopitalnumerique_module_module_session') );
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_module_module_edit' ) );
-        $this->addActionButton( new Action\EditButton( 'hopitalnumerique_module_module_edit' ) );
+        
+        //Boutton d'ajout d'un référentiel avec le même code par défaut
+        $ajoutSession = new RowAction('', 'hopitalnumerique_module_module_session_add');
+        $ajoutSession->setRouteParameters( array('id') );
+        $ajoutSession->setAttributes( array('class'=>'btn btn-warning fa fa-plus','title' => 'Ajouter une session') );
+        $this->addActionButton( $ajoutSession );
+        
         $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_delete' ) );
     }
 

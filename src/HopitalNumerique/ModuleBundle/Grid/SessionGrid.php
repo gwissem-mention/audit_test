@@ -31,7 +31,7 @@ class SessionGrid extends Grid implements IGrid
         $dateOuvertureInscriptionColumn->setSize( 150 );
         $this->addColonne( $dateOuvertureInscriptionColumn );
         
-        $dateFermetureInscriptionColumn = new Column\DateColumn('dateFermetureInscription', 'Date de fermeture des inscriptions');
+        $dateFermetureInscriptionColumn = new Column\DateColumn('dateFermetureInscription', 'Date de clôture des inscriptions');
         $dateFermetureInscriptionColumn->setSize( 150 );
         $this->addColonne( $dateFermetureInscriptionColumn );
         

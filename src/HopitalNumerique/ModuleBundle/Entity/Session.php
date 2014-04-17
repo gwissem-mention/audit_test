@@ -47,7 +47,7 @@ class Session
      * @var \DateTime
      *
      * @Assert\NotBlank(message="La date d'ouverture des inscriptions de la session ne peut pas être vide.")
-     * @Nodevo\Javascript(class="validate[required,custom[date],future[NOW]]")
+     * @Nodevo\Javascript(class="validate[required,custom[date]]")
      * @ORM\Column(name="ses_dateOuvertureInscription", type="datetime")
      */
     protected $dateOuvertureInscription;
@@ -56,7 +56,7 @@ class Session
      * @var \DateTime
      *
      * @Assert\NotBlank(message="La date de fermeture des inscriptions de la session ne peut pas être vide.")
-     * @Nodevo\Javascript(class="validate[required,custom[date],future[NOW],future[#hopitalnumerique_module_session_dateOuvertureInscription]]")
+     * @Nodevo\Javascript(class="validate[required,custom[date]]")
      * @ORM\Column(name="ses_dateFermetureInscription", type="datetime")
      */
     protected $dateFermetureInscription;
@@ -149,6 +149,13 @@ class Session
      */
     protected $etat;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->dateOuvertureInscription = new \DateTime();
+    }
 
     /**
      * Get id
@@ -360,22 +367,45 @@ class Session
     }
 
     /**
-     * Set restrictionAcces
+     * Add restrictionAcces
      *
-     * @param string $restrictionAcces
-     * @return Session
+     * @param \Nodevo\RoleBundle\Entity\Role $role
+     * @return Objet
      */
-    public function setRestrictionAcces($restrictionAcces)
+    public function addRestrictionAcces(\Nodevo\RoleBundle\Entity\Role $role)
     {
-        $this->restrictionAcces = $restrictionAcces;
-
+        $this->restrictionAcces[] = $role;
+    
         return $this;
     }
-
+    
     /**
-     * Get restrictionAcces
+     * Remove restrictionAcces
      *
-     * @return string 
+     * @param \Nodevo\RoleBundle\Entity\Role $role
+     */
+    public function removeRestrictionAcces(\Nodevo\RoleBundle\Entity\Role $role)
+    {
+        $this->restrictionAcces->removeElement($role);
+    }
+    
+    /**
+     * Set restrictionsAcces
+     *
+     * @param \Doctrine\Common\Collections\Collection $restrictionsAcces
+     * @return Objet
+     */
+    public function setRestrictionAcces($restrictionsAcces)
+    {
+        $this->restrictionAcces = $restrictionsAcces;
+    
+        return $this;
+    }
+    
+    /**
+     * Get restrictionsAcces
+     *
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRestrictionAcces()
     {
@@ -498,5 +528,35 @@ class Session
     
         if (file_exists($file) )
             unlink($file);
+    }
+
+    /**
+     * Set les valeurs du module lié, si il y en a un
+     * 
+     * @return this
+     */
+    public function getDefaultValueFromModule()
+    {
+        //Si il y a bien un module renseigné
+        if(!is_null($this->getModule()))
+        {
+            //Durée
+            if(!is_null($this->getModule()->getDuree()))
+                $this->setDuree($this->getModule()->getDuree());
+            //Horaires
+            if(!empty($this->getModule()->getHorairesType()))
+                $this->setHoraires($this->getModule()->getHorairesType());
+            //Lieu
+            if(!empty($this->getModule()->getLieu()))
+                $this->setLieu($this->getModule()->getLieu());
+            //Description
+            if(!empty($this->getModule()->getDescription()))
+                $this->setDescription($this->getModule()->getDescription());
+            //Nombre de places disponibles
+            if(!empty($this->getModule()->getNombrePlaceDisponible()))
+                $this->setNombrePlaceDisponible($this->getModule()->getNombrePlaceDisponible());
+        }
+        
+        return $this;
     }
 }

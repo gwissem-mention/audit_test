@@ -81,7 +81,9 @@ class RoleManager extends BaseManager
         $datas = $this->findAll();
         $roles = array();
         foreach($datas as $data)
+        {
             $roles[ $data->getRole() ] = $data->getName();
+        }
 
         return $roles;
     }
@@ -105,5 +107,29 @@ class RoleManager extends BaseManager
         }
 
         return $role;
+    }
+
+    /**
+     * Retourne un tableau d'entités de roles en fonction du tableau des noms de role passés en param
+     * 
+     * @param array $nomsRoles Tableaux des noms de roles
+     * 
+     * @return array[\Nodevo\RoleBundle\Entity\Role] Tableau des entités de roles correspondant
+     */
+    public function getRoleByArrayName(array $nomsRoles )
+    {
+        //Récupération de l'ensemble des rôles
+        $datas = $this->findAll();
+        $roles = array();
+        //Récupération des rôles correspondant aux noms passés en param
+        foreach($datas as $data)
+        {
+            if(in_array($data->getRole(), $nomsRoles))
+            {
+                $roles[] = $data;
+            }
+        }
+        
+        return $roles;
     }
 }

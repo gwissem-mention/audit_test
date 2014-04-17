@@ -26,10 +26,11 @@ class SessionController extends Controller
      */
     public function addAction(\HopitalNumerique\ModuleBundle\Entity\Module $module)
     {
-        \Doctrine\Common\Util\Debug::dump($module);die('die');
-        
         $session = $this->get('hopitalnumerique_module.manager.session')->createEmpty();
+        //Valeurs par défaut lors de la création
         $session->setModule( $module );
+        $session->getDefaultValueFromModule();
+        $session->setRestrictionAcces($this->get('nodevo_role.manager.role')->getRoleByArrayName(array('ROLE_AMBASSADEUR_7', 'ROLE_ARS_CMSI_4', 'ROLE_GCS_12')));
 
         return $this->renderForm('hopitalnumerique_module_session', $session, 'HopitalNumeriqueModuleBundle:Session:edit.html.twig' );
     }
@@ -119,7 +120,7 @@ class SessionController extends Controller
                 
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');
-                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_module_module_session') : $this->generateUrl('hopitalnumerique_module_module_session_edit', array( 'id' => $session->getId() ) ) ) );
+                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_module_module_session', array('id' => $session->getModule()->getId())) : $this->generateUrl('hopitalnumerique_module_module_session_edit', array( 'id' => $session->getId() ) ) ) );
             }
         }
 

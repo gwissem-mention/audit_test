@@ -20,4 +20,5 @@ class SessionManager extends BaseManager
     {
         return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
     }
+
 }

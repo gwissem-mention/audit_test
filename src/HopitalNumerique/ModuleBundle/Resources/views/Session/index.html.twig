@@ -19,10 +19,33 @@
 
 {% block toolbarButton %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module') }}" title="Retour à la liste des modules"><i class="fa fa-reply"></i></a>
-    <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module_session_add') }}" title="Ajouter un Session"><i class="fa fa-plus"></i></a>
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module_session_add', {'id' : module.id}) }}" title="Ajouter un Session"><i class="fa fa-plus"></i></a>
 {% endblock %}
 
 {% block body %}
     {{ grid(grid, _self) }}
 {% endblock %}
+
+{# Modification des boutons d'actions des lignes du grid uniquement pour la session #}
+{% block grid_column_actions_cell %}
+    {% set actions = column.getActionsToRender(row) %}
+    <div class="btn-group">
+        {% for action in actions %}
+            {% if app.user|checkAuthorization( path(action.route, column.routeParameters(row, action), false) ) %}
+                {# Si le mot delete est présent dans la route, on modifie le lien pour avoir le delete with confirm #}
+                {% if 'delete' in action.route %}
+                    {% if is_granted("ROLE_ADMINISTRATEUR_1") %}
+	                    <div onclick="deleteWithConfirm('{{ url(action.route, column.routeParameters(row, action), false) }}')" {% for name, value in action.attributes %} {{ name }}="{{ value }}" {% endfor %} >
+	                        {{ action.title|trans }}
+	                    </div>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ url(action.route, column.routeParameters(row, action), false) }}" {% for name, value in action.attributes %} {{ name }}="{{ value }}" {% endfor %}>
+                        {{ action.title|trans }}
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock grid_column_actions_cell %}
 

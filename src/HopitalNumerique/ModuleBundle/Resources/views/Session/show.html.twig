@@ -19,46 +19,70 @@
             </div>
 
             <div class="panel-body" >
-                <p>
-                    <strong>Id : </strong>
-                    {{ session.id }}
-                </p>
-                <p>
-                    <strong>Datesession : </strong>
-                    {{ session.dateSession }}
-                </p>
-                <p>
-                    <strong>Dateouvertureinscription : </strong>
-                    {{ session.dateOuvertureInscription }}
-                </p>
-                <p>
-                    <strong>Datefermetureinscription : </strong>
-                    {{ session.dateFermetureInscription }}
-                </p>
-                <p>
-                    <strong>Horaires : </strong>
-                    {{ session.horaires }}
-                </p>
-                <p>
-                    <strong>Lieu : </strong>
-                    {{ session.lieu }}
-                </p>
-                <p>
-                    <strong>Description : </strong>
-                    {{ session.description }}
-                </p>
-                <p>
-                    <strong>Nombreplacedisponible : </strong>
-                    {{ session.nombrePlaceDisponible }}
-                </p>
-                <p>
-                    <strong>Restrictionacces : </strong>
-                    {{ session.restrictionAcces }}
-                </p>
-                <p>
-                    <strong>Path : </strong>
-                    {{ session.path }}
-                </p>
+                {% if session.module %}
+	                <p>
+	                    <strong>Module concerné : </strong>
+	                    {{ session.module.titre }}
+	                </p>
+                {% endif %}
+                {% if session.Datesession %}
+	                <p>
+	                    <strong>Date de la session: </strong>
+	                    {{ session.dateSession|date('m/d/Y') }}
+	                </p>
+                {% endif %}
+                {% if session.Dateouvertureinscription %}
+	                <p>
+	                    <strong>Date d'ouverture des inscriptions: </strong>
+	                    {{ session.Dateouvertureinscription|date('m/d/Y') }}
+	                </p>
+                {% endif %}
+                {% if session.Datefermetureinscription %}
+	                <p>
+	                    <strong>Date de clôture des inscriptions: </strong>
+	                    {{ session.Datefermetureinscription|date('m/d/Y') }}
+	                </p>
+                {% endif %}
+                {% if session.duree is not empty and session.duree is not null %}
+	                <p>
+	                    <strong>Durée : </strong>
+	                    {{ session.duree.libelle }}
+	                </p>
+                {% endif %}
+                {% if session.horaires %}
+	                <p>
+	                    <strong>Horaires : </strong>
+	                    {{ session.horaires}}
+	                </p>
+                {% endif %}
+                {% if session.lieu %}
+	                <p>
+	                    <strong>Lieu : </strong>
+	                    {{ session.lieu}}
+	                </p>
+                {% endif %}
+                {% if session.description %}
+	                <p>
+	                    <strong>Description : </strong>
+	                    {{ session.description}}
+	                </p>
+                {% endif %}
+                {% if session.Nombreplacedisponible %}
+	                <p>
+	                    <strong>Nombre de places disponibles : </strong>
+	                    {{ session.Nombreplacedisponible}}
+	                </p>
+                {% endif %}
+                {% if session.restrictionAcces %}
+	                <p>
+	                    <strong>Groupes en restrictions d'accès : </strong>
+	                    <ul>
+							{% for key,role in session.restrictionAcces %}
+							    <li>{{ role.name }}</li>
+							{% endfor %}
+						</ul>
+	                </p>
+                {% endif %}
             </div>
         </div>
     </div>
