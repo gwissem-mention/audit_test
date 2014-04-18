@@ -25,7 +25,6 @@ class ModuleManager extends BaseManager
     public function getDatasForGrid( $condition = null )
     {
         $results = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
-        
         return $this->rearangeForProduction( $results );
     }
     

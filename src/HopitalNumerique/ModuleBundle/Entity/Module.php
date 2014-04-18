@@ -169,7 +169,7 @@ class Module
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_formateur", referencedColumnName="usr_id", nullable=true)
      * 
-     * @GRID\Column(field="formateur.nom", options = {"comment" = "Statut pointant sur la table reference avec le code ETAT du module"})
+     * @GRID\Column(field="formateur.nom", options = {"comment" = "Utilisateur s'occupant de la formation"})
      */
     protected $formateur;
 

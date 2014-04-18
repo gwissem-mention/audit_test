@@ -1,16 +1,12 @@
 #Module
+#---Index - grid
 hopitalnumerique_module_module:
     pattern:  /module
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:index" }
     requirements: 
         _method: GET|POST
 
-hopitalnumerique_module_module_add:
-    pattern:  /module/add
-    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:add" }
-    requirements: 
-        _method: GET|POST
-
+#---Fiche
 hopitalnumerique_module_module_show:
     pattern:  /module/show/{id}
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:show",  id: 1 }
@@ -18,6 +14,14 @@ hopitalnumerique_module_module_show:
         id: \d+
         _method: GET
 
+#---Formulaire d'ajout
+hopitalnumerique_module_module_add:
+    pattern:  /module/add
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:add" }
+    requirements: 
+        _method: GET|POST
+
+#---Formulaire d'édition
 hopitalnumerique_module_module_edit:
     pattern:  /module/edit/{id}
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:edit", id: 1 }
@@ -25,13 +29,15 @@ hopitalnumerique_module_module_edit:
         id: \d+
         _method: GET|POST
 
+#---Suppression
 hopitalnumerique_module_module_delete:
     pattern:  /module/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:delete", _format: json }
     requirements: 
         id: \d+
         _method: POST|DELETE
-        
+
+#---Download du fichier lié
 hopitalnumerique_module_module_dowload:
     pattern:  /module/dowload/{id}
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:download", id: 1 }
@@ -39,6 +45,7 @@ hopitalnumerique_module_module_dowload:
         id: \d+
 
 #Session
+#---Index - grid
 hopitalnumerique_module_module_session:
     pattern:  /module/session/{id}
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:index", id: 1 }
@@ -46,13 +53,7 @@ hopitalnumerique_module_module_session:
         _method: GET|POST
         id: \d+
 
-hopitalnumerique_module_module_session_add:
-    pattern:  /module/session/add/{id}
-    defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:add", id: 1 }
-    requirements: 
-        _method: GET|POST
-        id: \d+
-
+#---Fiche
 hopitalnumerique_module_module_session_show:
     pattern:  /module/session/show/{id}
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:show", id: 1 }
@@ -60,6 +61,15 @@ hopitalnumerique_module_module_session_show:
         id: \d+
         _method: GET
 
+#---Formulaire d'ajout
+hopitalnumerique_module_module_session_add:
+    pattern:  /module/session/add/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:add", id: 1 }
+    requirements: 
+        _method: GET|POST
+        id: \d+
+
+#---Formulaire d'édition
 hopitalnumerique_module_module_session_edit:
     pattern:  /module/session/edit/{id}
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:edit", id: 1 }
@@ -67,15 +77,49 @@ hopitalnumerique_module_module_session_edit:
         id: \d+
         _method: GET|POST
 
+#---Suppression
 hopitalnumerique_module_module_session_delete:
     pattern:  /module/session/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:delete", _format: json }
     requirements: 
         id: \d+
         _method: POST|DELETE
-        
+
+#---Download du fichier lié
 hopitalnumerique_module_module_session_dowload:
     pattern:  /module/session/dowload/{id}
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:download", id: 1 }
     requirements:
         id: \d+
+        
+#Inscription
+#---Index - grid
+hopitalnumerique_module_module_session_inscription:
+    pattern:  /module/session/inscription/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Inscription:index", id: 1 }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+#---Accepter inscription
+hopitalnumerique_module_module_session_inscription_accepter:
+    pattern:  /module/session/inscription/accepter/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Inscription:accepterInscription", id: 1 }
+    requirements:
+        id: \d+
+
+#---Refuser inscription
+hopitalnumerique_module_module_session_inscription_refuser:
+    pattern:  /module/session/inscription/refuser/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Inscription:refuserInscription", id: 1 }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+#---Annuler inscription
+hopitalnumerique_module_module_session_inscription_annuler:
+    pattern:  /module/session/inscription/annuler/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Inscription:annulerInscription", id: 1 }
+    requirements:
+        id: \d+
+        _method: GET|POST

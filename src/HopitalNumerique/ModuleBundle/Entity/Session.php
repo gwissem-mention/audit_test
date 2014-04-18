@@ -39,6 +39,16 @@ class Session
     protected $module;
     
     /**
+     * Liste des inscriptions liées au module
+     *
+     * @var /HopitalNumerique/ModuleBundle/Entity/Inscription
+     *
+     * @ORM\OneToMany(targetEntity="Inscription", mappedBy="session", cascade={"persist", "remove" })
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    protected $inscriptions;
+    
+    /**
      * @var \DateTime
      *
      * @Assert\NotBlank(message="La date de la session ne peut pas être vide.")
@@ -185,7 +195,7 @@ class Session
     {
         $this->module = $module;
     }
-    
+
     /**
      * Set dateSession
      *

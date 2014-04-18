@@ -61,7 +61,14 @@ class SessionGrid extends Grid implements IGrid
     public function setActionsButtons()
     {
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_module_module_session_show' ) );
-        $this->addActionButton( new Action\EditButton( 'hopitalnumerique_module_module_session_edit' ) );
+        
+        $actionListeInscrits = new Action\ShowButton('hopitalnumerique_module_module_session_inscription');
+        $actionListeInscrits->setAttributes( array(
+                'class'=>'btn btn-primary fa fa-users',
+                'title' => 'Afficher les inscrits',
+        ));
+        $this->addActionButton( $actionListeInscrits );
+
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_module_module_session_edit' ) );
         $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_delete' ) );
 

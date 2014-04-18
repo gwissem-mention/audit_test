@@ -5,6 +5,11 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-module-session-index.css" filter="cssrewrite"
+        'bundles/hopitalnumeriquemodule/css/session/index.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
     {{ block('grid_stylesheets')}}
 {% endblock %}
 
@@ -23,7 +28,9 @@
 {% endblock %}
 
 {% block body %}
-    {{ grid(grid, _self) }}
+    <div id="grid_session">
+        {{ grid(grid, _self) }}
+    </div>
 {% endblock %}
 
 {# Modification des boutons d'actions des lignes du grid uniquement pour la session #}

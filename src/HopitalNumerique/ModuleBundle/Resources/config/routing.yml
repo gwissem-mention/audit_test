@@ -1,3 +1,5 @@
 hopital_numerique_module_admin:
     resource: "@HopitalNumeriqueModuleBundle/Resources/config/routing/routing_admin.yml"
     prefix:   /admin
+
+
