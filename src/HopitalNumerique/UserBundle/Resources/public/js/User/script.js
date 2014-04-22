@@ -62,7 +62,9 @@ $(document).ready(function() {
     {
         $('#autre_etablissement_sante_collapse').click();
     }
-    
+
+    //bind de Validation Engine
+    $('form.toValidate').validationEngine();
 });
 
 /**

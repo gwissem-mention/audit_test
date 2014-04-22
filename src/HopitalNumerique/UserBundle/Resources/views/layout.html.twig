@@ -12,8 +12,8 @@
         <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
-            {% stylesheets output="compiled/login.css" filter="cssrewrite"
-                'bundles/nodevoadmin/css/styles.min.css'
+            {% stylesheets output="compiled/login.css" filter="cssrewrite, ?yui_css"
+                'bundles/nodevoadmin/css/avant.css'
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
@@ -43,7 +43,7 @@
         </div>
         {% block javascripts %}
             {% javascripts output="compiled/login.js"
-                'bundles/nodevoadmin/js/jquery-1.10.2.min.js'
+                "@jquery_js"
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}

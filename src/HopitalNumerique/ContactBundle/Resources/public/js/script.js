@@ -55,6 +55,9 @@ $(document).ready(function() {
     
 	//Chargement des masks du formulaire
     chargementMaskFormulaire();
+
+    //bind de Validation Engine
+    $('form.toValidate').validationEngine();
 });
 
 /**
