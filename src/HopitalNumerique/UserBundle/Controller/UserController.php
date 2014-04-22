@@ -30,8 +30,8 @@ class UserController extends Controller
             
             //Tableau des options à passer à la vue twig
             $options = array(
-                    //Récupération de l'article des conditions générales
-                    'conditionsGenerales' => array('conditionsGenerales' => $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => 264 )))
+                //Récupération de l'article des conditions générales
+                'conditionsGenerales' => array('conditionsGenerales' => $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => 264 )))
             );
             
             //Récupérations de la liste des catégories des conditions générales
