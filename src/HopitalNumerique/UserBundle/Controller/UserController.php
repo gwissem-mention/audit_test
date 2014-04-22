@@ -35,7 +35,8 @@ class UserController extends Controller
             );
             
             //Récupérations de la liste des catégories des conditions générales
-            $categories = $options['conditionsGenerales']['conditionsGenerales']->getTypes();
+            $tmp = $options['conditionsGenerales']['conditionsGenerales'];
+            $categories = $tmp->getTypes();
             
             //Récupération de la première catégorie des conditions générales (en principe il ne devrait y en avoir qu'une)
             $options['conditionsGenerales']['categorie'] = $categories[0];
