@@ -1,12 +1,14 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Contractualisation{% endblock %}
+
 {% block h1Title %}
     Fiche d'un fichier de contractualisation
 {% endblock %}
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-user-contractualisation-show.css" filter="cssrewrite"
+    {% stylesheets output="compiled/hopitalnumerique-user-contractualisation-show.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />

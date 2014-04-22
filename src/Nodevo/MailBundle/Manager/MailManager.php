@@ -427,7 +427,7 @@ class MailManager extends BaseManager
                             ->setSubject ( $mail->getObjet() )
                             ->setFrom ( $from )
                             ->setTo ( $user->getEmail() )
-                            ->setBcc( $cci )
+                            ->setBcc( ($mail->getId() === 1 || $mail->getId() === 2) ? null : $cci )
                             ->setBody ( $body, 'text/html' );
     }
 }

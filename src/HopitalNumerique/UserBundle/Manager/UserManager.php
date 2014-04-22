@@ -70,6 +70,16 @@ class UserManager extends BaseManager
     }
 
     /**
+     * Override : Récupère les données Etablissement pour le grid sous forme de tableau
+     *
+     * @return array
+     */
+    public function getEtablissementForGrid( $condition = null )
+    {
+        return $this->getRepository()->getEtablissementForGrid( $condition )->getQuery()->getResult();
+    }
+
+    /**
      * Modifie l'état de tous les users
      *
      * @param array     $users Liste des utilisateurs
@@ -138,6 +148,14 @@ class UserManager extends BaseManager
     {
         return $this->getRepository()->getAmbassadeursByRegionAndProduction( $region, $objet )->getQuery()->getResult();
     }
+
+    /**
+     * [getUsersGroupeEtablissement description]
+     *
+     * @param  array  $criteres [description]
+     *
+     * @return [type]
+     */
     public function getUsersGroupeEtablissement($criteres = array())
     {
         return $this->getRepository()->getUsersGroupeEtablissement($criteres)->getQuery()->getResult();
@@ -168,8 +186,6 @@ class UserManager extends BaseManager
         return $this->getRepository()->findUsersByRoleAndRegion($idregion, $role)->getQuery()->getOneOrNullResult();
     }
 
-
-    
     /**
      * Retourne un unique CMSI.
      *

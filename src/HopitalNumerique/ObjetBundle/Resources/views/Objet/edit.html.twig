@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Publication{% endblock %}
+
 {% block h1Title %}
     {% if objet.id %}
         Editer une publication
@@ -10,15 +12,15 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-objet-objet-edit.css" filter="cssrewrite"
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+    {% stylesheets output="compiled/hopitalnumerique-objet-objet-edit.css" filter="cssrewrite, ?yui_css" 
+        "@select2_css" 
+        "@fancybox_css"
+        "@validationEngine_css"
+        "@jquery_toggles_css"
         'bundles/hopitalnumeriqueuser/js/nSelect/style.css'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
-        'bundles/nodevoadmin/plugins/form-nestable/jquery.nestable.css'
+        'bundles/nodevoadmin/css/jquery.nestable.css'
         'bundles/hopitalnumeriqueobjet/css/style.css'
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
-        'bundles/nodevoadmin/plugins/form-toggle/toggles.css'
+        'bundles/nodevoadmin/css/toggles.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -26,18 +28,16 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-objet-objet-edit.js"
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
+    {% javascripts output="compiled/hopitalnumerique-objet-objet-edit.js" 
+        "@select2_js"
+        "@fancybox_js" 
+        "@validationEngine_js"
+        "@json_js"
+        "@jquery_toggles_js"
+        "@nestable_js"
+        "@tinymce_js"
         'bundles/hopitalnumeriqueuser/js/nSelect/nSelect.min.js'
-        'bundles/nodevotools/js/json.js'
-        'bundles/nodevoadmin/plugins/tinymce/tinymce.min.js'
-        'bundles/nodevoadmin/plugins/tinymce/tinymce.fr_FR.js'
-        'bundles/nodevoadmin/plugins/form-toggle/toggle.min.js'
         'bundles/hopitalnumeriqueobjet/js/script.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
-        'bundles/nodevoadmin/plugins/form-nestable/jquery.nestable.min.js'
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
         'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
         'bundles/nodevogestionnairemedia/js/MoxieManager.js'
     %}

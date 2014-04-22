@@ -1,11 +1,12 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Etablissements{% endblock %}
+
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-etablissement-etablissement-edit.js"
+        "@validationEngine_js"
         'bundles/hopitalnumeriqueetablissement/js/script.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -13,8 +14,8 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-etablissement-etablissement-edit.css" filter="cssrewrite"
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+    {% stylesheets output="compiled/hopitalnumerique-etablissement-etablissement-edit.css" filter="cssrewrite, ?yui_css"
+        "@validationEngine_css"
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}

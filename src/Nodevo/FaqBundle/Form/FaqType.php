@@ -18,7 +18,8 @@ class FaqType extends AbstractType
             ->add('reponse', 'textarea', array(
                 'required'   => true, 
                 'label'      => 'Réponse',
-                'label_attr' => array('class'=>'col-md-12')
+                'label_attr' => array('class'=>'col-md-12'),
+                'attr'       => array('class'=>'tinyMce')
             ))
             ->add('order', 'integer', array(
                 'label' => 'Ordre d\'affichage'

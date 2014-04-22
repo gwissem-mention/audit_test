@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Utilisateurs{% endblock %}
+
 {% block h1Title %}
     {% if user.id > 0 %}
         Editer un utilisateur
@@ -10,10 +12,9 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-user-user-edit.css" filter="cssrewrite"
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+    {% stylesheets output="compiled/hopitalnumerique-user-user-edit.css" filter="cssrewrite, ?yui_css" 
+        "@select2_css" 
+        "@validationEngine_css"
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -21,12 +22,11 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-user-user-edit.js"
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
+    {% javascripts output="compiled/hopitalnumerique-user-user-edit.js" 
+        "@select2_js" 
+        "@validationEngine_js"
+        "@jquery_maskedinput_js"
         'bundles/hopitalnumeriqueuser/js/User/script.js'
-        'bundles/hopitalnumeriquecore/js/jquery.maskedinput.min.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

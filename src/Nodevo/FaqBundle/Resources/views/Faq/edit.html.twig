@@ -1,10 +1,11 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Faq{% endblock %}
+
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/nodevo-faq-faq-edit.css" filter="cssrewrite"
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+    {% stylesheets output="compiled/nodevo-faq-faq-edit.css" filter="cssrewrite, ?yui_css" 
+        "@select2_css" 
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -12,14 +13,20 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/nodevo-faq-faq-edit.js"
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
-        'bundles/nodevoadmin/plugins/tinymce/tinymce.min.js'
-        'bundles/nodevoadmin/plugins/tinymce/tinymce.fr_FR.js'
+    {% javascripts output="compiled/nodevo-faq-faq-edit.js" 
+        "@select2_js" 
+        "@tinymce_js"
         'bundles/nodevofaq/js/script.js'
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    <script type="text/javascript">
+        NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
+        NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
+    </script>
 {% endblock %}
 
 {% block h1Title %}

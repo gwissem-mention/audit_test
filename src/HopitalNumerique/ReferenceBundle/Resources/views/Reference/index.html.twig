@@ -13,6 +13,8 @@
     {{ block('grid_javascripts')}}
 {% endblock %}
 
+{% block title %}{{parent()}} - Référentiel{% endblock %}
+
 {% block h1Title %}
     Liste des référentiels
 {% endblock %}

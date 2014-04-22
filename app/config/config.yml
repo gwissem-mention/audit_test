@@ -1,6 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: assetic.yml }
 
 framework:
     translator:      { fallback: "%locale%" }
@@ -27,36 +28,6 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-
-# Assetic Configuration
-assetic:
-    debug:          "%kernel.debug%"
-    use_controller: false
-    bundles:
-        - NodevoAdminBundle
-        - NodevoMenuBundle
-        - NodevoGridBundle
-        - NodevoAclBundle
-        - NodevoRoleBundle
-        - NodevoMailBundle
-        - NodevoFaqBundle
-        - NodevoContactBundle
-        - NodevoGestionnaireMediaBundle
-        - HopitalNumeriqueInterventionBundle
-        - HopitalNumeriqueUserBundle
-        - HopitalNumeriqueReferenceBundle
-        - HopitalNumeriqueEtablissementBundle
-        - HopitalNumeriqueCoreBundle
-        - HopitalNumeriqueObjetBundle
-        - HopitalNumeriqueQuestionnaireBundle
-        - HopitalNumeriqueAccountBundle
-        - HopitalNumeriqueRechercheBundle
-        - HopitalNumeriqueRegistreBundle
-        - HopitalNumeriquePublicationBundle
-        - HopitalNumeriqueFaqBundle
-        - FOSUserBundle
-    filters:
-        cssrewrite: ~
 
 # Doctrine Configuration
 doctrine:

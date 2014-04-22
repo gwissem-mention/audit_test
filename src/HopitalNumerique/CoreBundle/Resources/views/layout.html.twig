@@ -13,27 +13,26 @@
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
-            {% stylesheets output="compiled/main-front.css" filter="cssrewrite"
-                'bundles/hopitalnumeriquecore/css/bootstrap.min.css'
-                'bundles/hopitalnumeriquecore/css/bootstrap-theme.min.css'
+            {% stylesheets output="compiled/main-front.css" filter="cssrewrite, ?yui_css" 
+                "@bootstrap_css"
+                'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
                 'bundles/hopitalnumeriquecore/css/layout.css'
-                'bundles/hopitalnumeriquecore/js/jqueryui.min.css'
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
         {% endblock %}
 
         {% block javascripts %}
-            {% javascripts output="compiled/main-front.js"
-                'bundles/hopitalnumeriquecore/js/jquery-1.11.0.min.js'
-                'bundles/hopitalnumeriquecore/js/jqueryui-1.10.3.min.js'
-                'bundles/hopitalnumeriquecore/js/jqueryui-fr.js'
-                'bundles/hopitalnumeriquecore/js/bootstrap.min.js'
+            {% javascripts output="compiled/main-front.js" 
+                "@jquery_js" 
+                "@jquery_ui_js"
+                "@bootstrap_js"
                 'bundles/hopitalnumeriquecore/js/script.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
         {% endblock %}
+
         <script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

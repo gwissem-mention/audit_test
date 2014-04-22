@@ -26,7 +26,7 @@ abstract class Grid implements IGrid
     protected $_source               = null;
     protected $_sourceType           = self::SOURCE_TYPE_ENTITY;
     protected $_sourceCondition      = null;
-    protected $_maxResults           = 1000;
+    protected $_maxResults           = null;
     protected $_limits               = array(10, 20, 50, 100);
     protected $_defaultLimit         = 20;
     protected $_noDataMessage        = ' - Aucun élément à afficher - ';
@@ -350,7 +350,7 @@ abstract class Grid implements IGrid
                     //Edit : we can change the functionName called in the manager : default = getDatasForGrid
                     $manager = $this->_container->get( $this->_source );
 
-                    //Récupération de la fonction a appellée pour la récupération des données du grid vmo
+                    //Récupération de la fonction a appellée pour la récupération des données du grid
                     $datas = call_user_func( array($manager, $this->_functionName), $this->_sourceCondition );
 
                     if( !empty($datas) && !is_null($datas[0]['id']) ){

@@ -6,11 +6,11 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-recherche-search-index.css" filter="cssrewrite"
+    {% stylesheets output="compiled/hopitalnumerique-recherche-search-index.css" filter="cssrewrite, ?yui_css"
+        "@fancybox_css" 
         'bundles/hopitalnumeriquerecherche/css/style.css'
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -19,10 +19,10 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-recherche-search-index.js"
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        "@fancybox_js" 
+        "@jquery_cookie_js"
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
-        'bundles/hopitalnumeriquerecherche/js/jquery.cookie.js'
         'bundles/hopitalnumeriquerecherche/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

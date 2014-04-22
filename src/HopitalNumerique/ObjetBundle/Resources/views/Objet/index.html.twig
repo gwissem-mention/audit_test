@@ -13,6 +13,8 @@
     {{ block('grid_javascripts')}}
 {% endblock %}
 
+{% block title %}{{parent()}} - Publication{% endblock %}
+
 {% block h1Title %}
     Gestion des publications
 {% endblock %}

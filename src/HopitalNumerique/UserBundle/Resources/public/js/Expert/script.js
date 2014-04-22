@@ -7,6 +7,9 @@ $(document).ready(function() {
         'scrolling' : 'no',
         'modal'     : true
     });
+
+    //bind de Validation Engine
+    $('form.toValidate').validationEngine();
 });
 
 function deleteAllReponses(path)

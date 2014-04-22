@@ -82,12 +82,13 @@ class ObjetType extends AbstractType
             ))
             ->add('synthese', 'textarea', array(
                 'required' => false, 
-                'label'    => 'Synthèse'
+                'label'    => 'Synthèse',
+                'attr'     => array('class' => 'tinyMce')
             ))
             ->add('resume', 'textarea', array(
                 'required' => true, 
                 'label'    => 'Résumé',
-                'attr'     => array('class' => $this->_constraints['resume']['class'] )
+                'attr'     => array('class' => 'tinyMce '.$this->_constraints['resume']['class'] )
             ))
             ->add('file', 'file', array(
                 'required' => false, 

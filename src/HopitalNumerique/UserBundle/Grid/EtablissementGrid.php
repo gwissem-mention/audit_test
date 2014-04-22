@@ -16,7 +16,9 @@ class EtablissementGrid extends Grid implements IGrid
     */
     public function setConfig()
     {
-        $this->setSource( 'HopitalNumeriqueUserBundle:User' );
+        $this->setSource( 'hopitalnumerique_user.manager.user' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setFunctionName('getEtablissementForGrid');
         $this->setNoDataMessage('Aucun établissement "autre" référencé.');
         $this->setButtonSize(43);
     }
@@ -30,8 +32,11 @@ class EtablissementGrid extends Grid implements IGrid
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('prenom', 'Prénom') );
         
-        $regionColonne = new Column\AssocColumn('region.libelle', 'Région');
+        $regionColonne = new Column\TextColumn('region', 'Région');
         $regionColonne->setSize( 150 );
+        $regionColonne->setFilterType( 'select' );
+        $regionColonne->setSelectFrom( 'source' );
+        $regionColonne->setOperatorsVisible( false );
         $this->addColonne( $regionColonne );
 
         $this->addColonne( new Column\TextColumn('autreStructureRattachementSante', 'Etablissement autre') );
@@ -39,32 +44,6 @@ class EtablissementGrid extends Grid implements IGrid
         $archiverColonne = new Column\BooleanColumn('archiver', 'Archivé');
         $archiverColonne->setSize(100);
         $this->addColonne( $archiverColonne );
-
-        /* Colonnes inactives */
-        $this->addColonne( new Column\BlankColumn('email') );
-        $this->addColonne( new Column\BlankColumn('enabled') );
-        $this->addColonne( new Column\BlankColumn('password') );
-        $this->addColonne( new Column\BlankColumn('confirmationToken') );
-        $this->addColonne( new Column\BlankColumn('locked') );
-        $this->addColonne( new Column\BlankColumn('expiresAt') );
-        $this->addColonne( new Column\BlankColumn('credentialsExpired') );
-        $this->addColonne( new Column\BlankColumn('dateInscription') );
-        $this->addColonne( new Column\BlankColumn('telephonePortable') );
-        $this->addColonne( new Column\BlankColumn('nomStructure') );
-        $this->addColonne( new Column\BlankColumn('lock') );
-        $this->addColonne( new Column\BlankColumn('usernameCanonical') );
-        $this->addColonne( new Column\BlankColumn('emailCanonical') );
-        $this->addColonne( new Column\BlankColumn('salt') );
-        $this->addColonne( new Column\BlankColumn('lastLogin') );
-        $this->addColonne( new Column\BlankColumn('passwordRequestedAt') );
-        $this->addColonne( new Column\BlankColumn('expired') );
-        $this->addColonne( new Column\BlankColumn('roles') );
-        $this->addColonne( new Column\BlankColumn('credentialsExpireAt') );
-        $this->addColonne( new Column\BlankColumn('telephoneDirect') );
-        $this->addColonne( new Column\BlankColumn('contactAutre') );
-        $this->addColonne( new Column\BlankColumn('fonctionDansEtablissementSante') );
-        $this->addColonne( new Column\BlankColumn('fonctionStructure') );
-        $this->addColonne( new Column\BlankColumn('credentialsExpireAt') );
     }
 
     /**

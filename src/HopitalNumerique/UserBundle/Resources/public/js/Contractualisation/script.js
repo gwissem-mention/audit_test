@@ -21,6 +21,8 @@ $(document).ready(function() {
         $('#hopitalnumerique_user_contractualisation_file').val('');
     });
 	
+    //bind de Validation Engine
+    $('form.toValidate').validationEngine();
 });
 
 function gestionAffichageDateRenouvellement(ID_DOCUMENT_CONTRACTUALISATION_TYPE_AUTRES)

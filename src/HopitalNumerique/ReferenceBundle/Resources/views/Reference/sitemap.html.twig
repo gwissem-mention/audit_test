@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Référentiel{% endblock %}
+
 {% block h1Title %}
     Arborescence du référentiel générique
 {% endblock %}
@@ -15,7 +17,7 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-reference-reference-sitemap.css" filter="cssrewrite"
+    {% stylesheets output="compiled/hopitalnumerique-reference-reference-sitemap.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriquereference/css/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
