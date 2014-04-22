@@ -1,48 +1,45 @@
 $(document).ready(function() {
-    tinymce.PluginManager.load('table', '/bundles/nodevoadmin/plugins/tinymce/plugins/table/plugin.min.js');
-    tinymce.PluginManager.load('code', '/bundles/nodevoadmin/plugins/tinymce/plugins/code/plugin.min.js');
-    tinymce.PluginManager.load('pagebreak', '/bundles/nodevoadmin/plugins/tinymce/plugins/pagebreak/plugin.min.js');
-    tinymce.PluginManager.load('importcss', '/bundles/nodevoadmin/plugins/tinymce/plugins/importcss/plugin.min.js');
-    tinymce.PluginManager.load('textcolor', '/bundles/hopitalnumeriqueobjet/js/ObjetTextColor/plugin.min.js');
-    tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/ObjetAddPublication2/plugin.min.js');
-    tinymce.PluginManager.load('image', '/bundles/nodevoadmin/plugins/tinymce/plugins/image/plugin.min.js');
-    tinymce.PluginManager.load('link', '/bundles/nodevoadmin/plugins/tinymce/plugins/link/plugin.min.js');
-    tinymce.PluginManager.load('media', '/bundles/nodevoadmin/plugins/tinymce/plugins/media/plugin.min.js');
-    NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
-
-    //Save auto : toutes les 10 minutes  
-    //setInterval(saveAutomatique, 600000);
+    // tinymce.PluginManager.load('table', '/bundles/nodevoadmin/plugins/tinymce/plugins/table/plugin.min.js');
+    // tinymce.PluginManager.load('code', '/bundles/nodevoadmin/plugins/tinymce/plugins/code/plugin.min.js');
+    // tinymce.PluginManager.load('pagebreak', '/bundles/nodevoadmin/plugins/tinymce/plugins/pagebreak/plugin.min.js');
+    // tinymce.PluginManager.load('importcss', '/bundles/nodevoadmin/plugins/tinymce/plugins/importcss/plugin.min.js');
+    // tinymce.PluginManager.load('textcolor', '/bundles/hopitalnumeriqueobjet/js/ObjetTextColor/plugin.min.js');
+    // tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/ObjetAddPublication2/plugin.min.js');
+    // tinymce.PluginManager.load('image', '/bundles/nodevoadmin/plugins/tinymce/plugins/image/plugin.min.js');
+    // tinymce.PluginManager.load('link', '/bundles/nodevoadmin/plugins/tinymce/plugins/link/plugin.min.js');
+    // tinymce.PluginManager.load('media', '/bundles/nodevoadmin/plugins/tinymce/plugins/media/plugin.min.js');
+    // NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
     
-    tinyMCE.init({
-        selector     : "textarea",
-        theme        : "modern",
-        theme_url    : '/bundles/nodevoadmin/plugins/tinymce/themes/modern/theme.min.js',
-        skin_url     : '/bundles/nodevoadmin/plugins/tinymce/skins/lightgray',
-        plugins      : 'moxiemanager image table code textcolor pagebreak importcss link publication media',
-        height       : 210,
-        menubar      : false,
-        content_css  : '/bundles/hopitalnumeriqueobjet/css/wysiwyg.css',
-        toolbar1     : "code | undo redo cut copy paste | pagebreak | link | publication | insertfile image media ",
-        toolbar2     : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
-        style_formats: [
-            {title: 'Titres', items: [
-                {title: 'Titre 2', block: 'h2'},
-                {title: 'Titre 3', block: 'h3'},
-                {title: 'Titre 4', block: 'h4'},
-                {title: 'Titre 5', block: 'h5'},
-                {title: 'Titre 6', block: 'h6'}
-            ]},
-            {title: 'Blocs', items: [
-                {title: 'Paragraphe', block: 'p'}
-            ]}
-        ],
-        importcss_append: true,
-        importcss_groups: [
-            {title: 'Styles personnalisés'}
-        ],
-        relative_urls:false,
-        urlPublication : "/admin/objet/getObjets"
-    });
+    // tinyMCE.init({
+    //     selector     : "textarea",
+    //     theme        : "modern",
+    //     theme_url    : '/bundles/nodevoadmin/plugins/tinymce/themes/modern/theme.min.js',
+    //     skin_url     : '/bundles/nodevoadmin/plugins/tinymce/skins/lightgray',
+    //     plugins      : 'moxiemanager image table code textcolor pagebreak importcss link publication media',
+    //     height       : 210,
+    //     menubar      : false,
+    //     content_css  : '/bundles/hopitalnumeriqueobjet/css/wysiwyg.css',
+    //     toolbar1     : "code | undo redo cut copy paste | pagebreak | link | publication | insertfile image media ",
+    //     toolbar2     : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
+    //     style_formats: [
+    //         {title: 'Titres', items: [
+    //             {title: 'Titre 2', block: 'h2'},
+    //             {title: 'Titre 3', block: 'h3'},
+    //             {title: 'Titre 4', block: 'h4'},
+    //             {title: 'Titre 5', block: 'h5'},
+    //             {title: 'Titre 6', block: 'h6'}
+    //         ]},
+    //         {title: 'Blocs', items: [
+    //             {title: 'Paragraphe', block: 'p'}
+    //         ]}
+    //     ],
+    //     importcss_append: true,
+    //     importcss_groups: [
+    //         {title: 'Styles personnalisés'}
+    //     ],
+    //     relative_urls:false,
+    //     urlPublication : "/admin/objet/getObjets"
+    // });
 
     //gestion du bouton delete : changement du fichier uploadé
     $('.deleteUploadedFile').on('click',function(){

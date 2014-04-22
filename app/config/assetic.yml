@@ -35,6 +35,11 @@ assetic:
             jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.8.jar
     assets:
         #JS
+        tinymce_js:
+            inputs:
+                - "bundles/nodevotools/js/tinymce/tinymce.min.js"
+                - "bundles/nodevotools/js/tinymce/tinymce.fr_FR.js"
+                - "bundles/hopitalnumeriquecore/js/tinymce.js"
         jquery_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery/dist/jquery.min.js"

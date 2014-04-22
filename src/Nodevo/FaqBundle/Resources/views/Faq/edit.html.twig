@@ -15,12 +15,18 @@
     {{parent()}}
     {% javascripts output="compiled/nodevo-faq-faq-edit.js" 
         "@select2_js" 
-        'bundles/nodevoadmin/plugins/tinymce/tinymce.min.js'
-        'bundles/nodevoadmin/plugins/tinymce/tinymce.fr_FR.js'
+        "@tinymce_js"
         'bundles/nodevofaq/js/script.js'
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    <script type="text/javascript">
+        NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
+        NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
+    </script>
 {% endblock %}
 
 {% block h1Title %}
