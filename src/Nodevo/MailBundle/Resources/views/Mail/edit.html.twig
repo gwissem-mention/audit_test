@@ -11,16 +11,16 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/nodevo-mail-mail-edit.js"
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+        "@validationEngine_js"
+        'bundles/nodevomail/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/nodevo-mail-mail-edit.css" filter="cssrewrite"
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+    {% stylesheets output="compiled/nodevo-mail-mail-edit.css" filter="cssrewrite, ?yui_css"
+        "@validationEngine_css"
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}

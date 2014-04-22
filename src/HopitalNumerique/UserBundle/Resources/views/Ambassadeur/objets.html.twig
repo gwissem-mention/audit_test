@@ -6,10 +6,9 @@
 {% block stylesheets %}
     {{ parent() }}
     {{ block('grid_stylesheets')}}
-    {% stylesheets output="compiled/hopitalnumerique-user-ambassadeur-objets.css" filter="cssrewrite"
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+    {% stylesheets output="compiled/hopitalnumerique-user-ambassadeur-objets.css" filter="cssrewrite, ?yui_css" 
+        "@select2_css" 
+        "@fancybox_css" 
         'bundles/hopitalnumeriqueuser/js/nSelect/style.css'
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
     %}
@@ -20,9 +19,9 @@
 {% block javascripts %}
     {{ parent() }}
     {{ block('grid_javascripts')}}
-    {% javascripts output="compiled/hopitalnumerique-user-ambassadeur-objets.js"
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
+    {% javascripts output="compiled/hopitalnumerique-user-ambassadeur-objets.js" 
+        "@select2_js" 
+        "@fancybox_js" 
         'bundles/hopitalnumeriqueuser/js/nSelect/nSelect.min.js'
         'bundles/hopitalnumeriqueuser/js/Ambassadeur/objets.js'
     %}

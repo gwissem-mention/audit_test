@@ -2,9 +2,8 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/nodevo-faq-faq-edit.css" filter="cssrewrite"
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+    {% stylesheets output="compiled/nodevo-faq-faq-edit.css" filter="cssrewrite, ?yui_css" 
+        "@select2_css" 
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -12,8 +11,8 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/nodevo-faq-faq-edit.js"
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
+    {% javascripts output="compiled/nodevo-faq-faq-edit.js" 
+        "@select2_js" 
         'bundles/nodevoadmin/plugins/tinymce/tinymce.min.js'
         'bundles/nodevoadmin/plugins/tinymce/tinymce.fr_FR.js'
         'bundles/nodevofaq/js/script.js'

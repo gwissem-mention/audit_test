@@ -74,4 +74,7 @@ $(document).ready(function() {
     //on cache les params s'ils ne sont pas nécessaire
     if( $('#nodevo_menu_item_routeParameters div').length == 0 )
         $('#nodevo_menu_item_routeParameters').parent().parent().hide();
+
+    //bind de Validation Engine
+    $('form.toValidate').validationEngine();
 });

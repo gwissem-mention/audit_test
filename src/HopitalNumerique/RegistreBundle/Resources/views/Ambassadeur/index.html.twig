@@ -6,9 +6,9 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-registre-ambassadeur-index.css" filter="cssrewrite"
+    {% stylesheets output="compiled/hopitalnumerique-registre-ambassadeur-index.css" filter="cssrewrite, ?yui_css"
+        "@fancybox_css" 
         'bundles/hopitalnumeriqueregistre/css/style.css'
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -17,8 +17,8 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-registre-ambassadeur-index.js"
-        'bundles/nodevotools/js/json.js'
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        "@fancybox_js" 
+        "@json_js"
         'bundles/hopitalnumeriqueregistre/js/raphael.js'
         'bundles/hopitalnumeriqueregistre/js/carte_departement.js'
         'bundles/hopitalnumeriqueregistre/js/script.js'

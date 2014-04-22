@@ -147,6 +147,9 @@ $(document).ready(function() {
     $("#hopitalnumerique_objet_objet_roles").nSelect({
         formatNoMatches : function(){ return 'Aucune donnée trouvée'; }
     });
+
+    //bind de Validation Engine
+    $('form.toValidate').validationEngine();
 });
 
 $(window).load(function(){

@@ -3,12 +3,11 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/nodevo-menu-item-edit.js"
-        'bundles/nodevoadmin/js/bootstrap-iconpicker.min.js'
+        "@select2_js" 
+        "@validationEngine_js"
+        "@fancybox_js"
+        "@bootstrap_iconpicker_js"
         'bundles/nodevomenu/js/itemForm.js'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
         'bundles/hopitalnumeriqueobjet/js/popup-menu.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -17,12 +16,11 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/nodevo-menu-item-edit.css" filter="cssrewrite"
-        'bundles/nodevoadmin/css/bootstrap-iconpicker.min.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
+    {% stylesheets output="compiled/nodevo-menu-item-edit.css" filter="cssrewrite" 
+        "@select2_css" 
+        "@validationEngine_css"
+        "@fancybox_css"
+        "@bootstrap_iconpicker_css"
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
