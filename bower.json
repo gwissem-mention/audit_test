@@ -26,6 +26,7 @@
     "bootstrap-iconpicker": "*",
     "fontawesome": "~4.0.3",
     "Nestable": "https://github.com/dbushell/Nestable.git",
-    "jquery-nicescroll": "*"
+    "jquery-nicescroll": "*",
+    "enquire": "~2.1.0"
   }
 }
