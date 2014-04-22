@@ -77,4 +77,23 @@ class InscriptionManager extends BaseManager
         //save
         $this->_em->flush();
     }
+    
+    /**
+     * Modifie l'état de toutes les participations
+     *
+     * @param array     $inscriptions Liste des inscriptions
+     * @param Reference $ref          RefStatut à mettre
+     *
+     * @return empty
+     */
+    public function toogleEtatParticipation( $inscriptions, $ref )
+    {
+        foreach($inscriptions as $inscription) {
+            $inscription->setEtatParticipation( $ref );
+            $this->_em->persist( $inscription );
+        }
+    
+        //save
+        $this->_em->flush();
+    }
 }

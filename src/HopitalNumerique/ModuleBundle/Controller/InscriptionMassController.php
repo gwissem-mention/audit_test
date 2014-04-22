@@ -4,6 +4,7 @@ namespace HopitalNumerique\ModuleBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use HopitalNumerique\ModuleBundle\HopitalNumeriqueModuleBundle;
 
 /**
  * Inscription des actions de mass controller.
@@ -23,7 +24,7 @@ class InscriptionMassController extends Controller
      */
     public function accepterInscriptionMassAction( $primaryKeys, $allPrimaryKeys )
     {
-        return $this->toggleEtatInscription($primaryKeys, $allPrimaryKeys, 332);
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 332, 'inscription');
     }
     
     /**
@@ -36,7 +37,7 @@ class InscriptionMassController extends Controller
      */
     public function refuserInscriptionMassAction( $primaryKeys, $allPrimaryKeys )
     {
-        return $this->toggleEtatInscription($primaryKeys, $allPrimaryKeys, 333);
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 333, 'inscription');
     }
     
     /**
@@ -49,18 +50,39 @@ class InscriptionMassController extends Controller
      */
     public function annulerInscriptionMassAction( $primaryKeys, $allPrimaryKeys )
     {
-        return $this->toggleEtatInscription($primaryKeys, $allPrimaryKeys, 334);
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 334, 'inscription');
+    }
+    
+    /**
+     * Action de masse sur l'état de participation
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function aParticiperParticipationMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 336, 'participation');
+    }
+    
+    /**
+     * Action de masse sur l'état de participation
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function aPasParticiperParticipationMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 337, 'participation');
     }
     
     
     
-    
-    
-    
-    
-    
     /**
-     * Action de masse sur l'état d'inscription
+     * Action de masse sur les états
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
@@ -68,7 +90,7 @@ class InscriptionMassController extends Controller
      *
      * @return Redirect
      */
-    private function toggleEtatInscription( $primaryKeys, $allPrimaryKeys, $idReference )
+    private function toggleEtat( $primaryKeys, $allPrimaryKeys, $idReference, $etat )
     {
         //check connected user ACL
         $user = $this->get('security.context')->getToken()->getUser();
@@ -83,11 +105,23 @@ class InscriptionMassController extends Controller
     
         //get ref and Toggle State
         $ref = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $idReference) );
-        $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatInscription( $inscriptions, $ref );
-    
-        //inform user connected
-        $this->get('session')->getFlashBag()->add('info', 'Activation effectuée avec succès.' );
+        switch ($etat)
+        {
+        	case 'inscription':
+                $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatInscription( $inscriptions, $ref );
+                //inform user connected
+                $this->get('session')->getFlashBag()->add('info', 'Inscription(s) modifiée(s) avec succès.' );
+        	    break;
+        	case 'participation':
+                $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation( $inscriptions, $ref );
+        	    //inform user connected
+                $this->get('session')->getFlashBag()->add('info', 'Participation(s) modifiée(s) avec succès.' );
+        	    break;
+        }
         
-        return $this->redirect( $this->generateUrl('hopitalnumerique_module_module') );
+        //récupère une inscription pour récuperer les module / session
+        $tempInscription = $inscriptions[0];
+    
+        return $this->redirect( $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id' => $tempInscription->getSession()->getId())) );
     }
 }

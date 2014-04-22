@@ -119,8 +119,10 @@ class InscriptionGrid extends Grid implements IGrid
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Accepter inscription','HopitalNumeriqueModuleBundle:InscriptionMass:accepterInscriptionMass') );
-        $this->addMassAction( new Action\ActionMass('Refuser inscription','HopitalNumeriqueModuleBundle:InscriptionMass:refuserInscriptionMass') );
-        $this->addMassAction( new Action\ActionMass('Annuler inscription','HopitalNumeriqueModuleBundle:InscriptionMass:annulerInscriptionMass') );
+        $this->addMassAction( new Action\ActionMass('Accepter inscription'  ,'HopitalNumeriqueModuleBundle:InscriptionMass:accepterInscriptionMass') );
+        $this->addMassAction( new Action\ActionMass('Refuser inscription'   ,'HopitalNumeriqueModuleBundle:InscriptionMass:refuserInscriptionMass') );
+        $this->addMassAction( new Action\ActionMass('Annuler inscription'   ,'HopitalNumeriqueModuleBundle:InscriptionMass:annulerInscriptionMass') );
+        $this->addMassAction( new Action\ActionMass('A participé'           ,'HopitalNumeriqueModuleBundle:InscriptionMass:aParticiperParticipationMass') );
+        $this->addMassAction( new Action\ActionMass('N\'a pas participé'    ,'HopitalNumeriqueModuleBundle:InscriptionMass:aPasParticiperParticipationMass') );
     }
 }

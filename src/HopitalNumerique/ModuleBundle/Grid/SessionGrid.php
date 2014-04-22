@@ -48,6 +48,12 @@ class SessionGrid extends Grid implements IGrid
         $horaireColumn = new Column\TextColumn('horaires', 'Horaires');
         $this->addColonne( $horaireColumn );
         
+        $nbInscritsColumn = new Column\TextColumn('nbInscrits', 'Nombres d\'inscrits');
+        $this->addColonne( $nbInscritsColumn );
+        
+        $nbInscritsColumn = new Column\TextColumn('placeRestantes', 'Nombres de places restantes');
+        $this->addColonne( $nbInscritsColumn );
+        
         $etatColumn = new Column\TextColumn('etat', 'Etat');
         $etatColumn->setSize( 140 );
         $etatColumn->setFilterType('select');

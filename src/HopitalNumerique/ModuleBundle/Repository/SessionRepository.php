@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ModuleBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * SessionRepository
@@ -23,11 +24,22 @@ class SessionRepository extends EntityRepository
     public function getDatasForGrid( $condition )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ses.id, ses.dateSession, ses.dateOuvertureInscription, ses.dateFermetureInscription, ses.horaires, refDuree.libelle as duree, refEtat.libelle as etat')
+        $qb->select('
+                    ses.id,
+                    ses.dateSession,
+                    ses.dateOuvertureInscription,
+                    ses.dateFermetureInscription,
+                    ses.horaires,
+                    refDuree.libelle as duree,
+                    refEtat.libelle as etat,
+                    count(inscriptions) as nbInscrits,
+                    (ses.nombrePlaceDisponible - count(inscriptions)) as placeRestantes')
             ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
             ->leftJoin('ses.duree','refDuree')
             ->leftJoin('ses.etat','refEtat')
             ->leftJoin('ses.module','module')
+            ->leftJoin('ses.inscriptions', 'inscriptions', Join::WITH, 'inscriptions.etatInscription = :idAcccepte')
+            ->setParameter('idAcccepte', 332)
             ->where( 'module.id = :idModule')
             ->setParameter('idModule', $condition->value )
             ->orderBy('ses.dateSession');
