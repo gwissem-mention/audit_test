@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Etablissements{% endblock %}
+
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-etablissement-etablissement-edit.js"

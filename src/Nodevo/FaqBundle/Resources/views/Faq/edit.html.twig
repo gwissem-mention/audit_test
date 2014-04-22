@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Faq{% endblock %}
+
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/nodevo-faq-faq-edit.css" filter="cssrewrite, ?yui_css" 

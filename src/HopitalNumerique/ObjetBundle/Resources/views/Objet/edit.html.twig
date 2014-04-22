@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Publication{% endblock %}
+
 {% block h1Title %}
     {% if objet.id %}
         Editer une publication

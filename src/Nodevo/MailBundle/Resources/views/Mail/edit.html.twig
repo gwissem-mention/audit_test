@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Mails{% endblock %}
+
 {% block h1Title %}
     {% if mail.id %}
         Editer l'email

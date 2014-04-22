@@ -1,5 +1,7 @@
 {% extends 'HopitalNumeriqueInterventionBundle:Admin:layout.html.twig' %}
 
+{% block title %}{{parent()}} - Interventions{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-intervention-demande-admin-form-edit.css" filter="cssrewrite, ?yui_css"

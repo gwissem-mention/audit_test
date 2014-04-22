@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Menu{% endblock %}
+
 {% block h1Title %}
     {% if menu.id > 0 %}
         Editer le menu {{ menu.name }}

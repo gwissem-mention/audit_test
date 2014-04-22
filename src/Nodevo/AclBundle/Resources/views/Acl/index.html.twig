@@ -1,10 +1,12 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Habilitations{% endblock %}
+
 {% block h1Title %}
     Gestion des habilitations
 {% endblock %}
 
-{#         'bundles/nodevotools/ScrollTable/scrollTable.js'#}
+{# 'bundles/nodevotools/ScrollTable/scrollTable.js'#}
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/nodevo-acl-acl-index.js"

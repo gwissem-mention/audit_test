@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Menu{% endblock %}
+
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/nodevo-menu-item-edit.js"

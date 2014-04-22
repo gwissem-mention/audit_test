@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Etablissements{% endblock %}
+
 {% block h1Title %}
     Fiche de l'établissement {{etablissement.nom}}
 {% endblock %}

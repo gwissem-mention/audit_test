@@ -16,7 +16,7 @@
 
 
 ---------------------------------------------------------------------------------------------
-/* QSO - 24/03/2014
-   PROD -> DEV
-   Lorem ipsum */
- 
+/* QSO - 22/04/2014
+   DEV -> PROD
+ */
+UPDATE `hn_etablissement` SET `eta_codepostal` = CONCAT('0',`eta_codepostal`) WHERE length(`eta_codepostal`) = 4;

@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Référentiel{% endblock %}
+
 {% block h1Title %}
     {% if reference.id %}
         Editer le référentiel

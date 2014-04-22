@@ -289,11 +289,11 @@ function {{ grid.hash }}_markAll(select)
 {% endblock grid_column_filter_type_select %}
 
 {% block grid_column_lock_cell %}
-    <span class="grid_lock_{{ row.getField(column.id)|default('0') }}" >{{value}}</span>
+    <span class="grid_lock_{{ row.getField(column.id)|default('0') }}" >{{ row.getField(column.id)|default('0') }}</span>
 {% endblock grid_column_lock_cell %}
 
 {% block grid_column_boolean_cell %}
-    <span class="grid_boolean_{{ row.getField(column.id)|default('0') }}" >{{value}}</span>
+    <span class="grid_boolean_{{ row.getField(column.id)|default('0') }}" >{{ row.getField(column.id)|default('0') }}</span>
 {% endblock grid_column_boolean_cell %}
 
 {# Block grid : génère toute la structure du grid #}
