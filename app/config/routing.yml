@@ -87,6 +87,10 @@ hopital_numerique_questionnaire:
     resource: "@HopitalNumeriqueQuestionnaireBundle/Resources/config/routing.yml"
     prefix:   /
 
+hopital_numerique_paiement:
+    resource: "@HopitalNumeriquePaiementBundle/Resources/config/routing.yml"
+    prefix:   /
+
 # Bundles Nodevo
 nodevo_acl:
     resource: "@NodevoAclBundle/Resources/config/routing.yml"

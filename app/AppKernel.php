@@ -50,6 +50,7 @@ class AppKernel extends Kernel
             new Nodevo\FaqBundle\NodevoFaqBundle(),
             new HopitalNumerique\FaqBundle\HopitalNumeriqueFaqBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new HopitalNumerique\PaiementBundle\HopitalNumeriquePaiementBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

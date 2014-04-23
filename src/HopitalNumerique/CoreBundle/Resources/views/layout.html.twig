@@ -13,7 +13,7 @@
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
-            {% stylesheets output="compiled/main-front.css" filter="cssrewrite, ?yui_css" 
+            {% stylesheets output="compiled/hopitalnumerique-core.css" filter="cssrewrite, ?yui_css" 
                 "@bootstrap_css"
                 'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
                 'bundles/hopitalnumeriquecore/css/layout.css'
@@ -23,7 +23,7 @@
         {% endblock %}
 
         {% block javascripts %}
-            {% javascripts output="compiled/main-front.js" 
+            {% javascripts output="compiled/hopitalnumerique-core.js" 
                 "@jquery_js" 
                 "@jquery_ui_js"
                 "@bootstrap_js"

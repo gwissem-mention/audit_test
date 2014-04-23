@@ -1,0 +1,36 @@
+hopitalnumerique_paiement_facture:
+    pattern:  /admin/facture
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:index" }
+
+hopitalnumerique_paiement_facture_add:
+    pattern:  /admin/facture/add
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:add" }
+
+hopitalnumerique_paiement_facture_show:
+    pattern:  /admin/facture/show/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:show" }
+    requirements:
+        id: \d+
+
+hopitalnumerique_paiement_facture_edit:
+    pattern:  /admin/facture/edit/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:edit" }
+    requirements:
+        id: \d+
+
+hopitalnumerique_paiement_facture_delete:
+    pattern:  /admin/facture/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:delete", _format: json }
+    requirements: 
+        id: \d+
+
+
+hopitalnumerique_paiement_config:
+    pattern:  /admin/facture/config
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Config:index" }
+
+hopitalnumerique_paiement_config_save:
+    pattern:  /admin/facture/config/save
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Config:save" }
+    requirements:
+        _method:  POST
