@@ -38,6 +38,13 @@ class InscriptionController extends Controller
         $refRefuse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 332) );
         
         $inscription->setEtatInscription($refRefuse);
+
+        //Envoyer mail d'acceptation de l'inscription
+        $mail = $this->get('nodevo_mail.manager.mail')->sendAcceptationInscriptionMail($inscription->getUser(),array(
+                    'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                    'module'    => $inscription->getSession()->getModule()->getTitre()
+                ));
+        $this->get('mailer')->send($mail);
         
         //Suppression de l'entitée
         $this->get('hopitalnumerique_module.manager.inscription')->save( $inscription );
@@ -58,6 +65,13 @@ class InscriptionController extends Controller
         $refRefuse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 333) );
     
         $inscription->setEtatInscription($refRefuse);
+
+        //Envoyer mail de refus de l'inscription
+        $mail = $this->get('nodevo_mail.manager.mail')->sendRefusInscriptionMail($inscription->getUser(),array(
+                    'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                    'module'    => $inscription->getSession()->getModule()->getTitre()
+                ));
+        $this->get('mailer')->send($mail);
     
         //Suppression de l'entitée
         $this->get('hopitalnumerique_module.manager.inscription')->save( $inscription );

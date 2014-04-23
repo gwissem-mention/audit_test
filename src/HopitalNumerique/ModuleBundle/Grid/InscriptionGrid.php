@@ -110,6 +110,7 @@ class InscriptionGrid extends Grid implements IGrid
                 'title' => 'Afficher les inscrits',
                 'target' => '_blank'
         ));
+        $actionFicheParticipant->setRouteParametersMapping(array('userId' => 'id'));
         $actionFicheParticipant->setRouteParameters(array('userId'));
         $this->addActionButton( $actionFicheParticipant );
     }

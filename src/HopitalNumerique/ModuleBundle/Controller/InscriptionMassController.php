@@ -109,6 +109,24 @@ class InscriptionMassController extends Controller
         {
         	case 'inscription':
                 $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatInscription( $inscriptions, $ref );
+                if(332 === $ref->getId())
+                {
+                    //Envoyer mail d'acceptation de l'inscription
+                    $mails = $this->get('nodevo_mail.manager.mail')->sendAcceptationInscriptionMassMail($inscriptions,array());
+                    foreach ($mails as $mail)
+                    {
+                        $this->get('mailer')->send($mail);
+                    }
+                }
+                elseif (333 === $ref->getId())
+                {
+                    //Envoyer mail de refus de l'inscription
+                    $mails = $this->get('nodevo_mail.manager.mail')->sendRefusInscriptionMassMail($inscriptions,array());
+                    foreach ($mails as $mail)
+                    {
+                        $this->get('mailer')->send($mail);
+                    }
+                }
                 //inform user connected
                 $this->get('session')->getFlashBag()->add('info', 'Inscription(s) modifiée(s) avec succès.' );
         	    break;

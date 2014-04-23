@@ -252,6 +252,84 @@ class MailManager extends BaseManager
     
         return $this->generationMail($user, $mail, $options);
     }
+
+    /**
+     * Envoi un mail d'acceptation de l'inscription à une session d'un module
+     *
+     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendAcceptationInscriptionMail( $user, $options )
+    {
+        $mail = $this->findOneById(31);
+    
+        return $this->generationMail($user, $mail, $options);
+    }
+
+    /**
+     * Envoi un mail de refus de l'inscription à une session d'un module
+     *
+     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendRefusInscriptionMail( $user, $options )
+    {
+        $mail = $this->findOneById(32);
+    
+        return $this->generationMail($user, $mail, $options);
+    }
+
+    /**
+     * Envoi un mail d'acceptation de l'inscription à une session d'un module
+     *
+     * @param Inscriptions $inscriptions  
+     * @param array        $options      Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendAcceptationInscriptionMassMail( $inscriptions, $options )
+    {
+        $mail = $this->findOneById(31);
+
+        $toSend = array();
+        foreach ($inscriptions as $key => $inscription) 
+        {
+            $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                            'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                            'module'  => $inscription->getSession()->getModule()->getTitre()
+            ));
+        }
+    
+        return $toSend;
+    }
+
+    /**
+     * Envoi un mail de refus de l'inscription à une session d'un module
+     *
+     * @param Inscriptions $inscriptions  
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendRefusInscriptionMassMail( $inscriptions, $options )
+    {
+        $mail = $this->findOneById(32);
+
+        $toSend = array();
+        foreach ($inscriptions as $key => $inscription) 
+        {
+            $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                            'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                            'module'  => $inscription->getSession()->getModule()->getTitre()
+            ));
+        }
+    
+        return $toSend;
+    }
     
     /**
      * Envoi un mail de contact (différent des autres envoie de mail)
