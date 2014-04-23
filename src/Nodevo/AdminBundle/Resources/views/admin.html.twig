@@ -111,7 +111,7 @@
                         {{ block('flashBags') }}
                         
                         {%- set KnpMenu = knp_menu_get('menu-admin', [], {'breadcrumb' : 'yes'}) %}
-                        {{ knp_menu_render(KnpMenu, {'currentClass': 'active', 'ancestorClass':'active','template':'NodevoAdminBundle::menu.html.twig', 'currentAsLink':'0'}) }}
+                        {{ knp_menu_render(KnpMenu, {'currentClass': 'active', 'ancestorClass':'active','template':'NodevoAdminBundle::breadcrumbs.html.twig', 'currentAsLink':'0'}) }}
 
                         <h1>{% block h1Title %}{% endblock %}</h1>
                         <div class="options">

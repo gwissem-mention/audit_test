@@ -81,7 +81,7 @@ class SessionType extends AbstractType
                             'class' => $this->_constraints['description']['class']
                     ),
             ))
-            ->add('nombrePlaceDisponible', 'integer', array(
+            ->add('nombrePlaceDisponible', 'text', array(
                 'max_length' => 255, 
                 'required'   => false, 
                 'label'      => 'Nombre de places disponibles',
@@ -92,7 +92,7 @@ class SessionType extends AbstractType
                     'property'      => 'name',
                     'multiple'      => true,
                     'required'      => false,
-                    'label'         => 'Restrictions d\'accès',
+                    'label'         => 'Autoriser ce module à',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => 'restriction-acces'),
                     'query_builder' => function(EntityRepository $er) {

@@ -3,6 +3,10 @@
 {# Grid mandatory Stuff #}
 {% use 'NodevoGridBundle::grid.config.html.twig' %}
 
+{% block title %}
+	Hôpital Numérique - Modules
+{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     {{ block('grid_stylesheets')}}
