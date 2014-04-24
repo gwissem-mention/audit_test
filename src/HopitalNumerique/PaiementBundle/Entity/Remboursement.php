@@ -51,7 +51,7 @@ class Remboursement
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
-     * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id")
+     * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id", onDelete="CASCADE")
      */
     protected $region;
 

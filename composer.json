@@ -38,6 +38,8 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "knplabs/knp-menu": "2.0.*@dev",
         "knplabs/knp-menu-bundle": "2.0.*@dev",
+        "knplabs/knp-snappy": "*",
+        "knplabs/knp-snappy-bundle": "dev-master",
         "liip/doctrine-cache-bundle": "~1.0",
         "apy/datagrid-bundle": "~2.2",
         "white-october/pagerfanta-bundle": "2.1.*@dev",

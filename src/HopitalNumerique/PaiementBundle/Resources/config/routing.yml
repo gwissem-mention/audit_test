@@ -34,3 +34,9 @@ hopitalnumerique_paiement_front:
 hopitalnumerique_paiement_front_save:
     pattern:  /compte-hn/suivi-des-paiements/save
     defaults: { _controller: "HopitalNumeriquePaiementBundle:Front:createFacture" }
+
+hopitalnumerique_paiement_front_export:
+    pattern:  /compte-hn/suivi-des-paiements/export/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Front:export" }
+    requirements:
+        id: \d+

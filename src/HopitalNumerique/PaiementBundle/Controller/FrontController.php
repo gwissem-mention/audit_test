@@ -25,11 +25,14 @@ class FrontController extends Controller
         //get interventions + formations
         $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForFactures( $user );
         $formations    = array();
+        $datas         = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
 
-        $datas = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
+        //get Factures
+        $factures = $this->get('hopitalnumerique_paiement.manager.facture')->findBy( array('user' => $user) );
 
         return $this->render('HopitalNumeriquePaiementBundle:Front:suivi.html.twig', array(
-            'datas' => $datas
+            'datas'    => $datas,
+            'factures' => $factures
         ));
     }
 
@@ -48,8 +51,12 @@ class FrontController extends Controller
             return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_front') );
         }
 
+        //On récupère l'user connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+
         //create object facture
         $facture = new Facture;
+        $facture->setUser( $user );
         $this->get('hopitalnumerique_paiement.manager.facture')->save($facture);
 
         //prepare ref
@@ -71,5 +78,53 @@ class FrontController extends Controller
 
         $this->get('session')->getFlashBag()->add( 'success' , 'Facture générée avec succès' );     
         return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_front') );
+    }
+
+    /**
+     * Génère la facture
+     *
+     * @return Pdf
+     */
+    public function exportAction( Facture $facture )
+    {
+        $code = $facture->getUser()->getId() . $facture->getId();
+
+        //get Interventions for this facture
+        $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findBy( array('facture'=>$facture) );
+       
+        //get Formations for this facture
+        $formations = array();
+
+        return $this->render('HopitalNumeriquePaiementBundle:Pdf:facture.html.twig', array(
+            'code'          => $code,
+            'facture'       => $facture,
+            'interventions' => $interventions,
+            'formations'    => $formations
+        ));
+        
+
+        $html = $this->renderView('HopitalNumeriquePaiementBundle:Pdf:facture.html.twig', array(
+            'code'          => $code,
+            'facture'       => $facture,
+            'interventions' => $interventions,
+            'formations'    => $formations
+        ));
+
+        $options = array(
+            'margin-bottom' => 10,
+            'margin-left'   => 4,
+            'margin-right'  => 4,
+            'margin-top'    => 10,
+            'encoding'      => 'UTF-8'
+        );
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Facture_'.$code.'.pdf"'
+            )
+        );
     }
 }

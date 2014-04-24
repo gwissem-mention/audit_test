@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new HopitalNumerique\CoreBundle\HopitalNumeriqueCoreBundle(),
             new Nodevo\MenuBundle\NodevoMenuBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
             new Liip\DoctrineCacheBundle\LiipDoctrineCacheBundle(),
             new APY\DataGridBundle\APYDataGridBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),

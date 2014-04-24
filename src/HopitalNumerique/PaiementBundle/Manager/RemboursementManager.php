@@ -19,8 +19,9 @@ class RemboursementManager extends BaseManager
         foreach($remboursements as $remboursement) {
             $total = intval($remboursement->getIntervention() + $remboursement->getRepas() + $remboursement->getGestion());
 
-            $prix['interventions'][ $remboursement->getRegion()->getId() ] = $total;
-            $prix['formations'][ $remboursement->getRegion()->getId() ]    = intval($total + $remboursement->getSupplement());
+            $prix['interventions'][ $remboursement->getRegion()->getId() ]['total']        = $total;
+            $prix['interventions'][ $remboursement->getRegion()->getId() ]['intervention'] = $remboursement->getIntervention();
+            $prix['formations'][ $remboursement->getRegion()->getId() ]                    = intval($total + $remboursement->getSupplement());
         }
 
         //build Array for Table front
@@ -43,9 +44,9 @@ class RemboursementManager extends BaseManager
             //calcul total
             $ambassadeurRegion = $intervention->getAmbassadeur()->getRegion()->getId();
             $referentRegion    = $referent->getRegion()->getId();
-            $row->total        = $prix['interventions'][$ambassadeurRegion];
+            $row->total        = $prix['interventions'][$ambassadeurRegion]['total'];
             if( $ambassadeurRegion != $referentRegion )
-                $row->total = intval($row->total + $prix['interventions'][$referentRegion]);
+                $row->total = intval($row->total + $prix['interventions'][$referentRegion]['intervention']);
             
             $results[] = $row;
         }

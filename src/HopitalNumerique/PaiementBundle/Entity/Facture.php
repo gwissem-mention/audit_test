@@ -29,6 +29,12 @@ class Facture
     private $dateCreation;
 
     /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
+     */
+    protected $user;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -67,5 +73,26 @@ class Facture
     public function getDateCreation()
     {
         return $this->dateCreation;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User $user
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+    
+    /**
+     * Set user
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     */
+    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
+    {
+        $this->user = $user;
+        return $this;
     }
 }
