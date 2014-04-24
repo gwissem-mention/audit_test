@@ -1,14 +1,16 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Utilisateurs{% endblock %}
+
 {% block h1Title %}
     Editer un utilisateur
 {% endblock %}
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-user-expert-edit.css" filter="cssrewrite"
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
+    {% stylesheets output="compiled/hopitalnumerique-user-expert-edit.css" filter="cssrewrite, ?yui_css"
+        "@fancybox_css" 
+        "@validationEngine_css"
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -18,10 +20,9 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-user-expert-editer.js"
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        "@fancybox_js" 
+        "@validationEngine_js"
         'bundles/hopitalnumeriqueuser/js/Expert/script.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

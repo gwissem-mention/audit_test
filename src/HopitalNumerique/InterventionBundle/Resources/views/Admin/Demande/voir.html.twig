@@ -1,6 +1,7 @@
 {% extends 'HopitalNumeriqueInterventionBundle:Admin/Form:layout.html.twig' %}
 
 {% block h1Title %}Intervention{% endblock %}
+{% block title %}{{parent()}} - Interventions{% endblock %}
 
 {% block toolbarButton %}
     <a class="btn btn-default" href="{{ path('hopital_numerique_intervention_admin_liste') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>

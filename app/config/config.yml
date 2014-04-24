@@ -1,6 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: assetic.yml }
 
 framework:
     translator:      { fallback: "%locale%" }
@@ -28,37 +29,6 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
 
-# Assetic Configuration
-assetic:
-    debug:          "%kernel.debug%"
-    use_controller: false
-    bundles:
-        - NodevoAdminBundle
-        - NodevoMenuBundle
-        - NodevoGridBundle
-        - NodevoAclBundle
-        - NodevoRoleBundle
-        - NodevoMailBundle
-        - NodevoFaqBundle
-        - NodevoContactBundle
-        - NodevoGestionnaireMediaBundle
-        - HopitalNumeriqueInterventionBundle
-        - HopitalNumeriqueUserBundle
-        - HopitalNumeriqueReferenceBundle
-        - HopitalNumeriqueEtablissementBundle
-        - HopitalNumeriqueCoreBundle
-        - HopitalNumeriqueObjetBundle
-        - HopitalNumeriqueModuleBundle
-        - HopitalNumeriqueQuestionnaireBundle
-        - HopitalNumeriqueAccountBundle
-        - HopitalNumeriqueRechercheBundle
-        - HopitalNumeriqueRegistreBundle
-        - HopitalNumeriquePublicationBundle
-        - HopitalNumeriqueFaqBundle
-        - FOSUserBundle
-    filters:
-        cssrewrite: ~
-
 # Doctrine Configuration
 doctrine:
     dbal:
@@ -73,11 +43,11 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         entity_managers:
-          default:
-              auto_mapping: true
-              dql:
-                  string_functions:
-                      GROUP_CONCAT: DoctrineExtensions\Query\Mysql\GroupConcat
+            default:
+                auto_mapping: true
+                dql:
+                    string_functions:
+                        GROUP_CONCAT: DoctrineExtensions\Query\Mysql\GroupConcat
 
 # Swiftmailer Configuration
 swiftmailer:

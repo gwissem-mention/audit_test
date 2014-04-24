@@ -1,6 +1,5 @@
 jQuery(document).ready(function() {
 
-    
     //Récupération de l'id du département si il on est en édition
     var idDepartement = 0;  
     if(null !== $('#hopitalnumerique_etablissement_etablissement_departement').val())
@@ -21,6 +20,8 @@ jQuery(document).ready(function() {
     	$('#hopitalnumerique_etablissement_etablissement_departement').val(idDepartement);
 	}
     
+    //bind de Validation Engine
+    $('form.toValidate').validationEngine();
 });
 
 //Permet de charger les départements en fonction de la région selectionné en ajax

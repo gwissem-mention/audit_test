@@ -7,10 +7,10 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-publication-publication-index.css" filter="cssrewrite"
+    {% stylesheets output="compiled/hopitalnumerique-publication-publication-index.css" filter="cssrewrite, ?yui_css"
+        "@fancybox_css" 
         'bundles/hopitalnumeriquepublication/css/style.css'
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.css'
-        'bundles/hopitalnumeriqueobjet/css/wysiwyg.css'
+        'bundles/nodevotools/css/wysiwyg.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -21,7 +21,7 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-publication-publication-index.js"
-        'bundles/nodevoadmin/plugins/fancybox/jquery.fancybox.pack.js'
+        "@fancybox_js" 
         'bundles/hopitalnumeriquepublication/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

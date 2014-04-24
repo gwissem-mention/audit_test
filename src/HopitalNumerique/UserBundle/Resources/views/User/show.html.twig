@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Utilisateurs{% endblock %}
+
 {% block h1Title %}
     Fiche de l'utilisateur {{user.username|capitalize}}
 {% endblock %}

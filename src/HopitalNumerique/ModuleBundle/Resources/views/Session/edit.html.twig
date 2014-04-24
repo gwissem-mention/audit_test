@@ -14,10 +14,9 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-module-session-edit.css" filter="cssrewrite"
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+    {% stylesheets output="compiled/hopitalnumerique-module-session-edit.css" filter="cssrewrite, ?yui_css"
+        '@select2_css'
+        '@validationEngine_css'
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriquemodule/css/session/edit.css'
     %}
@@ -28,9 +27,8 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-module-session-edit.js"
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+        '@select2_js'
+        '@validationEngine_js'
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/hopitalnumeriquemodule/js/session/script.js'
     %}

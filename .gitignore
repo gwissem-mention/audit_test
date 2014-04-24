@@ -1,15 +1,18 @@
 #Symfony2
 /web/bundles/
 /web/compiled/
+/web/assetic/
+/web/fonts
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
 /app/logs/*
+/app/check.php
+/app/SymfonyRequirements.php
+/app/Resources/components/
 /build/
 /vendor/
 /bin/
-/app/check.php
-/app/SymfonyRequirements.php
 
 #Net Beans
 .buildpath

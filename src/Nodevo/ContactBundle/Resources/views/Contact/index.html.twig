@@ -6,7 +6,8 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/nodevo-contact-layout.css" filter="cssrewrite"
+    {% stylesheets output="compiled/nodevo-contact-layout.css" filter="cssrewrite, ?yui_css"
+        "@validationEngine_css"
         'bundles/hopitalnumeriqueaccount/css/layout.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -15,10 +16,10 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-user-expert-editer.js"
-        'bundles/nodevocontact/js/jquery.maskedinput.min.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
+    {% javascripts output="compiled/nodevo-contact-layout.js"
+        "@validationEngine_js"
+        "@jquery_maskedinput_js"
+        'bundles/nodevocontact/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

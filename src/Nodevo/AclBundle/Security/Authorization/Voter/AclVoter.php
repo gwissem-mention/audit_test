@@ -20,7 +20,7 @@ class AclVoter implements VoterInterface
      */
     public function __construct(AclManager $aclManager, RequestStack $requestStack)
     {
-        $this->_aclManager = $aclManager;
+        $this->_aclManager   = $aclManager;
         $this->_requestStack = $requestStack;
     }
 

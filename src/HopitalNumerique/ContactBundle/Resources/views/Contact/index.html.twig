@@ -5,11 +5,10 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-contact-index.css" filter="cssrewrite"
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.css'
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2-bootstrap.css'
+    {% stylesheets output="compiled/hopitalnumerique-contact-index.css" filter="cssrewrite, ?yui_css" 
+        "@select2_css"
+        "@validationEngine_css"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
         'bundles/hopitalnumeriquecontact/css/contact.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -18,12 +17,11 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-contact-index.js"
-        'bundles/hopitalnumeriqueuser/js/select2-3.4.5/select2.min.js'
+    {% javascripts output="compiled/hopitalnumerique-contact-index.js" filter="yui_js" 
+        "@select2_js"
+        "@validationEngine_js"
+        "@jquery_maskedinput_js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
-        'bundles/nodevocontact/js/jquery.maskedinput.min.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
         'bundles/hopitalnumeriquecontact/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

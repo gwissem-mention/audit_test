@@ -1,5 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block title %}{{parent()}} - Contractualisation{% endblock %}
+
 {% block h1Title %}
     {% if contractualisation.id %}
         Editer un fichier de contractualisation
@@ -15,9 +17,8 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-user-contractualisation-edit.js"
+        "@validationEngine_js"
         'bundles/hopitalnumeriqueuser/js/Contractualisation/script.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/jquery.validationEngine.js'
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/js/languages/jquery.validationEngine-fr.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -25,8 +26,8 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-user-contractualisation-edit.css" filter="cssrewrite"
-        'bundles/nodevoadmin/plugins/jQueryValidationEngine/css/validationEngine.jquery.css'
+    {% stylesheets output="compiled/hopitalnumerique-user-contractualisation-edit.css" filter="cssrewrite, ?yui_css"
+        "@validationEngine_css"
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />

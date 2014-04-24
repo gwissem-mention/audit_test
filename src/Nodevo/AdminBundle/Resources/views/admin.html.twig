@@ -12,14 +12,13 @@
         <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
-            {% stylesheets output="compiled/admin-main.css" filter="cssrewrite"
-                'bundles/nodevoadmin/css/styles.min.css'
+            {% stylesheets output="compiled/admin-main.css" filter="cssrewrite, ?yui_css"
+                'bundles/nodevoadmin/css/avant.css'
                 'bundles/nodevoadmin/css/nodevo.css'
+                'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
                 'bundles/nodevoadmin/plugins/codeprettifier/prettify.css'
                 'bundles/nodevoadmin/plugins/apprise/apprise.css'
-                'bundles/nodevoadmin/js/jqueryui.min.css'
                 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
-                
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
@@ -32,18 +31,17 @@
 
         {% block javascripts %}
             {% javascripts output="compiled/admin-main.js"
-                'bundles/nodevoadmin/js/jquery-1.10.2.min.js'
-                'bundles/nodevoadmin/js/jqueryui-1.10.3.min.js'
-                'bundles/nodevoadmin/js/jqueryui-fr.js'
-                'bundles/nodevoadmin/js/bootstrap.min.js'
-                'bundles/nodevoadmin/js/enquire.js'
-                'bundles/nodevoadmin/js/jquery.cookie.js'
-                'bundles/nodevoadmin/js/jquery.nicescroll.min.js'
+                "@jquery_js"
+                "@jquery_ui_js"
+                "@bootstrap_js"
+                "@enquire_js"
+                "@jquery_cookie_js"
+                "@jquery_nicescroll_js"
                 'bundles/nodevoadmin/plugins/codeprettifier/prettify.js'
-                'bundles/nodevoadmin/js/placeholdr.js'
-                'bundles/nodevoadmin/js/application.js'
                 'bundles/nodevoadmin/plugins/apprise/apprise.js'
                 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+                'bundles/nodevoadmin/js/placeholdr.js'
+                'bundles/nodevoadmin/js/application.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}

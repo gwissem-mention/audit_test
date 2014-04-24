@@ -1,7 +1,6 @@
 // ------------------------------
 // Sidebar Accordion Menu
 // ------------------------------
-
 $(function () {
     if($.cookie('admin_leftbar_collapse') === 'collapse-leftbar') {
         $('body').addClass('collapse-leftbar');
@@ -167,16 +166,13 @@ $(window).resize(function(){
 });
 rightbarRightPos();
 
-
 // -------------------------------
 // Mobile Only - set sidebar as fixed position, slide
 // -------------------------------
-
 enquire.register("screen and (max-width: 767px)", {
     match : function() {
         // For less than 768px
         $(function() {
-
             //Bind sidebar to nicescroll
             $("#sidebar").niceScroll({horizrailenabled:false});
             leftbarScrollShow();
@@ -197,22 +193,15 @@ enquire.register("screen and (max-width: 767px)", {
             $.removeCookie("admin_leftbar_collapse");
 
             $("body").removeClass("collapse-leftbar");
-
         });
-
-        console.log("match");
     },
     unmatch : function() {
-
         //Remove nicescroll to clear up some memory
-            $("#sidebar").niceScroll().remove();
-            $("#sidebar").css("overflow","visible");
-
-        console.log("unmatch");
+        $("#sidebar").niceScroll().remove();
+        $("#sidebar").css("overflow","visible");
 
         //hide leftbar
         $("body").removeClass("show-leftbar");
-
     }
 });
 
@@ -220,7 +209,8 @@ enquire.register("screen and (max-width: 767px)", {
 //---------------
 
 //Fixing the show of scroll rails even when sidebar is hidden
-function leftbarScrollShow () {
+function leftbarScrollShow ()
+{
     if ($("body").hasClass("show-leftbar")) {
         $("#sidebar").getNiceScroll().show();
     } else {
@@ -230,18 +220,21 @@ function leftbarScrollShow () {
 }
 
 //set Top positions for changing between static and fixed header
-function leftbarTopPos() {
+function leftbarTopPos()
+{
     var scr=$('body.static-header').scrollTop();
     if (scr<41) {$('ul#sidebar').css('top',40-scr + 'px');} else {$('ul#sidebar').css('top',0);}
 }
 
-function rightbarTopPos() {
+function rightbarTopPos()
+{
     var scr=$('body.static-header').scrollTop();
     if (scr<41) {$('#page-rightbar').css('top',40-scr + 'px');} else {$('#page-rightbar').css('top',0);}
 }
 
 //Set Right position for fixed layouts
-function rightbarRightPos () {
+function rightbarRightPos ()
+{
     if ($('body').hasClass('fixed-layout')) {
         var $pc = $('#page-content');
         var ending_right = ($(window).width() - ($pc.offset().left + $pc.outerWidth()));
@@ -251,7 +244,8 @@ function rightbarRightPos () {
 }
 
 // Match page height with Sidebar Height
-function checkpageheight() {
+function checkpageheight()
+{
     sh=$("#page-leftbar").height();
     ch=$("#page-content").height();
 
@@ -259,7 +253,8 @@ function checkpageheight() {
 }
 
 // Recalculate widget area to area visible
-function widgetheight() {
+function widgetheight()
+{
     $("#widgetarea").css({"max-height":$("body").height()});
     $("#widgetarea").getNiceScroll().resize();
 }
@@ -267,15 +262,12 @@ function widgetheight() {
 // -------------------------------
 // Back to Top button
 // -------------------------------
-
 $('#back-to-top').click(function () {
     $('body,html').animate({
         scrollTop: 0
     }, 500);
     return false;
 });
-
-
 
 // -------------------------------
 // Quick Start
@@ -286,30 +278,12 @@ $('#headerbardropdown').click(function() {
 });
 
 $('#headerbardropdown').click(function(event) {
-  $('html').one('click',function() {
-    $('#headerbar').css('top','-1000px');
-  });
+    $('html').one('click',function() {
+        $('#headerbar').css('top','-1000px');
+    });
 
-  event.stopPropagation();
+    event.stopPropagation();
 });
-
-
-// -------------------------------
-// Keep search open on click
-// -------------------------------
-// $('#search>a').click(function () {
-//     $('#search').toggleClass('keep-open');
-//     $('#search>a i').toggleClass("opacity-control");
-// });
-
-// $('#search').click(function(event) {
-//   $('html').one('click',function() {
-//     $('#search').removeClass('keep-open');
-//     $('#search>a i').addClass("opacity-control");
-//   });
-
-//   event.stopPropagation();
-// });
 
 //Presentational: set all panel-body with br0 if it has panel-footer
 $(".panel-footer").prev().css("border-radius","0");
@@ -332,7 +306,3 @@ function deleteWithConfirm(path)
         }
     });
 }
-
-
-
-

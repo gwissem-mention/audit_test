@@ -13,7 +13,7 @@ class UserRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
-     * @return array
+     * @return qb
      */
     public function getDatasForGrid()
     {        
@@ -37,6 +37,31 @@ class UserRepository extends EntityRepository
             ->groupBy('user')
             ->orderBy('user.dateInscription', 'DESC')
             ->addOrderBy('user.username');
+        
+        return $qb;
+    }
+
+    /**
+     * Override : Récupère les données Etablissement pour le grid sous forme de tableau
+     *
+     * @return qb
+     */
+    public function getEtablissementForGrid()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('user.id, 
+                     user.username, 
+                     user.nom, 
+                     user.prenom, 
+                     refRegion.libelle as region, 
+                     user.autreStructureRattachementSante,
+                     user.archiver
+
+            ')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->leftJoin('user.region','refRegion')
+            ->where('user.autreStructureRattachementSante IS NOT NULL')
+            ->orderBy('user.username');
         
         return $qb;
     }

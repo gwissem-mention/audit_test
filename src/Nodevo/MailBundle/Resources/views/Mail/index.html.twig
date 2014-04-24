@@ -13,6 +13,8 @@
     {{ block('grid_javascripts')}}
 {% endblock %}
 
+{% block title %}{{parent()}} - Mails{% endblock %}
+
 {% block h1Title %}
     Liste des emails
 {% endblock %}
