@@ -56,8 +56,8 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
             'HopitalNumeriqueInterventionBundle:Demande:nouveau.html.twig',
             array(
                 'interventionDemandeFormulaireNouveau' => $interventionDemandeFormulaire->createView(),
-                'interventionDemande' => $this->interventionDemande,
-                'ambassadeur' => $ambassadeur
+                'interventionDemande'                  => $this->interventionDemande,
+                'ambassadeur'                          => $ambassadeur
             )
         );
     }

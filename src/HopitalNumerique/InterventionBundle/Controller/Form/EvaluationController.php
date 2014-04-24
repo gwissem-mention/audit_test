@@ -53,10 +53,10 @@ class EvaluationController extends Controller
      */
     protected function renderForm($options, $view)
     {
-        $questionnaire    = $options['questionnaire'];
+        $questionnaire       = $options['questionnaire'];
         $interventionDemande = $options['interventionDemande'];
-        $user = $interventionDemande->getReferent();
-        $readOnly = (!$interventionDemande->evaluationEtatEstAEvaluer() || !$this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation')->utilisateurPeutEvaluer($interventionDemande, $this->utilisateurConnecte));
+        $user                = $interventionDemande->getReferent();
+        $readOnly            = (!$interventionDemande->evaluationEtatEstAEvaluer() || !$this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation')->utilisateurPeutEvaluer($interventionDemande, $this->utilisateurConnecte));
     
         //Création du formulaire via le service
         $form = $this->createForm('nodevo_questionnaire_questionnaire', $questionnaire, array(
@@ -137,6 +137,8 @@ class EvaluationController extends Controller
                     $reponses[$idQuestion] = $reponse;
                 }
 
+                /* ADD QSO : 23/04/2014 : met à jour le statut remboursement */
+                $interventionDemande->setRemboursementEtat( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id'=>5)) );
                 
                 $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatTermine());
                 $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEvaluationEtat($interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation_etat')->getInterventionEvaluationEtatEvalue());

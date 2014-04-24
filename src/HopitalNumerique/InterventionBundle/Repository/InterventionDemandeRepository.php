@@ -18,6 +18,23 @@ use Doctrine\ORM\Query\Expr\Join;
 class InterventionDemandeRepository extends EntityRepository
 {
     /**
+     * [getForFactures description]
+     *
+     * @return [type]
+     */
+    public function getForFactures( $user )
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('interventionDemande')
+                         ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+                         ->where('interventionDemande.remboursementEtat = 5 ', 'interventionDemande.interventionEtat = 22')
+                         ->where('interventionDemande.evaluationEtat = 29 ', 'interventionDemande.facture IS NULL')
+                         ->where('interventionDemande.ambassadeur = :user')
+                         ->setParameter('user', $user)
+                         ->orderBy('interventionDemande.dateCreation');
+    }
+
+    /**
      * Retourne les demandes d'intervention qui doivent automatiquement être validées par le CMSI.
      * 
      * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention qui doivent automatiquement être validées par le CMSI

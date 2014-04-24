@@ -278,13 +278,20 @@ class InterventionDemande
     private $interventionRegroupementsDemandesRegroupees;
     
     /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\PaiementBundle\Entity\Facture", cascade={"persist"})
+     * @ORM\JoinColumn(name="fac_id", referencedColumnName="fac_id", nullable=true)
+     */
+    protected $facture;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->ambassadeurs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ambassadeurs   = new \Doctrine\Common\Collections\ArrayCollection();
         $this->etablissements = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objets         = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facture        = null;
     }
 
     /**
@@ -1072,5 +1079,26 @@ class InterventionDemande
     public function evaluationEtatEstEvalue()
     {
         return ($this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId());
+    }
+
+    /**
+     * Get facture
+     *
+     * @return \HopitalNumerique\PaiementBundle\Entity\Facture $facture
+     */
+    public function getFacture()
+    {
+        return $this->facture;
+    }
+    
+    /**
+     * Set facture
+     *
+     * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture
+     */
+    public function setFacture(\HopitalNumerique\PaiementBundle\Entity\Facture $facture)
+    {
+        $this->facture = $facture;
+        return $this;
     }
 }

@@ -21,16 +21,6 @@ class FactureController extends Controller
     }
 
     /**
-     * Affiche le formulaire d'ajout de Facture.
-     */
-    public function addAction()
-    {
-        $facture = $this->get('hopitalnumerique_paiement.manager.facture')->createEmpty();
-
-        return $this->renderForm('hopitalnumerique_paiement_facture', $facture, 'HopitalNumeriquePaiementBundle:Facture:edit.html.twig' );
-    }
-
-    /**
      * Affiche le formulaire d'édition de Facture.
      *
      * @param integer $id Id de Facture.
@@ -76,6 +66,16 @@ class FactureController extends Controller
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_paiement_facture').'"}', 200);
     }
 
+    public function suiviAction()
+    {
+        //On récupère l'user connecté
+        $user          = $this->get('security.context')->getToken()->getUser();
+        $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForFactures( $user );
+
+        return $this->render('HopitalNumeriquePaiementBundle:Facture:suivi.html.twig', array(
+            'interventions' => $interventions
+        ));
+    }
 
 
 

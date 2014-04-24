@@ -52,11 +52,11 @@ class DemandeController extends Controller
         $interventionDemandeEstRegroupee = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->estInterventionDemandeRegroupee($interventionDemande);
         
         $vueParametres = array(
-                'interventionDemande' => $interventionDemande,
-                'interventionDemandeEstRegroupee' => $interventionDemandeEstRegroupee,
-                'InterventionEtat' => new InterventionEtat(),
+                'interventionDemande'                 => $interventionDemande,
+                'interventionDemandeEstRegroupee'     => $interventionDemandeEstRegroupee,
+                'InterventionEtat'                    => new InterventionEtat(),
                 'etablissementsRattachesNonRegroupes' => $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesNonRegroupes($interventionDemande),
-                'etablissementPeutAnnulerDemande' => $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->etablissementPeutAnnulerDemande($interventionDemande, $utilisateurConnecte)
+                'etablissementPeutAnnulerDemande'     => $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->etablissementPeutAnnulerDemande($interventionDemande, $utilisateurConnecte)
         );
         if ($utilisateurConnecte->hasRoleAmbassadeur())
         {
@@ -68,9 +68,9 @@ class DemandeController extends Controller
         {
             if (!$interventionDemandeEstRegroupee)
             {
-                $vueParametres['interventionsSimilairesParObjets'] = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getInterventionsSimilairesParObjets($interventionDemande);
-                $vueParametres['interventionsSimilairesParAmbassadeur'] = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getInterventionsSimilairesParAmbassadeur($interventionDemande);
-                $vueParametres['interventionRegroupementTypeObjetId'] = InterventionRegroupementType::getInterventionRegroupementTypeObjetId();
+                $vueParametres['interventionsSimilairesParObjets']          = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getInterventionsSimilairesParObjets($interventionDemande);
+                $vueParametres['interventionsSimilairesParAmbassadeur']     = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getInterventionsSimilairesParAmbassadeur($interventionDemande);
+                $vueParametres['interventionRegroupementTypeObjetId']       = InterventionRegroupementType::getInterventionRegroupementTypeObjetId();
                 $vueParametres['interventionRegroupementTypeAmbassadeurId'] = InterventionRegroupementType::getInterventionRegroupementTypeAmbassadeurId();
             }
         }

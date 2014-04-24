@@ -2,10 +2,6 @@ hopitalnumerique_paiement_facture:
     pattern:  /admin/facture
     defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:index" }
 
-hopitalnumerique_paiement_facture_add:
-    pattern:  /admin/facture/add
-    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:add" }
-
 hopitalnumerique_paiement_facture_show:
     pattern:  /admin/facture/show/{id}
     defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:show" }
@@ -34,3 +30,7 @@ hopitalnumerique_paiement_config_save:
     defaults: { _controller: "HopitalNumeriquePaiementBundle:Config:save" }
     requirements:
         _method:  POST
+
+hopitalnumerique_paiement_facture_front:
+    pattern:  /compte-hn/suivi-des-paiements
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:suivi" }
