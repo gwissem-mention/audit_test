@@ -83,9 +83,9 @@ class Inscription
      */
     public function __construct()
     {
-        $this->etatInscription   = 331;
-        $this->etatParticipation = 335;
-        $this->etatEvaluation    = 338;
+        $this->etatInscription   = 406;
+        $this->etatParticipation = 410;
+        $this->etatEvaluation    = 413;
     }
     
     /**

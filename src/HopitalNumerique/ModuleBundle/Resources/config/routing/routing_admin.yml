@@ -89,7 +89,7 @@ hopitalnumerique_module_module_session_delete:
 #---Download du fichier lié
 hopitalnumerique_module_module_session_dowload:
     pattern:  /module/session/dowload/{id}
-    defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:download", id: 1 }
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:downloadSession", id: 1 }
     requirements:
         id: \d+
 

@@ -35,7 +35,7 @@ class InscriptionController extends Controller
      */
     public function accepterInscriptionAction(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscription)
     {
-        $refRefuse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 332) );
+        $refRefuse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 407) );
         
         $inscription->setEtatInscription($refRefuse);
 
@@ -62,7 +62,7 @@ class InscriptionController extends Controller
      */
     public function refuserInscriptionAction(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscription)
     {
-        $refRefuse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 333) );
+        $refRefuse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 408) );
     
         $inscription->setEtatInscription($refRefuse);
 
@@ -89,7 +89,7 @@ class InscriptionController extends Controller
      */
     public function annulerInscriptionAction(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscription)
     {
-        $refAnnule = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 334) );
+        $refAnnule = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 409) );
     
         $inscription->setEtatInscription($refAnnule);
     

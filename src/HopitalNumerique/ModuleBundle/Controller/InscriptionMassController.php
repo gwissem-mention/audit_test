@@ -24,7 +24,7 @@ class InscriptionMassController extends Controller
      */
     public function accepterInscriptionMassAction( $primaryKeys, $allPrimaryKeys )
     {
-        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 332, 'inscription');
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 407, 'inscription');
     }
     
     /**
@@ -37,7 +37,7 @@ class InscriptionMassController extends Controller
      */
     public function refuserInscriptionMassAction( $primaryKeys, $allPrimaryKeys )
     {
-        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 333, 'inscription');
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 408, 'inscription');
     }
     
     /**
@@ -50,7 +50,7 @@ class InscriptionMassController extends Controller
      */
     public function annulerInscriptionMassAction( $primaryKeys, $allPrimaryKeys )
     {
-        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 334, 'inscription');
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 409, 'inscription');
     }
     
     /**
@@ -63,7 +63,7 @@ class InscriptionMassController extends Controller
      */
     public function aParticiperParticipationMassAction( $primaryKeys, $allPrimaryKeys )
     {
-        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 336, 'participation');
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 411, 'participation');
     }
     
     /**
@@ -76,7 +76,7 @@ class InscriptionMassController extends Controller
      */
     public function aPasParticiperParticipationMassAction( $primaryKeys, $allPrimaryKeys )
     {
-        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 337, 'participation');
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 412, 'participation');
     }
     
     
@@ -109,7 +109,7 @@ class InscriptionMassController extends Controller
         {
         	case 'inscription':
                 $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatInscription( $inscriptions, $ref );
-                if(332 === $ref->getId())
+                if(407 === $ref->getId())
                 {
                     //Envoyer mail d'acceptation de l'inscription
                     $mails = $this->get('nodevo_mail.manager.mail')->sendAcceptationInscriptionMassMail($inscriptions,array());
@@ -118,7 +118,7 @@ class InscriptionMassController extends Controller
                         $this->get('mailer')->send($mail);
                     }
                 }
-                elseif (333 === $ref->getId())
+                elseif (408 === $ref->getId())
                 {
                     //Envoyer mail de refus de l'inscription
                     $mails = $this->get('nodevo_mail.manager.mail')->sendRefusInscriptionMassMail($inscriptions,array());

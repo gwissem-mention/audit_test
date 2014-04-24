@@ -24,6 +24,38 @@ DELETE FROM `core_menu_item` WHERE `core_menu_item`.`itm_id` = 132;
 DELETE FROM `core_menu_item` WHERE `core_menu_item`.`itm_id` = 133;
 
 /* ---- Reference ----*/
-UPDATE `hn_reference` SET `ref_libelle` = 'Actif' WHERE `hn_reference`.`ref_id` = 328;
-UPDATE `hn_reference` SET `ref_libelle` = 'Inactif' WHERE `hn_reference`.`ref_id` = 329;
-UPDATE `hn_reference` SET `ref_libelle` = 'Annulé' WHERE `hn_reference`.`ref_id` = 330;
+/* En cas de modifs : */
+/* 13:35:43 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '400' WHERE `ref_id` = '325';
+/* 13:36:14 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '401' WHERE `ref_id` = '326';
+/* 13:36:21 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '402' WHERE `ref_id` = '327';
+/* 13:37:10 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '403' WHERE `ref_id` = '328';
+/* 13:37:16 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '404' WHERE `ref_id` = '329';
+/* 13:37:21 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '405' WHERE `ref_id` = '330';
+/* 13:37:26 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '406' WHERE `ref_id` = '331';
+/* 13:37:30 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '407' WHERE `ref_id` = '332';
+/* 13:37:32 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '408' WHERE `ref_id` = '333';
+/* 13:37:35 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '409' WHERE `ref_id` = '334';
+/* 13:37:38 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '410' WHERE `ref_id` = '335';
+/* 13:37:42 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '411' WHERE `ref_id` = '336';
+/* 13:37:45 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '412' WHERE `ref_id` = '337';
+/* 13:37:48 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '413' WHERE `ref_id` = '338';
+/* 13:37:52 Gaia (localnodevo) */ UPDATE `hn_reference` SET `ref_id` = '414' WHERE `ref_id` = '339';
+
+/* en cas d'ajout : */
+INSERT INTO `hn_reference` (`ref_id`, `parent_id`, `ref_libelle`, `ref_code`, `ref_etat`, `ref_dictionnaire`, `ref_recherche`, `ref_lock`, `ref_order`)
+VALUES
+    (400, NULL, 'Durée formation 1', 'DUREE_FORMATION', 3, 0, 0, 1, 1),
+    (401, NULL, 'Durée formation 2', 'DUREE_FORMATION', 3, 0, 0, 1, 2),
+    (402, NULL, 'Durée formation 3', 'DUREE_FORMATION', 3, 0, 0, 1, 3),
+    (403, NULL, 'Actif', 'STATUT_SESSION_FORMATION', 3, 0, 0, 1, 1),
+    (404, NULL, 'Inactif', 'STATUT_SESSION_FORMATION', 3, 0, 0, 1, 2),
+    (405, NULL, 'Annulé', 'STATUT_SESSION_FORMATION', 3, 0, 0, 1, 3),
+    (406, NULL, 'En attente', 'STATUT_FORMATION', 3, 0, 0, 1, 1),
+    (407, NULL, 'Acceptée', 'STATUT_FORMATION', 3, 0, 0, 1, 2),
+    (408, NULL, 'Refusée', 'STATUT_FORMATION', 3, 0, 0, 1, 3),
+    (409, NULL, 'Annulée', 'STATUT_FORMATION', 3, 0, 0, 1, 4),
+    (410, NULL, 'En attente', 'STATUT_PARTICIPATION', 3, 0, 0, 1, 1),
+    (411, NULL, 'A participé', 'STATUT_PARTICIPATION', 3, 0, 0, 1, 2),
+    (412, NULL, 'N\'a pas participé', 'STATUT_PARTICIPATION', 3, 0, 0, 1, 3),
+    (413, NULL, 'En attente', 'STATUT_EVAL_FORMATION', 3, 0, 0, 1, 1),
+    (414, NULL, 'Evaluée', 'STATUT_EVAL_FORMATION', 3, 0, 0, 1, 2);
