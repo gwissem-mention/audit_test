@@ -30,26 +30,35 @@
 
 {% block content %}
     <div class="row">
-        <form action="#" method="post">
+        <form action="{{path('hopitalnumerique_paiement_front_save')}}" method="post">
             <div class="col-md-12">
-                <table class="table">
+                <table class="table paiements">
                     <thead>
                         <tr>
                             <th></th>
                             <th>Date de la demande</th>
                             <th>Référent</th>
-                            <th>Type d'intervention</th>
+                            <th>Établissement du référent</th>
+                            <th>Type</th>
+                            <th>Total</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for intervention in interventions %}
+                        {% set total = 0 %}
+                        {% for data in datas %}
                             <tr>
-                                <td align="center"><input type="checkbox" name="intervention[{{intervention.id}}]" checked="checked" /></td>
-                                <td>{{intervention.dateCreation|date('d/m/Y')}}</td>
-                                <td>{{intervention.referent.prenomNom}}</td>
-                                <td>{{intervention.interventionType.libelle}}</td>
+                                <td align="center"><input type="checkbox" class="checkbox" name="rows[{{data.id}}]" checked="checked" value="{{data.total}}" /></td>
+                                <td>{{data.date|date('d/m/Y')}}</td>
+                                <td>{{data.referent}}</td>
+                                <td>{{data.type}}</td>
+                                <td>{{data.total}}€</td>
                             </tr>
+                            {% set total = total + data.total %}
                         {% endfor %}
+                        <tr>
+                            <td colspan="4" align="right">Total Facture</td>
+                            <td><span class="total">{{total}}</span>€</td>
+                        </tr>
                     </tbody>
                 </table>
                 <input type="submit" class="btn btn-success submit" value="Générer ma facture" />

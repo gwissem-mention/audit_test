@@ -2,8 +2,9 @@
 
 namespace HopitalNumerique\PaiementBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Facture controller.
@@ -34,21 +35,6 @@ class FactureController extends Controller
     }
 
     /**
-     * Affiche le Facture en fonction de son ID passé en paramètre.
-     * 
-     * @param integer $id Id de Facture.
-     */
-    public function showAction( $id )
-    {
-        //Récupération de l'entité en fonction du paramètre
-        $facture = $this->get('hopitalnumerique_paiement.manager.facture')->findOneBy( array( 'id' => $id) );
-
-        return $this->render('HopitalNumeriquePaiementBundle:Facture:show.html.twig', array(
-            'facture' => $facture,
-        ));
-    }
-
-    /**
      * Suppresion d'un Facture.
      * 
      * @param integer $id Id de Facture.
@@ -66,16 +52,11 @@ class FactureController extends Controller
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_paiement_facture').'"}', 200);
     }
 
-    public function suiviAction()
-    {
-        //On récupère l'user connecté
-        $user          = $this->get('security.context')->getToken()->getUser();
-        $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForFactures( $user );
+    
 
-        return $this->render('HopitalNumeriquePaiementBundle:Facture:suivi.html.twig', array(
-            'interventions' => $interventions
-        ));
-    }
+
+
+
 
 
 

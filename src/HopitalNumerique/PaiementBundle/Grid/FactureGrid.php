@@ -34,7 +34,6 @@ class FactureGrid extends Grid implements IGrid
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_paiement_facture_show' ) );
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_paiement_facture_edit' ) );
         $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_paiement_facture_delete' ) );
     }

@@ -15,6 +15,7 @@ parameters:
     secret: '536ghdge7g&7hdjzy6g"gvxojheg'
     
     #Variables spécifiques aux différents postes physique (Prod - preprod - chaque poste de dev, ... )
+    disable_delivery : true
     
     #Nodevo_Mail
     #Tableaux des adresses mails copie caché de tout les mails envoyé par l'application sous la forme "adresse_mail: nom_affiché"
