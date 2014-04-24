@@ -22,6 +22,13 @@ class Facture
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="fac_name", type="string", options = {"comment" = "Nom de la facture"}, nullable=true)
+     */
+    private $name;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fac_date_creation", type="datetime", options = {"comment" = "Date de création de la facture"})
@@ -35,11 +42,17 @@ class Facture
     protected $user;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="facture", cascade={"persist"})
+     */
+    private $interventions;   
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
-        $this->dateCreation = new \DateTime();
+        $this->dateCreation  = new \DateTime();
+        $this->interventions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -52,6 +65,27 @@ class Facture
         return $this->id;
     }
 
+    /**
+     * Get name
+     *
+     * @return string $name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+    
+    /**
+     * Set name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+    
     /**
      * Set dateCreation
      *
@@ -94,5 +128,51 @@ class Facture
     {
         $this->user = $user;
         return $this;
+    }
+
+    /**
+     * Add intervention
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention
+     * @return Facture
+     */
+    public function addIntervention(\HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention)
+    {
+        $this->interventions[] = $intervention;
+    
+        return $this;
+    }
+
+    /**
+     * Remove intervention
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention
+     */
+    public function removeIntervention(\HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention)
+    {
+        $this->interventions->removeElement($intervention);
+    }
+
+    /**
+     * Set interventions
+     *
+     * @param \Doctrine\Common\Collections\Collection $interventions
+     * @return Facture
+     */
+    public function setInterventions(\Doctrine\Common\Collections\Collection $interventions)
+    {
+        $this->interventions = $interventions;
+    
+        return $this;
+    }
+
+    /**
+     * Get interventions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInterventions()
+    {
+        return $this->interventions;
     }
 }

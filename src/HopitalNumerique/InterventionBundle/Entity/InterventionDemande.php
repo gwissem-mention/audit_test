@@ -285,7 +285,7 @@ class InterventionDemande
     private $interventionRegroupementsDemandesRegroupees;
     
     /**
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\PaiementBundle\Entity\Facture", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\PaiementBundle\Entity\Facture", cascade={"persist"}, inversedBy="interventions")
      * @ORM\JoinColumn(name="fac_id", referencedColumnName="fac_id", nullable=true)
      */
     protected $facture;

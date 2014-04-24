@@ -18,11 +18,9 @@
 {% endblock %}
 
 {% block toolbarButton %}
-    <a class="btn btn-default" href="{{ path('hopitalnumerique_paiement_facture_add') }}" title="Ajouter un Facture"><i class="fa fa-plus"></i></a>
     <a class="btn btn-default" href="{{ path('hopitalnumerique_paiement_config') }}" title="Configuration des règles de remboursement"><i class="fa fa-cogs"></i></a>
 {% endblock %}
 
 {% block body %}
     {{ grid(grid, _self) }}
 {% endblock %}
-
