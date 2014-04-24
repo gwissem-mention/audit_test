@@ -1,0 +1,14 @@
+<?php
+
+namespace HopitalNumerique\PaiementBundle\Manager;
+
+use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+
+/**
+ * Manager de l'entité Facture.
+ */
+class FactureManager extends BaseManager
+{
+    protected $_class = 'HopitalNumerique\PaiementBundle\Entity\Facture';
+
+}

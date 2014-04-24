@@ -28,5 +28,5 @@ monolog:
 assetic:
     use_controller: false
 
-#swiftmailer:
-    #disable_delivery: true
+swiftmailer:
+    disable_delivery: %disable_delivery%

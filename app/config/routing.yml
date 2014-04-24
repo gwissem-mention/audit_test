@@ -77,7 +77,7 @@ hopital_numerique_objet:
 hopital_numerique_intervention_admin:
     resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/admin.yml"
     prefix:   /admin/intervention
-    
+
 hopital_numerique_module:
     resource: "@HopitalNumeriqueModuleBundle/Resources/config/routing.yml"
     prefix:   /
@@ -89,6 +89,10 @@ hopital_numerique_user:
 
 hopital_numerique_questionnaire:
     resource: "@HopitalNumeriqueQuestionnaireBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hopital_numerique_paiement:
+    resource: "@HopitalNumeriquePaiementBundle/Resources/config/routing.yml"
     prefix:   /
 
 # Bundles Nodevo

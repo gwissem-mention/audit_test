@@ -138,3 +138,14 @@ hopital_numerique_questionnaire:
 hopital_numerique_contact:
     options:
         mailsContact: %confighn_hopitalnumerique_contact%
+
+#html to Pdf
+knp_snappy:
+    pdf:
+        enabled: true
+        binary: %wkhtmltopdf%
+        options: []
+    image:
+        enabled: true
+        binary: %wkhtmltoimage%
+        options: []
