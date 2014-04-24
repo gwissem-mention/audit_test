@@ -59,3 +59,6 @@ VALUES
     (412, NULL, 'N\'a pas participé', 'STATUT_PARTICIPATION', 3, 0, 0, 1, 3),
     (413, NULL, 'En attente', 'STATUT_EVAL_FORMATION', 3, 0, 0, 1, 1),
     (414, NULL, 'Evaluée', 'STATUT_EVAL_FORMATION', 3, 0, 0, 1, 2);
+
+/* Nettoyage de cotrine migration */
+/* 16:11:15 Gaia (localnodevo) */ DROP TABLE `migration_versions`;

@@ -1,0 +1,3 @@
+hopitalnumerique_module_module_front:
+    pattern: /index
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/ModuleFront:index }
