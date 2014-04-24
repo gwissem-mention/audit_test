@@ -25,6 +25,6 @@ parameters:
     
     #HopitalNumerique_Contact
     confighn_hopitalnumerique_contact:
-        qsomazzi@nodevo.com: Quentin
-        gmelchilsen@nodevo.com: Gaëtan
+        qsomazzi@nodevo.com: Quentin S.
+        gmelchilsen@nodevo.com: Gaëtan M.
         tdauriac@nodevo.com: Thomas D.

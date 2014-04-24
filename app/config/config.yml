@@ -43,11 +43,11 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         entity_managers:
-          default:
-              auto_mapping: true
-              dql:
-                  string_functions:
-                      GROUP_CONCAT: DoctrineExtensions\Query\Mysql\GroupConcat
+            default:
+                auto_mapping: true
+                dql:
+                    string_functions:
+                        GROUP_CONCAT: DoctrineExtensions\Query\Mysql\GroupConcat
 
 # Swiftmailer Configuration
 swiftmailer:
