@@ -27,15 +27,22 @@ class RemboursementManager extends BaseManager
         $results = array();
         foreach ($interventions as $intervention) {
             $row = new \StdClass;
+            
+            //build Referent + etablissement
+            $referent      = $intervention->getReferent();
+            $etablissement = $referent->getEtablissementRattachementSante() ? $referent->getEtablissementRattachementSante()->getNom() : $referent->getAutreStructureRattachementSante();
 
+            //build objet
             $row->id       = $intervention->getId();
             $row->date     = $intervention->getDateCreation();
-            $row->referent = $intervention->getReferent()->getPrenomNom();
+            $row->referent = $referent->getPrenomNom();
+            $row->etab     = $etablissement;
             $row->type     = 'Intervention : ' . $intervention->getInterventionType()->getLibelle();
+            $row->discr    = 'intervention';
 
             //calcul total
             $ambassadeurRegion = $intervention->getAmbassadeur()->getRegion()->getId();
-            $referentRegion    = $intervention->getReferent()->getRegion()->getId();
+            $referentRegion    = $referent->getRegion()->getId();
             $row->total        = $prix['interventions'][$ambassadeurRegion];
             if( $ambassadeurRegion != $referentRegion )
                 $row->total = intval($row->total + $prix['interventions'][$referentRegion]);
@@ -50,7 +57,9 @@ class RemboursementManager extends BaseManager
             $row->id       = $formation->getId();
             $row->date     = '';
             $row->referent = '';
+            $row->etab     = '';
             $row->type     = 'Formation : ';
+            $row->discr    = 'formation';
             $row->total    = 0;
             
             $results[] = $row;

@@ -26,10 +26,13 @@ class InterventionDemandeRepository extends EntityRepository
     {
         return $this->_em->createQueryBuilder()
                          ->select('interventionDemande')
-                         ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
-                         ->where('interventionDemande.remboursementEtat = 5 ', 'interventionDemande.interventionEtat = 22')
-                         ->where('interventionDemande.evaluationEtat = 29 ', 'interventionDemande.facture IS NULL')
-                         ->where('interventionDemande.ambassadeur = :user')
+                         ->from('\HopitalNumerique\InterventionBundle\Entity\InterventionDemande', 'interventionDemande')
+                         ->leftJoin('interventionDemande.remboursementEtat', 'refRemboursement')
+                         ->leftJoin('interventionDemande.interventionEtat', 'refEtat')
+                         ->leftJoin('interventionDemande.evaluationEtat', 'refEvaluation')
+                         ->andWhere('refRemboursement.id = 5 ', 'refEtat.id = 22')
+                         ->andWhere('refEvaluation.id = 29 ', 'interventionDemande.facture IS NULL')
+                         ->andWhere('interventionDemande.ambassadeur = :user')
                          ->setParameter('user', $user)
                          ->orderBy('interventionDemande.dateCreation');
     }

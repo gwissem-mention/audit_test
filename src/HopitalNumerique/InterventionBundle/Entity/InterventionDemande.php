@@ -125,6 +125,13 @@ class InterventionDemande
     private $refusMessage;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="interv_total", type="integer", nullable=true)
+     */
+    private $total;
+
+    /**
      * @var \HopitalNumerique\UserBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interventionDemandesReferent")
@@ -292,6 +299,7 @@ class InterventionDemande
         $this->etablissements = new \Doctrine\Common\Collections\ArrayCollection();
         $this->objets         = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facture        = null;
+        $this->total          = null;
     }
 
     /**
@@ -1101,4 +1109,25 @@ class InterventionDemande
         $this->facture = $facture;
         return $this;
     }
+
+    /**
+     * Get total
+     *
+     * @return integer $total
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+    
+    /**
+     * Set total
+     *
+     * @param integer $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+        return $this;
+    }    
 }

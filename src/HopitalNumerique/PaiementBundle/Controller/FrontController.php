@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\PaiementBundle\Controller;
 
+use HopitalNumerique\PaiementBundle\Entity\Facture;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,12 +33,43 @@ class FrontController extends Controller
         ));
     }
 
+    /**
+     * Enregistre la facture
+     *
+     * @return Redirect
+     */
     public function createFactureAction(Request $request)
     {
-        $datas = $request->request->get('intervention');
+        $interventions = $request->request->get('intervention');
+        $formations    = $request->request->get('formation');
 
-        echo '<pre>';
-        var_dump($datas);
-        die();
+        if( is_null($interventions) && is_null($formations) ){
+            $this->get('session')->getFlashBag()->add( 'warning' , 'Merci de sélectioner au moins 1 ligne' );
+            return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_front') );
+        }
+
+        //create object facture
+        $facture = new Facture;
+        $this->get('hopitalnumerique_paiement.manager.facture')->save($facture);
+
+        //prepare ref
+        $statutRemboursement = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id'=>6));
+
+        //handle interventions
+        $toSave = array();
+        foreach($interventions as $id => $prix) {
+            $intervention = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findOneBy( array('id' => $id) );
+            $intervention->setFacture( $facture );
+            $intervention->setRemboursementEtat( $statutRemboursement );
+            $intervention->setTotal( $prix );
+            
+            $toSave[] = $intervention;
+        }
+        $this->get('hopitalnumerique_intervention.manager.intervention_demande')->save($toSave);
+
+        //handle formations
+
+        $this->get('session')->getFlashBag()->add( 'success' , 'Facture générée avec succès' );     
+        return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_front') );
     }
 }
