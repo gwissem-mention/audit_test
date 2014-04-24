@@ -50,8 +50,8 @@ class AppKernel extends Kernel
             new HopitalNumerique\PublicationBundle\HopitalNumeriquePublicationBundle(),
             new HopitalNumerique\ContactBundle\HopitalNumeriqueContactBundle(),
             new HopitalNumerique\FaqBundle\HopitalNumeriqueFaqBundle(),
-            new HopitalNumerique\ModuleBundle\HopitalNumeriqueModuleBundle()
-            new HopitalNumerique\PaiementBundle\HopitalNumeriquePaiementBundle(),
+            new HopitalNumerique\ModuleBundle\HopitalNumeriqueModuleBundle(),
+            new HopitalNumerique\PaiementBundle\HopitalNumeriquePaiementBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
