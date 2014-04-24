@@ -39,7 +39,7 @@ class SessionRepository extends EntityRepository
             ->leftJoin('ses.etat','refEtat')
             ->leftJoin('ses.module','module')
             ->leftJoin('ses.inscriptions', 'inscriptions', Join::WITH, 'inscriptions.etatInscription = :idAcccepte')
-            ->setParameter('idAcccepte', 407)
+            ->setParameter('idAcccepte', 332)
             ->where( 'module.id = :idModule')
             ->setParameter('idModule', $condition->value )
             ->orderBy('ses.dateSession');
