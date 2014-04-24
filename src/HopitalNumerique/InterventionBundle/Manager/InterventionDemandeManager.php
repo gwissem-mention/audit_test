@@ -74,15 +74,25 @@ class InterventionDemandeManager extends BaseManager
     public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, UserManager $userManager, InterventionEtatManager $interventionEtatManager, InterventionEvaluationEtatManager $interventionEvaluationEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager)
     {
         parent::__construct($entityManager);
-        $this->securityContext = $securityContext;
-        $this->router = $router;
-        $this->userManager = $userManager;
-        $this->interventionEtatManager = $interventionEtatManager;
+        $this->securityContext                   = $securityContext;
+        $this->router                            = $router;
+        $this->userManager                       = $userManager;
+        $this->interventionEtatManager           = $interventionEtatManager;
         $this->interventionEvaluationEtatManager = $interventionEvaluationEtatManager;
-        $this->interventionRegroupementManager = $interventionRegroupementManager;
-        $this->interventionCourrielManager = $interventionCourrielManager;
+        $this->interventionRegroupementManager   = $interventionRegroupementManager;
+        $this->interventionCourrielManager       = $interventionCourrielManager;
         
         $this->utilisateurConnecte = $this->securityContext->getToken()->getUser();
+    }
+
+    /**
+     * Retourne la liste des interventions de l'utilisateur
+     *
+     * @return array
+     */
+    public function getForFactures( $user )
+    {
+        return $this->getRepository()->getForFactures( $user )->getQuery()->getResult();
     }
 
     /**

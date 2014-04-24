@@ -1,0 +1,59 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Règle de calcul des remboursements
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_paiement_facture') }}" title="Gestion des paiements"><i class="fa fa-list"></i></a>
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <form action="{{ path('hopitalnumerique_paiement_config_save') }}" method="post" >
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Régions</th>
+                        <th width="200px" >Forfait Intervention</th>
+                        <th width="200px" >Supplément formation</th>
+                        <th width="200px" >Forfait repas</th>
+                        <th width="300px" >Forfait de gestion administrative</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for remboursement in remboursements %}
+                        <tr>
+                            <td>{{remboursement.region.libelle}}</td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="remboursement[{{remboursement.id}}][intervention]" value="{{remboursement.intervention}}" />
+                                    <span class="input-group-addon">€</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="remboursement[{{remboursement.id}}][supplement]" value="{{remboursement.supplement}}" />
+                                    <span class="input-group-addon">€</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="remboursement[{{remboursement.id}}][repas]" value="{{remboursement.repas}}" />
+                                    <span class="input-group-addon">€</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="remboursement[{{remboursement.id}}][gestion]" value="{{remboursement.gestion}}" />
+                                    <span class="input-group-addon">€</span>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    </div>
+{% endblock %}
