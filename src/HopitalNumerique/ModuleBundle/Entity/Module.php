@@ -502,7 +502,7 @@ class Module
     
     public function getUploadDir()
     {
-        return 'web/medias/Modules';
+        return 'files/modules';
     }
     
     /**

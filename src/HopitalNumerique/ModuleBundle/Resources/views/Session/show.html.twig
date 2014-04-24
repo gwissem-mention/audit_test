@@ -67,6 +67,12 @@
 	                    {{ session.description}}
 	                </p>
                 {% endif %}
+                {% if session.inscriptions is not empty and session.inscriptions is not null %}
+                    <p>
+                        <strong>Nombre d'inscription : </strong>
+                        {{ session.inscriptions|length  }}
+                    </p>
+                {% endif %}
                 {% if session.Nombreplacedisponible %}
 	                <p>
 	                    <strong>Nombre de places disponibles : </strong>
@@ -82,6 +88,12 @@
 							{% endfor %}
 						</ul>
 	                </p>
+                {% endif %}
+                {% if session.etat is not empty and session.etat is not null %}
+                    <p>
+                        <strong>Etat de la session : </strong>
+                        {{ session.etat.libelle }}
+                    </p>
                 {% endif %}
             </div>
         </div>

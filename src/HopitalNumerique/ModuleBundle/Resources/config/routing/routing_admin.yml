@@ -40,9 +40,10 @@ hopitalnumerique_module_module_delete:
 #---Download du fichier lié
 hopitalnumerique_module_module_dowload:
     pattern:  /module/dowload/{id}
-    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:download", id: 1 }
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Module:downloadModule", id: 1 }
     requirements:
         id: \d+
+        _method: GET
 
 #Session
 #---Index - grid
@@ -91,7 +92,7 @@ hopitalnumerique_module_module_session_dowload:
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Session:download", id: 1 }
     requirements:
         id: \d+
-        
+
 #Inscription
 #---Index - grid
 hopitalnumerique_module_module_session_inscription:

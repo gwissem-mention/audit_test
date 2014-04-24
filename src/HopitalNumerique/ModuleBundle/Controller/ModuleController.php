@@ -100,7 +100,7 @@ class ModuleController extends Controller
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function dowloadAction( \HopitalNumerique\ModuleBundle\Entity\Module $module )
+    public function downloadModuleAction( \HopitalNumerique\ModuleBundle\Entity\Module $module )
     {
         $options = array(
                 'serve_filename' => $module->getPath(),

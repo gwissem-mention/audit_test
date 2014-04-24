@@ -449,6 +449,39 @@ class Session
             $this->etat = null;
     }
 
+    /**
+     * Add inscriptions
+     *
+     * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $inscriptions
+     * @return Menu
+     */
+    public function addInscription(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscriptions)
+    {
+        $this->inscriptions[] = $inscriptions;
+    
+        return $this;
+    }
+
+    /**
+     * Remove inscriptions
+     *
+     * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $inscriptions
+     */
+    public function removeInscription(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscriptions)
+    {
+        $this->inscriptions->removeElement($inscriptions);
+    }
+
+    /**
+     * Get inscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInscriptions()
+    {
+        return $this->inscriptions;
+    }
+
     // ----------------------------------------
     // --- Gestion de l'upload des fichiers ---
     // ----------------------------------------
@@ -497,7 +530,7 @@ class Session
     
     public function getUploadDir()
     {
-        return 'web/medias/Sessions';
+        return 'files/sessions';
     }
     
     /**

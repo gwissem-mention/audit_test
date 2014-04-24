@@ -105,7 +105,7 @@ class SessionController extends Controller
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function dowloadAction( \HopitalNumerique\ModuleBundle\Entity\Session $session )
+    public function downloadSessionAction( \HopitalNumerique\ModuleBundle\Entity\Session $session )
     {
         $options = array(
                 'serve_filename' => $session->getPath(),
