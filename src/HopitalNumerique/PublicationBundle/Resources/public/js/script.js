@@ -47,15 +47,17 @@ $(document).ready(function() {
     //Style WYSIWYG custom : titre pliable
     $('h2 .titre_depliable').click(function(){
         $(this).parent().nextAll().each(function(){
-            if ( !$(this).hasClass('titre_depliable') )
+            if ( !$(this).find('span').hasClass('titre_depliable') )
                 $(this).slideToggle();
+            else
+                return false;
         });
     });
 
     //Default collapse all
     $('h2 .titre_depliable').each(function(){
         $(this).parent().nextAll().each(function(){
-            if ( !$(this).hasClass('titre_depliable') )
+            if ( !$(this).find('span').hasClass('titre_depliable') )
                 $(this).hide();
         });
     })
