@@ -88,11 +88,25 @@ class InterventionDemandeManager extends BaseManager
     /**
      * Retourne la liste des interventions de l'utilisateur
      *
+     * @param User $user L'utilisateur concerné
+     *
      * @return array
      */
     public function getForFactures( $user )
     {
         return $this->getRepository()->getForFactures( $user )->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne la liste des interventions de l'utilisateur
+     *
+     * @param User $user L'utilisateur concerné
+     *
+     * @return array
+     */
+    public function getForTotal( $user )
+    {
+        return $this->getRepository()->getForTotal( $user )->getQuery()->getResult();
     }
 
     /**

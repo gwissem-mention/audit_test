@@ -55,7 +55,7 @@ class FactureController extends Controller
      */
     public function totalAction( User $user)
     {
-        $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findBy( array('referent' => $user) );
+        $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForTotal( $user );
         $formations    = array();
         $datas         = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
         $total         = 0;
