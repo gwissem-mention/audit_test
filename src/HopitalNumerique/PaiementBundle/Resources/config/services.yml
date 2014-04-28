@@ -4,14 +4,15 @@ parameters:
     #Facture
     hopitalnumerique_paiement.manager.facture.class: HopitalNumerique\PaiementBundle\Manager\FactureManager
     hopitalnumerique_paiement.grid.facture.class: HopitalNumerique\PaiementBundle\Grid\FactureGrid
-    hopitalnumerique_paiement.form.facture.class: HopitalNumerique\PaiementBundle\Form\FactureType
     #Remboursement
     hopitalnumerique_paiement.manager.remboursement.class: HopitalNumerique\PaiementBundle\Manager\RemboursementManager
 services:
     #Facture
     hopitalnumerique_paiement.manager.facture:
         class: %hopitalnumerique_paiement.manager.facture.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: 
+            - "@doctrine.orm.entity_manager"
+            - [ "@hopitalnumerique_intervention.manager.intervention_demande", "@hopitalnumerique_reference.manager.reference"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
@@ -19,11 +20,6 @@ services:
         class: %hopitalnumerique_paiement.grid.facture.class%
         arguments: ["@service_container"]
 
-    hopitalnumerique_paiement.form.facture:
-        class: %hopitalnumerique_paiement.form.facture.class%
-        arguments: ["@hopitalnumerique_paiement.manager.facture", "@validator"]
-        tags:
-            - { name: form.type, alias: hopitalnumerique_paiement_facture }
     #Remboursement
     hopitalnumerique_paiement.manager.remboursement:
         class: %hopitalnumerique_paiement.manager.remboursement.class%

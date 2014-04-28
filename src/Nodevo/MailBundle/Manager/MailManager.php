@@ -2,7 +2,7 @@
 
 namespace Nodevo\MailBundle\Manager;
 
-use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 

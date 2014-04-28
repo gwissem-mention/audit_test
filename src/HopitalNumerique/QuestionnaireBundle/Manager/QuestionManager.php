@@ -2,7 +2,7 @@
 
 namespace HopitalNumerique\QuestionnaireBundle\Manager;
 
-use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
 /**

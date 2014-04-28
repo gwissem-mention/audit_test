@@ -1,5 +1,5 @@
 <?php
-namespace Nodevo\AdminBundle\Manager;
+namespace Nodevo\ToolsBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Cache\Cache;

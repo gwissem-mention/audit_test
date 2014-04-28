@@ -18,9 +18,9 @@ use Doctrine\ORM\Query\Expr\Join;
 class InterventionDemandeRepository extends EntityRepository
 {
     /**
-     * [getForFactures description]
+     * Retourne la liste des interventions de l'utilisateur
      *
-     * @return [type]
+     * @return QueryBuilder
      */
     public function getForFactures( $user )
     {
@@ -33,6 +33,23 @@ class InterventionDemandeRepository extends EntityRepository
                          ->andWhere('refRemboursement.id = 5 ', 'refEtat.id = 22')
                          ->andWhere('refEvaluation.id = 29 ', 'interventionDemande.facture IS NULL')
                          ->andWhere('interventionDemande.ambassadeur = :user')
+                         ->setParameter('user', $user)
+                         ->orderBy('interventionDemande.dateCreation');
+    }
+
+    /**
+     * Retourne la liste des interventions de l'utilisateur
+     *
+     * @return QueryBuilder
+     */
+    public function getForTotal( $user )
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('interventionDemande')
+                         ->from('\HopitalNumerique\InterventionBundle\Entity\InterventionDemande', 'interventionDemande')
+                         ->leftJoin('interventionDemande.remboursementEtat', 'refRemboursement')
+                         ->andWhere('interventionDemande.remboursementEtat IS NULL OR refRemboursement.id != 7')
+                         ->andWhere('interventionDemande.referent = :user')
                          ->setParameter('user', $user)
                          ->orderBy('interventionDemande.dateCreation');
     }

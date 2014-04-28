@@ -1,20 +1,27 @@
+#Factures
 hopitalnumerique_paiement_facture:
     pattern:  /admin/facture
     defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:index" }
 
-hopitalnumerique_paiement_facture_edit:
-    pattern:  /admin/facture/edit/{id}
-    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:edit" }
+hopitalnumerique_paiement_facture_detail:
+    pattern:  /admin/facture/detail/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:detail" }
     requirements:
         id: \d+
 
-hopitalnumerique_paiement_facture_delete:
-    pattern:  /admin/facture/delete/{id}.{_format}
-    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:delete", _format: json }
+hopitalnumerique_paiement_facture_paye:
+    pattern:  /admin/facture/paye/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:paye"}
     requirements: 
+        id : \d+
+
+hopitalnumerique_paiement_facture_total:
+    pattern:  /admin/facture/total/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:total" }
+    requirements:
         id: \d+
 
-
+#Config
 hopitalnumerique_paiement_config:
     pattern:  /admin/facture/config
     defaults: { _controller: "HopitalNumeriquePaiementBundle:Config:index" }
@@ -25,8 +32,7 @@ hopitalnumerique_paiement_config_save:
     requirements:
         _method:  POST
 
-
-
+#Front
 hopitalnumerique_paiement_front:
     pattern:  /compte-hn/suivi-des-paiements
     defaults: { _controller: "HopitalNumeriquePaiementBundle:Front:suivi" }

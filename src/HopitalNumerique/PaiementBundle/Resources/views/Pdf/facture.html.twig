@@ -4,23 +4,42 @@
             <table width="100%" >
                 <tr>
                     <td><strong>Nom Etablissement</strong></td>
-                    <td>Nom ES</td>
+                    <td>
+                        {% if facture.user.etablissementRattachementSante %}
+                            {{facture.user.etablissementRattachementSante.nom}}
+                        {% else %}
+                            {{facture.user.autreStructureRattachementSante}}
+                        {% endif %}
+                    </td>
                 </tr>
                 <tr>
-                    <td><strong>Adresse 1</strong></td>
-                    <td>Adresse</td>
+                    <td><strong>Adresse</strong></td>
+                    <td>
+                        {% if facture.user.etablissementRattachementSante %}
+                            {% if facture.user.etablissementRattachementSante.adresse != '' %}
+                                {{facture.user.etablissementRattachementSante.adresse }},
+                            {% endif %}
+                            {{facture.user.etablissementRattachementSante.codePostal ~ ' ' ~ facture.user.etablissementRattachementSante.ville}}
+                        {% endif %}
+                    </td>
                 </tr>
                 <tr>
                     <td><strong>Tél.</strong></td>
-                    <td>Tel directeur</td>
+                    <td>
+                        {{infos['telDirecteur']}}
+                    </td>
                 </tr>
                 <tr>
                     <td><strong>Contact</strong></td>
-                    <td>Libelle contact administratif</td>
+                    <td>
+                        {{infos['libelleContact']}}
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td>Nom contact administratif</td>
+                    <td>
+                        {{infos['nomContact']}}
+                    </td>
                 </tr>
             </table>
         </td>
@@ -52,8 +71,8 @@
     </tr>
     <tr>
         <td></td>
-        <td style="border:1px solid black; height:60px; vertical-align:top; padding:10px ">
-            Participant : 
+        <td style="border:1px solid black; height:40px; vertical-align:top; padding:10px ">
+            <strong>Participant :</strong> {{facture.user.prenomNom|title}}
         </td>
     </tr>
     <tr style="height:10px">
@@ -136,14 +155,14 @@
         </tr>
     {% endif %}
 
-    {% if interventions|length > 0 %}
+    {% if facture.interventions|length > 0 %}
         <tr style="height:30px; border:0; vertical-align:bottom">
             <td colspan="6" style="border:0"><strong>Interventions auprès d'établissements</strong></td>
         </tr>
-        {% for intervention in interventions %}
+        {% for intervention in facture.interventions %}
             <tr>
                 {% if loop.first %}
-                    <td style="border:1px solid black;" rowspan="{{interventions|length}}" >Interventions</td>
+                    <td style="border:1px solid black;" rowspan="{{facture.interventions|length}}" >Interventions</td>
                 {% endif %}
                 <td style="border:1px solid black;" >
                     date : {{intervention.dateCreation|date('d/m/Y')}}<br /> 

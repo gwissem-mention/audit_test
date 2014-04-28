@@ -52,79 +52,56 @@ class FrontController extends Controller
         }
 
         //On récupère l'user connecté
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user    = $this->get('security.context')->getToken()->getUser();
+        $facture = $this->get('hopitalnumerique_paiement.manager.facture')->createFacture($user, $interventions, $formations);
 
-        //create object facture
-        $facture = new Facture;
-        $facture->setUser( $user );
-        $this->get('hopitalnumerique_paiement.manager.facture')->save($facture);
+        //get Reponses
+        $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( 2 , $user->getId(), true );
+        $infos    = $this->get('hopitalnumerique_paiement.manager.facture')->formateInfos( $reponses );
 
-        //prepare ref
-        $statutRemboursement = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id'=>6));
+        //Generate PDF
+        $code = $facture->getUser()->getId() . $facture->getId();
+        $this->get('knp_snappy.pdf')->generateFromHtml(
+            $this->renderView( 'HopitalNumeriquePaiementBundle:Pdf:facture.html.twig', array(
+                'code'       => $code,
+                'facture'    => $facture,
+                'infos'      => $infos,
+                'formations' => array()
+            )),
+            __ROOT_DIRECTORY__ . '/files/factures/facture'.$code.'.pdf',
+            array('margin-bottom' => 10, 'margin-left' => 4, 'margin-right' => 4, 'margin-top' => 10, 'encoding' => 'UTF-8')
+        );
 
-        //handle interventions
-        $toSave = array();
-        foreach($interventions as $id => $prix) {
-            $intervention = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findOneBy( array('id' => $id) );
-            $intervention->setFacture( $facture );
-            $intervention->setRemboursementEtat( $statutRemboursement );
-            $intervention->setTotal( $prix );
-            
-            $toSave[] = $intervention;
-        }
-        $this->get('hopitalnumerique_intervention.manager.intervention_demande')->save($toSave);
-
-        //handle formations
+        //save file Name
+        $facture->setName( 'facture' . $code . '.pdf' );
+        $this->get('hopitalnumerique_paiement.manager.facture')->save( $facture );
 
         $this->get('session')->getFlashBag()->add( 'success' , 'Facture générée avec succès' );     
         return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_front') );
     }
 
     /**
-     * Génère la facture
+     * Exporte la facture
      *
      * @return Pdf
      */
     public function exportAction( Facture $facture )
     {
-        $code = $facture->getUser()->getId() . $facture->getId();
-
-        //get Interventions for this facture
-        $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findBy( array('facture'=>$facture) );
-       
-        //get Formations for this facture
-        $formations = array();
-
-        return $this->render('HopitalNumeriquePaiementBundle:Pdf:facture.html.twig', array(
-            'code'          => $code,
-            'facture'       => $facture,
-            'interventions' => $interventions,
-            'formations'    => $formations
-        ));
-        
-
-        $html = $this->renderView('HopitalNumeriquePaiementBundle:Pdf:facture.html.twig', array(
-            'code'          => $code,
-            'facture'       => $facture,
-            'interventions' => $interventions,
-            'formations'    => $formations
-        ));
-
         $options = array(
-            'margin-bottom' => 10,
-            'margin-left'   => 4,
-            'margin-right'  => 4,
-            'margin-top'    => 10,
-            'encoding'      => 'UTF-8'
+            'serve_filename' => $facture->getName(),
+            'absolute_path'  => false,
+            'inline'         => false,
         );
+        
+        $fileName = __ROOT_DIRECTORY__.'/files/factures/' . $facture->getName();
+    
+        if( file_exists($fileName) ) {
+            return $this->get('igorw_file_serve.response_factory')->create( $fileName, 'application/pdf', $options);
+        } else {
+            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
+            $this->get('session')->getFlashBag()->add( ('danger') , 'Le document n\'existe plus sur le serveur.' );
 
-        return new Response(
-            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),
-            200,
-            array(
-                'Content-Type'        => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="Facture_'.$code.'.pdf"'
-            )
-        );
+            return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_front') );
+        }
     }
 }
