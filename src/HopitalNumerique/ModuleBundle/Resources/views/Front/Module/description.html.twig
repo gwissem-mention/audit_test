@@ -1,0 +1,15 @@
+<div class="panel" style="margin:0" >
+    <div class="panel-heading">
+        <h4 class="violet" style="margin-bottom:0" >Description de la session</h4>
+    </div>
+
+    <div class="panel-body" style="padding-top:0" >
+        <div class="col-md-12 fancybox-popin">            
+            {% if description is not null and description is not empty %}
+                {{ description }}
+            {% else %}
+                - Aucune description pour cette session -
+            {% endif %}   
+        </div>
+    </div>
+</div>

@@ -1,3 +1,15 @@
 hopitalnumerique_module_module_front:
     pattern: /index
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/ModuleFront:index}
+
+hopitalnumerique_module_module_affichage_front:
+    pattern: /index/{id}
     defaults: { _controller: HopitalNumeriqueModuleBundle:Front/ModuleFront:index }
+    requirements:
+        id: \d+
+
+hopitalnumerique_module_session_description_front:
+    pattern:  /session/description/{id}
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/SessionFront:description, id: 1  }
+    requirements:
+        id: \d+

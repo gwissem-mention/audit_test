@@ -482,6 +482,28 @@ class Session
         return $this->inscriptions;
     }
 
+    /**
+     * Get inscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInscriptionsAccepte()
+    {
+        $inscriptionsAcceptees = array();
+
+        foreach ($this->inscriptions as $key => $inscription) 
+        {
+            //Récupération de l'état de l'inscription courante
+            $etatInscription = $inscription->getEtatInscription();
+            if(407 === $etatInscription->getId())
+            {
+                $inscriptionsAcceptees[] = $inscription;
+            }
+        }
+
+        return $inscriptionsAcceptees;
+    }
+
     // ----------------------------------------
     // --- Gestion de l'upload des fichiers ---
     // ----------------------------------------

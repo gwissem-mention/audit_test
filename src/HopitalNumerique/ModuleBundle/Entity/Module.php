@@ -38,7 +38,7 @@ class Module
      * @var /HopitalNumerique/ModuleBundle/Entity/Session
      * 
      * @ORM\OneToMany(targetEntity="Session", mappedBy="module", cascade={"persist", "remove" })
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"dateSession" = "ASC"})
      */
     protected $sessions;
     
@@ -452,6 +452,39 @@ class Module
             $this->duree = $duree;
         else
             $this->duree = null;
+    }
+
+    /**
+     * Add sessions
+     *
+     * @param \HopitalNumerique\ModuleBundle\Entity\Session $sessions
+     * @return \HopitalNumerique\ModuleBundle\Entity\Module
+     */
+    public function addSession(\HopitalNumerique\ModuleBundle\Entity\Session $sessions)
+    {
+        $this->sessions[] = $sessions;
+    
+        return $this;
+    }
+
+    /**
+     * Remove sessions
+     *
+     * @param \HopitalNumerique\ModuleBundle\Entity\Session $sessions
+     */
+    public function removeSession(\HopitalNumerique\ModuleBundle\Entity\Session $sessions)
+    {
+        $this->sessions->removeElement($sessions);
+    }
+
+    /**
+     * Get sessions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSessions()
+    {
+        return $this->sessions;
     }
     
     // ----------------------------------------

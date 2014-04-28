@@ -42,7 +42,9 @@ class SessionRepository extends EntityRepository
             ->setParameter('idAcccepte', 332)
             ->where( 'module.id = :idModule')
             ->setParameter('idModule', $condition->value )
-            ->orderBy('ses.dateSession');
+            ->groupBy('ses.id')
+            ->orderBy('ses.dateSession')
+            ;
     
         return $qb;
     }
