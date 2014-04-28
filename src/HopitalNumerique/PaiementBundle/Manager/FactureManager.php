@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Knp\Bundle\SnappyBundle\Snappy\LoggableGenerator;
-use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
  * Manager de l'entité Facture.
@@ -20,9 +20,9 @@ class FactureManager extends BaseManager
     /**
      * Contruit le manager
      *
-     * @param EntityManager              $em                  L'Entity Manager
+     * @param EntityManager $em L'Entity Manager
      */
-    public function __construct(EntityManager $em, array $managers) // InterventionDemandeManager $interventionManager, ReferenceManager $referenceManager,  )
+    public function __construct(EntityManager $em, array $managers)
     {
         parent::__construct($em);
 
@@ -49,6 +49,9 @@ class FactureManager extends BaseManager
         //prepare ref
         $statutRemboursement = $this->_referenceManager->findOneBy(array('id'=>6));
 
+        //make total
+        $total = 0;
+
         //handle interventions
         foreach($interventions as $id => $prix) {
             $intervention = $this->_interventionManager->findOneBy( array('id' => $id) );
@@ -57,12 +60,69 @@ class FactureManager extends BaseManager
             $intervention->setTotal( $prix );
             
             $facture->addIntervention( $intervention );
+
+            $total += $prix;
         }
+        $facture->setTotal( $total );
         $this->save($facture);
 
         //handle formations
         $formationsEntities = array();
 
         return $facture;
+    }
+
+    /**
+     * Formate les réponses aux question du questionnaire ambassadeur
+     *
+     * @param array $reponses Les réponses
+     *
+     * @return array
+     */
+    public function formateInfos( $reponses )
+    {
+        $infos = array('telDirecteur' => '', 'libelleContact' => '', 'nomContact' => '');
+
+        foreach($reponses as $reponse){
+            switch ($reponse->getQuestion()->getId()) {
+                case 36:
+                    $infos['telDirecteur'] = $reponse->getReponse();
+                    break;
+                case 37:
+                    $infos['libelleContact'] = $reponse->getReponse();
+                    break;
+                case 38:
+                    $infos['nomContact'] = $reponse->getReponse();
+                    break;
+                
+                default:
+                    break;
+            }
+        }
+
+        return $infos;
+    }
+
+    /**
+     * Passe les interventions de la facture au statut payé
+     *
+     * @param Facture $facture La facture
+     *
+     * @return empty
+     */
+    public function paye( $facture )
+    {
+        $statutRemboursement = $this->_referenceManager->findOneBy( array( 'id' => 7 ) );
+        $interventions       = $facture->getInterventions()->toArray();
+
+        //change interventions state
+        foreach ($interventions as &$intervention)
+            $intervention->setRemboursementEtat( $statutRemboursement );
+        
+        //change facture state
+        $facture->setPayee( true );
+
+        //save factue = implicit save interventions
+        $this->save( $facture );
     }
 }

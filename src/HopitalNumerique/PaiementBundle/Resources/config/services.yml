@@ -4,7 +4,6 @@ parameters:
     #Facture
     hopitalnumerique_paiement.manager.facture.class: HopitalNumerique\PaiementBundle\Manager\FactureManager
     hopitalnumerique_paiement.grid.facture.class: HopitalNumerique\PaiementBundle\Grid\FactureGrid
-    hopitalnumerique_paiement.form.facture.class: HopitalNumerique\PaiementBundle\Form\FactureType
     #Remboursement
     hopitalnumerique_paiement.manager.remboursement.class: HopitalNumerique\PaiementBundle\Manager\RemboursementManager
 services:
@@ -21,11 +20,6 @@ services:
         class: %hopitalnumerique_paiement.grid.facture.class%
         arguments: ["@service_container"]
 
-    hopitalnumerique_paiement.form.facture:
-        class: %hopitalnumerique_paiement.form.facture.class%
-        arguments: ["@hopitalnumerique_paiement.manager.facture", "@validator"]
-        tags:
-            - { name: form.type, alias: hopitalnumerique_paiement_facture }
     #Remboursement
     hopitalnumerique_paiement.manager.remboursement:
         class: %hopitalnumerique_paiement.manager.remboursement.class%

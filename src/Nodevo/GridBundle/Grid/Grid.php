@@ -204,7 +204,7 @@ class Grid
          *
          * @param array $limits Tableau des limits de la pagination
          */
-        protected function setLimits( $limits = array( 5, 10, 15 ) )
+        protected function setLimits( $limits = array(10, 20, 50, 100) )
         {
             $this->_limits = $limits;
         }

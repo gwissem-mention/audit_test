@@ -19,6 +19,7 @@ class FactureGrid extends Grid implements IGrid
     {
         $this->setSource( 'HopitalNumeriquePaiementBundle:Facture' );
         $this->setNoDataMessage('Aucun Facture à afficher.');
+        $this->setButtonSize( 43 );
     }
 
     /**
@@ -26,7 +27,19 @@ class FactureGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        $this->addColonne( new Column\TextColumn('dateCreation', 'Datecreation') );        
+        $this->addColonne( new Column\AssocColumn('user.nom', 'Nom') );
+        $this->addColonne( new Column\AssocColumn('user.prenom', 'Prénom') );
+        $this->addColonne( new Column\AssocColumn('user.email', 'Adresse e-mail') );
+        $this->addColonne( new Column\AssocColumn('user.region.libelle', 'Région') );
+        $this->addColonne( new Column\AssocColumn('user.etablissementRattachementSante.nom', 'Établissement') );
+        $this->addColonne( new Column\TextColumn('total', 'Total') );
+        
+        $payedColumn = new Column\BooleanColumn('payee', 'Facture Payée ?');
+        $payedColumn->setSize( 120 );
+        $this->addColonne( $payedColumn );
+
+        /* Colonnes invisibles */
+        $this->addColonne( new Column\BlankColumn('dateCreation') );
     }
 
     /**
@@ -34,8 +47,15 @@ class FactureGrid extends Grid implements IGrid
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\EditButton( 'hopitalnumerique_paiement_facture_edit' ) );
-        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_paiement_facture_delete' ) );
+        $payeButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_paiement_facture_paye');
+        $payeButton->setRouteParameters( array('id') );    
+        $payeButton->setAttributes( array('class'=>'btn btn-green fa fa-money','title' => 'Payer') );
+        $payeButton->manipulateRender(function($action, $row) {
+            return !$row->getField('payee') ? $action : null;
+        });
+        $this->addActionButton( $payeButton );
+        
+        $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_paiement_facture_detail' ) );
     }
 
     /**
@@ -43,7 +63,6 @@ class FactureGrid extends Grid implements IGrid
      */
     public function setMassActions()
     {
-        
         
     }
 }

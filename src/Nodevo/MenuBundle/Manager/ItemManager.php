@@ -2,7 +2,7 @@
 
 namespace Nodevo\MenuBundle\Manager;
 
-use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 
 class ItemManager extends BaseManager

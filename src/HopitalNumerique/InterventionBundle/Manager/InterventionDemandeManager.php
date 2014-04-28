@@ -7,7 +7,7 @@
 namespace HopitalNumerique\InterventionBundle\Manager;
 
 use Symfony\Component\Security\Core\SecurityContext;
-use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;

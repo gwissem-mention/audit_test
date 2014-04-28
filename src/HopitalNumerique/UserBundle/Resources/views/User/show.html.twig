@@ -215,6 +215,11 @@
                     {# Include des données domaines fonctionnels #}
                     {{ render(controller("HopitalNumeriqueUserBundle:Ambassadeur:listeDomaines", {'idUser':user.id} )) }}
                 </div>
+
+                <div class="row">
+                    {# Include des données Paiements #}
+                    {{ render(controller("HopitalNumeriquePaiementBundle:Facture:total", {'id':user.id} )) }}
+                </div>
             </div>
         </div>
     </div>

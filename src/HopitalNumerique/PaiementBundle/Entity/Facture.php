@@ -3,6 +3,7 @@
 namespace HopitalNumerique\PaiementBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * Facture
@@ -38,9 +39,29 @@ class Facture
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
+     *
+     * @GRID\Column(field="user.nom")
+     * @GRID\Column(field="user.prenom")
+     * @GRID\Column(field="user.email")
+     * @GRID\Column(field="user.region.libelle")
+     * @GRID\Column(field="user.etablissementRattachementSante.nom")
      */
     protected $user;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fac_total", type="smallint", options = {"comment" = "Total de la facture"}, nullable=true)
+     */
+    private $total;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fac_payee", type="boolean", options = {"comment" = "Est ce que la facture est payee"})
+     */
+    private $payee;
+    
     /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="facture", cascade={"persist"})
      */
@@ -53,6 +74,7 @@ class Facture
     {
         $this->dateCreation  = new \DateTime();
         $this->interventions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->payee         = false;
     }
 
     /**
@@ -130,6 +152,48 @@ class Facture
         return $this;
     }
 
+    /**
+     * Get total
+     *
+     * @return integer $total
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+    
+    /**
+     * Set total
+     *
+     * @param integer $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+        return $this;
+    }
+
+    /**
+     * Get payee
+     *
+     * @return boolean $payee
+     */
+    public function isPayee()
+    {
+        return $this->payee;
+    }
+    
+    /**
+     * Set payee
+     *
+     * @param boolean $payee
+     */
+    public function setPayee($payee)
+    {
+        $this->payee = $payee;
+        return $this;
+    }
+    
     /**
      * Add intervention
      *
