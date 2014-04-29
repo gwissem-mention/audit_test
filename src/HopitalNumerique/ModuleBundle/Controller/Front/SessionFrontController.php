@@ -14,7 +14,7 @@ class SessionFrontController extends Controller
     public function descriptionAction(\HopitalNumerique\ModuleBundle\Entity\Session $session )
     {
         return $this->render('HopitalNumeriqueModuleBundle:Front/Module:description.html.twig', array(
-                'description' => $session->getDescription()
+                'session' => $session
         ));
     }
 

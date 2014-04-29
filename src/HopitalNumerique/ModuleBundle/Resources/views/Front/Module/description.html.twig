@@ -4,12 +4,41 @@
     </div>
 
     <div class="panel-body" style="padding-top:0" >
-        <div class="col-md-12 fancybox-popin">            
-            {% if description is not null and description is not empty %}
-                {{ description }}
-            {% else %}
-                - Aucune description pour cette session -
-            {% endif %}   
+        <div class="col-md-12 fancybox-popin">
+            <ul class="list-unstyled">
+                {# Description #}
+                <li><strong>Description :</strong><br />>
+                    {% if session.description is not null and session.description is not empty %}
+                        {{ session.description }}
+                    {% else %}
+                        - Aucune description pour cette session -
+                    {% endif %}
+                </li>
+                {# Durée #}
+                <li><strong>Durée :</strong><br />>
+                    {% if session.duree is not null and session.duree is not empty %}
+                        {{ session.duree.libelle }}
+                    {% else %}
+                        - Aucune durée pour cette session -
+                    {% endif %}
+                </li>
+                {# Lieu #}
+                <li><strong>Lieu :</strong><br />>
+                    {% if session.lieu is not null and session.lieu is not empty %}
+                        {{ session.lieu }}
+                    {% else %}
+                        - Aucune lieu pour cette session -
+                    {% endif %}
+                </li>
+                {# Horaires #}
+                <li><strong>Horaires :</strong><br />>
+                    {% if session.horaires is not null and session.horaires is not empty %}
+                        {{ session.horaires }}
+                    {% else %}
+                        - Aucune durée pour cette session -
+                    {% endif %}
+                </li>
+            </ul>
         </div>
     </div>
 </div>
