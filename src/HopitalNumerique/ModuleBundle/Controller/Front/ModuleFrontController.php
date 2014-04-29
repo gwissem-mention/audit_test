@@ -34,7 +34,6 @@ class ModuleFrontController extends Controller
             'modules'           => $modules,
             'moduleSelectionne' => $module
         ));
-
     }
 
     /**

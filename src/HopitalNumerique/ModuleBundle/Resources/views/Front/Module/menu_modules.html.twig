@@ -1,15 +1,13 @@
 <p class="titre">Hôpital Numérique</p>
 
-<ul class="list-unstyled">
-    {# Tout les modules #}
-    {% if moduleSelectionne is null %}<strong>{% endif %}
-    <li>> <a href={{ path("hopitalnumerique_module_module_front") }}>Tout les modules</a></li>
-    {% if moduleSelectionne is null %}</strong>{% endif %}
+<div id="sous-menu">
+    <ul class="list-unstyled">
+        {# Tout les modules #}
+        <li {% if moduleSelectionne is null %}class="active"{% endif %}><a href={{ path("hopitalnumerique_module_module_front") }}><span>Tout les modules</span></a></li>
 
-    {# Affichage des modules un par un #}
-    {% for module in modules %}
-        {% if moduleSelectionne and module.id == moduleSelectionne.id %}<strong>{% endif %}
-        <li>> <a href={{path("hopitalnumerique_module_module_affichage_front", {'id':module.id})}}>{{ module.titre }}</a></li>
-        {% if moduleSelectionne and module.id == moduleSelectionne.id %}</strong>{% endif %}
-    {% endfor %}
-</ul>
+        {# Affichage des modules un par un #}
+        {% for module in modules %}
+            <li {% if moduleSelectionne and module.id == moduleSelectionne.id %}class="active"{% endif %}><a href={{path("hopitalnumerique_module_module_affichage_front", {'id':module.id})}}><span>{{ module.titre }}</span></a></li>
+        {% endfor %}
+    </ul>
+</div>

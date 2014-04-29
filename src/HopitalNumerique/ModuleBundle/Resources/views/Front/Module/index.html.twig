@@ -1,8 +1,10 @@
 {% extends 'HopitalNumeriqueModuleBundle:Front:layout.html.twig' %}
 
 {% block menu_modules %}
-    {# Render de la vue de récupérations des différentes modules #}
-    {{ render(controller("HopitalNumeriqueModuleBundle:Front/ModuleFront:menuModules", {'module' : moduleSelectionne} )) }}
+    <div id="module-menu">
+        {# Render de la vue de récupérations des différentes modules #}
+        {{ render(controller("HopitalNumeriqueModuleBundle:Front/ModuleFront:menuModules", {'module' : moduleSelectionne} )) }}
+    </div>
 {% endblock menu_modules %}
 
 {% block chapo_description %}
@@ -27,53 +29,54 @@
                         </thead>
                         <tbody>
                             {% for key,session in module.sessions %}
-                                <tr>
-                                    <td>
-                                        {% for key,production in module.productions %}
-                                            {{ production.titre }}
-                                        {% endfor %}
-                                    </td>
-                                    <td class=
-                                        {% if date(session.dateSession) < date() %}
-                                            "danger" title="Session dépassée">
-                                        {% elseif date(session.dateSession) < date('+7days') %}
-                                            "warning" title="Session prévue dans moins de 7 jours">
-                                        {% elseif date(session.dateSession) < date('+1month') %}
-                                            "info" title="Session prévue dans moins d'un mois">
-                                        {% else %}
-                                            "success" title="Session prévue dans plus d'un mois">
-                                        {% endif %}
-                                        {{session.dateSession|date("d/m/Y")}}
-                                    </td>
-                                    <td class={% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}"success"{% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}"warning"{% else %}"danger"{% endif %}
-                                    {% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}
-                                        title="Places restantes suffisantes"
-                                    {% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}
-                                        title="Places restantes bientôt écoulées"
-                                    {% else %}
-                                        title="Plus de places restantes"
-                                    {% endif %}
-                                    >
-                                        {{session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length}}/{{session.nombrePlaceDisponible}}
-                                    </td>
-                                    <td>
-                                        {% set userInscrit = false %}
-                                        {% for key,inscription in session.getInscriptionsAccepte() %}
-                                            {% if app.user is not null and app.user.id == inscription.user.id %}
-                                                {% set userInscrit = true %}
+                                {# On affiche uniquement les dates non dépassées #}
+                                {% if date(session.dateSession) > date() %}
+                                    <tr>
+                                        <td>
+                                            {% for key,production in module.productions %}
+                                                {{ production.titre }}
+                                            {% endfor %}
+                                        </td>
+                                        <td class=
+                                            {% if date(session.dateSession) < date('+7days') %}
+                                                "warning" title="Session prévue dans moins de 7 jours">
+                                            {% elseif date(session.dateSession) < date('+1month') %}
+                                                "info" title="Session prévue dans moins d'un mois">
+                                            {% else %}
+                                                "success" title="Session prévue dans plus d'un mois">
                                             {% endif %}
-                                        {% endfor %}
-                                        {% if userInscrit %}
-                                            <span class="inscrit">{{session.etat.libelle}}</span>
+                                            {{session.dateSession|date("d/m/Y")}}
+                                        </td>
+                                        <td class={% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}"success"{% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}"warning"{% else %}"danger"{% endif %}
+                                        {% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}
+                                            title="Places restantes suffisantes"
+                                        {% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}
+                                            title="Places restantes bientôt écoulées"
+                                        {% else %}
+                                            title="Plus de places restantes"
                                         {% endif %}
-                                    </td>
-                                    <td style="min-width:74px;">
-                                        <div class="btn-group">
-                                            <a class="btn btn-info link fancybox.ajax" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}">?</a>
-                                            <a class="btn btn-info link fancybox.ajax" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}">?</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        >
+                                            {{session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length}}/{{session.nombrePlaceDisponible}}
+                                        </td>
+                                        <td>
+                                            {% set userInscrit = false %}
+                                            {% for key,inscription in session.getInscriptionsAccepte() %}
+                                                {% if app.user is not null and app.user.id == inscription.user.id %}
+                                                    {% set userInscrit = true %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if userInscrit %}
+                                                <span class="inscrit">{{session.etat.libelle}}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td style="min-width:74px;">
+                                            <div class="btn-group">
+                                                <a class="btn btn-info link fancybox.ajax" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}">?</a>
+                                                <a class="btn btn-info link fancybox.ajax" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}">?</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endif %}
                             {% endfor %}   
                         </tbody>
                     </table>
