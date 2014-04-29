@@ -36,8 +36,8 @@
                                     <td class=
                                         {% if date(session.dateSession) < date() %}
                                             "danger" title="Session dépassée">
-                                        {% elseif date(session.dateSession) < date('+2days') %}
-                                            "warning" title="Session prévue dans moins de 2 jours">
+                                        {% elseif date(session.dateSession) < date('+7days') %}
+                                            "warning" title="Session prévue dans moins de 7 jours">
                                         {% elseif date(session.dateSession) < date('+1month') %}
                                             "info" title="Session prévue dans moins d'un mois">
                                         {% else %}
