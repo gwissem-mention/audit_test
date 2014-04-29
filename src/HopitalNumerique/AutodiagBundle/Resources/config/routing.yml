@@ -1,0 +1,46 @@
+hopitalnumerique_autodiag_outil:
+    pattern:  /admin/outil
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Outil:index" }
+
+hopitalnumerique_autodiag_outil_add:
+    pattern:  /admin/outil/add
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Outil:add" }
+
+hopitalnumerique_autodiag_outil_edit:
+    pattern:  /admin/outil/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Outil:edit" }
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_outil_delete:
+    pattern:  /admin/outil/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Outil:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+hopitalnumerique_autodiag_categorie:
+    pattern:  /admin/outil/{id}/categorie
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Categorie:index" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_categorie_add:
+    pattern:  /admin/outil/{id}/categorie/add
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Categorie:add" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_categorie_edit:
+    pattern:  /admin/outil/{id}/categorie/edit/{idCat}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Categorie:edit" }
+    requirements:
+        id: \d+
+        idCat: \d+
+
+hopitalnumerique_autodiag_categorie_delete:
+    pattern:  /admin/outil/categorie/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Categorie:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE

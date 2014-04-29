@@ -1,0 +1,46 @@
+parameters:
+    #Options
+    hopital_numerique_autodiag.options:parameters:
+    #Outils
+    hopitalnumerique_autodiag.manager.outil.class: HopitalNumerique\AutodiagBundle\Manager\OutilManager
+    hopitalnumerique_autodiag.grid.outil.class: HopitalNumerique\AutodiagBundle\Grid\OutilGrid
+    hopitalnumerique_autodiag.form.outil.class: HopitalNumerique\AutodiagBundle\Form\OutilType
+    #Categories
+    hopitalnumerique_autodiag.manager.categorie.class: HopitalNumerique\AutodiagBundle\Manager\CategorieManager
+    hopitalnumerique_autodiag.grid.categorie.class: HopitalNumerique\AutodiagBundle\Grid\CategorieGrid
+    hopitalnumerique_autodiag.form.categorie.class: HopitalNumerique\AutodiagBundle\Form\CategorieType
+
+services:
+    #Outils
+    hopitalnumerique_autodiag.manager.outil:
+        class: %hopitalnumerique_autodiag.manager.outil.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_autodiag.grid.outil:
+        class: %hopitalnumerique_autodiag.grid.outil.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_autodiag.form.outil:
+        class: %hopitalnumerique_autodiag.form.outil.class%
+        arguments: ["@hopitalnumerique_autodiag.manager.outil", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_autodiag_outil }
+
+    #Categories
+    hopitalnumerique_autodiag.manager.categorie:
+        class: %hopitalnumerique_autodiag.manager.categorie.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_autodiag.grid.categorie:
+        class: %hopitalnumerique_autodiag.grid.categorie.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_autodiag.form.categorie:
+        class: %hopitalnumerique_autodiag.form.categorie.class%
+        arguments: ["@hopitalnumerique_autodiag.manager.categorie", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_autodiag_categorie }

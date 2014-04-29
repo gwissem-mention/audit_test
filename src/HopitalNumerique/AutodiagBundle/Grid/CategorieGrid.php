@@ -1,0 +1,64 @@
+<?php
+
+namespace HopitalNumerique\AutodiagBundle\Grid;
+
+use Nodevo\GridBundle\Grid\Grid;
+use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\Column;
+use Nodevo\GridBundle\Grid\Action;
+
+/**
+ * Configuration du grid Categorie.
+ */
+class CategorieGrid extends Grid implements IGrid
+{
+    /**
+     * Définie la config spécifique au grid Categorie.
+     */
+    public function setConfig()
+    {
+        $this->setSource( 'hopitalnumerique_autodiag.manager.categorie' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setNoDataMessage('Aucune categorie à afficher.');
+    }
+
+    /**
+     * Ajoute les colonnes du grid Categorie.
+     */
+    public function setColumns()
+    {
+        $titleColumn = new Column\TextColumn('title', 'Titre');
+        $titleColumn->setFilterable( false );
+        $this->addColonne( $titleColumn );
+
+        $noteColumn = new Column\TextColumn('note', 'Note Optimal');
+        $noteColumn->setFilterable( false );
+        $this->addColonne( $noteColumn );
+
+        //Colonnes invisible
+        $idCatColumn = new Column\TextColumn('idCat', 'ID to hide');
+        $idCatColumn->setFilterable( false );
+        $idCatColumn->setVisible( false );
+        $this->addColonne( $idCatColumn );
+    }
+
+    /**
+     * Ajoute les boutons d'action
+     */
+    public function setActionsButtons()
+    {
+        $editButton = new Action\EditButton( 'hopitalnumerique_autodiag_categorie_edit' );
+        $editButton->setRouteParameters( array('id', 'idCat') );
+        $this->addActionButton( $editButton );
+        
+        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_autodiag_categorie_delete' ) );
+    }
+
+    /**
+     * Ajoute les actions de masses.
+     */
+    public function setMassActions()
+    {
+               
+    }
+}

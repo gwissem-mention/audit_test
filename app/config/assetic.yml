@@ -26,6 +26,7 @@ assetic:
         - HopitalNumeriquePublicationBundle
         - HopitalNumeriqueFaqBundle
         - HopitalNumeriquePaiementBundle
+        - HopitalNumeriqueAutodiagBundle
         - FOSUserBundle
     filters:
         cssrewrite: ~
@@ -42,76 +43,91 @@ assetic:
                 - "bundles/nodevotools/js/tinymce/tinymce.min.js"
                 - "bundles/nodevotools/js/tinymce/tinymce.fr_FR.js"
                 - "bundles/hopitalnumeriquecore/js/tinymce.js"
+            filters : [ ?yui_js ]
         jquery_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery/dist/jquery.min.js"
+            filters : [ ?yui_js ]
         jquery_ui_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-ui/ui/minified/jquery-ui.min.js"
                 - "%kernel.root_dir%/Resources/components/jquery-ui/ui/minified/i18n/jquery-ui-i18n.min.js"
                 - "%kernel.root_dir%/Resources/components/jquery-ui/ui/minified/i18n/jquery.ui.datepicker-fr.min.js"
+            filters : [ ?yui_js ]
         bootstrap_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/bootstrap/dist/js/bootstrap.min.js"
+            filters : [ ?yui_js ]
         select2_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/select2/select2.min.js"
                 - "%kernel.root_dir%/Resources/components/select2/select2_locale_fr.js"
+            filters : [ ?yui_js ]
         fancybox_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/fancybox/source/jquery.fancybox.pack.js"
+            filters : [ ?yui_js ]
         validationEngine_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jQuery-Validation-Engine/js/jquery.validationEngine.js"
                 - "%kernel.root_dir%/Resources/components/jQuery-Validation-Engine/js/languages/jquery.validationEngine-fr.js"
+            filters : [ ?yui_js ]
         json_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/JSON-js/json2.js"
+            filters : [ ?yui_js ]
         bootstrap_iconpicker_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/bootstrap-iconpicker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"
+            filters : [ ?yui_js ]
         nestable_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/Nestable/jquery.nestable.js"
+            filters : [ ?yui_js ]
         enquire_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/enquire/dist/enquire.min.js"
+            filters : [ ?yui_js ]
         jquery_cookie_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-cookie/jquery.cookie.js"
+            filters : [ ?yui_js ]
         jquery_maskedinput_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-maskedinput/dist/jquery.maskedinput.min.js"
+            filters : [ ?yui_js ]
         jquery_toggles_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-toggles/toggles.min.js"
+            filters : [ ?yui_js ]
         jquery_nicescroll_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-nicescroll/jquery.nicescroll.min.js"
+            filters : [ ?yui_js ]
         #CSS
         select2_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/select2/select2.css"
                 - "%kernel.root_dir%/Resources/components/select2/select2-bootstrap.css"
-            filters: [ cssembed ]
+            filters: [ cssembed, ?yui_css ]
         bootstrap_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/bootstrap/dist/css/bootstrap.min.css"
                 - "%kernel.root_dir%/Resources/components/bootstrap/dist/css/bootstrap-theme.min.css"
-            filters: [ cssembed ]
+            filters: [ cssembed, ?yui_css ]
         fancybox_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/fancybox/source/jquery.fancybox.css"
-            filters: [ cssembed ]
+            filters: [ cssembed, ?yui_css ]
         validationEngine_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jQuery-Validation-Engine/css/validationEngine.jquery.css"
-            filters: [ cssembed ]
+            filters: [ cssembed, ?yui_css ]
         jquery_toggles_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-toggles/toggles.css"
-            filters: [ cssembed ]
+            filters: [ cssembed, ?yui_css ]
         bootstrap_iconpicker_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/bootstrap-iconpicker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"
-            filters: [ cssembed ]
+            filters: [ cssembed, ?yui_css ]
