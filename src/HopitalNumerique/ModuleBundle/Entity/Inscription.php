@@ -50,7 +50,7 @@ class Inscription
     /**
      * @var string
      *
-     * @ORM\Column(name="insc_commentaire", type="text")
+     * @ORM\Column(name="insc_commentaire", type="text", nullable=true)
      */
     private $commentaire;
     

@@ -1,0 +1,19 @@
+{% extends 'HopitalNumeriqueModuleBundle:Front:layout.html.twig' %}
+
+{% block menu_modules %}
+    <div id="module-menu">
+        {# Render de la vue de récupérations des différentes modules #}
+        {{ render(controller("HopitalNumeriqueModuleBundle:Front/ModuleFront:menuModules", {'module' : moduleSelectionne} )) }}
+    </div>
+{% endblock menu_modules %}
+
+{% block chapo_description %}
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse consectetur leo in quam elementum dictum. Donec congue velit sit amet feugiat aliquam. Donec sagittis facilisis libero, sit amet dignissim mi vestibulum vehicula. Nulla nunc elit, congue non consequat vitae, accumsan eget enim.
+{% endblock chapo_description %}
+
+{% block contenu %}
+    <div class="col-md-12">
+        
+    </div>
+    <div class="clearfix"></div>
+{% endblock contenu %}

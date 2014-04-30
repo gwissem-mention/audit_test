@@ -8,7 +8,7 @@
 #module-menu #sous-menu li.last{border-bottom:1px solid #f0f0f0; }
 
 #module h3{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; background: #f6f6f6}
-#module h3 a{font-size: 11px; color:#000000; display: block; background: url('../img/tdb.png') no-repeat right; padding-right: 30px; height: 22px; padding-top:11px; font-weight: normal}
+#module h3 a{font-size: 11px; color:#000000; display: block; background: url('/bundles/hopitalnumeriqueregistre/img/tdb.png') no-repeat right; padding-right: 30px; height: 22px; padding-top:11px; font-weight: normal}
 
 /* Partie Registre : liste */
 #module h4{font-size: 16px;font-weight: bold; border-bottom: solid 1px #d5d5d5; padding: 0 0 3px 0;}

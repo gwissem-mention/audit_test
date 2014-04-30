@@ -1,0 +1,5 @@
+<div id="form_inscription">
+    {% form_theme form 'HopitalNumeriqueUserBundle:User/Theme:theme.inscription.html.twig' %}
+    {{ form_javascript(form) }}
+    {{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}
+</div>

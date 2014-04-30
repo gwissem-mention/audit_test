@@ -1,3 +1,4 @@
+#Front - Module  
 hopitalnumerique_module_module_front:
     pattern: /index
     defaults: { _controller: HopitalNumeriqueModuleBundle:Front/ModuleFront:index}
@@ -8,8 +9,22 @@ hopitalnumerique_module_module_affichage_front:
     requirements:
         id: \d+
 
+#Front - Session
 hopitalnumerique_module_session_description_front:
     pattern:  /session/description/{id}
     defaults: { _controller: HopitalNumeriqueModuleBundle:Front/SessionFront:description, id: 1  }
+    requirements:
+        id: \d+
+
+hopitalnumerique_module_session_informations_front:
+    pattern:  /session/informations/{id}
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/SessionFront:information, id: 1  }
+    requirements:
+        id: \d+
+
+#Front - Inscription
+hopitalnumerique_module_inscription_add_front:
+    pattern:  /inscription/add/{id}
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/InscriptionFront:add }
     requirements:
         id: \d+

@@ -62,3 +62,11 @@ VALUES
 
 /* Nettoyage de cotrine migration */
 /* 16:11:15 Gaia (localnodevo) */ DROP TABLE `migration_versions`;
+
+/* -------------------*/
+/* ----   Front   ----*/
+/* -------------------*/
+/* Gestion des habilitations du front : GME - 29/04/14 */
+INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`)
+VALUES
+    (30, 'FrontOffice - Gestion des Modules', '/^\\/module/', 30, 2);
