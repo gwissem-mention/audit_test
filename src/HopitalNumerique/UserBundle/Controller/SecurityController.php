@@ -24,10 +24,6 @@ class SecurityController extends BaseController
                 $template = sprintf('HopitalNumeriqueAccountBundle:Security:login.html.twig');
             else
                 $template = sprintf('HopitalNumeriqueUserBundle:Security:login.html.twig');
-
-            //On récupère l'utilisateur qui est connecté
-            $user = $this->get('security.context')->getToken()->getUser();
-            $user->addNbVisites();
     
             return $this->container->get('templating')->renderResponse($template, $data);
         }

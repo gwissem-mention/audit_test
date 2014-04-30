@@ -222,7 +222,7 @@ class User extends BaseUser
     /**
      * @var integer
      * 
-     * @ORM\Column(name="usr_nbVisite", type="integer", options = {"comment" = "Nombre de fois où un user est connecté"})     
+     * @ORM\Column(name="usr_nb_visite", type="integer", options = {"comment" = "Nombre de fois où un user est connecté"})     
      */
     protected $nbVisites;
 
