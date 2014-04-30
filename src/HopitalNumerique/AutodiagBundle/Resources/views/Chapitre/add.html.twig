@@ -1,0 +1,19 @@
+<li class="dd-item dd3-item" data-id="{{chapitre.id}}" id="chapitre-{{chapitre.id}}" >
+    <div class="dd-handle dd3-handle"></div>
+    <div class="dd3-content">
+        <a href="#" class="fancybox.ajax" >{{chapitre.title}}</a>
+        <p class="text-muted pull-right" ><span>XX</span> éléments référencés</p>
+    </div>
+    <div class="dd3-actions dd4">
+        <div onclick="deleteChapitre( {{chapitre.id}}, '#' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+        <a href="#" class="pull-right dd3-cog manageReferences fancybox.ajax"><i class="fa fa-cog"></i></a>
+    </div>
+    
+    {% if chapitre.childs %}
+        <ol class="dd-list">
+            {% for child in chapitre.childs %}
+                {{ _self.buildTree(child) }}
+            {% endfor %}
+        </ol>
+    {% endif %}
+</li>

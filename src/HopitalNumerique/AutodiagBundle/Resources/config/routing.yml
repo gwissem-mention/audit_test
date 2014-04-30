@@ -1,3 +1,4 @@
+#Outils
 hopitalnumerique_autodiag_outil:
     pattern:  /admin/outil
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Outil:index" }
@@ -19,6 +20,7 @@ hopitalnumerique_autodiag_outil_delete:
         id: \d+
         _method: POST|DELETE
 
+#Catégories
 hopitalnumerique_autodiag_categorie:
     pattern:  /admin/outil/{id}/categorie
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Categorie:index" }
@@ -44,3 +46,16 @@ hopitalnumerique_autodiag_categorie_delete:
     requirements: 
         id: \d+
         _method: POST|DELETE
+
+#Chapitres
+hopitalnumerique_autodiag_chapitre:
+    pattern:  /admin/outil/{id}/chapitre
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:index" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_chapitre_add:
+    pattern:  /admin/outil/{id}/chapitre/add
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:add" }
+    requirements: 
+        id : \d+

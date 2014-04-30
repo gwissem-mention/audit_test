@@ -57,10 +57,23 @@ class Chapitre
     private $synthese;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="cha_order", type="smallint", options = {"comment" = "Ordre du chapitre"})
+     */
+    private $order;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Outil", cascade={"persist"})
      * @ORM\JoinColumn(name="out_id", referencedColumnName="out_id")
      */
     protected $outil;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chapitre", cascade={"persist"})
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="cha_id", onDelete="CASCADE", nullable=true)
+     */
+    protected $parent;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -192,6 +205,27 @@ class Chapitre
     }
 
     /**
+     * Get order
+     *
+     * @return integer $order
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+    
+    /**
+     * Set order
+     *
+     * @param integer $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+        return $this;
+    }
+    
+    /**
      * Get outil
      *
      * @return \HopitalNumerique\AutodiagBundle\Entity\Outil $outil
@@ -211,4 +245,26 @@ class Chapitre
         $this->outil = $outil;
         return $this;
     }
+
+    /**
+     * Get parent
+     *
+     * @return \HopitalNumerique\AutodiagBundle\Entity\Chapitre $parent
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+    
+    /**
+     * Set parent
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Chapitre $parent
+     */
+    public function setParent(\HopitalNumerique\AutodiagBundle\Entity\Chapitre $parent)
+    {
+        $this->parent = $parent;
+        return $this;
+    }
+    
 }

@@ -9,6 +9,8 @@ parameters:
     hopitalnumerique_autodiag.manager.categorie.class: HopitalNumerique\AutodiagBundle\Manager\CategorieManager
     hopitalnumerique_autodiag.grid.categorie.class: HopitalNumerique\AutodiagBundle\Grid\CategorieGrid
     hopitalnumerique_autodiag.form.categorie.class: HopitalNumerique\AutodiagBundle\Form\CategorieType
+    #Chapitres
+    hopitalnumerique_autodiag.manager.chapitre.class: HopitalNumerique\AutodiagBundle\Manager\ChapitreManager
 
 services:
     #Outils
@@ -44,3 +46,10 @@ services:
         arguments: ["@hopitalnumerique_autodiag.manager.categorie", "@validator"]
         tags:
             - { name: form.type, alias: hopitalnumerique_autodiag_categorie }
+
+    #Chapitres
+    hopitalnumerique_autodiag.manager.chapitre:
+        class: %hopitalnumerique_autodiag.manager.chapitre.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

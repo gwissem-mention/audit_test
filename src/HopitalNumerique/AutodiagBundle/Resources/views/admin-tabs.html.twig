@@ -23,6 +23,17 @@
         {% endif %}
 
 
+        {% if route == 'hopitalnumerique_autodiag_chapitre' %}
+            <li class="active">
+                <a href="#">Gestion des chapitres / questions</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{path('hopitalnumerique_autodiag_chapitre',{'id':outil.id})}}">Gestion des chapitres / questions</a>
+            </li>
+        {% endif %}
+
+
 
 
 
