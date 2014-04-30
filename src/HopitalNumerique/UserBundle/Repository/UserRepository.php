@@ -28,7 +28,8 @@ class UserRepository extends EntityRepository
                         user.roles,
                         refEtat.libelle as etat, 
                         user.lock, 
-                        min(contractualisation.dateRenouvellement) as contra
+                        min(contractualisation.dateRenouvellement) as contra,
+                        user.nbVisites
             ')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->leftJoin('user.etat','refEtat')
