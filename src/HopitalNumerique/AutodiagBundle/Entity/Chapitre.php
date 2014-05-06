@@ -261,7 +261,7 @@ class Chapitre
      *
      * @param \HopitalNumerique\AutodiagBundle\Entity\Chapitre $parent
      */
-    public function setParent(\HopitalNumerique\AutodiagBundle\Entity\Chapitre $parent)
+    public function setParent($parent)
     {
         $this->parent = $parent;
         return $this;

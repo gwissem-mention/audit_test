@@ -11,6 +11,10 @@ parameters:
     hopitalnumerique_autodiag.form.categorie.class: HopitalNumerique\AutodiagBundle\Form\CategorieType
     #Chapitres
     hopitalnumerique_autodiag.manager.chapitre.class: HopitalNumerique\AutodiagBundle\Manager\ChapitreManager
+    hopitalnumerique_autodiag.form.chapitre.class: HopitalNumerique\AutodiagBundle\Form\ChapitreType
+    #Questions
+    hopitalnumerique_autodiag.manager.question.class: HopitalNumerique\AutodiagBundle\Manager\QuestionManager
+    hopitalnumerique_autodiag.form.question.class: HopitalNumerique\AutodiagBundle\Form\QuestionType
 
 services:
     #Outils
@@ -53,3 +57,22 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_autodiag.form.chapitre:
+        class: %hopitalnumerique_autodiag.form.chapitre.class%
+        arguments: ["@hopitalnumerique_autodiag.manager.chapitre", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_autodiag_chapitre }
+
+    #Questions
+    hopitalnumerique_autodiag.manager.question:
+        class: %hopitalnumerique_autodiag.manager.question.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_autodiag.form.question:
+        class: %hopitalnumerique_autodiag.form.question.class%
+        arguments: ["@hopitalnumerique_autodiag.manager.question", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_autodiag_question }

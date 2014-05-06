@@ -2,8 +2,11 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller;
 
+use HopitalNumerique\AutodiagBundle\Entity\Chapitre;
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Chapitre controller.
@@ -15,10 +18,11 @@ class ChapitreController extends Controller
      */
     public function indexAction(Outil $outil)
     {
-        
+        $chapitres = $this->get('hopitalnumerique_autodiag.manager.chapitre')->getArbo( $outil );
+
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Chapitre:index.html.twig' , array(
             'outil'     => $outil,
-            'chapitres' => array()
+            'chapitres' => $chapitres
         ));
     }
 
@@ -35,10 +39,105 @@ class ChapitreController extends Controller
         $order = $this->get('hopitalnumerique_autodiag.manager.chapitre')->countChapitres($outil) + 1;
         $chapitre->setOrder( $order );
 
+        //init datas
+        $chapitre->setTitle('Chapitre '.$order);
+        $chapitre->setAlias('chapitre-'.$order);
+
+        //save
+        $this->get('hopitalnumerique_autodiag.manager.chapitre')->save( $chapitre );
+
         return $this->render('HopitalNumeriqueAutodiagBundle:Chapitre:add.html.twig', array(
             'chapitre' => $chapitre
         ));
     }
+
+    /**
+     * Met à jour l'ordre des différents chapitres
+     */
+    public function reorderAction(Outil $outil)
+    {
+        //get datas serialzed
+        $datas = $this->get('request')->request->get('datas');
+
+        //execute reorder
+        $this->get('hopitalnumerique_autodiag.manager.chapitre')->reorder( $datas, null );
+        $this->getDoctrine()->getManager()->flush();
+
+        //return success.true si le fichier existe deja
+        return new Response('{"success":true}', 200);
+    }
+
+    /**
+     * Suppresion d'un chapitre.
+     *
+     * METHOD = POST|DELETE
+     */
+    public function deleteAction( Chapitre $chapitre )
+    {
+        //On récupère le parent de l'élément que l'on delete.
+        $parent = $chapitre->getParent();
+
+        //get outil
+        $outil = $chapitre->getOutil();
+        
+        //delete
+        $this->get('hopitalnumerique_autodiag.manager.chapitre')->delete( $chapitre );
+
+        //On recherche si le parent de l'élément que l'on delete à encore des enfants après cette supression
+        $stillHaveChilds = 0;
+        if( !is_null($parent) ){
+            $childs = $this->get('hopitalnumerique_autodiag.manager.chapitre')->findBy( array( 'parent' => $parent ) );
+            if( !empty($childs ) )
+                $stillHaveChilds = 1;
+        }
+
+        return new Response('{"success":true, "childs":'.$stillHaveChilds.'}', 200);
+    }
+
+    /**
+     * POPIN : Edite le contenu d'un chapitre
+     */
+    public function editAction(Chapitre $chapitre)
+    {
+        $form = $this->createForm( 'hopitalnumerique_autodiag_chapitre', $chapitre);
+
+        return $this->render( 'HopitalNumeriqueAutodiagBundle:Chapitre:edit.html.twig' , array(
+            'form'     => $form->createView(),
+            'chapitre' => $chapitre
+        ));
+    }
+
+    /**
+     * Sauvegarde AJAX du chapitre
+     */
+    public function saveAction(Chapitre $chapitre, Request $request)
+    {
+        $form = $this->createForm( 'hopitalnumerique_autodiag_chapitre', $chapitre);
+
+        if ( $form->handleRequest($request)->isValid() ) {
+            //save
+            $this->getDoctrine()->getManager()->flush();
+            
+            return new Response('{"success":true, "id": '.$chapitre->getId().' , "titre":"'.$chapitre->getTitle().'"}', 200);
+        }
+
+        return new Response('{"success":false}', 200);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

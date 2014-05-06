@@ -1,0 +1,25 @@
+<div class="panel panel-midnightblue" id="fancybox" >
+    <div class="panel-heading" >
+        <h4>{% block popinTitle %}{% endblock %}</h4>
+    </div>
+
+    <div class="panel-body" >
+        <div class="content" >
+            {% block popinContent %}{% endblock %}
+        </div>
+        
+        <div class="panel-footer" >
+            <div class="row">
+                <div class="btn-toolbar pull-right">
+                    {% block popinActions %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" >
+    $(document).ready(function() {
+        {% block popinJavascript %}{% endblock %}
+    });
+</script>
