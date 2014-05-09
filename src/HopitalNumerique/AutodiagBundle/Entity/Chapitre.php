@@ -4,6 +4,10 @@ namespace HopitalNumerique\AutodiagBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+//Asserts Stuff
+use Symfony\Component\Validator\Constraints as Assert;
+use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
+
 /**
  * Chapitre
  *
@@ -25,6 +29,14 @@ class Chapitre
      * @var string
      *
      * @ORM\Column(name="cha_title", type="string", length=255, options = {"comment" = "Titre du chapitre"})
+     * @Assert\NotBlank(message="Le titre ne peut pas être vide.")
+     * @Assert\Length(
+     *      min = "1",
+     *      max = "255",
+     *      minMessage = "Il doit y avoir au moins {{ limit }} caractères dans le titre.",
+     *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans le titre."
+     * )
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      */
     private $title;
 
@@ -32,6 +44,11 @@ class Chapitre
      * @var string
      *
      * @ORM\Column(name="cha_alias", type="string", length=255, options = {"comment" = "Alias du chapitre"})
+     * @Assert\Length(
+     *      max = "255",
+     *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans le titre."
+     * )
+     * @Nodevo\Javascript(class="validate[maxSize[255]] checkAliasUnique")
      */
     private $alias;
 
@@ -39,6 +56,7 @@ class Chapitre
      * @var integer
      *
      * @ORM\Column(name="cha_note_optimale", type="smallint", nullable=true, options = {"comment" = "Note optimale du chapitre"})
+     * @Nodevo\Javascript(class="validate[custom[integer], min[0], max[999]]")
      */
     private $noteOptimale;
 
@@ -46,6 +64,7 @@ class Chapitre
      * @var integer
      *
      * @ORM\Column(name="cha_note_minimale", type="smallint", nullable=true, options = {"comment" = "Note minimale du chapitre"})
+     * @Nodevo\Javascript(class="validate[custom[integer], min[0], max[999]]")
      */
     private $noteMinimale;
 
@@ -64,8 +83,8 @@ class Chapitre
     private $order;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Outil", cascade={"persist"})
-     * @ORM\JoinColumn(name="out_id", referencedColumnName="out_id")
+     * @ORM\ManyToOne(targetEntity="Outil", cascade={"persist"}, inversedBy="chapitres")
+     * @ORM\JoinColumn(name="out_id", referencedColumnName="out_id", onDelete="CASCADE")
      */
     protected $outil;
 
@@ -76,11 +95,21 @@ class Chapitre
     protected $parent;
 
     /**
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="chapitre")
+     */
+    private $questions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\RefChapitre", mappedBy="chapitre", cascade={"persist"})
+     */
+    protected $references;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
-        
+        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -267,4 +296,36 @@ class Chapitre
         return $this;
     }
     
+    /**
+     * Get questions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    /**
+     * Get references
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $references
+     */
+    public function getReferences()
+    {
+        return $this->references;
+    }
+
+    /**
+     * Set references
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $references
+     * @return Objet
+     */
+    public function setReferences(\Doctrine\Common\Collections\ArrayCollection $references)
+    {        
+        $this->references = $references;
+    
+        return $this;
+    }
 }

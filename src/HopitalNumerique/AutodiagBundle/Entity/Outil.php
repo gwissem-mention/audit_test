@@ -117,6 +117,11 @@ class Outil
     protected $statut;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chapitre", mappedBy="outil")
+     */
+    private $chapitres;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -125,6 +130,7 @@ class Outil
         $this->columnChart  = false;
         $this->radarChart   = false;
         $this->tableChart   = false;
+        $this->chapitres    = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -386,5 +392,15 @@ class Outil
     {
         $this->statut = $statut;
         return $this;
+    }
+
+    /**
+     * Get chapitres
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChapitres()
+    {
+        return $this->chapitres;
     }
 }

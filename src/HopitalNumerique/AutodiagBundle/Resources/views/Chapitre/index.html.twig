@@ -4,8 +4,11 @@
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-autodiag-categorie-index.css" filter="cssrewrite, ?yui_css" 
         "@fancybox_css"
+        "@validationEngine_css"
+        "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
         'bundles/hopitalnumeriqueautodiag/css/style.css'
+        'bundles/nodevoadmin/css/toggles.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -17,6 +20,9 @@
         "@fancybox_js" 
         "@nestable_js"
         "@tinymce_js"
+        "@jquery_toggles_js"
+        "@validationEngine_js"
+        "@json_js"
         'bundles/hopitalnumeriqueautodiag/js/script.js'
         'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
         'bundles/nodevogestionnairemedia/js/MoxieManager.js'
@@ -91,11 +97,11 @@
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
             <a href="javascript:selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')">{{chapitre.title}}</a>
-            <p class="text-muted pull-right"><span>XX</span> éléments référencés</p>
+            <p class="text-muted pull-right"><span>{{chapitre.references|default('0')}}</span> éléments référencés</p>
         </div>
         <div class="dd3-actions">
             <div onclick="deleteChapitre( {{chapitre.id}}, '{{path('hopitalnumerique_autodiag_chapitre_delete', {'id':chapitre.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-            <a href="#" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
+            <a href="{{path('hopitalnumerique_autodiag_reference_chapitre',{'id':chapitre.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
             <a href="{{path('hopitalnumerique_autodiag_chapitre_edit',{'id':chapitre.id})}}" class="fancy pull-right dd3-edit fancybox.ajax"><i class="fa fa-edit"></i></a>
             <a href="{{path('hopitalnumerique_autodiag_question_add', {'id':chapitre.id})}}" class="fancy pull-right dd3-plus fancybox.ajax" onclick="selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')" ><i class="fa fa-plus"></i></a>
         </div>

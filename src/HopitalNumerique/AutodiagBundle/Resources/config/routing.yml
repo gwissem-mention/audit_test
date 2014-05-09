@@ -85,6 +85,12 @@ hopitalnumerique_autodiag_chapitre_save:
     requirements: 
         id : \d+
 
+hopitalnumerique_autodiag_chapitre_check_alias_unique:
+    pattern:  /admin/outil/chapitre/{id}/checkAliasUnique
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:checkAliasUnique" }
+    requirements: 
+        id : \d+
+
 #Questions
 hopitalnumerique_autodiag_question:
     pattern:  /admin/outil/chapitre/{id}/question
@@ -117,3 +123,28 @@ hopitalnumerique_autodiag_question_save:
     requirements: 
         id : \d+
         _method: POST
+
+#Références
+hopitalnumerique_autodiag_reference_chapitre:
+    pattern:  /admin/outil/chapitre/{id}/reference
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Reference:chapitre"}
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_reference_chapitre_save:
+    pattern:  /admin/outil/chapitre/{id}/reference/save
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Reference:saveChapitre" }
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_reference_question:
+    pattern:  /admin/outil/question/{id}/reference
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Reference:question"}
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_reference_question_save:
+    pattern:  /admin/outil/question/{id}/reference/save
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Reference:saveQuestion" }
+    requirements:
+        id: \d+

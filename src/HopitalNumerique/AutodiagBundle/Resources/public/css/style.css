@@ -8,4 +8,15 @@ div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
 #chapitres .dd3-actions .dd3-plus:before{ content: '\f067'; }
 
 /* Gestion des questions */
-#questions .text-muted {margin-right:90px}
+#questions .text-muted {margin-right:60px}
+#questions .dd3-content{padding-left:10px;}
+
+/* fancybox References */
+#panel-references{padding:0;}
+#panel-references .tableContent{overflow-y:scroll; height:470px}
+#panel-references .tableContent thead .checkAll{display: block; margin: 0 auto}
+#panel-references .tableContent .level1{background: #34495e}
+#panel-references .tableContent .level1 td{color: #ffffff; font-size: 16px; font-weight: bold}
+#panel-references .tableContent .level2{background: #D8D8D8}
+#panel-references .tableContent .level3{background: #E6E6E6}
+#panel-references .panel-footer{margin:0;}

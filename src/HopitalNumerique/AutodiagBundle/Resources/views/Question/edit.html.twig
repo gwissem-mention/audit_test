@@ -63,7 +63,7 @@
             </div>
         </div>
         
-        <div class="col-md-6 not-txt" style="{% if not question.type %}display:none{% endif %}" >
+        <div class="col-md-6 not-txt" style="{% if not question.type or question.type.id == 417 %}display:none{% endif %}" >
             <div class="form-group">
                 {{ form_label(form.noteMinimale) }}
                 <div class="col-md-4">
@@ -76,7 +76,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 txt" style="{% if not question.type %}display:none{% endif %}" >
+        <div class="col-md-6 txt" style="{% if not question.type or question.type.id != 417 %}display:none{% endif %}" >
             <div class="form-group">
                 {{ form_label(form.seuil) }}
                 <div class="col-md-4">
@@ -91,7 +91,7 @@
         </div>
 
         <div class="clearfix"></div>
-        <div class="col-md-12 not-txt" style="{% if not question.type %}display:none{% endif %}" >
+        <div class="col-md-12 not-txt" style="{% if not question.type or question.type.id == 417 %}display:none{% endif %}" >
             {{ form_row(form.options) }}
         </div>
 
@@ -100,22 +100,6 @@
             {{ form_row(form.synthese) }}
         </div>
     {{ form_end(form) }}
-
-    <script>
-    function toggleTypeQuestion()
-    {
-        if( $('#hopitalnumerique_autodiag_question_type').val() == 417 ){
-            $('.txt').show();
-            $('.not-txt').hide();
-        }else if ($('#hopitalnumerique_autodiag_question_type').val() == 415 || $('#hopitalnumerique_autodiag_question_type').val() == 416 ){
-            $('.txt').hide();
-            $('.not-txt').show();
-        }else{
-            $('.txt').hide();
-            $('.not-txt').hide();
-        }
-    }
-    </script>
 {% endblock %}
 
 {% block popinActions %}
@@ -125,4 +109,8 @@
     {% else %}
         <div onclick="saveQuestion('{{path('hopitalnumerique_autodiag_question_save')}}');" class="btn-primary btn">Enregistrer</div>
     {% endif %}
+{% endblock %}
+
+{% block popinJavascript %}
+    $('#fancybox form.toValidate').validationEngine();
 {% endblock %}

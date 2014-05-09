@@ -17,7 +17,8 @@ class OutilGrid extends Grid implements IGrid
      */
     public function setConfig()
     {
-        $this->setSource( 'HopitalNumeriqueAutodiagBundle:Outil' );
+        $this->setSource( 'hopitalnumerique_autodiag.manager.outil' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('Aucun Outil à afficher.');
     }
 
@@ -27,7 +28,23 @@ class OutilGrid extends Grid implements IGrid
     public function setColumns()
     {
         $this->addColonne( new Column\TextColumn('title', 'Title') );
-        $this->addColonne( new Column\TextColumn('alias', 'Alias') );
+        
+        $nbChapColumn = new Column\TextColumn('nbChap', 'Nb Chapitres');
+        $nbChapColumn->setSize( 110 );
+        $this->addColonne( $nbChapColumn );
+
+        $nbQuestColumn = new Column\TextColumn('nbQuest', 'Nb Questions');
+        $nbQuestColumn->setSize( 110 );
+        $this->addColonne( $nbQuestColumn );
+
+        $this->addColonne( new Column\DateColumn('dateCreation', 'Date de création') );
+
+        $statutColonne = new Column\TextColumn('statut', 'Statut');
+        $statutColonne->setSize( 80 );
+        $statutColonne->setFilterType('select');
+        $statutColonne->setSelectFrom('source');
+        $statutColonne->setOperatorsVisible( false );
+        $this->addColonne( $statutColonne );
     }
 
     /**
@@ -45,7 +62,8 @@ class OutilGrid extends Grid implements IGrid
      */
     public function setMassActions()
     {
-        
-        
+        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueAutodiagBundle:Outil:deleteMass') );
+        $this->addMassAction( new Action\ActionMass('Activer','HopitalNumeriqueAutodiagBundle:Outil:activerMass') );
+        $this->addMassAction( new Action\ActionMass('Désactiver','HopitalNumeriqueAutodiagBundle:Outil:desactiverMass') );
     }
 }

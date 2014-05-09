@@ -24,4 +24,22 @@ class QuestionRepository extends EntityRepository
                          ->andWhere('que.chapitre = :chapitre')
                          ->setParameter('chapitre', $chapitre );
     }
+
+    /**
+     * Calcul l'ordre de la question par rapport à l'outil
+     *
+     * @param Outil $outil L'outil
+     *
+     * @return QueryBuilder
+     */
+    public function calcOrder( $outil )
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('count(que)')
+                         ->from('\HopitalNumerique\AutodiagBundle\Entity\Question', 'que')
+                         ->leftJoin('que.chapitre','cha')
+                         ->where('cha.outil = :outil')
+                         ->setParameter('outil', $outil );
+    }
+
 }

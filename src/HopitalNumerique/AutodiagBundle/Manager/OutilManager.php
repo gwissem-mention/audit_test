@@ -39,4 +39,53 @@ class OutilManager extends BaseManager
 
         $this->save( $outil );
     }
+
+    /**
+     * Override : Récupère les données pour le grid sous forme de tableau
+     *
+     * @return array
+     */
+    public function getDatasForGrid( $condition = null )
+    {
+        $outils  = $this->findAll();
+        $results = array();
+
+        foreach($outils as $outil) {
+            $object                 = array();
+            $object['id']           = $outil->getId();
+            $object['title']        = $outil->getTitle();
+            $object['dateCreation'] = $outil->getDateCreation();
+            $object['statut']       = $outil->getStatut()->getLibelle();
+            $object['nbChap']       = 0;
+            $object['nbQuest']      = 0;
+
+            //do some maths
+            $chapitres = $outil->getChapitres();
+            $object['nbChap'] = count($chapitres);
+            foreach($chapitres as $chapitre)
+                $object['nbQuest'] += count($chapitre->getQuestions());
+
+            //set result to big array
+            $results[] = $object;
+        }
+
+        return $results;
+    }
+
+    /**
+     * Modifie l'état de l'outil
+     *
+     * @param array     $outils Liste des outils
+     * @param Reference $ref    Référence désirée
+     *
+     * @return empty
+     */
+    public function toogleState($outils, $ref)
+    {
+        foreach($outils as $outil)
+            $outil->setStatut( $ref );
+
+        //save
+        $this->_em->flush();
+    }
 }

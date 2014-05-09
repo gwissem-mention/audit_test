@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Controller;
 
 use HopitalNumerique\AutodiagBundle\Entity\Chapitre;
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
+use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -115,6 +116,10 @@ class ChapitreController extends Controller
         $form = $this->createForm( 'hopitalnumerique_autodiag_chapitre', $chapitre);
 
         if ( $form->handleRequest($request)->isValid() ) {
+            //handle Alias
+            $tool = new Chaine( ( $chapitre->getAlias() == '' ? $chapitre->getTitle() : $chapitre->getAlias() ) );
+            $chapitre->setAlias( $tool->minifie() );
+
             //save
             $this->getDoctrine()->getManager()->flush();
             
@@ -124,8 +129,25 @@ class ChapitreController extends Controller
         return new Response('{"success":false}', 200);
     }
 
+    /**
+     * AJAX : check si l'alias est unique
+     */
+    public function checkAliasUniqueAction(Chapitre $chapitre, Request $request)
+    {
+        $alias         = $request->request->get('alias');
+        $checkChapitre = $this->get('hopitalnumerique_autodiag.manager.chapitre')->findBy( array('alias'=>$alias, 'outil'=>$chapitre->getOutil()) );
+        if ( count($checkChapitre) > 1)
+            return new Response('{"success":false}', 200);
+        elseif ( count($checkChapitre) == 0)
+            return new Response('{"success":true}', 200);
 
-
+        $checkChapitre = $checkChapitre[0];
+        //si on a trouvé un chapitre et que l'ID est n'est pas celui en cours d'édition, l'alias existe déjà
+        if( $checkChapitre && $checkChapitre->getId() != $chapitre->getId() )
+            return new Response('{"success":false}', 200);
+        else
+            return new Response('{"success":true}', 200);
+    }
 
 
 

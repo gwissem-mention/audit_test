@@ -15,6 +15,9 @@ parameters:
     #Questions
     hopitalnumerique_autodiag.manager.question.class: HopitalNumerique\AutodiagBundle\Manager\QuestionManager
     hopitalnumerique_autodiag.form.question.class: HopitalNumerique\AutodiagBundle\Form\QuestionType
+    #Références
+    hopitalnumerique_autodiag.manager.refchapitre.class: HopitalNumerique\AutodiagBundle\Manager\RefChapitreManager
+    hopitalnumerique_autodiag.manager.refquestion.class: HopitalNumerique\AutodiagBundle\Manager\RefQuestionManager
 
 services:
     #Outils
@@ -76,3 +79,16 @@ services:
         arguments: ["@hopitalnumerique_autodiag.manager.question", "@validator"]
         tags:
             - { name: form.type, alias: hopitalnumerique_autodiag_question }
+
+    #References
+    hopitalnumerique_autodiag.manager.refchapitre:
+        class: %hopitalnumerique_autodiag.manager.refchapitre.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_autodiag.manager.refquestion:
+        class: %hopitalnumerique_autodiag.manager.refquestion.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

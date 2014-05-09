@@ -37,7 +37,7 @@ class Categorie
 
     /**
      * @ORM\ManyToOne(targetEntity="Outil", cascade={"persist"})
-     * @ORM\JoinColumn(name="out_id", referencedColumnName="out_id")
+     * @ORM\JoinColumn(name="out_id", referencedColumnName="out_id", onDelete="CASCADE")
      */
     protected $outil;
 

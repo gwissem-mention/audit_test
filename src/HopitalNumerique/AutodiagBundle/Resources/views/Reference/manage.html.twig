@@ -1,0 +1,153 @@
+<div class="panel panel-midnightblue" style="margin:0" >
+    <div class="panel-heading" style="height:65px">
+        <h4 style="line-height:22px; padding: 10px 0">{{titre}} - Gestion des références</h4>
+    </div>
+
+    <div class="panel-body" id="panel-references" >
+        <div class="tableContent" >
+            <table id="references-tab" class="table" >
+                <thead>
+                    <tr>
+                        <th width="60px" align="center"><input type="checkbox" class="checkAll" /></th>
+                        <th width="150px" align="center" class="text-center">Type Primaire ?</th>
+                        <th width="100px" align="center" >Nb Elements</th>
+                        <th>Nom</th>
+                        <th width="50px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ref in references %}
+                        <tr class="ref ref-{{ref.id}} level{{ref.level}}" data-level="{{ref.level}}" data-id="{{ref.id}}" data-childs="{{ref.childs|default('[]')}}" data-parents="{{ref.parents|default('[]')}}" style="{% if ref.parents|default('[]') != '[]' %}display:none{% endif %}" >
+                            <td align="center">
+                                <input type="checkbox" class="checkbox" id="checkbox-{{ref.id}}"{% if ref.selected %} checked="checked"{% endif %} />
+                            </td>
+                            <td align="center">
+                                <div class="toggle toggle-success {% if ref.primary %}on{% else %}off{% endif %}" {% if ref.level > 1 %}style="width:40px;height:14px;line-height:10px;font-size:8px;"{% endif %}></div>
+                            </td>
+                            
+                            <td align="center">
+                                {% if ref.childs|default('[]') != '[]' %}
+                                    <span class="nbChilds" >0</span> / <span class="nbChildsDirect" >{{ref.nbChilds}}</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <label for="checkbox-{{ref.id}}" style="width:100%;">{{ref.libelle}}</label>
+                            </td>
+
+                            <td align="center">
+                                {% if ref.childs|default('[]') != '[]' %}
+                                    <div class="btn {% if ref.level != 1 %}btn-sm{% else %}btn-sky{% endif %}"><i class="fa fa-arrow-right"></i></div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>    
+        </div>
+        
+        <div class="panel-footer" >
+            <div class="row">
+                <div class="btn-toolbar pull-right">
+                    <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+                    <div onclick="saveReferences({{chapitre}}, {{question}});" class="btn-primary btn">Enregistrer</div>
+                </div>
+            </div>
+        </div>
+        {% if chapitre != 'null' %}
+            <input type="hidden" id="save-references-url" value="{{path('hopitalnumerique_autodiag_reference_chapitre_save',{'id':chapitre})}}" />
+        {% endif %}
+
+        {% if question != 'null' %}
+            <input type="hidden" id="save-references-url" value="{{path('hopitalnumerique_autodiag_reference_question_save',{'id':question})}}" />
+        {% endif %}
+    </div>
+</div>
+
+<script type="text/javascript" >
+    $(document).ready(function() {
+        //toggles primary
+        $('.toggle.on').toggles( { on : true, text : { on : 'OUI', off : 'NON' } } );
+        $('.toggle.off').toggles( { on : false, text : { on : 'OUI', off : 'NON' } } );
+
+        //click de la checkbox globale
+        $('#references-tab .checkAll').on('click', function(){
+            if( $('.checkAll').prop('checked') ){
+                $('#references-tab .checkbox').each(function(){
+                    $(this).prop('checked', 'checked');
+                })
+            }else{
+                $('#references-tab .checkbox').each(function(){
+                    $(this).prop('checked', false);
+                })
+            }
+
+            updateNbChilds();
+        });
+
+        //click de chaque checkbox : on gère les enfants (selected)
+        $('#references-tab .checkbox').on('click', function(){
+            $('#references-tab .checkAll').prop('checked',false);
+
+            //get childs (if exist)
+            childs = $(this).parent().parent().data('childs');
+
+            if( childs.length > 0 ){
+                //on coche les enfants
+                if ( $(this).prop('checked') ){
+                    $.each(childs,function(key, val){
+                        $('.ref-'+val+' .checkbox').prop('checked','checked');
+                    });
+                // on décoche les enfants
+                }else{
+                    $.each(childs,function(key, val){
+                        $('.ref-'+val+' .checkbox').prop('checked',false);
+                    });
+                }
+            }
+
+            //get parents (if exist)
+            var parents = $(this).parents('tr').data('parents');
+
+            if( parents.length > 0 ){
+                //on coche les parents
+                if ( $(this).prop('checked') ){
+                    $.each(parents,function(key, val){
+                        $('.ref-'+val+' .checkbox').prop('checked','checked');
+                    });
+                }else{
+                    parents.reverse();
+                    //si on a décoché la case, on fait un traitement spécial aux parents
+                    $.each(parents,function(key, val){
+                        uncheck = true;
+
+                        //si on vient de décoché le dernier enfant on décoche le parent
+                        childs = $('.ref-'+val).data('childs');
+                        $.each(childs, function(cKey, cVal){
+                            if( $('.ref-'+cVal+' .checkbox').prop('checked') )
+                                uncheck = false;
+                        });
+
+                        if( uncheck )
+                            $('.ref-'+val+' .checkbox').prop('checked',false);
+                    });
+
+                    //on remet le tableau dans le bon ordre : sinon il le reverse au prochain click
+                    parents.reverse();
+                }
+            }
+
+            updateNbChilds();
+        });
+
+        //Gère les collapse
+        $('#references-tab .btn').on('click', function(){
+            //détermine le sens : collapse/expend
+            way = ( $(this).find('i').hasClass('fa-arrow-down') ) ? 'collapse' : 'expend';
+            
+            manageCollapse( $(this), way);
+        });
+
+        updateNbChilds();
+    });
+</script>

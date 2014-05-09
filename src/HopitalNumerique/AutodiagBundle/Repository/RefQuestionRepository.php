@@ -5,9 +5,9 @@ namespace HopitalNumerique\AutodiagBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * OutilRepository
+ * RefQuestionRepository
  */
-class OutilRepository extends EntityRepository
+class RefQuestionRepository extends EntityRepository
 {
     
 }

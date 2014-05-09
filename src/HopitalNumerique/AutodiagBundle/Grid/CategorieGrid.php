@@ -51,7 +51,10 @@ class CategorieGrid extends Grid implements IGrid
         $editButton->setRouteParameters( array('id', 'idCat') );
         $this->addActionButton( $editButton );
         
-        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_autodiag_categorie_delete' ) );
+        $deleteButton = new Action\DeleteButton( 'hopitalnumerique_autodiag_categorie_delete' );
+        $deleteButton->setRouteParameters( array('idCat') );
+        $deleteButton->setRouteParametersMapping( array( 'idCat' => 'id') );
+        $this->addActionButton( $deleteButton );
     }
 
     /**

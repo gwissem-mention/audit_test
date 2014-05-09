@@ -25,7 +25,7 @@
                 <div class="col-md-10">
                     {{ form_widget(form.alias) }}
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-10 col-md-offset-2">
                     <div class="help-block">
                         {{ form_errors(form.alias) }}
                     </div>
@@ -76,6 +76,8 @@
             </div>
         </div>
     {{ form_end(form) }}
+
+    <input type="hidden" id="check-alias-unique-url" value="{{path('hopitalnumerique_autodiag_chapitre_check_alias_unique', {'id':chapitre.id})}}" />
 {% endblock %}
 
 {% block popinActions %}
@@ -119,5 +121,11 @@
             {title: 'Styles personnalisés'}
         ],
         relative_urls:false
+    });
+
+    $('#fancybox form.toValidate').validationEngine();
+
+    $('.checkAliasUnique').on('blur', function(){
+        checkAliasUnique();
     });
 {% endblock %}

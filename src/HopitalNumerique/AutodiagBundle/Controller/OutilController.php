@@ -88,11 +88,76 @@ class OutilController extends Controller
      */
     public function deleteAction( Outil $outil )
     {
-        //Suppression de l'entitée
         $this->get('hopitalnumerique_autodiag.manager.outil')->delete( $outil );
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
 
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_outil').'"}', 200);
+    }
+
+    /**
+     * Désctivation de masse des outils
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function desactiverMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected outils
+        $outils = $this->get('hopitalnumerique_autodiag.manager.outil')->findBy( array('id' => $primaryKeys) );
+
+        //get ref and Toggle State
+        $ref = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 4 ) );
+        $this->get('hopitalnumerique_autodiag.manager.outil')->toogleState( $outils, $ref );
+
+        //inform user connected
+        $this->get('session')->getFlashBag()->add('info', 'Désactivation effectuée avec succès.' );
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_outil') );
+    }
+
+    /**
+     * Activation de masse des outils
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function activerMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected outils
+        $outils = $this->get('hopitalnumerique_autodiag.manager.outil')->findBy( array('id' => $primaryKeys) );
+
+        //get ref and Toggle State
+        $ref = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 3 ) );
+        $this->get('hopitalnumerique_autodiag.manager.outil')->toogleState( $outils, $ref );
+
+        //inform user connected
+        $this->get('session')->getFlashBag()->add('info', 'Activation effectuée avec succès.' );
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_outil') );
+    }
+
+    /**
+     * Suppression de masse des outils
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected outils
+        $outils = $this->get('hopitalnumerique_autodiag.manager.outil')->findBy( array('id' => $primaryKeys) );
+        $this->get('hopitalnumerique_autodiag.manager.outil')->delete( $outils );
+
+        //inform user connected
+        $this->get('session')->getFlashBag()->add('info', 'Supression effectuée avec succès.' );
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_outil') );
     }
 }

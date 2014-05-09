@@ -10,6 +10,13 @@ use Doctrine\ORM\EntityRepository;
 
 class QuestionType extends AbstractType
 {
+    private $_constraints = array();
+
+    public function __construct($manager, $validator)
+    {
+        $this->_constraints = $manager->getConstraints( $validator );
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $datas = $options['data'];
@@ -31,26 +38,29 @@ class QuestionType extends AbstractType
                               ->orderBy('ref.order', 'ASC');
                 },
                 'label_attr'   => array('class' => 'col-md-6 control-label'),
-                'attr'         => array('onchange' => 'toggleTypeQuestion()')
+                'attr'         => array('onchange' => 'toggleTypeQuestion()', 'class' => $this->_constraints['type']['class'])
             ))
             ->add('texte', 'text', array(
-                'max_length' => 255, 
+                'max_length' => $this->_constraints['texte']['maxlength'],
                 'required'   => true, 
-                'label'      => 'Texte'
+                'label'      => 'Texte',
+                'attr'       => array('class' => $this->_constraints['texte']['class'] )
             ))
             ->add('infoBulle', 'textarea', array( 
                 'required' => false, 
                 'label'    => 'Texte de l\'info-bulle'
             ))
-            ->add('ponderation', 'integer', array(
-                'required' => true, 
-                'label'    => 'Pondération de la question',
-                'label_attr' => array('class' => 'col-md-8 control-label')
+            ->add('ponderation', 'text', array(
+                'required'   => true, 
+                'label'      => 'Pondération de la question',
+                'label_attr' => array('class' => 'col-md-8 control-label'),
+                'attr'       => array('class' => $this->_constraints['ponderation']['class'] )
             ))
-            ->add('ordreResultat', 'integer', array(
-                'required' => true, 
-                'label'    => 'Ordre pour les résultats',
-                'label_attr' => array('class' => 'col-md-8 control-label')
+            ->add('ordreResultat', 'text', array(
+                'required'   => false, 
+                'label'      => 'Ordre pour les résultats',
+                'label_attr' => array('class' => 'col-md-8 control-label'),
+                'attr'       => array('class' => $this->_constraints['ordreResultat']['class'] )
             ))
             ->add('categorie', 'entity', array(
                 'class'         => 'HopitalNumeriqueAutodiagBundle:Categorie',
@@ -62,22 +72,25 @@ class QuestionType extends AbstractType
                     return $er->createQueryBuilder('cat')
                               ->where('cat.outil = :outil')
                               ->setParameter('outil', $outil);
-                }
+                },
+                'attr' => array('class' => $this->_constraints['categorie']['class'] )
             ))
             ->add('options', 'textarea', array( 
                 'required'   => true, 
                 'label'      => 'Items de choix de réponse',
                 'attr'       => array('rows' => 3)
             ))
-            ->add('noteMinimale', 'integer', array(
+            ->add('noteMinimale', 'text', array(
                 'required'   => false, 
                 'label'      => 'Note minimale de déclenchement',
-                'label_attr' => array('class' => 'col-md-8 control-label')
+                'label_attr' => array('class' => 'col-md-8 control-label'),
+                'attr'       => array('class' => $this->_constraints['noteMinimale']['class'] )
             ))
-            ->add('seuil', 'integer', array(
-                'required' => false, 
-                'label'    => 'Seuil de déclenchement',
-                'label_attr' => array('class' => 'col-md-8 control-label')
+            ->add('seuil', 'text', array(
+                'required'   => false, 
+                'label'      => 'Seuil de déclenchement',
+                'label_attr' => array('class' => 'col-md-8 control-label'),
+                'attr'       => array('class' => $this->_constraints['seuil']['class'] )
             ))
             ->add('synthese', 'textarea', array( 
                 'required' => false, 

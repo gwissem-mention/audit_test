@@ -63,6 +63,20 @@ class QuestionController extends Controller
     }
 
     /**
+     * Affiche le formulaire d'edition de Question.
+     */
+    public function editAction(Question $question, Request $request)
+    {
+        $form = $this->createForm( 'hopitalnumerique_autodiag_question', $question);
+
+        return $this->render( 'HopitalNumeriqueAutodiagBundle:Question:edit.html.twig' , array(
+            'form'     => $form->createView(),
+            'question' => $question,
+            'chapitre' => $question->getChapitre()
+        ));
+    }
+
+    /**
      * Sauvegarde AJAX de la question
      */
     public function saveAction($id, Request $request)
@@ -73,25 +87,30 @@ class QuestionController extends Controller
             $chapitre = $this->get('hopitalnumerique_autodiag.manager.chapitre')->findOneBy( array('id' => intval($datas['chapitre']) ) );
 
             if( ! $chapitre )
-                return new Response('{"success":false}', 200);
+                return new Response('<h3>Une erreur est survenue, merci de réessayé</h3>', 200);
 
             $question = $this->get('hopitalnumerique_autodiag.manager.question')->createEmpty();
             $question->setChapitre( $chapitre );
-        }else
+        }else{
             $question = $this->get('hopitalnumerique_autodiag.manager.question')->findOneBy( array('id'=>$id) );
+            $chapitre = $question->getChapitre();
+        }
 
         //build form
         $form = $this->createForm( 'hopitalnumerique_autodiag_question', $question);
 
         if ( $form->handleRequest($request)->isValid() ) {
-            
             $this->get('hopitalnumerique_autodiag.manager.question')->saveQuestion( $question );
 
-            
-            return new Response('{"success":true}', 200);
+            //actualise render
+            $questions = $this->get('hopitalnumerique_autodiag.manager.question')->findBy( array('chapitre' => $chapitre ) );
+            return $this->render( 'HopitalNumeriqueAutodiagBundle:Question:index.html.twig' , array(
+                'questions' => $questions,
+                'chapitre'  => $chapitre
+            ));
         }
 
-        return new Response('{"success":false}', 200);
+        return new Response('<h3>Une erreur est survenue, merci de réessayé</h3>', 200);
     }
 
 

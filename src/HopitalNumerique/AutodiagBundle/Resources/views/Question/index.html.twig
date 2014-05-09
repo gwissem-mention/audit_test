@@ -4,15 +4,13 @@
     <ol class="dd-list">
         {% for question in questions %}
             <li class="dd-item dd3-item" data-id="{{question.id}}" id="question-{{question.id}}" >
-                <div class="dd-handle dd3-handle"></div>
                 <div class="dd3-content">
-                    <a href="#">{{question.texte}}</a>
-                    <p class="text-muted pull-right"><span>XX</span> éléments référencés</p>
+                    <a href="{{path('hopitalnumerique_autodiag_question_edit',{'id':question.id})}}" class="fancy fancybox.ajax">{{question.texte}}</a>
+                    <p class="text-muted pull-right"><span>{{question.references|length}}</span> éléments référencés</p>
                 </div>
                 <div class="dd3-actions">
                     <div onclick="deleteQuestion( {{question.id}}, '{{path('hopitalnumerique_autodiag_question_delete', {'id':question.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-                    <a href="#" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
-                    <a href="{{path('hopitalnumerique_autodiag_question_edit',{'id':question.id})}}" class="fancy pull-right dd3-edit fancybox.ajax"><i class="fa fa-edit"></i></a>
+                    <a href="{{path('hopitalnumerique_autodiag_reference_question', {'id':question.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
                 </div>
             </li>
         {% endfor %}

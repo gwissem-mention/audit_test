@@ -4,6 +4,10 @@ namespace HopitalNumerique\AutodiagBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+//Asserts Stuff
+use Symfony\Component\Validator\Constraints as Assert;
+use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
+
 /**
  * Question
  *
@@ -25,6 +29,14 @@ class Question
      * @var string
      *
      * @ORM\Column(name="que_texte", type="string", length=512, options = {"comment" = "Texte de la question"})
+     * @Assert\NotBlank(message="Le texte ne peut pas être vide.")
+     * @Assert\Length(
+     *      min = "1",
+     *      max = "512",
+     *      minMessage = "Il doit y avoir au moins {{ limit }} caractères dans le texte.",
+     *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans le texte."
+     * )
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[512]]")
      */
     private $texte;
 
@@ -39,6 +51,7 @@ class Question
      * @var integer
      *
      * @ORM\Column(name="que_ponderation", type="smallint", options = {"comment" = "Pondération de la question"})
+     * @Nodevo\Javascript(class="validate[required,custom[integer], min[0], max[999]]")
      */
     private $ponderation;
 
@@ -46,6 +59,7 @@ class Question
      * @var integer
      *
      * @ORM\Column(name="que_ordre_resultat", type="smallint", options = {"comment" = "Ordre pour les résultats de la question"}, nullable=true)
+     * @Nodevo\Javascript(class="validate[custom[integer], min[0], max[999]]")
      */
     private $ordreResultat;
 
@@ -60,6 +74,7 @@ class Question
      * @var integer
      *
      * @ORM\Column(name="que_note_minimale", type="smallint", options = {"comment" = "Note minimale de déclenchement de la question"}, nullable=true)
+     * @Nodevo\Javascript(class="validate[custom[integer], min[0], max[999]]")
      */
     private $noteMinimale;
 
@@ -67,6 +82,7 @@ class Question
      * @var integer
      *
      * @ORM\Column(name="que_seuil", type="smallint", options = {"comment" = "Valeur du seuil de déclenchement de la question"}, nullable=true)
+     * @Nodevo\Javascript(class="validate[custom[integer], min[0], max[999]]")
      */
     private $seuil;
 
@@ -87,27 +103,34 @@ class Question
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_type", referencedColumnName="ref_id")
+     * @Nodevo\Javascript(class="validate[required]")
      */
     protected $type;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chapitre", cascade={"persist"})
-     * @ORM\JoinColumn(name="cha_id", referencedColumnName="cha_id")
+     * @ORM\ManyToOne(targetEntity="Chapitre", cascade={"persist"}, inversedBy="questions" )
+     * @ORM\JoinColumn(name="cha_id", referencedColumnName="cha_id", onDelete="CASCADE")
      */
     protected $chapitre;
 
     /**
      * @ORM\ManyToOne(targetEntity="Categorie", cascade={"persist"})
-     * @ORM\JoinColumn(name="cat_id", referencedColumnName="cat_id")
+     * @ORM\JoinColumn(name="cat_id", referencedColumnName="cat_id", onDelete="CASCADE")
+     * @Nodevo\Javascript(class="validate[required]")
      */
     protected $categorie;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\RefQuestion", mappedBy="question", cascade={"persist"})
+     */
+    protected $references;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
-        
+        $this->ponderation = 1;
     }
 
     /**
@@ -388,5 +411,28 @@ class Question
     {
         $this->categorie = $categorie;
         return $this;
-    }    
+    }
+
+    /**
+     * Get references
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $references
+     */
+    public function getReferences()
+    {
+        return $this->references;
+    }
+
+    /**
+     * Set references
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $references
+     * @return Objet
+     */
+    public function setReferences(\Doctrine\Common\Collections\ArrayCollection $references)
+    {        
+        $this->references = $references;
+    
+        return $this;
+    }
 }

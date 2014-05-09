@@ -69,6 +69,24 @@ function toggle( block )
     }   
 }
 
+//toggle le type de la question et cache les champs inutiles
+function toggleTypeQuestion()
+{
+    if( $('#hopitalnumerique_autodiag_question_type').val() == 417 ){
+        $('.txt').show();
+        $('.not-txt').hide();
+        $('#hopitalnumerique_autodiag_question_options').removeClass('validate[required]');
+    }else if ($('#hopitalnumerique_autodiag_question_type').val() == 415 || $('#hopitalnumerique_autodiag_question_type').val() == 416 ){
+        $('.txt').hide();
+        $('.not-txt').show();
+        $('#hopitalnumerique_autodiag_question_options').addClass('validate[required]');
+    }else{
+        $('.txt').hide();
+        $('.not-txt').hide();
+        $('#hopitalnumerique_autodiag_question_options').removeClass('validate[required]');
+    }
+}
+
 //Supprime le contenu en cours de visualisation
 function deleteChapitre( id, url )
 {
@@ -95,6 +113,11 @@ function deleteChapitre( id, url )
 
                         if( $('#chapitres ol li').length == 0)
                             $('.designForBlank').show();
+
+                        //clean questions
+                        $('#questions .chapitre').val( 0 );
+                        $('#questions .selectChapitre').show();
+                        $('#questions .results').html('');
                     }
                 }
             });
@@ -105,18 +128,21 @@ function deleteChapitre( id, url )
 //sauvegarde le chapitre
 function saveChapitre( url )
 {
-    $.ajax({
-        url      : url,
-        data     : $('#fancybox form').serialize(),
-        type     : 'POST',
-        dataType : 'json',
-        success  : function( data ){
-            if( data.success ) {
-                $('#chapitres #chapitre-' + data.id + ' > .dd3-content a').html( data.titre );
-                $.fancybox.close(true);
+    checkAliasUnique();
+    if( $('#hopitalnumerique_autodiag_chapitre_alias').parent().parent().find('.help-block').html() == '' ){
+        $.ajax({
+            url      : url,
+            data     : $('#fancybox form').serialize(),
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                if( data.success ) {
+                    $('#chapitres #chapitre-' + data.id + ' > .dd3-content a').html( data.titre );
+                    $.fancybox.close(true);
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 //Supprime le contenu en cours de visualisation
@@ -173,17 +199,124 @@ function selectChapter( id, url )
 //sauvegarde le chapitre
 function saveQuestion( url )
 {
+    if( $("#fancybox form").validationEngine('validate') ) {
+       $.ajax({
+            url     : url,
+            data    : $('#fancybox form').serialize(),
+            type    : 'POST',
+            success : function( data ){
+                $('#questions .results').html( data );
+                $.fancybox.close(true);
+            }
+        });
+    }
+    return false;
+}
+
+//vérifie que l'alias du chapitre est bien unique par rapport à l'objet
+function checkAliasUnique()
+{
     $.ajax({
-        url      : url,
-        data     : $('#fancybox form').serialize(),
+        url  : $('#check-alias-unique-url').val(),
+        data : {
+            alias : $('#hopitalnumerique_autodiag_chapitre_alias').val()
+        },
         type     : 'POST',
         dataType : 'json',
         success  : function( data ){
-            if( data.success ) {
-                console.log( data );
-                //$('#questions #chapitre-' + data.id + ' > .dd3-content a').html( data.titre );
-                $.fancybox.close(true);
+            if( !data.success )
+                $('#hopitalnumerique_autodiag_chapitre_alias').parent().parent().find('.help-block').html('<span style="color:red"> L\'alias doit être unique</span>');
+            else
+                $('#hopitalnumerique_autodiag_chapitre_alias').parent().parent().find('.help-block').html('');
+        }
+    });
+}
+
+//Met à jour le nombre d'enfants sélectionés dans la popin
+function updateNbChilds()
+{
+    $('#references-tab .ref').each(function(){
+        childs          = $(this).data('childs');
+        parentLevel     = $(this).data('level');
+        nbChecked = 0;
+        nbChildsDirect = 0;
+        
+        if( childs.length > 0 ) {
+            $.each(childs,function(key, val){
+
+                if ( $('.ref-'+val+' .checkbox').prop('checked') && $('.ref-'+val).data('level') == parentLevel + 1 )
+                    nbChecked++
+                
+                if ( $('.ref-'+val).data('level') == parentLevel + 1 )
+                    nbChildsDirect++
+            });
+        }
+
+        $(this).find('.nbChilds').html( nbChecked );
+        $(this).find('.nbChildsDirect').html( nbChildsDirect );
+    })
+}
+
+//Gère le collapse dans la pop-in des références
+function manageCollapse(element, way)
+{
+    childs = $(element).parent().parent().data('childs');
+    level  = $(element).parent().parent().data('level') + 1;
+
+    $.each(childs,function(key, val){
+        if( way === 'collapse' )
+            $('.ref-'+val).slideUp();
+        else{
+            if ( $('.ref-'+val).data('level') == level){
+                $('.ref-'+val).slideDown();
+                $('.ref-'+val+' .btn i').removeClass('fa-arrow-down').addClass('fa-arrow-right');
             }
+        }
+    });
+
+    $(element).find('i').toggleClass('fa-arrow-down fa-arrow-right');
+}
+
+//Sauvegarde les références de l'objet et du contenu
+function saveReferences( chapitre, question )
+{
+    var references = [];
+    var loader     = $('.panel-body').nodevoLoader().start();
+
+    $('#references-tab .ref').each(function() {
+        //si la référence est cochée, on l'ajoute dans les références à linker
+        if ( $(this).find('.checkbox').prop('checked') ) {
+            var ref = {};
+
+            //ref id
+            ref.id = $(this).data('id');
+
+            //type primary
+            ref.type = $(this).find('.toggle-slide').hasClass('active');
+
+            references.push( ref );    
+        }
+    });
+
+    //JSONify IT !
+    json = JSON.stringify( references );
+
+    //save the value
+    $.ajax({
+        url  : $('#save-references-url').val(),
+        data : {
+            references : json
+        },
+        type     : 'POST',
+        dataType : 'json',
+        success  : function( data ){
+            if( chapitre != null)
+                $('#chapitres #chapitre-'+chapitre+' > .dd3-content .text-muted span').html( data.nbRef );
+            else
+                $('#questions #question-'+question+' > .dd3-content .text-muted span').html( data.nbRef );
+
+            loader.finished();
+            $.fancybox.close(true);
         }
     });
 }

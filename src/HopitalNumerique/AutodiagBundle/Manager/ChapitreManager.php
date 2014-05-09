@@ -67,6 +67,55 @@ class ChapitreManager extends BaseManager
         return $this->getArboRecursive($datas, $parents, array() );
     }
 
+    /**
+     * Formatte les références sous forme d'un unique tableau
+     *
+     * @param Chapitre $chapitre   Chapitre concerné
+     * @param array    $references Liste des références de type dictionnaire
+     *
+     * @return array
+     */
+    public function getReferences($chapitre, $references)
+    {
+        $selectedReferences = $chapitre->getReferences();
+
+        //applique les références 
+        foreach( $selectedReferences as $selected )
+        {
+            //on récupère l'élément que l'on va manipuler
+            $ref = $references[ $selected->getReference()->getId() ];
+
+            //on le met à jour 
+            $ref->selected = true;
+            $ref->primary  = $selected->getPrimary();
+
+            //on remet l'élément à sa place
+            $references[ $selected->getReference()->getId() ] = $ref;
+        }
+        
+        return $references;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -91,6 +140,7 @@ class ChapitreManager extends BaseManager
             $item->title      = $element->getTitle();
             $item->id         = $element->getId();
             $item->order      = $element->getOrder();
+            $item->references = count($element->getReferences());
 
             //add childs : filter items with current element
             $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $element))->orderBy(array( "order" => Criteria::ASC ));

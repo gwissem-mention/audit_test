@@ -41,7 +41,7 @@ class CategorieController extends Controller
             // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
             $this->get('session')->getFlashBag()->add( 'success', 'Categorie ajoutée.' );
             
-            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_categorie', array( 'id' => $categorie->getId() ) ) );
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_categorie', array( 'id' => $outil->getId() ) ) );
         }
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Categorie:edit.html.twig' , array(
@@ -70,7 +70,7 @@ class CategorieController extends Controller
             // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
             $this->get('session')->getFlashBag()->add( 'info', 'Categorie mise à jour.' );
             
-            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_categorie', array( 'id' => $categorie->getId() ) ) );
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_categorie', array( 'id' => $categorie->getOutil()->getId() ) ) );
         }
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Categorie:edit.html.twig' , array(
@@ -88,12 +88,16 @@ class CategorieController extends Controller
      */
     public function deleteAction( Categorie $categorie )
     {
-        $idOutil = $categorie->getOutil()->getId();
+        $idOutil   = $categorie->getOutil()->getId();
+        $questions = $this->get('hopitalnumerique_autodiag.manager.question')->findBy( array('categorie' => $categorie ) );
 
-        //Suppression de l'entitée
-        $this->get('hopitalnumerique_autodiag.manager.categorie')->delete( $categorie );
-
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        if( count($questions) >= 1 ){
+            $this->get('session')->getFlashBag()->add('danger', 'Il est impossible de supprimer une catégorie qui possède des questions.' );
+        }else{
+            //Suppression de l'entitée
+            $this->get('hopitalnumerique_autodiag.manager.categorie')->delete( $categorie );
+            $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        }
 
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_categorie', array('id'=>$idOutil)).'"}', 200);
     }
