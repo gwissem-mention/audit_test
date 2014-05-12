@@ -99,7 +99,7 @@ VALUES
 /* Lien de menu front : 12/05/2014 */
 INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
 VALUES
-    (137, NULL, 3, 'Modules de formations', 'hopitalnumerique_module_module_front', NULL, 0, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 7);
+    (137, NULL, 3, 'Modules thématiques', 'hopitalnumerique_module_module_front', NULL, 0, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 7);
 
 /* Mail du form d'évaluation : GME - 12/05/2014 */
 INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`)

@@ -10,7 +10,7 @@
     </div>
 {% endblock menu_modules %}
 
-{% block chapo_titre %}Session{% endblock chapo_titre %}
+{% block chapo_titre %}Modules thématiques{% endblock chapo_titre %}
 
 {% block chapo_description %}
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse consectetur leo in quam elementum dictum. Donec congue velit sit amet feugiat aliquam. Donec sagittis facilisis libero, sit amet dignissim mi vestibulum vehicula. Nulla nunc elit, congue non consequat vitae, accumsan eget enim.
@@ -22,10 +22,17 @@
             <div class="panel">
                 <div class="col-md-12 table-responsive table-module">
 
-                    <h4 class="violet titre">{{session.module.titre}} - Session du {{session.dateSession|date('d-m-Y')}}</h4>
+                    <h4 class="violet titre">{{session.module.titre}} - Session du {{session.dateSession|date('d/m/Y')}}</h4>
 
                     <div class="description">
-                        {{ moduleMaccros.ficheSession(session) }}
+                        <p>
+                            <strong>Productions concernées : </strong>
+                            <ul>
+                                {% for key,production in session.module.productions %}
+                                    <li>{{ production.titre }}</li>
+                                {% endfor %}
+                            </ul>
+                        </p>
                     </div>
                     <div class="clearfix"></div>
                     
@@ -45,7 +52,7 @@
                             {{ render(controller("HopitalNumeriqueModuleBundle:Front/InscriptionFront:add", {'session' : session} )) }} 
                             
                             <div class="col-md-10 col-md-offset-2">
-                                <input onclick="$('form').submit();" class="btn btn-success col-md-5 pull-right submit questionnaire_submit" value="ENVOYER MA DEMANDE D'INSCRIPTION" type="button"/>
+                                <input onclick="$('form').submit();" class="btn btn-success col-md-6 pull-right submit questionnaire_submit" value="ENVOYER MA DEMANDE D'INSCRIPTION" type="button"/>
                             </div>
                             <div class="clearfix"></div>
 

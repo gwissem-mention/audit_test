@@ -20,7 +20,7 @@
             <div class="panel">
                 <div class="col-md-12 table-responsive table-module">
 
-                    <h4 class="violet titre"><a href="{{ path( "hopitalnumerique_module_module_show_front", {"id":module.id} ) }}">{{module.titre}}</a></h4>
+                    <h4 class="violet titre">Session(s) - <a href="{{ path( "hopitalnumerique_module_module_show_front", {"id":module.id} ) }}">{{module.titre}}</a></h4>
 
                     {{ moduleMaccros.createTableauSession(module) }}
                     
