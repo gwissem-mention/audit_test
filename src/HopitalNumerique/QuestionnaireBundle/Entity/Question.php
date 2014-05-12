@@ -3,6 +3,7 @@
 namespace HopitalNumerique\QuestionnaireBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Question

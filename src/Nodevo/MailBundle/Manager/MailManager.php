@@ -330,6 +330,34 @@ class MailManager extends BaseManager
     
         return $toSend;
     }
+
+    /**
+     * Envoi un mail pour acceder au formulaire d'évaluation à une session d'un module
+     *
+     * @param Inscriptions $inscriptions  
+     * @param array        $options      Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendFormulaireEvaluationsMassMail( $inscriptions, $options )
+    {
+        $mail = $this->findOneById(33);
+
+        $toSend = array();
+        foreach ($inscriptions as $key => $inscription) 
+        {
+            $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                            'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                            'module'  => $inscription->getSession()->getModule()->getTitre(),
+                            'url'     => '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'hopitalnumerique_module_evaluation_form_front', array(
+                                            'id' => $inscription->getSession()->getId() 
+                                        ))) .'" target="_blank" >Hopital Numérique</a>'
+
+            ));
+        }
+    
+        return $toSend;
+    }
     
     /**
      * Envoi un mail de contact (différent des autres envoie de mail)
@@ -494,6 +522,7 @@ class MailManager extends BaseManager
     
         // Render the whole template including any layouts etc
         $body = $templateContent->render( array("content" => $content) );
+
         //send email to users with new password
         return \Swift_Message::newInstance()
                             ->setSubject ( $mail->getObjet() )

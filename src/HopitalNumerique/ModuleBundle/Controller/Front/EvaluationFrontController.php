@@ -86,18 +86,30 @@ class EvaluationFrontController extends Controller
             }
 
             //Mise à jour de la production du module dans la liste des productions maitrisées : uniquement pour les ambassadeurs
-            if(!$this->container->get('security.context')->isGranted('ROLE_AMBASSADEUR_7'))
+            if($this->container->get('security.context')->isGranted('ROLE_AMBASSADEUR_7'))
             {
-                die('die');
                 //Récupération des formations
                 $formations = $session->getModule()->getProductions();
+                
                 //Pour chaque production on ajout l'utilisateur à la liste des ambassadeurs qui la maitrise
-                foreach($formations as &$formation)
+                foreach($formations as $formation)
                 {
-                    $formation->addAmbassadeur( $user );
-                }
+                    //Récupération des ambassadeurs pour vérifier si l'utilisateur actuel ne maitrise pas déjà cette formation
+                    $ambassadeursFormation = $formation->getAmbassadeurs();
+                    $ambassadeurIds = array();
 
-                $this->get('hopitalnumerique_objet.manager.objet')->save( $formations );
+                    foreach ($ambassadeursFormation as $ambassadeur)
+                    {
+                        $ambassadeurIds[] = $ambassadeur->getId();
+                    }
+
+                    if(!in_array($user->getId(), $ambassadeurIds))
+                    {
+                        $formation->addAmbassadeur( $user );
+                        $this->get('hopitalnumerique_objet.manager.objet')->save( $formation );
+                    }
+                }
+                
             }
 
             $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Votre évaluation de la session ' . $session->getModule()->getTitre() . ' a bien été prise en compte, nous vous remercions.' );
@@ -115,7 +127,5 @@ class EvaluationFrontController extends Controller
                 'session'           => $session,
                 'moduleSelectionne' => $session->getModule()
         ));
-
-
     }
 }

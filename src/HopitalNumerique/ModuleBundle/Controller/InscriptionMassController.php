@@ -102,6 +102,9 @@ class InscriptionMassController extends Controller
     
         //get all selected Users
         $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
+        
+        //récupère une inscription pour récuperer les module / session (php < php5.4)
+        $tempInscription = $inscriptions[0];
     
         //get ref and Toggle State
         $ref = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $idReference) );
@@ -132,13 +135,19 @@ class InscriptionMassController extends Controller
         	    break;
         	case 'participation':
                 $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation( $inscriptions, $ref );
+                if(411 === $ref->getId())
+                {
+                    //Envoyer mail du formulaire d'évluation de la session
+                    $mails = $this->get('nodevo_mail.manager.mail')->sendFormulaireEvaluationsMassMail($inscriptions,array());
+                    foreach ($mails as $mail)
+                    {
+                        $this->get('mailer')->send($mail);
+                    }
+                }
         	    //inform user connected
                 $this->get('session')->getFlashBag()->add('info', 'Participation(s) modifiée(s) avec succès.' );
         	    break;
         }
-        
-        //récupère une inscription pour récuperer les module / session
-        $tempInscription = $inscriptions[0];
     
         return $this->redirect( $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id' => $tempInscription->getSession()->getId())) );
     }
