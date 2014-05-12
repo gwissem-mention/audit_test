@@ -7,7 +7,7 @@
 
         {# Affichage des modules un par un #}
         {% for module in modules %}
-            <li {% if moduleSelectionne and module.id == moduleSelectionne.id %}class="active"{% endif %}><a href={{path("hopitalnumerique_module_module_affichage_front", {'id':module.id})}}><span>{{ module.titre }}</span></a></li>
+            <li {% if moduleSelectionne and module.id == moduleSelectionne.id %}class="active"{% endif %}><a href={{path("hopitalnumerique_module_module_show_front", {'id':module.id})}}><span>{{ module.titre }}</span></a></li>
         {% endfor %}
     </ul>
 </div>

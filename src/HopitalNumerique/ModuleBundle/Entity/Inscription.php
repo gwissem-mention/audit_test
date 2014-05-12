@@ -180,6 +180,19 @@ class Inscription
     {
         return $this->etatInscription;
     }
+
+    /**
+     * Inscrit ?
+     *
+     * @return boolean Inscrit
+     */
+    public function isInscrit()
+    {
+        if(407 === $this->etatInscription->getId())
+            return true;
+
+        return false;
+    }
     
     /**
      * Set etatParticipation

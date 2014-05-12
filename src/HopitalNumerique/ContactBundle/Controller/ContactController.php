@@ -23,8 +23,8 @@ class ContactController extends NodevoController
         //Récupération de l'entité passée en paramètre
         $contact = $this->get('hopital_numerique_contact.manager.contact')->createEmpty();
         
-        $formName = 'hopital_numerique_contact_contact';
-        $view = 'NodevoContactBundle:Contact:index.html.twig';
+        $formName         = 'hopital_numerique_contact_contact';
+        $view             = 'NodevoContactBundle:Contact:index.html.twig';
         $routeRedirection = 'hopital_numerique_homepage';
         
         return $this->renderForm( $formName , $contact, $view, $routeRedirection );
@@ -88,9 +88,9 @@ class ContactController extends NodevoController
         }
     
         $array = array_merge(array(
-                'form'               => $form->createView(),
-                'contact'            => $contact
-        ), $parametres);
+                        'form'               => $form->createView(),
+                        'contact'            => $contact
+                ), $parametres);
     
         return $this->render( $view , $array);
     }

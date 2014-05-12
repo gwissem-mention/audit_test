@@ -1,5 +1,6 @@
 <div id="form_inscription">
-    {% form_theme form 'HopitalNumeriqueUserBundle:User/Theme:theme.inscription.html.twig' %}
+    {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.vertical.html.twig' %}
     {{ form_javascript(form) }}
-    {{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}
+    {{ form_errors(form) }}
+    {{ form(form, { 'action': path('hopitalnumerique_module_inscription_add_front', {'id' : session.id}) } ) }}
 </div>

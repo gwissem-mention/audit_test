@@ -9,6 +9,12 @@ hopitalnumerique_module_module_affichage_front:
     requirements:
         id: \d+
 
+hopitalnumerique_module_module_show_front:
+    pattern: /show/{id}
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/ModuleFront:show }
+    requirements:
+        id: \d+
+
 #Front - Session
 hopitalnumerique_module_session_description_front:
     pattern:  /session/description/{id}
@@ -26,5 +32,12 @@ hopitalnumerique_module_session_informations_front:
 hopitalnumerique_module_inscription_add_front:
     pattern:  /inscription/add/{id}
     defaults: { _controller: HopitalNumeriqueModuleBundle:Front/InscriptionFront:add }
+    requirements:
+        id: \d+
+
+#Front - Evaluation
+hopitalnumerique_module_evaluation_form_front:
+    pattern:  /evaluation/{id}
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/EvaluationFront:formulaire }
     requirements:
         id: \d+

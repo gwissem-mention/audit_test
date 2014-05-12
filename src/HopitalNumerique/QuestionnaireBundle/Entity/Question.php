@@ -81,6 +81,14 @@ class Question
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\QuestionnaireBundle\Entity\Reponse", mappedBy="question", cascade={"persist", "remove" })
      */
     protected $reponses;
+
+    //Ajout d'un champs JSON pour récuperer les possibles choix d'une liste/radio
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="que_choixpossibles", type="string", length=255, nullable=true, options = {"comment" = "Choix possible pour une liste ou radio"})
+     */
+    protected $choixPossibles;
     
     public function __construct()
     {
@@ -315,5 +323,28 @@ class Question
     public function getReferenceParamTri()
     {
         return $this->referenceParamTri;
+    }
+
+    /**
+     * Set choixPossibles
+     *
+     * @param string $choixPossibles
+     * @return Question
+     */
+    public function setChoixPossibles($choixPossibles)
+    {
+        $this->choixPossibles = $choixPossibles;
+
+        return $this;
+    }
+
+    /**
+     * Get choixPossibles
+     *
+     * @return string 
+     */
+    public function getChoixPossibles()
+    {
+        return $this->choixPossibles;
     }
 }

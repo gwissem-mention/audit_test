@@ -273,7 +273,7 @@ class QuestionnaireController extends Controller
                     $reponses[$idQuestion] = $reponse;
                 }
 
-                //Envoie du mail à l'utilisateur pour l'aleter de la validation de sa candidature
+                //Envoie du mail à l'utilisateur pour l'alerter de la validation de sa candidature
                 if($this->_envoieDeMail)
                 {
                     switch ($questionnaire->getNomMinifie())

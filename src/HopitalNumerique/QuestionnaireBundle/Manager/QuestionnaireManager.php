@@ -41,7 +41,7 @@ class QuestionnaireManager extends BaseManager
         if(key_exists($label, $this->_questionnaireArray))
             return $this->_questionnaireArray[$label];
         else 
-             throw new \Exception('Le label \''. $label .'\' ne correspond à aucun questionnaire dans le QuestionnaireManager. Liste des labels attentu : ' . self::_getLabelsQuestionnaire() );
+             throw new \Exception('Le label \''. $label .'\' ne correspond à aucun questionnaire dans le QuestionnaireManager. Liste des labels attentu : ' . self::getLabelsQuestionnaire() );
     }
     
     /**
