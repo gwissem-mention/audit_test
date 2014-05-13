@@ -3,6 +3,8 @@
  # @param : \HopitalNumerique\ModuleBundle\Entity\Module : Module sur lequel on va afficher la session
  #}
 {% macro createTableauSession(moduleSelectionne) %}
+    {% set aucuneSessionAffichees = false %}
+
     <table class="table table-striped table-hover table-condensed table-bordered">
         <thead>
             <tr class="grid-row-titles">
@@ -98,8 +100,13 @@
                             </div>
                         </td>
                     </tr>
+                {% else %}
+                    {% set aucuneSessionAffichees = true %}
                 {% endif %}
-            {% endfor %}   
+            {% endfor %}
+            {% if aucuneSessionAffichees %}
+                <tr><td>- Pas de session à afficher -</td></tr>
+            {% endif %}
         </tbody>
     </table>
 {% endmacro %}

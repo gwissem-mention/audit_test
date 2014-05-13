@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block toolbarButton %}
-    <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste des utilisateurs"><i class="fa fa-reply"></i></a>
+    <a href="{{path('hopitalnumerique_module_module_session_inscription', {'id':session.id})}}" class="btn btn-default" title="Retour à la liste des utilisateurs"><i class="fa fa-reply"></i></a>
 {% endblock %}
 
 {% block body %}
