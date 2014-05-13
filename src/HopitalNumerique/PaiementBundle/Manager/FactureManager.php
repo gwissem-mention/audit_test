@@ -34,13 +34,14 @@ class FactureManager extends BaseManager
     /**
      * Créer l'objet facture pour l'user connecté avec la liste d'interventions/formations sélectionnées
      *
-     * @param User  $user          L'utilisateur connecté
-     * @param array $interventions Liste des interventions sélectionnées
-     * @param array $formations    Liste des formations sélectionnées
+     * @param User    $user          L'utilisateur connecté
+     * @param array   $interventions Liste des interventions sélectionnées
+     * @param array   $formations    Liste des formations sélectionnées
+     * @param integer $supplement    Supplement de la région
      *
      * @return Facture
      */
-    public function createFacture($user, $interventions, $formations)
+    public function createFacture($user, $interventions, $formations, $supplement)
     {
         //create object facture
         $facture = $this->createEmpty();
@@ -54,27 +55,32 @@ class FactureManager extends BaseManager
         $total = 0;
 
         //handle interventions
-        foreach($interventions as $id => $prix) {
-            $intervention = $this->_interventionManager->findOneBy( array('id' => $id) );
-            $intervention->setFacture( $facture );
-            $intervention->setRemboursementEtat( $statutRemboursement );
-            $intervention->setTotal( $prix );
-            
-            $facture->addIntervention( $intervention );
+        if( $interventions ) {
+            foreach($interventions as $id => $prix) {
+                $intervention = $this->_interventionManager->findOneBy( array('id' => $id) );
+                $intervention->setFacture( $facture );
+                $intervention->setRemboursementEtat( $statutRemboursement );
+                $intervention->setTotal( $prix );
+                
+                $facture->addIntervention( $intervention );
 
-            $total += $prix;
+                $total += $prix;
+            }
         }
 
         //handle formations
-        foreach ($formations as $id => $prix) {
-            $formation = $this->_formationManager->findOneBy( array('id' => $id) );
-            $formation->setFacture( $facture );
-            $formation->setEtatRemboursement( $statutRemboursement );
-            $formation->setTotal( $prix );
-            
-            $facture->addFormation( $formation );
+        if( $formations ){
+            foreach ($formations as $id => $prix) {
+                $formation = $this->_formationManager->findOneBy( array('id' => $id) );
+                $formation->setFacture( $facture );
+                $formation->setEtatRemboursement( $statutRemboursement );
+                $formation->setTotal( $prix );
+                $formation->setSupplement( $supplement );
+                
+                $facture->addFormation( $formation );
 
-            $total += $prix;
+                $total += $prix;
+            }
         }
 
         $facture->setTotal( $total );

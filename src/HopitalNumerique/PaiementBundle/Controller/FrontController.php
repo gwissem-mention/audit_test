@@ -52,8 +52,9 @@ class FrontController extends Controller
         }
 
         //On récupère l'user connecté
-        $user    = $this->get('security.context')->getToken()->getUser();
-        $facture = $this->get('hopitalnumerique_paiement.manager.facture')->createFacture($user, $interventions, $formations);
+        $user          = $this->get('security.context')->getToken()->getUser();
+        $remboursement = $this->get('hopitalnumerique_paiement.manager.remboursement')->findOneBy( array('region'=>$user->getRegion()) );
+        $facture       = $this->get('hopitalnumerique_paiement.manager.facture')->createFacture($user, $interventions, $formations, $remboursement->getSupplement() );
 
         //get Reponses
         $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( 2 , $user->getId(), true );

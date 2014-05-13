@@ -11,18 +11,18 @@ class RemboursementManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\PaiementBundle\Entity\Remboursement';
 
+    /**
+     * Remet en forme les données pour le tableau de suivi des paiements
+     *
+     * @param array $interventions Les interventions
+     * @param array $formations    Les formations
+     *
+     * @return array
+     */
     public function calculPrice( $interventions, $formations )
     {
         //build Table Remboursement
-        $remboursements = $this->findAll();
-        $prix           = array();
-        foreach($remboursements as $remboursement) {
-            $total = intval($remboursement->getIntervention() + $remboursement->getRepas() + $remboursement->getGestion());
-
-            $prix['interventions'][ $remboursement->getRegion()->getId() ]['total']        = $total;
-            $prix['interventions'][ $remboursement->getRegion()->getId() ]['intervention'] = $remboursement->getIntervention();
-            $prix['formations'][ $remboursement->getRegion()->getId() ]                    = intval($total + $remboursement->getSupplement());
-        }
+        $prix = $this->getPrixRemboursements();
 
         //build Array for Table front
         $results = array();
@@ -60,8 +60,8 @@ class RemboursementManager extends BaseManager
             //build objet
             $row->id       = $formation->getId();
             $row->date     = $formation->getDateInscription();
-            $row->referent = ''; //=====================================> TO CHECK REFERENT = formateur
-            $row->etab     = '';
+            $row->referent = '-';
+            $row->etab     = '-';
             $row->type     = 'Formation : ' . $formation->getSession()->getModule()->getTitre();
             $row->discr    = 'formation';
             $row->total    = $prix['formations'][$formation->getUser()->getRegion()->getId()];
@@ -70,5 +70,25 @@ class RemboursementManager extends BaseManager
         }        
 
         return $results;
+    }
+
+    /**
+     * Retorune un tableau contenant les prix des interventions / formations
+     *
+     * @return array
+     */
+    public function getPrixRemboursements()
+    {
+        $remboursements = $this->findAll();
+        $prix           = array();
+        foreach($remboursements as $remboursement) {
+            $total = intval($remboursement->getIntervention() + $remboursement->getRepas() + $remboursement->getGestion());
+
+            $prix['interventions'][ $remboursement->getRegion()->getId() ]['total']        = $total;
+            $prix['interventions'][ $remboursement->getRegion()->getId() ]['intervention'] = $remboursement->getIntervention();
+            $prix['formations'][ $remboursement->getRegion()->getId() ]                    = intval($total + $remboursement->getSupplement());
+        }
+
+        return $prix;
     }
 }

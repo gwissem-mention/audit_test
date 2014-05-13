@@ -117,21 +117,23 @@
     </tr>
     {% set total = 0 %}
 
-    {% if formations|length > 0 %}
+    {% if facture.formations|length > 0 %}
         <tr style="height:30px; border:0; vertical-align:bottom">
             <td colspan="6" style="border:0"><strong>Sessions de montée en compétence</strong></td>
         </tr>
 
-        <tr>
-            <td style="border:1px solid black;" >MAPF*</td>
-            <td style="border:1px solid black;" >date : auto</td>
-            <td style="border:0 !important" ></td>
-            <td align="center" style="border:1px solid black;" >forfait région amb + 20€ + 15€</td>
-            <td align="center" style="border:1px solid black;" >supplément région amb</td>
-            <td align="right" style="border:1px solid black;" >somme de la ligne</td>
-        </tr>
-        
-        
+        {% for formation in facture.formations %}
+            <tr>
+                <td style="border:1px solid black;" >{{formation.session.module.titre}}</td>
+                <td style="border:1px solid black;" >date : {{formation.dateInscription|date('d/m/Y')}}</td>
+                <td style="border:0 !important" ></td>
+                <td align="center" style="border:1px solid black;" >{{ formation.total - formation.supplement }}€</td>
+                <td align="center" style="border:1px solid black;" >{{formation.supplement}}€</td>
+                <td align="right" style="border:1px solid black;" >{{formation.total}}€</td>
+            </tr>
+
+            {% set total = total + formation.total %}
+        {% endfor %}
     {% endif %}
 
     {% if facture.interventions|length > 0 %}
@@ -171,9 +173,6 @@
     </tr>
 </table>
 <table width="740px" style="margin:10px auto 50px" >
-    <tr>
-        <td><i>*MAPF - module d'aide à la prise de fonction d'ambassadeur</i></td>
-    </tr>
     <tr>
         <td>Prestation effectuée par virement administratif sous 30 jours (joindre le RIB la 1ère fois)</td>
     </tr>

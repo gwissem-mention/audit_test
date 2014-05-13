@@ -62,6 +62,13 @@ class Inscription
     private $total;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="insc_supplement", type="integer", nullable=true)
+     */
+    private $supplement;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="insc_date_inscription", type="datetime")
@@ -114,6 +121,7 @@ class Inscription
         $this->etatEvaluation    = 27;
         $this->etatRemboursement = null;
         $this->total             = null;
+        $this->supplement        = null;
         $this->facture           = null;
         $this->dateInscription   = new \DateTime();
     }
@@ -184,6 +192,27 @@ class Inscription
     public function setTotal($total)
     {
         $this->total = $total;
+        return $this;
+    }
+    
+    /**
+     * Get supplement
+     *
+     * @return integer $supplement
+     */
+    public function getSupplement()
+    {
+        return $this->supplement;
+    }
+    
+    /**
+     * Set supplement
+     *
+     * @param integer $supplement
+     */
+    public function setSupplement($supplement)
+    {
+        $this->supplement = $supplement;
         return $this;
     }
     

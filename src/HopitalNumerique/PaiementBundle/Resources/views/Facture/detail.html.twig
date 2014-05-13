@@ -109,7 +109,31 @@
                 <div class="row">
                     <div class="col-md-12">
                         <table class="table">
-                            
+                            <thead>
+                                <th>Module thématique concerné</th>
+                                <th>Date Session</th>
+                                <th width="120px">Etat</th>
+                                <th width="80px">Montant</th>
+                                <th width="175px">Etat du remboursement</th>
+                                <th width="150px">Actions</th>
+                            </thead>
+                            <tbody>
+                                {% for formation in facture.formations %}
+                                    <tr>
+                                        <td>{{formation.session.module.titre}}</td>
+                                        <td>{{formation.session.dateSession|date('d/m/Y')}}</td>
+                                        <td>{{formation.etatInscription.libelle}}</td>
+                                        <td>{{formation.total}}€</td>
+                                        <td>{{formation.etatRemboursement.libelle}}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{{path('hopitalnumerique_module_module_session_inscription', {'id':formation.session.id})}}" class="btn btn-success btn-sm" title="Détail">Détail</a>
+                                                <a href="{{path('hopitalnumerique_module_module_session_evaluation_editer',{'session':formation.session.id, 'user':facture.user.id })}}" class="btn btn-info btn-sm" title="Evaluation">Evaluation</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
                         </table>
                     </div>
                 </div>
