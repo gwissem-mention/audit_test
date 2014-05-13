@@ -96,4 +96,16 @@ class InscriptionManager extends BaseManager
         //save
         $this->_em->flush();
     }
+
+    /**
+     * Retourne la liste des inscriptions de l'utilisateur
+     *
+     * @param User $user L'utilisateur concerné
+     *
+     * @return array
+     */
+    public function getForFactures( $user )
+    {
+        return $this->getRepository()->getForFactures( $user )->getQuery()->getResult();
+    }
 }

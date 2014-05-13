@@ -43,7 +43,7 @@ class Inscription
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_participant", referencedColumnName="usr_id", nullable=true)
      *
-     * @GRID\Column(field="user.nom", options = {"comment" = "Utilisateur inscrit"})
+     * @GRID\Column(field="user.nom")
      */
     protected $user;
     
@@ -55,10 +55,24 @@ class Inscription
     private $commentaire;
     
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="insc_total", type="integer", nullable=true)
+     */
+    private $total;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="insc_date_inscription", type="datetime")
+     */
+    private $dateInscription;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_etat_inscription", referencedColumnName="ref_id")
      *
-     * @GRID\Column(field="etatInscription.libelle", nullable=true, options = {"comment" = "Etat de l'inscription pointant sur la table de REFERENCE avec le code STATUT_FORMATION"})
+     * @GRID\Column(field="etatInscription.libelle")
      */
     protected $etatInscription;
     
@@ -66,7 +80,7 @@ class Inscription
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_etat_participation", referencedColumnName="ref_id")
      *
-     * @GRID\Column(field="etatParticipation.libelle", nullable=true, options = {"comment" = "Etat de la participation pointant sur la table de REFERENCE avec le code STATUT_FORMATION"})
+     * @GRID\Column(field="etatParticipation.libelle")
      */
     protected $etatParticipation;
     
@@ -74,9 +88,21 @@ class Inscription
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_etat_evaluation", referencedColumnName="ref_id")
      *
-     * @GRID\Column(field="etatEvaluation.libelle", nullable=true, options = {"comment" = "Etat de l'évaluation pointant sur la table de REFERENCE avec le code STATUT_EVAL_FORMATION"})
+     * @GRID\Column(field="etatEvaluation.libelle")
      */
     protected $etatEvaluation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
+     * @ORM\JoinColumn(name="ref_etat_remboursement", referencedColumnName="ref_id", nullable=true)
+     */
+    protected $etatRemboursement;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\PaiementBundle\Entity\Facture", cascade={"persist"}, inversedBy="formations")
+     * @ORM\JoinColumn(name="fac_id", referencedColumnName="fac_id", nullable=true)
+     */
+    protected $facture;
 
     /**
      * Constructor
@@ -85,7 +111,11 @@ class Inscription
     {
         $this->etatInscription   = 406;
         $this->etatParticipation = 410;
-        $this->etatEvaluation    = 413;
+        $this->etatEvaluation    = 27;
+        $this->etatRemboursement = null;
+        $this->total             = null;
+        $this->facture           = null;
+        $this->dateInscription   = new \DateTime();
     }
     
     /**
@@ -136,6 +166,48 @@ class Inscription
         return $this->commentaire;
     }
     
+    /**
+     * Get total
+     *
+     * @return integer $total
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+    
+    /**
+     * Set total
+     *
+     * @param integer $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+        return $this;
+    }
+    
+    /**
+     * Get dateInscription
+     *
+     * @return DateTime $dateInscription
+     */
+    public function getDateInscription()
+    {
+        return $this->dateInscription;
+    }
+    
+    /**
+     * Set dateInscription
+     *
+     * @param DateTime $dateInscription
+     */
+    public function setDateInscription($dateInscription)
+    {
+        $this->dateInscription = $dateInscription;
+        return $this;
+    }
+
     /**
      * Set user
      *
@@ -237,5 +309,47 @@ class Inscription
     public function getEtatEvaluation()
     {
         return $this->etatEvaluation;
+    }
+
+    /**
+     * Get etatRemboursement
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etatRemboursement
+     */
+    public function getEtatRemboursement()
+    {
+        return $this->etatRemboursement;
+    }
+    
+    /**
+     * Set etatRemboursement
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etatRemboursement
+     */
+    public function setEtatRemboursement(\HopitalNumerique\ReferenceBundle\Entity\Reference $etatRemboursement)
+    {
+        $this->etatRemboursement = $etatRemboursement;
+        return $this;
+    }
+
+    /**
+     * Get facture
+     *
+     * @return \HopitalNumerique\PaiementBundle\Entity\Facture $facture
+     */
+    public function getFacture()
+    {
+        return $this->facture;
+    }
+    
+    /**
+     * Set facture
+     *
+     * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture
+     */
+    public function setFacture(\HopitalNumerique\PaiementBundle\Entity\Facture $facture)
+    {
+        $this->facture = $facture;
+        return $this;
     }
 }

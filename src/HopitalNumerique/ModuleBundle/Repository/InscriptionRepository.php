@@ -48,4 +48,23 @@ class InscriptionRepository extends EntityRepository
     
         return $qb;
     }
+
+    /**
+     * Retourne la liste des inscriptions de l'utilisateur
+     *
+     * @return QueryBuilder
+     */
+    public function getForFactures( $user )
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('insc')
+                         ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
+                         ->leftJoin('insc.etatRemboursement', 'refRemboursement')
+                         ->leftJoin('insc.etatEvaluation', 'refEvaluation')
+                         ->leftJoin('insc.etatParticipation', 'refParticipation')
+                         ->andWhere('refRemboursement.id = 5', 'refEvaluation.id = 29')
+                         ->andWhere('refParticipation.id = 411','insc.facture IS NULL')
+                         ->andWhere('insc.user = :user')
+                         ->setParameter('user', $user);
+    }
 }

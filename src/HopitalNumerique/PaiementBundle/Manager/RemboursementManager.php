@@ -26,6 +26,8 @@ class RemboursementManager extends BaseManager
 
         //build Array for Table front
         $results = array();
+
+        //Manage interventions
         foreach ($interventions as $intervention) {
             $row = new \StdClass;
             
@@ -51,17 +53,18 @@ class RemboursementManager extends BaseManager
             $results[] = $row;
         }
 
-        //TODO : ADD formations
+        //Manage fomartions (inscriptions to sessions)
         foreach ($formations as $formation) {
             $row = new \StdClass;
 
+            //build objet
             $row->id       = $formation->getId();
-            $row->date     = '';
-            $row->referent = '';
+            $row->date     = $formation->getDateInscription();
+            $row->referent = ''; //=====================================> TO CHECK REFERENT = formateur
             $row->etab     = '';
-            $row->type     = 'Formation : ';
+            $row->type     = 'Formation : ' . $formation->getSession()->getModule()->getTitre();
             $row->discr    = 'formation';
-            $row->total    = 0;
+            $row->total    = $prix['formations'][$formation->getUser()->getRegion()->getId()];
             
             $results[] = $row;
         }        

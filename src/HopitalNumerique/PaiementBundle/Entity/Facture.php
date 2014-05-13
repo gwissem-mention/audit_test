@@ -65,7 +65,12 @@ class Facture
     /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="facture", cascade={"persist"})
      */
-    private $interventions;   
+    private $interventions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ModuleBundle\Entity\Inscription", mappedBy="facture", cascade={"persist"})
+     */
+    private $formations;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -74,6 +79,7 @@ class Facture
     {
         $this->dateCreation  = new \DateTime();
         $this->interventions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formations    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->payee         = false;
     }
 
@@ -238,5 +244,51 @@ class Facture
     public function getInterventions()
     {
         return $this->interventions;
+    }
+
+    /**
+     * Add formation
+     *
+     * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $formation
+     * @return Facture
+     */
+    public function addFormation(\HopitalNumerique\ModuleBundle\Entity\Inscription $formation)
+    {
+        $this->formations[] = $formation;
+    
+        return $this;
+    }
+
+    /**
+     * Remove formation
+     *
+     * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $formation
+     */
+    public function removeFormation(\HopitalNumerique\ModuleBundle\Entity\Inscription $formation)
+    {
+        $this->formations->removeElement($formation);
+    }
+
+    /**
+     * Set formations
+     *
+     * @param \Doctrine\Common\Collections\Collection $formations
+     * @return Facture
+     */
+    public function setFormations(\Doctrine\Common\Collections\Collection $formations)
+    {
+        $this->formations = $formations;
+    
+        return $this;
+    }
+
+    /**
+     * Get formations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFormations()
+    {
+        return $this->formations;
     }
 }
