@@ -50,7 +50,7 @@ class Inscription
     /**
      * @var string
      *
-     * @ORM\Column(name="insc_commentaire", type="text")
+     * @ORM\Column(name="insc_commentaire", type="text", nullable=true)
      */
     private $commentaire;
     
@@ -179,6 +179,19 @@ class Inscription
     public function getEtatInscription()
     {
         return $this->etatInscription;
+    }
+
+    /**
+     * Inscrit ?
+     *
+     * @return boolean Inscrit
+     */
+    public function isInscrit()
+    {
+        if(407 === $this->etatInscription->getId())
+            return true;
+
+        return false;
     }
     
     /**

@@ -13,28 +13,26 @@ class ModuleFrontController extends Controller
      *
      * @return [type]
      */
-    public function indexAction(\HopitalNumerique\ModuleBundle\Entity\Module $module = null)
+    public function indexAction()
     {
-        //Création du tableau de modules à afficher
-        $modules = array();
-
-        //Si il n'y a pas de module spécifié on récupère l'ensemble des modules et leurs sessions
-        if(is_null($module))
-        {
-            //Récupération de l'ensemble des modules
-            $modules = $this->get('hopitalnumerique_module.manager.module')->findBy(array('statut' => 3));
-        }
-        //Sinon il n'y a qu'un module a afficher, celui passé en param
-        else
-        {
-            $modules[] = $module; 
-        }
+        //Récupération de l'ensemble des modules
+        $modules = $this->get('hopitalnumerique_module.manager.module')->findBy(array('statut' => 3));
 
         return $this->render('HopitalNumeriqueModuleBundle:Front/Module:index.html.twig', array( 
-            'modules'           => $modules,
-            'moduleSelectionne' => $module
+            'modules'           => $modules
         ));
+    }
 
+    /**
+     * Permet d'afficher les différents modules dans un menu
+     *
+     * @param HopitalNumeriqueModuleBundleEntityModule $module
+     *
+     * @return [type]
+     */
+    public function showAction(\HopitalNumerique\ModuleBundle\Entity\Module $module = null)
+    {
+        return $this->render('HopitalNumeriqueModuleBundle:Front/Module:show.html.twig', array('moduleSelectionne' => $module));
     }
 
     /**

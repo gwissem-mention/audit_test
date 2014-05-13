@@ -2,7 +2,7 @@ $(document).ready(function() {
     $('a.link').fancybox({
         'padding'   : 0,
         'scrolling' : 'auto',
-        'width'     : '800px',
+        'width'     : '70%',
         'height'    : 'auto'
     });
 });

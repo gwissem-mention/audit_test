@@ -1,13 +1,13 @@
-<div class="panel" style="margin:0" >
+<div class="panel" style="margin:0; width:800px;" >
     <div class="panel-heading">
-        <h4 class="violet" style="margin-bottom:0" >Description de la session</h4>
+        <h4 class="violet" style="margin-bottom:0" >Informations de la session</h4>
     </div>
 
     <div class="panel-body" style="padding-top:0" >
         <div class="col-md-12 fancybox-popin">
             <ul class="list-unstyled">
                 {# Description #}
-                <li><strong>Description :</strong><br />>
+                <li style="margin: 0 0 10px;"><strong>Description :</strong><br />
                     {% if session.description is not null and session.description is not empty %}
                         {{ session.description }}
                     {% else %}
@@ -15,7 +15,7 @@
                     {% endif %}
                 </li>
                 {# Durée #}
-                <li><strong>Durée :</strong><br />>
+                <li style="margin: 0 0 10px;"><strong>Durée :</strong><br />
                     {% if session.duree is not null and session.duree is not empty %}
                         {{ session.duree.libelle }}
                     {% else %}
@@ -23,7 +23,7 @@
                     {% endif %}
                 </li>
                 {# Lieu #}
-                <li><strong>Lieu :</strong><br />>
+                <li style="margin: 0 0 10px;"><strong>Lieu :</strong><br />
                     {% if session.lieu is not null and session.lieu is not empty %}
                         {{ session.lieu }}
                     {% else %}
@@ -31,7 +31,7 @@
                     {% endif %}
                 </li>
                 {# Horaires #}
-                <li><strong>Horaires :</strong><br />>
+                <li><strong>Horaires :</strong><br />
                     {% if session.horaires is not null and session.horaires is not empty %}
                         {{ session.horaires }}
                     {% else %}

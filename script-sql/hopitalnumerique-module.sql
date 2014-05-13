@@ -62,3 +62,53 @@ VALUES
 
 /* Nettoyage de cotrine migration */
 /* 16:11:15 Gaia (localnodevo) */ DROP TABLE `migration_versions`;
+
+/* -------------------*/
+/* ----   Front   ----*/
+/* -------------------*/
+/* Gestion des habilitations du front : GME - 29/04/14 */
+INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`)
+VALUES
+    (30, 'FrontOffice - Gestion des Modules', '/^\\/module/', 30, 2);
+
+/* --- Fomulaire d'évaluation : GME - 05/05/14 --- */
+INSERT INTO `hn_questionnaire_questionnaire` (`qst_id`, `qst_nom`, `qst_lock`)
+VALUES
+    (4, 'Module - Evaluation', 1);
+INSERT INTO `hn_questionnaire_type_question` (`typ_id`, `libelle`, `nom`)
+VALUES
+    (8, 'radio', 'Radio');
+
+INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`)
+VALUES
+    (39, 4, 8, 'Ces objectifs énoncés en début de session ont-ils-été atteints ?', 0, 'etoiles', 1, 'module_objectif_enonces_atteints', NULL),
+    (40, 4, 8, 'Les apports de cette session sont-ils applicables dans le cadre de vos missions ?', 0, 'etoiles', 2, 'module_apports_session_applicables', NULL),
+    (41, 4, 8, 'Globalement estimez-vous utile d\'avoir suivi cette formation ?', 1, 'oui-non validate[required]', 3, 'module_formation_utilie', NULL),
+    (42, 4, 8, 'Le temps imparti pour cette formation était il suffisant ?', 0, 'etoiles', 4, 'module_temps_suffisant', NULL),
+    (43, 4, 8, 'Les questions abordées correspondaient-elles à vos attentes ?', 0, 'etoiles', 5, 'module_questions_correspondaient_attente', NULL),
+    (44, 4, 8, 'Glablement êtes-vous satisfait du contenu du module ?', 1, 'etoiles validate[required]', 6, 'module_statisfait_module', NULL),
+    (45, 4, 8, 'Y a-t-il eu suffisamment d\'occasions pour les participants d\'être actifs ?', 0, 'etoiles', 7, 'module_occasion_participant_actif', NULL),
+    (46, 4, 8, 'Quelle est votre appréciation des compétences pédagogiques de l\'intervenant ?', 0, 'etoiles', 8, 'module_competance_pedagogique_intervenant', NULL),
+    (47, 4, 8, 'Globalement êtes-vous satisfait des modalités pédagogique proposées ?', 1, 'oui-non validate[required]', 9, 'module_satisfait_modalites_pedagogique', NULL),
+    (48, 4, 8, 'Quelle est votre appréciation des informations fournies avant la formation ?', 0, 'etoiles', 10, 'module_appreciation_informations_fournies', NULL),
+    (49, 4, 8, 'Les conditions matérielles étaient elles adaptées à cette formation ?', 0, 'etoiles', 11, 'module_conditions_materielles_adaptees', NULL),
+    (50, 4, 8, 'Globalement êtes-vous satisfait des modalités pratiques de cette formation ?', 1, 'oui-non validate[required]', 12, 'module_satisfait_modile_pratique', NULL),
+    (51, 4, 2, 'Avez-vous des suggestions d\'amélioration ou des remarques dont vous souhaiteriez nous faire part ?', 0, NULL, 13, 'module_suggestion_faire_part', NULL),
+    (52, 4, 2, 'Dans le cadre de vos projets dans ce domaine, rencontrez-vous des problématiques qui ne trouvent pas de réponse dans le cadre de la session suvie ?', 0, NULL, 14, 'module_problematique_sans_reponse', NULL);
+
+/* Lien de menu front : 12/05/2014 */
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (137, NULL, 3, 'Modules thématiques', 'hopitalnumerique_module_module_front', NULL, 0, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 7);
+
+/* Mail du form d'évaluation : GME - 12/05/2014 */
+INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`)
+VALUES
+    (33, '[HOPITALNUMERIQUE] - Evaluation d\'une session', 'Formulaire de l\'évaluation à une session d\'un module', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\r\n\r\nVôtre participation à la session %module du %date a été notifié.\r\nVous pouvez accèder au formulaire d\'évaluation de la session ici : %url.\r\n\r\nCordialement,', '{\"%u\":\"Nom d\'utilisateur\",\"%module\":\"Nom du module\",\"%date\":\"Date de la session\",\"%url\":\"Lien du formulaire d\'évaluation.\"}');
+
+/* Lien de menu front : GME - 13/05/2014 */
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (138, 137, 3, 'Modules thématiques - Affichage', 'hopitalnumerique_module_module_show_front', '[]', NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+    (139, 137, 3, 'Modules thématiques - Session - Information', 'hopitalnumerique_module_session_informations_front', '[]', NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 2),
+    (140, 137, 3, 'Modules thématiques - Session - Evaluation', 'hopitalnumerique_module_evaluation_form_front', '[]', NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 3);

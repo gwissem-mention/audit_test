@@ -134,6 +134,7 @@ hopital_numerique_questionnaire:
         idRoles:
             expert: 1
             ambassadeur: 2
+            module-evaluation: 4
 
 hopital_numerique_contact:
     options:

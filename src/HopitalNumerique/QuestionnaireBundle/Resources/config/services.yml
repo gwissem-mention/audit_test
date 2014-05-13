@@ -11,6 +11,8 @@ parameters:
     #Reponse
     hopitalnumerique_questionnaire.manager.reponse.class: HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager
 #    hopitalnumerique_questionnaire.form.type.reponse: HopitalNumerique\QuestionnaireBundle\Form\Type\ReponseType
+    #Extensions twig
+    hopitalnumerique_questionnaire.twig.extensions.class: HopitalNumerique\QuestionnaireBundle\Twig\QuestionnaireExtension
 
 services:
     #--OptionsConfig
@@ -44,3 +46,8 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
             - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
+    #Extension Twig        
+    hopitalnumerique_questionnaire.twig.questionnaire_extension:
+        class: %hopitalnumerique_questionnaire.twig.extensions.class%
+        tags:
+            - { name: twig.extension }

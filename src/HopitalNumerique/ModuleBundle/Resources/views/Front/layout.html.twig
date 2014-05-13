@@ -22,31 +22,30 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
 {% endblock %}
 
 {% block body %}
     <div id="module">
         {# En-tête #}
         <div class="col-md-12">
-            <h3 class="violet">Module <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="pull-right">Tableau de bord</a> </h3>
+            <h3 class="violet">Modules thématiques<a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="pull-right">Tableau de bord</a> </h3>
         </div> 
         
         {# Listes des modules #}
-        <div class="col-md-2">
+        <div class="col-md-3">
             {% block menu_modules %}
                 {# Render de la vue de récupérations des différentes modules #}
             {% endblock menu_modules %}
         </div>
 
-        <div class="content col-md-10 no_padding">
+        <div class="content col-md-9 no_padding">
             {% block content %}
                 <div class="module">
                     
                     {% block chapo %}
                         <div class="col-md-12">
                             <div class="chapo">
-                                <h1 class="violet">Module</h1>
+                                <h1 class="violet">{% block chapo_titre %}Modules thématiques{% endblock chapo_titre %}</h1>
                                 <div class="description"><p>{% block chapo_description %}{% endblock chapo_description %}</p></div>
                             </div>
                         </div>
