@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "6fa17a20697d1d3358e209d0221edc43",
+    "hash": "f68c65f9afb456d780138808da099d62",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -830,12 +830,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "e4c000a9b19096be0135d0773b56f7c757c93542"
+                "reference": "13c173ff60eef8e32c10f76225eacca00a430826"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e4c000a9b19096be0135d0773b56f7c757c93542",
-                "reference": "e4c000a9b19096be0135d0773b56f7c757c93542",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/13c173ff60eef8e32c10f76225eacca00a430826",
+                "reference": "13c173ff60eef8e32c10f76225eacca00a430826",
                 "shasum": ""
             },
             "require": {
@@ -890,7 +890,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2014-04-08 21:21:16"
+            "time": "2014-05-07 23:51:03"
         },
         {
             "name": "genemu/form-bundle",
@@ -1123,12 +1123,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
-                "reference": "7d9bcdc29b49c3fc671a9c22885176f0ffe034c5"
+                "reference": "de645e813ddca4a1243db48bce5eaee8adb346a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/7d9bcdc29b49c3fc671a9c22885176f0ffe034c5",
-                "reference": "7d9bcdc29b49c3fc671a9c22885176f0ffe034c5",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/de645e813ddca4a1243db48bce5eaee8adb346a2",
+                "reference": "de645e813ddca4a1243db48bce5eaee8adb346a2",
                 "shasum": ""
             },
             "require": {
@@ -1179,7 +1179,7 @@
                 "menu",
                 "tree"
             ],
-            "time": "2014-04-08 20:25:33"
+            "time": "2014-05-01 19:50:28"
         },
         {
             "name": "knplabs/knp-menu-bundle",
@@ -1539,12 +1539,12 @@
         },
         {
             "name": "nodevo/gestionnaire-media",
-            "version": "1.2",
+            "version": "1.3",
             "target-dir": "Nodevo/GestionnaireMediaBundle",
             "source": {
                 "type": "git",
                 "url": "ssh://git@bitbucket.org:22/nodevo/web_symfony_bdl_moxiemanager.git",
-                "reference": "c5829d6a78ad0f751f5e6773738d1d2f79cd5791"
+                "reference": "5d9192a96a1e639345c6382a7ced773f7c833451"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -1567,7 +1567,7 @@
                 "moxie",
                 "moxiemanager"
             ],
-            "time": "2014-04-22 13:34:12"
+            "time": "2014-05-12 13:31:33"
         },
         {
             "name": "pagerfanta/pagerfanta",
@@ -1575,12 +1575,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/whiteoctober/Pagerfanta.git",
-                "reference": "c41473a84768ac18ec107033dbfa87229cdefafa"
+                "reference": "182db172bde6b1db453dc7fd38d3b7a401ba1f37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/c41473a84768ac18ec107033dbfa87229cdefafa",
-                "reference": "c41473a84768ac18ec107033dbfa87229cdefafa",
+                "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/182db172bde6b1db453dc7fd38d3b7a401ba1f37",
+                "reference": "182db172bde6b1db453dc7fd38d3b7a401ba1f37",
                 "shasum": ""
             },
             "require": {
@@ -1633,7 +1633,7 @@
                 "paginator",
                 "paging"
             ],
-            "time": "2014-03-14 07:32:00"
+            "time": "2014-05-12 09:06:10"
         },
         {
             "name": "psr/log",
@@ -1824,25 +1824,28 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.1.0",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "748c01c1144713ac0118396935d10b6ceec91b68"
+                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/748c01c1144713ac0118396935d10b6ceec91b68",
-                "reference": "748c01c1144713ac0118396935d10b6ceec91b68",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/043e336b871f17a117f76ef8e190eddfc04c8d48",
+                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
+            "require-dev": {
+                "mockery/mockery": "~0.9.1"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.1-dev"
+                    "dev-master": "5.2-dev"
                 }
             },
             "autoload": {
@@ -1871,7 +1874,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2014-03-18 09:03:27"
+            "time": "2014-05-08 08:11:19"
         },
         {
             "name": "symfony/assetic-bundle",
@@ -2105,16 +2108,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.4.3",
+            "version": "v2.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "3199b2e0d194f71fe2e13c95768b2ef22206682b"
+                "reference": "4697c33cdfb520dcf83fd6e4f7864fa26ddaebea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/3199b2e0d194f71fe2e13c95768b2ef22206682b",
-                "reference": "3199b2e0d194f71fe2e13c95768b2ef22206682b",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/4697c33cdfb520dcf83fd6e4f7864fa26ddaebea",
+                "reference": "4697c33cdfb520dcf83fd6e4f7864fa26ddaebea",
                 "shasum": ""
             },
             "require": {
@@ -2216,7 +2219,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2014-04-04 10:27:02"
+            "time": "2014-04-27 13:39:18"
         },
         {
             "name": "twig/extensions",

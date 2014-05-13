@@ -48,6 +48,7 @@
                         </td>
                         <td>
                             {% set userInscrit = false %}
+                            {% set userRefuser = false %}
                             {% set userEnAttente = false %}
                             {% set userAParticipe = false %}
                             {# Parcourt la liste des utilisateurs inscrits à la session #}
@@ -59,6 +60,10 @@
                                     {% if inscription.etatInscription.id == 407 %}
                                         {% set userInscrit = true %}
                                     {% endif %}
+                                    {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
+                                    {% if inscription.etatInscription.id == 408 %}
+                                        {% set userRefuser = true %}
+                                    {% endif %}
                                     {# Si l'utilisateur connecté a participé alors on set la variable userAParticipe à true #}
                                     {% if inscription.etatParticipation.id == 411 %}
                                         {% set userAParticipe = true %}
@@ -67,6 +72,8 @@
                             {% endfor %}
                             {% if userInscrit %}
                                 <span class="inscrit">{{session.etat.libelle}}</span>
+                            {% elseif userRefuser %}
+                                <span class="refuser">{{session.etat.libelle}}</span>
                             {% elseif userEnAttente %}
                                 <span class="en-attente">{{session.etat.libelle}}</span>
                             {% endif %}
