@@ -220,6 +220,13 @@ class User extends BaseUser
     protected $prenom;
 
     /**
+     * @var integer
+     * 
+     * @ORM\Column(name="usr_nb_visite", type="integer", options = {"comment" = "Nombre de fois où un user est connecté"})     
+     */
+    protected $nbVisites;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id")
      *
@@ -451,13 +458,14 @@ class User extends BaseUser
     {
         parent::__construct();
         
-        $this->objets       = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->username     = '';
-        $this->enabled      = 1;
-        $this->civilite     = array();
-        $this->lock         = false;
-        $this->archiver     = false;
-        $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objets    = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->username  = '';
+        $this->enabled   = 1;
+        $this->civilite  = array();
+        $this->lock      = false;
+        $this->archiver  = false;
+        $this->domaines  = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->nbVisites = 0;
     }
 
     public function __toString()
@@ -497,6 +505,26 @@ class User extends BaseUser
     {
         return $this->dateInscription;
     }
+
+    /**
+     * Get dateInscription string
+     *
+     * @return string
+     */
+    public function getDateInscriptionString()
+    {
+        return $this->dateInscription->format('d/m/Y');
+    }
+
+    /**
+     * Get lastLogin string
+     *
+     * @return string
+     */
+    public function getLastLoginString()
+    {
+        return $this->lastLogin ? $this->lastLogin->format('d/m/Y') : '';
+    }
     
     /**
      * Get nom
@@ -526,6 +554,26 @@ class User extends BaseUser
     public function getPrenom()
     {
         return $this->prenom;
+    } 
+    
+    /**
+     * Get nbVisites
+     *
+     * @return integer $nbVisites
+     */
+    public function getNbVisites()
+    {
+        return $this->nbVisites;
+    }
+    
+    /**
+     * Add nbVisites
+     *
+     * @param integer $nbVisites
+     */
+    public function addNbVisites()
+    {
+        $this->nbVisites++;
     }
     
     /**
@@ -1191,5 +1239,15 @@ class User extends BaseUser
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Get role
+     *
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->roles[0];
     }
 }

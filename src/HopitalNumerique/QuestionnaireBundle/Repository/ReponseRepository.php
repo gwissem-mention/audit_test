@@ -21,22 +21,21 @@ class ReponseRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('reponse')
-        ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
-        ->leftJoin('reponse.question', 'question')
-        ->leftJoin('reponse.user', 'user')
-        ->where( 'user.id = :idUser')
-        ->setParameter('idUser', $idUser );
-        
-        if ($paramId != null)
-        {
-            $qb->andWhere('reponse.paramId = :paramId')
-                ->setParameter('paramId', $paramId);
-        }
-        
-        $qb->leftJoin('reponse.reference', 'reference')
-        ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
-        ->setParameter('idQuestionnaire', $idQuestionnaire )
-        ->leftJoin('question.typeQuestion', 'typeQuestion');
+            ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
+            ->leftJoin('reponse.question', 'question')
+            ->leftJoin('reponse.user', 'user')
+            ->where( 'user.id = :idUser')
+            ->setParameter('idUser', $idUser );
+            
+            if ($paramId != null) {
+                $qb->andWhere('reponse.paramId = :paramId')
+                    ->setParameter('paramId', $paramId);
+            }
+            
+            $qb->leftJoin('reponse.reference', 'reference')
+            ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
+            ->setParameter('idQuestionnaire', $idQuestionnaire )
+            ->leftJoin('question.typeQuestion', 'typeQuestion');
     
         return $qb->getQuery();
     }
@@ -50,15 +49,15 @@ class ReponseRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('reponse')
-        ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
-        ->leftJoin('reponse.question', 'question')
-        ->leftJoin('reponse.user', 'user')
-        ->where( 'user.id = :idUser')
-        ->setParameter('idUser', $idUser )
-        ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
-        ->setParameter('idQuestionnaire', $idQuestionnaire )
-        ->innerJoin('question.typeQuestion', 'typeQuestion', 'WITH', 'typeQuestion.libelle = :libTypeQuestion')
-        ->setParameter('libTypeQuestion', 'file' );
+            ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
+            ->leftJoin('reponse.question', 'question')
+            ->leftJoin('reponse.user', 'user')
+            ->where( 'user.id = :idUser')
+            ->setParameter('idUser', $idUser )
+            ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
+            ->setParameter('idQuestionnaire', $idQuestionnaire )
+            ->innerJoin('question.typeQuestion', 'typeQuestion', 'WITH', 'typeQuestion.libelle = :libTypeQuestion')
+            ->setParameter('libTypeQuestion', 'file' );
     
         return $qb->getQuery();
     }
@@ -75,13 +74,13 @@ class ReponseRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('reponse.id as repId, user.id as userId, questionnaire.id as questId')
-        ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
-        ->leftJoin('reponse.question', 'question')
-        ->leftJoin('reponse.user', 'user')
-        ->leftJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :expertId OR questionnaire.id = :ambassadeurId')
-        ->setParameter('expertId', $idExpert)
-        ->setParameter('ambassadeurId', $idAmbassadeur)
-        ->groupBy('user, questionnaire');
+            ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
+            ->leftJoin('reponse.question', 'question')
+            ->leftJoin('reponse.user', 'user')
+            ->leftJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :expertId OR questionnaire.id = :ambassadeurId')
+            ->setParameter('expertId', $idExpert)
+            ->setParameter('ambassadeurId', $idAmbassadeur)
+            ->groupBy('user, questionnaire');
         
         return $qb->getQuery();
     }

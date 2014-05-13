@@ -242,16 +242,18 @@ abstract class Manager
 
         $this->_em->flush();
     }
-
+    
     /**
      * Export CSV du grid selon les colonnes
      *
-     * @param array $colonnes Liste des colonnes à exporter
-     * @param array $datas    Tableau de données
+     * @param array  $colonnes Liste des colonnes à exporter
+     * @param array  $datas    Tableau de données
+     * @param string $filename Nom du fichier CSV exporté
+     * @param [type] $kernelCharset [description]
      *
      * @return Response
      */
-    public function exportCsv( $colonnes, $datas, $kernelCharset )
+    public function exportCsv( $colonnes, $datas, $filename, $kernelCharset )
     {
         // Array to csv (copy from APY\DataGridBundle\Grid\Export\DSVExport.php)
         $outstream = fopen("php://temp", 'r+');
@@ -318,7 +320,7 @@ abstract class Manager
         $headers = array(
             'Content-Description'       => 'File Transfer',
             'Content-Type'              => 'text/comma-separated-values',
-            'Content-Disposition'       => sprintf('attachment; filename="%s"', 'export-utilisateurs.csv'),
+            'Content-Disposition'       => sprintf('attachment; filename="%s"', $filename),
             'Content-Transfer-Encoding' => 'binary',
             'Cache-Control'             => 'must-revalidate',
             'Pragma'                    => 'public',

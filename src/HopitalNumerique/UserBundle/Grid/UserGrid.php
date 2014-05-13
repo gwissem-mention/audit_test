@@ -38,7 +38,8 @@ class UserGrid extends Grid implements IGrid
         $arrayRolesDateContractualisation = $this->_arrayRolesDateContractualisation;
         
         $this->addColonne( new Column\DateColumn('dateInscription', 'Date d\'inscription') );        
-        $this->addColonne( new Column\TextColumn('username', 'Nom du compte') );
+        $this->addColonne( new Column\TextColumn('username', 'Nom du compte') );        
+        $this->addColonne( new Column\TextColumn('nbVisites', 'Visites') );
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('prenom', 'Prénom') );
         $this->addColonne( new Column\TextColumn('email', 'Adresse e-mail') );
@@ -110,11 +111,17 @@ class UserGrid extends Grid implements IGrid
     public function setMassActions()
     {
         $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueUserBundle:User:deleteMass') );
-        $this->addMassAction( new Action\Export\CsvMass('HopitalNumeriqueUserBundle:User:exportCsv') );
+
+        /* Exports */
+        $this->addMassAction( new Action\ActionMass('Export CSV - Caractérisation', 'HopitalNumeriqueUserBundle:User:exportCsv') );
+        //$this->addMassAction( new Action\ActionMass('Export CSV - Candidatures expert', 'HopitalNumeriqueUserBundle:User:exportCsvExperts') );
+
+
+
+
 
         $this->addMassAction( new Action\ActionMass('Activer','HopitalNumeriqueUserBundle:User:activerMass') );
         $this->addMassAction( new Action\ActionMass('Désactiver','HopitalNumeriqueUserBundle:User:desactiverMass') );
-		
 		$this->addMassAction( new Action\ActionMass('Envoyer un mail','HopitalNumeriqueUserBundle:User:envoyerMailMass') );
     }
 }

@@ -31,6 +31,9 @@ $(document).ready(function() {
             ]},
             {title: 'Blocs', items: [
                 {title: 'Paragraphe', block: 'p'}
+            ]},
+            {title: 'Tableaux', items: [
+                {title: 'Tableau simple', selector: 'table', classes: 'table table-striped table-bordered table-hover'}
             ]}
         ],
         importcss_append: true,
