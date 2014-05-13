@@ -105,3 +105,10 @@ VALUES
 INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`)
 VALUES
     (33, '[HOPITALNUMERIQUE] - Evaluation d\'une session', 'Formulaire de l\'évaluation à une session d\'un module', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\r\n\r\nVôtre participation à la session %module du %date a été notifié.\r\nVous pouvez accèder au formulaire d\'évaluation de la session ici : %url.\r\n\r\nCordialement,', '{\"%u\":\"Nom d\'utilisateur\",\"%module\":\"Nom du module\",\"%date\":\"Date de la session\",\"%url\":\"Lien du formulaire d\'évaluation.\"}');
+
+/* Lien de menu front : GME - 13/05/2014 */
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (138, 137, 3, 'Modules thématiques - Affichage', 'hopitalnumerique_module_module_show_front', '[]', NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+    (139, 137, 3, 'Modules thématiques - Session - Information', 'hopitalnumerique_module_session_informations_front', '[]', NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 2),
+    (140, 137, 3, 'Modules thématiques - Session - Evaluation', 'hopitalnumerique_module_evaluation_form_front', '[]', NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 3);

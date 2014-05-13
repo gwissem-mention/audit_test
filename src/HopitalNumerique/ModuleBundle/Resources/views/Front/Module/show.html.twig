@@ -47,8 +47,17 @@
                         </thead>
                         <tbody>
                             {% for key,session in moduleSelectionne.sessions %}
+                                {# Vérification de l'accès #}
+                                {% set autorisation = false %}
+                                {% for roleAutorise in session.restrictionAcces %}
+                                    {% if roleAutorise.role in app.user.roles %}
+                                        {% set autorisation = true %}
+                                    {% endif %}
+                                {% endfor %}
                                 {# On affiche uniquement les dates non dépassées #}
-                                {% if date(session.dateSession) > date() %}
+                                {% if date(session.dateOuvertureInscription) <= date() 
+                                      and date(session.dateFermetureInscription) > date() 
+                                      and autorisation %}
                                     <tr>
                                         <td class=
                                             {% if date(session.dateSession) < date('+7days') %}
