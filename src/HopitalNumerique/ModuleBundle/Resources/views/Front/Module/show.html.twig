@@ -40,6 +40,7 @@
                         <thead>
                             <tr class="grid-row-titles">
                                 <th style="font-size:11px;vertical-align:middle">Date de la session</th>
+                                <th style="font-size:11px;vertical-align:middle">Formateur</th>
                                 <th style="width:72px;font-size:11px">Places restantes</th>
                                 <th style="width:70px;font-size:11px">Vous êtes inscrit</th>
                                 <th style="width:86px;font-size:11px"></th>
@@ -106,16 +107,15 @@
                                             {% endif %}
                                         </td>
                                         {# Gestion de la taille en fonction du nombre de bouton qu'il y aura a afficher #}
-                                        <td {% if userAParticipe and not app.user.reponses|hadReponseForQuestionnaire( 4, session.id ) %}style="min-width:126px;"{% else %}style="min-width:86px;"{% endif %}>
+                                        <td style="min-width:86px;">
                                             <div class="btn-group">
                                                 <a class="btn btn-info link fancybox.ajax" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
                                                 <a class="btn btn-success link" href="{{path('hopitalnumerique_module_session_informations_front',{'id':session.id})}}"><i class="fa fa-arrow-right"></i></a>
-                                                {% if userAParticipe and not app.user.reponses|hadReponseForQuestionnaire( 4, session.id ) %}
-                                                    <a class="btn btn-green link" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':session.id})}}"><i class="fa fa-check"></i></a>
-                                                {% endif %}
                                             </div>
                                         </td>
                                     </tr>
+                                {% else %}
+                                    - Pas de session à afficher -
                                 {% endif %}
                             {% endfor %}   
                         </tbody>

@@ -28,6 +28,7 @@ class InscriptionRepository extends EntityRepository
                      user.nom as userNom,
                      user.prenom as userPrenom, 
                      user.roles,
+                     session.id as sessionId,
                      refProfilEtablissementSante.libelle as userProfil,
                      refRegion.libelle as userRegion,
                      insc.commentaire,

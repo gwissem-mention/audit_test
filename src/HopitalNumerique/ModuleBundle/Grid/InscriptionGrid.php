@@ -113,6 +113,16 @@ class InscriptionGrid extends Grid implements IGrid
         $actionFicheParticipant->setRouteParametersMapping(array('userId' => 'id'));
         $actionFicheParticipant->setRouteParameters(array('userId'));
         $this->addActionButton( $actionFicheParticipant );
+
+        $actionFicheEvaluation = new Action\ShowButton('hopitalnumerique_module_module_session_evaluation_editer');
+        $actionFicheEvaluation->setAttributes( array(
+                'class'=>'btn btn-primary fa fa-list',
+                'title' => 'Afficher le formulaire d\'évaluation',
+                'target' => '_blank'
+        ));
+        $actionFicheEvaluation->setRouteParametersMapping(array('userId' => 'user', 'sessionId' => 'session'));
+        $actionFicheEvaluation->setRouteParameters(array('userId', 'sessionId'));
+        $this->addActionButton( $actionFicheEvaluation );
     }
 
     /**

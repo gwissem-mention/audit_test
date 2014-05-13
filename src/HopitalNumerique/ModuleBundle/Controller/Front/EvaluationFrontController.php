@@ -20,6 +20,25 @@ class EvaluationFrontController extends Controller
         $idQuestionnaireModuleEvaluation = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('module-evaluation');
         $questionnaire                   = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireModuleEvaluation) );
         
+        //Vérification si l'utilisateur connecté a participé à cette session, sinon il n'a pas accès au formulaire d'évaluation
+        $aParticipe = false;
+        $inscriptionsAcceptes = $session->getInscriptionsAccepte();
+        foreach ($inscriptionsAcceptes as $inscriptionAccepte) 
+        {
+            if($user->getId() === $inscriptionAccepte->getUser()->getId())
+            {
+                $aParticipe = true;
+                break;
+            }
+        }
+
+        if(!$aParticipe)
+        {
+            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à cette session.' );
+
+            return $this->redirect($this->generateUrl( 'hopitalnumerique_module_module_front' ));
+        }
+
         $form = $this->createForm('nodevo_questionnaire_questionnaire', $questionnaire);
 
         //readonly si il y a des réponses dans le questionnaire
@@ -32,6 +51,7 @@ class EvaluationFrontController extends Controller
                 'label_attr' => array(
                     'idUser'           => $user->getId(),
                     'idQuestionnaire'  => $questionnaire->getId(),
+                    'paramId'          => $session->getId(),
                     'readOnly'         => $readOnly 
                 )
         ));
