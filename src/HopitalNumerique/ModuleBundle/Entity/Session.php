@@ -119,6 +119,16 @@ class Session
     /**
      * @var integer
      *
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="usr_formateur", referencedColumnName="usr_id", nullable=true)
+     * 
+     * @GRID\Column(field="formateur.nom")
+     */
+    protected $formateur;
+
+    /**
+     * @var integer
+     *
      * @Nodevo\Javascript(class="validate[custom[integer],min[0]]")
      * @ORM\Column(name="ses_nombrePlaceDisponible", type="integer", nullable=true, options = {"comment" = "Nombre de places disponibles de la session"})
      */
@@ -263,6 +273,29 @@ class Session
     public function getDateFermetureInscription()
     {
         return $this->dateFermetureInscription;
+    }
+
+    /**
+     * Set formateur
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $formateur
+     * @return Reponse
+     */
+    public function setFormateur(\HopitalNumerique\UserBundle\Entity\User $formateur = null)
+    {
+        $this->formateur = $formateur;
+    
+        return $this;
+    }
+    
+    /**
+     * Get formateur
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User
+     */
+    public function getFormateur()
+    {
+        return $this->formateur;
     }
 
     /**
@@ -639,23 +672,28 @@ class Session
             //Durée
             $duree = $module->getDuree();
             if(!is_null($duree))
-                $this->setDuree($module->getDuree());
+                $this->setDuree($duree);
             //Horaires
             $horaire = $module->getHorairesType();
             if(!empty($horaire))
-                $this->setHoraires($module->getHorairesType());
+                $this->setHoraires($horaire);
             //Lieu
             $lieu = $module->getLieu();
             if(!empty($lieu))
-                $this->setLieu($module->getLieu());
+                $this->setLieu($lieu);
             //Description
             $description = $module->getDescription();
             if(!empty($description))
-                $this->setDescription($module->getDescription());
+                $this->setDescription($description);
             //Nombre de places disponibles
             $nbPlaceDispo = $module->getNombrePlaceDisponible();
             if(!empty($nbPlaceDispo))
-                $this->setNombrePlaceDisponible($module->getNombrePlaceDisponible());
+                $this->setNombrePlaceDisponible($nbPlaceDispo);
+            //Formateur
+            $formateur = $module->getFormateur();
+            if(!is_null($formateur))
+                $this->setFormateur($formateur);
+
         }
         
         return $this;
