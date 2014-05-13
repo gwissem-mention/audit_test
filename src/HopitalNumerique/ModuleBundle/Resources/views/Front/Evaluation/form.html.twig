@@ -14,6 +14,7 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-module-front-evaluation-form.js"
         "@validationEngine_js"
+        'bundles/hopitalnumeriquemodule/js/Front/evaluation.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -36,7 +37,6 @@
     <div class="col-md-12">
         {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.vertical.html.twig' %}
         {{ form_javascript(form) }}
-        {{ form_errors(form) }}
         {{ form(form) }}
     </div>
     <div class="clearfix"></div>

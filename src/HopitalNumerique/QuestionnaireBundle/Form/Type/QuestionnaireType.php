@@ -42,7 +42,7 @@ class QuestionnaireType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $idUser          = (isset($options['label_attr']['idUser']) && !is_null($options['label_attr']['idUser'])) ? $options['label_attr']['idUser'] : 0;
-        $idQuestionnaire = (isset($options['label_attr']['idQuestionnaire']) && !is_null($options['label_attr']['idQuestionnaire'])) ? $options['label_attr']['idQuestionnaire'] : 0;        
+        $idQuestionnaire = (isset($options['label_attr']['idQuestionnaire']) && !is_null($options['label_attr']['idQuestionnaire'])) ? $options['label_attr']['idQuestionnaire'] : 0;
         $questionnaire   = $this->_managerQuestionnaire->findOneBy(array('id' => $idQuestionnaire));
         
        /*
