@@ -85,7 +85,7 @@ class Inscription
     {
         $this->etatInscription   = 406;
         $this->etatParticipation = 410;
-        $this->etatEvaluation    = 413;
+        $this->etatEvaluation    = 27;
     }
     
     /**

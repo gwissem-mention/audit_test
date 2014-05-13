@@ -25,7 +25,7 @@ class InscriptionFrontController extends Controller
         $inscription->setSession( $session );
         $inscription->setEtatInscription(   $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 406) ) );
         $inscription->setEtatParticipation( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 410) ) );
-        $inscription->setEtatEvaluation(    $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 413) ) );
+        $inscription->setEtatEvaluation(    $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 27) ) );
 
         $form = $this->createForm('hopitalnumerique_module_inscription', $inscription);
 
