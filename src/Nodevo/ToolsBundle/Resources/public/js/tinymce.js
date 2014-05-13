@@ -31,6 +31,11 @@ $(document).ready(function() {
             ]},
             {title: 'Blocs', items: [
                 {title: 'Paragraphe', block: 'p'}
+            ]},
+            {title: 'Tableaux', items: [
+                {title: 'Tableau simple', selector: 'table', classes: 'table table-striped table-hover'},
+                {title: 'Tableau avec bordures', selector: 'table', classes: 'table table-striped table-bordered table-hover'},
+                {title: 'Tableau condensé', selector: 'table', classes: 'table table-striped table-condensed table-hover'},
             ]}
         ],
         importcss_append: true,
