@@ -505,6 +505,26 @@ class User extends BaseUser
     {
         return $this->dateInscription;
     }
+
+    /**
+     * Get dateInscription string
+     *
+     * @return string
+     */
+    public function getDateInscriptionString()
+    {
+        return $this->dateInscription->format('d/m/Y');
+    }
+
+    /**
+     * Get lastLogin string
+     *
+     * @return string
+     */
+    public function getLastLoginString()
+    {
+        return $this->lastLogin ? $this->lastLogin->format('d/m/Y') : '';
+    }
     
     /**
      * Get nom
@@ -1203,5 +1223,15 @@ class User extends BaseUser
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Get role
+     *
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->roles[0];
     }
 }
