@@ -124,3 +124,13 @@ hopitalnumerique_module_module_session_inscription_annuler:
     requirements:
         id: \d+
         _method: GET|POST
+
+#Evaluation
+#---Edit
+hopitalnumerique_module_module_session_evaluation_editer:
+    pattern: /module/session/evaluation/edit/{user}/{session}
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Evaluation:edit, user: 1, session: 1 }
+    requirements:
+        user: \d+
+        session: \d+
+        _method: GET

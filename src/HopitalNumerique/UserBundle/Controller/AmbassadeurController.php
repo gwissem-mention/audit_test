@@ -93,7 +93,7 @@ class AmbassadeurController extends Controller
      */
     public function showAction( $idUser )
     {
-        //Récupération du questionnaire de l'expert
+        //Récupération du questionnaire de l'ambassadeur
         $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
     
         //Récupération de l'utilisateur passé en param

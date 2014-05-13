@@ -1,0 +1,38 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block title %}{{parent()}} - Utilisateurs{% endblock %}
+
+{% block h1Title %}
+    Évaluation de <strong>{{session.module.titre}}</strong> du <strong>{{session.dateSession|date('d/m/Y')}}</strong> de <strong>{{ user.getAppellation() }}</strong>
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-user-ambassadeur-edit.css" filter="cssrewrite, ?yui_css"
+        "@validationEngine_css"
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-user-ambassadeur-edit.js"
+        "@validationEngine_js"
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste des utilisateurs"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel-body" >
+            {# Include des évaluations #}
+            {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", {'user':user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
+        </div>           
+    </div>
+{% endblock %}

@@ -112,3 +112,6 @@ VALUES
     (138, 137, 3, 'Modules thématiques - Affichage', 'hopitalnumerique_module_module_show_front', '[]', NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
     (139, 137, 3, 'Modules thématiques - Session - Information', 'hopitalnumerique_module_session_informations_front', '[]', NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 2),
     (140, 137, 3, 'Modules thématiques - Session - Evaluation', 'hopitalnumerique_module_evaluation_form_front', '[]', NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 3);
+
+/* Nettoyage des références evaluation : GME - 13/05/2014 */
+/* 14:17:44 Gaia (localnodevo) */ DELETE FROM `hn_reference` WHERE `ref_id` IN ('413','414');
