@@ -98,7 +98,7 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des inscriptions de l'utilisateur
+     * Retourne la liste des inscriptions de l'utilisateur pour la création des factures
      *
      * @param User $user L'utilisateur concerné
      *
@@ -107,5 +107,17 @@ class InscriptionManager extends BaseManager
     public function getForFactures( $user )
     {
         return $this->getRepository()->getForFactures( $user )->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne la liste des inscriptions de l'utilisateur
+     *
+     * @param User $user L'utilisateur concerné
+     * 
+     * @return array
+     */
+    public function getInscriptionsForUser( $user )
+    {
+        return $this->getRepository()->getInscriptionsForUser( $user )->getQuery()->getResult();
     }
 }

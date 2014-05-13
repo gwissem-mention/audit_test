@@ -1,0 +1,4 @@
+#Front - Inscription
+hopitalnumerique_module_inscription_index_front:
+    pattern:  /inscription
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/InscriptionFront:index}

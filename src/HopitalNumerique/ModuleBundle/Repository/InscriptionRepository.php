@@ -51,7 +51,7 @@ class InscriptionRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des inscriptions de l'utilisateur
+     * Retourne la liste des inscriptions de l'utilisateur pour la création des factures
      *
      * @return QueryBuilder
      */
@@ -66,6 +66,21 @@ class InscriptionRepository extends EntityRepository
                          ->andWhere('refRemboursement.id = 5', 'refEvaluation.id = 29')
                          ->andWhere('refParticipation.id = 411','insc.facture IS NULL')
                          ->andWhere('insc.user = :user')
+                         ->setParameter('user', $user);
+    }
+
+    /**
+     * Retourne la liste des inscriptions de l'utilisateur
+     *
+     * @return QueryBuilder
+     */
+    public function getInscriptionsForUser( $user )
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('insc')
+                         ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
+                         ->leftJoin('insc.etatInscription','refEtatInscription')
+                         ->andWhere('insc.user = :user', 'refEtatInscription.id != 409')
                          ->setParameter('user', $user);
     }
 }
