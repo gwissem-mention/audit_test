@@ -112,7 +112,6 @@ class UserController extends Controller
         return $this->customRenderView( $view , $form, $user);
     }
     
-
     //---- Back Office ------    
     /**
      * Affichage des utilisateurs
@@ -209,7 +208,7 @@ class UserController extends Controller
         $idTypeEtablissement  = $this->get('request')->request->get('idTypeEtablissement');
         //Par défaut le département est obligatoire
         $where = array(
-        	'departement'   => $idDepartement,
+            'departement'   => $idDepartement,
             'typeOrganisme' => $idTypeEtablissement
         );
         
@@ -310,7 +309,7 @@ class UserController extends Controller
     }
 
     /**
-     * Export CSV de la liste des utilisateurs sélectionnés
+     * Export CSV de la liste des utilisateurs sélectionnés (caractérisation)
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
@@ -318,42 +317,46 @@ class UserController extends Controller
     public function exportCsvAction( $primaryKeys, $allPrimaryKeys )
     {
         //get all selected Users
-		if($allPrimaryKeys == 1)
-			$users = $this->get('hopitalnumerique_user.manager.user')->findAll();
-		else
-			$users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        if($allPrimaryKeys == 1)
+            $users = $this->get('hopitalnumerique_user.manager.user')->findAll();
+        else
+            $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
 
-        // Pour Excel Windows, les deux premiers caractères doivent être en minuscules,
-		// sinon le fichier est reconnu en tant que fichier SYLK.
-		//
-		// Un fichier SYLK est un fichier texte qui commence par « ID » ou « ID_xxxx »,
-		// où xxxx est une chaîne de texte. Le premier enregistrement d'un fichier
-		// SYLK est ID_Number. Lorsqu'Excel identifie ce texte au début d'un fichier texte,
-		// il interprète le fichier en tant que fichier SYLK. Excel essaie de convertir
-		// le fichier à partir du format SYLK, mais il n'y parvient pas car aucun code
-		// SYLK ne figure après les caractères « ID ». Étant donné qu'Excel ne peut pas
-		// convertir le fichier, le message d'erreur d'affiche. 
-		$colonnes = array( 
-                            'id'                  => 'id', 
-                            'nom'                 => 'Nom', 
-                            'prenom'              => 'Prénom', 
-                            'username'            => 'Nom du compte', 
-                            'email'               => 'Adresse e-mail',
-                            'etat.libelle'        => 'Etat',
-                            'region.libelle'      => 'Région',
-                            'titre.libelle'       => 'Titre',
-                            'civilite.libelle'    => 'Civilité',
-                            'telephoneDirect'     => 'Téléphone Direct',
-                            'telephonePortable'   => 'Téléphone Portable',
-                            'departement.libelle' => 'Département'
+        $colonnes = array( 
+                            'id'                                 => 'id', 
+                            'nom'                                => 'Nom', 
+                            'prenom'                             => 'Prénom', 
+                            'username'                           => 'Nom du compte', 
+                            'email'                              => 'Adresse e-mail',
+                            'etat.libelle'                       => 'Etat',
+                            'region.libelle'                     => 'Région',
+                            'titre.libelle'                      => 'Titre',
+                            'civilite.libelle'                   => 'Civilité',
+                            'telephoneDirect'                    => 'Téléphone Direct',
+                            'telephonePortable'                  => 'Téléphone Portable',
+                            'departement.libelle'                => 'Département',
+                            'lastLoginString'                    => 'Dernière connexion',
+                            'contactAutre'                       => 'Contact Autre',
+                            'role'                               => 'Roles',
+                            'statutEtablissementSante.libelle'   => 'Statut Etablissement Santé',
+                            'profilEtablissementSante.libelle'   => 'Profil Etablissement Santé',
+                            'raisonInscriptionSante.libelle'     => 'Raison inscription Santé',
+                            'raisonInscriptionStructure.libelle' => 'Raison inscription structure',
+                            'autreStructureRattachementSante'    => 'Autre structure de rattachement Santé',
+                            'nomStructure'                       => 'Nom structure',
+                            'fonctionStructure'                  => 'Fonction structure',
+                            'etablissementRattachementSante.nom' => 'Etablissement rattachement Santé',
+                            'dateInscriptionString'              => 'Date d\'inscription',
+                            'fonctionDansEtablissementSante'     => 'Fonction dans l\'établissement de Santé',
+                            'nbVisites'                          => 'Nombre de visites'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $users, $kernelCharset );
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $users, 'export-utilisateurs.csv', $kernelCharset );
     }
 
-	/**
+    /**
      * Envoyer un mail aux utilisateurs
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
@@ -385,7 +388,78 @@ class UserController extends Controller
             'mailto' => 'mailto:'.$to.'?bcc='.$bcc
         ));
     }
-	
+    
+    /**
+     * Export CSV de la liste des utilisateurs sélectionnés (candidatures experts)
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     */
+    public function exportCsvExpertsAction( $primaryKeys, $allPrimaryKeys )
+    {
+        // //get all selected Users
+        // if($allPrimaryKeys == 1)
+        //     $users = $this->get('hopitalnumerique_user.manager.user')->findAll();
+        // else
+        //     $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+
+        // //prepare colonnes
+        // $colonnes = array( 
+        //                     'id'       => 'id', 
+        //                     'nom'      => 'Nom', 
+        //                     'prenom'   => 'Prénom', 
+        //                     'username' => 'Nom du compte', 
+        //                     'email'    => 'Adresse e-mail',
+        //                 );
+
+        // $datas = array();
+        // foreach($users as $user)
+        // {
+        //     //prepare user infos
+        //     $row           = new \StdClass;
+        //     $row->id       = $user->getId();
+        //     $row->nom      = $user->getNom();
+        //     $row->prenom   = $user->getPrenom();
+        //     $row->username = $user->getUsername();
+        //     $row->email    = $user->getEmail();
+
+        //     //add reponses infos
+        //     $questions = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionsReponses( 1, $user->getId() );
+        //     foreach($questions as $question){
+        //         //add questions to colonnes
+        //         if( !isset($colonnes['question'.$question->getId()]))
+        //             $colonnes['question'.$question->getId()] = $question->getLibelle();
+
+        //         $reponses = $question->getReponses();
+        //         $reponse = $reponses[0]; //get réponse courante
+
+        //         switch ($question->getTypeQuestion()->getLibelle())
+        //         {
+
+        //         }
+
+        //         echo '<pre>';
+        //         var_dump($reponse);
+        //         die();
+        //     }
+            
+        // }
+        
+        // die();
+
+
+            
+
+
+            
+        
+
+        
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $users, 'export-utilisateurs.csv', $kernelCharset );
+    }
 
 
 
@@ -557,19 +631,19 @@ class UserController extends Controller
                 
                 switch ($do)
                 {
-                	case 'inscription':
+                    case 'inscription':
                         $this->get('session')->getFlashBag()->add( 'danger' , 'Certains serveurs de messagerie peuvent bloquer la bonne réception des emails émis par la plateforme Hôpital Numérique. Merci de vérifier auprès de votre service de informatique que les adresses accompagnement-hn@anap.fr et communication@anap.fr ne sont pas considérées comme du spam et qu\'elles font bien parties des adresses autorisées sur le serveur mail de votre établissment.' ); 
-                	    return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
-                	    break;
-                	case 'information-personnelles':
-                	    return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
-                	    break;
-                	case 'save-close':
-                	    return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
-                	    break;
-                	default:
-                	    return $this->redirect( $this->generateUrl('hopital_numerique_user_edit', array( 'id' => $user->getId())) );
-                	    break;
+                        return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+                        break;
+                    case 'information-personnelles':
+                        return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
+                        break;
+                    case 'save-close':
+                        return $this->redirect( $this->generateUrl('hopital_numerique_user_homepage') );
+                        break;
+                    default:
+                        return $this->redirect( $this->generateUrl('hopital_numerique_user_edit', array( 'id' => $user->getId())) );
+                        break;
                 }
             }
         }

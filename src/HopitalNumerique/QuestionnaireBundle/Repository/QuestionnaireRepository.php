@@ -21,9 +21,9 @@ class QuestionnaireRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('questionnaire, question, reponse')
-        ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Question', 'question')
-        ->innerJoin('question.questionnaire', 'questionnaire' ,'WITH' , 'questionnaire.id = :idQuestionnaire')
-        ->setParameter('idQuestionnaire', $idQuestionnaire );
+            ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Question', 'question')
+            ->innerJoin('question.questionnaire', 'questionnaire' ,'WITH' , 'questionnaire.id = :idQuestionnaire')
+            ->setParameter('idQuestionnaire', $idQuestionnaire );
         
         if ($paramId != null)
         {
@@ -34,8 +34,7 @@ class QuestionnaireRepository extends EntityRepository
         else
         {
             $qb->leftJoin('question.reponses', 'reponse', 'WITH' , 'reponse.user = :idUser ')
-    //         ->innerJoin('reponse.user', 'user' , 'WITH' , 'user.id = :idUser')
-            ->setParameter('idUser', $idUser );
+                ->setParameter('idUser', $idUser );
         }
         $qb->orderBy('question.ordre');
                 
