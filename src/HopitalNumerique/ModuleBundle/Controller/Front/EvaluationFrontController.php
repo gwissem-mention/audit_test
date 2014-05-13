@@ -25,7 +25,8 @@ class EvaluationFrontController extends Controller
         $inscriptionsAcceptes = $session->getInscriptionsAccepte();
         foreach ($inscriptionsAcceptes as $inscriptionAccepte) 
         {
-            if($user->getId() === $inscriptionAccepte->getUser()->getId())
+            if($user->getId() === $inscriptionAccepte->getUser()->getId()
+                && $inscriptionAccepte->getEtatParticipation()->getId() === 411)
             {
                 $aParticipe = true;
                 break;
@@ -134,7 +135,6 @@ class EvaluationFrontController extends Controller
             //Modifications de l'inscription: modification du statut "etatEvaluer"  
             $inscription = $this->get('hopitalnumerique_module.manager.inscription')->findOneBy( array('user' => $user, 'session' => $session) );
             $inscription->setEtatEvaluation( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 29)));
-            $inscription->setEtatRemboursement( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 5)));
             $this->get('hopitalnumerique_module.manager.inscription')->save( $inscription );
 
             $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Votre évaluation de la session ' . $session->getModule()->getTitre() . ' a bien été prise en compte, nous vous remercions.' );
