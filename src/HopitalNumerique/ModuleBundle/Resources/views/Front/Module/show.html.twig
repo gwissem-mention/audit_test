@@ -39,11 +39,10 @@
                     <table class="table table-striped table-hover table-condensed table-bordered">
                         <thead>
                             <tr class="grid-row-titles">
-                                {#<th style="width:78px;">Date</th>#}
-                                <th>Date</th>
-                                <th style="width:65px;">Places</th>
-                                <th style="width:65px;">Inscrit</th>
-                                <th style="width:86px;"></th>
+                                <th style="font-size:11px;vertical-align:middle">Date de la session</th>
+                                <th style="width:72px;font-size:11px">Places restantes</th>
+                                <th style="width:70px;font-size:11px">Vous êtes inscrit</th>
+                                <th style="width:86px;font-size:11px"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -53,15 +52,15 @@
                                     <tr>
                                         <td class=
                                             {% if date(session.dateSession) < date('+7days') %}
-                                                "warning" title="Session prévue dans moins de 7 jours">
+                                                "warning-off" title="Session prévue dans moins de 7 jours">
                                             {% elseif date(session.dateSession) < date('+1month') %}
-                                                "info" title="Session prévue dans moins d'un mois">
+                                                "info-off" title="Session prévue dans moins d'un mois">
                                             {% else %}
-                                                "success" title="Session prévue dans plus d'un mois">
+                                                "success-off" title="Session prévue dans plus d'un mois">
                                             {% endif %}
                                             {{session.dateSession|date("d/m/Y")}}
                                         </td>
-                                        <td class={% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}"success"{% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}"warning"{% else %}"danger"{% endif %}
+                                        <td align="center" class={% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}"success-off"{% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}"warning-off"{% else %}"danger-off"{% endif %}
                                         {% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}
                                             title="Places restantes suffisantes"
                                         {% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}
