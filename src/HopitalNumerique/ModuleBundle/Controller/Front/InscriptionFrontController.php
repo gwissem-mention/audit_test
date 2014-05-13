@@ -46,4 +46,22 @@ class InscriptionFrontController extends Controller
             'session' => $session
         ));
     }
+
+    /**
+     * Compte HN : Affiche la liste des inscriptions de l'utilisateur connecté
+     *
+     * @return view
+     */
+    public function indexAction()
+    {
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        //get all inscriptions
+        $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->getInscriptionsForUser( $user );
+
+        return $this->render('HopitalNumeriqueModuleBundle:Front/Inscription:index.html.twig', array(
+            'inscriptions' => $inscriptions
+        ));
+    }
 }
