@@ -28,6 +28,7 @@ class FactureManager extends BaseManager
 
         $this->_interventionManager = $managers[0];
         $this->_referenceManager    = $managers[1];
+        $this->_formationManager    = $managers[2];
     }
 
     /**
@@ -63,12 +64,22 @@ class FactureManager extends BaseManager
 
             $total += $prix;
         }
-        $facture->setTotal( $total );
-        $this->save($facture);
 
         //handle formations
-        $formationsEntities = array();
+        foreach ($formations as $id => $prix) {
+            $formation = $this->_formationManager->findOneBy( array('id' => $id) );
+            $formation->setFacture( $facture );
+            $formation->setEtatRemboursement( $statutRemboursement );
+            $formation->setTotal( $prix );
+            
+            $facture->addFormation( $formation );
 
+            $total += $prix;
+        }
+
+        $facture->setTotal( $total );
+        $this->save($facture);
+        
         return $facture;
     }
 

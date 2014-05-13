@@ -12,7 +12,7 @@ services:
         class: %hopitalnumerique_paiement.manager.facture.class%
         arguments: 
             - "@doctrine.orm.entity_manager"
-            - [ "@hopitalnumerique_intervention.manager.intervention_demande", "@hopitalnumerique_reference.manager.reference"]
+            - [ "@hopitalnumerique_intervention.manager.intervention_demande", "@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_module.manager.inscription"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
