@@ -5,7 +5,4 @@ $(document).ready(function() {
         'width'     : '70%',
         'height'    : 'auto'
     });
-
-    //bind de Validation Engine
-    $('form.toValidate').validationEngine();
 });
