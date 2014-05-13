@@ -87,6 +87,19 @@ class SessionType extends AbstractType
                 'label'      => 'Nombre de places disponibles',
                 'attr'       => array('class' => $this->_constraints['nombrePlaceDisponible']['class'] )
             ))
+            ->add('formateur', 'genemu_jqueryselect2_entity', array(
+                    'class'         => 'HopitalNumeriqueUserBundle:User',
+                    'property'      => 'appellation',
+                    'multiple'      => false,
+                    'required'      => false,
+                    'label'         => 'Formateur',
+                    'empty_value'   => ' - ',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('user')
+                            ->where('user.enabled = ' . 1)
+                            ->orderBy('user.nom', 'ASC');
+                    }
+            ))
             ->add('restrictionAcces', 'genemu_jqueryselect2_entity', array(
                     'class'         => 'NodevoRoleBundle:Role',
                     'property'      => 'name',
