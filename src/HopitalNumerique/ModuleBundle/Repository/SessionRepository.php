@@ -48,4 +48,23 @@ class SessionRepository extends EntityRepository
     
         return $qb;
     }
+
+    /**
+     * Retourne la liste des sessions du formateur
+     *
+     * @param User $user L'utilisateur concerné
+     * 
+     * @return QueryBuilder
+     */
+    public function getSessionsForFormateur( $user )
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('ses')
+                         ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
+                         ->leftJoin('ses.etat','refEtat')
+                         ->andWhere('ses.formateur = :user', 'refEtat.id = 403')
+                         ->andWhere('ses.dateSession < :today')
+                         ->setParameter('user', $user)
+                         ->setParameter('today', new \DateTime() );
+    }
 }
