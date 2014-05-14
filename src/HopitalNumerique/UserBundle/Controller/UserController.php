@@ -109,7 +109,12 @@ class UserController extends Controller
                 
             }
         }
-        $this->customRenderView( $view , $form, $user , $options);
+
+        return $this->render( $view , array(
+            'form'        => $form->createView(),
+            'user'        => $user,
+            'options'     => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user)
+        ));
     }
     
     //---- Back Office ------    
