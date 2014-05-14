@@ -39,6 +39,7 @@ security:
             logout:
                 path:   account_logout
                 target: hopital_numerique_homepage
+                success_handler: logout_handler
             remember_me:
                 key: %secret%
             context: application
@@ -58,6 +59,7 @@ security:
             logout:
                 path:   /admin/logout
                 target: hopital_numerique_admin_homepage
+                success_handler: logout_handler
             remember_me:
                 key: %secret%
             anonymous: false
@@ -78,6 +80,7 @@ security:
             logout:
                 path:   account_logout
                 target: hopital_numerique_homepage
+                success_handler: logout_handler
             remember_me:
                 key: %secret%
             anonymous: true

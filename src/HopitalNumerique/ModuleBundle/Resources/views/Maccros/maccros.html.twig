@@ -94,9 +94,9 @@
                             <div class="btn-group">
                                 <a class="btn btn-info link fancybox.ajax" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
                                 <a class="btn btn-success link" href="{{path('hopitalnumerique_module_session_informations_front',{'id':session.id})}}"><i class="fa fa-arrow-right"></i></a>
-                                {% if userAParticipe and not app.user.reponses|hadReponseForQuestionnaire( 4, session.id ) %}
+                                {#{% if userAParticipe and not app.user.reponses|hadReponseForQuestionnaire( 4, session.id ) %}
                                     <a class="btn btn-green link" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':session.id})}}"><i class="fa fa-check"></i></a>
-                                {% endif %}
+                                {% endif %}#}
                             </div>
                         </td>
                     </tr>

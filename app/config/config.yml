@@ -30,6 +30,9 @@ services:
        class: Twig_Extensions_Extension_Text
        tags:
            - { name: twig.extension }
+    logout_handler:
+        class: HopitalNumerique\UserBundle\Handler\LogoutHandler
+        arguments: ["@hopitalnumerique_objet.manager.objet"]
 
 # Twig Configuration
 twig:
