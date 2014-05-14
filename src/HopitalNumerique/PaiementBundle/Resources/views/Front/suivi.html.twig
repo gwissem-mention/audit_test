@@ -30,7 +30,7 @@
 
 {% block content %}
     
-    <h2>Interventions / Formations</h2>
+    <h2>Interventions / Modules thématiques</h2>
     <form action="{{path('hopitalnumerique_paiement_front_save')}}" method="post">
         <div class="col-md-12">
             <table class="table paiements">
@@ -58,7 +58,7 @@
                         {% set total = total + data.total %}
                     {% else %}
                         <tr>
-                            <td colspan="6" align="center"> - Aucune intervention ou formation disponible - </td>
+                            <td colspan="6" align="center"> - Aucune intervention ou module disponible - </td>
                         </tr>
                     {% endfor %}
                     {% if total != 0 %}

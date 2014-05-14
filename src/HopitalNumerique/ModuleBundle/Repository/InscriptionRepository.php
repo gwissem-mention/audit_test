@@ -63,9 +63,8 @@ class InscriptionRepository extends EntityRepository
                          ->leftJoin('insc.etatRemboursement', 'refRemboursement')
                          ->leftJoin('insc.etatEvaluation', 'refEvaluation')
                          ->leftJoin('insc.etatParticipation', 'refParticipation')
-                         ->andWhere('refRemboursement.id = 5', 'refEvaluation.id = 29')
                          ->andWhere('refParticipation.id = 411','insc.facture IS NULL')
-                         ->andWhere('insc.user = :user')
+                         ->andWhere('insc.user = :user', 'refEvaluation.id = 29')
                          ->setParameter('user', $user);
     }
 

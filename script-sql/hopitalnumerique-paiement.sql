@@ -40,3 +40,8 @@ VALUES
 
 UPDATE `hn_reference` SET `ref_libelle`= 'Facture à émettre' WHERE `ref_id` = 5;
 UPDATE `hn_reference` SET `ref_libelle`= 'Facture émise' WHERE `ref_id` = 6;
+
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (142, 68, 3, 'Suivi des paiements', 'hopitalnumerique_paiement_front', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 4),
+    (143, 68, 3, 'Modules Thématiques', 'hopitalnumerique_module_inscription_index_front', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1);

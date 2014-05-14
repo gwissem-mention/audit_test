@@ -62,7 +62,7 @@ class RemboursementManager extends BaseManager
             $row->date     = $formation->getDateInscription();
             $row->referent = '-';
             $row->etab     = '-';
-            $row->type     = 'Formation : ' . $formation->getSession()->getModule()->getTitre();
+            $row->type     = 'Module : ' . $formation->getSession()->getModule()->getTitre();
             $row->discr    = 'formation';
             $row->total    = $prix['formations'][$formation->getUser()->getRegion()->getId()];
             
