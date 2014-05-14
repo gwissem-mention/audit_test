@@ -1,0 +1,60 @@
+<table width="740px" style="margin:0 auto" >
+    <tr>
+        <td>
+            <img src="{{app.request.getSchemeAndHttpHost()}}{{asset('bundles/hopitalnumeriquemodule/img/logo.png')}}" width="200px" alt="LOGO" style="margin-left:50px" />
+        </td>
+    </tr>
+    <tr>
+        <td align="right" style="height:150px">
+            {{user.etablissementRattachementSante.nom}}<br />
+            {{user.etablissementRattachementSante.adresse ~ ' ' ~ user.etablissementRattachementSante.codepostal ~ ' ' ~ user.etablissementRattachementSante.ville|capitalize}}
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            Paris, le {{'now'|date('d/m/Y')}}
+        </td>
+    </tr>
+</table>
+
+<table width="740px" style="margin:0 auto" >
+    <tr>
+        <td style="height:100px">
+            <u>Objet</u>: Attestation de présence le {{inscription.session.dateSession|date('d/m/Y')}}<br />
+            <span style="margin-left:50px">{{inscription.session.module.titre}}</span>
+        </td>
+    </tr>
+    <tr>
+        <td style="height:70px">
+            Madame, Monsieur,
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Conformément à notre message d’invitation, j’atteste que {{user.civilite.libelle ~ ' ' ~ user.nom ~ ' ' ~ user.prenom }} a participé au module '{{inscription.session.module.titre}}' 
+            dans le cadre du projet Accompagnement Hôpital Numérique organisé(e) à l’ANAP le {{inscription.session.dateSession|date('d/m/Y')}} 
+            et animée par {{inscription.session.formateur.nom ~ ' ' ~ inscription.session.formateur.prenom }}.<br />
+            <br />
+            Vous remerciant de l’intérêt porté aux travaux de l’ANAP, je vous prie d’agréer, l’expression de ma considération distinguée.
+        </td>
+    </tr>
+</table>
+
+<table width="740px" style="margin:150px auto" >
+    <tr>
+        <td align="right">
+            <p style="margin-right:100px" >
+                Christian ANASTASY<br />
+                Directeur Général    
+            </p>
+        </td>
+    </tr>
+</table>
+
+<table width="740px" style="margin:0 auto" >
+    <tr>
+        <td>
+            <img src="{{app.request.getSchemeAndHttpHost()}}{{asset('bundles/hopitalnumeriquemodule/img/footer.png')}}" alt="Footer" width="640px" style="margin:0 auto; display:block" />
+        </td>
+    </tr>
+</table>

@@ -27,4 +27,15 @@ class SessionManager extends BaseManager
         return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
     }
 
+    /**
+     * Retourne la liste des sessions du formateur
+     *
+     * @param User $user L'utilisateur concerné
+     * 
+     * @return array
+     */
+    public function getSessionsForFormateur( $user )
+    {
+        return $this->getRepository()->getSessionsForFormateur( $user )->getQuery()->getResult();
+    }
 }

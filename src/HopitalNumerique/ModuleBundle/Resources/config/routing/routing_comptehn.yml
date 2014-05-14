@@ -2,3 +2,9 @@
 hopitalnumerique_module_inscription_index_front:
     pattern:  /inscription
     defaults: { _controller: HopitalNumeriqueModuleBundle:Front/InscriptionFront:index}
+
+hopitalnumerique_module_inscription_attestation_front:
+    pattern:  /inscription/{id}/attestation
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/InscriptionFront:attestation}
+    requirements:
+        id: \d+
