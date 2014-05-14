@@ -1,6 +1,8 @@
 .submit{margin:10px auto 20px auto; display: block}
 .footer{font-weight: bold}
 
+table.paiements{margin-bottom: 30px}
+
 table.table thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}
 table.table thead tr a { color:#FFFFFF; font-size: 12px }
 table.table thead th { background-color:#6F3596; vertical-align: middle }
