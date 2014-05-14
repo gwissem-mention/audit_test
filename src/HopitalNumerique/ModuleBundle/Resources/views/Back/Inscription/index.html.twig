@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block h1Title %}
-    Gestion des inscriptions
+    Gestion des inscriptions de la session du <strong>{{session.dateSession|date('d/m/Y')}}</strong> du module <strong>{{session.getModule().getTitre()}}</strong>
 {% endblock %}
 
 {% block toolbarButton %}

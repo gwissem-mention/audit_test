@@ -36,7 +36,7 @@
                     
                     <p style="margin: 0 0 5px;"><strong>Session(s) : </strong></p>
                     {% set aucuneSessionAffichees = false %}
-                    
+                                        
                     <table class="table table-striped table-hover table-condensed table-bordered">
                         <thead>
                             <tr class="grid-row-titles">
@@ -48,7 +48,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for key,session in moduleSelectionne.sessions %}
+                            {% for key,session in moduleSelectionne.getSessionsInscriptionsOuvertes() %}
                                 {# Vérification de l'accès #}
                                 {% set autorisation = false %}
                                 {% for roleAutorise in session.restrictionAcces %}
@@ -70,6 +70,9 @@
                                                 "success-off" title="Session prévue dans plus d'un mois">
                                             {% endif %}
                                             {{session.dateSession|date("d/m/Y")}}
+                                        </td>
+                                        <td>
+                                            {{session.formateur.getAppellation()}}
                                         </td>
                                         <td align="center" class={% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}"success-off"{% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}"warning-off"{% else %}"danger-off"{% endif %}
                                         {% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}

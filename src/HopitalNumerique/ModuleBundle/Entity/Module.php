@@ -486,6 +486,27 @@ class Module
     {
         return $this->sessions;
     }
+
+    /**
+     * Get sessions dont la date d'inscription est en ce moment
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSessionsInscriptionsOuvertes()
+    {
+        $sessions = array();
+
+        foreach ($this->sessions as $session) 
+        {
+            if($session->getDateOuvertureInscription() <= new \DateTime()
+                && $session->getDateFermetureInscription() >= new \DateTime()
+                && $session->getEtat()->getId() === 403)
+            {
+                $sessions[] = $session;
+            }
+        }
+        return $sessions;
+    }
     
     // ----------------------------------------
     // --- Gestion de l'upload des fichiers ---

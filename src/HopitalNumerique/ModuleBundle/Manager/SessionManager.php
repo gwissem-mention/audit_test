@@ -25,7 +25,42 @@ class SessionManager extends BaseManager
      */
     public function getDatasForGrid( $condition = null )
     {
-        return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        $sessions = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+
+        $result = array();
+
+        foreach ($sessions as $key => $session) 
+        {
+            $nbInscritsAccepte   = 0;
+            $nbInscritsEnAttente = 0;
+            $nbPlacesRestantes   = $session->getNombrePlaceDisponible();
+
+            foreach ($session->getInscriptions() as $inscription) 
+            {
+                if($inscription->getEtatInscription()->getId() === 406)
+                    $nbInscritsEnAttente++;
+                elseif($inscription->getEtatInscription()->getId() === 407)
+                {
+                    $nbInscritsAccepte++;
+                    $nbPlacesRestantes--;
+                }
+            }
+
+            $result[$key] = array(
+                'id'                       => $session->getId(),
+                'dateOuvertureInscription' => $session->getDateOuvertureInscription(),
+                'dateFermetureInscription' => $session->getDateFermetureInscription(),
+                'dateSession'              => $session->getDateSession(),
+                'duree'                    => $session->getDuree(),
+                'horaires'                 => $session->getHoraires(),
+                'nbInscrits'               => $nbInscritsAccepte,
+                'nbInscritsEnAttente'      => $nbInscritsEnAttente,
+                'placeRestantes'           => $nbPlacesRestantes . '/' . $session->getNombrePlaceDisponible(),
+                'etat'                     => $session->getEtat()->getLibelle()
+            );
+        }
+
+        return $result;
     }
 
     /**

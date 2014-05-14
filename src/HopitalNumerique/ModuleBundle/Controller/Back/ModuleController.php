@@ -35,6 +35,7 @@ class ModuleController extends Controller
     public function addAction()
     {
         $module = $this->get('hopitalnumerique_module.manager.module')->createEmpty();
+        $module->setStatut($this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 3) ));
 
         return $this->renderForm('hopitalnumerique_module_module', $module, 'HopitalNumeriqueModuleBundle:Back/Module:edit.html.twig' );
     }
