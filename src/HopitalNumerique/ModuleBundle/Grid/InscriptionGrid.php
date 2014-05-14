@@ -107,7 +107,7 @@ class InscriptionGrid extends Grid implements IGrid
         $actionFicheParticipant = new Action\ShowButton('hopital_numerique_user_show');
         $actionFicheParticipant->setAttributes( array(
                 'class'=>'btn btn-primary fa fa-user-md',
-                'title' => 'Afficher les inscrits',
+                'title' => 'Fiche de l\'utilisateur',
                 'target' => '_blank'
         ));
         $actionFicheParticipant->setRouteParametersMapping(array('userId' => 'id'));

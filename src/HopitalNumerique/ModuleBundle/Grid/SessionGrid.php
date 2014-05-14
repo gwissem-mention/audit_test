@@ -51,6 +51,9 @@ class SessionGrid extends Grid implements IGrid
         $nbInscritsColumn = new Column\TextColumn('nbInscrits', 'Nombres d\'inscrits');
         $this->addColonne( $nbInscritsColumn );
         
+        $nbInscritsEnAttenteColumn = new Column\TextColumn('nbInscritsEnAttente', 'Nombres d\'inscrits en attente');
+        $this->addColonne( $nbInscritsEnAttenteColumn );
+        
         $nbInscritsColumn = new Column\TextColumn('placeRestantes', 'Nombres de places restantes');
         $this->addColonne( $nbInscritsColumn );
         

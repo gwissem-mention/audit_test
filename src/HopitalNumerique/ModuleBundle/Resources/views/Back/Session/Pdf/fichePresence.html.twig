@@ -7,58 +7,50 @@
     </tr>
     {# Ligne du module #}
     <tr style="border:1px solid #e3e3e3;">
-        <td width="240px">
+        <td>
             <strong>{{ session.module.titre }}</strong>
         </td>
-        <td width="30px">
-            <input type="checkbox" width="5px" height="5px"/>
-        </td>
     </tr>
-    {# Ligne de séparation #}
-    <tr>
-        <td style="background: #5d5d5d;" height="20px;">
-        </td>
-    </tr>
-    <tr>
-        <table width="740px" style="margin:0 auto; border-collapse:collapse;">
-            <thead>
-                <tr class="grid-row-titles">
-                    <th style="font-size:11px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;"><strong>REGION</strong></th>
-                    <th style="font-size:11px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;"><strong>ETABLISSEMENT</strong></th>
-                    <th style="width:72px;font-size:11px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;"><strong>PRENOM</strong></th>
-                    <th style="width:70px;font-size:11px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;"><strong>NOM</strong></th>
-                    <th style="width:86px;font-size:11px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;"><strong>SIGNATURE</strong></th>
-                    <th style="width:86px;font-size:11px;vertical-align:middle;border:1px solid #e3e3e3;"><strong>OBSERVATIONS</strong></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for inscription in inscriptions %}
-                    <tr>
-                        <td style="border:1px solid #e3e3e3;">
-                            {{ inscription.user.region.libelle }}
-                        </td>
-                        <td style="border:1px solid #e3e3e3;">
-                            {% if inscription.user.etablissementRattachementSante is not null %}
-                                {{ inscription.user.etablissementRattachementSante.getAppellation() }}
-                            {% else %}
-                                {{ inscription.user.autreStructureRattachementSante }}
-                            {% endif %}
-                        </td>
-                        <td style="border:1px solid #e3e3e3;">
-                            {{ inscription.user.prenom }}
-                        </td>
-                        <td style="border:1px solid #e3e3e3;">
-                            {{ inscription.user.nom }}
-                        </td>
-                        <td style="border:1px solid #e3e3e3;">
-                            
-                        </td>
-                        <td style="border:1px solid #e3e3e3;">
-                            
-                        </td>
-                    </tr>
-                {% endfor %}  
-            </tbody>
-        </table>
-    </tr>
+</table>
+{# Ligne de séparation #}
+<div style="background: #5d5d5d;height:20px; width:740px"></div>
+<table width="740px" style="margin:0 auto; border-collapse:collapse;">
+    <thead>
+        <tr class="grid-row-titles">
+            <th style="font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>REGION</strong></th>
+            <th style="font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>ETABLISSEMENT</strong></th>
+            <th style="width:72px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>PRENOM</strong></th>
+            <th style="width:70px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>NOM</strong></th>
+            <th style="width:120px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>SIGNATURE</strong></th>
+            <th style="width:120px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;"><strong>OBSERVATIONS</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for inscription in inscriptions %}
+            <tr>
+                <td style="border:1px solid #e3e3e3;font-size:11px;" height="30px">
+                    {{ inscription.user.region.libelle }}
+                </td>
+                <td style="border:1px solid #e3e3e3;font-size:11px;">
+                    {% if inscription.user.etablissementRattachementSante is not null %}
+                        {{ inscription.user.etablissementRattachementSante.nom }}
+                    {% else %}
+                        {{ inscription.user.autreStructureRattachementSante }}
+                    {% endif %}
+                </td>
+                <td style="border:1px solid #e3e3e3;font-size:11px;">
+                    {{ inscription.user.prenom }}
+                </td>
+                <td style="border:1px solid #e3e3e3;font-size:11px;">
+                    {{ inscription.user.nom }}
+                </td>
+                <td style="border:1px solid #e3e3e3;font-size:11px;">
+                    
+                </td>
+                <td style="border:1px solid #e3e3e3;font-size:11px;">
+                    
+                </td>
+            </tr>
+        {% endfor %}  
+    </tbody>
 </table>

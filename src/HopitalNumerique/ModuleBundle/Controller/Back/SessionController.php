@@ -38,6 +38,7 @@ class SessionController extends Controller
         $session = $this->get('hopitalnumerique_module.manager.session')->createEmpty();
         //Valeurs par défaut lors de la création
         $session->setModule( $module );
+        $session->setEtat($this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 403) ));
         $session->getDefaultValueFromModule();
         $session->setRestrictionAcces($this->get('nodevo_role.manager.role')->getRoleByArrayName(array('ROLE_AMBASSADEUR_7', 'ROLE_ARS_CMSI_4', 'ROLE_GCS_12')));
 
@@ -126,7 +127,7 @@ class SessionController extends Controller
      */
     public function impressionFichePresenceAction( \HopitalNumerique\ModuleBundle\Entity\Session $session )
     {
-        return $this->render('HopitalNumeriqueModuleBundle:Back/Session/Pdf:fichePresence.html.twig', array(
+        $html = $this->renderView('HopitalNumeriqueModuleBundle:Back/Session/Pdf:fichePresence.html.twig', array(
             'session'       => $session,
             'inscriptions'  => $session->getInscriptions()
         ));

@@ -36,7 +36,7 @@
                     
                     <p style="margin: 0 0 5px;"><strong>Session(s) : </strong></p>
                     {% set aucuneSessionAffichees = false %}
-                    
+                                        
                     <table class="table table-striped table-hover table-condensed table-bordered">
                         <thead>
                             <tr class="grid-row-titles">
@@ -48,7 +48,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for key,session in moduleSelectionne.sessions %}
+                            {% for key,session in moduleSelectionne.getSessionsInscriptionsOuvertes() %}
                                 {# Vérification de l'accès #}
                                 {% set autorisation = false %}
                                 {% for roleAutorise in session.restrictionAcces %}
@@ -71,6 +71,9 @@
                                             {% endif %}
                                             {{session.dateSession|date("d/m/Y")}}
                                         </td>
+                                        <td>
+                                            {{session.formateur.getAppellation()}}
+                                        </td>
                                         <td align="center" class={% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}"success-off"{% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}"warning-off"{% else %}"danger-off"{% endif %}
                                         {% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}
                                             title="Places restantes suffisantes"
@@ -84,16 +87,29 @@
                                         </td>
                                         <td>
                                             {% set userInscrit = false %}
+                                            {% set userRefuser = false %}
                                             {% set userEnAttente = false %}
+                                            {% set userAnnule    = false %}
                                             {% set userAParticipe = false %}
                                             {# Parcourt la liste des utilisateurs inscrits à la session #}
                                             {% for key,inscription in session.getInscriptions() %}
                                                 {# Si l'utilisateur connecté est inscrit alors on set la variable userEnAttente à true #}
                                                 {% if app.user is not null and app.user.id == inscription.user.id %}
-                                                    {% set userEnAttente = true %}
                                                     {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
                                                     {% if inscription.etatInscription.id == 407 %}
                                                         {% set userInscrit = true %}
+                                                    {% endif %}
+                                                    {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
+                                                    {% if inscription.etatInscription.id == 408 %}
+                                                        {% set userRefuser = true %}
+                                                    {% endif %}
+                                                    {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
+                                                    {% if inscription.etatInscription.id == 406 %}
+                                                        {% set userEnAttente = true %}
+                                                    {% endif %}
+                                                    {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
+                                                    {% if inscription.etatInscription.id == 409 %}
+                                                        {% set userAnnule = true %}
                                                     {% endif %}
                                                     {# Si l'utilisateur connecté a participé alors on set la variable userAParticipe à true #}
                                                     {% if inscription.etatParticipation.id == 411 %}
@@ -103,8 +119,12 @@
                                             {% endfor %}
                                             {% if userInscrit %}
                                                 <span class="inscrit">{{session.etat.libelle}}</span>
+                                            {% elseif userRefuser %}
+                                                <span class="refuser">{{session.etat.libelle}}</span>
                                             {% elseif userEnAttente %}
                                                 <span class="en-attente">{{session.etat.libelle}}</span>
+                                            {% elseif userAnnule %}
+                                                <span class="annule">{{session.etat.libelle}}</span>
                                             {% endif %}
                                         </td>
                                         {# Gestion de la taille en fonction du nombre de bouton qu'il y aura a afficher #}
