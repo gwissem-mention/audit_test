@@ -22,6 +22,7 @@
                     <th>Evaluation</th>
                     <th>Etat Facture</th>
                     <th>Etat Remboursement</th>
+                    <th>Attestation de présence</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,6 +52,7 @@
                                 {% if inscription.facture.payee %}Payée{% else %}Non Payée{% endif%} : {{inscription.facture.total}}€
                             {% endif %}
                         </td>
+                        <td><a href="#" >Exporter</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
