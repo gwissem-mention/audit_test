@@ -8,5 +8,6 @@ $(document).ready(function() {
         $('#hopitalnumerique_module_module_path').val('');
         $('#hopitalnumerique_module_module_file').val('');
     });
+    $('form.toValidate').validationEngine();
 	
 });
