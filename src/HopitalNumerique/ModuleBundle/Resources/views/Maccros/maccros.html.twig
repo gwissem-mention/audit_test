@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for key,session in moduleSelectionne.sessions %}
+            {% for key,session in moduleSelectionne.getSessionsInscriptionsOuvertes() %}
                 {# Vérification de l'accès #}
                 {% set autorisation = false %}
                 {% for roleAutorise in session.restrictionAcces %}

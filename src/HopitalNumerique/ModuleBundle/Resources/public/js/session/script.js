@@ -8,6 +8,7 @@ $(document).ready(function() {
         $('#hopitalnumerique_module_session_path').val('');
         $('#hopitalnumerique_module_session_file').val('');
     });
+    $('form.toValidate').validationEngine();
 	
 	//Charge la date de fin d'inscription en fonction de la date de la session
     $('#hopitalnumerique_module_session_dateSession').on('change', function() 
