@@ -1,6 +1,6 @@
 <?php
 
-namespace HopitalNumerique\ModuleBundle\Controller;
+namespace HopitalNumerique\ModuleBundle\Controller\Back;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,7 +23,7 @@ class ModuleController extends Controller
     {
         $grid = $this->get('hopitalnumerique_module.grid.module');
 
-        return $grid->render('HopitalNumeriqueModuleBundle:Module:index.html.twig');
+        return $grid->render('HopitalNumeriqueModuleBundle:Back/Module:index.html.twig');
     }
 
     /**
@@ -36,7 +36,7 @@ class ModuleController extends Controller
     {
         $module = $this->get('hopitalnumerique_module.manager.module')->createEmpty();
 
-        return $this->renderForm('hopitalnumerique_module_module', $module, 'HopitalNumeriqueModuleBundle:Module:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_module_module', $module, 'HopitalNumeriqueModuleBundle:Back/Module:edit.html.twig' );
     }
 
     /**
@@ -52,7 +52,7 @@ class ModuleController extends Controller
         //Récupération de l'entité passée en paramètre
         $module = $this->get('hopitalnumerique_module.manager.module')->findOneBy( array('id' => $id) );
 
-        return $this->renderForm('hopitalnumerique_module_module', $module, 'HopitalNumeriqueModuleBundle:Module:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_module_module', $module, 'HopitalNumeriqueModuleBundle:Back/Module:edit.html.twig' );
     }
 
     /**
@@ -68,7 +68,7 @@ class ModuleController extends Controller
         //Récupération de l'entité en fonction du paramètre
         $module = $this->get('hopitalnumerique_module.manager.module')->findOneBy( array( 'id' => $id) );
 
-        return $this->render('HopitalNumeriqueModuleBundle:Module:show.html.twig', array(
+        return $this->render('HopitalNumeriqueModuleBundle:Back/Module:show.html.twig', array(
             'module' => $module,
         ));
     }
@@ -167,7 +167,7 @@ class ModuleController extends Controller
         }
 
         return $this->render( $view , array(
-            'form'             => $form->createView(),
+            'form'   => $form->createView(),
             'module' => $module
         ));
     }

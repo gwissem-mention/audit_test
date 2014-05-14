@@ -135,5 +135,8 @@ class InscriptionGrid extends Grid implements IGrid
         $this->addMassAction( new Action\ActionMass('Annuler inscription'   ,'HopitalNumeriqueModuleBundle:InscriptionMass:annulerInscriptionMass') );
         $this->addMassAction( new Action\ActionMass('A participé'           ,'HopitalNumeriqueModuleBundle:InscriptionMass:aParticiperParticipationMass') );
         $this->addMassAction( new Action\ActionMass('N\'a pas participé'    ,'HopitalNumeriqueModuleBundle:InscriptionMass:aPasParticiperParticipationMass') );
+        /* Exports */
+        $this->addMassAction( new Action\ActionMass('Export CSV - Inscriptions', 'HopitalNumeriqueModuleBundle:InscriptionMass:exportCsv') );
+        $this->addMassAction( new Action\ActionMass('Envoyer un mail'          , 'HopitalNumeriqueModuleBundle:InscriptionMass:envoyerMailMass') );
     }
 }

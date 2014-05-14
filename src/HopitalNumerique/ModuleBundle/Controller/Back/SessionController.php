@@ -1,6 +1,6 @@
 <?php
 
-namespace HopitalNumerique\ModuleBundle\Controller;
+namespace HopitalNumerique\ModuleBundle\Controller\Back;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,7 +24,7 @@ class SessionController extends Controller
         $grid = $this->get('hopitalnumerique_module.grid.session');
         $grid->setSourceCondition('module', $module->getId());
 
-        return $grid->render('HopitalNumeriqueModuleBundle:Session:index.html.twig', array('module' => $module));
+        return $grid->render('HopitalNumeriqueModuleBundle:Back/Session:index.html.twig', array('module' => $module));
     }
 
     /**
@@ -41,7 +41,7 @@ class SessionController extends Controller
         $session->getDefaultValueFromModule();
         $session->setRestrictionAcces($this->get('nodevo_role.manager.role')->getRoleByArrayName(array('ROLE_AMBASSADEUR_7', 'ROLE_ARS_CMSI_4', 'ROLE_GCS_12')));
 
-        return $this->renderForm('hopitalnumerique_module_session', $session, 'HopitalNumeriqueModuleBundle:Session:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_module_session', $session, 'HopitalNumeriqueModuleBundle:Back/Session:edit.html.twig' );
     }
 
     /**
@@ -57,7 +57,7 @@ class SessionController extends Controller
         //Récupération de l'entité passée en paramètre
         $session = $this->get('hopitalnumerique_module.manager.session')->findOneBy( array('id' => $id) );
 
-        return $this->renderForm('hopitalnumerique_module_session', $session, 'HopitalNumeriqueModuleBundle:Session:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_module_session', $session, 'HopitalNumeriqueModuleBundle:Back/Session:edit.html.twig' );
     }
 
     /**
@@ -73,7 +73,7 @@ class SessionController extends Controller
         //Récupération de l'entité en fonction du paramètre
         $session = $this->get('hopitalnumerique_module.manager.session')->findOneBy( array( 'id' => $id) );
 
-        return $this->render('HopitalNumeriqueModuleBundle:Session:show.html.twig', array(
+        return $this->render('HopitalNumeriqueModuleBundle:Back/Session:show.html.twig', array(
             'session' => $session,
         ));
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace HopitalNumerique\ModuleBundle\Controller;
+namespace HopitalNumerique\ModuleBundle\Controller\Back;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\UserBundle\Entity\User as HopiUser;
@@ -19,7 +19,7 @@ class EvaluationController extends Controller
         $idQuestionnaireEvaluationModule = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('module-evaluation');
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireEvaluationModule) );
     
-        return $this->render('HopitalNumeriqueModuleBundle:Evaluation:edit.html.twig',array(
+        return $this->render('HopitalNumeriqueModuleBundle:Back/Evaluation:edit.html.twig',array(
             'questionnaire'    => $questionnaire,
             'user'             => $user,
             'session'          => $session,

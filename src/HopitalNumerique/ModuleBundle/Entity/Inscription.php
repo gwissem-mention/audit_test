@@ -238,6 +238,16 @@ class Inscription
     }
 
     /**
+     * Get dateInscription string
+     *
+     * @return string
+     */
+    public function getDateInscriptionString()
+    {
+        return $this->dateInscription->format('d/m/Y');
+    }
+
+    /**
      * Set user
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user

@@ -1,6 +1,6 @@
 <?php
 
-namespace HopitalNumerique\ModuleBundle\Controller;
+namespace HopitalNumerique\ModuleBundle\Controller\Back;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,6 +79,73 @@ class InscriptionMassController extends Controller
         return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 412, 'participation');
     }
     
+    /**
+     * Export CSV de la liste des sessions 
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     */
+    public function exportCsvAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1)
+            $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findAll();
+        else
+            $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
+
+        $colonnes = array( 
+                            'id'                        => 'id', 
+                            'user.nom'                  => 'Nom', 
+                            'user.prenom'               => 'Prénom', 
+                            'user.username'             => 'Nom du compte', 
+                            'user.email'                => 'Adresse e-mail',
+                            'session.moduleTitre'       => 'Titre du module',
+                            'session.dateSessionString' => 'Date de la session',
+                            'etatInscription.libelle'   => 'Inscription',
+                            'etatParticipation.libelle' => 'Participation',
+                            'etatEvaluation.libelle'    => 'Evaluation',
+                            'dateInscriptionString'     => 'Date d\'inscription'
+                        );
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_module.manager.inscription')->exportCsv( $colonnes, $inscriptions, 'export-utilisateurs.csv', $kernelCharset );
+    }
+
+    /**
+     * Envoyer un mail aux utilisateurs
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function envoyerMailMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1)
+            $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findAll();
+        else
+            $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
+        
+        //get emails
+        $list = array();
+        foreach($inscriptions as $inscription)
+        {
+            if($inscription->getUser()->getEmail() != "")
+                $list[] = $inscription->getUser()->getEmail();
+        }
+
+        //to
+        $to = $this->get('security.context')->getToken()->getUser()->getEmail();
+        
+        //bcc list
+        $bcc = join(';', $list);
+        
+        return $this->render('HopitalNumeriqueModuleBundle:Inscription:mailto.html.twig', array(
+            'mailto' => 'mailto:'.$to.'?bcc='.$bcc
+        ));
+    }
     
     
     /**

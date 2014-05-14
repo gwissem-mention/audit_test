@@ -1,6 +1,6 @@
 <?php
 
-namespace HopitalNumerique\ModuleBundle\Controller;
+namespace HopitalNumerique\ModuleBundle\Controller\Back;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,7 +24,7 @@ class InscriptionController extends Controller
         $grid = $this->get('hopitalnumerique_module.grid.inscription');
         $grid->setSourceCondition('session', $session->getId());
 
-        return $grid->render('HopitalNumeriqueModuleBundle:Inscription:index.html.twig', array('session' => $session));
+        return $grid->render('HopitalNumeriqueModuleBundle:Back/Inscription:index.html.twig', array('session' => $session));
     }
     
     /**

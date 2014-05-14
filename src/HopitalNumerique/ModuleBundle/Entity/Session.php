@@ -201,6 +201,11 @@ class Session
         return $this->module->getId();
     }
     
+    public function getModuleTitre()
+    {
+        return $this->module->getTitre();
+    }
+    
     public function setModule( Module $module )
     {
         $this->module = $module;
@@ -227,6 +232,16 @@ class Session
     public function getDateSession()
     {
         return $this->dateSession;
+    }
+
+    /**
+     * Get dateSession string
+     *
+     * @return string
+     */
+    public function getDateSessionString()
+    {
+        return $this->dateSession->format('d/m/Y');
     }
 
     /**
