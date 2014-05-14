@@ -23,6 +23,7 @@
 
 {% block toolbarButton %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module_session', {'id' : session.module.id}) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module_session_impression_fiche', {'id' : session.id}) }}" title="Impression de la fiche de présence"><i class="fa fa-external-link"></i></a>
 {% endblock %}
 
 {% block body %}

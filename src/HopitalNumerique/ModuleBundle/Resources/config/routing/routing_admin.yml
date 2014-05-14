@@ -93,6 +93,14 @@ hopitalnumerique_module_module_session_dowload:
     requirements:
         id: \d+
 
+#---Impression Fiche
+hopitalnumerique_module_module_session_impression_fiche:
+    pattern:  /module/session/fiche-presence/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Back/Session:impressionFichePresence", id: 1 }
+    requirements:
+        id: \d+
+        _method: GET
+
 #Inscription
 #---Index - grid
 hopitalnumerique_module_module_session_inscription:

@@ -52,11 +52,8 @@ class SessionController extends Controller
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function editAction( $id )
+    public function editAction( \HopitalNumerique\ModuleBundle\Entity\Session $session )
     {
-        //Récupération de l'entité passée en paramètre
-        $session = $this->get('hopitalnumerique_module.manager.session')->findOneBy( array('id' => $id) );
-
         return $this->renderForm('hopitalnumerique_module_session', $session, 'HopitalNumeriqueModuleBundle:Back/Session:edit.html.twig' );
     }
 
@@ -68,11 +65,8 @@ class SessionController extends Controller
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function showAction( $id )
+    public function showAction( \HopitalNumerique\ModuleBundle\Entity\Session $session )
     {
-        //Récupération de l'entité en fonction du paramètre
-        $session = $this->get('hopitalnumerique_module.manager.session')->findOneBy( array( 'id' => $id) );
-
         return $this->render('HopitalNumeriqueModuleBundle:Back/Session:show.html.twig', array(
             'session' => $session,
         ));
@@ -87,10 +81,8 @@ class SessionController extends Controller
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function deleteAction( $id )
+    public function deleteAction( \HopitalNumerique\ModuleBundle\Entity\Session $session )
     {
-        $session = $this->get('hopitalnumerique_module.manager.session')->findOneBy( array( 'id' => $id) );
-
         //Suppression de l'entitée
         $this->get('hopitalnumerique_module.manager.session')->delete( $session );
 
@@ -124,6 +116,37 @@ class SessionController extends Controller
     
             return $this->redirect( $this->generateUrl('hopitalnumerique_module_module_session', array('id' => $session->getModule()->getId())) );
         }
+    }
+
+    /**
+     * Impression du pdf de la fiche de présence
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function impressionFichePresenceAction( \HopitalNumerique\ModuleBundle\Entity\Session $session )
+    {
+        return $this->render('HopitalNumeriqueModuleBundle:Back/Session/Pdf:fichePresence.html.twig', array(
+            'session'       => $session,
+            'inscriptions'  => $session->getInscriptions()
+        ));
+
+        $options = array(
+            'margin-bottom' => 10,
+            'margin-left'   => 4,
+            'margin-right'  => 4,
+            'margin-top'    => 10,
+            'encoding'      => 'UTF-8'
+        );
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),
+            200,
+            array(
+                'Content-Type'          => 'application/pdf',
+                'Content-Disposition'   => 'attachment; filename="Fiche_presence_'.$session->getModule()->getTitre().'_'.$session->getDateSession()->format('d/m/Y').'.pdf"'
+            )
+        );
     }
 
 
