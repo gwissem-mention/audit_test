@@ -4,6 +4,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-module-front-inscription-index.css" filter="cssrewrite, ?yui_css"
         "@fancybox_css" 
+        'bundles/hopitalnumeriquemodule/css/Front/inscription/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -30,7 +31,7 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Liste des incriptions</h2>
+    <h2>Inscriptions aux sessions</h2>
     <div class="col-md-12">
         <table class="table table-striped table-hover">
             <thead>
@@ -78,8 +79,10 @@
         </table>
     </div>
 
+    <div class="clearfix"></div>
+
     {% if sessions|length > 0 %}
-        <h2>Liste des sessions terminées</h2>
+        <h2>Vos sessions en tant que formateur</h2>
         <div class="col-md-12">
             <table class="table table-striped table-hover">
                 <thead>
@@ -107,7 +110,7 @@
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-info link fancybox.ajax btn-sm" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
-                                    <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-external-link"></i></a>
+                                    <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_session_evaluation_front',{'id':session.id})}}"><i class="fa fa-external-link"></i></a>
                                 </div>
                             </td>
                         </tr>

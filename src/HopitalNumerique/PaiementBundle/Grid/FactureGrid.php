@@ -20,6 +20,7 @@ class FactureGrid extends Grid implements IGrid
         $this->setSource( 'HopitalNumeriquePaiementBundle:Facture' );
         $this->setNoDataMessage('Aucun Facture à afficher.');
         $this->setButtonSize( 43 );
+        $this->setDefaultOrder( 'dateCreation', 'desc' );
     }
 
     /**

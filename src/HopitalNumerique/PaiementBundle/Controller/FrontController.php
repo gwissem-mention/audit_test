@@ -28,7 +28,7 @@ class FrontController extends Controller
         $datas         = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
 
         //get Factures
-        $factures = $this->get('hopitalnumerique_paiement.manager.facture')->findBy( array('user' => $user) );
+        $factures = $this->get('hopitalnumerique_paiement.manager.facture')->getFacturesOrdered( $user );
 
         return $this->render('HopitalNumeriquePaiementBundle:Front:suivi.html.twig', array(
             'datas'    => $datas,

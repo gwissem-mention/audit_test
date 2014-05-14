@@ -1,10 +1,16 @@
 #Front - Inscription
 hopitalnumerique_module_inscription_index_front:
-    pattern:  /modules-thematiques
+    pattern:  /module-thematiques
     defaults: { _controller: HopitalNumeriqueModuleBundle:Front/InscriptionFront:index}
 
 hopitalnumerique_module_inscription_attestation_front:
-    pattern:  /modules-thematiques/{id}/attestation
+    pattern:  /module-thematiques/{id}/attestation
     defaults: { _controller: HopitalNumeriqueModuleBundle:Front/InscriptionFront:attestation}
+    requirements:
+        id: \d+
+
+hopitalnumerique_module_session_evaluation_front:
+    pattern:  /module-thematiques/session/{id}/evaluations
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/SessionFront:evaluation}
     requirements:
         id: \d+

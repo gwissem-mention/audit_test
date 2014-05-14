@@ -38,6 +38,8 @@ class Grid
     protected $_filterIdColumn       = false;
     protected $_functionName         = 'getDatasForGrid';
     protected $_persistence          = true;
+    protected $_defaultOrder         = false;
+    protected $_defaultOrderColumn   = false;
 
     //colonnes
     protected $_colonnes         = array();
@@ -250,6 +252,18 @@ class Grid
         }
 
         /**
+         * Set l'ordre de tri par défault du grid
+         *
+         * @param string $column ID de la colonne
+         * @param string $order  Sens de tri
+         */
+        public function setDefaultOrder( $column, $order )
+        {
+            $this->_defaultOrder       = $order;
+            $this->_defaultOrderColumn = $column;
+        }
+
+        /**
          * Set la condition de filtrage sur la source des données du grid (si nécessaire)
          * => Obligé de la mettre public car le paramètre est passé dans la Request (donc le controller)
          *
@@ -379,6 +393,10 @@ class Grid
             //Si on est en source Entity : on met à jour les colonnes au lieu de les ajouter
             if($this->_sourceType == self::SOURCE_TYPE_ENTITY)
                 $this->manageColumnsForEntitySource();
+
+            //Set the default order
+            if( $this->_defaultOrder != false )
+                $this->_grid->setDefaultOrder( $this->_defaultOrderColumn, $this->_defaultOrder );
         }
 
         /**

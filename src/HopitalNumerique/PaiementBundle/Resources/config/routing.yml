@@ -5,7 +5,7 @@ hopitalnumerique_paiement_facture:
 
 hopitalnumerique_paiement_facture_detail:
     pattern:  /admin/facture/detail/{id}
-    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:detail" }
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:detail", id:1 }
     requirements:
         id: \d+
 

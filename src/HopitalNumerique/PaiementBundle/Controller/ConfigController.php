@@ -16,11 +16,7 @@ class ConfigController extends Controller
      */
     public function indexAction()
     {
-        $remboursements = $this->get('hopitalnumerique_paiement.manager.remboursement')->findAll();
-
-
-
-
+        $remboursements = $this->get('hopitalnumerique_paiement.manager.remboursement')->getRemboursementsOrdered();
 
         return $this->render('HopitalNumeriquePaiementBundle:Config:index.html.twig', array(
             'remboursements' => $remboursements

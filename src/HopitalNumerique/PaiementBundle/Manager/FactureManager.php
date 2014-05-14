@@ -142,4 +142,14 @@ class FactureManager extends BaseManager
         //save factue = implicit save interventions
         $this->save( $facture );
     }
+
+    /**
+     * Retourne la liste des factures ordonnées par date
+     *
+     * @return array
+     */
+    public function getFacturesOrdered( $user )
+    {
+        return $this->getRepository()->getFacturesOrdered( $user )->getQuery()->getResult();
+    }
 }

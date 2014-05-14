@@ -86,6 +86,7 @@
                 <tr>
                     <th width="100px">N°</th>
                     <th>Date</th>
+                    <th>Etat facture</th>
                     <th width="50px">Actions</th>
                 </tr>
             </thead>
@@ -94,6 +95,9 @@
                     <tr>
                         <td>{{facture.user.id ~ facture.id}}</td>
                         <td>{{facture.dateCreation|date('d/m/Y')}}</td>
+                        <td>
+                            {% if facture.payee %}Payée{% else %}Non payée{% endif %}
+                        </td>
                         <td><a href="{{path('hopitalnumerique_paiement_front_export', {'id':facture.id})}}">Exporter</a></td>
                     </tr>
                 {% else %}

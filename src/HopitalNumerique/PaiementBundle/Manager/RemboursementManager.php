@@ -91,4 +91,14 @@ class RemboursementManager extends BaseManager
 
         return $prix;
     }
+
+    /**
+     * Retourne la liste des remboursements ordonnées par région
+     *
+     * @return array
+     */
+    public function getRemboursementsOrdered()
+    {
+        return $this->getRepository()->getRemboursementsOrdered()->getQuery()->getResult();
+    }
 }
