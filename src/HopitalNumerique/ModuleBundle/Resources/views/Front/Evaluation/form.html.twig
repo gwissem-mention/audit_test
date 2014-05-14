@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueModuleBundle:Front:layout.html.twig' %}
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
 
 {% block stylesheets %}
     {{parent()}}
@@ -20,20 +20,17 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block menu_modules %}
-    <div id="module-menu">
-        {# Render de la vue de récupérations des différentes modules #}
-        {{ render(controller("HopitalNumeriqueModuleBundle:Front/ModuleFront:menuModules", {'module' : moduleSelectionne} )) }}
-    </div>
-{% endblock menu_modules %}
+{% block headerTitle %}Evaluation{% endblock %}
+{% block headerDesc %}
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+{% endblock %}
 
-{% block chapo_titre %}Evaluation{% endblock chapo_titre %}
-
-{% block chapo_description %}
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse consectetur leo in quam elementum dictum. Donec congue velit sit amet feugiat aliquam. Donec sagittis facilisis libero, sit amet dignissim mi vestibulum vehicula. Nulla nunc elit, congue non consequat vitae, accumsan eget enim.
-{% endblock chapo_description %}
-
-{% block contenu %}
+{% block content %}
     <div class="col-md-12">
         {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.vertical.html.twig' %}
         {{ form_javascript(form) }}
@@ -47,4 +44,4 @@
         </div>
     </div>
     <div class="clearfix"></div>
-{% endblock contenu %}
+{% endblock %}

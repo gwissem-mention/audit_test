@@ -40,7 +40,7 @@ class EvaluationFrontController extends Controller
             return $this->redirect($this->generateUrl( 'hopitalnumerique_module_module_front' ));
         }
 
-        $form = $this->createForm('nodevo_questionnaire_questionnaire', $questionnaire);
+        //$form = $this->createForm('nodevo_questionnaire_questionnaire', $questionnaire);
 
         //readonly si il y a des réponses dans le questionnaire
         $readOnly = !empty($reponses);
