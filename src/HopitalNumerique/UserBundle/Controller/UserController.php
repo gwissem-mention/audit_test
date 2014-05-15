@@ -410,7 +410,7 @@ class UserController extends Controller
         $to = $this->get('security.context')->getToken()->getUser()->getEmail();
         
         //bcc list
-        $bcc = join(';', $list);
+        $bcc = join(',', $list);
         
         return $this->render('HopitalNumeriqueUserBundle:User:mailto.html.twig', array(
             'mailto' => 'mailto:'.$to.'?bcc='.$bcc
