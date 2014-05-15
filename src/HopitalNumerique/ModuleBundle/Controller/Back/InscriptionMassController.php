@@ -87,11 +87,13 @@ class InscriptionMassController extends Controller
      */
     public function exportCsvAction( $primaryKeys, $allPrimaryKeys )
     {
-        //get all selected Users
-        if($allPrimaryKeys == 1)
-            $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findAll();
-        else
-            $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
+        //get all selected inscription
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_module.grid.inscription')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+        $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
 
         $colonnes = array( 
                             'id'                        => 'id', 
@@ -122,11 +124,13 @@ class InscriptionMassController extends Controller
      */
     public function envoyerMailMassAction( $primaryKeys, $allPrimaryKeys )
     {
-        //get all selected Users
-        if($allPrimaryKeys == 1)
-            $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findAll();
-        else
-            $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
+        //get all selected inscription
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_module.grid.inscription')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+        $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
         
         //get emails
         $list = array();
@@ -167,7 +171,12 @@ class InscriptionMassController extends Controller
             return $this->redirect( $this->generateUrl('hopitalnumerique_module_module') );
         }
     
-        //get all selected Users
+        //get all selected inscription
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_module.grid.inscription')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
         $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
         
         //récupère une inscription pour récuperer les module / session (php < php5.4)
