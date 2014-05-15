@@ -22,8 +22,7 @@ jQuery(document).ready(function() {
 		{
     		toggleEtablissementAutre = viderStructureEtablissementSante($(this));
 		}
-    });
-    
+    }); 
 });
 
 function viderStructureEtablissementSante(elementCourant)
