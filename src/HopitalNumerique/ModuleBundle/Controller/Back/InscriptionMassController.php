@@ -151,6 +151,16 @@ class InscriptionMassController extends Controller
         ));
     }
     
+
+
+
+
+
+
+
+
+
+    
     
     /**
      * Action de masse sur les états
