@@ -99,7 +99,7 @@ class InscriptionMassController extends Controller
                             'id'                        => 'id', 
                             'user.nom'                  => 'Nom', 
                             'user.prenom'               => 'Prénom', 
-                            'user.username'             => 'Nom du compte', 
+                            'user.username'             => 'Identifiant (login)', 
                             'user.email'                => 'Adresse e-mail',
                             'session.moduleTitre'       => 'Titre du module',
                             'session.dateSessionString' => 'Date de la session',

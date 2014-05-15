@@ -351,7 +351,7 @@ class UserController extends Controller
                             'id'                                 => 'id', 
                             'nom'                                => 'Nom', 
                             'prenom'                             => 'Prénom', 
-                            'username'                           => 'Nom du compte', 
+                            'username'                           => 'Identifiant (login)', 
                             'email'                              => 'Adresse e-mail',
                             'etat.libelle'                       => 'Etat',
                             'region.libelle'                     => 'Région',
@@ -367,7 +367,7 @@ class UserController extends Controller
                             'profilEtablissementSante.libelle'   => 'Profil Etablissement Santé',
                             'raisonInscriptionSante.libelle'     => 'Raison inscription Santé',
                             'raisonInscriptionStructure.libelle' => 'Raison inscription structure',
-                            'autreStructureRattachementSante'    => 'Autre structure de rattachement Santé',
+                            'autreStructureRattachementSante'    => 'Nom de votre établissement si non disponible dans la liste précédente Santé',
                             'nomStructure'                       => 'Nom structure',
                             'fonctionStructure'                  => 'Fonction structure',
                             'etablissementRattachementSante.nom' => 'Etablissement rattachement Santé',
@@ -439,7 +439,7 @@ class UserController extends Controller
         //                     'id'       => 'id', 
         //                     'nom'      => 'Nom', 
         //                     'prenom'   => 'Prénom', 
-        //                     'username' => 'Nom du compte', 
+        //                     'username' => 'Identifiant (login)', 
         //                     'email'    => 'Adresse e-mail',
         //                 );
 
