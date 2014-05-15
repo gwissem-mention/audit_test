@@ -34,7 +34,7 @@ class SessionFrontController extends Controller
         if( ( $session->getNombrePlaceDisponible() - count($session->getInscriptions()) ) == 0 )
         {
             // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
-            $this->get('session')->getFlashBag()->add( ('info') , 'Vous ne pouvez pas vous inscrire à cette session, il n\'y a plus de places. Veuillez-choisir une autre session ce rattachant à ce module.' );
+            $this->get('session')->getFlashBag()->add( ('danger') , 'Cette session est complète, vous ne pouvez pas vous inscrire. Veuillez-choisir une autre session de ce module thèmatique.' );
         }
 
         return $this->render('HopitalNumeriqueModuleBundle:Front/Session:index.html.twig', array(
