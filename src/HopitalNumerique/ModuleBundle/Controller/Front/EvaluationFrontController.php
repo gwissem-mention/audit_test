@@ -155,7 +155,8 @@ class EvaluationFrontController extends Controller
                 'questionnaire'     => $questionnaire,
                 'user'              => $user,
                 'session'           => $session,
-                'moduleSelectionne' => $session->getModule()
+                'moduleSelectionne' => $session->getModule(),
+                'readOnly'          => $readOnly
         ));
     }
 }

@@ -37,11 +37,13 @@
         {{ form(form) }}
     </div>
     <div class="clearfix"></div>
-
-    <div class="col-md-12">
-        <div class="col-md-10 col-md-offset-2">
-            <input onclick="$('form').submit();" class="btn btn-success col-md-3 pull-right submit questionnaire_submit" value="EVALUER" type="button"/>
+    
+    {% if not readOnly %}
+        <div class="col-md-12">
+            <div class="col-md-10 col-md-offset-2">
+                <input onclick="$('form').submit();" class="btn btn-success col-md-3 pull-right submit questionnaire_submit" value="EVALUER" type="button"/>
+            </div>
         </div>
-    </div>
+    {% endif %}
     <div class="clearfix"></div>
 {% endblock %}
