@@ -31,7 +31,7 @@ class SessionFrontController extends Controller
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
 
-        if( ( $session->getNombrePlaceDisponible() - count($session->getInscriptions()) ) == 0 )
+        if( ( $session->getNombrePlaceDisponible() - count($session->getInscriptions()) ) == 0 && !$session->userIsInscrit($user) )
         {
             // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
             $this->get('session')->getFlashBag()->add( ('info') , 'Vous ne pouvez pas vous inscrire à cette session, il n\'y a plus de places. Veuillez-choisir une autre session ce rattachant à ce module.' );
