@@ -79,6 +79,16 @@ class Grid
         return $this->_grid->getGridResponse( $vue, $params );
     }
 
+    /**
+     * Retourne les données du grid BRUT
+     *
+     * @return array
+     */
+    public function getRawData()
+    {
+        return $this->_grid->getRawData();
+    }
+
     //////////////////////////////////////////////////////////
     //              COLUMNS AND ACTIONS                     //
     //////////////////////////////////////////////////////////
