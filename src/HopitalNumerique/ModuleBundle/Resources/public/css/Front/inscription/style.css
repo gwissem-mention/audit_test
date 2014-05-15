@@ -1,0 +1,22 @@
+table.table thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 11px}
+table.table thead tr a { color:#FFFFFF; font-size: 11px }
+table.table thead th { background-color:#6F3596; vertical-align: middle }
+table.table th, table.table td { border: 1px solid #ddd;padding:4px; }
+
+.btn-green {
+    background-color: #16A085;
+    border-color: #16A085;
+    color: #FFFFFF;
+}
+.btn-green:hover, .btn-green:focus, .btn-green:active, .btn-green.active, .open .dropdown-toggle.btn-green {
+    background-color: #117C67;
+    border-color: #0F6A58;
+    color: #FFFFFF;
+}
+.btn-green:active, .btn-green.active, .open .dropdown-toggle.btn-green {
+    background-image: none;
+}
+.btn-green.disabled, .btn-green[disabled], fieldset[disabled] .btn-green, .btn-green.disabled:hover, .btn-green[disabled]:hover, fieldset[disabled] .btn-green:hover, .btn-green.disabled:focus, .btn-green[disabled]:focus, fieldset[disabled] .btn-green:focus, .btn-green.disabled:active, .btn-green[disabled]:active, fieldset[disabled] .btn-green:active, .btn-green.disabled.active, .btn-green.active[disabled], fieldset[disabled] .btn-green.active {
+    background-color: #16A085;
+    border-color: #16A085;
+}

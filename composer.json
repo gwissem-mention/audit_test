@@ -38,6 +38,8 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "knplabs/knp-menu": "2.0.*@dev",
         "knplabs/knp-menu-bundle": "2.0.*@dev",
+        "knplabs/knp-snappy": "*",
+        "knplabs/knp-snappy-bundle": "dev-master",
         "liip/doctrine-cache-bundle": "~1.0",
         "apy/datagrid-bundle": "~2.2",
         "white-october/pagerfanta-bundle": "2.1.*@dev",
@@ -46,9 +48,7 @@
         "igorw/file-serve-bundle": "~1.0",
         "doctrine/doctrine-fixtures-bundle": "~2.2",
         "beberlei/DoctrineExtensions": "v0.1",
-        "nodevo/gestionnaire-media": "v1.3",
-        "doctrine/doctrine-migrations-bundle": "2.1.*@dev",
-        "doctrine/migrations": "~1.0@dev"
+        "nodevo/gestionnaire-media": "v1.3"
     },
     "scripts": {
         "post-install-cmd": [

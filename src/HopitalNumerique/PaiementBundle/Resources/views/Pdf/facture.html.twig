@@ -1,0 +1,185 @@
+<table width="740px" style="margin:0 auto" >
+    <tr>
+        <td>
+            <table width="100%" >
+                <tr>
+                    <td><strong>Nom Etablissement</strong></td>
+                    <td>
+                        {% if facture.user.etablissementRattachementSante %}
+                            {{facture.user.etablissementRattachementSante.nom}}
+                        {% else %}
+                            {{facture.user.autreStructureRattachementSante}}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Adresse</strong></td>
+                    <td>
+                        {% if facture.user.etablissementRattachementSante %}
+                            {% if facture.user.etablissementRattachementSante.adresse != '' %}
+                                {{facture.user.etablissementRattachementSante.adresse }},
+                            {% endif %}
+                            {{facture.user.etablissementRattachementSante.codePostal ~ ' ' ~ facture.user.etablissementRattachementSante.ville}}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Tél.</strong></td>
+                    <td>
+                        {{infos['telDirecteur']}}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Contact</strong></td>
+                    <td>
+                        {{infos['libelleContact']}}
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        {{infos['nomContact']}}
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td style="vertical-align:top">
+            <table width="100%" >
+                <tr>
+                    <td><strong>Facture N°</strong></td>
+                    <td>{{code}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Date :</strong></td>
+                    <td>{{'now'|date('d/m/Y')}}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td style="border:1px solid black;padding:10px">
+            <strong>ANAP</strong><br />
+            <strong>Projet : Accompagnement Hôpital Numérique</strong><br />
+            <br />
+            <strong>23 avenue d'Italie</strong><br />
+            <strong>75013 PARIS</strong>
+        </td>
+    </tr>
+    <tr style="height:10px">
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td style="border:1px solid black; height:40px; vertical-align:top; padding:10px ">
+            <strong>Participant :</strong> {{facture.user.prenomNom|title}}
+        </td>
+    </tr>
+    <tr style="height:10px">
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%" >
+                <tr>
+                    <td align="center" style="border:1px solid black; padding:10px; width:50%" >
+                        code projet Anap<br />
+                        <strong>E120.101</strong>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+        </td>
+        <td style="border:1px solid black; padding:10px">
+            <table width="100%" >
+                <tr>
+                    <td>FACTURATION</td>
+                </tr>
+                <tr>
+                    <td align="center"><strong>ANAP - Unité de Centralisation des Factures (UCF)</strong></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table width="740px" style="margin:30px auto 0;border:1px solid black;border-collapse:collapse" >
+    <caption style="border-top:1px solid black;border-right:1px solid black;border-left:1px solid black;"><strong>DEMANDE DE REMBOURSEMENT DE FRAIS</strong></caption>
+    <tr style="height:10px">
+        <td colspan="6"></td>
+    </tr>
+    <tr>
+        <td width="400px" colspan="2" align="right" >Forfaits :</td>
+        <td width="20px"></td>
+        <td align="center" style="border:1px solid black;" >Forfait intervention</td>
+        <td align="center" width="150px" style="border:1px solid black;" >Supplément session à Paris</td>
+        <td align="center" width="100px" style="border:1px solid black;" >Sous-total</td>
+    </tr>
+    {% set total = 0 %}
+
+    {% if facture.formations|length > 0 %}
+        <tr style="height:30px; border:0; vertical-align:bottom">
+            <td colspan="6" style="border:0"><strong>Sessions de montée en compétence</strong></td>
+        </tr>
+
+        {% for formation in facture.formations %}
+            <tr>
+                <td style="border:1px solid black;" >{{formation.session.module.titre}}</td>
+                <td style="border:1px solid black;" >date : {{formation.dateInscription|date('d/m/Y')}}</td>
+                <td style="border:0 !important" ></td>
+                <td align="center" style="border:1px solid black;" >{{ formation.total - formation.supplement }}€</td>
+                <td align="center" style="border:1px solid black;" >{{formation.supplement}}€</td>
+                <td align="right" style="border:1px solid black;" >{{formation.total}}€</td>
+            </tr>
+
+            {% set total = total + formation.total %}
+        {% endfor %}
+    {% endif %}
+
+    {% if facture.interventions|length > 0 %}
+        <tr style="height:30px; border:0; vertical-align:bottom">
+            <td colspan="6" style="border:0"><strong>Interventions auprès d'établissements</strong></td>
+        </tr>
+        {% for intervention in facture.interventions %}
+            <tr>
+                {% if loop.first %}
+                    <td style="border:1px solid black;" rowspan="{{facture.interventions|length}}" >Interventions</td>
+                {% endif %}
+                <td style="border:1px solid black;" >
+                    date : {{intervention.dateCreation|date('d/m/Y')}}<br /> 
+                    {% if intervention.referent.region %}
+                        région : {{intervention.referent.region.libelle}}
+                    {% endif %}
+                </td>
+                <td style="border:0 !important" ></td>
+                <td align="center" style="border:1px solid black;" >{{intervention.total}}€</td>
+                <td style="border:1px solid black; background:grey" ></td>
+                <td align="right" style="border:1px solid black;" >{{intervention.total}}€</td>
+            </tr>
+
+            {% set total = total + intervention.total %}
+        {% endfor %}
+    {% endif %}
+    
+    <tr style="height:10px">
+        <td colspan="6"></td>
+    </tr>
+    <tr style="height:10px">
+        <td colspan="5" align="right">MONTANT TTC (total général)</td>
+        <td align="right" style="border:1px solid black;" >{{total}} €</td>
+    </tr>
+    <tr style="height:10px">
+        <td colspan="6"></td>
+    </tr>
+</table>
+<table width="740px" style="margin:10px auto 50px" >
+    <tr>
+        <td>Prestation effectuée par virement administratif sous 30 jours (joindre le RIB la 1ère fois)</td>
+    </tr>
+</table>
+<table width="740px" style="margin:0 auto" >
+    <tr>
+        <td width="200px"></td>
+        <td align="center" style="border:2px solid black;vertical-align:top" height="100px">Visa Etablissement</td>
+    </tr>
+</table>

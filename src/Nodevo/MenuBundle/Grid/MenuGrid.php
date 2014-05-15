@@ -40,7 +40,7 @@ class MenuGrid extends Grid implements IGrid
     public function setActionsButtons()
     {
         $this->addActionButton( new Action\EditButton('nodevo_menu_menu_edit') );
-        $this->addActionButton( new Action\ShowButton('nodevo_menu_item') );
+        $this->addActionButton( new Action\FilsButton('nodevo_menu_item') );
         $this->addActionButton( new Action\DeleteButton('nodevo_menu_menu_delete') );
     }
 

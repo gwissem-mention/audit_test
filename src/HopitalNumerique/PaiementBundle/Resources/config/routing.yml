@@ -1,0 +1,48 @@
+#Factures
+hopitalnumerique_paiement_facture:
+    pattern:  /admin/facture
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:index" }
+
+hopitalnumerique_paiement_facture_detail:
+    pattern:  /admin/facture/detail/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:detail", id:1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_paiement_facture_paye:
+    pattern:  /admin/facture/paye/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:paye"}
+    requirements: 
+        id : \d+
+
+hopitalnumerique_paiement_facture_total:
+    pattern:  /admin/facture/total/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:total" }
+    requirements:
+        id: \d+
+
+#Config
+hopitalnumerique_paiement_config:
+    pattern:  /admin/facture/config
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Config:index" }
+
+hopitalnumerique_paiement_config_save:
+    pattern:  /admin/facture/config/save
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Config:save" }
+    requirements:
+        _method:  POST
+
+#Front
+hopitalnumerique_paiement_front:
+    pattern:  /compte-hn/suivi-des-paiements
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Front:suivi" }
+
+hopitalnumerique_paiement_front_save:
+    pattern:  /compte-hn/suivi-des-paiements/save
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Front:createFacture" }
+
+hopitalnumerique_paiement_front_export:
+    pattern:  /compte-hn/suivi-des-paiements/export/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Front:export" }
+    requirements:
+        id: \d+

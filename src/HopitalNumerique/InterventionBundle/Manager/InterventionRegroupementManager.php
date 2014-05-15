@@ -6,7 +6,7 @@
  */
 namespace HopitalNumerique\InterventionBundle\Manager;
 
-use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\UserBundle\Entity\User;
 

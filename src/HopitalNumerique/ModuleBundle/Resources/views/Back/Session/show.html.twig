@@ -1,0 +1,31 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{# Importation de la librairie de maccro de modules #}
+{% import 'HopitalNumeriqueModuleBundle:Maccros:maccros.html.twig' as moduleMaccros %}
+
+{% block h1Title %}
+    Fiche de la session
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module_session', {'id' : session.module.id}) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if session.id %}
+        <a href="{{ path('hopitalnumerique_module_module_session_edit', { 'id': session.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                
+                {{ moduleMaccros.ficheSession(session) }}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

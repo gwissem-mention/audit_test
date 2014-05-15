@@ -1,0 +1,33 @@
+{% extends 'HopitalNumeriqueModuleBundle:Front:layout.html.twig' %}
+
+{# Importation de la librairie de maccro de modules #}
+{% import 'HopitalNumeriqueModuleBundle:Maccros:maccros.html.twig' as moduleMaccros %}
+
+{% block menu_modules %}
+    <div id="module-menu">
+        {# Render de la vue de récupérations des différentes modules #}
+        {{ render(controller("HopitalNumeriqueModuleBundle:Front/ModuleFront:menuModules", {'module' : null} )) }}
+    </div>
+{% endblock menu_modules %}
+
+{% block chapo_description %}
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse consectetur leo in quam elementum dictum. Donec congue velit sit amet feugiat aliquam. Donec sagittis facilisis libero, sit amet dignissim mi vestibulum vehicula. Nulla nunc elit, congue non consequat vitae, accumsan eget enim.
+{% endblock chapo_description %}
+
+{% block contenu %}
+    <div class="col-md-12">
+        {% for key,module in modules %}
+            <div class="panel">
+                <div class="col-md-12 table-responsive table-module">
+
+                    <h4 class="violet titre">Session(s) - <a href="{{ path( "hopitalnumerique_module_module_show_front", {"id":module.id} ) }}">{{module.titre}}</a></h4>
+
+                    {{ moduleMaccros.createTableauSession(module) }}
+                    
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="clearfix"></div>
+{% endblock contenu %}

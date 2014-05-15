@@ -203,6 +203,11 @@ class Objet
      * )
      */
     protected $ambassadeurs;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ModuleBundle\Entity\Module", mappedBy="productions")
+     */
+    protected $modules;
 
     /**
      * @Assert\File(
@@ -234,6 +239,7 @@ class Objet
         $this->roles        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->types        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ambassadeurs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->modules      = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

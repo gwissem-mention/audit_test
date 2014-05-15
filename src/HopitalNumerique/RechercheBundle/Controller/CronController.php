@@ -11,11 +11,12 @@ class CronController extends Controller
      */
     public function requetesAction($id)
     {
-        $context = $this->container->get('router')->getContext();
-        $urlSite = $context->getScheme() . '://' . $context->getHost().$context->getBaseUrl();
-
         if ($id == 'FHFURJYIHOLPMFKVIDUESQGEUDRCTUFT')
         {
+            $context = $this->container->get('router')->getContext();
+            $urlSite = $context->getScheme() . '://' . $context->getHost().$context->getBaseUrl();
+
+
             $users = $this->get('hopitalnumerique_user.manager.user')->findAll();
             foreach( $users as $user )
             {

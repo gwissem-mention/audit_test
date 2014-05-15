@@ -2,7 +2,7 @@
 
 namespace Nodevo\MailBundle\Manager;
 
-use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -15,6 +15,7 @@ class MailManager extends BaseManager
 
     private $_allowAdd;
     private $_allowDelete;
+
     /**
      * Envoie du mail en CCI à l'expediteur aussi
      * 
@@ -25,6 +26,7 @@ class MailManager extends BaseManager
     private $_mailExpediteur;
     private $_destinataire;
     private $_twig;
+
     /**
      * Adresses mails en Copie Caché de l'anap
      * @var array() Tableau clé: Nom affiché => valeur : Adresse mail
@@ -252,6 +254,112 @@ class MailManager extends BaseManager
     
         return $this->generationMail($user, $mail, $options);
     }
+
+    /**
+     * Envoi un mail d'acceptation de l'inscription à une session d'un module
+     *
+     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendAcceptationInscriptionMail( $user, $options )
+    {
+        $mail = $this->findOneById(31);
+    
+        return $this->generationMail($user, $mail, $options);
+    }
+
+    /**
+     * Envoi un mail de refus de l'inscription à une session d'un module
+     *
+     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendRefusInscriptionMail( $user, $options )
+    {
+        $mail = $this->findOneById(32);
+    
+        return $this->generationMail($user, $mail, $options);
+    }
+
+    /**
+     * Envoi un mail d'acceptation de l'inscription à une session d'un module
+     *
+     * @param Inscriptions $inscriptions  
+     * @param array        $options      Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendAcceptationInscriptionMassMail( $inscriptions, $options )
+    {
+        $mail = $this->findOneById(31);
+
+        $toSend = array();
+        foreach ($inscriptions as $key => $inscription) 
+        {
+            $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                            'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                            'module'  => $inscription->getSession()->getModule()->getTitre()
+            ));
+        }
+    
+        return $toSend;
+    }
+
+    /**
+     * Envoi un mail de refus de l'inscription à une session d'un module
+     *
+     * @param Inscriptions $inscriptions  
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendRefusInscriptionMassMail( $inscriptions, $options )
+    {
+        $mail = $this->findOneById(32);
+
+        $toSend = array();
+        foreach ($inscriptions as $key => $inscription) 
+        {
+            $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                            'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                            'module'  => $inscription->getSession()->getModule()->getTitre()
+            ));
+        }
+    
+        return $toSend;
+    }
+
+    /**
+     * Envoi un mail pour acceder au formulaire d'évaluation à une session d'un module
+     *
+     * @param Inscriptions $inscriptions  
+     * @param array        $options      Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendFormulaireEvaluationsMassMail( $inscriptions, $options )
+    {
+        $mail = $this->findOneById(33);
+
+        $toSend = array();
+        foreach ($inscriptions as $key => $inscription) 
+        {
+            $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                            'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                            'module'  => $inscription->getSession()->getModule()->getTitre(),
+                            'url'     => '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'hopitalnumerique_module_evaluation_form_front', array(
+                                            'id' => $inscription->getSession()->getId() 
+                                        ))) .'" target="_blank" >Hopital Numérique</a>'
+
+            ));
+        }
+    
+        return $toSend;
+    }
     
     /**
      * Envoi un mail de contact (différent des autres envoie de mail)
@@ -311,6 +419,13 @@ class MailManager extends BaseManager
         return $this->generationMail($destinataire, $mail, $options);
     }
     
+    public function sendInscriptionSession( $user, $options )
+    {
+        $mail = $this->findOneById(34);
+    
+        return $this->generationMail($user, $mail, $options);
+    }
+
     /**
      * Retourne un email de test
      *
@@ -340,17 +455,11 @@ class MailManager extends BaseManager
         
         $from = array($this->_mailExpediteur => $this->_nomExpediteur );
         
-        if($this->_expediteurEnCopie)
-            $cci = array_merge( $this->_mailAnap, $from );
-        else
-            $cci = $this->_mailAnap;
-        
         //return test email
         return \Swift_Message::newInstance()
                         ->setSubject( $mail->getObjet() )
                         ->setFrom( $from )
                         ->setTo( $this->_destinataire )
-                        ->setBcc( $cci )
                         ->setBody( $body, 'text/html' );
     }
 
@@ -422,6 +531,7 @@ class MailManager extends BaseManager
     
         // Render the whole template including any layouts etc
         $body = $templateContent->render( array("content" => $content) );
+
         //send email to users with new password
         return \Swift_Message::newInstance()
                             ->setSubject ( $mail->getObjet() )

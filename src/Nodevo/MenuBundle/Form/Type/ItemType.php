@@ -80,11 +80,11 @@ class ItemType extends AbstractType
                 'class'       => 'NodevoMenuBundle:Item',
                 'empty_value' => ' - ',
                 'required'    => false,
-                'label'       => 'Parent du lien',
+                'label'       => 'Fils de l\'item',
                 'query_builder' => function(EntityRepository $er) use ($options) {
                     return $er->createQueryBuilder('item')
                               ->andWhere('item.display = 1')
-                              ->orderBy('item.order');
+                              ->orderBy('item.name');
                 }
             ))
             

@@ -28,7 +28,7 @@ class EtablissementGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        $this->addColonne( new Column\TextColumn('username', 'Nom du compte') );
+        $this->addColonne( new Column\TextColumn('username', 'Identifiant (login)') );
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('prenom', 'Prénom') );
         

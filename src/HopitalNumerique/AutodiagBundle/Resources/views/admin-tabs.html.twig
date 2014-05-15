@@ -1,0 +1,36 @@
+<ul class="nav nav-tabs">
+    {# First Tab : available for add mode #}
+    {% if route == 'hopitalnumerique_autodiag_outil_add' or route == 'hopitalnumerique_autodiag_outil_edit' %}
+        <li class="active">
+            <a href="#">Informations générales</a>
+        </li>
+    {% elseif outil.id %}
+        <li>
+            <a href="{{path('hopitalnumerique_autodiag_outil_edit', {'id':outil.id})}}">Informations générales</a>
+        </li>
+    {% endif %}
+    
+    {# All other tabs : not available in add mode #}
+    {% if outil.id %}
+        {% if route == 'hopitalnumerique_autodiag_categorie' or route == 'hopitalnumerique_autodiag_categorie_add' or route == 'hopitalnumerique_autodiag_categorie_edit' %}
+            <li class="active">
+                <a href="#">Gestion des catégories</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{path('hopitalnumerique_autodiag_categorie',{'id':outil.id})}}">Gestion des catégories</a>
+            </li>
+        {% endif %}
+
+
+        {% if route == 'hopitalnumerique_autodiag_chapitre' %}
+            <li class="active">
+                <a href="#">Gestion des chapitres / questions</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{path('hopitalnumerique_autodiag_chapitre',{'id':outil.id})}}">Gestion des chapitres / questions</a>
+            </li>
+        {% endif %}
+    {% endif %}
+</ul>

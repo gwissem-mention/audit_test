@@ -47,7 +47,7 @@
 	                                    <tr>
 				                            {% for role in roles.initiaux %}
 	                                            <td style="min-width:110px; text-align:center;">
-					                                <div class="tableHeader"><strong>{{role.name}}</strong></div>
+					                                <div class="tableHeader"><strong>{{role.name|truncate(15,true,'...')}}</strong></div>
 	                                            </td>
 				                            {% endfor %}
 							            </tr>
@@ -127,7 +127,7 @@
 	                                    <tr>
 				                            {% for role in roles.nonInitiaux %}
 	                                            <td style="min-width:110px; text-align:center;">
-					                                <div class="tableHeader"><strong>{{role.name}}</strong></div>
+					                                <div class="tableHeader"><strong>{{role.name|truncate(15,true,'...')}}</strong></div>
 	                                            </td>
 				                            {% endfor %}
 							            </tr>

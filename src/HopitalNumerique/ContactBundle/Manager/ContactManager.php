@@ -6,6 +6,9 @@ use Nodevo\ContactBundle\Manager\ContactManager as NodevoContactManager;
 
 /**
  * Manager de l'entité Contractualisation.
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
  */
 class ContactManager extends NodevoContactManager
 {
@@ -13,6 +16,9 @@ class ContactManager extends NodevoContactManager
     /**
      * Adresses mails en Copie Caché de l'anap
      * @var array() Tableau clé: Nom affiché => valeur : Adresse mail
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     protected $_mailsContact;
     
@@ -21,6 +27,9 @@ class ContactManager extends NodevoContactManager
      *
      * @param EntityManager $em Entity      Manager de Doctrine
      * @param Array         $options        Tableau d'options
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function __construct($em, $options = array())
     {
@@ -33,6 +42,9 @@ class ContactManager extends NodevoContactManager
      * Renvoie la liste des mails dans le config.yml
      * 
      * @return array(string)
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function getMailsContact()
     {
@@ -45,6 +57,9 @@ class ContactManager extends NodevoContactManager
      * @param Contact $contact
      *
      * @return string Affichage du formulaire
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     public function getContactFormateMail($contact)
     {
@@ -70,7 +85,7 @@ class ContactManager extends NodevoContactManager
         //Type établissement
         $candidature .= is_null($contact->getStatutEtablissementSante()) ? '' : '<li><strong>Type d\'établissement :</strong> '. $contact->getStatutEtablissementSante()->getLibelle() .'</li>';
         //Etablissement de rattachement ou Autre structure si établissement est null
-        $candidature .= is_null($contact->getEtablissementRattachementSante()) ? (is_null($contact->getAutreStructureRattachementSante()) ? '' : '<li><strong>Autre structure de rattachement:</strong> '. $contact->getAutreStructureRattachementSante() .'</li>') : '<li><strong>Etablissement de rattachement :</strong> '. $contact->getEtablissementRattachementSante()->getAppellation() .'</li>';
+        $candidature .= is_null($contact->getEtablissementRattachementSante()) ? (is_null($contact->getAutreStructureRattachementSante()) ? '' : '<li><strong>Nom de votre établissement si non disponible dans la liste précédente:</strong> '. $contact->getAutreStructureRattachementSante() .'</li>') : '<li><strong>Etablissement de rattachement :</strong> '. $contact->getEtablissementRattachementSante()->getAppellation() .'</li>';
         //Fonction structure
         $candidature .= is_null($contact->getFonctionStructure()) ? '' : '<li><strong>Fonction structure :</strong> '. $contact->getFonctionStructure() .'</li>';
         //Message

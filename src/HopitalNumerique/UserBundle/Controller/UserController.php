@@ -109,7 +109,12 @@ class UserController extends Controller
                 
             }
         }
-        return $this->customRenderView( $view , $form, $user);
+
+        return $this->render( $view , array(
+            'form'        => $form->createView(),
+            'user'        => $user,
+            'options'     => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user)
+        ));
     }
     
     //---- Back Office ------    
@@ -343,7 +348,7 @@ class UserController extends Controller
                             'id'                                 => 'id', 
                             'nom'                                => 'Nom', 
                             'prenom'                             => 'Prénom', 
-                            'username'                           => 'Nom du compte', 
+                            'username'                           => 'Identifiant (login)', 
                             'email'                              => 'Adresse e-mail',
                             'etat.libelle'                       => 'Etat',
                             'region.libelle'                     => 'Région',
@@ -359,7 +364,7 @@ class UserController extends Controller
                             'profilEtablissementSante.libelle'   => 'Profil Etablissement Santé',
                             'raisonInscriptionSante.libelle'     => 'Raison inscription Santé',
                             'raisonInscriptionStructure.libelle' => 'Raison inscription structure',
-                            'autreStructureRattachementSante'    => 'Autre structure de rattachement Santé',
+                            'autreStructureRattachementSante'    => 'Nom de votre établissement si non disponible dans la liste précédente Santé',
                             'nomStructure'                       => 'Nom structure',
                             'fonctionStructure'                  => 'Fonction structure',
                             'etablissementRattachementSante.nom' => 'Etablissement rattachement Santé',
@@ -401,7 +406,7 @@ class UserController extends Controller
         $to = $this->get('security.context')->getToken()->getUser()->getEmail();
         
         //bcc list
-        $bcc = join(';', $list);
+        $bcc = join(',', $list);
         
         return $this->render('HopitalNumeriqueUserBundle:User:mailto.html.twig', array(
             'mailto' => 'mailto:'.$to.'?bcc='.$bcc
@@ -417,17 +422,20 @@ class UserController extends Controller
     public function exportCsvExpertsAction( $primaryKeys, $allPrimaryKeys )
     {
         // //get all selected Users
-        // if($allPrimaryKeys == 1)
-        //     $users = $this->get('hopitalnumerique_user.manager.user')->findAll();
-        // else
-        //     $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        // if($allPrimaryKeys == 1){
+        //     $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+        //     foreach($rawDatas as $data)
+        //         $primaryKeys[] = $data['id'];
+        // }
+        
+        // $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
 
         // //prepare colonnes
         // $colonnes = array( 
         //                     'id'       => 'id', 
         //                     'nom'      => 'Nom', 
         //                     'prenom'   => 'Prénom', 
-        //                     'username' => 'Nom du compte', 
+        //                     'username' => 'Identifiant (login)', 
         //                     'email'    => 'Adresse e-mail',
         //                 );
 
@@ -527,7 +535,7 @@ class UserController extends Controller
                     if(is_null($role)) {
                         $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un groupe associé.');
                     
-                        return $this->customRenderView( $view , $form, $user);
+                        $this->customRenderView( $view , $form, $user , $options);
                     }                    
                 }
             }
@@ -610,7 +618,7 @@ class UserController extends Controller
                     if( ! is_null($result) ) {
                         $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe ARS-CMSI pour cette région.' );
                 
-                        return $this->customRenderView( $view , $form, $user);
+                        return $this->customRenderView( $view , $form, $user , $options);
                     }
                 }
                 else if ( null == $user->getRegion() )
@@ -619,7 +627,7 @@ class UserController extends Controller
                     if( $role->getRole() == 'ROLE_ARS_CMSI_4' || $role->getRole() == 'ROLE_AMBASSADEUR_7') {
                         $this->get('session')->getFlashBag()->add('danger', 'Il est obligatoire de choisir une région pour le groupe sélectionné.' );
                         
-                        return $this->customRenderView( $view , $form, $user);
+                        $this->customRenderView( $view , $form, $user , $options);
                     }
                 }
                 
@@ -630,7 +638,7 @@ class UserController extends Controller
                     if( ! is_null($result) ) {
                         $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe Direction générale pour cet établissement.');
                     
-                        return $this->customRenderView( $view , $form, $user);
+                        $this->customRenderView( $view , $form, $user , $options);
                     }
                 }
                 

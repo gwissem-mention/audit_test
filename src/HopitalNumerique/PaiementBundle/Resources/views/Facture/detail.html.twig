@@ -1,0 +1,144 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block title %}{{parent()}} - Facture{% endblock %}
+
+{% block h1Title %}
+    Facture
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_paiement_facture') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading panel-collapse">
+                <h4>Informations</h4>
+                <div class="options">
+                    <a href="javascript:;" ><i class="fa fa-chevron-down"></i></a>
+                </div>
+            </div>
+
+            <div class="panel-body" >
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Nom : {{facture.user.nom}}</p>
+                        <p>Prénom : {{facture.user.prenom}}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>Région : {{facture.user.region.libelle}}</p>
+                        <p>Établissement : {{facture.user.etablissementRattachementSante.nom}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading panel-collapse">
+                <h4>Grille interventions</h4>
+                <div class="options">
+                    <a href="javascript:;" ><i class="fa fa-chevron-down"></i></a>
+                </div>
+            </div>
+
+            <div class="panel-body" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Établissement</th>
+                                    <th>Région</th>
+                                    <th width="120px">Émetteur</th>
+                                    <th width="120px">État</th>
+                                    <th width="80px" >Montant</th>
+                                    <th width="175px">État du remboursement</th>
+                                    <th width="150px">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for intervention in facture.interventions %}
+                                    <tr>
+                                        <td>{{ intervention.referent.prenom ~ ' ' ~ intervention.referent.nom }}</td>
+                                        <td>
+                                            {% if intervention.referent.etablissementRattachementSante %}
+                                                {{intervention.referent.etablissementRattachementSante.nom}}
+                                            {% else %}
+                                                {{intervention.referent.autreStructureRattachementSante}}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if intervention.referent.region %}
+                                                {{intervention.referent.region.libelle}}
+                                            {% endif %}
+                                        </td>
+                                        <td>{{intervention.interventionInitiateur.type}}</td>
+                                        <td>{{intervention.interventionEtat.libelle}}</td>
+                                        <td>{{intervention.total}}€</td>
+                                        <td>{{intervention.remboursementEtat.libelle}}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{{path('hopital_numerique_intervention_admin_demande_voir',{'id':intervention.id})}}" target="_blank" class="btn btn-success btn-sm" title="Détail">Détail</a>
+                                                <a href="{{path('hopital_numerique_intervention_admin_evaluation_voir',{'interventionDemande':intervention.id})}}" target="_blank" class="btn btn-info btn-sm" title="Evaluation">Evaluation</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading panel-collapse">
+                <h4>Grille formations</h4>
+                <div class="options">
+                    <a href="javascript:;" ><i class="fa fa-chevron-down"></i></a>
+                </div>
+            </div>
+
+            <div class="panel-body" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table">
+                            <thead>
+                                <th>Module thématique concerné</th>
+                                <th>Date Session</th>
+                                <th width="120px">Etat</th>
+                                <th width="80px">Montant</th>
+                                <th width="175px">Etat du remboursement</th>
+                                <th width="150px">Actions</th>
+                            </thead>
+                            <tbody>
+                                {% for formation in facture.formations %}
+                                    <tr>
+                                        <td>{{formation.session.module.titre}}</td>
+                                        <td>{{formation.session.dateSession|date('d/m/Y')}}</td>
+                                        <td>{{formation.etatInscription.libelle}}</td>
+                                        <td>{{formation.total}}€</td>
+                                        <td>{{formation.etatRemboursement.libelle}}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{{path('hopitalnumerique_module_module_session_inscription', {'id':formation.session.id})}}" class="btn btn-success btn-sm" title="Détail">Détail</a>
+                                                <a href="{{path('hopitalnumerique_module_module_session_evaluation_editer',{'session':formation.session.id, 'user':facture.user.id })}}" class="btn btn-info btn-sm" title="Evaluation">Evaluation</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

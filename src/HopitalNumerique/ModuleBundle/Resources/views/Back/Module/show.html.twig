@@ -1,0 +1,33 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{# Importation de la librairie de maccro de modules #}
+{% import 'HopitalNumeriqueModuleBundle:Maccros:maccros.html.twig' as moduleMaccros %}
+
+{% block title %}
+    Hôpital Numérique - Modules
+{% endblock %}
+
+{% block h1Title %}
+    Fiche du module
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if module.id %}
+        <a href="{{ path('hopitalnumerique_module_module_edit', { 'id': module.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                {{ moduleMaccros.ficheModule(module) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
