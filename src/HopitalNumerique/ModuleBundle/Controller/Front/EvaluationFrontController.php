@@ -147,7 +147,7 @@ class EvaluationFrontController extends Controller
             //Mise à jour/création des réponses
             $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );
 
-            return $this->redirect($this->generateUrl( 'hopitalnumerique_module_module_front' ));
+            return $this->redirect($this->generateUrl( 'hopitalnumerique_module_evaluation_view_front', array('id' => $session->getId()) ));
         }
     
         return $this->render( 'HopitalNumeriqueModuleBundle:Front/Evaluation:form.html.twig' , array(
