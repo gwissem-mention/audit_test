@@ -32,7 +32,7 @@ services:
            - { name: twig.extension }
     logout_handler:
         class: HopitalNumerique\UserBundle\Handler\LogoutHandler
-        arguments: ["@hopitalnumerique_objet.manager.objet"]
+        arguments: ["@hopitalnumerique_objet.manager.objet", "@security.context"]
 
 # Twig Configuration
 twig:
