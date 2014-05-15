@@ -6,8 +6,12 @@
     </tr>
     <tr>
         <td align="right" style="height:150px">
-            {{user.etablissementRattachementSante.nom}}<br />
-            {{user.etablissementRattachementSante.adresse ~ ' ' ~ user.etablissementRattachementSante.codepostal ~ ' ' ~ user.etablissementRattachementSante.ville|capitalize}}
+            {% if user.etablissementRattachementSante is not null %}
+                {{user.etablissementRattachementSante.nom}}<br />
+                {{user.etablissementRattachementSante.adresse ~ ' ' ~ user.etablissementRattachementSante.codepostal ~ ' ' ~ user.etablissementRattachementSante.ville|capitalize}}
+            {% else %}
+                {{ user.getAutreStructureRattachementSante() }}
+            {% endif %}
         </td>
     </tr>
     <tr>
