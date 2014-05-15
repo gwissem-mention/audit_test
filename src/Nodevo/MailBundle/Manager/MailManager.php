@@ -15,6 +15,7 @@ class MailManager extends BaseManager
 
     private $_allowAdd;
     private $_allowDelete;
+
     /**
      * Envoie du mail en CCI à l'expediteur aussi
      * 
@@ -25,6 +26,7 @@ class MailManager extends BaseManager
     private $_mailExpediteur;
     private $_destinataire;
     private $_twig;
+
     /**
      * Adresses mails en Copie Caché de l'anap
      * @var array() Tableau clé: Nom affiché => valeur : Adresse mail
@@ -417,6 +419,13 @@ class MailManager extends BaseManager
         return $this->generationMail($destinataire, $mail, $options);
     }
     
+    public function sendInscriptionSession( $user, $options )
+    {
+        $mail = $this->findOneById(34);
+    
+        return $this->generationMail($user, $mail, $options);
+    }
+
     /**
      * Retourne un email de test
      *
