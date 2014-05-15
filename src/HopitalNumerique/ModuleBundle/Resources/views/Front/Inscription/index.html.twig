@@ -40,8 +40,8 @@
                     <th>Productions concernées</th>
                     <th>Date de la session</th>
                     <th>Evaluation</th>
-                    <th>Etat Facture</th>
-                    <th>Etat Remboursement</th>
+                    <th>Etat facture</th>
+                    <th>Etat remb.</th>
                     <th width="90px">Actions</th>
                 </tr>
             </thead>
@@ -75,8 +75,8 @@
                                 {% endif %}
                                 {% if inscription.etatEvaluation.id == 29 %}
                                     <a class="btn btn-info btn-sm" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':inscription.session.id})}}"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-success btn-sm" title="Attestation de présence" href="{{path('hopitalnumerique_module_inscription_attestation_front',{'id':inscription.id})}}"><i class="fa fa-external-link"></i></a>
                                 {% endif %}
-                                <a class="btn btn-success btn-sm" title="Attestation de présence" href="{{path('hopitalnumerique_module_inscription_attestation_front',{'id':inscription.id})}}"><i class="fa fa-external-link"></i></a>
                             </div>
                         </td>
                     </tr>

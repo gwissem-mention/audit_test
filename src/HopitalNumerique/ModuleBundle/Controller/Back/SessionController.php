@@ -84,12 +84,14 @@ class SessionController extends Controller
      */
     public function deleteAction( \HopitalNumerique\ModuleBundle\Entity\Session $session )
     {
+        $moduleId = $session->getModule()->getId();
+
         //Suppression de l'entitée
         $this->get('hopitalnumerique_module.manager.session')->delete( $session );
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_module_module_session').'"}', 200);
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_module_module_session', array('id'=>$moduleId)).'"}', 200);
     }
 
     /**

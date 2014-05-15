@@ -1,5 +1,5 @@
-table.table thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}
-table.table thead tr a { color:#FFFFFF; font-size: 12px }
+table.table thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 11px}
+table.table thead tr a { color:#FFFFFF; font-size: 11px }
 table.table thead th { background-color:#6F3596; vertical-align: middle }
 table.table th, table.table td { border: 1px solid #ddd;padding:4px; }
 
