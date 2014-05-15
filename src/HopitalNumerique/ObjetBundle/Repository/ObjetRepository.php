@@ -18,7 +18,7 @@ class ObjetRepository extends EntityRepository
     public function getDatasForGrid()
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('obj.id, obj.titre, obj.isInfraDoc, refEtat.libelle as etat, obj.dateCreation, obj.dateModification, obj.lock, user.email as lockedBy, refTypes.libelle as types')
+        $qb->select('obj.id, obj.titre, obj.isInfraDoc, obj.isArticle, refEtat.libelle as etat, obj.dateCreation, obj.dateModification, obj.lock, user.email as lockedBy, refTypes.libelle as types')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->leftJoin('obj.etat','refEtat')
             ->leftJoin('obj.types','refTypes')

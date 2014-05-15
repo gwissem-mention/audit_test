@@ -248,7 +248,6 @@ class UserController extends Controller
             foreach($rawDatas as $data)
                 $primaryKeys[] = $data['id'];
         }
-
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
         $this->get('hopitalnumerique_user.manager.user')->delete( $users );
 
@@ -281,7 +280,6 @@ class UserController extends Controller
             foreach($rawDatas as $data)
                 $primaryKeys[] = $data['id'];
         }
-
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
 
         //get ref and Toggle State
@@ -318,7 +316,6 @@ class UserController extends Controller
             foreach($rawDatas as $data)
                 $primaryKeys[] = $data['id'];
         }
-
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
 
         //get ref and Toggle State
@@ -397,7 +394,6 @@ class UserController extends Controller
             foreach($rawDatas as $data)
                 $primaryKeys[] = $data['id'];
         }
-
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
         
         //get emails
