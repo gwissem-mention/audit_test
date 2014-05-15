@@ -3,7 +3,6 @@
 namespace HopitalNumerique\ModuleBundle\Controller\Front;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ModuleBundle\Entity\Session;
 
 class EvaluationFrontController extends Controller
@@ -42,8 +41,6 @@ class EvaluationFrontController extends Controller
 
         //readonly si il y a des réponses dans le questionnaire
         $readOnly = !empty($reponses);
-
-        $themeQuestionnaire = $readOnly ? 'vertical' : 'vertical_readonly';
 
         //Création du formulaire via le service
         $form = $this->createForm( 'nodevo_questionnaire_questionnaire', $questionnaire, array(

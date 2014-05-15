@@ -4,12 +4,8 @@ namespace HopitalNumerique\UserBundle\Manager;
 
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine; 
-use EasyApp\UserBundle\Entity\UserLogin;
+use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Event\FormEvent;
-use FOS\UserBundle\FOSUserBundle;
-
 
 class LoginManager implements EventSubscriberInterface
 {
@@ -42,10 +38,16 @@ class LoginManager implements EventSubscriberInterface
         );
     }
 
+    /**
+     * [onSecurityImplicitLogin description]
+     *
+     * @param  UserEvent $event [description]
+     *
+     * @return [type]
+     */
     public function onSecurityImplicitLogin(UserEvent $event)
     {
         $user = $event->getAuthenticationToken()->getUser();
-        $request = $event->getRequest();
 
         if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
             // user has just logged in
@@ -53,10 +55,16 @@ class LoginManager implements EventSubscriberInterface
         }
     }
 
+    /**
+     * [onSecurityInteractivelogin description]
+     *
+     * @param  \Symfony\Component\Security\Http\Event\InteractiveLoginEvent $event [description]
+     *
+     * @return [type]
+     */
     public function onSecurityInteractivelogin(\Symfony\Component\Security\Http\Event\InteractiveLoginEvent $event)
     {
         $user = $event->getAuthenticationToken()->getUser();
-        $request = $event->getRequest();
 
         if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
             // user has just logged in

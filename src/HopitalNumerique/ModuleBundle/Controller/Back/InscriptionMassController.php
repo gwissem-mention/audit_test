@@ -3,8 +3,6 @@
 namespace HopitalNumerique\ModuleBundle\Controller\Back;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use HopitalNumerique\ModuleBundle\HopitalNumeriqueModuleBundle;
 
 /**
  * Inscription des actions de mass controller.
