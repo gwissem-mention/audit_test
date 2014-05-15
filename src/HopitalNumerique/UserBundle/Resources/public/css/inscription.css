@@ -14,4 +14,4 @@
 #headerDesc { background-color:#f8f8f8;border:1px solid #e3e3e3;margin:30px 0px 0px 0px;font-size:13px; padding:10px; color:#6F3596; }
 #footerDesc { background-color:#f8f8f8;border:1px solid #e3e3e3;margin:30px 0px 0px 0px;padding:10px; }
 #footerDesc p{ font-size:11px;font-style:italic;}
-#footerDesc a{font-size: 13px; margin-top:10px; text-decoration: underline;font-style:none;}
+#footerDesc > a{font-size: 13px; margin-top:10px; text-decoration: underline;font-style:none;}
