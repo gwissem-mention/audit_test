@@ -14,13 +14,13 @@
     {% endstylesheets %}
 {% endblock %}
 
-{% block stylesheets %}
+{% block javascripts %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-faq-faq-faq.js" filter="cssrewrite, ?yui_css"
-        'bundles/hopitalnumeriquefaq/js/script.css'
+    {% javascripts output="compiled/hopitalnumerique-faq-faq-faq.js" 
+        'bundles/hopitalnumeriquefaq/js/script.js'
     %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
 {% block body %}
