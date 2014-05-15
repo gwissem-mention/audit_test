@@ -138,9 +138,11 @@
                                 {% else %}
                                     {% set aucuneSessionAffichees = true %}
                                 {% endif %}
+                            {% else %}
+                                {% set aucuneSessionAffichees = true %}
                             {% endfor %}
                             {% if aucuneSessionAffichees %}
-                                <tr><td>- Pas de session à afficher -</td></tr>
+                                <tr><td>- Aucune session planifiée -</td></tr>
                             {% endif %}  
                         </tbody>
                     </table>                    
