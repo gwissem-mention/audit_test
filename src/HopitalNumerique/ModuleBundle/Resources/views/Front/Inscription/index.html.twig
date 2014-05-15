@@ -37,10 +37,10 @@
             <thead>
                 <tr>
                     <th>Module</th>
-                    <th>Productions concernées</th>
                     <th>Date de la session</th>
                     <th>Evaluation</th>
                     <th>Etat facture</th>
+                    <th>Etat Inscription</th>
                     <th>Etat remb.</th>
                     <th width="90px">Actions</th>
                 </tr>
@@ -51,18 +51,12 @@
                         <td>
                             <a href="{{path('hopitalnumerique_module_module_show_front',{'id':inscription.session.module.id})}}">{{inscription.session.module.titre}}</a>
                         </td>
-                        <td>
-                            <ul style="padding: 0 0 0 15px;">
-                                {% for production in inscription.session.module.productions %}
-                                    <li>{{ production.titre }}</li>
-                                {% endfor %}
-                            </ul>
-                        </td>
                         <td>{{inscription.session.dateSession|date('d/m/Y')}}</td>
                         <td>
                             {{inscription.etatEvaluation.libelle}}
                         </td>
                         <td>{% if inscription.etatRemboursement != null %}{{inscription.etatRemboursement.libelle}}{% endif %}</td>
+                        <td>{% if inscription.etatInscription != null %}{{inscription.etatInscription.libelle}}{% endif %}</td>
                         <td>
                             {% if inscription.facture is not null %}
                                 {% if inscription.facture.payee %}Payée{% else %}Non Payée{% endif%} : {{inscription.facture.total}}€
