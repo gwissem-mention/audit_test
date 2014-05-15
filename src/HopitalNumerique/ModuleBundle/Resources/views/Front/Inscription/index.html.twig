@@ -70,7 +70,7 @@
                         </td>
                         <td>
                             <div class="btn-group">
-                                {% if inscription.etatParticipation.id == 411 and not app.user.reponses|hadReponseForQuestionnaire( 4, inscription.session.id ) %}
+                                {% if inscription.etatParticipation.id == 411 and not app.user.reponses|hadReponseForQuestionnaire( 4, inscription.session.id ) and inscription.etatEvaluation.id == 28 %}
                                     <a class="btn btn-green btn-sm" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':inscription.session.id})}}"><i class="fa fa-check"></i></a>
                                 {% endif %}
                                 {% if inscription.etatEvaluation.id == 29 %}
