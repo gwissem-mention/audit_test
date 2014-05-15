@@ -27,3 +27,9 @@
     </div>
 {% endspaceless %}
 {% endblock choice_widget_expanded %}
+
+{% block radio_widget %}
+{% spaceless %}
+    <input type="radio" {% if required %}class="validate[required]"{% endif %} {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+{% endspaceless %}
+{% endblock radio_widget %}
