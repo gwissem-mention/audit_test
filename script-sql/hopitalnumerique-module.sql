@@ -125,3 +125,7 @@ INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `
 VALUES
     (31, 'FrontOffice - Tableau de bord : Modules thématiques', '/^\\/compte-hn\\/module-thematiques/', 31, 2);
 
+/* Mail */
+INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`)
+VALUES
+    (34, '[HOPITALNUMERIQUE] - Inscription à une session', 'Inscription d\'un utilisateur à une session', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\r\n\r\nVotre inscription à la session %module du %date a été prise en compte.\r\n\r\nCordialement,', '{\"%u\":\"Nom d\'utilisateur\",\"%module\":\"Nom du module\",\"%date\":\"Date de la session\"}');
