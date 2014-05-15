@@ -69,7 +69,7 @@ VALUES
 /* Gestion des habilitations du front : GME - 29/04/14 */
 INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`)
 VALUES
-    (30, 'FrontOffice - Gestion des Modules', '/^\\/module/', 30, 2);
+    (30, 'FrontOffice - Accès aux modules', '/^\\/module/', 30, 2);
 
 /* --- Fomulaire d'évaluation : GME - 05/05/14 --- */
 INSERT INTO `hn_questionnaire_questionnaire` (`qst_id`, `qst_nom`, `qst_lock`)
