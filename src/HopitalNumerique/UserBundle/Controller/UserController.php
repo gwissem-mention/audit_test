@@ -243,6 +243,12 @@ class UserController extends Controller
         }
 
         //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
         $this->get('hopitalnumerique_user.manager.user')->delete( $users );
 
@@ -270,6 +276,12 @@ class UserController extends Controller
         }
 
         //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
 
         //get ref and Toggle State
@@ -301,6 +313,12 @@ class UserController extends Controller
         }
 
         //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys, 'lock' => 0) );
 
         //get ref and Toggle State
@@ -322,10 +340,12 @@ class UserController extends Controller
     public function exportCsvAction( $primaryKeys, $allPrimaryKeys )
     {
         //get all selected Users
-        if($allPrimaryKeys == 1)
-            $users = $this->get('hopitalnumerique_user.manager.user')->findAll();
-        else
-            $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
 
         $colonnes = array( 
                             'id'                                 => 'id', 
@@ -372,10 +392,13 @@ class UserController extends Controller
     public function envoyerMailMassAction( $primaryKeys, $allPrimaryKeys )
     {
         //get all selected Users
-        if($allPrimaryKeys == 1)
-            $users = $this->get('hopitalnumerique_user.manager.user')->findAll();
-        else
-            $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
         
         //get emails
         $list = array();
@@ -403,10 +426,13 @@ class UserController extends Controller
     public function exportCsvExpertsAction( $primaryKeys, $allPrimaryKeys )
     {
         // //get all selected Users
-        // if($allPrimaryKeys == 1)
-        //     $users = $this->get('hopitalnumerique_user.manager.user')->findAll();
-        // else
-        //     $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        // if($allPrimaryKeys == 1){
+        //     $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+        //     foreach($rawDatas as $data)
+        //         $primaryKeys[] = $data['id'];
+        // }
+        
+        // $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
 
         // //prepare colonnes
         // $colonnes = array( 
