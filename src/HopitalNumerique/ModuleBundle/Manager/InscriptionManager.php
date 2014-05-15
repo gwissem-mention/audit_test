@@ -96,6 +96,25 @@ class InscriptionManager extends BaseManager
         //save
         $this->_em->flush();
     }
+    
+    /**
+     * Modifie l'état de toutes les évaluations
+     *
+     * @param array     $inscriptions Liste des inscriptions
+     * @param Reference $ref          RefStatut à mettre
+     *
+     * @return empty
+     */
+    public function toogleEtatEvaluation( $inscriptions, $ref )
+    {
+        foreach($inscriptions as $inscription) {
+            $inscription->setEtatEvaluation( $ref );
+            $this->_em->persist( $inscription );
+        }
+    
+        //save
+        $this->_em->flush();
+    }
 
     /**
      * Retourne la liste des inscriptions de l'utilisateur pour la création des factures
