@@ -273,7 +273,7 @@ class QuestionnaireController extends Controller
                     $reponses[$idQuestion] = $reponse;
                 }
 
-                //Envoie du mail à l'utilisateur pour l'aleter de la validation de sa candidature
+                //Envoie du mail à l'utilisateur pour l'alerter de la validation de sa candidature
                 if($this->_envoieDeMail)
                 {
                     switch ($questionnaire->getNomMinifie())
@@ -308,8 +308,10 @@ class QuestionnaireController extends Controller
                             $CMSI        = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');
                             if(!is_null($CMSI))
                             {
+                                $etablissement = is_null($user->getEtablissementRattachementSante()) ? $user->getAutreStructureRattachementSante() : $user->getEtablissementRattachementSante()->getNom();
+
                                 $variablesTemplate = array(
-                                    'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
+                                    'candidat'      => $user->getPrenom() . ' ' . $user->getNom() . ' (' . $etablissement .')',
                                     'questionnaire' => $candidature
                                 );
                                 $mailCMSI = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurCMSIMail($CMSI, $variablesTemplate);
