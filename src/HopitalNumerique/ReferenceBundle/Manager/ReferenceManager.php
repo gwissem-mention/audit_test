@@ -2,7 +2,7 @@
 
 namespace HopitalNumerique\ReferenceBundle\Manager;
 
-use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;

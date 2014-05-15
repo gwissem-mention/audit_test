@@ -295,23 +295,23 @@ function manageCollapse(element, way)
 function updateNbChilds()
 {
     $('#references-tab .ref').each(function(){
-        childs			= $(this).data('childs');
-		parentLevel		= $(this).data('level');
+        childs          = $(this).data('childs');
+        parentLevel     = $(this).data('level');
         nbChecked = 0;
-		nbChildsDirect = 0;
-		
+        nbChildsDirect = 0;
+        
         if( childs.length > 0 ) {
             $.each(childs,function(key, val){
 
                 if ( $('.ref-'+val+' .checkbox').prop('checked') && $('.ref-'+val).data('level') == parentLevel + 1 )
                     nbChecked++
-				
-				if ( $('.ref-'+val).data('level') == parentLevel + 1 )
+                
+                if ( $('.ref-'+val).data('level') == parentLevel + 1 )
                     nbChildsDirect++
             });
         }
 
         $(this).find('.nbChilds').html( nbChecked );
-		$(this).find('.nbChildsDirect').html( nbChildsDirect );
+        $(this).find('.nbChildsDirect').html( nbChildsDirect );
     })
 }

@@ -42,7 +42,7 @@ class QuestionnaireType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $idUser          = (isset($options['label_attr']['idUser']) && !is_null($options['label_attr']['idUser'])) ? $options['label_attr']['idUser'] : 0;
-        $idQuestionnaire = (isset($options['label_attr']['idQuestionnaire']) && !is_null($options['label_attr']['idQuestionnaire'])) ? $options['label_attr']['idQuestionnaire'] : 0;        
+        $idQuestionnaire = (isset($options['label_attr']['idQuestionnaire']) && !is_null($options['label_attr']['idQuestionnaire'])) ? $options['label_attr']['idQuestionnaire'] : 0;
         $questionnaire   = $this->_managerQuestionnaire->findOneBy(array('id' => $idQuestionnaire));
         
        /*
@@ -120,6 +120,26 @@ class QuestionnaireType extends AbstractType
             	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
             	    ));
             	    break;
+                case 'choice':
+                // $tab = json_encode(array(1,2,3,4));
+                // var_dump(json_decode($tab));die();
+                    //Récupération de la liste des choix de la question
+                    $choix = !is_null($question->getChoixPossibles()) ? json_decode($question->getChoixPossibles()) : array('Oui','Non');
+
+                    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
+                            'required'    => $question->getObligatoire(),
+                            'label'       => $question->getLibelle(),
+                            'mapped'      => false,
+                            'read_only'   => $this->_readOnly,
+                            'disabled'    => $this->_readOnly,
+                            'choices'     => $choix,
+                            'empty_value' => false,
+                            'expanded'    => true,
+                            'multiple'    => false,
+                            'attr'        => array('class' => 'radio'),
+                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReponse()
+                    ));
+                    break;
             	case 'checkbox':
                     $attr = $question->getObligatoire() ? array('class' => 'checkbox validate[required]') : array();
 

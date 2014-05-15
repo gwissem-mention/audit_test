@@ -16,11 +16,11 @@ group:
 "Invalid CSRF token.": Votre session a expirée.
 
 # Security
-"Bad credentials": Nom du compte ou mot de passe incorrect.
+"Bad credentials": Identifiant (login) ou mot de passe incorrect.
 
 security:
     login:
-        username: "Nom du compte :"
+        username: "Identifiant (login) :"
         password: "Mot de passe :"
         remember_me: Se souvenir de moi
         submit: Connexion
@@ -28,7 +28,7 @@ security:
 # Profile
 profile:
     show:
-        username: Nom du compte
+        username: Identifiant (login)
         email: Adresse e-mail
     edit:
         submit: Mettre à jour
@@ -64,8 +64,8 @@ resetting:
     password_already_requested: Un nouveau mot de passe a déjà été demandé pour cet utilisateur dans les dernières 24 heures.
     check_email: Un e-mail a été envoyé à l'adresse %email%. Il contient un lien sur lequel il vous faudra cliquer afin de réinitialiser votre mot de passe.
     request:
-        invalid_username: Le nom du compte ou l'adresse e-mail "%username%" n'existe pas.
-        username: "Nom du compte ou adresse e-mail :"
+        invalid_username: Le Identifiant (login) ou l'adresse e-mail "%username%" n'existe pas.
+        username: "Identifiant (login) ou adresse e-mail :"
         submit: Réinitialiser le mot de passe
     reset:
         submit: Modifier le mot de passe
@@ -91,7 +91,7 @@ layout:
 # Form field labels
 form:
     group_name: "Nom du groupe :"
-    username: "Nom du compte :"
+    username: "Identifiant (login) :"
     email: "Adresse e-mail :"
     current_password: "Mot de passe actuel :"
     password: "Mot de passe :"

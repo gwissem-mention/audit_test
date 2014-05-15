@@ -152,6 +152,12 @@
                     {% if interventionDemande.remboursementEtat != null %}{{ interventionDemande.remboursementEtat.libelle }}{% endif %}
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-4">Montant du remboursement</div>
+                <div class="col-md-8">
+                    {% if interventionDemande.facture != null %}{{ interventionDemande.facture.total }}€{% endif %}
+                </div>
+            </div>
             
             <hr>
             

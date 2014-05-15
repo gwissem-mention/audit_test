@@ -1,0 +1,131 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::popin.html.twig' %}
+
+{% block popinTitle %}Editer le chapitre{% endblock %}
+
+{% block popinContent %}
+    {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+    {{ form_start(form) }}
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_label(form.title) }}
+                <div class="col-md-11">
+                    {{ form_widget(form.title) }}
+                </div>
+                <div class="col-md-12 col-md-offset-1">
+                    <div class="help-block">
+                        {{ form_errors(form.title) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.alias) }}
+                <div class="col-md-10">
+                    {{ form_widget(form.alias) }}
+                </div>
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="help-block">
+                        {{ form_errors(form.alias) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                {{ form_label(form.noteOptimale) }}
+                <div class="col-md-3">
+                    {{ form_widget(form.noteOptimale) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.noteOptimale) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                {{ form_label(form.noteMinimale) }}
+                <div class="col-md-3">
+                    {{ form_widget(form.noteMinimale) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.noteMinimale) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_label(form.synthese) }}
+                <div class="col-md-12">
+                    {{ form_widget(form.synthese) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.synthese) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+
+    <input type="hidden" id="check-alias-unique-url" value="{{path('hopitalnumerique_autodiag_chapitre_check_alias_unique', {'id':chapitre.id})}}" />
+{% endblock %}
+
+{% block popinActions %}
+    <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+    <div onclick="saveChapitre( '{{path('hopitalnumerique_autodiag_chapitre_save',{'id':chapitre.id})}}' );" class="btn-primary btn">Enregistrer</div>
+{% endblock %}
+
+{% block popinJavascript %}
+    tinymce.PluginManager.load('table', '/bundles/nodevotools/js/tinymce/plugins/table/plugin.min.js');
+    tinymce.PluginManager.load('code', '/bundles/nodevotools/js/tinymce/plugins/code/plugin.min.js');
+    tinymce.PluginManager.load('pagebreak', '/bundles/nodevotools/js/tinymce/plugins/pagebreak/plugin.min.js');
+    tinymce.PluginManager.load('importcss', '/bundles/nodevotools/js/tinymce/plugins/importcss/plugin.min.js');
+    tinymce.PluginManager.load('link', '/bundles/nodevotools/js/tinymce/plugins/link/plugin.min.js');
+    tinymce.PluginManager.load('textcolor', '/bundles/nodevotools/js/plugins/text-color/plugin.min.js');
+    
+    tinyMCE.init({
+        selector     : "textarea",
+        theme        : "modern",
+        theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
+        skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
+        plugins      : 'table code textcolor pagebreak importcss link',
+        height       : 210,
+        menubar      : false,
+        content_css  : '/bundles/nodevotools/css/wysiwyg.css',
+        toolbar1     : "code | undo redo cut copy paste | pagebreak | link | insertfile ",
+        toolbar2     : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
+        style_formats: [
+            {title: 'Titres', items: [
+                {title: 'Titre 2', block: 'h2'},
+                {title: 'Titre 3', block: 'h3'},
+                {title: 'Titre 4', block: 'h4'},
+                {title: 'Titre 5', block: 'h5'},
+                {title: 'Titre 6', block: 'h6'}
+            ]},
+            {title: 'Blocs', items: [
+                {title: 'Paragraphe', block: 'p'}
+            ]}
+        ],
+        importcss_append: true,
+        importcss_groups: [
+            {title: 'Styles personnalisés'}
+        ],
+        relative_urls:false
+    });
+
+    $('#fancybox form.toValidate').validationEngine();
+
+    $('.checkAliasUnique').on('blur', function(){
+        checkAliasUnique();
+    });
+{% endblock %}

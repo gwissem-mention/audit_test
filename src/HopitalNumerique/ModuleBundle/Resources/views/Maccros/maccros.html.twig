@@ -1,0 +1,278 @@
+{# Maccro permettant de créer un tableau avec les informations des sessions 
+ #
+ # @param : \HopitalNumerique\ModuleBundle\Entity\Module : Module sur lequel on va afficher la session
+ #}
+{% macro createTableauSession(moduleSelectionne) %}
+    {% set aucuneSessionAffichees = false %}
+
+    <table class="table table-striped table-hover table-condensed table-bordered">
+        <thead>
+            <tr class="grid-row-titles">
+                <th style="vertical-align:middle">Productions concernées</th>
+                <th style="width:78px;font-size:11px">Date de la session</th>
+                <th style="width:72px;font-size:11px">Places restantes</th>
+                <th style="width:70px;font-size:11px">Vous êtes inscrit</th>
+                <th style="width:86px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key,session in moduleSelectionne.getSessionsInscriptionsOuvertes() %}
+                {# Vérification de l'accès #}
+                {% set autorisation = false %}
+                {% for roleAutorise in session.restrictionAcces %}
+                    {% if roleAutorise.role in app.user.roles %}
+                        {% set autorisation = true %}
+                    {% endif %}
+                {% endfor %}
+                {# On affiche uniquement les dates non dépassées #}
+                {% if date(session.dateOuvertureInscription) <= date() 
+                      and date(session.dateFermetureInscription) > date() 
+                      and autorisation %}
+                    <tr>
+                        <td>
+                            <ul style="padding: 0 0 0 15px;">
+                                {% for key,production in moduleSelectionne.productions %}
+                                    <li>{{ production.titre }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td class=
+                            {% if date(session.dateSession) < date('+7days') %}
+                                "warning-off" title="Session prévue dans moins de 7 jours">
+                            {% elseif date(session.dateSession) < date('+1month') %}
+                                "info-off" title="Session prévue dans moins d'un mois">
+                            {% else %}
+                                "success-off" title="Session prévue dans plus d'un mois">
+                            {% endif %}
+                            {{session.dateSession|date("d/m/Y")}}
+                        </td>
+                        <td align="center" class={% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}"success-off"{% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}"warning-off"{% else %}"danger-off"{% endif %}
+                        {% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}
+                            title="Places restantes suffisantes"
+                        {% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}
+                            title="Places restantes bientôt écoulées"
+                        {% else %}
+                            title="Plus de places restantes"
+                        {% endif %}
+                        >
+                            {{session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length}}/{{session.nombrePlaceDisponible}}
+                        </td>
+                        <td>
+                            {% set userInscrit = false %}
+                            {% set userRefuser = false %}
+                            {% set userEnAttente = false %}
+                            {% set userAnnule    = false %}
+                            {% set userAParticipe = false %}
+                            {# Parcourt la liste des utilisateurs inscrits à la session #}
+                            {% for key,inscription in session.getInscriptions() %}
+                                {# Si l'utilisateur connecté est inscrit alors on set la variable userEnAttente à true #}
+                                {% if app.user is not null and app.user.id == inscription.user.id %}
+                                    {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
+                                    {% if inscription.etatInscription.id == 407 %}
+                                        {% set userInscrit = true %}
+                                    {% endif %}
+                                    {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
+                                    {% if inscription.etatInscription.id == 408 %}
+                                        {% set userRefuser = true %}
+                                    {% endif %}
+                                    {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
+                                    {% if inscription.etatInscription.id == 406 %}
+                                        {% set userEnAttente = true %}
+                                    {% endif %}
+                                    {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
+                                    {% if inscription.etatInscription.id == 409 %}
+                                        {% set userAnnule = true %}
+                                    {% endif %}
+                                    {# Si l'utilisateur connecté a participé alors on set la variable userAParticipe à true #}
+                                    {% if inscription.etatParticipation.id == 411 %}
+                                        {% set userAParticipe = true %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if userInscrit %}
+                                <span class="inscrit">{{session.etat.libelle}}</span>
+                            {% elseif userRefuser %}
+                                <span class="refuser">{{session.etat.libelle}}</span>
+                            {% elseif userEnAttente %}
+                                <span class="en-attente">{{session.etat.libelle}}</span>
+                            {% elseif userAnnule %}
+                                <span class="annule">{{session.etat.libelle}}</span>
+                            {% endif %}
+                        </td>
+                        {# Gestion de la taille en fonction du nombre de bouton qu'il y aura a afficher #}
+                        <td style="min-width:86px;">
+                            <div class="btn-group">
+                                <a class="btn btn-info link fancybox.ajax" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
+                                <a class="btn btn-success link" href="{{path('hopitalnumerique_module_session_informations_front',{'id':session.id})}}"><i class="fa fa-arrow-right"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    {% set aucuneSessionAffichees = true %}
+                {% endif %}
+            {% else %}
+                {% set aucuneSessionAffichees = true %}
+            {% endfor %}
+            {% if aucuneSessionAffichees %}
+                <tr><td>- Aucune session planifiée -</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endmacro %}
+
+{# Maccro permettant d'afficher les informations d'un module 
+ #
+ # @param : \HopitalNumerique\ModuleBundle\Entity\Module : Module sur lequel on va afficher les informations
+ #}
+{% macro ficheModule(module) %}
+    <p>
+        <strong>Titre du module : </strong>
+        {{ module.titre }}
+    </p>
+    <p>
+        <strong>Productions concernées : </strong>
+        <ul>
+            {% for key,production in module.productions %}
+                <li>{{ production.titre }}</li>
+            {% endfor %}
+        </ul>
+    </p>
+    {% if module.duree is not empty and module.duree is not null %}
+        <p>
+            <strong>Durée : </strong>
+            {{ module.duree.libelle }}
+        </p>
+    {% endif %}
+    {% if module.horairesType is not empty and module.horairesType is not null %}
+        <p>
+            <strong>Horaires type : </strong>
+            {{ module.horairesType }}
+        </p>
+    {% endif %}
+    {% if module.lieu is not empty and module.lieu is not null %}
+        <p>
+            <strong>Lieu : </strong>
+            {{ module.lieu }}
+        </p>
+    {% endif %}
+    {% if module.nombrePlaceDisponible is not empty and module.nombrePlaceDisponible is not null %}
+        <p>
+            <strong>Nombre de places disponibles : </strong>
+            {{ module.nombrePlaceDisponible }}
+        </p>
+    {% endif %}
+    {% if module.description is not empty and module.description is not null %}
+        <p>
+            <strong>Description : </strong>
+            {{ module.description }}
+        </p>
+    {% endif %}
+    {% if module.nombrePlaceDisponible is not empty and module.nombrePlaceDisponible is not null %}
+        <p>
+            <strong>Nombre de places disponibles : </strong>
+            {{ module.nombrePlaceDisponible }}
+        </p>
+    {% endif %}
+    {% if module.prerequis is not empty and module.prerequis is not null %}
+        <p>
+            <strong>Prérequis : </strong>
+            {{ module.prerequis }}
+        </p>
+    {% endif %}
+    {% if module.formateur is not empty and module.formateur is not null %}
+        <p>
+            <strong>Formateur : </strong>
+            {{ module.formateur.getAppellation() }}
+        </p>
+    {% endif %}
+    {% if module.statut is not empty and module.statut is not null %}
+        <p>
+            <strong>Etat du module : </strong>
+            {{ module.statut.libelle }}
+        </p>
+    {% endif %}
+{% endmacro %}
+
+
+{# Maccro permettant d'afficher les informations d'une session 
+ #
+ # @param : \HopitalNumerique\ModuleBundle\Entity\Session : Session sur laquelle on va afficher les informations
+ #}
+{% macro ficheSession(session) %}
+    {% if session.module %}
+        <p>
+            <strong>Module concerné : </strong>
+            {{ session.module.titre }}
+        </p>
+    {% endif %}
+    {% if session.Datesession %}
+        <p>
+            <strong>Date de la session: </strong>
+            {{ session.dateSession|date('d/m/Y') }}
+        </p>
+    {% endif %}
+    {% if session.Dateouvertureinscription %}
+        <p>
+            <strong>Date d'ouverture des inscriptions: </strong>
+            {{ session.Dateouvertureinscription|date('d/m/Y') }}
+        </p>
+    {% endif %}
+    {% if session.Datefermetureinscription %}
+        <p>
+            <strong>Date de clôture des inscriptions: </strong>
+            {{ session.Datefermetureinscription|date('d/m/Y') }}
+        </p>
+    {% endif %}
+    {% if session.duree is not empty and session.duree is not null %}
+        <p>
+            <strong>Durée : </strong>
+            {{ session.duree.libelle }}
+        </p>
+    {% endif %}
+    {% if session.horaires %}
+        <p>
+            <strong>Horaires : </strong>
+            {{ session.horaires}}
+        </p>
+    {% endif %}
+    {% if session.lieu %}
+        <p>
+            <strong>Lieu : </strong>
+            {{ session.lieu}}
+        </p>
+    {% endif %}
+    {% if session.description %}
+        <p>
+            <strong>Description : </strong>
+            {{ session.description}}
+        </p>
+    {% endif %}
+    {% if session.inscriptions is not empty and session.inscriptions is not null %}
+        <p>
+            <strong>Nombre d'inscription : </strong>
+            {{ session.inscriptions|length  }}
+        </p>
+    {% endif %}
+    {% if session.Nombreplacedisponible %}
+        <p>
+            <strong>Nombre de places disponibles : </strong>
+            {{ session.Nombreplacedisponible}}
+        </p>
+    {% endif %}
+    {% if session.restrictionAcces %}
+        <p>
+            <strong>Autoriser ce module à : </strong>
+            <ul>
+                {% for key,role in session.restrictionAcces %}
+                    <li>{{ role.name }}</li>
+                {% endfor %}
+            </ul>
+        </p>
+    {% endif %}
+    {% if session.etat is not empty and session.etat is not null %}
+        <p>
+            <strong>Etat de la session : </strong>
+            {{ session.etat.libelle }}
+        </p>
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,117 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-categorie-index.css" filter="cssrewrite, ?yui_css" 
+        "@fancybox_css"
+        "@validationEngine_css"
+        "@jquery_toggles_css"
+        'bundles/nodevoadmin/css/jquery.nestable.css'
+        'bundles/hopitalnumeriqueautodiag/css/style.css'
+        'bundles/nodevoadmin/css/toggles.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-autodiag-categorie-edit.js" 
+        "@fancybox_js" 
+        "@nestable_js"
+        "@tinymce_js"
+        "@jquery_toggles_js"
+        "@validationEngine_js"
+        "@json_js"
+        'bundles/hopitalnumeriqueautodiag/js/script.js'
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
+        NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
+    </script>
+{% endblock %}
+
+{% block h1Title %}
+    Editer un outil d'autodiagnostic : Gestion des chapitres / questions
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_outil') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <div class="options">
+                    {# Include external file for tabs : avoid duplicate code #}
+                    {% include 'HopitalNumeriqueAutodiagBundle::admin-tabs.html.twig' with { 'outil' : outil, 'route': app.request.attributes.get('_route') } %}
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div class="sous_options">
+                    <div class="btn-toolbar">
+                        <div class="btn btn-default addChapitre">Ajouter un chapitre</div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="well well-lg">
+                        <span class="designForBlank" style="{% if chapitres|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton 'Ajouter un chapitre' pour ajouter un chapitre.</span>
+                        <div class="dd" id="chapitres">
+                            <ol class="dd-list">
+                                {% for chapitre in chapitres %}
+                                    {{ _self.buildTree(chapitre) }}
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="well well-lg" id="questions">
+                        <span class="selectChapitre">Vous devez sélectionner un chapitre avant de visualiser les questions</span>
+                        <div class="results">
+                            
+                        </div>
+                        <input type="hidden" class="chapitre" value="0" />
+                    </div>
+                </div>
+
+                <input type="hidden" id="add-chapitre-url" value="{{path('hopitalnumerique_autodiag_chapitre_add',{'id':outil.id})}}" />
+                <input type="hidden" id="order-chapitre-url" value="{{path('hopitalnumerique_autodiag_chapitre_reorder',{'id':outil.id})}}" />
+                <input type="hidden" id="outil-id" value="{{outil.id}}" />
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% macro buildTree(chapitre) %}
+    <li class="dd-item dd3-item" data-id="{{chapitre.id}}" id="chapitre-{{chapitre.id}}" >
+        <div class="dd-handle dd3-handle"></div>
+        <div class="dd3-content">
+            <a href="javascript:selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')">{{chapitre.title}}</a>
+            <p class="text-muted pull-right"><span>{{chapitre.references|default('0')}}</span> éléments référencés</p>
+        </div>
+        <div class="dd3-actions">
+            <div onclick="deleteChapitre( {{chapitre.id}}, '{{path('hopitalnumerique_autodiag_chapitre_delete', {'id':chapitre.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+            <a href="{{path('hopitalnumerique_autodiag_reference_chapitre',{'id':chapitre.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
+            <a href="{{path('hopitalnumerique_autodiag_chapitre_edit',{'id':chapitre.id})}}" class="fancy pull-right dd3-edit fancybox.ajax"><i class="fa fa-edit"></i></a>
+            <a href="{{path('hopitalnumerique_autodiag_question_add', {'id':chapitre.id})}}" class="fancy pull-right dd3-plus fancybox.ajax" onclick="selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')" ><i class="fa fa-plus"></i></a>
+        </div>
+        
+        {% if chapitre.childs %}
+            <ol class="dd-list">
+                {% for child in chapitre.childs %}
+                    {{ _self.buildTree(child) }}
+                {% endfor %}
+            </ol>
+        {% endif %}
+    </li>
+{% endmacro %}

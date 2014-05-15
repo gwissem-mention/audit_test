@@ -1,0 +1,150 @@
+#Outils
+hopitalnumerique_autodiag_outil:
+    pattern:  /admin/outil
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Outil:index" }
+
+hopitalnumerique_autodiag_outil_add:
+    pattern:  /admin/outil/add
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Outil:add" }
+
+hopitalnumerique_autodiag_outil_edit:
+    pattern:  /admin/outil/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Outil:edit" }
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_outil_delete:
+    pattern:  /admin/outil/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Outil:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+#Catégories
+hopitalnumerique_autodiag_categorie:
+    pattern:  /admin/outil/{id}/categorie
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Categorie:index" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_categorie_add:
+    pattern:  /admin/outil/{id}/categorie/add
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Categorie:add" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_categorie_edit:
+    pattern:  /admin/outil/{id}/categorie/edit/{idCat}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Categorie:edit" }
+    requirements:
+        id: \d+
+        idCat: \d+
+
+hopitalnumerique_autodiag_categorie_delete:
+    pattern:  /admin/outil/categorie/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Categorie:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+#Chapitres
+hopitalnumerique_autodiag_chapitre:
+    pattern:  /admin/outil/{id}/chapitre
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:index" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_chapitre_add:
+    pattern:  /admin/outil/{id}/chapitre/add
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:add" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_chapitre_reorder:
+    pattern:  /admin/outil/{id}/chapitre/reorder
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:reorder" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_chapitre_delete:
+    pattern:  /admin/outil/chapitre/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+hopitalnumerique_autodiag_chapitre_edit:
+    pattern:  /admin/outil/chapitre/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:edit" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_chapitre_save:
+    pattern:  /admin/outil/chapitre/save/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:save" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_chapitre_check_alias_unique:
+    pattern:  /admin/outil/chapitre/{id}/checkAliasUnique
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:checkAliasUnique" }
+    requirements: 
+        id : \d+
+
+#Questions
+hopitalnumerique_autodiag_question:
+    pattern:  /admin/outil/chapitre/{id}/question
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Question:index" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_question_add:
+    pattern:  /admin/outil/chapitre/{id}/question/add
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Question:add" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_question_delete:
+    pattern:  /admin/outil/question/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Question:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+hopitalnumerique_autodiag_question_edit:
+    pattern:  /admin/outil/question/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Question:edit" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_autodiag_question_save:
+    pattern:  /admin/outil/question/save/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Question:save", id: 0 }
+    requirements: 
+        id : \d+
+        _method: POST
+
+#Références
+hopitalnumerique_autodiag_reference_chapitre:
+    pattern:  /admin/outil/chapitre/{id}/reference
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Reference:chapitre"}
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_reference_chapitre_save:
+    pattern:  /admin/outil/chapitre/{id}/reference/save
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Reference:saveChapitre" }
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_reference_question:
+    pattern:  /admin/outil/question/{id}/reference
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Reference:question"}
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_reference_question_save:
+    pattern:  /admin/outil/question/{id}/reference/save
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Reference:saveQuestion" }
+    requirements:
+        id: \d+

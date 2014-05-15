@@ -1,0 +1,71 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-outil-edit.css" filter="cssrewrite, ?yui_css" 
+        "@validationEngine_css"
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-autodiag-outil-edit.js" 
+        "@validationEngine_js"
+        'bundles/hopitalnumeriqueautodiag/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block h1Title %}
+    {% if outil.id %}
+        Editer un outil d'autodiagnostic
+    {% else %}
+        Ajouter un outil d'autodiagnostic
+    {% endif %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_outil') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    {% if outil.id %}
+        <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+        <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_autodiag_outil_delete', { 'id': outil.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <div class="options">
+                    {# Include external file for tabs : avoid duplicate code #}
+                    {% include 'HopitalNumeriqueAutodiagBundle::admin-tabs.html.twig' with { 'outil' : outil, 'route': app.request.attributes.get('_route') } %}
+                </div>
+            </div>
+
+            <div class="panel-body">
+                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                {{ form_start(form) }}
+                    {{ form_row(form.title) }}
+                    {{ form_row(form.alias) }}
+                    {{ form_row(form.columnChart) }}
+                    <div class="columnChart" {% if not outil.columnChart %}style="display:none"{% endif %}>
+                        {{ form_row(form.columnChartLabel) }}
+                        {{ form_row(form.columnChartAxe) }}
+                    </div>
+
+                    {{ form_row(form.radarChart) }}
+                    <div class="radarChart" {% if not outil.radarChart %}style="display:none"{% endif %}>
+                        {{ form_row(form.radarChartLabel) }}
+                        {{ form_row(form.radarChartAxe) }}
+                    </div>
+                    {{ form_row(form.tableChart) }}
+                    {{ form_row(form.statut) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

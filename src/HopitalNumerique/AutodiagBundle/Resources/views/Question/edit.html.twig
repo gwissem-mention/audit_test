@@ -1,0 +1,116 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::popin.html.twig' %}
+
+{% block popinTitle %}
+    {% if question.id %}
+        Editer une question
+    {% else %}
+        Ajouter une question
+    {% endif %}
+{% endblock %}
+
+{% block popinContent %}
+    {% form_theme form 'HopitalNumeriqueAutodiagBundle:Question:formTheme.html.twig' %}
+    {{ form_start(form) }}
+        <div class="col-md-4">
+            <div class="form-group">
+                {{ form_label(form.type) }}
+                <div class="col-md-6">
+                    {{ form_widget(form.type) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.type) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            {{ form_row(form.categorie) }}
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+            {{ form_row(form.texte) }}
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+            {{ form_row(form.infoBulle) }}
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-3">
+            <div class="form-group">
+                {{ form_label(form.ponderation) }}
+                <div class="col-md-4">
+                    {{ form_widget(form.ponderation) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.ponderation) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                {{ form_label(form.ordreResultat) }}
+                <div class="col-md-4">
+                    {{ form_widget(form.ordreResultat) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.ordreResultat) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 not-txt" style="{% if not question.type or question.type.id == 417 %}display:none{% endif %}" >
+            <div class="form-group">
+                {{ form_label(form.noteMinimale) }}
+                <div class="col-md-4">
+                    {{ form_widget(form.noteMinimale) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.noteMinimale) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 txt" style="{% if not question.type or question.type.id != 417 %}display:none{% endif %}" >
+            <div class="form-group">
+                {{ form_label(form.seuil) }}
+                <div class="col-md-4">
+                    {{ form_widget(form.seuil) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.seuil) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="col-md-12 not-txt" style="{% if not question.type or question.type.id == 417 %}display:none{% endif %}" >
+            {{ form_row(form.options) }}
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+            {{ form_row(form.synthese) }}
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block popinActions %}
+    <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+    {% if question.id %}
+        <div onclick="saveQuestion('{{path('hopitalnumerique_autodiag_question_save', {'id':question.id})}}');" class="btn-primary btn">Enregistrer</div>
+    {% else %}
+        <div onclick="saveQuestion('{{path('hopitalnumerique_autodiag_question_save')}}');" class="btn-primary btn">Enregistrer</div>
+    {% endif %}
+{% endblock %}
+
+{% block popinJavascript %}
+    $('#fancybox form.toValidate').validationEngine();
+{% endblock %}

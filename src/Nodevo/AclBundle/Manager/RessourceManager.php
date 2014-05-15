@@ -2,7 +2,7 @@
 
 namespace Nodevo\AclBundle\Manager;
 
-use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
  * Manager de l'entité Ressource
