@@ -202,6 +202,7 @@ class InscriptionMassController extends Controller
         	    break;
         	case 'participation':
                 $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation( $inscriptions, $ref );
+                //A participé
                 if(411 === $ref->getId())
                 {
                     //Envoyer mail du formulaire d'évluation de la session
@@ -210,6 +211,12 @@ class InscriptionMassController extends Controller
                     {
                         $this->get('mailer')->send($mail);
                     }
+                    $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation( $inscriptions, $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 28) ) );
+                }
+                //N'a pas participé
+                elseif(412 === $ref->getId())
+                {
+                    $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation( $inscriptions, $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 27) ) );
                 }
         	    //inform user connected
                 $this->get('session')->getFlashBag()->add('info', 'Participation(s) modifiée(s) avec succès.' );

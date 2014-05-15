@@ -129,3 +129,20 @@ VALUES
 INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`)
 VALUES
     (34, '[HOPITALNUMERIQUE] - Inscription à une session', 'Inscription d\'un utilisateur à une session', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\r\n\r\nVotre inscription à la session %module du %date a été prise en compte.\r\n\r\nCordialement,', '{\"%u\":\"Nom d\'utilisateur\",\"%module\":\"Nom du module\",\"%date\":\"Date de la session\"}');
+
+
+/* Correction sur question */
+/* 14:07:05 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_obligatoire` = '0' WHERE `que_id` = '51';
+/* 14:07:13 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = ' radio' WHERE `que_id` = '39';
+/* 14:07:17 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '39';
+/* 14:07:18 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '40';
+/* 14:07:19 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '41';
+/* 14:07:20 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '42';
+/* 14:07:21 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '43';
+/* 14:07:22 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '44';
+/* 14:07:23 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '45';
+/* 14:07:24 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '46';
+/* 14:07:25 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '47';
+/* 14:07:26 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '48';
+/* 14:07:27 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '49';
+/* 14:07:27 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '50';

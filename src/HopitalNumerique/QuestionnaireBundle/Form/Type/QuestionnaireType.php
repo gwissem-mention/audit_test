@@ -136,7 +136,7 @@ class QuestionnaireType extends AbstractType
                             'empty_value' => false,
                             'expanded'    => true,
                             'multiple'    => false,
-                            'attr'        => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
+                            'attr'        => array('class' => 'radio'),
                             'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReponse()
                     ));
                     break;
