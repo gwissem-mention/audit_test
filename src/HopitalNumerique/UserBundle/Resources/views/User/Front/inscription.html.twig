@@ -74,21 +74,29 @@
 	                    </div>
 	
 	                    <div id="etablissement_sante">
-		                    <h4 class="violet">Vous êtes un établissement de santé</h4>
-		                    {{ form_row(form.statutEtablissementSante) }}
-		                    {{ form_row(form.etablissementRattachementSante) }}
-		                    {{ form_row(form.autreStructureRattachementSante) }}
-		                    {{ form_row(form.profilEtablissementSante) }}
-		                    {{ form_row(form.fonctionDansEtablissementSante) }}
-		                    {{ form_row(form.raisonInscriptionSante) }}
-	                    </div>
-	
-	                    <div id="autre_etablissement_sante">
-		                    <h4 class="violet">Vous êtes une structure autre qu'un établissement de santé</h4>
-		                    {{ form_row(form.nomStructure) }}
-		                    {{ form_row(form.fonctionStructure) }}
-		                    {{ form_row(form.raisonInscriptionStructure) }}
-	                    </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading closed">Vous êtes un établissement de santé</div>
+                                <div class="panel-body" style="display:none;">
+                                    {{ form_row(form.statutEtablissementSante) }}
+                                    {{ form_row(form.etablissementRattachementSante) }}
+                                    {{ form_row(form.autreStructureRattachementSante) }}
+                                    {{ form_row(form.profilEtablissementSante) }}
+                                    {{ form_row(form.fonctionDansEtablissementSante) }}
+                                    {{ form_row(form.raisonInscriptionSante) }}
+                                </div>
+                            </div>
+                        </div>
+                            
+                        <div id="autre_etablissement_sante">
+                            <div class="panel panel-default">
+                                <div class="panel-heading closed">Vous êtes une structure autre qu'un établissement de santé</div>
+                                <div class="panel-body" style="display:none;">
+                                    {{ form_row(form.nomStructure) }}
+                                    {{ form_row(form.fonctionStructure) }}
+                                    {{ form_row(form.raisonInscriptionStructure) }}
+                                </div>
+                            </div>
+                        </div>
                         
 				        <div class="form-group">
 				            <div class="col-md-3"></div>

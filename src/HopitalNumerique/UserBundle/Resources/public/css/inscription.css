@@ -8,5 +8,8 @@
 #inscription form .resetPass{display:block; font-size: 13px; color: #a3a3a3; margin-top: 20px}
 #inscription form h4{ text-align:left; padding: 30px 0px 10px 0px; }
 #inscription form .conditonsGenerales{cursor:pointer;text-align:right;}
+#inscription form .panel-heading{color:#703695;cursor: pointer; font-weight: bold}
+#inscription form .panel-heading.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
+#inscription form .panel-heading.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}
 #headerDesc { background-color:#f8f8f8;border:1px solid #e3e3e3;margin:30px 0px 0px 0px;font-size:13px; padding:10px; color:#6F3596; }
 #footerDesc { background-color:#f8f8f8;border:1px solid #e3e3e3;margin:30px 0px 0px 0px;font-size:11px; padding:10px; font-style:italic; }
