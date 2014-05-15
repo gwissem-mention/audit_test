@@ -1,9 +1,9 @@
 <?php 
 namespace Nodevo\GridBundle\Grid;
 
-use APY\DataGridBundle\Grid\Source;
 use APY\DataGridBundle\Grid\Column;
-
+use APY\DataGridBundle\Grid\Export\CSVExport;
+use APY\DataGridBundle\Grid\Source;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 
@@ -79,6 +79,16 @@ class Grid
 
         //return the grid object
         return $this->_grid->getGridResponse( $vue, $params );
+    }
+
+    /**
+     * Retourne les données du grid BRUT
+     *
+     * @return array
+     */
+    public function getRawData()
+    {
+        return $this->_grid->getRawData();
     }
 
     //////////////////////////////////////////////////////////
@@ -246,7 +256,7 @@ class Grid
          *
          * @param string $name Nom de la fonction à appeller
          */
-        public function setFunctionName( $name )
+        protected function setFunctionName( $name )
         {
             $this->_functionName = $name;
         }
@@ -257,7 +267,7 @@ class Grid
          * @param string $column ID de la colonne
          * @param string $order  Sens de tri
          */
-        public function setDefaultOrder( $column, $order )
+        protected function setDefaultOrder( $column, $order )
         {
             $this->_defaultOrder       = $order;
             $this->_defaultOrderColumn = $column;
