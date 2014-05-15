@@ -83,7 +83,7 @@ class Session
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_duree", referencedColumnName="ref_id")
      *
-     * @GRID\Column(field="duree.libelle", options = {"comment" = "Durée pointant sur la table référence avec le code DUREE_FORMATION de la session"})
+     * @GRID\Column(field="duree.libelle")
      */
     protected $duree;
 
@@ -322,7 +322,7 @@ class Session
     {
         return $this->duree;
     }
-    
+
     /**
      * Set duree
      *
