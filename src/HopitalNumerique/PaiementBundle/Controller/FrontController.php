@@ -5,7 +5,6 @@ namespace HopitalNumerique\PaiementBundle\Controller;
 use HopitalNumerique\PaiementBundle\Entity\Facture;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Front controller.

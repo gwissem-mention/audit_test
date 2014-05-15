@@ -6,8 +6,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Doctrine\ORM\EntityRepository;
-
 class ChapitreType extends AbstractType
 {
     private $_constraints = array();
@@ -19,8 +17,6 @@ class ChapitreType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $datas = $options['data'];
-
         $builder
             ->add('title', 'text', array(
                 'max_length' => $this->_constraints['title']['maxlength'],

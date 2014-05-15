@@ -268,24 +268,31 @@ abstract class Manager
         foreach($datas as $data) {
             $ligne = array();
             foreach($keys as $key) {
-                //colonne External 2 test
-                if( strpos($key, '.') !== false) {
-                    //cas des foreign colonnes : on explode sur le ':' et on vérifie la présence d'une valeur
-                    $fcts = explode('.', $key);
-                    $fct1 = 'get'. ucfirst($fcts[0]);
-                    $tmp  = call_user_func(array($data, $fct1 ));
-                    //si il existe une valeur pour le 1er get, on tente de récupérer le second
-                    if( $tmp ) {
-                        $fct2    = 'get'. ucfirst($fcts[1]);
-                        $val     =  call_user_func(array($tmp, $fct2 ));
-                        $ligne[] = is_null($val) ? '' : $val;
-                    }else
-                        $ligne[] = '';
-                //simple colonne
-                }else{
-                    $fct     = 'get'.ucfirst($key);
-                    $val     = call_user_func(array($data,$fct));
+                //cas Tableau
+                if( is_array($data) ){
+                    $val     = $data[$key];
                     $ligne[] = is_null($val) ? '' : $val;
+                //Cas Objet
+                }else{
+                    //colonne External 2 test
+                    if( strpos($key, '.') !== false) {
+                        //cas des foreign colonnes : on explode sur le ':' et on vérifie la présence d'une valeur
+                        $fcts = explode('.', $key);
+                        $fct1 = 'get'. ucfirst($fcts[0]);
+                        $tmp  = call_user_func(array($data, $fct1 ));
+                        //si il existe une valeur pour le 1er get, on tente de récupérer le second
+                        if( $tmp ) {
+                            $fct2    = 'get'. ucfirst($fcts[1]);
+                            $val     =  call_user_func(array($tmp, $fct2 ));
+                            $ligne[] = is_null($val) ? '' : $val;
+                        }else
+                            $ligne[] = '';
+                    //simple colonne
+                    }else{
+                        $fct     = 'get'.ucfirst($key);
+                        $val     = call_user_func(array($data,$fct));
+                        $ligne[] = is_null($val) ? '' : $val;
+                    }
                 }
             }
 
