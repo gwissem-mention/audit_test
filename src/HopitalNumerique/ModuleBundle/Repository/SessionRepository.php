@@ -26,8 +26,8 @@ class SessionRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ses')
             ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
-            ->leftJoin('ses.duree','refDuree')
-            ->leftJoin('ses.etat','refEtat')
+            // ->leftJoin('ses.duree','refDuree')
+            // ->leftJoin('ses.etat','refEtat')
             ->leftJoin('ses.module','module')
             ->where( 'module.id = :idModule')
             ->setParameter('idModule', $condition->value )
