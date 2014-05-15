@@ -79,22 +79,22 @@ INSERT INTO `hn_questionnaire_type_question` (`typ_id`, `libelle`, `nom`)
 VALUES
     (8, 'radio', 'Radio');
 
-INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`)
+INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`, `que_choixpossibles`)
 VALUES
-    (39, 4, 8, 'Ces objectifs énoncés en début de session ont-ils-été atteints ?', 0, 'etoiles', 1, 'module_objectif_enonces_atteints', NULL),
-    (40, 4, 8, 'Les apports de cette session sont-ils applicables dans le cadre de vos missions ?', 0, 'etoiles', 2, 'module_apports_session_applicables', NULL),
-    (41, 4, 8, 'Globalement estimez-vous utile d\'avoir suivi cette formation ?', 1, 'oui-non validate[required]', 3, 'module_formation_utilie', NULL),
-    (42, 4, 8, 'Le temps imparti pour cette formation était il suffisant ?', 0, 'etoiles', 4, 'module_temps_suffisant', NULL),
-    (43, 4, 8, 'Les questions abordées correspondaient-elles à vos attentes ?', 0, 'etoiles', 5, 'module_questions_correspondaient_attente', NULL),
-    (44, 4, 8, 'Glablement êtes-vous satisfait du contenu du module ?', 1, 'etoiles validate[required]', 6, 'module_statisfait_module', NULL),
-    (45, 4, 8, 'Y a-t-il eu suffisamment d\'occasions pour les participants d\'être actifs ?', 0, 'etoiles', 7, 'module_occasion_participant_actif', NULL),
-    (46, 4, 8, 'Quelle est votre appréciation des compétences pédagogiques de l\'intervenant ?', 0, 'etoiles', 8, 'module_competance_pedagogique_intervenant', NULL),
-    (47, 4, 8, 'Globalement êtes-vous satisfait des modalités pédagogique proposées ?', 1, 'oui-non validate[required]', 9, 'module_satisfait_modalites_pedagogique', NULL),
-    (48, 4, 8, 'Quelle est votre appréciation des informations fournies avant la formation ?', 0, 'etoiles', 10, 'module_appreciation_informations_fournies', NULL),
-    (49, 4, 8, 'Les conditions matérielles étaient elles adaptées à cette formation ?', 0, 'etoiles', 11, 'module_conditions_materielles_adaptees', NULL),
-    (50, 4, 8, 'Globalement êtes-vous satisfait des modalités pratiques de cette formation ?', 1, 'oui-non validate[required]', 12, 'module_satisfait_modile_pratique', NULL),
-    (51, 4, 2, 'Avez-vous des suggestions d\'amélioration ou des remarques dont vous souhaiteriez nous faire part ?', 0, NULL, 13, 'module_suggestion_faire_part', NULL),
-    (52, 4, 2, 'Dans le cadre de vos projets dans ce domaine, rencontrez-vous des problématiques qui ne trouvent pas de réponse dans le cadre de la session suvie ?', 0, NULL, 14, 'module_problematique_sans_reponse', NULL);
+	(39, 4, 8, 'Ces objectifs énoncés en début de session ont-ils-été atteints ?', 0, NULL, 1, 'module_objectif_enonces_atteints', NULL, '[1,2,3,4]'),
+	(40, 4, 8, 'Les apports de cette session sont-ils applicables dans le cadre de vos missions ?', 0, NULL, 2, 'module_apports_session_applicables', NULL, '[1,2,3,4]'),
+	(41, 4, 8, 'Globalement estimez-vous utile d\'avoir suivi cette formation ?', 1, NULL, 3, 'module_formation_utilie', NULL, NULL),
+	(42, 4, 8, 'Le temps imparti pour cette formation était il suffisant ?', 0, NULL, 4, 'module_temps_suffisant', NULL, '[1,2,3,4]'),
+	(43, 4, 8, 'Les questions abordées correspondaient-elles à vos attentes ?', 0, NULL, 5, 'module_questions_correspondaient_attente', NULL, '[1,2,3,4]'),
+	(44, 4, 8, 'Glablement êtes-vous satisfait du contenu du module ?', 1, NULL, 6, 'module_statisfait_module', NULL, '[1,2,3,4]'),
+	(45, 4, 8, 'Y a-t-il eu suffisamment d\'occasions pour les participants d\'être actifs ?', 0, NULL, 7, 'module_occasion_participant_actif', NULL, '[1,2,3,4]'),
+	(46, 4, 8, 'Quelle est votre appréciation des compétences pédagogiques de l\'intervenant ?', 0, NULL, 8, 'module_competance_pedagogique_intervenant', NULL, '[1,2,3,4]'),
+	(47, 4, 8, 'Globalement êtes-vous satisfait des modalités pédagogique proposées ?', 1, NULL, 9, 'module_satisfait_modalites_pedagogique', NULL, NULL),
+	(48, 4, 8, 'Quelle est votre appréciation des informations fournies avant la formation ?', 0, NULL, 10, 'module_appreciation_informations_fournies', NULL, '[1,2,3,4]'),
+	(49, 4, 8, 'Les conditions matérielles étaient elles adaptées à cette formation ?', 0, NULL, 11, 'module_conditions_materielles_adaptees', NULL, '[1,2,3,4]'),
+	(50, 4, 8, 'Globalement êtes-vous satisfait des modalités pratiques de cette formation ?', 1, NULL, 12, 'module_satisfait_modile_pratique', NULL, NULL),
+	(51, 4, 2, 'Avez-vous des suggestions d\'amélioration ou des remarques dont vous souhaiteriez nous faire part ?', 0, NULL, 13, 'module_suggestion_faire_part', NULL, NULL),
+	(52, 4, 2, 'Dans le cadre de vos projets dans ce domaine, rencontrez-vous des problématiques qui ne trouvent pas de réponse dans le cadre de la session suvie ?', 0, NULL, 14, 'module_problematique_sans_reponse', NULL, NULL);
 
 /* Lien de menu front : 12/05/2014 */
 INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
@@ -130,19 +130,3 @@ INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expe
 VALUES
     (34, '[HOPITALNUMERIQUE] - Inscription à une session', 'Inscription d\'un utilisateur à une session', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\r\n\r\nVotre inscription à la session %module du %date a été prise en compte.\r\n\r\nCordialement,', '{\"%u\":\"Nom d\'utilisateur\",\"%module\":\"Nom du module\",\"%date\":\"Date de la session\"}');
 
-
-/* Correction sur question */
-/* 14:07:05 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_obligatoire` = '0' WHERE `que_id` = '51';
-/* 14:07:13 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = ' radio' WHERE `que_id` = '39';
-/* 14:07:17 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '39';
-/* 14:07:18 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '40';
-/* 14:07:19 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '41';
-/* 14:07:20 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '42';
-/* 14:07:21 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '43';
-/* 14:07:22 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '44';
-/* 14:07:23 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '45';
-/* 14:07:24 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '46';
-/* 14:07:25 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '47';
-/* 14:07:26 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '48';
-/* 14:07:27 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '49';
-/* 14:07:27 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_verifJS` = NULL WHERE `que_id` = '50';
