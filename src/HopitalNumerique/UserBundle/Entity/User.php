@@ -431,6 +431,15 @@ class User extends BaseUser
      * @Nodevo\Javascript(class="validate[required]")
      */
     protected $termsAccepted;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank(message="Le message de desinscription ne doit pas être vide.")
+     * @Nodevo\Javascript(class="validate[required]]")
+     * @ORM\Column(name="usr_raison_desinscription", type="text")
+     */
+    protected $raisonDesinscription;
     
     
     // ------- Interventions -------

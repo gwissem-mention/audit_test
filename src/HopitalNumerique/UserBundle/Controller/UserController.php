@@ -3,6 +3,7 @@ namespace HopitalNumerique\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controller des utilisateurs
@@ -25,7 +26,7 @@ class UserController extends Controller
         //Si il n'y a pas d'utilisateur connecté
         if(!$this->get('security.context')->isGranted('ROLE_USER'))
         {
-            //Récupération de l'utilisateur passé en param
+            //Création d'un nouvel user
             $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
             
             //Tableau des options à passer à la vue twig
@@ -45,6 +46,39 @@ class UserController extends Controller
         }
     
         return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+    }
+
+    /**
+     * Affichage du formulaire d'inscription
+     */
+    public function desinscriptionAction(Request $request)
+    {
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        //Création du formulaire via le service
+        $form = $this->createForm('nodevo_user_desinscription', $user);
+        
+        $view = 'HopitalNumeriqueUserBundle:User/Front:desinscription.html.twig';
+        
+        // Si l'utilisateur soumet le formulaire
+        if ( $form->handleRequest($request)->isValid() )
+        {
+            $user->setEtat( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 4 ) ) );
+
+            //Mise à jour / création de l'utilisateur
+            $this->get('fos_user.user_manager')->updateUser( $user );
+
+            // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+            $this->get('session')->getFlashBag()->add('success', $user->getAppellation() ', vous venez de vous désinscrire.');
+                
+            return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+        }
+
+        return $this->render( $view , array(
+            'form'        => $form->createView(),
+            'user'        => $user
+        ));
     }
     
     /**
