@@ -13,18 +13,29 @@ class QuestionnaireManager extends BaseManager
     protected $_class = 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire';
 
     protected $_questionnaireArray = array();
+    protected $_managerReponse;
     	
     /**
      * Constructeur du manager
      *
      * @param EntityManager $em Entity Manager de Doctrine
      */
-    public function __construct( EntityManager $em, $options = array() )
+    public function __construct( EntityManager $em, $managerReponse, $options = array() )
     {
         parent::__construct($em);
         $this->_questionnaireArray = isset($options['idRoles']) ? $options['idRoles'] : array();
+        $this->_managerReponse     = $managerReponse;
     }
     
+    /**
+     * [getQuestionsReponses description]
+     *
+     * @param  [type] $idQuestionnaire [description]
+     * @param  [type] $idUser          [description]
+     * @param  [type] $paramId         [description]
+     *
+     * @return [type]
+     */
     public function getQuestionsReponses( $idQuestionnaire, $idUser, $paramId = null )
     {
         return $this->getRepository()->getQuestionsReponses( $idQuestionnaire , $idUser, $paramId );
@@ -90,5 +101,68 @@ class QuestionnaireManager extends BaseManager
         $candidature .= '</ul>';
         
         return $candidature;
+    }
+
+    /**
+     * Créer un tableau formaté pour l'export CSV
+     *
+     * @param integer $idQuestionnaire ID du questionnaire
+     * @param array   $users           Liste des utilisateurs
+     *
+     * @return array
+     */
+    public function buildForExport( $idQuestionnaire, $users )
+    {
+        $questionnaire = $this->findOneBy( array('id' => $idQuestionnaire) );
+
+        //prepare colonnes
+        $colonnes = array( 'id' => 'id' );
+        $emptyRow = array( 'id' => '' );
+        $questions = $questionnaire->getQuestions();
+        foreach($questions as $question){
+            if( $question->getTypeQuestion()->getLibelle() != 'file'){
+                $colonnes['question'.$question->getId()] = $question->getLibelle();
+                $emptyRow['question'.$question->getId()] = '';
+            }
+        }
+
+        $datas = array();
+        foreach($users as $user)
+        {
+            //prepare user infos
+            $row       = array_merge(array(), $emptyRow); //use this to clone the empty table $emptyRow => make sure we have at least an empty data
+            $row['id'] = $user->getId();
+
+            //get reponses
+            $reponses = $this->_managerReponse->reponsesByQuestionnaireByUser( $idQuestionnaire, $user->getId(), true );
+            foreach($reponses as $reponse)
+            {
+                $question = $reponse->getQuestion();
+
+                //on récupère toutes les question sauf les types fichiers
+                if( $question->getTypeQuestion()->getLibelle() != 'file')
+                {
+                    //identifiant de la question
+                    $field = 'question'.$question->getId();
+
+                    switch ($question->getTypeQuestion()->getLibelle())
+                    {
+                        case 'entity':
+                            $row[$field] = $reponse->getReference()->getLibelle();
+                            break;
+                        case 'checkbox':
+                            $row[$field] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );
+                            break;
+                        default:
+                            $row[$field] = $reponse->getReponse();
+                            break;
+                    }
+                }
+            }
+
+            $datas[] = $row;
+        }
+
+        return array('colonnes' => $colonnes, 'datas' => $datas );
     }
 }

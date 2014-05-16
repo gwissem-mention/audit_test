@@ -421,71 +421,38 @@ class UserController extends Controller
      */
     public function exportCsvExpertsAction( $primaryKeys, $allPrimaryKeys )
     {
-        // //get all selected Users
-        // if($allPrimaryKeys == 1){
-        //     $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
-        //     foreach($rawDatas as $data)
-        //         $primaryKeys[] = $data['id'];
-        // }
-        
-        // $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
-
-        // //prepare colonnes
-        // $colonnes = array( 
-        //                     'id'       => 'id', 
-        //                     'nom'      => 'Nom', 
-        //                     'prenom'   => 'Prénom', 
-        //                     'username' => 'Identifiant (login)', 
-        //                     'email'    => 'Adresse e-mail',
-        //                 );
-
-        // $datas = array();
-        // foreach($users as $user)
-        // {
-        //     //prepare user infos
-        //     $row           = new \StdClass;
-        //     $row->id       = $user->getId();
-        //     $row->nom      = $user->getNom();
-        //     $row->prenom   = $user->getPrenom();
-        //     $row->username = $user->getUsername();
-        //     $row->email    = $user->getEmail();
-
-        //     //add reponses infos
-        //     $questions = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionsReponses( 1, $user->getId() );
-        //     foreach($questions as $question){
-        //         //add questions to colonnes
-        //         if( !isset($colonnes['question'.$question->getId()]))
-        //             $colonnes['question'.$question->getId()] = $question->getLibelle();
-
-        //         $reponses = $question->getReponses();
-        //         $reponse = $reponses[0]; //get réponse courante
-
-        //         switch ($question->getTypeQuestion()->getLibelle())
-        //         {
-
-        //         }
-
-        //         echo '<pre>';
-        //         var_dump($reponse);
-        //         die();
-        //     }
-            
-        // }
-        
-        // die();
-
-
-            
-
-
-            
-        
-
-        
-
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+        $users   = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        $results = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->buildForExport( 1, $users);
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $users, 'export-utilisateurs.csv', $kernelCharset );
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $results['colonnes'], $results['datas'], 'export-experts.csv', $kernelCharset );
+    }
+
+    /**
+     * Export CSV de la liste des utilisateurs sélectionnés (candidatures ambassadeurs)
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     */
+    public function exportCsvAmbassadeursAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+        $users   = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        $results = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->buildForExport( 2, $users);
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $results['colonnes'], $results['datas'], 'export-ambassadeurs.csv', $kernelCharset );
     }
 
 
@@ -678,6 +645,16 @@ class UserController extends Controller
         return $this->customRenderView( $view , $form, $user, $options);
     }
 
+    /**
+     * [customRenderView description]
+     *
+     * @param  [type] $view    [description]
+     * @param  [type] $form    [description]
+     * @param  [type] $user    [description]
+     * @param  [type] $options [description]
+     *
+     * @return [type]
+     */
     private function customRenderView( $view, $form, $user, $options )
     {
         return $this->render( $view , array(
