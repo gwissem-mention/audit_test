@@ -131,7 +131,7 @@ class SessionController extends Controller
     {
         $html = $this->renderView('HopitalNumeriqueModuleBundle:Back/Session/Pdf:fichePresence.html.twig', array(
             'session'       => $session,
-            'inscriptions'  => $session->getInscriptions()
+            'inscriptions'  => $session->getInscriptionsAccepte()
         ));
 
         $options = array(
