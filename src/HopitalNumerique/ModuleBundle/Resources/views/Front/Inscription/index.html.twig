@@ -38,8 +38,8 @@
                 <tr>
                     <th>Module</th>
                     <th>Date de la session</th>
+                    <th>Etat inscription</th>
                     <th>Evaluation</th>
-                    <th>Etat Inscription</th>
                     <th>Etat facture</th>
                     <th>Etat remb.</th>
                     <th width="90px">Actions</th>
@@ -52,10 +52,10 @@
                             <a href="{{path('hopitalnumerique_module_module_show_front',{'id':inscription.session.module.id})}}">{{inscription.session.module.titre}}</a>
                         </td>
                         <td>{{inscription.session.dateSession|date('d/m/Y')}}</td>
+                        <td>{% if inscription.etatInscription != null %}{{inscription.etatInscription.libelle}}{% endif %}</td>
                         <td>
                             {{inscription.etatEvaluation.libelle}}
                         </td>
-                        <td>{% if inscription.etatInscription != null %}{{inscription.etatInscription.libelle}}{% endif %}</td>
                         <td>{% if inscription.etatRemboursement != null %}{{inscription.etatRemboursement.libelle}}{% endif %}</td>
                         <td>
                             {% if inscription.facture is not null %}
