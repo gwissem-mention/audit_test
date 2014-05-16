@@ -455,6 +455,124 @@ class UserController extends Controller
         return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $results['colonnes'], $results['datas'], 'export-ambassadeurs.csv', $kernelCharset );
     }
 
+    /**
+     * Export CSV de la liste des utilisateurs sélectionnés (productions maitrises)
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     */
+    public function exportCsvProductionsAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        
+        //manages colonnes
+        $colonnes = array('id' => 'id');
+
+        //prepare datas
+        $datas     = array();
+        $nbProdMax = 0;
+        foreach($users as $user)
+        {
+            //prepare row
+            $row       = array();
+            $row['id'] = $user->getId();
+
+            $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByAmbassadeur( $user->getId() );
+            $nbProd = 0;
+            foreach($objets as $objet){
+                $row['prod'.$nbProd] = $objet->getTitre();
+                $nbProd++;
+            }
+            
+            //update nbProdMax
+            if( $nbProd > $nbProdMax)
+                $nbProdMax = $nbProd;
+
+            $datas[] = $row;
+        }
+
+        //add colonnes
+        for($i = 0; $i <= $nbProdMax; $i++)
+            $colonnes['prod'.$i] = '';
+
+        //add empty values
+        foreach($datas as &$data){
+            foreach ($colonnes as $key => $val) {
+                if( !isset($data[$key]) )
+                    $data[$key] = '';
+            }
+        }
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $datas, 'export-productions.csv', $kernelCharset );
+    }
+
+    /**
+     * Export CSV de la liste des utilisateurs sélectionnés (domaines fonctionnels maitrises)
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     */
+    public function exportCsvDomainesAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        
+        //manages colonnes
+        $colonnes = array('id' => 'id');
+
+        //prepare datas
+        $datas     = array();
+        $nbDomaineMax = 0;
+        foreach($users as $user)
+        {
+            //prepare row
+            $row       = array();
+            $row['id'] = $user->getId();
+
+            $domaines  = $user->getDomaines();
+            $nbDomaine = 0;
+            foreach($domaines as $domaine){
+                $row['domaine'.$nbDomaine] = $domaine->getLibelle();
+                $nbDomaine++;
+            }
+            
+            //update nbDomaineMax
+            if( $nbDomaine > $nbDomaineMax)
+                $nbDomaineMax = $nbDomaine;
+
+            $datas[] = $row;
+        }
+
+        //add colonnes
+        for($i = 0; $i <= $nbDomaineMax; $i++)
+            $colonnes['domaine'.$i] = '';
+
+        //add empty values
+        foreach($datas as &$data){
+            foreach ($colonnes as $key => $val) {
+                if( !isset($data[$key]) )
+                    $data[$key] = '';
+            }
+        }
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $datas, 'export-domaines.csv', $kernelCharset );
+    }
+
 
 
 

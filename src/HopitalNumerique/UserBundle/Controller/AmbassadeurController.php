@@ -100,8 +100,8 @@ class AmbassadeurController extends Controller
         $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $idQuestionnaireAmbassadeur , $idUser );
     
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:show.html.twig', array(
-                'reponses'       => $reponses,
-                'nombreReponses' => count($reponses)
+            'reponses'       => $reponses,
+            'nombreReponses' => count($reponses)
         ));
     }
     
@@ -116,8 +116,8 @@ class AmbassadeurController extends Controller
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByAmbassadeur($idUser);
     
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:liste_objets.html.twig', array(
-                'objets'       => $objets,
-                'nombreObjets' => count($objets)
+            'objets'       => $objets,
+            'nombreObjets' => count($objets)
         ));
     }
     
