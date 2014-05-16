@@ -38,8 +38,8 @@
                 <tr>
                     <th>Module</th>
                     <th>Date de la session</th>
+                    <th>Etat inscription</th>
                     <th>Evaluation</th>
-                    <th>Etat Inscription</th>
                     <th>Etat facture</th>
                     <th>Etat remb.</th>
                     <th width="90px">Actions</th>
@@ -52,10 +52,10 @@
                             <a href="{{path('hopitalnumerique_module_module_show_front',{'id':inscription.session.module.id})}}">{{inscription.session.module.titre}}</a>
                         </td>
                         <td>{{inscription.session.dateSession|date('d/m/Y')}}</td>
+                        <td>{% if inscription.etatInscription != null %}{{inscription.etatInscription.libelle}}{% endif %}</td>
                         <td>
                             {{inscription.etatEvaluation.libelle}}
                         </td>
-                        <td>{% if inscription.etatInscription != null %}{{inscription.etatInscription.libelle}}{% endif %}</td>
                         <td>{% if inscription.etatRemboursement != null %}{{inscription.etatRemboursement.libelle}}{% endif %}</td>
                         <td>
                             {% if inscription.facture is not null %}
@@ -68,7 +68,7 @@
                                     <a class="btn btn-green btn-sm" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':inscription.session.id})}}"><i class="fa fa-check"></i></a>
                                 {% endif %}
                                 {% if inscription.etatEvaluation.id == 29 %}
-                                    <a class="btn btn-info btn-sm" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':inscription.session.id})}}"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-info btn-sm" href="{{path('hopitalnumerique_module_evaluation_view_front',{'id':inscription.session.id})}}"><i class="fa fa-eye"></i></a>
                                     <a class="btn btn-success btn-sm" title="Attestation de présence" href="{{path('hopitalnumerique_module_inscription_attestation_front',{'id':inscription.id})}}"><i class="fa fa-external-link"></i></a>
                                 {% endif %}
                             </div>

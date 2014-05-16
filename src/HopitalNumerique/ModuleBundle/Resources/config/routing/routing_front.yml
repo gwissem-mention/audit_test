@@ -35,3 +35,10 @@ hopitalnumerique_module_evaluation_form_front:
     defaults: { _controller: HopitalNumeriqueModuleBundle:Front/EvaluationFront:formulaire, id: 1 }
     requirements:
         id: \d+
+
+hopitalnumerique_module_evaluation_view_front:
+    pattern:  /evaluation/view/{id}
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/EvaluationFront:formulaireVisualisation, id: 1 }
+    requirements:
+        id: \d+
+
