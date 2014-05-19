@@ -86,7 +86,7 @@ class QuestionController extends Controller
             $datas    = $request->request->get('hopitalnumerique_autodiag_question');
             $chapitre = $this->get('hopitalnumerique_autodiag.manager.chapitre')->findOneBy( array('id' => intval($datas['chapitre']) ) );
 
-            if( ! $chapitre )
+            if( !$chapitre )
                 return new Response('<h3>Une erreur est survenue, merci de réessayé</h3>', 200);
 
             $question = $this->get('hopitalnumerique_autodiag.manager.question')->createEmpty();
@@ -100,6 +100,11 @@ class QuestionController extends Controller
         $form = $this->createForm( 'hopitalnumerique_autodiag_question', $question);
 
         if ( $form->handleRequest($request)->isValid() ) {
+            //calcul question ponderation
+            $ponderation = $this->get('hopitalnumerique_autodiag.manager.question')->calculPonderationLeft($question);
+            if( $ponderation !== true )
+                return new Response('ponderation:'.$ponderation, 200);
+
             $this->get('hopitalnumerique_autodiag.manager.question')->saveQuestion( $question );
 
             //actualise render

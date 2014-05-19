@@ -20,6 +20,12 @@ hopitalnumerique_autodiag_outil_delete:
         id: \d+
         _method: POST|DELETE
 
+hopitalnumerique_autodiag_outil_ponderation:
+    pattern:  /admin/outil/{id}/ponderation
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Outil:ponderation" }
+    requirements: 
+        id : \d+
+
 #Catégories
 hopitalnumerique_autodiag_categorie:
     pattern:  /admin/outil/{id}/categorie

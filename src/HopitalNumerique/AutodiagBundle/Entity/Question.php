@@ -48,10 +48,10 @@ class Question
     private $infoBulle;
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="que_ponderation", type="smallint", options = {"comment" = "Pondération de la question"})
-     * @Nodevo\Javascript(class="validate[required,custom[integer], min[0], max[999]]")
+     * @ORM\Column(name="que_ponderation", type="float", options = {"comment" = "Pondération de la question"})
+     * @Nodevo\Javascript(class="validate[required,custom[number], min[0], max[100]]")
      */
     private $ponderation;
 
@@ -130,7 +130,7 @@ class Question
      */
     public function __construct()
     {
-        $this->ponderation = 1;
+        $this->ponderation = 0;
     }
 
     /**
@@ -192,7 +192,7 @@ class Question
     /**
      * Set ponderation
      *
-     * @param integer $ponderation
+     * @param float $ponderation
      * @return Question
      */
     public function setPonderation($ponderation)
@@ -205,7 +205,7 @@ class Question
     /**
      * Get ponderation
      *
-     * @return integer 
+     * @return float 
      */
     public function getPonderation()
     {
