@@ -9,3 +9,7 @@ hopital_numerique_module_front:
 hopital_numerique_module_front_comptehn:
     resource: "@HopitalNumeriqueModuleBundle/Resources/config/routing/routing_comptehn.yml"
     prefix:   /compte-hn
+
+hopital_numerique_module_front_cron:
+    resource: "@HopitalNumeriqueModuleBundle/Resources/config/routing/routing_cron.yml"
+    prefix:   /

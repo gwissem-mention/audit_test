@@ -108,6 +108,13 @@ class ModuleType extends AbstractType
                             ->orderBy('user.nom', 'ASC');
                     }
             ))
+            ->add('textMailRappel', 'textarea', array(
+                    'required' => false,
+                    'label'    => 'Texte du mail de rappel',
+                    'attr'        => array(
+                            'rows'   => 3
+                    ),
+            ))
             ->add('file', 'file', array(
                     'required' => false, 
                     'label'    => 'Pièce-jointe'

@@ -1,0 +1,4 @@
+#CRON
+hopital_numerique_cron_rappel_inscritpion:
+    pattern:  /cron-rappel-inscriptions/{id}
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Cron/Cron:envoieMailsRappel}

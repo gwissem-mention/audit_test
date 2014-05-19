@@ -281,6 +281,7 @@ class Inscription
         else
             $this->etatInscription = null;
     }
+    
     /**
      * Get etatInscription
      *
@@ -289,6 +290,16 @@ class Inscription
     public function getEtatInscription()
     {
         return $this->etatInscription;
+    }
+    
+    /**
+     * Get etatInscription Id
+     *
+     * @return int idEtatInscription
+     */
+    public function getEtatInscriptionId()
+    {
+        return $this->etatInscription->getId();
     }
 
     /**

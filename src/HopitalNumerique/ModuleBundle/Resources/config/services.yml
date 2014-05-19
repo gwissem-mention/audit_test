@@ -13,6 +13,8 @@ parameters:
     hopitalnumerique_module.manager.inscription.class: HopitalNumerique\ModuleBundle\Manager\InscriptionManager
     hopitalnumerique_module.grid.inscription.class: HopitalNumerique\ModuleBundle\Grid\InscriptionGrid
     hopitalnumerique_module.form.inscription.class: HopitalNumerique\ModuleBundle\Form\InscriptionType
+    #CronLogger
+    hopitalnumerique_module.service.logger.cronlogger.class: HopitalNumerique\ModuleBundle\DependencyInjection\Logger\CronLogger
 
 services:
     #Modules
@@ -74,3 +76,8 @@ services:
         arguments: ["@hopitalnumerique_module.manager.inscription", "@validator"]
         tags:
             - { name: form.type, alias: hopitalnumerique_module_inscription }
+
+    #Cronlogger
+    hopitalnumerique_module.service.logger.cronlogger:
+        class: "%hopitalnumerique_module.service.logger.cronlogger.class%"
+        arguments: ["@logger", "@session"]
