@@ -455,71 +455,156 @@ class UserController extends Controller
      */
     public function exportCsvExpertsAction( $primaryKeys, $allPrimaryKeys )
     {
-        // //get all selected Users
-        // if($allPrimaryKeys == 1){
-        //     $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
-        //     foreach($rawDatas as $data)
-        //         $primaryKeys[] = $data['id'];
-        // }
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+        $users   = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        $results = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->buildForExport( 1, $users);
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $results['colonnes'], $results['datas'], 'export-experts.csv', $kernelCharset );
+    }
+
+    /**
+     * Export CSV de la liste des utilisateurs sélectionnés (candidatures ambassadeurs)
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     */
+    public function exportCsvAmbassadeursAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+        $users   = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        $results = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->buildForExport( 2, $users);
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $results['colonnes'], $results['datas'], 'export-ambassadeurs.csv', $kernelCharset );
+    }
+
+    /**
+     * Export CSV de la liste des utilisateurs sélectionnés (productions maitrises)
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     */
+    public function exportCsvProductionsAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
         
-        // $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        //manages colonnes
+        $colonnes = array('id' => 'id');
 
-        // //prepare colonnes
-        // $colonnes = array( 
-        //                     'id'       => 'id', 
-        //                     'nom'      => 'Nom', 
-        //                     'prenom'   => 'Prénom', 
-        //                     'username' => 'Identifiant (login)', 
-        //                     'email'    => 'Adresse e-mail',
-        //                 );
+        //prepare datas
+        $datas     = array();
+        $nbProdMax = 0;
+        foreach($users as $user)
+        {
+            //prepare row
+            $row       = array();
+            $row['id'] = $user->getId();
 
-        // $datas = array();
-        // foreach($users as $user)
-        // {
-        //     //prepare user infos
-        //     $row           = new \StdClass;
-        //     $row->id       = $user->getId();
-        //     $row->nom      = $user->getNom();
-        //     $row->prenom   = $user->getPrenom();
-        //     $row->username = $user->getUsername();
-        //     $row->email    = $user->getEmail();
-
-        //     //add reponses infos
-        //     $questions = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionsReponses( 1, $user->getId() );
-        //     foreach($questions as $question){
-        //         //add questions to colonnes
-        //         if( !isset($colonnes['question'.$question->getId()]))
-        //             $colonnes['question'.$question->getId()] = $question->getLibelle();
-
-        //         $reponses = $question->getReponses();
-        //         $reponse = $reponses[0]; //get réponse courante
-
-        //         switch ($question->getTypeQuestion()->getLibelle())
-        //         {
-
-        //         }
-
-        //         echo '<pre>';
-        //         var_dump($reponse);
-        //         die();
-        //     }
+            $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByAmbassadeur( $user->getId() );
+            $nbProd = 0;
+            foreach($objets as $objet){
+                $row['prod'.$nbProd] = $objet->getTitre();
+                $nbProd++;
+            }
             
-        // }
-        
-        // die();
+            //update nbProdMax
+            if( $nbProd > $nbProdMax)
+                $nbProdMax = $nbProd;
 
+            $datas[] = $row;
+        }
 
-            
+        //add colonnes
+        for($i = 0; $i <= $nbProdMax; $i++)
+            $colonnes['prod'.$i] = '';
 
-
-            
-        
-
-        
+        //add empty values
+        foreach($datas as &$data){
+            foreach ($colonnes as $key => $val) {
+                if( !isset($data[$key]) )
+                    $data[$key] = '';
+            }
+        }
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $users, 'export-utilisateurs.csv', $kernelCharset );
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $datas, 'export-productions.csv', $kernelCharset );
+    }
+
+    /**
+     * Export CSV de la liste des utilisateurs sélectionnés (domaines fonctionnels maitrises)
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     */
+    public function exportCsvDomainesAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        
+        //manages colonnes
+        $colonnes = array('id' => 'id');
+
+        //prepare datas
+        $datas     = array();
+        $nbDomaineMax = 0;
+        foreach($users as $user)
+        {
+            //prepare row
+            $row       = array();
+            $row['id'] = $user->getId();
+
+            $domaines  = $user->getDomaines();
+            $nbDomaine = 0;
+            foreach($domaines as $domaine){
+                $row['domaine'.$nbDomaine] = $domaine->getLibelle();
+                $nbDomaine++;
+            }
+            
+            //update nbDomaineMax
+            if( $nbDomaine > $nbDomaineMax)
+                $nbDomaineMax = $nbDomaine;
+
+            $datas[] = $row;
+        }
+
+        //add colonnes
+        for($i = 0; $i <= $nbDomaineMax; $i++)
+            $colonnes['domaine'.$i] = '';
+
+        //add empty values
+        foreach($datas as &$data){
+            foreach ($colonnes as $key => $val) {
+                if( !isset($data[$key]) )
+                    $data[$key] = '';
+            }
+        }
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $datas, 'export-domaines.csv', $kernelCharset );
     }
 
 
@@ -712,6 +797,16 @@ class UserController extends Controller
         return $this->customRenderView( $view , $form, $user, $options);
     }
 
+    /**
+     * [customRenderView description]
+     *
+     * @param  [type] $view    [description]
+     * @param  [type] $form    [description]
+     * @param  [type] $user    [description]
+     * @param  [type] $options [description]
+     *
+     * @return [type]
+     */
     private function customRenderView( $view, $form, $user, $options )
     {
         return $this->render( $view , array(

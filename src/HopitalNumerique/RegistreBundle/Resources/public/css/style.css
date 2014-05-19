@@ -13,7 +13,7 @@
 /* Partie Registre : liste */
 #registre-ambassadeur h4{font-size: 16px;font-weight: bold; border-bottom: solid 1px #d5d5d5; padding: 0 0 3px 0;}
 #registre-ambassadeur .no_padding{ padding: 0;}
-#registre-ambassadeur .annuaire_ambassadeur .chapo { background-color:#f8f8f8;background-image:url('/bundles/hopitalnumeriqueintervention/img/chapo.png');background-position:19px 7px;background-repeat:no-repeat;padding:14px 18px 4px 18px; }
+#registre-ambassadeur .annuaire_ambassadeur .chapo { background-color:#f8f8f8;background-image:url('/bundles/hopitalnumeriqueintervention/img/chapo.png');background-position:19px 7px;background-repeat:no-repeat;padding:14px 18px 4px 18px; margin-bottom: 10px;}
 #registre-ambassadeur .annuaire_ambassadeur .chapo h1 { font-size:14px;font-weight:bold;margin:0px;padding:0px 0px 10px 40px;text-transform:uppercase; }
 #registre-ambassadeur .annuaire_ambassadeur .chapo div.description { font-size:13px; }
 #registre-ambassadeur .annuaire_ambassadeur .chapo div.description p { margin:8px 0px;padding:0px; }

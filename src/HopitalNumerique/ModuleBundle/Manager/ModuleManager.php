@@ -28,7 +28,10 @@ class ModuleManager extends BaseManager
         return $this->rearangeForProduction( $results );
     }
     
-    
+    public function getAllInscriptionsBySessionsActivesNonPasseesByModules()
+    {
+        return $this->getRepository()->getAllInscriptionsBySessionsActivesNonPasseesByModules()->getQuery()->getResult();
+    }
     
     
     

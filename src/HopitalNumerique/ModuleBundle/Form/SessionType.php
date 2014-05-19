@@ -115,6 +115,14 @@ class SessionType extends AbstractType
                         ->orderBy('role.name', 'ASC');
                     }
             ))
+            ->add('textMailRappel', 'textarea', array(
+                    'required' => true,
+                    'label'    => 'Texte du mail de rappel',
+                    'attr'        => array(
+                            'rows'   => 2,
+                            'class' => $this->_constraints['textMailRappel']['class']
+                    ),
+            ))
             ->add('file', 'file', array(
                     'required' => false, 
                     'label'    => 'Fiche de présence'

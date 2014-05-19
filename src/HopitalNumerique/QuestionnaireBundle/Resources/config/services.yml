@@ -23,7 +23,7 @@ services:
     #--Manager
     hopitalnumerique_questionnaire.manager.questionnaire:
         class: "%hopitalnumerique_questionnaire.manager.questionnaire.class%"
-        arguments: ["@doctrine.orm.entity_manager", "%hopitalnumerique_questionnaire.options%"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_questionnaire.manager.reponse", "%hopitalnumerique_questionnaire.options%"]
         calls:
             - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Type
