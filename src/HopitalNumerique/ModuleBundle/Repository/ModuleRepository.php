@@ -46,9 +46,10 @@ class ModuleRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('mod')
             ->from('HopitalNumeriqueModuleBundle:Module', 'mod')
-            ->leftJoin('mod.statut', 'refEtat', Join::WITH, 'refEtat.id = 3')
+            ->leftJoin('mod.statut', 'refEtat')
+            ->where('refEtat.id = 3')
             ->leftJoin('mod.sessions', 'session', Join::WITH, 'session.etat = 403')
-            ->where('session.dateSession >= :today')
+            ->andWhere('session.dateSession >= :today')
             ->setParameter('today', new \DateTime() )
             ->leftJoin('session.inscriptions', 'inscription', Join::WITH, 'inscription.etatInscription = 407')
             ->orderBy('mod.titre');
