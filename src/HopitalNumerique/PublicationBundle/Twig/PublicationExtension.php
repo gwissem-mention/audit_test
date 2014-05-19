@@ -50,7 +50,7 @@ class PublicationExtension extends \Twig_Extension
                     case 'PUBLICATION':
                         //cas Objet
                         $objet  = $this->_managerObjet->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        $target = $matches[4][$key] == "1" ? "target='_blank'" : "";
+                        $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
                         if($objet)
                             $replacement = '<a href="/publication/'.$matches[2][$key].'-' . $objet->getAlias() . '" '.$target.'>' . $matches[3][$key] . '</a>';
                         else
@@ -63,7 +63,7 @@ class PublicationExtension extends \Twig_Extension
                     case 'INFRADOC':
                         //cas contenu
                         $contenu = $this->_managerContenu->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        $target  = $matches[4][$key] == "1" ? "target='_blank'" : "";
+                        $target  = $matches[5][$key] == 1 ? 'target="_blank"' : "";
                         if( $contenu ){
                             $objet       = $contenu->getObjet();
                             $replacement = '<a href="/publication/'.$objet->getId().'-' . $objet->getAlias() . '/'.$matches[2][$key].'-'.$contenu->getAlias().'" '.$target.'>' . $matches[3][$key].'</a>';
@@ -76,7 +76,7 @@ class PublicationExtension extends \Twig_Extension
                     case 'ARTICLE':
                         //cas Objet
                         $objet  = $this->_managerObjet->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        $target = $matches[4][$key] == "1" ? "target='_blank'" : "";
+                        $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
                         if($objet)
                             $replacement = '<a href="/publication/article/'.$matches[2][$key].'-' . $objet->getAlias() . '" '.$target.'>' . $matches[3][$key] . '</a>';
                         else
