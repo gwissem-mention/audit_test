@@ -266,7 +266,6 @@ class InterventionDemande
      *     @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")
      *   }
      * )
-     * @Assert\Count(min=1,minMessage="Au moins une production doit être choisie.")
      */
     private $objets;
 
