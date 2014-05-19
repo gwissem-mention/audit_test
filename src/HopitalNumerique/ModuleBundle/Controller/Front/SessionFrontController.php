@@ -91,6 +91,6 @@ class SessionFrontController extends Controller
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_module.manager.session')->customExportCsv( $colonnes, $datas, 'export-evaluations.csv', $kernelCharset );
+        return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-evaluations.csv', $kernelCharset );
     }
 }

@@ -3,7 +3,6 @@
 namespace HopitalNumerique\ModuleBundle\Controller\Front;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ModuleBundle\Entity\Session;
 
 class EvaluationFrontController extends Controller
@@ -12,6 +11,19 @@ class EvaluationFrontController extends Controller
      * Affichage du formulaire d'évaluation
      */
     public function formulaireAction( Session $session )
+    {
+        return $this->renderForm( $session );
+    }
+
+    /**
+     * Affichage du formulaire d'évaluation en readonly
+     */
+    public function formulaireVisualisationAction( Session $session )
+    {
+        return $this->renderForm( $session, true );
+    }
+
+    private function renderForm ( Session $session, $readOnly = false)
     {
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
@@ -39,13 +51,6 @@ class EvaluationFrontController extends Controller
 
             return $this->redirect($this->generateUrl( 'hopitalnumerique_module_module_front' ));
         }
-
-        //$form = $this->createForm('nodevo_questionnaire_questionnaire', $questionnaire);
-
-        //readonly si il y a des réponses dans le questionnaire
-        $readOnly = !empty($reponses);
-
-        $themeQuestionnaire = $readOnly ? 'vertical' : 'vertical_readonly';
 
         //Création du formulaire via le service
         $form = $this->createForm( 'nodevo_questionnaire_questionnaire', $questionnaire, array(
@@ -142,7 +147,7 @@ class EvaluationFrontController extends Controller
             //Mise à jour/création des réponses
             $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );
 
-            return $this->redirect($this->generateUrl( 'hopitalnumerique_module_module_front' ));
+            return $this->redirect($this->generateUrl( 'hopitalnumerique_module_evaluation_view_front', array('id' => $session->getId()) ));
         }
     
         return $this->render( 'HopitalNumeriqueModuleBundle:Front/Evaluation:form.html.twig' , array(
@@ -150,7 +155,8 @@ class EvaluationFrontController extends Controller
                 'questionnaire'     => $questionnaire,
                 'user'              => $user,
                 'session'           => $session,
-                'moduleSelectionne' => $session->getModule()
+                'moduleSelectionne' => $session->getModule(),
+                'readOnly'          => $readOnly
         ));
     }
 }

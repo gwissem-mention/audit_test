@@ -30,7 +30,7 @@
                         <h4>{{actu.types}}</h4>
                         <h3>{{actu.titre}}</h3>
                         <p>
-                            {{actu.resume}}
+                            {{actu.resume|parsePublication|raw}}
                             <br />
                             <a class="readmore" href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">
                                 <i class="common-sprite common-sprite-arrow"></i> Lire la suite

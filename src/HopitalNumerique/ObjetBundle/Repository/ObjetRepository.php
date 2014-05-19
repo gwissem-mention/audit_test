@@ -3,7 +3,6 @@
 namespace HopitalNumerique\ObjetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * ObjetRepository

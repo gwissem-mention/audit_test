@@ -78,9 +78,6 @@ class ChapitreController extends Controller
         //On récupère le parent de l'élément que l'on delete.
         $parent = $chapitre->getParent();
 
-        //get outil
-        $outil = $chapitre->getOutil();
-        
         //delete
         $this->get('hopitalnumerique_autodiag.manager.chapitre')->delete( $chapitre );
 

@@ -3,9 +3,6 @@
 namespace HopitalNumerique\PaiementBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
-use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
-use Knp\Bundle\SnappyBundle\Snappy\LoggableGenerator;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**

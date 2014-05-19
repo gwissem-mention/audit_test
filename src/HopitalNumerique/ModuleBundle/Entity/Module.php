@@ -4,7 +4,6 @@ namespace HopitalNumerique\ModuleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;

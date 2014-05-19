@@ -36,6 +36,7 @@
                     
                     <p style="margin: 0 0 5px;"><strong>Session(s) : </strong></p>
                     {% set aucuneSessionAffichees = false %}
+                    {% set uneSessionAffichees = false %}
                                         
                     <table class="table table-striped table-hover table-condensed table-bordered">
                         <thead>
@@ -60,6 +61,7 @@
                                 {% if date(session.dateOuvertureInscription) <= date() 
                                       and date(session.dateFermetureInscription) > date() 
                                       and autorisation %}
+                                {% set uneSessionAffichees = true %}
                                     <tr>
                                         <td class=
                                             {% if date(session.dateSession) < date('+7days') %}
@@ -141,7 +143,7 @@
                             {% else %}
                                 {% set aucuneSessionAffichees = true %}
                             {% endfor %}
-                            {% if aucuneSessionAffichees %}
+                            {% if aucuneSessionAffichees and not uneSessionAffichees %}
                                 <tr><td>- Aucune session planifiée -</td></tr>
                             {% endif %}  
                         </tbody>

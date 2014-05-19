@@ -5,7 +5,6 @@ namespace HopitalNumerique\AutodiagBundle\Controller;
 use HopitalNumerique\AutodiagBundle\Entity\Chapitre;
 use HopitalNumerique\AutodiagBundle\Entity\Question;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

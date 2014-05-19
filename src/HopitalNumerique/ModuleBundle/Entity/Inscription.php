@@ -5,8 +5,6 @@ namespace HopitalNumerique\ModuleBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 //Asserts Stuff
-use Symfony\Component\Validator\Constraints as Assert;
-use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**

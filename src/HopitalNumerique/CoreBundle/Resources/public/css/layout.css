@@ -7,6 +7,7 @@ body{ background: #E5E5E5;}
 a, a:hover, a:active {color:#6f3596}
 a.readmore{display: block; color:#000000; font-family: Arial; font-weight: bold}
 a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: -2px -2px; float: left; margin: 6px 6px 0 0}
+a.fancybox-close{background-position: 0px 0px}
 .lock-screen{background:#000000 !important; position:fixed; top:0; left:0; width:100%; height:100%; opacity:0.5; z-index: 19}
 h2{font-size: 22px}
 h3{font-size: 20px}

@@ -6,8 +6,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Doctrine\ORM\EntityRepository;
-
 /**
  * 
  * @author Gaetan MELCHILSEN
@@ -29,7 +27,7 @@ class InscriptionType extends AbstractType
                     'required' => false,
                     'label'    => 'Informations complémentaires',
                     'attr'     => array(
-                        'rows'   => 8
+                        'rows' => 8
                     )
             ));
     }

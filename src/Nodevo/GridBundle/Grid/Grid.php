@@ -2,7 +2,6 @@
 namespace Nodevo\GridBundle\Grid;
 
 use APY\DataGridBundle\Grid\Column;
-use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Source;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;

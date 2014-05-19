@@ -37,7 +37,7 @@ class QuestionnaireRepository extends EntityRepository
                 ->setParameter('idUser', $idUser );
         }
         $qb->orderBy('question.ordre');
-                
+
         return $qb->getQuery()->getResult();
     }
 }

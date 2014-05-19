@@ -75,31 +75,9 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.cacheBoutonsAc
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormulaire = function()
 {
-    var formulaireVerification = HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampObjets();
-    var formulaireVerification = (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampEtablissements() && formulaireVerification);
-    
-    return formulaireVerification;
+    return HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampEtablissements();
 };
-/**
- * Vérifie, avant soumission, le champ Objets du formulaire de demande d'intervention.
- * 
- * @return boolean VRAI ssi le champ est valide
- */
-HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampObjets = function()
-{
-    var objetsChamp = $('select.hopitalnumerique_interventionbundle_interventiondemande_objets');
-    //var objetsChampEngineValidator = $('div.hopitalnumerique_interventionbundle_interventiondemande_objets ul.select2-choices');
-    var objetsChampEngineValidator = $($('div#s2id_' + $('select.hopitalnumerique_interventionbundle_interventiondemande_objets').prop('id')));
-    
-    if ($(objetsChamp).val() == null)
-    {
-        $(objetsChampEngineValidator).validationEngine('showPrompt', '* Ce champ est requis', 'red', 'topRight', true);
-        return false;
-    }
-    else $(objetsChampEngineValidator).validationEngine('hide');
 
-    return true;
-};
 /**
  * Vérifie, avant soumission, le champ Établissements du formulaire de demande d'intervention.
  * 
