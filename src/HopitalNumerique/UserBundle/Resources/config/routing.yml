@@ -13,6 +13,10 @@ hopital_numerique_user_inscription:
     pattern:  /compte-hn/inscription
     defaults: { _controller: HopitalNumeriqueUserBundle:User:inscription }
 
+hopital_numerique_user_desinscription:
+    pattern:  /compte-hn/desinscription
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:desinscription }
+
 hopital_numerique_user_informations_personnelles:
     pattern:  /compte-hn/informations-personnelles    
     defaults: { _controller: HopitalNumeriqueUserBundle:User:informationsPersonnelles }
@@ -55,7 +59,7 @@ hopitalnumerique_user_ambassadeur_front_edit:
 
 # ----- Back Office -----
 
-#Utilisateur 
+#Utilisateur
 hopital_numerique_user_homepage:
     pattern:  /admin/user
     defaults: { _controller: HopitalNumeriqueUserBundle:User:index }

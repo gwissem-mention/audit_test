@@ -431,6 +431,13 @@ class User extends BaseUser
      * @Nodevo\Javascript(class="validate[required]")
      */
     protected $termsAccepted;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="usr_raison_desinscription", nullable=true, type="text")
+     */
+    protected $raisonDesinscription;
     
     
     // ------- Interventions -------
@@ -458,15 +465,14 @@ class User extends BaseUser
     {
         parent::__construct();
         
-        $this->objets    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->username  = '';
-        $this->enabled   = 1;
-        $this->civilite  = array();
-        $this->lock      = false;
-        $this->archiver  = false;
-        $this->domaines  = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->nbVisites = 0;
-    }
+        $this->objets               = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->username             = '';
+        $this->enabled              = 1;
+        $this->civilite             = array();
+        $this->lock                 = false;
+        $this->archiver             = false;
+        $this->domaines             = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->nbVisites            = 0;    }
 
     public function __toString()
     {
@@ -1249,5 +1255,25 @@ class User extends BaseUser
     public function getRole()
     {
         return $this->roles[0];
+    }
+
+    /**
+     * Get raisonDesinscription
+     *
+     * @return string $raisonDesinscription
+     */
+    public function getRaisonDesinscription()
+    {
+        return $this->raisonDesinscription;
+    }
+    
+    /**
+     * Set raisonDesinscription
+     *
+     * @param string $raisonDesinscription
+     */
+    public function setRaisonDesinscription($raisonDesinscription)
+    {
+        $this->raisonDesinscription = $raisonDesinscription;
     }
 }
