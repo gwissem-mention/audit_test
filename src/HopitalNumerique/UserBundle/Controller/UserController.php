@@ -55,7 +55,7 @@ class UserController extends Controller
     {
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
-        
+
         //Création du formulaire via le service
         $form = $this->createForm('nodevo_user_desinscription', $user);
         
@@ -65,12 +65,16 @@ class UserController extends Controller
         if ( $form->handleRequest($request)->isValid() )
         {
             $user->setEtat( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 4 ) ) );
+            $user->setEnabled( 0 );
 
             //Mise à jour / création de l'utilisateur
             $this->get('fos_user.user_manager')->updateUser( $user );
 
+            $this->get('security.context')->setToken(null);
+            $this->get('request')->getSession()->invalidate();
+
             // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-            $this->get('session')->getFlashBag()->add('success', $user->getAppellation() ', vous venez de vous désinscrire.');
+            $this->get('session')->getFlashBag()->add('success', $user->getAppellation() . ', vous venez de vous désinscrire.');
                 
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
         }

@@ -1,0 +1,57 @@
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-user-desinscription.css" filter="cssrewrite, ?yui_css"
+        "@validationEngine_css"
+        'bundles/hopitalnumeriqueuser/css/motdepasse.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-user-desinscription.js"
+        "@validationEngine_js"
+        'bundles/hopitalnumeriqueuser/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block headerTitle %}Désinscription de Mon Hôpital Numérique{% endblock %}
+
+{% block headerDesc %}
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer suscipit et tellus quis mollis. Nullam in varius justo. Morbi scelerisque laoreet hendrerit. Maecenas quis dui.
+    </p>
+{% endblock %}
+
+{% block content %}
+    <div id="form_edit_user">
+        <div id="form_edit_motdepasse">
+            {% form_theme form 'HopitalNumeriqueUserBundle:User/Theme:theme.desinscription.html.twig' %}
+            {{ form_start(form) }}
+                {{ form_javascript(form) }}
+                <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+                
+                <div class="col-md-12">
+                    {{ form_row(form.raisonDesinscription) }}
+                </div>
+                <div class="col-md-12">
+                    {{ form_row(form.termsAccepted) }}
+                </div>
+                <div class="col-md-12">
+                    {# Permet de mettre à la ligne le submit #}
+                    <div class="form-group">
+                        <div class="col-md-10 col-md-offset-2">
+                            <input onclick="$('form').submit();" class="btn btn-success pull-right submit" value="ME DESINSCRIRE" type="button" />
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

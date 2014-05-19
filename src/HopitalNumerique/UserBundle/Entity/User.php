@@ -1259,4 +1259,24 @@ class User extends BaseUser
     {
         return $this->roles[0];
     }
+
+    /**
+     * Get raisonDesinscription
+     *
+     * @return string $raisonDesinscription
+     */
+    public function getRaisonDesinscription()
+    {
+        return $this->raisonDesinscription;
+    }
+    
+    /**
+     * Set raisonDesinscription
+     *
+     * @param string $raisonDesinscription
+     */
+    public function setRaisonDesinscription($raisonDesinscription)
+    {
+        $this->raisonDesinscription = $raisonDesinscription;
+    }
 }
