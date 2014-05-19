@@ -435,9 +435,7 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @Assert\NotBlank(message="Le message de desinscription ne doit pas être vide.")
-     * @Nodevo\Javascript(class="validate[required]]")
-     * @ORM\Column(name="usr_raison_desinscription", type="text")
+     * @ORM\Column(name="usr_raison_desinscription", nullable=true, type="text")
      */
     protected $raisonDesinscription;
     
@@ -467,15 +465,14 @@ class User extends BaseUser
     {
         parent::__construct();
         
-        $this->objets    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->username  = '';
-        $this->enabled   = 1;
-        $this->civilite  = array();
-        $this->lock      = false;
-        $this->archiver  = false;
-        $this->domaines  = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->nbVisites = 0;
-    }
+        $this->objets               = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->username             = '';
+        $this->enabled              = 1;
+        $this->civilite             = array();
+        $this->lock                 = false;
+        $this->archiver             = false;
+        $this->domaines             = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->nbVisites            = 0;    }
 
     public function __toString()
     {

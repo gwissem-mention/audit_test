@@ -45,10 +45,9 @@ class DesinscriptionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('raisonDesinscription', 'textarea', array(
-                    'required' => true,
+                    'required' => false,
                     'label'    => 'Quelle est la raison de votre désinscription ?',
                     'attr'        => array(
-                            'class' => $this->_constraints['raisonDesinscription']['class'],
                             'rows'   => 10
                     ),
             ))
