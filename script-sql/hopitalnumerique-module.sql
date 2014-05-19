@@ -130,3 +130,7 @@ INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expe
 VALUES
     (34, '[HOPITALNUMERIQUE] - Inscription à une session', 'Inscription d\'un utilisateur à une session', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\r\n\r\nVotre inscription à la session %module du %date a été prise en compte.\r\n\r\nCordialement,', '{\"%u\":\"Nom d\'utilisateur\",\"%module\":\"Nom du module\",\"%date\":\"Date de la session\"}');
 
+/* Mail automatique de rappel */
+INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`)
+VALUES
+	(35, '[HOPITALNUMERIQUE] - Rappel de votre inscription à une Session', 'Rappel d\'inscription d\'un utilisateur à une session', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\r\n\r\nNous vous rappelons votre inscription à la session %module qui aura lieu le %date.\r\n\r\n%texteMail\r\n\r\nCordialement,', '{\"%u\":\"Nom d\'utilisateur\",\"%module\":\"Nom du module\",\"%date\":\"Date de la session\",\"%texteMail\":\"Texte de mail à modifier.\"}');
