@@ -1,12 +1,25 @@
 #autodiag{margin-top: 20px; position: relative}
+#autodiag h2{ margin:0 0 50px 0;}
 
 /* Colonne left */
     #autodiag p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
     /* Sous-menu */
     #autodiag #chapitres ul{list-style:none; padding:0; margin-bottom: 20px}
     #autodiag #chapitres ul li{border-top:1px solid #f0f0f0; background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
-    #autodiag #chapitres ul li div{padding:5px 0; color:#777777; font-size: 14px;}
-    #autodiag #chapitres ul li.active div,#autodiag #chapitres ul li:hover div{color:#6f3596;}
+    #autodiag #chapitres ul li div{padding:5px 0; color:#777777; font-size: 14px;cursor:pointer;}
+    #autodiag #chapitres ul li.stepy-active div,#autodiag #chapitres ul li:hover div{color:#6f3596;}
 
 /* Colonne right */
-    #autodiag .content{background-color: #f8f8f8}
+    #autodiag .content{background-color: #f8f8f8; padding-bottom: 20px}
+    #autodiag .content .badge-primary{background-color:#4f8edc; font-size:10px; padding:3px 6px; vertical-align: top}
+
+    #autodiag .stepy-navigator{}
+    #autodiag .stepy-navigator .button-back,
+    #autodiag .stepy-navigator .button-next
+        { display: inline-block; margin-bottom: 0; text-align: center; vertical-align: middle; cursor: pointer; border: 1px solid #ccc; white-space: nowrap; padding: 6px 12px; font-size: 14px; border-radius: 4px; color: #333; background-color: #fff; text-shadow: 0 1px 0 #fff; }
+    #autodiag .stepy-navigator .button-back{float:left;}
+    #autodiag .stepy-navigator .button-next{float:right;}
+    
+    #autodiag .stepy-navigator .button-back:hover,
+    #autodiag .stepy-navigator .button-next:hover
+        { background-color: #e0e0e0; color: #333; border-color: #adadad; text-decoration: none; }

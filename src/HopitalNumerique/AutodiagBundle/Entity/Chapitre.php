@@ -96,6 +96,8 @@ class Chapitre
 
     /**
      * @ORM\OneToMany(targetEntity="Question", mappedBy="chapitre")
+     *
+     * @ORM\OrderBy({"order" = "ASC"})
      */
     private $questions;
 

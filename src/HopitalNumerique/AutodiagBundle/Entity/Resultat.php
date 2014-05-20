@@ -56,7 +56,7 @@ class Resultat
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE", nullable=true)
      */
     protected $user;
 
@@ -65,7 +65,8 @@ class Resultat
      */
     public function __construct()
     {
-        
+        $this->dateLastSave = new \DateTime();
+        $this->tauxRemplissage = 0;
     }
 
     /**

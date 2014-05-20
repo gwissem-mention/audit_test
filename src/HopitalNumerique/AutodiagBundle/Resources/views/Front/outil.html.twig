@@ -25,18 +25,79 @@
 {% block body %}
     <div id="autodiag">
         <div class="col-md-3">
-            <p class="titre">Les Chapitres</p>
+            <p class="titre">Les chapitres</p>
             <div id="chapitres"></div>
         </div>
         <div class="col-md-9" >
+            <h2>{{outil.title}}</h2>
             <div class="col-md-12 content">
-                <form action="#" id="wizard" class="form-horizontal">
+                {% set formName = outil.alias %}
+                <form action="{{path('hopitalnumerique_autodiag_front_save', {'id':outil.id})}}" id="wizard" class="form-horizontal" method="POST">
                     {% for chapitre in outil.chapitres %}
+                        {# Build vars to make it cleaner #}
+                        {% set fieldsetName = formName ~ '[' ~ chapitre.id ~ ']' %}
+                        {% set fieldsetId = formName ~ '_' ~ chapitre.id %}
+
+                        {# Build step #}
                         <fieldset title="{{chapitre.title}}" >
-                            CONTENT
+                            <h3>{{chapitre.title}}</h3>
+
+                            {% for question in chapitre.questions %}
+                                {# Build vars to make it cleaner #}
+                                {% set questionName = fieldsetName ~ '[' ~ question.id ~ ']' %}
+                                {% set questionId = fieldsetId ~ '_' ~ question.id %}
+
+                                {# Build form group #}
+                                <div class="form-group">
+                                    <label for="{{questionName}}" class="col-md-4 control-label">
+                                        {% if question.ordreResultat is not null %}
+                                            {{question.ordreResultat}}.
+                                        {% endif %}
+                                        {{question.texte}}
+                                        <span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        {# SELECT #}
+                                        {% if question.type.id == '415' %}
+                                            {% set options = question.options|nl2br|split('<br />') %}
+                                            <select name="{{questionName}}" id="{{questionId}}" class="form-control">
+                                                <option value="-1">Non concerné</option>
+                                                {% for option in options %}
+                                                    {% set datas = option|split(';') %}
+                                                    <option value="{{datas[0]}}">{{datas[1]|capitalize}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        {# RADIO #}
+                                        {% elseif question.type.id == '416' %}
+                                            {% set options = question.options|nl2br|split('<br />') %}
+                                            <div class="radio block"><label><input type="radio" value="-1" name="{{questionName}}" id="{{questionId}}" checked="" />Non concerné</label></div>
+                                            {% for option in options %}
+                                                {% set datas = option|split(';') %}
+                                                <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" />{{datas[1]|capitalize}}</label></div>
+                                            {% endfor %}
+                                        {# TEXT #}
+                                        {% else %}
+                                            <input type="text" class="form-control input-sm" name="{{questionName}}" id="{{questionId}}" />
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </fieldset>
                     {% endfor %}
-                    <input type="submit" class="finish btn-success btn" value="Submit" />
+                    
+                    <hr />
+                    
+                    <input type="hidden" name="action" id="action" value="" />
+
+                    {% if app.user %}
+                        <div class="col-md-6">
+                            <div onclick="$('#action').val('save');$('#wizard').submit();" class="finish btn btn-primary btn-block" >Enregistrer l'outil</div>
+                        </div>
+                    {% endif %}
+
+                    <div class="col-md-6 {% if not app.user %}col-md-offset-3{% endif %}">
+                        <div onclick="$('#action').val('valid');$('#wizard').submit();" class="finish btn btn-success btn-block" >Valider l'outil</div>
+                    </div>
                 </form>
             </div>
             <div class="clearfix"></div>

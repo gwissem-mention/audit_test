@@ -18,6 +18,8 @@ parameters:
     #Références
     hopitalnumerique_autodiag.manager.refchapitre.class: HopitalNumerique\AutodiagBundle\Manager\RefChapitreManager
     hopitalnumerique_autodiag.manager.refquestion.class: HopitalNumerique\AutodiagBundle\Manager\RefQuestionManager
+    #Resultat
+    hopitalnumerique_autodiag.manager.resultat.class: HopitalNumerique\AutodiagBundle\Manager\ResultatManager
 
 services:
     #Outils
@@ -89,6 +91,13 @@ services:
 
     hopitalnumerique_autodiag.manager.refquestion:
         class: %hopitalnumerique_autodiag.manager.refquestion.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    #Resultat
+    hopitalnumerique_autodiag.manager.resultat:
+        class: %hopitalnumerique_autodiag.manager.resultat.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

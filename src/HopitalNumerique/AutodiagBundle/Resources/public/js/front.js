@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    //Load Wizards
     $('#wizard').stepy({
         finishButton : true, 
         titleClick   : true, 
@@ -11,7 +10,4 @@ $(document).ready(function() {
         nextLabel    : 'Chapitre suivant',
         titleTarget  : '#chapitres'
     });
-
-    //Add Wizard Compability - see docs
-    $('.stepy-navigator').wrapInner('<div class="pull-right"></div>');
 });
