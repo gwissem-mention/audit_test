@@ -28,6 +28,19 @@ class SessionController extends Controller
     }
 
     /**
+     * Affiche la liste des Session.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function indexAllSessionsAction()
+    {
+        $grid = $this->get('hopitalnumerique_module.grid.allsession');
+
+        return $grid->render('HopitalNumeriqueModuleBundle:Back/Session:indexAllSessions.html.twig');
+    }
+
+    /**
      * Affiche le formulaire d'ajout de Session.
      * 
      * @author Gaetan MELCHILSEN

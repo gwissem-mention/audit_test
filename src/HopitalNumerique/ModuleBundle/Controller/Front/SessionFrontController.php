@@ -44,6 +44,31 @@ class SessionFrontController extends Controller
     }
 
     /**
+     * Envoie un mail de rappel à tout les utilisateurs inscrits et acceptés de la session
+     *
+     * @param HopitalNumeriqueModuleBundleEntitySession $session [description]
+     *
+     * @return [type]
+     */
+    public function mailRappelAction( \HopitalNumerique\ModuleBundle\Entity\Session $session )
+    {
+        //récupérations des inscriptions acceptées
+        $inscriptions = $session->getInscriptionsAccepte();
+
+        //Envoyer mail de refus de l'inscription
+        $mails = $this->get('nodevo_mail.manager.mail')->sendRappelInscriptionMail($inscriptions,array());
+        foreach ($mails as $mail)
+        {
+            $this->get('mailer')->send($mail);
+        }
+        
+        // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
+        $this->get('session')->getFlashBag()->add( ('success') , 'Mails de rappel envoyé aux utilisateurs acceptés à cette session.' );
+
+        return new Response('Mails de rappel envoyés.');
+    }
+
+    /**
      * Compte HN : Génère le fichier CSV des formulaires d'évaluation
      *
      * @return view

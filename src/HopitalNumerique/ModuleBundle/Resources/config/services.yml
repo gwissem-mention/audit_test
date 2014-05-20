@@ -8,11 +8,14 @@ parameters:
     #Sessions
     hopitalnumerique_module.manager.session.class: HopitalNumerique\ModuleBundle\Manager\SessionManager
     hopitalnumerique_module.grid.session.class: HopitalNumerique\ModuleBundle\Grid\SessionGrid
+    hopitalnumerique_module.grid.allsession.class: HopitalNumerique\ModuleBundle\Grid\AllSessionGrid
     hopitalnumerique_module.form.session.class: HopitalNumerique\ModuleBundle\Form\SessionType
     #Inscriptions
     hopitalnumerique_module.manager.inscription.class: HopitalNumerique\ModuleBundle\Manager\InscriptionManager
     hopitalnumerique_module.grid.inscription.class: HopitalNumerique\ModuleBundle\Grid\InscriptionGrid
     hopitalnumerique_module.form.inscription.class: HopitalNumerique\ModuleBundle\Form\InscriptionType
+    #CronLogger
+    hopitalnumerique_module.service.logger.cronlogger.class: HopitalNumerique\ModuleBundle\DependencyInjection\Logger\CronLogger
 
 services:
     #Modules
@@ -44,8 +47,13 @@ services:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
     #--Grid
+    #Sessions
     hopitalnumerique_module.grid.session:
         class: %hopitalnumerique_module.grid.session.class%
+        arguments: ["@service_container"]
+    #AllSessions
+    hopitalnumerique_module.grid.allsession:
+        class: %hopitalnumerique_module.grid.allsession.class%
         arguments: ["@service_container"]
 
     #--Formulaire
@@ -74,3 +82,8 @@ services:
         arguments: ["@hopitalnumerique_module.manager.inscription", "@validator"]
         tags:
             - { name: form.type, alias: hopitalnumerique_module_inscription }
+
+    #Cronlogger
+    hopitalnumerique_module.service.logger.cronlogger:
+        class: "%hopitalnumerique_module.service.logger.cronlogger.class%"
+        arguments: ["@logger", "@session"]

@@ -161,6 +161,13 @@ class Module
      * @ORM\Column(name="mod_piecejointe", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier stocké"})
      */
     protected $path;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mod_mail", type="text", nullable=true, options = {"comment" = "Texte dans le mail de rappel"})
+     */
+    protected $textMailRappel;
     
     /**
      * @var integer
@@ -313,6 +320,29 @@ class Module
     public function getLieu()
     {
         return $this->lieu;
+    }
+
+    /**
+     * Set textMailRappel
+     *
+     * @param string $textMailRappel
+     * @return Module
+     */
+    public function setTextMailRappel($textMailRappel)
+    {
+        $this->textMailRappel = $textMailRappel;
+
+        return $this;
+    }
+
+    /**
+     * Get textMailRappel
+     *
+     * @return string 
+     */
+    public function getTextMailRappel()
+    {
+        return $this->textMailRappel;
     }
 
     /**
@@ -484,6 +514,25 @@ class Module
     public function getSessions()
     {
         return $this->sessions;
+    }
+
+    /**
+     * Get sessions actives
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSessionsActives()
+    {
+        $sessions = array();
+
+        foreach ($this->sessions as $session) 
+        {
+            if(403 === $session->getEtat()->getId())
+            {
+                $sessions[] = $session;
+            }
+        }
+        return $sessions;
     }
 
     /**

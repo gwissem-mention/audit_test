@@ -8,6 +8,8 @@ parameters:
     hopitalnumerique_user.grid.user.class: HopitalNumerique\UserBundle\Grid\UserGrid
     #Mot-de-passe
     hopitalnumerique_user.form.type.motdepasse: HopitalNumerique\UserBundle\Form\Type\MotDePasseType
+    #Desinscription
+    hopitalnumerique_user.form.type.desinscription: HopitalNumerique\UserBundle\Form\Type\DesinscriptionType
     #Contractualisation
     hopitalnumerique_user.manager.contractualisation.class: HopitalNumerique\UserBundle\Manager\ContractualisationManager
     hopitalnumerique_user.grid.contractualisation.class: HopitalNumerique\UserBundle\Grid\ContractualisationGrid
@@ -54,6 +56,13 @@ services:
         arguments: ["@hopitalnumerique_user.manager.user", "@validator", "@security.context"]
         tags:
             - { name: form.type, alias: nodevo_user_motdepasse }
+    #Desinscription:
+    #--Formulaire    
+    hopitalnumerique_user.form.type.desinscription:
+        class: %hopitalnumerique_user.form.type.desinscription%
+        arguments: ["@hopitalnumerique_user.manager.user", "@validator", "@security.context"]
+        tags:
+            - { name: form.type, alias: nodevo_user_desinscription }
 
     #Contractualisation
     #--Manager

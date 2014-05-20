@@ -334,6 +334,31 @@ class MailManager extends BaseManager
     }
 
     /**
+     * Envoi un mail d'acceptation de l'inscription à une session d'un module
+     *
+     * @param Inscriptions $inscriptions  
+     * @param array        $options      Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendRappelInscriptionMail( $inscriptions, $options )
+    {
+        $mail = $this->findOneById(35);
+
+        $toSend = array();
+        foreach ($inscriptions as $key => $inscription) 
+        {
+            $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                            'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                            'module'  => $inscription->getSession()->getModule()->getTitre(),
+                            'texteMail' => $inscription->getSession()->getTextMailRappel()
+            ));
+        }
+    
+        return $toSend;
+    }
+
+    /**
      * Envoi un mail pour acceder au formulaire d'évaluation à une session d'un module
      *
      * @param Inscriptions $inscriptions  

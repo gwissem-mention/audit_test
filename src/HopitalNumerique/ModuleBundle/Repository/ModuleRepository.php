@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ModuleBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * ModuleRepository
@@ -27,6 +28,30 @@ class ModuleRepository extends EntityRepository
             ->from('HopitalNumeriqueModuleBundle:Module', 'mod')
             ->leftJoin('mod.statut','refEtat')
             ->leftJoin('mod.productions','productions')
+            ->orderBy('mod.titre');
+        
+        return $qb;
+    }
+
+    /**
+     * Récupère les modules et leurs sessions actives et leurs inscriptions pas encore passées
+     *
+     * @return array(Module)
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function getAllInscriptionsBySessionsActivesNonPasseesByModules()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('mod')
+            ->from('HopitalNumeriqueModuleBundle:Module', 'mod')
+            ->leftJoin('mod.statut', 'refEtat')
+            ->where('refEtat.id = 3')
+            ->leftJoin('mod.sessions', 'session', Join::WITH, 'session.etat = 403')
+            ->andWhere('session.dateSession >= :today')
+            ->setParameter('today', new \DateTime() )
+            ->leftJoin('session.inscriptions', 'inscription', Join::WITH, 'inscription.etatInscription = 407')
             ->orderBy('mod.titre');
         
         return $qb;

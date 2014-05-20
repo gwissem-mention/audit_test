@@ -131,12 +131,16 @@
 
 {% block footerDesc %}
 	   <div id ="footerDesc">
-			<p>
-				Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».
-			</p>
-			<p>
-				Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
-			</p>
-                        {#<a target="_blank" href="{{path('hopital_numerique_publication_publication_article',{'id':user.id})}}">Me désinscrire de Mon Hôpital Numérique</a>#}
+			<div class="text">
+                <p>
+    				Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».
+    			</p>
+    			<p>
+    				Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
+    			</p>
+            </div>
+            <div class="lien">
+                <a target="_blank" href="{{path('hopital_numerique_user_desinscription')}}">Me désinscrire de Mon Hôpital Numérique</a>
+            </div>
 		</div>
 {% endblock %}

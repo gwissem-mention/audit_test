@@ -30,7 +30,7 @@ class ModuleType extends AbstractType
                     'required' => true,
                     'label'    => 'Titre du module',
                     'attr'        => array(
-                            'class' => $this->_constraints['titre']['class']
+                        'class' => $this->_constraints['titre']['class']
                     ),
             ))
             ->add('productions', 'genemu_jqueryselect2_entity', array(
@@ -107,6 +107,13 @@ class ModuleType extends AbstractType
                             ->where('user.enabled = ' . 1)
                             ->orderBy('user.nom', 'ASC');
                     }
+            ))
+            ->add('textMailRappel', 'textarea', array(
+                    'required' => false,
+                    'label'    => 'Texte du mail de rappel',
+                    'attr'        => array(
+                            'rows'   => 3
+                    ),
             ))
             ->add('file', 'file', array(
                     'required' => false, 

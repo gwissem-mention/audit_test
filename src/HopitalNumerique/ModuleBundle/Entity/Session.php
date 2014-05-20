@@ -165,6 +165,16 @@ class Session
     protected $path;
 
     /**
+     * @var string
+     *
+     * @Assert\NotBlank(message="Le texte du mail de rappel ne peut pas être vide.")
+     * @Nodevo\Javascript(class="validate[required]")
+     * 
+     * @ORM\Column(name="ses_textMailRappel", type="text", options = {"comment" = "Texte du mail de rappel de la session"})
+     */
+    protected $textMailRappel;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_etat", referencedColumnName="ref_id")
      * @Nodevo\Javascript(class="validate[required]")
@@ -383,6 +393,29 @@ class Session
     }
 
     /**
+     * Set textMailRappel
+     *
+     * @param string $textMailRappel
+     * @return Session
+     */
+    public function setTextMailRappel($textMailRappel)
+    {
+        $this->textMailRappel = $textMailRappel;
+
+        return $this;
+    }
+
+    /**
+     * Get textMailRappel
+     *
+     * @return string 
+     */
+    public function getTextMailRappel()
+    {
+        return $this->textMailRappel;
+    }
+
+    /**
      * Set description
      *
      * @param string $description
@@ -482,6 +515,16 @@ class Session
     public function getEtat()
     {
         return $this->etat;
+    }
+
+    /**
+     * Get etat
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
+     */
+    public function getEtatId()
+    {
+        return $this->etat->getId();
     }
     
     /**
@@ -708,7 +751,10 @@ class Session
             $formateur = $module->getFormateur();
             if(!is_null($formateur))
                 $this->setFormateur($formateur);
-
+            //Texte mail defaut
+            $textMailRappel = $module->getTextMailRappel();
+            if(!empty($textMailRappel))
+                $this->setTextMailRappel($textMailRappel);
         }
         
         return $this;
