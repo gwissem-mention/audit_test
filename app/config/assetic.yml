@@ -104,6 +104,10 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-nicescroll/jquery.nicescroll.min.js"
             filters : [ ?yui_js ]
+        jquery_stepy_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/stepy/lib/jquery.stepy.js"
+            filters : [ ?yui_js ]
         #CSS
         select2_css:
             inputs:

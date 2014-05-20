@@ -27,6 +27,7 @@
     "fontawesome": "~4.0.3",
     "Nestable": "https://github.com/dbushell/Nestable.git",
     "jquery-nicescroll": "*",
-    "enquire": "~2.1.0"
+    "enquire": "~2.1.0",
+    "stepy": "https://github.com/wbotelhos/stepy.git"
   }
 }

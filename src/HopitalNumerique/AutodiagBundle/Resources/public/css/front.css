@@ -1,0 +1,12 @@
+#autodiag{margin-top: 20px; position: relative}
+
+/* Colonne left */
+    #autodiag p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
+    /* Sous-menu */
+    #autodiag #chapitres ul{list-style:none; padding:0; margin-bottom: 20px}
+    #autodiag #chapitres ul li{border-top:1px solid #f0f0f0; background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
+    #autodiag #chapitres ul li div{padding:5px 0; color:#777777; font-size: 14px;}
+    #autodiag #chapitres ul li.active div,#autodiag #chapitres ul li:hover div{color:#6f3596;}
+
+/* Colonne right */
+    #autodiag .content{background-color: #f8f8f8}

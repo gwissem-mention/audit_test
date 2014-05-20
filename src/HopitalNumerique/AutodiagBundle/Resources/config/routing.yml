@@ -154,3 +154,8 @@ hopitalnumerique_autodiag_reference_question_save:
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Reference:saveQuestion" }
     requirements:
         id: \d+
+
+#Front
+hopitalnumerique_autodiag_front_outil:
+    pattern:  /autodiagnostic/{alias}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:outil" }

@@ -1,0 +1,45 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Autodiagnostic{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-autodiag-front-outil.js" 
+        '@jquery_stepy_js'
+        'bundles/hopitalnumeriqueautodiag/js/front.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-front-outil.css" filter="cssrewrite, ?yui_css" 
+        'bundles/hopitalnumeriqueautodiag/css/front.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div id="autodiag">
+        <div class="col-md-3">
+            <p class="titre">Les Chapitres</p>
+            <div id="chapitres"></div>
+        </div>
+        <div class="col-md-9" >
+            <div class="col-md-12 content">
+                <form action="#" id="wizard" class="form-horizontal">
+                    {% for chapitre in outil.chapitres %}
+                        <fieldset title="{{chapitre.title}}" >
+                            CONTENT
+                        </fieldset>
+                    {% endfor %}
+                    <input type="submit" class="finish btn-success btn" value="Submit" />
+                </form>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endblock %}
