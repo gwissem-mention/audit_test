@@ -8,6 +8,7 @@ parameters:
     #Sessions
     hopitalnumerique_module.manager.session.class: HopitalNumerique\ModuleBundle\Manager\SessionManager
     hopitalnumerique_module.grid.session.class: HopitalNumerique\ModuleBundle\Grid\SessionGrid
+    hopitalnumerique_module.grid.allsession.class: HopitalNumerique\ModuleBundle\Grid\AllSessionGrid
     hopitalnumerique_module.form.session.class: HopitalNumerique\ModuleBundle\Form\SessionType
     #Inscriptions
     hopitalnumerique_module.manager.inscription.class: HopitalNumerique\ModuleBundle\Manager\InscriptionManager
@@ -46,8 +47,13 @@ services:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
     #--Grid
+    #Sessions
     hopitalnumerique_module.grid.session:
         class: %hopitalnumerique_module.grid.session.class%
+        arguments: ["@service_container"]
+    #AllSessions
+    hopitalnumerique_module.grid.allsession:
+        class: %hopitalnumerique_module.grid.allsession.class%
         arguments: ["@service_container"]
 
     #--Formulaire

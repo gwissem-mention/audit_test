@@ -35,6 +35,26 @@ class SessionRepository extends EntityRepository
     }
 
     /**
+     * Récupère les données du grid sous forme de tableau correctement formaté
+     *
+     * @return array
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function getAllDatasForGrid( $condition )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('ses')
+            ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
+            // ->leftJoin('ses.module','module')
+            ->groupBy('ses.id')
+            ->orderBy('ses.dateSession');
+
+        return $qb;
+    }
+
+    /**
      * Retourne la liste des sessions du formateur
      *
      * @param User $user L'utilisateur concerné

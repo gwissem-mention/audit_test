@@ -53,6 +53,12 @@ hopitalnumerique_module_module_session:
     requirements: 
         _method: GET|POST
         id: \d+
+#---Index - grid - allSessions
+hopitalnumerique_module_module_allsession:
+    pattern:  /module/session/all
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Back/Session:indexAllSessions"}
+    requirements: 
+        _method: GET|POST
 
 #---Fiche
 hopitalnumerique_module_module_session_show:

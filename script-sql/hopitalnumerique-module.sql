@@ -134,3 +134,16 @@ VALUES
 INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`)
 VALUES
 	(35, '[HOPITALNUMERIQUE] - Rappel de votre inscription à une Session', 'Rappel d\'inscription d\'un utilisateur à une session', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\r\n\r\nNous vous rappelons votre inscription à la session %module qui aura lieu le %date.\r\n\r\n%texteMail\r\n\r\nCordialement,', '{\"%u\":\"Nom d\'utilisateur\",\"%module\":\"Nom du module\",\"%date\":\"Date de la session\",\"%texteMail\":\"Texte de mail à modifier.\"}');
+
+
+/* 20/05/2014 : GME - Lien de menus */
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (148, 128, 1, 'Gestion des modules', 'hopitalnumerique_module_module', '[]', NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1);
+
+UPDATE core_menu_item SET itm_parent = 148 WHERE itm_parent = 128;
+UPDATE core_menu_item SET itm_parent = 128 WHERE itm_id = 148;
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (149, 128, 1, 'Gestion des sessions', 'hopitalnumerique_module_module_allsession', '[]', NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 2);
+

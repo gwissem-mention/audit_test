@@ -50,7 +50,56 @@ class SessionManager extends BaseManager
                 'dateOuvertureInscription' => $session->getDateOuvertureInscription(),
                 'dateFermetureInscription' => $session->getDateFermetureInscription(),
                 'dateSession'              => $session->getDateSession(),
-                'duree'                    => $session->getDuree(),
+                'duree'                    => $session->getDuree()->getLibelle(),
+                'horaires'                 => $session->getHoraires(),
+                'nbInscrits'               => $nbInscritsAccepte,
+                'nbInscritsEnAttente'      => $nbInscritsEnAttente,
+                'placeRestantes'           => $nbPlacesRestantes . '/' . $session->getNombrePlaceDisponible(),
+                'etat'                     => $session->getEtat()->getLibelle()
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Override : Récupère les données pour le grid sous forme de tableau
+     *
+     * @return array
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function getAllDatasForGrid( $condition = null )
+    {
+        $sessions = $this->getRepository()->getAllDatasForGrid( $condition )->getQuery()->getResult();
+
+        $result = array();
+
+        foreach ($sessions as $key => $session) 
+        {
+            $nbInscritsAccepte   = 0;
+            $nbInscritsEnAttente = 0;
+            $nbPlacesRestantes   = $session->getNombrePlaceDisponible();
+
+            foreach ($session->getInscriptions() as $inscription) 
+            {
+                if($inscription->getEtatInscription()->getId() === 406)
+                    $nbInscritsEnAttente++;
+                elseif($inscription->getEtatInscription()->getId() === 407)
+                {
+                    $nbInscritsAccepte++;
+                    $nbPlacesRestantes--;
+                }
+            }
+
+            $result[$key] = array(
+                'id'                       => $session->getId(),
+                'moduleTitre'              => $session->getModule()->getTitre(),
+                'dateOuvertureInscription' => $session->getDateOuvertureInscription(),
+                'dateFermetureInscription' => $session->getDateFermetureInscription(),
+                'dateSession'              => $session->getDateSession(),
+                'duree'                    => $session->getDuree()->getLibelle(),
                 'horaires'                 => $session->getHoraires(),
                 'nbInscrits'               => $nbInscritsAccepte,
                 'nbInscritsEnAttente'      => $nbInscritsEnAttente,

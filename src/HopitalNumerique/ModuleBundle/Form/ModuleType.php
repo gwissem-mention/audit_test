@@ -30,7 +30,7 @@ class ModuleType extends AbstractType
                     'required' => true,
                     'label'    => 'Titre du module',
                     'attr'        => array(
-                            'class' => $this->_constraints['titre']['class']
+                        'class' => $this->_constraints['titre']['class']
                     ),
             ))
             ->add('productions', 'genemu_jqueryselect2_entity', array(
