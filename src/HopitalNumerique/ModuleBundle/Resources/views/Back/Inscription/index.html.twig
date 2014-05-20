@@ -10,6 +10,11 @@
 {% block stylesheets %}
     {{ parent() }}
     {{ block('grid_stylesheets')}}
+    {% stylesheets output="compiled/hopitalnumerique-module-inscription-index.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquemodule/css/inscription/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}

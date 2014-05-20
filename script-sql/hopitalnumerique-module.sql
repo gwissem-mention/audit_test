@@ -148,5 +148,5 @@ INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `i
 VALUES
     (149, 128, 1, 'Gestion des sessions', 'hopitalnumerique_module_module_allsession', '[]', NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 2);
 
-/* 17:47:40 Gaia (localnodevo) */ UPDATE `core_mail` SET `mail_objet` = '[HOPITALNUMERIQUE] - Refus inscription à une session', `mail_body` = 'Bonjour %u,\r\n\r\nVôtre inscription à la session %module du %date a été refusé pour le motif suivant : %textRefus.\r\n\r\nCordialement,' WHERE `mail_id` = '32';
+/* 17:47:40 Gaia (localnodevo) */ UPDATE `core_mail` SET `mail_objet` = '[HOPITALNUMERIQUE] - Refus inscription à une session', `mail_body` = 'Bonjour %u,\r\n\r\nVôtre inscription à la session %module du %date a été refusé pour le motif suivant :\r\n\r\n%textRefus.\r\n\r\nCordialement,' WHERE `mail_id` = '32';
 
