@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ModuleBundle\Controller\Back;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Inscription des actions de mass controller.
@@ -33,9 +34,13 @@ class InscriptionMassController extends Controller
      *
      * @return Redirect
      */
-    public function refuserInscriptionMassAction( $primaryKeys, $allPrimaryKeys )
+    public function refuserInscriptionMassAction( Request $request, $primaryKeys, $allPrimaryKeys )
     {
-        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 408, 'inscription');
+        //Récupération des cookies
+        $cookies = $request->cookies;
+        $textMail = $cookies->has('textMailInscription')  ? $cookies->get('textMailInscription') : 'pasDeCookie';
+        
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 408, 'inscription', array('textMailInscription' => $textMail));
     }
     
     /**
@@ -169,7 +174,7 @@ class InscriptionMassController extends Controller
      *
      * @return Redirect
      */
-    private function toggleEtat( $primaryKeys, $allPrimaryKeys, $idReference, $etat )
+    private function toggleEtat( $primaryKeys, $allPrimaryKeys, $idReference, $etat, $options = array() )
     {
         //check connected user ACL
         $user = $this->get('security.context')->getToken()->getUser();
@@ -207,8 +212,9 @@ class InscriptionMassController extends Controller
                 }
                 elseif (408 === $ref->getId())
                 {
+                    $textRefus = $options['textMailInscription'];
                     //Envoyer mail de refus de l'inscription
-                    $mails = $this->get('nodevo_mail.manager.mail')->sendRefusInscriptionMassMail($inscriptions,array());
+                    $mails = $this->get('nodevo_mail.manager.mail')->sendRefusInscriptionMassMail($inscriptions,array('textRefus' => $textRefus));
                     foreach ($mails as $mail)
                     {
                         $this->get('mailer')->send($mail);

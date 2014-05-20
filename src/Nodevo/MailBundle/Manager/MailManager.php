@@ -325,8 +325,9 @@ class MailManager extends BaseManager
         foreach ($inscriptions as $key => $inscription) 
         {
             $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
-                            'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
-                            'module'  => $inscription->getSession()->getModule()->getTitre()
+                            'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                            'module'    => $inscription->getSession()->getModule()->getTitre(),
+                            'textRefus' => $options['textRefus']
             ));
         }
     

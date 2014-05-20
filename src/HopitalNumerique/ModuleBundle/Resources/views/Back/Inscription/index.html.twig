@@ -14,7 +14,12 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ block('grid_javascripts')}}
+    {% javascripts output="compiled/hopitalnumerique-module-inscription-index.js"
+        '@jquery_cookie_js'
+        'bundles/hopitalnumeriquemodule/js/inscription/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
 {% block h1Title %}
