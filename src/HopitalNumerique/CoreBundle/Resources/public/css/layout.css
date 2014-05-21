@@ -1,5 +1,6 @@
 *{ font-family: 'Open Sans', sans-serif }
 body{ background: #E5E5E5;}
+#mobileNotReady{display: none;}
 #body{margin:0 auto; background: white; max-width: 1196px}
 #content{background: white;padding-bottom: 30px;position: relative; }
 .common-sprite { background-image: url('../img/common-sprite.png'); background-repeat: no-repeat; display: block; }
