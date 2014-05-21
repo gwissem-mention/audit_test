@@ -14,3 +14,12 @@ VALUES
     (422, NULL, 'Résultats d’imagerie, biologie, anapath', 'DOMAINE_FONCTIONNEL_CANDIDATURE', 3, 0, 0, 1, 3),
     (423, NULL, 'Programmation des ressources', 'DOMAINE_FONCTIONNEL_CANDIDATURE', 3, 0, 0, 1, 4),
     (424, NULL, 'Pilotage médico-économique', 'DOMAINE_FONCTIONNEL_CANDIDATURE', 3, 0, 0, 1, 5);
+INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`, `que_choixpossibles`)
+VALUES
+    (54, 2, 5, 'Dans quel(s) domaines(s) fonctionnel(s) avez vous mené des projets ?', 1, NULL, 9, 'domaine_fonctionnel_projet_menes', 'DOMAINE_FONCTIONNEL_CANDIDATURE', NULL);
+INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`, `que_choixpossibles`)
+VALUES
+    (55, 2, 2, 'Description de votre expérience', 1, NULL, 10, 'description_votre_experience', NULL, NULL);
+
+/* 12:25:01 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_ordre` = '11' WHERE `que_id` = '16';
+

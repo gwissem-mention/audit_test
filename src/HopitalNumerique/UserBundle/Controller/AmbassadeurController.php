@@ -39,6 +39,7 @@ class AmbassadeurController extends Controller
             'questionnaire'      => $questionnaire,
             'user'               => $user,
             'optionRenderForm'   => array(
+                'showAllQuestions'   => false,
                 'readOnly'           => $readOnly,
                 'envoieDeMail'       => true,
                 'themeQuestionnaire' => $themeQuestionnaire,
