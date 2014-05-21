@@ -22,4 +22,8 @@ VALUES
     (55, 2, 2, 'Description de votre expérience', 1, NULL, 10, 'description_votre_experience', NULL, NULL);
 
 /* 12:25:01 Gaia (localnodevo) */ UPDATE `hn_questionnaire_question` SET `que_ordre` = '11' WHERE `que_id` = '16';
+INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`, `que_choixpossibles`)
+VALUES
+    (56, 2, 2, 'Avis du CMSI', 0, 'hideQuestion', 12, 'avis_du_CMSI', NULL, NULL);
+
 
