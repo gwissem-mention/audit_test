@@ -4,7 +4,7 @@
 #homepage .home-left{ }
 #homepage .home-left > img{ width: 100%}
 #homepage .home-left h1{color:#333333; font-size: 14px; font-weight: bold;}
-#homepage .home-left p{color:#777777; font-size: 12px;}
+#homepage .home-left p{color:#777777; font-size: 12px; text-align: justify;}
 #homepage .home-left h3{ font-size: 18px; font-weight: bold; margin-top: 28px;}
 #homepage .home-left .actus{ width: 100% }
 #homepage .home-left .actus .actu { font-size: 12px; margin-top: 20px }
