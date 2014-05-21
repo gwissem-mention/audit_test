@@ -30,6 +30,16 @@
         </div>
         <div class="col-md-9" >
             <h2>{{outil.title}}</h2>
+
+            <div class="options">
+                <div class="btn-toolbar">
+                    <div onclick="$('#action').val('valid');$('#wizard').submit();" class="finish btn btn-success btn-sm" ><i class="fa fa-check"></i></div>
+                    {% if app.user %}
+                        <div onclick="$('#action').val('save');$('#wizard').submit();" class="finish btn btn-primary btn-sm" ><i class="fa fa-save"></i></div>
+                    {% endif %}
+                </div>
+            </div>
+
             <div class="col-md-12 content">
                 {% set formName = outil.alias %}
                 <form action="{{path('hopitalnumerique_autodiag_front_save', {'id':outil.id})}}" id="wizard" class="form-horizontal" method="POST">
@@ -83,21 +93,8 @@
                                 </div>
                             {% endfor %}
                         </fieldset>
-                    {% endfor %}
-                    
-                    <hr />
-                    
+                    {% endfor %}                    
                     <input type="hidden" name="action" id="action" value="" />
-
-                    {% if app.user %}
-                        <div class="col-md-6">
-                            <div onclick="$('#action').val('save');$('#wizard').submit();" class="finish btn btn-primary btn-block" >Enregistrer l'outil</div>
-                        </div>
-                    {% endif %}
-
-                    <div class="col-md-6 {% if not app.user %}col-md-offset-3{% endif %}">
-                        <div onclick="$('#action').val('valid');$('#wizard').submit();" class="finish btn btn-success btn-block" >Valider l'outil</div>
-                    </div>
                 </form>
             </div>
             <div class="clearfix"></div>
