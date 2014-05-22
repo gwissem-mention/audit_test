@@ -29,6 +29,13 @@ class Reponse
     private $value;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="rep_remarque", type="string", length=512)
+     */
+    private $remarque;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Resultat", cascade={"persist"})
      * @ORM\JoinColumn(name="res_id", referencedColumnName="res_id", onDelete="CASCADE")
      */
@@ -79,6 +86,27 @@ class Reponse
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * Get remarque
+     *
+     * @return string $remarque
+     */
+    public function getRemarque()
+    {
+        return $this->remarque;
+    }
+    
+    /**
+     * Set remarque
+     *
+     * @param string $remarque
+     */
+    public function setRemarque($remarque)
+    {
+        $this->remarque = $remarque;
+        return $this;
     }
 
     /**

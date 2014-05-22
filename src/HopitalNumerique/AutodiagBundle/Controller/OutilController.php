@@ -203,4 +203,17 @@ class OutilController extends Controller
 
         return new Response('{"success":true, "message" : "Les pondérations de votre outil ont été mis à jour."}', 200);
     }
+
+    /**
+     * Action appelée dans le plugin "Outil" pour tinymce
+     */
+    public function getOutilsAction()
+    {
+        $outils = $this->get('hopitalnumerique_autodiag.manager.outil')->findAll();
+
+        return $this->render('HopitalNumeriqueAutodiagBundle:Outil:getOutils.html.twig', array(
+            'outils' => $outils,
+            'texte' => $this->get('request')->request->get('texte')
+        ));
+    }
 }

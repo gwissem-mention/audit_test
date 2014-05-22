@@ -31,7 +31,7 @@ class Resultat
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="res_date_validation", type="datetime")
+     * @ORM\Column(name="res_date_validation", type="datetime", nullable=true)
      */
     private $dateValidation;
 

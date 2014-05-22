@@ -26,6 +26,10 @@ hopitalnumerique_autodiag_outil_ponderation:
     requirements: 
         id : \d+
 
+hopitalnumerique_autodiag_get_outils:
+    pattern:  /admin/getOutils
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Outil:getOutils" }
+
 #Catégories
 hopitalnumerique_autodiag_categorie:
     pattern:  /admin/outil/{id}/categorie
@@ -163,5 +167,11 @@ hopitalnumerique_autodiag_front_outil:
 hopitalnumerique_autodiag_front_save:
     pattern:  /autodiagnostic/{id}/save
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:save" }
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_front_resultat:
+    pattern:  /autodiagnostic/resultat/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:resultat" }
     requirements:
         id: \d+

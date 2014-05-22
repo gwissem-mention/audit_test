@@ -50,7 +50,7 @@ class Question
     /**
      * @var float
      *
-     * @ORM\Column(name="que_ponderation", type="float", options = {"comment" = "Pondération de la question"})
+     * @ORM\Column(name="que_ponderation", type="float", options = {"comment" = "Ponderation de la question"})
      * @Nodevo\Javascript(class="validate[required,custom[number], min[0], max[100]]")
      */
     private $ponderation;

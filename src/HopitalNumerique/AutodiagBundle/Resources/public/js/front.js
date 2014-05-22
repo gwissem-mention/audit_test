@@ -10,4 +10,91 @@ $(document).ready(function() {
         nextLabel    : 'Chapitre suivant',
         titleTarget  : '#chapitres'
     });
+
+    //add remarques input toggle
+    $('.remarques-toggle').click(function(){
+        $('#'+$(this).data('target')).slideToggle();
+    });
+
+    //init avancement
+    calcAvancement();
+
+    //calcul avancement on each answer by type
+    $('#wizard fieldset select').on('change', function(){
+        calcAvancement();
+    });
+    $('#wizard fieldset input.question').on('blur', function(){
+        calcAvancement();
+    });
+    $('#wizard fieldset .radios input').on('click', function(){
+        calcAvancement();
+    });
 });
+
+//Truncate l'avancement affiché
+function truncate(n) {
+    return Math[n > 0 ? "floor" : "ceil"](n);
+}
+
+//calcul l'avancement/le remplissage du questionnaire
+function calcAvancement()
+{
+    totalQuestions         = 0;
+    totalQuestionsAnswered = 0;
+
+    $('#wizard fieldset').each(function(){
+        //get some values
+        step                = $(this).attr('id').replace('wizard-step-', '');
+        nbQuestions         = 0;
+        nbQuestionsAnswered = 0;
+
+        //parcours des questions
+        $(this).find('.form-group').each(function(){
+            //select
+            if( $(this).find('select').length != 0 && $(this).find('select').val() != "-1" )
+                nbQuestionsAnswered++;
+            //radio
+            else if ( $(this).find('.radios').length != 0 ){ 
+                $(this).find('.radios input').each(function(){
+                    if( $(this).prop('checked') ){
+                        nbQuestionsAnswered++;
+                        return false;
+                    }
+                });
+            //text
+            }else if( $(this).find('input.question').length != 0 && $(this).find('input.question').val() != '' )
+                nbQuestionsAnswered++;
+
+            nbQuestions++;
+        });
+
+        avancement = nbQuestions > 0 ? truncate((nbQuestionsAnswered * 100) / nbQuestions) : 0;
+
+        //update liste
+        avancement = avancement < 100 ? '<span class="text-muted">'+avancement+'%</span>' : '<span class="text-success"><i class="fa fa-check"></i></span>';
+        $('#wizard-header li#wizard-head-'+step+' div span').remove();
+        $('#wizard-header li#wizard-head-'+step+' div').append( avancement );
+
+        totalQuestions += nbQuestions;
+        totalQuestionsAnswered += nbQuestionsAnswered;
+    });
+
+    avancementTotal = totalQuestions > 0 ? truncate((totalQuestionsAnswered * 100) / totalQuestions) : 0;
+    $('#autodiag .progress-bar').css('width', avancementTotal + '%');
+    $('#autodiag #remplissage').val( avancementTotal );
+}
+
+//enregistre ou valide le questionnaire
+function saveQuestionnaire( type )
+{
+    $('#action').val( type );
+
+    if( type == 'valid' ){
+        apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+            if(r) { 
+                $('#wizard').submit();
+            }
+        });
+    }else
+        $('#wizard').submit();
+}

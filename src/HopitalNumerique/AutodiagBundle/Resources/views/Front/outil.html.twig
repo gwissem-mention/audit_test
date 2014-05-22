@@ -7,6 +7,7 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-autodiag-front-outil.js" 
         '@jquery_stepy_js'
+        'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/hopitalnumeriqueautodiag/js/front.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -16,6 +17,7 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-autodiag-front-outil.css" filter="cssrewrite, ?yui_css" 
+        'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriqueautodiag/css/front.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -27,15 +29,18 @@
         <div class="col-md-3">
             <p class="titre">Les chapitres</p>
             <div id="chapitres"></div>
+            <div class="progress progress-striped">
+                <div class="progress-bar progress-bar-success" style="width: 0"></div>
+            </div>
         </div>
         <div class="col-md-9" >
             <h2>{{outil.title}}</h2>
 
             <div class="options">
                 <div class="btn-toolbar">
-                    <div onclick="$('#action').val('valid');$('#wizard').submit();" class="finish btn btn-success btn-sm" ><i class="fa fa-check"></i></div>
+                    <div onclick="saveQuestionnaire('valid');" class="finish btn btn-success btn-sm" ><i class="fa fa-check"></i></div>
                     {% if app.user %}
-                        <div onclick="$('#action').val('save');$('#wizard').submit();" class="finish btn btn-primary btn-sm" ><i class="fa fa-save"></i></div>
+                        <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary btn-sm" ><i class="fa fa-save"></i></div>
                     {% endif %}
                 </div>
             </div>
@@ -46,7 +51,7 @@
                     {% for chapitre in outil.chapitres %}
                         {# Build vars to make it cleaner #}
                         {% set fieldsetName = formName ~ '[' ~ chapitre.id ~ ']' %}
-                        {% set fieldsetId = formName ~ '_' ~ chapitre.id %}
+                        {% set fieldsetId   = formName ~ '_' ~ chapitre.id %}
 
                         {# Build step #}
                         <fieldset title="{{chapitre.title}}" >
@@ -55,7 +60,7 @@
                             {% for question in chapitre.questions %}
                                 {# Build vars to make it cleaner #}
                                 {% set questionName = fieldsetName ~ '[' ~ question.id ~ ']' %}
-                                {% set questionId = fieldsetId ~ '_' ~ question.id %}
+                                {% set questionId   = fieldsetId ~ '_' ~ question.id %}
 
                                 {# Build form group #}
                                 <div class="form-group">
@@ -66,12 +71,13 @@
                                         {{question.texte}}
                                         <span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>
                                     </label>
-                                    <div class="col-md-8">
+                                    <div class="col-md-7">
                                         {# SELECT #}
                                         {% if question.type.id == '415' %}
                                             {% set options = question.options|nl2br|split('<br />') %}
                                             <select name="{{questionName}}" id="{{questionId}}" class="form-control">
-                                                <option value="-1">Non concerné</option>
+                                                <option value="-1"> - </option>
+                                                <option value="0">Non concerné</option>
                                                 {% for option in options %}
                                                     {% set datas = option|split(';') %}
                                                     <option value="{{datas[0]}}">{{datas[1]|capitalize}}</option>
@@ -80,22 +86,40 @@
                                         {# RADIO #}
                                         {% elseif question.type.id == '416' %}
                                             {% set options = question.options|nl2br|split('<br />') %}
-                                            <div class="radio block"><label><input type="radio" value="-1" name="{{questionName}}" id="{{questionId}}" checked="" />Non concerné</label></div>
-                                            {% for option in options %}
-                                                {% set datas = option|split(';') %}
-                                                <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" />{{datas[1]|capitalize}}</label></div>
-                                            {% endfor %}
+                                            <div class="radios">
+                                                <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" />Non concerné</label></div>
+                                                {% for option in options %}
+                                                    {% set datas = option|split(';') %}
+                                                    <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" />{{datas[1]|capitalize}}</label></div>
+                                                {% endfor %}
+                                            </div>
                                         {# TEXT #}
                                         {% else %}
-                                            <input type="text" class="form-control input-sm" name="{{questionName}}" id="{{questionId}}" />
+                                            <input type="text" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" />
                                         {% endif %}
+
+                                        <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="display:none" placeholder="Remarques" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i class="fa fa-edit"></i></div>
                                     </div>
                                 </div>
                             {% endfor %}
                         </fieldset>
                     {% endfor %}                    
                     <input type="hidden" name="action" id="action" value="" />
+                    <input type="hidden" name="remplissage" id="remplissage" value="0" />
                 </form>
+
+                <script>
+                    $(document).ready(function() {
+                        
+                    });
+
+                    
+
+                    
+                </script>
             </div>
             <div class="clearfix"></div>
         </div>
