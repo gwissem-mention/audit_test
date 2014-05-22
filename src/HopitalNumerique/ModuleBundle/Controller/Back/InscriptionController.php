@@ -26,6 +26,35 @@ class InscriptionController extends Controller
 
         return $grid->render('HopitalNumeriqueModuleBundle:Back/Inscription:index.html.twig', array('session' => $session));
     }
+
+    /**
+     * Affiche le formulaire d'ajout de Session.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function addAction(\HopitalNumerique\ModuleBundle\Entity\Session $session)
+    {
+        $inscription = $this->get('hopitalnumerique_module.manager.inscription')->createEmpty();
+        //Valeurs par défaut lors de la création
+        $inscription->setSession( $session );
+        $inscription->setEtatEvaluation($this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 27) ));
+
+        return $this->renderForm('hopitalnumerique_module_addinscription', $inscription, 'HopitalNumeriqueModuleBundle:Back/Inscription:edit.html.twig' );
+    }
+
+    /**
+     * Affiche le formulaire d'édition de Session.
+     *
+     * @param integer $id Id de Session.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function editAction( \HopitalNumerique\ModuleBundle\Entity\Inscription $inscription )
+    {
+        return $this->renderForm('hopitalnumerique_module_addinscription', $inscription, 'HopitalNumeriqueModuleBundle:Back/Inscription:edit.html.twig' );
+    }
     
     /**
      * Passe l'état de l'inscription à 'acceptée'
@@ -101,4 +130,51 @@ class InscriptionController extends Controller
         return $this->redirect( $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id' => $inscription->getSession()->getId())) );
     }
 
+    /**
+     * Effectue le render du formulaire Inscritpion.
+     *
+     * @param string        $formName       Nom du service associé au formulaire
+     * @param Inscritpion   $inscritpion    Entité $session
+     * @param string        $view           Chemin de la vue ou sera rendu le formulaire
+     *
+     * @return Form | redirect
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    private function renderForm( $formName, $inscription, $view )
+    {
+        //Création du formulaire via le service
+        $form = $this->createForm( $formName, $inscription);
+
+        $request = $this->get('request');
+        
+        // Si l'utilisateur soumet le formulaire
+        if ('POST' == $request->getMethod()) {
+            
+            // On bind les données du form
+            $form->handleRequest($request);
+
+            //si le formulaire est valide
+            if ($form->isValid()) {
+                //test ajout ou edition
+                $new = is_null($inscription->getId());
+
+                //On utilise notre Manager pour gérer la sauvegarde de l'objet
+                $this->get('hopitalnumerique_module.manager.inscription')->save($inscription);
+                
+                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Inscription ' . ($new ? 'ajoutée.' : 'mise à jour.') ); 
+                
+                //on redirige vers la page index ou la page edit selon le bouton utilisé
+                $do = $request->request->get('do');
+                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id' => $inscription->getSession()->getId())) : $this->generateUrl('hopitalnumerique_module_module_session_inscription_edit', array( 'id' => $inscription->getId() ) ) ) );
+            }
+        }
+
+        return $this->render( $view , array(
+            'form'        => $form->createView(),
+            'inscription' => $inscription
+        ));
+    }
 }

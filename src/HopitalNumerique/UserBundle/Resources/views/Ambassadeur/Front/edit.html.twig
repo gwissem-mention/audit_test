@@ -4,6 +4,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-user-ambassadeur-front-edit.css" filter="cssrewrite, ?yui_css"
         "@validationEngine_css"
+        "@select2_css"
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -14,6 +15,7 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-user-ambassadeur-front-edit.js"
         "@validationEngine_js"
+        "@select2_js"
         'bundles/hopitalnumeriqueuser/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

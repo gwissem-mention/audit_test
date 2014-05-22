@@ -16,7 +16,7 @@ class ModuleFrontController extends Controller
     public function indexAction()
     {
         //Récupération de l'ensemble des modules
-        $modules = $this->get('hopitalnumerique_module.manager.module')->findBy(array('statut' => 3));
+        $modules = $this->get('hopitalnumerique_module.manager.module')->findBy(array('statut' => 3), array('titre' => 'ASC'));
 
         return $this->render('HopitalNumeriqueModuleBundle:Front/Module:index.html.twig', array( 
             'modules'           => $modules
@@ -45,7 +45,7 @@ class ModuleFrontController extends Controller
     public function menuModulesAction(\HopitalNumerique\ModuleBundle\Entity\Module $module = null)
     {
         //Récupération de l'entité passée en paramètre
-        $modules = $this->get('hopitalnumerique_module.manager.module')->findBy(array('statut' => 3));
+        $modules = $this->get('hopitalnumerique_module.manager.module')->findBy(array('statut' => 3), array('titre' => 'ASC'));
 
         return $this->render('HopitalNumeriqueModuleBundle:Front/Module:menu_modules.html.twig', array( 
             'modules'           => $modules,
