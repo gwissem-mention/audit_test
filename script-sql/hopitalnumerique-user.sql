@@ -25,5 +25,3 @@ VALUES
 INSERT INTO `hn_questionnaire_question` (`que_id`, `qst_id`, `typ_question`, `que_libelle`, `que_obligatoire`, `que_verifJS`, `que_ordre`, `que_alias`, `que_reference_param_tri`, `que_choixpossibles`)
 VALUES
     (56, 2, 2, 'Avis du CMSI', 0, 'hideQuestion', 12, 'avis_du_CMSI', NULL, NULL);
-
-
