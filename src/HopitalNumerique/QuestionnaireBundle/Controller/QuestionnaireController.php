@@ -241,7 +241,7 @@ class QuestionnaireController extends Controller
                 
                 //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
                 $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
-                
+
                 //Gestion des réponses
                 foreach ($params as $key => $param)
                 {
@@ -271,6 +271,17 @@ class QuestionnaireController extends Controller
                     if('entity' === $typeParam)
                     {
                         $reponse->setReference($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $param)));
+                    }
+                    elseif('entitymultiple' === $typeParam)
+                    {
+                        $reponse->setReponse("");
+
+                        $reponse->setReferenceMulitple(array());
+
+                        foreach ($param as $value) 
+                        {
+                            $reponse->addReferenceMulitple($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $value)));
+                        }
                     }
     
                     //Test ajout ou edition

@@ -188,6 +188,28 @@ class QuestionnaireType extends AbstractType
             	            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReference()
             	    ));
             	    break;
+                //Les entity ne sont prévues que pour des entités de Référence (TODO : mettre en base la class et le property ?)
+                case 'entitymultiple':
+                    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'entity', array(
+                            'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                            'property'    => 'libelle',
+                            'required'    => $question->getObligatoire(),
+                            'label'       => $question->getLibelle(),
+                            'mapped'      => false,
+                            'multiple'    => true,
+                            'read_only'   => $this->_readOnly,
+                            'disabled'    => $this->_readOnly,
+                            'empty_value' => ' - ',
+                            'attr'        => $attr,
+                            'query_builder' => function(EntityRepository $er) use ($question){
+                                return $er->createQueryBuilder('ref')
+                                ->where('ref.code = :etat')
+                                ->setParameter('etat', $question->getReferenceParamTri())
+                                ->orderBy('ref.order', 'ASC');
+                            },
+                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReferenceMulitple()
+                    ));
+                    break;
             	case 'file':  
                     $attr = $question->getObligatoire() ? array('class' => 'inputUpload validate[required]') : array();          	    
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'file', array(
