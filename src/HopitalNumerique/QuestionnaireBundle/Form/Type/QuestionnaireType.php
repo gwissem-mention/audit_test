@@ -24,11 +24,11 @@ class QuestionnaireType extends AbstractType
      */
     public function __construct($managerReponse, $managerQuestion, $managerQuestionnaire, $validator, $managerInterventionDemande)
     {
-        $this->_managerReponse       = $managerReponse;
-        $this->_managerQuestion      = $managerQuestion;
-        $this->_managerQuestionnaire = $managerQuestionnaire;
+        $this->_managerReponse             = $managerReponse;
+        $this->_managerQuestion            = $managerQuestion;
+        $this->_managerQuestionnaire       = $managerQuestionnaire;
         $this->_managerInterventionDemande = $managerInterventionDemande;
-        $this->_constraints          = $managerQuestionnaire->getConstraints( $validator );
+        $this->_constraints                = $managerQuestionnaire->getConstraints( $validator );
     }
 
     /**
@@ -42,7 +42,7 @@ class QuestionnaireType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $idUser          = (isset($options['label_attr']['idUser']) && !is_null($options['label_attr']['idUser'])) ? $options['label_attr']['idUser'] : 0;
-        $idQuestionnaire = (isset($options['label_attr']['idQuestionnaire']) && !is_null($options['label_attr']['idQuestionnaire'])) ? $options['label_attr']['idQuestionnaire'] : 0;        
+        $idQuestionnaire = (isset($options['label_attr']['idQuestionnaire']) && !is_null($options['label_attr']['idQuestionnaire'])) ? $options['label_attr']['idQuestionnaire'] : 0;
         $questionnaire   = $this->_managerQuestionnaire->findOneBy(array('id' => $idQuestionnaire));
         
        /*
@@ -53,7 +53,11 @@ class QuestionnaireType extends AbstractType
         *  )
         **/
         $routeRedirection = (isset($options['label_attr']['routeRedirection']) && !is_null($options['label_attr']['routeRedirection'])) ? $options['label_attr']['routeRedirection'] : array();
-        $this->_readOnly = (isset($options['label_attr']['readOnly']) && !is_null($options['label_attr']['readOnly'])) ? $options['label_attr']['readOnly'] : false;
+        $this->_readOnly  = (isset($options['label_attr']['readOnly']) && !is_null($options['label_attr']['readOnly'])) ? $options['label_attr']['readOnly'] : false;
+
+        //Si le showAllQuestions n'est pas reinseigné, par défaut on les affiches toutes
+        if((!isset($options['label_attr']['showAllQuestions']) || is_null($options['label_attr']['showAllQuestions'])))
+            $options['label_attr']['showAllQuestions'] = true;
         
         //Ajout d'un champ hidden pour récupérer les routes de redirection dans le controleur à la validation
         $builder->add('routeRedirect', 'hidden', array(
@@ -105,6 +109,18 @@ class QuestionnaireType extends AbstractType
             //Dans le cas où le champ est obligatoire on ajoute automatiquement le contrôle JS dessus
             // il sera surchargé si le champ controle JS est rempli pour la question courante
             $attr = $question->getObligatoire() ? array('class' => 'validate[required]') : array();
+
+            if(!$options['label_attr']['showAllQuestions'])
+            {
+                //Récupère les classes de la question
+                $classes = split(' ', $question->getVerifJS());
+                //Vérifie si on doit afficher la question
+                $hide = in_array('hideQuestion', $classes);
+
+                //Si la question est à cacher alors on ne la créée pas
+                if($hide)
+                    break;
+            }
         
             switch ($question->getTypeQuestion()->getLibelle())
             {
@@ -120,6 +136,24 @@ class QuestionnaireType extends AbstractType
             	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
             	    ));
             	    break;
+                case 'choice':
+                    //Récupération de la liste des choix de la question
+                    $choix = !is_null($question->getChoixPossibles()) ? json_decode($question->getChoixPossibles()) : array('Oui','Non');
+
+                    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
+                            'required'    => $question->getObligatoire(),
+                            'label'       => $question->getLibelle(),
+                            'mapped'      => false,
+                            'read_only'   => $this->_readOnly,
+                            'disabled'    => $this->_readOnly,
+                            'choices'     => $choix,
+                            'empty_value' => false,
+                            'expanded'    => true,
+                            'multiple'    => false,
+                            'attr'        => array('class' => 'radio'),
+                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReponse()
+                    ));
+                    break;
             	case 'checkbox':
                     $attr = $question->getObligatoire() ? array('class' => 'checkbox validate[required]') : array();
 

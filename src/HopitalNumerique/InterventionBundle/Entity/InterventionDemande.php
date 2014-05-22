@@ -125,6 +125,13 @@ class InterventionDemande
     private $refusMessage;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="interv_total", type="integer", nullable=true)
+     */
+    private $total;
+
+    /**
      * @var \HopitalNumerique\UserBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="interventionDemandesReferent")
@@ -259,7 +266,6 @@ class InterventionDemande
      *     @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")
      *   }
      * )
-     * @Assert\Count(min=1,minMessage="Au moins une production doit être choisie.")
      */
     private $objets;
 
@@ -278,13 +284,21 @@ class InterventionDemande
     private $interventionRegroupementsDemandesRegroupees;
     
     /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\PaiementBundle\Entity\Facture", cascade={"persist"}, inversedBy="interventions")
+     * @ORM\JoinColumn(name="fac_id", referencedColumnName="fac_id", nullable=true)
+     */
+    protected $facture;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->ambassadeurs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ambassadeurs   = new \Doctrine\Common\Collections\ArrayCollection();
         $this->etablissements = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objets         = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facture        = null;
+        $this->total          = null;
     }
 
     /**
@@ -1073,4 +1087,46 @@ class InterventionDemande
     {
         return ($this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId());
     }
+
+    /**
+     * Get facture
+     *
+     * @return \HopitalNumerique\PaiementBundle\Entity\Facture $facture
+     */
+    public function getFacture()
+    {
+        return $this->facture;
+    }
+    
+    /**
+     * Set facture
+     *
+     * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture
+     */
+    public function setFacture(\HopitalNumerique\PaiementBundle\Entity\Facture $facture)
+    {
+        $this->facture = $facture;
+        return $this;
+    }
+
+    /**
+     * Get total
+     *
+     * @return integer $total
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+    
+    /**
+     * Set total
+     *
+     * @param integer $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+        return $this;
+    }    
 }

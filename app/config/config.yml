@@ -24,6 +24,16 @@ framework:
     fragments:       ~
     http_method_override: true
 
+# Mise en place des services
+services:
+    twig.extension.text:
+       class: Twig_Extensions_Extension_Text
+       tags:
+           - { name: twig.extension }
+    logout_handler:
+        class: HopitalNumerique\UserBundle\Handler\LogoutHandler
+        arguments: ["@hopitalnumerique_objet.manager.objet", "@security.context"]
+
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"
@@ -127,7 +137,19 @@ hopital_numerique_questionnaire:
         idRoles:
             expert: 1
             ambassadeur: 2
+            module-evaluation: 4
 
 hopital_numerique_contact:
     options:
         mailsContact: %confighn_hopitalnumerique_contact%
+
+#html to Pdf
+knp_snappy:
+    pdf:
+        enabled: true
+        binary: %wkhtmltopdf%
+        options: []
+    image:
+        enabled: true
+        binary: %wkhtmltoimage%
+        options: []

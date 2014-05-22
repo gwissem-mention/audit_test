@@ -40,6 +40,9 @@ class ContactController extends Controller
      * @param string  $view     Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
      */
     private function renderForm( $formName, $contact, $view, $routeRedirection, $parametres = array() )
     {

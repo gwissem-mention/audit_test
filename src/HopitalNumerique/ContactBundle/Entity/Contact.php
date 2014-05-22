@@ -9,10 +9,11 @@ use Nodevo\ContactBundle\Entity\Contact as NodevoContact;
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
-
 /**
  * Contact
  *
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
  * @ORM\Table("hn_contact")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ContactBundle\Repository\ContactRepository")
  */
@@ -68,11 +69,11 @@ class Contact extends NodevoContact
      * @Assert\Length(
      *      min = "1",
      *      max = "255",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'autre structure de rattachement.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'autre structure de rattachement."
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente."
      * )
      * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
-     * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Autre structure de rattachement santé de l utilisateur"})
+     * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Nom de votre établissement si non disponible dans la liste précédente santé de l utilisateur"})
      */
     protected $autreStructureRattachementSante;
 

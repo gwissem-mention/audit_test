@@ -16,7 +16,7 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-user-informations_personnelles-editer.js" 
+    {% javascripts output="compiled/hopitalnumerique-user-informations_personnelles-edit.js" 
         "@select2_js" 
         "@validationEngine_js"
         "@jquery_maskedinput_js"
@@ -50,7 +50,7 @@
                     
                     {# Formulaire : #}
 		            <div class="form-group">
-                        <label class="control-label col-md-4">Nom du compte</label>
+                        <label class="control-label col-md-4">Identifiant (login)</label>
                         <div class="username col-md-7">{{ user.username }}</div>
                     </div>
 	                <div class="clearfix"></div>
@@ -131,11 +131,16 @@
 
 {% block footerDesc %}
 	   <div id ="footerDesc">
-			<p>
-				Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».
-			</p>
-			<p>
-				Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
-			</p>
+			<div class="text">
+                <p>
+    				Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».
+    			</p>
+    			<p>
+    				Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
+    			</p>
+            </div>
+            <div class="lien">
+                <a target="_blank" href="{{path('hopital_numerique_user_desinscription')}}">Me désinscrire de Mon Hôpital Numérique</a>
+            </div>
 		</div>
 {% endblock %}

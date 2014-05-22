@@ -1,0 +1,104 @@
+{% extends 'HopitalNumeriqueModuleBundle:Front:layout.html.twig' %}
+
+{# Importation de la librairie de maccro de modules #}
+{% import 'HopitalNumeriqueModuleBundle:Maccros:maccros.html.twig' as moduleMaccros %}
+
+{% block menu_modules %}
+    <div id="module-menu">
+        {# Render de la vue de récupérations des différentes modules #}
+        {{ render(controller("HopitalNumeriqueModuleBundle:Front/ModuleFront:menuModules", {'module' : moduleSelectionne} )) }}
+    </div>
+{% endblock menu_modules %}
+
+{% block chapo_titre %}Modules thématiques{% endblock chapo_titre %}
+
+{% block chapo_description %}
+    Vous êtes libres de vous inscrire à toute session susceptible de vous intéresser. Vous êtes engagé à participer à au moins 1 session par an. Au delà de la participation à 3 sessions, l'Anap se réserve le droit de refuser votre demande pour des questions de prise en charge des frais.
+{% endblock chapo_description %}
+
+{% block contenu %}
+    <div class="col-md-12">
+        {% if moduleSelectionne %}
+            <div class="panel">
+                <div class="col-md-12 table-responsive table-module">
+
+                    <h4 class="violet titre">{{session.module.titre}} - Session du {{session.dateSession|date('d/m/Y')}}</h4>
+
+                    <div class="description">
+                        <p>
+                            <strong>Productions concernées : </strong>
+                            <ul>
+                                {% for key,production in session.module.productions %}
+                                    <li>{{ production.titre }}</li>
+                                {% endfor %}
+                            </ul>
+                        </p>
+                    </div>
+                    <div class="clearfix"></div>
+                    
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            {# Utilisateur pas inscrit et il reste des places #}
+            {% if (not session.userIsInscrit(app.user)) and ( (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 ) %}
+                <div class="panel">
+                    <div class="col-md-12 table-responsive table-module">
+
+                        <h4 class="violet titre">Inscrivez-vous !</h4>
+
+                        <div class="description">
+                            {# Render de la vue de récupérations des différentes modules #}
+                            {{ render(controller("HopitalNumeriqueModuleBundle:Front/InscriptionFront:add", {'session' : session} )) }} 
+                            
+                            <div class="col-md-10 col-md-offset-2">
+                                <input onclick="$('form').submit();" class="btn btn-success col-md-6 pull-right submit questionnaire_submit" value="ENVOYER MA DEMANDE D'INSCRIPTION" type="button"/>
+                            </div>
+                            <div class="clearfix"></div>
+
+                        </div>
+                        <div class="clearfix"></div>
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            {# Utilisateur pas inscrit et il ne reste plus de places #}
+            {% elseif (not session.userIsInscrit(app.user)) and ( (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) == 0 ) %}
+                <div class="panel">
+                    <div class="col-md-12 table-responsive table-module">
+
+                        <h4 class="violet titre">Session complète. Autres sessions du même module thèmatique :</h4>
+
+                        <div class="description">
+                            <div id="grid_session" style="margin-top:5px">
+                                {{ moduleMaccros.createTableauSession(session.module) }}
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+            {# Utilisateur inscrit #}
+            {% elseif session.userIsInscrit(app.user) %}
+                <div class="panel">
+                    <div class="col-md-12 table-responsive table-module">
+
+                        <h4 class="violet titre">Vous êtes inscrit à cette session</h4>
+
+                        <div class="description">
+                            <p>Vous êtes déjà inscrit à cette session, vous recevrez un mail de confirmation de participation dans les plus brefs délais.
+                            Vous pouvez suivre votre demande dans votre <a href="{{path('hopitalnumerique_module_inscription_index_front')}}">tableau de bord</a>.</p>
+                        </div>
+                        <div class="clearfix"></div>
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="clearfix"></div>
+{% endblock contenu %}

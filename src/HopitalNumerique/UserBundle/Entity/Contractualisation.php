@@ -78,7 +78,7 @@ class Contractualisation
      *
      * @GRID\Column(field="typeDocument.libelle")
      */
-    protected $typeDocument;    
+    protected $typeDocument;
 
     /**
      * @var integer
@@ -86,7 +86,7 @@ class Contractualisation
      * @ORM\ManyToOne(targetEntity="User", inversedBy="contractualisations")
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
      */
-    private $user;    
+    private $user;
 
     /**
      * Get id

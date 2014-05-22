@@ -1,0 +1,15 @@
+hopital_numerique_module_admin:
+    resource: "@HopitalNumeriqueModuleBundle/Resources/config/routing/routing_admin.yml"
+    prefix:   /admin
+
+hopital_numerique_module_front:
+    resource: "@HopitalNumeriqueModuleBundle/Resources/config/routing/routing_front.yml"
+    prefix:   /module
+
+hopital_numerique_module_front_comptehn:
+    resource: "@HopitalNumeriqueModuleBundle/Resources/config/routing/routing_comptehn.yml"
+    prefix:   /compte-hn
+
+hopital_numerique_module_front_cron:
+    resource: "@HopitalNumeriqueModuleBundle/Resources/config/routing/routing_cron.yml"
+    prefix:   /

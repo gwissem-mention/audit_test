@@ -1,0 +1,42 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{# Grid mandatory Stuff #}
+{% use 'NodevoGridBundle::grid.config.html.twig' %}
+
+{% block title %}
+	Hôpital Numérique - Modules
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('grid_stylesheets')}}
+    {% stylesheets output="compiled/hopitalnumerique-module-inscription-index.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquemodule/css/inscription/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-module-inscription-index.js"
+        '@jquery_cookie_js'
+        'bundles/hopitalnumeriquemodule/js/inscription/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block h1Title %}
+    Gestion des inscriptions de la session du <strong>{{session.dateSession|date('d/m/Y')}}</strong> du module <strong>{{session.getModule().getTitre()}}</strong>
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module_session', {'id' : session.module.id}) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module_session_impression_fiche', {'id' : session.id}) }}" title="Impression de la fiche de présence"><i class="fa fa-external-link"></i></a>
+{% endblock %}
+
+{% block body %}
+    {{ grid(grid, _self) }}
+{% endblock %}
+

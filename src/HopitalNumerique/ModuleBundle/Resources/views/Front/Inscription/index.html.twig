@@ -1,0 +1,123 @@
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-module-front-inscription-index.css" filter="cssrewrite, ?yui_css"
+        "@fancybox_css" 
+        'bundles/hopitalnumeriquemodule/css/Front/inscription/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-module-front-inscription-index.js"
+        "@fancybox_js"
+        'bundles/hopitalnumeriquemodule/js/Front/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block headerTitle %}Modules Thématiques{% endblock %}
+{% block headerDesc %}
+    <p>Retrouvez ici vos demandes et participations aux sessions de montée en compétence (MAPF et sessions thématiques).</p>
+{% endblock %}
+
+{% block content %}
+    <h2>Inscriptions aux sessions</h2>
+    <div class="col-md-12">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Module</th>
+                    <th>Date de la session</th>
+                    <th>Etat inscription</th>
+                    <th>Evaluation</th>
+                    <th>Etat facture</th>
+                    <th>Etat remb.</th>
+                    <th width="90px">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inscription in inscriptions %}
+                    <tr>
+                        <td>
+                            <a href="{{path('hopitalnumerique_module_module_show_front',{'id':inscription.session.module.id})}}">{{inscription.session.module.titre}}</a>
+                        </td>
+                        <td>{{inscription.session.dateSession|date('d/m/Y')}}</td>
+                        <td>{% if inscription.etatInscription != null %}{{inscription.etatInscription.libelle}}{% endif %}</td>
+                        <td>
+                            {{inscription.etatEvaluation.libelle}}
+                        </td>
+                        <td>{% if inscription.etatRemboursement != null %}{{inscription.etatRemboursement.libelle}}{% endif %}</td>
+                        <td>
+                            {% if inscription.facture is not null %}
+                                {% if inscription.facture.payee %}Payée{% else %}Non Payée{% endif%} : {{inscription.facture.total}}€
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                {% if inscription.etatParticipation.id == 411 and not app.user.reponses|hadReponseForQuestionnaire( 4, inscription.session.id ) and inscription.etatEvaluation.id == 28 %}
+                                    <a class="btn btn-green btn-sm" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':inscription.session.id})}}"><i class="fa fa-check"></i></a>
+                                {% endif %}
+                                {% if inscription.etatEvaluation.id == 29 %}
+                                    <a class="btn btn-info btn-sm" href="{{path('hopitalnumerique_module_evaluation_view_front',{'id':inscription.session.id})}}"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-success btn-sm" title="Attestation de présence" href="{{path('hopitalnumerique_module_inscription_attestation_front',{'id':inscription.id})}}"><i class="fa fa-external-link"></i></a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7"> - Aucune inscription - </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="clearfix"></div>
+
+    {% if sessions|length > 0 %}
+        <h2>Vos sessions en tant que formateur</h2>
+        <div class="col-md-12">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>Productions concernées</th>
+                        <th>Date de la session</th>
+                        <th width="90px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for session in sessions %}
+                        <tr>
+                            <td>
+                                <a href="{{path('hopitalnumerique_module_module_show_front',{'id':session.module.id})}}">{{session.module.titre}}</a>
+                            </td>
+                            <td>
+                                <ul style="padding: 0 0 0 15px;">
+                                    {% for production in session.module.productions %}
+                                        <li>{{ production.titre }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>{{session.dateSession|date('d/m/Y')}}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="btn btn-info link fancybox.ajax btn-sm" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
+                                    <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_session_evaluation_front',{'id':session.id})}}"><i class="fa fa-external-link"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <div class="clearfix"></div>
+{% endblock %}

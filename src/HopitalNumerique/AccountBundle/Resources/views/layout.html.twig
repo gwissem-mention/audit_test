@@ -19,11 +19,11 @@
             <h3 class="violet">Tableau de bord</h3>
         </div>
         
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-12">
             {{ knp_menu_render('menu-tdb', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}    
         </div>
         
-        <div class="content col-md-9">
+        <div class="content col-md-9 col-sm-12">
             {% block header %}
                 <div class="header-account">
                     <h1 class="violet">{% block headerTitle %}{% endblock %}</h1>

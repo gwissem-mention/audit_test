@@ -12,6 +12,9 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  * Contact
  * 
  * @ORM\MappedSuperclass
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
  */
 class Contact
 {

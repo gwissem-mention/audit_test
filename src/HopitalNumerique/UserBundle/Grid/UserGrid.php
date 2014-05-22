@@ -38,7 +38,7 @@ class UserGrid extends Grid implements IGrid
         $arrayRolesDateContractualisation = $this->_arrayRolesDateContractualisation;
         
         $this->addColonne( new Column\DateColumn('dateInscription', 'Date d\'inscription') );        
-        $this->addColonne( new Column\TextColumn('username', 'Nom du compte') );        
+        $this->addColonne( new Column\TextColumn('username', 'Identifiant (login)') );        
         $this->addColonne( new Column\TextColumn('nbVisites', 'Visites') );
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('prenom', 'Prénom') );
@@ -114,11 +114,10 @@ class UserGrid extends Grid implements IGrid
 
         /* Exports */
         $this->addMassAction( new Action\ActionMass('Export CSV - Caractérisation', 'HopitalNumeriqueUserBundle:User:exportCsv') );
-        //$this->addMassAction( new Action\ActionMass('Export CSV - Candidatures expert', 'HopitalNumeriqueUserBundle:User:exportCsvExperts') );
-
-
-
-
+        $this->addMassAction( new Action\ActionMass('Export CSV - Candidatures expert', 'HopitalNumeriqueUserBundle:User:exportCsvExperts') );
+        $this->addMassAction( new Action\ActionMass('Export CSV - Candidatures ambassadeur', 'HopitalNumeriqueUserBundle:User:exportCsvAmbassadeurs') );
+        $this->addMassAction( new Action\ActionMass('Export CSV - Productions maitrisées', 'HopitalNumeriqueUserBundle:User:exportCsvProductions') );
+        $this->addMassAction( new Action\ActionMass('Export CSV - Domaines fonctionnels maitrisés', 'HopitalNumeriqueUserBundle:User:exportCsvDomaines') );
 
         $this->addMassAction( new Action\ActionMass('Activer','HopitalNumeriqueUserBundle:User:activerMass') );
         $this->addMassAction( new Action\ActionMass('Désactiver','HopitalNumeriqueUserBundle:User:desactiverMass') );

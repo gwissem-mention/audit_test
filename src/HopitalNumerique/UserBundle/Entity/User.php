@@ -4,13 +4,13 @@ namespace HopitalNumerique\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
-use APY\DataGridBundle\Grid\Mapping as GRID;
+use Nodevo\RoleBundle\Entity\Role;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
-use Nodevo\RoleBundle\Entity\Role;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * User
@@ -322,11 +322,11 @@ class User extends BaseUser
      * @Assert\Length(
      *      min = "1",
      *      max = "255",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'autre structure de rattachement.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'autre structure de rattachement."
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente."
      * )
      * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
-     * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Autre structure de rattachement santé de l utilisateur"})
+     * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Nom de votre établissement si non disponible dans la liste précédente santé de l utilisateur"})
      */
     protected $autreStructureRattachementSante;
     
@@ -335,8 +335,8 @@ class User extends BaseUser
      * @Assert\Length(
      *      min = "3",
      *      max = "255",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'autre structure de rattachement.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'autre structure de rattachement."
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente."
      * )
      * @Nodevo\Javascript(class="validate[minSize[3],maxSize[255]]")
      * @ORM\Column(name="usr_fonction_dans_etablissement", type="string", length=255, nullable=true, options = {"comment" = "Fonction dans l etablissement de santé de l utilisateur"})
@@ -431,6 +431,13 @@ class User extends BaseUser
      * @Nodevo\Javascript(class="validate[required]")
      */
     protected $termsAccepted;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="usr_raison_desinscription", nullable=true, type="text")
+     */
+    protected $raisonDesinscription;
     
     
     // ------- Interventions -------
@@ -458,15 +465,14 @@ class User extends BaseUser
     {
         parent::__construct();
         
-        $this->objets    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->username  = '';
-        $this->enabled   = 1;
-        $this->civilite  = array();
-        $this->lock      = false;
-        $this->archiver  = false;
-        $this->domaines  = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->nbVisites = 0;
-    }
+        $this->objets               = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->username             = '';
+        $this->enabled              = 1;
+        $this->civilite             = array();
+        $this->lock                 = false;
+        $this->archiver             = false;
+        $this->domaines             = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->nbVisites            = 0;    }
 
     public function __toString()
     {
@@ -1202,7 +1208,23 @@ class User extends BaseUser
      */
     public function getAppellation()
     {
-        return ($this->civilite != null ? $this->civilite->getLibelle().' ' : '').$this->prenom.' '.$this->nom;
+        // ----Traitement pour transformer le prénom "Jean-luc robert" en "Jean-Luc Robert"
+        //Récupération du prénom
+        $prenom = strtolower($this->getPrenom());
+        //Découpage du prénom sur le tiret
+        $tempsPrenom = explode('-', $prenom);
+        //Unsset de la variable
+        $prenom = "";
+        //Pour chaque bout on met une MAJ sur la première lettre de chaque mot, si il y en plusieurs c'est qu'il y avait un -
+        foreach ($tempsPrenom as $key => $tempPrenom)
+        {
+            $prenom .= ("" !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
+        }
+        
+        // ----Mise en majuscule du nom
+        $nom = strtoupper($this->getNom());
+        
+        return ($this->civilite != null ? $this->civilite->getLibelle().' ' : '').$prenom.' '.$nom;
     }
 
     /**
@@ -1233,5 +1255,25 @@ class User extends BaseUser
     public function getRole()
     {
         return $this->roles[0];
+    }
+
+    /**
+     * Get raisonDesinscription
+     *
+     * @return string $raisonDesinscription
+     */
+    public function getRaisonDesinscription()
+    {
+        return $this->raisonDesinscription;
+    }
+    
+    /**
+     * Set raisonDesinscription
+     *
+     * @param string $raisonDesinscription
+     */
+    public function setRaisonDesinscription($raisonDesinscription)
+    {
+        $this->raisonDesinscription = $raisonDesinscription;
     }
 }

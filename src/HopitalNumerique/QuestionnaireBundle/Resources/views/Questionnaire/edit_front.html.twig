@@ -1,5 +1,5 @@
 {% block javascripts %}
-    {% javascripts output="compiled/hopitalnumerique-questionnaire-questionnaire-edit.js"
+    {% javascripts output="compiled/hopitalnumerique-questionnaire-questionnaire-edit-front.js"
         'bundles/hopitalnumeriquequestionnaire/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block stylesheets %}
-    {% stylesheets output="compiled/hopitalnumerique-questionnaire-questionnaire-edit.css" filter="cssrewrite, ?yui_css"
+    {% stylesheets output="compiled/hopitalnumerique-questionnaire-questionnaire-edit-front.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriquequestionnaire/css/questionnaire.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />

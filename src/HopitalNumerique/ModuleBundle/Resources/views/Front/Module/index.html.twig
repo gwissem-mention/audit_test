@@ -1,0 +1,33 @@
+{% extends 'HopitalNumeriqueModuleBundle:Front:layout.html.twig' %}
+
+{# Importation de la librairie de maccro de modules #}
+{% import 'HopitalNumeriqueModuleBundle:Maccros:maccros.html.twig' as moduleMaccros %}
+
+{% block menu_modules %}
+    <div id="module-menu">
+        {# Render de la vue de récupérations des différentes modules #}
+        {{ render(controller("HopitalNumeriqueModuleBundle:Front/ModuleFront:menuModules", {'module' : null} )) }}
+    </div>
+{% endblock menu_modules %}
+
+{% block chapo_description %}
+    En cliquant sur la flèche, vous pouvez déposer une demande d'inscription à une session. Vous recevrez une notification confirmant votre demande. Sous 48h, vous recevrez une notification d'acceptation ou de refus de votre demande. Une fois accepté, votre participation à la session est confirmée.
+{% endblock chapo_description %}
+
+{% block contenu %}
+    <div class="col-md-12">
+        {% for key,module in modules %}
+            <div class="panel">
+                <div class="col-md-12 table-responsive table-module">
+
+                    <h4 class="violet titre">Session(s) - <a href="{{ path( "hopitalnumerique_module_module_show_front", {"id":module.id} ) }}">{{module.titre}}</a></h4>
+
+                    {{ moduleMaccros.createTableauSession(module) }}
+                    
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="clearfix"></div>
+{% endblock contenu %}

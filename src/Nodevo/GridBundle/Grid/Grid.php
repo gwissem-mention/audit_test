@@ -1,9 +1,8 @@
 <?php 
 namespace Nodevo\GridBundle\Grid;
 
-use APY\DataGridBundle\Grid\Source;
 use APY\DataGridBundle\Grid\Column;
-
+use APY\DataGridBundle\Grid\Source;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 
@@ -38,6 +37,8 @@ abstract class Grid implements IGrid
     protected $_filterIdColumn       = false;
     protected $_functionName         = 'getDatasForGrid';
     protected $_persistence          = true;
+    protected $_defaultOrder         = false;
+    protected $_defaultOrderColumn   = false;
 
     //colonnes
     protected $_colonnes         = array();
@@ -214,7 +215,7 @@ abstract class Grid implements IGrid
          *
          * @param array $limits Tableau des limits de la pagination
          */
-        protected function setLimits( $limits = array( 5, 10, 15 ) )
+        protected function setLimits( $limits = array(10, 20, 50, 100) )
         {
             $this->_limits = $limits;
         }
@@ -254,9 +255,21 @@ abstract class Grid implements IGrid
          *
          * @param string $name Nom de la fonction à appeller
          */
-        public function setFunctionName( $name )
+        protected function setFunctionName( $name )
         {
             $this->_functionName = $name;
+        }
+
+        /**
+         * Set l'ordre de tri par défault du grid
+         *
+         * @param string $column ID de la colonne
+         * @param string $order  Sens de tri
+         */
+        protected function setDefaultOrder( $column, $order )
+        {
+            $this->_defaultOrder       = $order;
+            $this->_defaultOrderColumn = $column;
         }
 
         /**
@@ -327,7 +340,7 @@ abstract class Grid implements IGrid
 
                 //Ajout des actions au grid
                 $actionsColumn = new Column\ActionsColumn('actions', '', $this->_buttons);
-                $actionsColumn->setSize( ((count($this->_buttons) * $this->_buttonSize)) + 22 );
+                $actionsColumn->setSize( ((count($this->_buttons) * $this->_buttonSize)) + 23 );
                 $this->_colonnes[] = $actionsColumn;
 
                 if($this->_sourceType == self::SOURCE_TYPE_ENTITY)
@@ -389,6 +402,10 @@ abstract class Grid implements IGrid
             //Si on est en source Entity : on met à jour les colonnes au lieu de les ajouter
             if($this->_sourceType == self::SOURCE_TYPE_ENTITY)
                 $this->manageColumnsForEntitySource();
+
+            //Set the default order
+            if( $this->_defaultOrder != false )
+                $this->_grid->setDefaultOrder( $this->_defaultOrderColumn, $this->_defaultOrder );
         }
 
         /**
@@ -467,7 +484,7 @@ abstract class Grid implements IGrid
             {
                 $datas[$key][$this->_fieldLabelRecursive] = '|--- ' . $datas[$key][$this->_fieldLabelRecursive];
 
-                $parentData = $datasById[$parentData[$this->_fieldParentRecursive]];
+                $parentData = array_key_exists($this->_fieldParentRecursive,$parentData)  && array_key_exists($parentData[$this->_fieldParentRecursive], $datasById)? $datasById[$parentData[$this->_fieldParentRecursive]] : null;
                 $datas      = $this->gestionAffichageSousItems( $key, $datas, $datasById, $parentData );
             }
             

@@ -1,0 +1,94 @@
+parameters:
+    #Options
+    hopital_numerique_autodiag.options:parameters:
+    #Outils
+    hopitalnumerique_autodiag.manager.outil.class: HopitalNumerique\AutodiagBundle\Manager\OutilManager
+    hopitalnumerique_autodiag.grid.outil.class: HopitalNumerique\AutodiagBundle\Grid\OutilGrid
+    hopitalnumerique_autodiag.form.outil.class: HopitalNumerique\AutodiagBundle\Form\OutilType
+    #Categories
+    hopitalnumerique_autodiag.manager.categorie.class: HopitalNumerique\AutodiagBundle\Manager\CategorieManager
+    hopitalnumerique_autodiag.grid.categorie.class: HopitalNumerique\AutodiagBundle\Grid\CategorieGrid
+    hopitalnumerique_autodiag.form.categorie.class: HopitalNumerique\AutodiagBundle\Form\CategorieType
+    #Chapitres
+    hopitalnumerique_autodiag.manager.chapitre.class: HopitalNumerique\AutodiagBundle\Manager\ChapitreManager
+    hopitalnumerique_autodiag.form.chapitre.class: HopitalNumerique\AutodiagBundle\Form\ChapitreType
+    #Questions
+    hopitalnumerique_autodiag.manager.question.class: HopitalNumerique\AutodiagBundle\Manager\QuestionManager
+    hopitalnumerique_autodiag.form.question.class: HopitalNumerique\AutodiagBundle\Form\QuestionType
+    #Références
+    hopitalnumerique_autodiag.manager.refchapitre.class: HopitalNumerique\AutodiagBundle\Manager\RefChapitreManager
+    hopitalnumerique_autodiag.manager.refquestion.class: HopitalNumerique\AutodiagBundle\Manager\RefQuestionManager
+
+services:
+    #Outils
+    hopitalnumerique_autodiag.manager.outil:
+        class: %hopitalnumerique_autodiag.manager.outil.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_autodiag.grid.outil:
+        class: %hopitalnumerique_autodiag.grid.outil.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_autodiag.form.outil:
+        class: %hopitalnumerique_autodiag.form.outil.class%
+        arguments: ["@hopitalnumerique_autodiag.manager.outil", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_autodiag_outil }
+
+    #Categories
+    hopitalnumerique_autodiag.manager.categorie:
+        class: %hopitalnumerique_autodiag.manager.categorie.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_autodiag.grid.categorie:
+        class: %hopitalnumerique_autodiag.grid.categorie.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_autodiag.form.categorie:
+        class: %hopitalnumerique_autodiag.form.categorie.class%
+        arguments: ["@hopitalnumerique_autodiag.manager.categorie", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_autodiag_categorie }
+
+    #Chapitres
+    hopitalnumerique_autodiag.manager.chapitre:
+        class: %hopitalnumerique_autodiag.manager.chapitre.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_autodiag.form.chapitre:
+        class: %hopitalnumerique_autodiag.form.chapitre.class%
+        arguments: ["@hopitalnumerique_autodiag.manager.chapitre", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_autodiag_chapitre }
+
+    #Questions
+    hopitalnumerique_autodiag.manager.question:
+        class: %hopitalnumerique_autodiag.manager.question.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_autodiag.form.question:
+        class: %hopitalnumerique_autodiag.form.question.class%
+        arguments: ["@hopitalnumerique_autodiag.manager.question", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_autodiag_question }
+
+    #References
+    hopitalnumerique_autodiag.manager.refchapitre:
+        class: %hopitalnumerique_autodiag.manager.refchapitre.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_autodiag.manager.refquestion:
+        class: %hopitalnumerique_autodiag.manager.refquestion.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

@@ -300,7 +300,6 @@ function {{ grid.hash }}_markAll(select)
 {% block grid %}
     {# Block des filtres #}
     {% if grid.totalCount > 0 or grid.isFiltered or grid.noDataMessage is sameas(false) %}
-        {#{{ grid_search(grid, _self) }} #} 
         {{ block('grid_search') }}  
     {% endif %}
 

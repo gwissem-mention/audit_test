@@ -48,23 +48,23 @@
                 <div class="options">
                     <ul class="nav nav-tabs">
                         <li class="active">
-						    <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Caractérisation</a>
-						</li>
+                            <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Caractérisation</a>
+                        </li>
                         {% if user.id is not null and (options.expert or options.ambassadeur)  %}
-							<li>
-							    <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Contractualisation</a>
-							</li>
-						{% endif %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Contractualisation</a>
+                            </li>
+                        {% endif %}
                         {% if user.id is not null and (options.expert or options.expert_form) %}
-							<li>
-							    <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature expert</a>
-							</li>
-						{% endif %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature expert</a>
+                            </li>
+                        {% endif %}
                         {% if user.id is not null and (options.ambassadeur or options.ambassadeur_form) %}
-							<li>
-							    <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature ambassadeur</a>
-							</li>
-						{% endif %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature ambassadeur</a>
+                            </li>
+                        {% endif %}
                         {% if user.id is not null and options.ambassadeur %}
                             <li>
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maîtrisées</a>
@@ -149,7 +149,7 @@
                         </div>
                     </div>
                 {{ form_end(form) }}
-	        </div>
+            </div>
         </div>
     </div>
 {% endblock %}

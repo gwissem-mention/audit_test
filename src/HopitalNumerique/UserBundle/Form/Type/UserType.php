@@ -50,7 +50,7 @@ class UserType extends AbstractType
         $builder->add('username', 'text', array(
                 'max_length' => $this->_constraints['username']['maxlength'],
                 'required'   => true, 
-                'label'      => 'Nom du compte',
+                'label'      => 'Identifiant (login)',
                 'attr'       => array('class' => $this->_constraints['username']['class'] )
             ));
 
@@ -251,7 +251,7 @@ class UserType extends AbstractType
             ->add('autreStructureRattachementSante', 'text', array(
                     'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
                     'required'   => false,
-                    'label'      => 'Autre structure de rattachement',
+                    'label'      => 'Nom de votre établissement si non disponible dans la liste précédente',
                     'attr'       => array('class' => $this->_constraints['autreStructureRattachementSante']['class'] . ' etablissement_sante' )
             ))
             

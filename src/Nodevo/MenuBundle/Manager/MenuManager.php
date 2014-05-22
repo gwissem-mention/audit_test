@@ -2,7 +2,7 @@
 
 namespace Nodevo\MenuBundle\Manager;
 
-use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Nodevo\MenuBundle\Provider\MenuNode;
 use Nodevo\MenuBundle\Entity\Item;
 use Nodevo\MenuBundle\Entity\Menu;

@@ -7,6 +7,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Nodevo\ContactBundle\Form\Type\ContactType as NodevoContactType;
 
+/**
+ * 
+ * @author Gaetan MELCHILSEN
+ * @copyright Nodevo
+ */
 class ContactType extends NodevoContactType
 {
     private $_constraints = array();
@@ -112,7 +117,7 @@ class ContactType extends NodevoContactType
         ->add('autreStructureRattachementSante', 'text', array(
                 'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
                 'required'   => false,
-                'label'      => 'Autre structure de rattachement',
+                'label'      => 'Nom de votre établissement si non disponible dans la liste précédente',
                 'attr'       => array('class' => $this->_constraints['autreStructureRattachementSante']['class'] . ' etablissement_sante' )
         ))
         ;

@@ -7,7 +7,7 @@
 namespace HopitalNumerique\InterventionBundle\Manager;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur;
-use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
  * Manager pour les initiateurs des interventions.

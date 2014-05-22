@@ -7,7 +7,7 @@
 namespace HopitalNumerique\InterventionBundle\Manager;
 
 use Symfony\Component\Security\Core\SecurityContext;
-use Nodevo\AdminBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
@@ -74,15 +74,39 @@ class InterventionDemandeManager extends BaseManager
     public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, UserManager $userManager, InterventionEtatManager $interventionEtatManager, InterventionEvaluationEtatManager $interventionEvaluationEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager)
     {
         parent::__construct($entityManager);
-        $this->securityContext = $securityContext;
-        $this->router = $router;
-        $this->userManager = $userManager;
-        $this->interventionEtatManager = $interventionEtatManager;
+        $this->securityContext                   = $securityContext;
+        $this->router                            = $router;
+        $this->userManager                       = $userManager;
+        $this->interventionEtatManager           = $interventionEtatManager;
         $this->interventionEvaluationEtatManager = $interventionEvaluationEtatManager;
-        $this->interventionRegroupementManager = $interventionRegroupementManager;
-        $this->interventionCourrielManager = $interventionCourrielManager;
+        $this->interventionRegroupementManager   = $interventionRegroupementManager;
+        $this->interventionCourrielManager       = $interventionCourrielManager;
         
         $this->utilisateurConnecte = $this->securityContext->getToken()->getUser();
+    }
+
+    /**
+     * Retourne la liste des interventions de l'utilisateur
+     *
+     * @param User $user L'utilisateur concerné
+     *
+     * @return array
+     */
+    public function getForFactures( $user )
+    {
+        return $this->getRepository()->getForFactures( $user )->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne la liste des interventions de l'utilisateur
+     *
+     * @param User $user L'utilisateur concerné
+     *
+     * @return array
+     */
+    public function getForTotal( $user )
+    {
+        return $this->getRepository()->getForTotal( $user )->getQuery()->getResult();
     }
 
     /**

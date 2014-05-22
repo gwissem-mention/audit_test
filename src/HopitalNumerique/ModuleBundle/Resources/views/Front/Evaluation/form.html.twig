@@ -1,0 +1,44 @@
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-module-front-evaluation-form.css" filter="cssrewrite, ?yui_css"
+        '@validationEngine_css'
+        'bundles/hopitalnumeriquemodule/css/Front/evaluation/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-module-front-evaluation-form.js"
+        "@validationEngine_js"
+        'bundles/hopitalnumeriquemodule/js/Front/evaluation.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block headerTitle %}Evaluation{% endblock %}
+{% block headerDesc %}
+    <p>Le Formulaire d'évaluation, suite à votre participation à une session, est disponible ci-dessous. Merci d'y répondre pour pouvoir générer la facture correspondante, à partir de votre <a href="{{ path("hopitalnumerique_module_inscription_index_front") }}">tableau de bord.</a></p>
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-12" id="evaluation" >
+        {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.vertical.html.twig' %}
+        {{ form_javascript(form) }}
+        {{ form(form) }}
+    </div>
+    <div class="clearfix"></div>
+    
+    {% if not readOnly %}
+        <div class="col-md-12">
+            <div class="col-md-10 col-md-offset-2">
+                <input onclick="$('form').submit();" class="btn btn-success col-md-3 pull-right submit questionnaire_submit" value="EVALUER" type="button"/>
+            </div>
+        </div>
+    {% endif %}
+    <div class="clearfix"></div>
+{% endblock %}

@@ -1,0 +1,89 @@
+parameters:
+    #Options
+    hopital_numerique_module.options:parameters:
+    #Modules
+    hopitalnumerique_module.manager.module.class: HopitalNumerique\ModuleBundle\Manager\ModuleManager
+    hopitalnumerique_module.grid.module.class: HopitalNumerique\ModuleBundle\Grid\ModuleGrid
+    hopitalnumerique_module.form.module.class: HopitalNumerique\ModuleBundle\Form\ModuleType
+    #Sessions
+    hopitalnumerique_module.manager.session.class: HopitalNumerique\ModuleBundle\Manager\SessionManager
+    hopitalnumerique_module.grid.session.class: HopitalNumerique\ModuleBundle\Grid\SessionGrid
+    hopitalnumerique_module.grid.allsession.class: HopitalNumerique\ModuleBundle\Grid\AllSessionGrid
+    hopitalnumerique_module.form.session.class: HopitalNumerique\ModuleBundle\Form\SessionType
+    #Inscriptions
+    hopitalnumerique_module.manager.inscription.class: HopitalNumerique\ModuleBundle\Manager\InscriptionManager
+    hopitalnumerique_module.grid.inscription.class: HopitalNumerique\ModuleBundle\Grid\InscriptionGrid
+    hopitalnumerique_module.form.inscription.class: HopitalNumerique\ModuleBundle\Form\InscriptionType
+    #CronLogger
+    hopitalnumerique_module.service.logger.cronlogger.class: HopitalNumerique\ModuleBundle\DependencyInjection\Logger\CronLogger
+
+services:
+    #Modules
+    #--Manager
+    hopitalnumerique_module.manager.module:
+        class: %hopitalnumerique_module.manager.module.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    #--Grid
+    hopitalnumerique_module.grid.module:
+        class: %hopitalnumerique_module.grid.module.class%
+        arguments: ["@service_container"]
+
+    #--Formulaire
+    hopitalnumerique_module.form.module:
+        class: %hopitalnumerique_module.form.module.class%
+        arguments: ["@hopitalnumerique_module.manager.module", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_module_module }
+
+    #Sessions
+    #--Manager
+    hopitalnumerique_module.manager.session:
+        class: %hopitalnumerique_module.manager.session.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    #--Grid
+    #Sessions
+    hopitalnumerique_module.grid.session:
+        class: %hopitalnumerique_module.grid.session.class%
+        arguments: ["@service_container"]
+    #AllSessions
+    hopitalnumerique_module.grid.allsession:
+        class: %hopitalnumerique_module.grid.allsession.class%
+        arguments: ["@service_container"]
+
+    #--Formulaire
+    hopitalnumerique_module.form.session:
+        class: %hopitalnumerique_module.form.session.class%
+        arguments: ["@hopitalnumerique_module.manager.session", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_module_session }
+
+    #Inscriptions
+    #--Manager
+    hopitalnumerique_module.manager.inscription:
+        class: %hopitalnumerique_module.manager.inscription.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    #--Grid
+    hopitalnumerique_module.grid.inscription:
+        class: %hopitalnumerique_module.grid.inscription.class%
+        arguments: ["@service_container"]
+
+    #--Formulaire
+    hopitalnumerique_module.form.inscription:
+        class: %hopitalnumerique_module.form.inscription.class%
+        arguments: ["@hopitalnumerique_module.manager.inscription", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_module_inscription }
+
+    #Cronlogger
+    hopitalnumerique_module.service.logger.cronlogger:
+        class: "%hopitalnumerique_module.service.logger.cronlogger.class%"
+        arguments: ["@logger", "@session"]
