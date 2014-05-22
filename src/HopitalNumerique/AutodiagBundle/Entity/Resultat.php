@@ -49,7 +49,7 @@ class Resultat
     protected $statut;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Outil", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Outil", cascade={"persist"}, inversedBy="resultats")
      * @ORM\JoinColumn(name="out_id", referencedColumnName="out_id", onDelete="CASCADE")
      */
     protected $outil;
@@ -59,13 +59,13 @@ class Resultat
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE", nullable=true)
      */
     protected $user;
-
+    
     /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
-        $this->dateLastSave = new \DateTime();
+        $this->dateLastSave    = new \DateTime();
         $this->tauxRemplissage = 0;
     }
 

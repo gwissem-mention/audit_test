@@ -29,6 +29,14 @@ class OutilGrid extends Grid implements IGrid
     {
         $this->addColonne( new Column\TextColumn('title', 'Title') );
         
+        $nbFormColumn = new Column\TextColumn('nbForm', 'Nb Formulaires en cours');
+        $nbFormColumn->setSize( 160 );
+        $this->addColonne( $nbFormColumn );
+
+        $nbFormValidColumn = new Column\TextColumn('nbFormValid', 'Nb Formulaires finalisés');
+        $nbFormValidColumn->setSize( 160 );
+        $this->addColonne( $nbFormValidColumn );
+
         $nbChapColumn = new Column\TextColumn('nbChap', 'Nb Chapitres');
         $nbChapColumn->setSize( 110 );
         $this->addColonne( $nbChapColumn );
@@ -54,7 +62,7 @@ class OutilGrid extends Grid implements IGrid
     {
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_autodiag_outil_edit' ) );
         $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_autodiag_outil_delete' ) );
-
+        $this->addActionButton( new Action\FilsButton( 'hopitalnumerique_autodiag_resultat' ) );
     }
 
     /**

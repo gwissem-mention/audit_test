@@ -29,12 +29,18 @@
         <div class="col-md-3">
             <p class="titre">Les chapitres</p>
             <div id="chapitres"></div>
-            <div class="progress progress-striped">
-                <div class="progress-bar progress-bar-success" style="width: 0"></div>
+            <div class="avancement-global">
+                <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-success" style="width: 0"></div>
+                </div>
+                <p>
+                    <span class="text-muted pull-left" >0%</span>
+                    <span class="text-muted pull-right" >100%</span>
+                </p>
             </div>
         </div>
         <div class="col-md-9" >
-            <h2>{{outil.title}}</h2>
+            <h1>{{outil.title}}</h1>
 
             <div class="options">
                 <div class="btn-toolbar">
@@ -55,8 +61,10 @@
 
                         {# Build step #}
                         <fieldset title="{{chapitre.title}}" >
-                            <h3>{{chapitre.title}}</h3>
+                            <h2>{{chapitre.title}}</h2>
 
+                            <hr>
+    
                             {% for question in chapitre.questions %}
                                 {# Build vars to make it cleaner #}
                                 {% set questionName = fieldsetName ~ '[' ~ question.id ~ ']' %}
@@ -105,6 +113,8 @@
                                     </div>
                                 </div>
                             {% endfor %}
+
+                            <hr>
                         </fieldset>
                     {% endfor %}                    
                     <input type="hidden" name="action" id="action" value="" />

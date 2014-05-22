@@ -159,6 +159,13 @@ hopitalnumerique_autodiag_reference_question_save:
     requirements:
         id: \d+
 
+#Resultat
+hopitalnumerique_autodiag_resultat:
+    pattern:  /admin/outil/{id}/resultat
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:index" }
+    requirements: 
+        id : \d+
+
 #Front
 hopitalnumerique_autodiag_front_outil:
     pattern:  /autodiagnostic/{alias}

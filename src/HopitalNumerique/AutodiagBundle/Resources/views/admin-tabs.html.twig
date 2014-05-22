@@ -22,7 +22,6 @@
             </li>
         {% endif %}
 
-
         {% if route == 'hopitalnumerique_autodiag_chapitre' %}
             <li class="active">
                 <a href="#">Gestion des chapitres / questions</a>
@@ -32,5 +31,15 @@
                 <a href="{{path('hopitalnumerique_autodiag_chapitre',{'id':outil.id})}}">Gestion des chapitres / questions</a>
             </li>
         {% endif %}
+
+        {% if route == 'hopitalnumerique_autodiag_resultat' or route == 'hopitalnumerique_autodiag_resultat_edit' %}
+            <li class="active">
+                <a href="#">Consultation des résultats</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{path('hopitalnumerique_autodiag_resultat',{'id':outil.id})}}">Consultation des résultats</a>
+            </li>
+        {% endif %}        
     {% endif %}
 </ul>

@@ -71,13 +71,15 @@ class FrontController extends Controller
 
         //create Resultat entity
         $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->createEmpty();
-        $resultat->setStatut( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 418) ) );
         $resultat->setOutil( $outil );
         $resultat->setTauxRemplissage( $remplissage );
 
         //cas ou l'user à validé le questionnaire
-        if( $action == 'valid')
+        if( $action == 'valid'){
             $resultat->setDateValidation( new \DateTime() );
+            $resultat->setStatut( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 419) ) );
+        }else
+            $resultat->setStatut( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 418) ) );
 
         //cas user connecté
         if( $user )

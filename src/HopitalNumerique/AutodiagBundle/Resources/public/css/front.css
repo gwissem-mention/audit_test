@@ -1,6 +1,6 @@
 #autodiag{margin-top: 20px; position: relative}
-#autodiag h2{ margin:0 0 50px 0; float:left;}
-#autodiag .options{display: inline;float: right;position: relative;top: 16px;right: 20px;}
+#autodiag h1{ margin:0 0 50px 0; float:left; font-weight: bold;}
+#autodiag .options{display: inline;float: right;position: relative;top: 0px;right: 20px;}
 
 /* Colonne left */
     #autodiag p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
@@ -10,9 +10,10 @@
     #autodiag #chapitres ul li div{padding:5px 0; color:#777777; font-size: 14px;cursor:pointer;}
     #autodiag #chapitres ul li div .text-muted, #autodiag #chapitres ul li div .text-success{font-size:10px;float: right}
     #autodiag #chapitres ul li.stepy-active div,#autodiag #chapitres ul li:hover div{color:#6f3596;}
-
+    #autodiag .avancement-global span{font-size:10px;}
 /* Colonne right */
     #autodiag .content{background-color: #f8f8f8; padding-bottom: 20px}
+    #autodiag .content h2{color:#6f3596;}
     #autodiag .content .badge-primary{background-color:#4f8edc; font-size:10px; padding:3px 6px; vertical-align: top}
     #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer}
 

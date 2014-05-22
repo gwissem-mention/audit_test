@@ -122,6 +122,11 @@ class Outil
     private $chapitres;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\Resultat", mappedBy="outil", cascade={"persist"})
+     */
+    protected $resultats;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -403,4 +408,26 @@ class Outil
     {
         return $this->chapitres;
     }
+
+    /**
+     * Get resultats
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $resultats
+     */
+    public function getResultats()
+    {
+        return $this->resultats;
+    }
+    
+    /**
+     * Set resultats
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $resultats
+     */
+    public function setResultats(\Doctrine\Common\Collections\ArrayCollection $resultats)
+    {
+        $this->resultats = $resultats;
+        return $this;
+    }
+    
 }

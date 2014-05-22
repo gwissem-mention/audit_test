@@ -58,12 +58,22 @@ class OutilManager extends BaseManager
             $object['statut']       = $outil->getStatut()->getLibelle();
             $object['nbChap']       = 0;
             $object['nbQuest']      = 0;
+            $object['nbForm']       = 0;
+            $object['nbFormValid']  = 0;
 
             //do some maths
             $chapitres = $outil->getChapitres();
             $object['nbChap'] = count($chapitres);
             foreach($chapitres as $chapitre)
                 $object['nbQuest'] += count($chapitre->getQuestions());
+
+            $resultats = $outil->getResultats();
+            foreach($resultats as $resultat) {
+                if( is_null($resultat->getDateValidation()) )
+                    $object['nbForm']++;
+                else
+                    $object['nbFormValid']++;
+            }
 
             //set result to big array
             $results[] = $object;
