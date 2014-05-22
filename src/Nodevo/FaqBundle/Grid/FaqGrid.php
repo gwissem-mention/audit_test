@@ -10,7 +10,7 @@ use Nodevo\GridBundle\Grid\Action;
 /**
  * Configuration du grid Faq.
  */
-class FaqGrid extends Grid implements IGrid
+class FaqGrid extends Grid
 {
     /**
      * Définie la config spécifique au grid Faq.
