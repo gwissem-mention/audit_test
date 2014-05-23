@@ -9,13 +9,12 @@
             <h4 class="violet titre">{{moduleSelectionne.titre}}</h4>
 
             <div class="description">
-                    <strong>Production(s) concernée(s) : </strong>
-                    <ul>
-                        {% for key,production in moduleSelectionne.productions %}
-                            <li>{{ production.titre }}</li>
-                        {% endfor %}
-                    </ul>
-                
+                <strong>Production(s) concernée(s) : </strong>
+                <ul>
+                    {% for key,production in moduleSelectionne.productions %}
+                        <li>{{ production.titre }}</li>
+                    {% endfor %}
+                </ul>
             </div>
             
             <div class="clearfix"></div>

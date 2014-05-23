@@ -6,12 +6,12 @@
     <div class="panel-body" style="padding-top:0" >
         <div class="col-md-12 fancybox-popin">
             <ul class="list-unstyled">
-                {# Description #}
-                <li style="margin: 0 0 10px;"><strong>Description :</strong><br />
-                    {% if session.description is not null and session.description is not empty %}
-                        {{ session.description }}
+                {# Date de la session #}
+                <li style="margin: 0 0 10px;"><strong>Date de la session :</strong><br />
+                    {% if session.dateSession is not null and session.dateSession is not empty %}
+                        {{ session.dateSession|date('d/m/Y') }}
                     {% else %}
-                        - Aucune description pour cette session -
+                        - Aucune date n'est renseignée pour cette session -
                     {% endif %}
                 </li>
                 {# Durée #}
@@ -36,6 +36,33 @@
                         {{ session.horaires }}
                     {% else %}
                         - Aucune durée pour cette session -
+                    {% endif %}
+                </li>
+                <br />
+                {# Formateur #}
+                <li style="margin: 0 0 10px;"><strong>Formateur :</strong><br />
+                    {% if session.formateur is not null and session.formateur is not empty %}
+                        {{ session.formateur.getAppellation() }}
+                    {% else %}
+                        - Aucun formateur pour cette session -
+                    {% endif %}
+                </li>
+                <br />
+                {# Productions concernées #}
+                <li><strong>Production(s) concernée(s) : </strong>
+                    <ul>
+                        {% for production in session.module.productions %}
+                            <li>{{ production.titre }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <br />
+                {# Description #}
+                <li style="margin: 0 0 10px;"><strong>Description :</strong><br />
+                    {% if session.description is not null and session.description is not empty %}
+                        {{ session.description }}
+                    {% else %}
+                        - Aucune description pour cette session -
                     {% endif %}
                 </li>
             </ul>
