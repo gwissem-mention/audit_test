@@ -61,12 +61,18 @@ class Resultat
     protected $user;
     
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\Reponse", mappedBy="resultat", cascade={"persist"})
+     */
+    protected $reponses;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
         $this->dateLastSave    = new \DateTime();
         $this->tauxRemplissage = 0;
+        $this->reponses        = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -211,4 +217,13 @@ class Resultat
         return $this;
     }
     
+    /**
+     * Get reponses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReponses()
+    {
+        return $this->reponses;
+    }
 }

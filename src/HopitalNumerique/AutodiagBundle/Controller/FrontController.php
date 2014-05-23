@@ -24,19 +24,26 @@ class FrontController extends Controller
         $ponderationMax = 100;
         $questions      = array();
         $chapitres      = $outil->getChapitres();
+        $parents        = array();
+        $enfants        = array();
         
         //build big array of questions
-        foreach($chapitres as $chapitre)
+        foreach($chapitres as $chapitre){
             $questions = array_merge($questions, $chapitre->getQuestions()->toArray() );
+
+            if( is_null($chapitre->getParent()) ){
+                $parents[ $chapitre->getId() ]['parent'] = $chapitre;
+                $parents[ $chapitre->getId() ]['childs'] = array();
+            }else
+                $enfants[] = $chapitre;
+        }
         
         //calcul pondération
         foreach( $questions as $key => $question) {
             $ponderation = $question->getPonderation();
 
-            if( $ponderation != 0 ){
+            if( $ponderation != 0 )
                 $ponderationMax -= $ponderation;
-                unset( $questions[$key] );
-            }
         }
 
         //max Pondération invalid
@@ -46,8 +53,15 @@ class FrontController extends Controller
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage'));
         }
 
+        //reformate les chapitres
+        foreach($enfants as $enfant) {
+            $parentId = $enfant->getParent()->getId();
+            $parents[ $parentId ]['childs'][] = $enfant;
+        }
+
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
-            'outil' => $outil
+            'outil'     => $outil,
+            'chapitres' => $parents
         ));
     }
 

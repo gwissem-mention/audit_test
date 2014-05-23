@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Controller;
 
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
+use HopitalNumerique\AutodiagBundle\Entity\Resultat;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,33 +24,16 @@ class ResultatController extends Controller
         return $grid->render('HopitalNumeriqueAutodiagBundle:Resultat:index.html.twig', array('outil'=>$outil));
     }
 
+    /**
+     * Affiche le détail d'un résultat
+     */
+    public function detailAction( Resultat $resultat )
+    {
+        $chapitres = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
 
-    // /**
-    //  * Affiche le formulaire d'édition de Categorie.
-    //  *
-    //  * @param integer $id Id de Categorie.
-    //  */
-    // public function editAction( $id, $idCat, Request $request )
-    // {
-    //     //Récupération de l'entité passée en paramètre
-    //     $categorie = $this->get('hopitalnumerique_autodiag.manager.categorie')->findOneBy( array('id' => $idCat) );
-
-    //     $form = $this->createForm( 'hopitalnumerique_autodiag_categorie', $categorie);
-
-    //     if ( $form->handleRequest($request)->isValid() ) {
-    //         //On utilise notre Manager pour gérer la sauvegarde de l'objet
-    //         $this->get('hopitalnumerique_autodiag.manager.categorie')->save($categorie);
-            
-    //         // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-    //         $this->get('session')->getFlashBag()->add( 'info', 'Categorie mise à jour.' );
-            
-    //         return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_categorie', array( 'id' => $categorie->getOutil()->getId() ) ) );
-    //     }
-
-    //     return $this->render( 'HopitalNumeriqueAutodiagBundle:Categorie:edit.html.twig' , array(
-    //         'form'      => $form->createView(),
-    //         'categorie' => $categorie,
-    //         'outil'     => $categorie->getOutil()
-    //     ));
-    // }
+        return $this->render( 'HopitalNumeriqueAutodiagBundle:Resultat:detail.html.twig' , array(
+            'resultat'  => $resultat,
+            'chapitres' => $chapitres
+        ));
+    }
 }

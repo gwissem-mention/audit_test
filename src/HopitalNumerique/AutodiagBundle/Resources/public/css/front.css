@@ -1,6 +1,6 @@
 #autodiag{margin-top: 20px; position: relative}
-#autodiag h1{ margin:0 0 50px 0; float:left; font-weight: bold;}
-#autodiag .options{display: inline;float: right;position: relative;top: 0px;right: 20px;}
+#autodiag h1{ margin:0 0 50px 0; float:left; font-size:30px;}
+#autodiag .options{display: inline;float: right;position: relative;top: 0px;right: 0;}
 
 /* Colonne left */
     #autodiag p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
@@ -13,9 +13,13 @@
     #autodiag .avancement-global span{font-size:10px;}
 /* Colonne right */
     #autodiag .content{background-color: #f8f8f8; padding-bottom: 20px}
-    #autodiag .content h2{color:#6f3596;}
-    #autodiag .content .badge-primary{background-color:#4f8edc; font-size:10px; padding:3px 6px; vertical-align: top}
+    #autodiag .content h2{color:#6f3596; text-transform: uppercase;}
+    #autodiag .content h3{color:#6f3596; text-transform: uppercase; margin-bottom: 20px; font-size: 18px}
+    #autodiag .content .badge-primary{background-color:#4f8edc; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
     #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer}
+    #autodiag .content .radio{float: left; margin-right: 30px;}
+    #autodiag .content .save{margin: 20px auto; display: block; width: 200px; }
+    #autodiag .content .sous-chapitre label{padding-left:40px;}
 
     #autodiag .stepy-navigator{}
     #autodiag .stepy-navigator .button-back,

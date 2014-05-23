@@ -166,6 +166,12 @@ hopitalnumerique_autodiag_resultat:
     requirements: 
         id : \d+
 
+hopitalnumerique_autodiag_resultat_detail:
+    pattern:  /admin/outil/resultat/{id}/detail
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:detail" }
+    requirements: 
+        id : \d+        
+
 #Front
 hopitalnumerique_autodiag_front_outil:
     pattern:  /autodiagnostic/{alias}

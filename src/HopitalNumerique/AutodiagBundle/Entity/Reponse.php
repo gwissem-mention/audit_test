@@ -36,7 +36,7 @@ class Reponse
     private $remarque;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Resultat", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Resultat", cascade={"persist"}, inversedBy="reponses")
      * @ORM\JoinColumn(name="res_id", referencedColumnName="res_id", onDelete="CASCADE")
      */
     protected $resultat;

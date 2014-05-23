@@ -1,0 +1,85 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-resultat-detail.css" filter="cssrewrite, ?yui_css" 
+        'bundles/hopitalnumeriqueautodiag/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block h1Title %}
+    Editer un outil d'autodiagnostic : Détail d'un résultat
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_outil') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <div class="options">
+                    {# Include external file for tabs : avoid duplicate code #}
+                    {% include 'HopitalNumeriqueAutodiagBundle::admin-tabs.html.twig' with { 'outil' : resultat.outil, 'route': app.request.attributes.get('_route') } %}
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div class="sous_options">
+                    <div class="btn-toolbar">
+                        <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_resultat', {'id':resultat.outil.id}) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+                    </div>
+                </div>
+
+                <div id="resultat-detail" class="content">
+                    {% for chapitre in chapitres %}
+                        {# Build step #}
+                        <div class="chapitre-{{chapitre.id}}">
+                            <h2>{{chapitre.title}}</h2>
+                            
+                            <hr>
+
+                            {% if chapitre.questions|length > 0 %}
+                                {{ _self.buildQuestion(chapitre.questions) }}
+                            {% endif %}
+                            
+                            {% if chapitre.childs|length > 0 %}
+                                <div class="row sous-chapitre">
+                                    {% for child in chapitre.childs %}
+                                        <h3>{{child.title}}</h3>
+                                        
+                                        {{ _self.buildQuestion(child.questions) }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% macro buildQuestion(questions) %}
+    {% for question in questions %}
+        <div class="row">
+            <div class="col-md-4">
+                <p class="text-right">
+                    {{question.question}} : 
+                </p>
+            </div>
+            
+            <div class="col-md-8">
+                <p>
+                    {{question.value}}
+                </p>
+                <p class="text-muted">
+                    <em>{{question.remarque}}</em>
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+{% endmacro %}

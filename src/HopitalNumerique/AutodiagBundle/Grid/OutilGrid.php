@@ -73,5 +73,6 @@ class OutilGrid extends Grid implements IGrid
         $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueAutodiagBundle:Outil:deleteMass') );
         $this->addMassAction( new Action\ActionMass('Activer','HopitalNumeriqueAutodiagBundle:Outil:activerMass') );
         $this->addMassAction( new Action\ActionMass('Désactiver','HopitalNumeriqueAutodiagBundle:Outil:desactiverMass') );
+        $this->addMassAction( new Action\ActionMass('Exporter les réponses','HopitalNumeriqueAutodiagBundle:Outil:exportMass') );
     }
 }

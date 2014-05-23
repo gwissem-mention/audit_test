@@ -103,6 +103,12 @@ class OutilController extends Controller
      */
     public function desactiverMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_autodiag.grid.outil')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+
         //get all selected outils
         $outils = $this->get('hopitalnumerique_autodiag.manager.outil')->findBy( array('id' => $primaryKeys) );
 
@@ -126,6 +132,12 @@ class OutilController extends Controller
      */
     public function activerMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_autodiag.grid.outil')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+
         //get all selected outils
         $outils = $this->get('hopitalnumerique_autodiag.manager.outil')->findBy( array('id' => $primaryKeys) );
 
@@ -149,6 +161,12 @@ class OutilController extends Controller
      */
     public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_autodiag.grid.outil')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+
         //get all selected outils
         $outils = $this->get('hopitalnumerique_autodiag.manager.outil')->findBy( array('id' => $primaryKeys) );
         $this->get('hopitalnumerique_autodiag.manager.outil')->delete( $outils );
@@ -213,7 +231,83 @@ class OutilController extends Controller
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Outil:getOutils.html.twig', array(
             'outils' => $outils,
-            'texte' => $this->get('request')->request->get('texte')
+            'texte'  => $this->get('request')->request->get('texte')
         ));
+    }
+
+    /**
+     * Export de masse des reponses
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function exportMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_autodiag.grid.outil')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+
+        //get all selected outils
+        $outils = $this->get('hopitalnumerique_autodiag.manager.outil')->findBy( array('id' => $primaryKeys) );
+
+        //prepare colonnes headers
+        $colonnes = array(
+            'outil'      => 'Outil',
+            'chapitre0'  => 'Chapitre',
+            'chapitre1'  => 'Chapitre',
+            'lastSave'   => 'Date de dernière sauvegarde',
+            'validation' => 'Date de validation',
+            'question'   => 'Question'
+        );
+
+        $datas     = array();
+        $emptyCols = array();
+        foreach($outils as $outil) {
+            $resultats = $outil->getResultats();
+            $colId     = 0;
+            foreach($resultats as $resultat) {
+                //add colonne ID
+                $user                   = !is_null($resultat->getUser()) ? $resultat->getUser()->getPrenomNom() : 'Guest';
+                $colonnes['col'.$colId] = $user;
+                $emptyCols[]            = 'col'.$colId;
+
+                $reponses = $resultat->getReponses();
+                foreach($reponses as $reponse) {
+                    $question = $reponse->getQuestion();
+
+                    if ( !isset($datas[$question->getId()]) ){
+                        $row               = array();
+                        $row['outil']      = $outil->getTitle();
+                        $row['question']   = $question->getTexte();
+                        $row['lastSave']   = $resultat->getDateLastSave()->format('d/m/Y');
+                        $row['validation'] = $resultat->getDateValidation()->format('d/m/Y');
+                        $row['chapitre1']  = $question->getChapitre()->getTitle();
+                        $row['chapitre0']  = !is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getParent()->getTitle() : '';
+
+                        $datas[$question->getId()] = $row;
+                    }
+
+                    $datas[$question->getId()]['col'.$colId] = $reponse->getValue();
+                }
+
+                $colId++;
+            }
+        }
+
+        //reparse all result to add empty cols
+        foreach($datas as &$data) {
+            foreach($emptyCols as $one){
+                if( !isset($data[$one]) )
+                    $data[$one] = '';
+            }
+        }
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_autodiag.manager.outil')->exportCsv( $colonnes, $datas, 'export-resultats.csv', $kernelCharset );
     }
 }

@@ -59,9 +59,7 @@ class ResultatGrid extends Grid implements IGrid
      */
     public function setActionsButtons()
     {
-        // $editButton = new Action\EditButton( 'hopitalnumerique_autodiag_categorie_edit' );
-        // $editButton->setRouteParameters( array('id', 'idRes') );
-        // $this->addActionButton( $editButton );
+        $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_autodiag_resultat_detail' ) );
     }
 
     /**

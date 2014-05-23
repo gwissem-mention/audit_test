@@ -44,94 +44,99 @@
 
             <div class="options">
                 <div class="btn-toolbar">
-                    <div onclick="saveQuestionnaire('valid');" class="finish btn btn-success btn-sm" ><i class="fa fa-check"></i></div>
-                    {% if app.user %}
-                        <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary btn-sm" ><i class="fa fa-save"></i></div>
-                    {% endif %}
+                    <div onclick="saveQuestionnaire('valid');" class="finish btn btn-success btn-sm" ><i class="fa fa-check"></i> Valider le questionnaire</div>
                 </div>
             </div>
 
             <div class="col-md-12 content">
                 {% set formName = outil.alias %}
                 <form action="{{path('hopitalnumerique_autodiag_front_save', {'id':outil.id})}}" id="wizard" class="form-horizontal" method="POST">
-                    {% for chapitre in outil.chapitres %}
+                    {% for chapitre in chapitres %}
+                        {% set parent = chapitre['parent'] %}
                         {# Build vars to make it cleaner #}
-                        {% set fieldsetName = formName ~ '[' ~ chapitre.id ~ ']' %}
-                        {% set fieldsetId   = formName ~ '_' ~ chapitre.id %}
+                        {% set fieldsetName = formName ~ '[' ~ parent.id ~ ']' %}
+                        {% set fieldsetId   = formName ~ '_' ~ parent.id %}
 
                         {# Build step #}
-                        <fieldset title="{{chapitre.title}}" >
-                            <h2>{{chapitre.title}}</h2>
+                        <fieldset title="{{parent.title}}" >
+                            <h2>{{parent.title}}</h2>
 
                             <hr>
-    
-                            {% for question in chapitre.questions %}
-                                {# Build vars to make it cleaner #}
-                                {% set questionName = fieldsetName ~ '[' ~ question.id ~ ']' %}
-                                {% set questionId   = fieldsetId ~ '_' ~ question.id %}
 
-                                {# Build form group #}
-                                <div class="form-group">
-                                    <label for="{{questionName}}" class="col-md-4 control-label">
-                                        {% if question.ordreResultat is not null %}
-                                            {{question.ordreResultat}}.
-                                        {% endif %}
-                                        {{question.texte}}
-                                        <span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>
-                                    </label>
-                                    <div class="col-md-7">
-                                        {# SELECT #}
-                                        {% if question.type.id == '415' %}
-                                            {% set options = question.options|nl2br|split('<br />') %}
-                                            <select name="{{questionName}}" id="{{questionId}}" class="form-control">
-                                                <option value="-1"> - </option>
-                                                <option value="0">Non concerné</option>
-                                                {% for option in options %}
-                                                    {% set datas = option|split(';') %}
-                                                    <option value="{{datas[0]}}">{{datas[1]|capitalize}}</option>
-                                                {% endfor %}
-                                            </select>
-                                        {# RADIO #}
-                                        {% elseif question.type.id == '416' %}
-                                            {% set options = question.options|nl2br|split('<br />') %}
-                                            <div class="radios">
-                                                <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" />Non concerné</label></div>
-                                                {% for option in options %}
-                                                    {% set datas = option|split(';') %}
-                                                    <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" />{{datas[1]|capitalize}}</label></div>
-                                                {% endfor %}
-                                            </div>
-                                        {# TEXT #}
-                                        {% else %}
-                                            <input type="text" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" />
-                                        {% endif %}
-
-                                        <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="display:none" placeholder="Remarques" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i class="fa fa-edit"></i></div>
-                                    </div>
+                            {% if parent.questions|length > 0 %}
+                                {{ _self.buildQuestion(parent.questions, fieldsetName, fieldsetId) }}
+                            {% endif %}
+                            
+                            {% if chapitre['childs']|length > 0 %}
+                                <div class="sous-chapitre">
+                                    {% for child in chapitre['childs'] %}
+                                        <h3>{{child.title}}</h3>
+                                        
+                                        <hr>
+                                        
+                                        {{ _self.buildQuestion(child.questions, fieldsetName, fieldsetId) }}
+                                    {% endfor %}
                                 </div>
-                            {% endfor %}
-
-                            <hr>
+                            {% endif %}
                         </fieldset>
-                    {% endfor %}                    
+                    {% endfor %}
                     <input type="hidden" name="action" id="action" value="" />
                     <input type="hidden" name="remplissage" id="remplissage" value="0" />
                 </form>
 
-                <script>
-                    $(document).ready(function() {
-                        
-                    });
-
-                    
-
-                    
-                </script>
+                {% if app.user %}
+                    <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary btn-sm save" ><i class="fa fa-save"></i> Enregistrer le questionnaire</div>
+                {% endif %}
             </div>
             <div class="clearfix"></div>
         </div>
     </div>
 {% endblock %}
+
+{% macro buildQuestion(questions, fieldsetName, fieldsetId) %}
+    {% for question in questions %}
+        {# Build vars to make it cleaner #}
+        {% set questionName = fieldsetName ~ '[' ~ question.id ~ ']' %}
+        {% set questionId   = fieldsetId ~ '_' ~ question.id %}
+
+        {# Build form group #}
+        <div class="form-group">
+            <label for="{{questionName}}" class="col-md-6">
+                <span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>
+                {{question.texte}}
+            </label>
+            <div class="col-md-5">
+                {# SELECT #}
+                {% if question.type.id == '415' %}
+                    {% set options = question.options|nl2br|split('<br />') %}
+                    <select name="{{questionName}}" id="{{questionId}}" class="form-control">
+                        <option value="-1"> - </option>
+                        <option value="0">Non concerné</option>
+                        {% for option in options %}
+                            {% set datas = option|split(';') %}
+                            <option value="{{datas[0]}}">{{datas[1]|capitalize}}</option>
+                        {% endfor %}
+                    </select>
+                {# RADIO #}
+                {% elseif question.type.id == '416' %}
+                    {% set options = question.options|nl2br|split('<br />') %}
+                    <div class="radios">
+                        <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" />Non concerné</label></div>
+                        {% for option in options %}
+                            {% set datas = option|split(';') %}
+                            <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" />{{datas[1]|capitalize}}</label></div>
+                        {% endfor %}
+                    </div>
+                {# TEXT #}
+                {% else %}
+                    <input type="text" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" />
+                {% endif %}
+
+                <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="display:none" placeholder="Remarques" />
+            </div>
+            <div class="col-md-1">
+                <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i class="fa fa-edit"></i></div>
+            </div>
+        </div>
+    {% endfor %}
+{% endmacro %}
