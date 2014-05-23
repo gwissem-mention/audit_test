@@ -8,7 +8,7 @@
             <ul class="list-unstyled">
                 {# Date de la session #}
                 <li style="margin: 0 0 10px;"><div class="col-md-4"><strong>Date de la session :</strong></div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         {% if session.dateSession is not null and session.dateSession is not empty %}
                             {{ session.dateSession|date('d/m/Y') }}
                         {% else %}
@@ -18,7 +18,7 @@
                 </li>
                 {# Durée #}
                 <li style="margin: 0 0 10px;"><div class="col-md-4"><strong>Durée :</strong></div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         {% if session.duree is not null and session.duree is not empty %}
                             {{ session.duree.libelle }}
                         {% else %}
@@ -28,7 +28,7 @@
                 </li>
                 {# Lieu #}
                 <li style="margin: 0 0 10px;"><div class="col-md-4"><strong>Lieu :</strong></div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         {% if session.lieu is not null and session.lieu is not empty %}
                             {{ session.lieu }}
                         {% else %}
@@ -38,7 +38,7 @@
                 </li>
                 {# Horaires #}
                 <li><div class="col-md-4"><strong>Horaires :</strong></div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         {% if session.horaires is not null and session.horaires is not empty %}
                             {{ session.horaires }}
                         {% else %}
@@ -48,7 +48,7 @@
                 </li>
                 {# Formateur #}
                 <li style="margin: 0 0 10px;"><div class="col-md-4"><strong>Pièce-jointe :</strong></div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         {% if session.module.path is not null and session.module.path is not empty %}
                             <a class="uploadedFile" href="{{path('hopitalnumerique_module_module_dowload_front', {'id': session.module.id })}}">{{session.module.path}}</a>
                         {% else %}
@@ -58,7 +58,7 @@
                 </li>
                 {# Pièce jointe #}
                 <li><div class="col-md-4" style="margin: 0 0 10px;"><strong>Formateur :</strong></div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         {% if session.formateur is not null and session.formateur is not empty %}
                             {{ session.formateur.getAppellation() }}
                         {% else %}
