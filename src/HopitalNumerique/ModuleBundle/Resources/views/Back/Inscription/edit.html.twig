@@ -1,0 +1,59 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block title %}
+    Hôpital Numérique - Modules
+{% endblock %}
+
+{% block h1Title %}
+    {% if inscription.id %}
+        Editer une inscription
+    {% else %}
+        Ajouter une inscription
+    {% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-module-inscription-edit.css" filter="cssrewrite, ?yui_css"
+        '@select2_css'
+        '@validationEngine_css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-module-inscription-edit.js"
+        '@select2_js'
+        '@validationEngine_js'
+        'bundles/hopitalnumeriquemodule/js/inscription/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_module_module_session_inscription', {'id' : inscription.session.id}) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body">
+                <div id="form-session">
+                    {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                    {# Application des librairies JS sur le form : #}
+                    {{ form_javascript(form) }}
+                    {{ form(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

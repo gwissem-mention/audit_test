@@ -137,7 +137,7 @@
         <div class="clearfix"></div>
     </div>
 
-    {% if app.user and app.user|checkAuthorization( path('hopital_numerique_registre_homepage') ) and ambassadeurs is not empty %}
+    {% if app.user and app.user|checkAuthorization( path('hopital_numerique_registre_homepage') ) %}
         <div id="ambassadeurs" class="closed">
             <div class="content" style="display:none">
                 <h3 class="violet">Les ambassadeurs</h3>
@@ -159,6 +159,10 @@
                             {% endif %}
                         </p>
                         <a class="btn background-violet" href="{{path('hopital_numerique_intervention_demande_nouveau_avec_objet',{'ambassadeur':ambassadeur.id, 'prod':objet.id})}}">Solliciter cet ambassadeur</a>
+                    </div>
+                {% else %}
+                    <div class="ambassadeur">
+                        - Aucun ambassadeur référencé sur cette production -
                     </div>
                 {% endfor %}
                 <a href="{{ path('hopital_numerique_registre_homepage') }}" class="readmore"><i class="common-sprite common-sprite-arrow"></i>Accès à l'annuaire des ambassadeurs</a>

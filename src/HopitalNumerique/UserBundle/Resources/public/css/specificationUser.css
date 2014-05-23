@@ -7,5 +7,3 @@ div#form_edit_informations_personnelles form .champ-obligatoire .etoile{color: #
 div#form_edit_informations_personnelles form .username {padding: 7px 0px 0px 15px;}
 div#form_edit_informations_personnelles form label{ color:#333333; font-size: 14px }
 div#form_edit_informations_personnelles form h4{ text-align:left; padding: 30px 0px 10px 0px; }
-
-select[multiple] {height: 110px;}

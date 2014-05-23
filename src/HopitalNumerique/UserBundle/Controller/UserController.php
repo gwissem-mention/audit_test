@@ -408,7 +408,8 @@ class UserController extends Controller
                             'etablissementRattachementSante.nom' => 'Etablissement rattachement Santé',
                             'dateInscriptionString'              => 'Date d\'inscription',
                             'fonctionDansEtablissementSante'     => 'Fonction dans l\'établissement de Santé',
-                            'nbVisites'                          => 'Nombre de visites'
+                            'nbVisites'                          => 'Nombre de visites',
+                            'raisonDesinscription'               => 'Raison de désinscription'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
@@ -636,7 +637,10 @@ class UserController extends Controller
         
         //Si on est en FO dans informations personelles, on affiche pas le mot de passe. Il est géré dans un autre formulaire
         if($this->_informationsPersonnelles)
+        {
             $form->remove('plainPassword');
+            $form->remove('raisonDesinscription');
+        }
 
         $request = $this->get('request');
 

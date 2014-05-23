@@ -3,9 +3,9 @@ $(document).ready(function() {
     //pop-in affichage du message de refus
     $('#refusCandidature').fancybox({
         'padding'   : 0,
-        'autoSize'  : false,
+        'autoSize'  : true,
         'width'     : '70%',
-        'scrolling' : 'no',
+        'scrolling' : 'yes',
         'modal'     : true
     });
 

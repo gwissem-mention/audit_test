@@ -619,7 +619,6 @@ class Module
                 unlink($this->getAbsolutePath());
     
             $this->path = round(microtime(true) * 1000) . '_' . $this->file->getClientOriginalName();
-            
         }
     }
     

@@ -190,7 +190,12 @@ class QuestionnaireType extends AbstractType
             	    break;
                 //Les entity ne sont prévues que pour des entités de Référence (TODO : mettre en base la class et le property ?)
                 case 'entitymultiple':
-                    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'entity', array(
+                    if (isset($attr['class']))
+                        $attr['class'] = $attr['class'].' select2-multiple-entity';
+                    else  
+                        $attr['class'] = 'select2-multiple-entity';
+
+                    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'genemu_jqueryselect2_entity', array(
                             'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                             'property'    => 'libelle',
                             'required'    => $question->getObligatoire(),

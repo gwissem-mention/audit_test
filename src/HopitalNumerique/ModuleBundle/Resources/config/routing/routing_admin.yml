@@ -116,6 +116,22 @@ hopitalnumerique_module_module_session_inscription:
         id: \d+
         _method: GET|POST
 
+#---Form
+hopitalnumerique_module_module_session_inscription_add:
+    pattern:  /module/session/inscription/add/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Back/Inscription:add", id: 1 }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+#---Formulaire d'édition
+hopitalnumerique_module_module_session_inscription_edit:
+    pattern:  /module/session/inscription/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Back/Inscription:edit", id: 1 }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
 #---Accepter inscription
 hopitalnumerique_module_module_session_inscription_accepter:
     pattern:  /module/session/inscription/accepter/{id}
