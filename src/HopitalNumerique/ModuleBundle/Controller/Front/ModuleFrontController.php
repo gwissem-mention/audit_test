@@ -36,6 +36,33 @@ class ModuleFrontController extends Controller
     }
 
     /**
+     * Download le fichier de session.
+     *
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function downloadModuleAction( \HopitalNumerique\ModuleBundle\Entity\Module $module )
+    {
+        $options = array(
+                'serve_filename' => $module->getPath(),
+                'absolute_path'  => false,
+                'inline'         => false,
+        );
+    
+        if(file_exists($module->getUploadRootDir() . '/'. $module->getPath()))
+        {
+            return $this->get('igorw_file_serve.response_factory')->create( $module->getUploadRootDir() . '/'. $module->getPath(), 'application/pdf', $options);
+        }
+        else
+        {
+            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
+            $this->get('session')->getFlashBag()->add( ('danger') , 'Le document n\'existe plus sur le serveur.' );
+    
+            return $this->redirect( $this->generateUrl('hopitalnumerique_module_module_front') );
+        }
+    }
+
+    /**
      * Permet d'afficher les différents modules dans un menu
      *
      * @param HopitalNumeriqueModuleBundleEntityModule $module

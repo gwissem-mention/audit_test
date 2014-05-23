@@ -127,6 +127,7 @@ class SessionType extends AbstractType
                     'required' => false, 
                     'label'    => 'Fiche de présence'
             ))
+            ->add('path', 'hidden')
             ->add('etat', 'entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property'      => 'libelle',
