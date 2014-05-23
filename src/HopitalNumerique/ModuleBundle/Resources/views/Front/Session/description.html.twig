@@ -7,7 +7,7 @@
         <div class="col-md-12 fancybox-popin">
             <ul class="list-unstyled">
                 {# Date de la session #}
-                <li style="margin: 0 0 10px;"><strong>Date de la session :</strong><br />
+                <li style="margin: 0 0 10px;"><strong>Date de la session :</strong>
                     {% if session.dateSession is not null and session.dateSession is not empty %}
                         {{ session.dateSession|date('d/m/Y') }}
                     {% else %}
@@ -15,7 +15,7 @@
                     {% endif %}
                 </li>
                 {# Durée #}
-                <li style="margin: 0 0 10px;"><strong>Durée :</strong><br />
+                <li style="margin: 0 0 10px;"><strong>Durée :</strong>
                     {% if session.duree is not null and session.duree is not empty %}
                         {{ session.duree.libelle }}
                     {% else %}
@@ -23,7 +23,7 @@
                     {% endif %}
                 </li>
                 {# Lieu #}
-                <li style="margin: 0 0 10px;"><strong>Lieu :</strong><br />
+                <li style="margin: 0 0 10px;"><strong>Lieu :</strong>
                     {% if session.lieu is not null and session.lieu is not empty %}
                         {{ session.lieu }}
                     {% else %}
@@ -31,7 +31,7 @@
                     {% endif %}
                 </li>
                 {# Horaires #}
-                <li><strong>Horaires :</strong><br />
+                <li><strong>Horaires :</strong>
                     {% if session.horaires is not null and session.horaires is not empty %}
                         {{ session.horaires }}
                     {% else %}
@@ -40,7 +40,7 @@
                 </li>
                 <br />
                 {# Formateur #}
-                <li style="margin: 0 0 10px;"><strong>Formateur :</strong><br />
+                <li style="margin: 0 0 10px;"><strong>Formateur :</strong>
                     {% if session.formateur is not null and session.formateur is not empty %}
                         {{ session.formateur.getAppellation() }}
                     {% else %}
@@ -58,7 +58,7 @@
                 </li>
                 <br />
                 {# Description #}
-                <li style="margin: 0 0 10px;"><strong>Description :</strong><br />
+                <li style="margin: 0 0 10px;"><strong>Description :</strong>
                     {% if session.description is not null and session.description is not empty %}
                         {{ session.description }}
                     {% else %}
