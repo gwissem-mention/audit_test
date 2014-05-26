@@ -1,0 +1,2 @@
+ALTER TABLE hn_objet ADD obj_nb_vue INT NOT NULL COMMENT 'Nombre de fois où lobjet à été vue';
+ALTER TABLE hn_objet_contenu ADD con_nb_vue INT NOT NULL COMMENT 'Nombre de fois où le contenu à été vue';

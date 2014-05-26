@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\PublicationBundle\Controller;
 
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class PublicationController extends Controller
@@ -9,9 +10,10 @@ class PublicationController extends Controller
     /**
      * Objet Action
      */
-    public function objetAction($id, $alias)
+    public function objetAction(Objet $objet)
     {
-        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
+        //objet visualisation
+        $objet->setNbVue( ($objet->getNbVue() + 1) );
 
         //Si l'user connecté à le rôle requis pour voir l'objet
         if( $this->checkAuthorization( $objet ) === false )
@@ -21,7 +23,7 @@ class PublicationController extends Controller
         $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
 
         //get Contenus : for sommaire
-        $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
+        $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $objet->getId() ) : array();
 
         //set Consultation entry
         $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $objet );
@@ -51,6 +53,9 @@ class PublicationController extends Controller
         //on récupère le contenu
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array( 'id' => $idc ) );
         $prefix  = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu);
+
+        //add visualisation
+        $contenu->setNbVue( ($contenu->getNbVue() + 1) );
 
         //Types objet
         $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
