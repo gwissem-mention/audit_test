@@ -84,20 +84,9 @@
                                 {% endif %}
                             </div>
                         </li>
-                        {# Productions concernées #}
-                        <li>
-                            <div class="col-md-12" style="margin: 0 0 10px; padding-top: 10px; border-top: 1px solid #D5D5D5;">
-                                <strong>Production(s) concernée(s) : </strong>
-                                <ul>
-                                    {% for production in session.module.productions %}
-                                        <li>{{ production.titre }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </li>
                         {# Description #}
                         <li>
-                            <div class="col-md-12" style="margin: 0 0 10px;">
+                            <div class="col-md-12" style="margin: 0 0 10px;padding-top:10px;border-top: 1px solid #D5D5D5;">
                                 <strong>Description :</strong><br />
                                 {% if session.description is not null and session.description is not empty %}
                                     {{ session.description }}
@@ -115,7 +104,17 @@
                                 {% else %}
                                     - Aucun(s) prérequis pour cette session -
                                 {% endif %}
-		        	            <br/><br/>
+                            </div>
+                        </li>
+                        {# Productions concernées #}
+                        <li>
+                            <div class="col-md-12" style="margin: 0 0 10px; padding-top: 10px;">
+                                <strong>Production(s) concernée(s) : </strong>
+                                <ul>
+                                    {% for production in session.module.productions %}
+                                        <li>{{ production.titre }}</li>
+                                    {% endfor %}
+                                </ul>
                             </div>
                         </li>
                     </ul>
