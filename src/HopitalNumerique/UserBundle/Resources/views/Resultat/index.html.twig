@@ -1,25 +1,16 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
-{% block title %}{{parent()}} - Utilisateurs{% endblock %}
+{% block title %}{{parent()}} - Autodiagnostic{% endblock %}
 
 {% block h1Title %}
-    Domaines maîtrisés
-{% endblock %}
-
-{% block javascripts %}
-    {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-user-ambassadeur-domaines.js"
-        'bundles/hopitalnumeriqueuser/js/Ambassadeur/domaines.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    Gestion des Résultats
 {% endblock %}
 
 {% block toolbarButton %}
     <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste des utilisateurs"><i class="fa fa-reply"></i></a>
 {% endblock %}
 
-{% block body %}
+{% block body %}    
     <div class="col-sm-12">
         <div id="form_edit_user" class="panel panel-midnightblue">
             <div class="panel-heading">
@@ -28,7 +19,7 @@
                         <li>
                             <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Caractérisation</a>
                         </li>
-                        {% if user.id is not null and (options.expert or options.ambassadeur)  %}
+                        {% if user.id is not null and (options.expert or options.ambassadeur) %}
                             <li>
                                 <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Contractualisation</a>
                             </li>
@@ -47,47 +38,46 @@
                             <li>
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maîtrisées</a>
                             </li>
-                            <li class="active" >
+                            <li>
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Domaines maîtrisés</a>
                             </li>
                         {% endif %}
-                        {% if user.id is not null %}
-                            <li>
-                                <a href="{{path('hopital_numerique_user_resultats', {'id':user.id})}}">Autodiagnostic</a>
-                            </li>
-                        {% endif %}
+                        
+                        <li class="active">
+                            <a href="#">Autodiagnostic</a>
+                        </li>
                     </ul>
                 </div>
             </div>
 
             <div class="panel-body" >
-                <div class="sous_options pull-right">
-                    <div class="btn-toolbar">
-                        {% if app.user|checkAuthorization( path('hopitalnumerique_user_ambassadeur_savedomaine') ) %}
-                            <div onclick="saveDomaines();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
-                        {% endif %}
-                    </div>
-                </div>
-                <table class="table" id="domaines" >
+                <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th width="50px"></th>
-                            <th> Domaine fonctionnel</th>
+                            <th>Taux de remplissage global</th>
+                            <th>Date du dernier enregistrement</th>
+                            <th>Date de validation</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for domaine in domaines %}
+                        {% for resultat in resultats %}
                             <tr>
-                                <td><input type="checkbox" data-id="{{domaine.id}}" id="domaine_{{domaine.id}}" {% if domaine.selected %}checked="checked"{% endif %} /></td>
-                                <td><label for="domaine_{{domaine.id}}">{{domaine.libelle}}</label></td>
+                                <td>{{resultat.tauxRemplissage}}%</td>
+                                <td>{{resultat.dateLastSave|date('d/m/Y')}}</td>
+                                <td>{{resultat.dateValidation|date('d/m/Y')}}</td>
+                                <td>
+                                    <a href="{{path('hopitalnumerique_autodiag_resultat_detail', {'id':resultat.id})}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4"> - Vous n'avez pas encore rempli de questionnaire d'autodiagnostic - </td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-            </div>           
+            </div>            
         </div>
-
-        <input type="hidden" id="domaines-save-url" value="{{path('hopitalnumerique_user_ambassadeur_savedomaine')}}" />
-        <input type="hidden" id="user_id" value="{{user.id}}" />
     </div>
 {% endblock %}

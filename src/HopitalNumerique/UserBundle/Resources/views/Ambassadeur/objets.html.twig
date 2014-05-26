@@ -71,6 +71,11 @@
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Domaines maîtrisés</a>
                             </li>
                         {% endif %}
+                        {% if user.id is not null %}
+                            <li>
+                                <a href="{{path('hopital_numerique_user_resultats', {'id':user.id})}}">Autodiagnostic</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
