@@ -486,8 +486,7 @@ class MailManager extends BaseManager
         return \Swift_Message::newInstance()
                         ->setSubject( $mail->getObjet() )
                         ->setFrom( $from )
-                        //->setTo( $this->_destinataire )
-                        ->setTo( 'qsomazzi@yopmail.com' )
+                        ->setTo( $this->_destinataire )
                         ->setBody( strip_tags($body, '<style>' ) )
                         ->addPart( $body, 'text/html' );
     }
