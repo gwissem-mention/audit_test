@@ -1,38 +1,43 @@
 <style type="text/css">
     @media print {
-        *{width: 100% !important; border:none;background-color :#fff; font-family :Serif;font-size :12pt;}
-        #body, .panel-footer { display:none; }
+        *{ border:none;background-color :#fff; font-family :Serif;font-size :12pt;}
+        #body, .footer { display:none; }
         .fancybox-wrap{top:0 !important; left:0 !important;}
         @page{ margin: 1cm .5cm; size: portrait; }
         #mesrequetes{width: 0}
+        .content{margin:0;}
     }
 </style>
 
-<link rel="stylesheet" href="{{asset('bundles/hopitalnumeriquecore/css/bootstrap.min.css')}}" type="text/css" />
-<link rel="stylesheet" href="{{asset('bundles/hopitalnumeriquecore/css/bootstrap-theme.min.css')}}" type="text/css" />
-<link rel="stylesheet" href="{{asset('bundles/hopitalnumeriquecore/css/layout.css')}}" type="text/css" />
-<link rel="stylesheet" href="{{asset('bundles/hopitalnumeriquerecherche/css/style.css')}}" type="text/css" />
+{% block stylesheets %}
+    {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese.css" filter="cssrewrite, ?yui_css" 
+        "@bootstrap_css"
+        'bundles/hopitalnumeriquecore/css/layout.css'
+        'bundles/hopitalnumeriquerecherche/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
 
-<div class="panel" id="synthese-ajax" >
-    <div class="panel-heading">
-        <h4 class="violet">{{objet.titre}} - Synthèse</h4>
+<div id="synthese-ajax" style="background-color:#ffffff; padding-top:20px">
+    <img style="margin:20px auto; width:130px; display:block" src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" />
+
+    <h4 class="violet text-center" style="text-decoration:none">{{objet.titre}}</h4>
+    <h5 class="violet text-center" style="margin-top:10px; font-weight: bold" >Synthèse</h5>
+
+    <div class="content" style="margin:20px">
+        {% if objet %}
+            {{objet.synthese|raw}}
+        {% else %}
+            Vous n'avez pas les droits nécessaires pour accéder à cette publication.
+        {% endif %}
     </div>
 
-    <div class="panel-body" >
-        <div class="content">
-            {% if objet %}
-                {{objet.synthese|raw}}
-            {% else %}
-                Vous n'avez pas les droits nécessaires pour accéder à cette publication.
-            {% endif %}
-        </div>
-
-        <div class="panel-footer" >
-            <div class="row">
-                <div class="btn-toolbar pull-right">
-                    <div onclick="print();" class="btn-info btn">Imprimer</div>
-                </div>
-            </div>
+    <div class="footer" >
+        <div class="pull-right" style="margin:0 20px 20px 0">
+            <div onclick="print();" class="btn-info btn">Imprimer</div>
         </div>
     </div>
+
+    <div class="clearfix"></div>
 </div>
