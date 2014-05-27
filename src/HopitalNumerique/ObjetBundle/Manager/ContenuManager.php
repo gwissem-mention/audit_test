@@ -247,6 +247,7 @@ class ContenuManager extends BaseManager
             $item->titre      = $element->getTitre();
             $item->alias      = $element->getAlias();
             $item->id         = $element->getId();
+            $item->nbVue      = $element->getNbVue();
             $item->references = count($element->getReferences());
             $item->order      = $chapitre;
             $item->hasContent = $element->getContenu() == ''   ? false : true;
