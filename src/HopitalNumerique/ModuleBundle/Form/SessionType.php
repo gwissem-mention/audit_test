@@ -27,7 +27,7 @@ class SessionType extends AbstractType
         $builder
             ->add('dateSession', 'genemu_jquerydate', array(
                 'required' => true, 
-                'label'    => 'Date de la session',
+                'label'    => 'Début de la session',
                 'widget'   => 'single_text',
                 'attr'     => array('class' => $this->_constraints['dateSession']['class'] )
             ))

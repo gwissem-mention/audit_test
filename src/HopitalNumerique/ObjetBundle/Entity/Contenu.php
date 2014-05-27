@@ -104,6 +104,13 @@ class Contenu
     protected $consultations;
 
     /**
+     * @var integer
+     * 
+     * @ORM\Column(name="con_nb_vue", type="integer", options = {"comment" = "Nombre de fois où le contenu à été vue"})     
+     */
+    protected $nbVue;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -114,6 +121,7 @@ class Contenu
         $this->contenu      = '';
         $this->parent       = null;
         $this->order        = 0;
+        $this->nbVue        = 0;
         $this->references   = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -254,6 +262,27 @@ class Contenu
     public function setParent($parent)
     {
         $this->parent = $parent;
+    }
+    
+    /**
+     * Get nbVue
+     *
+     * @return integer $nbVue
+     */
+    public function getNbVue()
+    {
+        return $this->nbVue;
+    }
+    
+    /**
+     * Set nbVue
+     *
+     * @param integer $nbVue
+     */
+    public function setNbVue($nbVue)
+    {
+        $this->nbVue = $nbVue;
+        return $this;
     }
     
     /**

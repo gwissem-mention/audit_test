@@ -153,6 +153,13 @@ class Objet
     private $vignette;
 
     /**
+     * @var integer
+     * 
+     * @ORM\Column(name="obj_nb_vue", type="integer", options = {"comment" = "Nombre de fois où lobjet à été vue"})     
+     */
+    protected $nbVue;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="obj_locked_by", referencedColumnName="usr_id")
      */
@@ -230,6 +237,7 @@ class Objet
     {
         $this->dateCreation = new \DateTime();
         $this->etat         = 3;
+        $this->nbVue        = 0;
         $this->commentaires = true;
         $this->notes        = true;
         $this->isInfraDoc   = false;
@@ -615,6 +623,27 @@ class Objet
     public function setVignette($vignette)
     {
         $this->vignette = $vignette;
+    }
+
+    /**
+     * Get nbVue
+     *
+     * @return integer $nbVue
+     */
+    public function getNbVue()
+    {
+        return $this->nbVue;
+    }
+    
+    /**
+     * Set nbVue
+     *
+     * @param integer $nbVue
+     */
+    public function setNbVue($nbVue)
+    {
+        $this->nbVue = $nbVue;
+        return $this;
     }
 
     /**
