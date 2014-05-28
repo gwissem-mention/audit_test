@@ -1,0 +1,29 @@
+HopitalNumerique\ForumBundle\Entity\Registry:
+    type: entity
+    table: cc_forum_registry
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        cachedPostCount:
+            type: integer
+            column: cached_post_count
+            nullable: false
+        cachedKarmaPositiveCount:
+            type: integer
+            column: cached_karma_positive_count
+            nullable: false
+        cachedKarmaNegativeCount:
+            type: integer
+            column: cached_karma_negative_count
+            nullable: false
+    manyToOne:
+        ownedBy:
+            targetEntity: HopitalNumerique\UserBundle\Entity\User
+            cascade: ["persist"]
+            nullable: true
+            joinColumn:
+                name: fk_owned_by_user_id
+                referencedColumnName: usr_id
+                onDelete: SET NULL

@@ -1,0 +1,79 @@
+# CCDNForum\ForumBundle\Entity\Post:
+HopitalNumerique\ForumBundle\Entity\Post:
+    type: entity
+    table: cc_forum_post
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        body:
+            type: text
+        createdDate:
+            type: datetime
+            column: created_date
+        editedDate:
+            type: datetime
+            column: edited_date
+            nullable: true
+        isDeleted:
+            type: boolean
+            column: is_deleted
+            nullable: false
+        deletedDate:
+            type: datetime
+            column: deleted_date
+            nullable: true
+        unlockedDate:
+            type: datetime
+            column: unlocked_date
+            nullable: true
+        unlockedUntilDate:
+            type: datetime
+            column: unlocked_until_date
+            nullable: true
+    manyToOne:
+        topic:
+            targetEntity: HopitalNumerique\ForumBundle\Entity\Topic
+            cascade: ["persist"]
+            inversedBy: posts
+            #nullable: true
+            joinColumn:
+                name: fk_topic_id
+                referencedColumnName: id
+                onDelete: SET NULL
+        createdBy:
+            targetEntity: HopitalNumerique\UserBundle\Entity\User
+            cascade: []
+            nullable: true
+            joinColumn:
+                name: fk_created_by_user_id
+                referencedColumnName: usr_id
+        editedBy:
+            targetEntity: HopitalNumerique\UserBundle\Entity\User
+            cascade: []
+            nullable: true
+            joinColumn:
+                name: fk_edited_by_user_id
+                referencedColumnName: usr_id
+        deletedBy:
+            targetEntity: HopitalNumerique\UserBundle\Entity\User
+            cascade: []
+            nullable: true
+            joinColumn:
+                name: fk_deleted_by_user_id
+                referencedColumnName: usr_id
+        unlockedBy:
+            targetEntity: HopitalNumerique\UserBundle\Entity\User
+            cascade: []
+            nullable: true
+            joinColumn:
+                name: fk_unlocked_by_user_id
+                referencedColumnName: usr_id
+#        attachment:
+#            targetEntity: CCDNComponent\AttachmentBundle\Entity\Attachment
+#            cascade: ["persist"]
+#            joinColumn:
+#                name: fk_attachment_id
+#                referencedColumnName: id
+#                onDelete: SET NULL

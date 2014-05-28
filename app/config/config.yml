@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: assetic.yml }
+    - { resource: forum.yml }
 
 framework:
     translator:      { fallback: "%locale%" }
@@ -52,12 +53,22 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
+        resolve_target_entities:
+            Symfony\Component\Security\Core\User\UserInterface: HopitalNumerique\UserBundle\Entity\User
         entity_managers:
             default:
                 auto_mapping: true
                 dql:
                     string_functions:
                         GROUP_CONCAT: DoctrineExtensions\Query\Mysql\GroupConcat
+                mappings:
+                    CCDNForumForumBundle:
+                        mapping:              true
+                        type:                 yml
+                        dir:                  "../../../../../src/HopitalNumerique/ForumBundle/Resources/config/doctrine"
+                        alias:                ~
+                        prefix:               HopitalNumerique\ForumBundle\Entity
+                        is_bundle:            true
 
 # Swiftmailer Configuration
 swiftmailer:

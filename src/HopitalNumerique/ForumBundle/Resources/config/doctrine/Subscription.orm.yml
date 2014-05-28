@@ -1,0 +1,42 @@
+HopitalNumerique\ForumBundle\Entity\Subscription:
+    type: entity
+    table: cc_forum_subscription
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        isRead:
+            type: boolean
+            column: is_read
+            nullable: false
+        isSubscribed:
+            type: boolean
+            column: is_subscribed
+            nullable: false
+    manyToOne:
+        forum:
+            targetEntity: HopitalNumerique\ForumBundle\Entity\Forum
+            cascade: []
+            nullable: true
+            joinColumn:
+                name: fk_forum_id
+                referencedColumnName: id
+                onDelete: SET NULL
+        topic:
+            targetEntity: HopitalNumerique\ForumBundle\Entity\Topic
+            cascade: ["persist"]
+            inversedBy: subscriptions
+            nullable: true
+            joinColumn:
+                name: fk_topic_id
+                referencedColumnName: id
+                onDelete: SET NULL
+        ownedBy:
+            targetEntity: HopitalNumerique\UserBundle\Entity\User
+            cascade: ["persist"]
+            nullable: true
+            joinColumn:
+                name: fk_owned_by_user_id
+                referencedColumnName: usr_id
+                onDelete: SET NULL
