@@ -1,12 +1,72 @@
 {% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
 
 {# Référencement #}
-{% block title %}{{parent()}} - Autodiagnostic{% endblock %}
+{% block title %}{{parent()}} - Autodiagnostic - Résultats{% endblock %}
 
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-front-resultat.css" filter="cssrewrite, ?yui_css" 
+        'bundles/hopitalnumeriqueautodiag/css/front.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
 
 {% block body %}
-    <div id="autodiag">
-        
-        
+    <div id="resultats">
+        <div class="col-md-12">
+            <h1 class="violet">Résultats de l'outil {{resultat.outil.title}}</h1>
+
+            {% for chapitre in chapitres %}
+                <div class="chapitre-{{chapitre.id}}">
+                    <h2 class="violet">{{chapitre.title}}</h2>
+                    <hr>
+
+                    {% if chapitre.synthese %}
+                        <p class="violet synthese">{{chapitre.synthese}}</p>
+                    {% endif %}
+
+                    {% if chapitre.questions|length > 0 %}
+                        {{ _self.buildQuestion(chapitre.questions) }}
+                    {% endif %}
+                    
+                    {% if chapitre.childs|length > 0 %}
+                        <div class="row sous-chapitre">
+                            <div class="col-md-12">
+                                {% for child in chapitre.childs %}
+                                    <h3 class="violet">{{child.title}}</h3>
+                                    {% if child.synthese %}
+                                        <p class="violet synthese">{{child.synthese}}</p>
+                                    {% endif %}
+                                    
+                                    {{ _self.buildQuestion(child.questions) }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <hr>
+            
+            <a href="#" class="btn btn-primary pull-right">Télécharger les résultats</a>
+        </div>
     </div>
 {% endblock %}
+
+{% macro buildQuestion(questions) %}
+    {% for question in questions %}
+        {% if ((question.type == '415' and question.value != 0) or (question.type == '416' and question.value != 0 ) or (question.type == '417' and question.value != '') ) and (question.value < question.noteMinimale) %}
+            {% set publications = question.id|getPublications %}
+            {% if publications %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="question">{{question.question}}</p>
+                        <p class="violet synthese">{{question.synthese}}</p>
+                        {{publications|raw}}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endmacro %}

@@ -23,6 +23,8 @@ parameters:
     hopitalnumerique_autodiag.grid.resultat.class: HopitalNumerique\AutodiagBundle\Grid\ResultatGrid
     #Reponse
     hopitalnumerique_autodiag.manager.reponse.class: HopitalNumerique\AutodiagBundle\Manager\ReponseManager
+    #Twig
+    hopitalnumerique_autodiag.twig.autodiag.class: HopitalNumerique\AutodiagBundle\Twig\AutodiagExtension
 
 services:
     #Outils
@@ -115,3 +117,10 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    #Extension Twig
+    hopitalnumerique_autodiag.twig.autodiag_extension:
+        class: %hopitalnumerique_autodiag.twig.autodiag.class%
+        arguments : ["@service_container"]
+        tags:
+            - { name: twig.extension }

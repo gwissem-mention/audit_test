@@ -45,16 +45,31 @@ class ResultatManager extends BaseManager
         return $results;
     }
 
+    /**
+     * Formatte les résultats pour la partie backoffice
+     *
+     * @param Resultat $resultat L'objet Résultat
+     *
+     * @return array
+     */
     public function formateResultat( Resultat $resultat )
     {
         //build reponses array
         $reponses          = $resultat->getReponses();
         $questionsReponses = array();
         foreach($reponses as $reponse) {
-            $rep           = new \StdClass;
-            $rep->question = $reponse->getQuestion()->getTexte();
-            $rep->value    = $reponse->getValue();
-            $rep->remarque = $reponse->getRemarque();
+            $rep = new \StdClass;
+
+            $question           = $reponse->getQuestion();
+            $rep->value         = $reponse->getValue();
+            $rep->remarque      = $reponse->getRemarque();
+            $rep->id            = $question->getId();
+            $rep->question      = $question->getTexte();
+            $rep->ordreResultat = $question->getOrdreResultat();
+            $rep->noteMinimale  = $question->getNoteMinimale();
+            $rep->synthese      = $question->getSynthese();
+            $rep->order         = $question->getOrder();
+            $rep->type          = $question->getType()->getId();
 
             $questionsReponses[ $reponse->getQuestion()->getId() ] = $rep;
         }
@@ -64,11 +79,13 @@ class ResultatManager extends BaseManager
         $parents        = array();
         $enfants        = array();
         foreach($chapitres as $one){
-            $chapitre         = new \StdClass;
-            $chapitre->id     = $one->getId();
-            $chapitre->title  = $one->getTitle();
-            $chapitre->childs = array();
-            $chapitre->parent = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
+            $chapitre = new \StdClass;
+            
+            $chapitre->id       = $one->getId();
+            $chapitre->synthese = $one->getSynthese();
+            $chapitre->title    = $one->getTitle();
+            $chapitre->childs   = array();
+            $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
             //handle questions/reponses
             $questions         = $one->getQuestions();

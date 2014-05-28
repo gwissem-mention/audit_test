@@ -40,8 +40,6 @@ class SearchManager extends BaseManager
     {
         //prepare some vars
         $nbCateg             = 4;
-        $objets              = array();
-        $contenus            = array();
         $objetsToIntersect   = array();
         $contenusToIntersect = array();
 
@@ -82,30 +80,7 @@ class SearchManager extends BaseManager
             }
         }
 
-        //Si on a filtré sur plusieurs catégories, on récupère uniquement les objets commun à chaque catégorie (filtre ET)
-        if( isset($objetsToIntersect[0]) )
-            $objets = (count($objetsToIntersect) > 1) ? call_user_func_array('array_intersect_key',$objetsToIntersect) : $objetsToIntersect[0];
-        
-        //Si on a filtré sur plusieurs catégories, on récupère uniquement les contenus commun à chaque catégorie (filtre ET)
-        if( isset($contenusToIntersect[0]) )
-            $contenus = (count($contenusToIntersect) > 1) ? call_user_func_array('array_intersect_key',$contenusToIntersect) : $contenusToIntersect[0];
-
-        $fusion = array_merge( $objets, $contenus );
-
-        if( empty($fusion) )
-            return $fusion;
-
-        //make a $sort array for multi-sort function
-        $sort = array();
-        foreach($fusion as $k=>$v) {
-            $sort['primary'][$k] = $v['primary'];
-            $sort['nbRef'][$k]   = $v['nbRef'];
-            $sort['id'][$k]      = $v['id'];
-        }
-        //sort by primary desc and then nbRef asc
-        array_multisort($sort['primary'], SORT_DESC, $sort['nbRef'], SORT_ASC,$sort['id'], SORT_DESC,$fusion);
-
-        return $fusion;
+        return $this->mergeDatas( $objetsToIntersect, $contenusToIntersect );
     }
 
     /**
@@ -203,6 +178,53 @@ class SearchManager extends BaseManager
         return $tabToReturn;
     }
 
+    /**
+     * Retourne la liste des objets pour la question d'autodiag
+     *
+     * @param array $references Liste de références
+     * @param Role  $role       Role de l'utilisateur
+     *
+     * @return array
+     */
+    public function getObjetsForAutodiag( $references, $role )
+    {
+        //prepare some vars
+        $objetsToIntersect   = array();
+        $contenusToIntersect = array();
+
+        //on récupères tous les objets, on les formate et on les ajoute à nos catégories
+        $results = $this->_refObjetManager->getObjetsForRecherche( $references );
+        if( $results ){
+            $tmp = array();
+            foreach( $results as $one) {
+                $objet = $this->formateObjet( $one, $role );
+                if( !is_null($objet) && $objet['categ'] != '' )
+                    $tmp[ $objet['id'] ] = $objet;
+            }
+
+            //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
+            $objetsToIntersect[] = $tmp;
+        }else
+            $objetsToIntersect[] = array();
+
+        //on récupères tous les contenus (infradoc), on les formate et on les ajoute à nos catégories
+        $results = $this->_refContenuManager->getContenusForRecherche( $references );
+        if( $results ) {
+            $tmp = array();
+            foreach( $results as $one) {
+                $contenu = $this->formateContenu( $one, $role );
+                if( !is_null($contenu) && $contenu['categ'] != '' )
+                    $tmp[ $contenu['id'] ] = $contenu;
+            }
+
+            //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
+            $contenusToIntersect[] = $tmp;
+        }
+        else
+            $contenusToIntersect[] = array();
+
+        return $this->mergeDatas( $objetsToIntersect, $contenusToIntersect );
+    }
 
 
 
@@ -214,6 +236,46 @@ class SearchManager extends BaseManager
 
 
 
+
+
+    /**
+     * Merge les données objetds et les données contenus
+     *
+     * @param array $objetsToIntersect   Les objets
+     * @param array $contenusToIntersect Les contenus
+     *
+     * @return array
+     */
+    private function mergeDatas( $objetsToIntersect, $contenusToIntersect )
+    {
+        $objets   = array();
+        $contenus = array();
+
+        //Si on a filtré sur plusieurs catégories, on récupère uniquement les objets commun à chaque catégorie (filtre ET)
+        if( isset($objetsToIntersect[0]) )
+            $objets = (count($objetsToIntersect) > 1) ? call_user_func_array('array_intersect_key',$objetsToIntersect) : $objetsToIntersect[0];
+        
+        //Si on a filtré sur plusieurs catégories, on récupère uniquement les contenus commun à chaque catégorie (filtre ET)
+        if( isset($contenusToIntersect[0]) )
+            $contenus = (count($contenusToIntersect) > 1) ? call_user_func_array('array_intersect_key',$contenusToIntersect) : $contenusToIntersect[0];
+
+        $fusion = array_merge( $objets, $contenus );
+
+        if( empty($fusion) )
+            return $fusion;
+
+        //make a $sort array for multi-sort function
+        $sort = array();
+        foreach($fusion as $k=>$v) {
+            $sort['primary'][$k] = $v['primary'];
+            $sort['nbRef'][$k]   = $v['nbRef'];
+            $sort['id'][$k]      = $v['id'];
+        }
+        //sort by primary desc and then nbRef asc
+        array_multisort($sort['primary'], SORT_DESC, $sort['nbRef'], SORT_ASC,$sort['id'], SORT_DESC,$fusion);
+
+        return $fusion;
+    }
 
     /**
      * Formatte Correctement les refContenus

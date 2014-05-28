@@ -1,3 +1,4 @@
+/* Autodiag : partie questionnaire */
 #autodiag{margin-top: 20px; position: relative}
 #autodiag h1{ margin:0 0 50px 0; float:left; font-size:30px;}
 #autodiag .options{display: inline;float: right;position: relative;top: 0px;right: 0;}
@@ -31,3 +32,11 @@
     #autodiag .stepy-navigator .button-back:hover,
     #autodiag .stepy-navigator .button-next:hover
         { background-color: #e0e0e0; color: #333; border-color: #adadad; text-decoration: none; }
+
+/* Autodiag : partie résultats */
+#resultats h1{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; background: #f6f6f6}
+#resultats h2{ text-transform: uppercase;}
+#resultats h3{ text-transform: uppercase; margin-bottom: 20px; font-size: 18px}
+#resultats .synthese{font-style: italic; font-size: 12px}
+#resultats .question{font-weight: bold; margin-bottom: 0}
+#resultats .sous-chapitre .question{padding-left:40px;}
