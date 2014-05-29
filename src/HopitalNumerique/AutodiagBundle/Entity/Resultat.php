@@ -70,7 +70,6 @@ class Resultat
      */
     public function __construct()
     {
-        $this->dateLastSave    = new \DateTime();
         $this->tauxRemplissage = 0;
         $this->reponses        = new \Doctrine\Common\Collections\ArrayCollection();
     }

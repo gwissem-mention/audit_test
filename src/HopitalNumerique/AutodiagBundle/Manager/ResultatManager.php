@@ -2,7 +2,9 @@
 
 namespace HopitalNumerique\AutodiagBundle\Manager;
 
+use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use HopitalNumerique\AutodiagBundle\Entity\Resultat;
+use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -90,8 +92,10 @@ class ResultatManager extends BaseManager
             //handle questions/reponses
             $questions         = $one->getQuestions();
             $chapitreQuestions = array();
-            foreach ($questions as $question)
-                $chapitreQuestions[] = $questionsReponses[ $question->getId() ];
+            foreach ($questions as $question){
+                if( isset($questionsReponses[ $question->getId() ]) )
+                    $chapitreQuestions[] = $questionsReponses[ $question->getId() ];
+            }
 
             $chapitre->questions = $chapitreQuestions;
 
@@ -109,5 +113,18 @@ class ResultatManager extends BaseManager
         }
 
         return $parents;
+    }
+
+    /**
+     * Récupère le dernier résultat validé
+     *
+     * @param Outil  $outil L'outil
+     * @param User   $user  L'utilisateur connecté
+     *
+     * @return Resultat
+     */
+    public function getLastResultatValided( Outil $outil, User $user )
+    {
+        return $this->getRepository()->getLastResultatValided($outil, $user)->getQuery()->getOneOrNullResult();
     }
 }

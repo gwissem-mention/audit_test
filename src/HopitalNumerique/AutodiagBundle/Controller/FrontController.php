@@ -59,9 +59,30 @@ class FrontController extends Controller
             $parents[ $parentId ]['childs'][] = $enfant;
         }
 
+        //get Existing responses (for connected user only)
+        $user     = $this->get('security.context')->getToken()->getUser();
+        $reponses = false;
+        if( $user != 'anon.' ) {
+            $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
+            
+            //get Resultat for last one note valided
+            $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
+            
+            //if the previous one is valided, we get the results to pre-load values
+            if( !$resultat )
+                $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->getLastResultatValided( $outil, $user );
+
+            if( $resultat ){
+                $datas = $resultat->getReponses();
+                foreach($datas as $one)
+                    $reponses[ $one->getQuestion()->getId() ] = $one->getValue();
+            }
+        }
+
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
             'outil'     => $outil,
-            'chapitres' => $parents
+            'chapitres' => $parents,
+            'reponses'  => $reponses
         ));
     }
 
@@ -84,9 +105,25 @@ class FrontController extends Controller
         $user = $user != 'anon.' ? $user : false;
 
         //create Resultat entity
-        $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->createEmpty();
-        $resultat->setOutil( $outil );
+        if( $user ) {
+            $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
+            
+            //get Resultat for last one note valided
+            $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
+        }
+        
+        //create for the first time
+        if( !$resultat ) {
+            $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->createEmpty();
+            $resultat->setOutil( $outil );
+        }else{
+            //empty old reponses
+            $oldReponses = $this->get('hopitalnumerique_autodiag.manager.reponse')->findBy( array('resultat'=>$resultat) );
+            $this->get('hopitalnumerique_autodiag.manager.reponse')->delete( $oldReponses );
+        }
+        
         $resultat->setTauxRemplissage( $remplissage );
+        $resultat->setDateLastSave( new \DateTime() );
 
         //cas ou l'user à validé le questionnaire
         if( $action == 'valid'){
@@ -149,8 +186,6 @@ class FrontController extends Controller
         }
 
         $chapitres = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
-
-
         
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
             'resultat'  => $resultat,

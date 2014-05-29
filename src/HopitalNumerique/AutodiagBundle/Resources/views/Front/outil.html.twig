@@ -64,7 +64,7 @@
                             <hr>
 
                             {% if parent.questions|length > 0 %}
-                                {{ _self.buildQuestion(parent.questions, fieldsetName, fieldsetId) }}
+                                {{ _self.buildQuestion(parent.questions, reponses, fieldsetName, fieldsetId) }}
                             {% endif %}
                             
                             {% if chapitre['childs']|length > 0 %}
@@ -74,7 +74,7 @@
                                         
                                         <hr>
                                         
-                                        {{ _self.buildQuestion(child.questions, fieldsetName, fieldsetId) }}
+                                        {{ _self.buildQuestion(child.questions, reponses, fieldsetName, fieldsetId) }}
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -93,7 +93,7 @@
     </div>
 {% endblock %}
 
-{% macro buildQuestion(questions, fieldsetName, fieldsetId) %}
+{% macro buildQuestion(questions, reponses, fieldsetName, fieldsetId) %}
     {% for question in questions %}
         {# Build vars to make it cleaner #}
         {% set questionName = fieldsetName ~ '[' ~ question.id ~ ']' %}
@@ -109,27 +109,29 @@
                 {# SELECT #}
                 {% if question.type.id == '415' %}
                     {% set options = question.options|nl2br|split('<br />') %}
+
                     <select name="{{questionName}}" id="{{questionId}}" class="form-control">
                         <option value="-1"> - </option>
-                        <option value="0">Non concerné</option>
+                        <option value="0" {% if reponses[question.id] is defined and reponses[question.id] == 0 %}selected="selected"{% endif %} >Non concerné</option>
                         {% for option in options %}
                             {% set datas = option|split(';') %}
-                            <option value="{{datas[0]}}">{{datas[1]|capitalize}}</option>
+                            <option value="{{datas[0]}}" {% if reponses[question.id] is defined and reponses[question.id] == datas[0] %}selected="selected"{% endif %} >{{datas[1]|capitalize}}</option>
                         {% endfor %}
                     </select>
                 {# RADIO #}
                 {% elseif question.type.id == '416' %}
                     {% set options = question.options|nl2br|split('<br />') %}
+
                     <div class="radios">
-                        <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" />Non concerné</label></div>
+                        <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" {% if reponses[question.id] is defined and reponses[question.id] == 0 %}checked="checked"{% endif %} />Non concerné</label></div>
                         {% for option in options %}
                             {% set datas = option|split(';') %}
-                            <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" />{{datas[1]|capitalize}}</label></div>
+                            <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" {% if reponses[question.id] is defined and reponses[question.id] == datas[0] %}checked="checked"{% endif %} />{{datas[1]|capitalize}}</label></div>
                         {% endfor %}
                     </div>
                 {# TEXT #}
                 {% else %}
-                    <input type="integer" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" />
+                    <input type="integer" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" value="{% if reponses[question.id] is defined %}{{reponses[question.id]}}{% endif %}" />
                 {% endif %}
 
                 <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="display:none" placeholder="Remarques" />
