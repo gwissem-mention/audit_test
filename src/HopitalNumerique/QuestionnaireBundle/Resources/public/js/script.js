@@ -5,7 +5,7 @@ $(document).ready(function() {
     });
 
     //Select2
-    $('inpit.select2-multiple-entity').select2({
+    $('input.select2-multiple-entity').select2({
         placeholder: "Choisissez un ou plusieurs choix",
         allowClear: true,
         formatNoMatches : function(){

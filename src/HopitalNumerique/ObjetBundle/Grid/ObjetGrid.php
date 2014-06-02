@@ -53,7 +53,7 @@ class ObjetGrid extends Grid implements IGrid
         $dateColonne->setSize( 180 );
         $this->addColonne( $dateColonne );
         
-        $this->addColonne( new Column\TextColumn('nbVue', 'Nombre de vue') );
+        $this->addColonne( new Column\NumberColumn('nbVue', 'Nombre de vue') );
 
         $this->addColonne( new Column\LockedColumn() );
 

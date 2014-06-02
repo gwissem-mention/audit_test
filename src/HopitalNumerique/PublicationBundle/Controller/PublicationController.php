@@ -16,8 +16,9 @@ class PublicationController extends Controller
         $objet->setNbVue( ($objet->getNbVue() + 1) );
 
         //Si l'user connecté à le rôle requis pour voir l'objet
-        if( $this->checkAuthorization( $objet ) === false )
+        if( $this->checkAuthorization( $objet ) === false ){
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+        }
         
         //Types objet
         $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );

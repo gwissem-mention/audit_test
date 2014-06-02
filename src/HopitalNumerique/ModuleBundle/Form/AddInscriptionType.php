@@ -31,12 +31,12 @@ class AddInscriptionType extends AbstractType
                         'rows' => 8
                     )
             ))
-            ->add('user', 'entity', array(
-                    'class'       => 'HopitalNumeriqueUserBundle:User',
-                    'property'    => 'appellation',
-                    'required'    => true,
-                    'label'       => 'Utilisateur',
-                    'empty_value' => ' - ',
+            ->add('user', 'genemu_jqueryselect2_entity', array(
+                    'class'         => 'HopitalNumeriqueUserBundle:User',
+                    'property'      => 'appellation',
+                    'required'      => true,
+                    'label'         => 'Utilisateur',
+                    'empty_value'   => ' - ',
                     'query_builder' => function(EntityRepository $er){
                         return $er->createQueryBuilder('user')
                         ->where('user.etat = :etat')

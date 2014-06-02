@@ -1,0 +1,8 @@
+/* Pop-in de synthèse*/
+#synthese-ajax{ margin:0; background-color:#ffffff; padding-top:20px }
+#synthese-ajax #logoAnap{ margin:20px auto; width:130px; display:block }
+#synthese-ajax h1{margin-bottom: 5px; font-size: 18px}
+#synthese-ajax h2{margin-top:10px; font-weight: bold; font-size: 14px}
+#synthese-ajax .content{ min-height:480px; padding:0 15px 15px 15px; margin:20px }
+#synthese-ajax .btn{ margin-right:10px }
+#synthese-ajax .copyright{ margin-top:20px }
