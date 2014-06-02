@@ -8,13 +8,6 @@
 #recherche .requete .placeholder p{margin:0;}
 #recherche .showMore{margin: 10px auto; display: block; width: 110px}
 
-/* Pop-in de synthèse*/
-#synthese-ajax{ margin:0;}
-#synthese-ajax h4{text-decoration: underline; margin-bottom: 5px}
-#synthese-ajax .panel-body{ padding:0;}
-#synthese-ajax .panel-body .content{ min-height:480px; padding:0 15px 15px 15px }
-#synthese-ajax .panel-body .panel-footer .btn{ margin-right:10px }
-
 /* Destination */
     #recherche .requete #dest{position: relative;}
     #recherche .requete #dest ol.arbo-requete{padding:0; margin-top:15px;}

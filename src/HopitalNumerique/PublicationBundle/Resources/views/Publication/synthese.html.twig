@@ -13,21 +13,26 @@
     {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese.css" filter="cssrewrite, ?yui_css" 
         "@bootstrap_css"
         'bundles/hopitalnumeriquecore/css/layout.css'
-        'bundles/hopitalnumeriquerecherche/css/style.css'
+        'bundles/hopitalnumeriquerecherche/css/synthese.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 {% endblock %}
 
-<div id="synthese-ajax" style="background-color:#ffffff; padding-top:20px">
-    <img style="margin:20px auto; width:130px; display:block" src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" />
+<div id="synthese-ajax" >
+    <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" />
 
-    <h4 class="violet text-center" style="text-decoration:none">{{objet.titre}}</h4>
-    <h5 class="violet text-center" style="margin-top:10px; font-weight: bold" >Synthèse</h5>
+    <h1 class="violet text-center" >{{objet.titre}}</h1>
+    <h2 class="violet text-center" >Synthèse</h2>
 
-    <div class="content" style="margin:20px">
+    <div class="content">
         {% if objet %}
             {{objet.synthese|raw}}
+            <p class="copyright text-muted text-center">
+                © ANAP - Mon Hôpital Numérique<br />
+                Ces contenus extraits de la plateforme de l'Anap <a href="www.monhopitalnumerique.fr">www.MonHopitalNumerique.fr</a> sont diffusés gratuitement. <br />
+                Toutefois, leur utilisation ou citation est soumise à l'inscription de la mention suivante : "© ANAP - Mon Hôpital Numérique"
+            </p>
         {% else %}
             Vous n'avez pas les droits nécessaires pour accéder à cette publication.
         {% endif %}
