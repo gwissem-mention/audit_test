@@ -112,7 +112,7 @@
                                 <strong>Production(s) concernée(s) : </strong>
                                 <ul>
                                     {% for production in session.module.productions %}
-                                        <li>{{ production.titre }}</li>
+                                        <li><a target="_blank" href="{{path('hopital_numerique_publication_publication_objet',{'id':production.id,'alias':production.alias})}}">{{production.titre}}</a></li>
                                     {% endfor %}
                                 </ul>
                             </div>

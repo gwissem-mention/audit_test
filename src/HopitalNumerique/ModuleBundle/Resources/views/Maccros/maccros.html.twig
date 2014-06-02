@@ -9,11 +9,11 @@
             <h4 class="violet titre">{{moduleSelectionne.titre}}</h4>
 
             <div class="description" style="margin: 0 0 10px 0;">
-		{{ moduleSelectionne.description }}
+		        {{ moduleSelectionne.description }}
                 {#<strong>Production(s) concernée(s) : </strong>
                 <ul>
                     {% for key,production in moduleSelectionne.productions %}
-                        <li>{{ production.titre }}</li>
+                        <li><a target="_blank" href="{{path('hopital_numerique_publication_publication_objet',{'id':production.id,'alias':production.alias})}}">{{production.titre}}</a></li>
                     {% endfor %}
                 </ul>#}
             </div>
