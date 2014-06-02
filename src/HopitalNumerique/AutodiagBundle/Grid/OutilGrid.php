@@ -19,7 +19,7 @@ class OutilGrid extends Grid implements IGrid
     {
         $this->setSource( 'hopitalnumerique_autodiag.manager.outil' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
-        $this->setNoDataMessage('Aucun Outil à afficher.');
+        $this->setNoDataMessage('Aucun outil à afficher.');
     }
 
     /**
@@ -27,21 +27,21 @@ class OutilGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        $this->addColonne( new Column\TextColumn('title', 'Title') );
+        $this->addColonne( new Column\TextColumn('title', 'Titre') );
         
-        $nbFormColumn = new Column\TextColumn('nbForm', 'Nb Formulaires en cours');
+        $nbFormColumn = new Column\TextColumn('nbForm', 'Nb formulaires en cours');
         $nbFormColumn->setSize( 160 );
         $this->addColonne( $nbFormColumn );
 
-        $nbFormValidColumn = new Column\TextColumn('nbFormValid', 'Nb Formulaires finalisés');
+        $nbFormValidColumn = new Column\TextColumn('nbFormValid', 'Nb formulaires finalisés');
         $nbFormValidColumn->setSize( 160 );
         $this->addColonne( $nbFormValidColumn );
 
-        $nbChapColumn = new Column\TextColumn('nbChap', 'Nb Chapitres');
+        $nbChapColumn = new Column\TextColumn('nbChap', 'Nb chapitres');
         $nbChapColumn->setSize( 110 );
         $this->addColonne( $nbChapColumn );
 
-        $nbQuestColumn = new Column\TextColumn('nbQuest', 'Nb Questions');
+        $nbQuestColumn = new Column\TextColumn('nbQuest', 'Nb questions');
         $nbQuestColumn->setSize( 110 );
         $this->addColonne( $nbQuestColumn );
 
