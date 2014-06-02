@@ -1,7 +1,7 @@
 ccdn_forum_forum:
     template:
         engine:               twig
-        pager_theme:          CCDNForumForumBundle:Common:Paginator/twitter_bootstrap.html.twig
+        pager_theme:          KnpPaginatorBundle:Pagination:twitter_bootstrap_pagination.html.twig
     entity:
         forum:
             class:                HopitalNumerique\ForumBundle\Entity\Forum
@@ -38,19 +38,19 @@ ccdn_forum_forum:
             class:                CCDNForum\ForumBundle\Model\Component\Gateway\RegistryGateway
     repository:
         forum:
-            class:                CCDNForum\ForumBundle\Model\Component\Repository\ForumRepository
+            class:                HopitalNumerique\ForumBundle\Model\Component\Repository\ForumRepository
         category:
-            class:                CCDNForum\ForumBundle\Model\Component\Repository\CategoryRepository
+            class:                HopitalNumerique\ForumBundle\Model\Component\Repository\CategoryRepository
         board:
-            class:                CCDNForum\ForumBundle\Model\Component\Repository\BoardRepository
+            class:                HopitalNumerique\ForumBundle\Model\Component\Repository\BoardRepository
         topic:
-            class:                CCDNForum\ForumBundle\Model\Component\Repository\TopicRepository
+            class:                HopitalNumerique\ForumBundle\Model\Component\Repository\TopicRepository
         post:
-            class:                CCDNForum\ForumBundle\Model\Component\Repository\PostRepository
+            class:                HopitalNumerique\ForumBundle\Model\Component\Repository\PostRepository
         subscription:
-            class:                CCDNForum\ForumBundle\Model\Component\Repository\SubscriptionRepository
+            class:                HopitalNumerique\ForumBundle\Model\Component\Repository\SubscriptionRepository
         registry:
-            class:                CCDNForum\ForumBundle\Model\Component\Repository\RegistryRepository
+            class:                HopitalNumerique\ForumBundle\Model\Component\Repository\RegistryRepository
     manager:
         forum:
             class:                CCDNForum\ForumBundle\Model\Component\Manager\ForumManager
