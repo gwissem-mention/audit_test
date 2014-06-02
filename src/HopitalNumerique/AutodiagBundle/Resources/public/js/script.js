@@ -38,32 +38,36 @@ $(document).ready(function() {
     }
 
     //Création et gestion de l'arborescence des chapitres
-    $('#chapitres').nestable({'maxDepth':2,'group':0}).on('change', function() {
-        var serializedDatas = $(this).nestable('serialize');
+    if( $('#chapitres').length > 0 ){
+        $('#chapitres').nestable({'maxDepth':2,'group':0}).on('change', function() {
+            var serializedDatas = $(this).nestable('serialize');
 
-        $.ajax({
-            url  : $('#order-chapitre-url').val(),
-            data : {
-                datas : serializedDatas
-            },
-            type     : 'POST',
-            dataType : 'json',
-            success  : function( data ){
-                //console.log( 'reorder executed' );
-            }
+            $.ajax({
+                url  : $('#order-chapitre-url').val(),
+                data : {
+                    datas : serializedDatas
+                },
+                type     : 'POST',
+                dataType : 'json',
+                success  : function( data ){
+                    //console.log( 'reorder executed' );
+                }
+            });
         });
-    });
+    }
 
     //Fancybox
-    $('.fancy').fancybox({
-        'padding'   : 0,
-        'autoSize'  : false,
-        'width'     : '80%',
-        'height'    : '600px',
-        'scrolling' : 'no',
-        'modal'     : true
-    });
-
+    if( $('.fancy').length > 0 ){
+        $('.fancy').fancybox({
+            'padding'   : 0,
+            'autoSize'  : false,
+            'width'     : '80%',
+            'height'    : '600px',
+            'scrolling' : 'no',
+            'modal'     : true
+        });
+    }
+    
     //bind de Validation Engine
     if( $('form.toValidate').length > 0 )
         $('form.toValidate').validationEngine();
