@@ -56,12 +56,11 @@
         </div>
     </div>
 </div>
-
 <script type="text/javascript" >
     $(document).ready(function() {
         //toggles primary
-        $('.toggle.on').toggles( { on : true, text : { on : 'OUI', off : 'NON' } } );
-        $('.toggle.off').toggles( { on : false, text : { on : 'OUI', off : 'NON' } } );
+        $('.toggle.on').toggles( { on : true, text : { on : 'OUI', off : 'NON' }, type : 'select' } );
+        $('.toggle.off').toggles( { on : false, text : { on : 'OUI', off : 'NON' }, type : 'select' } );
 
         //click de la checkbox globale
         $('#references-tab .checkAll').on('click', function(){
