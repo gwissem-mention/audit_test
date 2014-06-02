@@ -96,7 +96,54 @@ class ChapitreManager extends BaseManager
         return $references;
     }
 
+    /**
+     * Retourne la liste des chapitres et questions pour la vue liste
+     *
+     * @param Outil $outil L'outil
+     *
+     * @return array
+     */
+    public function getChapitresForListe( $outil )
+    {
+        //build chapitres
+        $chapitres      = $outil->getChapitres();
+        $parents        = array();
+        $enfants        = array();
 
+        
+        foreach($chapitres as $one){
+            $chapitre = new \StdClass;
+            
+            $chapitre->id      = $one->getId();
+            $chapitre->title   = $one->getTitle();
+            $chapitre->noteMin = $one->getNoteMinimale();
+            $chapitre->noteOpt = $one->getNoteOptimale();
+            $chapitre->childs  = array();
+            $chapitre->parent  = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
+
+            //handle questions
+            $questions         = $one->getQuestions();
+            $chapitreQuestions = array();
+            foreach ($questions as $question)
+                $chapitreQuestions[] = $question;
+
+            $chapitre->questions = $chapitreQuestions;
+
+            //handle héritage
+            if( is_null($one->getParent()) ){
+                $parents[ $one->getId() ] = $chapitre;
+            }else
+                $enfants[] = $chapitre;
+        }
+
+        //reformate les chapitres
+        foreach($enfants as $enfant){
+            $parent = $parents[ $enfant->parent ];
+            $parent->childs[] = $enfant;
+        }
+
+        return $parents;
+    }
 
 
 

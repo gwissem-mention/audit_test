@@ -1,0 +1,94 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Editer un outil d'autodiagnostic : Gestion des chapitres / questions
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-chapitre-liste.css" filter="cssrewrite, ?yui_css" 
+        'bundles/hopitalnumeriqueautodiag/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_outil') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <div class="options">
+                    {# Include external file for tabs : avoid duplicate code #}
+                    {% include 'HopitalNumeriqueAutodiagBundle::admin-tabs.html.twig' with { 'outil' : outil, 'route': app.request.attributes.get('_route') } %}
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div class="sous_options">
+                    <div class="btn-toolbar">
+                        <a class="btn btn-default" href="{{path('hopitalnumerique_autodiag_chapitre', {'id':outil.id})}}">Vue Edition</a>
+                    </div>
+                </div>
+
+                <div class="col-md-12" id="listeChapitres">
+                    {% for chapitre in chapitres %}
+                        <h2>
+                            {{chapitre.title}}
+                            <span class="pull-right">
+                                {% if chapitre.noteOpt %}Note optimale : {{chapitre.noteOpt}}{% endif %}
+                                {% if chapitre.noteOpt and chapitre.noteMin %}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
+                                {% if chapitre.noteMin %}Note minimale de déclenchement : {{chapitre.noteMin}}{% endif %}
+                            </span>
+                        </h2>
+
+                        {% if chapitre.questions|length > 0 %}
+                            {{ _self.buildQuestion(chapitre.questions) }}
+                        {% endif %}
+                        
+                        {% if chapitre.childs|length > 0 %}
+                            <div class="row sous-chapitre">
+                                <div class="col-md-12">
+                                    {% for child in chapitre.childs %}
+                                        <h3>
+                                            {{child.title}}
+                                            <span class="pull-right">
+                                                {% if chapitre.noteOpt %}Note optimale : {{chapitre.noteOpt}}{% endif %}
+                                                {% if chapitre.noteOpt and chapitre.noteMin %}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
+                                                {% if chapitre.noteMin %}Note minimale de déclenchement : {{chapitre.noteMin}}{% endif %}
+                                            </span>
+                                        </h3>
+                                        
+                                        {{ _self.buildQuestion(child.questions) }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+
+        
+    </style>
+
+{% endblock %}
+
+{% macro buildQuestion(questions) %}
+    {% for question in questions %}
+        <div class="row">
+            <div class="col-md-12">
+                <p class="question">
+                    {{question.texte}}
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+{% endmacro %} 

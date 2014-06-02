@@ -59,6 +59,7 @@
                     <div class="btn-toolbar">
                         <div class="btn btn-default addChapitre">Ajouter un chapitre</div>
                         <div class="btn btn-default calcPonderation">Calculer les pondérations des questions</div>
+                        <a class="btn btn-default" href="{{path('hopitalnumerique_autodiag_liste',{'id':outil.id})}}">Vue Liste</a>
                     </div>
                 </div>
 
@@ -103,7 +104,7 @@
             <a href="javascript:selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')">{{chapitre.title}}</a>
             <p class="text-muted pull-right">
                 {% if chapitre.noteOptimale %}Note optimale : {{chapitre.noteOptimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
-                {% if chapitre.noteOptimale %}Note minimale de déclenchement : {{chapitre.noteMinimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
+                {% if chapitre.noteMinimale %}Note minimale de déclenchement : {{chapitre.noteMinimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
                 <span>{{chapitre.references|default('0')}}</span> éléments référencés
             </p>
         </div>

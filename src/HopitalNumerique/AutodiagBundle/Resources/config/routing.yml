@@ -64,6 +64,12 @@ hopitalnumerique_autodiag_chapitre:
     requirements: 
         id : \d+
 
+hopitalnumerique_autodiag_liste:
+    pattern:  /admin/outil/{id}/chapitre/liste
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:liste" }
+    requirements: 
+        id : \d+
+
 hopitalnumerique_autodiag_chapitre_add:
     pattern:  /admin/outil/{id}/chapitre/add
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:add" }
