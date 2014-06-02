@@ -63,8 +63,15 @@
                             <hr>
 
                             {% if parent.questions|length > 0 %}
-                                {{ currentPage.buildQuestion(parent.questions, reponses, formName, questionNumber) }}
-                                {% set questionNumber = questionNumber + parent.questions|length %}
+                                {% for question in parent.questions %}
+                                    {% if reponses[question.id] is defined %}
+                                        {% set reponse = reponses[question.id] %}
+                                    {% else %}
+                                        {% set reponse = -1 %}
+                                    {% endif %}
+                                    {{ currentPage.buildQuestion(question, reponse, formName, questionNumber) }}
+                                    {% set questionNumber = questionNumber + 1 %}
+                                {% endfor %}
                             {% endif %}
                             
                             {% if chapitre['childs']|length > 0 %}
@@ -74,8 +81,15 @@
                                         
                                         <hr>
                                         
-                                        {{ currentPage.buildQuestion(child.questions, reponses, formName, questionNumber) }}
-                                        {% set questionNumber = questionNumber + child.questions|length %}
+                                        {% for question in child.questions %}
+                                            {% if reponses[question.id] is defined %}
+                                                {% set reponse = reponses[question.id] %}
+                                            {% else %}
+                                                {% set reponse = -1 %}
+                                            {% endif %}
+                                            {{ currentPage.buildQuestion(question, reponse, formName, questionNumber) }}
+                                            {% set questionNumber = questionNumber + 1 %}
+                                        {% endfor %}
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -94,53 +108,50 @@
     </div>
 {% endblock %}
 
-{% macro buildQuestion(questions, reponses, formName, questionNumber) %}
-    {% for question in questions %}
-        {# Build vars to make it cleaner #}
-        {% set questionName = formName ~ '[' ~ question.chapitre.id ~ ']' ~ '[' ~ question.id ~ ']' %}
-        {% set questionId   = formName ~ '_' ~ question.chapitre.id ~ '_' ~ question.id %}
+{% macro buildQuestion(question, reponse, formName, questionNumber) %}
+    {# Build vars to make it cleaner #}
+    {% set questionName = formName ~ '[' ~ question.chapitre.id ~ ']' ~ '[' ~ question.id ~ ']' %}
+    {% set questionId   = formName ~ '_' ~ question.chapitre.id ~ '_' ~ question.id %}
 
-        {# Build form group #}
-        <div class="form-group">
-            <label for="{{questionName}}" class="col-md-6">
-                <span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>
-                {{questionNumber ~ '. ' ~ question.texte}}
-            </label>
-            <div class="col-md-5">
-                {# SELECT #}
-                {% if question.type.id == '415' %}
-                    {% set options = question.options|nl2br|split('<br />') %}
+    {# Build form group #}
+    <div class="form-group">
+        <label for="{{questionName}}" class="col-md-6">
+            <span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>
+            {{questionNumber ~ '. ' ~ question.texte}}
+        </label>
+        <div class="col-md-5">
+            {# SELECT #}
+            {% if question.type.id == '415' %}
+                {% set options = question.options|nl2br|split('<br />') %}
 
-                    <select name="{{questionName}}" id="{{questionId}}" class="form-control">
-                        <option value="-1"> - </option>
-                        <option value="0" {% if reponses[question.id] is defined and reponses[question.id] == 0 %}selected="selected"{% endif %} >Non concerné</option>
-                        {% for option in options %}
-                            {% set datas = option|split(';') %}
-                            <option value="{{datas[0]}}" {% if reponses[question.id] is defined and reponses[question.id] == datas[0] %}selected="selected"{% endif %} >{{datas[1]|capitalize}}</option>
-                        {% endfor %}
-                    </select>
-                {# RADIO #}
-                {% elseif question.type.id == '416' %}
-                    {% set options = question.options|nl2br|split('<br />') %}
+                <select name="{{questionName}}" id="{{questionId}}" class="form-control">
+                    <option value="-1"> - </option>
+                    <option value="0" {% if reponse == 0 %}selected="selected"{% endif %} >Non concerné</option>
+                    {% for option in options %}
+                        {% set datas = option|split(';') %}
+                        <option value="{{datas[0]}}" {% if reponse == datas[0] %}selected="selected"{% endif %} >{{datas[1]|capitalize}}</option>
+                    {% endfor %}
+                </select>
+            {# RADIO #}
+            {% elseif question.type.id == '416' %}
+                {% set options = question.options|nl2br|split('<br />') %}
 
-                    <div class="radios">
-                        <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" {% if reponses[question.id] is defined and reponses[question.id] == 0 %}checked="checked"{% endif %} />Non concerné</label></div>
-                        {% for option in options %}
-                            {% set datas = option|split(';') %}
-                            <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" {% if reponses[question.id] is defined and reponses[question.id] == datas[0] %}checked="checked"{% endif %} />{{datas[1]|capitalize}}</label></div>
-                        {% endfor %}
-                    </div>
-                {# TEXT #}
-                {% else %}
-                    <input type="integer" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" value="{% if reponses[question.id] is defined %}{{reponses[question.id]}}{% endif %}" />
-                {% endif %}
+                <div class="radios">
+                    <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" {% if reponse == 0 %}checked="checked"{% endif %} />Non concerné</label></div>
+                    {% for option in options %}
+                        {% set datas = option|split(';') %}
+                        <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" {% if reponse == datas[0] %}checked="checked"{% endif %} />{{datas[1]|capitalize}}</label></div>
+                    {% endfor %}
+                </div>
+            {# TEXT #}
+            {% else %}
+                <input type="integer" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" value="{% if reponse != -1 %}{{reponse}}{% endif %}" />
+            {% endif %}
 
-                <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="display:none" placeholder="Remarques" />
-            </div>
-            <div class="col-md-1">
-                <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i class="fa fa-edit"></i></div>
-            </div>
+            <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="display:none" placeholder="Remarques" />
         </div>
-        {% set questionNumber = questionNumber + 1 %}
-    {% endfor %}
+        <div class="col-md-1">
+            <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i class="fa fa-edit"></i></div>
+        </div>
+    </div>
 {% endmacro %}
