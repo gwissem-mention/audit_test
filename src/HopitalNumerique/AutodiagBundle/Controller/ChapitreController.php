@@ -120,7 +120,7 @@ class ChapitreController extends Controller
             //save
             $this->getDoctrine()->getManager()->flush();
             
-            return new Response('{"success":true, "id": '.$chapitre->getId().' , "titre":"'.$chapitre->getTitle().'"}', 200);
+            return new Response('{"success":true}', 200);
         }
 
         return new Response('{"success":false}', 200);

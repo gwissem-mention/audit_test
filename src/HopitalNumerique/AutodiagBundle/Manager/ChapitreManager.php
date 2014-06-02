@@ -136,11 +136,13 @@ class ChapitreManager extends BaseManager
         foreach($elements as $element)
         {
             //construction de l'element current
-            $item             = new \stdClass;
-            $item->title      = $element->getTitle();
-            $item->id         = $element->getId();
-            $item->order      = $element->getOrder();
-            $item->references = count($element->getReferences());
+            $item               = new \stdClass;
+            $item->title        = $element->getTitle();
+            $item->id           = $element->getId();
+            $item->order        = $element->getOrder();
+            $item->noteMinimale = $element->getNoteMinimale();
+            $item->noteOptimale = $element->getNoteOptimale();
+            $item->references   = count($element->getReferences());
 
             //add childs : filter items with current element
             $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $element))->orderBy(array( "order" => Criteria::ASC ));

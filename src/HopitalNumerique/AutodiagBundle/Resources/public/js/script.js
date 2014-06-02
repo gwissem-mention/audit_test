@@ -154,9 +154,9 @@ function saveChapitre( url )
             type     : 'POST',
             dataType : 'json',
             success  : function( data ){
-                if( data.success ) {
-                    $('#chapitres #chapitre-' + data.id + ' > .dd3-content a').html( data.titre );
+                if( data.success ){
                     $.fancybox.close(true);
+                    window.location.reload();
                 }
             }
         });
@@ -225,7 +225,7 @@ function saveQuestion( url )
             success : function( data ){
                 if( data.substring(0, 11) != 'ponderation' ){
                     $('#questions .results').html( data );
-                    $.fancybox.close(true);    
+                    $.fancybox.close(true);
                 }else{
                     $('#hopitalnumerique_autodiag_question_ponderation').parent().parent().find('.help-block').html('<span style="color:red">Valeur maximum autorisée : ' + data.substring(12) + '</span>');
                 }

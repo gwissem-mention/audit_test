@@ -6,8 +6,8 @@
     </div>
     <div class="dd3-actions">
         <div onclick="deleteChapitre( {{chapitre.id}}, '{{path('hopitalnumerique_autodiag_chapitre_delete', {'id':chapitre.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-            <a href="{{path('hopitalnumerique_autodiag_reference_chapitre',{'id':chapitre.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
             <a href="{{path('hopitalnumerique_autodiag_chapitre_edit',{'id':chapitre.id})}}" class="fancy pull-right dd3-edit fancybox.ajax"><i class="fa fa-edit"></i></a>
             <a href="{{path('hopitalnumerique_autodiag_question_add', {'id':chapitre.id})}}" class="fancy pull-right dd3-plus fancybox.ajax" onclick="selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')" ><i class="fa fa-plus"></i></a>
+            <a href="{{path('hopitalnumerique_autodiag_reference_chapitre',{'id':chapitre.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
     </div>
 </li>
