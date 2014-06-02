@@ -5,3 +5,5 @@
 .toggle-slide .toggle-blob { background: #fff;}
 .toggle-slide .toggle-blob { border: 1px solid #81858c;}
 .toggle-slide.active .toggle-blob { border: 1px solid #2965cc;}
+.toggle-slide.toggle-select .toggle-on{ background:none !important; }
+.toggle-slide.toggle-select .toggle-on.active{ background:#85C744 !important; }
