@@ -18,7 +18,7 @@ class QuestionController extends Controller
      */
     public function indexAction(Chapitre $chapitre)
     {
-        $questions = $this->get('hopitalnumerique_autodiag.manager.question')->findBy( array('chapitre' => $chapitre ) );
+        $questions = $this->get('hopitalnumerique_autodiag.manager.question')->getQuestionsOrdered( $chapitre );
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Question:index.html.twig' , array(
             'questions' => $questions,
@@ -118,7 +118,21 @@ class QuestionController extends Controller
         return new Response('<h3>Une erreur est survenue, merci de réessayé</h3>', 200);
     }
 
+    /**
+     * Met à jour l'ordre des différentes questions
+     */
+    public function reorderAction(Chapitre $chapitre)
+    {
+        //get datas serialzed
+        $datas = $this->get('request')->request->get('datas');
 
+        //execute reorder
+        $this->get('hopitalnumerique_autodiag.manager.question')->reorder( $datas );
+        $this->getDoctrine()->getManager()->flush();
+
+        //return success.true si le fichier existe deja
+        return new Response('{"success":true}', 200);
+    }
 
 
 

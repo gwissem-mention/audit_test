@@ -4,6 +4,7 @@
     <ol class="dd-list">
         {% for question in questions %}
             <li class="dd-item dd3-item" data-id="{{question.id}}" id="question-{{question.id}}" >
+                <div class="dd-handle dd3-handle"></div>
                 <div class="dd3-content">
                     <a href="{{path('hopitalnumerique_autodiag_question_edit',{'id':question.id})}}" class="fancy fancybox.ajax">{{question.texte}}</a>
                     <p class="text-muted pull-right">
@@ -22,3 +23,23 @@
         {% endfor %}
     </ol>
 </div>
+
+<input type="hidden" id="order-question-url" value="{{path('hopitalnumerique_autodiag_question_reorder',{'id':chapitre.id})}}" />
+
+<script type="text/javascript" >
+    $('#questions div.dd').nestable({'maxDepth':1,'group':0}).on('change', function() {
+        var serializedDatas = $(this).nestable('serialize');
+
+        $.ajax({
+            url  : $('#order-question-url').val(),
+            data : {
+                datas : serializedDatas
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                //console.log( 'reorder executed' );
+            }
+        });
+    });
+</script>

@@ -134,6 +134,12 @@ hopitalnumerique_autodiag_question_save:
         id : \d+
         _method: POST
 
+hopitalnumerique_autodiag_question_reorder:
+    pattern:  /admin/outil/{id}/question/reorder
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Question:reorder" }
+    requirements: 
+        id : \d+
+
 #Références
 hopitalnumerique_autodiag_reference_chapitre:
     pattern:  /admin/outil/chapitre/{id}/reference
