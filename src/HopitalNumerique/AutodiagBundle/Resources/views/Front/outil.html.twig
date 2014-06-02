@@ -50,6 +50,7 @@
 
             <div class="col-md-12 content">
                 {% set formName = outil.alias %}
+                {% set questionNumber = 1 %}
                 {% import _self as currentPage %}
                 <form action="{{path('hopitalnumerique_autodiag_front_save', {'id':outil.id})}}" id="wizard" class="form-horizontal" method="POST">
                     {% for chapitre in chapitres %}
@@ -62,7 +63,8 @@
                             <hr>
 
                             {% if parent.questions|length > 0 %}
-                                {{ currentPage.buildQuestion(parent.questions, reponses, formName) }}
+                                {{ currentPage.buildQuestion(parent.questions, reponses, formName, questionNumber) }}
+                                {% set questionNumber = questionNumber + parent.questions|length %}
                             {% endif %}
                             
                             {% if chapitre['childs']|length > 0 %}
@@ -72,7 +74,8 @@
                                         
                                         <hr>
                                         
-                                        {{ currentPage.buildQuestion(child.questions, reponses, formName) }}
+                                        {{ currentPage.buildQuestion(child.questions, reponses, formName, questionNumber) }}
+                                        {% set questionNumber = questionNumber + child.questions|length %}
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -91,7 +94,7 @@
     </div>
 {% endblock %}
 
-{% macro buildQuestion(questions, reponses, formName) %}
+{% macro buildQuestion(questions, reponses, formName, questionNumber) %}
     {% for question in questions %}
         {# Build vars to make it cleaner #}
         {% set questionName = formName ~ '[' ~ question.chapitre.id ~ ']' ~ '[' ~ question.id ~ ']' %}
@@ -101,7 +104,7 @@
         <div class="form-group">
             <label for="{{questionName}}" class="col-md-6">
                 <span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>
-                {{question.texte}}
+                {{questionNumber ~ '. ' ~ question.texte}}
             </label>
             <div class="col-md-5">
                 {# SELECT #}
@@ -138,5 +141,6 @@
                 <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i class="fa fa-edit"></i></div>
             </div>
         </div>
+        {% set questionNumber = questionNumber + 1 %}
     {% endfor %}
 {% endmacro %}
