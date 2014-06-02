@@ -50,12 +50,10 @@
 
             <div class="col-md-12 content">
                 {% set formName = outil.alias %}
+                {% import _self as currentPage %}
                 <form action="{{path('hopitalnumerique_autodiag_front_save', {'id':outil.id})}}" id="wizard" class="form-horizontal" method="POST">
                     {% for chapitre in chapitres %}
                         {% set parent = chapitre['parent'] %}
-                        {# Build vars to make it cleaner #}
-                        {% set fieldsetName = formName ~ '[' ~ parent.id ~ ']' %}
-                        {% set fieldsetId   = formName ~ '_' ~ parent.id %}
 
                         {# Build step #}
                         <fieldset title="{{parent.title}}" >
@@ -64,7 +62,7 @@
                             <hr>
 
                             {% if parent.questions|length > 0 %}
-                                {{ _self.buildQuestion(parent.questions, reponses, fieldsetName, fieldsetId) }}
+                                {{ currentPage.buildQuestion(parent.questions, reponses, formName) }}
                             {% endif %}
                             
                             {% if chapitre['childs']|length > 0 %}
@@ -74,7 +72,7 @@
                                         
                                         <hr>
                                         
-                                        {{ _self.buildQuestion(child.questions, reponses, fieldsetName, fieldsetId) }}
+                                        {{ currentPage.buildQuestion(child.questions, reponses, formName) }}
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -93,11 +91,11 @@
     </div>
 {% endblock %}
 
-{% macro buildQuestion(questions, reponses, fieldsetName, fieldsetId) %}
+{% macro buildQuestion(questions, reponses, formName) %}
     {% for question in questions %}
         {# Build vars to make it cleaner #}
-        {% set questionName = fieldsetName ~ '[' ~ question.id ~ ']' %}
-        {% set questionId   = fieldsetId ~ '_' ~ question.id %}
+        {% set questionName = formName ~ '[' ~ question.chapitre.id ~ ']' ~ '[' ~ question.id ~ ']' %}
+        {% set questionId   = formName ~ '_' ~ question.chapitre.id ~ '_' ~ question.id %}
 
         {# Build form group #}
         <div class="form-group">
