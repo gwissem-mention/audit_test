@@ -8,7 +8,7 @@ $(document).ready(function() {
     });
 
     //gestion du nom de fichier unique
-    $('#hopitalnumerique_objet_objet_file, #hopitalnumerique_objet_objet_file2').on('change', function() {
+    $('#hopitalnumerique_objet_objet_file, #hopitalnumerique_objet_objet_file2, #hopitalnumerique_objet_objet_fileEdit').on('change', function() {
         $.ajax({
             url  : $('#objet-file-url').val(),
             data : {
