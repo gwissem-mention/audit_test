@@ -1,13 +1,3 @@
-$(document).ready(function() {
-    //Select2
-    $('#hopitalnumerique_module_addinscription_user').select2({
-        placeholder: "Choisissez un utilisateur",
-        formatNoMatches : function(){
-            return "Aucun résultat trouvé.";
-        }
-    });
-});
-
 //Permet de cacher les filtres
 $( ".grid-filters-title" ).click(function() {
     $( ".grid-filters-content" ).slideToggle( "slow" );
