@@ -19,6 +19,10 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  */
 class Objet
 {
+    const FICHIER_1    = 1;
+    const FICHIER_2    = 2;
+    const FICHIER_EDIT = 3;
+
     /**
      * @var integer
      *
@@ -160,6 +164,13 @@ class Objet
     protected $nbVue;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="obj_path_edit", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier éditable"})
+     */
+    private $pathEdit;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="obj_locked_by", referencedColumnName="usr_id")
      */
@@ -229,6 +240,13 @@ class Objet
      * )
      */
     public $file2;
+
+    /**
+     * @Assert\File(
+     *     maxSize = "10M"
+     * )
+     */
+    public $fileEdit;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -360,8 +378,8 @@ class Objet
      */
     public function setPath($path)
     {
-        if( is_null($path) && file_exists($this->getAbsolutePath( true )) )
-            unlink($this->getAbsolutePath( true ));
+        if( is_null($path) && file_exists($this->getAbsolutePath( self::FICHIER_1 )) )
+            unlink($this->getAbsolutePath( self::FICHIER_1 ));
 
         $this->path = $path;
 
@@ -386,8 +404,8 @@ class Objet
      */
     public function setPath2($path2)
     {
-        if( is_null($path2) && file_exists($this->getAbsolutePath( false )) )
-            unlink($this->getAbsolutePath( false ));
+        if( is_null($path2) && file_exists($this->getAbsolutePath( self::FICHIER_2 )) )
+            unlink($this->getAbsolutePath( self::FICHIER_2 ));
 
         $this->path2 = $path2;
 
@@ -402,6 +420,32 @@ class Objet
     public function getPath2()
     {
         return $this->path2;
+    }
+
+    /**
+     * Set pathEdit
+     *
+     * @param string $pathEdit
+     * @return Objet
+     */
+    public function setPathEdit($pathEdit)
+    {
+        if( is_null($pathEdit) && file_exists($this->getAbsolutePath( self::FICHIER_EDIT )) )
+            unlink($this->getAbsolutePath( self::FICHIER_EDIT ));
+
+        $this->pathEdit = $pathEdit;
+
+        return $this;
+    }
+
+    /**
+     * Get pathEdit
+     *
+     * @return string 
+     */
+    public function getPathEdit()
+    {
+        return $this->pathEdit;
     }
 
     /**
@@ -873,38 +917,98 @@ class Objet
         return $this;
     }
 
-    public function getAbsolutePath( $firstFile = true )
+    /**
+     * [getAbsolutePath description]
+     *
+     * @param  [type] $type [description]
+     *
+     * @return [type]
+     */
+    public function getAbsolutePath( $type )
     {
-        if( $firstFile )
-            return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
-        else
-            return null === $this->path2 ? null : $this->getUploadRootDir().'/'.$this->path2;
+        $result = null;
+
+        switch ($type) {
+            case self::FICHIER_1:
+                if( !is_null($this->path) )
+                    $result = $this->path;
+                break;
+
+            case self::FICHIER_2:
+                if( !is_null($this->path2) )
+                    $result = $this->path2;
+                break;
+
+            case self::FICHIER_EDIT:
+                if( !is_null($this->pathEdit) )
+                    $result = $this->pathEdit;
+                break;
+        }
+
+        if( is_null($result) )
+            return null;
+
+        return $this->getUploadRootDir() . '/' . $result;
     }
 
-    public function getWebPath( $firstFile = true )
+    /**
+     * [getWebPath description]
+     *
+     * @param  [type] $type [description]
+     *
+     * @return [type]
+     */
+    public function getWebPath( $type )
     {
-        if( $firstFile )
-            return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
-        else
-            return null === $this->path2 ? null : $this->getUploadDir().'/'.$this->path2;
+        $result = null;
+
+        switch ($type) {
+            case self::FICHIER_1:
+                if( !is_null($this->path) )
+                    $result = $this->path;
+                break;
+
+            case self::FICHIER_2:
+                if( !is_null($this->path2) )
+                    $result = $this->path2;
+                break;
+
+            case self::FICHIER_EDIT:
+                if( !is_null($this->pathEdit) )
+                    $result = $this->pathEdit;
+                break;
+        }
+        if( is_null($result) )
+            return null;
+
+        return $this->getUploadDir() . '/' . $result;
     }
     
     /**
      * Fonction qui renvoie le type mime de la piece jointe 1 ou 2
      */
-    public function getTypeMime( $firstFile = true )
+    public function getTypeMime( $type )
     {
-        if( $firstFile ){
-            $path = $this->path;
-        } else {
-            $path = $this->path2;
+        $result = null;
+
+        switch ($type) {
+            case self::FICHIER_1:
+                $result = $this->path;
+                break;
+
+            case self::FICHIER_2:
+                $result = $this->path2;
+                break;
+
+            case self::FICHIER_EDIT:
+                $result = $this->pathEdit;
+                break;
         }
-        
-        if( !$path ){
+
+        if( !$result || is_null($result) )
             return "";
-        }
         
-        return substr($path, strrpos($path, ".") + 1);
+        return substr($result, strrpos($result, ".") + 1);
     }
 
     public function getUploadRootDir()
@@ -926,18 +1030,26 @@ class Objet
     {
         if (null !== $this->file){
             //delete Old File
-            if ( file_exists($this->getAbsolutePath( true )) )
-                unlink($this->getAbsolutePath( true ));
+            if ( file_exists($this->getAbsolutePath( self::FICHIER_1 )) )
+                unlink($this->getAbsolutePath( self::FICHIER_1 ));
 
             $this->path = $this->file->getClientOriginalName();
         }
 
         if (null !== $this->file2){
             //delete Old File
-            if ( file_exists($this->getAbsolutePath( false )) )
-                unlink($this->getAbsolutePath( false ));
+            if ( file_exists($this->getAbsolutePath( self::FICHIER_2 )) )
+                unlink($this->getAbsolutePath( self::FICHIER_2 ));
 
             $this->path2 = $this->file2->getClientOriginalName();
+        }
+
+        if (null !== $this->fileEdit){
+            //delete Old File
+            if ( file_exists($this->getAbsolutePath( self::FICHIER_EDIT )) )
+                unlink($this->getAbsolutePath( self::FICHIER_EDIT ));
+
+            $this->pathEdit = $this->fileEdit->getClientOriginalName();
         }
     }
 
@@ -947,7 +1059,7 @@ class Objet
      */
     public function upload()
     {
-        if ( null === $this->file && null === $this->file2 )
+        if ( null === $this->file && null === $this->file2 && null === $this->fileEdit )
             return;
         
         // s'il y a une erreur lors du déplacement du fichier, une exception
@@ -963,6 +1075,11 @@ class Objet
             $this->file2->move($this->getUploadRootDir(), $this->path2);
             unset($this->file2);
         }
+
+        if ( null !== $this->fileEdit ){
+            $this->fileEdit->move($this->getUploadRootDir(), $this->pathEdit);
+            unset($this->fileEdit);
+        }
     }
 
     /**
@@ -970,10 +1087,13 @@ class Objet
      */
     public function removeUpload()
     {
-        if ( $file = $this->getAbsolutePath( true ) && file_exists( $this->getAbsolutePath( true ) ) )
+        if ( $file = $this->getAbsolutePath( self::FICHIER_1 ) && file_exists( $this->getAbsolutePath( self::FICHIER_1 ) ) )
             unlink($file);
 
-        if ( $file2 = $this->getAbsolutePath( false ) && file_exists( $this->getAbsolutePath( false ) ) )
+        if ( $file2 = $this->getAbsolutePath( self::FICHIER_2 ) && file_exists( $this->getAbsolutePath( self::FICHIER_2 ) ) )
             unlink($file2);
+
+        if ( $fileEdit = $this->getAbsolutePath( self::FICHIER_EDIT ) && file_exists( $this->getAbsolutePath( self::FICHIER_EDIT ) ) )
+            unlink($fileEdit);
     }
 }

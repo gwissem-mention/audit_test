@@ -76,16 +76,16 @@
         {% endif %}
 
         {# Téléchargement fichier + synthèse #}
-        {% if objet.getAbsolutePath(true) is not null or objet.getAbsolutePath(false) is not null or objet.synthese is not null %}
+        {% if objet.getAbsolutePath(1) is not null or objet.getAbsolutePath(2) is not null or objet.synthese is not null %}
             <div class="col-md-4">
                 <div class="wrapper">
-                    {% if objet.getAbsolutePath(true) is not null %}
-                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(true)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(true)}}');"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(true)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
+                    {% if objet.getAbsolutePath(1) is not null %}
+                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(1)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(1)}}');"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(1)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
                     {% endif %}
 
                     <div class="clearfix"></div>
-                    {% if objet.getAbsolutePath(false) is not null %}
-                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(false)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(false)}}');"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(false)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
+                    {% if objet.getAbsolutePath(2) is not null %}
+                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(2)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(2)}}');"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(2)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
                     {% endif %}
                     
                     <div class="clearfix"></div>

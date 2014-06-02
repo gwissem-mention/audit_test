@@ -100,6 +100,11 @@ class ObjetType extends AbstractType
                 'label'    => 'Fichier 2'
             ))
             ->add('path2', 'hidden')
+            ->add('fileEdit', 'file', array(
+                'required' => false, 
+                'label'    => 'Fichier Editable'
+            ))
+            ->add('pathEdit', 'hidden')
             ->add('vignette', 'text', array(
                 'required' => false,
                 'label'    => 'Vignette',
@@ -178,9 +183,7 @@ class ObjetType extends AbstractType
             ->add('modified', 'hidden', array(
                 'mapped'   => false
             ))
-            ->add('article', 'hidden', array(
-                
-            ));
+            ->add('article', 'hidden');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
