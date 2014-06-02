@@ -1,0 +1,31 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Mon compte{% endblock %}
+{% block metadesc %}Connectez-vous à votre compte "Mon Hôpital Numérique" pour accéder aux outils proposés par l'ANAP{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-account-layout.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriqueaccount/css/layout.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="container clearfix">
+        <div class="row">
+            <aside class="col-md-2 page-sidebar-left">
+                {%- block sidebar -%}
+                {%- endblock sidebar -%}
+            </aside>
+
+            <div class="col-md-10 page-body-right">
+                <div id="top clearfix"></div>
+                {%- block body -%}
+                {%- endblock body -%}
+            </div>
+        </div>
+    </div>
+{% endblock %}
