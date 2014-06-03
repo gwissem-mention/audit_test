@@ -38,3 +38,7 @@
 
 .fancybox-popin {width:auto;}
 .fancybox-inner {width:550px; overflow:auto;}
+
+@media screen and (max-width: 991px) {
+    #registre-ambassadeur .annuaire_ambassadeur .fiche .content{height: auto}
+}

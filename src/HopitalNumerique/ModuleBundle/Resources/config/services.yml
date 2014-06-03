@@ -14,6 +14,7 @@ parameters:
     hopitalnumerique_module.manager.inscription.class: HopitalNumerique\ModuleBundle\Manager\InscriptionManager
     hopitalnumerique_module.grid.inscription.class: HopitalNumerique\ModuleBundle\Grid\InscriptionGrid
     hopitalnumerique_module.form.inscription.class: HopitalNumerique\ModuleBundle\Form\InscriptionType
+    hopitalnumerique_module.form.addinscription.class: HopitalNumerique\ModuleBundle\Form\AddInscriptionType
     #CronLogger
     hopitalnumerique_module.service.logger.cronlogger.class: HopitalNumerique\ModuleBundle\DependencyInjection\Logger\CronLogger
 
@@ -77,11 +78,18 @@ services:
         arguments: ["@service_container"]
 
     #--Formulaire
+    #Inscription FO
     hopitalnumerique_module.form.inscription:
         class: %hopitalnumerique_module.form.inscription.class%
         arguments: ["@hopitalnumerique_module.manager.inscription", "@validator"]
         tags:
             - { name: form.type, alias: hopitalnumerique_module_inscription }
+    #Ajout en BO
+    hopitalnumerique_module.form.addinscription:
+        class: %hopitalnumerique_module.form.addinscription.class%
+        arguments: ["@hopitalnumerique_module.manager.inscription", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_module_addinscription }
 
     #Cronlogger
     hopitalnumerique_module.service.logger.cronlogger:

@@ -116,7 +116,7 @@ class QuestionnaireManager extends BaseManager
         $questionnaire = $this->findOneBy( array('id' => $idQuestionnaire) );
 
         //prepare colonnes
-        $colonnes = array( 'id' => 'id' );
+        $colonnes = array( 'id' => 'id_utilisateur', 'user' => 'Prénom et Nom de l\'utilisateur' );
         $emptyRow = array( 'id' => '' );
         $questions = $questionnaire->getQuestions();
         foreach($questions as $question){
@@ -130,8 +130,9 @@ class QuestionnaireManager extends BaseManager
         foreach($users as $user)
         {
             //prepare user infos
-            $row       = array_merge(array(), $emptyRow); //use this to clone the empty table $emptyRow => make sure we have at least an empty data
-            $row['id'] = $user->getId();
+            $row         = array_merge(array(), $emptyRow); //use this to clone the empty table $emptyRow => make sure we have at least an empty data
+            $row['id']   = $user->getId();
+            $row['user'] = $user->getPrenomNom();
 
             //get reponses
             $reponses = $this->_managerReponse->reponsesByQuestionnaireByUser( $idQuestionnaire, $user->getId(), true );

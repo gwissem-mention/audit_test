@@ -58,6 +58,7 @@ class QuestionnaireController extends Controller
         $routeRedirection    = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect'] : '';
         $themeQuestionnaire  = array_key_exists('themeQuestionnaire', $optionRenderForm) ? $optionRenderForm['themeQuestionnaire'] : 'default';
         $this->_envoieDeMail = array_key_exists('envoieDeMail', $optionRenderForm) ? $optionRenderForm['envoieDeMail'] : true;
+        $showAllQuestions    = array_key_exists('showAllQuestions', $optionRenderForm) ? $optionRenderForm['showAllQuestions'] : true;
     
         //Si le tableau n'est pas vide on le récupère
         if(!is_null($routeRedirection))
@@ -65,14 +66,15 @@ class QuestionnaireController extends Controller
     
         //Récupération du thème de formulaire
         $this->_themeQuestionnaire = $themeQuestionnaire;
+
+        $options =  array(
+                'questionnaire'    => $questionnaire,
+                'user'             => $user,
+                'readOnly'         => $readOnly,
+                'showAllQuestions' => $showAllQuestions
+        );
     
-        return $this->renderForm('nodevo_questionnaire_questionnaire',
-                array(
-                        'questionnaire'    => $questionnaire,
-                        'user'             => $user,
-                        'readOnly'         => $readOnly
-                ) ,
-                'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit_front.html.twig'
+        return $this->renderForm('nodevo_questionnaire_questionnaire', $options, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit_front.html.twig'
         );
     }
     
@@ -130,15 +132,20 @@ class QuestionnaireController extends Controller
         $user             = $options['user'];
         $readOnly         = $options['readOnly'];
         $questionnaire    = $options['questionnaire'];
+
+        $label_attr = array(
+                'idUser'           => $user->getId(),
+                'idQuestionnaire'  => $questionnaire->getId(),
+                'routeRedirection' => $this->_routeRedirection,
+                'readOnly'         => $readOnly
+        );
+
+        if(isset($options['showAllQuestions']) && !is_null($options['showAllQuestions']))
+            $label_attr['showAllQuestions'] = $options['showAllQuestions'];
     
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $questionnaire, array(
-                'label_attr' => array(
-                        'idUser'           => $user->getId(),
-                        'idQuestionnaire'  => $questionnaire->getId(),
-                        'routeRedirection' => $this->_routeRedirection,
-                        'readOnly'         => $readOnly 
-                )
+                'label_attr' => $label_attr
         ));
         
         $request = $this->get('request');
@@ -234,7 +241,7 @@ class QuestionnaireController extends Controller
                 
                 //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
                 $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
-                
+
                 //Gestion des réponses
                 foreach ($params as $key => $param)
                 {
@@ -264,6 +271,17 @@ class QuestionnaireController extends Controller
                     if('entity' === $typeParam)
                     {
                         $reponse->setReference($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $param)));
+                    }
+                    elseif('entitymultiple' === $typeParam)
+                    {
+                        $reponse->setReponse("");
+
+                        $reponse->setReferenceMulitple(array());
+
+                        foreach ($param as $value) 
+                        {
+                            $reponse->addReferenceMulitple($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $value)));
+                        }
                     }
     
                     //Test ajout ou edition

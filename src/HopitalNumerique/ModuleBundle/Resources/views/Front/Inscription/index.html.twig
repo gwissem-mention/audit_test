@@ -22,12 +22,7 @@
 
 {% block headerTitle %}Modules Thématiques{% endblock %}
 {% block headerDesc %}
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <p>Retrouvez ici vos demandes et participations aux sessions de montée en compétence (MAPF et sessions thématiques). Pour vous inscrire à de nouvelles sessions thématiques, rendez-vous dans <a href="{{path("hopitalnumerique_module_module_front")}}">Modules thématiques</a></p>
 {% endblock %}
 
 {% block content %}
@@ -37,7 +32,7 @@
             <thead>
                 <tr>
                     <th>Module</th>
-                    <th>Date de la session</th>
+                    <th>Début de la session</th>
                     <th>Etat inscription</th>
                     <th>Evaluation</th>
                     <th>Etat facture</th>
@@ -93,7 +88,7 @@
                     <tr>
                         <th>Module</th>
                         <th>Productions concernées</th>
-                        <th>Date de la session</th>
+                        <th>Début de la session</th>
                         <th width="90px">Actions</th>
                     </tr>
                 </thead>

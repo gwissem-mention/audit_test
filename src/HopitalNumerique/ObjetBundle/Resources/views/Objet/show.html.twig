@@ -46,10 +46,10 @@
                             {{ objet.types|rearangeDatas('libelle') }}
                         </p>
 
-                        {% if objet.getAbsolutePath() is not null %}
+                        {% if objet.getAbsolutePath(1) is not null %}
                             <p>
                                 <strong>Fichier : </strong>
-                                <a href="/{{objet.getWebPath()}}" target="_blank">{{objet.path}}</a>
+                                <a href="/{{objet.getWebPath(1)}}" target="_blank">{{objet.path}}</a>
                             </p>
                         {% endif %}
                         

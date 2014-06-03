@@ -76,16 +76,16 @@
         {% endif %}
 
         {# Téléchargement fichier + synthèse #}
-        {% if objet.getAbsolutePath(true) is not null or objet.getAbsolutePath(false) is not null or objet.synthese is not null %}
+        {% if objet.getAbsolutePath(1) is not null or objet.getAbsolutePath(2) is not null or objet.synthese is not null %}
             <div class="col-md-4">
                 <div class="wrapper">
-                    {% if objet.getAbsolutePath(true) is not null %}
-                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(true)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(true)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
+                    {% if objet.getAbsolutePath(1) is not null %}
+                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(1)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(1)}}');"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(1)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
                     {% endif %}
 
                     <div class="clearfix"></div>
-                    {% if objet.getAbsolutePath(false) is not null %}
-                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(false)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(false)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
+                    {% if objet.getAbsolutePath(2) is not null %}
+                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(2)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(2)}}');"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(2)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
                     {% endif %}
                     
                     <div class="clearfix"></div>
@@ -137,7 +137,7 @@
         <div class="clearfix"></div>
     </div>
 
-    {% if app.user and app.user|checkAuthorization( path('hopital_numerique_registre_homepage') ) and ambassadeurs is not empty %}
+    {% if app.user and app.user|checkAuthorization( path('hopital_numerique_registre_homepage') ) %}
         <div id="ambassadeurs" class="closed">
             <div class="content" style="display:none">
                 <h3 class="violet">Les ambassadeurs</h3>
@@ -159,6 +159,10 @@
                             {% endif %}
                         </p>
                         <a class="btn background-violet" href="{{path('hopital_numerique_intervention_demande_nouveau_avec_objet',{'ambassadeur':ambassadeur.id, 'prod':objet.id})}}">Solliciter cet ambassadeur</a>
+                    </div>
+                {% else %}
+                    <div class="ambassadeur">
+                        - Aucun ambassadeur référencé sur cette production -
                     </div>
                 {% endfor %}
                 <a href="{{ path('hopital_numerique_registre_homepage') }}" class="readmore"><i class="common-sprite common-sprite-arrow"></i>Accès à l'annuaire des ambassadeurs</a>

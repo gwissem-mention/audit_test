@@ -27,7 +27,7 @@
     #publication .objetLink{font-size: 16px}
     #publication .col-md-4 div.wrapper{border:1px solid #e2e2e2; padding:10px 20px 0;margin-top:10px;}
     #publication .col-md-4 div.wrapper a.downloadLink{color:#070707; font-size: 13px; font-weight: normal; margin-bottom: 10px}
-    #publication .col-md-4 div.wrapper a.synthese{background: url('../img/synthese-violet.png') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 104px; font-weight: normal; margin-bottom: 10px}
+    #publication .col-md-4 div.wrapper a.synthese{background: url('../img/synthese-violet.png') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 96px; font-weight: normal; margin-bottom: 10px}
     #publication .col-md-4 div.wrapper .fa-download{margin:3px 0 0 7px;}
 
     /* Bloc Commentaires */
@@ -91,7 +91,7 @@
     #autresResultats .carousel-control{width:2%;}
     #autresResultats .carousel-control.right {background: none}
     #autresResultats .carousel-control.left {background: none}
-    #autresResultats .carousel-control span{top:30%;}
+    #autresResultats .carousel-control span{top:30%;font-size: 20px; margin-left: 0; margin-top: 0}
     #autresResultats .results{padding:0 15px;height:150px;}
     #autresResultats .results p.noresult{margin-top:29px;}
     #autresResultats span.label{font-size: 9px;line-height: 2; vertical-align: top}
@@ -121,4 +121,10 @@
 /* Décalage de la publication pour laisser la place au sommaire sur les petites résolutions */
 @media screen and (max-width: 1225px) {
     #menu, #publication.with-sommaire{padding-left: 10px}
+}
+
+@media screen and (max-width: 991px) {
+    #points-durs{margin-bottom: 20px}
+    #ressources{margin-bottom: 20px}
+    #autresResultats .carousel-inner{ width: 92%;}
 }

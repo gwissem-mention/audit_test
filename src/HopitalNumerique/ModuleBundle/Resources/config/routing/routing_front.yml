@@ -9,6 +9,14 @@ hopitalnumerique_module_module_show_front:
     requirements:
         id: \d+
 
+#---Download du fichier lié
+hopitalnumerique_module_module_dowload_front:
+    pattern:  /dowload/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Front/ModuleFront:downloadModule", id: 1 }
+    requirements:
+        id: \d+
+        _method: GET
+
 #Front - Session
 hopitalnumerique_module_session_description_front:
     pattern:  /session/description/{id}

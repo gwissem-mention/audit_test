@@ -1,38 +1,48 @@
 <style type="text/css">
     @media print {
-        *{width: 100% !important; border:none;background-color :#fff; font-family :Serif;font-size :12pt;}
-        #body, .panel-footer { display:none; }
+        *{ border:none;background-color :#fff; font-family :Serif;font-size :12pt;}
+        #body, .footer { display:none; }
         .fancybox-wrap{top:0 !important; left:0 !important;}
         @page{ margin: 1cm .5cm; size: portrait; }
         #mesrequetes{width: 0}
+        .content{margin:0;}
     }
 </style>
 
-<link rel="stylesheet" href="{{asset('bundles/hopitalnumeriquecore/css/bootstrap.min.css')}}" type="text/css" />
-<link rel="stylesheet" href="{{asset('bundles/hopitalnumeriquecore/css/bootstrap-theme.min.css')}}" type="text/css" />
-<link rel="stylesheet" href="{{asset('bundles/hopitalnumeriquecore/css/layout.css')}}" type="text/css" />
-<link rel="stylesheet" href="{{asset('bundles/hopitalnumeriquerecherche/css/style.css')}}" type="text/css" />
+{% block stylesheets %}
+    {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese.css" filter="cssrewrite, ?yui_css" 
+        "@bootstrap_css"
+        'bundles/hopitalnumeriquecore/css/layout.css'
+        'bundles/hopitalnumeriquerecherche/css/synthese.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
 
-<div class="panel" id="synthese-ajax" >
-    <div class="panel-heading">
-        <h4 class="violet">{{objet.titre}} - Synthèse</h4>
+<div id="synthese-ajax" >
+    <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" />
+
+    <h1 class="violet text-center" >{{objet.titre}}</h1>
+    <h2 class="violet text-center" >Synthèse</h2>
+
+    <div class="content">
+        {% if objet %}
+            {{objet.synthese|raw}}
+            <p class="copyright text-muted text-center">
+                © ANAP - Mon Hôpital Numérique<br />
+                Ces contenus extraits de la plateforme de l'Anap <a href="www.monhopitalnumerique.fr">www.MonHopitalNumerique.fr</a> sont diffusés gratuitement. <br />
+                Toutefois, leur utilisation ou citation est soumise à l'inscription de la mention suivante : "© ANAP - Mon Hôpital Numérique"
+            </p>
+        {% else %}
+            Vous n'avez pas les droits nécessaires pour accéder à cette publication.
+        {% endif %}
     </div>
 
-    <div class="panel-body" >
-        <div class="content">
-            {% if objet %}
-                {{objet.synthese|raw}}
-            {% else %}
-                Vous n'avez pas les droits nécessaires pour accéder à cette publication.
-            {% endif %}
-        </div>
-
-        <div class="panel-footer" >
-            <div class="row">
-                <div class="btn-toolbar pull-right">
-                    <div onclick="print();" class="btn-info btn">Imprimer</div>
-                </div>
-            </div>
+    <div class="footer" >
+        <div class="pull-right" style="margin:0 20px 20px 0">
+            <div onclick="print();" class="btn-info btn">Imprimer</div>
         </div>
     </div>
+
+    <div class="clearfix"></div>
 </div>

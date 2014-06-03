@@ -4,7 +4,7 @@
 #homepage .home-left{ }
 #homepage .home-left > img{ width: 100%}
 #homepage .home-left h1{color:#333333; font-size: 14px; font-weight: bold;}
-#homepage .home-left p{color:#777777; font-size: 12px;}
+#homepage .home-left p{color:#777777; font-size: 12px; text-align: justify;}
 #homepage .home-left h3{ font-size: 18px; font-weight: bold; margin-top: 28px;}
 #homepage .home-left .actus{ width: 100% }
 #homepage .home-left .actus .actu { font-size: 12px; margin-top: 20px }
@@ -39,3 +39,15 @@
 #homepage .home-right .creation-compte p.titre{ font-size: 24px; font-weight: bold; margin-bottom: 15px}
 #homepage .home-right .creation-compte .buttons{margin-top:10px;}
 #homepage .home-right .creation-compte .buttons .signup{margin-right:10px;}
+
+
+@media screen and (max-width: 991px) {
+    #homepage .home-right .recherche{margin:25px 0;}
+    #homepage .home-right .recherche p{text-align: center;}
+    
+    #homepage .home-right .forum p{text-align: center}
+
+    #homepage .home-right .creation-compte .icone{margin:20px auto;}
+    #homepage .home-right .creation-compte p.titre{text-align: center}
+    #homepage .home-right .creation-compte ul{padding-left: 0px}
+}

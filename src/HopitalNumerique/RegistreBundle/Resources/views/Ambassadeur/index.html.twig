@@ -92,13 +92,17 @@
 					                                   <div class="etab" title="{% if ambassadeur.etablissementRattachementSante.ville is not null %}{{ ambassadeur.etablissementRattachementSante.ville }}{% if ambassadeur.etablissementRattachementSante.codepostal is not null %} ({{ ambassadeur.etablissementRattachementSante.codepostal }}){% endif %}{% endif %}">    
 					                                       {{ambassadeur.etablissementRattachementSante.nom}}
 				                                       </div>
-					                                {% else %}
+					                                {% elseif ambassadeur.autreStructureRattachementSante is not empty %}
 					                                   <div class="etab">
 					                                       {{ambassadeur.autreStructureRattachementSante}}
 				                                       </div>
+                                                    {% else %}
+                                                       <div class="etab">
+                                                           {{ambassadeur.nomStructure}}
+                                                       </div>
 					                                {% endif %}
 					                            <div class="fonction">
-					                                {% if ambassadeur.fonctionDansEtablissementSante %}
+					                                {% if ambassadeur.fonctionDansEtablissementSante is not empty %}
 					                                    {{ambassadeur.fonctionDansEtablissementSante}}
 					                                {% else %}
 					                                    {{ambassadeur.fonctionStructure}}

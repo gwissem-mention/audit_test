@@ -325,8 +325,9 @@ class MailManager extends BaseManager
         foreach ($inscriptions as $key => $inscription) 
         {
             $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
-                            'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
-                            'module'  => $inscription->getSession()->getModule()->getTitre()
+                            'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                            'module'    => $inscription->getSession()->getModule()->getTitre(),
+                            'textRefus' => $options['textRefus']
             ));
         }
     
@@ -426,7 +427,12 @@ class MailManager extends BaseManager
                                 ->setFrom( $from )
                                 ->setTo( array($recepteurMail => $recepteurName) )
                                 ->setBcc( $cci )
+<<<<<<< HEAD
                                 ->setBody( $body, 'text/html' );
+=======
+                                ->setBody( strip_tags($body, '<style>' ) )
+                                ->addPart( $body, 'text/html' );
+>>>>>>> develop
         }
         return $mailsToSend;
     }
@@ -485,7 +491,8 @@ class MailManager extends BaseManager
                         ->setSubject( $mail->getObjet() )
                         ->setFrom( $from )
                         ->setTo( $this->_destinataire )
-                        ->setBody( $body, 'text/html' );
+                        ->setBody( strip_tags($body, '<style>' ) )
+                        ->addPart( $body, 'text/html' );
     }
 
     public function getDestinataire()
@@ -561,6 +568,11 @@ class MailManager extends BaseManager
                             ->setFrom( $from )
                             ->setTo( $user->getEmail() )
                             ->setBcc( ($mail->getId() === 1 || $mail->getId() === 2) ? null : $cci )
+<<<<<<< HEAD
                             ->setBody( $body, 'text/html' );
+=======
+                            ->setBody( strip_tags($body, '<style>' ) )
+                            ->addPart( $body, 'text/html' );
+>>>>>>> develop
     }
 }

@@ -151,6 +151,7 @@ class UserType extends AbstractType
 
             //Si il y a un utilisateur connecté nous sommes en BO
             if($this->_securityContext->isGranted('ROLE_USER'))
+            {
                 $builder->add('roles', 'entity', array(
                     'class'         => 'NodevoRoleBundle:Role',
                     'property'      => 'name',
@@ -167,6 +168,11 @@ class UserType extends AbstractType
                     },
                     'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
                 ));
+                $builder->add('raisonDesinscription', 'textarea', array(
+                    'required'   => false, 
+                    'label'      => 'Raison de la désinscription'
+                ));
+            }
 
             //Si il y a un utilisateur connecté nous sommes en BO et que le role est CMSI
             if( !($this->_securityContext->isGranted('ROLE_ARS_CMSI_4')) )

@@ -92,6 +92,14 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                    <div><strong>Profil de l'établissement</strong></div>
+                                         <div>
+                                            {% if user.profilEtablissementSante is defined and user.profilEtablissementSante is not null  %}
+                                                {{user.profilEtablissementSante.libelle}}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <div><strong>Groupe associé</strong></div>
                                         {% for role in roles %}
                                             <div>{{ role.name }}</div>
@@ -142,14 +150,6 @@
                                             <div class="form-group">
                                                 <div><strong>Nom de votre établissement si non disponible dans la liste précédente</strong></div>
                                                 <div>{{user.autreStructureRattachementSante}}</div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div><strong>Profil de l'établissement</strong></div>
-                                                <div>
-                                                    {% if user.profilEtablissementSante is defined and user.profilEtablissementSante is not null  %}
-                                                        {{user.profilEtablissementSante.libelle}}
-                                                    {% endif %}
-                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <div><strong>Fonction dans l'établissement</strong></div>

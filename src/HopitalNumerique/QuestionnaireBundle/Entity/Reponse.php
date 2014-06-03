@@ -51,6 +51,16 @@ class Reponse
     protected $reference;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinTable(name="hn_questionnaire_reponse_reference",
+     *      joinColumns={ @ORM\JoinColumn(name="rep_id", referencedColumnName="rep_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
+     * )
+     * @ORM\OrderBy({"order" = "ASC"})
+     */
+    protected $referenceMulitple;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="param_id", type="integer", nullable=true, options = {"comment" = "Éventuelle clef étrangère"})
@@ -158,6 +168,51 @@ class Reponse
             $this->reference = $reference;
         else
             $this->reference = null;
+    }
+    /**
+     * Add referenceMulitple
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
+     * @return Objet
+     */
+    public function addReferenceMulitple(\HopitalNumerique\ReferenceBundle\Entity\Reference $reference)
+    {
+        $this->referenceMulitple[] = $reference;
+    
+        return $this;
+    }
+    
+    /**
+     * Remove referenceMulitple
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference$reference
+     */
+    public function removeReferenceMulitple(\HopitalNumerique\ReferenceBundle\Entity\Reference $reference)
+    {
+        $this->referenceMulitple->removeElement($reference);
+    }
+    
+    /**
+     * Set referenceMulitple
+     *
+     * @param \Doctrine\Common\Collections\Collection $referenceMulitple
+     * @return Objet
+     */
+    public function setReferenceMulitple($referenceMulitple)
+    {
+        $this->referenceMulitple = $referenceMulitple;
+    
+        return $this;
+    }
+    
+    /**
+     * Get referenceMulitple
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReferenceMulitple()
+    {
+        return $this->referenceMulitple;
     }
 
     /**

@@ -6,37 +6,98 @@
     <div class="panel-body" style="padding-top:0" >
         <div class="col-md-12 fancybox-popin">
             <ul class="list-unstyled">
-                {# Description #}
-                <li style="margin: 0 0 10px;"><strong>Description :</strong><br />
-                    {% if session.description is not null and session.description is not empty %}
-                        {{ session.description }}
-                    {% else %}
-                        - Aucune description pour cette session -
-                    {% endif %}
+                {# Début de la session #}
+                <li style="margin: 0 0 10px;"><div class="col-md-4"><strong>Début de la session :</strong></div>
+                    <div class="col-md-8">
+                        {% if session.dateSession is not null and session.dateSession is not empty %}
+                            {{ session.dateSession|date('d/m/Y') }}
+                        {% else %}
+                            - Aucune date n'est renseignée pour cette session -
+                        {% endif %}
+                    </div>
                 </li>
                 {# Durée #}
-                <li style="margin: 0 0 10px;"><strong>Durée :</strong><br />
-                    {% if session.duree is not null and session.duree is not empty %}
-                        {{ session.duree.libelle }}
-                    {% else %}
-                        - Aucune durée pour cette session -
-                    {% endif %}
+                <li style="margin: 0 0 10px;"><div class="col-md-4"><strong>Durée :</strong></div>
+                    <div class="col-md-8">
+                        {% if session.duree is not null and session.duree is not empty %}
+                            {{ session.duree.libelle }}
+                        {% else %}
+                            - Aucune durée pour cette session -
+                        {% endif %}
+                    </div>
                 </li>
                 {# Lieu #}
-                <li style="margin: 0 0 10px;"><strong>Lieu :</strong><br />
-                    {% if session.lieu is not null and session.lieu is not empty %}
-                        {{ session.lieu }}
-                    {% else %}
-                        - Aucune lieu pour cette session -
-                    {% endif %}
+                <li style="margin: 0 0 10px;"><div class="col-md-4"><strong>Lieu :</strong></div>
+                    <div class="col-md-8">
+                        {% if session.lieu is not null and session.lieu is not empty %}
+                            {{ session.lieu }}
+                        {% else %}
+                            - Aucune lieu pour cette session -
+                        {% endif %}
+                    </div>
                 </li>
                 {# Horaires #}
-                <li><strong>Horaires :</strong><br />
-                    {% if session.horaires is not null and session.horaires is not empty %}
-                        {{ session.horaires }}
-                    {% else %}
-                        - Aucune durée pour cette session -
-                    {% endif %}
+                <li><div class="col-md-4"><strong>Horaires :</strong></div>
+                    <div class="col-md-8">
+                        {% if session.horaires is not null and session.horaires is not empty %}
+                            {{ session.horaires }}
+                        {% else %}
+                            - Aucune durée pour cette session -
+                        {% endif %}
+                    </div>
+                </li>
+                {# Formateur #}
+                <li style="margin: 0 0 10px;"><div class="col-md-4"><strong>Pièce-jointe :</strong></div>
+                    <div class="col-md-8">
+                        {% if session.module.path is not null and session.module.path is not empty %}
+                            <a class="uploadedFile" href="{{path('hopitalnumerique_module_module_dowload_front', {'id': session.module.id })}}">{{session.module.path}}</a>
+                        {% else %}
+                            - Aucune pièce-jointe pour cette session -
+                        {% endif %}
+                    </div>
+                </li>
+                {# Pièce jointe #}
+                <li><div class="col-md-4" style="margin: 0 0 10px;"><strong>Formateur :</strong></div>
+                    <div class="col-md-8">
+                        {% if session.formateur is not null and session.formateur is not empty %}
+                            {{ session.formateur.getAppellation() }}
+                        {% else %}
+                            - Aucun formateur pour cette session -
+                        {% endif %}
+                    </div>
+                </li>
+                {# Description #}
+                <li>
+                    <div class="col-md-12" style="margin: 0 0 10px; padding-top:10px; border-top: 1px solid #D5D5D5;">
+                        <strong>Description :</strong><br />
+                        {% if session.description is not null and session.description is not empty %}
+                            {{ session.description }}
+                        {% else %}
+                            - Aucune description pour cette session -
+                        {% endif %}
+                    </div>
+                </li>
+                {# Prérequis #}
+                <li>
+                    <div class="col-md-12">
+                        <strong>Prérequis :</strong><br />
+                        {% if session.module.prerequis is not null and session.module.prerequis is not empty %}
+                            {{ session.module.prerequis }}
+                        {% else %}
+                            - Aucun(s) prérequis pour cette session -
+                        {% endif %}
+                    </div>
+                </li>
+                {# Productions concernées #}
+                <li>
+                    <div class="col-md-12" style="margin: 0 0 10px; padding-top: 10px;">
+                        <strong>Production(s) concernée(s) : </strong>
+                        <ul>
+                            {% for production in session.module.productions %}
+                                <li><a target="_blank" href="{{path('hopital_numerique_publication_publication_objet',{'id':production.id,'alias':production.alias})}}">{{production.titre}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </li>
             </ul>
         </div>

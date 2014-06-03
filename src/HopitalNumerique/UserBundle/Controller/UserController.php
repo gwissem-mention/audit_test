@@ -408,7 +408,8 @@ class UserController extends Controller
                             'etablissementRattachementSante.nom' => 'Etablissement rattachement Santé',
                             'dateInscriptionString'              => 'Date d\'inscription',
                             'fonctionDansEtablissementSante'     => 'Fonction dans l\'établissement de Santé',
-                            'nbVisites'                          => 'Nombre de visites'
+                            'nbVisites'                          => 'Nombre de visites',
+                            'raisonDesinscription'               => 'Raison de désinscription'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
@@ -510,7 +511,7 @@ class UserController extends Controller
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
         
         //manages colonnes
-        $colonnes = array('id' => 'id');
+        $colonnes = array('id' => 'id_utilisateur', 'user' => 'Prénom et Nom de l\'utilisateur');
 
         //prepare datas
         $datas     = array();
@@ -518,8 +519,9 @@ class UserController extends Controller
         foreach($users as $user)
         {
             //prepare row
-            $row       = array();
-            $row['id'] = $user->getId();
+            $row         = array();
+            $row['id']   = $user->getId();
+            $row['user'] = $user->getPrenomNom();
 
             $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByAmbassadeur( $user->getId() );
             $nbProd = 0;
@@ -569,7 +571,7 @@ class UserController extends Controller
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
         
         //manages colonnes
-        $colonnes = array('id' => 'id');
+        $colonnes = array('id' => 'id_utilisateur', 'user' => 'Prénom et Nom de l\'utilisateur');
 
         //prepare datas
         $datas     = array();
@@ -577,8 +579,9 @@ class UserController extends Controller
         foreach($users as $user)
         {
             //prepare row
-            $row       = array();
-            $row['id'] = $user->getId();
+            $row         = array();
+            $row['id']   = $user->getId();
+            $row['user'] = $user->getPrenomNom();
 
             $domaines  = $user->getDomaines();
             $nbDomaine = 0;
@@ -636,7 +639,10 @@ class UserController extends Controller
         
         //Si on est en FO dans informations personelles, on affiche pas le mot de passe. Il est géré dans un autre formulaire
         if($this->_informationsPersonnelles)
+        {
             $form->remove('plainPassword');
+            $form->remove('raisonDesinscription');
+        }
 
         $request = $this->get('request');
 
@@ -782,7 +788,7 @@ class UserController extends Controller
                 switch ($do)
                 {
                     case 'inscription':
-                        $this->get('session')->getFlashBag()->add( 'danger' , 'Certains serveurs de messagerie peuvent bloquer la bonne réception des emails émis par la plateforme Hôpital Numérique. Merci de vérifier auprès de votre service de informatique que les adresses accompagnement-hn@anap.fr et communication@anap.fr ne sont pas considérées comme du spam et qu\'elles font bien parties des adresses autorisées sur le serveur mail de votre établissment.' ); 
+                        $this->get('session')->getFlashBag()->add( 'danger' , 'Certains serveurs de messagerie peuvent bloquer la bonne réception des emails émis par la plateforme Hôpital Numérique. Merci de vérifier auprès de votre service de informatique que les adresses accompagnement-hn@anap.fr et communication@anap.fr ne sont pas considérées comme du spam et qu\'elles font bien parties des adresses autorisées sur le serveur mail de votre établissement.' ); 
                         return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
                         break;
                     case 'information-personnelles':
