@@ -192,4 +192,17 @@ class FrontController extends Controller
             'chapitres' => $chapitres
         ));
     }
+
+    /**
+     * Page Mon Compte : affiche la liste des derniers résultats
+     */
+    public function autodiagAction()
+    {
+        $user      = $this->get('security.context')->getToken()->getUser();
+        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy( array( 'user' => $user ) );        
+
+        return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:autodiag.html.twig' , array(
+            'resultats' => $resultats
+        ));
+    }
 }

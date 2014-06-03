@@ -40,3 +40,9 @@
 #resultats .synthese{font-style: italic; font-size: 12px}
 #resultats .question{font-weight: bold; margin-bottom: 0}
 #resultats .sous-chapitre .question{padding-left:40px;}
+
+/* Partie Compte HN */
+.autodiagTable thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}
+.autodiagTable thead tr a { color:#FFFFFF; font-size: 12px }
+.autodiagTable thead th { background-color:#6F3596; vertical-align: middle }
+.autodiagTable th, .autodiagTable td { border: 1px solid #ddd;padding:4px; }
