@@ -41,7 +41,7 @@
 #homepage .home-right .creation-compte .buttons .signup{margin-right:10px;}
 
 
-@media screen and (max-width: 765px) {
+@media screen and (max-width: 991px) {
     #homepage .home-right .recherche{margin:25px 0;}
     #homepage .home-right .recherche p{text-align: center;}
     
