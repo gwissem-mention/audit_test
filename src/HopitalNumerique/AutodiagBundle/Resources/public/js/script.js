@@ -16,6 +16,7 @@ $(document).ready(function() {
                             $('.designForBlank').hide();
                         }
 
+                        initFancyBox();
                     }else
                         apprise('Une erreur est survenue lors de l\'ajout de votre chapitre, merci de réessayer');
                 }
@@ -57,8 +58,18 @@ $(document).ready(function() {
     }
 
     //Fancybox
-    if( $('.fancy').length > 0 ){
-        $('.fancy').fancybox({
+    if( $('.fancy').length > 0 )
+        initFancyBox();
+    
+    //bind de Validation Engine
+    if( $('form.toValidate').length > 0 )
+        $('form.toValidate').validationEngine();
+});
+
+// Initialise la fancybox
+function initFancyBox()
+{
+    $('.fancy').fancybox({
             'padding'   : 0,
             'autoSize'  : false,
             'width'     : '80%',
@@ -66,12 +77,7 @@ $(document).ready(function() {
             'scrolling' : 'no',
             'modal'     : true
         });
-    }
-    
-    //bind de Validation Engine
-    if( $('form.toValidate').length > 0 )
-        $('form.toValidate').validationEngine();
-});
+}
 
 //Toogle Block and manage classes
 function toggle( block )
