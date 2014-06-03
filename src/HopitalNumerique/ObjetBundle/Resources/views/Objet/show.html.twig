@@ -114,6 +114,16 @@
                                 {{ objet.resume|raw }}
                             </div>
                         </p>
+                        <p>
+                            <strong>Les outils d'autodiagnostics quivants sont susceptibles de remonter dans les résultats : </strong><br />
+                            <div class="well">
+                                <ul>
+                                    {% for outil in outils %}
+                                        <li>{{outil.title}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </p>
                     </div>
                 </div>
             </div>

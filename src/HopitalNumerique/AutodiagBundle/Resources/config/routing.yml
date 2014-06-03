@@ -200,3 +200,8 @@ hopitalnumerique_autodiag_front_resultat:
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:resultat" }
     requirements:
         id: \d+
+
+#CRON
+hopitalnumerique_autodiag_cron:
+    pattern:  /cron-autodiag/{id}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Cron:autodiag}

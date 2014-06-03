@@ -226,7 +226,32 @@ class SearchManager extends BaseManager
         return $this->mergeDatas( $objetsToIntersect, $contenusToIntersect );
     }
 
+    /**
+     * Retourne la liste des objets pour le cron d'autodiag
+     *
+     * @param array $references Liste de références
+     *
+     * @return array
+     */
+    public function getObjetsForCronAutodiag( $references )
+    {
+        $objets = array();
 
+        //on récupères tous les objets, on les formate et on les ajoute à nos catégories
+        $results = $this->_refObjetManager->getObjetsForRecherche( $references );
+        if( $results ){
+            $tmp = array();
+            foreach( $results as $one) {
+                $objet = $this->formateObjet( $one );
+                if( !is_null($objet) && $objet['categ'] != '' )
+                    $tmp[ $objet['id'] ] = $objet;
+            }
+
+            $objets = array_merge($tmp, $objets);
+        }
+
+        return $objets;
+    }
 
 
 
@@ -337,7 +362,7 @@ class SearchManager extends BaseManager
      * 
      * @return stdClass
      */
-    private function formateObjet( $one, $role )
+    private function formateObjet( $one, $role = null )
     {
         //Références
         $item            = array();
@@ -346,14 +371,16 @@ class SearchManager extends BaseManager
         //objet
         $objet = $one->getObjet();
         
-        //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
-        $roles = $objet->getRoles();
-        foreach($roles as $restrictedRole){
-            //on "break" en retournant null, l'objet n'est pas ajouté
-            if( $restrictedRole->getRole() == $role)
-                return null;
+        if( !is_null($role) ) {
+            //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
+            $roles = $objet->getRoles();
+            foreach($roles as $restrictedRole){
+                //on "break" en retournant null, l'objet n'est pas ajouté
+                if( $restrictedRole->getRole() == $role)
+                    return null;
+            }    
         }
-
+        
         $item['id']       = $objet->getId();
         $item['titre']    = $objet->getTitre();
         $item['nbRef']    = count($objet->getReferences());
