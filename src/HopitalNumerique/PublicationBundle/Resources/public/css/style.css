@@ -122,3 +122,9 @@
 @media screen and (max-width: 1225px) {
     #menu, #publication.with-sommaire{padding-left: 10px}
 }
+
+@media screen and (max-width: 765px) {
+    #points-durs{margin-bottom: 20px}
+    #ressources{margin-bottom: 20px}
+    #autresResultats .carousel-inner{ width: 625px;}
+}
