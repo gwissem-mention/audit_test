@@ -26,6 +26,7 @@
             <thead>
                 <tr>
                     <th>Titre</th>
+                    <th>Date début remplissage</th>
                     <th>Date dernier enregistrement</th>
                     <th>Pourcentage de remplissage</th>
                     <th width="50px">Actions</th>
@@ -35,6 +36,7 @@
                 {% for resultat in resultats if resultat.dateValidation is null %}
                     <tr>
                         <td>{{resultat.outil.title}}</td>
+                        <td>{{resultat.dateCreation|date('d/m/Y')}}</td>
                         <td>{{resultat.dateLastSave|date('d/m/Y')}}</td>
                         <td>{{resultat.tauxRemplissage}}%</td>
                         <td>

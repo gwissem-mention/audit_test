@@ -36,6 +36,13 @@ class Resultat
     private $dateValidation;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="res_date_creation", type="datetime")
+     */
+    private $dateCreation;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="res_taux_remplissage", type="float")
@@ -71,6 +78,7 @@ class Resultat
     public function __construct()
     {
         $this->tauxRemplissage = 0;
+        $this->dateCreation    = new \DateTime;
         $this->reponses        = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -105,6 +113,27 @@ class Resultat
     public function getDateLastSave()
     {
         return $this->dateLastSave;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime $dateCreation
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+    
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+        return $this;
     }
 
     /**
