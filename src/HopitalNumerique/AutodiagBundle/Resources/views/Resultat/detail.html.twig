@@ -35,6 +35,7 @@
                 </div>
 
                 <div id="resultat-detail" class="content">
+                    {% import _self as mySelf %}
                     {% for chapitre in chapitres %}
                         <div class="chapitre-{{chapitre.id}}">
                             <h2>{{chapitre.title}}</h2>
@@ -42,7 +43,7 @@
                             <hr>
 
                             {% if chapitre.questions|length > 0 %}
-                                {{ _self.buildQuestion(chapitre.questions) }}
+                                {{ mySelf.buildQuestion(chapitre.questions) }}
                             {% endif %}
                             
                             {% if chapitre.childs|length > 0 %}
@@ -50,7 +51,7 @@
                                     {% for child in chapitre.childs %}
                                         <h3>{{child.title}}</h3>
                                         
-                                        {{ _self.buildQuestion(child.questions) }}
+                                        {{ mySelf.buildQuestion(child.questions) }}
                                     {% endfor %}
                                 </div>
                             {% endif %}

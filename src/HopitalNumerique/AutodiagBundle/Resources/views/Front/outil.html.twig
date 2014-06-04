@@ -51,7 +51,7 @@
             <div class="col-md-12 content">
                 {% set formName = outil.alias %}
                 {% set questionNumber = 1 %}
-                {% import _self as currentPage %}
+                {% import _self as mySelf %}
                 <form action="{{path('hopitalnumerique_autodiag_front_save', {'id':outil.id})}}" id="wizard" class="form-horizontal" method="POST">
                     {% for chapitre in chapitres %}
                         {% set parent = chapitre['parent'] %}
@@ -69,7 +69,7 @@
                                     {% else %}
                                         {% set reponse = -1 %}
                                     {% endif %}
-                                    {{ currentPage.buildQuestion(question, reponse, formName, questionNumber) }}
+                                    {{ mySelf.buildQuestion(question, reponse, formName, questionNumber) }}
                                     {% set questionNumber = questionNumber + 1 %}
                                 {% endfor %}
                             {% endif %}
@@ -87,7 +87,7 @@
                                             {% else %}
                                                 {% set reponse = -1 %}
                                             {% endif %}
-                                            {{ currentPage.buildQuestion(question, reponse, formName, questionNumber) }}
+                                            {{ mySelf.buildQuestion(question, reponse, formName, questionNumber) }}
                                             {% set questionNumber = questionNumber + 1 %}
                                         {% endfor %}
                                     {% endfor %}

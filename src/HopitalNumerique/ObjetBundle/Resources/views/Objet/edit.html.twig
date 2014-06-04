@@ -349,8 +349,9 @@
                                     <p class="designForBlank" style="{% if contenus|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour ajouter un élément dans votre sommaire.</p>
                                     <div class="dd" id="sommaire">
                                         <ol class="dd-list">
+                                            {% import _self as mySelf %}
                                             {% for contenu in contenus %}
-                                                {{ _self.buildTree(contenu) }}
+                                                {{ mySelf.buildTree(contenu) }}
                                             {% endfor %}
                                         </ol>
                                     </div>
@@ -394,8 +395,9 @@
         
         {% if contenu.childs %}
             <ol class="dd-list">
+                {% import _self as mySelf %}
                 {% for child in contenu.childs %}
-                    {{ _self.buildTree(child) }}
+                    {{ mySelf.buildTree(child) }}
                 {% endfor %}
             </ol>
         {% endif %}

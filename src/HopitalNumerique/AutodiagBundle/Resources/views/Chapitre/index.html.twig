@@ -68,8 +68,9 @@
                         <span class="designForBlank" style="{% if chapitres|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton 'Ajouter un chapitre' pour ajouter un chapitre.</span>
                         <div class="dd" id="chapitres">
                             <ol class="dd-list">
+                                {% import _self as mySelf %}
                                 {% for chapitre in chapitres %}
-                                    {{ _self.buildTree(chapitre) }}
+                                    {{ mySelf.buildTree(chapitre) }}
                                 {% endfor %}
                             </ol>
                         </div>
@@ -117,8 +118,9 @@
         
         {% if chapitre.childs %}
             <ol class="dd-list">
+                {% import _self as mySelf %}
                 {% for child in chapitre.childs %}
-                    {{ _self.buildTree(child) }}
+                    {{ mySelf.buildTree(child) }}
                 {% endfor %}
             </ol>
         {% endif %}
