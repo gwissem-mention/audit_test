@@ -109,5 +109,10 @@
         #resultats #forum .results .carousel-control.right {background: none}
         #resultats #forum .results .carousel-control.left {background: none}
 
+@media screen and (max-width: 991px) {
+    #recherche .requete h2{height: auto}
+    #recherche .requete h2.rclose{background: url('../img/requete-close.png') no-repeat bottom right; }
+    #recherche .requete h2.ropen{background: url('../img/requete-open.png') no-repeat bottom right; }
 
-        
+    #resultats #ressources .results .carousel-inner{width:92%;}
+}
