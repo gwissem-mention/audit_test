@@ -13,6 +13,7 @@ class InterventionInitiateur
 {
     private static $INTERVENTION_INITIATEUR_CMSI = 1;
     private static $INTERVENTION_INITIATEUR_ETABLISSEMENT = 2;
+    private static $INTERVENTION_INITIATEUR_ANAP = 3;
 
     /**
      * @var integer
@@ -80,5 +81,14 @@ class InterventionInitiateur
     public static function getInterventionInitiateurEtablissementId()
     {
         return self::$INTERVENTION_INITIATEUR_ETABLISSEMENT;
+    }
+    /**
+     * Returne l'ID de l'ANAP.
+     *
+     * @return integer ID de l'ANAP
+     */
+    public static function getInterventionInitiateurAnapId()
+    {
+        return self::$INTERVENTION_INITIATEUR_ANAP;
     }
 }

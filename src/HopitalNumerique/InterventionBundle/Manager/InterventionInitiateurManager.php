@@ -34,4 +34,13 @@ class InterventionInitiateurManager extends BaseManager
     {
         return $this->getRepository()->findOneById(InterventionInitiateur::getInterventionInitiateurEtablissementId());
     }
+    /**
+     * Returne l'ANAP.
+     *
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur L'ANAP
+     */
+    public function getInterventionInitiateurAnap()
+    {
+        return $this->getRepository()->findOneById(InterventionInitiateur::getInterventionInitiateurAnapId());
+    }
 }

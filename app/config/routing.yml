@@ -47,6 +47,10 @@ hopital_numerique_intervention_regroupement:
 hopital_numerique_intervention_user:
     resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/user.yml"
     prefix:   /compte-hn/intervention
+
+hopital_numerique_intervention_objet:
+    resource: "@HopitalNumeriqueInterventionBundle/Resources/config/routing/objet.yml"
+    prefix:   /compte-hn/intervention
 # ^^^^^ ---- GME 07/04/2014 : Fichiers de routing à revoir. Trop de d'appels : pas propre ---- ^^^^^
 
 hopital_numerique_contact:

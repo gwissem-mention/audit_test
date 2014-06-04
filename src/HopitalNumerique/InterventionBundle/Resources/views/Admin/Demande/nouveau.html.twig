@@ -1,0 +1,29 @@
+{% extends 'HopitalNumeriqueInterventionBundle:Admin/Demande:edit.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+{% block h1Title %}Créer une intervention{% endblock %}
+
+{% block body %}
+    
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" id="intervention_demande_panel">
+                {{ form_start(interventionDemandeFormulaireNouveau, { attr:{ id:'form_intervention_demande_nouveau', class:'form-horizontal toValidate', novalidate:'novalidate' }}) }}
+                    {% form_theme interventionDemandeFormulaireNouveau 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
+
+                    {{ form_javascript(interventionDemandeFormulaireNouveau) }}
+                    {{ form_widget(interventionDemandeFormulaireNouveau) }}
+
+                {{ form_end(interventionDemandeFormulaireNouveau) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+hopital_numerique_intervention_objet_objets:
+    pattern:  /objetsByAmbassadeur/json/{ambassadeur}
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Objet:jsonObjetsByAmbassadeur" }
+    requirements:
+        _method:  GET
+        _format: json
+        ambassadeur: \d+

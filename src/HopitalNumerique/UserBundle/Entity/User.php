@@ -1059,6 +1059,16 @@ class User extends BaseUser
         return $this->contractualisations;
     }
 
+    /**
+     * Get objets
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getObjets()
+    {
+        return $this->objets;
+    }
+    
     // ^ -------- Gestion questionnaire  -------- ^
     
     /**

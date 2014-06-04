@@ -1,3 +1,23 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-intervention-admin.css" filter="cssrewrite, ?yui_css"
+        "@select2_css" 
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-intervention-admin.js" 
+        "@select2_js" 
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block title %}{{parent()}} - Interventions{% endblock %}
