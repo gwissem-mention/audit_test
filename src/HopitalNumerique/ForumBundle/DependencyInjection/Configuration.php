@@ -5,57 +5,15 @@ namespace HopitalNumerique\ForumBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use CCDNForum\ForumBundle\DependencyInjection\Configuration as ConfigurationCCDN;
+
 
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
  */
-class Configuration implements ConfigurationInterface
+class Configuration extends ConfigurationCCDN
 {
-    /**
-     *
-     * @access public
-     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder
-     */
-    public function getConfigTreeBuilder()
-    {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('ccdn_forum_forum');
-
-        $rootNode
-            ->children()
-                ->arrayNode('template')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->scalarNode('engine')->defaultValue('twig')->end()
-                        ->scalarNode('pager_theme')->defaultValue($this->defaultValuePaginatorTheme)->end()
-                    ->end()
-                ->end()
-            ->end();
-
-        // Class file namespaces.
-        $this->addEntitySection($rootNode);
-        $this->addGatewaySection($rootNode);
-        $this->addRepositorySection($rootNode);
-        $this->addManagerSection($rootNode);
-        $this->addModelSection($rootNode);
-        $this->addFormSection($rootNode);
-        $this->addComponentSection($rootNode);
-
-        // Configuration stuff.
-        $this->addForumSection($rootNode);
-        $this->addCategorySection($rootNode);
-        $this->addBoardSection($rootNode);
-        $this->addTopicSection($rootNode);
-        $this->addPostSection($rootNode);
-        $this->addItemPostSection($rootNode);
-        $this->addSubscriptionSection($rootNode);
-        $this->addFixtureReferenceSection($rootNode);
-        $this->addSEOSection($rootNode);
-
-        return $treeBuilder;
-    }
-
     /**
      *
      * @access private

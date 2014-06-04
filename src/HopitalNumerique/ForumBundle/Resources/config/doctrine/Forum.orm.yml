@@ -1,4 +1,6 @@
 HopitalNumerique\ForumBundle\Entity\Forum:
+    constraints:
+        Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
     type: entity
     table: cc_forum_forum
     id:

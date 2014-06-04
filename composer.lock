@@ -98,12 +98,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeconsortium/CCDNForumForumBundle.git",
-                "reference": "91807881d157ca091614adb54166aaa9d5ec80ec"
+                "reference": "b8813e9ef3aca5bec1d8f37438f24a96c9660110"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeconsortium/CCDNForumForumBundle/zipball/91807881d157ca091614adb54166aaa9d5ec80ec",
-                "reference": "91807881d157ca091614adb54166aaa9d5ec80ec",
+                "url": "https://api.github.com/repos/codeconsortium/CCDNForumForumBundle/zipball/b8813e9ef3aca5bec1d8f37438f24a96c9660110",
+                "reference": "b8813e9ef3aca5bec1d8f37438f24a96c9660110",
                 "shasum": ""
             },
             "require": {
@@ -159,7 +159,7 @@
                 "codeconsortium",
                 "forum"
             ],
-            "time": "2014-04-23 22:53:06"
+            "time": "2014-06-02 13:05:18"
         },
         {
             "name": "doctrine/annotations",
@@ -1258,12 +1258,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
-                "reference": "de645e813ddca4a1243db48bce5eaee8adb346a2"
+                "reference": "80b87cb4ebc5f046ee5c3a57dae6c1f97f281068"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/de645e813ddca4a1243db48bce5eaee8adb346a2",
-                "reference": "de645e813ddca4a1243db48bce5eaee8adb346a2",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/80b87cb4ebc5f046ee5c3a57dae6c1f97f281068",
+                "reference": "80b87cb4ebc5f046ee5c3a57dae6c1f97f281068",
                 "shasum": ""
             },
             "require": {
@@ -1314,7 +1314,7 @@
                 "menu",
                 "tree"
             ],
-            "time": "2014-05-01 19:50:28"
+            "time": "2014-06-01 10:01:17"
         },
         {
             "name": "knplabs/knp-menu-bundle",
@@ -1769,12 +1769,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/whiteoctober/Pagerfanta.git",
-                "reference": "e7bb39bb45ecf64a5fa09a546f1d8007fd292359"
+                "reference": "ac1edfdf81c91a0f1471769071011ebf9b055421"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/e7bb39bb45ecf64a5fa09a546f1d8007fd292359",
-                "reference": "e7bb39bb45ecf64a5fa09a546f1d8007fd292359",
+                "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/ac1edfdf81c91a0f1471769071011ebf9b055421",
+                "reference": "ac1edfdf81c91a0f1471769071011ebf9b055421",
                 "shasum": ""
             },
             "require": {
@@ -1828,7 +1828,7 @@
                 "paginator",
                 "paging"
             ],
-            "time": "2014-05-23 10:20:31"
+            "time": "2014-06-02 09:21:14"
         },
         {
             "name": "psr/log",
@@ -2303,16 +2303,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.4.5",
+            "version": "v2.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "885b6d17447fcc3cd9c42622321e5af4283dbde1"
+                "reference": "ebf1be8a9217eb5911102a522eb2bd500923297d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/885b6d17447fcc3cd9c42622321e5af4283dbde1",
-                "reference": "885b6d17447fcc3cd9c42622321e5af4283dbde1",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/ebf1be8a9217eb5911102a522eb2bd500923297d",
+                "reference": "ebf1be8a9217eb5911102a522eb2bd500923297d",
                 "shasum": ""
             },
             "require": {
@@ -2414,7 +2414,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2014-05-22 21:04:05"
+            "time": "2014-05-31 18:42:13"
         },
         {
             "name": "twig/extensions",

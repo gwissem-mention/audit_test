@@ -54,15 +54,17 @@ class RoleHelper
      *
      * @access public
      * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
-     * @param array                                                     $availableRoles
      */
-    public function __construct(SecurityContextInterface $securityContext, $availableRoles)
+    public function __construct(SecurityContextInterface $securityContext, $managerRole)
     {
         $this->securityContext = $securityContext;
 
         // default role is array is empty.
         if (empty($availableRoles)) {
-            $availableRoles[] = array('ROLE_USER');
+            foreach ($managerRole->getRolesAsArray() as $code => $name) 
+            {
+                $availableRoles[$code] = array($name);
+            }
         }
 
         $this->availableRoles = $availableRoles;

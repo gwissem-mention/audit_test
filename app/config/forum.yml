@@ -1,3 +1,10 @@
+services:
+    ccdn_forum_forum.component.helper.role:
+        class: %ccdn_forum_forum.component.helper.role.class%
+        arguments:
+            - @security.context
+            - @nodevo_role.manager.role
+
 ccdn_forum_forum:
     template:
         engine:               twig
