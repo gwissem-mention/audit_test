@@ -70,7 +70,7 @@
     {% for question in chapitre.questions %}
         {# Affiche les résultats pour les réponses valides (!non concerné et !vide) #}
         {% if ((question.type == '415' and question.value != 0) or (question.type == '416' and question.value != 0 ) or (question.type == '417' and question.value != '') ) and (question.value < question.noteMinimale) %}
-            {% set publications = question.id|getPublications %}
+            {% set publications = question.id|getPublicationsForQuestion %}
             {% if publications %}
                 <div class="row">
                     <div class="col-md-12">
@@ -84,6 +84,7 @@
     {% endfor %}
 {% endmacro %}
 
+{# Calcul de la note du chapitre #}
 {% macro calcNote(chapitre) %}
     {% set noteChapitre = 0 %}
     {% for question in chapitre.questions %}
@@ -93,7 +94,14 @@
         {% endif %}
     {% endfor %}
     
-    {% if noteChapitre < chapitre.noteMinimale %}
-
+    {% if noteChapitre < chapitre.noteMin %}
+        {% set publications = chapitre.id|getPublicationsForChapitre %}
+        {% if publications %}
+            <div class="row">
+                <div class="col-md-12">
+                    {{publications|raw}}
+                </div>
+            </div>
+        {% endif %}
     {% endif %}
 {% endmacro %}

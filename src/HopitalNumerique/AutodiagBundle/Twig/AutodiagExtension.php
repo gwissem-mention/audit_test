@@ -24,22 +24,53 @@ class AutodiagExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'getPublications' => new \Twig_Filter_Method($this, 'getPublications')
+            'getPublicationsForQuestion' => new \Twig_Filter_Method($this, 'getPublicationsForQuestion'),
+            'getPublicationsForChapitre' => new \Twig_Filter_Method($this, 'getPublicationsForChapitre')
         );
     }
 
     /**
-     * Récupère la liste des publications lié à cette réponse
+     * Récupère la liste des publications lié à cette question
      *
-     * @param integer $id ID de la réponse
+     * @param integer $id ID de la question
      *
      * @return string
      */
-    public function getPublications( $id )
+    public function getPublicationsForQuestion( $id )
     {
         $question   = $this->getManagerQuestion()->findOneBy( array('id'=>$id) );
-        $references = $question->getReferences();
-        $refs       = array();
+        
+        return $this->buildRefs( $question->getReferences() );
+    }
+
+    /**
+     * Récupère la liste des publications lié à ce chapitre
+     *
+     * @param integer $id ID du chapitre
+     *
+     * @return string
+     */
+    public function getPublicationsForChapitre( $id )
+    {
+        $chapitre = $this->getManagerChapitre()->findOneBy( array('id'=>$id) );
+        
+        return $this->buildRefs( $chapitre->getReferences() );
+    }
+
+
+
+
+
+    /**
+     * Construit les références
+     *
+     * @param array $references Les références
+     *
+     * @return string
+     */
+    private function buildRefs( $references )
+    {
+        $refs = array();
 
         foreach($references as $reference)
             $refs[] = $reference->getReference()->getId();
@@ -71,6 +102,16 @@ class AutodiagExtension extends \Twig_Extension
     private function getManagerQuestion()
     {
         return $this->container->get('hopitalnumerique_autodiag.manager.question');
+    }
+
+    /**
+     * Retourne le manager Chapitre
+     *
+     * @return ChapitreManager
+     */
+    private function getManagerChapitre()
+    {
+        return $this->container->get('hopitalnumerique_autodiag.manager.chapitre');
     }
 
     /**

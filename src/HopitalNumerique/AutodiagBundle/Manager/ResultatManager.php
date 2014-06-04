@@ -86,6 +86,7 @@ class ResultatManager extends BaseManager
             $chapitre->id       = $one->getId();
             $chapitre->synthese = $one->getSynthese();
             $chapitre->title    = $one->getTitle();
+            $chapitre->noteMin  = $one->getNoteMinimale();
             $chapitre->childs   = array();
             $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
