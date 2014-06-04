@@ -1,7 +1,7 @@
 # CCDNForum\ForumBundle\Entity\Post:
 HopitalNumerique\ForumBundle\Entity\Post:
     type: entity
-    table: cc_forum_post
+    table: hn_forum_post
     id:
         id:
             type: integer

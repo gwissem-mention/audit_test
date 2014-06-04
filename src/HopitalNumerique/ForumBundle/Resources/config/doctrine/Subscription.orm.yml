@@ -1,6 +1,6 @@
 HopitalNumerique\ForumBundle\Entity\Subscription:
     type: entity
-    table: cc_forum_subscription
+    table: hn_forum_subscription
     id:
         id:
             type: integer

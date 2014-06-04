@@ -1,6 +1,6 @@
 HopitalNumerique\ForumBundle\Entity\Board:
     type: entity
-    table: cc_forum_board
+    table: hn_forum_board
     id:
         id:
             type: integer
