@@ -40,7 +40,7 @@ class ObjetGrid extends Grid implements IGrid
         $infraColumn->setSize( 90 );
         $this->addColonne( $infraColumn );
 
-        $autodiagColumn = new Column\ArrayColumn('autodiags', 'Liée aux autodiagnostics');
+        $autodiagColumn = new Column\ArrayColumn('autodiags', 'Autodiag ?');
         $autodiagColumn->setSize( 120 );
         $this->addColonne( $autodiagColumn );
 
