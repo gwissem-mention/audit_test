@@ -119,8 +119,12 @@
                         {{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}
                     </div>
                 {% endif %}
-                {% block body %}{% endblock %}
-                <div class="clearfix"></div>
+                {% block block_du_body %}
+                    {% block prebody %}{% endblock prebody %}
+                    <div class="clearfix"></div>
+                    {% block body %}{% endblock body %}
+                    <div class="clearfix"></div>
+                {% endblock %}
             </div>
             <div class="col-md-12" id="footer">
                 {{ knp_menu_render('menu-footer-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
