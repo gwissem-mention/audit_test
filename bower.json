@@ -28,6 +28,7 @@
     "Nestable": "https://github.com/dbushell/Nestable.git",
     "jquery-nicescroll": "*",
     "enquire": "~2.1.0",
-    "stepy": "https://github.com/wbotelhos/stepy.git"
+    "stepy": "https://github.com/wbotelhos/stepy.git",
+    "highcharts.com": "*"
   }
 }

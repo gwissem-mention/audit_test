@@ -1,0 +1,18 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{% block body %}
+    <div id="resultats">
+        <div class="col-md-12">
+            <h1 class="violet">Résultats de l'outil {{resultat.outil.title}}</h1>
+
+            {% for chapitre in chapitres %}
+                <div class="chapitre-{{chapitre.id}}">
+                    <h2 class="violet">{{chapitre.title}}</h2>
+
+
+                    
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

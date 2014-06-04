@@ -194,6 +194,33 @@ class FrontController extends Controller
     }
 
     /**
+     * Affiche les résultat PDF d'un outil après la validation d'un outil en front
+     *
+     * @param  Resultat $resultat L'entitée résultat
+     */
+    public function pdfAction( Resultat $resultat )
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $user != 'anon.' ? $user : false;
+
+        //restriction de l'accès aux résultats lorsque l'user est connecté
+        if( 
+            ( $user && !is_null($resultat->getUser()) && $resultat->getUser() != $user ) || 
+            (!$user && !is_null($resultat->getUser()) ) 
+        ) {
+            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à ces résultats');
+            return $this->redirect( $this->generateUrl('hopital_numerique_homepage' ) );
+        }
+
+        $chapitres = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+        
+        return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:pdf.html.twig' , array(
+            'resultat'  => $resultat,
+            'chapitres' => $chapitres
+        ));
+    }
+
+    /**
      * Page Mon Compte : affiche la liste des derniers résultats
      */
     public function autodiagAction()
