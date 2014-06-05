@@ -79,8 +79,10 @@ class InterventionDemandeManager
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur pour le filtre
      * @return array Liste des objets pour les listes de formulaire
      */
-    public function getObjetsChoices(User $ambassadeur)
+    public function getObjetsChoices(User $ambassadeur = null)
     {
+        if ($ambassadeur == null)
+            return array();
         return $this->objetManager->getObjetsByAmbassadeur($ambassadeur);
     }
 }

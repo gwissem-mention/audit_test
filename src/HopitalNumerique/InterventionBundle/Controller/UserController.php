@@ -7,6 +7,7 @@
 namespace HopitalNumerique\InterventionBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
@@ -50,6 +51,24 @@ class UserController extends Controller
 
         $usersJson = $this->get('hopitalnumerique_intervention.manager.form_user')->jsonReferents($usersFiltres);
 
+        return new Response($usersJson);
+    }
+    /**
+     * Action qui renvoie une liste d'ambassadeurs. Les paramètres passables sont :
+     * <ul>
+     *   <li>region : L'ID de la région de l'ambassadeur</li>
+     * </ul>
+     *
+     * @return \Symfony\Component\HttpFoundation\Response Un objet JSON comprenant la liste des utilisateurs
+     */
+    public function jsonAmbassadeursAction(Request $request)
+    {
+        $usersFiltres = array();
+        if ($request->query->has('region'))
+            $usersFiltres['region'] = $request->query->get('region');
+    
+        $usersJson = $this->get('hopitalnumerique_intervention.manager.form_user')->jsonAmbassadeurs($usersFiltres);
+    
         return new Response($usersJson);
     }
     

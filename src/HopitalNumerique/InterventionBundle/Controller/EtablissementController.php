@@ -1,6 +1,6 @@
 <?php
 /**
- * Contrôleur de gestion des établissement utilisés pour les interventions.
+ * Contrôleur de gestion des établissements utilisés pour les interventions.
  * 
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
@@ -9,7 +9,7 @@ namespace HopitalNumerique\InterventionBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * Contrôleur de gestion des établissement utilisées pour les interventions.
+ * Contrôleur de gestion des établissements utilisées pour les interventions.
  */
 class EtablissementController extends Controller
 {

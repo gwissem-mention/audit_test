@@ -18,6 +18,10 @@
     Les interventions
 {% endblock %}
 
+{% block toolbarButton %}
+    <a href="{{path('hopital_numerique_intervention_admin_demande_nouveau')}}" class="btn btn-default" title="Créer une intervention"><i class="fa fa-plus"></i></a>
+{% endblock %}
+
 {% block body %}
     {{ grid(grid, _self) }}
     {% block grid_filters %}{% endblock grid_filters%}

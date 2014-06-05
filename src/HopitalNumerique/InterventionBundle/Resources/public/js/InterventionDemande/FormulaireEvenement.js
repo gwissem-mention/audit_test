@@ -80,6 +80,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initR
 
     $(regionSelect).change(function() {
         HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements();
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAmbassadeurs();
     });
 };
 /**
@@ -126,11 +127,19 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initI
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initAmbassadeur_Change = function()
 {
+    //<-- Transfert d'un ambassadeur
     var ambassadeursSelect = $('select#intervention_demande_ambassadeur_change');
-
     $(ambassadeursSelect).change(function() {
         HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majActivationTransfertAmbassadeur();
     });
+    //-->
+    
+    //<-- Changement d'ambassadeur dans le formulaire
+    var ambassadeurSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_ambassadeur');
+    $(ambassadeurSelect).change(function() {
+        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeObjets();
+    });
+    //-->
 };
 
 
