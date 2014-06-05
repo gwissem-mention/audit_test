@@ -96,21 +96,24 @@ h3{font-size: 20px}
 @media screen and (max-width: 991px) {
     #mesrequetes{display: none}
     
-    #header #logoAnap{margin:5px 10px 10px 10px;}
-    #header #logoHn{margin:3px 10px 10px 10px;}
-    #header #titre{margin: 25px 0 0 20px; width: auto}
+    #header #logoAnap{margin:20px 10px 10px 10px;}
+    #header #logoHn{margin:10px 15px 10px;}
+    #header #titre{margin: 20px 0 0 20px; width: auto}
     #header .loggedUser{display: none}
     #header p.violet{display: none}
     #header .common-sprite-header{width: 33%;background-position: -100px -15px;}
-    #header .connexion a{margin-right: 5px; width: 90px;}
+    #header .connexion a{margin-right: 5px; width: 95px;}
 
     #menu{display: none}
     #menu-select{display: block; margin:10px 0;}
+
+    #footer .menu-footer li{display: block; text-align: center;}
+    #footer .menu-footer li a{border-right: none;}
 }
 
 @media screen and (max-width: 600px) {
     #header{height: 60px}
     #header #logoHn{display: none}
     #header #logoAnap{display: none}
-    #header #titre{margin: 25px auto 0 auto; float:none!important; width: 310px}
+    #header #titre{margin: 10px auto 10px auto; float:none!important; width: 310px}
 }
