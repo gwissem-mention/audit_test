@@ -12,64 +12,123 @@
     {% endstylesheets %}
 {% endblock %}
 
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-autodiag-front-resultat.js" 
+        '@highcharts_js'
+        'bundles/hopitalnumeriqueautodiag/js/resultats.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block body %}
     {% import _self as mySelf %}
 
     <div id="resultats">
         <div class="col-md-12">
-            <h1 class="violet">Résultats de l'outil {{resultat.outil.title}}</h1>
+            <h1 class="text-center">- {{resultat.outil.title}} -</h1>
 
-            {% for chapitre in chapitres %}
-                <div class="chapitre-{{chapitre.id}}">
-                    <h2 class="violet">{{chapitre.title}}</h2>
-                    <hr>
+            <h2 class="violet open" data-toggle="graphiques" >Résultats de l'outil - Graphiques</h2>
 
-                    {% if chapitre.synthese %}
-                        <p class="violet synthese">{{chapitre.synthese}}</p>
-                    {% endif %}
+            <div id="graphiques">
+                <p class="text-justify">
+                    <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, repudiandae quibusdam voluptate nesciunt quaerat culpa ab at neque voluptatibus aut natus ipsam ut nisi eos adipisci temporibus omnis sunt consequatur.</span>
+                    <span>Quas, suscipit, dolor, maiores laudantium ullam esse at fugiat delectus voluptatem tempora ipsam facilis alias modi nulla quae perferendis iusto dignissimos dolorum reprehenderit ut recusandae soluta asperiores! Sit, repudiandae, nemo.</span>
+                </p>
 
-                    {# Résultats liés au chapitre #}
-                    {{ mySelf.calcNote(chapitre) }}
+                {# Affichage du graphique barre #}
+                {% if graphiques['barre'] is defined %}
+                    {% set chart = graphiques['barre'] %}
+                    <h3>{{chart.title|capitalize}}</h3>
+                    <div class="row">
+                        {% for panel in chart.panels %}
+                            <div class="col-md-6">
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">{{panel.title}}</h3>
+                                    </div>
 
-                    {# Résultats liés aux questions #}
-                    {% if chapitre.questions|length > 0 %}
-                        {{ mySelf.buildQuestion(chapitre) }}
-                    {% endif %}
-                    
-                    {# Sous Chapitres #}
-                    {% if chapitre.childs|length > 0 %}
-                        <div class="row sous-chapitre">
-                            <div class="col-md-12">
-                                {% for child in chapitre.childs %}
-                                    <h3 class="violet">{{child.title}}</h3>
-
-                                    {% if child.synthese %}
-                                        <p class="violet synthese">{{child.synthese}}</p>
-                                    {% endif %}
-                                    
-                                    {# Résultats liés au chapitre #}
-                                    {{ mySelf.calcNote(child) }}
-
-                                    {# Résultats liés aux questions #}
-                                    {{ mySelf.buildQuestion(child) }}
-                                {% endfor %}
+                                    <div class="panel-body">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-danger" style="width: 33.3%">
+                                                Faible
+                                            </div>
+                                            <div class="progress-bar progress-bar-warning" style="width: 33.3%">
+                                                Moyen
+                                            </div>
+                                            <div class="progress-bar progress-bar-success" style="width: 33.3%">
+                                                Fort
+                                            </div>
+                                            <div class="cursor" style="left:{{panel.value|number_format(2,'.')}}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    {% endif %}
-                </div>
-            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                {# Affichage du graphique spider #}
+                
+                <div class="clearfix"></div>
+            </div>
 
-            <hr>
-            
-            <a href="{{path('hopitalnumerique_autodiag_front_pdf', {'id':resultat.id})}}" class="btn btn-primary pull-right">Télécharger les résultats</a>
+            <h2 class="violet closed" data-toggle="chapitres" >Résultats de l'outil - Publications</h2>
+
+            <div id="chapitres" style="display:none">
+                <p class="text-justify">
+                    <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, repudiandae quibusdam voluptate nesciunt quaerat culpa ab at neque voluptatibus aut natus ipsam ut nisi eos adipisci temporibus omnis sunt consequatur.</span>
+                    <span>Quas, suscipit, dolor, maiores laudantium ullam esse at fugiat delectus voluptatem tempora ipsam facilis alias modi nulla quae perferendis iusto dignissimos dolorum reprehenderit ut recusandae soluta asperiores! Sit, repudiandae, nemo.</span>
+                </p>
+
+                {# Affichage des publications #}
+                {% for chapitre in chapitres %}
+                    <div class="chapitre-{{chapitre.id}}">
+                        <h3 class="violet">{{chapitre.title}}</h3>
+                        <hr>
+
+                        {% if chapitre.synthese %}
+                            <p class="violet synthese">{{chapitre.synthese}}</p>
+                        {% endif %}
+
+                        {# Résultats liés au chapitre #}
+                        {{ mySelf.calcNote(chapitre) }}
+
+                        {# Résultats liés aux questions #}
+                        {{ mySelf.buildQuestion(chapitre) }}
+                        
+                        {# Sous Chapitres #}
+                        {% if chapitre.childs|length > 0 %}
+                            <div class="row sous-chapitre">
+                                <div class="col-md-12">
+                                    {% for child in chapitre.childs %}
+                                        <h4 class="violet">{{child.title}}</h4>
+
+                                        {% if child.synthese %}
+                                            <p class="violet synthese">{{child.synthese}}</p>
+                                        {% endif %}
+                                        
+                                        {# Résultats liés au chapitre #}
+                                        {{ mySelf.calcNote(child) }}
+
+                                        {# Résultats liés aux questions #}
+                                        {{ mySelf.buildQuestion(child) }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}
 
+{# Construit les lignes associées aux résultats #}
 {% macro buildQuestion(chapitre) %}
-    {% for question in chapitre.questions %}
-        {# Affiche les résultats pour les réponses valides (!non concerné et !vide) #}
-        {% if ((question.type == '415' and question.value != 0) or (question.type == '416' and question.value != 0 ) or (question.type == '417' and question.value != '') ) and (question.value < question.noteMinimale) %}
+    {% if chapitre.questions|length > 0 %}
+        {% for question in chapitre.questions %}
             {% set publications = question.id|getPublicationsForQuestion %}
             {% if publications %}
                 <div class="row">
@@ -80,21 +139,13 @@
                     </div>
                 </div>
             {% endif %}
-        {% endif %}
-    {% endfor %}
+        {% endfor %}
+    {% endif %}
 {% endmacro %}
 
 {# Calcul de la note du chapitre #}
-{% macro calcNote(chapitre) %}
-    {% set noteChapitre = 0 %}
-    {% for question in chapitre.questions %}
-        {# Calcul la note du chapitre pour les réponses valides (!non concerné et !vide) #}
-        {% if ((question.type == '415' and question.value != 0) or (question.type == '416' and question.value != 0 ) or (question.type == '417' and question.value != '') ) and (question.value < question.noteMinimale) %}
-            {% set noteChapitre = noteChapitre + question.value %}
-        {% endif %}
-    {% endfor %}
-    
-    {% if noteChapitre < chapitre.noteMin %}
+{% macro calcNote(chapitre) %}  
+    {% if chapitre.noteChapitre < chapitre.noteMin %}
         {% set publications = chapitre.id|getPublicationsForChapitre %}
         {% if publications %}
             <div class="row">

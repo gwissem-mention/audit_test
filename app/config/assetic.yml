@@ -91,6 +91,7 @@ assetic:
         highcharts_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/highcharts.com/js/highcharts.src.js"
+                - "%kernel.root_dir%/Resources/components/highcharts.com/js/highcharts-more.src.js"
             filters : [ ?yui_js ]
         jquery_cookie_js:
             inputs:

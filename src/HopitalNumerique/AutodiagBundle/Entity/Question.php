@@ -114,7 +114,7 @@ class Question
     protected $chapitre;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Categorie", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Categorie", cascade={"persist"}, inversedBy="questions")
      * @ORM\JoinColumn(name="cat_id", referencedColumnName="cat_id", onDelete="CASCADE")
      * @Nodevo\Javascript(class="validate[required]")
      */
