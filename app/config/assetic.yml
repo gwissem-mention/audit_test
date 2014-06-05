@@ -88,6 +88,10 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/enquire/dist/enquire.min.js"
             filters : [ ?yui_js ]
+        highcharts_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/highcharts.com/js/highcharts.src.js"
+            filters : [ ?yui_js ]
         jquery_cookie_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-cookie/jquery.cookie.js"
