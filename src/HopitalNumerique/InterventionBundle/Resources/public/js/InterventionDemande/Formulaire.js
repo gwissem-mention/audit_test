@@ -54,6 +54,8 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initChamps = f
             return 'Aucune option disponible'
         }
     });
+    $('#hopitalnumerique_interventionbundle_interventiondemande_admin_ambassadeur').select2();
+    $('#hopitalnumerique_interventionbundle_interventiondemande_admin_referent').select2();
 };
 
 
@@ -90,7 +92,6 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampEt
     
     if ($(objetsChamp).size() > 0)
     {
-        //var objetsChampEngineValidator = $('div.hopitalnumerique_interventionbundle_interventiondemande_etablissements ul.select2-choices');
         var objetsChampEngineValidator = $('div#s2id_hopitalnumerique_interventionbundle_interventiondemande_cmsi_etablissements');
         
         if ($(objetsChamp).val() == null)
@@ -290,8 +291,6 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initAutresEtab
 
     if (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS.length > 0)
     {
-        /*for (var i = 0; i < HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS.length; i++)
-            $(etablissementSelect).find('option[value=' + HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS[i] + ']').attr('selected', true);*/
         $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements').select2('val', HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS);
         HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS = new Array();
         $(etablissementSelect).trigger('change');
@@ -391,6 +390,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampRefer
 {
     var referentSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_referent');
     $(referentSelect).html('');
+    $(referentSelect).select2('val', null);
 };
 /**
  * Raffraîchit le SELECT des référents.
@@ -402,6 +402,9 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampRefere
 {
     var referentsSelect = $('select.hopitalnumerique_interventionbundle_interventiondemande_referent');
     var referentsSelectHtml = '';
+    // Si dans l'administration
+    if ($('#hopitalnumerique_interventionbundle_interventiondemande_admin_referent').size() > 0)
+        referentsSelectHtml = '<option value="">-</option>';
     
     $.each(users, function(index, referent) {
         referentsSelectHtml += '<option value="' + referent.id + '">' + referent.nom + ' ' + referent.prenom + '</option>';
