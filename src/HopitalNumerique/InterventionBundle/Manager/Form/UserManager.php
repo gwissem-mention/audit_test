@@ -114,7 +114,7 @@ class UserManager
     public function getAmbassadeursChoices($region = null)
     {
         if ($region == null)
-            return $this->userManager->getAmbassadeurs(array());
+            return $this->userManager->getAmbassadeurs();
         return $this->userManager->getAmbassadeursByRegionAndDomaine($region);
     }
     /**

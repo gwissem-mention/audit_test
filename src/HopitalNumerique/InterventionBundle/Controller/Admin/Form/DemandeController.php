@@ -35,7 +35,7 @@ class DemandeController extends Controller
         $this->utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         $this->interventionDemande = new InterventionDemande();
         $this->interventionDemande->setInterventionInitiateur($this->container->get('hopitalnumerique_intervention.manager.intervention_initiateur')->getInterventionInitiateurAnap());
-        $this->interventionDemande->setInterventionEtat($this->container->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatAttenteCmsi());
+        $this->interventionDemande->setInterventionEtat($this->container->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatAcceptationCmsi());
 
         $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_admin', $this->interventionDemande, array('interventionDemande' => $this->interventionDemande));
         if ($this->gereEnvoiFormulaireDemandeNouveau($interventionDemandeFormulaire))
