@@ -253,11 +253,15 @@ abstract class DemandesAbstractGrid extends Grid implements IGrid
     {
         if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurCmsiId())
         {
-            return '<span class="glyphicon glyphicon-user" title="Initié par '.$row->getField('interventionInitiateurType').'"></span>';
+            return '<span class="glyphicon glyphicon-user" title="Initié par CMSI"></span>';
         }
         else if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurEtablissementId())
         {
-            return '<span class="glyphicon glyphicon-home" title="Initié par '.$row->getField('interventionInitiateurType').'"></span>';
+            return '<span class="glyphicon glyphicon-home" title="Initié par ES"></span>';
+        }
+        else if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurAnapId())
+        {
+            return '<span class="glyphicon glyphicon-briefcase" title="Initié par ANAP"></span>';
         }
         return '';
     }

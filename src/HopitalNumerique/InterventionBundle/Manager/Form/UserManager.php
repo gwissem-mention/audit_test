@@ -111,8 +111,10 @@ class UserManager
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference|null $region La région des ambassadeurs
      * @return array Liste des ambassadeurs pour les listes de formulaire
      */
-    public function getAmbassadeursChoices($region)
+    public function getAmbassadeursChoices($region = null)
     {
+        if ($region == null)
+            return $this->userManager->getAmbassadeurs();
         return $this->userManager->getAmbassadeursByRegionAndDomaine($region);
     }
     /**
@@ -125,8 +127,7 @@ class UserManager
         return $this->userManager->getUsersGroupeEtablissement();
     }
 
-    
-    
+
     /**
      * Retourne la liste jsonifiée des utilisateurs.
      *
@@ -165,6 +166,29 @@ class UserManager
             );
         }
 
+        return json_encode($usersListeFormatee);
+    }
+    /**
+     * Retourne la liste jsonifiée des ambassadeurs.
+     *
+     * @param array $criteres Le filtre à appliquer sur la liste
+     * @return string La liste des utilisateurs jsonifiée
+     */
+    public function jsonAmbassadeurs(array $criteres)
+    {
+        $users = $this->userManager->getAmbassadeurs($criteres);
+        $usersListeFormatee = array();
+    
+        foreach ($users as $user)
+        {
+            $usersListeFormatee[] = array(
+                'id' => $user->getId(),
+                'nom' => $user->getNom(),
+                'prenom' => $user->getPrenom(),
+                'appellation' => $user->getAppellation()
+            );
+        }
+    
         return json_encode($usersListeFormatee);
     }
 }

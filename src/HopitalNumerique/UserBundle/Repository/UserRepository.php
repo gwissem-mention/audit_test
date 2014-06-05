@@ -276,7 +276,7 @@ class UserRepository extends EntityRepository
      * @param array $criteres Filtres à appliquer sur la liste
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des ambassadeurs
      */
-    public function getAmbassadeurs(array $criteres)
+    public function getAmbassadeurs(array $criteres = array())
     {
         return $this->findByRole(Role::$ROLE_AMBASSADEUR_LABEL, $criteres);
     }
@@ -300,7 +300,12 @@ class UserRepository extends EntityRepository
         {
             $requete->andWhere('user.'.$critereChamp.' = :'.$critereChamp)
                 ->setParameter($critereChamp, $critereValeur);
-        } 
+        }
+        
+        $requete
+            ->addOrderBy('user.nom', 'ASC')
+            ->addOrderBy('user.prenom', 'ASC')
+        ;
 
         return $requete->getQuery()->getResult();
     }

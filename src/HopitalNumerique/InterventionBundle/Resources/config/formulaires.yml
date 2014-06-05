@@ -3,6 +3,7 @@ parameters:
     hopitalnumerique_intervention.type.user.cmsi.class: HopitalNumerique\InterventionBundle\Form\User\CmsiType
     hopitalnumerique_intervention.type.user.etablissement.class: HopitalNumerique\InterventionBundle\Form\User\EtablissementType
     hopitalnumerique_intervention.type.intervention_demande.class: HopitalNumerique\InterventionBundle\Form\InterventionDemandeType
+    hopitalnumerique_intervention.type.intervention_demande.admin.class: HopitalNumerique\InterventionBundle\Form\InterventionDemande\AdminType
     hopitalnumerique_intervention.type.intervention_demande.cmsi.class: HopitalNumerique\InterventionBundle\Form\InterventionDemande\CmsiType
     hopitalnumerique_intervention.type.intervention_demande.etablissement.class: HopitalNumerique\InterventionBundle\Form\InterventionDemande\EtablissementType
     hopitalnumerique_intervention.type.intervention_demande.edition.cmsi.class: HopitalNumerique\InterventionBundle\Form\InterventionDemande\Edition\CmsiType
@@ -15,6 +16,11 @@ services:
         tags:
             - { name: form.type, alias: hopitalnumerique_interventionbundle_interventiondemande }
         arguments: ["@security.context", "@validator", "@hopitalnumerique_intervention.manager.intervention_demande", "@hopitalnumerique_intervention.manager.form_intervention_demande", "@hopitalnumerique_intervention.manager.form_user", "@hopitalnumerique_intervention.manager.form_etablissement"]
+    hopitalnumerique_intervention.type.intervention_demande_admin:
+        class: "%hopitalnumerique_intervention.type.intervention_demande.admin.class%"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_interventionbundle_interventiondemande_admin }
+        arguments: ["@security.context", "@validator", "@hopitalnumerique_intervention.manager.intervention_demande", "@hopitalnumerique_objet.manager.objet", "@hopitalnumerique_intervention.manager.form_intervention_demande", "@hopitalnumerique_intervention.manager.form_intervention_initiateur", "@hopitalnumerique_intervention.manager.form_user", "@hopitalnumerique_intervention.manager.form_etablissement"]
     hopitalnumerique_intervention.type.intervention_demande_cmsi:
         class: "%hopitalnumerique_intervention.type.intervention_demande.cmsi.class%"
         tags:
