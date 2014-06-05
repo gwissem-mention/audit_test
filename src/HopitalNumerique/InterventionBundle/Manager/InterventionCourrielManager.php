@@ -179,7 +179,7 @@ class InterventionCourrielManager
     {
         $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielEstAccepteeAmbassadeurId());
     
-        $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionDemandeUrl));
+        // RLE 05/06/2014 : Suppression de l'envoi au CMSI
         $this->envoiCourriel($courriel, $referent, array('l' => $interventionDemandeUrl));
     }
     /**
@@ -194,7 +194,7 @@ class InterventionCourrielManager
     {
         $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielEstRefuseeAmbassadeurId());
     
-        $this->envoiCourriel($courriel, $cmsi, array('l' => $interventionDemandeUrl));
+        // RLE 05/06/2014 : Suppression de l'envoi au CMSI
         $this->envoiCourriel($courriel, $referent, array('l' => $interventionDemandeUrl));
     }
     /**
