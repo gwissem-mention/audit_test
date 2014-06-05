@@ -175,7 +175,7 @@ class InterventionCourrielManager
      * @param string $interventionDemandeUrl Le chemin vers l'URL de la demande d'intervention
      * @return void
      */
-    public function envoiCourrielEstAccepteAmbassadeur(User $cmsi, User $referent, $interventionDemandeUrl)
+    public function envoiCourrielEstAccepteAmbassadeur(User $referent, $interventionDemandeUrl)
     {
         $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielEstAccepteeAmbassadeurId());
     
@@ -190,7 +190,7 @@ class InterventionCourrielManager
      * @param string $interventionDemandeUrl Le chemin vers l'URL de la demande d'intervention
      * @return void
      */
-    public function envoiCourrielEstRefuseAmbassadeur(User $cmsi, User $referent, $interventionDemandeUrl)
+    public function envoiCourrielEstRefuseAmbassadeur(User $referent, $interventionDemandeUrl)
     {
         $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielEstRefuseeAmbassadeurId());
     
