@@ -161,6 +161,20 @@ class ResultatManager extends BaseManager
             $results['barre'] = $chart;
         }
 
+        //cas Spider Web
+        if ( $outil->isRadarChart() )
+        {
+            $chart         = new \StdClass;
+            $chart->title  = $outil->getRadarChartLabel();
+            $chart->panels = array();
+
+
+            //getRadarChartAxe
+
+            $results['radar'] = $chart;
+        }
+
+
         return $results;
     }
 

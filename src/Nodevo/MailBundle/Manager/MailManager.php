@@ -427,12 +427,8 @@ class MailManager extends BaseManager
                                 ->setFrom( $from )
                                 ->setTo( array($recepteurMail => $recepteurName) )
                                 ->setBcc( $cci )
-<<<<<<< HEAD
-                                ->setBody( $body, 'text/html' );
-=======
                                 ->setBody( strip_tags($body, '<style>' ) )
                                 ->addPart( $body, 'text/html' );
->>>>>>> develop
         }
         return $mailsToSend;
     }
@@ -568,11 +564,7 @@ class MailManager extends BaseManager
                             ->setFrom( $from )
                             ->setTo( $user->getEmail() )
                             ->setBcc( ($mail->getId() === 1 || $mail->getId() === 2) ? null : $cci )
-<<<<<<< HEAD
-                            ->setBody( $body, 'text/html' );
-=======
                             ->setBody( strip_tags($body, '<style>' ) )
                             ->addPart( $body, 'text/html' );
->>>>>>> develop
     }
 }
