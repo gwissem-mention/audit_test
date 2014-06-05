@@ -138,6 +138,7 @@ class ResultatManager extends BaseManager
                     $panel        = new \StdClass;
                     $panel->title = $chapitre->title;
                     $panel->value = $this->calculMoyenneChapitre( $chapitre );
+                    $panel->taux  = $this->calculTauxChapitre( $chapitre );
 
                     $chart->panels[] = $panel;
                 }
@@ -153,6 +154,7 @@ class ResultatManager extends BaseManager
                     $panel        = new \StdClass;
                     $panel->title = $categorie->getTitle();
                     $panel->value = $this->calculMoyenneCategorie( $categorie, $questionsReponses );
+                    $panel->taux  = $this->calculTauxCategorie( $categorie, $questionsReponses );
 
                     $chart->panels[] = $panel;
                 }
@@ -180,13 +182,60 @@ class ResultatManager extends BaseManager
 
 
 
+    /**
+     * Calcul de taux de remplissage de la catégorie
+     *
+     * @param Categorie $categorie         L'entitée Catégorie
+     * @param array     $questionsReponses Tableaux de questions/réponses
+     *
+     * @return double
+     */
+    private function calculTauxCategorie( $categorie, $questionsReponses )
+    {
+        $questions           = $categorie->getQuestions();
+        $nbQuestions         = 0;
+        $nbQuestionsRemplies = 0;
 
+        foreach($questions as $question)
+        {
+            //get reponse
+            if( isset($questionsReponses[$question->getId()]) ){
+                $reponse = $questionsReponses[$question->getId()];
+                if( $reponse->value != '' ) {
+                    $sommeValues       += ($reponse->value * $reponse->ponderation);
+                    $sommePonderations += $reponse->ponderation;
+                }
 
+                if( ( ($reponse->type == 415 && $reponse->value != 0 ) || ($reponse->type == 416 && $reponse->value != 0) || ($reponse->type == 417 && $reponse->value != '') ) && $reponse->value < $reponse->noteMinimale)
+                    $nbQuestionsRemplies++;
+            }
 
+            $nbQuestions++;
+        }
 
+        return $nbQuestions != 0 ? ( ($nbQuestionsRemplies * 100) / $nbQuestions) : 0;
+    }
 
+    /**
+     * Calcul ne Taux de remplissage du chapitre
+     *
+     * @param StdClass $chapitre Le chapitre
+     *
+     * @return double
+     */
+    private function calculTauxChapitre( $chapitre )
+    {
+        $nbQuestions         = $chapitre->nbQuestions;
+        $nbQuestionsRemplies = $chapitre->nbQuestionsRemplies;
 
+        $childs = $chapitre->childs;
+        foreach( $childs as $child ){
+            $nbQuestions         += $child->nbQuestions;
+            $nbQuestionsRemplies += $child->nbQuestionsRemplies;
+        }
 
+        return $nbQuestions != 0 ? ( ($nbQuestionsRemplies * 100) / $nbQuestions) : 0;
+    }
 
     /**
      * Calcul la moyenne pondérée
@@ -281,9 +330,11 @@ class ResultatManager extends BaseManager
      */
     private function buildQuestionsForFront( $questions, $chapitre, $questionsReponses )
     {
-        $results      = array();
-        $forCharts    = array();
-        $noteChapitre = 0;
+        $results             = array();
+        $forCharts           = array();
+        $noteChapitre        = 0;
+        $nbQuestions         = 0;
+        $nbQuestionsRemplies = 0;
 
         foreach ($questions as $question)
         {
@@ -294,16 +345,21 @@ class ResultatManager extends BaseManager
                 if( ( ($one->type == 415 && $one->value != 0 ) || ($one->type == 416 && $one->value != 0) || ($one->type == 417 && $one->value != '') ) && $one->value < $one->noteMinimale){
                     $results[]     = $one;
                     $noteChapitre += $one->value;
+                    $nbQuestionsRemplies ++;
                 }
 
                 //on ajoute TOUTES les questions aux chapitre pour les calculs liés aux graphiques (pondération)
                 $forCharts[] = $one;
             }
+
+            $nbQuestions++;
         }
 
-        $chapitre->questions          = $results;
-        $chapitre->questionsForCharts = $forCharts;
-        $chapitre->noteChapitre       = $noteChapitre;
+        $chapitre->questions           = $results;
+        $chapitre->questionsForCharts  = $forCharts;
+        $chapitre->noteChapitre        = $noteChapitre;
+        $chapitre->nbQuestions         = $nbQuestions;
+        $chapitre->nbQuestionsRemplies = $nbQuestionsRemplies;
 
         return $chapitre;
     }

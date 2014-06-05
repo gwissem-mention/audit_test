@@ -113,7 +113,7 @@ class QuestionnaireType extends AbstractType
             if(!$options['label_attr']['showAllQuestions'])
             {
                 //Récupère les classes de la question
-                $classes = split(' ', $question->getVerifJS());
+                $classes = explode(' ', $question->getVerifJS());
                 //Vérifie si on doit afficher la question
                 $hide = in_array('hideQuestion', $classes);
 

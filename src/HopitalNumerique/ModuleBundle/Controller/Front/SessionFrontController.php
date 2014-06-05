@@ -4,6 +4,7 @@ namespace HopitalNumerique\ModuleBundle\Controller\Front;
 
 use HopitalNumerique\ModuleBundle\Entity\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class SessionFrontController extends Controller
 {
