@@ -50,4 +50,11 @@
     #homepage .home-right .creation-compte .icone{margin:20px auto;}
     #homepage .home-right .creation-compte p.titre{text-align: center}
     #homepage .home-right .creation-compte ul{padding-left: 0px}
+    #homepage .home-right .creation-compte .buttons .login{margin: 10px 0 0 0;}
+    #homepage .home-right .creation-compte .buttons .signup{margin: 10px 10px 0 0;}
+}
+
+@media screen and (max-width: 600px) {
+    #homepage .home-right .creation-compte .buttons .login{margin: 0 0 0 250px;}
+    #homepage .home-right .creation-compte .buttons .signup{margin: 10px 0 0 0;}
 }
