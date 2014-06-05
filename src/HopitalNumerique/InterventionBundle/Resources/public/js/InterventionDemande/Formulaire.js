@@ -37,7 +37,6 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.init = functio
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init();
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initChamps();
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements();
-    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAmbassadeurs();
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majActivationTransfertAmbassadeur();
 };
 
@@ -49,7 +48,6 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.init = functio
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initChamps = function()
 {
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampAutresEtablissements();
-    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampAmbassadeurs();
     $('select[multiple]').select2({
         formatNoMatches:function()
         {

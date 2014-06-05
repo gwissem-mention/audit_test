@@ -80,7 +80,6 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.initR
 
     $(regionSelect).change(function() {
         HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements();
-        HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAmbassadeurs();
     });
 };
 /**

@@ -88,19 +88,19 @@ class AdminType extends InterventionDemandeType
                 'required'    => true,
                 'attr'        => array('class' => $this->_constraints['interventionType']['class'] )
             ))
+        ;
+        parent::buildForm($builder, $options);
+        $builder
             ->add('region', 'entity', array(
                 'label'    => 'Région des établissements',
                 'choices'  => $this->formUserManager->getRegionsChoices(),
                 'class'    => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
+                'empty_value' => '-',
                 'property' => 'libelle',
                 'mapped'   => false,
                 'required' => true,
-                'attr'     => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_region'),
-                'data'     => $this->utilisateurConnecte->getRegion()
+                'attr'     => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_region')
             ))
-        ;
-        parent::buildForm($builder, $options);
-        $builder
             ->add('etablissements', 'entity', array(
                 'choices' => $this->formEtablissementManager->getEtablissementsChoices(),
                 'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
