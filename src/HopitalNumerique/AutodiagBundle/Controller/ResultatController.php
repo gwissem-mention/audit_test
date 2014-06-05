@@ -5,8 +5,6 @@ namespace HopitalNumerique\AutodiagBundle\Controller;
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use HopitalNumerique\AutodiagBundle\Entity\Resultat;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Resultat controller.

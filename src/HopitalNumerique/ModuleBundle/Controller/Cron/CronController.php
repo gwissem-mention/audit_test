@@ -13,9 +13,6 @@ class CronController extends Controller
     {
         if ($id == 'BHFYRJYIHOLPMFFVIDUEKQGEUJRCQSFA')
         {
-            $context = $this->container->get('router')->getContext();
-            $urlSite = $context->getScheme() . '://' . $context->getHost().$context->getBaseUrl();
-
             //Récupérations de tout les modules
             $modules = $this->get('hopitalnumerique_module.manager.module')->getAllInscriptionsBySessionsActivesNonPasseesByModules();
             
