@@ -45,7 +45,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="4" align="center"> - Aucun formulaire d'autodiagnostic en cours - </td>
+                        <td colspan="5" align="center"> - Aucun formulaire d'autodiagnostic en cours - </td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -61,7 +61,6 @@
                 <tr>
                     <th>Titre</th>
                     <th>Date validation</th>
-                    
                     <th width="50px">Actions</th>
                 </tr>
             </thead>
@@ -73,7 +72,6 @@
                         
                         <td>
                             <a href="{{path('hopitalnumerique_autodiag_front_resultat', {'id':resultat.id})}}" class="btn btn-xs btn-success"><i class="fa fa-eye"></i></a>
-                            <a href="{{path('hopitalnumerique_autodiag_front_resultat', {'id':resultat.id})}}" class="btn btn-xs btn-info"><i class="fa fa-download"></i></a>
                         </td>
                     </tr>
                 {% else %}

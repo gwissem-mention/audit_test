@@ -1,0 +1,274 @@
+{% import _self as mySelf %}
+
+<div id="resultats">
+    <div class="col-md-12">
+        <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn pull-right"><i class="fa fa-print"></i></a>
+
+        <h1 class="text-center">{{resultat.outil.title}}</h1>
+
+        <h2 class="violet open" data-toggle="graphiques" >Résultats de l'outil - Graphiques</h2>
+
+        <div id="graphiques">
+            <p class="text-justify">
+                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, repudiandae quibusdam voluptate nesciunt quaerat culpa ab at neque voluptatibus aut natus ipsam ut nisi eos adipisci temporibus omnis sunt consequatur.</span>
+                <span>Quas, suscipit, dolor, maiores laudantium ullam esse at fugiat delectus voluptatem tempora ipsam facilis alias modi nulla quae perferendis iusto dignissimos dolorum reprehenderit ut recusandae soluta asperiores! Sit, repudiandae, nemo.</span>
+            </p>
+
+            {# Affichage du graphique barre #}
+            {% if graphiques['barre'] is defined %}
+                {% set chart = graphiques['barre'] %}
+                <h3>{{chart.title|capitalize}}</h3>
+                <div class="row">
+                    {% for panel in chart.panels %}
+                        <div class="col-md-6">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">{{panel.title}}</h3>
+                                    <div class="options">
+                                        {{panel.taux|number_format(0)}}%
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="panel-body">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-danger" style="width: 33.3%">
+                                            Faible
+                                        </div>
+                                        <div class="progress-bar progress-bar-warning" style="width: 33.3%">
+                                            Moyen
+                                        </div>
+                                        <div class="progress-bar progress-bar-success" style="width: 33.3%">
+                                            Fort
+                                        </div>
+                                        <div class="cursor" data-position="{{panel.value|number_format(2,'.')}}%" title="<span>Ma Valeur : </span><b>{{panel.value|number_format(2,'.')}}%</b>" ></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="page-break"></div>
+            {% endif %}
+            
+            {# Affichage du graphique spider #}
+            {% if graphiques['radar'] is defined %}
+                {% set chart = graphiques['radar'] %}
+                <h3>{{chart.title|capitalize}}</h3>
+                <div class="row">
+                    <div id="radarChart"></div>
+                    <input type="hidden" id="datas-radar" value="{{chart.datas|json_encode()}}">
+                </div>
+                <div class="page-break"></div>
+            {% endif %}
+
+            {# Affichage du graphique tableau #}
+            {% if graphiques['table'] is defined %}
+                {% set chart = graphiques['table'] %}
+                <h3>{{chart.title|capitalize}}</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <th colspan="2"></th>
+                                {% for id, chapitre in chart.datas.chapitres %}
+                                    <th class="text-center chapitre-{{id}}">{{chapitre|capitalize}}</th>
+                                {% endfor %}
+                                <th class="text-center title-total">Total</th>
+                            </thead>
+                            <tbody>
+                                {% for id,categorie in chart.datas.categories %}
+                                    {% set nbRepCateg = 0 %}
+                                    {% set nbPointsCateg = 0 %}
+                                    {% set maxCateg = 0 %}
+
+                                    <tr>
+                                        <td class="vertical-align categorie-{{id}}" rowspan="3"><b>{{categorie.title|capitalize}}</b></td>
+                                        <td>Nombre de réponses</td>
+                                        {% for datas in categorie['chapitres'] %}
+                                            <td class="text-center">
+                                                {{datas['nbRep']}}
+                                            </td>
+                                            {% set nbRepCateg = nbRepCateg + datas['nbRep'] %}
+                                        {% endfor %}
+                                        <td class="text-center">
+                                            {{nbRepCateg}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nombre de points</td>
+                                        {% for datas in categorie['chapitres'] %}
+                                            <td class="text-center">
+                                                {{datas['nbPoints']}} sur {{datas['max']}}
+                                            </td>
+                                            {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
+                                            {% set maxCateg = maxCateg + datas['max'] %}
+                                        {% endfor %}
+                                        <td class="text-center">
+                                            {{nbPointsCateg}} sur {{maxCateg}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Note</td>
+                                        {% for datas in categorie['chapitres'] %}
+                                            {% if datas['max'] != 0 %}
+                                                {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
+                                            {% else %}
+                                                {% set note = 0 %}
+                                            {% endif %}
+                                            <td class="text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
+                                                {{ note|number_format(0) }}%
+                                            </td>
+                                        {% endfor %}
+                                        {% if maxCateg != 0 %}
+                                            {% set note = (nbPointsCateg * 100) / maxCateg %}
+                                        {% else %}
+                                            {% set note = 0 %}
+                                        {% endif %}
+                                        <td data-categorie="{{id}}" class="total-categorie text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
+                                            {{ note|number_format(0) }}%
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td class="title-total vertical-align" rowspan="3"><b>Total</b></td>
+                                    <td>Nombre de réponses</td>
+                                    {% set nbRepTotal = 0 %}
+                                    {% for datas in chart.datas.totauxChapitres %}
+                                        <td class="text-center">
+                                            {{datas['nbRep']}}
+                                        </td>
+                                        {% set nbRepTotal = nbRepTotal + datas['nbRep'] %}
+                                    {% endfor %}
+                                    <td class="text-center">
+                                        {{nbRepTotal}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Nombre de points</td>
+                                    {% set nbPointsTotal = 0 %}
+                                    {% set maxTotal = 0 %}
+                                    {% for datas in chart.datas.totauxChapitres %}
+                                        <td class="text-center">
+                                            {{datas['nbPoints']}} sur {{datas['max']}}
+                                        </td>
+                                        {% set nbPointsTotal = nbPointsTotal + datas['nbPoints'] %}
+                                        {% set maxTotal = maxTotal + datas['max'] %}
+                                    {% endfor %}
+                                    <td class="text-center">
+                                        {{nbPointsTotal}} sur {{maxTotal}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Note</td>
+                                    {% for idChapitre,datas in chart.datas.totauxChapitres %}
+                                        {% if datas['max'] != 0 %}
+                                            {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
+                                        {% else %}
+                                            {% set note = 0 %}
+                                        {% endif %}
+                                        <td data-chapitre="{{idChapitre}}" class="total-chapitre text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
+                                            {{ note|number_format(0) }}%
+                                        </td>
+                                    {% endfor %}
+                                    {% if maxTotal != 0 %}
+                                        {% set note = (nbPointsTotal * 100) / maxTotal %}
+                                    {% else %}
+                                        {% set note = 0 %}
+                                    {% endif %}
+                                    <td class="last-note text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
+                                        {{ note|number_format(0) }}%
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="clearfix"></div>
+        </div>
+        
+        <div class="page-break"></div>
+
+        <h2 class="violet closed" data-toggle="chapitres" >Résultats de l'outil - Publications</h2>
+
+        <div id="chapitres" style="display:none">
+            <p class="text-justify">
+                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, repudiandae quibusdam voluptate nesciunt quaerat culpa ab at neque voluptatibus aut natus ipsam ut nisi eos adipisci temporibus omnis sunt consequatur.</span>
+                <span>Quas, suscipit, dolor, maiores laudantium ullam esse at fugiat delectus voluptatem tempora ipsam facilis alias modi nulla quae perferendis iusto dignissimos dolorum reprehenderit ut recusandae soluta asperiores! Sit, repudiandae, nemo.</span>
+            </p>
+
+            {# Affichage des publications #}
+            {% for chapitre in chapitres %}
+                <div class="chapitre-{{chapitre.id}}">
+                    <h3 class="violet">{{chapitre.title}}</h3>
+                    <hr>
+
+                    {% if chapitre.synthese %}
+                        <p class="violet synthese">{{chapitre.synthese}}</p>
+                    {% endif %}
+
+                    {# Résultats liés au chapitre #}
+                    {{ mySelf.calcNote(chapitre) }}
+
+                    {# Résultats liés aux questions #}
+                    {{ mySelf.buildQuestion(chapitre) }}
+                    
+                    {# Sous Chapitres #}
+                    {% if chapitre.childs|length > 0 %}
+                        <div class="row sous-chapitre">
+                            <div class="col-md-12">
+                                {% for child in chapitre.childs %}
+                                    <h4 class="violet">{{child.title}}</h4>
+
+                                    {% if child.synthese %}
+                                        <p class="violet synthese">{{child.synthese}}</p>
+                                    {% endif %}
+                                    
+                                    {# Résultats liés au chapitre #}
+                                    {{ mySelf.calcNote(child) }}
+
+                                    {# Résultats liés aux questions #}
+                                    {{ mySelf.buildQuestion(child) }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{# Construit les lignes associées aux résultats #}
+{% macro buildQuestion(chapitre) %}
+    {% if chapitre.questions|length > 0 %}
+        {% for question in chapitre.questions %}
+            {% set publications = question.id|getPublicationsForQuestion %}
+            {% if publications %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="question">{{question.question}}</p>
+                        <p class="violet synthese">{{question.synthese}}</p>
+                        {{publications|raw}}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
+
+{# Calcul de la note du chapitre #}
+{% macro calcNote(chapitre) %}  
+    {% if chapitre.noteChapitre < chapitre.noteMin %}
+        {% set publications = chapitre.id|getPublicationsForChapitre %}
+        {% if publications %}
+            <div class="row">
+                <div class="col-md-12">
+                    {{publications|raw}}
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endmacro %}

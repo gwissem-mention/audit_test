@@ -1,0 +1,12 @@
+*{border:none; font-family:Serif;font-size :12pt;}
+body{background-color :#fff;}
+@page{ margin: 1 cm .5cm; size: portrait; }
+.page-break {page-break-after: always}
+#header, #footer, #menu, #sommaire, #mesrequetes, .print {display: none}
+img{ width:auto !important }
+#graphiques, #chapitres {display: block !important}
+#resultats #graphiques #radarChart{width: 100%; height: 600px;}
+
+.progress-bar-danger{background-color:#c9302c !important; color:#FFFFFF !important; font-weight: bold!important}
+.progress-bar-warning{background-color:#ec971f !important; color:#FFFFFF !important; font-weight: bold!important}
+.progress-bar-success{background-color:#449d44 !important; color:#FFFFFF !important; font-weight: bold!important}

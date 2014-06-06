@@ -125,8 +125,8 @@
                 {% set options = question.options|nl2br|split('<br />') %}
 
                 <select name="{{questionName}}" id="{{questionId}}" class="form-control">
-                    <option value="-1"> - </option>
-                    <option value="0" {% if reponse == 0 %}selected="selected"{% endif %} >Non concerné</option>
+                    <option value=""> - </option>
+                    <option value="0" {% if reponse != '' and reponse == 0 %}selected="selected"{% endif %} >Non concerné</option>
                     {% for option in options %}
                         {% set datas = option|split(';') %}
                         <option value="{{datas[0]}}" {% if reponse == datas[0] %}selected="selected"{% endif %} >{{datas[1]|capitalize}}</option>
@@ -135,13 +135,16 @@
             {# RADIO #}
             {% elseif question.type.id == '416' %}
                 {% set options = question.options|nl2br|split('<br />') %}
-
                 <div class="radios">
-                    <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" {% if reponse == 0 %}checked="checked"{% endif %} />Non concerné</label></div>
+                    {% set isChecked = false %}
+                    <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" {% if reponse != '' and reponse == 0 %}{% set isChecked = true %}checked="checked"{% endif %} />Non concerné</label></div>
                     {% for option in options %}
                         {% set datas = option|split(';') %}
-                        <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" {% if reponse == datas[0] %}checked="checked"{% endif %} />{{datas[1]|capitalize}}</label></div>
+                        <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" {% if reponse == datas[0] %}{% set isChecked = true %}checked="checked"{% endif %} />{{datas[1]|capitalize}}</label></div>
                     {% endfor %}
+                    <div class="hide">
+                        <div class="radio block"><input type="radio" value="" name="{{questionName}}" id="{{questionId}}" {% if isChecked == false %}checked="checked"{% endif %} /></div>
+                    </div>
                 </div>
             {# TEXT #}
             {% else %}

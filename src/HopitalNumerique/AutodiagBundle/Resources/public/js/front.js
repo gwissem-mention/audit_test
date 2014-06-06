@@ -51,12 +51,12 @@ function calcAvancement()
         //parcours des questions
         $(this).find('.form-group').each(function(){
             //select
-            if( $(this).find('select').length != 0 && $(this).find('select').val() != "-1" )
+            if( $(this).find('select').length != 0 && $(this).find('select').val() != "" )
                 nbQuestionsAnswered++;
             //radio
             else if ( $(this).find('.radios').length != 0 ){ 
                 $(this).find('.radios input').each(function(){
-                    if( $(this).prop('checked') ){
+                    if( $(this).prop('checked') && $(this).val() != "" ){
                         nbQuestionsAnswered++;
                         return false;
                     }

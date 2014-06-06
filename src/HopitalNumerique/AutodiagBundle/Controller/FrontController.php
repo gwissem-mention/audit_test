@@ -6,6 +6,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use HopitalNumerique\AutodiagBundle\Entity\Resultat;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Front controller.
@@ -152,7 +153,7 @@ class FrontController extends Controller
                 $reponse->setQuestion( $question );
                 $reponse->setResultat( $resultat );
                 $reponse->setRemarque( $remarque );
-                $reponse->setValue( $value );
+                $reponse->setValue( trim($value) );
 
                 $reponses[] = $reponse;
             }
@@ -193,6 +194,57 @@ class FrontController extends Controller
             'chapitres'  => $chapitres,
             'graphiques' => $graphiques
         ));
+    }
+
+    /**
+     * Génère le PDF de résultat
+     *
+     * @param Resultat $resultat L'entitée Résultat
+     *
+     * @return PDF
+     */
+    public function pdfAction( Resultat $resultat )
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $user != 'anon.' ? $user : false;
+
+        //restriction de l'accès aux résultats lorsque l'user est connecté
+        if( 
+            ( $user && !is_null($resultat->getUser()) && $resultat->getUser() != $user ) || 
+            (!$user && !is_null($resultat->getUser()) ) 
+        ) {
+            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à ces résultats');
+            return $this->redirect( $this->generateUrl('hopital_numerique_homepage' ) );
+        }
+
+        //récupère les chapitres et les formate pour l'affichage des liens des publications
+        $chapitres  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat, true );
+        $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
+
+        $html = $this->renderView( 'HopitalNumeriqueAutodiagBundle:Front:pdf.html.twig' , array(
+            'resultat'   => $resultat,
+            'chapitres'  => $chapitres,
+            'graphiques' => $graphiques
+        ));
+
+        $options = array(
+            'margin-bottom' => 10,
+            'margin-left'   => 4,
+            'margin-right'  => 4,
+            'margin-top'    => 10,
+            'encoding'      => 'UTF-8'
+        );
+
+        die($html);
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),
+            200,
+            array(
+                'Content-Type'          => 'application/pdf',
+                'Content-Disposition'   => 'attachment; filename="resultats-de-l-outil-'.$resultat->getOutil()->getAlias().'.pdf"'
+            )
+        );
     }
 
     /**

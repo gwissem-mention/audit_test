@@ -113,6 +113,10 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/stepy/lib/jquery.stepy.js"
             filters : [ ?yui_js ]
+        jquery_qtip2_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/qtip2/jquery.qtip.min.js"
+            filters : [ ?yui_js ]
         #CSS
         select2_css:
             inputs:
@@ -135,6 +139,10 @@ assetic:
         jquery_toggles_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-toggles/toggles.css"
+            filters: [ cssembed, ?yui_css ]
+        jquery_qtip2_css:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/qtip2/jquery.qtip.min.css"
             filters: [ cssembed, ?yui_css ]
         bootstrap_iconpicker_css:
             inputs:

@@ -73,6 +73,7 @@ class ResultatManager extends BaseManager
             $chapitre->title    = $one->getTitle();
             $chapitre->childs   = array();
             $chapitre->noteMin  = $one->getNoteMinimale();
+            $chapitre->noteOpt  = $one->getNoteOptimale();
             $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
             //handle questions/reponses
@@ -123,42 +124,19 @@ class ResultatManager extends BaseManager
         //récupère les données pour les graphiques
         $outil = $resultat->getOutil();
 
+        //récupère le gros tableau de questions / réponses
+        $questionsReponses = $this->buildQuestionsReponses( $resultat->getReponses() );
+
+        //get Datas for Each axes : Chapitres / Catégories
+        $datasAxeChapitre   = $this->buildDatasAxeChapitre( $chapitres );
+        $datasAxeCategories = $this->buildDatasAxeCategories( $outil->getCategories() , $questionsReponses );
+
         //cas first chart
         if ( $outil->isColumnChart() )
         {
             $chart         = new \StdClass;
             $chart->title  = $outil->getColumnChartLabel();
-            $chart->panels = array();
-
-            //get by Chapitre
-            if( $outil->getColumnChartAxe() == 1 )
-            {
-                foreach($chapitres as $chapitre)
-                {
-                    $panel        = new \StdClass;
-                    $panel->title = $chapitre->title;
-                    $panel->value = $this->calculMoyenneChapitre( $chapitre );
-                    $panel->taux  = $this->calculTauxChapitre( $chapitre );
-
-                    $chart->panels[] = $panel;
-                }
-            //get By catégories
-            }
-            else
-            {
-                $questionsReponses = $this->buildQuestionsReponses( $resultat->getReponses() );
-                $categories        = $outil->getCategories();
-
-                foreach( $categories as $categorie )
-                {
-                    $panel        = new \StdClass;
-                    $panel->title = $categorie->getTitle();
-                    $panel->value = $this->calculMoyenneCategorie( $categorie, $questionsReponses );
-                    $panel->taux  = $this->calculTauxCategorie( $categorie, $questionsReponses );
-
-                    $chart->panels[] = $panel;
-                }
-            }
+            $chart->panels = ($outil->getColumnChartAxe() == 1) ? $datasAxeChapitre : $datasAxeCategories;
 
             $results['barre'] = $chart;
         }
@@ -166,21 +144,155 @@ class ResultatManager extends BaseManager
         //cas Spider Web
         if ( $outil->isRadarChart() )
         {
-            $chart         = new \StdClass;
-            $chart->title  = $outil->getRadarChartLabel();
-            $chart->panels = array();
-
-
-            //getRadarChartAxe
+            $chart        = new \StdClass;
+            $chart->title = $outil->getRadarChartLabel();
+            $chart->datas = ($outil->getRadarChartAxe() == 1) ? $datasAxeChapitre : $datasAxeCategories;
 
             $results['radar'] = $chart;
         }
 
+        //cas Table
+        if ( $outil->isTableChart() )
+        {
+            $chart        = new \StdClass;
+            $chart->title = 'Mes résultats détaillés';
+            $chart->datas = $this->buildDatasTable( $outil->getCategories(), $chapitres, $questionsReponses );
+
+            $results['table'] = $chart;
+        }
 
         return $results;
     }
 
 
+
+
+
+    /**
+     * Construit le tableau de données pour le rendu graphique Table
+     *
+     * @param array $categories        Liste des entités catégorie
+     * @param array $chapitres         Liste des chapitres parents
+     * @param array $questionsReponses Tableau de questions/réponses
+     *
+     * @return StdClass
+     */
+    private function buildDatasTable( $categories, $chapitres, $questionsReponses )
+    {
+        $results = new \StdClass;
+
+        //build chapitres
+        $results->chapitres = array();
+        foreach($chapitres as $chapitre)
+            $results->chapitres[$chapitre->id] = $chapitre->title;
+        
+        //build catégories
+        $results->categories = array();
+        $totalChapitres      = array();
+
+        foreach($categories as $categorie){
+            $categorieId = $categorie->getId();
+
+            $results->categories[ $categorieId ]['title']     = $categorie->getTitle();
+            $results->categories[ $categorieId ]['chapitres'] = array();
+
+            //get questions by catégorie
+            $questions = $categorie->getQuestions();
+            foreach($questions as $question)
+            {
+                //check If Question != texte and != Non concerné
+                $one   = $questionsReponses[ $question->getId() ];
+                $value = $one->value;
+
+                if( $one->type != 417 && $value !== 0 ){
+                    //get parent chapitre ID
+                    $chapitre = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getId() : $question->getChapitre()->getParent()->getId();
+
+                    //manage empty Values
+                    $value = $value == '' ? 0 : $value;
+
+                    //Add Chapitre if not exist
+                    if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitre] )  )
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
+                    if ( !isset($totalChapitres[ $chapitre ]) )
+                        $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
+
+                    //update Chapitre
+                    $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbRep']++;
+                    $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints'] += $value;
+                    $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']      += $one->max;
+
+                    //update Total
+                    $totalChapitres[ $chapitre ]['nbRep']++;
+                    $totalChapitres[ $chapitre ]['nbPoints'] += $value;
+                    $totalChapitres[ $chapitre ]['max']      += $one->max;                    
+                }
+            }
+
+            //Set Default Values for Empty Cells
+            foreach($chapitres as $one){
+                if( !isset($results->categories[ $categorieId ]['chapitres'][$one->id]) ){
+                    $results->categories[ $categorieId ]['chapitres'][$one->id] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
+                    $totalChapitres[ $one->id ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
+                }
+            }
+        }
+
+        //build Total chapitre
+        $results->totauxChapitres = $totalChapitres;
+
+        return $results;
+    }
+
+    /**
+     * Retourne le tableau de données lors de l'axe Categorie
+     *
+     * @param array $categories        Liste des catégories
+     * @param array $questionsReponses Le tableau de questions/réponses
+     *
+     * @return array
+     */
+    private function buildDatasAxeCategories( $categories, $questionsReponses )
+    {
+        $datas = array();
+        foreach( $categories as $categorie )
+        {
+            $data        = new \StdClass;
+            $data->title = $categorie->getTitle();
+            $data->value = $this->calculMoyenneCategorie( $categorie, $questionsReponses );
+            $data->taux  = $this->calculTauxCategorie( $categorie, $questionsReponses );
+            $data->opti  = $categorie->getNote();
+
+            $datas[] = $data;
+        }
+
+        return $datas;
+    }
+
+    /**
+     * Retourne le tableau de données lors de l'axe Chapitre
+     *
+     * @param array $chapitres Les chapitres
+     *
+     * @return array
+     */
+    private function buildDatasAxeChapitre( $chapitres )
+    {
+        $datas = array();
+
+        foreach($chapitres as $chapitre)
+        {
+            $data        = new \StdClass;
+            $data->title = $chapitre->title;
+            $data->value = $this->calculMoyenneChapitre( $chapitre );
+            $data->taux  = $this->calculTauxChapitre( $chapitre );
+            $data->opti  = $chapitre->noteOpt;
+
+            $datas[] = $data;
+        }
+
+        return $datas;
+    }
 
     /**
      * Calcul de taux de remplissage de la catégorie
@@ -201,11 +313,6 @@ class ResultatManager extends BaseManager
             //get reponse
             if( isset($questionsReponses[$question->getId()]) ){
                 $reponse = $questionsReponses[$question->getId()];
-                if( $reponse->value != '' ) {
-                    $sommeValues       += ($reponse->value * $reponse->ponderation);
-                    $sommePonderations += $reponse->ponderation;
-                }
-
                 if( ( ($reponse->type == 415 && $reponse->value != 0 ) || ($reponse->type == 416 && $reponse->value != 0) || ($reponse->type == 417 && $reponse->value != '') ) && $reponse->value < $reponse->noteMinimale)
                     $nbQuestionsRemplies++;
             }
@@ -213,7 +320,7 @@ class ResultatManager extends BaseManager
             $nbQuestions++;
         }
 
-        return $nbQuestions != 0 ? ( ($nbQuestionsRemplies * 100) / $nbQuestions) : 0;
+        return $nbQuestions != 0 ? number_format(( ($nbQuestionsRemplies * 100) / $nbQuestions), 0) : 0;
     }
 
     /**
@@ -234,7 +341,7 @@ class ResultatManager extends BaseManager
             $nbQuestionsRemplies += $child->nbQuestionsRemplies;
         }
 
-        return $nbQuestions != 0 ? ( ($nbQuestionsRemplies * 100) / $nbQuestions) : 0;
+        return $nbQuestions != 0 ? number_format(( ($nbQuestionsRemplies * 100) / $nbQuestions), 0) : 0;
     }
 
     /**
@@ -392,9 +499,34 @@ class ResultatManager extends BaseManager
             $rep->order         = $question->getOrder();
             $rep->type          = $question->getType()->getId();
 
+            //Si != Texte, on calcul la réponse Max
+            if( $rep->type != 417 )
+                $rep->max = $this->calculMaxOption( $question );
+
             $results[ $reponse->getQuestion()->getId() ] = $rep;
         }
 
         return $results;
+    }
+
+    /**
+     * Calcul la valeur maximum de la question
+     *
+     * @param Question $question L'entité Question
+     *
+     * @return integer
+     */
+    private function calculMaxOption( $question )
+    {
+        $max = 0;
+        $options  = nl2br($question->getOptions());
+        $options  = explode('<br />', $options);
+
+        foreach($options as $option){
+            $tmp = explode(';', $option);
+            $max = (isset($tmp[0]) && intval(trim($tmp[0])) > $max ) ? intval(trim($tmp[0])) : $max;
+        }
+
+        return $max;
     }
 }

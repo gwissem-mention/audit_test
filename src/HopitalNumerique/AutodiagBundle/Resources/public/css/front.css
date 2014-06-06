@@ -1,3 +1,6 @@
+.qtip.qtip-bootstrap{border:1px solid #ff0000;}
+.qtip .qtip-content span{color:#ff0000;}
+
 /* Autodiag : partie questionnaire */
     #autodiag{margin-top: 20px; position: relative}
     #autodiag h1{ margin:0 0 50px 0; float:left; font-size:30px;}
@@ -35,7 +38,7 @@
         { background-color: #e0e0e0; color: #333; border-color: #adadad; text-decoration: none; }
 
 /* Autodiag : partie résultats */
-    #resultats h2{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%;}
+    #resultats h2{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; cursor:pointer;}
     #resultats h2.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
     #resultats h2.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}
 
@@ -49,11 +52,14 @@
     /* Graphiques */
         #resultats #graphiques .panel{border-color:#6f3596;}
         #resultats #graphiques .panel .panel-heading{background:#6f3596; padding:7px 15px; }
-        #resultats #graphiques .panel h3.panel-title{margin-bottom: 0; color:#FFFFFF; font-size: 14px}
+        #resultats #graphiques .panel .panel-heading h3.panel-title{margin-bottom: 0; color:#FFFFFF; font-size: 14px; float: left}
+        #resultats #graphiques .panel .panel-heading .options{float:right; color:#FFF;}
         #resultats #graphiques .panel .progress{position: relative; height: 30px; margin-bottom: 0}
         #resultats #graphiques .panel .progress .progress-bar{font-weight: bold; color:#FFF;}
         #resultats #graphiques .panel .cursor{ width:0; height:0; border:6px solid transparent; border-bottom:12px solid black; position: absolute; bottom: 0}
-
+        #resultats #graphiques #radarChart{min-width: 400px; max-width: 100%; height: 600px; margin: 0 auto}
+        #resultats #graphiques .table .vertical-align{vertical-align: middle}
+        
 /* Partie Compte HN */
     .autodiagTable thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}
     .autodiagTable thead tr a { color:#FFFFFF; font-size: 12px }
