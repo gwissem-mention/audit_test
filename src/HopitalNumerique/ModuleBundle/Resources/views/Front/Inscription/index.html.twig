@@ -87,7 +87,6 @@
                 <thead>
                     <tr>
                         <th>Module</th>
-                        <th>Productions concernées</th>
                         <th>Début de la session</th>
                         <th width="90px">Actions</th>
                     </tr>
@@ -97,13 +96,6 @@
                         <tr>
                             <td>
                                 <a href="{{path('hopitalnumerique_module_module_show_front',{'id':session.module.id})}}">{{session.module.titre}}</a>
-                            </td>
-                            <td>
-                                <ul style="padding: 0 0 0 15px;">
-                                    {% for production in session.module.productions %}
-                                        <li>{{ production.titre }}</li>
-                                    {% endfor %}
-                                </ul>
                             </td>
                             <td>{{session.dateSession|date('d/m/Y')}}</td>
                             <td>
