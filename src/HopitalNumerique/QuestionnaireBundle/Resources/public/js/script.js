@@ -5,13 +5,15 @@ $(document).ready(function() {
     });
 
     //Select2
-    $('input.select2-multiple-entity').select2({
-        placeholder: "Choisissez un ou plusieurs choix",
-        allowClear: true,
-        formatNoMatches : function(){
-            return "Aucun résultat trouvé.";
-        }
-    });
+    if( $('input.select2-multiple-entity').length > 0 ){
+        $('input.select2-multiple-entity').select2({
+            placeholder: "Choisissez un ou plusieurs choix",
+            allowClear: true,
+            formatNoMatches : function(){
+                return "Aucun résultat trouvé.";
+            }
+        });
+    }
     
 	//gestion du bouton delete : changement du fichier uploadé
     $('.deleteUploadedFile').on('click',function(){
