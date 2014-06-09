@@ -78,8 +78,16 @@ class DemandeController extends Controller
                 $this->interventionDemande->setCmsi($cmsi);
                 //-->
                 $this->interventionDemande->setCmsiDateChoix(new \DateTime());
+                
                 $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
+                
+                // Message Flash
                 $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été créée.');
+                
+                // Envoi des courriels
+                $this->container->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielDemandeAcceptationAmbassadeur($this->interventionDemande->getAmbassadeur(), $this->generateUrl('hopital_numerique_intervention_demande_voir', array('id' => $this->interventionDemande->getId()), true));
+                $this->container->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielAlerteReferent($this->interventionDemande->getReferent());
+                
                 return true;
             }
             else $this->get('session')->getFlashBag()->add('danger', 'Le formulaire n\'est pas valide.');
