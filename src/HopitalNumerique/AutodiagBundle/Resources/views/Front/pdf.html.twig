@@ -1,7 +1,6 @@
 {% block stylesheets %}    
     {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf.css" filter="cssrewrite, ?yui_css" 
         "@bootstrap_css"
-        "@jquery_qtip2_css"
         'bundles/hopitalnumeriquecore/css/layout.css'
         'bundles/hopitalnumeriqueautodiag/css/front.css'
         'bundles/hopitalnumeriqueautodiag/css/print.css'
@@ -14,9 +13,8 @@
     {% javascripts output="compiled/hopitalnumerique-autodiag-front-pdf.js" 
         "@jquery_js"
         "@bootstrap_js"
-        'bundles/hopitalnumeriquecore/js/script.js'
         '@highcharts_js'
-        '@jquery_qtip2_js'
+        'bundles/hopitalnumeriquecore/js/script.js'
         'bundles/hopitalnumeriqueautodiag/js/resultats.js'
     %}
         <script type="text/javascript" src="http://hopital.local{{ asset_url }}"></script>
