@@ -126,6 +126,7 @@
 }
 
 @media screen and (max-width: 991px) {
+    #ambassadeurs{display: none}
     #points-durs{margin-bottom: 20px}
     #ressources{margin-bottom: 20px}
     #autresResultats .carousel-inner{ width: 92%;}
