@@ -109,8 +109,8 @@
 					                                {% endif %}
 					                            </div>
 					                            
-					                            <span class="col-md-12"><a class="link violet fancybox.ajax" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Domaines fonctionnels</a></span>
-					                            <span class="col-md-12"><a class="link violet fancybox.ajax" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a></span>
+					                            <span class="col-md-12"><a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Domaines fonctionnels</a></span>
+					                            <span class="col-md-12"><a class="link violet fancybox.ajax outilsMaitrises" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a></span>
 					
 					                            <span class="col-md-12"><a class="btn background-violet {% if (user.isCMSI) and not (user.user.region.id == ambassadeur.region.id) %}disabled{% endif %}" href="{% if (user.isCMSI) and not ((user.user.region.id == ambassadeur.region.id)) %}#{% else %}{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}{% endif %}">Solliciter cet ambassadeur</a></span>
 					                            <div class="clearfix"></div>

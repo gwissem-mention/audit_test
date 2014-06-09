@@ -25,16 +25,17 @@ class EvaluationController extends Controller
             'session'          => $session,
             'optionRenderForm' => array(
                 'envoieDeMail'       => false,
-                'readOnly'           => true,
+                'readOnly'           => false,
                 'routeRedirect'      => json_encode(array(
                     'quit'              => array(
                         'route'             => 'hopitalnumerique_module_module',
                         'arguments'         => array()
                     ),
                     'sauvegarde'        => array(
-                        'route'             => 'hopitalnumerique_user_ambassadeur_edit',
+                        'route'             => 'hopitalnumerique_module_module_session_evaluation_editer',
                         'arguments'         => array(
-                            'id'                => $user->getId()
+                            'user'                => $user->getId(),
+                            'session'             => $session->getId()
                         )
                     )
                 ))

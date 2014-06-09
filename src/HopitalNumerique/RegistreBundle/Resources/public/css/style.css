@@ -41,4 +41,7 @@
 
 @media screen and (max-width: 991px) {
     #registre-ambassadeur .annuaire_ambassadeur .fiche .content{height: auto}
+    #registre-ambassadeur .map span{display: block; margin: 10px 0 0 0; }
+    #registre-ambassadeur .domainesFonctionnels{display: block;}
+    #registre-ambassadeur .outilsMaitrises{display: block;}
 }
