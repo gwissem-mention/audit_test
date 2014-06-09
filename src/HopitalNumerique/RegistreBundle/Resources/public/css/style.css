@@ -44,4 +44,6 @@
     #registre-ambassadeur .map span{display: block; margin: 10px 0 0 0; }
     #registre-ambassadeur .domainesFonctionnels{display: block;}
     #registre-ambassadeur .outilsMaitrises{display: block;}
+    #registre-ambassadeur .lienTableauDeBord{display:none;}
+    #registre-ambassadeur .annuaire_ambassadeur .fiche .content a.link{margin-bottom: 0px; }
 }
