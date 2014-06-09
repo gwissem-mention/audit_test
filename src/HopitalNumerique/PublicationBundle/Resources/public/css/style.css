@@ -129,4 +129,6 @@
     #points-durs{margin-bottom: 20px}
     #ressources{margin-bottom: 20px}
     #autresResultats .carousel-inner{ width: 92%;}
+    .btnprint{display: none}
+    #articles .actus{margin-bottom: 20px}
 }
