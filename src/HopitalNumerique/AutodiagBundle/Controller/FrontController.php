@@ -235,8 +235,6 @@ class FrontController extends Controller
             'encoding'      => 'UTF-8'
         );
 
-        die($html);
-
         return new Response(
             $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),
             200,

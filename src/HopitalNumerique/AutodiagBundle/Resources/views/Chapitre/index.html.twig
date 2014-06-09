@@ -104,7 +104,7 @@
         <div class="dd3-content">
             <a href="javascript:selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')">{{chapitre.title}}</a>
             <p class="text-muted pull-right">
-                {% if chapitre.noteOptimale %}Note optimale : {{chapitre.noteOptimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
+                {% if chapitre.noteOptimale %}Note optimal : {{chapitre.noteOptimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
                 {% if chapitre.noteMinimale %}Note minimale de déclenchement : {{chapitre.noteMinimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
                 <span>{{chapitre.references|default('0')}}</span> éléments référencés
             </p>
