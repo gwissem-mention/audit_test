@@ -36,11 +36,11 @@ class AutodiagExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function getPublicationsForQuestion( $id )
+    public function getPublicationsForQuestion( $id, $pdf = false )
     {
         $question   = $this->getManagerQuestion()->findOneBy( array('id'=>$id) );
         
-        return $this->buildRefs( $question->getReferences() );
+        return $this->buildRefs( $question->getReferences(), $pdf );
     }
 
     /**
@@ -50,12 +50,16 @@ class AutodiagExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function getPublicationsForChapitre( $id )
+    public function getPublicationsForChapitre( $id, $pdf = false )
     {
         $chapitre = $this->getManagerChapitre()->findOneBy( array('id'=>$id) );
         
-        return $this->buildRefs( $chapitre->getReferences() );
+        return $this->buildRefs( $chapitre->getReferences(), $pdf );
     }
+
+
+
+
 
 
 
@@ -68,7 +72,7 @@ class AutodiagExtension extends \Twig_Extension
      *
      * @return string
      */
-    private function buildRefs( $references )
+    private function buildRefs( $references, $pdf = false )
     {
         $refs = array();
 
@@ -85,9 +89,10 @@ class AutodiagExtension extends \Twig_Extension
             return false;
 
         $html = '<ul>';
-        foreach ($objets as $objet) {
+        foreach ($objets as $objet)
+        {
             $href = !is_null($objet['objet']) ? $objet['objet'] . '-' . $objet['aliasO'] . '/' . $objet['id'] . '-' . $objet['aliasC'] : $objet['id'] . '-' . $objet['alias'];
-            $html .= '<li><a href="/publication/'.$href.'" >'.$objet['titre'].'</a></li>';
+            $html .= '<li><a href="/publication/'.$href.'" >' . ($pdf ? '/publication/' . $href . ' - ' : '' ) . $objet['titre'] . '</a></li>';
         }
         $html .= '</ul>';
 

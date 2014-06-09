@@ -211,10 +211,10 @@
                     {% endif %}
 
                     {# Résultats liés au chapitre #}
-                    {{ mySelf.calcNote(chapitre) }}
+                    {{ mySelf.calcNote(chapitre, pdf) }}
 
                     {# Résultats liés aux questions #}
-                    {{ mySelf.buildQuestion(chapitre) }}
+                    {{ mySelf.buildQuestion(chapitre, pdf) }}
                     
                     {# Sous Chapitres #}
                     {% if chapitre.childs|length > 0 %}
@@ -228,7 +228,7 @@
                                     {% endif %}
                                     
                                     {# Résultats liés au chapitre #}
-                                    {{ mySelf.calcNote(child) }}
+                                    {{ mySelf.calcNote(child, pdf) }}
 
                                     {# Résultats liés aux questions #}
                                     {{ mySelf.buildQuestion(child) }}
@@ -243,10 +243,10 @@
 </div>
 
 {# Construit les lignes associées aux résultats #}
-{% macro buildQuestion(chapitre) %}
+{% macro buildQuestion(chapitre, pdf) %}
     {% if chapitre.questions|length > 0 %}
         {% for question in chapitre.questions %}
-            {% set publications = question.id|getPublicationsForQuestion %}
+            {% set publications = question.id|getPublicationsForQuestion(pdf) %}
             {% if publications %}
                 <div class="row">
                     <div class="col-md-12">
@@ -261,9 +261,9 @@
 {% endmacro %}
 
 {# Calcul de la note du chapitre #}
-{% macro calcNote(chapitre) %}  
+{% macro calcNote(chapitre, pdf) %}  
     {% if chapitre.noteChapitre < chapitre.noteMin %}
-        {% set publications = chapitre.id|getPublicationsForChapitre %}
+        {% set publications = chapitre.id|getPublicationsForChapitre(pdf) %}
         {% if publications %}
             <div class="row">
                 <div class="col-md-12">

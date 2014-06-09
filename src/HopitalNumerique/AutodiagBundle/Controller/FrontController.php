@@ -203,7 +203,7 @@ class FrontController extends Controller
      *
      * @return PDF
      */
-    public function pdfAction( Resultat $resultat )
+    public function pdfAction( Resultat $resultat, Request $request )
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $user = $user != 'anon.' ? $user : false;
@@ -228,13 +228,15 @@ class FrontController extends Controller
         ));
 
         $options = array(
-            'margin-bottom'    => 10,
-            'margin-left'      => 4,
-            'margin-right'     => 4,
-            'margin-top'       => 10,
+            'margin-bottom'    => 0,
+            'margin-left'      => 5,
+            'margin-right'     => 5,
+            'margin-top'       => 4,
             'encoding'         => 'UTF-8',
             'javascript-delay' => 500
         );
+
+        $html = str_replace('/publication', $request->getSchemeAndHttpHost() . '/publication', $html);
 
         return new Response(
             $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),

@@ -5,7 +5,7 @@
         'bundles/hopitalnumeriqueautodiag/css/front.css'
         'bundles/hopitalnumeriqueautodiag/css/print.css'
     %}
-        <link rel="stylesheet" href="http://hopital.local{{ asset_url }}" />
+        <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
     {% endstylesheets %}
 {% endblock %}
 
@@ -17,8 +17,14 @@
         'bundles/hopitalnumeriquecore/js/script.js'
         'bundles/hopitalnumeriqueautodiag/js/pdf.js'
     %}
-        <script type="text/javascript" src="http://hopital.local{{ asset_url }}"></script>
+        <script type="text/javascript" src="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 
 {% include 'HopitalNumeriqueAutodiagBundle:Front:resultats-donnees.html.twig' with {'resultat':resultat, 'pdf':true} %}
+
+<p class="copyright text-muted text-center">
+    © ANAP - Mon Hôpital Numérique<br />
+    Ces contenus extraits de la plateforme de l'Anap <a href="www.monhopitalnumerique.fr">www.MonHopitalNumerique.fr</a> sont diffusés gratuitement. <br />
+    Toutefois, leur utilisation ou citation est soumise à l'inscription de la mention suivante : "© ANAP - Mon Hôpital Numérique"
+</p>
