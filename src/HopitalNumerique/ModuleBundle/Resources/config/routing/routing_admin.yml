@@ -115,8 +115,8 @@ hopitalnumerique_module_module_session_inscription:
     requirements:
         id: \d+
         _method: GET|POST
-#---Index - grid - allSessions
-hopitalnumerique_module_module_allsession:
+#---Index - grid - allInscription
+hopitalnumerique_module_module_allinscription:
     pattern:  /module/session/inscription/all
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Back/Inscription:indexAllInscriptions"}
     requirements: 
