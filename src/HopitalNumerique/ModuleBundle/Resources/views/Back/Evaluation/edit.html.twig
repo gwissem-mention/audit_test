@@ -27,7 +27,6 @@
 {% block toolbarButton %}
     <div onclick="$('#do').val('save');$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
     <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
-    <div onclick='deleteAllReponses("{{path('hopitalnumerique_reponse_deleteAll', {'user':user.id, 'questionnaire':questionnaire.id})}}" );' class="btn btn-default" title="Suppression des réponses de ce questionnaire"><i class="fa fa-trash-o"></i></div>
     <a href="{{path('hopitalnumerique_module_module_session_inscription', {'id':session.id})}}" class="btn btn-default" title="Retour à la liste des utilisateurs"><i class="fa fa-reply"></i></a>
 {% endblock %}
 
