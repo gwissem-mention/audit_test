@@ -2,6 +2,11 @@
 
 {% block javascripts %}
     {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-intervention-demande-admin-nouveau.js"
+        'bundles/hopitalnumeriqueintervention/js/InterventionDemande/Admin/FormulaireCreation.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
 {% block h1Title %}Créer une intervention{% endblock %}

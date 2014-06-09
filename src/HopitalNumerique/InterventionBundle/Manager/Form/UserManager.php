@@ -124,7 +124,7 @@ class UserManager
      */
     public function getReferentsChoices()
     {
-        return $this->userManager->getUsersGroupeEtablissement();
+        return $this->userManager->getESAndEnregistres();
     }
 
 
@@ -154,7 +154,7 @@ class UserManager
      */
     public function jsonReferents(array $criteres)
     {
-        $users = $this->userManager->getUsersGroupeEtablissement($criteres);
+        $users = $this->userManager->getESAndEnregistres($criteres);
         $usersListeFormatee = array();
 
         foreach ($users as $user)

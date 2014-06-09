@@ -98,7 +98,7 @@ class AdminType extends InterventionDemandeType
                 'empty_value' => '-',
                 'property' => 'libelle',
                 'mapped'   => false,
-                'required' => true,
+                'required' => false,
                 'attr'     => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_region')
             ))
             ->add('etablissements', 'entity', array(
@@ -119,6 +119,13 @@ class AdminType extends InterventionDemandeType
                 'required'  => true,
                 'read_only' => false,
                 'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_ambassadeur')
+            ))
+            ->add('referent', 'entity', array(
+                'choices'  => $this->formUserManager->getReferentsChoices(),
+                'class'    => 'HopitalNumerique\UserBundle\Entity\User',
+                'label'    => 'Demandeur',
+                'required' => true,
+                'attr'     => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_referent')
             ))
             ->add('objets', 'entity', array(
                 'choices'  => $this->objetManager->findAll(),
