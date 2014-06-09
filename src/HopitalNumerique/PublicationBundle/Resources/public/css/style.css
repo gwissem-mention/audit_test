@@ -37,7 +37,9 @@
     /* Bloc Autres résultats */
     #publication .autresResultats{ margin:0;}
     #publication .autresResultats h2{ color:#414141;font-size: 18px; font-weight: bold;}
-    #publication img{ margin: 5px 10px 0 0; }
+    #publication img{ margin: 5px 10px 0 5px; }
+    #publication ul{padding-left:20px;}
+    #publication ul li{list-style-position: inside;}
 
 /* Liste ambassadeurs */
     #ambassadeurs{position: fixed; right:0; top:0; height: 100%; max-width: 33%}
