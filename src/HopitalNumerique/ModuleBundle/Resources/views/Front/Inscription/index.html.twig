@@ -49,10 +49,10 @@
                         <td>{% if inscription.etatInscription != null %}{{inscription.etatInscription.libelle}}{% endif %}</td>
                         <td>
                             {% if inscription.etatParticipation.id == 411 and not app.user.reponses|hadReponseForQuestionnaire( 4, inscription.session.id ) and inscription.etatEvaluation.id == 28 %}
-                                <a class="btn btn-green btn-sm" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':inscription.session.id})}}">{{inscription.etatEvaluation.libelle}}</i></a>
+                                <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':inscription.session.id})}}">{{inscription.etatEvaluation.libelle}}</i></a>
                             {% elseif inscription.etatEvaluation.id == 29 %}
                                 <div class="btn-group"> 
-                                    <a class="btn btn-green btn-sm" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':inscription.session.id})}}"><i class="fa fa-check"></i></a>
+                                    <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':inscription.session.id})}}"><i class="fa fa-check"></i></a>
 				    <a class="btn btn-success btn-sm" title="Attestation de présence" href="{{path('hopitalnumerique_module_inscription_attestation_front',{'id':inscription.id})}}"><i class="fa fa-external-link"></i></a>
                                 </div>
                             {% else %}
