@@ -109,6 +109,8 @@ h3{font-size: 20px}
 
     #footer .menu-footer li{display: block; text-align: center;}
     #footer .menu-footer li a{border-right: none;}
+
+    .btnprint {display:none;}
 }
 
 @media screen and (max-width: 600px) {

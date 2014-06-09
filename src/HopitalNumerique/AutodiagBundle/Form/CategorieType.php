@@ -19,7 +19,7 @@ class CategorieType extends AbstractType
             ->add('note', 'integer', array(
                 'max_length' => 3, 
                 'required'   => false, 
-                'label'      => 'Note optimale'
+                'label'      => 'Note optimal'
             ))
         ;
     }
