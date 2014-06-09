@@ -51,6 +51,30 @@ class InscriptionRepository extends EntityRepository
     }
 
     /**
+     * Récupère les données du grid sous forme de tableau correctement formaté
+     *
+     * @return array
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function getAllDatasForGrid( $condition )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('ins')
+            ->from('HopitalNumeriqueModuleBundle:Inscription', 'ins')
+            ->leftJoin('ins.session','ses')
+            ->leftJoin('ses.etat','refEtat')
+            ->andWhere('refEtat.id = 403')
+            ->leftJoin('ins.user','user')
+            // ->leftJoin('ses.module','module')
+            ->groupBy('ins.id')
+            ->orderBy('user.nom');
+
+        return $qb;
+    }
+
+    /**
      * Retourne la liste des inscriptions de l'utilisateur pour la création des factures
      *
      * @return QueryBuilder
