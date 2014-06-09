@@ -20,6 +20,14 @@
 {% block javascripts %}
     {{ parent() }}
     {{ block('grid_javascripts')}}
+
+    <script>
+        $(document).ready(function() {
+            //bind de Validation Engine
+            $('.panel-heading').click();
+        });
+    </script>
+
 {% endblock %}
 
 {% block h1Title %}
