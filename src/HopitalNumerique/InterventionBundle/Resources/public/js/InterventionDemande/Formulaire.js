@@ -37,6 +37,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.init = functio
     HopitalNumeriqueInterventionBundle_InterventionDemande_FormulaireEvenement.init();
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initChamps();
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeAutresEtablissements();
+    HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeReferents();
     HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majActivationTransfertAmbassadeur();
 };
 
@@ -77,7 +78,8 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.cacheBoutonsAc
  */
 HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieFormulaire = function()
 {
-    return HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampEtablissements();
+    //return HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.verifieChampEtablissements();
+    return true;
 };
 
 /**
@@ -336,12 +338,17 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majListeRefere
     {
         HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.videChampReferents();
         var autresEtablissementsIds = HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.getAutresEtablissementsIds();
+        // Si aucun autre ES est choisi, on force le filtre pour ne pas afficher tous les référents de la région 
+        if (autresEtablissementsIds.length == 0)
+            autresEtablissementsIds = null;
     
-        if (autresEtablissementsIds.length > 0)
+        // Pour le CMSI et l'ANAP, on n'est plus obligé de choisir un ES
+        // si autresEtablissementsIds.length > 0
         {
             var loaderAjax = $('#intervention_demande_panel').nodevoLoader().start();
             
-            $.getJSON(
+            $.getJSON
+            (
                 '/compte-hn/intervention/referents/json',
                 {
                     etablissementRattachementSante:autresEtablissementsIds
@@ -407,7 +414,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majChampRefere
         referentsSelectHtml = '<option value="">-</option>';
     
     $.each(users, function(index, referent) {
-        referentsSelectHtml += '<option value="' + referent.id + '">' + referent.nom + ' ' + referent.prenom + '</option>';
+        referentsSelectHtml += '<option value="' + referent.id + '">' + referent.appellation + '</option>';
     });
     
     $(referentsSelect).html(referentsSelectHtml);

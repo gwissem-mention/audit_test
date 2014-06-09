@@ -1,8 +1,8 @@
-{% extends 'HopitalNumeriqueInterventionBundle:Form:layout.html.twig' %}
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
 
 {% block stylesheets %}
     {{ parent() }}
-    {% stylesheets output="compiled/hopitalnumerique-intervention-evaluation-nouveau.css" filter="cssrewrite, ?yui_css"
+    {% stylesheets output="compiled/hopitalnumerique-intervention-admin-evaluation-nouveau.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriqueintervention/css/evaluation.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}">
@@ -11,7 +11,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts output="compiled/hopitalnumerique-intervention-evaluation-nouveau.js"
+    {% javascripts output="compiled/hopitalnumerique-intervention-admin-evaluation-nouveau.js"
         'bundles/hopitalnumeriquequestionnaire/js/script.js'
         'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation.js'
         'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation/FormulaireCreation.js'
@@ -31,15 +31,17 @@
     {% endif %}
 {% endblock %}
 
-{% block headerTitle %}Mon évaluation{% endblock %}
+{% block h1Title %}Évaluation{% endblock %}
 
-{% block headerDesc %}
-    <p>L'ambassadeur a terminé son intervention dans votre établissement. Veuillez évaluer son intervention en remplissant le formulaire ci-après.</p>
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopital_numerique_intervention_admin_liste') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div onclick="$('#do').val('save');$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
 {% endblock %}
 
-{% block content %}
+{% block body %}
     {{ render(controller(
-        "HopitalNumeriqueInterventionBundle:Form/Evaluation:edit",
+        "HopitalNumeriqueInterventionBundle:Admin/Form/Evaluation:form",
         {
             interventionDemande:interventionDemande,
             questionnaire:questionnaire,

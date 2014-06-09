@@ -44,13 +44,22 @@ class CmsiType extends InterventionDemandeType
     {
         parent::buildForm($builder, $options);
         $builder
+            ->add('region', 'entity', array(
+                'label'    => 'Région des établissements',
+                'choices'  => $this->formUserManager->getRegionsChoices(),
+                'class'    => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
+                'property' => 'libelle',
+                'mapped'   => false,
+                'required' => false,
+                'attr'     => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_region')
+            ))
             ->add('etablissements', 'entity', array(
                 'choices' => $this->formEtablissementManager->getEtablissementsChoices(),
                 'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
                 'property' => 'nom',
                 'multiple' => true,
                 'label' => 'Rattacher des établissements à ma demande, parmi',
-                'required' => true,
+                'required' => false,
                 'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements')))
             ->add('cmsiCommentaire', 'textarea', array(
                 'label' => 'Commentaire CMSI',

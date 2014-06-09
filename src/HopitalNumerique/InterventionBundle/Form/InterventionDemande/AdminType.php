@@ -107,7 +107,7 @@ class AdminType extends InterventionDemandeType
                 'property' => 'nom',
                 'multiple' => true,
                 'label' => 'Rattacher des établissements à ma demande, parmi',
-                'required' => true,
+                'required' => false,
                 'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements')
             ))
             ->add('ambassadeur', 'entity', array(

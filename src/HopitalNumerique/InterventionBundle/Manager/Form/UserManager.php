@@ -6,6 +6,9 @@
  */
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
 
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Nodevo\AclBundle\Manager\AclManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
 
@@ -15,9 +18,21 @@ use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
 class UserManager
 {
     /**
+     * @var \HopitalNumerique\UserBundle\Entity\User L'utilisateur connecté
+     */
+    private $utilisateurConnecte;
+    /**
+     * @var \Symfony\Bundle\FrameworkBundle\Routing\Router Router de l'application
+     */
+    private $router;
+    /**
      * @var \HopitalNumerique\UserBundle\Manager\UserManager Le manager de l'entité User
      */
     private $userManager;
+    /**
+     * @var \Nodevo\AclBundle\Manager\AclManager Le manager de l'entité Acl
+     */
+    private $aclManager;
     /**
      * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager Manager de Reference
      */
@@ -30,16 +45,24 @@ class UserManager
     /**
      * Constructeur du manager gérant les formulaires utilisateurs.
      *
+     * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
+     * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router Router de l'application
      * @param \HopitalNumerique\UserBundle\Manager\UserManager $userManager Le manager de l'entité User
+     * @param \Nodevo\AclBundle\Manager\AclManager $aclManager Le manager de l'entité Acl
      * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager $referenceManager Manager de Reference
      * @param \HopitalNumerique\EtablissementBundle\Manager\EtablissementManager $etablissementManager Manager de Etablissement
      * @return void
      */
-    public function __construct(\HopitalNumerique\UserBundle\Manager\UserManager $userManager, ReferenceManager $referenceManager, EtablissementManager $etablissementManager)
+    public function __construct(SecurityContext $securityContext, Router $router, \HopitalNumerique\UserBundle\Manager\UserManager $userManager, AclManager $aclManager, ReferenceManager $referenceManager, EtablissementManager $etablissementManager)
     {
+        $this->router = $router;
         $this->userManager = $userManager;
+        $this->aclManager = $aclManager;
         $this->referenceManager = $referenceManager;
         $this->etablissementManager = $etablissementManager;
+        
+        $securityContext = $securityContext;
+        $this->utilisateurConnecte = $securityContext->getToken()->getUser();
     }
 
     /**
@@ -124,7 +147,11 @@ class UserManager
      */
     public function getReferentsChoices()
     {
-        return $this->userManager->getESAndEnregistres();
+        $referents = $this->userManager->getESAndEnregistres();
+        if ($this->ajouteUtilisateurConnecteCommeDemandeur())
+            $referents[] = $this->utilisateurConnecte;
+        
+        return $referents;
     }
 
 
@@ -155,14 +182,17 @@ class UserManager
     public function jsonReferents(array $criteres)
     {
         $users = $this->userManager->getESAndEnregistres($criteres);
-        $usersListeFormatee = array();
+        if ($this->ajouteUtilisateurConnecteCommeDemandeur())
+            array_unshift($users, $this->utilisateurConnecte);
 
+        $usersListeFormatee = array();
         foreach ($users as $user)
         {
             $usersListeFormatee[] = array(
                 'id' => $user->getId(),
                 'nom' => $user->getNom(),
-                'prenom' => $user->getPrenom()
+                'prenom' => $user->getPrenom(),
+                'appellation' => $user->getAppellation()
             );
         }
 
@@ -190,5 +220,15 @@ class UserManager
         }
     
         return json_encode($usersListeFormatee);
+    }
+    
+    /**
+     * Retourne si dans les listes des référents, on ajoute la personne connectée.
+     * 
+     * @return boolean VRAI ssi on ajoute l'utilisateur connecté aux listes de référents
+     */
+    private function ajouteUtilisateurConnecteCommeDemandeur()
+    {
+        return ($this->utilisateurConnecte->hasRoleCmsi() || $this->aclManager->checkAuthorization($this->router->generate('hopital_numerique_intervention_admin_demande_nouveau'), $this->utilisateurConnecte));
     }
 }
