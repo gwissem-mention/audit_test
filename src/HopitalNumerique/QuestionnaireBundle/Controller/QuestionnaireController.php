@@ -93,6 +93,8 @@ class QuestionnaireController extends Controller
         $readOnly           = array_key_exists('readOnly', $optionRenderForm) ? $optionRenderForm['readOnly'] : false;
         $routeRedirection   = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect'] : '';
         $themeQuestionnaire = array_key_exists('themeQuestionnaire', $optionRenderForm) ? $optionRenderForm['themeQuestionnaire'] : 'default';
+        $session            = array_key_exists('session', $optionRenderForm) ? $optionRenderForm['session'] : 0;
+
         
         //Si le tableau n'est pas vide on le récupère
         if(!is_null($routeRedirection))
@@ -103,9 +105,10 @@ class QuestionnaireController extends Controller
         
         return $this->renderForm('nodevo_questionnaire_questionnaire',
                 array(
-                        'questionnaire'    => $questionnaire,
-                        'user'             => $user,
-                        'readOnly'         => $readOnly
+                        'questionnaire' => $questionnaire,
+                        'user'          => $user,
+                        'readOnly'      => $readOnly,
+                        'session'       => $session
                 ) ,
                 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit.html.twig'
         );
@@ -132,12 +135,14 @@ class QuestionnaireController extends Controller
         $user             = $options['user'];
         $readOnly         = $options['readOnly'];
         $questionnaire    = $options['questionnaire'];
+        $idSession        = $options['session'];
 
         $label_attr = array(
                 'idUser'           => $user->getId(),
                 'idQuestionnaire'  => $questionnaire->getId(),
                 'routeRedirection' => $this->_routeRedirection,
-                'readOnly'         => $readOnly
+                'readOnly'         => $readOnly,
+                'idSession'        => $idSession
         );
 
         if(isset($options['showAllQuestions']) && !is_null($options['showAllQuestions']))
@@ -291,6 +296,23 @@ class QuestionnaireController extends Controller
                     $reponses[$idQuestion] = $reponse;
                 }
 
+                if('module-evaluation' === $questionnaire->getNomMinifie())
+                {
+
+                    $idSession = $form["idSession"]->getData();
+
+                    //Dans le cas où on est dans le formulaire de session
+                    $session = ($idSession !== 0) ? $this->get('hopitalnumerique_module.manager.session')->findOneBy( array( 'id' => $idSession ) ) : null;
+
+                    if(!is_null($session))
+                    {
+                        //Modifications de l'inscription: modification du statut "etatEvaluer"  
+                        $inscription = $this->get('hopitalnumerique_module.manager.inscription')->findOneBy( array('user' => $user, 'session' => $session) );
+                        $inscription->setEtatEvaluation( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 29)));
+                        $this->get('hopitalnumerique_module.manager.inscription')->save( $inscription );
+                    }
+                }
+
                 //Envoie du mail à l'utilisateur pour l'alerter de la validation de sa candidature
                 if($this->_envoieDeMail)
                 {
@@ -355,7 +377,7 @@ class QuestionnaireController extends Controller
                     }
                 }
                 
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Votre candidature au poste ' . $questionnaire->getNomMinifie() . ' a bien été envoyée, nous reviendrons vers vous dans les plus brefs délais.' );
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Formulaire enregistré.' );
                                 
                 //Mise à jour/création des réponses
                 $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );

@@ -18,12 +18,13 @@ class EvaluationController extends Controller
         //Récupération du questionnaire de l'expert
         $idQuestionnaireEvaluationModule = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('module-evaluation');
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireEvaluationModule) );
-    
+            
         return $this->render('HopitalNumeriqueModuleBundle:Back/Evaluation:edit.html.twig',array(
             'questionnaire'    => $questionnaire,
             'user'             => $user,
             'session'          => $session,
             'optionRenderForm' => array(
+                'session'            => $session->getId(),
                 'envoieDeMail'       => false,
                 'readOnly'           => false,
                 'routeRedirect'      => json_encode(array(
