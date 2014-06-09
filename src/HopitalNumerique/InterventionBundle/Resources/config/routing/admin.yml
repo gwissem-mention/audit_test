@@ -37,3 +37,17 @@ hopital_numerique_intervention_admin_evaluation_voir:
     requirements:
         _method: GET
         interventionDemande: \d+
+
+hopital_numerique_intervention_admin_evaluation_nouveau:
+    pattern:  /demande/{interventionDemande}/evaluation/nouveau
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Form/Evaluation:nouveau", interventionDemande: 0 }
+    requirements:
+        _method:  GET|POST
+        interventionDemande: \d+
+
+hopital_numerique_intervention_admin_evaluation_form:
+    pattern:  /demande/{interventionDemande}/evaluation/form
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Form/Evaluation:form" }
+    requirements:
+        _method:  GET|POST
+        interventionDemande: \d+

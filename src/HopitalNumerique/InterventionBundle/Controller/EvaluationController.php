@@ -17,35 +17,6 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation;
 class EvaluationController extends Controller
 {
     /**
-     * Action qui affiche le formulaire de création d'une évaluation.
-     *
-     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention à évaluer
-     * @return \Symfony\Component\HttpFoundation\Response Aucune réponse
-     */
-    public function nouveauAction(InterventionDemande $interventionDemande)
-    {
-        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
-        
-        if ($this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation')->utilisateurPeutEvaluer($interventionDemande, $utilisateurConnecte))
-        {
-            $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
-
-            return $this->render('HopitalNumeriqueInterventionBundle:Evaluation:nouveau.html.twig', array(
-                'interventionDemande'=> $interventionDemande,
-                'etablissements' => $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesEtRegroupes($interventionDemande),
-                'questionnaire'=> $questionnaire,
-                'user' => $utilisateurConnecte,
-                'optionRenderForm'=> array(
-                    'themeQuestionnaire' => 'vertical'
-                )
-            ));
-        }
-
-        $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à créer cette évaluation.');
-        return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
-    }
-    
-    /**
      * Action qui affiche le formulaire d'évaluation d'intervention rempli.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention évaluée

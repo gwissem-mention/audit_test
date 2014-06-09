@@ -1,0 +1,32 @@
+{% block stylesheets %}
+    {% stylesheets output="compiled/hopitalnumerique-intervention-admin-evaluation-formEdit.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquequestionnaire/css/questionnaire.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+<div id="form_questionnaire_front">
+
+    {% if readOnly != true %}<div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>{% endif %}
+
+    <form id="form_intervention_evaluation" method="post" action="{{ path('hopital_numerique_intervention_admin_evaluation_form', { interventionDemande:interventionDemande.id }) }}" class="form-horizontal toValidate" novalidate="novalidate" {{ form_enctype(form) }}>
+    
+        <div class="form-group">
+            <div class="col-md-4 control-label"><label>Ambassadeur</label></div>
+            <div class="col-md-8">
+                <input class="form-control" type="text" value="{{ interventionDemande.ambassadeur.appellation }}" readonly="readonly">
+            </div>
+        </div>
+    
+        {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.horizontal.html.twig' %}
+        {{ form_javascript(form) }}
+        {{ form_widget(form) }}
+    </form>
+
+    <script type="text/javascript">
+        <!-- TODO Faire mieux -->
+        $('#nodevo_questionnaire_questionnaire_entity_35_evaluation_intervention_type').val({{ interventionDemande.interventionType.id }});
+    </script>
+
+</div>

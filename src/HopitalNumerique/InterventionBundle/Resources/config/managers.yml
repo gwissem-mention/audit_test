@@ -45,7 +45,7 @@ services:
         arguments: ["@hopitalnumerique_objet.manager.objet"]
     hopitalnumerique_intervention.manager.form_user:
         class: "%hopitalnumerique_intervention.manager.form_user.class%"
-        arguments: ["@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_etablissement.manager.etablissement"]
+        arguments: ["@security.context", "@router", "@hopitalnumerique_user.manager.user", "@nodevo_acl.manager.acl", "@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_etablissement.manager.etablissement"]
     hopitalnumerique_intervention.manager.form_etablissement:
         class: "%hopitalnumerique_intervention.manager.form_etablissement.class%"
         arguments: ["@hopitalnumerique_etablissement.manager.etablissement"]

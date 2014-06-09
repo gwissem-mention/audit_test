@@ -20,6 +20,39 @@ class EvaluationController extends Controller
      * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté actuellement
      */
     protected $utilisateurConnecte;
+    /**
+     * @var string Route de redirection quand le formulaire est enregistré
+     */
+    protected $routeRedirectionSucces = 'hopital_numerique_intervention_demande_liste';
+
+    /**
+     * Action qui affiche le formulaire de création d'une évaluation.
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention à évaluer
+     * @return \Symfony\Component\HttpFoundation\Response Aucune réponse
+     */
+    public function nouveauAction(InterventionDemande $interventionDemande)
+    {
+        $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
+    
+        if ($this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation')->utilisateurPeutEvaluer($interventionDemande, $utilisateurConnecte))
+        {
+            $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
+    
+            return $this->render('HopitalNumeriqueInterventionBundle:Evaluation/Form:nouveau.html.twig', array(
+                'interventionDemande'=> $interventionDemande,
+                'etablissements' => $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesEtRegroupes($interventionDemande),
+                'questionnaire'=> $questionnaire,
+                'user' => $utilisateurConnecte,
+                'optionRenderForm'=> array(
+                    'themeQuestionnaire' => 'vertical'
+                )
+            ));
+        }
+    
+        $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à créer cette évaluation.');
+        return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+    }
     
     /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
@@ -27,7 +60,7 @@ class EvaluationController extends Controller
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande Demande d'intervention de l'évaluation à afficher
      * @return \Symfony\Component\HttpFoundation\Response Vue du formulaire d'évaluation
      */
-    public function editAction(InterventionDemande $interventionDemande)
+    public function formAction(InterventionDemande $interventionDemande)
     {
         $this->utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
 
@@ -38,7 +71,7 @@ class EvaluationController extends Controller
                 'interventionDemande' => $interventionDemande,
                 'questionnaire' => $questionnaire
             ),
-            'HopitalNumeriqueInterventionBundle:Evaluation/Form:edit.html.twig'
+            'HopitalNumeriqueInterventionBundle:Evaluation/Form:form.html.twig'
         );
     }
 
@@ -150,7 +183,7 @@ class EvaluationController extends Controller
             //Mise à jour/création des réponses
             $this->get('hopitalnumerique_questionnaire.manager.reponse')->save($reponses);
 
-            return $this->redirect($this->generateUrl('hopital_numerique_intervention_demande_liste'));
+            return $this->redirect($this->generateUrl($this->routeRedirectionSucces));
         }
         
         return $this->redirect($this->generateUrl('hopital_numerique_intervention_demande_liste'));
