@@ -5,6 +5,7 @@
 /*.grid .exports { padding:6px 0px 0px 0px;text-align:right; }*/
 .grid-search form .form-group{min-height: 54px}
 .grid_footer .total{float: left; margin: 10px; height: 34px; padding-top: 6px;}
+.grid_header .total{margin:10px 10px 10px 0;}
 
 /*****************************************************/
 /************          Colonnes           ************/
