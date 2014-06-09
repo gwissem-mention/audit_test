@@ -12,3 +12,8 @@ INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `i
 VALUES
     (150, 68, 3, 'Autodiagnostics', 'hopitalnumerique_autodiag_front_comptehn', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
     (151, NULL, 4, 'Autodiagnostics', 'hopitalnumerique_autodiag_front_comptehn', NULL, NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 12);
+
+INSERT INTO `hn_reference` (`ref_id`, `parent_id`, `ref_libelle`, `ref_code`, `ref_etat`, `ref_dictionnaire`, `ref_recherche`, `ref_lock`, `ref_order`)
+VALUES
+    (418, NULL, 'Initial', 'STATUT_RESULTAT', 3, 0, 0, 0, 1),
+    (419, NULL, 'Validé', 'STATUT_RESULTAT', 3, 0, 0, 0, 2);
