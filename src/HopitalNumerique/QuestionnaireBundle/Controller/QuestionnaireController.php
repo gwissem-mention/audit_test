@@ -145,7 +145,7 @@ class QuestionnaireController extends Controller
     
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $questionnaire, array(
-                'label_attr' => $label_attr
+            'label_attr' => $label_attr
         ));
         
         $request = $this->get('request');
@@ -323,13 +323,26 @@ class QuestionnaireController extends Controller
                             
                             //CMSI
                             $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
+                            
+                            $etablissement = is_null($user->getEtablissementRattachementSante()) ? $user->getAutreStructureRattachementSante() : $user->getEtablissementRattachementSante()->getNom();
+                            
+                            $candidat = '<ul>';
+                            $candidat .= '<li><strong>Prénom</strong> : ' . (trim($user->getPrenom()) === '' ? '-' : $user->getPrenom() ). '</li>';
+                            $candidat .= '<li><strong>Nom</strong> : ' . (trim($user->getNom()) == '' ? '-' : $user->getNom() ). '</li>';
+                            $candidat .= '<li><strong>Adresse e-mail</strong> : ' . (trim($user->getEmail()) === '' ? '-' : $user->getEmail() ). '</li>';
+                            $candidat .= '<li><strong>Téléphone direct</strong> : ' . (trim($user->getTelephoneDirect()) === '' ? '-' : $user->getTelephoneDirect() ). '</li>';
+                            $candidat .= '<li><strong>Téléphone portable</strong> : ' . (trim($user->getTelephonePortable()) === '' ? '-' : $user->getTelephonePortable() ). '</li>';
+                            $candidat .= '<li><strong>Profil</strong> : ' . (trim($user->getProfilEtablissementSante()->getLibelle()) === '' ? '-' : $user->getProfilEtablissementSante()->getLibelle() ). '</li>';
+                            $candidat .= '<li><strong>Établissement de rattrachement</strong> : ' . (trim($etablissement) === '' ? '-' : $etablissement ). '</li>';
+                            $candidat .= '<li><strong>Nom de votre établissement si non disponible dans la liste précédente</strong> : ' . (trim($user->getAutreStructureRattachementSante()) === '' ? '-' : $user->getAutreStructureRattachementSante() ). '</li>';
+                            $candidat .= '<li><strong>Fonction dans l\'établissement</strong> : ' . (trim($user->getFonctionStructure()) === '' ? '-' : $user->getFonctionStructure() ). '</li>';
+                            $candidat .= '</ul>';
+
                             $CMSI        = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');
                             if(!is_null($CMSI))
                             {
-                                $etablissement = is_null($user->getEtablissementRattachementSante()) ? $user->getAutreStructureRattachementSante() : $user->getEtablissementRattachementSante()->getNom();
-
                                 $variablesTemplate = array(
-                                    'candidat'      => $user->getPrenom() . ' ' . $user->getNom() . ' (' . $etablissement .')',
+                                    'candidat'      => $candidat,
                                     'questionnaire' => $candidature
                                 );
                                 $mailCMSI = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurCMSIMail($CMSI, $variablesTemplate);
