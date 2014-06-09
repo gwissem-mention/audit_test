@@ -31,6 +31,7 @@
                                 </div>
 
                                 <div class="panel-body">
+                                    <h3 class="toPrint">{{panel.title}}</h3>
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-danger" style="width: 33.3%">
                                             Faible
@@ -41,7 +42,7 @@
                                         <div class="progress-bar progress-bar-success" style="width: 33.3%">
                                             Fort
                                         </div>
-                                        <div class="cursor" data-position="{{panel.value|number_format(2,'.')}}%" title="<span>Ma Valeur : </span><b>{{panel.value|number_format(2,'.')}}%</b>" ></div>
+                                        <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(2,'.')}}%"{% endif %} data-position="{{panel.value|number_format(2,'.')}}%" title="<span>Ma Valeur : </span><b>{{panel.value|number_format(2,'.')}}%</b>" ></div>
                                     </div>
                                 </div>
                             </div>

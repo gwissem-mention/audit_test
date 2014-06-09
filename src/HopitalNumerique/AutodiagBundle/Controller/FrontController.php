@@ -228,11 +228,12 @@ class FrontController extends Controller
         ));
 
         $options = array(
-            'margin-bottom' => 10,
-            'margin-left'   => 4,
-            'margin-right'  => 4,
-            'margin-top'    => 10,
-            'encoding'      => 'UTF-8'
+            'margin-bottom'    => 10,
+            'margin-left'      => 4,
+            'margin-right'     => 4,
+            'margin-top'       => 10,
+            'encoding'         => 'UTF-8',
+            'javascript-delay' => 500
         );
 
         return new Response(

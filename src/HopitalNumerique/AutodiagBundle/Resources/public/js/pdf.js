@@ -1,23 +1,4 @@
 $(document).ready(function() {
-
-    /* Handle Title click for collapse */
-    $('#resultats h2').click(function(){
-        $('#' + $(this).data('toggle') ).slideToggle();
-        $(this).toggleClass('open closed');
-    });
-
-    /* Cursor Tooltip*/
-    $('.cursor').qtip({ 
-        style : 'qtip-bootstrap'
-    });
-
-    /* Animation Cursor init */
-    $('.cursor').each(function(){
-        $(this).animate({
-            left: "+="+$(this).data('position'),
-        }, 2000);
-    });
-
     /* Manage values */
     var datas      = $.parseJSON( $('#datas-radar').val() );
     var categories = [];
@@ -33,7 +14,9 @@ $(document).ready(function() {
     $('#radarChart').highcharts({
         chart : {
             polar : true,
-            type  : 'line'
+            type  : 'line',
+            width : 800,
+            animation: false
         },
         title : {
             text : null
@@ -63,6 +46,11 @@ $(document).ready(function() {
         tooltip : {
             shared      : true,
             pointFormat : '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}%</b><br/>'
+        },
+        plotOptions : {
+            series : {
+                animation : false
+            }
         },
         series : [
             {

@@ -29,7 +29,7 @@
     "jquery-nicescroll": "*",
     "enquire": "~2.1.0",
     "stepy": "https://github.com/wbotelhos/stepy.git",
-    "highcharts.com": "*",
+    "highcharts.com": "4.0.0",
     "qtip2": "2.2.0"
   }
 }

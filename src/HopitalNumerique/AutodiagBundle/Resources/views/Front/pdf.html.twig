@@ -15,10 +15,10 @@
         "@bootstrap_js"
         '@highcharts_js'
         'bundles/hopitalnumeriquecore/js/script.js'
-        'bundles/hopitalnumeriqueautodiag/js/resultats.js'
+        'bundles/hopitalnumeriqueautodiag/js/pdf.js'
     %}
         <script type="text/javascript" src="http://hopital.local{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 
-{% include 'HopitalNumeriqueAutodiagBundle:Front:resultats-donnees.html.twig' with {'resultat':resultat} %}
+{% include 'HopitalNumeriqueAutodiagBundle:Front:resultats-donnees.html.twig' with {'resultat':resultat, 'pdf':true} %}
