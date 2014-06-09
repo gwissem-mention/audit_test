@@ -31,48 +31,49 @@ $(document).ready(function() {
 
     /* Créer le Spider Chart */
     $('#radarChart').highcharts({
-        chart: {
-            polar: true,
-            type: 'line'
+        chart : {
+            polar : true,
+            type  : 'line',
+            width : 800
         },
-        title: {
-            text: null
+        title : {
+            text : null
         },
         credits : {
-            enabled:false
+            enabled : false
         },
-        pane: {
-            size: '100%'
+        pane : {
+            size : '100%'
         },
-        xAxis: {
-            categories: categories,
-            tickmarkPlacement: 'on',
-            lineWidth: 0
+        xAxis : {
+            categories        : categories,
+            tickmarkPlacement : 'on',
+            lineWidth         : 0
         },
-        yAxis: {
-            gridLineInterpolation: 'polygon',
-            lineWidth: 0,
-            min: 0,
-            max: 100,
-            tickInterval : 20,
-            gridLineDashStyle : 'Dash',
-            labels  : {
-                enabled: false
+        yAxis : {
+            gridLineInterpolation : 'polygon',
+            lineWidth             : 0,
+            min                   : 0,
+            max                   : 100,
+            tickInterval          : 20,
+            gridLineDashStyle     : 'Dash',
+            labels                : {
+                enabled : false
             }
         },
-        tooltip: {
-            shared: true,
-            pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}%</b><br/>'
+        tooltip : {
+            shared      : true,
+            pointFormat : '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}%</b><br/>'
         },
-        series: [
+        series : [
             {
-                name: 'Ma valeur',
-                color: '#ff0000',
-                data: values
+                name  : 'Ma valeur',
+                color : '#ff0000',
+                data  : values
             }, {
-                name: 'Valeur optimale préconisée par l\'ANAP',
-                data: optimale,
-                color: '#6f3596'
+                name  : 'Valeur optimale préconisée par l\'ANAP',
+                data  : optimale,
+                color : '#6f3596'
             }
         ]
     });

@@ -239,8 +239,8 @@ class FrontController extends Controller
             $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),
             200,
             array(
-                'Content-Type'          => 'application/pdf',
-                'Content-Disposition'   => 'attachment; filename="resultats-de-l-outil-'.$resultat->getOutil()->getAlias().'.pdf"'
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="resultats-de-l-outil-'.$resultat->getOutil()->getAlias().'.pdf"'
             )
         );
     }

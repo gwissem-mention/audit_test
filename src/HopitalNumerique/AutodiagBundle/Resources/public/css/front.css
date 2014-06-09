@@ -51,7 +51,7 @@
 
     /* Graphiques */
         #resultats #graphiques .panel{border-color:#6f3596;}
-        #resultats #graphiques .panel .panel-heading{background:#6f3596 !important; padding:7px 15px; }
+        #resultats #graphiques .panel .panel-heading{background-color:#6f3596 !important; background-image:none !important; padding:7px 15px; }
         #resultats #graphiques .panel .panel-heading h3.panel-title{margin-bottom: 0; color:#FFFFFF; font-size: 14px; float: left}
         #resultats #graphiques .panel .panel-heading .options{float:right; color:#FFF;}
         #resultats #graphiques .panel .progress{position: relative; height: 30px; margin-bottom: 0}
