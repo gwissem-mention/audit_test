@@ -50,6 +50,13 @@ class Resultat
     private $tauxRemplissage;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="res_pdf", type="string", length=255, nullable=true)
+     */
+    private $pdf;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_statut", referencedColumnName="ref_id")
      */
@@ -80,6 +87,7 @@ class Resultat
         $this->tauxRemplissage = 0;
         $this->dateCreation    = new \DateTime;
         $this->reponses        = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pdf             = null;
     }
 
     /**
@@ -180,6 +188,27 @@ class Resultat
     public function getTauxRemplissage()
     {
         return $this->tauxRemplissage;
+    }
+
+    /**
+     * Get pdf
+     *
+     * @return string $pdf
+     */
+    public function getPdf()
+    {
+        return $this->pdf;
+    }
+    
+    /**
+     * Set pdf
+     *
+     * @param string $pdf
+     */
+    public function setPdf($pdf)
+    {
+        $this->pdf = $pdf;
+        return $this;
     }
 
     /**

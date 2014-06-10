@@ -132,6 +132,14 @@ class FrontController extends Controller
         }else
             $resultat->setStatut( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 418) ) );
 
+        //Delete le PDF s'il existe : Permet de le mettre à jour lors de l'affichage des résultats
+        if( !is_null($resultat->getPdf()) ){
+            $pdfName = $resultat->getPdf();
+            $resultat->setPdf( null );
+
+            unlink(__ROOT_DIRECTORY__ . '/files/autodiag/' . $pdfName);
+        }
+
         //cas user connecté
         if( $user )
             $resultat->setUser( $user );
@@ -171,7 +179,7 @@ class FrontController extends Controller
      *
      * @param  Resultat $resultat L'entitée résultat
      */
-    public function resultatAction( Resultat $resultat )
+    public function resultatAction( Resultat $resultat, Request $request )
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $user = $user != 'anon.' ? $user : false;
@@ -189,6 +197,13 @@ class FrontController extends Controller
         $chapitres  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat, true );
         $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
 
+        //PDF généré
+        if( is_null($resultat->getPdf()) ){
+            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $user );
+            $resultat->setPdf( $pdf );
+            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
+        }
+
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
             'resultat'   => $resultat,
             'chapitres'  => $chapitres,
@@ -197,11 +212,22 @@ class FrontController extends Controller
     }
 
     /**
-     * Génère le PDF de résultat
+     * Page Mon Compte : affiche la liste des derniers résultats
+     */
+    public function autodiagAction()
+    {
+        $user      = $this->get('security.context')->getToken()->getUser();
+        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy( array( 'user' => $user ) );        
+
+        return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:autodiag.html.twig' , array(
+            'resultats' => $resultats
+        ));
+    }
+
+    /**
+     * Retourne le PDF du résultat
      *
-     * @param Resultat $resultat L'entitée Résultat
-     *
-     * @return PDF
+     * @param  Resultat $resultat L'entitée résultat
      */
     public function pdfAction( Resultat $resultat, Request $request )
     {
@@ -217,9 +243,37 @@ class FrontController extends Controller
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage' ) );
         }
 
-        //récupère les chapitres et les formate pour l'affichage des liens des publications
-        $chapitres  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat, true );
-        $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
+        $fileName = __ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf();
+        $options  = array(
+            'serve_filename' => 'resultat-outil-'.$resultat->getOutil()->getAlias().'.pdf',
+            'absolute_path'  => false,
+            'inline'         => false,
+        );
+
+        return $this->get('igorw_file_serve.response_factory')->create( $fileName , 'application/pdf', $options);
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Génère un pdf pour le résultat
+     *
+     * @param array    $chapitres  Liste des chapitres
+     * @param array    $graphiques Liste des graphiques
+     * @param Resultat $resultat   Objet résultat
+     * @param Request  $request    Objet Request
+     * @param User     $user       User connecté
+     *
+     * @return string PDF name
+     */
+    private function generatePdf( $chapitres, $graphiques, $resultat, $request, $user )
+    {
+        $filename = $resultat->getId() . $resultat->getOutil()->getId() . $user->getId() . time() . '.pdf';
 
         $html = $this->renderView( 'HopitalNumeriqueAutodiagBundle:Front:pdf.html.twig' , array(
             'resultat'   => $resultat,
@@ -240,29 +294,10 @@ class FrontController extends Controller
 
         $this->get('knp_snappy.pdf')->generateFromHtml(
             $html,
-            __ROOT_DIRECTORY__ . '/files/autodiag/'.$resultat->getOutil()->getAlias().'.pdf',
+            __ROOT_DIRECTORY__ . '/files/autodiag/' . $filename,
             $options
         );
 
-        
-
-
-
-
-
-
-    }
-
-    /**
-     * Page Mon Compte : affiche la liste des derniers résultats
-     */
-    public function autodiagAction()
-    {
-        $user      = $this->get('security.context')->getToken()->getUser();
-        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy( array( 'user' => $user ) );        
-
-        return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:autodiag.html.twig' , array(
-            'resultats' => $resultats
-        ));
+        return $filename;
     }
 }

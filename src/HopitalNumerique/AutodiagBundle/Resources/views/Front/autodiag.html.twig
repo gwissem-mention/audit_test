@@ -71,7 +71,7 @@
                         <td>{{resultat.dateValidation|date('d/m/Y')}}</td>
                         
                         <td>
-                            <a href="{{path('hopitalnumerique_autodiag_front_resultat', {'id':resultat.id})}}" class="btn btn-xs btn-success"><i class="fa fa-eye"></i></a>
+                            <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="btn btn-xs btn-info"><i class="fa fa-download"></i></a>
                         </td>
                     </tr>
                 {% else %}
