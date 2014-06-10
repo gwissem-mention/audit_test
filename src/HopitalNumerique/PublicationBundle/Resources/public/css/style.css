@@ -1,3 +1,5 @@
+.mobile{display:none;}
+
 /* Sommaire */
     #sommaire{ position: fixed; left:0; top:0; height: 100%; max-width: 33% }
     #sommaire.closed{ width:33px;background: url('../img/sommaire.jpg') no-repeat center 95px; cursor: pointer }
@@ -120,17 +122,16 @@
 /**
  * MEDIA QUERIES
  */
-/* Décalage de la publication pour laisser la place au sommaire sur les petites résolutions */
-@media screen and (max-width: 1225px) {
-    #menu, #publication.with-sommaire{padding-left: 10px}
+@media screen and (max-width: 1270px) {
+    #ambassadeurs.closed, #sommaire.closed{display: none}
+    .mobile{display:block;}
 }
 
 @media screen and (max-width: 991px) {
     #autresResultats h2{background-image:none;}
     #articles{margin-top: 10px;}
-    #sommaire{width: 100%; max-width: 100%}
-
-    #ambassadeurs{display: none}
+    #ambassadeurs.open, #sommaire.open, #mesrequetes.open{width: 100%; max-width: 100%}
+    
     #points-durs{margin-bottom: 20px}
     #ressources{margin-bottom: 20px}
     #autresResultats .carousel-inner{ width: 92%;}
