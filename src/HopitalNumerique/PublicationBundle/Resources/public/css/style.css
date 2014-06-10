@@ -70,12 +70,12 @@
     /* Colonne left */
         #articles p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
         /* Sous-menu */
-        #articles #sous-menu{list-style:none; padding:0; margin-bottom: 20px}
-        #articles #sous-menu li{border-top:1px solid #f0f0f0; background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
-        #articles #sous-menu li a{padding:5px 0; display: block}
-        #articles #sous-menu li a span{color:#777777; font-size: 14px; }
-        #articles #sous-menu li.active a span,#articles #sous-menu li:hover a span{color:#6f3596;}
-        #articles #sous-menu li.last{border-bottom:1px solid #f0f0f0; }
+        #articles .menu-main{list-style:none; padding:0; margin-bottom: 20px}
+        #articles .menu-main li{border-top:1px solid #f0f0f0; background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
+        #articles .menu-main li a{padding:5px 0; display: block}
+        #articles .menu-main li a span{color:#777777; font-size: 14px; }
+        #articles .menu-main li.active a span, #articles .menu-main li:hover a span{color:#6f3596;}
+        #articles .menu-main li.last{border-bottom:1px solid #f0f0f0; }
         /* Catégories d'actu */
         #articles .actus{background: #f6f6f6; border-radius: 5px; padding:10px;}
         #articles .actus ul{list-style: none; padding:0;}
