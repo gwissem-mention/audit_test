@@ -8,7 +8,7 @@
 #login form .inscription{display:block; font-size: 13px; color: #a3a3a3; margin-top: 20px;float:right;}
 
 @media screen and (max-width: 991px) {
-    #login form{ padding:44px 4px;}
+    #login form{ padding:44px 4px 20px;}
     #login form .resetPass{float:none;}
-    #login form .inscription{float:none;}
+    #login form .inscription{float:none; margin-top: 10px;}
 }
