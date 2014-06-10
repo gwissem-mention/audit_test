@@ -17,7 +17,7 @@ class MenuNode implements NodeInterface
     public function __construct( $item = null )
     {
         if ( null !== $item ) {
-            $this->setName( $item->getName() );
+            $this->setName( 'menu-' . $item->getId() );
             $this->setOptions( $item );
 
             $this->id   = $item->getId();
@@ -41,7 +41,7 @@ class MenuNode implements NodeInterface
             'routeParameters'    => $routeParameters,                     //Besoin d'un tableau associatif
             'routeAbsolute'      => $item->getRouteAbsolute(),
             'uri'                => $item->getUri(),
-            'label'              => null,
+            'label'              => $item->getName(),
             'attributes'         => array( 'icon' => $item->getIcon() ),  // attributs html des balises
             'linkAttributes'     => array(),                              // attributs html des balises
             'childrenAttributes' => array(),                              // attributs html des balises

@@ -1,8 +1,0 @@
-{% extends 'HopitalNumeriqueCoreBundle::menu.html.twig' %}
-
-{% block linkElement %}
-    {% import 'knp_menu.html.twig' as knp_menu %}
-    <a {{ knp_menu.attributes(item.linkAttributes) }} href="{{ item.uri }}">
-        {{ block('spanElement') }}
-    </a>
-{% endblock %}
