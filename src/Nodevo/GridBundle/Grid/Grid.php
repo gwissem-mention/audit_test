@@ -39,6 +39,7 @@ abstract class Grid implements IGrid
     protected $_persistence          = true;
     protected $_defaultOrder         = false;
     protected $_defaultOrderColumn   = false;
+    protected $_defaultFilters       = array();
 
     //colonnes
     protected $_colonnes         = array();
@@ -273,6 +274,16 @@ abstract class Grid implements IGrid
         }
 
         /**
+         * Set le filtre de tri par défault du grid
+         *
+         * @param array $filters Filtre à appliquer dans le grid
+         */
+        protected function setDefaultFilters( $filters = array() )
+        {
+            $this->_defaultFilters = $filters;
+        }
+
+        /**
          * Set la condition de filtrage sur la source des données du grid (si nécessaire)
          * => Obligé de la mettre public car le paramètre est passé dans la Request (donc le controller)
          *
@@ -406,6 +417,10 @@ abstract class Grid implements IGrid
             //Set the default order
             if( $this->_defaultOrder != false )
                 $this->_grid->setDefaultOrder( $this->_defaultOrderColumn, $this->_defaultOrder );
+
+            //Set the default filter
+            if( count($this->_defaultFilters) > 0 )
+                $this->_grid->setDefaultFilters( $this->_defaultFilters );
         }
 
         /**

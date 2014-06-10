@@ -20,7 +20,8 @@ class CategorieRepository extends EntityRepository
         $qb->select('cat.id as idCat, cat.title, cat.note, out.id as id')
             ->from('HopitalNumeriqueAutodiagBundle:Categorie', 'cat')
             ->leftJoin('cat.outil','out')
-            ->where('cat.'.$condition->field.' = '.$condition->value);
+            ->where('cat.'.$condition->field.' = '.$condition->value)
+            ->orderBy('cat.title','asc');
             
         return $qb;
     }

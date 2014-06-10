@@ -276,14 +276,24 @@ class UserRepository extends EntityRepository
      * @param array $criteres Filtres à appliquer sur la liste
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des ambassadeurs
      */
-    public function getAmbassadeurs(array $criteres)
+    public function getAmbassadeurs(array $criteres = array())
     {
         return $this->findByRole(Role::$ROLE_AMBASSADEUR_LABEL, $criteres);
     }
     /**
+     * Retourne une liste d'utilisateurs ES ou Enregistré.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     */
+    public function getESAndEnregistres(array $criteres = array())
+    {
+        return $this->findByRole(array(Role::$ROLE_ES_LABEL, Role::$ROLE_ENREGISTRE_LABEL), $criteres);
+    }
+    /**
      * Retourne une liste d'utilisateurs en fonction d'un rôle.
      *
-     * @param string $role Label du rôle sur lequel filtrer
+     * @param string|array $role Label(s) du(es) rôle(s) sur lequel(lesquels) filtrer
      * @param array $criteres Filtres à appliquer sur la liste
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
      */
@@ -291,17 +301,51 @@ class UserRepository extends EntityRepository
     {
         $requete = $this->_em->createQueryBuilder();
     
-        $requete->select('user')
+        $requete
+            ->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->where('user.roles LIKE :role')
-                ->setParameter('role', '%'.$role.'%');
+        ;
+
+        if (!is_array($role))
+        {
+            $requete
+                ->where('user.roles LIKE :role')->setParameter('role', '%'.$role.'%')
+            ;
+        }
+        else
+        {
+            for ($i = 0; $i < count($role); $i++)
+            {
+                $requete
+                    ->orWhere('user.roles LIKE :role'.$i)->setParameter('role'.$i, '%'.$role[$i].'%')
+                ;
+            }
+        }
     
         foreach ($criteres as $critereChamp => $critereValeur)
         {
-            $requete->andWhere('user.'.$critereChamp.' = :'.$critereChamp)
-                ->setParameter($critereChamp, $critereValeur);
-        } 
-
+            if (is_array($critereValeur))
+            {
+                $requete
+                    ->andWhere(
+                        $requete->expr()->in('user.'.$critereChamp, $critereValeur)
+                    )
+                ;
+            }
+            else
+            {
+                $requete
+                    ->andWhere('user.'.$critereChamp.' = :'.$critereChamp)
+                    ->setParameter($critereChamp, $critereValeur)
+                ;
+            }
+        }
+        
+        $requete
+            ->addOrderBy('user.nom', 'ASC')
+            ->addOrderBy('user.prenom', 'ASC')
+        ;
+        
         return $requete->getQuery()->getResult();
     }
     /* ^^^^^^^^^^^^^^^^^^^^^^ Code de Rémi ^^^^^^^^^^^^^^^^^^^^^^^^^^ */

@@ -13,6 +13,7 @@
 .requetes .ligne p i{margin-left:5px;}
 .requetes .ligne p span.label{ font-size:9px; line-height: 2; vertical-align: top }
 .requetes .ligne a{margin:0 0 0 7px;color:#333333;font-size: 13px}
+.requetes .ligne .actions{float: right}
 .requetes .ligne .actions div{color:#c0bebe;cursor: pointer}
 .requetes .ligne .actions div.active{color:#B4DC00;}
 .requetes .ligne .actions div.inactive{color:#de0d4d;}
@@ -32,3 +33,9 @@ ol.arbo-requete li.level0 ol li.level1 ol li.level2 ol li.level3 span{ font-styl
 #popin-mails{margin:0;}
 #popin-mails .toggle{margin-top:5px}
 #popin-mails .btn{margin-right:10px}
+
+@media screen and (max-width: 991px) {
+    .requetes .ligne .actions{float: none}
+
+    .btn-pas-mobile {display: none}
+}

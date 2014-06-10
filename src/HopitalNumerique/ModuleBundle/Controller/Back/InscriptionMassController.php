@@ -105,7 +105,7 @@ class InscriptionMassController extends Controller
                             'user.username'             => 'Identifiant (login)', 
                             'user.email'                => 'Adresse e-mail',
                             'session.moduleTitre'       => 'Titre du module',
-                            'session.dateSessionString' => 'Date de la session',
+                            'session.dateSessionString' => 'Début de la session',
                             'etatInscription.libelle'   => 'Inscription',
                             'etatParticipation.libelle' => 'Participation',
                             'etatEvaluation.libelle'    => 'Evaluation',

@@ -230,6 +230,7 @@ class InterventionDemandeRepository extends EntityRepository
         $requete
             ->select(
                 'interventionDemande.id AS id',
+                'referent.id AS referentId',
                 'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
                 'referentEtablissement.finess AS referentEtablissementFiness',
@@ -550,6 +551,7 @@ class InterventionDemandeRepository extends EntityRepository
                 'CONCAT(cmsi.nom, \' \', cmsi.prenom) AS cmsi_nom',
                 'CONCAT(ambassadeur.nom, \' \', ambassadeur.prenom) AS ambassadeur_nom',
                 'ambassadeurRegion.libelle AS ambassadeurRegionLibelle',
+                'referent.id AS referentId',
                 'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
                 'referentEtablissement.finess AS referentEtablissementFiness',

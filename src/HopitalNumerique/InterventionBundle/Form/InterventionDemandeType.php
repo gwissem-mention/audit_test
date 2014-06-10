@@ -100,7 +100,7 @@ abstract class InterventionDemandeType extends AbstractType
                 'class'    => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
                 'property' => 'libelle',
                 'mapped'   => false,
-                'required' => true,
+                'required' => false,
                 'attr'     => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_region'),
                 'data'     => $this->utilisateurConnecte->getRegion()
             ))

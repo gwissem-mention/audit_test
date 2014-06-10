@@ -2,20 +2,26 @@ hopital_numerique_intervention_admin_liste:
     pattern:  /demandes/liste
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Demande:liste" }
     requirements:
-        _method:  GET
+        _method: GET
+
+hopital_numerique_intervention_admin_demande_nouveau:
+    pattern:  /demande/nouveau
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Form/Demande:nouveau" }
+    requirements:
+        _method: GET|POST
 
 hopital_numerique_intervention_admin_demande_edit:
     pattern:  /demande/edit/{id}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Form/Demande:edit", id: 0 }
     requirements:
-        _method:  GET|POST
+        _method: GET|POST
         id: \d+
 
 hopital_numerique_intervention_admin_demande_voir:
     pattern:  /demande/show/{id}
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Demande:voir", id: 0 }
     requirements:
-        _method:  GET
+        _method: GET
         id: \d+
 
 hopital_numerique_intervention_admin_demande_delete:
@@ -29,5 +35,19 @@ hopital_numerique_intervention_admin_evaluation_voir:
     pattern:  /demande/{interventionDemande}/evaluation/voir
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Evaluation:voir", interventionDemande: 0 }
     requirements:
-        _method:  GET
+        _method: GET
+        interventionDemande: \d+
+
+hopital_numerique_intervention_admin_evaluation_nouveau:
+    pattern:  /demande/{interventionDemande}/evaluation/nouveau
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Form/Evaluation:nouveau", interventionDemande: 0 }
+    requirements:
+        _method:  GET|POST
+        interventionDemande: \d+
+
+hopital_numerique_intervention_admin_evaluation_form:
+    pattern:  /demande/{interventionDemande}/evaluation/form
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Form/Evaluation:form" }
+    requirements:
+        _method:  GET|POST
         interventionDemande: \d+

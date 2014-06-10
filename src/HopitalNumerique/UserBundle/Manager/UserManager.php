@@ -212,8 +212,18 @@ class UserManager extends BaseManager
      * @param array $criteres Filtres à appliquer sur la liste
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des ambassadeurs
      */
-    public function getAmbassadeurs(array $criteres)
+    public function getAmbassadeurs(array $criteres = array())
     {
         return $this->getRepository()->getAmbassadeurs($criteres);
+    }
+    /**
+     * Retourne une liste d'utilisateurs ES ou Enregistré.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     */
+    public function getESAndEnregistres(array $criteres = array())
+    {
+        return $this->getRepository()->getESAndEnregistres($criteres);
     }
 }

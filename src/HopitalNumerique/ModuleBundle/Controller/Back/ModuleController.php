@@ -164,7 +164,7 @@ class ModuleController extends Controller
                 //test ajout ou edition
                 $new = is_null($module->getId());
 
-                $module->setDescription( $module->getDescription() );
+                $module->setDateLastUpdate( new \DateTime() );
                 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_module.manager.module')->save($module);

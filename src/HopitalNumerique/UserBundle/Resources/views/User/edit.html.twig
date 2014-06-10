@@ -73,6 +73,12 @@
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Domaines maîtrisés</a>
                             </li>
                         {% endif %}
+
+                        {% if user.id is not null %}
+                            <li>
+                                <a href="{{path('hopital_numerique_user_resultats', {'id':user.id})}}">Autodiagnostic</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -99,6 +105,7 @@
                     {{ form_row(form.contactAutre) }}
                     {{ form_row(form.region) }}
                     {{ form_row(form.departement) }} 
+                    {{ form_row(form.profilEtablissementSante) }}
                     {{ form_row(form.roles) }}
 
                     {% if user.id != 1 %}
@@ -125,7 +132,6 @@
                                         {{ form_row(form.statutEtablissementSante) }}
                                         {{ form_row(form.etablissementRattachementSante) }}
                                         {{ form_row(form.autreStructureRattachementSante) }}
-                                        {{ form_row(form.profilEtablissementSante) }}
                                         {{ form_row(form.fonctionDansEtablissementSante) }}
                                         {{ form_row(form.raisonInscriptionSante) }}
 

@@ -8,6 +8,7 @@ $(document).ready(function() {
     tinymce.PluginManager.load('media', '/bundles/nodevotools/js/tinymce/plugins/media/plugin.min.js');
     tinymce.PluginManager.load('textcolor', '/bundles/nodevotools/js/plugins/text-color/plugin.min.js');
     tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.min.js');
+    tinymce.PluginManager.load('outil', '/bundles/hopitalnumeriqueautodiag/js/outil/plugin.min.js');
     NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
     
     tinyMCE.init({
@@ -15,11 +16,11 @@ $(document).ready(function() {
         theme        : "modern",
         theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
         skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
-        plugins      : 'moxiemanager image table code textcolor pagebreak importcss link publication media',
+        plugins      : 'moxiemanager image table code textcolor pagebreak importcss link publication outil media',
         height       : 210,
         menubar      : false,
         content_css  : '/bundles/nodevotools/css/wysiwyg.css',
-        toolbar1     : "code | undo redo cut copy paste | pagebreak | link | publication | insertfile image media ",
+        toolbar1     : "code | undo redo cut copy paste | pagebreak | link | publication | outil | insertfile image media ",
         toolbar2     : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
         style_formats: [
             {title: 'Titres', items: [
@@ -40,7 +41,6 @@ $(document).ready(function() {
         importcss_groups: [
             {title: 'Styles personnalisés'}
         ],
-        relative_urls:false,
-        urlPublication : "/admin/objet/getObjets"
+        relative_urls:false
     });
 });

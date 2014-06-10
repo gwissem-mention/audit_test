@@ -34,7 +34,7 @@ class ChapitreType extends AbstractType
             ))
             ->add('noteOptimale', 'text', array(
                 'required'   => false, 
-                'label'      => 'Note optimale',
+                'label'      => 'Note optimal',
                 'label_attr' => array('class' => 'col-md-9 control-label'),
                 'attr'       => array('class' => $this->_constraints['noteOptimale']['class'] )
             ))

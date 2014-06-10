@@ -4,6 +4,7 @@
  */
 namespace HopitalNumerique\InterventionBundle\Grid;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\IGrid;
 use Nodevo\GridBundle\Grid\Column;
@@ -15,6 +16,21 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
  */
 abstract class DemandesAbstractGrid extends Grid implements IGrid
 {
+    protected $utilisateurConnecte;
+    
+    /**
+     * Constructeur du grid des demandes d'intervention.
+     * 
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Conteneur de services de l'application
+     * @return void
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct($container);
+        
+        $this->utilisateurConnecte = $container->get('security.context')->getToken()->getUser();
+    }
+    
     /**
      * Set la config propre au Grid des demandes d'intervention (Source + config par défaut)
      */
@@ -253,11 +269,15 @@ abstract class DemandesAbstractGrid extends Grid implements IGrid
     {
         if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurCmsiId())
         {
-            return '<span class="glyphicon glyphicon-user" title="Initié par '.$row->getField('interventionInitiateurType').'"></span>';
+            return '<span class="glyphicon glyphicon-user" title="Initié par CMSI"></span>';
         }
         else if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurEtablissementId())
         {
-            return '<span class="glyphicon glyphicon-home" title="Initié par '.$row->getField('interventionInitiateurType').'"></span>';
+            return '<span class="glyphicon glyphicon-home" title="Initié par ES"></span>';
+        }
+        else if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurAnapId())
+        {
+            return '<span class="glyphicon glyphicon-briefcase" title="Initié par ANAP"></span>';
         }
         return '';
     }

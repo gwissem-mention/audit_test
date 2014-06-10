@@ -102,7 +102,7 @@ class DemandeController extends Controller
             return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/ambassadeur.html.twig');
         else return $this->render('HopitalNumeriqueInterventionBundle:Demande:Listes/etablissement.html.twig');
     }
-    
+
     /**
      * Action pour la visualisation des suivis de demandes d'intervention.
      *
@@ -136,7 +136,7 @@ class DemandeController extends Controller
         
         return new Response('Clef invalide.');
     }
-    
+
     /**
      * CRON qui doit appelé une fois par jour.
      *

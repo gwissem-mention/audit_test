@@ -1,0 +1,49 @@
+{% extends 'HopitalNumeriqueInterventionBundle:Form:layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-intervention-evaluation-nouveau.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriqueintervention/css/evaluation.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-intervention-evaluation-nouveau.js"
+        'bundles/hopitalnumeriquequestionnaire/js/script.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation/FormulaireCreation.js'
+        'bundles/hopitalnumeriqueintervention/js/InterventionEvaluation/Evenement.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    
+    {% if interventionDemande.evaluationEtatEstAEvaluer %}
+        <script type="text/javascript">
+            var etablissements = new Array();
+            {% for etablissement in etablissements %}etablissements.push("{{ etablissement.nom }}");{% endfor %}
+            $(document).ready(function() {
+                HopitalNumeriqueInterventionBundle_InterventionEvaluation.setAutresEtablissements(etablissements);
+            });
+        </script>
+    {% endif %}
+{% endblock %}
+
+{% block headerTitle %}Mon évaluation{% endblock %}
+
+{% block headerDesc %}
+    <p>L'ambassadeur a terminé son intervention dans votre établissement. Veuillez évaluer son intervention en remplissant le formulaire ci-après.</p>
+{% endblock %}
+
+{% block content %}
+    {{ render(controller(
+        "HopitalNumeriqueInterventionBundle:Form/Evaluation:form",
+        {
+            interventionDemande:interventionDemande,
+            questionnaire:questionnaire,
+            optionRenderForm:optionRenderForm
+        }
+    )) }}
+{% endblock %}

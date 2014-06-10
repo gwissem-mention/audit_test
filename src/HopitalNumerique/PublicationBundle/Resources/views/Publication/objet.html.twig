@@ -29,6 +29,7 @@
 {% endblock %}
 
 {% block body %}
+    {% import _self as mySelf %}
     {% if objet.isInfraDoc %}
         <div id="sommaire" class="closed">
             <div class="content" style="display:none">
@@ -38,7 +39,7 @@
                 <h3 class="violet">Sommaire</h3>
                 <ul>
                     {% for one in contenus %}
-                        {{ _self.buildTree(one, objet) }}
+                        {{ mySelf.buildTree(one, objet) }}
                     {% endfor %}
                 </ul>
             </div>
@@ -51,7 +52,7 @@
             <h4 class="gris" >{{types}}</h4>
         </div>
         <div class="col-md-2">
-            <div class="btn btn-sm btn-default print pull-right" onclick="print();"><i class="fa fa-print"></i></div>
+            <div class="btn btn-sm btn-default print pull-right btnprint" onclick="print();"><i class="fa fa-print"></i></div>
             <a class="btn btn-sm btn-default back pull-right" href="{{path('hopital_numerique_recherche_homepage')}}"><i class="fa fa-reply"></i></a>
         </div>
         {# Cas Contenu #}
@@ -76,16 +77,16 @@
         {% endif %}
 
         {# Téléchargement fichier + synthèse #}
-        {% if objet.getAbsolutePath(true) is not null or objet.getAbsolutePath(false) is not null or objet.synthese is not null %}
+        {% if objet.getAbsolutePath(1) is not null or objet.getAbsolutePath(2) is not null or objet.synthese is not null %}
             <div class="col-md-4">
                 <div class="wrapper">
-                    {% if objet.getAbsolutePath(true) is not null %}
-                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(true)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(true)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
+                    {% if objet.getAbsolutePath(1) is not null %}
+                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(1)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(1)}}');"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(1)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
                     {% endif %}
 
                     <div class="clearfix"></div>
-                    {% if objet.getAbsolutePath(false) is not null %}
-                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(false)}}" target="_blank"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(false)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
+                    {% if objet.getAbsolutePath(2) is not null %}
+                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(2)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(2)}}');"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(2)|upper}} )</a><i class="pull-left fa fa-download violet"></i>
                     {% endif %}
                     
                     <div class="clearfix"></div>
@@ -108,13 +109,13 @@
                 <div class="col-md-6">
                     <div id="points-durs" class="top" >
                         <h3>Points durs</h3>
-                        {{ _self.buildCarousel(objet, objets, contenu, '- Aucun point dur trouvé -', 'point-dur') }}
+                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucun point dur trouvé -', 'point-dur') }}
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div id="production" class="top" >
                         <h3>Productions</h3>
-                        {{ _self.buildCarousel(objet, objets, contenu, '- Aucune production trouvée -', 'production') }}
+                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucune production trouvée -', 'production') }}
                     </div>
                 </div>
             </div>
@@ -123,13 +124,13 @@
                 <div class="col-md-6">
                     <div id="ressources" class="bottom background-rose" >
                         <h3>Ressources externes</h3>
-                        {{ _self.buildCarousel(objet, objets, contenu, '- Aucune ressource externe trouvée -', 'ressource') }}
+                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucune ressource externe trouvée -', 'ressource') }}
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div id="forum" class="bottom background-violet" >
                         <h3>Forum</h3>
-                        {{ _self.buildCarousel(objet, objets, contenu, '- Aucun fil de discussion du forum trouvé -', 'forum') }}
+                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucun fil de discussion du forum trouvé -', 'forum') }}
                     </div>
                 </div>
             </div>
@@ -172,6 +173,7 @@
 {% endblock %}
 
 {% macro buildTree(one, objet) %}
+    {% import _self as mySelf %}
     <li>
         {% if one.hasContent %}
             <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':one.id,'aliasc':one.alias})}}" >{{one.order ~ ' ' ~ one.titre}} </a>
@@ -181,7 +183,7 @@
         {% if one.childs %}
             <ul>
                 {% for child in one.childs %}
-                    {{ _self.buildTree(child, objet) }}
+                    {{ mySelf.buildTree(child, objet) }}
                 {% endfor %}
             </ul>
         {% endif %}

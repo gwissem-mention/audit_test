@@ -28,6 +28,19 @@ class InscriptionController extends Controller
     }
 
     /**
+     * Affiche la liste des Session.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function indexAllInscriptionsAction()
+    {
+        $grid = $this->get('hopitalnumerique_module.grid.allinscription');
+
+        return $grid->render('HopitalNumeriqueModuleBundle:Back/Inscription:indexAllInscriptions.html.twig');
+    }
+
+    /**
      * Affiche le formulaire d'ajout de Session.
      * 
      * @author Gaetan MELCHILSEN

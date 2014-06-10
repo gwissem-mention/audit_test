@@ -28,6 +28,8 @@ class DemandesTraiteesGrid extends DemandesAbstractGrid
      */
     public function setColumns()
     {
+        $utilisateurConnecte = $this->utilisateurConnecte;
+        
         parent::setColumns();
 
         $this->addColonneDemandeur();
@@ -41,10 +43,12 @@ class DemandesTraiteesGrid extends DemandesAbstractGrid
         $colonneEvaluation->setFilterable(false)->setSortable(false);
         $colonneEvaluation->setAlign('center');
         $colonneEvaluation->manipulateRenderCell(
-            function($value, $row, $router)
+            function($value, $row, $router) use($utilisateurConnecte)
             {
                 if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
                 {
+                    if ($row->getField('referentId') == $utilisateurConnecte->getId())
+                        return '<a class="btn btn-warning" title="Évaluer la demande" href="'.$router->generate('hopital_numerique_intervention_evaluation_nouveau', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-edit"></span></a>';
                     return '<span title="À évaluer" class="glyphicon glyphicon-time"></span>';
                 }
                 else if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())

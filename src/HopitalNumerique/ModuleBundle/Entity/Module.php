@@ -40,6 +40,13 @@ class Module
      * @ORM\OrderBy({"dateSession" = "ASC"})
      */
     protected $sessions;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="mod_date_derniere_maj", type="datetime")
+     */
+    protected $dateLastUpdate;
     
     /**
      * @var string
@@ -205,6 +212,27 @@ class Module
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Get dateLastUpdate
+     *
+     * @return DateTime $dateLastUpdate
+     */
+    public function getDateLastUpdate()
+    {
+        return $this->dateLastUpdate;
+    }
+    
+    /**
+     * Set dateLastUpdate
+     *
+     * @param DateTime $dateLastUpdate
+     */
+    public function setDateLastUpdate($dateLastUpdate)
+    {
+        $this->dateLastUpdate = $dateLastUpdate;
+        return $this;
     }
 
     /**

@@ -67,7 +67,8 @@
 	                    {{ form_row(form.contactAutre) }}
 	                    {{ form_row(form.region) }}
 	                    {{ form_row(form.departement) }} 
-	                    
+	                    {{ form_row(form.profilEtablissementSante) }}
+                             
 	                    <div class="hide">
 	                        {{ form_row(form.etat) }}  
 	                    </div>
@@ -79,7 +80,6 @@
                                     {{ form_row(form.statutEtablissementSante) }}
                                     {{ form_row(form.etablissementRattachementSante) }}
                                     {{ form_row(form.autreStructureRattachementSante) }}
-                                    {{ form_row(form.profilEtablissementSante) }}
                                     {{ form_row(form.fonctionDansEtablissementSante) }}
                                     {{ form_row(form.raisonInscriptionSante) }}
                                 </div>
@@ -98,15 +98,14 @@
                         </div>
                         
 				        <div class="form-group">
-				            <div class="col-md-3"></div>
-				            <div class="col-md-1">
+				            <div class="col-md-1 col-md-offset-3 col-sm-1">
 				                {{ form_widget(form.termsAccepted) }}
 				            </div>
-				            <div class="col-md-8">
-				                <div class="col-md-12">{{ form_label(form.termsAccepted) }}</div>
-				                <div class="col-md-12"><a target="_blank" href="{{path('hopital_numerique_publication_publication_article',{'id':twigOptions.conditionsGenerales.conditionsGenerales.id, 'alias':twigOptions.conditionsGenerales.conditionsGenerales.alias,'categorie':twigOptions.conditionsGenerales.categorie.libelle|lower})}}">Lien vers les CGU.</a></div>
+				            <div class="col-md-8 col-sm-11">
+				                {{ form_label(form.termsAccepted) }}<br />
+				                <a target="_blank" href="{{path('hopital_numerique_publication_publication_article',{'id':twigOptions.conditionsGenerales.conditionsGenerales.id, 'alias':twigOptions.conditionsGenerales.conditionsGenerales.alias,'categorie':twigOptions.conditionsGenerales.categorie.libelle|lower})}}">Lien vers les CGU.</a>
 			                </div>
-				            <div class="col-md-4">
+				            <div class="col-md-8 col-md-offset-4">
 				                <div class="help-block">
 				                    {{ form_errors(form.termsAccepted) }}
 				                </div>

@@ -64,6 +64,12 @@ class QuestionnaireType extends AbstractType
                 'data'       => $routeRedirection,
                 'mapped'     => false
         ));
+
+        //Ajout d'un champ hidden pour récupérer les routes de redirection dans le controleur à la validation
+        $builder->add('idSession', 'hidden', array(
+                'data'       => isset($options['label_attr']['idSession']) && !is_null($options['label_attr']['idSession']) ? $options['label_attr']['idSession'] : 0,
+                'mapped'     => false
+        ));
         
         //Récupération du questionnaire
         $questions = $this->_managerQuestionnaire->getQuestionsReponses($idQuestionnaire, $idUser, (isset($options['label_attr']['paramId']) ? $options['label_attr']['paramId'] : null));
@@ -113,7 +119,7 @@ class QuestionnaireType extends AbstractType
             if(!$options['label_attr']['showAllQuestions'])
             {
                 //Récupère les classes de la question
-                $classes = split(' ', $question->getVerifJS());
+                $classes = explode(' ', $question->getVerifJS());
                 //Vérifie si on doit afficher la question
                 $hide = in_array('hideQuestion', $classes);
 

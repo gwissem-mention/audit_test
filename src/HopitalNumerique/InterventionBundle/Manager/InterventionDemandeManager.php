@@ -591,9 +591,9 @@ class InterventionDemandeManager extends BaseManager
                 $this->save($interventionDemande);
                 
                 if ($interventionEtat->getId() == InterventionEtat::getInterventionEtatRefusAmbassadeurId())
-                    $this->interventionCourrielManager->envoiCourrielEstRefuseAmbassadeur($interventionDemande->getCmsi(), $interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+                    $this->interventionCourrielManager->envoiCourrielEstRefuseAmbassadeur($interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
                 elseif ($interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationAmbassadeurId())
-                    $this->interventionCourrielManager->envoiCourrielEstAccepteAmbassadeur($interventionDemande->getCmsi(), $interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
+                    $this->interventionCourrielManager->envoiCourrielEstAccepteAmbassadeur($interventionDemande->getReferent(), $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true));
                 
                 return true;
             }

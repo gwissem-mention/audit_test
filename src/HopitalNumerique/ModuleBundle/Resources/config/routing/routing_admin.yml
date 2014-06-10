@@ -115,6 +115,12 @@ hopitalnumerique_module_module_session_inscription:
     requirements:
         id: \d+
         _method: GET|POST
+#---Index - grid - allInscription
+hopitalnumerique_module_module_allinscription:
+    pattern:  /module/session/inscription/all
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Back/Inscription:indexAllInscriptions"}
+    requirements: 
+        _method: GET|POST
 
 #---Form
 hopitalnumerique_module_module_session_inscription_add:
@@ -159,7 +165,7 @@ hopitalnumerique_module_module_session_inscription_annuler:
 #---Edit
 hopitalnumerique_module_module_session_evaluation_editer:
     pattern: /module/session/evaluation/edit/{user}/{session}
-    defaults: { _controller: HopitalNumeriqueModuleBundle:Back/Evaluation:edit, user: 1, session: 1 }
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Back/Evaluation:edit, session: 1 }
     requirements:
         user: \d+
         session: \d+

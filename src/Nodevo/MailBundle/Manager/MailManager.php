@@ -423,11 +423,12 @@ class MailManager extends BaseManager
             $cci = $this->_mailAnap;
             
             $mailsToSend[] = \Swift_Message::newInstance()
-                                ->setSubject ( $mail->getObjet() )
-                                ->setFrom ( $from )
-                                ->setTo ( array($recepteurMail => $recepteurName) )
+                                ->setSubject( $mail->getObjet() )
+                                ->setFrom( $from )
+                                ->setTo( array($recepteurMail => $recepteurName) )
                                 ->setBcc( $cci )
-                                ->setBody ( $body, 'text/html' );
+                                ->setBody( strip_tags($body, '<style>' ) )
+                                ->addPart( $body, 'text/html' );
         }
         return $mailsToSend;
     }
@@ -486,15 +487,14 @@ class MailManager extends BaseManager
                         ->setSubject( $mail->getObjet() )
                         ->setFrom( $from )
                         ->setTo( $this->_destinataire )
-                        ->setBody( $body, 'text/html' );
+                        ->setBody( strip_tags($body, '<style>' ) )
+                        ->addPart( $body, 'text/html' );
     }
 
     public function getDestinataire()
     {
         return $this->_destinataire;
     }
-
-
 
     /**
      * Remplace les variables du mail par les vrais valeurs
@@ -560,10 +560,11 @@ class MailManager extends BaseManager
 
         //send email to users with new password
         return \Swift_Message::newInstance()
-                            ->setSubject ( $mail->getObjet() )
-                            ->setFrom ( $from )
-                            ->setTo ( $user->getEmail() )
+                            ->setSubject( $mail->getObjet() )
+                            ->setFrom( $from )
+                            ->setTo( $user->getEmail() )
                             ->setBcc( ($mail->getId() === 1 || $mail->getId() === 2) ? null : $cci )
-                            ->setBody ( $body, 'text/html' );
+                            ->setBody( strip_tags($body, '<style>' ) )
+                            ->addPart( $body, 'text/html' );
     }
 }

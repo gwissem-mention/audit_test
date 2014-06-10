@@ -13,6 +13,7 @@ parameters:
     #Inscriptions
     hopitalnumerique_module.manager.inscription.class: HopitalNumerique\ModuleBundle\Manager\InscriptionManager
     hopitalnumerique_module.grid.inscription.class: HopitalNumerique\ModuleBundle\Grid\InscriptionGrid
+    hopitalnumerique_module.grid.allinscription.class: HopitalNumerique\ModuleBundle\Grid\AllInscriptionGrid
     hopitalnumerique_module.form.inscription.class: HopitalNumerique\ModuleBundle\Form\InscriptionType
     hopitalnumerique_module.form.addinscription.class: HopitalNumerique\ModuleBundle\Form\AddInscriptionType
     #CronLogger
@@ -73,8 +74,13 @@ services:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
     #--Grid
+    #Inscription
     hopitalnumerique_module.grid.inscription:
         class: %hopitalnumerique_module.grid.inscription.class%
+        arguments: ["@service_container"]
+    #AllInscription
+    hopitalnumerique_module.grid.allinscription:
+        class: %hopitalnumerique_module.grid.allinscription.class%
         arguments: ["@service_container"]
 
     #--Formulaire

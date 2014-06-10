@@ -89,6 +89,11 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/enquire/dist/enquire.min.js"
             filters : [ ?yui_js ]
+        highcharts_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/highcharts.com/js/highcharts.src.js"
+                - "%kernel.root_dir%/Resources/components/highcharts.com/js/highcharts-more.src.js"
+            filters : [ ?yui_js ]
         jquery_cookie_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-cookie/jquery.cookie.js"
@@ -104,6 +109,14 @@ assetic:
         jquery_nicescroll_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-nicescroll/jquery.nicescroll.min.js"
+            filters : [ ?yui_js ]
+        jquery_stepy_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/stepy/lib/jquery.stepy.js"
+            filters : [ ?yui_js ]
+        jquery_qtip2_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/qtip2/jquery.qtip.min.js"
             filters : [ ?yui_js ]
         #CSS
         select2_css:
@@ -127,6 +140,10 @@ assetic:
         jquery_toggles_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-toggles/toggles.css"
+            filters: [ cssembed, ?yui_css ]
+        jquery_qtip2_css:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/qtip2/jquery.qtip.min.css"
             filters: [ cssembed, ?yui_css ]
         bootstrap_iconpicker_css:
             inputs:

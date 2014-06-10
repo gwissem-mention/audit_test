@@ -8,6 +8,7 @@ parameters:
     hopitalnumerique_intervention.manager.intervention_regroupement.class: HopitalNumerique\InterventionBundle\Manager\InterventionRegroupementManager
     hopitalnumerique_intervention.manager.form_intervention_demande.class: HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager
     hopitalnumerique_intervention.manager.form_intervention_initiateur.class: HopitalNumerique\InterventionBundle\Manager\Form\InterventionInitiateurManager
+    hopitalnumerique_intervention.manager.form_objet.class: HopitalNumerique\InterventionBundle\Manager\Form\ObjetManager
     hopitalnumerique_intervention.manager.form_user.class: HopitalNumerique\InterventionBundle\Manager\Form\UserManager
     hopitalnumerique_intervention.manager.form_etablissement.class: HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager
 
@@ -39,9 +40,12 @@ services:
     hopitalnumerique_intervention.manager.form_intervention_initiateur:
         class: "%hopitalnumerique_intervention.manager.form_intervention_initiateur.class%"
         arguments: ["@hopitalnumerique_intervention.manager.intervention_initiateur"]
+    hopitalnumerique_intervention.manager.form_objet:
+        class: "%hopitalnumerique_intervention.manager.form_objet.class%"
+        arguments: ["@hopitalnumerique_objet.manager.objet"]
     hopitalnumerique_intervention.manager.form_user:
         class: "%hopitalnumerique_intervention.manager.form_user.class%"
-        arguments: ["@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_etablissement.manager.etablissement"]
+        arguments: ["@security.context", "@router", "@hopitalnumerique_user.manager.user", "@nodevo_acl.manager.acl", "@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_etablissement.manager.etablissement"]
     hopitalnumerique_intervention.manager.form_etablissement:
         class: "%hopitalnumerique_intervention.manager.form_etablissement.class%"
         arguments: ["@hopitalnumerique_etablissement.manager.etablissement"]

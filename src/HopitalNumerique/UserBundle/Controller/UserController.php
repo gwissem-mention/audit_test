@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Controller des utilisateurs
  */
 class UserController extends Controller
-{    
+{
     /**
      * Vue informations personnelles sur le front
      * 
@@ -511,7 +511,7 @@ class UserController extends Controller
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
         
         //manages colonnes
-        $colonnes = array('id' => 'id');
+        $colonnes = array('id' => 'id_utilisateur', 'user' => 'Prénom et Nom de l\'utilisateur');
 
         //prepare datas
         $datas     = array();
@@ -519,8 +519,9 @@ class UserController extends Controller
         foreach($users as $user)
         {
             //prepare row
-            $row       = array();
-            $row['id'] = $user->getId();
+            $row         = array();
+            $row['id']   = $user->getId();
+            $row['user'] = $user->getPrenomNom();
 
             $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByAmbassadeur( $user->getId() );
             $nbProd = 0;
@@ -570,7 +571,7 @@ class UserController extends Controller
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
         
         //manages colonnes
-        $colonnes = array('id' => 'id');
+        $colonnes = array('id' => 'id_utilisateur', 'user' => 'Prénom et Nom de l\'utilisateur');
 
         //prepare datas
         $datas     = array();
@@ -578,8 +579,9 @@ class UserController extends Controller
         foreach($users as $user)
         {
             //prepare row
-            $row       = array();
-            $row['id'] = $user->getId();
+            $row         = array();
+            $row['id']   = $user->getId();
+            $row['user'] = $user->getPrenomNom();
 
             $domaines  = $user->getDomaines();
             $nbDomaine = 0;

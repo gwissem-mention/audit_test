@@ -6,8 +6,8 @@
     <div class="panel-body" style="padding-top:0" >
         <div class="col-md-12 fancybox-popin">
             <ul class="list-unstyled">
-                {# Date de la session #}
-                <li style="margin: 0 0 10px;"><div class="col-md-4"><strong>Date de la session :</strong></div>
+                {# Début de la session #}
+                <li style="margin: 0 0 10px;"><div class="col-md-4"><strong>Début de la session :</strong></div>
                     <div class="col-md-8">
                         {% if session.dateSession is not null and session.dateSession is not empty %}
                             {{ session.dateSession|date('d/m/Y') }}
@@ -66,20 +66,9 @@
                         {% endif %}
                     </div>
                 </li>
-                {# Productions concernées #}
-                <li>
-                    <div class="col-md-12" style="margin: 0 0 10px; padding-top: 10px; border-top: 1px solid #D5D5D5;">
-                        <strong>Production(s) concernée(s) : </strong>
-                        <ul>
-                            {% for production in session.module.productions %}
-                                <li>{{ production.titre }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </li>
                 {# Description #}
                 <li>
-                    <div class="col-md-12" style="margin: 0 0 10px;">
+                    <div class="col-md-12" style="margin: 0 0 10px; padding-top:10px; border-top: 1px solid #D5D5D5;">
                         <strong>Description :</strong><br />
                         {% if session.description is not null and session.description is not empty %}
                             {{ session.description }}
@@ -97,6 +86,17 @@
                         {% else %}
                             - Aucun(s) prérequis pour cette session -
                         {% endif %}
+                    </div>
+                </li>
+                {# Productions concernées #}
+                <li>
+                    <div class="col-md-12" style="margin: 0 0 10px; padding-top: 10px;">
+                        <strong>Production(s) concernée(s) : </strong>
+                        <ul>
+                            {% for production in session.module.productions %}
+                                <li><a target="_blank" href="{{path('hopital_numerique_publication_publication_objet',{'id':production.id,'alias':production.alias})}}">{{production.titre}}</a></li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </li>
             </ul>

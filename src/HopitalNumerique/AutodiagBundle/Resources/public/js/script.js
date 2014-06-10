@@ -16,6 +16,7 @@ $(document).ready(function() {
                             $('.designForBlank').hide();
                         }
 
+                        initFancyBox();
                     }else
                         apprise('Une erreur est survenue lors de l\'ajout de votre chapitre, merci de réessayer');
                 }
@@ -23,37 +24,60 @@ $(document).ready(function() {
         });
     }
 
-    //Création et gestion de l'arborescence des chapitres
-    $('#chapitres').nestable({'maxDepth':2,'group':0}).on('change', function() {
-        var serializedDatas = $(this).nestable('serialize');
-
-        $.ajax({
-            url  : $('#order-chapitre-url').val(),
-            data : {
-                datas : serializedDatas
-            },
-            type     : 'POST',
-            dataType : 'json',
-            success  : function( data ){
-                //console.log( 'reorder executed' );
-            }
+    if( $('.calcPonderation').length > 0 ){
+        //Calcul la pondération pour les questions
+        $('.calcPonderation').click(function(){
+            $.ajax({
+                url      : $('#calc-ponderation-url').val(),
+                type     : 'POST',
+                dataType : 'json',
+                success  : function( data ){
+                    apprise(data.message);
+                }
+            });
         });
-    });
+    }
+
+    //Création et gestion de l'arborescence des chapitres
+    if( $('#chapitres').length > 0 ){
+        $('#chapitres').nestable({'maxDepth':2,'group':0}).on('change', function() {
+            var serializedDatas = $(this).nestable('serialize');
+
+            $.ajax({
+                url  : $('#order-chapitre-url').val(),
+                data : {
+                    datas : serializedDatas
+                },
+                type     : 'POST',
+                dataType : 'json',
+                success  : function( data ){
+                    //console.log( 'reorder executed' );
+                }
+            });
+        });
+    }
 
     //Fancybox
-    $('.fancy').fancybox({
-        'padding'   : 0,
-        'autoSize'  : false,
-        'width'     : '80%',
-        'height'    : '600px',
-        'scrolling' : 'no',
-        'modal'     : true
-    });
-
+    if( $('.fancy').length > 0 )
+        initFancyBox();
+    
     //bind de Validation Engine
     if( $('form.toValidate').length > 0 )
         $('form.toValidate').validationEngine();
 });
+
+// Initialise la fancybox
+function initFancyBox()
+{
+    $('.fancy').fancybox({
+            'padding'   : 0,
+            'autoSize'  : false,
+            'width'     : '80%',
+            'height'    : '600px',
+            'scrolling' : 'no',
+            'modal'     : true
+        });
+}
 
 //Toogle Block and manage classes
 function toggle( block )
@@ -136,9 +160,9 @@ function saveChapitre( url )
             type     : 'POST',
             dataType : 'json',
             success  : function( data ){
-                if( data.success ) {
-                    $('#chapitres #chapitre-' + data.id + ' > .dd3-content a').html( data.titre );
+                if( data.success ){
                     $.fancybox.close(true);
+                    window.location.reload();
                 }
             }
         });
@@ -205,8 +229,12 @@ function saveQuestion( url )
             data    : $('#fancybox form').serialize(),
             type    : 'POST',
             success : function( data ){
-                $('#questions .results').html( data );
-                $.fancybox.close(true);
+                if( data.substring(0, 11) != 'ponderation' ){
+                    $('#questions .results').html( data );
+                    $.fancybox.close(true);
+                }else{
+                    $('#hopitalnumerique_autodiag_question_ponderation').parent().parent().find('.help-block').html('<span style="color:red">Valeur maximum autorisée : ' + data.substring(12) + '</span>');
+                }
             }
         });
     }

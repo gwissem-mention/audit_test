@@ -149,6 +149,8 @@ class InterventionDemande
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ambassadeur_id", referencedColumnName="usr_id")
      * })
+     * @Assert\NotNull(message="Un ambassadeur doit être choisi.")
+     * @Nodevo\Javascript(class="validate[required]")
      */
     private $ambassadeur;
 

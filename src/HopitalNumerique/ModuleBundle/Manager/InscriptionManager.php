@@ -58,6 +58,44 @@ class InscriptionManager extends BaseManager
         
         return array_values($inscriptions);
     }
+
+    /**
+     * Override : Récupère les données pour le grid sous forme de tableau
+     *
+     * @return array
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function getAllDatasForGrid( $condition = null )
+    {
+        $inscriptions = $this->getRepository()->getAllDatasForGrid( $condition )->getQuery()->getResult();
+
+        $result = array();
+
+        foreach ($inscriptions as $key => $inscription) 
+        {
+            $nomPrenom = $inscription->getUser()->getAppellation();
+
+            $result[$key] = array(
+                'id'                => $inscription->getId(),
+                'userId'            => $inscription->getUser()->getId(),
+                'sessionId'         => $inscription->getSession()->getId(),
+                'moduleTitre'       => $inscription->getSession()->getModule()->getTitre(),
+                'dateSession'       => $inscription->getSession()->getDateSession(),
+                'nomPrenom'         => $nomPrenom,
+                'userRegion'        => ( !is_null( $inscription->getUser()->getRegion() ) ) ? $inscription->getUser()->getRegion()->getLibelle() : '',
+                'userProfil'        => ( !is_null( $inscription->getUser()->getProfilEtablissementSante() ) ) ? $inscription->getUser()->getProfilEtablissementSante()->getLibelle() : '',
+                'roles'              => $inscription->getUser()->getRoles(),
+                'commentaire'       => $inscription->getCommentaire(),
+                'etatInscription'   => $inscription->getEtatInscription()->getLibelle(),
+                // 'etatParticipation' => $inscription->getEtatParticipation()->getLibelle(),
+                // 'etatEvaluation'    => $inscription->getEtatEvaluation()->getLibelle(),
+            );
+        }
+
+        return $result;
+    }
     
     /**
      * Modifie l'état de toutes les inscriptions
