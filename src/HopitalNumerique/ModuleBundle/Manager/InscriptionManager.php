@@ -77,18 +77,36 @@ class InscriptionManager extends BaseManager
         {
             $nomPrenom = $inscription->getUser()->getAppellation();
 
+            $nbInscritsAccepte   = 0;
+            $nbInscritsEnAttente = 0;
+            $nbPlacesRestantes   = $inscription->getSession()->getNombrePlaceDisponible();
+
+            foreach ($inscription->getSession()->getInscriptions() as $inscriptionDeLaSession) 
+            {
+                if($inscriptionDeLaSession->getEtatInscription()->getId() === 406)
+                    $nbInscritsEnAttente++;
+                elseif($inscriptionDeLaSession->getEtatInscription()->getId() === 407)
+                {
+                    $nbInscritsAccepte++;
+                    $nbPlacesRestantes--;
+                }
+            }
+
             $result[$key] = array(
-                'id'                => $inscription->getId(),
-                'userId'            => $inscription->getUser()->getId(),
-                'sessionId'         => $inscription->getSession()->getId(),
-                'moduleTitre'       => $inscription->getSession()->getModule()->getTitre(),
-                'dateSession'       => $inscription->getSession()->getDateSession(),
-                'nomPrenom'         => $nomPrenom,
-                'userRegion'        => ( !is_null( $inscription->getUser()->getRegion() ) ) ? $inscription->getUser()->getRegion()->getLibelle() : '',
-                'userProfil'        => ( !is_null( $inscription->getUser()->getProfilEtablissementSante() ) ) ? $inscription->getUser()->getProfilEtablissementSante()->getLibelle() : '',
-                'roles'              => $inscription->getUser()->getRoles(),
-                'commentaire'       => $inscription->getCommentaire(),
-                'etatInscription'   => $inscription->getEtatInscription()->getLibelle(),
+                'id'                  => $inscription->getId(),
+                'userId'              => $inscription->getUser()->getId(),
+                'sessionId'           => $inscription->getSession()->getId(),
+                'moduleTitre'         => $inscription->getSession()->getModule()->getTitre(),
+                'dateSession'         => $inscription->getSession()->getDateSession(),
+                'nomPrenom'           => $nomPrenom,
+                'userRegion'          => ( !is_null( $inscription->getUser()->getRegion() ) ) ? $inscription->getUser()->getRegion()->getLibelle() : '',
+                'userProfil'          => ( !is_null( $inscription->getUser()->getProfilEtablissementSante() ) ) ? $inscription->getUser()->getProfilEtablissementSante()->getLibelle() : '',
+                'roles'               => $inscription->getUser()->getRoles(),
+                'commentaire'         => $inscription->getCommentaire(),
+                'etatInscription'     => $inscription->getEtatInscription()->getLibelle(),
+                'nbInscrits'          => $nbInscritsAccepte,
+                'nbInscritsEnAttente' => $nbInscritsEnAttente,
+                'placeRestantes'      => $nbPlacesRestantes . '/' . $inscription->getSession()->getNombrePlaceDisponible(),
                 // 'etatParticipation' => $inscription->getEtatParticipation()->getLibelle(),
                 // 'etatEvaluation'    => $inscription->getEtatEvaluation()->getLibelle(),
             );
