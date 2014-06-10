@@ -97,10 +97,12 @@ class ObjetController extends Controller
     public function showAction( $id )
     {
         //Récupération de l'entité en fonction du paramètre
-        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id) );
+        $objet  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id) );
+        $outils = $this->get('hopitalnumerique_autodiag.manager.outil')->findBy( array( 'id' => $objet->getAutodiags() ));
 
         return $this->render('HopitalNumeriqueObjetBundle:Objet:show.html.twig', array(
-            'objet' => $objet,
+            'objet'  => $objet,
+            'outils' => $outils
         ));
     }
 

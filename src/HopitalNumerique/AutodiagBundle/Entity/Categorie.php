@@ -36,17 +36,22 @@ class Categorie
     private $note;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Outil", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Outil", cascade={"persist"}, inversedBy="categories")
      * @ORM\JoinColumn(name="out_id", referencedColumnName="out_id", onDelete="CASCADE")
      */
     protected $outil;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="categorie")
+     */
+    private $questions;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
-        
+        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -126,4 +131,13 @@ class Categorie
         return $this;
     }
     
+    /**
+     * Get questions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
 }

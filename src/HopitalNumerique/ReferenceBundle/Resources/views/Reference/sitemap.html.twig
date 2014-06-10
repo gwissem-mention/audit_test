@@ -30,13 +30,14 @@
 {% endblock %}
 
 {% block body %}
+    {% import _self as mySelf %}
     <div class="col-sm-12">
         <ul class="references">
             {% for code,reference in references %}
             <div class="panel panel-midnightblue">
                 <div class="panel-heading panel-collapse">{{ code }}</div>
                 <div class="panel-body">
-                    {{ _self.buildTree(reference) }}
+                    {{ mySelf.buildTree(reference) }}
                 </div>
             </div>
             {% endfor %}
@@ -45,21 +46,22 @@
 {% endblock %}
 
 {% macro buildTree(reference, codeChild = false) %}
+    {% import _self as mySelf %}
     {% for ref in reference  %}
-    <li>
-        {% if codeChild %}
-        {{ref.libelle}} ({{ codeChild }})
-        {% else %}
-        {{ref.libelle}}
-        {% endif %}
- 
-        {% if ref.childs %}
-            <ul>
-                {% for code, child in ref.childs %}
-                    {{ _self.buildTree(child, code) }}
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </li>
+        <li>
+            {% if codeChild %}
+                {{ref.libelle}} ({{ codeChild }})
+            {% else %}
+                {{ref.libelle}}
+            {% endif %}
+     
+            {% if ref.childs %}
+                <ul>
+                    {% for code, child in ref.childs %}
+                        {{ mySelf.buildTree(child, code) }}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
     {% endfor %}
 {% endmacro %}

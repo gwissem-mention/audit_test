@@ -82,8 +82,8 @@ class SearchController extends Controller
         $request    = $this->get('request');
         $references = $request->request->get('references');
 
-        $objets     = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role );
-        $objets     = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
+        $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role );
+        $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
 
         //on prépare la session
         $session = $this->getRequest()->getSession();

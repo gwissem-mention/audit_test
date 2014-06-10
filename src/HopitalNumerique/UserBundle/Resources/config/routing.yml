@@ -242,3 +242,8 @@ hopitalnumerique_user_ambassadeur_domainesFonctionnels:
 hopitalnumerique_user_ambassadeur_savedomaine:
     pattern: /admin/user/ambassadeur/saveDomaine
     defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:saveDomaine, _format: json }
+
+#Utilisateur
+hopital_numerique_user_resultats:
+    pattern:  /admin/user/{id}/resultats
+    defaults: { _controller: HopitalNumeriqueUserBundle:Resultat:index }

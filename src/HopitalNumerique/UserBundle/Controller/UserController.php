@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Controller des utilisateurs
  */
 class UserController extends Controller
-{    
+{
     /**
      * Vue informations personnelles sur le front
      * 

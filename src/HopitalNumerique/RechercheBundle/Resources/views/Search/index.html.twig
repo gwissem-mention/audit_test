@@ -31,11 +31,12 @@
 {% endblock %}
 
 {% block body %}
+    {% import _self as mySelf %}
     <div id="recherche">
         <div class="col-md-4">
             <div id="origin">
                 <ol>
-                    {{ _self.buildTree(elements, 0, 'cliquable') }}
+                    {{ mySelf.buildTree(elements, 0, 'cliquable') }}
                 </ol>
             </div>
         </div>
@@ -66,7 +67,7 @@
                     <hr />
 
                     <ol class="arbo-requete">
-                        {{ _self.buildTree(elements, 0, 'hide') }}
+                        {{ mySelf.buildTree(elements, 0, 'hide') }}
                     </ol>
                 </div>    
             </div>
@@ -91,6 +92,7 @@
         {% set liClass = class %}
     {% endif %}
 
+    {% import _self as mySelf %}
     {% for element in elements  %}
         
         {% if level == 1 and element.childs %}
@@ -110,7 +112,7 @@
                 {% endif %}
                 <ol>
                     {% for child in element.childs %}
-                        {{ _self.buildTree(child, level+1, class ) }}
+                        {{ mySelf.buildTree(child, level+1, class ) }}
                     {% endfor %}
                 </ol>
             {% endif %}

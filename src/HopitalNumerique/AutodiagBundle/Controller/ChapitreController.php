@@ -28,6 +28,19 @@ class ChapitreController extends Controller
     }
 
     /**
+     * Affiche la liste des chapitres.
+     */
+    public function listeAction(Outil $outil)
+    {
+        $chapitres = $this->get('hopitalnumerique_autodiag.manager.chapitre')->getChapitresForListe( $outil );
+
+        return $this->render( 'HopitalNumeriqueAutodiagBundle:Chapitre:liste.html.twig' , array(
+            'outil'     => $outil,
+            'chapitres' => $chapitres
+        ));
+    }
+
+    /**
      * Ajoute un chapitre
      */
     public function addAction(Outil $outil)
@@ -120,7 +133,7 @@ class ChapitreController extends Controller
             //save
             $this->getDoctrine()->getManager()->flush();
             
-            return new Response('{"success":true, "id": '.$chapitre->getId().' , "titre":"'.$chapitre->getTitle().'"}', 200);
+            return new Response('{"success":true}', 200);
         }
 
         return new Response('{"success":false}', 200);

@@ -25,6 +25,18 @@ class QuestionManager extends BaseManager
     }
 
     /**
+     * Retourne la liste des questions dans le bon ordre
+     *
+     * @param Chapitre $chapitre chapitre
+     *
+     * @return integer
+     */
+    public function getQuestionsOrdered( $chapitre )
+    {
+        return $this->getRepository()->getQuestionsOrdered($chapitre)->getQuery()->getResult();
+    }
+
+    /**
      * Enregistre la question
      *
      * @param  Question $question La question
@@ -42,8 +54,8 @@ class QuestionManager extends BaseManager
 
         //cas nouveau
         if( is_null($question->getId()) ){
-            $outil = $question->getChapitre()->getOutil();
-            $question->setOrder( $this->calcOrder($outil) );
+            $chapitre = $question->getChapitre();
+            $question->setOrder( $this->calcOrder($chapitre) );
         }
 
         $this->save( $question );
@@ -78,7 +90,63 @@ class QuestionManager extends BaseManager
         return $references;
     }
 
+    /**
+     * [calculPonderationLeft description]
+     *
+     * @param  [type] $question [description]
+     *
+     * @return [type]
+     */
+    public function calculPonderationLeft( $question )
+    {
+        //get Outil
+        $outil = $question->getChapitre()->getOutil();
 
+        //init some vars
+        $ponderationMax = 100;
+        $questions      = array();
+        $chapitres      = $outil->getChapitres();
+        
+        //build big array of questions
+        foreach($chapitres as $chapitre)
+            $questions = array_merge($questions, $chapitre->getQuestions()->toArray() );
+        
+        //calcul pondération
+        foreach( $questions as $key => $one) {
+            if( $one->getId() != $question->getId() ){
+                $ponderation = $one->getPonderation();
+
+                if( $ponderation != 0 ){
+                    $ponderationMax -= $ponderation;
+                    unset( $questions[$key] );
+                }    
+            }
+        }
+
+        //max Pondération invalid
+        if( $ponderationMax < 0 )
+            return 0;
+
+        return ($question->getPonderation() <= $ponderationMax) ? true : $ponderationMax;
+    }
+
+    /**
+     * Met à jour l'ordre des questions
+     *
+     * @param array $elements Les éléments
+     *
+     * @return empty
+     */
+    public function reorder( $elements )
+    {
+        $order = 1;
+
+        foreach($elements as $element) {
+            $question = $this->findOneBy( array('id' => $element['id']) );
+            $question->setOrder( $order );
+            $order++;
+        }
+    }
 
 
 
@@ -89,14 +157,14 @@ class QuestionManager extends BaseManager
 
 
     /**
-     * Calcul l'ordre de la question par rapport à l'outil
+     * Calcul l'ordre de la question par rapport au chapitre
      *
-     * @param Outil $outil L'outil
+     * @param Chapitre $chapitre Le chapitre
      *
      * @return integer
      */
-    private function calcOrder( $outil )
+    private function calcOrder( $chapitre )
     {
-        return $this->getRepository()->calcOrder($outil)->getQuery()->getSingleScalarResult() + 1;
+        return $this->countQuestions( $chapitre ) + 1;
     }
 }

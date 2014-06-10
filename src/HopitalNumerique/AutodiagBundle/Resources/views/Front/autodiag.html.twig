@@ -1,0 +1,87 @@
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+
+{% block headerTitle %}Autodiagnostics{% endblock %}
+{% block headerDesc %}
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-front-autodiag.css" filter="cssrewrite, ?yui_css" 
+        'bundles/hopitalnumeriqueautodiag/css/front.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+    <h2>Mes formulaires d'autodiagnostics en cours</h2>
+    <div class="col-md-12">
+        <table class="table autodiagTable">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Date début remplissage</th>
+                    <th>Date dernier enregistrement</th>
+                    <th>Pourcentage de remplissage</th>
+                    <th width="50px">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in resultats if resultat.dateValidation is null %}
+                    <tr>
+                        <td>{{resultat.outil.title}}</td>
+                        <td>{{resultat.dateCreation|date('d/m/Y')}}</td>
+                        <td>{{resultat.dateLastSave|date('d/m/Y')}}</td>
+                        <td>{{resultat.tauxRemplissage}}%</td>
+                        <td>
+                            <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="btn btn-xs btn-success"><i class="fa fa-eye"></i></a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" align="center"> - Aucun formulaire d'autodiagnostic en cours - </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <h2>Mes diagnostics</h2>
+    <div class="col-md-12">
+        <table class="table autodiagTable">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Date validation</th>
+                    <th width="50px">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in resultats if resultat.dateValidation is not null %}
+                    <tr>
+                        <td>{{resultat.outil.title}}</td>
+                        <td>{{resultat.dateValidation|date('d/m/Y')}}</td>
+                        
+                        <td>
+                            <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="btn btn-xs btn-info"><i class="fa fa-download"></i></a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" align="center"> - Aucun formulaire d'autodiagnostic validé - </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="clearfix"></div>
+{% endblock %}
