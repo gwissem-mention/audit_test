@@ -48,3 +48,7 @@
     background-color: #16A085;
     border-color: #16A085;
 }
+
+@media screen and (max-width: 991px) {
+    #registre-ambassadeur .lienTableauDeBord{display:none;}
+}

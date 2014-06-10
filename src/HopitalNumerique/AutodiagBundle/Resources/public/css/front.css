@@ -1,0 +1,74 @@
+.qtip.qtip-bootstrap{border:1px solid #ff0000;}
+.qtip .qtip-content span{color:#ff0000;}
+
+/* Autodiag : partie questionnaire */
+    #autodiag{margin-top: 20px; position: relative}
+    #autodiag h1{ margin:0 0 50px 0; float:left; font-size:30px;}
+    #autodiag .options{display: inline;float: right;position: relative;top: 0px;right: 0;}
+
+/* Colonne left */
+    #autodiag p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
+
+    /* Sous-menu */
+        #autodiag #chapitres ul{list-style:none; padding:0; margin-bottom: 20px}
+        #autodiag #chapitres ul li{border-top:1px solid #f0f0f0; background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
+        #autodiag #chapitres ul li div{padding:5px 0; color:#777777; font-size: 14px;cursor:pointer;}
+        #autodiag #chapitres ul li div .text-muted, #autodiag #chapitres ul li div .text-success{font-size:10px;float: right}
+        #autodiag #chapitres ul li.stepy-active div,#autodiag #chapitres ul li:hover div{color:#6f3596;}
+        #autodiag .avancement-global span{font-size:10px;}
+
+/* Colonne right */
+    #autodiag .content{background-color: #f8f8f8; padding-bottom: 20px}
+    #autodiag .content h2{color:#6f3596; text-transform: uppercase;}
+    #autodiag .content h3{color:#6f3596; text-transform: uppercase; margin-bottom: 20px; font-size: 18px}
+    #autodiag .content .badge-primary{background-color:#4f8edc; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
+    #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer}
+    #autodiag .content .radio{float: left; margin-right: 30px;}
+    #autodiag .content .save{margin: 20px auto; display: block; width: 200px; }
+    #autodiag .content .sous-chapitre label{padding-left:40px;}
+
+    #autodiag .stepy-navigator{}
+    #autodiag .stepy-navigator .button-back,
+    #autodiag .stepy-navigator .button-next
+        { display: inline-block; margin-bottom: 0; text-align: center; vertical-align: middle; cursor: pointer; border: 1px solid #ccc; white-space: nowrap; padding: 6px 12px; font-size: 14px; border-radius: 4px; color: #333; background-color: #fff; text-shadow: 0 1px 0 #fff; }
+    #autodiag .stepy-navigator .button-back{float:left;}
+    #autodiag .stepy-navigator .button-next{float:right;}
+    #autodiag .stepy-navigator .button-back:hover,
+    #autodiag .stepy-navigator .button-next:hover
+        { background-color: #e0e0e0; color: #333; border-color: #adadad; text-decoration: none; }
+
+/* Autodiag : partie résultats */
+    #resultats h2{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; cursor:pointer;}
+    #resultats h2.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
+    #resultats h2.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}
+
+    /* Chapitres */
+        #resultats #chapitres h3{ text-transform: uppercase;}
+        #resultats #chapitres h4{ text-transform: uppercase; margin-bottom: 20px; font-size: 18px}
+        #resultats #chapitres .synthese{font-style: italic; font-size: 12px}
+        #resultats #chapitres .question{font-weight: bold; margin-bottom: 0}
+        #resultats #chapitres .sous-chapitre .question{padding-left:40px;}
+
+    /* Graphiques */
+        #resultats #graphiques .panel{border-color:#6f3596;}
+        #resultats #graphiques .panel .panel-heading{background-color:#6f3596 !important; background-image:none !important; padding:7px 15px; }
+        #resultats #graphiques .panel .panel-heading h3.panel-title{margin-bottom: 0; color:#FFFFFF; font-size: 14px; float: left}
+        #resultats #graphiques .panel .panel-heading .options{float:right; color:#FFF;}
+        #resultats #graphiques .panel .progress{position: relative; height: 30px; margin-bottom: 0}
+        #resultats #graphiques .panel .progress .progress-bar{font-weight: bold; color:#FFF;}
+        #resultats #graphiques .panel .cursor{ width:0; height:0; border:6px solid transparent; border-bottom:12px solid black; position: absolute; bottom: 0}
+        #resultats #graphiques .panel h3.toPrint{display: none}
+        #resultats #graphiques #radarChart{min-width: 400px; max-width: 100%; height: 600px; margin: 0 auto}
+        #resultats #graphiques .table .vertical-align{vertical-align: middle}
+        
+/* Partie Compte HN */
+    .autodiagTable thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}
+    .autodiagTable thead tr a { color:#FFFFFF; font-size: 12px }
+    .autodiagTable thead th { background-color:#6F3596; vertical-align: middle }
+    .autodiagTable th, .autodiagTable td { border: 1px solid #ddd;padding:4px; }
+
+/* Partie liste des autodiag */
+#autodiag-liste p.intro{margin-bottom: 20px}
+#autodiag-liste .panel-heading{color:#703695;cursor: pointer; font-weight: bold}
+#autodiag-liste .panel-heading.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
+#autodiag-liste .panel-heading.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}

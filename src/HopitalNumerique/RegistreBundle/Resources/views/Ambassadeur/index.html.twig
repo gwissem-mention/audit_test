@@ -47,7 +47,7 @@
                     {% endfor %}
                 </select>
                 {# Carte de france #}
-                <div id="canvas_france" style="width:100%;" ></div>
+                <div id="canvas_france"></div>
 
                 <span onclick="selectionnerToutesRegions();" class="link violet col-md-12" title="Sélectionner tout">> Sélectionner tout</span>
                 <span onclick="deselectionnerToutesRegions();" class="link violet col-md-12" title="Désélectionner tout">> Désélectionner tout</span>
@@ -109,10 +109,10 @@
 					                                {% endif %}
 					                            </div>
 					                            
-					                            <span class="col-md-12"><a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Domaines fonctionnels</a></span>
-					                            <span class="col-md-12"><a class="link violet fancybox.ajax outilsMaitrises" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a></span>
+					                            <div class="col-md-12"><a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Domaines fonctionnels</a></div>
+					                            <div class="col-md-12"><a class="link violet fancybox.ajax outilsMaitrises" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a></div>
 					
-					                            <span class="col-md-12"><a class="btn background-violet {% if (user.isCMSI) and not (user.user.region.id == ambassadeur.region.id) %}disabled{% endif %}" href="{% if (user.isCMSI) and not ((user.user.region.id == ambassadeur.region.id)) %}#{% else %}{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}{% endif %}">Solliciter cet ambassadeur</a></span>
+					                            <div class="col-md-12"><a class="btn background-violet {% if (user.isCMSI) and not (user.user.region.id == ambassadeur.region.id) %}disabled{% endif %}" href="{% if (user.isCMSI) and not ((user.user.region.id == ambassadeur.region.id)) %}#{% else %}{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}{% endif %}">Solliciter cet ambassadeur</a></div>
 					                            <div class="clearfix"></div>
 					                        </div>
 					                    </div>

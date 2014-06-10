@@ -28,3 +28,11 @@
 {% block body %}
     {{ grid(grid, _self) }}
 {% endblock %}
+
+{% block grid_column_autodiags_cell %}
+    {% if row.getField(column.id)|length == 0 %}
+        <span class="grid_boolean_0" >0</span>
+    {% else %}
+        <span class="grid_boolean_1" >1</span>
+    {% endif %}
+{% endblock grid_column_autodiags_cell %}

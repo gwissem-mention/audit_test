@@ -20,3 +20,7 @@ table.table th, table.table td { border: 1px solid #ddd;padding:4px; }
     background-color: #16A085;
     border-color: #16A085;
 }
+
+@media screen and (max-width: 991px) {
+    #registre-ambassadeur .lienTableauDeBord{display:none;}
+}

@@ -4,9 +4,16 @@
     <ol class="dd-list">
         {% for question in questions %}
             <li class="dd-item dd3-item" data-id="{{question.id}}" id="question-{{question.id}}" >
+                <div class="dd-handle dd3-handle"></div>
                 <div class="dd3-content">
                     <a href="{{path('hopitalnumerique_autodiag_question_edit',{'id':question.id})}}" class="fancy fancybox.ajax">{{question.texte}}</a>
-                    <p class="text-muted pull-right"><span>{{question.references|length}}</span> éléments référencés</p>
+                    <p class="text-muted pull-right">
+                        Catégorie : {{question.categorie.title}}&nbsp;&nbsp;|&nbsp;&nbsp;
+                        {% if question.ponderation %}Pondération : {{question.ponderation}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
+                        {% if question.ordreResultat %}Ordre pour les résultats : {{question.ordreResultat}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
+                        {% if question.seuil %}Seuil de déclenchement : {{question.seuil}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
+                        <span>{{question.references|length}}</span> éléments référencés
+                    </p>
                 </div>
                 <div class="dd3-actions">
                     <div onclick="deleteQuestion( {{question.id}}, '{{path('hopitalnumerique_autodiag_question_delete', {'id':question.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
@@ -16,3 +23,23 @@
         {% endfor %}
     </ol>
 </div>
+
+<input type="hidden" id="order-question-url" value="{{path('hopitalnumerique_autodiag_question_reorder',{'id':chapitre.id})}}" />
+
+<script type="text/javascript" >
+    $('#questions div.dd').nestable({'maxDepth':1,'group':0}).on('change', function() {
+        var serializedDatas = $(this).nestable('serialize');
+
+        $.ajax({
+            url  : $('#order-question-url').val(),
+            data : {
+                datas : serializedDatas
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                //console.log( 'reorder executed' );
+            }
+        });
+    });
+</script>

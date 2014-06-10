@@ -1,0 +1,83 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block title %}{{parent()}} - Autodiagnostic{% endblock %}
+
+{% block h1Title %}
+    Gestion des Résultats
+{% endblock %}
+
+{% block toolbarButton %}
+    <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste des utilisateurs"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}    
+    <div class="col-sm-12">
+        <div id="form_edit_user" class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <div class="options">
+                    <ul class="nav nav-tabs">
+                        <li>
+                            <a href="{{path('hopital_numerique_user_edit', {'id':user.id})}}">Caractérisation</a>
+                        </li>
+                        {% if user.id is not null and (options.expert or options.ambassadeur) %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_contractualisation', {'id':user.id})}}">Contractualisation</a>
+                            </li>
+                        {% endif %}
+                        {% if user.id is not null and (options.expert or options.expert_form) %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_expert_edit', {'id':user.id})}}">Candidature expert</a>
+                            </li>
+                        {% endif %}
+                        {% if user.id is not null and (options.ambassadeur or options.ambassadeur_form) %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature ambassadeur</a>
+                            </li>
+                        {% endif %}
+                        {% if user.id is not null and options.ambassadeur %}
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maîtrisées</a>
+                            </li>
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Domaines maîtrisés</a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="active">
+                            <a href="#">Autodiagnostic</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel-body" >
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Taux de remplissage global</th>
+                            <th>Date du dernier enregistrement</th>
+                            <th>Date de validation</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resultat in resultats %}
+                            <tr>
+                                <td>{{resultat.tauxRemplissage}}%</td>
+                                <td>{{resultat.dateLastSave|date('d/m/Y')}}</td>
+                                <td>{{resultat.dateValidation|date('d/m/Y')}}</td>
+                                <td>
+                                    <a href="{{path('hopitalnumerique_autodiag_resultat_detail', {'id':resultat.id})}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4"> - Vous n'avez pas encore rempli de questionnaire d'autodiagnostic - </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>            
+        </div>
+    </div>
+{% endblock %}
