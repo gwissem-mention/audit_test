@@ -30,12 +30,17 @@
 
 {% block body %}
     <div id="articles">
+        {% set root = knp_menu_get('menu-main-front') %}
+        {#{% for item in root %}
+            <pre>{{dump(item)}}</pre>    
+        {% endfor %}#}
+
         {% if menu == "menu-footer-front" %}
             <div class="col-md-12">
         {% else %}
             <div class="col-md-3">
                 <p class="titre">Hôpital <br />Numérique</p>
-                {% set root = knp_menu_get('menu-main-front') %}
+                
                 {% set menu = root['menu-65'] %}
                 {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
 
