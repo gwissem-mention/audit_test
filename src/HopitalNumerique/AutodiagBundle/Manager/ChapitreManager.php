@@ -96,7 +96,54 @@ class ChapitreManager extends BaseManager
         return $references;
     }
 
+    /**
+     * Retourne la liste des chapitres et questions pour la vue liste
+     *
+     * @param Outil $outil L'outil
+     *
+     * @return array
+     */
+    public function getChapitresForListe( $outil )
+    {
+        //build chapitres
+        $chapitres      = $outil->getChapitres();
+        $parents        = array();
+        $enfants        = array();
 
+        
+        foreach($chapitres as $one){
+            $chapitre = new \StdClass;
+            
+            $chapitre->id      = $one->getId();
+            $chapitre->title   = $one->getTitle();
+            $chapitre->noteMin = $one->getNoteMinimale();
+            $chapitre->noteOpt = $one->getNoteOptimale();
+            $chapitre->childs  = array();
+            $chapitre->parent  = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
+
+            //handle questions
+            $questions         = $one->getQuestions();
+            $chapitreQuestions = array();
+            foreach ($questions as $question)
+                $chapitreQuestions[] = $question;
+
+            $chapitre->questions = $chapitreQuestions;
+
+            //handle héritage
+            if( is_null($one->getParent()) ){
+                $parents[ $one->getId() ] = $chapitre;
+            }else
+                $enfants[] = $chapitre;
+        }
+
+        //reformate les chapitres
+        foreach($enfants as $enfant){
+            $parent = $parents[ $enfant->parent ];
+            $parent->childs[] = $enfant;
+        }
+
+        return $parents;
+    }
 
 
 
@@ -136,11 +183,13 @@ class ChapitreManager extends BaseManager
         foreach($elements as $element)
         {
             //construction de l'element current
-            $item             = new \stdClass;
-            $item->title      = $element->getTitle();
-            $item->id         = $element->getId();
-            $item->order      = $element->getOrder();
-            $item->references = count($element->getReferences());
+            $item               = new \stdClass;
+            $item->title        = $element->getTitle();
+            $item->id           = $element->getId();
+            $item->order        = $element->getOrder();
+            $item->noteMinimale = $element->getNoteMinimale();
+            $item->noteOptimale = $element->getNoteOptimale();
+            $item->references   = count($element->getReferences());
 
             //add childs : filter items with current element
             $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $element))->orderBy(array( "order" => Criteria::ASC ));

@@ -1,18 +1,18 @@
 <?php
 namespace HopitalNumerique\PublicationBundle\Twig;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 class PublicationExtension extends \Twig_Extension
 {
-    private $_managerObjet;
-    private $_managerContenu;
+    private $container;
 
     /**
      * Construit l'extension Twig
      */
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
-        $this->_managerObjet   = $container->get('hopitalnumerique_objet.manager.objet');
-        $this->_managerContenu = $container->get('hopitalnumerique_objet.manager.contenu');
+        $this->container = $container;
     }
 
     /**
@@ -49,7 +49,7 @@ class PublicationExtension extends \Twig_Extension
                 switch($value){
                     case 'PUBLICATION':
                         //cas Objet
-                        $objet  = $this->_managerObjet->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        $objet  = $this->getManagerObjet()->findOneBy( array( 'id' => $matches[2][$key] ) );
                         $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
                         if($objet){
                             $label = $matches[3][$key] ? $matches[3][$key] : $objet->getTitre();
@@ -64,7 +64,7 @@ class PublicationExtension extends \Twig_Extension
                         break;
                     case 'INFRADOC':
                         //cas contenu
-                        $contenu = $this->_managerContenu->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        $contenu = $this->getManagerContenu()->findOneBy( array( 'id' => $matches[2][$key] ) );
                         $target  = $matches[5][$key] == 1 ? 'target="_blank"' : "";
                         if( $contenu ){
                             $objet       = $contenu->getObjet();
@@ -79,7 +79,7 @@ class PublicationExtension extends \Twig_Extension
                         break;
                     case 'ARTICLE':
                         //cas Objet
-                        $objet  = $this->_managerObjet->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        $objet  = $this->getManagerObjet()->findOneBy( array( 'id' => $matches[2][$key] ) );
                         $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
                         if($objet){
                             $label = $matches[3][$key] ? $matches[3][$key] : $objet->getTitre();
@@ -92,11 +92,54 @@ class PublicationExtension extends \Twig_Extension
                         $content = str_replace($pattern, $replacement, $content);
                                 
                         break;
+                    case 'AUTODIAG':
+                        //cas Outil
+                        $outil  = $this->getManagerOutil()->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
+                        if($outil)
+                            $replacement = '<a href="/autodiagnostic/'. $outil->getAlias() . '" '.$target.'>' . $matches[3][$key] . '</a>';
+                        else
+                            $replacement = "<a href=\"javascript:alert('Cet outil n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
+
+                        $pattern = $matches[0][$key];
+                        $content = str_replace($pattern, $replacement, $content);
+                                
+                        break;
                 }
             }
         }
         
         return $content;
+    }
+
+    /**
+     * Retourne le manager contenu
+     *
+     * @return ContenuManager
+     */
+    private function getManagerContenu()
+    {
+        return $this->container->get('hopitalnumerique_objet.manager.contenu'); 
+    }
+
+    /**
+     * Retourne le manager objet
+     *
+     * @return ObjetManager
+     */
+    private function getManagerObjet()
+    {
+        return $this->container->get('hopitalnumerique_objet.manager.objet');
+    }
+
+    /**
+     * Retourne le manager outil
+     *
+     * @return OutilManager
+     */
+    private function getManagerOutil()
+    {
+        return $this->container->get('hopitalnumerique_autodiag.manager.outil');
     }
 
     /**

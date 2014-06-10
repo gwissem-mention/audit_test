@@ -157,6 +157,13 @@ class Objet
     private $vignette;
 
     /**
+     * @var array
+     * 
+     * @ORM\Column(name="obj_autodiag", type="array", options = {"comment" = "Liste des autodiag liés à l objet"})
+     */
+    private $autodiags;
+
+    /**
      * @var integer
      * 
      * @ORM\Column(name="obj_nb_vue", type="integer", options = {"comment" = "Nombre de fois où lobjet à été vue"})     
@@ -261,7 +268,8 @@ class Objet
         $this->isInfraDoc   = false;
         $this->isArticle    = false;
         $this->lock         = false;
-        $this->vignette     = null;
+        $this->vignette     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->autodiags    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->roles        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->types        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ambassadeurs = new \Doctrine\Common\Collections\ArrayCollection();
@@ -823,6 +831,38 @@ class Objet
     public function getTypes()
     {
         return $this->types;
+    }
+
+    /**
+     * Get autodiags
+     *
+     * @return array $autodiags
+     */
+    public function getAutodiags()
+    {
+        return $this->autodiags;
+    }
+    
+    /**
+     * Set autodiags
+     *
+     * @param array $autodiags
+     */
+    public function setAutodiags(array $autodiags)
+    {
+        $this->autodiags = $autodiags;
+        return $this;
+    }
+    
+    /**
+     * add autodiag
+     *
+     * @param integer $autodiag
+     */
+    public function addAutodiag($autodiag)
+    {
+        $this->autodiags[] = $autodiag;
+        return $this;
     }
 
     /**

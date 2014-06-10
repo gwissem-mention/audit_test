@@ -165,7 +165,7 @@ hopitalnumerique_module_module_session_inscription_annuler:
 #---Edit
 hopitalnumerique_module_module_session_evaluation_editer:
     pattern: /module/session/evaluation/edit/{user}/{session}
-    defaults: { _controller: HopitalNumeriqueModuleBundle:Back/Evaluation:edit, user: 1, session: 1 }
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Back/Evaluation:edit, session: 1 }
     requirements:
         user: \d+
         session: \d+

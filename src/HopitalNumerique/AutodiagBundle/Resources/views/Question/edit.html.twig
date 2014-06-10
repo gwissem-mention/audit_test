@@ -42,6 +42,7 @@
                 <div class="col-md-4">
                     {{ form_widget(form.ponderation) }}
                 </div>
+                <div class="clearfix"></div>
                 <div class="col-md-12">
                     <div class="help-block">
                         {{ form_errors(form.ponderation) }}
@@ -92,7 +93,20 @@
 
         <div class="clearfix"></div>
         <div class="col-md-12 not-txt" style="{% if not question.type or question.type.id == 417 %}display:none{% endif %}" >
-            {{ form_row(form.options) }}
+            <div class="form-group">
+                <div class="col-md-2">
+                    <label class="control-label col-md-12 required">Items de choix de réponse<span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
+                    <p class="col-md-12 text-right text-muted">[valeur] ; [libellé]</p>
+                </div>
+                <div class="col-md-10">
+                    {{ form_widget(form.options) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.options) }}
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="clearfix"></div>

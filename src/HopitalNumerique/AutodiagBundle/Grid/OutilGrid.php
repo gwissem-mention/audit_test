@@ -19,7 +19,7 @@ class OutilGrid extends Grid implements IGrid
     {
         $this->setSource( 'hopitalnumerique_autodiag.manager.outil' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
-        $this->setNoDataMessage('Aucun Outil à afficher.');
+        $this->setNoDataMessage('Aucun outil à afficher.');
     }
 
     /**
@@ -27,13 +27,21 @@ class OutilGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        $this->addColonne( new Column\TextColumn('title', 'Title') );
+        $this->addColonne( new Column\TextColumn('title', 'Titre') );
         
-        $nbChapColumn = new Column\TextColumn('nbChap', 'Nb Chapitres');
+        $nbFormColumn = new Column\TextColumn('nbForm', 'Nb formulaires en cours');
+        $nbFormColumn->setSize( 160 );
+        $this->addColonne( $nbFormColumn );
+
+        $nbFormValidColumn = new Column\TextColumn('nbFormValid', 'Nb formulaires finalisés');
+        $nbFormValidColumn->setSize( 160 );
+        $this->addColonne( $nbFormValidColumn );
+
+        $nbChapColumn = new Column\TextColumn('nbChap', 'Nb chapitres');
         $nbChapColumn->setSize( 110 );
         $this->addColonne( $nbChapColumn );
 
-        $nbQuestColumn = new Column\TextColumn('nbQuest', 'Nb Questions');
+        $nbQuestColumn = new Column\TextColumn('nbQuest', 'Nb questions');
         $nbQuestColumn->setSize( 110 );
         $this->addColonne( $nbQuestColumn );
 
@@ -54,7 +62,7 @@ class OutilGrid extends Grid implements IGrid
     {
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_autodiag_outil_edit' ) );
         $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_autodiag_outil_delete' ) );
-
+        $this->addActionButton( new Action\FilsButton( 'hopitalnumerique_autodiag_resultat' ) );
     }
 
     /**
@@ -65,5 +73,6 @@ class OutilGrid extends Grid implements IGrid
         $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueAutodiagBundle:Outil:deleteMass') );
         $this->addMassAction( new Action\ActionMass('Activer','HopitalNumeriqueAutodiagBundle:Outil:activerMass') );
         $this->addMassAction( new Action\ActionMass('Désactiver','HopitalNumeriqueAutodiagBundle:Outil:desactiverMass') );
+        $this->addMassAction( new Action\ActionMass('Exporter les réponses','HopitalNumeriqueAutodiagBundle:Outil:exportMass') );
     }
 }
