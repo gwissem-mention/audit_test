@@ -91,16 +91,36 @@ $(document).ready(function() {
     //init : open first categ
     $('#origin li.level0:first').addClass('active').find('ol:first').slideDown();
 
-    //fancybox daffichage de la synthese
+    if( $('#requete-refs').val() != '[]')
+        handleRequestForRecherche();
+
     $('a.synthese').fancybox({
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '80%',
         'scrolling' : 'no'
     });
+});
 
-    if( $('#requete-refs').val() != '[]')
-        handleRequestForRecherche();
+//fancybox daffichage de la synthese
+enquire.register("screen and (max-width: 991px)", {
+    match : function() {
+        $(function() {
+            $(document).unbind('click.fb-start');
+            $('a.synthese').attr('target','_blank');
+        });
+    },
+    unmatch : function() {
+        $(function() {
+            $('a.synthese').fancybox({
+                'padding'   : 0,
+                'autoSize'  : false,
+                'width'     : '80%',
+                'scrolling' : 'no'
+            });
+            $('a.synthese').attr('target','');
+        });
+    }
 });
 
 /**

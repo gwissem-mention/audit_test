@@ -1,12 +1,4 @@
 $(document).ready(function() {
-    //fancybox daffichage de la synthese
-    $('a.synthese').fancybox({
-        'padding'   : 0,
-        'autoSize'  : false,
-        'width'     : '80%',
-        'scrolling' : 'no'
-    });
-
     /* Gestion de l'ouverture/fermeture du sommaire et de la liste des ambassadeurs */
     $('#sommaire.closed, #ambassadeurs.closed').click(function(){
         //on ouvre
@@ -60,5 +52,33 @@ $(document).ready(function() {
             if ( !$(this).find('span').hasClass('titre_depliable') )
                 $(this).hide();
         });
-    })
+    });
+
+    $('a.synthese').fancybox({
+        'padding'   : 0,
+        'autoSize'  : false,
+        'width'     : '80%',
+        'scrolling' : 'no'
+    });
+});
+
+//fancybox daffichage de la synthese
+enquire.register("screen and (max-width: 991px)", {
+    match : function() {
+        $(function() {
+            $(document).unbind('click.fb-start');
+            $('a.synthese').attr('target','_blank');
+        });
+    },
+    unmatch : function() {
+        $(function() {
+            $('a.synthese').fancybox({
+                'padding'   : 0,
+                'autoSize'  : false,
+                'width'     : '80%',
+                'scrolling' : 'no'
+            });
+            $('a.synthese').attr('target','');
+        });
+    }
 });
