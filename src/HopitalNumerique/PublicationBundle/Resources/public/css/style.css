@@ -1,4 +1,7 @@
-.mobile{display:none;}
+.mobile{display:none; margin-bottom:5px;}
+.mobile .label{ font-size: 13px}
+.mobile .label-ambassadeur{background-color: #DE0D4D; margin-left:10px;}
+.mobile .label-requete{ background-color: #6F3596; margin-left:10px; }
 
 /* Sommaire */
     #sommaire{ position: fixed; left:0; top:0; height: 100%; max-width: 33% }
