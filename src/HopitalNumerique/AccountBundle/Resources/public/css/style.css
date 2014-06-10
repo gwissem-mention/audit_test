@@ -4,4 +4,11 @@
 #login form .background-violet{width: 214px; height: 4px; position: absolute; top: 0; left: 0;}
 #login form label{ color:#333333; font-size: 14px }
 #login form .submit{margin-right: 16px; text-transform: uppercase;}
-#login form .resetPass{display:block; font-size: 13px; color: #a3a3a3; margin-top: 20px}
+#login form .resetPass{display:block; font-size: 13px; color: #a3a3a3; margin-top: 20px;float:left;}
+#login form .inscription{display:block; font-size: 13px; color: #a3a3a3; margin-top: 20px;float:right;}
+
+@media screen and (max-width: 991px) {
+    #login form{ padding:44px 4px;}
+    #login form .resetPass{float:none;}
+    #login form .inscription{float:none;}
+}

@@ -16,7 +16,7 @@ function afficheCarteFrance(donneesParRegionJSON, remplissage)
     var donneesParRegion = $.parseJSON(donneesParRegionJSON);
     
 	var couleurDefaut = "#FFFFFF";
-    var frenchMap     = new Raphael(document.getElementById('canvas_france'), 240, 350, { width:400,height:300 });
+    var frenchMap     = new Raphael(document.getElementById('canvas_france'), 240, 350, { width:400,height:300, margin:'auto' });
 
     frenchMap.setViewBox(0, 0, 810, 1100, true); 
 

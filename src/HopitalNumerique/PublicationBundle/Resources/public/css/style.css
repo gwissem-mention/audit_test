@@ -126,7 +126,14 @@
 }
 
 @media screen and (max-width: 991px) {
+    #sommaire{width: 100%; max-width: 100%}
+
+    #ambassadeurs{display: none}
     #points-durs{margin-bottom: 20px}
     #ressources{margin-bottom: 20px}
     #autresResultats .carousel-inner{ width: 92%;}
+    .btnprint{display: none}
+    #articles .actus{margin-bottom: 20px}
+
+    #autresResultats .results {height: 190px}
 }
