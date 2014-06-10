@@ -66,3 +66,9 @@
     .autodiagTable thead tr a { color:#FFFFFF; font-size: 12px }
     .autodiagTable thead th { background-color:#6F3596; vertical-align: middle }
     .autodiagTable th, .autodiagTable td { border: 1px solid #ddd;padding:4px; }
+
+/* Partie liste des autodiag */
+#autodiag-liste p.intro{margin-bottom: 20px}
+#autodiag-liste .panel-heading{color:#703695;cursor: pointer; font-weight: bold}
+#autodiag-liste .panel-heading.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
+#autodiag-liste .panel-heading.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}

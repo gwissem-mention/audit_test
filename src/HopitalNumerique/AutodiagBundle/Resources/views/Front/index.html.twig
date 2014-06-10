@@ -1,0 +1,44 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Autodiagnostic{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-front-index.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriqueautodiag/css/front.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-autodiag-front-index.js" 
+        'bundles/hopitalnumeriquefaq/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="autodiag-liste">
+        <div class="col-md-12">
+            <h1>Outils d'autodiagnostic</h1>
+            <p class="intro" >
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente, obcaecati, pariatur, est dolorum magni quasi dolores iste illum reprehenderit omnis quod temporibus praesentium quo dignissimos eos illo facilis quae voluptate!
+            </p>
+        </div>
+
+        {% for objet in objets %}
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading closed">{{objet.titre}}</div>
+                    <div class="panel-body" style="display:none;">
+                        {{objet.resume|parsePublication|raw}}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

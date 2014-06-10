@@ -185,6 +185,10 @@ hopitalnumerique_autodiag_resultat_detail:
         id : \d+        
 
 #Front
+hopitalnumerique_autodiag_front_outil_index:
+    pattern:  /autodiagnostic
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:index" }
+
 hopitalnumerique_autodiag_front_outil:
     pattern:  /autodiagnostic/{alias}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:outil" }
