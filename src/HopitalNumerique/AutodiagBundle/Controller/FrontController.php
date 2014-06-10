@@ -238,14 +238,19 @@ class FrontController extends Controller
 
         $html = str_replace('/publication', $request->getSchemeAndHttpHost() . '/publication', $html);
 
-        return new Response(
-            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),
-            200,
-            array(
-                'Content-Type'        => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="resultats-de-l-outil-'.$resultat->getOutil()->getAlias().'.pdf"'
-            )
+        $this->get('knp_snappy.pdf')->generateFromHtml(
+            $html,
+            __ROOT_DIRECTORY__ . '/files/autodiag/'.$resultat->getOutil()->getAlias().'.pdf',
+            $options
         );
+
+        
+
+
+
+
+
+
     }
 
     /**
