@@ -143,29 +143,6 @@ class Item
     }
 
     /**
-     * Set order
-     *
-     * @return integer 
-     */
-    public function setOrder($order)
-    {
-        $this->order = $order;
-
-        return $this;
-    }
-
-    /**
-     * Get order
-     *
-     * @return integer 
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-
-    /**
      * Set name
      *
      * @param string $name
@@ -398,6 +375,28 @@ class Item
         $this->routeAbsolute = $routeAbsolute;
 
         return $this;
+    }
+
+    /**
+     * Set order
+     *
+     * @return integer 
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+    /**
+     * Get order
+     *
+     * @return integer 
+     */
+    public function getOrder()
+    {
+        return $this->order;
     }
 
     /**

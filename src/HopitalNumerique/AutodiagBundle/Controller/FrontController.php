@@ -14,6 +14,19 @@ use Symfony\Component\HttpFoundation\Response;
 class FrontController extends Controller
 {
     /**
+     * Liste les outils d'autodiagnostic présent dans les articles de la plateforme
+     */
+    public function indexAction()
+    {
+        $categ  = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => 179 ) );
+        $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByTypes( $categ );
+
+        return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:index.html.twig' , array(
+            'objets' => $objets
+        ));
+    }
+
+    /**
      * Affiche le Front vu chapitre
      *
      * @param Outil $outil L'entitée Outil
@@ -252,6 +265,7 @@ class FrontController extends Controller
 
         return $this->get('igorw_file_serve.response_factory')->create( $fileName , 'application/pdf', $options);
     }
+
 
 
 

@@ -60,6 +60,12 @@
             <div class="col-md-12">
                 <a class="objetLink rose" href="{{path('hopital_numerique_publication_publication_objet', {'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a>
                 <h1 class="violet">{{prefix ~ ' ' ~ contenu.titre}}</h1>
+                <div class="mobile">
+                    <a class="label label-success pull-left" href="javascript:$('#sommaire').click();">Sommaire</a>
+                    <a class="label label-ambassadeur pull-right" href="javascript:$('#ambassadeurs').click();">Ambassadeurs</a>
+                    <a class="label label-requete pull-right" href="javascript:$('#mesrequetes').click();">Mes requetes</a>
+                    <div class="clearfix"></div>
+                </div>
             </div>
             
             <div class="col-md-12">
@@ -69,6 +75,12 @@
         {% else %}
             <div class="col-md-12">
                 <h1 class="violet">{{objet.titre}}</h1>
+                <div class="mobile">
+                    <a class="label label-success pull-left" href="javascript:$('#sommaire').click();">Sommaire</a>
+                    <a class="label label-ambassadeur pull-right" href="javascript:$('#ambassadeurs').click();">Ambassadeurs</a>
+                    <a class="label label-requete pull-right" href="javascript:$('#mesrequetes').click();">Mes requetes</a>
+                    <div class="clearfix"></div>
+                </div>
             </div>
             
             <div class="col-md-12">
