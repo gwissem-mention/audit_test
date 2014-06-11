@@ -37,8 +37,8 @@ class MenuProvider implements MenuProviderInterface
      */
     public function get($name, array $options = array())
     {
-        $tree   = $this->menuManager->getTree( $this->_menuEntity );
-        $type   = (isset($options['breadcrumb']) && $options['breadcrumb'] === 'yes') ? 'breadcrumb' : 'menu';
+        $tree = $this->menuManager->getTree( $this->_menuEntity );
+        $type = (isset($options['breadcrumb']) && $options['breadcrumb'] === 'yes') ? 'breadcrumb' : 'menu';
 
         //Cas menu
         if( $type == 'menu' ) {

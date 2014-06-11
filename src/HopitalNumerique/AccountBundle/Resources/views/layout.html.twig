@@ -20,7 +20,24 @@
         </div>
         
         <div class="col-md-3 col-sm-12">
-            {{ knp_menu_render('menu-tdb', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}    
+            {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+            {% set root = knp_menu_get('menu-main-front') %}
+            {% set parent = null %}
+
+            {% for item in root %}
+                {% if currentPath == item.uri %}
+                    {% set parent = item.name %}
+                {% endif %}
+
+                {% for child in item.children %}
+                    {% if currentPath == child.uri %}
+                        {% set parent = item.name %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+
+            {% set menu = root[parent] %}
+            {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
         </div>
         
         <div class="content col-md-9 col-sm-12">
