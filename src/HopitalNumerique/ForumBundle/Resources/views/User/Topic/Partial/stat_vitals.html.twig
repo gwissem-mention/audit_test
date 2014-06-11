@@ -1,11 +1,13 @@
 {%- spaceless -%}
 
     {% if is_granted("ROLE_ADMINISTRATEUR_1") %}
-    <div class="col-md-12 btn-toolbar">
-        <a href="{{path('hopitalnumerique_objet_reference_objet_own', {'id':1})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-eye"></i></a>
-        <a href="{{path('hopitalnumerique_objet_reference_objet', {'id':1})}}" class="manageReferences edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
-        <p class="text-muted text-right pull-right"><span class="nbRefs">{% if not 1 %}0{% else %}1{% endif %}</span> éléments référencés</p>
-    </div>
+        <div class="col-md-12 btn-toolbar">
+            <input type="hidden" id="save-references-topic-url" value="{{path('hopitalnumerique_forum_reference_topic_save',{'id':topic.id})}}" />
+            <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_forum_reference_contenu')}}" />
+            <a href="{{path('hopitalnumerique_forum_reference_topic_own', {'id':topic.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-eye"></i></a>
+            <a href="{{path('hopitalnumerique_forum_reference_topic', {'id':topic.id})}}" class="manageReferences edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
+            <p class="text-muted text-right pull-right"><span class="nbRefs">{% if not topic.id %}0{% else %}{{topic.references|length}}{% endif %}</span> éléments référencés</p>
+        </div>
     {% endif %}
     <header class="row clearfix">
         <div class="col-md-6">

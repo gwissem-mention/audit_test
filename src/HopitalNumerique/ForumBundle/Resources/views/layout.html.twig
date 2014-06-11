@@ -6,12 +6,29 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-account-layout.css" filter="cssrewrite, ?yui_css"
-        'bundles/hopitalnumeriqueaccount/css/layout.css'
+    {% stylesheets output="compiled/hopitalnumerique-forum-layout.css" filter="cssrewrite, ?yui_css"
+        "@select2_css" 
+        "@fancybox_css"
+        "@jquery_toggles_css"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+        'bundles/hopitalnumeriqueobjet/css/style.css'
+        'bundles/nodevoadmin/css/toggles.css'
         'bundles/hopitalnumeriqueforum/css/forum.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-forum-layout.js"
+        "@fancybox_js"
+        "@jquery_toggles_js"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/hopitalnumeriqueforum/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
 {% block prebody %}

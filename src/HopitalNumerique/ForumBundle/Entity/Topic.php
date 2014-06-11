@@ -24,7 +24,7 @@ class Topic extends BaseTopic
      */
     public function getReferences()
     {
-        return $this->references;
+        return is_null($this->references) ? array() : $this->references;
     }
 
     /**

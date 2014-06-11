@@ -50,6 +50,10 @@ HopitalNumerique\ForumBundle\Entity\Topic:
             targetEntity: HopitalNumerique\ForumBundle\Entity\Subscription
             mappedBy: topic
             cascade: ["persist", "remove"]
+        references:
+            targetEntity: HopitalNumerique\ForumBundle\Entity\RefTopic
+            mappedBy: topic
+            cascade: ["persist", "remove"]
     manyToOne:
         board:
             targetEntity: HopitalNumerique\ForumBundle\Entity\Board
