@@ -13,9 +13,9 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  */
 class BreadcrumbNodeLoader implements LoaderInterface
 {
-    private $factory;
-    private $security;
-    private $container;
+    private $_factory;
+    private $_security;
+    private $_container;
     private $_rootNode;
 
     /**
@@ -26,68 +26,65 @@ class BreadcrumbNodeLoader implements LoaderInterface
      * @param [type]                   $container [description]
      * @param array                    $options   [description]
      */
-    public function __construct(FactoryInterface $factory, SecurityContextInterface $security, $container, $options = array())
+    public function __construct( FactoryInterface $factory, SecurityContextInterface $security, $container, $options = array() )
     {
-        $this->factory   = $factory;
-        $this->security  = $security;
-        $this->container = $container;
-        $this->_rootNode = isset($options['rootNode']) ? $options['breadcrumbRouteRacine'] : '';
+        $this->_factory   = $factory;
+        $this->_security  = $security;
+        $this->_container = $container;
+        $this->_rootNode  = isset($options['breadcrumbRoot']) ? $options['breadcrumbRoot'] : false;
     }
 
     /**
-     * [getMenu description]
+     * Charge le fil d'ariane
      *
-     * @param  [type] $data [description]
+     * @param array $data Liste des éléments
      *
-     * @return [type]
+     * @return MenuItem
      */
-    public function getMenu($data)
+    public function load($data)
     {
-        $nodes = $this->load($data);
+        //build Menu
+        $menu = $this->_factory->createItem('root');
 
-        $menu = clone $nodes;
-        $menu->setChildren(array());
+        if($this->_rootNode)
+            $menu->addChild('Accueil', array('route' => $this->_rootNode ) );
 
-        $options          = $data->getOptions();
-        $options['route'] = $this->_rootNode;
+        //récupère l'arborescence
+        $nodesArray = $this->getDatas($data)->getBreadcrumbsArray();
+        $nodesArray = $nodesArray[0]['item'];
 
-        $item = $this->factory->createItem($data->getName(), $options);
-        $item->setName('Accueil');
-        $item->setLabel('Accueil');
-
-        $menu->addChild($item);
-        
-        $this->addChildren($menu, $nodes);
+        //get children
+        $childs = array_values($nodesArray->getChildren());
+        $menu = $this->addChild( $menu, $childs );
 
         return $menu;
     }
 
     /**
-     * [load description]
+     * Récupère l'arbre du Menu
      *
-     * @param  [type] $data [description]
+     * @param array $data Liste des éléments
      *
-     * @return [type]
+     * @return items
      */
-    public function load($data)
+    public function getDatas($data)
     {
         if (!$data instanceof NodeInterface)
             throw new \InvalidArgumentException(sprintf('Unsupported data. Expected Knp\Menu\NodeInterface but got ', is_object($data) ? get_class($data) : gettype($data)));
 
-        $item = $this->factory->createItem($data->getName(), $data->getOptions());
+        $item = $this->_factory->createItem($data->getName(), $data->getOptions());
 
-        foreach ($data->getChildren() as $childNode) {
-
-            if( !is_null($element = $this->load($childNode)) ){
+        foreach ($data->getChildren() as $childNode)
+        {
+            if( !is_null($element = $this->getDatas($childNode)) )
+            {
                 $options = $childNode->getOptions();
-                if ($options['route'] === $this->container->get('request')->attributes->get('_route') || $element->getChildren())
-                {                    
-                    $item->addChild( $element ); 
-                }
+                if ($options['route'] === $this->_container->get('request')->attributes->get('_route') || $element->getChildren())
+                    $item->addChild( $element );
             }
         }
 
-        return $item;   
+        return $item;
     }
 
     /**
@@ -103,24 +100,31 @@ class BreadcrumbNodeLoader implements LoaderInterface
     }
 
     /**
-     * [addChildren description]
+     * Ajoute l'arbo des enfants du fil d'ariane
      *
-     * @param [type] $menu  [description]
-     * @param [type] $nodes [description]
+     * @param MenutItem $menu   Le menu
+     * @param array     $childs Tableau des enfants
      */
-    private function addChildren($menu, $nodes)
+    private function addChild( $menu, $childs )
     {
-        foreach ($nodes->getChildren() as $childNode) 
-        {            
-            if ($childNode->getUri() !== 'javascript:;')
-            {                
-                $child = clone $childNode;
-                $child->setChildren(array());
-                $child->setParent(null);
-                $menu->addChild($child);
-            }
+        $element   = $childs[0];
+        $newChilds = array_values($element->getChildren());
+        $options   = array();
 
-            $this->addChildren($menu, $nodes->getChild($childNode->getName()));
+        //remove javascript link
+        if( $element->getUri() != 'javascript:;' )
+            $options['uri'] = $element->getUri();
+        
+        //Test if childs present
+        if( count($newChilds) > 0 )
+        {
+            $menu->addChild( $element->getLabel(), $options );
+            $menu = $this->addChild( $menu, $newChilds );    
+        }else{
+            //No Link on Last Element
+            $menu->addChild( $element->getLabel() );
         }
+        
+        return $menu;
     }
 }
