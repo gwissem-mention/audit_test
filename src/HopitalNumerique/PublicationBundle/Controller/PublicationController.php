@@ -149,9 +149,11 @@ class PublicationController extends Controller
     private function getObjetsFromRecherche( $publication )
     {
         //get Recherche results
-        $session = $this->getRequest()->getSession();
-        $refs    = json_decode($session->get('requete-refs'), true);
-
+        // $session = $this->getRequest()->getSession();
+        // $refs    = json_decode($session->get('requete-refs'), true);
+        $refs       = array();
+        $refs       = $this->getMoreRefs( $refs, $publication->getReferences() );
+        
         //On récupère le role de l'user connecté
         $user = $this->get('security.context')->getToken()->getUser();
         $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
@@ -219,5 +221,42 @@ class PublicationController extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * Récupère les références de la production consulté
+     *
+     * @param array $refs       Les refs
+     * @param array $references Les RefObjet/RefContenu
+     *
+     * @return array
+     */
+    private function getMoreRefs($refs, $references )
+    {
+        //prépare les categs
+        $categs = array( 220 => 'categ1', 221 => 'categ2', 223 => 'categ3', 222 => 'categ4' );
+        //get refs from consulted object
+        foreach( $references as $reference ) {
+            $one = $reference->getReference();
+
+            if( !is_null($one->getParent()) ) {
+                $parentId = $one->getParent()->getId();
+                //get Grand Parent if needed
+                if ( !in_array($parentId, array_keys($categs)) ){
+                    $parentId = $one->getParent()->getParent()->getId();
+
+                    //get Arrière Grand Parent if needed
+                    if ( !in_array($parentId, array_keys($categs)) )
+                        $parentId = $one->getParent()->getParent()->getParent()->getId();
+                }
+
+                if( !isset($refs[ $categs[$parentId] ]) )
+                    $refs[ $categs[$parentId] ] = array();
+                
+                $refs[ $categs[$parentId] ][] = $one->getId();
+            }
+        }
+
+        return $refs;
     }
 }
