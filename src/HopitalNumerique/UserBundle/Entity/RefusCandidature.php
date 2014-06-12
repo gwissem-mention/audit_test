@@ -4,6 +4,8 @@ namespace HopitalNumerique\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+//Asserts Stuff
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * RefusCandidature
@@ -27,6 +29,7 @@ class RefusCandidature
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="refusCandidature")
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
+     * @GRID\Column(field="user.nom")
      */
     private $user;
     

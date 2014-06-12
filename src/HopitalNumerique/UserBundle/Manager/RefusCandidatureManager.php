@@ -5,7 +5,7 @@ namespace HopitalNumerique\UserBundle\Manager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
- * Manager de l'entité Contractualisation.
+ * Manager de l'entité RefusCandidature.
  */
 class RefusCandidatureManager extends BaseManager
 {
@@ -49,4 +49,5 @@ class RefusCandidatureManager extends BaseManager
     {
         return array_key_exists($idUser, $refusCandidatures) && array_key_exists($idQuestionnaire, $refusCandidatures[$idUser]);            
     }
+
 }
