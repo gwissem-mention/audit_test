@@ -83,27 +83,6 @@ class InscriptionGrid extends Grid implements IGrid
      */
     public function setActionsButtons()
     {
-        // $actionAccepterInscription = new Action\ShowButton('hopitalnumerique_module_module_session_inscription_accepter');
-        // $actionAccepterInscription->setAttributes( array(
-        //         'class'=>'btn btn-success fa fa-check-circle',
-        //         'title' => 'Accepter l\'inscription',
-        // ));
-        // $this->addActionButton( $actionAccepterInscription );
-        
-        // $actionRefuserInscription = new Action\ShowButton('hopitalnumerique_module_module_session_inscription_refuser');
-        // $actionRefuserInscription->setAttributes( array(
-        //         'class'=>'btn btn-danger fa fa-minus-circle',
-        //         'title' => 'Refuser l\'inscription',
-        // ));
-        // $this->addActionButton( $actionRefuserInscription );
-        
-        // $actionAnnulerInscription = new Action\ShowButton('hopitalnumerique_module_module_session_inscription_annuler');
-        // $actionAnnulerInscription->setAttributes( array(
-        //         'class'=>'btn btn-default fa fa-ban',
-        //         'title' => 'Annuler l\'inscription',
-        // ));
-        // $this->addActionButton( $actionAnnulerInscription );
-        
         $actionFicheParticipant = new Action\ShowButton('hopital_numerique_user_show');
         $actionFicheParticipant->setAttributes( array(
                 'class'=>'btn btn-primary fa fa-user-md',
@@ -123,6 +102,7 @@ class InscriptionGrid extends Grid implements IGrid
         $actionFicheEvaluation->setRouteParametersMapping(array('userId' => 'user', 'sessionId' => 'session'));
         $actionFicheEvaluation->setRouteParameters(array('userId', 'sessionId'));
         $this->addActionButton( $actionFicheEvaluation );
+        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_inscription_delete' ) );
     }
 
     /**

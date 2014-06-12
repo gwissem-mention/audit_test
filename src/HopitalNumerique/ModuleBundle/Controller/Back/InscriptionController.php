@@ -4,6 +4,8 @@ namespace HopitalNumerique\ModuleBundle\Controller\Back;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Inscription controller.
@@ -28,7 +30,7 @@ class InscriptionController extends Controller
     }
 
     /**
-     * Affiche la liste des Session.
+     * Affiche la liste des Inscriptions.
      * 
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
@@ -41,7 +43,7 @@ class InscriptionController extends Controller
     }
 
     /**
-     * Affiche le formulaire d'ajout de Session.
+     * Affiche le formulaire d'ajout de Inscriptions.
      * 
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
@@ -57,9 +59,9 @@ class InscriptionController extends Controller
     }
 
     /**
-     * Affiche le formulaire d'édition de Session.
+     * Affiche le formulaire d'édition de Inscriptions.
      *
-     * @param integer $id Id de Session.
+     * @param integer $id Id de Inscriptions.
      * 
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
@@ -67,6 +69,29 @@ class InscriptionController extends Controller
     public function editAction( \HopitalNumerique\ModuleBundle\Entity\Inscription $inscription )
     {
         return $this->renderForm('hopitalnumerique_module_addinscription', $inscription, 'HopitalNumeriqueModuleBundle:Back/Inscription:edit.html.twig' );
+    }
+
+    /**
+     * Suppresion d'un Inscriptions.
+     * 
+     * @param integer $id Id de Inscription.
+     * METHOD = POST|DELETE
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function deleteAction(Request $request, \HopitalNumerique\ModuleBundle\Entity\Inscription $inscription )
+    {
+        $sessionId = $inscription->getSession()->getId();
+
+        $url = strpos($this->getRequest()->headers->get('referer'), 'inscription/all') ? $this->generateUrl('hopitalnumerique_module_module_allinscription') : $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id'=>$sessionId));
+
+        //Suppression de l'entitée
+        $this->get('hopitalnumerique_module.manager.inscription')->delete( $inscription );
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+
+        return new Response('{"success":true, "url" : "'. $url .'"}', 200);
     }
     
     /**

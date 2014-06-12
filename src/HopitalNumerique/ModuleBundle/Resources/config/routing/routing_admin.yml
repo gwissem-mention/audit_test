@@ -138,6 +138,14 @@ hopitalnumerique_module_module_session_inscription_edit:
         id: \d+
         _method: GET|POST
 
+#---Suppression
+hopitalnumerique_module_module_session_inscription_delete:
+    pattern:  /module/session/inscription/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Back/Inscription:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
 #---Accepter inscription
 hopitalnumerique_module_module_session_inscription_accepter:
     pattern:  /module/session/inscription/accepter/{id}
