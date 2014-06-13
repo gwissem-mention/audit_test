@@ -70,8 +70,7 @@ class SessionRepository extends EntityRepository
                          ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
                          ->leftJoin('ses.etat','refEtat')
                          ->andWhere('ses.formateur = :user', 'refEtat.id = 403')
-                         ->andWhere('ses.dateSession < :today')
                          ->setParameter('user', $user)
-                         ->setParameter('today', new \DateTime() );
+                         ->orderBy('ses.dateSession', 'DESC');
     }
 }

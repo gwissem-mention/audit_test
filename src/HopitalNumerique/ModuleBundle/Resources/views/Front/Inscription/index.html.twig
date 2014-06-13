@@ -87,6 +87,7 @@
                     <tr>
                         <th>Module</th>
                         <th>Début de la session</th>
+                        <th width="90px">Nombre participants</th>
                         <th width="90px">Actions</th>
                     </tr>
                 </thead>
@@ -97,6 +98,7 @@
                                 <a href="{{path('hopitalnumerique_module_module_show_front',{'id':session.module.id})}}">{{session.module.titre}}</a>
                             </td>
                             <td>{{session.dateSession|date('d/m/Y')}}</td>
+                            <td>{{session.getInscriptionsAccepte()|length}}/{{session.getNombrePlaceDisponible()}}</td>
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-info link fancybox.ajax btn-sm" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
