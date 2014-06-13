@@ -73,6 +73,6 @@ class SessionRepository extends EntityRepository
                          ->andWhere('ses.formateur = :user', 'refEtat.id = 403')
                          ->setParameter('user', $user)
                          ->orderBy('ses.dateSession', 'DESC')
-                         ->addOrderBy('ins.id', 'DESC');
+                         ->addOrderBy('ins.dateInscription', 'DESC');
     }
 }

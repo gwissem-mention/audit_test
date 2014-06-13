@@ -1,7 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
 {% block h1Title %}
-    Fiche RefusCandidature
+    Fiche de refus de candidature
 {% endblock %}
 
 {% block toolbarButton %}
@@ -17,15 +17,15 @@
 
             <div class="panel-body" >
                 <p>
-                    <strong>Id : </strong>
-                    {{ refuscandidature.id }}
+                    <strong>Utilisateur : </strong>
+                    {{ refuscandidature.user.getAppellation() }}
                 </p>
                 <p>
-                    <strong>Motifrefus : </strong>
+                    <strong>Motif du refus : </strong>
                     {{ refuscandidature.motifRefus }}
                 </p>
                 <p>
-                    <strong>Daterefus : </strong>
+                    <strong>Date du refus : </strong>
                     {{ refuscandidature.dateRefus|date('d/m/Y') }}
                 </p>
             </div>
