@@ -39,9 +39,9 @@ class AddInscriptionType extends AbstractType
                     'empty_value'   => ' - ',
                     'query_builder' => function(EntityRepository $er){
                         return $er->createQueryBuilder('user') //Faire une fonction dans le repo avec le groupe toussa
-                        ->where('user.etat = :etat')
-                        ->setParameter('etat', 3)
-                        ->orderBy('user.nom', 'ASC');
+                            ->where('user.etat = :etat')
+                            ->setParameter('etat', 3)
+                            ->orderBy('user.nom', 'ASC');
                     }
             ))
             ->add('etatInscription', 'entity', array(
