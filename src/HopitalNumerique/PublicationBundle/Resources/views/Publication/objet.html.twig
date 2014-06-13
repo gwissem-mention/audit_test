@@ -207,10 +207,9 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
         {% set count = 1 %}
-        {% set active = '' %}
 
         {% for item in objets if item['categ'] == key %}
-            <div class="item{{active}}" data-pos="{{count}}" >
+            <div class="item" data-pos="{{count}}" >
                 <h4>
                     {% if item['updated'] %}
                         <span class="label label-success">MaJ</span>
@@ -229,12 +228,6 @@
 
                 <p>{{ item['resume']|trim }}</p>
             </div>
-            
-            {% if (contenu != false and item['objet'] is not null and item['id'] == contenu.id) or (contenu == false and item['objet'] is null and item['id'] == objet.id) %}
-                {% set active = ' active' %}
-            {% else %}
-                {% set active = '' %}
-            {% endif %}
 
             {% set count = count + 1 %}
         {% else %}
