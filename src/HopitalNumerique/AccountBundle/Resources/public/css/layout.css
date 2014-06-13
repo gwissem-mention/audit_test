@@ -74,9 +74,9 @@ div#tableau-de-bord div.panel_boutons { background-color:transparent !important;
 #tableau-de-bord h3{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; background: #f6f6f6}
 
 /* Menu */
-#tableau-de-bord .menu-tdb{ margin:0 auto; list-style: none; padding:0; background: #f8f8f8; width: 100%;}
-#tableau-de-bord .menu-tdb li a{display: block; padding: 20px 10px 20px 10px; margin: 0; font-size: 14px; color: #5d5e5e; background: url('../img/menu-tdb-sep.jpg') no-repeat top; border-left:5px solid #f8f8f8;}
-#tableau-de-bord .menu-tdb li:hover a, #tableau-de-bord .menu-tdb li.active a{border-left:5px solid #de0d4d;text-decoration: none}
+#tableau-de-bord .menu-main{ margin:0 auto; list-style: none; padding:0; background: #f8f8f8; width: 100%;}
+#tableau-de-bord .menu-main li a{display: block; padding: 20px 10px 20px 10px; margin: 0; font-size: 14px; color: #5d5e5e; background: url('../img/menu-tdb-sep.jpg') no-repeat top; border-left:5px solid #f8f8f8;}
+#tableau-de-bord .menu-main li:hover a, #tableau-de-bord .menu-main li.active a{border-left:5px solid #de0d4d;text-decoration: none}
 
 /* Content */
     #tableau-de-bord .content{}
@@ -98,6 +98,6 @@ div#tableau-de-bord div.panel_boutons { background-color:transparent !important;
     #tableau-de-bord .content div#footerDesc { font-size:11px; padding:10px; font-style:italic; }
 
 @media screen and (max-width: 991px) {
-    #tableau-de-bord .menu-tdb{ margin:0 0 15px; list-style: none; padding:0; background: #f8f8f8; width: 100%;}
+    #tableau-de-bord .menu-main{ margin:0 0 15px; list-style: none; padding:0; background: #f8f8f8; width: 100%;}
     #tableau-de-bord .content div.panel {width: 100%;overflow-x: auto;}
 }

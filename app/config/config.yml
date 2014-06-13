@@ -119,9 +119,10 @@ nodevo_mail:
         expediteurEnCopie: %confighn_nodevomail_expediteurEnCopie%
         mailAnap: %confighn_nodevomail_mailsAnap%
 
+#Menu Breadcrumb Admin Link
 nodevo_menu:
     options:
-        breadcrumbRouteRacine: hopital_numerique_admin_homepage
+        breadcrumbRoot: hopital_numerique_admin_homepage
 
 # Gestion download fichiers sécurisé (pas dans /web)
 igorw_file_serve:

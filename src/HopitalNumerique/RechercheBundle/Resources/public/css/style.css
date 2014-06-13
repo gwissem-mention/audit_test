@@ -6,7 +6,9 @@
 #recherche .requete h2.ropen{background: url('../img/requete-open.png') no-repeat center right; cursor:pointer; }
 #recherche .requete .placeholder{border:2px dashed #bfbfbf; min-height:100px; padding:20px; background: #f8f8f8; margin-top: 10px; border-radius: 10px}
 #recherche .requete .placeholder p{margin:0;}
-#recherche .showMore{margin: 10px auto; display: block; width: 110px}
+#recherche .shows{ margin:10px auto; width: 250px}
+#recherche .shows .showMore{ display: inline-block; width: 110px}
+#recherche .shows .showLess{ display: inline-block; width: 120px}
 
 /* Destination */
     #recherche .requete #dest{position: relative;}

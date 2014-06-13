@@ -68,10 +68,11 @@ class QuestionnaireController extends Controller
         $this->_themeQuestionnaire = $themeQuestionnaire;
 
         $options =  array(
-                'questionnaire'    => $questionnaire,
-                'user'             => $user,
-                'readOnly'         => $readOnly,
-                'showAllQuestions' => $showAllQuestions
+            'questionnaire'    => $questionnaire,
+            'user'             => $user,
+            'readOnly'         => $readOnly,
+            'showAllQuestions' => $showAllQuestions,
+            'session'          => 0
         );
     
         return $this->renderForm('nodevo_questionnaire_questionnaire', $options, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit_front.html.twig'
@@ -104,13 +105,13 @@ class QuestionnaireController extends Controller
         $this->_themeQuestionnaire = $themeQuestionnaire;
         
         return $this->renderForm('nodevo_questionnaire_questionnaire',
-                array(
-                        'questionnaire' => $questionnaire,
-                        'user'          => $user,
-                        'readOnly'      => $readOnly,
-                        'session'       => $session
-                ) ,
-                'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit.html.twig'
+            array(
+                    'questionnaire' => $questionnaire,
+                    'user'          => $user,
+                    'readOnly'      => $readOnly,
+                    'session'       => $session
+            ) ,
+            'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit.html.twig'
         );
     }
 
@@ -132,10 +133,10 @@ class QuestionnaireController extends Controller
      */
     private function renderForm( $formName, $options, $view )
     {
-        $user             = $options['user'];
-        $readOnly         = $options['readOnly'];
-        $questionnaire    = $options['questionnaire'];
-        $idSession        = $options['session'];
+        $user          = $options['user'];
+        $readOnly      = $options['readOnly'];
+        $questionnaire = $options['questionnaire'];
+        $idSession     = $options['session'];
 
         $label_attr = array(
                 'idUser'           => $user->getId(),

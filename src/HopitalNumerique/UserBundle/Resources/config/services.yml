@@ -26,6 +26,9 @@ parameters:
     hopitalnumerique_user.twig.extensions.class: HopitalNumerique\UserBundle\Twig\UserExtension
     #Login - event
     hopitalnumerique_user.manager.login.class: HopitalNumerique\UserBundle\Manager\LoginManager
+    #Refus candidature
+    hopitalnumerique_user.manager.refuscandidature.class: HopitalNumerique\UserBundle\Manager\RefusCandidatureManager
+    hopitalnumerique_user.grid.refuscandidature.class: HopitalNumerique\UserBundle\Grid\RefusCandidatureGrid
 
 services:
     #Utilisateur:
@@ -94,6 +97,10 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    #--Grid
+    hopitalnumerique_user.grid.refuscandidature:
+        class: %hopitalnumerique_user.grid.refuscandidature.class%
+        arguments: ["@service_container"]
 
     #Ambassadeurs
     #--Grid

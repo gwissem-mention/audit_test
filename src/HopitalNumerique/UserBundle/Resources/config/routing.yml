@@ -247,3 +247,20 @@ hopitalnumerique_user_ambassadeur_savedomaine:
 hopital_numerique_user_resultats:
     pattern:  /admin/user/{id}/resultats
     defaults: { _controller: HopitalNumeriqueUserBundle:Resultat:index }
+
+#Refus candidature
+hopitalnumerique_user_refuscandidature:
+    pattern:  /admin/user/refuscandidature
+    defaults: { _controller: "HopitalNumeriqueUserBundle:RefusCandidature:index" }
+    requirements: 
+        _method: GET|POST
+
+
+hopitalnumerique_user_refuscandidature_show:
+    pattern:  /admin/user/refuscandidature/show/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:RefusCandidature:show" }
+    requirements:
+        id: \d+
+        _method: GET
+
+

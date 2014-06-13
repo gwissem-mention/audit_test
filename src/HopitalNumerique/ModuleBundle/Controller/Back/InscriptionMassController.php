@@ -220,6 +220,11 @@ class InscriptionMassController extends Controller
                         $this->get('mailer')->send($mail);
                     }
                 }
+                if (408 === $ref->getId() || 409 === $ref->getId()  )
+                {
+                    $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation( $inscriptions, $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 412) ) );
+                    $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation( $inscriptions, $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 27) ) );
+                }
                 //inform user connected
                 $this->get('session')->getFlashBag()->add('info', 'Inscription(s) modifiée(s) avec succès.' );
         	    break;

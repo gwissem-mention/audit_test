@@ -120,6 +120,7 @@ class AllInscriptionGrid extends Grid implements IGrid
         $actionFicheEvaluation->setRouteParametersMapping(array('userId' => 'user', 'sessionId' => 'session'));
         $actionFicheEvaluation->setRouteParameters(array('userId', 'sessionId'));
         $this->addActionButton( $actionFicheEvaluation );
+        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_inscription_delete' ) );
     }
 
     /**

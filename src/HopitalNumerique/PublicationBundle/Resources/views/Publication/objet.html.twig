@@ -52,8 +52,8 @@
             <h4 class="gris" >{{types}}</h4>
         </div>
         <div class="col-md-2">
-            <div class="btn btn-sm btn-default print pull-right btnprint" onclick="print();"><i class="fa fa-print"></i></div>
-            <a class="btn btn-sm btn-default back pull-right" href="{{path('hopital_numerique_recherche_homepage')}}"><i class="fa fa-reply"></i></a>
+            <div class="btn btn-sm btn-default print btnprint" onclick="print();"><i class="fa fa-print"></i></div>
+            <a class="btn btn-sm btn-default back btnBack" href="{{path('hopital_numerique_recherche_homepage')}}"><i class="fa fa-reply"></i></a>
         </div>
         {# Cas Contenu #}
         {% if contenu is defined %}
@@ -116,7 +116,7 @@
             {% set contenu = false %}
         {% endif %}
         <div class="col-md-12" id="autresResultats" >
-            <h2 class="open">Autres résultats de votre requête de recherche</h2>
+            <h2 class="open">Résultats annexes à cette publication</h2>
             <div class="row">
                 <div class="col-md-6">
                     <div id="points-durs" class="top" >
