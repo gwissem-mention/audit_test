@@ -6,12 +6,24 @@
     Liste des utilisateurs
 {% endblock %}
 
+{% block toolbarButton %}
+    <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
 {% block body %}
-Ouverture du client de messagerie...
-<p>Si votre client de messagerie ne s'ouvre pas, <a href="{{ mailto }}">cliquez ici</a>.</p>
-<p><a href="javascript:history.back();">Retour &agrave; la liste des utilisateurs</a></p>
-<script>
-	window.document.location = '{{ mailto }}';
-	//history.back();
-</script>
+    <p>Ouverture du client de messagerie...</p>
+    <p>Si votre client de messagerie ne s'ouvre pas, <a href="{{ mailto }}">cliquez ici</a>.</p>
+
+    <h3>Liste des mails pour Outlook : </h3>
+    <p class="well">
+        {{ list|join('; ') }}
+    </p>
+
+    <h3>Liste des mails pour OSX mail : </h3>
+    <p class="well">
+        {{ list|join(', ') }}
+    </p>
+    <script type="text/javascript">
+        window.document.location = '{{ mailto }}';
+    </script>
 {% endblock %}

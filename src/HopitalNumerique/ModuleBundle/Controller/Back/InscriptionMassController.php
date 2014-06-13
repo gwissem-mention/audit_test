@@ -150,7 +150,8 @@ class InscriptionMassController extends Controller
         $bcc = join(',', $list);
         
         return $this->render('HopitalNumeriqueModuleBundle:Back/Inscription:mailto.html.twig', array(
-            'mailto' => 'mailto:'.$to.'?bcc='.$bcc
+            'mailto' => 'mailto:'.$to.'?bcc='.$bcc,
+            'list'   => $list
         ));
     }
     
