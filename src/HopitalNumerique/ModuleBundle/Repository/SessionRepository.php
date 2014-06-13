@@ -69,10 +69,8 @@ class SessionRepository extends EntityRepository
                          ->select('ses')
                          ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
                          ->leftJoin('ses.etat','refEtat')
-                         ->leftJoin('ses.inscriptions','ins')
                          ->andWhere('ses.formateur = :user', 'refEtat.id = 403')
                          ->setParameter('user', $user)
-                         ->orderBy('ses.dateSession', 'DESC')
-                         ->addOrderBy('ins.dateInscription', 'DESC');
+                         ->orderBy('ses.dateSession', 'DESC');
     }
 }

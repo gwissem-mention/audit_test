@@ -570,7 +570,16 @@ class Session
      */
     public function getInscriptions()
     {
-        return $this->inscriptions;
+        $inscriptions = array();
+
+        foreach ($this->inscriptions as $inscription)
+        {
+            $inscriptions[$inscription->getDateInscription()->format('dmY') . $inscription->getId()] = $inscription;
+        }
+
+        krsort($inscriptions);
+
+        return $inscriptions;
     }
 
     /**
