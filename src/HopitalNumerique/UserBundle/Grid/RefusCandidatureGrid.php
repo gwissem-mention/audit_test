@@ -36,7 +36,7 @@ class RefusCandidatureGrid extends Grid implements IGrid
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_user_refuscandidature_show' ) );
+        // $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_user_refuscandidature_show' ) );
 
     }
 
