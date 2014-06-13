@@ -26,7 +26,7 @@ class RefusCandidatureGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        $this->addColonne( new Column\TextColumn('user.nom', 'Utilisateur') ); 
+        $this->addColonne( new Column\TextColumn('user.username', 'Utilisateur') ); 
         $this->addColonne( new Column\TextColumn('motifRefus', 'Motif du refus') );
         $this->addColonne( new Column\DateColumn('dateRefus', 'Date de refus') ); 
     }
