@@ -26,20 +26,20 @@ class QuestionRepository extends EntityRepository
     }
 
     /**
-     * Calcul l'ordre de la question par rapport à l'outil
+     * Retourne la liste des questions dans le bon ordre
      *
-     * @param Outil $outil L'outil
+     * @param Chapitre $chapitre chapitre
      *
-     * @return QueryBuilder
+     * @return integer
      */
-    public function calcOrder( $outil )
+    public function getQuestionsOrdered( $chapitre )
     {
         return $this->_em->createQueryBuilder()
-                         ->select('count(que)')
+                         ->select('que')
                          ->from('\HopitalNumerique\AutodiagBundle\Entity\Question', 'que')
-                         ->leftJoin('que.chapitre','cha')
-                         ->where('cha.outil = :outil')
-                         ->setParameter('outil', $outil );
+                         ->andWhere('que.chapitre = :chapitre')
+                         ->setParameter('chapitre', $chapitre )
+                         ->orderBy('que.order', 'ASC');
     }
 
 }

@@ -9,7 +9,6 @@ div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
 
 /* Gestion des questions */
 #questions .text-muted {margin-right:60px}
-#questions .dd3-content{padding-left:10px;}
 
 /* fancybox References */
 #panel-references{padding:0;}
@@ -20,3 +19,15 @@ div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
 #panel-references .tableContent .level2{background: #D8D8D8}
 #panel-references .tableContent .level3{background: #E6E6E6}
 #panel-references .panel-footer{margin:0;}
+
+/* Affichage d'un résultat */
+#resultat-detail h3{margin-left:30px;}
+
+/* Affichage de la liste des chapitres/question d'un outil */
+#listeChapitres h2{background: #cfcfcf; margin-top: 20px; padding: 5px 20px; color: #6f3596}
+#listeChapitres h2 span{color:#4d4d4d; font-size: 20px; padding:10px 0;}
+#listeChapitres .sous-chapitre .row{padding-left:20px;}
+#listeChapitres .question{font-weight: bold; margin-left: 5px}
+#listeChapitres .question span{font-weight: normal;}
+#listeChapitres h3{background: #efefef; margin-top: 20px; padding: 5px 20px;color: #6f3596}
+#listeChapitres h3 span{color:#4d4d4d; font-size: 17px; padding:5px 0;}

@@ -21,6 +21,11 @@ class FrontController extends Controller
         //On récupère l'user connecté
         $user = $this->get('security.context')->getToken()->getUser();
 
+        if( is_null($user->getRegion()) ){
+            $this->get('session')->getFlashBag()->add( 'warning' , 'Merci de saisir votre région avant d\'accéder à l\'interface de suivi des paiements' );
+            return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
+        }
+
         //get interventions + formations
         $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForFactures( $user );
         $formations    = $this->get('hopitalnumerique_module.manager.inscription')->getForFactures( $user );
@@ -76,7 +81,7 @@ class FrontController extends Controller
         $facture->setName( 'facture' . $code . '.pdf' );
         $this->get('hopitalnumerique_paiement.manager.facture')->save( $facture );
 
-        $this->get('session')->getFlashBag()->add( 'success' , 'Facture générée avec succès' );     
+        $this->get('session')->getFlashBag()->add( 'success' , 'Facture générée avec succès' );
         return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_front') );
     }
 

@@ -1,6 +1,3 @@
-/* 10:10:29 Gaia (localnodevo) */ DELETE FROM `core_mail` WHERE `mail_id` IN ('24');
-
-
-INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`)
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
 VALUES
-    (24, '[HOPITALNUMERIQUE] - Candidature ambassadeur pour l\'ARS', 'Nouvelle candidature ambassadeur / Envoi CMSI', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\r\n\nL\'utilisateur suivant vient de soumettre une candidature ambassadeur : %candidat\r\n\r\nVoici ses informations : %questionnaire \r\n\r\nCordialement,', '{\"%u\":\"Nom d\'utilisateur\",\"%candidat\":\"Nom du candidat\",\"%questionnaire\":\"Questionnaire\"}');
+    (NULL, 8, 1, 'Gestion refus candidature', 'hopitalnumerique_user_refuscandidature', NULL, 0, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 2);

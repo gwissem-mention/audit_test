@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {% stylesheets output="compiled/hopitalnumerique-autodiag-categorie-index.css" filter="cssrewrite, ?yui_css" 
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-chapitre-index.css" filter="cssrewrite, ?yui_css" 
         "@fancybox_css"
         "@validationEngine_css"
         "@jquery_toggles_css"
@@ -16,7 +16,7 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-autodiag-categorie-edit.js" 
+    {% javascripts output="compiled/hopitalnumerique-autodiag-chapitre-index.js" 
         "@fancybox_js" 
         "@nestable_js"
         "@tinymce_js"
@@ -58,25 +58,30 @@
                 <div class="sous_options">
                     <div class="btn-toolbar">
                         <div class="btn btn-default addChapitre">Ajouter un chapitre</div>
+                        <div class="btn btn-default calcPonderation">Calculer les pondérations des questions</div>
+                        <a class="btn btn-default" href="{{path('hopitalnumerique_autodiag_liste',{'id':outil.id})}}">Vue Liste</a>
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="well well-lg">
                         <span class="designForBlank" style="{% if chapitres|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton 'Ajouter un chapitre' pour ajouter un chapitre.</span>
                         <div class="dd" id="chapitres">
                             <ol class="dd-list">
+                                {% import _self as mySelf %}
                                 {% for chapitre in chapitres %}
-                                    {{ _self.buildTree(chapitre) }}
+                                    {{ mySelf.buildTree(chapitre) }}
                                 {% endfor %}
                             </ol>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="clearfix"></div>
+
+                <div class="col-md-12">
                     <div class="well well-lg" id="questions">
-                        <span class="selectChapitre">Vous devez sélectionner un chapitre avant de visualiser les questions</span>
+                        <span class="selectChapitre">Vous devez sélectionner un chapitre avant de visualiser les questions.</span>
                         <div class="results">
                             
                         </div>
@@ -86,6 +91,7 @@
 
                 <input type="hidden" id="add-chapitre-url" value="{{path('hopitalnumerique_autodiag_chapitre_add',{'id':outil.id})}}" />
                 <input type="hidden" id="order-chapitre-url" value="{{path('hopitalnumerique_autodiag_chapitre_reorder',{'id':outil.id})}}" />
+                <input type="hidden" id="calc-ponderation-url" value="{{path('hopitalnumerique_autodiag_outil_ponderation',{'id':outil.id})}}" />
                 <input type="hidden" id="outil-id" value="{{outil.id}}" />
             </div>
         </div>
@@ -97,19 +103,24 @@
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
             <a href="javascript:selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')">{{chapitre.title}}</a>
-            <p class="text-muted pull-right"><span>{{chapitre.references|default('0')}}</span> éléments référencés</p>
+            <p class="text-muted pull-right">
+                {% if chapitre.noteOptimale %}Note optimal : {{chapitre.noteOptimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
+                {% if chapitre.noteMinimale %}Note minimale de déclenchement : {{chapitre.noteMinimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
+                <span>{{chapitre.references|default('0')}}</span> éléments référencés
+            </p>
         </div>
         <div class="dd3-actions">
             <div onclick="deleteChapitre( {{chapitre.id}}, '{{path('hopitalnumerique_autodiag_chapitre_delete', {'id':chapitre.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-            <a href="{{path('hopitalnumerique_autodiag_reference_chapitre',{'id':chapitre.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
             <a href="{{path('hopitalnumerique_autodiag_chapitre_edit',{'id':chapitre.id})}}" class="fancy pull-right dd3-edit fancybox.ajax"><i class="fa fa-edit"></i></a>
             <a href="{{path('hopitalnumerique_autodiag_question_add', {'id':chapitre.id})}}" class="fancy pull-right dd3-plus fancybox.ajax" onclick="selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')" ><i class="fa fa-plus"></i></a>
+            <a href="{{path('hopitalnumerique_autodiag_reference_chapitre',{'id':chapitre.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
         </div>
         
         {% if chapitre.childs %}
             <ol class="dd-list">
+                {% import _self as mySelf %}
                 {% for child in chapitre.childs %}
-                    {{ _self.buildTree(child) }}
+                    {{ mySelf.buildTree(child) }}
                 {% endfor %}
             </ol>
         {% endif %}

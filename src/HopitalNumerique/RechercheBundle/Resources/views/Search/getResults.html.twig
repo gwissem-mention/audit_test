@@ -19,7 +19,10 @@
     </div>
 
     {% if count > showMorePointsDurs %}
-        <div class="btn btn-default btn-xs showMore" onclick="showMore(this, 1);" >Plus de résultats</div>
+        <div class="shows">
+            <div class="btn btn-default btn-xs showMore" onclick="showMore(this, 1);" >Plus de résultats</div>
+            <div class="btn btn-default btn-xs showLess" onclick="showLess(this, 1);" >Moins de résultats</div>
+        </div>
     {% endif %}
 </div>
 
@@ -42,7 +45,10 @@
         </div>
     </div>
     {% if count > showMoreProductions %}
-        <div class="btn btn-default btn-xs showMore" onclick="showMore(this, 2);" >Plus de résultats</div>
+        <div class="shows">
+            <div class="btn btn-default btn-xs showMore" onclick="showMore(this, 2);" >Plus de résultats</div>
+            <div class="btn btn-default btn-xs showLess" onclick="showLess(this, 2);" >Moins de résultats</div>
+        </div>
     {% endif %}
 </div>
 

@@ -99,12 +99,14 @@ class SessionController extends Controller
     {
         $moduleId = $session->getModule()->getId();
 
+        $url = strpos($this->getRequest()->headers->get('referer'), 'session/all') ? $this->generateUrl('hopitalnumerique_module_module_allsession') : $this->generateUrl('hopitalnumerique_module_module_session', array('id'=>$moduleId));
+
         //Suppression de l'entitée
         $this->get('hopitalnumerique_module.manager.session')->delete( $session );
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_module_module_session', array('id'=>$moduleId)).'"}', 200);
+        return new Response('{"success":true, "url" : "'.$url.'"}', 200);
     }
 
     /**

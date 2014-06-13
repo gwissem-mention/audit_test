@@ -43,30 +43,32 @@
     <h2 class="requeteTitle" >Gérer mes Requêtes de recherches</h2>
     <div class="requetes">
         {% for requete in requetes %}
-            <div class="ligne requete-{{requete.id}}" >
-                <div {% if not requete.isDefault %}title="Mettre par défaut"{% endif %} class="default {% if requete.isDefault %}active{% endif %}" data-link="{{path('hopital_numerique_requete_toggle',{'id':requete.id})}}" >
-                    <i class="fa {% if requete.isDefault %}fa-star{% endif %}"></i>
+            <a href="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">
+                <div class="ligne requete-{{requete.id}}" >
+                    <div {% if not requete.isDefault %}title="Mettre par défaut"{% endif %} class="default {% if requete.isDefault %}active{% endif %}" data-link="{{path('hopital_numerique_requete_toggle',{'id':requete.id})}}" >
+                        <i class="fa {% if requete.isDefault %}fa-star{% endif %}"></i>
+                    </div>
+
+                    <p {% if requete.isDefault %}class="violet"{% endif %} >
+                        {{requete.nom|capitalize}}
+                        {% if requete.isNew %}
+                            <span class="label label-danger">Nouveau</span>
+                        {% endif %}
+                        {% if requete.isUpdated %}
+                            <span class="label label-success">MaJ</span>
+                        {% endif %}
+                    </p>
+
+                    <div class="actions pull-right">
+                        <div class="fa fa-envelope btn-pas-mobile {% if requete.isUserNotified %}active{% else %}inactive{% endif %}" title="Notifications" onclick="showDetails('{{path('hopital_numerique_requete_mail',{'id':requete.id})}}')"></div>
+                        <div class="fa fa-eye btn-pas-mobile" title="Voir le détail" onclick="showDetails('{{path('hopital_numerique_requete_detail',{'id':requete.id})}}')"></div>
+                        <div class="fa fa-edit btn-pas-mobile" title="Editer" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
+                        <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
+                    </div>
+
+                    <div class="clearfix"></div>
                 </div>
-
-                <p {% if requete.isDefault %}class="violet"{% endif %} >
-                    {{requete.nom|capitalize}}
-                    {% if requete.isNew %}
-                        <span class="label label-danger">Nouveau</span>
-                    {% endif %}
-                    {% if requete.isUpdated %}
-                        <span class="label label-success">MaJ</span>
-                    {% endif %}
-                </p>
-
-                <div class="actions pull-right">
-                    <div class="fa fa-envelope {% if requete.isUserNotified %}active{% else %}inactive{% endif %}" title="Notifications" onclick="showDetails('{{path('hopital_numerique_requete_mail',{'id':requete.id})}}')"></div>
-                    <div class="fa fa-eye" title="Voir le détail" onclick="showDetails('{{path('hopital_numerique_requete_detail',{'id':requete.id})}}')"></div>
-                    <div class="fa fa-edit" title="Editer" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
-                    <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
-                </div>
-
-                <div class="clearfix"></div>
-            </div>
+            </a>
         {% else %}
             <div class="ligne">
                 <p> - Aucune requête de recherche enregistrée - </p>
@@ -89,7 +91,7 @@
                     </a>
                 {% endif %}
                 
-                <div class="actions pull-right">
+                <div class="actions">
                     <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_consultation_delete', {'id':consultation.id})}}')"></div>
                 </div>
             </div>

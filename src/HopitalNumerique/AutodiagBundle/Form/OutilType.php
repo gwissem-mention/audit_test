@@ -41,16 +41,16 @@ class OutilType extends AbstractType
             ))
             ->add('columnChartLabel', 'text', array(
                 'max_length' => 255, 
-                'required'   => false, 
+                'required'   => true, 
                 'label'      => 'Libellé du résultat sur le graphique barre',
                 'attr'       => array('class' => $outil->isColumnChart() ? 'validate[required,maxSize[255]]' : '' )
             ))
             ->add('columnChartAxe', 'choice', array(
                 'choices'     => array(1 => 'Chapitres', 2 => 'Catégories'),
-                'required'    => false, 
+                'required'    => true, 
                 'empty_value' => ' - ',
                 'label'       => 'Axes du graphique barre',
-                'attr'       => array('class' => $outil->isColumnChart() ? 'validate[required]' : '' )
+                'attr'        => array('class' => $outil->isColumnChart() ? 'validate[required]' : '' )
             ))
             ->add('radarChart', 'checkbox', array(
                 'label'    => 'Afficher la restitution en graphique radar ?',
@@ -59,16 +59,16 @@ class OutilType extends AbstractType
             ))
             ->add('radarChartLabel', 'text', array(
                 'max_length' => 255, 
-                'required'   => false, 
+                'required'   => true, 
                 'label'      => 'Libellé du résultat sur le graphique radar',
                 'attr'       => array('class' => $outil->isRadarChart() ? 'validate[required,maxSize[255]]' : '' )
             ))
             ->add('radarChartAxe', 'choice', array(
                 'choices'     => array(1 => 'Chapitres', 2 => 'Catégories'),
-                'required'    => false, 
+                'required'    => true, 
                 'empty_value' => ' - ',
                 'label'       => 'Axes du graphique radar',
-                'attr'       => array('class' => $outil->isRadarChart() ? 'validate[required]' : '' )
+                'attr'        => array('class' => $outil->isRadarChart() ? 'validate[required]' : '' )
             ))
             ->add('tableChart', 'checkbox', array(
                 'label'    => 'Afficher la restitution sous forme de table ?',

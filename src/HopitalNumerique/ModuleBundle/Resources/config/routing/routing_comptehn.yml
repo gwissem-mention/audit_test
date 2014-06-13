@@ -14,3 +14,9 @@ hopitalnumerique_module_session_evaluation_front:
     defaults: { _controller: HopitalNumeriqueModuleBundle:Front/SessionFront:evaluation}
     requirements:
         id: \d+
+
+hopitalnumerique_module_session_formateur_front:
+    pattern:  /module-thematiques/session/{id}/formateur
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/SessionFront:exportCommentaireCSV}
+    requirements:
+        id: \d+

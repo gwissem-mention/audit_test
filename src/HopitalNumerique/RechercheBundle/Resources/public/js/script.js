@@ -91,16 +91,36 @@ $(document).ready(function() {
     //init : open first categ
     $('#origin li.level0:first').addClass('active').find('ol:first').slideDown();
 
-    //fancybox daffichage de la synthese
+    if( $('#requete-refs').val() != '[]')
+        handleRequestForRecherche();
+
     $('a.synthese').fancybox({
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '80%',
         'scrolling' : 'no'
     });
+});
 
-    if( $('#requete-refs').val() != '[]')
-        handleRequestForRecherche();
+//fancybox daffichage de la synthese
+enquire.register("screen and (max-width: 991px)", {
+    match : function() {
+        $(function() {
+            $(document).unbind('click.fb-start');
+            $('a.synthese').attr('target','_blank');
+        });
+    },
+    unmatch : function() {
+        $(function() {
+            $('a.synthese').fancybox({
+                'padding'   : 0,
+                'autoSize'  : false,
+                'width'     : '80%',
+                'scrolling' : 'no'
+            });
+            $('a.synthese').attr('target','');
+        });
+    }
 });
 
 /**
@@ -284,6 +304,22 @@ function updateResultats( cleanSession )
 }
 
 /**
+ * Gestion de moins de résultats
+ */
+function showLess(that, btn)
+{
+    //Maj Cookie val
+    cookieName = (btn == 1) ? 'showMorePointsDurs' : 'showMoreProductions';
+    $.cookie(cookieName, 2, {path: '/' } );
+
+    $(that).parent().parent().find('.results > div').each(function(){
+        $(this).slideUp();
+    });
+
+    $(that).parent().find('.showMore').show();
+}
+
+/**
  * Gestion du bouton Plus de résultats
  */
 function showMore(that, btn)
@@ -299,7 +335,7 @@ function showMore(that, btn)
     //get cookie val
     showMoreCookieVal = $.cookie(cookieName);
 
-    $(that).parent().find('.results > div:hidden').each(function(){
+    $(that).parent().parent().find('.results > div:hidden').each(function(){
         if( toHide != 0){
             $(this).slideDown();
             toHide = toHide - 1;
@@ -312,7 +348,7 @@ function showMore(that, btn)
     $.cookie(cookieName, showMoreCookieVal, {path: '/' } );
 
     if (elementsLeft == 0)
-        $(that).remove();
+        $(that).hide();
 }
 
 /**

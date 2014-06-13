@@ -7,7 +7,7 @@
 #registre-ambassadeur .map span{cursor:pointer; }
 #registre-ambassadeur .map a.btn{color:#ffffff;font-size: 14px; font-weight: bold; display: block; margin: 5px 0; }
 #registre-ambassadeur .map p.titre{color:#4b4a49; font-size: 13px; font-weight: bold}
-#registre-ambassadeur .map #canvas_france{width:242px; height:355px;}
+#registre-ambassadeur .map #canvas_france{width:auto; height:355px; margin:0;}
 #registre-ambassadeur .map #domaines_liste{width: 100%}
 
 /* Partie Registre : liste */
@@ -40,8 +40,11 @@
 .fancybox-inner {width:550px; overflow:auto;}
 
 @media screen and (max-width: 991px) {
+    #registre-ambassadeur .map #canvas_france{width:242px; height:355px; margin:auto;}
     #registre-ambassadeur .annuaire_ambassadeur .fiche .content{height: auto}
-    #registre-ambassadeur .map span{display: block; margin: 10px 0 0 0; }
+    #registre-ambassadeur .map span{display: block;}
     #registre-ambassadeur .domainesFonctionnels{display: block;}
     #registre-ambassadeur .outilsMaitrises{display: block;}
+    #registre-ambassadeur .lienTableauDeBord{display:none;}
+    #registre-ambassadeur .annuaire_ambassadeur .fiche .content a.link{margin-bottom: 0px; }
 }

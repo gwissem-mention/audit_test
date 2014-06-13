@@ -4,6 +4,7 @@ namespace HopitalNumerique\ModuleBundle\Controller\Front;
 
 use HopitalNumerique\ModuleBundle\Entity\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class SessionFrontController extends Controller
 {
@@ -117,5 +118,50 @@ class SessionFrontController extends Controller
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
         return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-evaluations.csv', $kernelCharset );
+    }
+
+    /**
+     * Compte HN : Génère le fichier CSV des formulaires d'évaluation
+     *
+     * @return view
+     */
+    public function exportCommentaireCSVAction( \HopitalNumerique\UserBundle\Entity\User $user )
+    {
+        $colonnes = array();
+        $datas    = array();
+
+        //get sessions terminées where user connected == formateur
+        $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateur( $user );
+
+        $colonnes = array(
+            'Module',
+            'Date de la session',
+            'Utilisateur',
+            'Statut inscription',
+            'Date de l\'inscription',
+            'Commentaire'
+        );
+
+        //Pour chaque session, on parcourt les inscriptions pour les lister
+        foreach ($sessions as $session) 
+        {
+            foreach ($session->getInscriptions() as $inscription) 
+            {
+                $row = array();
+
+                $row[0] = $session->getModule()->getTitre();
+                $row[1] = $session->getDateSession()->format('d/m/Y');
+                $row[2] = $inscription->getUser()->getAppellation();
+                $row[3] = $inscription->getDateInscription()->format('d/m/Y');
+                $row[4] = $inscription->getEtatInscription()->getLibelle();
+                $row[5] = $inscription->getCommentaire();
+
+                $datas[] = $row;
+            }
+        }
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-commentaire-formateur.csv', $kernelCharset );
     }
 }

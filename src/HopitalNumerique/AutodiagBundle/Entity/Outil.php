@@ -122,6 +122,16 @@ class Outil
     private $chapitres;
 
     /**
+     * @ORM\OneToMany(targetEntity="Categorie", mappedBy="outil")
+     */
+    private $categories;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\Resultat", mappedBy="outil", cascade={"persist"})
+     */
+    protected $resultats;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -131,6 +141,7 @@ class Outil
         $this->radarChart   = false;
         $this->tableChart   = false;
         $this->chapitres    = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->categories   = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -403,4 +414,36 @@ class Outil
     {
         return $this->chapitres;
     }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Get resultats
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getResultats()
+    {
+        return $this->resultats;
+    }
+    
+    /**
+     * Set resultats
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $resultats
+     */
+    public function setResultats(\Doctrine\Common\Collections\ArrayCollection $resultats)
+    {
+        $this->resultats = $resultats;
+        return $this;
+    }
+    
 }

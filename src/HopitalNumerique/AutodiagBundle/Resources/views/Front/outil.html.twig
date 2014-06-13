@@ -1,0 +1,160 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Autodiagnostic{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-autodiag-front-outil.js" 
+        '@jquery_stepy_js'
+        'bundles/nodevoadmin/plugins/apprise/apprise.js'
+        'bundles/hopitalnumeriqueautodiag/js/front.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-front-outil.css" filter="cssrewrite, ?yui_css" 
+        'bundles/nodevoadmin/plugins/apprise/apprise.css'
+        'bundles/hopitalnumeriqueautodiag/css/front.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div id="autodiag">
+        <div class="col-md-3">
+            <p class="titre">Les chapitres</p>
+            <div id="chapitres"></div>
+            <div class="avancement-global">
+                <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-success" style="width: 0"></div>
+                </div>
+                <p>
+                    <span class="text-muted pull-left" >0%</span>
+                    <span class="text-muted pull-right" >100%</span>
+                </p>
+            </div>
+        </div>
+        <div class="col-md-9" >
+            <h1>{{outil.title}}</h1>
+
+            <div class="options">
+                <div class="btn-toolbar">
+                    <div onclick="saveQuestionnaire('valid');" class="finish btn btn-success btn-sm" ><i class="fa fa-check"></i> Valider le questionnaire</div>
+                </div>
+            </div>
+
+            <div class="col-md-12 content">
+                {% set formName = outil.alias %}
+                {% set questionNumber = 1 %}
+                {% import _self as mySelf %}
+                <form action="{{path('hopitalnumerique_autodiag_front_save', {'id':outil.id})}}" id="wizard" class="form-horizontal" method="POST">
+                    {% for chapitre in chapitres %}
+                        {% set parent = chapitre['parent'] %}
+
+                        {# Build step #}
+                        <fieldset title="{{parent.title}}" >
+                            <h2>{{parent.title}}</h2>
+
+                            <hr>
+
+                            {% if parent.questions|length > 0 %}
+                                {% for question in parent.questions %}
+                                    {% if reponses[question.id] is defined %}
+                                        {% set reponse = reponses[question.id] %}
+                                    {% else %}
+                                        {% set reponse = -1 %}
+                                    {% endif %}
+                                    {{ mySelf.buildQuestion(question, reponse, formName, questionNumber) }}
+                                    {% set questionNumber = questionNumber + 1 %}
+                                {% endfor %}
+                            {% endif %}
+                            
+                            {% if chapitre['childs']|length > 0 %}
+                                <div class="sous-chapitre">
+                                    {% for child in chapitre['childs'] %}
+                                        <h3>{{child.title}}</h3>
+                                        
+                                        <hr>
+                                        
+                                        {% for question in child.questions %}
+                                            {% if reponses[question.id] is defined %}
+                                                {% set reponse = reponses[question.id] %}
+                                            {% else %}
+                                                {% set reponse = -1 %}
+                                            {% endif %}
+                                            {{ mySelf.buildQuestion(question, reponse, formName, questionNumber) }}
+                                            {% set questionNumber = questionNumber + 1 %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </fieldset>
+                    {% endfor %}
+                    <input type="hidden" name="action" id="action" value="" />
+                    <input type="hidden" name="remplissage" id="remplissage" value="0" />
+                </form>
+
+                {% if app.user %}
+                    <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary btn-sm save" ><i class="fa fa-save"></i> Enregistrer le questionnaire</div>
+                {% endif %}
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% macro buildQuestion(question, reponse, formName, questionNumber) %}
+    {# Build vars to make it cleaner #}
+    {% set questionName = formName ~ '[' ~ question.chapitre.id ~ ']' ~ '[' ~ question.id ~ ']' %}
+    {% set questionId   = formName ~ '_' ~ question.chapitre.id ~ '_' ~ question.id %}
+
+    {# Build form group #}
+    <div class="form-group">
+        <label for="{{questionName}}" class="col-md-6">
+            <span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>
+            {{questionNumber ~ '. ' ~ question.texte}}
+        </label>
+        <div class="col-md-5">
+            {# SELECT #}
+            {% if question.type.id == '415' %}
+                {% set options = question.options|nl2br|split('<br />') %}
+
+                <select name="{{questionName}}" id="{{questionId}}" class="form-control">
+                    <option value=""> - </option>
+                    <option value="0" {% if reponse != '' and reponse == 0 %}selected="selected"{% endif %} >Non concerné</option>
+                    {% for option in options %}
+                        {% set datas = option|split(';') %}
+                        <option value="{{datas[0]}}" {% if reponse == datas[0] %}selected="selected"{% endif %} >{{datas[1]|capitalize}}</option>
+                    {% endfor %}
+                </select>
+            {# RADIO #}
+            {% elseif question.type.id == '416' %}
+                {% set options = question.options|nl2br|split('<br />') %}
+                <div class="radios">
+                    {% set isChecked = false %}
+                    <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" {% if reponse != '' and reponse == 0 %}{% set isChecked = true %}checked="checked"{% endif %} />Non concerné</label></div>
+                    {% for option in options %}
+                        {% set datas = option|split(';') %}
+                        <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" {% if reponse == datas[0] %}{% set isChecked = true %}checked="checked"{% endif %} />{{datas[1]|capitalize}}</label></div>
+                    {% endfor %}
+                    <div class="hide">
+                        <div class="radio block"><input type="radio" value="" name="{{questionName}}" id="{{questionId}}" {% if isChecked == false %}checked="checked"{% endif %} /></div>
+                    </div>
+                </div>
+            {# TEXT #}
+            {% else %}
+                <input type="integer" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" value="{% if reponse != -1 %}{{reponse}}{% endif %}" />
+            {% endif %}
+
+            <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="display:none" placeholder="Remarques" />
+        </div>
+        <div class="col-md-1">
+            <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i class="fa fa-edit"></i></div>
+        </div>
+    </div>
+{% endmacro %}

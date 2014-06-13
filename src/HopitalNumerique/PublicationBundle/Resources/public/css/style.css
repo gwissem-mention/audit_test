@@ -1,3 +1,10 @@
+.mobile{display:none; margin-bottom:5px;}
+.mobile .label{ font-size: 13px}
+.mobile .label-ambassadeur{background-color: #DE0D4D; margin-left:10px;}
+.mobile .label-requete{ background-color: #6F3596; margin-left:10px; }
+.btnprint{position: absolute; top: -10px; right:0;}
+.btnBack{position: absolute; top: -10px; right:40px;}
+
 /* Sommaire */
     #sommaire{ position: fixed; left:0; top:0; height: 100%; max-width: 33% }
     #sommaire.closed{ width:33px;background: url('../img/sommaire.jpg') no-repeat center 95px; cursor: pointer }
@@ -65,12 +72,12 @@
     /* Colonne left */
         #articles p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
         /* Sous-menu */
-        #articles #sous-menu{list-style:none; padding:0; margin-bottom: 20px}
-        #articles #sous-menu li{border-top:1px solid #f0f0f0; background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
-        #articles #sous-menu li a{padding:5px 0; display: block}
-        #articles #sous-menu li a span{color:#777777; font-size: 14px; }
-        #articles #sous-menu li.active a span,#articles #sous-menu li:hover a span{color:#6f3596;}
-        #articles #sous-menu li.last{border-bottom:1px solid #f0f0f0; }
+        #articles .menu-main{list-style:none; padding:0; margin-bottom: 20px}
+        #articles .menu-main li{border-top:1px solid #f0f0f0; background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
+        #articles .menu-main li a{padding:5px 0; display: block}
+        #articles .menu-main li a span{color:#777777; font-size: 14px; }
+        #articles .menu-main li.active a span, #articles .menu-main li:hover a span{color:#6f3596;}
+        #articles .menu-main li.last{border-bottom:1px solid #f0f0f0; }
         /* Catégories d'actu */
         #articles .actus{background: #f6f6f6; border-radius: 5px; padding:10px;}
         #articles .actus ul{list-style: none; padding:0;}
@@ -89,7 +96,7 @@
     #autresResultats .carousel-indicators{bottom: 0; width: 95%; left:0; margin: 0 15px 10px}
     #autresResultats .carousel-indicators li{background-color:#d2d1d1; }
     #autresResultats .carousel-indicators .active{background-color:#703695 }
-    #autresResultats .carousel-inner{margin-left:25px;width:475px;}
+    #autresResultats .carousel-inner{margin-left:25px;width:90%;}
     #autresResultats .carousel-control{width:2%;}
     #autresResultats .carousel-control.right {background: none}
     #autresResultats .carousel-control.left {background: none}
@@ -120,13 +127,21 @@
 /**
  * MEDIA QUERIES
  */
-/* Décalage de la publication pour laisser la place au sommaire sur les petites résolutions */
-@media screen and (max-width: 1225px) {
-    #menu, #publication.with-sommaire{padding-left: 10px}
+@media screen and (max-width: 1270px) {
+    #ambassadeurs.closed, #sommaire.closed{display: none}
+    .mobile{display:block;}
 }
 
 @media screen and (max-width: 991px) {
+    #autresResultats h2{background-image:none;}
+    #articles{margin-top: 10px;}
+    #ambassadeurs.open, #sommaire.open, #mesrequetes.open{width: 100%; max-width: 100%}
+    
     #points-durs{margin-bottom: 20px}
     #ressources{margin-bottom: 20px}
     #autresResultats .carousel-inner{ width: 92%;}
+    .btnprint{display: none}
+    #articles .actus{margin-bottom: 20px}
+
+    #autresResultats .results {height: 190px}
 }

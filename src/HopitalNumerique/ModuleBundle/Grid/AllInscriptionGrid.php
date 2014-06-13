@@ -74,6 +74,15 @@ class AllInscriptionGrid extends Grid implements IGrid
         $etatInscriptionColumn->setOperatorsVisible( false );
         $this->addColonne( $etatInscriptionColumn );
 
+        $nbInscritsColumn = new Column\TextColumn('nbInscrits', 'Nombres d\'inscrits pour sa session');
+        $this->addColonne( $nbInscritsColumn );
+        
+        $nbInscritsEnAttenteColumn = new Column\TextColumn('nbInscritsEnAttente', 'Nombres d\'inscrits en attente pour sa session');
+        $this->addColonne( $nbInscritsEnAttenteColumn );
+        
+        $nbInscritsColumn = new Column\TextColumn('placeRestantes', 'Nombres de places restantes pour sa session');
+        $this->addColonne( $nbInscritsColumn );
+
         // $etatParticipationColumn = new Column\TextColumn('etatParticipation', 'Etat de la participation');
         // $etatParticipationColumn->setSize( 170 );
         // $etatParticipationColumn->setFilterType('select');
@@ -111,6 +120,7 @@ class AllInscriptionGrid extends Grid implements IGrid
         $actionFicheEvaluation->setRouteParametersMapping(array('userId' => 'user', 'sessionId' => 'session'));
         $actionFicheEvaluation->setRouteParameters(array('userId', 'sessionId'));
         $this->addActionButton( $actionFicheEvaluation );
+        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_inscription_delete' ) );
     }
 
     /**
