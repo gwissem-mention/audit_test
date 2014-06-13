@@ -29,7 +29,7 @@ class RefusCandidature
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="refusCandidature")
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
-     * @GRID\Column(field="user.nom")
+     * @GRID\Column(field="user.username")
      */
     private $user;
     
