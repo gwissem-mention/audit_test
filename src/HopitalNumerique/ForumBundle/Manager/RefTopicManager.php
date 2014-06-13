@@ -13,6 +13,7 @@ class RefTopicManager extends BaseManager
 
     /**
      * Retourne la liste des références topics pour la recherche
+     * @todo  : Voir comment récupérer le répository RepTopicRepository
      *
      * @param array $references Liste des références
      *
@@ -20,6 +21,15 @@ class RefTopicManager extends BaseManager
      */
     public function getTopicForRecherche( $references )
     {
-        return $this->getRepository()->getTopicForRecherche( $references )->getQuery()->getResult();
+        $qb = $this->_em->createQueryBuilder();
+
+        return $qb->select('refO')
+                        ->from('\HopitalNumerique\ForumBundle\Entity\RefTopic', 'refO')
+                        ->leftJoin('refO.topic','top')
+                        ->andWhere('refO.reference in (:references)','top.isClosed = false')
+                        ->setParameter('references', $references )
+                        ->orderBy('refO.primary', 'ASC')
+                        ->getQuery()
+                        ->getResult();
     }
 }

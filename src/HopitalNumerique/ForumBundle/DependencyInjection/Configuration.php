@@ -18,7 +18,7 @@ class Configuration extends ConfigurationCCDN
      *
      * @access private
      * @param  \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $node
-     * @return \CCDNForum\ForumBundle\DependencyInjection\Configuration
+     * @return \HopitalNumerique\ForumBundle\DependencyInjection\Configuration
      */
     private function addEntitySection(ArrayNodeDefinition $node)
     {
