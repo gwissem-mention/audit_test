@@ -312,11 +312,14 @@ function showLess(that, btn)
     cookieName = (btn == 1) ? 'showMorePointsDurs' : 'showMoreProductions';
     $.cookie(cookieName, 2, {path: '/' } );
 
-    $(that).parent().parent().find('.results > div').each(function(){
-        $(this).slideUp();
+    var i = 0;
+    $(that).parent().parent().find('.results > div').each(function( i ){
+        if( i !== 0 && i !== 1)
+            $(this).slideUp();
     });
 
     $(that).parent().find('.showMore').show();
+    $(that).hide();
 }
 
 /**
@@ -349,6 +352,8 @@ function showMore(that, btn)
 
     if (elementsLeft == 0)
         $(that).hide();
+
+    $(that).parent().find('.showLess').show();
 }
 
 /**
