@@ -258,7 +258,7 @@ hopitalnumerique_user_refuscandidature:
 
 hopitalnumerique_user_refuscandidature_show:
     pattern:  /admin/user/refuscandidature/show/{id}
-    defaults: { _controller: "HopitalNumeriqueUserBundle:RefusCandidature:show" }
+    defaults: { _controller: "HopitalNumeriqueUserBundle:RefusCandidature:show", id: 1 }
     requirements:
         id: \d+
         _method: GET

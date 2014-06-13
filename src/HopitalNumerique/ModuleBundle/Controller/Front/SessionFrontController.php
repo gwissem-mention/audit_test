@@ -137,8 +137,8 @@ class SessionFrontController extends Controller
             'Module',
             'Date de la session',
             'Utilisateur',
-            'Statut inscription',
             'Date de l\'inscription',
+            'Statut inscription',
             'Commentaire'
         );
 

@@ -6,9 +6,6 @@
 
 {% block toolbarButton %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_user_refuscandidature') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
-    {% if refuscandidature.id %}
-        <a href="{{ path('hopitalnumerique_user_refuscandidature_edit', { 'id': refuscandidature.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
-    {% endif %}
 {% endblock %}
 
 {% block body %}
@@ -29,7 +26,7 @@
                 </p>
                 <p>
                     <strong>Daterefus : </strong>
-                    {{ refuscandidature.dateRefus }}
+                    {{ refuscandidature.dateRefus|date('d/m/Y') }}
                 </p>
             </div>
         </div>
