@@ -18,12 +18,10 @@
         </div>
     </div>
 
-    {% if count > showMorePointsDurs %}
-        <div class="shows">
-            <div class="btn btn-default btn-xs showMore" onclick="showMore(this, 1);" >Plus de résultats</div>
-            <div class="btn btn-default btn-xs showLess" onclick="showLess(this, 1);" >Moins de résultats</div>
-        </div>
-    {% endif %}
+    <div class="shows">
+        <div class="btn btn-default btn-xs showMore" {% if count <= showMorePointsDurs %}style="display:none"{% endif %} onclick="showMore(this, 1);" >Plus de résultats</div>
+        <div class="btn btn-default btn-xs showLess" {% if showMorePointsDurs <= 2 %}style="display:none"{% endif %} onclick="showLess(this, 1);" >Moins de résultats</div>
+    </div>    
 </div>
 
 <div id="productions" class="col-md-12">
@@ -43,13 +41,11 @@
                 <p> - Aucune production trouvée - </p>
             {% endfor %}
         </div>
+    </div>    
+    <div class="shows">
+        <div class="btn btn-default btn-xs showMore" {% if count <= showMoreProductions %}style="display:none"{% endif %} onclick="showMore(this, 2);" >Plus de résultats</div>
+        <div class="btn btn-default btn-xs showLess" {% if showMoreProductions <= 2 %}style="display:none"{% endif %} onclick="showLess(this, 2);" >Moins de résultats</div>
     </div>
-    {% if count > showMoreProductions %}
-        <div class="shows">
-            <div class="btn btn-default btn-xs showMore" onclick="showMore(this, 2);" >Plus de résultats</div>
-            <div class="btn btn-default btn-xs showLess" onclick="showLess(this, 2);" >Moins de résultats</div>
-        </div>
-    {% endif %}
 </div>
 
 <div class="col-md-6">
