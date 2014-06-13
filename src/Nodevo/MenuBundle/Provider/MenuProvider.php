@@ -4,6 +4,9 @@ namespace Nodevo\MenuBundle\Provider;
 
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
+use Nodevo\MenuBundle\Manager\MenuManager;
+use Nodevo\MenuBundle\Provider\BreadcrumbNodeLoader;
+use Nodevo\MenuBundle\Provider\NodeLoader;
 
 class MenuProvider implements MenuProviderInterface
 {
@@ -15,7 +18,14 @@ class MenuProvider implements MenuProviderInterface
     protected $menuManager      = null;
     protected $_menuEntity      = null;
 
-    public function __construct($loader, $breadcrumbLoader, $menuManager)
+    /**
+     * [__construct description]
+     *
+     * @param NodeLoader           $loader           [description]
+     * @param BreadcrumbNodeLoader $breadcrumbLoader [description]
+     * @param MenuManager          $menuManager      [description]
+     */
+    public function __construct(NodeLoader $loader, BreadcrumbNodeLoader $breadcrumbLoader, MenuManager $menuManager)
     {
         $this->loader           = $loader;
         $this->breadcrumbLoader = $breadcrumbLoader;
@@ -38,30 +48,33 @@ class MenuProvider implements MenuProviderInterface
     public function get($name, array $options = array())
     {
         $tree = $this->menuManager->getTree( $this->_menuEntity );
-        $type = (isset($options['breadcrumb']) && $options['breadcrumb'] === 'yes') ? 'breadcrumb' : 'menu';
 
-        //Cas menu
-        if( $type == 'menu' ) {
-            $class = !is_null($this->_menuEntity->getCssClass()) ? $this->_menuEntity->getCssClass() : '';
-            $id    = !is_null($this->_menuEntity->getCssId()) ? $this->_menuEntity->getCssId() : '';
+        //Cas breadcrumb
+        if( isset($options['breadcrumb']) && $options['breadcrumb'] === 'yes' )
+        {
+            $loader = $this->breadcrumbLoader;
+            $class  = 'breadcrumb';
+            $id     = '';
+        }
+        //Cas Menu
+        else
+        {
+            $class  = !is_null($this->_menuEntity->getCssClass()) ? $this->_menuEntity->getCssClass() : '';
+            $id     = !is_null($this->_menuEntity->getCssId())    ? $this->_menuEntity->getCssId()    : '';
+            $loader = $this->loader;
 
             //set Class for childrens
-            $this->loader->setClass($class);
-
-        //Cas fil d'ariane
-        }else{
-            $class = 'breadcrumb';
-            $id    = '';
+            $loader->setClass($class);
         }
 
         //Get Menu
-        try {
-            $menu = $type == 'menu' ? $this->loader->load($tree) : $this->breadcrumbLoader->getMenu($tree);
-        } 
-        catch (\Exception $e) {
-            $tree = $this->menuManager->getTree( $this->_menuEntity, true);
-            $menu = $type == 'menu' ? $this->loader->load($tree) : $this->breadcrumbLoader->getMenu($tree);
-        }
+        //try {
+            $menu = $loader->load($tree);
+        // } 
+        // catch (\Exception $e) {
+        //     $tree = $this->menuManager->getTree( $this->_menuEntity, true);
+        //     $menu = $loader->load($tree);
+        // }
         
         //set Vars    
         $menu->setChildrenAttribute('class', $class );

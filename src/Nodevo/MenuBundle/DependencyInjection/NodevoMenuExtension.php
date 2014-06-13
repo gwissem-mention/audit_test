@@ -26,8 +26,6 @@ class NodevoMenuExtension extends Extension
         $loader->load('services.yml');
 
         if (isset($config['options']))
-        {
             $container->setParameter('nodevo_menu.options', $config['options']);
-        }
     }
 }
