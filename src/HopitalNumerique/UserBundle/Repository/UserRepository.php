@@ -351,8 +351,10 @@ class UserRepository extends EntityRepository
     /* ^^^^^^^^^^^^^^^^^^^^^^ Code de Rémi ^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
     /**
-     * Retourne une liste d'utilisateurs en fonction d'un rôle.
+     * Retourne une liste d'utilisateurs en fonction d'un rôle en respectant le retour d'un QB et non d'une liste d'utilisateur
+     * ainsi que le public pour l'utilisateur dans des formType.
      *
+     * @author gmelchilsen <gmelchilsen@nodevo.com>
      * @param string|array $role Label(s) du(es) rôle(s) sur lequel(lesquels) filtrer
      * @param array $criteres Filtres à appliquer sur la liste
      * @return QueryBuilder
