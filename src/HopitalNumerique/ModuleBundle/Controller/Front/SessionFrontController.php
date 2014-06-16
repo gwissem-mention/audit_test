@@ -132,7 +132,7 @@ class SessionFrontController extends Controller
 
         if(empty($datas))
         {
-            $colonnes = array(0 => "Aucune données");
+            $colonnes = array(0 => "Aucune donnée");
             $datas[] = array(0 => "");
         }
 

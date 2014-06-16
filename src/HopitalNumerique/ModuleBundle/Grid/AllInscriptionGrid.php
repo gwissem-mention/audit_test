@@ -128,14 +128,19 @@ class AllInscriptionGrid extends Grid implements IGrid
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Accepter inscription'  ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:accepterInscriptionMass') );
+        $this->addMassAction( new Action\ActionMass('Inscription - Accepter inscription'  ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:accepterInscriptionMass') );
 
-        $actionMassRefusInscription = new Action\ActionMass('Refuser inscription'   ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:refuserInscriptionMass');
+        $actionMassRefusInscription = new Action\ActionMass('Inscription - Refuser inscription'   ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:refuserInscriptionMass');
         $this->addMassAction( $actionMassRefusInscription );
+        $this->addMassAction( new Action\ActionMass('Inscription   - Annuler inscription'   ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:annulerInscriptionMass') );
+
+        $this->addMassAction( new Action\ActionMass('Participation - A participé'           ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:aParticiperParticipationMass') );
+        $this->addMassAction( new Action\ActionMass('Participation - N\'a pas participé'    ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:aPasParticiperParticipationMass') );
         
-        $this->addMassAction( new Action\ActionMass('Annuler inscription'   ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:annulerInscriptionMass') );
-        $this->addMassAction( new Action\ActionMass('A participé'           ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:aParticiperParticipationMass') );
-        $this->addMassAction( new Action\ActionMass('N\'a pas participé'    ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:aPasParticiperParticipationMass') );
+        $this->addMassAction( new Action\ActionMass('Evaluation - A évaluer'           ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:aEvaluaerEvaluationMass') );
+        $this->addMassAction( new Action\ActionMass('Evaluation - Évaluée'    ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:evalueeEvaluationMass') );
+        $this->addMassAction( new Action\ActionMass('Evaluation - NA'    ,'HopitalNumeriqueModuleBundle:Back/InscriptionMass:naEvaluationMass') );
+        
         /* Exports */
         $this->addMassAction( new Action\ActionMass('Export CSV - Inscriptions', 'HopitalNumeriqueModuleBundle:Back/InscriptionMass:exportCsv') );
         $this->addMassAction( new Action\ActionMass('Envoyer un mail'          , 'HopitalNumeriqueModuleBundle:Back/InscriptionMass:envoyerMailMass') );
