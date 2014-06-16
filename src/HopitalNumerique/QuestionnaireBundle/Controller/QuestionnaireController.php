@@ -204,16 +204,6 @@ class QuestionnaireController extends Controller
                         $reponse = $this->get('hopitalnumerique_questionnaire.manager.reponse')->createEmpty();
                         $reponse->setUser($user);
                         $reponse->setQuestion($questionFiles);
-
-                        if('module-evaluation' === $questionnaire->getNomMinifie())
-                        {
-                            $idSession = $form["idSession"]->getData();
-
-                            if(!is_null($idSession) && 0 !== $idSession)
-                            {
-                                $reponse->setParamId( $idSession );
-                            }
-                        }
                     }
                 
                     //Format du champ file
@@ -299,7 +289,17 @@ class QuestionnaireController extends Controller
                             $reponse->addReferenceMulitple($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $value)));
                         }
                     }
-    
+
+                    if('module-evaluation' === $questionnaire->getNomMinifie())
+                    {
+                        $idSession = $form["idSession"]->getData();
+
+                        if(!is_null($idSession) && 0 !== $idSession)
+                        {
+                            $reponse->setParamId( $idSession );
+                        }
+                    }
+
                     //Test ajout ou edition
                     $new = is_null($reponse->getId());
                     
@@ -309,7 +309,6 @@ class QuestionnaireController extends Controller
 
                 if('module-evaluation' === $questionnaire->getNomMinifie())
                 {
-
                     $idSession = $form["idSession"]->getData();
 
                     //Dans le cas où on est dans le formulaire de session
@@ -339,6 +338,34 @@ class QuestionnaireController extends Controller
                         }
 
                         $this->get('hopitalnumerique_module.manager.inscription')->save( $inscription );
+
+                        $roleUser = $this->get('nodevo_role.manager.role')->getUserRole($user);
+
+                        //Mise à jour de la production du module dans la liste des productions maitrisées : uniquement pour les ambassadeurs
+                        if('ROLE_AMBASSADEUR_7' === $roleUser)
+                        {
+                            //Récupération des formations
+                            $formations = $session->getModule()->getProductions();
+                            
+                            //Pour chaque production on ajout l'utilisateur à la liste des ambassadeurs qui la maitrise
+                            foreach($formations as $formation)
+                            {
+                                //Récupération des ambassadeurs pour vérifier si l'utilisateur actuel ne maitrise pas déjà cette formation
+                                $ambassadeursFormation = $formation->getAmbassadeurs();
+                                $ambassadeurIds = array();
+
+                                foreach ($ambassadeursFormation as $ambassadeur)
+                                {
+                                    $ambassadeurIds[] = $ambassadeur->getId();
+                                }
+
+                                if(!in_array($user->getId(), $ambassadeurIds))
+                                {
+                                    $formation->addAmbassadeur( $user );
+                                    $this->get('hopitalnumerique_objet.manager.objet')->save( $formation );
+                                }
+                            }
+                        }
                     }
                 }
 
