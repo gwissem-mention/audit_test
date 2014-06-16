@@ -23,7 +23,6 @@ class SessionGrid extends Grid implements IGrid
         $this->setSource( 'hopitalnumerique_module.manager.session' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('- Aucune session planifiée -');
-        $this->setButtonSize(45);
     }
 
     /**
