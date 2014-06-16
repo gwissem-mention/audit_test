@@ -102,6 +102,9 @@ class SessionFrontController extends Controller
                     case 'checkbox':
                         $row[$idQuestion] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );
                         break;
+                    case 'choice':
+                        $row[$idQuestion] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );
+                        break;
                     default:
                         $row[$idQuestion] = $reponse->getReponse();
                         break;
