@@ -88,7 +88,7 @@
                         <th>Module</th>
                         <th>Début de la session</th>
                         <th width="90px">Nombre participants</th>
-                        <th width="90px">Actions</th>
+                        <th width="135px">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -97,12 +97,19 @@
                             <td>
                                 <a href="{{path('hopitalnumerique_module_module_show_front',{'id':session.module.id})}}">{{session.module.titre}}</a>
                             </td>
-                            <td>{{session.dateSession|date('d/m/Y')}}</td>
-                            <td>{{session.getInscriptionsAccepte()|length}}/{{session.getNombrePlaceDisponible()}}</td>
+                            <td>
+                                {{session.dateSession|date('d/m/Y')}}
+                            </td>
+                            <td>
+                                {{session.getInscriptionsAccepte()|length}}/{{session.getNombrePlaceDisponible()}}
+                            </td>
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-info link fancybox.ajax btn-sm" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
-                                    <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_session_evaluation_front',{'id':session.id})}}"><i class="fa fa-external-link"></i></a>
+                                    {% if date(session.dateSession)  <= date() %}
+                                        <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_session_evaluation_front',{'id':session.id})}}"><i class="fa fa-external-link"></i></a>
+                                    {% endif %}
+                                    <a class="btn btn-warning btn-sm" href="{{path('hopitalnumerique_module_session_formateur_session_front',{'id':session.id})}}"><i class="fa fa-cloud-download"></i></a>
                                 </div>
                             </td>
                         </tr>
