@@ -36,8 +36,10 @@
                 {% endfor %}
             {% endfor %}
 
-            {% set menu = root[parent] %}
-            {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+            {% if parent is not null %}
+                {% set menu = root[parent] %}
+                {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+            {% endif %}
         </div>
         
         <div class="content col-md-9 col-sm-12">
