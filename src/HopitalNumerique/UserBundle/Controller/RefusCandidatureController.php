@@ -53,9 +53,9 @@ class RefusCandidatureController extends Controller
 
         $colonnes = array( 
                             'id'              => 'id',
-                            'user.nom'        => 'Nom', 
-                            'user.prenom'     => 'Prénom', 
-                            'user.username'   => 'Identifiant (login)', 
+                            'user.nom'        => 'Nom',
+                            'user.prenom'     => 'Prénom',
+                            'user.username'   => 'Identifiant (login)',
                             'user.email'      => 'Adresse e-mail',
                             'motifRefus'      => 'Motif du refus',
                             'dateRefusString' => 'Date du refus'
