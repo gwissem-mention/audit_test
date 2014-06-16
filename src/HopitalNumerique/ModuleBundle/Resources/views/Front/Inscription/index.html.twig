@@ -106,10 +106,10 @@
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-info link fancybox.ajax btn-sm" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
+                                    <a class="btn btn-warning btn-sm" href="{{path('hopitalnumerique_module_session_formateur_session_front',{'id':session.id})}}"><i class="fa fa-cloud-download"></i></a>
                                     {% if date(session.dateSession)  <= date() %}
                                         <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_session_evaluation_front',{'id':session.id})}}"><i class="fa fa-external-link"></i></a>
                                     {% endif %}
-                                    <a class="btn btn-warning btn-sm" href="{{path('hopitalnumerique_module_session_formateur_session_front',{'id':session.id})}}"><i class="fa fa-cloud-download"></i></a>
                                 </div>
                             </td>
                         </tr>
