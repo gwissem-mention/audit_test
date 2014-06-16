@@ -14,30 +14,11 @@
 
 {% block body %}
     <div id="actualites">
-        {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
-        {% set root = knp_menu_get('menu-main-front') %}
-        {% set parent = null %}
-
-        {% for item in root %}
-            {% if currentPath == item.uri %}
-                {% set parent = item.name %}
-            {% endif %}
-
-            {% for child in item.children %}
-                {% if currentPath == child.uri %}
-                    {% set parent = item.name %}
-                {% endif %}
-            {% endfor %}
-        {% endfor %}
-
-        {% if parent is not null %}
-            <div class="col-md-3">
-                <p class="titre">Hôpital <br />Numérique</p>
-                {% set menu = root[parent] %}
-                {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
-                {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites")) }}
-            </div>
-        {% endif %}
+        
+        <div class="col-md-3">
+            <p class="titre">Hôpital <br />Numérique</p>
+            {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites")) }}
+        </div>
         
         <div class="col-md-9" >
             <div class="col-md-12">
