@@ -62,6 +62,12 @@ class SessionGrid extends Grid implements IGrid
         $etatColumn->setFilterType('select');
         $etatColumn->setOperatorsVisible( false );
         $this->addColonne( $etatColumn );
+        
+        $archiverColumn = new Column\BooleanColumn('archiver', 'Archiver');
+        $archiverColumn->setSize( 70 );
+        $archiverColumn->setFilterType('select');
+        $archiverColumn->setOperatorsVisible( false );
+        $this->addColonne( $archiverColumn );
     }
 
     /**
@@ -79,6 +85,27 @@ class SessionGrid extends Grid implements IGrid
         $this->addActionButton( $actionListeInscrits );
 
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_module_module_session_edit' ) );
+
+        //--------- GME 16/06 : Cadenas lock/unlock -------
+        //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
+        $unlockButton = new Action\LockButton( 'hopitalnumerique_module_module_session_archiver' );
+        // $unlockButton->setRouteParameters( array('id', 'message'=>true) );
+        $unlockButton->setAttributes( array('class'=>'btn btn-warning fa fa-unlock','title' => 'Dévérouiller') );
+        $unlockButton->manipulateRender(function($action, $row) {
+            return $row->getField('archiver') ? $action : null;
+        });
+        $this->addActionButton( $unlockButton );
+
+        //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
+        $lockButton = new Action\LockButton( 'hopitalnumerique_module_module_session_archiver' );
+        // $lockButton->setRouteParameters( array('id', 'message'=>true) );
+        $lockButton->setAttributes( array('class'=>'btn btn-warning fa fa-lock','title' => 'Vérouiller') );
+        $lockButton->manipulateRender(function($action, $row) {
+            return $row->getField('archiver') ? null : $action;
+        });
+        $this->addActionButton( $lockButton );
+        //--------- GME 16/06 : Cadenas lock/unlock -------
+
         $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_delete' ) );
 
     }

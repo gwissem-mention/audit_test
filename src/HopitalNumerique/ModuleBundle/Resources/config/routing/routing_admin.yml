@@ -85,6 +85,14 @@ hopitalnumerique_module_module_session_edit:
         _method: GET|POST
 
 #---Suppression
+hopitalnumerique_module_module_session_archiver:
+    pattern:  /module/session/archiver/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Back/Session:archiver", id: 1}
+    requirements: 
+        id: \d+
+        _method: GET|POST
+
+#---Suppression
 hopitalnumerique_module_module_session_delete:
     pattern:  /module/session/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Back/Session:delete", _format: json }
