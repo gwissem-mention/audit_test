@@ -22,7 +22,7 @@ class FrontController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
 
         if( is_null($user->getRegion()) ){
-            $this->get('session')->getFlashBag()->add( 'warning' , 'Merci de saisir votre région avant d\'accéder à l\'interface de suivi des paiements' );
+            $this->get('session')->getFlashBag()->add( 'warning' , 'Merci de saisir votre région avant d\'accéder à l\'interface de suivi des paiements.' );
             return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
         }
 
