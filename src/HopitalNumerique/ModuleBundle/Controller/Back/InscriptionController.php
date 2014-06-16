@@ -182,8 +182,21 @@ class InscriptionController extends Controller
      */
     private function renderForm( $formName, $inscription, $view )
     {
+        //On passe un tableau des id de roles autorisé pour pouvoir filtrer les utilisateurs dans le formulaire
+        $roleNames = array();
+        foreach ($inscription->getSession()->getRestrictionAcces() as $role) 
+        {
+            $roleNames[] = $role->getRole();
+        }
+
+        $label_attr = array(
+            'roleNames' => $roleNames
+        );
+    
         //Création du formulaire via le service
-        $form = $this->createForm( $formName, $inscription);
+        $form = $this->createForm( $formName, $inscription, array(
+            'label_attr' => $label_attr
+        ));
 
         $request = $this->get('request');
         
