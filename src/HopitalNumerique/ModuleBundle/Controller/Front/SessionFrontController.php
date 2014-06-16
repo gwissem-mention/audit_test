@@ -164,4 +164,43 @@ class SessionFrontController extends Controller
 
         return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-commentaire-formateur.csv', $kernelCharset );
     }
+
+    /**
+     * Compte HN : Génère le fichier CSV des formulaires d'évaluation par session
+     *
+     * @return view
+     */
+    public function exportCommentaireCSVBySessionAction( Session $session )
+    {
+        $colonnes = array();
+        $datas    = array();
+
+        $colonnes = array(
+            'Module',
+            'Date de la session',
+            'Utilisateur',
+            'Date de l\'inscription',
+            'Statut inscription',
+            'Commentaire'
+        );
+
+        foreach ($session->getInscriptions() as $inscription) 
+        {
+            $row = array();
+
+            $row[0] = $session->getModule()->getTitre();
+            $row[1] = $session->getDateSession()->format('d/m/Y');
+            $row[2] = $inscription->getUser()->getAppellation();
+            $row[3] = $inscription->getDateInscription()->format('d/m/Y');
+            $row[4] = $inscription->getEtatInscription()->getLibelle();
+            $row[5] = $inscription->getCommentaire();
+
+            $datas[] = $row;
+        }
+    
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-commentaire-formateur-session.csv', $kernelCharset );
+    }
 }
