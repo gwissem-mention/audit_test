@@ -17,8 +17,10 @@ class RefusCandidatureGrid extends Grid implements IGrid
      */
     public function setConfig()
     {
-        $this->setSource( 'HopitalNumeriqueUserBundle:RefusCandidature' );
-        $this->setNoDataMessage('Aucun RefusCandidature à afficher.');
+        $this->setSource( 'hopitalnumerique_user.manager.refuscandidature' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setNoDataMessage('Aucun refus de candidature à afficher.');
+        $this->setButtonSize(49);
     }
 
     /**
@@ -26,9 +28,18 @@ class RefusCandidatureGrid extends Grid implements IGrid
      */
     public function setColumns()
     {
-        $this->addColonne( new Column\TextColumn('user.username', 'Utilisateur') ); 
+
+        $prenomNomParticipantColumn = new Column\TextColumn('nomPrenom', 'Candidat');
+        $prenomNomParticipantColumn->setSize( 150 );
+        $this->addColonne( $prenomNomParticipantColumn );
+        
+        $regionParticipantColumn = new Column\TextColumn('userRegion', 'Sa région');
+        $regionParticipantColumn->setSize( 150 );
+        $this->addColonne( $regionParticipantColumn );
+        
         $this->addColonne( new Column\TextColumn('motifRefus', 'Motif du refus') );
-        $this->addColonne( new Column\DateColumn('dateRefus', 'Date de refus') ); 
+
+        $this->addColonne( new Column\DateColumn('dateRefus', 'Date de refus') );
     }
 
     /**
@@ -36,8 +47,15 @@ class RefusCandidatureGrid extends Grid implements IGrid
      */
     public function setActionsButtons()
     {
-        // $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_user_refuscandidature_show' ) );
-
+        $actionFicheParticipant = new Action\ShowButton('hopital_numerique_user_show');
+        $actionFicheParticipant->setAttributes( array(
+                'class'=>'btn btn-primary fa fa-user-md',
+                'title' => 'Fiche de l\'utilisateur',
+                'target' => '_blank'
+        ));
+        $actionFicheParticipant->setRouteParametersMapping(array('userId' => 'id'));
+        $actionFicheParticipant->setRouteParameters(array('userId'));
+        $this->addActionButton( $actionFicheParticipant );
     }
 
     /**
@@ -45,7 +63,6 @@ class RefusCandidatureGrid extends Grid implements IGrid
      */
     public function setMassActions()
     {
-        
-        
+        $this->addMassAction( new Action\ActionMass('Export CSV - Refus candidature', 'HopitalNumeriqueUserBundle:RefusCandidature:exportCsv') );
     }
 }

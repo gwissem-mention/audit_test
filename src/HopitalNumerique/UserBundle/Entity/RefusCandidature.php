@@ -188,4 +188,14 @@ class RefusCandidature
     {
         return $this->dateRefus;
     }
+
+    /**
+     * Get dateRefus string
+     *
+     * @return string
+     */
+    public function getDateRefusString()
+    {
+        return $this->dateRefus->format('d/m/Y');
+    }
 }
