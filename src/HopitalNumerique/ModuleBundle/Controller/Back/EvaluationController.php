@@ -24,6 +24,7 @@ class EvaluationController extends Controller
             'user'             => $user,
             'session'          => $session,
             'optionRenderForm' => array(
+                'themeQuestionnaire' => 'vertical',
                 'session'            => $session->getId(),
                 'envoieDeMail'       => false,
                 'readOnly'           => false,
