@@ -204,6 +204,20 @@ class QuestionnaireController extends Controller
                         $reponse = $this->get('hopitalnumerique_questionnaire.manager.reponse')->createEmpty();
                         $reponse->setUser($user);
                         $reponse->setQuestion($questionFiles);
+
+                        if('module-evaluation' === $questionnaire->getNomMinifie())
+                        {
+
+                            $idSession = $form["idSession"]->getData();
+
+                            //Dans le cas où on est dans le formulaire de session
+                            $session = ($idSession !== 0) ? $this->get('hopitalnumerique_module.manager.session')->findOneBy( array( 'id' => $idSession ) ) : null;
+
+                            if(!is_null($session))
+                            {
+                                $reponse->setParamId( $session->getId() );
+                            }
+                        }
                     }
                 
                     //Format du champ file
