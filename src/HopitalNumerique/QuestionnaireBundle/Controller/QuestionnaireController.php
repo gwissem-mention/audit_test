@@ -207,15 +207,11 @@ class QuestionnaireController extends Controller
 
                         if('module-evaluation' === $questionnaire->getNomMinifie())
                         {
-
                             $idSession = $form["idSession"]->getData();
 
-                            //Dans le cas où on est dans le formulaire de session
-                            $session = ($idSession !== 0) ? $this->get('hopitalnumerique_module.manager.session')->findOneBy( array( 'id' => $idSession ) ) : null;
-
-                            if(!is_null($session))
+                            if(!is_null($idSession) && 0 !== $idSession)
                             {
-                                $reponse->setParamId( $session->getId() );
+                                $reponse->setParamId( $idSession );
                             }
                         }
                     }

@@ -83,6 +83,45 @@ class InscriptionMassController extends Controller
     }
     
     /**
+     * Action de masse sur l'état de l'évaluation
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function aEvaluaerEvaluationMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 28, 'evaluation');
+    }
+    
+    /**
+     * Action de masse sur l'état de l'évaluation
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function evalueeEvaluationMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 29, 'evaluation');
+    }
+    
+    /**
+     * Action de masse sur l'état de l'évaluation
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function naEvaluationMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        return $this->toggleEtat($primaryKeys, $allPrimaryKeys, 430, 'evaluation');
+    }
+    
+    /**
      * Export CSV de la liste des sessions 
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
@@ -229,7 +268,7 @@ class InscriptionMassController extends Controller
                 //inform user connected
                 $this->get('session')->getFlashBag()->add('info', 'Inscription(s) modifiée(s) avec succès.' );
         	    break;
-        	case 'participation':
+            case 'participation':
                 $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation( $inscriptions, $ref );
                 //A participé
                 if(411 === $ref->getId())
@@ -247,9 +286,14 @@ class InscriptionMassController extends Controller
                 {
                     $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation( $inscriptions, $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 27) ) );
                 }
-        	    //inform user connected
+                //inform user connected
                 $this->get('session')->getFlashBag()->add('info', 'Participation(s) modifiée(s) avec succès.' );
-        	    break;
+                break;
+            case 'evaluation':
+                $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation( $inscriptions, $ref );
+                //inform user connected
+                $this->get('session')->getFlashBag()->add('info', 'Evaluation(s) modifiée(s) avec succès.' );
+                break;
         }
     
         return $this->redirect( $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id' => $tempInscription->getSession()->getId())) );
