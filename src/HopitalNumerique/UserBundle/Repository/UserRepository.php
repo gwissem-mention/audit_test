@@ -349,4 +349,65 @@ class UserRepository extends EntityRepository
         return $requete->getQuery()->getResult();
     }
     /* ^^^^^^^^^^^^^^^^^^^^^^ Code de Rémi ^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
+    /**
+     * Retourne une liste d'utilisateurs en fonction d'un rôle en respectant le retour d'un QB et non d'une liste d'utilisateur
+     * ainsi que le public pour l'utilisateur dans des formType.
+     *
+     * @author gmelchilsen <gmelchilsen@nodevo.com>
+     * @param string|array $role Label(s) du(es) rôle(s) sur lequel(lesquels) filtrer
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return QueryBuilder
+     */
+    public function getUsersByRole($role, array $criteres = array())
+    {
+        $qb = $this->_em->createQueryBuilder();
+    
+        $qb
+            ->select('user')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+        ;
+
+        if (!is_array($role))
+        {
+            $qb
+                ->where('user.roles LIKE :role')->setParameter('role', '%'.$role.'%')
+            ;
+        }
+        else
+        {
+            for ($i = 0; $i < count($role); $i++)
+            {
+                $qb
+                    ->orWhere('user.roles LIKE :role'.$i)->setParameter('role'.$i, '%'.$role[$i].'%')
+                ;
+            }
+        }
+    
+        foreach ($criteres as $critereChamp => $critereValeur)
+        {
+            if (is_array($critereValeur))
+            {
+                $qb
+                    ->andWhere(
+                        $qb->expr()->in('user.'.$critereChamp, $critereValeur)
+                    )
+                ;
+            }
+            else
+            {
+                $qb
+                    ->andWhere('user.'.$critereChamp.' = :'.$critereChamp)
+                    ->setParameter($critereChamp, $critereValeur)
+                ;
+            }
+        }
+        
+        $qb
+            ->addOrderBy('user.nom', 'ASC')
+            ->addOrderBy('user.prenom', 'ASC')
+        ;
+        
+        return $qb;
+    }
 }
