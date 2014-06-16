@@ -55,7 +55,8 @@ class SessionManager extends BaseManager
                 'nbInscrits'               => $nbInscritsAccepte,
                 'nbInscritsEnAttente'      => $nbInscritsEnAttente,
                 'placeRestantes'           => $nbPlacesRestantes . '/' . $session->getNombrePlaceDisponible(),
-                'etat'                     => $session->getEtat()->getLibelle()
+                'etat'                     => $session->getEtat()->getLibelle(),
+                'archiver'                 => $session->getArchiver()
             );
         }
 
@@ -104,7 +105,8 @@ class SessionManager extends BaseManager
                 'nbInscrits'               => $nbInscritsAccepte,
                 'nbInscritsEnAttente'      => $nbInscritsEnAttente,
                 'placeRestantes'           => $nbPlacesRestantes . '/' . $session->getNombrePlaceDisponible(),
-                'etat'                     => $session->getEtat()->getLibelle()
+                'etat'                     => $session->getEtat()->getLibelle(),
+                'archiver'                 => $session->getArchiver()
             );
         }
 

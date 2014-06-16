@@ -140,6 +140,24 @@ class EvaluationFrontController extends Controller
             //Modifications de l'inscription: modification du statut "etatEvaluer"  
             $inscription = $this->get('hopitalnumerique_module.manager.inscription')->findOneBy( array('user' => $user, 'session' => $session) );
             $inscription->setEtatEvaluation( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 29)));
+
+            //Vérification de l'ensemble des inscriptions de la session : Si toutes les inscriptions sont évaluée alors la session est archiver
+            $sessionAArchiver = true;
+            foreach ($session->getInscriptions() as $inscription) 
+            {
+                if( 29 !== $inscription->getEtatEvaluation()->getId() )
+                {
+                    $sessionAArchiver = false;
+                    break;
+                }
+            }
+
+            if($sessionAArchiver)
+            {
+                $session->setArchiver(true);
+                $this->get('hopitalnumerique_module.manager.session')->save( $session );
+            }
+
             $this->get('hopitalnumerique_module.manager.inscription')->save( $inscription );
 
             $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Votre évaluation de la session ' . $session->getModule()->getTitre() . ' a bien été prise en compte, nous vous remercions.' );

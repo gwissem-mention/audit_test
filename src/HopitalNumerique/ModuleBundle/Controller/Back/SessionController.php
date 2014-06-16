@@ -87,6 +87,24 @@ class SessionController extends Controller
     }
 
     /**
+     * Passe la session à "archivé".
+     */
+    public function archiverAction( \HopitalNumerique\ModuleBundle\Entity\Session $session )
+    {
+        $session->setArchiver(!$session->getArchiver());
+        $moduleId = $session->getModule()->getId();
+        
+        $url = strpos($this->getRequest()->headers->get('referer'), 'session/all') ? $this->generateUrl('hopitalnumerique_module_module_allsession') : $this->generateUrl('hopitalnumerique_module_module_session', array('id'=>$moduleId));
+
+        //Suppression de l'entitée
+        $this->get('hopitalnumerique_module.manager.session')->save( $session );
+
+        $this->get('session')->getFlashBag()->add('info', 'La session ' . $session->getArchiver() ? ' est archivée.' : 'n\' est plus archivée.');
+
+        return $this->redirect( $url );
+    }
+
+    /**
      * Suppresion d'un Session.
      * 
      * @param integer $id Id de Session.

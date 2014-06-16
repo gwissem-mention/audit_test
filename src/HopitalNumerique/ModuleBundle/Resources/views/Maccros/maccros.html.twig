@@ -302,4 +302,10 @@
             {{ session.etat.libelle }}
         </p>
     {% endif %}
+    {% if session.archiver is not null %}
+        <p>
+            <strong>Archiver : </strong>
+            {% if session.archiver %}Oui{% else %}Non{% endif %}
+        </p>
+    {% endif %}
 {% endmacro %}

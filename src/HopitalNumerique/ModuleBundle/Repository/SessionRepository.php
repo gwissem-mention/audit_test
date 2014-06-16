@@ -49,6 +49,7 @@ class SessionRepository extends EntityRepository
             ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
              ->leftJoin('ses.etat','refEtat')
              ->andWhere('refEtat.id = 403')
+             ->andWhere('ses.archiver = false')
             // ->leftJoin('ses.module','module')
             ->groupBy('ses.id')
             ->orderBy('ses.dateSession');
