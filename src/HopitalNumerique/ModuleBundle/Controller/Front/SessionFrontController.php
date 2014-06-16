@@ -82,6 +82,7 @@ class SessionFrontController extends Controller
         $inscriptions = $session->getInscriptionsAccepte();
         foreach($inscriptions as $inscription)
         {
+            $hasReponses = false;
             $user     = $inscription->getUser();
             $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( 4, $user->getId() , true, $session->getId() );
             $row      = array();
@@ -105,11 +106,22 @@ class SessionFrontController extends Controller
                         $row[$idQuestion] = $reponse->getReponse();
                         break;
                 }
+
+                $hasReponses = true;
             }
+
+            if(!$hasReponses)
+                continue;
 
             ksort($row);
 
             $datas[] = $row;
+        }
+
+        if(empty($datas))
+        {
+            $colonnes = array(0 => "Aucune données");
+            $datas[] = array(0 => "");
         }
 
         //reorder colonnes
