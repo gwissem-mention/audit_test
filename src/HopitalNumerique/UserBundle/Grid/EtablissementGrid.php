@@ -73,6 +73,6 @@ class EtablissementGrid extends Grid implements IGrid
      */
     public function setMassActions()
     {
-        
+        $this->addMassAction( new Action\ActionMass('Export CSV', 'HopitalNumeriqueEtablissementBundle:Etablissement:exportCsvAutres') );
     }
 }

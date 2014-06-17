@@ -37,7 +37,7 @@ class ReferenceRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
-     * @return array
+     * @return Query Builder
      */
     public function getDatasForGrid()
     {
@@ -48,6 +48,25 @@ class ReferenceRepository extends EntityRepository
             ->leftJoin('ref.parent','refParent')
             ->orderBy('ref.code, ref.order');
             
-        return $qb->getQuery()->getResult();
+        return $qb;
+    }
+
+    /**
+     * Récupère les données pour l'export CSV
+     *
+     * @return QueryBuilder
+     */
+    public function getDatasForExport( $ids )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('ref.id, ref.libelle, ref.code, ref.dictionnaire, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent')
+            ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
+            ->leftJoin('ref.etat','refEtat')
+            ->leftJoin('ref.parent','refParent')
+            ->where('ref.id IN (:ids)')
+            ->orderBy('ref.code, ref.order')
+            ->setParameter('ids', $ids);
+            
+        return $qb;
     }
 }

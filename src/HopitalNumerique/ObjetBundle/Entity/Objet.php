@@ -221,6 +221,11 @@ class Objet
     protected $consultations;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Contenu", mappedBy="objet", cascade={"persist", "remove" })
+     */
+    protected $contenus;
+
+    /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="objets")
      * @ORM\JoinTable(name="hn_objet_ambassadeur",
      *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")},
@@ -953,6 +958,29 @@ class Objet
     public function setConsultations(\Doctrine\Common\Collections\ArrayCollection $consultations)
     {        
         $this->consultations = $consultations;
+    
+        return $this;
+    }
+
+    /**
+     * Get contenus
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $contenus
+     */
+    public function getContenus()
+    {
+        return $this->contenus;
+    }
+
+    /**
+     * Set contenus
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $contenus
+     * @return Objet
+     */
+    public function setContenus(\Doctrine\Common\Collections\ArrayCollection $contenus)
+    {        
+        $this->contenus = $contenus;
     
         return $this;
     }
