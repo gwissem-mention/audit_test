@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <table width="740px" style="margin:0 auto; border:1px solid #e3e3e3;" >
     {# Titre #}
     <tr align="center" style="font-size:14px;border:1px solid #e3e3e3;">
@@ -29,7 +30,11 @@
         {% for inscription in inscriptions %}
             <tr>
                 <td style="border:1px solid #e3e3e3;font-size:11px;" height="30px">
-                    {{ inscription.user.region.libelle }}
+                    {% if inscription.user.region is not null and inscription.user.region is not empty %}
+                        {{ inscription.user.region.libelle }}
+                    {% else %}
+                        - Région renseignée -
+                    {% endif %}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;">
                     {% if inscription.user.etablissementRattachementSante is not null %}
