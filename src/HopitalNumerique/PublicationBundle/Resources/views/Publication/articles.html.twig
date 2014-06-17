@@ -30,38 +30,39 @@
 
 {% block body %}
     <div id="articles">
+        {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
         {% set root = knp_menu_get('menu-main-front') %}
-        {#{% for item in root %}
-            <pre>{{dump(item)}}</pre>    
-        {% endfor %}#}
+        {% set parent = null %}
 
-        {% if menu == "menu-footer-front" %}
-            <div class="col-md-12">
-        {% else %}
+        {% for item in root %}
+            {% if currentPath == item.uri %}
+                {% set parent = item.name %}
+            {% endif %}
+
+            {% for child in item.children %}
+                {% if currentPath == child.uri %}
+                    {% set parent = item.name %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+
+        {% if parent is not null %}
             <div class="col-md-3">
                 <p class="titre">Hôpital <br />Numérique</p>
-                
-                {% set menu = root['menu-65'] %}
+                {% set menu = root[parent] %}
                 {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
-
-                <div class="clearfix"></div>
-
                 {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites")) }}
             </div>
-            <div class="col-md-9" >
         {% endif %}
+
+        <div class="col-md-{% if parent is null %}12{% else %}9{% endif %}">
             {% if types != 'Article' %}
-                <div class="col-md-10">
+                <div class="col-md-12">
                     <h4 class="gris" >{{types}}</h4>
                 </div>
-                <div class="col-md-2">
-                    <div class="btn btn-sm btn-default pull-right btnprint" onclick="print();"><i class="fa fa-print"></i></div>
-                </div>
-                <div class="col-md-12">
-            {% else %}
-                <div class="col-md-12">
-                <div class="btn btn-sm btn-default pull-right btnprint" onclick="print();"><i class="fa fa-print"></i></div>
             {% endif %}
+            <div class="col-md-12">
+                <div class="btn btn-sm btn-default pull-right btnprint" onclick="print();"><i class="fa fa-print"></i></div>
                 <h1 class="violet">{{objet.titre}}</h1>
             </div>
 
@@ -71,12 +72,4 @@
             <div class="clearfix"></div>
         </div>
     </div>
-
-
-    <style>
-        
-    </style>
-
-
-
 {% endblock %}

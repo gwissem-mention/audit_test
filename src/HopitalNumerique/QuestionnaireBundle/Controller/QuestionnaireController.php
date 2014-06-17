@@ -68,10 +68,11 @@ class QuestionnaireController extends Controller
         $this->_themeQuestionnaire = $themeQuestionnaire;
 
         $options =  array(
-                'questionnaire'    => $questionnaire,
-                'user'             => $user,
-                'readOnly'         => $readOnly,
-                'showAllQuestions' => $showAllQuestions
+            'questionnaire'    => $questionnaire,
+            'user'             => $user,
+            'readOnly'         => $readOnly,
+            'showAllQuestions' => $showAllQuestions,
+            'session'          => 0
         );
     
         return $this->renderForm('nodevo_questionnaire_questionnaire', $options, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit_front.html.twig'
@@ -104,13 +105,13 @@ class QuestionnaireController extends Controller
         $this->_themeQuestionnaire = $themeQuestionnaire;
         
         return $this->renderForm('nodevo_questionnaire_questionnaire',
-                array(
-                        'questionnaire' => $questionnaire,
-                        'user'          => $user,
-                        'readOnly'      => $readOnly,
-                        'session'       => $session
-                ) ,
-                'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit.html.twig'
+            array(
+                    'questionnaire' => $questionnaire,
+                    'user'          => $user,
+                    'readOnly'      => $readOnly,
+                    'session'       => $session
+            ) ,
+            'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit.html.twig'
         );
     }
 
@@ -132,10 +133,10 @@ class QuestionnaireController extends Controller
      */
     private function renderForm( $formName, $options, $view )
     {
-        $user             = $options['user'];
-        $readOnly         = $options['readOnly'];
-        $questionnaire    = $options['questionnaire'];
-        $idSession        = $options['session'];
+        $user          = $options['user'];
+        $readOnly      = $options['readOnly'];
+        $questionnaire = $options['questionnaire'];
+        $idSession     = $options['session'];
 
         $label_attr = array(
                 'idUser'           => $user->getId(),
@@ -288,7 +289,17 @@ class QuestionnaireController extends Controller
                             $reponse->addReferenceMulitple($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $value)));
                         }
                     }
-    
+
+                    if('module-evaluation' === $questionnaire->getNomMinifie())
+                    {
+                        $idSession = $form["idSession"]->getData();
+
+                        if(!is_null($idSession) && 0 !== $idSession)
+                        {
+                            $reponse->setParamId( $idSession );
+                        }
+                    }
+
                     //Test ajout ou edition
                     $new = is_null($reponse->getId());
                     
@@ -298,7 +309,6 @@ class QuestionnaireController extends Controller
 
                 if('module-evaluation' === $questionnaire->getNomMinifie())
                 {
-
                     $idSession = $form["idSession"]->getData();
 
                     //Dans le cas où on est dans le formulaire de session
@@ -309,7 +319,53 @@ class QuestionnaireController extends Controller
                         //Modifications de l'inscription: modification du statut "etatEvaluer"  
                         $inscription = $this->get('hopitalnumerique_module.manager.inscription')->findOneBy( array('user' => $user, 'session' => $session) );
                         $inscription->setEtatEvaluation( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 29)));
+
+                        //Vérification de l'ensemble des inscriptions de la session : Si toutes les inscriptions sont évaluée alors la session est archiver
+                        $sessionAArchiver = true;
+                        foreach ($session->getInscriptions() as $inscription) 
+                        {
+                            if( 29 !== $inscription->getEtatEvaluation()->getId() )
+                            {
+                                $sessionAArchiver = false;
+                                break;
+                            }
+                        }
+
+                        if($sessionAArchiver)
+                        {
+                            $session->setArchiver(true);
+                            $this->get('hopitalnumerique_module.manager.session')->save( $session );
+                        }
+
                         $this->get('hopitalnumerique_module.manager.inscription')->save( $inscription );
+
+                        $roleUser = $this->get('nodevo_role.manager.role')->getUserRole($user);
+
+                        //Mise à jour de la production du module dans la liste des productions maitrisées : uniquement pour les ambassadeurs
+                        if('ROLE_AMBASSADEUR_7' === $roleUser)
+                        {
+                            //Récupération des formations
+                            $formations = $session->getModule()->getProductions();
+                            
+                            //Pour chaque production on ajout l'utilisateur à la liste des ambassadeurs qui la maitrise
+                            foreach($formations as $formation)
+                            {
+                                //Récupération des ambassadeurs pour vérifier si l'utilisateur actuel ne maitrise pas déjà cette formation
+                                $ambassadeursFormation = $formation->getAmbassadeurs();
+                                $ambassadeurIds = array();
+
+                                foreach ($ambassadeursFormation as $ambassadeur)
+                                {
+                                    $ambassadeurIds[] = $ambassadeur->getId();
+                                }
+
+                                if(!in_array($user->getId(), $ambassadeurIds))
+                                {
+                                    $formation->addAmbassadeur( $user );
+                                    $this->get('hopitalnumerique_objet.manager.objet')->save( $formation );
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -357,7 +413,7 @@ class QuestionnaireController extends Controller
                             $candidat .= '<li><strong>Profil</strong> : ' . (trim($user->getProfilEtablissementSante()->getLibelle()) === '' ? '-' : $user->getProfilEtablissementSante()->getLibelle() ). '</li>';
                             $candidat .= '<li><strong>Établissement de rattrachement</strong> : ' . (trim($etablissement) === '' ? '-' : $etablissement ). '</li>';
                             $candidat .= '<li><strong>Nom de votre établissement si non disponible dans la liste précédente</strong> : ' . (trim($user->getAutreStructureRattachementSante()) === '' ? '-' : $user->getAutreStructureRattachementSante() ). '</li>';
-                            $candidat .= '<li><strong>Fonction dans l\'établissement</strong> : ' . (trim($user->getFonctionStructure()) === '' ? '-' : $user->getFonctionStructure() ). '</li>';
+                            $candidat .= '<li><strong>Fonction dans l\'établissement</strong> : ' . (trim($user->getFonctionDansEtablissementSante()) === '' ? '-' : $user->getFonctionDansEtablissementSante() ). '</li>';
                             $candidat .= '</ul>';
 
                             $CMSI        = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');

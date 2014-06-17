@@ -49,6 +49,7 @@ class SessionRepository extends EntityRepository
             ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
              ->leftJoin('ses.etat','refEtat')
              ->andWhere('refEtat.id = 403')
+             ->andWhere('ses.archiver = false')
             // ->leftJoin('ses.module','module')
             ->groupBy('ses.id')
             ->orderBy('ses.dateSession');
@@ -70,8 +71,7 @@ class SessionRepository extends EntityRepository
                          ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
                          ->leftJoin('ses.etat','refEtat')
                          ->andWhere('ses.formateur = :user', 'refEtat.id = 403')
-                         ->andWhere('ses.dateSession < :today')
                          ->setParameter('user', $user)
-                         ->setParameter('today', new \DateTime() );
+                         ->orderBy('ses.dateSession', 'DESC');
     }
 }

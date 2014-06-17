@@ -23,6 +23,8 @@ class AddInscriptionType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $roleNames = (isset($options['label_attr']['roleNames']) && !is_null($options['label_attr']['roleNames'])) ? $options['label_attr']['roleNames'] : array();
+
         $builder
             ->add('commentaire', 'textarea', array(
                     'required' => false,
@@ -37,11 +39,8 @@ class AddInscriptionType extends AbstractType
                     'required'      => true,
                     'label'         => 'Utilisateur',
                     'empty_value'   => ' - ',
-                    'query_builder' => function(EntityRepository $er){
-                        return $er->createQueryBuilder('user')
-                        ->where('user.etat = :etat')
-                        ->setParameter('etat', 3)
-                        ->orderBy('user.nom', 'ASC');
+                    'query_builder' => function(EntityRepository $er) use ($roleNames) {
+                        return $er->getUsersByRole($roleNames);
                     }
             ))
             ->add('etatInscription', 'entity', array(

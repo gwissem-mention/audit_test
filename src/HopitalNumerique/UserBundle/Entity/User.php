@@ -17,6 +17,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  *
  * @ORM\Table("core_user")
  * @ORM\Entity(repositoryClass="HopitalNumerique\UserBundle\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(fields="email", message="Cette adresse email existe déjà.")
  * @UniqueEntity(fields="username", message="Ce nom de compte existe déjà.")
  * @ORM\AttributeOverrides({
@@ -438,6 +439,27 @@ class User extends BaseUser
      * @ORM\Column(name="usr_raison_desinscription", nullable=true, type="text")
      */
     protected $raisonDesinscription;
+
+    // ------- Ambassadeurs  -------
+    /**
+     * @Assert\File(
+     *     maxSize = "10M",
+     *     mimeTypes = { 
+     *         "image/gif", 
+     *         "image/jpeg", 
+     *         "image/png",
+     *     },
+     *     mimeTypesMessage = "Choisissez un fichier valide (IMAGE)"
+     * )
+     */
+    public $file;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="usr_photo", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier stocké"})
+     */
+    protected $path;
     
     
     // ------- Interventions -------
@@ -1298,5 +1320,100 @@ class User extends BaseUser
     public function setRaisonDesinscription($raisonDesinscription)
     {
         $this->raisonDesinscription = $raisonDesinscription;
+    }
+
+    // ----------------------------------------
+    // --- Gestion de l'upload des fichiers ---
+    // ----------------------------------------
+    
+    /**
+     * Set path
+     *
+     * @param string $path
+     * @return Contractualisation
+     */
+    public function setPath($path)
+    {
+        if( is_null($path) && file_exists($this->getAbsolutePath()) )
+            unlink($this->getAbsolutePath());
+    
+        $this->path = $path;
+    
+        return $this;
+    }
+    
+    /**
+     * Get path
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+    
+    public function getAbsolutePath()
+    {
+        return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+    }
+    
+    public function getWebPath()
+    {
+        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+    }
+    
+    public function getUploadRootDir()
+    {
+        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
+        return __WEB_DIRECTORY__.'/'.$this->getUploadDir();
+    }
+    
+    public function getUploadDir()
+    {
+        return 'medias/Utilisateurs';
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if (null !== $this->file){
+            //delete Old File
+            if ( file_exists($this->getAbsolutePath()) )
+                unlink($this->getAbsolutePath());
+    
+            $this->path = round(microtime(true) * 1000) . '_' . $this->file->getClientOriginalName();
+        }
+    }
+    
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        if (null === $this->file)
+            return;
+    
+        // s'il y a une erreur lors du déplacement du fichier, une exception
+        // va automatiquement être lancée par la méthode move(). Cela va empêcher
+        // proprement l'entité d'être persistée dans la base de données si
+        // erreur il y a
+        $this->file->move($this->getUploadRootDir(), $this->path);
+    
+        unset($this->file);
+    }
+    
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        $file = $this->getAbsolutePath();
+    
+        if (file_exists($file) )
+            unlink($file);
     }
 }

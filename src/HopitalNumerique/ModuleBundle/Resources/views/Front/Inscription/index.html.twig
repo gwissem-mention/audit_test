@@ -80,14 +80,15 @@
     <div class="clearfix"></div>
 
     {% if sessions|length > 0 %}
-        <h2>Vos sessions en tant que formateur</h2>
+        <h2>Vos sessions en tant que formateur {#<a class="btn btn-link btn-xs" title="Télécharger l'ensemble des inscriptions de toutes les sessions ci-dessous" href="{{path('hopitalnumerique_module_session_formateur_front',{'id':app.user.id})}}"><i class="fa fa-cloud-download"></i></a>#}</h2>
         <div class="col-md-12">
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Module</th>
                         <th>Début de la session</th>
-                        <th width="90px">Actions</th>
+                        <th width="90px">Nombre participants</th>
+                        <th width="135px">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -96,11 +97,19 @@
                             <td>
                                 <a href="{{path('hopitalnumerique_module_module_show_front',{'id':session.module.id})}}">{{session.module.titre}}</a>
                             </td>
-                            <td>{{session.dateSession|date('d/m/Y')}}</td>
+                            <td>
+                                {{session.dateSession|date('d/m/Y')}}
+                            </td>
+                            <td>
+                                {{session.getInscriptionsAccepte()|length}}/{{session.getNombrePlaceDisponible()}}
+                            </td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-info link fancybox.ajax btn-sm" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
-                                    <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_session_evaluation_front',{'id':session.id})}}"><i class="fa fa-external-link"></i></a>
+                                    <a class="btn btn-info link fancybox.ajax btn-sm" title="Description de la session" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
+                                    <a class="btn btn-warning btn-sm" title="Télécharger l'ensemble des inscriptions de cette session" href="{{path('hopitalnumerique_module_session_formateur_session_front',{'id':session.id})}}"><i class="fa fa-cloud-download"></i></a>
+                                    {% if date(session.dateSession)  <= date() %}
+                                        <a class="btn btn-success btn-sm" title="Télécharger l'ensemble des évaluations de cette session" href="{{path('hopitalnumerique_module_session_evaluation_front',{'id':session.id})}}"><i class="fa fa-external-link"></i></a>
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>

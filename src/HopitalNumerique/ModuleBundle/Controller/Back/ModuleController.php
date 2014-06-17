@@ -104,9 +104,9 @@ class ModuleController extends Controller
     public function downloadModuleAction( \HopitalNumerique\ModuleBundle\Entity\Module $module )
     {
         $options = array(
-                'serve_filename' => $module->getPath(),
-                'absolute_path'  => false,
-                'inline'         => false,
+            'serve_filename' => $module->getPath(),
+            'absolute_path'  => false,
+            'inline'         => false,
         );
     
         if(file_exists($module->getUploadRootDir() . '/'. $module->getPath()))

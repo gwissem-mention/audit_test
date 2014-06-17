@@ -141,6 +141,11 @@ class SessionType extends AbstractType
                         ->setParameter('etat', 'STATUT_SESSION_FORMATION')
                         ->orderBy('ref.order', 'ASC');
                     }
+            ))
+            ->add('archiver', 'checkbox', array(
+                'required' => false, 
+                'label'    => 'Archiver la session ?',
+                'attr'     => array( 'class' => 'checkbox' )
             ));
     }
 

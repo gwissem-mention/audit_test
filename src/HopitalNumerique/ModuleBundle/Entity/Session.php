@@ -184,10 +184,18 @@ class Session
     protected $etat;
 
     /**
+     * @var boolean
+     * 
+     * @ORM\Column(name="ses_archiver", type="boolean", nullable=true, options = {"comment" = "Session archivé ?"})
+     */
+    protected $archiver;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
+        $this->archiver                 = true;
         $this->dateOuvertureInscription = new \DateTime();
     }
 
@@ -439,6 +447,26 @@ class Session
     }
 
     /**
+     * Get archiver
+     *
+     * @return boolean $archiver
+     */
+    public function getArchiver()
+    {
+        return $this->archiver;
+    }
+    
+    /**
+     * Set archiver
+     *
+     * @param boolean $archiver
+     */
+    public function setArchiver($archiver)
+    {
+        $this->archiver = $archiver;
+    }
+
+    /**
      * Set nombrePlaceDisponible
      *
      * @param integer $nombrePlaceDisponible
@@ -570,7 +598,16 @@ class Session
      */
     public function getInscriptions()
     {
-        return $this->inscriptions;
+        $inscriptions = array();
+
+        foreach ($this->inscriptions as $inscription)
+        {
+            $inscriptions[$inscription->getDateInscription()->format('dmY') . $inscription->getId()] = $inscription;
+        }
+
+        krsort($inscriptions);
+
+        return $inscriptions;
     }
 
     /**

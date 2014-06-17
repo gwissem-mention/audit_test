@@ -20,7 +20,33 @@
         </div>
         
         <div class="col-md-3 col-sm-12">
-            {{ knp_menu_render('menu-tdb', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}    
+            {#{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}#}
+            {% set currentPath = path(app.request.attributes.get('_route')) %}
+            {% set root = knp_menu_get('menu-main-front') %}
+            {% set parent = null %}
+
+            {% for item in root %}
+                {% if currentPath == item.uri %}
+                    {% set parent = item.name %}
+                {% endif %}
+
+                {% for child in item.children %}
+                    {% if currentPath == child.uri %}
+                        {% set parent = item.name %}
+                    {% endif %}
+
+                    {% for babyChild in child.children %}
+                        {% if currentPath == babyChild.uri %}
+                            {% set parent = item.name %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+
+            {% if parent is not null %}
+                {% set menu = root[parent] %}
+                {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+            {% endif %}
         </div>
         
         <div class="content col-md-9 col-sm-12">
@@ -36,8 +62,7 @@
                     {% block barreActions %}{% endblock %}
                 </div>
             {% endif %}
-            
-            
+                
             <div class="panel">
                 {% block content %}{% endblock %}
             </div>

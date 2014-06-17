@@ -14,12 +14,12 @@
 
 {% block body %}
     <div id="actualites">
+        
         <div class="col-md-3">
             <p class="titre">Hôpital <br />Numérique</p>
-            {{ knp_menu_render('menu-sub-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriquePublicationBundle::menu.html.twig'}) }}
-
             {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites")) }}
         </div>
+        
         <div class="col-md-9" >
             <div class="col-md-12">
                 {% for actu in actualites %}

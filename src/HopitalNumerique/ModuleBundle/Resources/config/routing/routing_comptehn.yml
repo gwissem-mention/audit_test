@@ -5,12 +5,24 @@ hopitalnumerique_module_inscription_index_front:
 
 hopitalnumerique_module_inscription_attestation_front:
     pattern:  /module-thematiques/{id}/attestation
-    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/InscriptionFront:attestation}
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/InscriptionFront:attestation, id: 1}
     requirements:
         id: \d+
 
 hopitalnumerique_module_session_evaluation_front:
     pattern:  /module-thematiques/session/{id}/evaluations
-    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/SessionFront:evaluation}
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/SessionFront:evaluation, id: 1}
+    requirements:
+        id: \d+
+
+hopitalnumerique_module_session_formateur_front:
+    pattern:  /module-thematiques/session/{id}/formateur
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/SessionFront:exportCommentaireCSV, id: 1}
+    requirements:
+        id: \d+
+
+hopitalnumerique_module_session_formateur_session_front:
+    pattern:  /module-thematiques/session/{id}/session
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/SessionFront:exportCommentaireCSVBySession, id: 1}
     requirements:
         id: \d+

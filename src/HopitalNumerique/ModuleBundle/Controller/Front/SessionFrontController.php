@@ -82,6 +82,7 @@ class SessionFrontController extends Controller
         $inscriptions = $session->getInscriptionsAccepte();
         foreach($inscriptions as $inscription)
         {
+            $hasReponses = false;
             $user     = $inscription->getUser();
             $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( 4, $user->getId() , true, $session->getId() );
             $row      = array();
@@ -101,15 +102,38 @@ class SessionFrontController extends Controller
                     case 'checkbox':
                         $row[$idQuestion] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );
                         break;
+                    case 'choice':
+                        $question = $reponse->getQuestion();
+
+                        if(!is_null($question->getChoixPossibles()))
+                        {
+                            $row[$idQuestion] = $reponse->getReponse();
+                        }
+                        else
+                        {
+                            $row[$idQuestion] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );
+                        }
+                        break;
                     default:
                         $row[$idQuestion] = $reponse->getReponse();
                         break;
                 }
+
+                $hasReponses = true;
             }
+
+            if(!$hasReponses)
+                continue;
 
             ksort($row);
 
             $datas[] = $row;
+        }
+
+        if(empty($datas))
+        {
+            $colonnes = array(0 => "Aucune donnée");
+            $datas[] = array(0 => "");
         }
 
         //reorder colonnes
@@ -118,5 +142,89 @@ class SessionFrontController extends Controller
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
         return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-evaluations.csv', $kernelCharset );
+    }
+
+    /**
+     * Compte HN : Génère le fichier CSV des formulaires d'évaluation
+     *
+     * @return view
+     */
+    public function exportCommentaireCSVAction( \HopitalNumerique\UserBundle\Entity\User $user )
+    {
+        $colonnes = array();
+        $datas    = array();
+
+        //get sessions terminées where user connected == formateur
+        $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateur( $user );
+
+        $colonnes = array(
+            'Module',
+            'Date de la session',
+            'Utilisateur',
+            'Date de l\'inscription',
+            'Statut inscription',
+            'Commentaire'
+        );
+
+        //Pour chaque session, on parcourt les inscriptions pour les lister
+        foreach ($sessions as $session) 
+        {
+            foreach ($session->getInscriptions() as $inscription) 
+            {
+                $row = array();
+
+                $row[0] = $session->getModule()->getTitre();
+                $row[1] = $session->getDateSession()->format('d/m/Y');
+                $row[2] = $inscription->getUser()->getAppellation();
+                $row[3] = $inscription->getDateInscription()->format('d/m/Y');
+                $row[4] = $inscription->getEtatInscription()->getLibelle();
+                $row[5] = $inscription->getCommentaire();
+
+                $datas[] = $row;
+            }
+        }
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-commentaire-formateur.csv', $kernelCharset );
+    }
+
+    /**
+     * Compte HN : Génère le fichier CSV des formulaires d'évaluation par session
+     *
+     * @return view
+     */
+    public function exportCommentaireCSVBySessionAction( Session $session )
+    {
+        $colonnes = array();
+        $datas    = array();
+
+        $colonnes = array(
+            'Module',
+            'Date de la session',
+            'Utilisateur',
+            'Date de l\'inscription',
+            'Statut inscription',
+            'Commentaire'
+        );
+
+        foreach ($session->getInscriptions() as $inscription) 
+        {
+            $row = array();
+
+            $row[0] = $session->getModule()->getTitre();
+            $row[1] = $session->getDateSession()->format('d/m/Y');
+            $row[2] = $inscription->getUser()->getAppellation();
+            $row[3] = $inscription->getDateInscription()->format('d/m/Y');
+            $row[4] = $inscription->getEtatInscription()->getLibelle();
+            $row[5] = $inscription->getCommentaire();
+
+            $datas[] = $row;
+        }
+    
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-commentaire-formateur-session.csv', $kernelCharset );
     }
 }
