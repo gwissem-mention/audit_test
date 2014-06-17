@@ -4,6 +4,16 @@ $(document).ready(function() {
     loader = $('#form_edit_user').nodevoLoader();
     var idEntreprise = 0;
     var idDepartement = 0;
+
+    // ------- Gestion de la photo de profil --------
+    //Gestion du bouton delete : changement du fichier uploadé
+    $('.deleteUploadedFile').on('click',function(){
+        $('.uploadedFile, .deleteUploadedFile ').hide();
+        $('.uploadedFile').html('');
+        $('.inputUpload').show();
+        $('#nodevo_user_user_path').val('');
+        $('#nodevo_user_user_file').val('');
+    });
     
     // ------- Gestion des listes déroulantes en AJAX ----------
             

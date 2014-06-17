@@ -80,7 +80,7 @@
     <div class="clearfix"></div>
 
     {% if sessions|length > 0 %}
-        <h2>Vos sessions en tant que formateur {#<a class="btn btn-link btn-xs" href="{{path('hopitalnumerique_module_session_formateur_front',{'id':app.user.id})}}"><i class="fa fa-cloud-download"></i></a>#}</h2>
+        <h2>Vos sessions en tant que formateur {#<a class="btn btn-link btn-xs" title="Télécharger l'ensemble des inscriptions de toutes les sessions ci-dessous" href="{{path('hopitalnumerique_module_session_formateur_front',{'id':app.user.id})}}"><i class="fa fa-cloud-download"></i></a>#}</h2>
         <div class="col-md-12">
             <table class="table table-striped table-hover">
                 <thead>

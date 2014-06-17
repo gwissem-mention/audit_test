@@ -153,25 +153,30 @@ class UserType extends AbstractType
             if($this->_securityContext->isGranted('ROLE_USER'))
             {
                 $builder->add('roles', 'entity', array(
-                    'class'         => 'NodevoRoleBundle:Role',
-                    'property'      => 'name',
-                    'required'      => true,
-                    'label'         => 'Groupe associé',
-                    'mapped'        => false,
-                    'empty_value'   => ' - ',
-                    'attr'          => array('class'=>'validate[required]'),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ro')
-                                  ->where('ro.etat != :etat')
-                                  ->setParameter('etat', 4)
-                                  ->orderBy('ro.name');
-                    },
-                    'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
-                ));
-                $builder->add('raisonDesinscription', 'textarea', array(
-                    'required'   => false, 
-                    'label'      => 'Raison de la désinscription'
-                ));
+                        'class'         => 'NodevoRoleBundle:Role',
+                        'property'      => 'name',
+                        'required'      => true,
+                        'label'         => 'Groupe associé',
+                        'mapped'        => false,
+                        'empty_value'   => ' - ',
+                        'attr'          => array('class'=>'validate[required]'),
+                        'query_builder' => function(EntityRepository $er) {
+                            return $er->createQueryBuilder('ro')
+                                      ->where('ro.etat != :etat')
+                                      ->setParameter('etat', 4)
+                                      ->orderBy('ro.name');
+                        },
+                        'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
+                    ))
+                    ->add('raisonDesinscription', 'textarea', array(
+                        'required'   => false, 
+                        'label'      => 'Raison de la désinscription'
+                    ))
+                    ->add('file', 'file', array(
+                        'required' => false, 
+                        'label'    => 'Photo de profil'
+                    ))
+                    ->add('path', 'hidden');
             }
 
             //Si il y a un utilisateur connecté nous sommes en BO et que le role est CMSI
