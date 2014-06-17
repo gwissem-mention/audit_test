@@ -20,7 +20,8 @@
         </div>
         
         <div class="col-md-3 col-sm-12">
-            {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+            {#{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}#}
+            {% set currentPath = path(app.request.attributes.get('_route')) %}
             {% set root = knp_menu_get('menu-main-front') %}
             {% set parent = null %}
 
@@ -33,6 +34,12 @@
                     {% if currentPath == child.uri %}
                         {% set parent = item.name %}
                     {% endif %}
+
+                    {% for babyChild in child.children %}
+                        {% if currentPath == babyChild.uri %}
+                            {% set parent = item.name %}
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
             {% endfor %}
 
@@ -55,8 +62,7 @@
                     {% block barreActions %}{% endblock %}
                 </div>
             {% endif %}
-            
-            
+                
             <div class="panel">
                 {% block content %}{% endblock %}
             </div>

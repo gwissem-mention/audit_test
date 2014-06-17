@@ -35,6 +35,7 @@ ol.arbo-requete li.level0 ol li.level1 ol li.level2 ol li.level3 span{ font-styl
 #popin-mails .btn{margin-right:10px}
 
 @media screen and (max-width: 991px) {
+    .requetes .ligne{cursor:pointer;}
     .requetes .ligne .actions{float: none}
 
     .btn-pas-mobile {display: none}

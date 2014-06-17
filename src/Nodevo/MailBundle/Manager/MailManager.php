@@ -428,7 +428,7 @@ class MailManager extends BaseManager
                                 ->setTo( array($recepteurMail => $recepteurName) )
                                 ->setBcc( $cci )
                                 ->setBody( strip_tags($body, '<style>' ) )
-                                ->addPart( $body, 'text/html' );
+                                ->addPart( quoted_printable_decode($body), 'text/html' );
         }
         return $mailsToSend;
     }
@@ -488,7 +488,7 @@ class MailManager extends BaseManager
                         ->setFrom( $from )
                         ->setTo( $this->_destinataire )
                         ->setBody( strip_tags($body, '<style>' ) )
-                        ->addPart( $body, 'text/html' );
+                        ->addPart( quoted_printable_decode($body), 'text/html' );
     }
 
     public function getDestinataire()
@@ -565,6 +565,6 @@ class MailManager extends BaseManager
                             ->setTo( $user->getEmail() )
                             ->setBcc( ($mail->getId() === 1 || $mail->getId() === 2) ? null : $cci )
                             ->setBody( strip_tags($body, '<style>' ) )
-                            ->addPart( $body, 'text/html' );
+                            ->addPart( quoted_printable_decode($body), 'text/html' );
     }
 }
