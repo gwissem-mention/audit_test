@@ -28,8 +28,10 @@
     background: linear-gradient(to bottom,  #ebeaea 0%,#ffffff 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebeaea', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */}
 #registre-ambassadeur .annuaire_ambassadeur .fiche .content h5{font-size: 16px; font-weight: bold; color: #020202; margin: 0;}
+#registre-ambassadeur .annuaire_ambassadeur .fiche .content .photo-profil{margin: 10px 5px 0 0;}
+#registre-ambassadeur .annuaire_ambassadeur .fiche .content .description{margin: 10px 0 0 10px;}
 #registre-ambassadeur .annuaire_ambassadeur .fiche .content .etab{font-size: 14px; color: #4c4c4c;}
-#registre-ambassadeur .annuaire_ambassadeur .fiche .content .fonction{font-size: 14px; color: #4c4c4c;margin-bottom: 15px }
+#registre-ambassadeur .annuaire_ambassadeur .fiche .content .fonction{font-size: 14px; color: #4c4c4c;margin-bottom: 2px }
 #registre-ambassadeur .annuaire_ambassadeur .fiche .content p.titre{font-size: 16px; margin:0;}
 #registre-ambassadeur .annuaire_ambassadeur .fiche .content ul{margin:0 0 15px;}
 #registre-ambassadeur .annuaire_ambassadeur .fiche .content a.link{font-size: 12px;margin-bottom: 15px; }

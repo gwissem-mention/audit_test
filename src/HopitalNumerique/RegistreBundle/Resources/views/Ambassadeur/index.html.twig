@@ -86,34 +86,53 @@
 				                        {% set ambassadeurExisteRegion = true %}
 					                    <div class="fiche col-md-6">
 					                        <div class="content">
-					                            <h5>{{ambassadeur.prenom|title ~ ' ' ~ ambassadeur.nom|title}}</h5>
-					                            
-					                                {% if ambassadeur.etablissementRattachementSante %}
-					                                   <div class="etab" title="{% if ambassadeur.etablissementRattachementSante.ville is not null %}{{ ambassadeur.etablissementRattachementSante.ville }}{% if ambassadeur.etablissementRattachementSante.codepostal is not null %} ({{ ambassadeur.etablissementRattachementSante.codepostal }}){% endif %}{% endif %}">    
-					                                       {{ambassadeur.etablissementRattachementSante.nom}}
-				                                       </div>
-					                                {% elseif ambassadeur.autreStructureRattachementSante is not empty %}
-					                                   <div class="etab">
-					                                       {{ambassadeur.autreStructureRattachementSante}}
-				                                       </div>
+                                                    
+                                                <h5>{{ambassadeur.prenom|title ~ ' ' ~ ambassadeur.nom|title}}</h5>
+
+                                                <div class="col-md-3">
+                                                    {% if ambassadeur.getPath() is not null and ambassadeur.getPath() is not empty %}
+                                                        <img class="photo-profil" src="/{{ ambassadeur.getWebPath() }}" width="90px" height="130px">
                                                     {% else %}
-                                                       <div class="etab">
-                                                           {{ambassadeur.nomStructure}}
-                                                       </div>
-					                                {% endif %}
-					                            <div class="fonction">
-					                                {% if ambassadeur.fonctionDansEtablissementSante is not empty %}
-					                                    {{ambassadeur.fonctionDansEtablissementSante}}
-					                                {% else %}
-					                                    {{ambassadeur.fonctionStructure}}
-					                                {% endif %}
-					                            </div>
-					                            
-					                            <div class="col-md-12"><a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Domaines fonctionnels</a></div>
-					                            <div class="col-md-12"><a class="link violet fancybox.ajax outilsMaitrises" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a></div>
-					
-					                            <div class="col-md-12"><a class="btn background-violet {% if (user.isCMSI) and not (user.user.region.id == ambassadeur.region.id) %}disabled{% endif %}" href="{% if (user.isCMSI) and not ((user.user.region.id == ambassadeur.region.id)) %}#{% else %}{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}{% endif %}">Solliciter cet ambassadeur</a></div>
-					                            <div class="clearfix"></div>
+                                                        <img class="photo-profil" src="/medias/Utilisateurs/profil.png" width="90px" height="130px">
+                                                    {% endif %}
+                                                </div>
+
+                                                <div class="col-md-9">
+                                                    <div class="description">
+    					                                {% if ambassadeur.etablissementRattachementSante %}
+    					                                   <div class="etab" title="ambassadeur.etablissementRattachementSante.nom - {% if ambassadeur.etablissementRattachementSante.ville is not null %}{{ ambassadeur.etablissementRattachementSante.ville }}{% if ambassadeur.etablissementRattachementSante.codepostal is not null %} ({{ ambassadeur.etablissementRattachementSante.codepostal }}){% endif %}{% endif %}">    
+    					                                       {{ambassadeur.etablissementRattachementSante.nom|truncate(35,true,'...')}}
+    				                                       </div>
+    					                                {% elseif ambassadeur.autreStructureRattachementSante is not empty %}
+    					                                   <div class="etab" title="{{ambassadeur.autreStructureRattachementSante}}">
+    					                                       {{ambassadeur.autreStructureRattachementSante|truncate(35,true,'...')}}
+    				                                       </div>
+                                                        {% else %}
+                                                           <div class="etab" title="{{ambassadeur.nomStructure}}">
+                                                               {{ambassadeur.nomStructure|truncate(35,true,'...')}}
+                                                           </div>
+    					                                {% endif %}
+        					                            <div class="fonction" title="{% if ambassadeur.fonctionDansEtablissementSante is not empty %}{{ambassadeur.fonctionDansEtablissementSante}}{% else %}{{ambassadeur.fonctionStructure}}{% endif %}">
+        					                                {% if ambassadeur.fonctionDansEtablissementSante is not empty %}
+        					                                    {{ambassadeur.fonctionDansEtablissementSante|truncate(26,true,'...')}}
+        					                                {% else %}
+        					                                    {{ambassadeur.fonctionStructure|truncate(26,true,'...')}}
+        					                                {% endif %}
+        					                            </div>
+    					                            
+        					                            <div class="col-md-12">
+                                                            <a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Domaines fonctionnels</a>
+                                                        </div>
+        					                            <div class="col-md-12">
+                                                            <a class="link violet fancybox.ajax outilsMaitrises" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a>
+                                                        </div>
+        					
+        					                            <div class="col-md-12">
+                                                            <a class="btn background-violet {% if (user.isCMSI) and not (user.user.region.id == ambassadeur.region.id) %}disabled{% endif %}" href="{% if (user.isCMSI) and not ((user.user.region.id == ambassadeur.region.id)) %}#{% else %}{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}{% endif %}">Solliciter cet ambassadeur</a>
+                                                        </div>
+        					                            <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
 					                        </div>
 					                    </div>
 				                    {% endif %}
