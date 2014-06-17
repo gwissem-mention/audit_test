@@ -643,6 +643,7 @@ class UserController extends Controller
         {
             $form->remove('plainPassword');
             $form->remove('raisonDesinscription');
+            $form->remove('file');
         }
 
         $request = $this->get('request');
@@ -777,6 +778,8 @@ class UserController extends Controller
                     $user->setEnabled( 1 );
                 else
                     $user->setEnabled( 0 );
+
+                $user->setDateLastUpdate(new \DateTime());
                 
                 //Mise à jour / création de l'utilisateur
                 $this->get('fos_user.user_manager')->updateUser( $user );
