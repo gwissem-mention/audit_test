@@ -112,7 +112,38 @@ class ReferenceController extends Controller
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_reference_reference').'"}', 200);
     }
 
+    /**
+     * Export CSV de la liste des références sélectionnés
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     */
+    public function exportCsvAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_reference.grid.reference')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+        $refs = $this->get('hopitalnumerique_reference.manager.reference')->getDatasForExport( $primaryKeys );
 
+        $colonnes = array( 
+                            'id'           => 'id', 
+                            'libelle'      => 'Libelle', 
+                            'code'         => 'Code', 
+                            'dictionnaire' => 'Présent dans le dictionnaire', 
+                            'recherche'    => 'Présent dans la recherhce', 
+                            'lock'         => 'Vérouillé ?', 
+                            'order'        => 'Ordre d\'affichage', 
+                            'etat'         => 'Etat', 
+                            'idParent'     => 'ID du parent'
+                        );
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $refs, 'export-references.csv', $kernelCharset );
+    }
 
 
 

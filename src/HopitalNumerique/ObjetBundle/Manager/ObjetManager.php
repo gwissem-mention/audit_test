@@ -40,6 +40,94 @@ class ObjetManager extends BaseManager
     }
 
     /**
+     * Récupère les objets pour l'export
+     *
+     * @return array
+     */
+    public function getDatasForExport( $ids )
+    {
+        $objets  = $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
+        $results = array();
+
+        foreach($objets as $objet) {
+            $row = array();
+
+            //simple stuff
+            $row['id']           = $objet->getId();
+            $row['titre']        = $objet->getTitre();
+            $row['alias']        = $objet->getAlias();
+            // $row['synthese']     = $objet->getSynthese();
+            // $row['resume']       = $objet->getResume();
+            $row['commentaires'] = $objet->getCommentaires() ? 'Oui' : 'Non';
+            $row['notes']        = $objet->getNotes()        ? 'Oui' : 'Non';
+            $row['type']         = $objet->isArticle()       ? 'Article' : 'Objet';
+            $row['nbVue']        = $objet->getNbVue();
+            $row['etat']         = $objet->getEtat()->getLibelle();
+
+            //quelques Dates
+            $row['dateCreation']         = !is_null($objet->getDateCreation())         ? $objet->getDateCreation()->format('d/m/Y')         : '';
+            $row['dateDebutPublication'] = !is_null($objet->getDateDebutPublication()) ? $objet->getDateDebutPublication()->format('d/m/Y') : '';
+            $row['dateFinPublication']   = !is_null($objet->getDateFinPublication())   ? $objet->getDateFinPublication()->format('d/m/Y')   : '';
+            $row['dateModification']     = !is_null($objet->getDateModification())     ? $objet->getDateModification()->format('d/m/Y')     : '';
+            
+            //handle Roles
+            $roles        = $objet->getRoles();
+            $row['roles'] = array();
+            foreach($roles as $role)
+                $row['roles'][] = $role->getName();
+            $row['roles'] = implode(', ', $row['roles']);
+                
+            //handle types (catégories)
+            $types        = $objet->getTypes();
+            $row['types'] = array();
+            foreach($types as $type)
+                $row['types'][] = $type->getLibelle();
+            $row['types'] = implode(', ', $row['types']);
+
+            //handle Ambassadeurs concernés
+            $ambassadeurs        = $objet->getAmbassadeurs();
+            $row['ambassadeurs'] = array();
+            foreach($ambassadeurs as $ambassadeur)
+                $row['ambassadeurs'][] = $ambassadeur->getPrenomNom();
+            $row['ambassadeurs'] = implode(', ', $row['ambassadeurs']);
+
+            //set empty values for objet (infra doc)
+            $row['idC'] = $row['titreC'] = $row['aliasC'] = $row['orderC'] = $row['contenuC'] = $row['dateCreationC'] = $row['dateModificationC'] = $row['nbVueC'] = '';
+
+            //add Object To Results
+            $results[] = $row;
+
+            if( $objet->isInfraDoc() ) {
+                $contenus = $objet->getContenus();
+                if( $contenus ){
+                    foreach($contenus as $contenu) {                        
+                        $row = array();
+
+                        //init empty for infra doc
+                        $row['id'] = $row['titre'] = $row['alias'] = $row['synthese'] = $row['resume'] = $row['commentaires'] = $row['notes'] = $row['type'] = $row['nbVue'] = $row['etat'] = '';
+                        $row['dateCreation'] = $row['dateDebutPublication'] = $row['dateFinPublication'] = $row['dateModification'] = $row['roles'] = $row['types'] = $row['ambassadeurs'] = '';
+
+                        //Infra doc values
+                        $row['idC']               = $contenu->getId();
+                        $row['titreC']            = $contenu->getTitre();
+                        $row['aliasC']            = $contenu->getAlias();
+                        $row['orderC']            = $contenu->getOrder();
+                        //$row['contenuC']          = $contenu->getContenu();
+                        $row['dateCreationC']     = !is_null($contenu->getDateCreation()) ? $contenu->getDateCreation()->format('d/m/Y') : '';
+                        $row['dateModificationC'] = !is_null($contenu->getDateModification()) ? $contenu->getDateModification()->format('d/m/Y') : '';
+                        $row['nbVueC']            = $contenu->getNbVue();
+
+                        //add Infra-doc To Results
+                        $results[] = $row;
+                    }
+                }
+            }
+        }
+
+        return $results;
+    }
+
+    /**
      * Retourne la liste des objets selon le/les types
      *
      * @param array $types Les types à filtrer
