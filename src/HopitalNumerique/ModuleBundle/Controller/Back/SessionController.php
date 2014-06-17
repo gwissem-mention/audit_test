@@ -172,7 +172,8 @@ class SessionController extends Controller
             'margin-left'   => 4,
             'margin-right'  => 4,
             'margin-top'    => 10,
-            'encoding'      => 'UTF-8'
+            'encoding'      => 'UTF-8',
+            'orientation'   => 'Landscape'
         );
 
         return new Response(
