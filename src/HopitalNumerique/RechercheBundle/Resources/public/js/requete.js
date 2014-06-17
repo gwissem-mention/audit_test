@@ -12,6 +12,13 @@ $(document).ready(function() {
             }
         });
     });
+
+    width = $( window ).width();
+    if( width < 991 ) {
+        $('.ligne').on('click', function(){
+            window.location = $(this).data('target');
+        });
+    }
 });
 
 /**
