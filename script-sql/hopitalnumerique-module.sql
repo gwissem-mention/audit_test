@@ -1,1 +1,0 @@
-UPDATE `hn_module_session` SET ses_archiver = 0;
