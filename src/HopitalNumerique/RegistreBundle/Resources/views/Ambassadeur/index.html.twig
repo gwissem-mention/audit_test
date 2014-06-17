@@ -92,8 +92,12 @@
                                                 <div class="col-md-3">
                                                     {% if ambassadeur.getPath() is not null and ambassadeur.getPath() is not empty %}
                                                         <img class="photo-profil" src="/{{ ambassadeur.getWebPath() }}" width="90px" height="130px">
+                                                    {% elseif ambassadeur.civilite.id == 8 %}
+                                                        {# Monsieur #}
+                                                        <img class="photo-profil" src="/medias/Utilisateurs/profil-homme.png" width="90px" height="130px">
                                                     {% else %}
-                                                        <img class="photo-profil" src="/medias/Utilisateurs/profil.png" width="90px" height="130px">
+                                                        {# Madame #}
+                                                        <img class="photo-profil" src="/medias/Utilisateurs/profil-femme.png" width="90px" height="130px">
                                                     {% endif %}
                                                 </div>
 
