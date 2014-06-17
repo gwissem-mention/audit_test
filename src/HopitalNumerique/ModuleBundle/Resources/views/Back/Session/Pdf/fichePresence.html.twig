@@ -8,14 +8,23 @@
 <table width="1100px" style="margin:0 auto; border:1px solid #e3e3e3;" >
     {# Titre #}
     <tr align="center" style="font-size:14px;border:1px solid #e3e3e3;">
-        <td>
-            <strong>FEUILLE D'EMARGEMENT - {{ session.dateSession|date('d/m/Y') }}</strong>
+        <td style="width:100px;">
+            <img src="{{app.request.getSchemeAndHttpHost()}}{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
+        </td>
+        <td style="width:1000px;">
+            <strong>FEUILLE D'EMARGEMENT</strong>
+        </td>
+    </tr>
+    {# Libelle #}
+    <tr align="center" style="font-size:14px;border:1px solid #e3e3e3;height:50px">
+        <td colspan="2">
+            <strong>Accompagnement Hôpital Numérique - Sessions de montée en compétence</strong>
         </td>
     </tr>
     {# Ligne du module #}
     <tr style="border:1px solid #e3e3e3;">
-        <td>
-            <strong>{{ session.module.titre }}</strong>
+        <td colspan="2">
+            <strong>{{ session.module.titre }} - {{ session.dateSession|date('d/m/Y') }} - Formateur : {{ session.formateur.getAppellation() }}</strong>
         </td>
     </tr>
 </table>
