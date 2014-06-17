@@ -80,6 +80,16 @@ class UserManager extends BaseManager
     }
 
     /**
+     * Técupère les établissements pour l'export CSV
+     *
+     * @return array
+     */
+    public function getEtablissementForExport( $ids )
+    {
+        return $this->getRepository()->getEtablissementForExport( $ids )->getQuery()->getResult();
+    }
+
+    /**
      * Modifie l'état de tous les users
      *
      * @param array     $users Liste des utilisateurs

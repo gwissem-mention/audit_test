@@ -17,6 +17,7 @@ class EtablissementGrid extends Grid implements IGrid
     public function setConfig()
     {
         $this->setSource( 'HopitalNumeriqueEtablissementBundle:Etablissement' );
+        $this->setDefaultOrder('nom', 'ASC');
     }
 
     /**
@@ -70,6 +71,6 @@ class EtablissementGrid extends Grid implements IGrid
      */
     public function setMassActions()
     {
-        
+        $this->addMassAction( new Action\ActionMass('Export CSV', 'HopitalNumeriqueEtablissementBundle:Etablissement:exportCsv') );
     }
 }

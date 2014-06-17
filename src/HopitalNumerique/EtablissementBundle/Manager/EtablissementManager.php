@@ -49,4 +49,23 @@ class EtablissementManager extends BaseManager
         
         return $etablissementsRegroupesParTypeOrganisme;
     }
+
+    /**
+     * Récupère les données pour l'export CSV
+     *
+     * @return array
+     */
+    public function getDatasForExport( $ids )
+    {
+        return $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
+    }
+
+
+
+
+
+
+
+
+
 }

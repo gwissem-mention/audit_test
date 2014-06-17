@@ -93,7 +93,7 @@ class Contenu
     protected $parent = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Objet", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Objet", cascade={"persist"}, inversedBy="contenus")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
      */
     protected $objet;
