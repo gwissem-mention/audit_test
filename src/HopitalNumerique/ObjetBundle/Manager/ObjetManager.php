@@ -63,6 +63,10 @@ class ObjetManager extends BaseManager
             $row['type']         = $objet->isArticle()       ? 'Article' : 'Objet';
             $row['nbVue']        = $objet->getNbVue();
             $row['etat']         = $objet->getEtat()->getLibelle();
+            $row['fichier1']     = $objet->getPath();
+            $row['fichier2']     = $objet->getPath2();
+            $row['fichierEdit']  = $objet->getPathEdit();
+            $row['vignette']     = $objet->getVignette();
 
             //quelques Dates
             $row['dateCreation']         = !is_null($objet->getDateCreation())         ? $objet->getDateCreation()->format('d/m/Y')         : '';
@@ -106,6 +110,7 @@ class ObjetManager extends BaseManager
                         //init empty for infra doc
                         $row['id'] = $row['titre'] = $row['alias'] = $row['synthese'] = $row['resume'] = $row['commentaires'] = $row['notes'] = $row['type'] = $row['nbVue'] = $row['etat'] = '';
                         $row['dateCreation'] = $row['dateDebutPublication'] = $row['dateFinPublication'] = $row['dateModification'] = $row['roles'] = $row['types'] = $row['ambassadeurs'] = '';
+                        $row['fichier1'] = $row['fichier2'] = $row['fichierEdit'] = $row['vignette'] = '';
 
                         //Infra doc values
                         $row['idC']               = $contenu->getId();
