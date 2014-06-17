@@ -460,6 +460,13 @@ class User extends BaseUser
      * @ORM\Column(name="usr_photo", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier stocké"})
      */
     protected $path;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="usr_date_derniere_maj", type="datetime")
+     */
+    protected $dateLastUpdate;
     
     
     // ------- Interventions -------
@@ -1307,6 +1314,27 @@ class User extends BaseUser
     public function setRaisonDesinscription($raisonDesinscription)
     {
         $this->raisonDesinscription = $raisonDesinscription;
+    }
+
+    /**
+     * Get dateLastUpdate
+     *
+     * @return DateTime $dateLastUpdate
+     */
+    public function getDateLastUpdate()
+    {
+        return $this->dateLastUpdate;
+    }
+    
+    /**
+     * Set dateLastUpdate
+     *
+     * @param DateTime $dateLastUpdate
+     */
+    public function setDateLastUpdate($dateLastUpdate)
+    {
+        $this->dateLastUpdate = $dateLastUpdate;
+        return $this;
     }
 
     // ----------------------------------------
