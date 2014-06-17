@@ -203,56 +203,58 @@
 {% endmacro %}
 
 {% macro buildCarousel(objet, objets, contenu, emptyMessage, key) %}
-<div id="{{key}}-slides" class="results carousel slide" data-ride="carousel" >
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner">
-        {% set count = 1 %}
+    <div id="{{key}}-slides" class="results carousel slide" data-ride="carousel" >
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            {% set count = 1 %}
 
-        {% for item in objets if item['categ'] == key %}
-            <div class="item" data-pos="{{count}}" >
-                <h4>
-                    {% if item['updated'] %}
-                        <span class="label label-success">MaJ</span>
-                    {% elseif item['new'] %}
-                        <span class="label label-danger">Nouveau</span>
-                    {% endif %}
+            {% for item in objets if item['categ'] == key %}
+                {% if count <= 10 %}
+                    <div class="item" data-pos="{{count}}" >
+                        <h4>
+                            {% if item['updated'] %}
+                                <span class="label label-success">MaJ</span>
+                            {% elseif item['new'] %}
+                                <span class="label label-danger">Nouveau</span>
+                            {% endif %}
 
-                    {% if item['objet'] is not null %}
-                        <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':item['objet'],'alias':item['aliasO'],'idc':item['id'],'aliasc':item['aliasC']})}}" >
-                    {% else %}
-                        <a href="{{path('hopital_numerique_publication_publication_objet', {'id':item['id'],'alias':item['alias']})}}" >
-                    {% endif %}
-                        {{item['titre']}}{% if item['objet'] is not null %}<small> - Extrait d'une production</small>{% endif %}
-                    </a>
-                </h4>
+                            {% if item['objet'] is not null %}
+                                <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':item['objet'],'alias':item['aliasO'],'idc':item['id'],'aliasc':item['aliasC']})}}" >
+                            {% else %}
+                                <a href="{{path('hopital_numerique_publication_publication_objet', {'id':item['id'],'alias':item['alias']})}}" >
+                            {% endif %}
+                                {{item['titre']}}{% if item['objet'] is not null %}<small> - Extrait d'une production</small>{% endif %}
+                            </a>
+                        </h4>
 
-                <p>{{ item['resume']|trim }}</p>
-            </div>
+                        <p>{{ item['resume']|trim }}</p>
+                    </div>
+                {% endif %}
 
-            {% set count = count + 1 %}
-        {% else %}
-            <div class="item active">
-                <h4></h4>
-                <p class="noresult"> {{emptyMessage}} </p>
-            </div>
-        {% endfor %}
-    </div>
-
-    {% if count > 1 %}
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-            {% for i in 1..count - 1 %}
-                <li data-target="#{{key}}-slides" data-slide-to="{{i-1}}" class="pos-{{i}}" ></li>
+                {% set count = count + 1 %}
+            {% else %}
+                <div class="item active">
+                    <h4></h4>
+                    <p class="noresult"> {{emptyMessage}} </p>
+                </div>
             {% endfor %}
-        </ol>
+        </div>
 
-        <!-- Controls -->
-        <a class="left carousel-control" href="#{{key}}-slides" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left violet"></span>
-        </a>
-        <a class="right carousel-control" href="#{{key}}-slides" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right violet"></span>
-        </a>
-    {% endif %}
-</div>
+        {% if count > 1 %}
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                {% for i in 1..count - 1 %}
+                    <li data-target="#{{key}}-slides" data-slide-to="{{i-1}}" class="pos-{{i}}" ></li>
+                {% endfor %}
+            </ol>
+
+            <!-- Controls -->
+            <a class="left carousel-control" href="#{{key}}-slides" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left violet"></span>
+            </a>
+            <a class="right carousel-control" href="#{{key}}-slides" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right violet"></span>
+            </a>
+        {% endif %}
+    </div>
 {% endmacro %}

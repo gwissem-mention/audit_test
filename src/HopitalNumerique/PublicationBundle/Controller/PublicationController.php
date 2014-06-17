@@ -161,8 +161,21 @@ class PublicationController extends Controller
         //on récupère sa recherche
         $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $refs, $role );
         $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
-        
-        return $this->get('hopitalnumerique_recherche.manager.search')->formatForPublication( $objets, $publication );
+    
+        //make array unique
+        $ids = array();
+        foreach($objets as $objet) {
+            if( $publication->getId() != $objet['id'] )
+                $ids[] = $objet['id'];
+        }
+        $ids = array_unique($ids);
+        $newObjets = array();
+        foreach($objets as $objet) {
+            if( in_array($objet['id'], $ids) )
+                $newObjets[] = $objet;
+        }
+
+        return $this->get('hopitalnumerique_recherche.manager.search')->formatForPublication( $newObjets, $publication );
     }
 
     /**
