@@ -26,7 +26,7 @@
         </td>
         <td class="left">
             {%- if topic.getClosedDate -%}
-                <span class="label label-danger">{{- 'topic.badge.closed' |trans({}, 'CCDNForumForumBundle') -}}</span>&nbsp;
+                <span class="label label-danger">{{- 'topic.badge.closed' |trans({}, ForumBundle.translation ) -}}</span>&nbsp;
             {%- endif -%}
 
             <a href="{{- path('ccdn_forum_user_topic_show', {'forumName': forumName, 'topicId': topic.getId }) -}}" title="{{- topic.getTitle -}}">
@@ -36,7 +36,7 @@
             <br>
 
             {%- if topic.getFirstPost -%}
-                {{- 'post.posted-by' | trans({}, 'CCDNForumForumBundle') |raw -}}
+                {{- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -}}
                 {{- topic.getFirstPost.getCreatedBy.getAppellation() -}}
 
                 &nbsp;&#183;
@@ -59,7 +59,7 @@
         </td>
         <td class="center">
             {%- if topic.getLastPost -%}
-                {{- 'post.posted-by' | trans({}, 'CCDNForumForumBundle') |raw -}}
+                {{- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -}}
                 {{- topic.getLastPost.getCreatedBy.getAppellation() -}}
 
                 <br>

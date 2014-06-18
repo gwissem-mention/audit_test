@@ -39,6 +39,9 @@ services:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    globals:
+        ForumBundle:
+            translation: HopitalNumeriqueForumBundle
 
 # Doctrine Configuration
 doctrine:

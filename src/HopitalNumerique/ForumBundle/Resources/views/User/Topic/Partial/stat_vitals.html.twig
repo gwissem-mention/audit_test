@@ -15,21 +15,21 @@
         </div>
         <div class="col-md-6 text-right">
             <span class="label label-default" title="{{- topic.cachedReplyCount -}}">
-                {{- 'topic.reply-count-label' |trans({}, 'CCDNForumForumBundle') -}}
+                {{- 'topic.reply-count-label' |trans({}, ForumBundle.translation ) -}}
                 {{- topic.cachedReplyCount -}}
             </span>
 
             &nbsp;
 
             <span class="label label-default" title="{{- topic.cachedViewCount -}}">
-                {{- 'topic.view-count-label' |trans({}, 'CCDNForumForumBundle') -}}
+                {{- 'topic.view-count-label' |trans({}, ForumBundle.translation ) -}}
                 {{- topic.cachedViewCount -}}
             </span>
 
             {%- if subscription_count is defined -%}
                 &nbsp;
                 <span class="label label-default" title="{{- subscription_count -}}">
-                    {{- 'topic.subscription-count-label' |trans({}, 'CCDNForumForumBundle') -}}
+                    {{- 'topic.subscription-count-label' |trans({}, ForumBundle.translation ) -}}
                     {{- subscription_count -}}
                 </span>
             {%- endif -%}

@@ -39,12 +39,15 @@
 {% endblock prebody %}
 
 {% block block_du_body %}
+    <div class="col-md-12">
+        <h3 class="violet">Forum</h3>
+    </div>
     <div style="margin-top:20px;">
-        <div class="col-md-2 page-sidebar-left">
+        <div class="col-md-3 page-sidebar-left">
             {{ block('prebody') }}
             <div class="clearfix"></div>
         </div>
-        <div class="col-md-10 page-body-right">
+        <div class="col-md-9 page-body-right">
             {% block body %}{% endblock body %}
             <div class="clearfix"></div>
         </div>
