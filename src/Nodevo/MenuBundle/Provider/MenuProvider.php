@@ -67,14 +67,7 @@ class MenuProvider implements MenuProviderInterface
             $loader->setClass($class);
         }
 
-        //Get Menu
-        //try {
-            $menu = $loader->load($tree);
-        // } 
-        // catch (\Exception $e) {
-        //     $tree = $this->menuManager->getTree( $this->_menuEntity, true);
-        //     $menu = $loader->load($tree);
-        // }
+        $menu = $loader->load($tree);
         
         //set Vars    
         $menu->setChildrenAttribute('class', $class );

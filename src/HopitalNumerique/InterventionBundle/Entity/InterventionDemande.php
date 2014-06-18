@@ -106,6 +106,13 @@ class InterventionDemande
     /**
      * @var string
      *
+     * @ORM\Column(name="interv_objets_autres", type="text", columnDefinition="TEXT", nullable=true)
+     */
+    private $objetsAutres;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="interv_rdv_informations", type="text", columnDefinition="TEXT", nullable=true)
      */
     private $rdvInformations;
@@ -1130,5 +1137,26 @@ class InterventionDemande
     {
         $this->total = $total;
         return $this;
-    }    
+    }
+
+    /**
+     * Get objetsAutres
+     *
+     * @return string $objetsAutres
+     */
+    public function getObjetsAutres()
+    {
+        return $this->objetsAutres;
+    }
+    
+    /**
+     * Set objetsAutres
+     *
+     * @param string $objetsAutres
+     */
+    public function setObjetsAutres($objetsAutres)
+    {
+        $this->objetsAutres = $objetsAutres;
+        return $this;
+    }
 }
