@@ -48,7 +48,8 @@
         "igorw/file-serve-bundle": "~1.0",
         "doctrine/doctrine-fixtures-bundle": "~2.2",
         "beberlei/DoctrineExtensions": "v0.1",
-        "nodevo/gestionnaire-media": "v1.3"
+        "nodevo/gestionnaire-media": "v1.3",
+        "stof/doctrine-extensions-bundle": "~1.1@dev"
     },
     "scripts": {
         "post-install-cmd": [

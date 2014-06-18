@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * User
@@ -20,6 +21,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(fields="email", message="Cette adresse email existe déjà.")
  * @UniqueEntity(fields="username", message="Ce nom de compte existe déjà.")
+ * @Gedmo\Loggable
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="username",
  *          column=@ORM\Column(
@@ -175,6 +177,7 @@ class User extends BaseUser
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom de compte."
      * )
      * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]],custom[onlyLetterNumber]")
+     * @Gedmo\Versioned
      */
     protected $username;
     
@@ -189,6 +192,7 @@ class User extends BaseUser
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom de compte."
      * )
      * @Nodevo\Javascript(class="validate[required,custom[email]]")
+     * @Gedmo\Versioned
      */
     protected $email;
 
@@ -203,6 +207,7 @@ class User extends BaseUser
      * )
      * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
      * @ORM\Column(name="usr_nom", type="string", length=50, options = {"comment" = "Nom de l utilisateur"})
+     * @Gedmo\Versioned
      */
     protected $nom;
     
@@ -217,6 +222,7 @@ class User extends BaseUser
      * )
      * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
      * @ORM\Column(name="usr_prenom", type="string", length=50, options = {"comment" = "Prénom de l utilisateur"})
+     * @Gedmo\Versioned
      */
     protected $prenom;
 
@@ -230,7 +236,8 @@ class User extends BaseUser
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id")
-     *
+     * @Gedmo\Versioned
+     * 
      * @GRID\Column(field="region.libelle")
      */
     protected $region;
@@ -238,6 +245,7 @@ class User extends BaseUser
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_departement", referencedColumnName="ref_id")
+     * @Gedmo\Versioned
      */
     protected $departement;
 
@@ -246,12 +254,14 @@ class User extends BaseUser
      * @ORM\JoinColumn(name="ref_etat", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="L'état ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
+     * @Gedmo\Versioned
      */
     protected $etat;
     
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_titre", referencedColumnName="ref_id")
+     * @Gedmo\Versioned
      */
     protected $titre;
     
@@ -260,11 +270,13 @@ class User extends BaseUser
      * @ORM\JoinColumn(name="ref_civilite", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="La civilité ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
+     * @Gedmo\Versioned
      */
     protected $civilite;
     
     /**
      * @var string
+     * 
      * @Assert\Length(
      *      min = "14",
      *      max = "14",
@@ -272,12 +284,14 @@ class User extends BaseUser
      *      maxMessage="Le numéro de téléphone direct doit être composé de {{ limit }} caractères."
      * )
      * @Nodevo\Javascript(class="validate[minSize[14],maxSize[14]],custom[phone]", mask="99 99 99 99 99")
+     * @Gedmo\Versioned
      * @ORM\Column(name="usr_telephone_direct", type="string", length=14, nullable=true, options = {"comment" = "Téléphone de l utilisateur"})
      */
     protected $telephoneDirect;
     
     /**
      * @var string
+     * 
      * @Assert\Length(
      *      min = "14",
      *      max = "14",
@@ -285,13 +299,16 @@ class User extends BaseUser
      *      maxMessage="Le numéro de téléphone portable doit être composé de {{ limit }} caractères."
      * )
      * @Nodevo\Javascript(class="validate[minSize[14],maxSize[14]],custom[phone]", mask="99 99 99 99 99")
+     * @Gedmo\Versioned
      * @ORM\Column(name="usr_telephone_portable", type="string", length=14, nullable=true, options = {"comment" = "Téléphone portable de l utilisateur"})
      */
     protected $telephonePortable;
     
     /**
      * @var string
+     * 
      * @ORM\Column(name="usr_contact_autre", type="text", nullable=true, options = {"comment" = "Autre moyen de contacter l utilsateur"})
+     * @Gedmo\Versioned
      */
     protected $contactAutre;
     
@@ -309,17 +326,20 @@ class User extends BaseUser
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_statut_etablissement_sante", referencedColumnName="ref_id")
+     * @Gedmo\Versioned
      */
     protected $statutEtablissementSante;
     
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\EtablissementBundle\Entity\Etablissement", inversedBy="usersRattachement", cascade={"persist"})
      * @ORM\JoinColumn(name="eta_etablissement_rattachement_sante", referencedColumnName="eta_id")
+     * @Gedmo\Versioned
      */
     protected $etablissementRattachementSante;
     
     /**
      * @var string
+     * 
      * @Assert\Length(
      *      min = "1",
      *      max = "255",
@@ -327,12 +347,14 @@ class User extends BaseUser
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente."
      * )
      * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
+     * @Gedmo\Versioned
      * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Nom de votre établissement si non disponible dans la liste précédente santé de l utilisateur"})
      */
     protected $autreStructureRattachementSante;
     
     /**
      * @var string
+     * 
      * @Assert\Length(
      *      min = "3",
      *      max = "255",
@@ -340,6 +362,7 @@ class User extends BaseUser
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente."
      * )
      * @Nodevo\Javascript(class="validate[minSize[3],maxSize[255]]")
+     * @Gedmo\Versioned
      * @ORM\Column(name="usr_fonction_dans_etablissement", type="string", length=255, nullable=true, options = {"comment" = "Fonction dans l etablissement de santé de l utilisateur"})
      */
     protected $fonctionDansEtablissementSante;
@@ -347,12 +370,14 @@ class User extends BaseUser
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_profil_etablissement_sante", referencedColumnName="ref_id")
+     * @Gedmo\Versioned
      */
     protected $profilEtablissementSante;
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_raison_inscription_sante", referencedColumnName="ref_id")
+     * @Gedmo\Versioned
      */
     protected $raisonInscriptionSante;
 
@@ -362,6 +387,7 @@ class User extends BaseUser
 
     /**
      * @var string
+     * 
      * @Assert\Length(
      *      min = "1",
      *      max = "255",
@@ -370,11 +396,13 @@ class User extends BaseUser
      * )
      * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
      * @ORM\Column(name="usr_nom_structure", type="string", length=255, nullable=true, options = {"comment" = "Nom de la structure de l utilisateur"})
+     * @Gedmo\Versioned
      */
     protected $nomStructure;
     
     /**
      * @var string
+     * 
      * @Assert\Length(
      *      min = "1",
      *      max = "255",
@@ -383,6 +411,7 @@ class User extends BaseUser
      * )
      * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
      * @ORM\Column(name="usr_fonction_strucutre", type="string", length=255, nullable=true, options = {"comment" = "Fonction au sein de la structure"})
+     * @Gedmo\Versioned
      */
     protected $fonctionStructure;
     
@@ -390,6 +419,7 @@ class User extends BaseUser
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_raison_inscription_structure", referencedColumnName="ref_id")
+     * @Gedmo\Versioned
      */
     protected $raisonInscriptionStructure;
     
@@ -408,13 +438,16 @@ class User extends BaseUser
     /**
      * @var boolean
      *
-     * @ORM\Column(name="usr_lock", type="boolean", options = {"comment" = "L utilisateur est-il verrouillé ?"}) */
+     * @ORM\Column(name="usr_lock", type="boolean", options = {"comment" = "L utilisateur est-il verrouillé ?"})
+     */
     protected $lock;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="usr_archiver", type="boolean", options = {"comment" = "L utilisateur est-il archivé ?"}) */
+     * @ORM\Column(name="usr_archiver", type="boolean", options = {"comment" = "L utilisateur est-il archivé ?"}) 
+     * @Gedmo\Versioned
+     */
     protected $archiver;
 
     /**
@@ -437,6 +470,7 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="usr_raison_desinscription", nullable=true, type="text")
+     * @Gedmo\Versioned
      */
     protected $raisonDesinscription;
 
@@ -458,6 +492,7 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="usr_photo", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier stocké"})
+     * @Gedmo\Versioned
      */
     protected $path;
 

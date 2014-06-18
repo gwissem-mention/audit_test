@@ -1,9 +1,10 @@
 <?php
 namespace HopitalNumerique\UserBundle\Controller;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Controller des utilisateurs
@@ -200,12 +201,33 @@ class UserController extends Controller
         $user  = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
         $roles = $this->get('nodevo_role.manager.role')->findIn( $user->getRoles() );
 
+        
+
         return $this->render('HopitalNumeriqueUserBundle:User:show.html.twig', array(
             'user'                     => $user,
             'questionnaireExpert'      => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('expert'),
             'questionnaireAmbassadeur' => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur'),
             'options'                  => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
             'roles'                    => $roles
+        ));
+    }
+
+    /**
+     * [historiqueAction description]
+     *
+     * @param  User   $user [description]
+     *
+     * @return [type]
+     */
+    public function historiqueAction( User $user )
+    {
+        //get History
+        $em   = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('Gedmo\Loggable\Entity\LogEntry');
+        $logs = $repo->getLogEntries($user);
+
+        return $this->render('HopitalNumeriqueUserBundle:User:historique.html.twig', array(
+            'logs' => $logs
         ));
     }
 

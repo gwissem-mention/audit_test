@@ -100,9 +100,15 @@ class ObjetController extends Controller
         $objet  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id) );
         $outils = $this->get('hopitalnumerique_autodiag.manager.outil')->findBy( array( 'id' => $objet->getAutodiags() ));
 
+        //get History
+        $em   = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('Gedmo\Loggable\Entity\LogEntry');
+        $logs = $repo->getLogEntries($objet);
+
         return $this->render('HopitalNumeriqueObjetBundle:Objet:show.html.twig', array(
             'objet'  => $objet,
-            'outils' => $outils
+            'outils' => $outils,
+            'logs'   => $logs
         ));
     }
 

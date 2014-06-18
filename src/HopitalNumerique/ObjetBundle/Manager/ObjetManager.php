@@ -56,8 +56,6 @@ class ObjetManager extends BaseManager
             $row['id']           = $objet->getId();
             $row['titre']        = $objet->getTitre();
             $row['alias']        = $objet->getAlias();
-            // $row['synthese']     = $objet->getSynthese();
-            // $row['resume']       = $objet->getResume();
             $row['commentaires'] = $objet->getCommentaires() ? 'Oui' : 'Non';
             $row['notes']        = $objet->getNotes()        ? 'Oui' : 'Non';
             $row['type']         = $objet->isArticle()       ? 'Article' : 'Objet';
@@ -117,7 +115,6 @@ class ObjetManager extends BaseManager
                         $row['titreC']            = $contenu->getTitre();
                         $row['aliasC']            = $contenu->getAlias();
                         $row['orderC']            = $contenu->getOrder();
-                        //$row['contenuC']          = $contenu->getContenu();
                         $row['dateCreationC']     = !is_null($contenu->getDateCreation()) ? $contenu->getDateCreation()->format('d/m/Y') : '';
                         $row['dateModificationC'] = !is_null($contenu->getDateModification()) ? $contenu->getDateModification()->format('d/m/Y') : '';
                         $row['nbVueC']            = $contenu->getNbVue();

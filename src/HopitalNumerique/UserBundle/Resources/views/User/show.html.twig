@@ -8,9 +8,6 @@
 
 {% block toolbarButton %}
     <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
-{#     {% if app.user|checkAuthorization( path('hopital_numerique_user_edit', {'id':user.id} ) ) %}#}
-{#         <a href="{{path('hopital_numerique_user_edit', {'id':user.id} )}}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>#}
-{#     {% endif %}#}
 {% endblock %}
 
 {% block body %}
@@ -21,15 +18,13 @@
             </div>
 
             <div class="panel-body" >
-            
                 <div class="row">
                     <div class="panel panel-default gray">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseUser" class="collapsed" id="questionnaire_expert_collapse">
                             <div class="panel-heading"><h4>Informations de caractérisation</h4></div>
                         </a>
                         <div id="collapseUser" class="collapse" style="height: 0px;"> 
-                            <div class="panel-body">       
-            
+                            <div class="panel-body">            
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div><strong>Civilité</strong></div>
@@ -223,6 +218,11 @@
                 <div class="row">
                     {# Include des données Paiements #}
                     {{ render(controller("HopitalNumeriquePaiementBundle:Facture:total", {'id':user.id} )) }}
+                </div>
+
+                <div class="row">
+                    {# Include de l'historique #}
+                    {{ render(controller("HopitalNumeriqueUserBundle:User:historique", {'id':user.id} )) }}
                 </div>
             </div>
         </div>

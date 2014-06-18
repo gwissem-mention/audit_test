@@ -9,7 +9,7 @@ namespace HopitalNumerique\InterventionBundle\Form\InterventionDemande;
 use Symfony\Component\Form\FormBuilderInterface;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemandeType;
 use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\Validator\Validator;
+use Symfony\Component\Validator\Validator\LegacyValidator;
 use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager as FormInterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\UserManager as FormUserManager;
@@ -31,7 +31,7 @@ class EtablissementType extends InterventionDemandeType
      * @param \HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager $formEtablissementManager Manager Form\Etablissement
      * @return void
      */
-    public function __construct(SecurityContext $securityContext, Validator $validator, InterventionDemandeManager $interventionDemandeManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
+    public function __construct(SecurityContext $securityContext, $validator, InterventionDemandeManager $interventionDemandeManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
     {
         parent::__construct($securityContext, $validator, $interventionDemandeManager, $formInterventionDemandeManager, $formUserManager, $formEtablissementManager);
     }
