@@ -58,6 +58,12 @@ doctrine:
                 dql:
                     string_functions:
                         GROUP_CONCAT: DoctrineExtensions\Query\Mysql\GroupConcat
+                mappings:
+                    gedmo_loggable:
+                        type: annotation
+                        prefix: Gedmo\Loggable\Entity
+                        dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity"
+                        is_bundle: false
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -154,3 +160,10 @@ knp_snappy:
         enabled: true
         binary: %wkhtmltoimage%
         options: []
+
+#Stof Stuff
+stof_doctrine_extensions:
+    default_locale: fr_FR
+    orm:
+        default: 
+            loggable: true

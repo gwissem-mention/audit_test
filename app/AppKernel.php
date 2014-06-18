@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
             new Igorw\FileServeBundle\IgorwFileServeBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Nodevo\AdminBundle\NodevoAdminBundle(),
             new Nodevo\MenuBundle\NodevoMenuBundle(),
             new Nodevo\RoleBundle\NodevoRoleBundle(),

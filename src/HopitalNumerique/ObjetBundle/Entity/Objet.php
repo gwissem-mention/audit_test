@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Objet
@@ -16,6 +17,7 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\ObjetRepository")
  * @UniqueEntity(fields="alias", message="Cet alias existe déjà.")
  * @ORM\HasLifecycleCallbacks
+ * @Gedmo\Loggable
  */
 class Objet
 {
@@ -34,6 +36,7 @@ class Objet
 
     /**
      * @var string
+     * 
      * @Assert\NotBlank(message="Le titre ne peut pas être vide.")
      * @Assert\Length(
      *      min = "1",
@@ -42,32 +45,38 @@ class Objet
      *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans le titre."
      * )
      * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_titre", type="string", length=255, options = {"comment" = "Titre de l objet"})
      */
     private $titre;
 
     /**
      * @var string
+     * 
      * @Assert\Length(
      *      max = "255",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le titre."
      * )
      * @Nodevo\Javascript(class="validate[maxSize[255]]")
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_alias", type="string", length=255, unique=true, options = {"comment" = "Alias de l objet"})
      */
     private $alias;
 
     /**
      * @var string
-     *
+     * 
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_synthese", type="text", nullable=true, options = {"comment" = "Synthèse de l objet"})
      */
     private $synthese;
 
     /**
      * @var string
+     * 
      * @Assert\NotBlank(message="Le résumé ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_resume", type="text", options = {"comment" = "Résumé de l objet"})
      */
     private $resume;
@@ -75,6 +84,7 @@ class Objet
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_path", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier lié à l objet"})
      */
     private $path;
@@ -82,6 +92,7 @@ class Objet
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_path2", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier 2 lié à l objet"})
      */
     private $path2;
@@ -89,6 +100,7 @@ class Objet
     /**
      * @var boolean
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_commentaires", type="boolean", options = {"comment" = "Commentaires autorisés sur l objet ?"})
      */
     private $commentaires;
@@ -96,6 +108,7 @@ class Objet
     /**
      * @var boolean
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_notes", type="boolean", options = {"comment" = "Notes autorisées sur l objet ?"})
      */
     private $notes;
@@ -110,6 +123,7 @@ class Objet
     /**
      * @var \DateTime
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_date_debut_publication", type="datetime", nullable=true, options = {"comment" = "Date de début de la publication de l objet"})
      */
     private $dateDebutPublication;
@@ -117,6 +131,7 @@ class Objet
     /**
      * @var \DateTime
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_date_fin_publication", type="datetime", nullable=true, options = {"comment" = "Date de fin de la publication de l objet"})
      */
     private $dateFinPublication;
@@ -124,6 +139,7 @@ class Objet
     /**
      * @var \DateTime
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_date_modification", type="datetime", nullable=true, options = {"comment" = "Date de modification de l objet"})
      */
     private $dateModification;
@@ -138,6 +154,7 @@ class Objet
     /**
      * @var boolean
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_isInfraDoc", type="boolean", options = {"comment" = "L objet est de type infradocumentaire ?"})
      */
     private $isInfraDoc;
@@ -145,23 +162,33 @@ class Objet
     /**
      * @var boolean
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_isArticle", type="boolean", options = {"comment" = "L objet est un article ?"})
      */
     private $isArticle;
 
     /**
      * @var string
-     * 
+     *
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_vignette", type="string", length=255, options = {"comment" = "Vignette de l objet"}, nullable=true)
      */
     private $vignette;
 
     /**
      * @var array
-     * 
+     *
      * @ORM\Column(name="obj_autodiag", type="array", options = {"comment" = "Liste des autodiag liés à l objet"})
      */
     private $autodiags;
+
+    /**
+     * @var array
+     *
+     * @Gedmo\Versioned
+     * @ORM\Column(name="obj_referencement", type="array", options = {"comment" = "Copie du référencement pour l historique"})
+     */
+    private $referencement;
 
     /**
      * @var integer
@@ -173,6 +200,7 @@ class Objet
     /**
      * @var string
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_path_edit", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier éditable"})
      */
     private $pathEdit;
@@ -188,6 +216,7 @@ class Objet
      * @ORM\JoinColumn(name="ref_statut", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="Le statut ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
+     * @Gedmo\Versioned
      */
     protected $etat;
 
@@ -265,20 +294,21 @@ class Objet
      */
     public function __construct()
     {
-        $this->dateCreation = new \DateTime();
-        $this->etat         = 3;
-        $this->nbVue        = 0;
-        $this->commentaires = true;
-        $this->notes        = true;
-        $this->isInfraDoc   = false;
-        $this->isArticle    = false;
-        $this->lock         = false;
-        $this->vignette     = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->autodiags    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->roles        = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->types        = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->ambassadeurs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->modules      = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dateCreation  = new \DateTime();
+        $this->etat          = 3;
+        $this->nbVue         = 0;
+        $this->commentaires  = true;
+        $this->notes         = true;
+        $this->isInfraDoc    = false;
+        $this->isArticle     = false;
+        $this->lock          = false;
+        $this->vignette      = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->autodiags     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->referencement = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->roles         = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->types         = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ambassadeurs  = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->modules       = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -867,6 +897,38 @@ class Objet
     public function addAutodiag($autodiag)
     {
         $this->autodiags[] = $autodiag;
+        return $this;
+    }
+
+    /**
+     * Get referencement
+     *
+     * @return array $referencement
+     */
+    public function getReferencement()
+    {
+        return $this->referencement;
+    }
+    
+    /**
+     * Set referencement
+     *
+     * @param array $referencement
+     */
+    public function setReferencement(array $referencement)
+    {
+        $this->referencement = $referencement;
+        return $this;
+    }
+    
+    /**
+     * add referencement
+     *
+     * @param string $referencement
+     */
+    public function addReferencement($referencement)
+    {
+        $this->referencement[] = $referencement;
         return $this;
     }
 
