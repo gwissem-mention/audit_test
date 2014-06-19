@@ -420,8 +420,6 @@ class UserController extends Controller
                             'role'                               => 'Roles',
                             'statutEtablissementSante.libelle'   => 'Statut Etablissement Santé',
                             'profilEtablissementSante.libelle'   => 'Profil Etablissement Santé',
-                            'raisonInscriptionSante.libelle'     => 'Raison inscription Santé',
-                            'raisonInscriptionStructure.libelle' => 'Raison inscription structure',
                             'autreStructureRattachementSante'    => 'Nom de votre établissement si non disponible dans la liste précédente Santé',
                             'nomStructure'                       => 'Nom structure',
                             'fonctionStructure'                  => 'Fonction structure',
