@@ -133,6 +133,10 @@ abstract class InterventionDemandeType extends AbstractType
                 'required' => false,
                 'attr'     => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_objets')
             ))
+            ->add('objetsAutres', 'textarea', array(
+                'label'    => 'Ma sollicitation porte sur une autre production / un autre thème',
+                'required' => false
+            ))
             ->add('description', 'textarea', array(
                 'label'    => 'Description succincte de mon projet',
                 'required' => false
