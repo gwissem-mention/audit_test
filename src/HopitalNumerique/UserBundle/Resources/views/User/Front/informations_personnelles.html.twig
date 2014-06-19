@@ -104,7 +104,7 @@
 	                    <h4 class="violet">Vous êtes une structure autre qu'un établissement de santé</h4>
 	                    {{ form_row(form.nomStructure) }}
 	                    {{ form_row(form.fonctionStructure) }}
-	                    {{ form_row(form.raisonInscriptionStructure) }}
+	                    {#{{ form_row(form.raisonInscriptionStructure) }}#}
                     </div>
                     
 	                {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}

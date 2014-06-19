@@ -174,14 +174,14 @@
                                                 <div><strong>Fonction de la structure</strong></div>
                                                 <div>{{user.fonctionStructure}}</div>
                                             </div>
-                                            <div class="form-group">
+                                            {#<div class="form-group">
                                                 <div><strong>Raison de l'inscription</strong></div>
                                                 <div>
                                                     {% if user.raisonInscriptionStructure is defined and user.raisonInscriptionStructure is not null  %}
                                                         {{user.raisonInscriptionStructure.libelle}}
                                                     {% endif %}
                                                 </div>
-                                            </div>
+                                            </div>#}
                                         {% endif %}                                 
                                     </div>
                                 </div>  
