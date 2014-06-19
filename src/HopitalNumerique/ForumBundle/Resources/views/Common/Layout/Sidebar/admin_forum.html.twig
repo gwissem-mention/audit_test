@@ -1,6 +1,6 @@
 {%- spaceless -%}
 
-    <ul class="nav nav-pills nav-stacked">
+    <ul class="nav nav-pills nav-stacked menu-main">
 
         {%- set route = app.request.attributes.get('_route') -%}
 
@@ -12,11 +12,9 @@
              -%}
                 <li class="active">
                     <a href="{{- path('ccdn_forum_admin_forum_list') -}}">
-                        <i class="glyphicon glyphicon-list"></i>
             {%- else -%}
                 <li>
                     <a href="{{- path('ccdn_forum_admin_forum_list') -}}">
-                        <i class="glyphicon glyphicon-list"></i>
             {%- endif -%}
                         {{'crumbs.admin.manage-forums.index' |trans({}, ForumBundle.translation )}}
                     </a>
@@ -30,11 +28,9 @@
          -%}
             <li class="active">
                 <a href="{{- path('ccdn_forum_admin_category_list') -}}">
-                    <i class="glyphicon glyphicon-list"></i>
         {%- else -%}
             <li>
                 <a href="{{- path('ccdn_forum_admin_category_list') -}}">
-                    <i class="glyphicon glyphicon-list"></i>
         {%- endif -%}
                     {{'crumbs.admin.manage-categories.index' |trans({}, ForumBundle.translation )}}
                 </a>
@@ -47,11 +43,9 @@
          -%}
             <li class="active">
                 <a href="{{- path('ccdn_forum_admin_board_list') -}}">
-                    <i class="glyphicon glyphicon-list"></i>
         {%- else -%}
             <li>
                 <a href="{{- path('ccdn_forum_admin_board_list') -}}">
-                    <i class="glyphicon glyphicon-list"></i>
         {%- endif -%}
                     {{'crumbs.admin.manage-boards.index' |trans({}, ForumBundle.translation )}}
                 </a>

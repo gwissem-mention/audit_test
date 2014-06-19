@@ -14,7 +14,7 @@
                     <i class="glyphicon glyphicon-lock" style="margin-top:10px;"></i>
                 {%- endif -%}
             {%- endif -%}
-        </td>
+        </td>    
 
         <td class="left">
             <h4>
@@ -23,18 +23,18 @@
                 </a>
             </h4>
 
-            <blockquote class="slim">
+            <span class="slim blockquote-reduit">
                 {{- board.getDescription -}}
-            </blockquote>
+            </span>
         </td>
 
-        <td class="center" style="width: 100px;">
+        <td class="center" align="center" style="width: 100px;">
             <span class="label label-info lead" title="{{- board.getCachedTopicCount -}}">
                 {{- board.getCachedTopicCount -}}
             </span>
         </td>
 
-        <td class="center" style="width: 100px;">
+        <td class="center" align="center" style="width: 100px;">
             <span class="label label-info lead" title="{{- board.getCachedPostCount -}}">
                 {{- board.getCachedPostCount -}}
             </span>
@@ -47,23 +47,18 @@
                     {{- board.getLastPost.getCreatedBy -}}
 
                     <br>
-
-                    {#
-                        @TODO figure a way to determine page in a more appropriate way
-                        {%- set page = divCeil(( board.getLastPost.getTopic.getCachedReplyCount + 1), topics_per_page) -%}
-                    #}
                     {%- set page = 1 -%}
                     {%- if page < 2 -%}
                         <a href="{{- path('ccdn_forum_user_topic_show', {'forumName': forumName, 'topicId': board.getLastPost.getTopic.getId } ) -}}#{{- board.getLastPost.getId -}}">
                             <i class="glyphicon glyphicon-arrow-right"></i>
-                            <abbr class="timestamper" title="{{- board.getLastPost.getCreatedDate |date('Y-m-d H:i:s T Z', 'Europe/London') -}}">
+                            <abbr class="timestamper" title="{{- board.getLastPost.getCreatedDate |date(ccdn_forum_forum.category.user.last_post_datetime_format) -}}">
                                 {{- board.getLastPost.getCreatedDate |date(ccdn_forum_forum.category.user.last_post_datetime_format) -}}
                             </abbr>
                         </a>
                     {%- else -%}
                         <a href="{{- path('ccdn_forum_user_topic_show_paginated', {'forumName': forumName, 'topicId': board.getLastPost.getTopic.getId, 'page':page }) -}}#{{- board.getLastPost.getId -}}">
                             <i class="glyphicon glyphicon-arrow-right"></i>
-                            <abbr class="timestamper" title="{{- board.getLastPost.getCreatedDate |date('Y-m-d H:i:s T Z', 'Europe/London') -}}">
+                            <abbr class="timestamper" title="{{- board.getLastPost.getCreatedDate |date(ccdn_forum_forum.category.user.last_post_datetime_format) -}}">
                                 {{- board.getLastPost.getCreatedDate |date(ccdn_forum_forum.category.user.last_post_datetime_format) -}}
                             </abbr>
                         </a>
