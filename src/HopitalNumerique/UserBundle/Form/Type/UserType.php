@@ -324,20 +324,22 @@ class UserType extends AbstractType
                     'attr'       => array('class' => $this->_constraints['fonctionStructure']['class'] . ' autre_structure' )
             ))
             
-            ->add('raisonInscriptionStructure', 'entity', array(
-                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'property'    => 'libelle',
-                    'required'    => false,
-                    'label'       => 'Raison de l \'inscription',
-                    'empty_value' => ' - ',
-                    'attr'        => array('class' => 'autre_structure'),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'RAISON_INSCRIPTION')
-                        ->orderBy('ref.libelle', 'ASC');
-                    }
-            ));
+            // ->add('raisonInscriptionStructure', 'entity', array(
+            //         'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+            //         'property'    => 'libelle',
+            //         'required'    => false,
+            //         'label'       => 'Raison de l \'inscription',
+            //         'empty_value' => ' - ',
+            //         'attr'        => array('class' => 'autre_structure'),
+            //         'query_builder' => function(EntityRepository $er) {
+            //             return $er->createQueryBuilder('ref')
+            //             ->where('ref.code = :etat')
+            //             ->setParameter('etat', 'RAISON_INSCRIPTION')
+            //             ->orderBy('ref.libelle', 'ASC');
+            //         }
+            // ))
+
+            ;
             
             // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
             
