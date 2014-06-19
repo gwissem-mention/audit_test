@@ -150,14 +150,14 @@
                                                 <div><strong>Fonction dans l'établissement</strong></div>
                                                 <div>{{user.fonctionDansEtablissementSante}}</div>
                                             </div>
-                                            <div class="form-group">
+                                            {#<div class="form-group">
                                                 <div><strong>Raison de l'inscription</strong></div>
                                                 <div>
                                                     {% if user.raisonInscriptionSante is defined and user.raisonInscriptionSante is not null  %}
                                                         {{user.raisonInscriptionSante.libelle}}
                                                     {% endif %}
                                                 </div>
-                                            </div>
+                                            </div>#}
                                         {% endif %}
                                         
                                         {# Affichage du bloc uniquement si il y a des données de structure #}
