@@ -1,1 +1,0 @@
-UPDATE `hn_objet` SET `obj_referencement` = 'a:0:{}';
