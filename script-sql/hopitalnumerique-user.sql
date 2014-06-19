@@ -1,2 +1,0 @@
-UPDATE `core_user` SET `roles` = 'a:1:{i:0;s:17:"ROLE_ENREGISTRE_9";}' WHERE `eta_etablissement_rattachement_sante` IS NULL AND `roles`= 'a:1:{i:0;s:9:"ROLE_ES_8";}';
-UPDATE `core_user` SET `roles` = 'a:1:{i:0;s:9:"ROLE_ES_8";}' WHERE `eta_etablissement_rattachement_sante` IS NOT NULL AND `roles`= 'a:1:{i:0;s:17:"ROLE_ENREGISTRE_9";}';
