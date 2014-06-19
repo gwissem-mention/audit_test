@@ -51,7 +51,7 @@ abstract class InterventionDemandeType extends AbstractType
      * Constructeur du formulaire de demande d'intervention.
      * 
      * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
-     * @param \Symfony\Component\Validator\Validator $validator Validator
+     * @param \Symfony\Component\Validator\Validator\LegacyValidator $validator LegacyValidator
      * @param \Nodevo\InterventionBundle\Manager\InterventionDemandeManager $interventionDemandeManager Manager InterventionDemande
      * @param \Nodevo\InterventionBundle\Manager\Form\InterventionDemandeManager $formInterventionDemandeManager Manager Form\InterventionDemande
      * @param \Nodevo\InterventionBundle\Manager\Form\UserManager $formUserManager Manager Form\User
@@ -132,10 +132,6 @@ abstract class InterventionDemandeType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'attr'     => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_objets')
-            ))
-            ->add('objetsAutres', 'textarea', array(
-                'label'    => 'Ma sollicitation porte sur une autre production / un autre thème',
-                'required' => false
             ))
             ->add('description', 'textarea', array(
                 'label'    => 'Description succincte de mon projet',

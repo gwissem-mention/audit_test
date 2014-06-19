@@ -9,7 +9,7 @@ namespace HopitalNumerique\InterventionBundle\Form\InterventionDemande;
 use Symfony\Component\Form\FormBuilderInterface;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemandeType;
 use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\Validator\Validator;
+use Symfony\Component\Validator\Validator\LegacyValidator;
 use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager as FormInterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\InterventionInitiateurManager as FormInterventionInitiateurManager;
@@ -35,7 +35,7 @@ class AdminType extends InterventionDemandeType
      * Constructeur du formulaire de création de demande d'intervention spécifique dans l'administration.
      *
      * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
-     * @param \Symfony\Component\Validator\Validator $validator Validator
+     * @param \Symfony\Component\Validator\Validator\LegacyValidator $validator LegacyValidator
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager $interventionDemandeManager Manager InterventionDemande
      * @param \HopitalNumerique\ObjetBundle\Manager\ObjetManager $objetManager Manager Objet
      * @param \HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager $formInterventionDemandeManager Manager Form\InterventionDemande
@@ -44,7 +44,7 @@ class AdminType extends InterventionDemandeType
      * @param \HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager $formEtablissementManager Manager Form\Etablissement
      * @return void
      */
-    public function __construct(SecurityContext $securityContext, Validator $validator, InterventionDemandeManager $interventionDemandeManager, ObjetManager $objetManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormInterventionInitiateurManager $formInterventionInitiateurManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
+    public function __construct(SecurityContext $securityContext, LegacyValidator $validator, InterventionDemandeManager $interventionDemandeManager, ObjetManager $objetManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormInterventionInitiateurManager $formInterventionInitiateurManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
     {
         parent::__construct($securityContext, $validator, $interventionDemandeManager, $formInterventionDemandeManager, $formUserManager, $formEtablissementManager);
         $this->objetManager = $objetManager;
