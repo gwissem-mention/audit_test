@@ -289,20 +289,20 @@ class UserType extends AbstractType
                     }
             ))
             
-            ->add('raisonInscriptionSante', 'entity', array(
-                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'property'    => 'libelle',
-                    'required'    => false,
-                    'label'       => 'Raison de l \'inscription',
-                    'empty_value' => ' - ',
-                    'attr'        => array('class' => 'etablissement_sante'),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'RAISON_INSCRIPTION')
-                        ->orderBy('ref.libelle', 'ASC');
-                    }
-            ))
+            // ->add('raisonInscriptionSante', 'entity', array(
+            //         'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+            //         'property'    => 'libelle',
+            //         'required'    => false,
+            //         'label'       => 'Raison de l \'inscription',
+            //         'empty_value' => ' - ',
+            //         'attr'        => array('class' => 'etablissement_sante'),
+            //         'query_builder' => function(EntityRepository $er) {
+            //             return $er->createQueryBuilder('ref')
+            //             ->where('ref.code = :etat')
+            //             ->setParameter('etat', 'RAISON_INSCRIPTION')
+            //             ->orderBy('ref.libelle', 'ASC');
+            //         }
+            // ))
             
             ;
 
