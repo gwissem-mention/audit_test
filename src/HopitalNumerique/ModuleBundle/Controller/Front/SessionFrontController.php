@@ -102,16 +102,18 @@ class SessionFrontController extends Controller
                     case 'checkbox':
                         $row[$idQuestion] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );
                         break;
-                    case 'choice':
+                    case 'entityradio':
                         $question = $reponse->getQuestion();
 
-                        if(!is_null($question->getChoixPossibles()))
+                        $referenceReponse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $reponse->getReponse()) );
+
+                        if(!is_null($referenceReponse))
                         {
-                            $row[$idQuestion] = $reponse->getReponse();
+                            $row[$idQuestion] = $referenceReponse->getLibelle();
                         }
                         else
                         {
-                            $row[$idQuestion] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );
+                            $row[$idQuestion] = 'Non renseigné';
                         }
                         break;
                     default:
