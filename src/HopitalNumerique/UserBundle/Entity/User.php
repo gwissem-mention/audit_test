@@ -377,13 +377,6 @@ class User extends BaseUser
      */
     protected $profilEtablissementSante;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
-     * @ORM\JoinColumn(name="ref_raison_inscription_sante", referencedColumnName="ref_id")
-     * @Gedmo\Versioned
-     */
-    protected $raisonInscriptionSante;
-
     // v -------- Onglet : Vous êtes un établissement de santé -------- v
     
     // ^ -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- ^
@@ -417,14 +410,6 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $fonctionStructure;
-    
-
-    /**
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
-     * @ORM\JoinColumn(name="ref_raison_inscription_structure", referencedColumnName="ref_id")
-     * @Gedmo\Versioned
-     */
-    protected $raisonInscriptionStructure;
     
     // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
     
@@ -968,29 +953,6 @@ class User extends BaseUser
     }
 
     /**
-     * Set raisonInscriptionSante
-     *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $raisonInscriptionSante
-     */
-    public function setRaisonInscriptionSante($raisonInscriptionSante)
-    {
-        if($raisonInscriptionSante instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
-            $this->raisonInscriptionSante = $raisonInscriptionSante;
-        else
-            $this->raisonInscriptionSante = null;
-    }
-    
-    /**
-     * Get raisonInscriptionSante
-     *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $raisonInscriptionSante
-     */
-    public function getRaisonInscriptionSante()
-    {
-        return $this->raisonInscriptionSante;
-    }
-    
-    /**
      * Get nomStructure
      *
      * @return string $nomStructure
@@ -1029,30 +991,7 @@ class User extends BaseUser
     {
         $this->fonctionStructure = $fonctionStructure;
     }
-
-    /**
-     * Set raisonInscriptionStructure
-     *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $raisonInscriptionStructure
-     */
-    public function setRaisonInscriptionStructure($raisonInscriptionStructure)
-    {
-        if($raisonInscriptionStructure instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
-            $this->raisonInscriptionStructure = $raisonInscriptionStructure;
-        else
-            $this->raisonInscriptionStructure = null;
-    }
     
-    /**
-     * Get raisonInscriptionStructure
-     *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $raisonInscriptionStructure
-     */
-    public function getRaisonInscriptionStructure()
-    {
-        return $this->raisonInscriptionStructure;
-    }
-
     /**
      * Get lock
      *
