@@ -97,14 +97,12 @@
 	                    {{ form_row(form.etablissementRattachementSante) }}
 	                    {{ form_row(form.autreStructureRattachementSante) }}
 	                    {{ form_row(form.fonctionDansEtablissementSante) }}
-	                    {#{{ form_row(form.raisonInscriptionSante) }}#}
                     </div>
 
                     <div id="autre_etablissement_sante">
 	                    <h4 class="violet">Vous êtes une structure autre qu'un établissement de santé</h4>
 	                    {{ form_row(form.nomStructure) }}
 	                    {{ form_row(form.fonctionStructure) }}
-	                    {#{{ form_row(form.raisonInscriptionStructure) }}#}
                     </div>
                     
 	                {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}

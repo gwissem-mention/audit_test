@@ -54,7 +54,6 @@ class UserExtension extends \Twig_Extension
             $resultat['rattachementSante']     = (is_null($user->getEtablissementRattachementSante())) ? (is_null($user->getAutreStructureRattachementSante()) ? array('label' => 'Etablissement de rattachement / Nom de votre établissement si non disponible dans la liste précédente') : array()) : array();
             $resultat['fonctionEtablissement'] = (is_null($user->getFonctionDansEtablissementSante())) ? array('label' => 'Fonction dans l\'établissement') : array();
             $resultat['profilEtablissement']   = (is_null($user->getProfilEtablissementSante())) ? array('label' => 'Profil de l\'établissement') : array();
-            $resultat['raisonInscription']     = (is_null($user->getRaisonInscriptionSante())) ? array('label' => 'Raison inscription') : array();
         }
         
         //Si l'un des éléments ci-dessus est manquant

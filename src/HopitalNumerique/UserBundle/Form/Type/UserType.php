@@ -288,22 +288,6 @@ class UserType extends AbstractType
                         ->orderBy('ref.libelle', 'ASC');
                     }
             ))
-            
-            // ->add('raisonInscriptionSante', 'entity', array(
-            //         'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-            //         'property'    => 'libelle',
-            //         'required'    => false,
-            //         'label'       => 'Raison de l \'inscription',
-            //         'empty_value' => ' - ',
-            //         'attr'        => array('class' => 'etablissement_sante'),
-            //         'query_builder' => function(EntityRepository $er) {
-            //             return $er->createQueryBuilder('ref')
-            //             ->where('ref.code = :etat')
-            //             ->setParameter('etat', 'RAISON_INSCRIPTION')
-            //             ->orderBy('ref.libelle', 'ASC');
-            //         }
-            // ))
-            
             ;
 
             // v -------- Onglet : Vous êtes un établissement de santé -------- v
@@ -323,22 +307,6 @@ class UserType extends AbstractType
                     'label'      => 'Fonction dans la structure',
                     'attr'       => array('class' => $this->_constraints['fonctionStructure']['class'] . ' autre_structure' )
             ))
-            
-            // ->add('raisonInscriptionStructure', 'entity', array(
-            //         'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-            //         'property'    => 'libelle',
-            //         'required'    => false,
-            //         'label'       => 'Raison de l \'inscription',
-            //         'empty_value' => ' - ',
-            //         'attr'        => array('class' => 'autre_structure'),
-            //         'query_builder' => function(EntityRepository $er) {
-            //             return $er->createQueryBuilder('ref')
-            //             ->where('ref.code = :etat')
-            //             ->setParameter('etat', 'RAISON_INSCRIPTION')
-            //             ->orderBy('ref.libelle', 'ASC');
-            //         }
-            // ))
-
             ;
             
             // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
