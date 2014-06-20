@@ -1,4 +1,8 @@
-<h3>{{chapitre.title}}</h3>
+<h3 class="pull-left">{{chapitre.title}}</h3>
+<div class="options pull-right">
+    <a href="{{path('hopitalnumerique_autodiag_question_add', {'id':chapitre.id})}}" class="btn btn-success addQuestion fancybox.ajax"><i class="fa fa-plus"></i></a>
+</div>
+<div class="clearfix"></div>
 <span class="designForBlank" style="{% if questions|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour ajouter une question.</span>
 <div class="dd">
     <ol class="dd-list">
@@ -40,6 +44,17 @@
             success  : function( data ){
                 //console.log( 'reorder executed' );
             }
+        });
+    });
+
+    $(document).ready(function() {
+        $('.addQuestion').fancybox({
+            'padding'   : 0,
+            'autoSize'  : false,
+            'width'     : '80%',
+            'height'    : '600px',
+            'scrolling' : 'no',
+            'modal'     : true
         });
     });
 </script>
