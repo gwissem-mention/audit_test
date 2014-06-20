@@ -8,9 +8,22 @@
 #sidebar .menu-main li.active a, #sidebar .menu-main li.active-son a, #sidebar .menu-main li a:hover, #sidebar .menu-main li.forum a{border-left:5px solid #7635AB;text-decoration: none ;border-radius:0px;}
 #sidebar .menu-main li.last{border-bottom:1px solid #f0f0f0; }
 
+/* ---  En-tête FO  --- */
+
 #informations-topic span.label{background-color: #CECECE;margin:0 5px 0 0; height: 22px; text-align: center; padding: 5px 5px 0; }
 #informations-topic .manageReferences, #informations-topic .text-muted {margin:0 0 15px 5px;}
 #information-board span.label{background-color: #CECECE;margin:0 0 0 5px;}
 
+/* --- Présentation des boards --- */
+
 h4 {font-size: 15px;}
 #content .blockquote-reduit{ border-left: 5px solid #eee; font-size: 12px; margin: 0 0 20px; padding: 10px 20px;}
+
+/* --- Admin --- */
+.checkbox input{width: 20px;height: 20px;}
+
+#content .toolbar-backoffice {margin: 0 30px 15px 0;}
+#content .toolbar-backoffice-forum {margin: 0 15px 15px 0;}
+
+/* - Création */
+#titre-creation h4{ font-size: 18px; text-align: center;font-weight:bold;}

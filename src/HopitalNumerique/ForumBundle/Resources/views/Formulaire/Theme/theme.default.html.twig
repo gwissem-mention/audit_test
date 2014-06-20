@@ -1,0 +1,59 @@
+{% extends 'NodevoAdminBundle::form.html.twig' %}
+
+{% block file_widget %}
+    {% spaceless %}
+        {% if data is not null or data is not empty %}
+            <a id="downloadFile{{ id }}" href="{{path('hopitalnumerique_reponse_download', {'reponse':data.id})}}">{{ data.lib }}</a>
+            <input id={{ id }} type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+            <script>$('#{{ id }}').addClass('inputFile{{ id }}') ;$('.inputFile{{ id }}').hide();</script>
+            <div class="deleteUploadedFile{{ id }} btn btn-danger btn-xs pull-right" >
+                <i class="fa fa-trash-o" onclick="$('.deleteUploadedFile{{ id }}, #downloadFile{{ id }}').hide(); $('.inputFile{{ id }}').show();"></i>
+            </div>
+        {% else %}
+            <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+        {% endif %}
+    {% endspaceless %}
+{% endblock file_widget %}
+
+{% block choice_widget_expanded %}
+{% spaceless %}
+    <div {{ block('widget_container_attributes') }}>
+    {% for child in form %}
+        <div class="col-md-4 checkbox">
+            {{ form_widget(child) }}
+            {{ form_label(child) }}
+        </div>
+    {% endfor %}
+    </div>
+{% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+{% block radio_widget %}
+{% spaceless %}
+    <input type="radio" {% if required %}class="validate[required]"{% endif %} {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+{% endspaceless %}
+{% endblock radio_widget %}
+
+{% block form_label %}
+    {% spaceless %}
+        {% if label is not sameas(false) %}
+            {% if not compound %}
+                {% set label_attr = label_attr|merge({'for': id}) %}
+            {% endif %}
+            {% if required %}
+                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-md-3 control-label') ~ ' required')|trim}) %}
+            {% else %}
+                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-md-3 control-label'))|trim}) %}
+            {% endif %}
+            {% if label is empty %}
+                {% set label = name|humanize %}
+            {% endif %}
+            <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            {{ label|trans({}, translation_domain) }}
+            {% if required %}
+                <span style="color:red;font-size:10px" title="Ce champ est requis">*</span>
+            {% endif %}
+            </label>
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}

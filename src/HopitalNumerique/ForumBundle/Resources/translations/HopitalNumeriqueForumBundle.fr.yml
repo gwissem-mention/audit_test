@@ -172,7 +172,7 @@ board:
     reply-count-th:                    "Réponses"
     topic-count-th:                    "Topics"
     post-count-th:                     "Posts"
-    last-post-th:                      "Dernier Post"
+    last-post-th:                      "Dernière réponse"
     announcements-th:                  "Annonces"
     label:                             "Board : "
     name-label:                        "Nom : "

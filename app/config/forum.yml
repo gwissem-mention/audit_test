@@ -126,21 +126,21 @@ ccdn_forum_forum:
                 class:                CCDNForum\ForumBundle\Form\Handler\Moderator\Post\PostUnlockFormHandler
         type:
             forum_create:
-                class:                CCDNForum\ForumBundle\Form\Type\Admin\Forum\ForumCreateFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Forum\ForumCreateFormType
             forum_update:
-                class:                CCDNForum\ForumBundle\Form\Type\Admin\Forum\ForumUpdateFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Forum\ForumUpdateFormType
             forum_delete:
                 class:                CCDNForum\ForumBundle\Form\Type\Admin\Forum\ForumDeleteFormType
             category_create:
-                class:                CCDNForum\ForumBundle\Form\Type\Admin\Category\CategoryCreateFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Category\CategoryCreateFormType
             category_update:
-                class:                CCDNForum\ForumBundle\Form\Type\Admin\Category\CategoryUpdateFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Category\CategoryUpdateFormType
             category_delete:
                 class:                CCDNForum\ForumBundle\Form\Type\Admin\Category\CategoryDeleteFormType
             board_create:
-                class:                CCDNForum\ForumBundle\Form\Type\Admin\Board\BoardCreateFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Board\BoardCreateFormType
             board_update:
-                class:                CCDNForum\ForumBundle\Form\Type\Admin\Board\BoardUpdateFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Board\BoardUpdateFormType
             board_delete:
                 class:                CCDNForum\ForumBundle\Form\Type\Admin\Board\BoardDeleteFormType
             topic_create:
@@ -163,26 +163,26 @@ ccdn_forum_forum:
         admin:
             create:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             delete:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             edit:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             list:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
     category:
         admin:
             create:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             delete:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             edit:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             list:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
         user:
@@ -195,13 +195,13 @@ ccdn_forum_forum:
         admin:
             create:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             delete:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             edit:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             list:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
         user:
@@ -215,10 +215,10 @@ ccdn_forum_forum:
         moderator:
             change_board:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             delete:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
         user:
             flood_control:
                 post_limit:           4
@@ -230,24 +230,24 @@ ccdn_forum_forum:
                 deleted_datetime_format:  d-m-Y - H:i
             create:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             reply:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
     post:
         moderator:
             unlock:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
         user:
             show:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
             edit:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             delete:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             lock:
                 enable:               true
                 after_days:           7

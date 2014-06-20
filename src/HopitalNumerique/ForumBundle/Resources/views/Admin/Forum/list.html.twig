@@ -22,43 +22,45 @@
 {%- block body_content -%}
     {%- spaceless -%}
 
-        <section class="row btn-toolbar clearfix">
-            <a class="btn btn-primary" href="{{- path('ccdn_forum_admin_forum_create') -}}">
+        <section class="row btn-toolbar clearfix toolbar-backoffice-forum">
+            <a class="btn btn-primary pull-right col-md-4" href="{{- path('ccdn_forum_admin_forum_create') -}}">
                 {{- 'link.forum.create' |trans({}, ForumBundle.translation ) -}}
             </a>
         </section>
 
         <section class="clearfix">
-            <table class="table table-bordered" id="admin-forums-list">
-                <thead>
-                    <tr>
-                        <th>{{- 'forum.id-th' |trans({}, ForumBundle.translation ) -}}</th>
-                        <th>{{- 'forum.name-th' |trans({}, ForumBundle.translation ) -}}</th>
-                        <th>{{- 'forum.category-count-th' |trans({}, ForumBundle.translation ) -}}</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {%- for forum_index, forum in forums -%}
+            <div class="col-md-12">
+                <table class="table table-bordered" id="admin-forums-list">
+                    <thead>
                         <tr>
-                            <td>{{- forum.id -}}</td>
-                            <td>{{- forum.name -}}</td>
-                            <td>{{- forum.categories |length -}}</td>
-                            <td>
-                                <a class="btn btn-default" href="{{- path('ccdn_forum_admin_forum_edit', {'forumId': forum.id}) -}}" id="update_forum[{{- forum.name -}}]">
-                                    {{- 'link.edit' |trans({}, ForumBundle.translation ) -}}
-                                </a>
-
-                                {%- if is_granted('ROLE_SUPER_ADMIN') -%}
-                                    <a class="btn btn-danger" href="{{- path('ccdn_forum_admin_forum_delete', {'forumId': forum.id}) -}}" id="delete_forum[{{- forum.name -}}]">
-                                        {{- 'link.delete' |trans({}, ForumBundle.translation ) -}}
-                                    </a>
-                                {%- endif -%}
-                            </td>
+                            <th>{{- 'forum.id-th' |trans({}, ForumBundle.translation ) -}}</th>
+                            <th>{{- 'forum.name-th' |trans({}, ForumBundle.translation ) -}}</th>
+                            <th>{{- 'forum.category-count-th' |trans({}, ForumBundle.translation ) -}}</th>
+                            <th style="width:94px"></th>
                         </tr>
-                    {%- endfor -%}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {%- for forum_index, forum in forums -%}
+                            <tr>
+                                <td>{{- forum.id -}}</td>
+                                <td>{{- forum.name -}}</td>
+                                <td>{{- forum.categories |length -}}</td>
+                                <td>
+                                    <a class="btn btn-info" href="{{- path('ccdn_forum_admin_forum_edit', {'forumId': forum.id}) -}}" id="update_forum[{{- forum.name -}}]">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+
+                                    {%- if is_granted('ROLE_SUPER_ADMIN') -%}
+                                        <a class="btn btn-danger" href="{{- path('ccdn_forum_admin_forum_delete', {'forumId': forum.id}) -}}" id="delete_forum[{{- forum.name -}}]">
+                                            <i class="fa fa-trash-o"></i>
+                                        </a>
+                                    {%- endif -%}
+                                </td>
+                            </tr>
+                        {%- endfor -%}
+                    </tbody>
+                </table>
+            </div>
         </section>
 
     {%- endspaceless -%}

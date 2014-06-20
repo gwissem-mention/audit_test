@@ -91,6 +91,18 @@ class RoleHelper
         return $roles;
     }
 
+    public function getRoleForFormulaire()
+    {
+        $roles = array();
+
+        foreach ($this->availableRoles as $roleName => $roleSubs)
+        {
+            $roles[$roleName] = implode('</li><li>', $roleSubs);
+        }
+
+        return $roles;
+    }
+
     /**
      *
      * @access public

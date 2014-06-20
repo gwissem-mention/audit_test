@@ -21,16 +21,15 @@
 
 {%- block body_content -%}
     {%- spaceless -%}
-
-        <section class="row btn-toolbar clearfix">
-            <a class="btn btn-primary" href="{{- path('ccdn_forum_admin_board_create', {'forum_filter': forum_filter, 'category_filter': category_filter}) -}}">
+        <section class="btn-toolbar clearfix toolbar-backoffice">
+            <a class="btn btn-primary pull-right col-md-4" href="{{- path('ccdn_forum_admin_board_create', {'forum_filter': forum_filter, 'category_filter': category_filter}) -}}">
                 {{- 'link.board.create' |trans({}, ForumBundle.translation ) -}}
             </a>
         </section>
 
         <section class="col-md-12 row clearfix">
-            <div class="col-md-4 row">
-                <div class="col-md-6 row">
+            <div class="row">
+                <div class="col-md-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             {{- 'filter.forums' |trans({}, ForumBundle.translation ) -}}
@@ -53,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 row">
+                <div class="col-md-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             {{- 'filter.categories' |trans({}, ForumBundle.translation ) -}}
@@ -83,63 +82,65 @@
                 </div>
             </div>
 
-            <div class="col-md-8 row">
-                <table class="table table-bordered" id="admin-boards-list">
-                    <thead>
-                        <tr>
-                            <th>{{- 'board.id-th' |trans({}, ForumBundle.translation ) -}}</th>
-                            <th>{{- 'board.name-th' |trans({}, ForumBundle.translation ) -}}</th>
-                            <th>{{- 'board.topic-count-th' |trans({}, ForumBundle.translation ) -}}</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {%- for board_index, board in boards -%}
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered" id="admin-boards-list">
+                        <thead>
                             <tr>
-                                <td>{{- board.id -}}</td>
-                                <td>{{- board.name -}}</td>
-                                <td>{{- board.topics |length -}}</td>
-                                <td>
-                                    <a class="btn btn-default" href="{{- path('ccdn_forum_admin_board_edit', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}"
-                                     id="update_board[{{- board.name -}}]">
-                                        {{- 'link.edit' |trans({}, ForumBundle.translation ) -}}
-                                    </a>
-
-                                    {%- if is_granted('ROLE_SUPER_ADMIN') -%}
-                                        <a class="btn btn-danger" href="{{- path('ccdn_forum_admin_board_delete', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}"
-                                         id="delete_board[{{- board.name -}}]">
-                                            {{- 'link.delete' |trans({}, ForumBundle.translation ) -}}
-                                        </a>
-                                    {%- endif -%}
-
-                                    {%- if category_filter is not null and category_filter != '' %}
-                                        {% if loop.length > 1 %}
-                                            <div class="btn-group">
-                                                <a class="btn btn-default" href="{{- path('ccdn_forum_admin_board_reorder_up', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}"
-                                                 id="reorder_up_board[{{- board.name -}}]">
-                                                    {%- if loop.first -%}
-                                                        <i class="glyphicon glyphicon-retweet"></i>
-                                                    {%- else -%}
-                                                        <i class="glyphicon glyphicon-chevron-up"></i>
-                                                    {%- endif -%}
-                                                </a>
-
-                                                <a class="btn btn-default" href="{{- path('ccdn_forum_admin_board_reorder_down', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}"
-                                                 id="reorder_down_board[{{- board.name -}}]">
-                                                    {%- if loop.last -%}
-                                                        <i class="glyphicon glyphicon-retweet"></i>
-                                                    {%- else -%}
-                                                        <i class="glyphicon glyphicon-chevron-down"></i>
-                                                    {%- endif -%}
-                                                </a>
-                                            </div>
-                                        {%- endif -%}
-                                    {%- endif -%}
-                                </td>
+                                <th>{{- 'board.id-th' |trans({}, ForumBundle.translation ) -}}</th>
+                                <th>{{- 'board.name-th' |trans({}, ForumBundle.translation ) -}}</th>
+                                <th>{{- 'board.topic-count-th' |trans({}, ForumBundle.translation ) -}}</th>
+                                <th style="width:173px"></th>
                             </tr>
-                        {%- endfor -%}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {%- for board_index, board in boards -%}
+                                <tr>
+                                    <td>{{- board.id -}}</td>
+                                    <td>{{- board.name -}}</td>
+                                    <td>{{- board.topics |length -}}</td>
+                                    <td>
+                                        <a class="btn btn-info" href="{{- path('ccdn_forum_admin_board_edit', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}"
+                                         id="update_board[{{- board.name -}}]">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+
+                                        {%- if is_granted('ROLE_SUPER_ADMIN') -%}
+                                            <a class="btn btn-danger" href="{{- path('ccdn_forum_admin_board_delete', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}"
+                                             id="delete_board[{{- board.name -}}]">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        {%- endif -%}
+
+                                        {%- if category_filter is not null and category_filter != '' %}
+                                            {% if loop.length > 1 %}
+                                                <div class="btn-group">
+                                                    {%- if loop.first -%}
+                                                        <a class="btn btn-warning" href="{{- path('ccdn_forum_admin_board_reorder_up', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_up_board[{{- board.name -}}]">
+                                                            <i class="glyphicon glyphicon-retweet"></i>
+                                                    {%- else -%}
+                                                        <a class="btn btn-success" href="{{- path('ccdn_forum_admin_board_reorder_up', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_up_board[{{- board.name -}}]">
+                                                            <i class="glyphicon glyphicon-chevron-up"></i>
+                                                    {%- endif -%}
+                                                    </a>
+
+                                                    {%- if loop.last -%}
+                                                        <a class="btn btn-warning" href="{{- path('ccdn_forum_admin_board_reorder_down', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_down_board[{{- board.name -}}]">
+                                                            <i class="glyphicon glyphicon-retweet"></i>
+                                                    {%- else -%}
+                                                        <a class="btn btn-success" href="{{- path('ccdn_forum_admin_board_reorder_down', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_down_board[{{- board.name -}}]">
+                                                            <i class="glyphicon glyphicon-chevron-down"></i>
+                                                    {%- endif -%}
+                                                    </a>
+                                                </div>
+                                            {%- endif -%}
+                                        {%- endif -%}
+                                    </td>
+                                </tr>
+                            {%- endfor -%}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
