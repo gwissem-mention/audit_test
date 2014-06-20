@@ -128,7 +128,7 @@
                                 {{ form_widget(form.file) }}
                             </div>
 
-                            {% if user.getAbsolutePath() is not null %}{{ user.getWebPath() }}
+                            {% if user.getAbsolutePath() is not null %}
                                 <img class="uploadedFile" src="/{{ user.getWebPath() }}" alt="Photo de profil" width="92px" height="132px">
                                 <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" ><i class="fa fa-trash-o"></i></div>
                             {% endif %}

@@ -13,6 +13,9 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+//Tools
+use \Nodevo\ToolsBundle\Tools\Chaine;
+
 /**
  * User
  *
@@ -1433,8 +1436,11 @@ class User extends BaseUser
             //delete Old File
             if ( file_exists($this->getAbsolutePath()) )
                 unlink($this->getAbsolutePath());
-    
-            $this->path = round(microtime(true) * 1000) . '_' . $this->file->getClientOriginalName();
+
+            $tool = new Chaine( $this->getPrenomNom() );
+            $nomFichier = $tool->minifie();
+
+            $this->path = round(microtime(true) * 1000) . '_' . $nomFichier . '.jpg';
         }
     }
     
