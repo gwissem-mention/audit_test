@@ -122,8 +122,7 @@
                                             or (user.etablissementRattachementSante is defined and user.etablissementRattachementSante is not null)
                                             or (user.autreStructureRattachementSante is defined and user.autreStructureRattachementSante is not null) 
                                             or (user.fonctionDansEtablissementSante is defined and user.fonctionDansEtablissementSante is not null) 
-                                            or (user.profilEtablissementSante is defined and user.profilEtablissementSante is not null)
-                                            or (user.raisonInscriptionSante is defined and user.raisonInscriptionSante is not null) %}
+                                            or (user.profilEtablissementSante is defined and user.profilEtablissementSante is not null) %}
                                             {# Zone établissement de santé #}
                                             <div><h4>Vous êtes un établissement de santé</h4></div>                               
                                             <div class="form-group">
@@ -150,20 +149,11 @@
                                                 <div><strong>Fonction dans l'établissement</strong></div>
                                                 <div>{{user.fonctionDansEtablissementSante}}</div>
                                             </div>
-                                            {#<div class="form-group">
-                                                <div><strong>Raison de l'inscription</strong></div>
-                                                <div>
-                                                    {% if user.raisonInscriptionSante is defined and user.raisonInscriptionSante is not null  %}
-                                                        {{user.raisonInscriptionSante.libelle}}
-                                                    {% endif %}
-                                                </div>
-                                            </div>#}
                                         {% endif %}
                                         
                                         {# Affichage du bloc uniquement si il y a des données de structure #}
                                         {% if (user.nomStructure is defined and user.nomStructure is not null)
-                                           or (user.fonctionStructure is defined and user.fonctionStructure is not null)
-                                           or (user.raisonInscriptionStructure is defined and user.raisonInscriptionStructure is not null) %}
+                                           or (user.fonctionStructure is defined and user.fonctionStructure is not null) %}
                                             {# Zone autre qu'un établissement de santé #}
                                             <h4>Vous êtes une structure autre qu'un établissement de santé</h4>
                                             <div class="form-group">
@@ -174,14 +164,6 @@
                                                 <div><strong>Fonction de la structure</strong></div>
                                                 <div>{{user.fonctionStructure}}</div>
                                             </div>
-                                            {#<div class="form-group">
-                                                <div><strong>Raison de l'inscription</strong></div>
-                                                <div>
-                                                    {% if user.raisonInscriptionStructure is defined and user.raisonInscriptionStructure is not null  %}
-                                                        {{user.raisonInscriptionStructure.libelle}}
-                                                    {% endif %}
-                                                </div>
-                                            </div>#}
                                         {% endif %}                                 
                                     </div>
                                 </div>  
