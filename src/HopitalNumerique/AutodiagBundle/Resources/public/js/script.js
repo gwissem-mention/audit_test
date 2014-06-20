@@ -17,6 +17,7 @@ $(document).ready(function() {
                         }
 
                         initFancyBox();
+                        apprise('Chapitre ajouté');
                     }else
                         apprise('Une erreur est survenue lors de l\'ajout de votre chapitre, merci de réessayer');
                 }
