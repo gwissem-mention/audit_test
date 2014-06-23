@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2d98bc8e3b9ebba92dcc704b105e3c50",
+    "hash": "07e903864af388acab2e92f076e0c881",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -1338,12 +1338,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
-                "reference": "9768b3a9d7b22ed6c54953ae0af45e94475ae00d"
+                "reference": "532a4ad323be54da77179022474e873d307e524c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/9768b3a9d7b22ed6c54953ae0af45e94475ae00d",
-                "reference": "9768b3a9d7b22ed6c54953ae0af45e94475ae00d",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/532a4ad323be54da77179022474e873d307e524c",
+                "reference": "532a4ad323be54da77179022474e873d307e524c",
                 "shasum": ""
             },
             "require": {
@@ -1394,7 +1394,7 @@
                 "menu",
                 "tree"
             ],
-            "time": "2014-06-13 08:09:55"
+            "time": "2014-06-20 09:37:12"
         },
         {
             "name": "knplabs/knp-menu-bundle",
@@ -1449,7 +1449,6 @@
                 "menu"
             ],
             "time": "2014-06-16 19:59:46"
-<<<<<<< HEAD
         },
         {
             "name": "knplabs/knp-paginator-bundle",
@@ -1576,12 +1575,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpSnappyBundle.git",
-                "reference": "32982f40f2da73f16509a85f1bc43b34f98b15de"
+                "reference": "cefcc47ad095bc4655d3a0151950ada796bc024d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpSnappyBundle/zipball/32982f40f2da73f16509a85f1bc43b34f98b15de",
-                "reference": "32982f40f2da73f16509a85f1bc43b34f98b15de",
+                "url": "https://api.github.com/repos/KnpLabs/KnpSnappyBundle/zipball/cefcc47ad095bc4655d3a0151950ada796bc024d",
+                "reference": "cefcc47ad095bc4655d3a0151950ada796bc024d",
                 "shasum": ""
             },
             "require": {
@@ -1624,7 +1623,7 @@
                 "pdf",
                 "snappy"
             ],
-            "time": "2014-06-12 10:54:11"
+            "time": "2014-06-19 09:27:46"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -2727,7 +2726,7 @@
         "knplabs/knp-snappy-bundle": 20,
         "white-october/pagerfanta-bundle": 20,
         "pagerfanta/pagerfanta": 20,
-        "codeconsortium/ccdn-forum-bundle": 20
+        "codeconsortium/ccdn-forum-bundle": 20,
         "stof/doctrine-extensions-bundle": 20
     },
     "platform": {
