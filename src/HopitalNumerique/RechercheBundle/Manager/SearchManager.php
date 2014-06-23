@@ -12,7 +12,6 @@ class SearchManager extends BaseManager
     private $_production        = 175;
     private $_ressource         = 183;
     private $_pointDur          = 184;
-    private $_forum             = 188;
     private $_refObjetManager   = null;
     private $_refContenuManager = null;
     private $_refTopicManager   = null;
@@ -448,10 +447,6 @@ class SearchManager extends BaseManager
         $item['id']    = $topic->getId();
         $item['titre'] = $topic->getTitle();
         $item['nbRef'] = count($topic->getReferences());
-        
-        //clean resume (pagebreak)
-        //$tab = explode('<!-- pagebreak -->', $topic->getResume() );
-        //$item['resume'] = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
         
         //get Type
         $item['categ'] = 'forum';
