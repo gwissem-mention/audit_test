@@ -43,6 +43,13 @@ class Flash
     private $isPublished;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fla_date_creation", type="datetime", options = {"comment" = "Date de création du flash"})
+     */
+    private $dateCreation;
+
+    /**
      * @ORM\ManyToMany(targetEntity="\Nodevo\RoleBundle\Entity\Role")
      * @ORM\JoinTable(name="hn_flash_role",
      *      joinColumns={ @ORM\JoinColumn(name="fla_id", referencedColumnName="fla_id")},
@@ -56,8 +63,9 @@ class Flash
      */
     public function __construct()
     {
-        $this->isPublished = true;
-        $this->roles       = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->isPublished  = true;
+        $this->dateCreation = new \DateTime;
+        $this->roles        = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -137,6 +145,27 @@ class Flash
     public function getIsPublished()
     {
         return $this->isPublished;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime $dateCreation
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+    
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+        return $this;
     }
 
     /**

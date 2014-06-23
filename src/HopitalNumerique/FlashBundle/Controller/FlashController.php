@@ -44,21 +44,6 @@ class FlashController extends Controller
     }
 
     /**
-     * Affiche le Flash en fonction de son ID passé en paramètre.
-     * 
-     * @param integer $id Id de Flash.
-     */
-    public function showAction( $id )
-    {
-        //Récupération de l'entité en fonction du paramètre
-        $flash = $this->get('hopitalnumerique_flash.manager.flash')->findOneBy( array( 'id' => $id) );
-
-        return $this->render('HopitalNumeriqueFlashBundle:Flash:show.html.twig', array(
-            'flash' => $flash,
-        ));
-    }
-
-    /**
      * Suppresion d'un Flash.
      * 
      * @param integer $id Id de Flash.

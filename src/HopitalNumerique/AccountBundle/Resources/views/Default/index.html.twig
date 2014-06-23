@@ -13,6 +13,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-account-default-index.css" filter="cssrewrite, ?yui_css"
         '@jquery_gridster_css'
+        'bundles/hopitalnumeriqueaccount/css/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -31,7 +32,14 @@
 {% block content %}
     <div class="gridster">
         <ul class="list-unstyled">
-            <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" data-id="1" >1</li>
+            {% if messages|length > 0 %}
+                <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" data-id="1" >
+                    {% for message in messages %}
+                        <p class="titre">{{message.title}}</p>
+                        <p>{{message.content|nl2br}}</p>
+                    {% endfor %}
+                </li>
+            {% endif %}
             <li data-row="1" data-col="2" data-sizex="1" data-sizey="1" data-id="2" >2</li>
             <li data-row="2" data-col="1" data-sizex="1" data-sizey="1" data-id="3" >3</li>
             <li data-row="2" data-col="2" data-sizex="1" data-sizey="1" data-id="4" >4</li>
