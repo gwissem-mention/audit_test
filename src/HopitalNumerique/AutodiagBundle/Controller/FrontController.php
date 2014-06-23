@@ -58,10 +58,12 @@ class FrontController extends Controller
                 $ponderationMax -= $ponderation;
         }
 
+        $ponderationMax = ceil($ponderationMax);
+
         //max Pondération invalid
         if( $ponderationMax != 0 ) {
             // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
-            $this->get('session')->getFlashBag()->add( 'danger', 'L\'outil n\'est pas correctement configué, il n\'est donc pas accessible');
+            $this->get('session')->getFlashBag()->add( 'danger', 'L\'outil n\'est pas correctement configuré, il n\'est donc pas accessible');
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage'));
         }
 

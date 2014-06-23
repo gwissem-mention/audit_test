@@ -58,7 +58,8 @@ class AppKernel extends Kernel
             //-v- Bundles du Forum -v-
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new CCDNForum\ForumBundle\CCDNForumForumBundle(),
-            //-^- Bundles du Forum -^-
+            //-^- Bundles du Forum -^-,
+            new HopitalNumerique\FlashBundle\HopitalNumeriqueFlashBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

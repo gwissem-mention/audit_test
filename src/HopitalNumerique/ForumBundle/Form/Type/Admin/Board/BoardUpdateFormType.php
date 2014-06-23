@@ -152,7 +152,7 @@ class BoardUpdateFormType extends AbstractType
             'intention'           => 'forum_board_update_item',
             'validation_groups'   => array('forum_board_update'),
             'cascade_validation'  => true,
-            'available_roles'     => $this->roleHelper->getRoleForFormulaires(),
+            'available_roles'     => $this->roleHelper->getRoleForFormulaire(),
         ));
     }
 

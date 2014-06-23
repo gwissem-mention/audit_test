@@ -1,8 +1,6 @@
 <?php
-
 namespace HopitalNumerique\AdminBundle\Controller;
 
-use Gedmo\Loggable\Entity\LogEntry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**

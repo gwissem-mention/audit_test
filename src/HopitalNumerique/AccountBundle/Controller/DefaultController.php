@@ -11,6 +11,18 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('HopitalNumeriqueAccountBundle:Default:index.html.twig', array());
+        //On récupère l'user connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        //get Flash messages visible for this user
+        $messages = $this->get('hopitalnumerique_flash.manager.flash')->getMessagesForUser( $user );
+
+        //get requetes
+        $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->getRequetesForDashboard( $user );
+
+        return $this->render('HopitalNumeriqueAccountBundle:Default:index.html.twig', array(
+            'messages' => $messages,
+            'requetes' => $requetes
+        ));
     }
 }
