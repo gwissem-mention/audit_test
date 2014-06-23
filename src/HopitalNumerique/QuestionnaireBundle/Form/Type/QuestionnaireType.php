@@ -200,7 +200,7 @@ class QuestionnaireType extends AbstractType
                                 ->setParameter('etat', $question->getReferenceParamTri())
                                 ->orderBy('ref.order', 'ASC');
                             },
-                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReferenceMulitple()
+                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReference()
                     ));
                     break;
                 //Les entity ne sont prévues que pour des entités de Référence (TODO : mettre en base la class et le property ?)
