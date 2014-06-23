@@ -2,24 +2,9 @@ $(document).ready(function() {
     if( $('.addChapitre').length > 0 ){
         //Ajoute un chapitre
         $('.addChapitre').click(function(){
-            $.ajax({
-                url  : $('#add-chapitre-url').val(),
-                data : {
-                    key : $('#outil-id').val()
-                },
-                type     : 'POST',
-                success  : function( data ){
-                    if( data != '' ){
-                        $('#chapitres ol:first').append( data );
-
-                        if( $('#chapitres ol li').length > 0){
-                            $('.designForBlank').hide();
-                        }
-
-                        initFancyBox();
-                        apprise('Chapitre ajouté');
-                    }else
-                        apprise('Une erreur est survenue lors de l\'ajout de votre chapitre, merci de réessayer');
+            apprise('Titre du chapitre', {'input':true,'textOk':'Ajouter','textCancel':'Annuler'}, function(r) {
+                if(r) { 
+                    addChapitre( r );
                 }
             });
         });
@@ -110,6 +95,32 @@ function toggleTypeQuestion()
         $('.not-txt').hide();
         $('#hopitalnumerique_autodiag_question_options').removeClass('validate[required]');
     }
+}
+
+//ajoute un chapitre
+function addChapitre( titre )
+{
+    $.ajax({
+        url  : $('#add-chapitre-url').val(),
+        data : {
+            key   : $('#outil-id').val(),
+            titre : titre
+        },
+        type     : 'POST',
+        success  : function( data ){
+            if( data != '' ){
+                $('#chapitres ol:first').append( data );
+
+                if( $('#chapitres ol li').length > 0){
+                    $('.designForBlank').hide();
+                }
+
+                initFancyBox();
+                apprise('Chapitre ajouté');
+            }else
+                apprise('Une erreur est survenue lors de l\'ajout de votre chapitre, merci de réessayer');
+        }
+    });
 }
 
 //Supprime le contenu en cours de visualisation
