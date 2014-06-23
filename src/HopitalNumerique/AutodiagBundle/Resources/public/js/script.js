@@ -17,6 +17,7 @@ $(document).ready(function() {
                         }
 
                         initFancyBox();
+                        apprise('Chapitre ajouté');
                     }else
                         apprise('Une erreur est survenue lors de l\'ajout de votre chapitre, merci de réessayer');
                 }
@@ -152,7 +153,7 @@ function deleteChapitre( id, url )
 //sauvegarde le chapitre
 function saveChapitre( url )
 {
-    checkAliasUnique();
+    res = checkAliasUnique();
     if( $('#hopitalnumerique_autodiag_chapitre_alias').parent().parent().find('.help-block').html() == '' ){
         $.ajax({
             url      : url,
@@ -251,11 +252,14 @@ function checkAliasUnique()
         },
         type     : 'POST',
         dataType : 'json',
+        async    : false,
         success  : function( data ){
             if( !data.success )
                 $('#hopitalnumerique_autodiag_chapitre_alias').parent().parent().find('.help-block').html('<span style="color:red"> L\'alias doit être unique</span>');
             else
                 $('#hopitalnumerique_autodiag_chapitre_alias').parent().parent().find('.help-block').html('');
+
+            return true;
         }
     });
 }

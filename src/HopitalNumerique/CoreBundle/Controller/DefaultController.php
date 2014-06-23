@@ -4,8 +4,16 @@ namespace HopitalNumerique\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+/**
+ * 
+ */
 class DefaultController extends Controller
 {
+    /**
+     * [indexAction description]
+     *
+     * @return [type]
+     */
     public function indexAction()
     {
         $article = $this->get('hopitalnumerique_objet.manager.objet')->getArticleHome();

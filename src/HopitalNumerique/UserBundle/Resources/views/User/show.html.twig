@@ -113,7 +113,6 @@
                                         <div>{{user.raisonDesinscription}}</div>
                                     </div> 
                                 </div>
-                            
                                 {# Zones des volets #}
                                 <div class="col-md-6">
                                     <div class="panel-group panel-info" id="accordion">
@@ -166,7 +165,13 @@
                                             </div>
                                         {% endif %}                                 
                                     </div>
-                                </div>  
+                                </div>
+                                {% if user.getAbsolutePath() is not null %}                    
+                                    <div class="form-group">
+                                        <div><strong>Photo de profil</strong></div>
+                                        <img class="uploadedFile" src="/{{ user.getWebPath() }}" alt="Photo de profil" width="92px" height="132px">
+                                    </div> 
+                                {% endif %}  
                             </div>
                         </div>
                     </div>
