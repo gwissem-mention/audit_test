@@ -25,17 +25,10 @@ class ChapitreType extends AbstractType
                 'label_attr' => array('class' => 'col-md-1 control-label'),
                 'attr'       => array('class' => $this->_constraints['title']['class'] )
             ))
-            ->add('alias', 'text', array(
-                'max_length' => $this->_constraints['alias']['maxlength'],
-                'required'   => false, 
-                'label'      => 'Alias',
-                'label_attr' => array('class' => 'col-md-2 control-label'),
-                'attr'       => array('class' => $this->_constraints['alias']['class'] )
-            ))
             ->add('noteOptimale', 'text', array(
                 'required'   => false, 
-                'label'      => 'Note optimal',
-                'label_attr' => array('class' => 'col-md-9 control-label'),
+                'label'      => 'Note optimale',
+                'label_attr' => array('class' => 'col-md-2 control-label', 'style' => 'padding-left:0'),
                 'attr'       => array('class' => $this->_constraints['noteOptimale']['class'] )
             ))
             ->add('noteMinimale', 'text', array(
