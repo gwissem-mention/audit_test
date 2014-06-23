@@ -15,10 +15,12 @@
                 <span class="label label-danger">Nouveau</span>
             {% endif %}
 
-            {% if objet['countRef'] >= 200 %}
-                <img src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-2.png')}}" alt="Niveau 2" />
-            {% elseif objet['countRef'] < 200 %}
-                <img src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-3.png')}}" alt="Niveau 3" />
+            {% if objet['primary'] == 1 %}
+                <img src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-1-prod.png')}}" alt="Niveau 1" />
+            {% elseif objet['countRef'] <= 200 %}
+                <img src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-2-prod.png')}}" alt="Niveau 2" />
+            {% elseif objet['countRef'] > 200 %}
+                <img src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-3-prod.png')}}" alt="Niveau 3" />
             {% endif %}
             
             {% if objet['objet'] is not null %}
