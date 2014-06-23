@@ -27,6 +27,7 @@ assetic:
         - HopitalNumeriqueFaqBundle
         - HopitalNumeriquePaiementBundle
         - HopitalNumeriqueAutodiagBundle
+        - HopitalNumeriqueForumBundle
         - FOSUserBundle
     filters:
         cssrewrite: ~

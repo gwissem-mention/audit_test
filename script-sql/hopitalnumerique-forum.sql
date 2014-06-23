@@ -1,0 +1,1 @@
+/* 11:48:58 Gaia (localnodevo) */ UPDATE `core_menu_item` SET `itm_route` = 'ccdn_forum_user_category_index', `itm_uri` = '' WHERE `itm_id` = '67';

@@ -101,20 +101,22 @@ class ConsultationManager extends BaseManager
             //Parcours des objets retournés par la recherche
             foreach($objets as &$objet)
             {
-                $id          = $objet['id'];
-                $isConsulted = false;
-                $type        = is_null($objet['objet']) ? 'objets' : 'contenus';
-    
-                //la publication fait partie des publications déjà consultées par l'utilisateur
-                if( isset( $consulted[$type][ $id ] ) ){
-                    $isConsulted      = true;
-                    $objet['updated'] = $consulted[$type][ $id ];
-                }
+                if( $objet['categ'] != 'forum' ){
+                    $id          = $objet['id'];
+                    $isConsulted = false;
+                    $type        = is_null($objet['objet']) ? 'objets' : 'contenus';
+        
+                    //la publication fait partie des publications déjà consultées par l'utilisateur
+                    if( isset( $consulted[$type][ $id ] ) ){
+                        $isConsulted      = true;
+                        $objet['updated'] = $consulted[$type][ $id ];
+                    }
 
-                //Si la publication n'a jamais été consulté ET
-                //Si la date de création de l'objet est postérieure à la date d'inscription de l'utilisateur : Notif new
-                if( $isConsulted === false && ($objet['created'] > $dateInscription) )
-                    $objet['new'] = true;
+                    //Si la publication n'a jamais été consulté ET
+                    //Si la date de création de l'objet est postérieure à la date d'inscription de l'utilisateur : Notif new
+                    if( $isConsulted === false && ($objet['created'] > $dateInscription) )
+                        $objet['new'] = true;
+                }
             }
         }
         
