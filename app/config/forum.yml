@@ -159,6 +159,13 @@ ccdn_forum_forum:
                 class:                CCDNForum\ForumBundle\Form\Type\User\Post\PostDeleteFormType
             post_unlock:
                 class:                CCDNForum\ForumBundle\Form\Type\Moderator\Post\PostUnlockFormType
+    component:
+        event_listener:
+            flash:
+                class:                HopitalNumerique\ForumBundle\Component\Dispatcher\Listener\FlashListener
+        helper:
+            role:
+                class:                HopitalNumerique\ForumBundle\Component\Helper\RoleHelper
     forum:
         admin:
             create:

@@ -20,7 +20,9 @@ h4 {font-size: 15px;}
 #content .blockquote-reduit{ border-left: 5px solid #eee; font-size: 12px; margin: 0 0 20px; padding: 10px 20px;}
 
 /* --- Admin --- */
-.checkbox input{width: 20px;height: 20px;}
+.checkboxCustom input{width: 20px;height: 20px;}
+.checkboxCustom label{text-align: left;}
+.checkboxCustom .control-label{text-align: left;}
 
 #content .toolbar-backoffice {margin: 0 30px 15px 0;}
 #content .toolbar-backoffice-forum {margin: 0 15px 15px 0;}

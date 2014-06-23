@@ -1,6 +1,6 @@
 <?php
 
-namespace HopitalNumerique\ForumBundle\Component\Dispatcher;
+namespace HopitalNumerique\ForumBundle\Component\Dispatcher\Listener;
 
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -89,7 +89,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getForum()) {
             if ($event->getForum()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully created new forum "' . $event->getForum()->getName() . '"');
+                $this->session->getFlashBag()->add('success', 'Nouveau forum "' . $event->getForum()->getName() . '" créé.');
             }
         }
     }
@@ -103,7 +103,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getForum()) {
             if ($event->getForum()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully edited the forum "' . $event->getForum()->getName() . '"');
+                $this->session->getFlashBag()->add('success', 'Forum "' . $event->getForum()->getName() . '" édité.');
             }
         }
     }
@@ -117,7 +117,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getForum()) {
             if (! $event->getForum()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully deleted the forum "' . $event->getForum()->getName() . '"');
+                $this->session->getFlashBag()->add('success', 'Forum "' . $event->getForum()->getName() . '" supprimé.');
             }
         }
     }
@@ -131,7 +131,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getCategory()) {
             if ($event->getCategory()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully created new category "' . $event->getCategory()->getName() . '"');
+                $this->session->getFlashBag()->add('success', 'Nouvelle catégorie "' . $event->getCategory()->getName() . '" créée.');
             }
         }
     }
@@ -145,7 +145,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getCategory()) {
             if ($event->getCategory()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully edited the category "' . $event->getCategory()->getName() . '"');
+                $this->session->getFlashBag()->add('success', 'Catégorie "' . $event->getCategory()->getName() . '" éditée.');
             }
         }
     }
@@ -159,7 +159,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getCategory()) {
             if (! $event->getCategory()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully deleted the category "' . $event->getCategory()->getName() . '"');
+                $this->session->getFlashBag()->add('success', 'Catégorie "' . $event->getCategory()->getName() . '" supprimée.');
             }
         }
     }
@@ -173,7 +173,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getBoard()) {
             if ($event->getBoard()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully created new board "' . $event->getBoard()->getName() . '"');
+                $this->session->getFlashBag()->add('success', 'Nouvelle board "' . $event->getBoard()->getName() . '" créée.');
             }
         }
     }
@@ -187,7 +187,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getBoard()) {
             if ($event->getBoard()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully edited the board "' . $event->getBoard()->getName() . '"');
+                $this->session->getFlashBag()->add('success', 'Board "' . $event->getBoard()->getName() . '" éditée.');
             }
         }
     }
@@ -201,7 +201,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getBoard()) {
             if (! $event->getBoard()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully deleted the board "' . $event->getBoard()->getName() . '"');
+                $this->session->getFlashBag()->add('success', 'Board "' . $event->getBoard()->getName() . '" supprimée.');
             }
         }
     }
@@ -215,7 +215,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getTopic()) {
             if ($event->getTopic()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully deleted the topic "' . $event->getTopic()->getId() . '"');
+                $this->session->getFlashBag()->add('success', 'Topic "' . $event->getTopic()->getId() . '" supprimé.');
             }
         }
     }
@@ -229,7 +229,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getTopic()) {
             if ($event->getTopic()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully restored the topic "' . $event->getTopic()->getId() . '"');
+                $this->session->getFlashBag()->add('success', 'Topic "' . $event->getTopic()->getId() . '" réstoré.');
             }
         }
     }
@@ -243,7 +243,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getTopic()) {
             if ($event->getTopic()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully stickied topic "' . $event->getTopic()->getId() . '"');
+                $this->session->getFlashBag()->add('success', 'Vous suivez désormais le topic "' . $event->getTopic()->getId() . '".');
             }
         }
     }
@@ -257,7 +257,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getTopic()) {
             if ($event->getTopic()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully unstickied topic "' . $event->getTopic()->getId() . '"');
+                $this->session->getFlashBag()->add('success', 'Vous ne suivez plus le topic "' . $event->getTopic()->getId() . '".');
             }
         }
     }
@@ -271,7 +271,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getTopic()) {
             if ($event->getTopic()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully closed topic "' . $event->getTopic()->getId() . '"');
+                $this->session->getFlashBag()->add('success', 'Topic "' . $event->getTopic()->getId() . '" fermé.');
             }
         }
     }
@@ -285,7 +285,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getTopic()) {
             if ($event->getTopic()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully reopened topic "' . $event->getTopic()->getId() . '"');
+                $this->session->getFlashBag()->add('success', 'Topic "' . $event->getTopic()->getId() . '" ré-ouvert.');
             }
         }
     }
@@ -299,7 +299,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getPost()) {
             if ($event->getPost()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully unlocked post "' . $event->getPost()->getId() . '"');
+                $this->session->getFlashBag()->add('success', 'Topic "' . $event->getPost()->getId() . '" dévérouillé.');
             }
         }
     }
@@ -313,7 +313,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getPost()) {
             if ($event->getPost()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully restored the post "' . $event->getPost()->getId() . '"');
+                $this->session->getFlashBag()->add('success', 'Topic "' . $event->getPost()->getId() . '" réstoré.');
             }
         }
     }
@@ -327,7 +327,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getPost()) {
             if ($event->getPost()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully locked post "' . $event->getPost()->getId() . '"');
+                $this->session->getFlashBag()->add('success', 'Topic "' . $event->getPost()->getId() . '" vérouillé.');
             }
         }
     }
@@ -341,7 +341,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getTopic()) {
             if ($event->getTopic()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully posted the topic "' . $event->getTopic()->getTitle() . '"');
+                $this->session->getFlashBag()->add('success', 'Nouveau topic "' . $event->getTopic()->getTitle() . '" créé.');
             }
         }
     }
@@ -353,7 +353,7 @@ class FlashListener implements EventSubscriberInterface
      */
     public function onTopicCreateFlooded(UserTopicFloodEvent $event)
     {
-        $this->session->getFlashBag()->add('warning', 'You have posted too much in a short time, take a break.');
+        $this->session->getFlashBag()->add('warning', 'Vous avez créé trop de topics en peu de temps, faîtes une pause.');
     }
 
     /**
@@ -365,7 +365,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getTopic()) {
             if ($event->getTopic()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully replied to the topic "' . $event->getTopic()->getTitle() . '"');
+                $this->session->getFlashBag()->add('success', 'Nouvelle réponse au topic "' . $event->getTopic()->getTitle() . '".');
             }
         }
     }
@@ -377,7 +377,7 @@ class FlashListener implements EventSubscriberInterface
      */
     public function onTopicReplyFlooded(UserTopicFloodEvent $event)
     {
-        $this->session->getFlashBag()->add('warning', 'You have posted too much in a short time, take a break.');
+        $this->session->getFlashBag()->add('warning', 'Vous avez posté trop de réponses en peu de temps, faîtes une pause.');
     }
 
     /**
@@ -389,7 +389,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getPost()) {
             if ($event->getPost()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully edited the post "' . $event->getPost()->getId() . '"');
+                $this->session->getFlashBag()->add('success', 'Post "' . $event->getPost()->getId() . '" édité.');
             }
         }
     }
@@ -403,7 +403,7 @@ class FlashListener implements EventSubscriberInterface
     {
         if ($event->getPost()) {
             if ($event->getPost()->getId()) {
-                $this->session->getFlashBag()->add('success', 'Successfully deleted the post "' . $event->getPost()->getId() . '"');
+                $this->session->getFlashBag()->add('success', 'Post "' . $event->getPost()->getId() . '" supprimé.');
             }
         }
     }

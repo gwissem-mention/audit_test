@@ -32,7 +32,7 @@ title:
             edit:                      "Éditer la Board %board_name%"
             delete:                    "Supprimer la Board %board_name%"
     category:
-        index:                         "Index"
+        index:                         "Forum"
         show:                          "%category_name% Catégorie"
     board:
         show:                          "%board_name% Board"
