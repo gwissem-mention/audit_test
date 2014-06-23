@@ -24,12 +24,15 @@
     "jquery-maskedinput": "1.3.1",
     "jquery-toggles": "2.0.4",
     "bootstrap-iconpicker": "*",
-    "fontawesome": "~4.0.3",
+    "fontawesome": "~4.1",
     "Nestable": "https://github.com/dbushell/Nestable.git",
     "jquery-nicescroll": "*",
     "enquire": "~2.1.0",
     "stepy": "https://github.com/wbotelhos/stepy.git",
     "highcharts.com": "4.0.0",
     "qtip2": "2.2.0"
+  },
+  "resolutions": {
+    "jquery": "1.11.0"
   }
 }
