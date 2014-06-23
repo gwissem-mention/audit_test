@@ -47,10 +47,9 @@ class SessionRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ses')
             ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
-             ->leftJoin('ses.etat','refEtat')
-             ->andWhere('refEtat.id = 403')
-             ->andWhere('ses.archiver = false')
-            // ->leftJoin('ses.module','module')
+            ->leftJoin('ses.etat','refEtat')
+            ->andWhere('refEtat.id = 403')
+            ->andWhere('ses.archiver = false')
             ->groupBy('ses.id')
             ->orderBy('ses.dateSession');
 
@@ -67,11 +66,33 @@ class SessionRepository extends EntityRepository
     public function getSessionsForFormateur( $user )
     {
         return $this->_em->createQueryBuilder()
-                         ->select('ses')
-                         ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
-                         ->leftJoin('ses.etat','refEtat')
-                         ->andWhere('ses.formateur = :user', 'refEtat.id = 403')
-                         ->setParameter('user', $user)
-                         ->orderBy('ses.dateSession', 'DESC');
+                        ->select('ses')
+                        ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
+                        ->leftJoin('ses.etat','refEtat')
+                        ->andWhere('ses.formateur = :user', 'refEtat.id = 403')
+                        ->setParameter('user', $user)
+                        ->orderBy('ses.dateSession', 'DESC');
+    }
+
+    /**
+     * Retourne la liste des sessions à évaluer pour le dashboard user
+     *
+     * @param User $user L'utilisateur concerné
+     * 
+     * @return QueryBuilder
+     */
+    public function getSessionsForDashboard( $user )
+    {
+        return $this->_em->createQueryBuilder()
+                        ->select('ses.id, module.titre, refEtatParticipation.id as refEtatParticipationId, refEtatEvaluation.id as refEtatEvaluationId')
+                        ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
+                        ->leftJoin('ses.inscriptions','inscription')
+                        ->leftJoin('ses.module','module')
+                        ->leftJoin('inscription.etatInscription','refEtatInscription')
+                        ->leftJoin('inscription.etatParticipation','refEtatParticipation')
+                        ->leftJoin('inscription.etatEvaluation','refEtatEvaluation')
+                        ->andWhere('inscription.user = :user', 'refEtatInscription.id = 407')
+                        ->setParameter('user', $user)
+                        ->orderBy('ses.dateSession', 'DESC');
     }
 }
