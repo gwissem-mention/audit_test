@@ -107,22 +107,24 @@ class BreadcrumbNodeLoader implements LoaderInterface
      */
     private function addChild( $menu, $childs )
     {
-        $element   = $childs[0];
-        $newChilds = array_values($element->getChildren());
-        $options   = array();
+        if( isset($childs[0]) ){
+            $element   = $childs[0];
+            $newChilds = array_values($element->getChildren());
+            $options   = array();
 
-        //remove javascript link
-        if( $element->getUri() != 'javascript:;' )
-            $options['uri'] = $element->getUri();
-        
-        //Test if childs present
-        if( count($newChilds) > 0 )
-        {
-            $menu->addChild( $element->getLabel(), $options );
-            $menu = $this->addChild( $menu, $newChilds );    
-        }else{
-            //No Link on Last Element
-            $menu->addChild( $element->getLabel() );
+            //remove javascript link
+            if( $element->getUri() != 'javascript:;' )
+                $options['uri'] = $element->getUri();
+            
+            //Test if childs present
+            if( count($newChilds) > 0 )
+            {
+                $menu->addChild( $element->getLabel(), $options );
+                $menu = $this->addChild( $menu, $newChilds );    
+            }else{
+                //No Link on Last Element
+                $menu->addChild( $element->getLabel() );
+            }
         }
         
         return $menu;

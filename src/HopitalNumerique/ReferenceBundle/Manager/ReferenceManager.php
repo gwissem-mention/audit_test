@@ -59,7 +59,17 @@ class ReferenceManager extends BaseManager
      */
     public function getDatasForGrid( $condition = null )
     {
-        return $this->getRepository()->getDatasForGrid( $condition );
+        return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+    }
+
+    /**
+     * Récupère les données pour l'export CSV
+     *
+     * @return array
+     */
+    public function getDatasForExport( $ids )
+    {
+        return $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
     }
 
     /**

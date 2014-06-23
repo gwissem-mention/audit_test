@@ -1,9 +1,10 @@
 <?php
 namespace HopitalNumerique\UserBundle\Controller;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Controller des utilisateurs
@@ -198,7 +199,7 @@ class UserController extends Controller
     {
         //Récupération de l'utilisateur passé en param
         $user  = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
-        $roles = $this->get('nodevo_role.manager.role')->findIn( $user->getRoles() );
+        $roles = $this->get('nodevo_role.manager.role')->findIn( $user->getRoles() );        
 
         return $this->render('HopitalNumeriqueUserBundle:User:show.html.twig', array(
             'user'                     => $user,
@@ -206,6 +207,25 @@ class UserController extends Controller
             'questionnaireAmbassadeur' => $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur'),
             'options'                  => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
             'roles'                    => $roles
+        ));
+    }
+
+    /**
+     * [historiqueAction description]
+     *
+     * @param  User   $user [description]
+     *
+     * @return [type]
+     */
+    public function historiqueAction( User $user )
+    {
+        //get History
+        $em   = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('Gedmo\Loggable\Entity\LogEntry');
+        $logs = $repo->getLogEntries($user);
+
+        return $this->render('HopitalNumeriqueUserBundle:User:historique.html.twig', array(
+            'logs' => $logs
         ));
     }
 
@@ -400,8 +420,6 @@ class UserController extends Controller
                             'role'                               => 'Roles',
                             'statutEtablissementSante.libelle'   => 'Statut Etablissement Santé',
                             'profilEtablissementSante.libelle'   => 'Profil Etablissement Santé',
-                            'raisonInscriptionSante.libelle'     => 'Raison inscription Santé',
-                            'raisonInscriptionStructure.libelle' => 'Raison inscription structure',
                             'autreStructureRattachementSante'    => 'Nom de votre établissement si non disponible dans la liste précédente Santé',
                             'nomStructure'                       => 'Nom structure',
                             'fonctionStructure'                  => 'Fonction structure',
@@ -716,16 +734,33 @@ class UserController extends Controller
                     {
                         //--Frontoffice-- Informations personnelles
                         //Reforce le role de l'utilisateur pour éviter qu'il soit modifié
-                        $connectedUser = $this->get('security.context')->getToken()->getUser();
+                        $connectedUser          = $this->get('security.context')->getToken()->getUser();
                         $roleUserConnectedLabel = $this->get('nodevo_role.manager.role')->getUserRole($connectedUser);
-                        $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => $roleUserConnectedLabel));
+
+                        //Test etab user
+                        if( $roleUserConnectedLabel == 'ROLE_ENREGISTRE_9' || $roleUserConnectedLabel == 'ROLE_ES_8' ){
+                            if( !is_null($user->getEtablissementRattachementSante()) )
+                                $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ES_8'));
+                            else
+                                $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
+                        }else
+                            $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => $roleUserConnectedLabel));
+
                         $user->setRoles( array( $role ) );
                         
                         //Reforce l'username
-                        $user->setUsername($user->getUsername());
+                        $user->setUsername( $user->getUsername() );
                     }
                     else 
                     {
+                        //Test etab user
+                        if( $role->getRole() == 'ROLE_ENREGISTRE_9' || $role->getRole() == 'ROLE_ES_8' ){
+                            if( !is_null($user->getEtablissementRattachementSante()) )
+                                $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ES_8'));
+                            else
+                                $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
+                        }
+
                         //--BO--
                         //set Role for User : not mapped field
                         $user->setRoles( array( $role->getRole() ) );
@@ -735,7 +770,10 @@ class UserController extends Controller
                 {
                     //--FO-- Inscription
                     //Set du role "Enregistré" par défaut pour les utilisateurs
-                    $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
+                    if( !is_null($user->getEtablissementRattachementSante()) )
+                        $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ES_8'));
+                    else
+                        $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
                     $user->setRoles( array( $role->getRole() ) );
                 }
 

@@ -68,6 +68,31 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * Récupère les Etablissement pour l'export
+     *
+     * @return qb
+     */
+    public function getEtablissementForExport( $ids )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('user.id, 
+                     user.username, 
+                     user.nom, 
+                     user.prenom, 
+                     refRegion.libelle as region, 
+                     user.autreStructureRattachementSante,
+                     user.archiver
+            ')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->leftJoin('user.region','refRegion')
+            ->andWhere('user.autreStructureRattachementSante IS NOT NULL', 'user.id IN (:ids)')
+            ->orderBy('user.username')
+            ->setParameter('ids', $ids);
+        
+        return $qb;
+    }
+
+    /**
      * On cherche a savoir si un user existe avec le role et la région de l'user modifié
      *
      * @param User $user L'utilisateur modifié

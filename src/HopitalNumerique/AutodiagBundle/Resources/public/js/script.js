@@ -2,23 +2,9 @@ $(document).ready(function() {
     if( $('.addChapitre').length > 0 ){
         //Ajoute un chapitre
         $('.addChapitre').click(function(){
-            $.ajax({
-                url  : $('#add-chapitre-url').val(),
-                data : {
-                    key : $('#outil-id').val()
-                },
-                type     : 'POST',
-                success  : function( data ){
-                    if( data != '' ){
-                        $('#chapitres ol:first').append( data );
-
-                        if( $('#chapitres ol li').length > 0){
-                            $('.designForBlank').hide();
-                        }
-
-                        initFancyBox();
-                    }else
-                        apprise('Une erreur est survenue lors de l\'ajout de votre chapitre, merci de réessayer');
+            apprise('Titre du chapitre', {'input':true,'textOk':'Ajouter','textCancel':'Annuler'}, function(r) {
+                if(r) { 
+                    addChapitre( r );
                 }
             });
         });
@@ -111,6 +97,32 @@ function toggleTypeQuestion()
     }
 }
 
+//ajoute un chapitre
+function addChapitre( titre )
+{
+    $.ajax({
+        url  : $('#add-chapitre-url').val(),
+        data : {
+            key   : $('#outil-id').val(),
+            titre : titre
+        },
+        type     : 'POST',
+        success  : function( data ){
+            if( data != '' ){
+                $('#chapitres ol:first').append( data );
+
+                if( $('#chapitres ol li').length > 0){
+                    $('.designForBlank').hide();
+                }
+
+                initFancyBox();
+                apprise('Chapitre ajouté');
+            }else
+                apprise('Une erreur est survenue lors de l\'ajout de votre chapitre, merci de réessayer');
+        }
+    });
+}
+
 //Supprime le contenu en cours de visualisation
 function deleteChapitre( id, url )
 {
@@ -152,7 +164,7 @@ function deleteChapitre( id, url )
 //sauvegarde le chapitre
 function saveChapitre( url )
 {
-    checkAliasUnique();
+    res = checkAliasUnique();
     if( $('#hopitalnumerique_autodiag_chapitre_alias').parent().parent().find('.help-block').html() == '' ){
         $.ajax({
             url      : url,
@@ -251,11 +263,14 @@ function checkAliasUnique()
         },
         type     : 'POST',
         dataType : 'json',
+        async    : false,
         success  : function( data ){
             if( !data.success )
                 $('#hopitalnumerique_autodiag_chapitre_alias').parent().parent().find('.help-block').html('<span style="color:red"> L\'alias doit être unique</span>');
             else
                 $('#hopitalnumerique_autodiag_chapitre_alias').parent().parent().find('.help-block').html('');
+
+            return true;
         }
     });
 }

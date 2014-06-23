@@ -1,8 +1,23 @@
 <?php
 namespace HopitalNumerique\UserBundle\Twig;
 
+use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+
 class UserExtension extends \Twig_Extension
 {
+    private $_refManager;
+    private $_etabManager;
+
+    /**
+     * Construit l'extension Twig
+     */
+    public function __construct( ReferenceManager $refManager, EtablissementManager $etabManager )
+    {
+        $this->_refManager  = $refManager;
+        $this->_etabManager = $etabManager;
+    }
+
     /**
      * Retourne la liste des filtres custom pour cette extension
      *
@@ -11,7 +26,8 @@ class UserExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'informationsManquantes' => new \Twig_Filter_Method($this, 'informationsManquantes')
+            'informationsManquantes'  => new \Twig_Filter_Method($this, 'informationsManquantes'),
+            'formateHistoryValueUser' => new \Twig_Filter_Method($this, 'formateHistoryValueUser')
         );
     }
 
@@ -38,7 +54,6 @@ class UserExtension extends \Twig_Extension
             $resultat['rattachementSante']     = (is_null($user->getEtablissementRattachementSante())) ? (is_null($user->getAutreStructureRattachementSante()) ? array('label' => 'Etablissement de rattachement / Nom de votre établissement si non disponible dans la liste précédente') : array()) : array();
             $resultat['fonctionEtablissement'] = (is_null($user->getFonctionDansEtablissementSante())) ? array('label' => 'Fonction dans l\'établissement') : array();
             $resultat['profilEtablissement']   = (is_null($user->getProfilEtablissementSante())) ? array('label' => 'Profil de l\'établissement') : array();
-            $resultat['raisonInscription']     = (is_null($user->getRaisonInscriptionSante())) ? array('label' => 'Raison inscription') : array();
         }
         
         //Si l'un des éléments ci-dessus est manquant
@@ -54,6 +69,39 @@ class UserExtension extends \Twig_Extension
         }
 
         return $resultat;
+    }
+
+    /**
+     * Retourne la donnée d'historique formatée correctement
+     *
+     * @param array $datas La donnée
+     *
+     * @return string
+     */
+    public function formateHistoryValueUser( $data, $field )
+    {
+        $return = '';
+
+        if( is_array($data) ) {
+            //Ref handle
+            if( isset($data['id']) ){
+                if( $field == 'etablissementRattachementSante' ){
+                    $etab = $this->_etabManager->findOneBy( array('id' => $data['id']) );
+                    $return = $etab->getNom();
+                }else{
+                    $ref    = $this->_refManager->findOneBy( array('id' => $data['id']) );
+                    $return = $ref->getLibelle();
+                }
+            }else
+                $return = implode('; ', $data);
+        }else if( $data instanceof \DateTime ){
+            $return = $data->format('d/m/Y');
+        }else if( is_null($data) ){
+            $return = 'NULL';
+        }else
+            $return = $data;
+
+        return $return;
     }
 
     /**

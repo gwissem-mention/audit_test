@@ -10,6 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class ReferenceController extends Controller
 {
+    /**
+     * [objetAction description]
+     *
+     * @param  [type] $id [description]
+     *
+     * @return [type]
+     */
     public function objetAction( $id )
     {
         //Récupération de l'objet passée en paramètre
@@ -27,6 +34,13 @@ class ReferenceController extends Controller
         ));
     }
     
+    /**
+     * [objetOwnAction description]
+     *
+     * @param  [type] $id [description]
+     *
+     * @return [type]
+     */
     public function objetOwnAction( $id )
     {
         //Récupération de l'objet passée en paramètre
@@ -42,6 +56,13 @@ class ReferenceController extends Controller
         ));
     }
 
+    /**
+     * [contenuAction description]
+     *
+     * @param  [type] $id [description]
+     *
+     * @return [type]
+     */
     public function contenuAction( $id )
     {
         //Récupération du contenu passée en paramètre
@@ -59,6 +80,13 @@ class ReferenceController extends Controller
         ));
     }
 
+    /**
+     * [contenuOwnAction description]
+     *
+     * @param  [type] $id [description]
+     *
+     * @return [type]
+     */
     public function contenuOwnAction( $id )
     {
         //Récupération du contenu passée en paramètre
@@ -74,6 +102,13 @@ class ReferenceController extends Controller
         ));
     }
 
+    /**
+     * [saveObjetAction description]
+     *
+     * @param  [type] $id [description]
+     *
+     * @return [type]
+     */
     public function saveObjetAction( $id )
     {
         //Récupération de l'objet passée en paramètre
@@ -82,27 +117,41 @@ class ReferenceController extends Controller
         //efface toutes les anciennes références
         $oldRefs = $this->get('hopitalnumerique_objet.manager.refobjet')->findBy( array('objet' => $objet) );
         $this->get('hopitalnumerique_objet.manager.refobjet')->delete( $oldRefs );
+        $objet->setReferencement( array() );
 
         //ajoute les nouvelles références
         $nbRef      = 0;
         $references = json_decode( $this->get('request')->request->get('references') );
+        $refsToSave = array();
         foreach( $references as $reference ) {
             $ref = $this->get('hopitalnumerique_objet.manager.refobjet')->createEmpty();
             $ref->setObjet( $objet );
             $ref->setPrimary( $reference->type );
 
             //get ref
-            $ref->setReference( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $reference->id) ) );
+            $itemRef = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $reference->id) );
+            $ref->setReference( $itemRef );
+
+            //update Objet
+            $objet->addReferencement( $itemRef->getLibelle() . ' : ' . ($reference->type ? 'Primaire' : 'Secondaire') );
 
             //save it
-            $this->get('hopitalnumerique_objet.manager.refobjet')->save( $ref );
+            $refsToSave[] = $ref;
 
             $nbRef++;
         }
 
+        //save Refs AND objet (implicite)
+        $this->get('hopitalnumerique_objet.manager.refobjet')->save( $refsToSave );
+
         return new Response('{"success":true, "nbRef":'.$nbRef.'}', 200);
     }
 
+    /**
+     * [saveContenuAction description]
+     *
+     * @return [type]
+     */
     public function saveContenuAction()
     {
         //on récupère le contenu

@@ -124,6 +124,40 @@
                                 </ul>
                             </div>
                         </p>
+                        {% if logs %}
+                            <p>
+                                <strong>Historique : </strong><br />
+                                <div>
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th width="100px">Type</th>
+                                                <th width="130px">Date</th>
+                                                <th width="200px">Utilisateur</th>
+                                                <th width="180px">Champ</th>
+                                                <th>Valeur</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for log in logs %}
+                                                {% set nbRows = log.data|length %}
+                                                {% for key,data in log.data %}
+                                                    <tr>
+                                                        {% if loop.first %}
+                                                            <td rowspan="{{nbRows}}">{% if log.action == 'update' %}Mise à jour{% else %}Création{% endif %}</td>
+                                                            <td rowspan="{{nbRows}}">{{log.loggedAt|date('d/m/Y H:i')}}</td>
+                                                            <td rowspan="{{nbRows}}">{{log.username|title}}</td>
+                                                        {% endif %}
+                                                        <td>{{key}}</td>
+                                                        <td>{{data|formateHistoryValue}}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </p>
+                        {% endif %}
                     </div>
                 </div>
             </div>

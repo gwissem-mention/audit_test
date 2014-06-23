@@ -1,14 +1,18 @@
 <?php
 namespace HopitalNumerique\ObjetBundle\Twig;
 
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+
 class ObjetExtension extends \Twig_Extension
 {
+    private $_refManager;
+
     /**
      * Construit l'extension Twig
      */
-    public function __construct()
+    public function __construct( ReferenceManager $refManager )
     {
-
+        $this->_refManager = $refManager;
     }
 
     /**
@@ -19,7 +23,8 @@ class ObjetExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'rearangeDatas' => new \Twig_Filter_Method($this, 'rearangeDatas')
+            'rearangeDatas'       => new \Twig_Filter_Method($this, 'rearangeDatas'),
+            'formateHistoryValue' => new \Twig_Filter_Method($this, 'formateHistoryValue')
         );
     }
 
@@ -38,6 +43,34 @@ class ObjetExtension extends \Twig_Extension
             $newDatas[] = call_user_func( array( $data, $field ) );
 
         return implode(', ', $newDatas);
+    }
+
+    /**
+     * Retourne la donnée d'historique formatée correctement
+     *
+     * @param array $datas La donnée
+     *
+     * @return string
+     */
+    public function formateHistoryValue( $data )
+    {
+        $return = '';
+
+        if( is_array($data) ) {
+            //Ref handle
+            if( isset($data['id']) ){
+                $ref    = $this->_refManager->findOneBy( array('id' => $data['id']) );
+                $return = $ref->getLibelle();
+            }else
+                $return = implode('; ', $data);
+        }else if( $data instanceof \DateTime ){
+            $return = $data->format('d/m/Y');
+        }else if( is_null($data) ){
+            $return = 'NULL';
+        }else
+            $return = $data;
+
+        return $return;
     }
 
     /**

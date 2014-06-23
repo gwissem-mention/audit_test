@@ -129,6 +129,7 @@ services:
     #Extension Twig        
     hopitalnumerique_user.twig.user_extension:
         class: %hopitalnumerique_user.twig.extensions.class%
+        arguments: ["@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_etablissement.manager.etablissement"]
         tags:
             - { name: twig.extension }
 

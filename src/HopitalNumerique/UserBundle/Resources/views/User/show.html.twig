@@ -8,9 +8,6 @@
 
 {% block toolbarButton %}
     <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
-{#     {% if app.user|checkAuthorization( path('hopital_numerique_user_edit', {'id':user.id} ) ) %}#}
-{#         <a href="{{path('hopital_numerique_user_edit', {'id':user.id} )}}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>#}
-{#     {% endif %}#}
 {% endblock %}
 
 {% block body %}
@@ -21,15 +18,13 @@
             </div>
 
             <div class="panel-body" >
-            
                 <div class="row">
                     <div class="panel panel-default gray">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseUser" class="collapsed" id="questionnaire_expert_collapse">
                             <div class="panel-heading"><h4>Informations de caractérisation</h4></div>
                         </a>
                         <div id="collapseUser" class="collapse" style="height: 0px;"> 
-                            <div class="panel-body">       
-            
+                            <div class="panel-body">            
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div><strong>Civilité</strong></div>
@@ -118,7 +113,6 @@
                                         <div>{{user.raisonDesinscription}}</div>
                                     </div> 
                                 </div>
-                            
                                 {# Zones des volets #}
                                 <div class="col-md-6">
                                     <div class="panel-group panel-info" id="accordion">
@@ -127,8 +121,7 @@
                                             or (user.etablissementRattachementSante is defined and user.etablissementRattachementSante is not null)
                                             or (user.autreStructureRattachementSante is defined and user.autreStructureRattachementSante is not null) 
                                             or (user.fonctionDansEtablissementSante is defined and user.fonctionDansEtablissementSante is not null) 
-                                            or (user.profilEtablissementSante is defined and user.profilEtablissementSante is not null)
-                                            or (user.raisonInscriptionSante is defined and user.raisonInscriptionSante is not null) %}
+                                            or (user.profilEtablissementSante is defined and user.profilEtablissementSante is not null) %}
                                             {# Zone établissement de santé #}
                                             <div><h4>Vous êtes un établissement de santé</h4></div>                               
                                             <div class="form-group">
@@ -155,20 +148,11 @@
                                                 <div><strong>Fonction dans l'établissement</strong></div>
                                                 <div>{{user.fonctionDansEtablissementSante}}</div>
                                             </div>
-                                            <div class="form-group">
-                                                <div><strong>Raison de l'inscription</strong></div>
-                                                <div>
-                                                    {% if user.raisonInscriptionSante is defined and user.raisonInscriptionSante is not null  %}
-                                                        {{user.raisonInscriptionSante.libelle}}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
                                         {% endif %}
                                         
                                         {# Affichage du bloc uniquement si il y a des données de structure #}
                                         {% if (user.nomStructure is defined and user.nomStructure is not null)
-                                           or (user.fonctionStructure is defined and user.fonctionStructure is not null)
-                                           or (user.raisonInscriptionStructure is defined and user.raisonInscriptionStructure is not null) %}
+                                           or (user.fonctionStructure is defined and user.fonctionStructure is not null) %}
                                             {# Zone autre qu'un établissement de santé #}
                                             <h4>Vous êtes une structure autre qu'un établissement de santé</h4>
                                             <div class="form-group">
@@ -179,17 +163,15 @@
                                                 <div><strong>Fonction de la structure</strong></div>
                                                 <div>{{user.fonctionStructure}}</div>
                                             </div>
-                                            <div class="form-group">
-                                                <div><strong>Raison de l'inscription</strong></div>
-                                                <div>
-                                                    {% if user.raisonInscriptionStructure is defined and user.raisonInscriptionStructure is not null  %}
-                                                        {{user.raisonInscriptionStructure.libelle}}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
                                         {% endif %}                                 
                                     </div>
-                                </div>  
+                                </div>
+                                {% if user.getAbsolutePath() is not null %}                    
+                                    <div class="form-group">
+                                        <div><strong>Photo de profil</strong></div>
+                                        <img class="uploadedFile" src="/{{ user.getWebPath() }}" alt="Photo de profil" width="92px" height="132px">
+                                    </div> 
+                                {% endif %}  
                             </div>
                         </div>
                     </div>
@@ -223,6 +205,11 @@
                 <div class="row">
                     {# Include des données Paiements #}
                     {{ render(controller("HopitalNumeriquePaiementBundle:Facture:total", {'id':user.id} )) }}
+                </div>
+
+                <div class="row">
+                    {# Include de l'historique #}
+                    {{ render(controller("HopitalNumeriqueUserBundle:User:historique", {'id':user.id} )) }}
                 </div>
             </div>
         </div>

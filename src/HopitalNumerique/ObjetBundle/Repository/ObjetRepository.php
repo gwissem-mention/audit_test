@@ -26,6 +26,24 @@ class ObjetRepository extends EntityRepository
             
         return $qb;
     }
+
+    /**
+     * Récupère les objets pour l'export
+     *
+     * @return array
+     */
+    public function getDatasForExport( $ids )
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('obj')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->where('obj.id IN (:ids)')
+            ->orderBy('obj.titre', 'ASC')
+            ->setParameter('ids', $ids);
+            
+        return $qb;
+    }
     
     /**
      * Récupère les données du grid pour un ambassadeur sous forme de tableau correctement formaté

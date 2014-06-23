@@ -80,6 +80,12 @@ hopital_numerique_user_show:
     requirements:
         id: \d+
 
+hopital_numerique_user_historique:
+    pattern: /admin/user/historique/{id}
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:historique}
+    requirements:
+        id: \d+
+
 hopital_numerique_user_delete:
     pattern: /admin/user/delete/{id}.{_format}
     defaults: { _controller: HopitalNumeriqueUserBundle:User:delete, _format: json}

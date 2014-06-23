@@ -9,7 +9,7 @@ namespace HopitalNumerique\InterventionBundle\Form\InterventionDemande\Edition;
 use Symfony\Component\Form\FormBuilderInterface;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemande\CmsiType as InterventionDemandeCmsiType;
 use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\Validator\Validator;
+use Symfony\Component\Validator\Validator\LegacyValidator;
 use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager as FormInterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\UserManager as FormUserManager;
@@ -24,14 +24,14 @@ class CmsiType extends InterventionDemandeCmsiType
      * Constructeur du formulaire d'édition de demande d'intervention spécifique au CMSI.
      *
      * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
-     * @param \Symfony\Component\Validator\Validator $validator Validator
+     * @param \Symfony\Component\Validator\Validator\LegacyValidator $validator LegacyValidator
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager $interventionDemandeManager Manager InterventionDemande
      * @param \HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager $formInterventionDemandeManager Manager Form\InterventionDemande
      * @param \HopitalNumerique\InterventionBundle\Manager\Form\UserManager $formUserManager Manager Form\User
      * @param \HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager $formEtablissementManager Manager Form\Etablissement
      * @return void
      */
-    public function __construct(SecurityContext $securityContext, Validator $validator, InterventionDemandeManager $interventionDemandeManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
+    public function __construct(SecurityContext $securityContext, LegacyValidator $validator, InterventionDemandeManager $interventionDemandeManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
     {
         parent::__construct($securityContext, $validator, $interventionDemandeManager, $formInterventionDemandeManager, $formUserManager, $formEtablissementManager);
     }

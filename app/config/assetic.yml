@@ -119,6 +119,9 @@ assetic:
                 - "%kernel.root_dir%/Resources/components/qtip2/jquery.qtip.min.js"
             filters : [ ?yui_js ]
         #CSS
+        font_awesome_css:
+            inputs:
+                - "bundles/nodevotools/fonts/font-awesome/css/font-awesome.min.css"
         select2_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/select2/select2.css"

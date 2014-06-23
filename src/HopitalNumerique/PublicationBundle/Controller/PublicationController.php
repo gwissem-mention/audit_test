@@ -149,8 +149,6 @@ class PublicationController extends Controller
     private function getObjetsFromRecherche( $publication )
     {
         //get Recherche results
-        // $session = $this->getRequest()->getSession();
-        // $refs    = json_decode($session->get('requete-refs'), true);
         $refs       = array();
         $refs       = $this->getMoreRefs( $refs, $publication->getReferences() );
         

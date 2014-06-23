@@ -100,7 +100,6 @@ class ObjetGrid extends Grid implements IGrid
      */
     public function setMassActions()
     {
-        
-        
+        $this->addMassAction( new Action\ActionMass('Export CSV', 'HopitalNumeriqueObjetBundle:Objet:exportCsv') );
     }
 }

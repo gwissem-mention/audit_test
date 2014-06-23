@@ -99,7 +99,7 @@ class EvaluationFrontController extends Controller
                 }
                 //Mode ajout + édition : set la nouvelle réponse
                 $reponse->setReponse($param);
-                if('entity' === $typeParam)
+                if('entity' === $typeParam || 'entityradio' === $typeParam)
                 {
                     $reponse->setReference($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $param)));
                 }

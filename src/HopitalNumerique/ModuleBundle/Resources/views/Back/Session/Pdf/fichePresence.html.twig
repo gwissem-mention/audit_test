@@ -1,47 +1,67 @@
-<table width="740px" style="margin:0 auto; border:1px solid #e3e3e3;" >
+<meta charset="utf-8">
+<style type="text/css">
+    @page{
+        margin: 1cm 0.5cm;
+        size: A4 landscape ;
+    }
+</style>
+<table width="1100px" style="margin:0 auto; border:1px solid #e3e3e3;" >
     {# Titre #}
     <tr align="center" style="font-size:14px;border:1px solid #e3e3e3;">
-        <td>
-            <strong>FEUILLE D'EMERGEMENT - {{ session.dateSession|date('d/m/Y') }}</strong>
+        <td style="width:100px;">
+            <img src="{{app.request.getSchemeAndHttpHost()}}{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
+        </td>
+        <td style="width:1000px;">
+            <strong>FEUILLE D'EMARGEMENT</strong>
+        </td>
+    </tr>
+    {# Libelle #}
+    <tr align="center" style="font-size:14px;border:1px solid #e3e3e3;height:50px">
+        <td colspan="2">
+            <strong>Accompagnement Hôpital Numérique - Sessions de montée en compétence</strong>
         </td>
     </tr>
     {# Ligne du module #}
     <tr style="border:1px solid #e3e3e3;">
-        <td>
-            <strong>{{ session.module.titre }}</strong>
+        <td colspan="2">
+            <strong>{{ session.module.titre }} - {{ session.dateSession|date('d/m/Y') }} - Formateur : {{ session.formateur.getAppellation() }}</strong>
         </td>
     </tr>
 </table>
 {# Ligne de séparation #}
-<div style="background: #5d5d5d;height:20px; width:740px"></div>
-<table width="740px" style="margin:0 auto; border-collapse:collapse;">
+<div style="background: #5d5d5d;height:20px; width:1100px"></div>
+<table width="1100px" style="margin:0 auto; border-collapse:collapse;">
     <thead>
         <tr class="grid-row-titles">
             <th style="font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>REGION</strong></th>
             <th style="font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>ETABLISSEMENT</strong></th>
             <th style="width:72px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>PRENOM</strong></th>
             <th style="width:70px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>NOM</strong></th>
-            <th style="width:120px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>SIGNATURE</strong></th>
-            <th style="width:120px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;"><strong>OBSERVATIONS</strong></th>
+            <th style="width:300px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>SIGNATURE</strong></th>
+            <th style="width:300px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;"><strong>OBSERVATIONS</strong></th>
         </tr>
     </thead>
     <tbody>
         {% for inscription in inscriptions %}
             <tr>
-                <td style="border:1px solid #e3e3e3;font-size:11px;" height="30px">
-                    {{ inscription.user.region.libelle }}
+                <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;" height="50px">
+                    {% if inscription.user.region is not null and inscription.user.region is not empty %}
+                        {{ inscription.user.region.libelle }}
+                    {% else %}
+                        - Région renseignée -
+                    {% endif %}
                 </td>
-                <td style="border:1px solid #e3e3e3;font-size:11px;">
+                <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
                     {% if inscription.user.etablissementRattachementSante is not null %}
                         {{ inscription.user.etablissementRattachementSante.nom }}
                     {% else %}
                         {{ inscription.user.autreStructureRattachementSante }}
                     {% endif %}
                 </td>
-                <td style="border:1px solid #e3e3e3;font-size:11px;">
+                <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
                     {{ inscription.user.prenom }}
                 </td>
-                <td style="border:1px solid #e3e3e3;font-size:11px;">
+                <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
                     {{ inscription.user.nom }}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;">

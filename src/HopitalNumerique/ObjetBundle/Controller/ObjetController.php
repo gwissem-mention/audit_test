@@ -100,9 +100,15 @@ class ObjetController extends Controller
         $objet  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id) );
         $outils = $this->get('hopitalnumerique_autodiag.manager.outil')->findBy( array( 'id' => $objet->getAutodiags() ));
 
+        //get History
+        $em   = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('Gedmo\Loggable\Entity\LogEntry');
+        $logs = $repo->getLogEntries($objet);
+
         return $this->render('HopitalNumeriqueObjetBundle:Objet:show.html.twig', array(
             'objet'  => $objet,
-            'outils' => $outils
+            'outils' => $outils,
+            'logs'   => $logs
         ));
     }
 
@@ -232,7 +238,59 @@ class ObjetController extends Controller
         return new Response(json_encode($result), 200);
     }
 
+    /**
+     * Export CSV de la liste des objets sélectionnés
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     */
+    public function exportCsvAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_objet.grid.objet')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
 
+        $objets = $this->get('hopitalnumerique_objet.manager.objet')->getDatasForExport( $primaryKeys );
+
+        $colonnes = array( 
+                            'id'                   => 'ID publication', 
+                            'titre'                => 'Titre publication',
+                            'alias'                => 'Alias publication',
+                            //'synthese'           => 'Synthèse de la publication',
+                            //'resume'             => 'Résumé de la publication',
+                            'commentaires'         => 'Commentaires autorisé ?',
+                            'notes'                => 'Notes autorisé ?',
+                            'dateCreation'         => 'Date de création de la publication',
+                            'dateDebutPublication' => 'Date de début de la publication',
+                            'dateFinPublication'   => 'Date de fin de la publication',
+                            'dateModification'     => 'Date de modification de la publication',
+                            'type'                 => 'Type de la publication',
+                            'nbVue'                => 'Nombre de visualisation de la publication',
+                            'etat'                 => 'Etat de la publication',
+                            'roles'                => 'Accès interdit aux groupes',
+                            'types'                => 'Catégories de la publication',
+                            'ambassadeurs'         => 'Ambassadeurs concernés par la publication',
+                            'fichier1'             => 'Fichier 1',
+                            'fichier2'             => 'Fichier 2',
+                            'fichierEdit'          => 'Fichier Editable',
+                            'vignette'             => 'Vignette',
+                            'idC'                  => 'ID infra-doc',
+                            'titreC'               => 'Titre infra-doc',
+                            'aliasC'               => 'Alias infra-doc',
+                            'orderC'               => 'Ordre de l\'infra-doc',
+                            //'contenuC'           => 'Contenu de l\'infra-doc',
+                            'dateCreationC'        => 'Date de création de l\'infra-doc',
+                            'dateModificationC'    => 'Date de modification de l\'infra-doc',
+                            'nbVueC'               => 'Nombre de visualisation de l\'infra-doc'
+                        );
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_objet.manager.objet')->exportCsv( $colonnes, $objets, 'export-publications.csv', $kernelCharset );
+    }
 
 
 
