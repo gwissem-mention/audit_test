@@ -17,8 +17,12 @@ class DefaultController extends Controller
         //get Flash messages visible for this user
         $messages = $this->get('hopitalnumerique_flash.manager.flash')->getMessagesForUser( $user );
 
+        //get requetes
+        $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->getRequetesForDashboard( $user );
+
         return $this->render('HopitalNumeriqueAccountBundle:Default:index.html.twig', array(
-            'messages' => $messages
+            'messages' => $messages,
+            'requetes' => $requetes
         ));
     }
 }
