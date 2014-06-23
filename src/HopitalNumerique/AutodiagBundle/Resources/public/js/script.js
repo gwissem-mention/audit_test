@@ -164,21 +164,18 @@ function deleteChapitre( id, url )
 //sauvegarde le chapitre
 function saveChapitre( url )
 {
-    res = checkAliasUnique();
-    if( $('#hopitalnumerique_autodiag_chapitre_alias').parent().parent().find('.help-block').html() == '' ){
-        $.ajax({
-            url      : url,
-            data     : $('#fancybox form').serialize(),
-            type     : 'POST',
-            dataType : 'json',
-            success  : function( data ){
-                if( data.success ){
-                    $.fancybox.close(true);
-                    window.location.reload();
-                }
+    $.ajax({
+        url      : url,
+        data     : $('#fancybox form').serialize(),
+        type     : 'POST',
+        dataType : 'json',
+        success  : function( data ){
+            if( data.success ){
+                $.fancybox.close(true);
+                window.location.reload();
             }
-        });
-    }
+        }
+    });
 }
 
 //Supprime le contenu en cours de visualisation
@@ -251,28 +248,6 @@ function saveQuestion( url )
         });
     }
     return false;
-}
-
-//vérifie que l'alias du chapitre est bien unique par rapport à l'objet
-function checkAliasUnique()
-{
-    $.ajax({
-        url  : $('#check-alias-unique-url').val(),
-        data : {
-            alias : $('#hopitalnumerique_autodiag_chapitre_alias').val()
-        },
-        type     : 'POST',
-        dataType : 'json',
-        async    : false,
-        success  : function( data ){
-            if( !data.success )
-                $('#hopitalnumerique_autodiag_chapitre_alias').parent().parent().find('.help-block').html('<span style="color:red"> L\'alias doit être unique</span>');
-            else
-                $('#hopitalnumerique_autodiag_chapitre_alias').parent().parent().find('.help-block').html('');
-
-            return true;
-        }
-    });
 }
 
 //Met à jour le nombre d'enfants sélectionés dans la popin
