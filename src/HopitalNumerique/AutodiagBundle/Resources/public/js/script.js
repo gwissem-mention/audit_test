@@ -2,7 +2,7 @@ $(document).ready(function() {
     if( $('.addChapitre').length > 0 ){
         //Ajoute un chapitre
         $('.addChapitre').click(function(){
-            apprise('Titre du chapitre', {'input':true,'textOk':'Ajouter','textCancel':'Annuler'}, function(r) {
+            apprise('Titre du chapitre', {'input' : true, 'textOk' : 'Ajouter', 'textCancel' : 'Annuler'}, function(r) {
                 if(r) { 
                     addChapitre( r );
                 }
