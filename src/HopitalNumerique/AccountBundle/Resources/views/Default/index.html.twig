@@ -1,5 +1,23 @@
 {% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-account-default-index.js"
+        '@jquery_gridster_js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-account-default-index.css" filter="cssrewrite, ?yui_css"
+        '@jquery_gridster_css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
 {% block headerTitle %}Tableau de bord{% endblock %}
 {% block headerDesc %}
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -11,53 +29,35 @@
 {% endblock %}
 
 {% block content %}
-    <ul id="sortable" class="list-unstyled">
-        <li class="ui-state-default col-md-6">
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    CONTENT
-                </div>
-            </div>
-        </li>
-        <li class="ui-state-default col-md-6">
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    CONTENT
-                </div>
-            </div>
-        </li>
-        <li class="ui-state-default col-md-6">
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    CONTENT
-                </div>
-            </div>
-        </li>
-        <li class="ui-state-default col-md-6">
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    CONTENT
-                </div>
-            </div>
-        </li>
-        <li class="ui-state-default col-md-6">
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    CONTENT
-                </div>
-            </div>
-        </li>
-    </ul>
-
-    <div class="clearfix"></div>
-
+    <div class="gridster">
+        <ul class="list-unstyled">
+            <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" data-id="1" >1</li>
+            <li data-row="1" data-col="2" data-sizex="1" data-sizey="1" data-id="2" >2</li>
+            <li data-row="2" data-col="1" data-sizex="1" data-sizey="1" data-id="3" >3</li>
+            <li data-row="2" data-col="2" data-sizex="1" data-sizey="1" data-id="4" >4</li>
+            <li data-row="3" data-col="1" data-sizex="1" data-sizey="1" data-id="5" >5</li>
+            <li data-row="3" data-col="2" data-sizex="1" data-sizey="1" data-id="6" >6</li>
+        </ul>
+    </div>
 
     <script>
         $(function() {
-            $( "#sortable" ).sortable({
-                revert: true
-            });
-            $( "ul, li" ).disableSelection();
+            var gridster = $(".gridster ul").gridster({
+                widget_margins         : [5, 5],
+                widget_base_dimensions : [410, 410],
+                max_cols               : 2,
+                min_cols               : 2,
+                serialize_params       : function($w, wgd) { return { col: wgd.col, row: wgd.row, size_y: wgd.size_y, size_x: wgd.size_x, id: $w.data('id') } },
+                draggable              : {
+                    stop : function(event, ui){ console.log( gridster.serialize() ); }
+                }
+            }).data('gridster');
         });
     </script>
+
+    <style>
+        .gridster ul li:nth-child(even){background-color: red; color: #FFF; font-size: 35px}
+        .gridster ul li:nth-child(odd){background-color: blue; color: #FFF; font-size: 35px }
+    </style>
+
 {% endblock %}
