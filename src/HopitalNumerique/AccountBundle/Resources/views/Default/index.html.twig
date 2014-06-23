@@ -11,5 +11,53 @@
 {% endblock %}
 
 {% block content %}
-    content
+    <ul id="sortable" class="list-unstyled">
+        <li class="ui-state-default col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    CONTENT
+                </div>
+            </div>
+        </li>
+        <li class="ui-state-default col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    CONTENT
+                </div>
+            </div>
+        </li>
+        <li class="ui-state-default col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    CONTENT
+                </div>
+            </div>
+        </li>
+        <li class="ui-state-default col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    CONTENT
+                </div>
+            </div>
+        </li>
+        <li class="ui-state-default col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    CONTENT
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <div class="clearfix"></div>
+
+
+    <script>
+        $(function() {
+            $( "#sortable" ).sortable({
+                revert: true
+            });
+            $( "ul, li" ).disableSelection();
+        });
+    </script>
 {% endblock %}

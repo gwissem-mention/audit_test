@@ -18,22 +18,8 @@
                 </div>
             </div>
         </div>
-
+        
         <div class="col-md-6">
-            <div class="form-group">
-                {{ form_label(form.alias) }}
-                <div class="col-md-10">
-                    {{ form_widget(form.alias) }}
-                </div>
-                <div class="col-md-10 col-md-offset-2">
-                    <div class="help-block">
-                        {{ form_errors(form.alias) }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
             <div class="form-group">
                 {{ form_label(form.noteOptimale) }}
                 <div class="col-md-3">
@@ -46,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="form-group">
                 {{ form_label(form.noteMinimale) }}
                 <div class="col-md-3">
@@ -124,8 +110,4 @@
     });
 
     $('#fancybox form.toValidate').validationEngine();
-
-    $('.checkAliasUnique').on('blur', function(){
-        checkAliasUnique();
-    });
 {% endblock %}
