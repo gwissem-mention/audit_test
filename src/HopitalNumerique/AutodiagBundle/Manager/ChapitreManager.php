@@ -110,7 +110,6 @@ class ChapitreManager extends BaseManager
         $parents        = array();
         $enfants        = array();
 
-        
         foreach($chapitres as $one){
             $chapitre = new \StdClass;
             
@@ -118,6 +117,7 @@ class ChapitreManager extends BaseManager
             $chapitre->title   = $one->getTitle();
             $chapitre->noteMin = $one->getNoteMinimale();
             $chapitre->noteOpt = $one->getNoteOptimale();
+            $chapitre->order   = $one->getOrder();
             $chapitre->childs  = array();
             $chapitre->parent  = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
@@ -141,6 +141,16 @@ class ChapitreManager extends BaseManager
             $parent = $parents[ $enfant->parent ];
             $parent->childs[] = $enfant;
         }
+
+        //make a $sort array for multi-sort function
+        $sort = array();
+        foreach($parents as $k=>$v) {
+            $sort['order'][$k] = $v->order;
+            $sort['title'][$k] = $v->title;
+            $sort['id'][$k]    = $v->id;
+        }
+        //sort by order asc, title asc, id desc
+        array_multisort($sort['order'], SORT_ASC, $sort['title'], SORT_ASC,$sort['id'], SORT_DESC, $parents);
 
         return $parents;
     }
