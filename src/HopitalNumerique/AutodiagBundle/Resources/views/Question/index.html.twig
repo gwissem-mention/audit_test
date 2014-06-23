@@ -10,13 +10,10 @@
             <li class="dd-item dd3-item" data-id="{{question.id}}" id="question-{{question.id}}" >
                 <div class="dd-handle dd3-handle"></div>
                 <div class="dd3-content">
-                    <a href="{{path('hopitalnumerique_autodiag_question_edit',{'id':question.id})}}" class="fancy fancybox.ajax" title="{{question.texte}}">{{question.order ~ '. ' ~ question.texte|truncate(80, true, '...')}}</a>
+                    <a href="{{path('hopitalnumerique_autodiag_question_edit',{'id':question.id})}}" class="fancy fancybox.ajax" title="{{question.texte}}">{{question.texte|truncate(115, true, '...')}}</a>
                     <p class="text-muted pull-right">
-                        Catégorie : {{question.categorie.title}}&nbsp;&nbsp;|&nbsp;&nbsp;
-                        {% if question.ponderation %}Pondération : {{question.ponderation}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
-                        {% if question.ordreResultat %}Ordre pour les résultats : {{question.ordreResultat}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
-                        {% if question.seuil %}Seuil de déclenchement : {{question.seuil}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
-                        <span>{{question.references|length}}</span> éléments référencés
+                        {% if question.ponderation %}Pond. : {{question.ponderation}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
+                        <span>{{question.references|length}}</span> référence(s)
                     </p>
                 </div>
                 <div class="dd3-actions">
