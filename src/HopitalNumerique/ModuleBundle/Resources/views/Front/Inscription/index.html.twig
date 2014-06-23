@@ -54,7 +54,7 @@
                                 <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':inscription.session.id})}}">{{inscription.etatEvaluation.libelle}}</i></a>
                             {% elseif inscription.etatEvaluation.id == 29 %}
                                 <div class="btn-group"> 
-                                    <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_evaluation_form_front',{'id':inscription.session.id})}}"><i class="fa fa-check"></i></a>
+                                    <a class="btn btn-success btn-sm" href="{{path('hopitalnumerique_module_evaluation_view_front',{'id':inscription.session.id})}}"><i class="fa fa-check"></i></a>
 				    <a class="btn btn-success btn-sm" title="Attestation de présence" href="{{path('hopitalnumerique_module_inscription_attestation_front',{'id':inscription.id})}}"><i class="fa fa-external-link"></i></a>
                                 </div>
                             {% else %}
