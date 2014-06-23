@@ -2,7 +2,7 @@ hopital_numerique_intervention_admin_liste:
     pattern:  /demandes/liste
     defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Demande:liste" }
     requirements:
-        _method: GET
+        _method: GET|POST
 
 hopital_numerique_intervention_admin_demande_nouveau:
     pattern:  /demande/nouveau
