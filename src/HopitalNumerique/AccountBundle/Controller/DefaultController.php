@@ -20,9 +20,13 @@ class DefaultController extends Controller
         //get requetes
         $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->getRequetesForDashboard( $user );
 
+        //get Sessions
+        $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForDashboard( $user );
+
         return $this->render('HopitalNumeriqueAccountBundle:Default:index.html.twig', array(
             'messages' => $messages,
-            'requetes' => $requetes
+            'requetes' => $requetes,
+            'sessions' => $sessions
         ));
     }
 }
