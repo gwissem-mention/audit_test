@@ -17,6 +17,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Validator\Constraints\True;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 /**
  *
  * @category CCDNForum
@@ -28,7 +34,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  * @link     https://github.com/codeconsortium/CCDNForumForumBundle
  *
  */
-class ForumUpdateFormType extends AbstractType
+class ForumDeleteFormType extends AbstractType
 {
     /**
      *
@@ -39,21 +45,12 @@ class ForumUpdateFormType extends AbstractType
 
     /**
      *
-     * @access protected
-     * @var Object $roleHelper
-     */
-    protected $roleHelper;
-
-    /**
-     *
      * @access public
      * @param string $forumClass
-     * @param Object $roleHelper
      */
-    public function __construct($forumClass, $roleHelper)
+    public function __construct($forumClass)
     {
         $this->forumClass = $forumClass;
-        $this->roleHelper = $roleHelper;
     }
 
     /**
@@ -64,26 +61,48 @@ class ForumUpdateFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $trueValidator = function (FormEvent $event) {
+            $form = $event->getForm();
+
+            $confirm = $form->get('confirm_delete')->getData();
+
+            if (empty($confirm) || $confirm == false) {
+                $form['confirm_delete']->addError(new FormError("You must confirm this action."));
+            }
+        };
+
         $builder
-            ->add('name', 'text',
+            ->add('confirm_delete', 'checkbox',
                 array(
-                    'label'              => 'forum.name-label',
+                    'mapped'             => false,
+                    'required'           => true,
+                    'label'              => 'forum.confirm-delete-label',
                     'translation_domain' => 'CCDNForumForumBundle',
                     'attr'               => array(
-                        'class' => 'validate[required,minSize[3],maxSize[255]]'
-                    )
+                        'class' => 'validate[required]'
+                    ),
+                    'constraints'        => array(
+                        new True(),
+                        new NotBlank()
+                    ),
                 )
             )
-            ->add('readAuthorisedRoles', 'choice',
+            ->add('confirm_subordinates', 'checkbox',
                 array(
-                    'required'           => false,
-                    'expanded'           => true,
-                    'multiple'           => true,
-                    'choices'            => $options['available_roles'],
-                    'label'              => 'forum.roles.board-view-label',
+                    'mapped'             => false,
+                    'required'           => true,
+                    'label'              => 'forum.confirm-delete-subordinates-label',
                     'translation_domain' => 'CCDNForumForumBundle',
+                    'attr'               => array(
+                        'class' => 'validate[required]'
+                    ),
+                    'constraints'        => array(
+                        new True(),
+                        new NotBlank()
+                    ),
                 )
             )
+            ->addEventListener(FormEvents::POST_BIND, $trueValidator)
         ;
     }
 
@@ -99,10 +118,9 @@ class ForumUpdateFormType extends AbstractType
             'csrf_protection'     => true,
             'csrf_field_name'     => '_token',
             // a unique key to help generate the secret token
-            'intention'           => 'forum_forum_update_item',
-            'validation_groups'   => array('forum_forum_update'),
+            'intention'           => 'forum_forum_delete_item',
+            'validation_groups'   => array('forum_forum_delete'),
             'cascade_validation'  => true,
-            'available_roles'     => $this->roleHelper->getRoleForFormulaire(),
         ));
     }
 
@@ -113,6 +131,6 @@ class ForumUpdateFormType extends AbstractType
      */
     public function getName()
     {
-        return 'Forum_ForumUpdate';
+        return 'Forum_ForumDelete';
     }
 }

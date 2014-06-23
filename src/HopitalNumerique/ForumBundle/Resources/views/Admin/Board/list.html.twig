@@ -22,7 +22,7 @@
 {%- block body_content -%}
     {%- spaceless -%}
         <section class="btn-toolbar clearfix toolbar-backoffice">
-            <a class="btn btn-primary pull-right col-md-4" href="{{- path('ccdn_forum_admin_board_create', {'forum_filter': forum_filter, 'category_filter': category_filter}) -}}">
+            <a class="btn btn-success pull-right col-md-4" href="{{- path('ccdn_forum_admin_board_create', {'forum_filter': forum_filter, 'category_filter': category_filter}) -}}">
                 {{- 'link.board.create' |trans({}, ForumBundle.translation ) -}}
             </a>
         </section>
@@ -37,7 +37,7 @@
                         <div class="list-group">
                             <a href="{{- path('ccdn_forum_admin_board_list') -}}"
                              class="list-group-item ellipsis {%- if forum_filter is null or forum_filter == '' %} active {%- endif -%}">
-                                <i class="glyphicon glyphicon-exclamation-sign"></i>
+                                <i style="margin:0 5px 0 0" class="glyphicon glyphicon-exclamation-sign"></i>
                                 {{- 'link.unassigned' |trans({}, ForumBundle.translation ) -}}
                             </a>
                             {%- for forum in forums -%}
@@ -60,7 +60,7 @@
                         <div class="list-group">
                             <a href="{{- path('ccdn_forum_admin_board_list', {'forum_filter': forum_filter}) -}}"
                              class="list-group-item ellipsis {%- if category_filter is null or category_filter == '' %} active {%- endif -%}">
-                                <i class="glyphicon glyphicon-exclamation-sign"></i>
+                                <i style="margin:0 5px 0 0" class="glyphicon glyphicon-exclamation-sign"></i>
                                 {{- 'link.unassigned' |trans({}, ForumBundle.translation ) -}}
                             </a>
                             {%- for category in categories -%}
@@ -100,41 +100,43 @@
                                     <td>{{- board.name -}}</td>
                                     <td>{{- board.topics |length -}}</td>
                                     <td>
-                                        <a class="btn btn-info" href="{{- path('ccdn_forum_admin_board_edit', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}"
-                                         id="update_board[{{- board.name -}}]">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-
-                                        {%- if is_granted('ROLE_SUPER_ADMIN') -%}
-                                            <a class="btn btn-danger" href="{{- path('ccdn_forum_admin_board_delete', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}"
-                                             id="delete_board[{{- board.name -}}]">
-                                                <i class="fa fa-trash-o"></i>
+                                        <div class="btn-group">
+                                            <a class="btn btn-info" href="{{- path('ccdn_forum_admin_board_edit', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}"
+                                             id="update_board[{{- board.name -}}]">
+                                                <i class="fa fa-edit"></i>
                                             </a>
-                                        {%- endif -%}
 
-                                        {%- if category_filter is not null and category_filter != '' %}
-                                            {% if loop.length > 1 %}
-                                                <div class="btn-group">
-                                                    {%- if loop.first -%}
-                                                        <a class="btn btn-warning" href="{{- path('ccdn_forum_admin_board_reorder_up', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_up_board[{{- board.name -}}]">
-                                                            <i class="glyphicon glyphicon-retweet"></i>
-                                                    {%- else -%}
-                                                        <a class="btn btn-success" href="{{- path('ccdn_forum_admin_board_reorder_up', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_up_board[{{- board.name -}}]">
-                                                            <i class="glyphicon glyphicon-chevron-up"></i>
-                                                    {%- endif -%}
-                                                    </a>
-
-                                                    {%- if loop.last -%}
-                                                        <a class="btn btn-warning" href="{{- path('ccdn_forum_admin_board_reorder_down', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_down_board[{{- board.name -}}]">
-                                                            <i class="glyphicon glyphicon-retweet"></i>
-                                                    {%- else -%}
-                                                        <a class="btn btn-success" href="{{- path('ccdn_forum_admin_board_reorder_down', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_down_board[{{- board.name -}}]">
-                                                            <i class="glyphicon glyphicon-chevron-down"></i>
-                                                    {%- endif -%}
-                                                    </a>
-                                                </div>
+                                            {%- if is_granted('ROLE_SUPER_ADMIN') -%}
+                                                <a class="btn btn-danger" href="{{- path('ccdn_forum_admin_board_delete', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}"
+                                                 id="delete_board[{{- board.name -}}]">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
                                             {%- endif -%}
-                                        {%- endif -%}
+
+                                            {%- if category_filter is not null and category_filter != '' %}
+                                                {% if loop.length > 1 %}
+                                                    <div class="btn-group">
+                                                        {%- if loop.first -%}
+                                                            <a class="btn btn-warning" href="{{- path('ccdn_forum_admin_board_reorder_up', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_up_board[{{- board.name -}}]">
+                                                                <i class="glyphicon glyphicon-retweet"></i>
+                                                        {%- else -%}
+                                                            <a class="btn btn-success" href="{{- path('ccdn_forum_admin_board_reorder_up', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_up_board[{{- board.name -}}]">
+                                                                <i class="glyphicon glyphicon-chevron-up"></i>
+                                                        {%- endif -%}
+                                                        </a>
+
+                                                        {%- if loop.last -%}
+                                                            <a class="btn btn-warning" href="{{- path('ccdn_forum_admin_board_reorder_down', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_down_board[{{- board.name -}}]">
+                                                                <i class="glyphicon glyphicon-retweet"></i>
+                                                        {%- else -%}
+                                                            <a class="btn btn-success" href="{{- path('ccdn_forum_admin_board_reorder_down', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_down_board[{{- board.name -}}]">
+                                                                <i class="glyphicon glyphicon-chevron-down"></i>
+                                                        {%- endif -%}
+                                                        </a>
+                                                    </div>
+                                                {%- endif -%}
+                                            {%- endif -%}
+                                        </div>
                                     </td>
                                 </tr>
                             {%- endfor -%}

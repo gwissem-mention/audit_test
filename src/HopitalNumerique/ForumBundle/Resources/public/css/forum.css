@@ -1,4 +1,5 @@
 #content h3{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; background: #f6f6f6}
+#content .lienAdmin {font-size: 13px;cursor: pointer;}
 
 /* ---  Menu  --- */
 
@@ -9,7 +10,6 @@
 #sidebar .menu-main li.last{border-bottom:1px solid #f0f0f0; }
 
 /* ---  En-tête FO  --- */
-
 #informations-topic span.label{background-color: #CECECE;margin:0 5px 0 0; height: 22px; text-align: center; padding: 5px 5px 0; }
 #informations-topic .manageReferences, #informations-topic .text-muted {margin:0 0 15px 5px;}
 #information-board span.label{background-color: #CECECE;margin:0 0 0 5px;}
@@ -26,6 +26,14 @@ h4 {font-size: 15px;}
 
 #content .toolbar-backoffice {margin: 0 30px 15px 0;}
 #content .toolbar-backoffice-forum {margin: 0 15px 15px 0;}
+
+#choix-forum .label{color:#BFD302;}
+#choix-forum .list-group-item.active, #choix-forum .list-group-item.active:hover,#choix-forum .list-group-item.active:focus {
+    background-image: linear-gradient(to bottom, #7635AB 0px, #8746BC 100%);
+    background-repeat: repeat-x;
+    border-color: #7635AB;
+    text-shadow: 0 -1px 0 #7635AB;
+}
 
 /* - Création */
 #titre-creation h4{ font-size: 18px; text-align: center;font-weight:bold;}

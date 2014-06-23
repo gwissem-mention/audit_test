@@ -95,6 +95,9 @@ class CategoryCreateFormType extends AbstractType
                 array(
                     'label'              => 'category.name-label',
                     'translation_domain' => 'CCDNForumForumBundle',
+                    'attr'               => array(
+                        'class' => 'validate[required,minSize[3],maxSize[255]]'
+                    )
                 )
             )
             ->add('readAuthorisedRoles', 'choice',

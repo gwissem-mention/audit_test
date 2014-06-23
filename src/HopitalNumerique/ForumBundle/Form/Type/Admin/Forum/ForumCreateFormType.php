@@ -69,6 +69,9 @@ class ForumCreateFormType extends AbstractType
                 array(
                     'label'              => 'forum.name-label',
                     'translation_domain' => 'CCDNForumForumBundle',
+                    'attr'               => array(
+                        'class' => 'validate[required,minSize[3],maxSize[255]]'
+                    )
                 )
             )
             ->add('readAuthorisedRoles', 'choice',

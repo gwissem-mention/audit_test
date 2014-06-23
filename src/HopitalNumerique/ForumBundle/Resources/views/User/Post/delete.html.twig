@@ -19,7 +19,7 @@
     <section class="clearfix">
         {%- form_theme form ccdn_forum_forum.post.user.delete.form_theme -%}
         <form action="{{- path('ccdn_forum_user_post_delete_process', {'forumName': forumName, 'postId': post.id } ) -}}"
-         method="post" {{ form_enctype(form) }} class="form-horizontal" novalidate>
+         method="post" {{ form_enctype(form) }} class="form-horizontal toValidate" novalidate>
             <fieldset>
 
                 <div class="form-group">
@@ -36,7 +36,7 @@
 
                 <div class="form-group">
                     <div class="col-lg-offset-2 col-lg-10">
-                        <input type="submit" class="btn btn-primary" value="
+                        <input type="submit" class="btn btn-success" value="
                             {{- 'form.button.post.delete' | trans({}, ForumBundle.translation ) -}}
                         " name="submit[post]" id="submit[post]">
 

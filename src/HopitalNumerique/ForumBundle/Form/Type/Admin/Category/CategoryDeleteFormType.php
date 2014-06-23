@@ -16,7 +16,11 @@ namespace HopitalNumerique\ForumBundle\Form\Type\Admin\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Validator\Constraints\True;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  *
@@ -29,7 +33,7 @@ use Doctrine\ORM\EntityRepository;
  * @link     https://github.com/codeconsortium/CCDNForumForumBundle
  *
  */
-class CategoryUpdateFormType extends AbstractType
+class CategoryDeleteFormType extends AbstractType
 {
     /**
      *
@@ -40,30 +44,12 @@ class CategoryUpdateFormType extends AbstractType
 
     /**
      *
-     * @access protected
-     * @var string $forumClass
-     */
-    protected $forumClass;
-
-    /**
-     *
-     * @access protected
-     * @var Object $roleHelper
-     */
-    protected $roleHelper;
-
-    /**
-     *
      * @access public
      * @param string $categoryClass
-     * @param string $forumClass
-     * @param Object $roleHelper
      */
-    public function __construct($categoryClass, $forumClass, $roleHelper)
+    public function __construct($categoryClass)
     {
         $this->categoryClass = $categoryClass;
-        $this->forumClass = $forumClass;
-        $this->roleHelper = $roleHelper;
     }
 
     /**
@@ -74,41 +60,48 @@ class CategoryUpdateFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $trueValidator = function (FormEvent $event) {
+            $form = $event->getForm();
+
+            $confirm = $form->get('confirm_delete')->getData();
+
+            if (empty($confirm) || $confirm == false) {
+                $form['confirm_delete']->addError(new FormError("You must confirm this action."));
+            }
+        };
+
         $builder
-            ->add('forum', 'entity',
+            ->add('confirm_delete', 'checkbox',
                 array(
-                    'property'           => 'name',
-                    'class'              => $this->forumClass,
-                    'query_builder'      =>
-                        function (EntityRepository $er) {
-                            return $er
-                                ->createQueryBuilder('f')
-                            ;
-                        },
-                    'required'           => false,
-                    'label'              => 'forum.label',
-                    'translation_domain' => 'CCDNForumForumBundle',
-                )
-            )
-            ->add('name', 'text',
-                array(
-                    'label'              => 'category.name-label',
+                    'mapped'             => false,
+                    'required'           => true,
+                    'label'              => 'category.confirm-delete-label',
                     'translation_domain' => 'CCDNForumForumBundle',
                     'attr'               => array(
-                        'class' => 'validate[required,minSize[3],maxSize[255]]'
-                    )
+                        'class' => 'validate[required]'
+                    ),
+                    'constraints'        => array(
+                        new True(),
+                        new NotBlank()
+                    ),
                 )
             )
-            ->add('readAuthorisedRoles', 'choice',
+            ->add('confirm_subordinates', 'checkbox',
                 array(
-                    'required'           => false,
-                    'expanded'           => true,
-                    'multiple'           => true,
-                    'choices'            => $options['available_roles'],
-                    'label'              => 'category.roles.board-view-label',
+                    'mapped'             => false,
+                    'required'           => true,
+                    'label'              => 'category.confirm-delete-subordinates-label',
                     'translation_domain' => 'CCDNForumForumBundle',
+                    'attr'               => array(
+                        'class' => 'validate[required]'
+                    ),
+                    'constraints'        => array(
+                        new True(),
+                        new NotBlank()
+                    ),
                 )
             )
+            ->addEventListener(FormEvents::POST_BIND, $trueValidator)
         ;
     }
 
@@ -124,10 +117,9 @@ class CategoryUpdateFormType extends AbstractType
             'csrf_protection'     => true,
             'csrf_field_name'     => '_token',
             // a unique key to help generate the secret token
-            'intention'           => 'forum_category_update_item',
-            'validation_groups'   => array('forum_category_update'),
+            'intention'           => 'forum_category_delete_item',
+            'validation_groups'   => array('forum_category_delete'),
             'cascade_validation'  => true,
-            'available_roles'     => $this->roleHelper->getRoleForFormulaire(),
         ));
     }
 
@@ -138,6 +130,6 @@ class CategoryUpdateFormType extends AbstractType
      */
     public function getName()
     {
-        return 'Forum_CategoryUpdate';
+        return 'Forum_CategoryDelete';
     }
 }
