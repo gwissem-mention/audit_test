@@ -58,7 +58,7 @@ abstract class InterventionDemandeType extends AbstractType
      * @param \Nodevo\InterventionBundle\Manager\Form\EtablissementManager $formEtablissementManager Manager Form\Etablissement
      * @return void
      */
-    public function __construct(SecurityContext $securityContext, LegacyValidator $validator, InterventionDemandeManager $interventionDemandeManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
+    public function __construct(SecurityContext $securityContext, $validator, InterventionDemandeManager $interventionDemandeManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
     {
         $this->_constraints                   = $interventionDemandeManager->getConstraints($validator);
         $this->formInterventionDemandeManager = $formInterventionDemandeManager;

@@ -44,7 +44,7 @@ class AdminType extends InterventionDemandeType
      * @param \HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager $formEtablissementManager Manager Form\Etablissement
      * @return void
      */
-    public function __construct(SecurityContext $securityContext, LegacyValidator $validator, InterventionDemandeManager $interventionDemandeManager, ObjetManager $objetManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormInterventionInitiateurManager $formInterventionInitiateurManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
+    public function __construct(SecurityContext $securityContext, $validator, InterventionDemandeManager $interventionDemandeManager, ObjetManager $objetManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormInterventionInitiateurManager $formInterventionInitiateurManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
     {
         parent::__construct($securityContext, $validator, $interventionDemandeManager, $formInterventionDemandeManager, $formUserManager, $formEtablissementManager);
         $this->objetManager = $objetManager;

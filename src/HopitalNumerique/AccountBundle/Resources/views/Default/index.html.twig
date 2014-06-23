@@ -13,6 +13,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-account-default-index.css" filter="cssrewrite, ?yui_css"
         '@jquery_gridster_css'
+        'bundles/hopitalnumeriqueaccount/css/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -31,9 +32,30 @@
 {% block content %}
     <div class="gridster">
         <ul class="list-unstyled">
-            <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" data-id="1" >1</li>
-            <li data-row="1" data-col="2" data-sizex="1" data-sizey="1" data-id="2" >2</li>
-            <li data-row="2" data-col="1" data-sizex="1" data-sizey="1" data-id="3" >3</li>
+            <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" data-id="messages" >
+                <div class="scroll">
+                    {% for message in messages %}
+                        <p class="titre">{{message.title}}</p>
+                        <p>{{message.content|nl2br}}</p>
+                    {% else %}
+                        - Aucun message -
+                    {% endfor %}
+                </div>
+            </li>
+            <li data-row="1" data-col="2" data-sizex="1" data-sizey="1" data-id="requetes" >
+                <div class="scroll">
+                    {% for requete in requetes %}
+                        <a href="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">{{requete.nom|capitalize}}</a><br />
+                    {% else %}
+                        - Aucune requête -
+                    {% endfor %}
+                </div>
+            </li>
+            <li data-row="2" data-col="1" data-sizex="1" data-sizey="1" data-id="modules" >
+                <div class="scroll">
+                    
+                </div>
+            </li>
             <li data-row="2" data-col="2" data-sizex="1" data-sizey="1" data-id="4" >4</li>
             <li data-row="3" data-col="1" data-sizex="1" data-sizey="1" data-id="5" >5</li>
             <li data-row="3" data-col="2" data-sizex="1" data-sizey="1" data-id="6" >6</li>
@@ -44,10 +66,10 @@
         $(function() {
             var gridster = $(".gridster ul").gridster({
                 widget_margins         : [5, 5],
-                widget_base_dimensions : [410, 410],
+                widget_base_dimensions : [410, 200],
                 max_cols               : 2,
                 min_cols               : 2,
-                serialize_params       : function($w, wgd) { return { col: wgd.col, row: wgd.row, size_y: wgd.size_y, size_x: wgd.size_x, id: $w.data('id') } },
+                serialize_params       : function($w, wgd) { return { col: wgd.col, row: wgd.row, id: $w.data('id') } },
                 draggable              : {
                     stop : function(event, ui){ console.log( gridster.serialize() ); }
                 }
@@ -58,6 +80,7 @@
     <style>
         .gridster ul li:nth-child(even){background-color: red; color: #FFF; font-size: 35px}
         .gridster ul li:nth-child(odd){background-color: blue; color: #FFF; font-size: 35px }
+        .gridster ul li .scroll{overflow: hidden; overflow-y:auto; height: 200px}
     </style>
 
 {% endblock %}

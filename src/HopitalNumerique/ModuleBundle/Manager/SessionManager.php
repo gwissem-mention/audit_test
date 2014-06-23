@@ -124,4 +124,16 @@ class SessionManager extends BaseManager
     {
         return $this->getRepository()->getSessionsForFormateur( $user )->getQuery()->getResult();
     }
+
+    /**
+     * Retourne la liste des sessions à évaluer pour le dashboard user
+     *
+     * @param User $user L'utilisateur concerné
+     * 
+     * @return array
+     */
+    public function getSessionsForDashboard( $user )
+    {
+        return $this->getRepository()->getSessionsForDashboard( $user )->getQuery()->getResult();
+    }
 }
