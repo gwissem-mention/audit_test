@@ -43,7 +43,7 @@ class ChapitreController extends Controller
     /**
      * Ajoute un chapitre
      */
-    public function addAction(Outil $outil)
+    public function addAction(Outil $outil, $titre)
     {
         //créer un chapitre
         $chapitre = $this->get('hopitalnumerique_autodiag.manager.chapitre')->createEmpty();
@@ -54,8 +54,10 @@ class ChapitreController extends Controller
         $chapitre->setOrder( $order );
 
         //init datas
-        $chapitre->setTitle('Chapitre '.$order);
-        $chapitre->setAlias('chapitre-'.$order);
+        $titre = 'Chapitre '.$order;
+        $chapitre->setTitre( $titre );
+        $tool = new Chaine( $titre );
+        $chapitre->setAlias( $tool->minifie() );
 
         //save
         $this->get('hopitalnumerique_autodiag.manager.chapitre')->save( $chapitre );
