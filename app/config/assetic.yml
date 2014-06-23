@@ -27,6 +27,7 @@ assetic:
         - HopitalNumeriqueFaqBundle
         - HopitalNumeriquePaiementBundle
         - HopitalNumeriqueAutodiagBundle
+        - HopitalNumeriqueForumBundle
         - FOSUserBundle
     filters:
         cssrewrite: ~
@@ -93,6 +94,10 @@ assetic:
                 - "%kernel.root_dir%/Resources/components/highcharts.com/js/highcharts.src.js"
                 - "%kernel.root_dir%/Resources/components/highcharts.com/js/highcharts-more.src.js"
             filters : [ ?yui_js ]
+        jquery_gridster_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/gridster/dist/jquery.gridster.min.js"
+            filters : [ ?yui_js ]
         jquery_cookie_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-cookie/jquery.cookie.js"
@@ -138,6 +143,10 @@ assetic:
         validationEngine_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jQuery-Validation-Engine/css/validationEngine.jquery.css"
+            filters: [ cssembed, ?yui_css ]
+        jquery_gridster_css:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/gridster/dist/jquery.gridster.min.css"
             filters: [ cssembed, ?yui_css ]
         jquery_toggles_css:
             inputs:

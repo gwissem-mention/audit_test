@@ -1273,6 +1273,19 @@ class User extends BaseUser
         return $this->roles[0];
     }
 
+    public function getRoles()
+    {
+        $roles = parent::getRoles();
+
+        if(in_array('ROLE_ADMINISTRATEUR_1', $roles))
+        {
+            $roles[] = 'ROLE_ADMIN';
+            $roles[] = 'ROLE_SUPER_ADMIN';
+        }
+
+        return $roles;
+    }
+
     /**
      * Get raisonDesinscription
      *
