@@ -52,7 +52,7 @@ class ObjetType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'label'    => 'Interdire l\'accès au groupes',
-                'attr'     => array( 'placeholder' => 'Selectionnez le ou les rôles qui auront accès à cette publication' )
+                'attr'     => array( 'placeholder' => 'Selectionnez le ou les rôles qui n\'auront pas accès à cette publication' )
             ))
             ->add('types', 'genemu_jqueryselect2_entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',

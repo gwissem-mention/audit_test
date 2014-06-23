@@ -47,7 +47,7 @@
                 widget_base_dimensions : [410, 410],
                 max_cols               : 2,
                 min_cols               : 2,
-                serialize_params       : function($w, wgd) { return { col: wgd.col, row: wgd.row, size_y: wgd.size_y, size_x: wgd.size_x, id: $w.data('id') } },
+                serialize_params       : function($w, wgd) { return { col: wgd.col, row: wgd.row, id: $w.data('id') } },
                 draggable              : {
                     stop : function(event, ui){ console.log( gridster.serialize() ); }
                 }

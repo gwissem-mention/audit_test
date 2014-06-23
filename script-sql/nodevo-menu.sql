@@ -8,3 +8,8 @@
 /* 10:53:07 Gaia */ UPDATE `core_menu_item` SET `itm_order` = '6' WHERE `itm_id` = '72';
 /* 10:53:10 Gaia */ UPDATE `core_menu_item` SET `itm_order` = '7' WHERE `itm_id` = '73';
 /* 10:53:14 Gaia */ UPDATE `core_menu_item` SET `itm_order` = '8' WHERE `itm_id` = '141';
+
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (164, 54, 1, 'Messages flash', 'hopitalnumerique_flash_flash', '[]', NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 4);
+/* 15:23:48 Gaia */ UPDATE `core_menu_item` SET `itm_order` = '3' WHERE `itm_id` = '121';

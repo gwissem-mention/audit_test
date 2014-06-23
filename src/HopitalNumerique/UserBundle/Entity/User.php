@@ -412,7 +412,7 @@ class User extends BaseUser
     protected $fonctionStructure;
     
     // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet", mappedBy="ambassadeurs")
      */
@@ -491,6 +491,20 @@ class User extends BaseUser
      */
     protected $dateLastUpdate;
     
+    // ------- Dashboards
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="usr_dashboard_front", type="text", options = {"comment" = "Dashboard de l utilisateur"}, nullable=true)
+     */
+    protected $dashboardFront;
+
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="usr_dashboard_back", type="text", options = {"comment" = "Dashboard admin de l utilisateur"}, nullable=true)
+     */
+    protected $dashboardBack;
     
     // ------- Interventions -------
     /**
@@ -517,14 +531,15 @@ class User extends BaseUser
     {
         parent::__construct();
         
-        $this->objets               = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->username             = '';
-        $this->enabled              = 1;
-        $this->civilite             = array();
-        $this->lock                 = false;
-        $this->archiver             = false;
-        $this->domaines             = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->nbVisites            = 0;    }
+        $this->objets    = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->username  = '';
+        $this->enabled   = 1;
+        $this->civilite  = array();
+        $this->lock      = false;
+        $this->archiver  = false;
+        $this->domaines  = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->nbVisites = 0;
+    }
 
     public function __toString()
     {
@@ -1324,6 +1339,48 @@ class User extends BaseUser
     public function setDateLastUpdate($dateLastUpdate)
     {
         $this->dateLastUpdate = $dateLastUpdate;
+        return $this;
+    }
+
+    /**
+     * Get dashboardFront
+     *
+     * @return string $dashboardFront
+     */
+    public function getDashboardFront()
+    {
+        return $this->dashboardFront;
+    }
+    
+    /**
+     * Set dashboardFront
+     *
+     * @param string $dashboardFront
+     */
+    public function setDashboardFront($dashboardFront)
+    {
+        $this->dashboardFront = $dashboardFront;
+        return $this;
+    }
+    
+    /**
+     * Get dashboardBack
+     *
+     * @return string $dashboardBack
+     */
+    public function getDashboardBack()
+    {
+        return $this->dashboardBack;
+    }
+    
+    /**
+     * Set dashboardBack
+     *
+     * @param string $dashboardBack
+     */
+    public function setDashboardBack($dashboardBack)
+    {
+        $this->dashboardBack = $dashboardBack;
         return $this;
     }
 
