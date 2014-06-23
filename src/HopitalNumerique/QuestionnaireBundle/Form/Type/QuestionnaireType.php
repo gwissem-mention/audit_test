@@ -211,13 +211,13 @@ class QuestionnaireType extends AbstractType
                             'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                             'property'    => 'libelle',
                             'required'    => $question->getObligatoire(),
+                            'empty_value' => $question->getObligatoire() ? false : 'Ne se prononce pas',
                             'label'       => $question->getLibelle(),
                             'mapped'      => false,
                             'read_only'   => $this->_readOnly,
                             'disabled'    => $this->_readOnly,
                             'expanded'    => true,
                             'multiple'    => false,
-                            'empty_value' => 'Ne se prononce pas',
                             'attr'        => $attr,
                             'query_builder' => function(EntityRepository $er) use ($question){
                                 return $er->createQueryBuilder('ref')
