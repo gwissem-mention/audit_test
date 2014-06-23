@@ -71,8 +71,8 @@ hopitalnumerique_autodiag_liste:
         id : \d+
 
 hopitalnumerique_autodiag_chapitre_add:
-    pattern:  /admin/outil/{id}/chapitre/add
-    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:add" }
+    pattern:  /admin/outil/{id}/chapitre/add/{titre}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:add", titre: null }
     requirements: 
         id : \d+
 
