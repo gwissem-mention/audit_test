@@ -29,54 +29,56 @@
 
         <section class="col-md-12 row clearfix">
             <div class="row">
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            {{- 'filter.forums' |trans({}, ForumBundle.translation ) -}}
-                        </div>
-                        <div class="list-group">
-                            <a href="{{- path('ccdn_forum_admin_board_list') -}}"
-                             class="list-group-item ellipsis {%- if forum_filter is null or forum_filter == '' %} active {%- endif -%}">
-                                <i style="margin:0 5px 0 0" class="glyphicon glyphicon-exclamation-sign"></i>
-                                {{- 'link.unassigned' |trans({}, ForumBundle.translation ) -}}
-                            </a>
-                            {%- for forum in forums -%}
-                                <a href="{{- path('ccdn_forum_admin_board_list', {'forum_filter': forum.id}) -}}" title="{{- forum.name -}}"
-                                 class="list-group-item ellipsis {%- if forum_filter == forum.id %} active {%- endif -%}">
-                                    <span class="label pull-right">
-                                        {{- forum.getCategories | length -}}
-                                    </span>
-                                    {{- forum.name -}}
+                <div id="choix-forum">  
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                {{- 'filter.forums' |trans({}, ForumBundle.translation ) -}}
+                            </div>
+                            <div class="list-group">
+                                <a href="{{- path('ccdn_forum_admin_board_list') -}}"
+                                 class="list-group-item ellipsis {%- if forum_filter is null or forum_filter == '' %} active {%- endif -%}">
+                                    <i style="margin:0 5px 0 0" class="glyphicon glyphicon-exclamation-sign"></i>
+                                    {{- 'link.unassigned' |trans({}, ForumBundle.translation ) -}}
                                 </a>
-                            {%- endfor -%}
+                                {%- for forum in forums -%}
+                                    <a href="{{- path('ccdn_forum_admin_board_list', {'forum_filter': forum.id}) -}}" title="{{- forum.name -}}"
+                                     class="list-group-item ellipsis {%- if forum_filter == forum.id %} active {%- endif -%}">
+                                        <span class="label pull-right">
+                                            {{- forum.getCategories | length -}}
+                                        </span>
+                                        {{- forum.name -}}
+                                    </a>
+                                {%- endfor -%}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            {{- 'filter.categories' |trans({}, ForumBundle.translation ) -}}
-                        </div>
-                        <div class="list-group">
-                            <a href="{{- path('ccdn_forum_admin_board_list', {'forum_filter': forum_filter}) -}}"
-                             class="list-group-item ellipsis {%- if category_filter is null or category_filter == '' %} active {%- endif -%}">
-                                <i style="margin:0 5px 0 0" class="glyphicon glyphicon-exclamation-sign"></i>
-                                {{- 'link.unassigned' |trans({}, ForumBundle.translation ) -}}
-                            </a>
-                            {%- for category in categories -%}
-                                <a href="
-                                    {%- if category.forum -%}
-                                        {{- path('ccdn_forum_admin_board_list', {'forum_filter': category.forum.id, 'category_filter': category.id}) -}}
-                                    {%- else -%}
-                                        {{- path('ccdn_forum_admin_board_list', {'category_filter': category.id}) -}}
-                                    {%- endif -%}
-                                 " title="{{- category.name -}}" class="list-group-item ellipsis {%- if category_filter == category.id %} active {%- endif -%}">
-                                    <span class="label pull-right">
-                                        {{- category.getBoards | length -}}
-                                    </span>
-                                    {{- category.name -}}
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                {{- 'filter.categories' |trans({}, ForumBundle.translation ) -}}
+                            </div>
+                            <div class="list-group">
+                                <a href="{{- path('ccdn_forum_admin_board_list', {'forum_filter': forum_filter}) -}}"
+                                 class="list-group-item ellipsis {%- if category_filter is null or category_filter == '' %} active {%- endif -%}">
+                                    <i style="margin:0 5px 0 0" class="glyphicon glyphicon-exclamation-sign"></i>
+                                    {{- 'link.unassigned' |trans({}, ForumBundle.translation ) -}}
                                 </a>
-                            {%- endfor -%}
+                                {%- for category in categories -%}
+                                    <a href="
+                                        {%- if category.forum -%}
+                                            {{- path('ccdn_forum_admin_board_list', {'forum_filter': category.forum.id, 'category_filter': category.id}) -}}
+                                        {%- else -%}
+                                            {{- path('ccdn_forum_admin_board_list', {'category_filter': category.id}) -}}
+                                        {%- endif -%}
+                                     " title="{{- category.name -}}" class="list-group-item ellipsis {%- if category_filter == category.id %} active {%- endif -%}">
+                                        <span class="label pull-right">
+                                            {{- category.getBoards | length -}}
+                                        </span>
+                                        {{- category.name -}}
+                                    </a>
+                                {%- endfor -%}
+                            </div>
                         </div>
                     </div>
                 </div>

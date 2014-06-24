@@ -60,6 +60,9 @@ class PostCreateFormType extends AbstractType
                 array(
                     'label'              => 'post.body-label',
                     'translation_domain' => 'CCDNForumForumBundle',
+                    'attr'               => array(
+                        'class' => 'validate[required,minSize[15],maxSize[255]]'
+                    )
                 )
             )
             ->add('subscribe', 'checkbox',
@@ -68,9 +71,6 @@ class PostCreateFormType extends AbstractType
                     'required'           => false,
                     'label'              => 'post.subscribe-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                    'attr'               => array(
-                        'class' => 'validate[required]'
-                    ),
                     'attr'     => array(
                         'checked' => 'checked'
                     )

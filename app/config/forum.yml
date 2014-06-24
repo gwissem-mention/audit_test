@@ -154,7 +154,7 @@ ccdn_forum_forum:
             post_create:
                 class:                HopitalNumerique\ForumBundle\Form\Type\User\Post\PostCreateFormType
             post_update:
-                class:                CCDNForum\ForumBundle\Form\Type\User\Post\PostUpdateFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\User\Post\PostUpdateFormType
             post_delete:
                 class:                HopitalNumerique\ForumBundle\Form\Type\User\Post\PostDeleteFormType
             post_unlock:

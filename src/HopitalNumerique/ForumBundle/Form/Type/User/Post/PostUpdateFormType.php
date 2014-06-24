@@ -11,7 +11,7 @@
  * file that was distributed with this source code.
  */
 
-namespace HopitalNumerique\ForumBundle\Form\Type\User\Topic;
+namespace HopitalNumerique\ForumBundle\Form\Type\User\Post;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,23 +28,23 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  * @link     https://github.com/codeconsortium/CCDNForumForumBundle
  *
  */
-class TopicUpdateFormType extends AbstractType
+class PostUpdateFormType extends AbstractType
 {
     /**
      *
      * @access protected
-     * @var string $topicClass
+     * @var string $postClass
      */
-    protected $topicClass;
+    protected $postClass;
 
     /**
      *
      * @access public
-     * @param string $topicClass
+     * @param string $postClass
      */
-    public function __construct($topicClass)
+    public function __construct($postClass)
     {
-        $this->topicClass = $topicClass;
+        $this->postClass = $postClass;
     }
 
     /**
@@ -56,12 +56,12 @@ class TopicUpdateFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', null,
+            ->add('body', 'textarea',
                 array(
-                    'label'              => 'topic.title-label',
-                    'translation_domain' => 'CCDNForumForumBundle'
+                    'label'              => 'post.body-label',
+                    'translation_domain' => 'CCDNForumForumBundle',
                     'attr'               => array(
-                        'class' => 'validate[required,minSize[10],maxSize[255]]'
+                        'class' => 'validate[required,minSize[15],maxSize[255]]'
                     )
                 )
             )
@@ -76,12 +76,13 @@ class TopicUpdateFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class'         => $this->topicClass,
-            'csrf_protection'    => true,
-            'csrf_field_name'    => '_token',
+            'data_class'          => $this->postClass,
+            'csrf_protection'     => true,
+            'csrf_field_name'     => '_token',
             // a unique key to help generate the secret token
-            'intention'          => 'forum_topic_update_item',
-            'validation_groups'  => array('forum_topic_update', 'forum_post_update'),
+            'intention'           => 'forum_post_update_item',
+            'validation_groups'   => array('forum_post_update'),
+            'cascade_validation'  => true,
         ));
     }
 
@@ -92,6 +93,6 @@ class TopicUpdateFormType extends AbstractType
      */
     public function getName()
     {
-        return 'Topic';
+        return 'Post';
     }
 }

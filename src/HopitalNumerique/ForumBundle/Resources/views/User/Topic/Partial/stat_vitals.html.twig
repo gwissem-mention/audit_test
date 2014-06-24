@@ -133,8 +133,8 @@
                         {{- subscription_count -}}
                     </span>
                 {%- endif -%}
-                <span class="pull-left">|</span>
                 {% if is_granted("ROLE_ADMINISTRATEUR_1") %}
+                    <span class="pull-left">|</span>
                     <input type="hidden" id="save-references-topic-url" value="{{path('hopitalnumerique_forum_reference_topic_save',{'id':topic.id})}}" />
                     <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_forum_reference_contenu')}}" />
                     <a href="{{path('hopitalnumerique_forum_reference_topic_own', {'id':topic.id})}}" class="manageReferences btn btn-xs btn-success fancybox.ajax pull-left"><i class="fa fa-eye"></i></a>

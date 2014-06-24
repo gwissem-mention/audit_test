@@ -23,7 +23,7 @@
             <fieldset>
 
                 <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-10">
+                    <div id="titre-creation">
                         <h4>{{- 'title.topic.create' | trans({}, ForumBundle.translation ) -}}</h4>
                     </div>
                 </div>
@@ -36,21 +36,23 @@
 
                 {{- form_rest(form) -}}
 
-                <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-10">
-                        <input type="submit" class="btn btn-success" value="
-                            {{- 'form.button.topic.create' | trans({}, ForumBundle.translation ) -}}
-                        " name="submit[post]" id="submit[post]">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <input type="submit" class="btn btn-success col-lg-offset-2 col-lg-3" value="
+                                {{- 'form.button.topic.create' | trans({}, ForumBundle.translation ) -}}
+                            " name="submit[post]" id="submit[post]">
 
-                    {#
-                        <input type="submit" class="btn" value="
-                            {{- 'form.button.preview' | trans({}, ForumBundle.translation ) -}}
-                        " name="submit[preview]">
-                    #}
+                        {#
+                            <input type="submit" class="btn" value="
+                                {{- 'form.button.preview' | trans({}, ForumBundle.translation ) -}}
+                            " name="submit[preview]">
+                        #}
 
-                        <a class="btn btn-default" href="{{- path('ccdn_forum_user_board_show', {'forumName': forumName, 'boardId': board.id}) -}}">
-                            {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}
-                        </a>
+                            <a class="btn btn-default col-lg-offset-1 col-lg-2" href="{{- path('ccdn_forum_user_board_show', {'forumName': forumName, 'boardId': board.id}) -}}">
+                                {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}
+                            </a>
+                        </div>
                     </div>
                 </div>
 
