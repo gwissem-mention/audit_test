@@ -88,8 +88,10 @@ class FrontController extends Controller
 
             if( $resultat ){
                 $datas = $resultat->getReponses();
-                foreach($datas as $one)
-                    $reponses[ $one->getQuestion()->getId() ] = $one->getValue();
+                foreach($datas as $one){
+                    $reponses[ $one->getQuestion()->getId() ]['value'] = $one->getValue();
+                    $reponses[ $one->getQuestion()->getId() ]['remarque'] = $one->getRemarque();
+                }
             }
         }
 
@@ -99,7 +101,6 @@ class FrontController extends Controller
             $tmp = $one['parent'];
             $chapitresOrdered[ $tmp->getOrder() ] = $one;
         }
-
         ksort($chapitresOrdered);
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
