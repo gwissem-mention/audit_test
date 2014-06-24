@@ -115,11 +115,11 @@
 
     {# Build form group #}
     <div class="form-group">
-        <label for="{{questionName}}" class="col-md-6">
+        <label for="{{questionName}}" class="col-md-7">
             {% if question.infoBulle %}<span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>{% endif %}
             {{questionNumber ~ '. ' ~ question.texte}}
         </label>
-        <div class="col-md-5">
+        <div class="col-md-4">
             {# SELECT #}
             {% if question.type.id == '415' %}
                 {% set options = question.options|nl2br|split('<br />') %}
