@@ -68,7 +68,7 @@
                                     {% if reponses[question.id] is defined %}
                                         {% set reponse = reponses[question.id] %}
                                     {% else %}
-                                        {% set reponse = -1 %}
+                                        {% set reponse = {'value': null} %}
                                     {% endif %}
                                     {{ mySelf.buildQuestion(question, reponse, formName, questionNumber) }}
                                     {% set questionNumber = questionNumber + 1 %}
@@ -86,7 +86,7 @@
                                             {% if reponses[question.id] is defined %}
                                                 {% set reponse = reponses[question.id] %}
                                             {% else %}
-                                                {% set reponse = -1 %}
+                                                {% set reponse = {'value' : null} %}
                                             {% endif %}
                                             {{ mySelf.buildQuestion(question, reponse, formName, questionNumber) }}
                                             {% set questionNumber = questionNumber + 1 %}
@@ -127,7 +127,7 @@
 
                 <select name="{{questionName}}" id="{{questionId}}" class="form-control">
                     <option value=""> - </option>
-                    <option value="0" {% if reponse['value'] != '' and reponse['value'] == 0 %}selected="selected"{% endif %} >Non concerné</option>
+                    <option value="-1" {% if reponse['value'] == -1 %}selected="selected"{% endif %} >Non concerné</option>
                     {% for option in options %}
                         {% set datas = option|split(';') %}
                         <option value="{{datas[0]}}" {% if reponse['value'] == datas[0] %}selected="selected"{% endif %} >{{datas[1]|capitalize}}</option>
@@ -138,7 +138,7 @@
                 {% set options = question.options|nl2br|split('<br />') %}
                 <div class="radios">
                     {% set isChecked = false %}
-                    <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] != '' and reponse['value'] == 0 %}{% set isChecked = true %}checked="checked"{% endif %} />Non concerné</label></div>
+                    <div class="radio block"><label><input type="radio" value="-1" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] != '' and reponse['value'] == -1 %}{% set isChecked = true %}checked="checked"{% endif %} />Non concerné</label></div>
                     {% for option in options %}
                         {% set datas = option|split(';') %}
                         <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] == datas[0] %}{% set isChecked = true %}checked="checked"{% endif %} />{{datas[1]|capitalize}}</label></div>
@@ -152,7 +152,7 @@
                 <input type="integer" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" value="{% if reponse['value'] != -1 %}{{reponse['value']}}{% endif %}" />
             {% endif %}
 
-            <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="{% if reponse['remarque'] == '' %}display:none{% endif %}" placeholder="Remarques" value="{% if reponse['remarque'] != '' %}{{reponse['remarque']}}{% endif %}" />
+            <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="{% if reponse['remarque'] is not defined or reponse['remarque'] == '' %}display:none{% endif %}" placeholder="Remarques" value="{% if reponse['remarque'] is defined and reponse['remarque'] != '' %}{{reponse['remarque']}}{% endif %}" />
         </div>
         <div class="col-md-1 col-sm-1">
             <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i class="fa fa-edit"></i></div>
