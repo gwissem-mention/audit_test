@@ -26,7 +26,7 @@
 
 {% block body %}
     <div id="autodiag">
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-12 blockLeft">
             <p class="titre">Les chapitres</p>
             <div id="chapitres"></div>
             <div class="avancement-global">
@@ -38,8 +38,9 @@
                     <span class="text-muted pull-right" >100%</span>
                 </p>
             </div>
+            <div class="clearfix"></div>
         </div>
-        <div class="col-md-9" >
+        <div class="col-md-9 col-sm-12" >
             <h1>{{outil.title}}</h1>
 
             <div class="options">
@@ -115,11 +116,11 @@
 
     {# Build form group #}
     <div class="form-group">
-        <label for="{{questionName}}" class="col-md-7">
+        <label for="{{questionName}}" class="col-md-7 col-sm-12">
             {% if question.infoBulle %}<span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>{% endif %}
             {{questionNumber ~ '. ' ~ question.texte}}
         </label>
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-11">
             {# SELECT #}
             {% if question.type.id == '415' %}
                 {% set options = question.options|nl2br|split('<br />') %}
@@ -153,7 +154,7 @@
 
             <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="{% if reponse['remarque'] == '' %}display:none{% endif %}" placeholder="Remarques" value="{% if reponse['remarque'] != '' %}{{reponse['remarque']}}{% endif %}" />
         </div>
-        <div class="col-md-1">
+        <div class="col-md-1 col-sm-1">
             <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i class="fa fa-edit"></i></div>
         </div>
     </div>

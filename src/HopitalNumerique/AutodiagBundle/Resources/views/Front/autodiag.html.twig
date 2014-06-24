@@ -40,7 +40,7 @@
                         <td>{{resultat.dateLastSave|date('d/m/Y')}}</td>
                         <td>{{resultat.tauxRemplissage}}%</td>
                         <td>
-                            <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="btn btn-success" title="Afficher le résultat"><i class="fa fa-external-link"></i></a>
+                            <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="btn btn-success" title="Continuer le questionnaire"><i class="fa fa-external-link"></i></a>
                         </td>
                     </tr>
                 {% else %}
