@@ -1,3 +1,8 @@
+jQuery(document).ready(function() {
+    //bind de Validation Engine
+    $('form.toValidate').validationEngine();
+});
+
 $(function() {
     $('.dd3-content a, .manageReferences, .uploadSommaire').fancybox({
         'padding'   : 0,

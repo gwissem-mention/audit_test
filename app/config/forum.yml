@@ -130,19 +130,19 @@ ccdn_forum_forum:
             forum_update:
                 class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Forum\ForumUpdateFormType
             forum_delete:
-                class:                CCDNForum\ForumBundle\Form\Type\Admin\Forum\ForumDeleteFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Forum\ForumDeleteFormType
             category_create:
                 class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Category\CategoryCreateFormType
             category_update:
                 class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Category\CategoryUpdateFormType
             category_delete:
-                class:                CCDNForum\ForumBundle\Form\Type\Admin\Category\CategoryDeleteFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Category\CategoryDeleteFormType
             board_create:
                 class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Board\BoardCreateFormType
             board_update:
                 class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Board\BoardUpdateFormType
             board_delete:
-                class:                CCDNForum\ForumBundle\Form\Type\Admin\Board\BoardDeleteFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Board\BoardDeleteFormType
             topic_create:
                 class:                CCDNForum\ForumBundle\Form\Type\User\Topic\TopicCreateFormType
             topic_update:
@@ -152,11 +152,11 @@ ccdn_forum_forum:
             change_topics_board:
                 class:                CCDNForum\ForumBundle\Form\Type\Moderator\Topic\TopicChangeBoardFormType
             post_create:
-                class:                CCDNForum\ForumBundle\Form\Type\User\Post\PostCreateFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\User\Post\PostCreateFormType
             post_update:
-                class:                CCDNForum\ForumBundle\Form\Type\User\Post\PostUpdateFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\User\Post\PostUpdateFormType
             post_delete:
-                class:                CCDNForum\ForumBundle\Form\Type\User\Post\PostDeleteFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\User\Post\PostDeleteFormType
             post_unlock:
                 class:                CCDNForum\ForumBundle\Form\Type\Moderator\Post\PostUnlockFormType
     component:

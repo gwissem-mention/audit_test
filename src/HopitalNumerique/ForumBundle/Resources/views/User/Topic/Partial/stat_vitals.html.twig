@@ -111,12 +111,6 @@
 
     {%- endif -%}
 
-    <style type="text/css">
-        #informations-topic .manageReferences, #informations-topic .text-muted {margin:0 0 15px 5px;}
-        #informations-topic .label {height: 22px; text-align: center; padding: 5px 5px 0; }
-        #content .blockquote-reduit{ border-left: 5px solid #eee; font-size: 12.5px; margin: 0 0 20px; padding: 10px 20px;}
-    </style>
-
     <header class="row clearfix">
         <div class="col-md-12 text-right row">
             <div id="informations-topic">
@@ -139,12 +133,12 @@
                         {{- subscription_count -}}
                     </span>
                 {%- endif -%}
-                <span class="pull-left">|</span>
                 {% if is_granted("ROLE_ADMINISTRATEUR_1") %}
+                    <span class="pull-left">|</span>
                     <input type="hidden" id="save-references-topic-url" value="{{path('hopitalnumerique_forum_reference_topic_save',{'id':topic.id})}}" />
                     <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_forum_reference_contenu')}}" />
-                    <a href="{{path('hopitalnumerique_forum_reference_topic_own', {'id':topic.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-left"><i class="fa fa-eye"></i></a>
-                    <a href="{{path('hopitalnumerique_forum_reference_topic', {'id':topic.id})}}" class="manageReferences edit btn btn-xs btn-primary fancybox.ajax pull-left"><i class="fa fa-tags"></i></a>
+                    <a href="{{path('hopitalnumerique_forum_reference_topic_own', {'id':topic.id})}}" class="manageReferences btn btn-xs btn-success fancybox.ajax pull-left"><i class="fa fa-eye"></i></a>
+                    <a href="{{path('hopitalnumerique_forum_reference_topic', {'id':topic.id})}}" class="manageReferences edit btn btn-xs btn-success fancybox.ajax pull-left"><i class="fa fa-tags"></i></a>
                     <p class="text-muted text-right pull-left"><span class="nbRefs">{% if not topic.id %}0{% else %}{{topic.references|length}}{% endif %}</span> éléments référencés</p>
                 {% endif %}
             </div>

@@ -11,7 +11,7 @@
  * file that was distributed with this source code.
  */
 
-namespace HopitalNumerique\ForumBundle\Form\Type\Admin\Forum;
+namespace HopitalNumerique\ForumBundle\Form\Type\User\Topic;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,32 +28,23 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  * @link     https://github.com/codeconsortium/CCDNForumForumBundle
  *
  */
-class ForumUpdateFormType extends AbstractType
+class TopicUpdateFormType extends AbstractType
 {
     /**
      *
      * @access protected
-     * @var string $forumClass
+     * @var string $topicClass
      */
-    protected $forumClass;
-
-    /**
-     *
-     * @access protected
-     * @var Object $roleHelper
-     */
-    protected $roleHelper;
+    protected $topicClass;
 
     /**
      *
      * @access public
-     * @param string $forumClass
-     * @param Object $roleHelper
+     * @param string $topicClass
      */
-    public function __construct($forumClass, $roleHelper)
+    public function __construct($topicClass)
     {
-        $this->forumClass = $forumClass;
-        $this->roleHelper = $roleHelper;
+        $this->topicClass = $topicClass;
     }
 
     /**
@@ -65,23 +56,13 @@ class ForumUpdateFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text',
+            ->add('title', null,
                 array(
-                    'label'              => 'forum.name-label',
-                    'translation_domain' => 'CCDNForumForumBundle',
+                    'label'              => 'topic.title-label',
+                    'translation_domain' => 'CCDNForumForumBundle'
                     'attr'               => array(
-                        'class' => 'validate[required,minSize[3],maxSize[255]]'
+                        'class' => 'validate[required,minSize[10],maxSize[255]]'
                     )
-                )
-            )
-            ->add('readAuthorisedRoles', 'choice',
-                array(
-                    'required'           => false,
-                    'expanded'           => true,
-                    'multiple'           => true,
-                    'choices'            => $options['available_roles'],
-                    'label'              => 'forum.roles.board-view-label',
-                    'translation_domain' => 'CCDNForumForumBundle',
                 )
             )
         ;
@@ -95,14 +76,12 @@ class ForumUpdateFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class'          => $this->forumClass,
-            'csrf_protection'     => true,
-            'csrf_field_name'     => '_token',
+            'data_class'         => $this->topicClass,
+            'csrf_protection'    => true,
+            'csrf_field_name'    => '_token',
             // a unique key to help generate the secret token
-            'intention'           => 'forum_forum_update_item',
-            'validation_groups'   => array('forum_forum_update'),
-            'cascade_validation'  => true,
-            'available_roles'     => $this->roleHelper->getRoleForFormulaire(),
+            'intention'          => 'forum_topic_update_item',
+            'validation_groups'  => array('forum_topic_update', 'forum_post_update'),
         ));
     }
 
@@ -113,6 +92,6 @@ class ForumUpdateFormType extends AbstractType
      */
     public function getName()
     {
-        return 'Forum_ForumUpdate';
+        return 'Topic';
     }
 }

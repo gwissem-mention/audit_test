@@ -202,7 +202,7 @@ class ResultatManager extends BaseManager
             {
                 //check If Question != texte and != Non concerné
                 $one   = $questionsReponses[ $question->getId() ];
-                $value = $one->value;
+                $value = $one->tableValue;
 
                 if( $one->type != 417 && $value !== 0 ){
                     //get parent chapitre ID
@@ -449,9 +449,12 @@ class ResultatManager extends BaseManager
             {
                 //on ajoute seulement les questions valides pour les résultats
                 $one = $questionsReponses[ $question->getId() ];
-                if( ( ($one->type == 415 && $one->value != 0 ) || ($one->type == 416 && $one->value != 0) || ($one->type == 417 && $one->value != '') ) && $one->value < $one->noteMinimale){
-                    $results[]     = $one;
-                    $noteChapitre += $one->value;
+                if( ($one->type == 415 && $one->value != 0 ) || ($one->type == 416 && $one->value != 0) || ($one->type == 417 && $one->value != '') ){
+                    if( $one->value < $one->noteMinimale ){
+                        $results[]     = $one;
+                        $noteChapitre += $one->value;
+                    }
+                    
                     $nbQuestionsRemplies ++;
                 }
 
@@ -486,7 +489,7 @@ class ResultatManager extends BaseManager
 
             //reponses values
             $question           = $reponse->getQuestion();
-            $rep->value         = $reponse->getValue();
+            $rep->tableValue    = $reponse->getValue();
             $rep->remarque      = $reponse->getRemarque();
 
             //questions values
@@ -500,8 +503,13 @@ class ResultatManager extends BaseManager
             $rep->type          = $question->getType()->getId();
 
             //Si != Texte, on calcul la réponse Max
-            if( $rep->type != 417 )
+            if( $rep->type != 417 ){
                 $rep->max = $this->calculMaxOption( $question );
+
+                //on rapporte la valeur de note question sur 100
+                $rep->value = $rep->max != 0 ? ($reponse->getValue() * 100) / $rep->max : 0;
+            }else
+                $rep->value = $reponse->getValue();
 
             $results[ $reponse->getQuestion()->getId() ] = $rep;
         }

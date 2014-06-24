@@ -23,7 +23,7 @@
             <fieldset>
 
                 <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-10">
+                    <div id="titre-creation">
                         <h4>
                             {{- 'title.topic.reply' | trans({}, ForumBundle.translation ) -}}
                         </h4>
@@ -37,9 +37,9 @@
 
                 {{- form_widget(form) -}}
 
-                <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-10">
-                        <input type="submit" class="btn btn-primary" value="
+                <div class="row">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-success col-lg-offset-2 col-lg-3" value="
                             {{- 'form.button.topic.reply' | trans({}, ForumBundle.translation ) -}}
                         " name="submit[post]" id="submit[post]">
 
@@ -49,7 +49,7 @@
                         " name="submit[preview]">
                     #}
 
-                        <a class="btn btn-default" href="{{- path('ccdn_forum_user_topic_show', {'forumName': forumName, 'topicId': topic.id}) -}}">
+                        <a class="btn btn-default col-lg-offset-1 col-lg-2" href="{{- path('ccdn_forum_user_topic_show', {'forumName': forumName, 'topicId': topic.id}) -}}">
                             {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}
                         </a>
                     </div>

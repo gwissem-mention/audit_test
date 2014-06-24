@@ -96,12 +96,18 @@ class BoardUpdateFormType extends AbstractType
                 array(
                     'label'              => 'board.name-label',
                     'translation_domain' => 'CCDNForumForumBundle',
+                    'attr'               => array(
+                        'class' => 'validate[required,minSize[3],maxSize[255]]'
+                    )
                 )
             )
             ->add('description', 'textarea',
                 array(
                     'label'              => 'board.description-label',
                     'translation_domain' => 'CCDNForumForumBundle',
+                    'attr'               => array(
+                        'class' => 'validate[required,minSize[10],maxSize[255]]'
+                    )
                 )
             )
             ->add('readAuthorisedRoles', 'choice',

@@ -26,7 +26,7 @@
         <div class="col-md-3">
             {% set is_topic_create_disabled = board.isAuthorisedToCreateTopic(app.security) ? '': ' disabled' %}
 
-            <a class="btn btn-primary{{ is_topic_create_disabled }} pull-right" rel="nofollow" href="{{- path('ccdn_forum_user_topic_create', {'forumName': forumName, 'boardId': board.getId }) -}}">
+            <a class="btn btn-success{{ is_topic_create_disabled }} pull-right" rel="nofollow" href="{{- path('ccdn_forum_user_topic_create', {'forumName': forumName, 'boardId': board.getId }) -}}">
                 {{- 'link.topic.create' | trans({}, ForumBundle.translation ) -}}
             </a>
         </div>
