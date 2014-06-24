@@ -62,7 +62,12 @@ class OutilGrid extends Grid implements IGrid
     {
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_autodiag_outil_edit' ) );
         $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_autodiag_outil_delete' ) );
-        $this->addActionButton( new Action\FilsButton( 'hopitalnumerique_autodiag_resultat' ) );
+
+        $btn = new \APY\DataGridBundle\Grid\Action\RowAction( '', 'hopitalnumerique_autodiag_resultat' );
+        $btn->setRouteParameters( array('id') );
+        $btn->setAttributes( array('class'=>'btn btn-success fa fa-list','title' => 'Afficher les résultats') );
+
+        $this->addActionButton( $btn );
     }
 
     /**

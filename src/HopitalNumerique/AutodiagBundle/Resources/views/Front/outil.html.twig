@@ -57,7 +57,7 @@
                         {% set parent = chapitre['parent'] %}
 
                         {# Build step #}
-                        <fieldset title="{{parent.title}}" >
+                        <fieldset title="<p>{{parent.title}}</p>" >
                             <h2>{{parent.title}}</h2>
 
                             <hr>
@@ -115,21 +115,21 @@
 
     {# Build form group #}
     <div class="form-group">
-        <label for="{{questionName}}" class="col-md-6">
-            <span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>
+        <label for="{{questionName}}" class="col-md-7">
+            {% if question.infoBulle %}<span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>{% endif %}
             {{questionNumber ~ '. ' ~ question.texte}}
         </label>
-        <div class="col-md-5">
+        <div class="col-md-4">
             {# SELECT #}
             {% if question.type.id == '415' %}
                 {% set options = question.options|nl2br|split('<br />') %}
 
                 <select name="{{questionName}}" id="{{questionId}}" class="form-control">
                     <option value=""> - </option>
-                    <option value="0" {% if reponse != '' and reponse == 0 %}selected="selected"{% endif %} >Non concerné</option>
+                    <option value="0" {% if reponse['value'] != '' and reponse['value'] == 0 %}selected="selected"{% endif %} >Non concerné</option>
                     {% for option in options %}
                         {% set datas = option|split(';') %}
-                        <option value="{{datas[0]}}" {% if reponse == datas[0] %}selected="selected"{% endif %} >{{datas[1]|capitalize}}</option>
+                        <option value="{{datas[0]}}" {% if reponse['value'] == datas[0] %}selected="selected"{% endif %} >{{datas[1]|capitalize}}</option>
                     {% endfor %}
                 </select>
             {# RADIO #}
@@ -137,10 +137,10 @@
                 {% set options = question.options|nl2br|split('<br />') %}
                 <div class="radios">
                     {% set isChecked = false %}
-                    <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" {% if reponse != '' and reponse == 0 %}{% set isChecked = true %}checked="checked"{% endif %} />Non concerné</label></div>
+                    <div class="radio block"><label><input type="radio" value="0" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] != '' and reponse['value'] == 0 %}{% set isChecked = true %}checked="checked"{% endif %} />Non concerné</label></div>
                     {% for option in options %}
                         {% set datas = option|split(';') %}
-                        <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" {% if reponse == datas[0] %}{% set isChecked = true %}checked="checked"{% endif %} />{{datas[1]|capitalize}}</label></div>
+                        <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] == datas[0] %}{% set isChecked = true %}checked="checked"{% endif %} />{{datas[1]|capitalize}}</label></div>
                     {% endfor %}
                     <div class="hide">
                         <div class="radio block"><input type="radio" value="" name="{{questionName}}" id="{{questionId}}" {% if isChecked == false %}checked="checked"{% endif %} /></div>
@@ -148,10 +148,10 @@
                 </div>
             {# TEXT #}
             {% else %}
-                <input type="integer" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" value="{% if reponse != -1 %}{{reponse}}{% endif %}" />
+                <input type="integer" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" value="{% if reponse['value'] != -1 %}{{reponse['value']}}{% endif %}" />
             {% endif %}
 
-            <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="display:none" placeholder="Remarques" />
+            <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="{% if reponse['remarque'] == '' %}display:none{% endif %}" placeholder="Remarques" value="{% if reponse['remarque'] != '' %}{{reponse['remarque']}}{% endif %}" />
         </div>
         <div class="col-md-1">
             <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i class="fa fa-edit"></i></div>

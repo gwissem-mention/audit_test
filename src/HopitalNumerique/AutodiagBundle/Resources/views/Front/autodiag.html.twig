@@ -28,7 +28,7 @@
                     <th>Titre</th>
                     <th>Date début remplissage</th>
                     <th>Date dernier enregistrement</th>
-                    <th>Pourcentage de remplissage</th>
+                    <th>Pourcentage remplissage</th>
                     <th width="50px">Actions</th>
                 </tr>
             </thead>
@@ -40,7 +40,7 @@
                         <td>{{resultat.dateLastSave|date('d/m/Y')}}</td>
                         <td>{{resultat.tauxRemplissage}}%</td>
                         <td>
-                            <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="btn btn-xs btn-success"><i class="fa fa-eye"></i></a>
+                            <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="btn btn-success" title="Afficher le résultat"><i class="fa fa-external-link"></i></a>
                         </td>
                     </tr>
                 {% else %}
@@ -54,7 +54,7 @@
 
     <div class="clearfix"></div>
 
-    <h2>Mes diagnostics</h2>
+    <h2>Historique de mes autodiagnostics</h2>
     <div class="col-md-12">
         <table class="table autodiagTable">
             <thead>
@@ -71,7 +71,7 @@
                         <td>{{resultat.dateValidation|date('d/m/Y')}}</td>
                         
                         <td>
-                            <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="btn btn-xs btn-info"><i class="fa fa-download"></i></a>
+                            <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="btn btn-success" title="Télécharger le PDF du résultat"><i class="fa fa-download"></i></a>
                         </td>
                     </tr>
                 {% else %}

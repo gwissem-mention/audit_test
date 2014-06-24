@@ -32,7 +32,8 @@ $(document).ready(function() {
 });
 
 //Truncate l'avancement affiché
-function truncate(n) {
+function truncate(n)
+{
     return Math[n > 0 ? "floor" : "ceil"](n);
 }
 
@@ -73,7 +74,7 @@ function calcAvancement()
         //update liste
         avancement = avancement < 100 ? '<span class="text-muted">'+avancement+'%</span>' : '<span class="text-success"><i class="fa fa-check"></i></span>';
         $('#wizard-header li#wizard-head-'+step+' div span').remove();
-        $('#wizard-header li#wizard-head-'+step+' div').append( avancement );
+        $('#wizard-header li#wizard-head-'+step+' div').prepend( avancement );
 
         totalQuestions += nbQuestions;
         totalQuestionsAnswered += nbQuestionsAnswered;
@@ -90,7 +91,7 @@ function saveQuestionnaire( type )
     $('#action').val( type );
 
     if( type == 'valid' ){
-        apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+        apprise('La validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci.', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
             if(r) { 
                 $('#wizard').submit();
             }

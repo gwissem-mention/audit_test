@@ -63,7 +63,7 @@ class FrontController extends Controller
         //max Pondération invalid
         if( $ponderationMax != 0 ) {
             // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
-            $this->get('session')->getFlashBag()->add( 'danger', 'L\'outil n\'est pas correctement configuré, il n\'est donc pas accessible');
+            $this->get('session')->getFlashBag()->add( 'danger', 'L\'outil n\'est pas correctement configuré, il n\'est donc pas accessible.');
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage'));
         }
 
@@ -88,14 +88,24 @@ class FrontController extends Controller
 
             if( $resultat ){
                 $datas = $resultat->getReponses();
-                foreach($datas as $one)
-                    $reponses[ $one->getQuestion()->getId() ] = $one->getValue();
+                foreach($datas as $one){
+                    $reponses[ $one->getQuestion()->getId() ]['value'] = $one->getValue();
+                    $reponses[ $one->getQuestion()->getId() ]['remarque'] = $one->getRemarque();
+                }
             }
         }
 
+        //reorder parents
+        $chapitresOrdered = array();
+        foreach($parents as $one){
+            $tmp = $one['parent'];
+            $chapitresOrdered[ $tmp->getOrder() ] = $one;
+        }
+        ksort($chapitresOrdered);
+
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
             'outil'     => $outil,
-            'chapitres' => $parents,
+            'chapitres' => $chapitresOrdered,
             'reponses'  => $reponses
         ));
     }
@@ -183,7 +193,7 @@ class FrontController extends Controller
         $this->get('hopitalnumerique_autodiag.manager.reponse')->save( $reponses );
 
         // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
-        $this->get('session')->getFlashBag()->add( 'success', 'Autodiagnostic ' . ($action == 'valid' ? 'validé':'enregistré') );
+        $this->get('session')->getFlashBag()->add( 'success', 'Autodiagnostic ' . ($action == 'valid' ? 'validé.':'enregistré.') );
 
         return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array( 'id' => $resultat->getId() ) ) );
     }
@@ -203,7 +213,7 @@ class FrontController extends Controller
             ( $user && !is_null($resultat->getUser()) && $resultat->getUser() != $user ) || 
             (!$user && !is_null($resultat->getUser()) ) 
         ) {
-            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à ces résultats');
+            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à ces résultats.');
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage' ) );
         }
 
@@ -253,7 +263,7 @@ class FrontController extends Controller
             ( $user && !is_null($resultat->getUser()) && $resultat->getUser() != $user ) || 
             (!$user && !is_null($resultat->getUser()) ) 
         ) {
-            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à ces résultats');
+            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à ces résultats.');
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage' ) );
         }
 
