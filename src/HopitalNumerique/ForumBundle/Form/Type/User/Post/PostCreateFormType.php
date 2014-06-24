@@ -61,7 +61,8 @@ class PostCreateFormType extends AbstractType
                     'label'              => 'post.body-label',
                     'translation_domain' => 'CCDNForumForumBundle',
                     'attr'               => array(
-                        'class' => 'validate[required,minSize[15],maxSize[255]]'
+                        'class' => 'validate[required,minSize[15],maxSize[255]]',
+                        'rows' => 8
                     )
                 )
             )

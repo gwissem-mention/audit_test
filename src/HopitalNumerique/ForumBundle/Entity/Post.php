@@ -11,5 +11,15 @@ use CCDNForum\ForumBundle\Entity\Post as BasePost;
  */
 class Post extends BasePost
 {
+
+    /**
+     * Get body
+     *
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
         
 }

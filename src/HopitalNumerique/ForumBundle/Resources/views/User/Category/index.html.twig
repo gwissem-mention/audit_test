@@ -17,7 +17,10 @@
     {%- spaceless -%}
 
     {%- for category in categories -%}
-        {%- include "CCDNForumForumBundle:User:Category/Partial/item_category.html.twig" -%}
+        {# Affichage uniquement si l'utilisateur a le droit de visioner #}
+        {% if app.user.getRole() in category.readAuthorisedRoles %}
+            {%- include "CCDNForumForumBundle:User:Category/Partial/item_category.html.twig" -%}
+        {% endif %}
     {%- else -%}
         <section class="row clearfix">
             <div class="well text-center">

@@ -1,5 +1,18 @@
 #content h3{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; background: #f6f6f6}
 #content .lienAdmin {font-size: 13px;cursor: pointer;}
+#content header.panel-heading a i.glyphicon{color:#FFFFFF;}
+
+#content .pagination {}
+#content .pagination ul{ list-style:none;}
+#content .pagination li{ display: inline-block;}
+#content .pagination a,.pagination span {display: block;border: 1px solid blue;color: blue;padding: 3px 4px;}
+#content .pagination a {text-decoration: none;}
+#content .pagination a:hover { background: #428BCA;}
+#content .pagination .active {background: #428BCA;font-weight: bold;}
+#content .pagination .disabled {border-color: #428BCA;color: #428BCA;}
+
+/* ---  Breadcrumb --- */
+#breadcrumbs-forum .breadcrumb a{color:#428BCA; font-size: 12px}
 
 /* ---  Menu  --- */
 
@@ -10,14 +23,17 @@
 #sidebar .menu-main li.last{border-bottom:1px solid #f0f0f0; }
 
 /* ---  En-tête FO  --- */
+#informations-topic { margin: 0 0 10px 0;}
 #informations-topic span.label{background-color: #CECECE;margin:0 5px 0 0; height: 22px; text-align: center; padding: 5px 5px 0; }
 #informations-topic .manageReferences, #informations-topic .text-muted {margin:0 0 15px 5px;}
+#information-board { margin: 10px 0 0 0;}
 #information-board span.label{background-color: #CECECE;margin:0 0 0 5px;}
 
-/* --- Présentation des boards --- */
+/* --- FO --- */
 
 h4 {font-size: 15px;}
 #content .blockquote-reduit{ border-left: 5px solid #eee; font-size: 12px; margin: 0 0 20px; padding: 10px 20px;}
+#content .dropdown-menu i{ margin: 0 5px 0 0;}
 
 /* --- Admin --- */
 .checkboxCustom input{width: 20px;height: 20px;}

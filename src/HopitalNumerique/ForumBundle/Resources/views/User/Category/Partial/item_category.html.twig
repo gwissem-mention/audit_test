@@ -19,7 +19,10 @@
             </thead>
             <tbody>
                 {%- for row, board in category.boards -%}
-                    {%- include "CCDNForumForumBundle:User:Category/Partial/item_board.html.twig" -%}
+                    {# Affichage uniquement si l'utilisateur a le droit de visioner #}
+                    {% if app.user.getRole() in board.readAuthorisedRoles %}
+                        {%- include "CCDNForumForumBundle:User:Category/Partial/item_board.html.twig" -%}
+                    {% endif %}
                 {%- else -%}
                     <tr>
                         <td class="text-center" colspan="5" style="width:100%;">

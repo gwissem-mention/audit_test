@@ -67,7 +67,10 @@ class TopicCreateFormType extends AbstractType
             ->add('title', null,
                 array(
                     'label'              => 'topic.title-label',
-                    'translation_domain' => 'CCDNForumForumBundle'
+                    'translation_domain' => 'CCDNForumForumBundle',
+                    'attr'               => array(
+                        'class' => 'validate[required,minSize[10],maxSize[255]]'
+                    )
                 )
             )
         ;
