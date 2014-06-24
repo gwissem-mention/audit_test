@@ -1,0 +1,25 @@
+HopitalNumerique\ForumBundle\Entity\RefTopic:
+    type: entity
+    table: hn_forum_topic_reference
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        primary:
+            type: boolean
+            column: reftop_primary
+            nullable: false
+    manyToOne:
+        reference:
+            targetEntity: HopitalNumerique\ReferenceBundle\Entity\Reference
+            joinColumn:
+                name: ref_id
+                referencedColumnName: ref_id
+                onDelete: CASCADE
+        topic:
+            targetEntity: HopitalNumerique\ForumBundle\Entity\Topic
+            joinColumn:
+                name: topic_id
+                referencedColumnName: id
+                onDelete: CASCADE

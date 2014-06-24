@@ -1,0 +1,48 @@
+{%- spaceless -%}
+
+    {%- set sidebar_categories = board_list(forumName) -%}
+
+    {%- if sidebar_categories |length -%}
+        <li>
+            <ul class="nav nav-pills nav-stacked">
+                {%- for sidebar_category in sidebar_categories -%}
+                    {%- if sidebar_category.boards |length -%}
+                        {%- if category is defined and route == 'ccdn_forum_user_category_show' -%}
+                            {%- if sidebar_category.id == category.id -%}
+                                <li class="active">
+                                    <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': sidebar_category.id, 'forumName': forumName}) -}}"
+                                     title="{{- sidebar_category.name -}}">
+                            {%- else -%}
+                                <li>
+                                    <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': sidebar_category.id, 'forumName': forumName}) -}}"
+                                     title="{{- sidebar_category.name -}}">
+                            {%- endif -%}
+                        {%- else -%}
+                            {%- if board is defined -%}
+                                {%- if sidebar_category.id == board.category.id -%}
+                                    <li class="active-son">
+                                        <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': sidebar_category.id, 'forumName': forumName}) -}}"
+                                         title="{{- sidebar_category.name -}}">
+                                {%- else -%}
+                                    <li>
+                                        <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': sidebar_category.id, 'forumName': forumName}) -}}"
+                                         title="{{- sidebar_category.name -}}">
+                                {%- endif -%}
+                            {%- else -%}
+                                <li>
+                                    <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': sidebar_category.id, 'forumName': forumName}) -}}"
+                                     title="{{- sidebar_category.name -}}">
+                            {%- endif -%}
+                        {%- endif -%}
+                                        {{- sidebar_category.name -}}
+                                    </a>
+                                </li>
+
+                        
+                    {%- endif -%}
+                {%- endfor -%}
+            </ul>
+        </li>
+    {%- endif -%}
+
+{%- endspaceless -%}

@@ -1,0 +1,25 @@
+hopitalnumerique_flash_flash:
+    pattern:  /admin/flash
+    defaults: { _controller: "HopitalNumeriqueFlashBundle:Flash:index" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_flash_flash_add:
+    pattern:  /admin/flash/add
+    defaults: { _controller: "HopitalNumeriqueFlashBundle:Flash:add" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_flash_flash_edit:
+    pattern:  /admin/flash/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueFlashBundle:Flash:edit" }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+hopitalnumerique_flash_flash_delete:
+    pattern:  /admin/flash/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueFlashBundle:Flash:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE

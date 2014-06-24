@@ -36,6 +36,7 @@
 
                 <div class="col-md-12" id="listeChapitres">
                     {% import _self as mySelf %}
+                    {% set questionNumber = 1 %}
                     {% for chapitre in chapitres %}
                         <h2>
                             {{chapitre.title}}
@@ -47,7 +48,10 @@
                         </h2>
 
                         {% if chapitre.questions|length > 0 %}
-                            {{ mySelf.buildQuestion(chapitre.questions) }}
+                            {% for question in chapitre.questions %}
+                                {{ mySelf.buildQuestion(question, questionNumber) }}
+                                {% set questionNumber = questionNumber + 1 %}
+                            {% endfor %}
                         {% endif %}
                         
                         {% if chapitre.childs|length > 0 %}
@@ -63,7 +67,10 @@
                                             </span>
                                         </h3>
                                         
-                                        {{ mySelf.buildQuestion(child.questions) }}
+                                        {% for question in child.questions %}
+                                            {{ mySelf.buildQuestion(question, questionNumber) }}
+                                            {% set questionNumber = questionNumber + 1 %}
+                                        {% endfor %}
                                     {% endfor %}
                                 </div>
                             </div>
@@ -76,20 +83,18 @@
     </div>
 {% endblock %}
 
-{% macro buildQuestion(questions) %}
-    {% for question in questions %}
-        <div class="row">
-            <div class="col-md-12">
-                <p class="question">
-                    {{question.texte}}&nbsp;&nbsp;-&nbsp;&nbsp;
-                    <span class="text-muted">
-                        Catégorie : {{question.categorie.title}}
-                        {% if question.ponderation %}&nbsp;&nbsp;|&nbsp;&nbsp;Pondération : {{question.ponderation}}{% endif %}
-                        {% if question.ordreResultat %}&nbsp;&nbsp;|&nbsp;&nbsp;Ordre pour les résultats : {{question.ordreResultat}}{% endif %}
-                        {% if question.seuil %}&nbsp;&nbsp;|&nbsp;&nbsp;Seuil de déclenchement : {{question.seuil}}{% endif %}
-                    </span>
-                </p>
-            </div>
+{% macro buildQuestion(question, questionNumber) %}
+    <div class="row">
+        <div class="col-md-12">
+            <p class="question">
+                {{questionNumber ~ '. ' ~ question.texte}}&nbsp;&nbsp;-&nbsp;&nbsp;
+                <span class="text-muted">
+                    Catégorie : {{question.categorie.title}}
+                    {% if question.ponderation %}&nbsp;&nbsp;|&nbsp;&nbsp;Pondération : {{question.ponderation}}{% endif %}
+                    {% if question.ordreResultat %}&nbsp;&nbsp;|&nbsp;&nbsp;Ordre pour les résultats : {{question.ordreResultat}}{% endif %}
+                    {% if question.seuil %}&nbsp;&nbsp;|&nbsp;&nbsp;Seuil de déclenchement : {{question.seuil}}{% endif %}
+                </span>
+            </p>
         </div>
-    {% endfor %}
+    </div>
 {% endmacro %} 

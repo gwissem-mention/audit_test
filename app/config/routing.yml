@@ -15,6 +15,10 @@ hopital_numerique_publication:
     resource: "@HopitalNumeriquePublicationBundle/Resources/config/routing.yml"
     prefix:   /
 
+hopital_numerique_forum:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing.yml"
+    prefix:   /
+
 hopital_numerique_account:
     resource: "@HopitalNumeriqueAccountBundle/Resources/config/routing.yml"
     prefix:   /compte-hn
@@ -103,6 +107,10 @@ hopital_numerique_autodiag:
     resource: "@HopitalNumeriqueAutodiagBundle/Resources/config/routing.yml"
     prefix:   /
 
+hopital_numerique_flash:
+    resource: "@HopitalNumeriqueFlashBundle/Resources/config/routing.yml"
+    prefix:   /
+
 # Bundles Nodevo
 nodevo_acl:
     resource: "@NodevoAclBundle/Resources/config/routing.yml"
@@ -135,3 +143,9 @@ nodevo_faq:
 nodevo_gestionnaire_media:
     resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"
     prefix:   /admin/media
+
+#Forum
+CCDNForumForumBundle:
+    resource: "@CCDNForumForumBundle/Resources/config/routing.yml"
+    prefix:   /
+

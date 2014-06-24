@@ -1,0 +1,69 @@
+{% extends 'CCDNForumForumBundle:Common:Layout/base.html.twig' %}
+
+{% set LayoutTemplate = ccdn_forum_forum.forum.admin.list.layout_template %}
+
+{%- block title -%}
+    {{- 'title.admin.manage-forums.index' |trans({}, ForumBundle.translation ) -}}
+{%- endblock title -%}
+
+{%- block sidebar -%}
+    {%- spaceless -%}
+    {{- parent() -}}
+    {%- include 'CCDNForumForumBundle:Common:Layout/Sidebar/admin_forum.html.twig' -%}
+    {%- endspaceless -%}
+{%- endblock sidebar -%}
+
+{% block information_page %}
+    <div class="col-md-12">
+        <h3 class="violet">Forum - Administration </h3>
+    </div>
+{% endblock information_page %}
+
+{%- block body_content -%}
+    {%- spaceless -%}
+
+        <section class="row btn-toolbar clearfix toolbar-backoffice-forum">
+            <a class="btn btn-success pull-right col-md-4" href="{{- path('ccdn_forum_admin_forum_create') -}}">
+                {{- 'link.forum.create' |trans({}, ForumBundle.translation ) -}}
+            </a>
+        </section>
+
+        <section class="clearfix">
+            <div class="col-md-12">
+                <table class="table table-bordered" id="admin-forums-list">
+                    <thead>
+                        <tr>
+                            <th>{{- 'forum.id-th' |trans({}, ForumBundle.translation ) -}}</th>
+                            <th>{{- 'forum.name-th' |trans({}, ForumBundle.translation ) -}}</th>
+                            <th>{{- 'forum.category-count-th' |trans({}, ForumBundle.translation ) -}}</th>
+                            <th style="width:94px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%- for forum_index, forum in forums -%}
+                            <tr>
+                                <td>{{- forum.id -}}</td>
+                                <td>{{- forum.name -}}</td>
+                                <td>{{- forum.categories |length -}}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a class="btn btn-info" href="{{- path('ccdn_forum_admin_forum_edit', {'forumId': forum.id}) -}}" id="update_forum[{{- forum.name -}}]">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+
+                                        {%- if is_granted('ROLE_SUPER_ADMIN') -%}
+                                            <a class="btn btn-danger" href="{{- path('ccdn_forum_admin_forum_delete', {'forumId': forum.id}) -}}" id="delete_forum[{{- forum.name -}}]">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        {%- endif -%}
+                                    </div>
+                                </td>
+                            </tr>
+                        {%- endfor -%}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    {%- endspaceless -%}
+{%- endblock body_content -%}

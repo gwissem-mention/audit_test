@@ -12,21 +12,23 @@ class SearchManager extends BaseManager
     private $_production        = 175;
     private $_ressource         = 183;
     private $_pointDur          = 184;
-    private $_forum             = 188;
     private $_refObjetManager   = null;
     private $_refContenuManager = null;
     private $_refsPonderees     = null;
+    private $_refTopicManager   = null;
     
     /**
      * Override du contrct d'un manager normal : ce manager n'est lié à aucune entitée
      *
      * @param RefObjetManager   $refObjetManager   Entitée RefObjetManager
      * @param RefContenuManager $refContenuManager Entitée RefContenuManager
+     * @param RefTopicManager   $refTopicManager   Entitée RefTopicManager
      */
-    public function __construct( $refObjetManager, $refContenuManager )
+    public function __construct( $refObjetManager, $refContenuManager, $refTopicManager )
     {
         $this->_refObjetManager   = $refObjetManager;
         $this->_refContenuManager = $refContenuManager;
+        $this->_refTopicManager   = $refTopicManager;
     }
     
     /**
@@ -44,6 +46,7 @@ class SearchManager extends BaseManager
         $objetsToIntersect    = array();
         $contenusToIntersect  = array();
         $this->_refsPonderees = $refsPonderees;
+        $filsForumToIntersect = array();
 
         //get objets from each Categ
         for ( $i = 1; $i <= $nbCateg; $i++ ) {
@@ -79,10 +82,25 @@ class SearchManager extends BaseManager
                 }
                 else
                     $contenusToIntersect[] = array();
+
+                //on récupères tous les objets, on les formate et on les ajoute à nos catégories
+                $results = $this->_refTopicManager->getTopicForRecherche( $references['categ'.$i] );                
+                if( $results ){
+                    $tmp = array();
+                    foreach( $results as $one) {
+                        $topic = $this->formateTopic( $one, $role );
+                        if( !is_null($topic) && $topic['categ'] != '' )
+                            $tmp[ $topic['id'] ] = $topic;
+                    }
+
+                    //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
+                    $filsForumToIntersect[] = $tmp;
+                }else
+                    $filsForumToIntersect[] = array();
             }
         }
 
-        return $this->mergeDatas( $objetsToIntersect, $contenusToIntersect );
+        return $this->mergeDatas( $objetsToIntersect, $contenusToIntersect, $filsForumToIntersect );
     }
 
     /**
@@ -225,7 +243,7 @@ class SearchManager extends BaseManager
         else
             $contenusToIntersect[] = array();
 
-        return $this->mergeDatas( $objetsToIntersect, $contenusToIntersect );
+        return $this->mergeDatas( $objetsToIntersect, $contenusToIntersect, array() );
     }
 
     /**
@@ -273,10 +291,11 @@ class SearchManager extends BaseManager
      *
      * @return array
      */
-    private function mergeDatas( $objetsToIntersect, $contenusToIntersect )
+    private function mergeDatas( $objetsToIntersect, $contenusToIntersect, $filsForumToIntersect )
     {
-        $objets   = array();
-        $contenus = array();
+        $objets    = array();
+        $contenus  = array();
+        $filsForum = array();
 
         //Si on a filtré sur plusieurs catégories, on récupère uniquement les objets commun à chaque catégorie (filtre ET)
         if( isset($objetsToIntersect[0]) )
@@ -286,7 +305,11 @@ class SearchManager extends BaseManager
         if( isset($contenusToIntersect[0]) )
             $contenus = (count($contenusToIntersect) > 1) ? call_user_func_array('array_intersect_key',$contenusToIntersect) : $contenusToIntersect[0];
 
-        $fusion = array_merge( $objets, $contenus );
+        //Si on a filtré sur plusieurs catégories, on récupère uniquement les fils du forum commun à chaque catégorie (filtre ET)
+        if( isset($filsForumToIntersect[0]) )
+            $filsForum = (count($filsForumToIntersect) > 1) ? call_user_func_array('array_intersect_key',$filsForumToIntersect) : $filsForumToIntersect[0];
+
+        $fusion = array_merge( $objets, $contenus, $filsForum );
 
         if( empty($fusion) )
             return $fusion;
@@ -426,6 +449,32 @@ class SearchManager extends BaseManager
         
         return $note;
     }
+   
+    /*
+     * Formatte Correctement les refTopic
+     *
+     * @param RefTopic $one  L'entité RefTopic
+     * 
+     * @return stdClass
+     */
+    private function formateTopic( $one )
+    {
+        //Références
+        $item            = array();
+        $item['primary'] = $one->getPrimary();
+
+        //topic
+        $topic = $one->getTopic();
+        
+        $item['id']       = $topic->getId();
+        $item['titre']    = $topic->getTitle();
+        $item['countRef'] = $this->getNoteReferencement($topic->getReferences());
+        
+        //get Type
+        $item['categ'] = 'forum';
+
+        return $item;
+    }
 
     /**
      * Extrait la catégorie et le(s) type(s) de l'objet
@@ -455,9 +504,6 @@ class SearchManager extends BaseManager
                 $parent = $one->getParent();
                 if( $parent->getId() == $this->_production ){
                     $categ  = 'production';
-                    $type[] = $one->getLibelle();
-                }elseif($parent->getId() == $this->_forum ){
-                    $categ  = 'forum';
                     $type[] = $one->getLibelle();
                 }
             }

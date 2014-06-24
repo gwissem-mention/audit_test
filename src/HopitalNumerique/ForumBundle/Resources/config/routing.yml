@@ -1,0 +1,55 @@
+HopitalNumeriqueForumBundle-Admin:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/admin.yml"
+    prefix: /forum/admin
+
+HopitalNumeriqueForumBundle-Admin-Forum:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/admin-forum.yml"
+    prefix: /forum/admin/manage-forums
+
+HopitalNumeriqueForumBundle-Admin-Category:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/admin-category.yml"
+    prefix: /forum/admin/manage-categories
+
+HopitalNumeriqueForumBundle-Admin-Board:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/admin-board.yml"
+    prefix: /forum/admin/manage-boards
+
+HopitalNumeriqueForumBundle-Admin-Topic:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/admin-topic.yml"
+    prefix: /forum/admin/manage-topics
+
+HopitalNumeriqueForumBundle-Admin-Post:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/admin-post.yml"
+    prefix: /forum/admin/manage-posts
+
+
+
+HopitalNumeriqueForumBundle-Moderator-Topic:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/moderator-topic.yml"
+    prefix: /forum/{forumName}/moderator/manage-topics
+
+HopitalNumeriqueForumBundle-Moderator-Post:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/moderator-post.yml"
+    prefix: /forum/{forumName}/moderator/manage-posts
+
+
+
+HopitalNumeriqueForumBundle-User-Category:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/user-category.yml"
+    prefix: /forum
+
+HopitalNumeriqueForumBundle-User-Board:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/user-board.yml"
+    prefix: /forum/{forumName}/board
+
+HopitalNumeriqueForumBundle-User-Topic:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/user-topic.yml"
+    prefix: /forum/{forumName}/topic
+
+HopitalNumeriqueForumBundle-User-Post:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/user-post.yml"
+    prefix: /forum/{forumName}/post
+
+HopitalNumeriqueForumBundle-User-Subscription:
+    resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/user-subscription.yml"
+    prefix: /forum/{forumName}/subscription

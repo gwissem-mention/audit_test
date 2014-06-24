@@ -1,0 +1,18 @@
+parameters:
+    hopitalnumerique_forum.manager.topic.class: HopitalNumerique\ForumBundle\Manager\TopicManager
+    hopitalnumerique_forum.manager.reftopic.class: HopitalNumerique\ForumBundle\Manager\RefTopicManager
+
+services:
+    #Manager
+    #--Topic
+    hopitalnumerique_forum.manager.topic:
+        class: %hopitalnumerique_forum.manager.topic.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    #--RefTopic
+    hopitalnumerique_forum.manager.reftopic:
+        class: %hopitalnumerique_forum.manager.reftopic.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

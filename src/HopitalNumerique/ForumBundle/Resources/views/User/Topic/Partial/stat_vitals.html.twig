@@ -1,0 +1,148 @@
+{%- spaceless -%}
+    
+    <div class="row">
+        <span class="lead" title="{{- topic.getTitle -}}">{{- topic.getTitle -}}</span>
+    </div>
+
+    {%- if topic is defined -%}
+        
+        <section class="row clearfix btn-toolbar">
+
+            {%- if board is not defined -%}
+                {%- set board = topic.getBoard -%}
+            {%- endif -%}
+
+            {%- if canReplyToTopic(topic, forum) -%}
+                <a class="btn btn-danger pull-right" rel="nofollow"
+                 href="{{- path('ccdn_forum_user_topic_reply', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                    {{- 'link.topic.reply' | trans({}, ForumBundle.translation ) -}}
+                </a>
+            {%- else -%}
+                <a class="btn btn-danger disabled pull-right" rel="nofollow"
+                 href="{{- path('ccdn_forum_user_topic_reply', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                    {{- 'link.topic.reply' | trans({}, ForumBundle.translation ) -}}
+                </a>
+            {%- endif -%}
+
+
+            {%- if canSubscribeToTopic(topic, forum, (subscription is defined ? subscription : null)) -%}
+                <a class="btn btn-info pull-right" href="{{- path('ccdn_forum_user_subscription_subscribe', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                    {{- 'link.topic.subscribe' | trans({}, ForumBundle.translation ) -}}
+                </a>
+            {%- endif -%}
+
+            {%- if canUnsubscribeFromTopic(topic, forum, (subscription is defined ? subscription : null)) -%}
+                <a class="btn btn-info pull-right" href="{{- path('ccdn_forum_user_subscription_unsubscribe', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                    {{- 'link.topic.unsubscribe' | trans({}, ForumBundle.translation ) -}}
+                </a>
+            {%- endif -%}
+
+
+            {%- if is_granted('ROLE_MODERATOR') -%}
+                <div class="btn-group">
+                    <a class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown" href="#">
+                        {{- 'link.admin.index' |trans({}, ForumBundle.translation ) -}}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+
+                        {%- if canStickyTopic(topic, forum) -%}
+                            <li>
+                                <a class="pull-right" href="{{- path('ccdn_forum_moderator_topic_sticky', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                                    {{- 'link.topic.sticky' |trans({}, ForumBundle.translation ) -}}
+                                </a>
+                            </li>
+                        {%- endif -%}
+
+                        {%- if canUnstickyTopic(topic, forum) -%}
+                            <li>
+                                <a class="pull-right" href="{{- path('ccdn_forum_moderator_topic_unsticky', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                                    {{- 'link.topic.unsticky' |trans({}, ForumBundle.translation ) -}}
+                                </a>
+                            </li>
+                        {%- endif -%}
+
+                        {%- if canCloseTopic(topic, forum) -%}
+                            <li>
+                                <a class="pull-right" href="{{- path('ccdn_forum_moderator_topic_close', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                                    {{- 'link.topic.close' | trans({}, ForumBundle.translation ) -}}
+                                </a>
+                            </li>
+                        {%- endif -%}
+
+                        {%- if canReopenTopic(topic, forum) -%}
+                            <li>
+                                <a class="pull-right" href="{{- path('ccdn_forum_moderator_topic_reopen', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                                    {{- 'link.topic.reopen' | trans({}, ForumBundle.translation ) -}}
+                                </a>
+                            </li>
+                        {%- endif -%}
+
+                        {%- if canRestoreTopic(topic, forum) -%}
+                            <li>
+                                <a class="pull-right" href="{{- path('ccdn_forum_moderator_topic_restore', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                                    {{- 'link.topic.restore' |trans({}, ForumBundle.translation ) -}}
+                                </a>
+                            </li>
+                        {%- endif -%}
+
+                        {%- if canDeleteTopic(topic, forum) -%}
+                            <li>
+                                <a class="pull-right" href="{{- path('ccdn_forum_moderator_topic_delete', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                                    {{- 'link.topic.delete' |trans({}, ForumBundle.translation ) -}}
+                                </a>
+                            </li>
+                        {%- endif -%}
+
+                        {%- if canTopicChangeBoard(topic, forum) -%}
+                            <li>
+                                <a class="pull-right" href="{{- path('ccdn_forum_moderator_topic_change_board', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                                    {{- 'link.topic.change_board' | trans({}, ForumBundle.translation ) -}}
+                                </a>
+                            </li>
+                        {%- endif -%}
+
+                    </ul>
+                </div>
+
+            {%- endif -%}
+
+        </section>
+
+    {%- endif -%}
+
+    <header class="row clearfix">
+        <div class="col-md-12 text-right row">
+            <div id="informations-topic">
+                <span class="label label-default pull-left" title="{{- topic.cachedReplyCount -}}">
+                    {{- 'topic.reply-count-label' |trans({}, ForumBundle.translation ) -}}
+                    {{- topic.cachedReplyCount -}}
+                </span>
+
+                &nbsp;
+
+                <span class="label label-default pull-left" title="{{- topic.cachedViewCount -}}">
+                    {{- 'topic.view-count-label' |trans({}, ForumBundle.translation ) -}}
+                    {{- topic.cachedViewCount -}}
+                </span>
+
+                {%- if subscription_count is defined -%}
+                    &nbsp;
+                    <span class="label label-default pull-left" title="{{- subscription_count -}}">
+                        {{- 'topic.subscription-count-label' |trans({}, ForumBundle.translation ) -}}
+                        {{- subscription_count -}}
+                    </span>
+                {%- endif -%}
+                <span class="pull-left">|</span>
+                {% if is_granted("ROLE_ADMINISTRATEUR_1") %}
+                    <input type="hidden" id="save-references-topic-url" value="{{path('hopitalnumerique_forum_reference_topic_save',{'id':topic.id})}}" />
+                    <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_forum_reference_contenu')}}" />
+                    <a href="{{path('hopitalnumerique_forum_reference_topic_own', {'id':topic.id})}}" class="manageReferences btn btn-xs btn-success fancybox.ajax pull-left"><i class="fa fa-eye"></i></a>
+                    <a href="{{path('hopitalnumerique_forum_reference_topic', {'id':topic.id})}}" class="manageReferences edit btn btn-xs btn-success fancybox.ajax pull-left"><i class="fa fa-tags"></i></a>
+                    <p class="text-muted text-right pull-left"><span class="nbRefs">{% if not topic.id %}0{% else %}{{topic.references|length}}{% endif %}</span> éléments référencés</p>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+{%- endspaceless -%}

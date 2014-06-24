@@ -1,0 +1,15 @@
+/* 10:52:06 Gaia */ UPDATE `core_menu_item` SET `itm_route` = 'hopital_numerique_account_homepage' WHERE `itm_id` = '68';
+/* 10:52:29 Gaia */ INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES (NULL, '68', '3', 'Informations personnelles', 'hopital_numerique_user_informations_personnelles', NULL, NULL, NULL, NULL, '1', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '1');
+/* 10:52:44 Gaia */ UPDATE `core_menu_item` SET `itm_name` = 'Tableau de bord', `itm_route` = 'hopital_numerique_account_homepage' WHERE `itm_id` = '163';
+/* 10:53:00 Gaia */ UPDATE `core_menu_item` SET `itm_order` = '2' WHERE `itm_id` = '69';
+/* 10:53:03 Gaia */ UPDATE `core_menu_item` SET `itm_order` = '3' WHERE `itm_id` = '85';
+/* 10:53:04 Gaia */ UPDATE `core_menu_item` SET `itm_order` = '4' WHERE `itm_id` = '70';
+/* 10:53:06 Gaia */ UPDATE `core_menu_item` SET `itm_order` = '5' WHERE `itm_id` = '71';
+/* 10:53:07 Gaia */ UPDATE `core_menu_item` SET `itm_order` = '6' WHERE `itm_id` = '72';
+/* 10:53:10 Gaia */ UPDATE `core_menu_item` SET `itm_order` = '7' WHERE `itm_id` = '73';
+/* 10:53:14 Gaia */ UPDATE `core_menu_item` SET `itm_order` = '8' WHERE `itm_id` = '141';
+
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (164, 54, 1, 'Messages flash', 'hopitalnumerique_flash_flash', '[]', NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 4);
+/* 15:23:48 Gaia */ UPDATE `core_menu_item` SET `itm_order` = '3' WHERE `itm_id` = '121';

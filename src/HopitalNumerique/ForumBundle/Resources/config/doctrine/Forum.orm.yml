@@ -1,0 +1,22 @@
+HopitalNumerique\ForumBundle\Entity\Forum:
+    constraints:
+        Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: 'name'
+    type: entity
+    table: hn_forum_forum
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+            unique: true
+        readAuthorisedRoles:
+            type: array
+            column: read_authorised_roles
+            nullable: true
+    oneToMany:
+        categories:
+            targetEntity: HopitalNumerique\ForumBundle\Entity\Category
+            mappedBy: forum
+            cascade: ["persist", "remove"]

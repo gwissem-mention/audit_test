@@ -142,24 +142,6 @@ class QuestionnaireType extends AbstractType
             	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
             	    ));
             	    break;
-                case 'choice':
-                    //Récupération de la liste des choix de la question
-                    $choix = !is_null($question->getChoixPossibles()) ? json_decode($question->getChoixPossibles()) : array('Oui','Non');
-
-                    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
-                            'required'    => $question->getObligatoire(),
-                            'label'       => $question->getLibelle(),
-                            'mapped'      => false,
-                            'read_only'   => $this->_readOnly,
-                            'disabled'    => $this->_readOnly,
-                            'choices'     => $choix,
-                            'empty_value' => false,
-                            'expanded'    => true,
-                            'multiple'    => false,
-                            'attr'        => array('class' => 'radio'),
-                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReponse()
-                    ));
-                    break;
             	case 'checkbox':
                     $attr = $question->getObligatoire() ? array('class' => 'checkbox validate[required]') : array();
 
@@ -218,7 +200,32 @@ class QuestionnaireType extends AbstractType
                                 ->setParameter('etat', $question->getReferenceParamTri())
                                 ->orderBy('ref.order', 'ASC');
                             },
-                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReferenceMulitple()
+                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReference()
+                    ));
+                    break;
+                //Les entity ne sont prévues que pour des entités de Référence (TODO : mettre en base la class et le property ?)
+                case 'entityradio':
+                        $attr['class'] = 'radio';
+
+                    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'entity', array(
+                            'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                            'property'    => 'libelle',
+                            'required'    => $question->getObligatoire(),
+                            'empty_value' => $question->getObligatoire() ? false : 'Ne se prononce pas',
+                            'label'       => $question->getLibelle(),
+                            'mapped'      => false,
+                            'read_only'   => $this->_readOnly,
+                            'disabled'    => $this->_readOnly,
+                            'expanded'    => true,
+                            'multiple'    => false,
+                            'attr'        => $attr,
+                            'query_builder' => function(EntityRepository $er) use ($question){
+                                return $er->createQueryBuilder('ref')
+                                ->where('ref.code = :etat')
+                                ->setParameter('etat', $question->getReferenceParamTri())
+                                ->orderBy('ref.order', 'ASC');
+                            },
+                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReference()
                     ));
                     break;
             	case 'file':  

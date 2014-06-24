@@ -43,7 +43,7 @@ class ChapitreController extends Controller
     /**
      * Ajoute un chapitre
      */
-    public function addAction(Outil $outil)
+    public function addAction(Outil $outil, Request $request)
     {
         //créer un chapitre
         $chapitre = $this->get('hopitalnumerique_autodiag.manager.chapitre')->createEmpty();
@@ -54,8 +54,10 @@ class ChapitreController extends Controller
         $chapitre->setOrder( $order );
 
         //init datas
-        $chapitre->setTitle('Chapitre '.$order);
-        $chapitre->setAlias('chapitre-'.$order);
+        $titre = trim($request->request->get('titre')) ? : 'Chapitre '.$order;
+        $tool  = new Chaine( $titre );
+        $chapitre->setTitle( $titre );
+        $chapitre->setAlias( $tool->minifie() );
 
         //save
         $this->get('hopitalnumerique_autodiag.manager.chapitre')->save( $chapitre );
@@ -138,38 +140,4 @@ class ChapitreController extends Controller
 
         return new Response('{"success":false}', 200);
     }
-
-    /**
-     * AJAX : check si l'alias est unique
-     */
-    public function checkAliasUniqueAction(Chapitre $chapitre, Request $request)
-    {
-        $alias         = $request->request->get('alias');
-        $checkChapitre = $this->get('hopitalnumerique_autodiag.manager.chapitre')->findBy( array('alias'=>$alias, 'outil'=>$chapitre->getOutil()) );
-        if ( count($checkChapitre) > 1)
-            return new Response('{"success":false}', 200);
-        elseif ( count($checkChapitre) == 0)
-            return new Response('{"success":true}', 200);
-
-        $checkChapitre = $checkChapitre[0];
-        //si on a trouvé un chapitre et que l'ID est n'est pas celui en cours d'édition, l'alias existe déjà
-        if( $checkChapitre && $checkChapitre->getId() != $chapitre->getId() )
-            return new Response('{"success":false}', 200);
-        else
-            return new Response('{"success":true}', 200);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

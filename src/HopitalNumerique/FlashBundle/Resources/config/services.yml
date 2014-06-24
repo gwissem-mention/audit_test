@@ -1,0 +1,21 @@
+parameters:
+    hopitalnumerique_flash.manager.flash.class: HopitalNumerique\FlashBundle\Manager\FlashManager
+    hopitalnumerique_flash.grid.flash.class: HopitalNumerique\FlashBundle\Grid\FlashGrid
+    hopitalnumerique_flash.form.flash.class: HopitalNumerique\FlashBundle\Form\FlashType
+
+services:
+    hopitalnumerique_flash.manager.flash:
+        class: %hopitalnumerique_flash.manager.flash.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_flash.grid.flash:
+        class: %hopitalnumerique_flash.grid.flash.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_flash.form.flash:
+        class: %hopitalnumerique_flash.form.flash.class%
+        arguments: ["@hopitalnumerique_flash.manager.flash", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_flash_flash }
