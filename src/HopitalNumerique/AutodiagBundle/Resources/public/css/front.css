@@ -20,7 +20,7 @@
 /* Colonne right */
     #autodiag .content{background-color: #f8f8f8; padding-bottom: 20px}
     #autodiag .content h2{color:#6f3596; text-transform: uppercase;}
-    #autodiag .content h3{color:#6f3596; text-transform: uppercase; margin-bottom: 20px; font-size: 18px}
+    #autodiag .content h3{color:#6f3596; margin-bottom: 20px; font-size: 18px}
     #autodiag .content .badge-primary{background-color:#4f8edc; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
     #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer}
     #autodiag .content .radio{float: left; margin-right: 30px;}

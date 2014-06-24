@@ -90,7 +90,7 @@ function saveQuestionnaire( type )
     $('#action').val( type );
 
     if( type == 'valid' ){
-        apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+        apprise('La validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci.', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
             if(r) { 
                 $('#wizard').submit();
             }
