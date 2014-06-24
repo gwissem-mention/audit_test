@@ -24,8 +24,8 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">{{panel.title}}</h3>
-                                    <div class="options">
-                                        {{panel.taux|number_format(0)}}%
+                                    <div class="options" title="Taux remplissage : {{panel.taux}}%">
+                                        {{panel.taux}}%
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -68,7 +68,7 @@
                 {% set chart = graphiques['table'] %}
                 <h3>{{chart.title|capitalize}}</h3>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 tableContainer">
                         <table class="table table-hover table-bordered">
                             <thead>
                                 <th colspan="2"></th>

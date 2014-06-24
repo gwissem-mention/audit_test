@@ -89,47 +89,7 @@ class QuestionManager extends BaseManager
         
         return $references;
     }
-
-    /**
-     * [calculPonderationLeft description]
-     *
-     * @param  [type] $question [description]
-     *
-     * @return [type]
-     */
-    public function calculPonderationLeft( $question )
-    {
-        //get Outil
-        $outil = $question->getChapitre()->getOutil();
-
-        //init some vars
-        $ponderationMax = 100;
-        $questions      = array();
-        $chapitres      = $outil->getChapitres();
-        
-        //build big array of questions
-        foreach($chapitres as $chapitre)
-            $questions = array_merge($questions, $chapitre->getQuestions()->toArray() );
-        
-        //calcul pondération
-        foreach( $questions as $key => $one) {
-            if( $one->getId() != $question->getId() ){
-                $ponderation = $one->getPonderation();
-
-                if( $ponderation != 0 ){
-                    $ponderationMax -= $ponderation;
-                    unset( $questions[$key] );
-                }    
-            }
-        }
-
-        //max Pondération invalid
-        if( $ponderationMax < 0 )
-            return 0;
-
-        return ($question->getPonderation() <= $ponderationMax) ? true : $ponderationMax;
-    }
-
+    
     /**
      * Met à jour l'ordre des questions
      *

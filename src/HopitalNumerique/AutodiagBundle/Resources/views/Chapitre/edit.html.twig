@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" style="{% if chapitre.parent is not null %}display:none{% endif %}" >
             <div class="form-group">
                 {{ form_label(form.noteMinimale) }}
                 <div class="col-md-3">

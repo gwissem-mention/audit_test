@@ -25,7 +25,7 @@ $(document).ready(function() {
             enabled : false
         },
         pane : {
-            size : '100%'
+            size : '90%'
         },
         xAxis : {
             categories        : categories,

@@ -74,6 +74,7 @@ class ResultatManager extends BaseManager
             $chapitre->childs   = array();
             $chapitre->noteMin  = $one->getNoteMinimale();
             $chapitre->noteOpt  = $one->getNoteOptimale();
+            $chapitre->order    = $one->getOrder();
             $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
             //handle questions/reponses
@@ -181,9 +182,16 @@ class ResultatManager extends BaseManager
     {
         $results = new \StdClass;
 
+        //reorder chapitres
+        $chapitresOrdered = array();
+        foreach($chapitres as $one){
+            $chapitresOrdered[ $one->order ] = $one;
+        }
+        ksort($chapitresOrdered);
+
         //build chapitres
         $results->chapitres = array();
-        foreach($chapitres as $chapitre)
+        foreach($chapitresOrdered as $chapitre)
             $results->chapitres[$chapitre->id] = $chapitre->title;
         
         //build catégories
@@ -201,36 +209,35 @@ class ResultatManager extends BaseManager
             foreach($questions as $question)
             {
                 //check If Question != texte and != Non concerné
-                $one   = $questionsReponses[ $question->getId() ];
-                $value = $one->value;
+                if( isset($questionsReponses[ $question->getId() ]) ){
+                    $one   = $questionsReponses[ $question->getId() ];
+                    $value = $one->tableValue;
 
-                if( $one->type != 417 && $value !== 0 ){
-                    //get parent chapitre ID
-                    $chapitre = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getId() : $question->getChapitre()->getParent()->getId();
+                    if( ($one->type != 417 && $value !== 0) || $value != -1 ){
+                        //get parent chapitre ID
+                        $chapitre = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getId() : $question->getChapitre()->getParent()->getId();
 
-                    //manage empty Values
-                    $value = $value == '' ? 0 : $value;
+                        //Add Chapitre if not exist
+                        if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitre] )  )
+                            $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
+                        if ( !isset($totalChapitres[ $chapitre ]) )
+                            $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
 
-                    //Add Chapitre if not exist
-                    if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitre] )  )
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
-                    if ( !isset($totalChapitres[ $chapitre ]) )
-                        $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
+                        //update Chapitre
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbRep']++;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints'] += $value;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']      += $one->max;
 
-                    //update Chapitre
-                    $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbRep']++;
-                    $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints'] += $value;
-                    $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']      += $one->max;
-
-                    //update Total
-                    $totalChapitres[ $chapitre ]['nbRep']++;
-                    $totalChapitres[ $chapitre ]['nbPoints'] += $value;
-                    $totalChapitres[ $chapitre ]['max']      += $one->max;                    
+                        //update Total
+                        $totalChapitres[ $chapitre ]['nbRep']++;
+                        $totalChapitres[ $chapitre ]['nbPoints'] += $value;
+                        $totalChapitres[ $chapitre ]['max']      += $one->max;
+                    }
                 }
             }
 
             //Set Default Values for Empty Cells
-            foreach($chapitres as $one){
+            foreach($chapitresOrdered as $one){
                 if( !isset($results->categories[ $categorieId ]['chapitres'][$one->id]) ){
                     $results->categories[ $categorieId ]['chapitres'][$one->id] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
                     $totalChapitres[ $one->id ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
@@ -313,18 +320,18 @@ class ResultatManager extends BaseManager
             //get reponse
             if( isset($questionsReponses[$question->getId()]) ){
                 $reponse = $questionsReponses[$question->getId()];
-                if( ( ($reponse->type == 415 && $reponse->value != 0 ) || ($reponse->type == 416 && $reponse->value != 0) || ($reponse->type == 417 && $reponse->value != '') ) && $reponse->value < $reponse->noteMinimale)
+                if( ( $reponse->type == 415 || $reponse->type == 416 || ($reponse->type == 417 && $reponse->value != '') ) && $reponse->value <= $reponse->noteMinimale)
                     $nbQuestionsRemplies++;
-            }
 
-            $nbQuestions++;
+                $nbQuestions++;
+            }
         }
 
         return $nbQuestions != 0 ? number_format(( ($nbQuestionsRemplies * 100) / $nbQuestions), 0) : 0;
     }
 
     /**
-     * Calcul ne Taux de remplissage du chapitre
+     * Calcul le Taux de remplissage du chapitre
      *
      * @param StdClass $chapitre Le chapitre
      *
@@ -364,7 +371,7 @@ class ResultatManager extends BaseManager
             //get reponse
             if( isset($questionsReponses[$question->getId()]) ){
                 $reponse = $questionsReponses[$question->getId()];
-                if( $reponse->value != '' ) {
+                if( $reponse->value != -1 && $reponse->value != '' ) {
                     $sommeValues       += ($reponse->value * $reponse->ponderation);
                     $sommePonderations += $reponse->ponderation;
                 }
@@ -449,17 +456,20 @@ class ResultatManager extends BaseManager
             {
                 //on ajoute seulement les questions valides pour les résultats
                 $one = $questionsReponses[ $question->getId() ];
-                if( ( ($one->type == 415 && $one->value != 0 ) || ($one->type == 416 && $one->value != 0) || ($one->type == 417 && $one->value != '') ) && $one->value < $one->noteMinimale){
-                    $results[]     = $one;
-                    $noteChapitre += $one->value;
+                if( $one->type == 415  || $one->type == 416 || ($one->type == 417 && $one->value != '') ){
+                    if( $one->value <= $one->noteMinimale ){
+                        $results[]     = $one;
+                        $noteChapitre += $one->value;
+                    }
+                    
                     $nbQuestionsRemplies ++;
                 }
 
                 //on ajoute TOUTES les questions aux chapitre pour les calculs liés aux graphiques (pondération)
                 $forCharts[] = $one;
-            }
 
-            $nbQuestions++;
+                $nbQuestions++;
+            }
         }
 
         $chapitre->questions           = $results;
@@ -482,28 +492,35 @@ class ResultatManager extends BaseManager
     {
         $results = array();
         foreach($reponses as $reponse) {
-            $rep = new \StdClass;
+            if( $reponse->getValue() != -1 ){
+                $rep = new \StdClass;
 
-            //reponses values
-            $question           = $reponse->getQuestion();
-            $rep->value         = $reponse->getValue();
-            $rep->remarque      = $reponse->getRemarque();
+                //reponses values
+                $question           = $reponse->getQuestion();
+                $rep->tableValue    = $reponse->getValue();
+                $rep->remarque      = $reponse->getRemarque();
 
-            //questions values
-            $rep->id            = $question->getId();
-            $rep->question      = $question->getTexte();
-            $rep->ordreResultat = $question->getOrdreResultat();
-            $rep->noteMinimale  = $question->getNoteMinimale();
-            $rep->synthese      = $question->getSynthese();
-            $rep->ponderation   = $question->getPonderation();
-            $rep->order         = $question->getOrder();
-            $rep->type          = $question->getType()->getId();
+                //questions values
+                $rep->id            = $question->getId();
+                $rep->question      = $question->getTexte();
+                $rep->ordreResultat = $question->getOrdreResultat();
+                $rep->noteMinimale  = $question->getNoteMinimale();
+                $rep->synthese      = $question->getSynthese();
+                $rep->ponderation   = $question->getPonderation();
+                $rep->order         = $question->getOrder();
+                $rep->type          = $question->getType()->getId();
 
-            //Si != Texte, on calcul la réponse Max
-            if( $rep->type != 417 )
-                $rep->max = $this->calculMaxOption( $question );
+                //Si != Texte, on calcul la réponse Max
+                if( $rep->type != 417 ){
+                    $rep->max = $this->calculMaxOption( $question );
 
-            $results[ $reponse->getQuestion()->getId() ] = $rep;
+                    //on rapporte la valeur de note question sur 100
+                    $rep->value = $rep->max != 0 ? ($reponse->getValue() * 100) / $rep->max : 0;
+                }else
+                    $rep->value = $reponse->getValue();
+
+                $results[ $reponse->getQuestion()->getId() ] = $rep;
+            }
         }
 
         return $results;
