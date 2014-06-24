@@ -178,51 +178,6 @@ class OutilController extends Controller
     }
 
     /**
-     * Calcul la pondération de toutes les questions
-     *
-     * @param Outil $outil L'outil
-     *
-     * @return Response
-     */
-    public function ponderationAction( Outil $outil )
-    {
-        //init some vars
-        $ponderationMax = 100;
-        $questions      = array();
-        $chapitres      = $outil->getChapitres();
-        
-        //build big array of questions
-        foreach($chapitres as $chapitre)
-            $questions = array_merge($questions, $chapitre->getQuestions()->toArray() );
-        
-        //calcul pondération
-        foreach( $questions as $key => $question) {
-            $ponderation = $question->getPonderation();
-
-            if( $ponderation != 0 ){
-                $ponderationMax -= $ponderation;
-                unset( $questions[$key] );
-            }
-        }
-
-        //max Pondération invalid
-        if( $ponderationMax < 0 )
-            return new Response('{"success":false, "message" : "La pondération totale de votre outil est supérieure à 100."}', 200);
-
-        if( count($questions) == 0 )
-            return new Response('{"success":true, "message" : "Toutes les questions de votre outil possèdent une pondération valide."}', 200);
-
-        //update pondération
-        $ponderation = $ponderationMax / count($questions);
-        foreach ($questions as $question)
-            $question->setPonderation( $ponderation );
-        
-        $this->get('hopitalnumerique_autodiag.manager.question')->save($questions);
-
-        return new Response('{"success":true, "message" : "Les pondérations de votre outil ont été mis à jour."}', 200);
-    }
-
-    /**
      * Action appelée dans le plugin "Outil" pour tinymce
      */
     public function getOutilsAction()

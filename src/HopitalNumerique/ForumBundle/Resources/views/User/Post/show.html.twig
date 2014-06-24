@@ -19,7 +19,10 @@
     {%- include "CCDNForumForumBundle:User:Topic/Partial/stat_vitals.html.twig" -%}
 
     {%- if topic.isDeleted or topic.isClosed or topic.isSticky -%}
-        {%- include "CCDNForumForumBundle:User:Topic/Partial/stat_mods.html.twig" -%}
+        {# Affichage uniquement si l'utilisateur a le droit de visioner #}
+        {% if app.user.getRole() in topic.getBoard.readAuthorisedRoles %}
+            {%- include "CCDNForumForumBundle:User:Topic/Partial/stat_mods.html.twig" -%}
+        {% endif %}
     {%- endif -%}
 
     <br>

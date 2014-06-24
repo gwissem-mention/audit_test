@@ -33,38 +33,17 @@ class FrontController extends Controller
     public function outilAction( Outil $outil )
     {
         //init some vars
-        $ponderationMax = 100;
-        $questions      = array();
         $chapitres      = $outil->getChapitres();
         $parents        = array();
         $enfants        = array();
         
-        //build big array of questions
+        //build chapitres
         foreach($chapitres as $chapitre){
-            $questions = array_merge($questions, $chapitre->getQuestions()->toArray() );
-
             if( is_null($chapitre->getParent()) ){
                 $parents[ $chapitre->getId() ]['parent'] = $chapitre;
                 $parents[ $chapitre->getId() ]['childs'] = array();
             }else
                 $enfants[] = $chapitre;
-        }
-        
-        //calcul pondération
-        foreach( $questions as $key => $question) {
-            $ponderation = $question->getPonderation();
-
-            if( $ponderation != 0 )
-                $ponderationMax -= $ponderation;
-        }
-
-        $ponderationMax = ceil($ponderationMax);
-
-        //max Pondération invalid
-        if( $ponderationMax != 0 ) {
-            // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
-            $this->get('session')->getFlashBag()->add( 'danger', 'L\'outil n\'est pas correctement configuré, il n\'est donc pas accessible.');
-            return $this->redirect( $this->generateUrl('hopital_numerique_homepage'));
         }
 
         //reformate les chapitres
@@ -72,6 +51,14 @@ class FrontController extends Controller
             $parentId = $enfant->getParent()->getId();
             $parents[ $parentId ]['childs'][] = $enfant;
         }
+
+        //reorder parents
+        $chapitresOrdered = array();
+        foreach($parents as $one){
+            $tmp = $one['parent'];
+            $chapitresOrdered[ $tmp->getOrder() ] = $one;
+        }
+        ksort($chapitresOrdered);
 
         //get Existing responses (for connected user only)
         $user     = $this->get('security.context')->getToken()->getUser();
@@ -94,14 +81,6 @@ class FrontController extends Controller
                 }
             }
         }
-
-        //reorder parents
-        $chapitresOrdered = array();
-        foreach($parents as $one){
-            $tmp = $one['parent'];
-            $chapitresOrdered[ $tmp->getOrder() ] = $one;
-        }
-        ksort($chapitresOrdered);
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
             'outil'     => $outil,

@@ -320,7 +320,7 @@ class ResultatManager extends BaseManager
             //get reponse
             if( isset($questionsReponses[$question->getId()]) ){
                 $reponse = $questionsReponses[$question->getId()];
-                if( ( $reponse->type == 415 || $reponse->type == 416 || ($reponse->type == 417 && $reponse->value != '') ) && $reponse->value < $reponse->noteMinimale)
+                if( ( $reponse->type == 415 || $reponse->type == 416 || ($reponse->type == 417 && $reponse->value != '') ) && $reponse->value <= $reponse->noteMinimale)
                     $nbQuestionsRemplies++;
 
                 $nbQuestions++;
@@ -457,7 +457,7 @@ class ResultatManager extends BaseManager
                 //on ajoute seulement les questions valides pour les résultats
                 $one = $questionsReponses[ $question->getId() ];
                 if( $one->type == 415  || $one->type == 416 || ($one->type == 417 && $one->value != '') ){
-                    if( $one->value < $one->noteMinimale ){
+                    if( $one->value <= $one->noteMinimale ){
                         $results[]     = $one;
                         $noteChapitre += $one->value;
                     }

@@ -26,11 +26,19 @@
         "@fancybox_js"
         "@jquery_toggles_js"
         "@validationEngine_js"
+        "@tinymce_js"
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriqueforum/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    <script type="text/javascript">
+        NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
+        NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
+    </script>
 {% endblock %}
 
 {% block prebody %}
@@ -42,45 +50,20 @@
 
 {% block block_du_body %}
 
+<style type="text/css"></style>
+
     {% block information_page %}
 
-        {# Affichage du breadcrumbs du forum dans le H3 #}
-        {% set breadcrumbsForum = "" %}
-        {% set breadcrumbsForumTitle = "" %}
-
-        {%- if board is not defined -%}
-            {%- if topic is defined -%}
-                {%- set breadcrumbsForum = topic.getBoard.getCategory.getName|truncate(30,true,'...') ~ ' • ' ~ topic.getBoard.getName|truncate(30,true,'...') -%}
-                {%- set breadcrumbsForumTitle = topic.getBoard.getCategory.getName ~ ' • ' ~ topic.getBoard.getName -%}
-            {%- else -%}
-                {%- if post is defined -%}
-                    {%- if post.getTopic is defined -%}
-                        {%- set breadcrumbsForum = post.getTopic.getBoard.getCategory.getName|truncate(30,true,'...') ~ ' • ' ~ post.getTopic.getBoard.getName|truncate(30,true,'...') -%}
-                        {%- set breadcrumbsForumTitle = post.getTopic.getBoard.getCategory.getName ~ ' • ' ~ post.getTopic.getBoard.getName -%}
-                    {%- endif -%}
-                {%- endif -%}
-            {%- endif -%}
-        {%- endif -%}
-
-        {%- if category is not defined -%}
-            {%- if board is defined -%}
-                {%- set breadcrumbsForum = board.getCategory.getName|truncate(30,true,'...') ~ ' • ' ~ board.getName|truncate(30,true,'...') -%}
-                {%- set breadcrumbsForumTitle = board.getCategory.getName ~ ' • ' ~ board.getName -%}
-            {%- else -%}
-                {%- if topic is defined -%}
-                    {%- set breadcrumbsForum = topic.getBoard.getCategory.getName|truncate(30,true,'...') ~ ' • ' ~ topic.getBoard.getName|truncate(30,true,'...') -%}
-                    {%- set breadcrumbsForumTitle = topic.getBoard.getCategory.getName ~ ' • ' ~ topic.getBoard.getName -%}
-                {%- endif -%}
-            {%- endif -%}
-        {%- endif -%}
-
-        {%- if category is defined and not null -%}
-            {%- set breadcrumbsForum = category.getName|truncate(30,true,'...') -%}
-            {%- set breadcrumbsForumTitle = category.getName -%}
-        {%- endif -%}
-
         <div class="col-md-12">
-            <h3 class="violet">Forum {% if breadcrumbsForum is not empty %} - <span title="{{breadcrumbsForumTitle}}">{{ breadcrumbsForum }}</span>{% endif %}{% if is_granted("ROLE_ADMINISTRATEUR_1") %}<a href="{{path('ccdn_forum_admin_index')}}" target="_blank" class="pull-right lienAdmin"><i style="margin:0 5px 0 0;" class="fa fa-cog"></i>Accès à l'administration</a> {% endif %} </h3>
+            <h3 class="violet">Forum / <a href="{{- path('ccdn_forum_user_subscription_index', {'forumName': forum.name}) -}}">Mes abonnements</a>{% if is_granted("ROLE_ADMINISTRATEUR_1") %}<a href="{{path('ccdn_forum_admin_index')}}" target="_blank" class="pull-right lienAdmin"><i style="margin:0 5px 0 0;" class="fa fa-cog"></i>Accès à l'administration</a> {% endif %} </h3>
+        </div>
+
+        <div id="breadcrumbs-forum" class="col-md-12">
+            {%- block crumb_trail -%}
+                {%- if crumbs is defined -%}
+                        {%- include 'CCDNForumForumBundle:Common:Layout/crumbs.html.twig' with {'crumbs': crumbs } -%}
+                {%- endif -%}
+            {%- endblock crumb_trail -%}
         </div>
     {% endblock information_page %}
 

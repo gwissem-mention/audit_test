@@ -42,7 +42,7 @@ $(document).ready(function() {
             enabled : false
         },
         pane : {
-            size : '100%'
+            size : '90%'
         },
         xAxis : {
             categories        : categories,
@@ -62,7 +62,7 @@ $(document).ready(function() {
         },
         tooltip : {
             shared      : true,
-            pointFormat : '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}%</b><br/>'
+            pointFormat : '<span style="color:{series.color}; font-size:10px">{series.name} : {point.y:,.0f}%<br/>'
         },
         series : [
             {

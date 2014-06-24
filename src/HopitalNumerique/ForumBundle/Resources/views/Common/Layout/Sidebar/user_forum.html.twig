@@ -6,17 +6,26 @@
 
         {%- if topic is not defined -%}
             {%- if post is defined -%}
-                {%- set topic = post.getTopic -%}
+                {# Affichage uniquement si l'utilisateur a le droit de visioner #}
+                {% if app.user.getRole() in post.getTopic.getBoard.readAuthorisedRoles %}
+                    {%- set topic = post.getTopic -%}
+                {%- endif -%}
             {%- endif -%}
         {%- endif -%}
 
         {%- if board is not defined -%}
             {%- if topic is defined -%}
-                {%- set board = topic.getBoard -%}
+                {# Affichage uniquement si l'utilisateur a le droit de visioner #}
+                {% if app.user.getRole() in topic.getBoard.readAuthorisedRoles %}
+                    {%- set board = topic.getBoard -%}
+                {%- endif -%}
             {%- else -%}
                 {%- if post is defined -%}
                     {%- if post.getTopic is defined -%}
-                        {%- set board = post.getTopic.getBoard -%}
+                        {# Affichage uniquement si l'utilisateur a le droit de visioner #}
+                        {% if app.user.getRole() in post.getTopic.getBoard.readAuthorisedRoles %}
+                            {%- set board = post.getTopic.getBoard -%}
+                        {% endif %}
                     {%- endif -%}
                 {%- endif -%}
             {%- endif -%}
@@ -24,10 +33,16 @@
 
         {%- if category is not defined -%}
             {%- if board is defined -%}
-                {%- set category = board.getCategory -%}
+                {# Affichage uniquement si l'utilisateur a le droit de visioner #}
+                {% if app.user.getRole() in board.getCategory.readAuthorisedRoles %}
+                    {%- set category = board.getCategory -%}
+                {% endif %}
             {%- else -%}
                 {%- if topic is defined -%}
-                    {%- set category = topic.getBoard -%}
+                    {# Affichage uniquement si l'utilisateur a le droit de visioner #}
+                    {% if app.user.getRole() in topic.getBoard.getCategory.readAuthorisedRoles %}
+                        {%- set category = topic.getBoard.getCategory -%}
+                    {% endif %}
                 {%- endif -%}
             {%- endif -%}
         {%- endif -%}
@@ -35,11 +50,17 @@
         {%- if forum is defined and not null -%}
             {%- if route == 'ccdn_homepage'
                 or route == 'ccdn_forum_user_category_index' -%}
-                <li class="active">
-                    <a href="{{- path('ccdn_forum_user_category_index', {'forumName': forumName}) -}}">
+                {# Affichage uniquement si l'utilisateur a le droit de visioner #}
+                {% if app.user.getRole() in forum.readAuthorisedRoles %}
+                    <li class="active">
+                        <a href="{{- path('ccdn_forum_user_category_index', {'forumName': forumName}) -}}">
+                {% endif %}
             {%- else -%}
-                <li class="forum">
-                    <a href="{{- path('ccdn_forum_user_category_index', {'forumName': forumName}) -}}">
+                {# Affichage uniquement si l'utilisateur a le droit de visioner #}
+                {% if app.user.getRole() in forum.readAuthorisedRoles %}
+                    <li class="forum">
+                        <a href="{{- path('ccdn_forum_user_category_index', {'forumName': forumName}) -}}">
+                {% endif %}
             {%- endif -%}
                         <strong>{{- 'link.category.index' |trans({}, ForumBundle.translation )|upper -}}</strong>
                     </a>

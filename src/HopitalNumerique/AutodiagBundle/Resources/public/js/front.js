@@ -29,6 +29,11 @@ $(document).ready(function() {
     $('#wizard fieldset .radios input').on('click', function(){
         calcAvancement();
     });
+
+    //remove les title des fieldset pour empecher l'effet bizarre
+    $('fieldset').each(function(){
+        $(this).attr('title', '');
+    })
 });
 
 //Truncate l'avancement affiché
