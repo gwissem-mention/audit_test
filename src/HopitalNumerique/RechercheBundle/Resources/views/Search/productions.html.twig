@@ -16,11 +16,11 @@
             {% endif %}
 
             {% if objet['primary'] == 1 %}
-                <img src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-1-prod.png')}}" alt="Niveau 1" />
+                <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-1-prod.png')}}" alt="Niveau 1" title="Contenus les plus pertinents" />
             {% elseif objet['countRef'] <= 200 %}
-                <img src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-2-prod.png')}}" alt="Niveau 2" />
+                <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-2-prod.png')}}" alt="Niveau 2" title="Contenus pertinents" />
             {% elseif objet['countRef'] > 200 %}
-                <img src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-3-prod.png')}}" alt="Niveau 3" />
+                <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-3-prod.png')}}" alt="Niveau 3" title="Contenus potentiellement pertinents" />
             {% endif %}
             
             {% if objet['objet'] is not null %}
