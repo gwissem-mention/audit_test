@@ -4,7 +4,7 @@
 #
 ccdn_forum_user_topic_show:
     pattern: /{topicId}
-    defaults: { _controller: CCDNForumForumBundle:UserTopic:show, _locale: fr, forumName: MonHopitalNumerique }
+    defaults: { _controller: HopitalNumeriqueForumBundle:UserTopic:show, _locale: fr, forumName: MonHopitalNumerique }
 
 ccdn_forum_user_topic_create:
     pattern: /create/for-board/{boardId}

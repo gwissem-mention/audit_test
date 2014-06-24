@@ -329,9 +329,9 @@ function saveReferences( chapitre, question )
         dataType : 'json',
         success  : function( data ){
             if( chapitre != null)
-                $('#chapitres #chapitre-'+chapitre+' > .dd3-content .text-muted span').html( data.nbRef );
+                $('#chapitres #chapitre-'+chapitre+' > .dd3-content .text-muted span').html( data.note );
             else
-                $('#questions #question-'+question+' > .dd3-content .text-muted span').html( data.nbRef );
+                $('#questions #question-'+question+' > .dd3-content .text-muted span').html( data.note );
 
             loader.finished();
             $.fancybox.close(true);

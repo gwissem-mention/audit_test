@@ -12,6 +12,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class ChapitreManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Chapitre';
+    private $_refPonderees;
 
     /**
      * Compte le nombre de chapitres lié à loutil
@@ -55,8 +56,10 @@ class ChapitreManager extends BaseManager
      *
      * @return array
      */
-    public function getArbo( $outil )
+    public function getArbo( $outil, $refPonderees )
     {
+        $this->_refPonderees = $refPonderees;
+
         $datas = new ArrayCollection( $this->getRepository()->getArbo( $outil )->getQuery()->getResult() );
 
         //Récupère uniquement les premiers parents
@@ -199,7 +202,7 @@ class ChapitreManager extends BaseManager
             $item->order        = $element->getOrder();
             $item->noteMinimale = $element->getNoteMinimale();
             $item->noteOptimale = $element->getNoteOptimale();
-            $item->references   = count($element->getReferences());
+            $item->note         = $this->getNoteReferencement($element->getReferences());
 
             //add childs : filter items with current element
             $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $element))->orderBy(array( "order" => Criteria::ASC ));
@@ -214,4 +217,24 @@ class ChapitreManager extends BaseManager
         return $tab;
     }
 
+    /**
+     * Retourne la note des références
+     *
+     * @param array $references   Tableau des références
+     * @param array $ponderations Tableau des pondérations
+     *
+     * @return integer
+     */
+    private function getNoteReferencement( $references )
+    {
+        $note = 0;
+        foreach($references as $reference){
+            $id = $reference->getReference()->getId();
+
+            if( isset($this->_refPonderees[ $id ]) )
+                $note += $this->_refPonderees[ $id ]['poids'];
+        }
+        
+        return $note;
+    }
 }
