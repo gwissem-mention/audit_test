@@ -7,6 +7,7 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-autodiag-front-outil.js" 
         '@jquery_stepy_js'
+        '@jquery_qtip2_js'
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/hopitalnumeriqueautodiag/js/front.js'
     %}
@@ -17,6 +18,7 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-autodiag-front-outil.css" filter="cssrewrite, ?yui_css" 
+        "@jquery_qtip2_css"
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriqueautodiag/css/front.css'
     %}
@@ -107,6 +109,13 @@
             <div class="clearfix"></div>
         </div>
     </div>
+    <script>
+    $(document).ready(function() {
+        $('.badge').qtip({ 
+            style : 'qtip-bootstrap'
+        });
+    });
+    </script>
 {% endblock %}
 
 {% macro buildQuestion(question, reponse, formName, questionNumber) %}
