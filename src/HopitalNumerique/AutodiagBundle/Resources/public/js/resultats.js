@@ -24,7 +24,7 @@ $(document).ready(function() {
     var values     = [];
     var optimale   = [];
     $(datas).each(function(index, element ){
-        categories.push( element.title + ' ( '+ element.taux+'% )' );
+        categories.push( element.title + ' ( Taux remplissage : '+ element.taux+'% )' );
         values.push( element.value );
         optimale.push( element.opti );
     })
