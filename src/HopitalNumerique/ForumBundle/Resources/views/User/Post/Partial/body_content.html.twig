@@ -1,5 +1,5 @@
 {%- spaceless -%}
 
-    {{- post.getBody|nl2br -}}
+    {{- BBCode_Parse(post.getBody|nl2br)|raw -}}
 
 {%- endspaceless -%}

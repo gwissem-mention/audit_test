@@ -18,8 +18,7 @@
 
     <section class="clearfix">
         {%- form_theme form ccdn_forum_forum.topic.user.create.form_theme -%}
-        <form action="{{- path('ccdn_forum_user_topic_create_process', {'forumName': forumName, 'boardId': board.id } ) -}}"
-         method="post" {{ form_enctype(form) }} class="form-horizontal toValidate" role="form" novalidate>
+        <form action="{{- path('ccdn_forum_user_topic_create_process', {'forumName': forumName, 'boardId': board.id } ) -}}" method="post" {{ form_enctype(form) }} class="form-horizontal toValidate" role="form" novalidate>
             <fieldset>
 
                 <div class="form-group">
@@ -28,26 +27,22 @@
                     </div>
                 </div>
 
+                {{ form_javascript(form) }}
+
                 {{- form_errors(form) -}}
 
                 {{- form_row(form.Topic.board) -}}
 
                 {{- form_row(form.Topic.title) -}}
 
+                {{- form_row(form.body) -}}
+
                 {{- form_rest(form) -}}
 
                 <div class="row">
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-10">
-                            <input type="submit" class="btn btn-success col-lg-offset-2 col-lg-3" value="
-                                {{- 'form.button.topic.create' | trans({}, ForumBundle.translation ) -}}
-                            " name="submit[post]" id="submit[post]">
-
-                        {#
-                            <input type="submit" class="btn" value="
-                                {{- 'form.button.preview' | trans({}, ForumBundle.translation ) -}}
-                            " name="submit[preview]">
-                        #}
+                            <input type="submit" class="btn btn-success col-lg-offset-2 col-lg-3" value="{{- 'form.button.topic.create' | trans({}, ForumBundle.translation ) -}}" name="submit[post]" id="submit[post]">
 
                             <a class="btn btn-default col-lg-offset-1 col-lg-2" href="{{- path('ccdn_forum_user_board_show', {'forumName': forumName, 'boardId': board.id}) -}}">
                                 {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}

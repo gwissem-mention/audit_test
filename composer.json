@@ -50,7 +50,9 @@
         "beberlei/DoctrineExtensions": "v0.1",
         "codeconsortium/ccdn-forum-bundle": "dev-master",
         "nodevo/gestionnaire-media": "v1.3",
-        "stof/doctrine-extensions-bundle": "~1.1@dev"
+        "stof/doctrine-extensions-bundle": "~1.1@dev",
+        "codeconsortium/ccdn-component-bb-code": "dev-master",
+        "codeconsortium/ccdn-component-bb-code-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [
