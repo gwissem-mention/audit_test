@@ -110,3 +110,30 @@ function saveQuestionnaire( type, userConnected )
     }else
         $('#wizard').submit();
 }
+
+//Vide le questionnaire
+function emptyAutodiag()
+{
+    $('#wizard fieldset .emptyChapter').each(function(){
+        $(this).click();
+    });
+}
+
+//vide le chapitre
+function emptyChapter( that )
+{
+    //empty select + inputs
+    $(that).parent().find('.form-control').each(function(){
+        if( $(this).is('input') )
+            $(this).val('');
+        else if( $(this).is('select') )
+            $(this).val( $(this).find('option:first').val() );
+    });
+
+    //empty radios
+    $(that).parent().find('.radio').each(function(){
+        $(this).find('input').prop('checked', '');
+    });
+
+    calcAvancement();
+}

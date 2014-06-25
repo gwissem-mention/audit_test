@@ -32,17 +32,9 @@ class ObjetGrid extends Grid implements IGrid
         $this->addColonne( new Column\TextColumn('titre', 'Titre') );
         $this->addColonne( new Column\TextColumn('types','Catégories') );
         
-        $isArticleColumn = new Column\BooleanColumn('isArticle', 'Article');
-        $isArticleColumn->setSize( 90 );
-        $this->addColonne( $isArticleColumn );
-
-        $infraColumn = new Column\BooleanColumn('isInfraDoc', 'Infra-doc');
+        $infraColumn = new Column\BooleanColumn('isInfraDoc', 'Infra-doc ?');
         $infraColumn->setSize( 90 );
         $this->addColonne( $infraColumn );
-
-        $autodiagColumn = new Column\ArrayColumn('autodiags', 'Autodiag ?');
-        $autodiagColumn->setSize( 120 );
-        $this->addColonne( $autodiagColumn );
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize( 80 );

@@ -48,8 +48,23 @@
             <div class="options">
                 <div class="btn-toolbar">
                     <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success btn-sm" ><i class="fa fa-check"></i> Valider le questionnaire</div>
+                    {% if reponses %}
+                        <div onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i></div>
+                    {% endif %}
                 </div>
             </div>
+
+            {% if reponses %}
+                <div class="clearfix"></div>
+    
+                <div class="col-md-12">
+                    <p class="text-muted">
+                        Votre questionnaire à été pré-rempli avec vos réponses précédentes, si vous souhaitez vider ces réponses, cliquez sur la corbeille au niveau du titre pour vider la totalité des réponses, ou au niveau du chapitre pour vider les réponses d'un seul chapitre.
+                    </p>
+                </div>
+
+                <div class="clearfix"></div>
+            {% endif %}
 
             <div class="col-md-12 content">
                 {% set formName = outil.alias %}
@@ -61,6 +76,9 @@
 
                         {# Build step #}
                         <fieldset title="<p>{{parent.title}}</p>" >
+                            {% if reponses %}
+                                <div onclick="emptyChapter(this);" class="emptyChapter btn btn-default btn-sm pull-right"><i class="fa fa-trash-o"></i></div>
+                            {% endif %}
                             <h2>{{parent.title}}</h2>
 
                             <hr>
@@ -154,7 +172,7 @@
                 <input type="integer" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" value="{% if reponse['value'] != -1 %}{{reponse['value']}}{% endif %}" />
             {% endif %}
 
-            <input type="text" class="form-control input-sm" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="{% if reponse['remarque'] is not defined or reponse['remarque'] == '' %}display:none{% endif %}" placeholder="Remarques" value="{% if reponse['remarque'] is defined and reponse['remarque'] != '' %}{{reponse['remarque']}}{% endif %}" />
+            <input type="text" class="form-control input-sm remarque" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="{% if reponse['remarque'] is not defined or reponse['remarque'] == '' %}display:none{% endif %}" placeholder="Remarques" value="{% if reponse['remarque'] is defined and reponse['remarque'] != '' %}{{reponse['remarque']}}{% endif %}" />
         </div>
         <div class="col-md-1 col-sm-1">
             <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i class="fa fa-edit"></i></div>

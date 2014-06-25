@@ -516,8 +516,10 @@ class ResultatManager extends BaseManager
 
                     //on rapporte la valeur de note question sur 100
                     $rep->value = $rep->max != 0 ? ($reponse->getValue() * 100) / $rep->max : 0;
-                }else
+                }else{
                     $rep->value = $reponse->getValue();
+                    $rep->max   = 0;
+                }
 
                 $results[ $reponse->getQuestion()->getId() ] = $rep;
             }
