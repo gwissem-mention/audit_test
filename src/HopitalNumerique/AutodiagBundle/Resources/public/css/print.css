@@ -11,6 +11,8 @@ img{ width:auto !important }
 #resultats #graphiques .panel{box-shadow: none !important; border-radius: 0}
 #resultats #graphiques .panel h3.toPrint{color:#6f3596; display: block; margin-bottom: 10px; font-size: 14px; margin-top: 0 }
 #resultats #graphiques .panel .panel-heading{display: none}
+#resultats #graphiques .tableContainer{overflow:visible;}
+
 .copyright{margin-top:30px;}
 
 .progress-bar-danger{background-color:#c9302c !important; color:#FFFFFF !important; font-weight: bold!important}
