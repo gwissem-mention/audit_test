@@ -220,7 +220,7 @@ post:
     show:                              "Montrer"
     hide:                              "Cacher"
 subscription:
-    no-topics:                         "Vous n'êtes abonné à aucun topic."
+    no-topics:                         "Vous n'avez aucun topic en attente."
     all:                               "Tout"
     unread:                            "Non-lu"
     read:                              "Lu"

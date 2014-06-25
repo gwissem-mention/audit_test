@@ -20,7 +20,8 @@
             <tbody>
                 {%- for row, board in category.boards -%}
                     {# Affichage uniquement si l'utilisateur a le droit de visioner #}
-                    {% if app.user.getRole() in board.readAuthorisedRoles %}
+                    {% if (app.user is not null and app.user.getRole() in board.readAuthorisedRoles)
+                            or (app.user is null and 'ROLE_ANONYME_10' in board.readAuthorisedRoles) %}
                         {%- include "CCDNForumForumBundle:User:Category/Partial/item_board.html.twig" -%}
                     {% endif %}
                 {%- else -%}
