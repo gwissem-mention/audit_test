@@ -221,12 +221,12 @@ post:
     hide:                              "Cacher"
 subscription:
     no-topics:                         "Vous n'êtes abonné à aucun topic."
-    all:                               "tout"
-    unread:                            "non-lu"
-    read:                              "lu"
+    all:                               "Tout"
+    unread:                            "Non-lu"
+    read:                              "Lu"
 
-next:                                  "Suivant"
-previous:                              "Précédent"
+next:                                  ""
+previous:                              ""
 
 flash:
     success:
