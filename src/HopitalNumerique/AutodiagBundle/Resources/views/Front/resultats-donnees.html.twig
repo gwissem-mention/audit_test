@@ -25,8 +25,8 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">{{panel.title}}</h3>
-                                    <div class="options" title="Taux remplissage : {{panel.taux}}%">
-                                        Taux remplissage : {{panel.taux}}%
+                                    <div class="options" title="Taux remplissage : {{panel.taux|number_format(0)}}%">
+                                        Taux remplissage : {{panel.taux|number_format(0)}}%
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -43,7 +43,7 @@
                                         <div class="progress-bar progress-bar-success" style="width: 33.3%">
                                             Fort
                                         </div>
-                                        <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(2,'.')}}%"{% endif %} data-position="{{panel.value|number_format(2,'.')}}%" title="<span>Ma Valeur : {{panel.value|number_format(2,'.')}}%</span>" ></div>
+                                        <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(0)}}%"{% endif %} data-position="{{panel.value|number_format(0)}}%" title="<span>Ma Valeur : {{panel.value|number_format(0)}}%</span>" ></div>
                                     </div>
                                 </div>
                             </div>
