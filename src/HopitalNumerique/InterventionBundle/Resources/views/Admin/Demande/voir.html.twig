@@ -216,13 +216,16 @@
                             {% if interventionDemande.evaluationEtat != null %}{{ interventionDemande.evaluationEtat.libelle }}{% endif %}
                         </div>
                     </div></div>
-                    <div class="form-group"><div class="row">
-                        <div class="col-md-4"><strong>État du remboursement</strong></div>
-                        <div class="col-md-8">
-                            {% if interventionDemande.remboursementEtat != null %}{{ interventionDemande.remboursementEtat.libelle }}{% endif %}
+                    {% if app.user|checkAuthorization( path('hopitalnumerique_paiement_front') ) %}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4"><strong>État du remboursement</strong></div>
+                                <div class="col-md-8">
+                                    {% if interventionDemande.remboursementEtat != null %}{{ interventionDemande.remboursementEtat.libelle }}{% endif %}
+                                </div>
+                            </div>
                         </div>
-                    </div></div>
-                
+                    {% endif %}
                 </div>
             </div>            
 

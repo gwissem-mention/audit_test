@@ -25,8 +25,8 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">{{panel.title}}</h3>
-                                    <div class="options" title="Taux remplissage : {{panel.taux}}%">
-                                        {{panel.taux}}%
+                                    <div class="options" title="Taux remplissage : {{panel.taux|number_format(0)}}%">
+                                        Taux remplissage : {{panel.taux|number_format(0)}}%
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -43,7 +43,7 @@
                                         <div class="progress-bar progress-bar-success" style="width: 33.3%">
                                             Fort
                                         </div>
-                                        <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(2,'.')}}%"{% endif %} data-position="{{panel.value|number_format(2,'.')}}%" title="<span>Ma Valeur : {{panel.value|number_format(2,'.')}}%</span>" ></div>
+                                        <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(0)}}%"{% endif %} data-position="{{panel.value|number_format(0)}}%" title="<span>Ma Valeur : {{panel.value|number_format(0)}}%</span>" ></div>
                                     </div>
                                 </div>
                             </div>
@@ -202,7 +202,7 @@
             </p>
 
             {# Affichage des publications #}
-            {% for chapitre in chapitres %}
+            {% for chapitre in chapitres if chapitre.questions|length > 0 %}
                 <div class="chapitre-{{chapitre.id}}">
                     <h3 class="violet">{{chapitre.title}}</h3>
                     <hr>
@@ -221,7 +221,7 @@
                     {% if chapitre.childs|length > 0 %}
                         <div class="row sous-chapitre">
                             <div class="col-md-12">
-                                {% for child in chapitre.childs %}
+                                {% for child in chapitre.childs if child.questions|length > 0 %}
                                     <h4 class="violet">{{child.title}}</h4>
 
                                     {% if child.synthese %}
@@ -238,6 +238,8 @@
                         </div>
                     {% endif %}
                 </div>
+            {% else %}
+                - Aucune recommandation de l'ANAP nécessaire -
             {% endfor %}
         </div>
     </div>
@@ -245,20 +247,18 @@
 
 {# Construit les lignes associées aux résultats #}
 {% macro buildQuestion(chapitre, pdf) %}
-    {% if chapitre.questions|length > 0 %}
-        {% for question in chapitre.questions %}
-            {% set publications = question.id|getPublicationsForQuestion(pdf) %}
-            {% if publications %}
-                <div class="row">
-                    <div class="col-md-12">
-                        <p class="question">{{question.question}}</p>
-                        <p class="violet synthese">{{question.synthese}}</p>
-                        {{publications|raw}}
-                    </div>
+    {% for question in chapitre.questions %}
+        {% set publications = question.id|getPublicationsForQuestion(pdf) %}
+        {% if publications %}
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="question">{{question.question}}</p>
+                    <p class="violet synthese">{{question.synthese}}</p>
+                    {{publications|raw}}
                 </div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
 {% endmacro %}
 
 {# Calcul de la note du chapitre #}

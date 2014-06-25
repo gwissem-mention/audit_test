@@ -23,14 +23,14 @@
 
 
         {%- if canSubscribeToTopic(topic, forum, (subscription is defined ? subscription : null)) -%}
-            <a class="btn btn-info" href="{{- path('ccdn_forum_user_subscription_subscribe', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+            <a class="btn btn-success" href="{{- path('ccdn_forum_user_subscription_subscribe', {'forumName': forumName, 'topicId': topic.getId }) -}}">
                 <i class="glyphicon glyphicon-eye-open"></i>
                 {{- 'link.topic.subscribe' | trans({}, ForumBundle.translation ) -}}
             </a>
         {%- endif -%}
 
         {%- if canUnsubscribeFromTopic(topic, forum, (subscription is defined ? subscription : null)) -%}
-            <a class="btn btn-info" href="{{- path('ccdn_forum_user_subscription_unsubscribe', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+            <a class="btn btn-success" href="{{- path('ccdn_forum_user_subscription_unsubscribe', {'forumName': forumName, 'topicId': topic.getId }) -}}">
                 <i class="glyphicon glyphicon-eye-close"></i>
                 {{- 'link.topic.unsubscribe' | trans({}, ForumBundle.translation ) -}}
             </a>

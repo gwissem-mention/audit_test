@@ -61,10 +61,20 @@
                                 {#{inscription.etatEvaluation.libelle}#}
                             {% endif %}
                         </td>
-                        <td>{% if inscription.etatRemboursement != null %}{{inscription.etatRemboursement.libelle}}{% endif %}</td>
                         <td>
-                            {% if inscription.facture is not null %}
-                                {% if inscription.facture.payee %}Payée{% else %}Non Payée{% endif%} : {{inscription.facture.total}}€
+                            {% if app.user|checkAuthorization( path('hopitalnumerique_paiement_front') ) %}
+                                {% if inscription.etatRemboursement != null %}{{inscription.etatRemboursement.libelle}}{% endif %}
+                            {% else %}
+                                NA
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if app.user|checkAuthorization( path('hopitalnumerique_paiement_front') ) %}
+                                {% if inscription.facture is not null %}
+                                    {% if inscription.facture.payee %}Payée{% else %}Non Payée{% endif%} : {{inscription.facture.total}}€
+                                {% endif %}
+                            {% else %}
+                                NA
                             {% endif %}
                         </td>
                     </tr>
