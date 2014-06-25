@@ -49,13 +49,17 @@ class FrontController extends Controller
         //reformate les chapitres
         foreach($enfants as $enfant) {
             $parentId = $enfant->getParent()->getId();
-            $parents[ $parentId ]['childs'][] = $enfant;
+            $parents[ $parentId ]['childs'][$enfant->getOrder()] = $enfant;
         }
 
         //reorder parents
         $chapitresOrdered = array();
         foreach($parents as $one){
             $tmp = $one['parent'];
+
+            //sort childs
+            ksort($one['childs']);
+
             $chapitresOrdered[ $tmp->getOrder() ] = $one;
         }
         ksort($chapitresOrdered);
