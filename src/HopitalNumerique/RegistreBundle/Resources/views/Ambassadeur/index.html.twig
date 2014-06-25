@@ -132,7 +132,7 @@
                                                         </div>
         					
         					                            <div class="col-md-12">
-                                                            {% if user and (user.isCMSI) and not (user.user.region.id == ambassadeur.region.id) and not user|checkAuthorization( path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id}) ) %}
+                                                            {% if app.user and not app.user|checkAuthorization( path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id}) ) %}
                                                                 <a class="btn background-violet disabled" href="#">Solliciter cet ambassadeur</a>
                                                             {% else %}
                                                                 <a class="btn background-violet" href="{{path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id})}}">Solliciter cet ambassadeur</a>
