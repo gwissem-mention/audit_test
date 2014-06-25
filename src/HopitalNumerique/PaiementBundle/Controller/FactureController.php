@@ -47,19 +47,22 @@ class FactureController extends Controller
     }
 
     /**
-     * Partial : affiche le total de l'utilisateru dans sa fiche
+     * Partial : affiche le total de l'utilisateur dans sa fiche
      *
      * @param User $user L'utilisateur affiché
      */
     public function totalAction( User $user)
     {
-        $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForTotal( $user );
-        $formations    = array();
-        $datas         = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
-        $total         = 0;
+        $total = 0;
 
-        foreach($datas as $data)
-            $total += $data->total;
+        if( $user->getRole() != 'ROLE_ADMINISTRATEUR_1') {
+            $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForTotal( $user );
+            $formations    = array();
+            $datas         = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
+            
+            foreach($datas as $data)
+                $total += $data->total;    
+        }
 
         return $this->render('HopitalNumeriquePaiementBundle:Facture:total.html.twig', array(
             'total' => $total
