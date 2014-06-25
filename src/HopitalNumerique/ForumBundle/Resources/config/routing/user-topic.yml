@@ -4,55 +4,55 @@
 #
 ccdn_forum_user_topic_show:
     pattern: /{topicId}
-    defaults: { _controller: CCDNForumForumBundle:UserTopic:show, _locale: fr, forumName: MonHopitalNumerique }
+    defaults: { _controller: CCDNForumForumBundle:UserTopic:show, _locale: fr, forumName: default }
 
 ccdn_forum_user_topic_create:
     pattern: /create/for-board/{boardId}
-    defaults: { _controller: CCDNForumForumBundle:UserTopic:create, _locale: fr, forumName: MonHopitalNumerique }
+    defaults: { _controller: CCDNForumForumBundle:UserTopic:create, _locale: fr, forumName: default }
 
 ccdn_forum_user_topic_create_process:
     pattern: /create/for-board/{boardId}/process
-    defaults: { _controller: CCDNForumForumBundle:UserTopic:createProcess, _locale: fr, forumName: MonHopitalNumerique }
+    defaults: { _controller: CCDNForumForumBundle:UserTopic:createProcess, _locale: fr, forumName: default }
 
 ccdn_forum_user_topic_reply:
     pattern: /{topicId}/reply
-    defaults: { _controller: CCDNForumForumBundle:UserTopic:reply, _locale: fr, forumName: MonHopitalNumerique }
+    defaults: { _controller: CCDNForumForumBundle:UserTopic:reply, _locale: fr, forumName: default }
 
 ccdn_forum_user_topic_reply_process:
     pattern: /{topicId}/reply/process
-    defaults: { _controller: CCDNForumForumBundle:UserTopic:replyProcess, _locale: fr, forumName: MonHopitalNumerique }
+    defaults: { _controller: CCDNForumForumBundle:UserTopic:replyProcess, _locale: fr, forumName: default }
 
 #Reference
 hopitalnumerique_forum_reference_topic:
     pattern:  /reference/topic/{id}
-    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:topic", id:1, forumName: MonHopitalNumerique }
+    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:topic", id:1, forumName: default }
     requirements:
         id: \d+
 
 hopitalnumerique_forum_reference_topic_own:
     pattern:  /reference/topic-own/{id}
-    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:topicOwn", id:1, forumName: MonHopitalNumerique  }
+    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:topicOwn", id:1, forumName: default  }
     requirements:
         id: \d+
 
 hopitalnumerique_forum_reference_topic_save:
     pattern:  /reference/save/topic/{id}
-    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:saveTopic", forumName: MonHopitalNumerique  }
+    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:saveTopic", forumName: default  }
     requirements:
         id: \d+
 
 hopitalnumerique_forum_reference_contenu:
     pattern:  /reference/contenu/{id}
-    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:contenu", id:1, forumName: MonHopitalNumerique  }
+    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:contenu", id:1, forumName: default  }
     requirements:
         id: \d+
 
 hopitalnumerique_forum_reference_contenu_own:
     pattern:  /reference/contenu_own/{id}
-    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:contenuOwn", id:1, forumName: MonHopitalNumerique  }
+    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:contenuOwn", id:1, forumName: default  }
     requirements:
         id: \d+
 
 hopitalnumerique_forum_reference_contenu_save:
     pattern:  /reference/save/contenu
-    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:saveContenu", forumName: MonHopitalNumerique  }
+    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:saveContenu", forumName: default  }

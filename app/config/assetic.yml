@@ -29,6 +29,7 @@ assetic:
         - HopitalNumeriqueAutodiagBundle
         - HopitalNumeriqueForumBundle
         - HopitalNumeriqueFlashBundle
+        - CCDNForumForumBundle
         - FOSUserBundle
     filters:
         cssrewrite: ~

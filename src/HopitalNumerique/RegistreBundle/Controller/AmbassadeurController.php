@@ -69,9 +69,8 @@ class AmbassadeurController extends Controller
         //Sinon on charge la région de l'utilisateur
         else
         {
-            
             //Si l'utilisateur courant n'a pas de région renseigné on le prévient qu'il n'y aura aucune région selectionné par défaut
-            if(is_null($user->getRegion()))
+            if('anon.' === $user || is_null($user->getRegion()))
             {
                 $regionsJSON = json_encode(array());
             }

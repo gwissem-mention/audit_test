@@ -1,6 +1,15 @@
 {% extends 'CCDNForumForumBundle:Common:Layout/base.html.twig' %}
 
 {% set LayoutTemplate = ccdn_forum_forum.topic.user.show.layout_template %}
+         
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-forum-user-topic-show.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriqueforum/css/fancybox.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
 
 {%- block title -%}
     {{- 'title.topic.show' | trans({'%topic_title%': topic.getTitle |capitalize}, 'CCDNForumForumBundle') -}}

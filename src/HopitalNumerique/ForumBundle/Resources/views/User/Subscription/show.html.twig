@@ -52,13 +52,13 @@
             <ul class="nav nav-tabs">
                 {%- import _self as tabs -%}
                 {%- if forum is not null -%}
-                    {{- tabs.subscription_tab('all', forumName, 'all', filter, total_subscribed_forums['count_read'], total_subscribed_forums['count_unread'], total_subscribed_forums['count_total']) -}}
-                    {{- tabs.subscription_tab('unread', forumName, 'unread', filter, null, total_subscribed_forums['count_unread'], null) -}}
-                    {{- tabs.subscription_tab('read', forumName, 'read', filter, total_subscribed_forums['count_read'], null, null) -}}
+                    {{- tabs.subscription_tab('subscription.all'|trans({}, ForumBundle.translation ), forumName, 'all', filter, total_subscribed_forums['count_read'], total_subscribed_forums['count_unread'], total_subscribed_forums['count_total']) -}}
+                    {{- tabs.subscription_tab('subscription.unread'|trans({}, ForumBundle.translation ), forumName, 'unread', filter, null, total_subscribed_forums['count_unread'], null) -}}
+                    {{- tabs.subscription_tab('subscription.read'|trans({}, ForumBundle.translation ), forumName, 'read', filter, total_subscribed_forums['count_read'], null, null) -}}
                 {%- else -%}
-                    {{- tabs.subscription_tab('all', '~', 'all', filter, total_subscribed_forums['count_read'], total_subscribed_forums['count_unread'], total_subscribed_forums['count_total']) -}}
-                    {{- tabs.subscription_tab('unread', '~', 'unread', filter, null, total_subscribed_forums['count_unread'], null) -}}
-                    {{- tabs.subscription_tab('read', '~', 'read', filter, total_subscribed_forums['count_read'], null, null) -}}
+                    {{- tabs.subscription_tab('subscription.all'|trans({}, ForumBundle.translation ), '~', 'all', filter, total_subscribed_forums['count_read'], total_subscribed_forums['count_unread'], total_subscribed_forums['count_total']) -}}
+                    {{- tabs.subscription_tab('subscription.unread'|trans({}, ForumBundle.translation ), '~', 'unread', filter, null, total_subscribed_forums['count_unread'], null) -}}
+                    {{- tabs.subscription_tab('subscription.read'|trans({}, ForumBundle.translation ), '~', 'read', filter, total_subscribed_forums['count_read'], null, null) -}}
                 {%- endif -%}
             </ul>
         </div>
@@ -86,7 +86,7 @@
                 {%- else -%}
                     <tr>
                         <td class="text-center" colspan="6">
-                            <span class="lead">
+                            <span>
                                 {{- 'subscription.no-topics' | trans({}, ForumBundle.translation ) -}}
                             </span>
                         </td>

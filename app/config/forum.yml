@@ -8,7 +8,7 @@ services:
 ccdn_forum_forum:
     template:
         engine:               twig
-        pager_theme:          KnpPaginatorBundle:Pagination:twitter_bootstrap_pagination.html.twig
+        pager_theme:          KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig
     entity:
         forum:
             class:                HopitalNumerique\ForumBundle\Entity\Forum
@@ -214,7 +214,7 @@ ccdn_forum_forum:
         user:
             show:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                topics_per_page:      50
+                topics_per_page:      20
                 topic_title_truncate:  50
                 first_post_datetime_format:  d-m-Y - H:i
                 last_post_datetime_format:  d-m-Y - H:i
@@ -268,7 +268,7 @@ ccdn_forum_forum:
     subscription:
         list:
             layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-            topics_per_page:      50
+            topics_per_page:      20
             topic_title_truncate:  50
             first_post_datetime_format:  d-m-Y - H:i
             last_post_datetime_format:  d-m-Y - H:i
