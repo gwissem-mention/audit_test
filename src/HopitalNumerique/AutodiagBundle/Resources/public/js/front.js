@@ -33,7 +33,13 @@ $(document).ready(function() {
     //remove les title des fieldset pour empecher l'effet bizarre
     $('fieldset').each(function(){
         $(this).attr('title', '');
-    })
+    });
+
+    if( $('.badge').length > 0 ){
+        $('.badge').qtip({ 
+            style : 'qtip-tipsy'
+        });
+    }
 });
 
 //Truncate l'avancement affiché
@@ -91,11 +97,11 @@ function calcAvancement()
 }
 
 //enregistre ou valide le questionnaire
-function saveQuestionnaire( type )
+function saveQuestionnaire( type, userConnected )
 {
     $('#action').val( type );
 
-    if( type == 'valid' ){
+    if( type == 'valid' && userConnected ){
         apprise('La validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci.', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
             if(r) { 
                 $('#wizard').submit();

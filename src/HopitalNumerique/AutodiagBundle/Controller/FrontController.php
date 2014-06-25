@@ -108,6 +108,7 @@ class FrontController extends Controller
         $user = $user != 'anon.' ? $user : false;
 
         //create Resultat entity
+        $resultat = false;
         if( $user ) {
             $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
             
@@ -202,7 +203,7 @@ class FrontController extends Controller
 
         //PDF généré
         if( is_null($resultat->getPdf()) ){
-            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $user );
+            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request );
             $resultat->setPdf( $pdf );
             $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
         }
@@ -271,13 +272,12 @@ class FrontController extends Controller
      * @param array    $graphiques Liste des graphiques
      * @param Resultat $resultat   Objet résultat
      * @param Request  $request    Objet Request
-     * @param User     $user       User connecté
      *
      * @return string PDF name
      */
-    private function generatePdf( $chapitres, $graphiques, $resultat, $request, $user )
+    private function generatePdf( $chapitres, $graphiques, $resultat, $request )
     {
-        $filename = $resultat->getId() . $resultat->getOutil()->getId() . $user->getId() . time() . '.pdf';
+        $filename = $resultat->getId() . $resultat->getOutil()->getId() . time() . '.pdf';
 
         $html = $this->renderView( 'HopitalNumeriqueAutodiagBundle:Front:pdf.html.twig' , array(
             'resultat'   => $resultat,

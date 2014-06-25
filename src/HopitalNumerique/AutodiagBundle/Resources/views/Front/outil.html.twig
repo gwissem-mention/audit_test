@@ -47,7 +47,7 @@
 
             <div class="options">
                 <div class="btn-toolbar">
-                    <div onclick="saveQuestionnaire('valid');" class="finish btn btn-success btn-sm" ><i class="fa fa-check"></i> Valider le questionnaire</div>
+                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success btn-sm" ><i class="fa fa-check"></i> Valider le questionnaire</div>
                 </div>
             </div>
 
@@ -109,13 +109,6 @@
             <div class="clearfix"></div>
         </div>
     </div>
-    <script>
-    $(document).ready(function() {
-        $('.badge').qtip({ 
-            style : 'qtip-bootstrap'
-        });
-    });
-    </script>
 {% endblock %}
 
 {% macro buildQuestion(question, reponse, formName, questionNumber) %}
