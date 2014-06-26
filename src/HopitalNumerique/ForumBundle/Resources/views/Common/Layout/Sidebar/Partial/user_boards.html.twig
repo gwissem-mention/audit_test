@@ -8,7 +8,8 @@
                 {%- for sidebar_category in sidebar_categories -%}
 
                     {# Affichage uniquement si l'utilisateur a le droit de visioner #}
-                    {% if app.user.getRole() in sidebar_category.readAuthorisedRoles %}
+                    {% if (app.user is not null and app.user.getRole() in sidebar_category.readAuthorisedRoles) 
+                        or (app.user is null and 'ROLE_ANONYME_10' in sidebar_category.readAuthorisedRoles) %}
 
                         {%- if sidebar_category.boards |length -%}
                             {%- if category is defined and route == 'ccdn_forum_user_category_show' -%}
