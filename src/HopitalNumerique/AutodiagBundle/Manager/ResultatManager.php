@@ -337,7 +337,8 @@ class ResultatManager extends BaseManager
             //get reponse
             if( isset($questionsReponses[$question->getId()]) ){
                 $reponse = $questionsReponses[$question->getId()];
-                if( $reponse->value !== '' )
+                
+                if( $reponse->valueForTauxCateg !== '' )
                     $nbQuestionsRemplies++;
 
                 $nbQuestions++;
@@ -507,7 +508,7 @@ class ResultatManager extends BaseManager
     {
         $results = array();
         foreach($reponses as $reponse) {
-            if( $reponse->getValue() !== -1 ){
+            if( $reponse->getValue() != -1 ){
                 $rep = new \StdClass;
 
                 //reponses values
@@ -535,6 +536,8 @@ class ResultatManager extends BaseManager
                     $rep->value = $reponse->getValue();
                     $rep->max   = 0;
                 }
+
+                $rep->valueForTauxCateg = $reponse->getValue();
 
                 $results[ $reponse->getQuestion()->getId() ] = $rep;
             }
