@@ -28,7 +28,7 @@
 
                             <div class="panel-body">
                                 <p>
-                                    {{ post.getBody }}
+                                    {{ BBCode_Parse(post.getBody)|raw }}
                                 </p>
                             </div>
 

@@ -20,13 +20,10 @@
     <div {{ block('widget_container_attributes') }}>
     {% for child in form %}
         <div class="row checkboxCustom">
-            <div class="col-md-1 pull-left">
-                {{ form_widget(child) }}
-            </div>
             {% if child.vars.label is not sameas(false) %}
                 {% set label = child.vars.label %}
                 {% if not child.vars.compound %}
-                    {% set label_attr = label_attr|merge({'for': id}) %}
+                    {% set label_attr = label_attr|merge({'for': id ~ '_' ~ (loop.index - 1)}) %}
                 {% endif %}
                 {% if child.vars.required %}
                     {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-md-11 control-label') ~ ' required')|trim}) %}
@@ -37,7 +34,8 @@
                     {% set label = name|humanize %}
                 {% endif %}
                 <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
-                {{ label|trans({}, translation_domain) }}
+                    {{ label|trans({}, translation_domain) }}
+                    {{ form_widget(child) }}
                 {% if child.vars.required %}
                     <span style="color:red;font-size:10px" title="Ce champ est requis">*</span>
                 {% endif %}
@@ -57,8 +55,8 @@
 
 {% block checkbox_widget %}
 {% spaceless %}
-    <div class="checkboxCustom">
-        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+    <div class="checkboxCustom pull-left">
+        <input style="margin:0 5px 2px 0;" type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
     </div>
 {% endspaceless %}
 {% endblock checkbox_widget %}

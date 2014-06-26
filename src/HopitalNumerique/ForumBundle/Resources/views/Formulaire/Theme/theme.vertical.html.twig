@@ -1,0 +1,110 @@
+{% extends 'HopitalNumeriqueForumBundle:Formulaire/Theme:theme.default.html.twig' %}
+
+{% block form_start %}
+{% spaceless %}
+    {% set attr = attr|default({'class': 'toValidate', 'novalidate':'novalidate'}) %}
+    {{parent()}}
+{% endspaceless %}
+{% endblock form_start %}
+
+{% block form_row %}
+    {% spaceless %}
+        {% if form.vars.block_prefixes.1 == 'checkbox' %}
+            <div class ="form_vertical_row">
+                <div class="form-group">                    
+                    <div class="col-md-1 col-md-offset-1">
+                        {{ form_widget(form) }}
+                    </div>
+                    <div class="col-md-10">
+                        {{ form_label(form) }}
+                    </div>
+                    <div class="col-md-12">                     
+                        {% if form_errors(form) %}<div class="alert alert-danger col-md-12">{{ form_errors(form) }}</div>{% endif %}
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        {% else %}          
+            <div class ="form_vertical_row">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        {{ form_label(form) }}
+                    </div>
+                    <div class="col-md-12">
+                        {{ form_widget(form) }}
+                    </div>
+                    <div class="col-md-12">
+                        <div class="help-block">
+                            {{ form_errors(form) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_row %}
+
+{% block form_label %}
+    {% spaceless %}
+        {% if label is not sameas(false) %}
+            {% if not compound %}
+                {% set label_attr = label_attr|merge({'for': id}) %}
+            {% endif %}
+            {% if required %}
+                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('control-label') ~ ' required')|trim}) %}
+            {% else %}
+                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('control-label'))|trim}) %}
+            {% endif %}
+            {% if label is empty %}
+                {% set label = name|humanize %}
+            {% endif %}
+            <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            {{ label|trans({}, translation_domain) }}
+            {% if required %}
+                <span style="color:red;font-size:10px" title="Ce champ est requis">*</span>
+            {% endif %}
+            </label>
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}
+
+{%- macro button_group(button_group) -%}
+    {%- for button_order, tag in button_group -%}
+        {%- set icon = BBCode_GetButtonIcon(tag) -%}
+        {%- set label = BBCode_GetButtonLabel(tag) -%}
+        {%- set token_name = BBCode_GetTokenName(tag) -%}
+        {%- set token_count = BBCode_GetTokenCount(tag) -%}
+        {%- set param_question = BBCode_GetButtonParameterQuestion(tag) -%}
+
+        <button class="btn btn-default btn-sm" data-tag="{{- token_name -}}" data-tag-count="{{- token_count -}}"{%- if param_question %} data-param-question="{{- param_question|trans({}, ForumBundle.translation ) -}}"{% endif %}>
+            {%- if icon -%}
+                <i class="{{- icon -}}"></i>
+            {%- else -%}
+                {{- label |raw -}}
+            {%- endif -%}
+        </button>
+    {%- endfor -%}
+{%- endmacro -%}
+
+{% block bb_editor_widget %}
+    <div class="bb-editor">
+        {% set attr = attr|merge({ 'class': attr.class|default('') ~ 'form-control bb-editor', 'style': attr.style|default('') ~ 'height:250px;'}) %}
+
+        <div class="hidden-xs">
+            {%- set tag_groups = BBCode_GetTagsAllowed(attr.acl_group) -%}
+
+            {%- import _self as bb_macros -%}
+            
+            {# Permet de supprimer les boutons de vidéo #}
+            {% set assetCustom = [] %}
+            {% set assetCustom = assetCustom|merge({'none' : tag_groups['Asset']['none']}) %}
+
+            {{- bb_macros.button_row({'Format': tag_groups['Format'], 'Asset': assetCustom}) -}}
+                
+        </div>
+
+        <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+
+    </div>
+{% endblock bb_editor_widget %}

@@ -18,7 +18,8 @@
 
     {%- for category in categories -%}
         {# Affichage uniquement si l'utilisateur a le droit de visioner #}
-        {% if app.user.getRole() in category.readAuthorisedRoles %}
+        {% if (app.user is not null and app.user.getRole() in category.readAuthorisedRoles)
+            or (app.user is null and 'ROLE_ANONYME_10' in category.readAuthorisedRoles) %}
             {%- include "CCDNForumForumBundle:User:Category/Partial/item_category.html.twig" -%}
         {% endif %}
     {%- else -%}
