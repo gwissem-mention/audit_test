@@ -1,4 +1,20 @@
 $(document).ready(function() {
+    //cache les chapitres inutiles
+    chaptersToHide = jQuery.parseJSON($('#chaptersToHide').val());
+    $.each(chaptersToHide, function(index, value) {
+        $('#chapitres .chapitre-' + value).hide();
+    });
+
+    //si on a cacher TOUS les chapitres, on affiche le message empty
+    allHidden = true;
+    $('#chapitres .chapter').each(function(){
+        if( $(this).css('display') == 'block' )
+            allHidden = false;
+    });
+
+    if( allHidden )
+        $('#chaptersToHide').parent().show();
+    
     /* Manage values */
     var datas      = $.parseJSON( $('#datas-radar').val() );
     var categories = [];
