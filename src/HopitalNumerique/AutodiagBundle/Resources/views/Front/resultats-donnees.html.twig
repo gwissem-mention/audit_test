@@ -202,7 +202,7 @@
             </p>
 
             {# Affichage des publications #}
-            {% for chapitre in chapitres if chapitre.questions|length > 0 %}
+            {% for chapitre in chapitres if (chapitre.questions|length > 0 or chapitre.childs|length > 0) %}
                 <div class="chapitre-{{chapitre.id}}">
                     <h3 class="violet">{{chapitre.title}}</h3>
                     <hr>
