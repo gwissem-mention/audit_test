@@ -473,7 +473,7 @@ class ResultatManager extends BaseManager
                 $one = $questionsReponses[ $question->getId() ];
 
                 if( $one->initialValue !== '' ){
-                    if( $one->noteMinimale !== '' and $one->value <= $one->noteMinimale ){
+                    if( $one->noteMinimale !== '' and $one->initialValue <= $one->noteMinimale ){
                         $results[]     = $one;
                         $noteChapitre += $one->value;
                     }
