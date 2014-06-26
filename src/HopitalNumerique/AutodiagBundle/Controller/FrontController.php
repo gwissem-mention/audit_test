@@ -295,7 +295,7 @@ class FrontController extends Controller
             'margin-right'     => 5,
             'margin-top'       => 4,
             'encoding'         => 'UTF-8',
-            //'javascript-delay' => 500
+            'javascript-delay' => 500
         );
 
         $html = str_replace('/publication', $request->getSchemeAndHttpHost() . '/publication', $html);
