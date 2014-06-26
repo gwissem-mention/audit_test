@@ -227,19 +227,21 @@ class ResultatManager extends BaseManager
 
                         //Add Chapitre if not exist
                         if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitre] )  )
-                            $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
+                            $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0 );
                         if ( !isset($totalChapitres[ $chapitre ]) )
-                            $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
+                            $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0 );
 
                         //update Chapitre
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbRep']++;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints'] += $value;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']      += $one->max;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints'] += ($value * $one->ponderation);
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']      += ($one->max * $one->ponderation);
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['pond']     += $one->ponderation;
 
                         //update Total
                         $totalChapitres[ $chapitre ]['nbRep']++;
-                        $totalChapitres[ $chapitre ]['nbPoints'] += $value;
-                        $totalChapitres[ $chapitre ]['max']      += $one->max;
+                        $totalChapitres[ $chapitre ]['nbPoints'] += ($value * $one->ponderation);
+                        $totalChapitres[ $chapitre ]['max']      += ($one->max * $one->ponderation);
+                        $totalChapitres[ $chapitre ]['pond']     += $one->ponderation;
                     }
                 }
             }
@@ -247,8 +249,8 @@ class ResultatManager extends BaseManager
             //Set Default Values for Empty Cells
             foreach($chapitresOrdered as $one){
                 if( !isset($results->categories[ $categorieId ]['chapitres'][$one->id]) ){
-                    $results->categories[ $categorieId ]['chapitres'][$one->id] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
-                    $totalChapitres[ $one->id ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
+                    $results->categories[ $categorieId ]['chapitres'][$one->id] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0 );
+                    $totalChapitres[ $one->id ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0 );
                 }
             }
         }
