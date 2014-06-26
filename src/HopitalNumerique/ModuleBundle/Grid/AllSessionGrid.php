@@ -62,7 +62,7 @@ class AllSessionGrid extends Grid implements IGrid
         $nbInscritsColumn = new Column\TextColumn('placeRestantes', 'Nombres de places restantes');
         $this->addColonne( $nbInscritsColumn );
         
-        $archiverColumn = new Column\BooleanColumn('archiver', 'Archiver');
+        $archiverColumn = new Column\BooleanColumn('archiver', 'Archivée');
         $archiverColumn->setSize( 70 );
         $archiverColumn->setFilterType('select');
         $archiverColumn->setOperatorsVisible( false );
