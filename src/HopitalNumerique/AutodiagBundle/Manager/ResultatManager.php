@@ -337,7 +337,7 @@ class ResultatManager extends BaseManager
             //get reponse
             if( isset($questionsReponses[$question->getId()]) ){
                 $reponse = $questionsReponses[$question->getId()];
-                if( $reponse->value != '' )
+                if( $reponse->value !== '' )
                     $nbQuestionsRemplies++;
 
                 $nbQuestions++;
@@ -464,20 +464,20 @@ class ResultatManager extends BaseManager
         $noteChapitre        = 0;
         $nbQuestions         = 0;
         $nbQuestionsRemplies = 0;
-
         foreach ($questions as $question)
         {
             if( isset($questionsReponses[ $question->getId() ]) )
             {
                 //on ajoute seulement les questions valides pour les résultats
                 $one = $questionsReponses[ $question->getId() ];
-                if( $one->value != '' ){
-                    if( $one->noteMinimale != '' and $one->value <= $one->noteMinimale ){
+
+                if( $one->value !== '' ){
+                    if( $one->noteMinimale !== '' and $one->value <= $one->noteMinimale ){
                         $results[]     = $one;
                         $noteChapitre += $one->value;
                     }
                     
-                    $nbQuestionsRemplies ++;
+                    $nbQuestionsRemplies++;
                 }
 
                 //on ajoute TOUTES les questions aux chapitre pour les calculs liés aux graphiques (pondération)
@@ -507,7 +507,7 @@ class ResultatManager extends BaseManager
     {
         $results = array();
         foreach($reponses as $reponse) {
-            if( $reponse->getValue() != -1 ){
+            if( $reponse->getValue() !== -1 ){
                 $rep = new \StdClass;
 
                 //reponses values
