@@ -139,7 +139,7 @@
                     <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_forum_reference_contenu')}}" />
                     <a href="{{path('hopitalnumerique_forum_reference_topic_own', {'id':topic.id})}}" class="manageReferences btn btn-xs btn-success fancybox.ajax pull-left"><i class="fa fa-eye"></i></a>
                     <a href="{{path('hopitalnumerique_forum_reference_topic', {'id':topic.id})}}" class="manageReferences edit btn btn-xs btn-success fancybox.ajax pull-left"><i class="fa fa-tags"></i></a>
-                    <p class="text-muted text-right pull-left">Note référencement : <span class="nbRefs">{{note|number_format(2, ',')}}</span></p>
+                    <p class="text-muted text-right pull-left">Note référencement : <span class="nbRefs">{{note|number_format(2, ',')}}</span> / 400</p>
                 {% endif %}
             </div>
         </div>

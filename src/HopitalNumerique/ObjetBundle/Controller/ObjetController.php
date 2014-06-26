@@ -81,6 +81,7 @@ class ObjetController extends Controller
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->lock($objet, $user);
 
         //get Contenus
+        $this->get('hopitalnumerique_objet.manager.contenu')->setRefPonderees( $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees() );
         $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id );
 
         //get Note referencement

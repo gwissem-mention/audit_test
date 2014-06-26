@@ -13,7 +13,7 @@
                     <a href="{{path('hopitalnumerique_autodiag_question_edit',{'id':question.id})}}" class="fancy fancybox.ajax" title="{{question.texte}}">{{question.texte|truncate(115, true, '...')}}</a>
                     <p class="text-muted pull-right">
                         {% if question.ponderation %}Pond. : {{question.ponderation}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
-                        Note référencement : <span>{{question.note}}</span>
+                        Note référencement : <span>{{question.note}}</span> / 400
                     </p>
                 </div>
                 <div class="dd3-actions">
