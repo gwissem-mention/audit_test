@@ -1,6 +1,22 @@
 parameters:
     hopitalnumerique_forum.manager.topic.class: HopitalNumerique\ForumBundle\Manager\TopicManager
     hopitalnumerique_forum.manager.reftopic.class: HopitalNumerique\ForumBundle\Manager\RefTopicManager
+    #BBCode
+    hopitalnumerique_forum.component.bb_code.tag_integrator.class: HopitalNumerique\ForumBundle\Component\BBCode\TagIntegrator
+    hopitalnumerique_forum.bb_parser.tags:
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Bold'
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Heading1'
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Heading2'
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Heading3'
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Italic'
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Link'
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\ListItem'
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\ListOrdered'
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\ListUnordered'
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Strike'
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\SubScript'
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\SuperScript'
+        - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Underline'
 
 services:
     #Manager
@@ -16,3 +32,10 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    #BBCode
+    hopitalnumerique_forum.component.bb_code.tag_integrator:
+        class: %hopitalnumerique_forum.component.bb_code.tag_integrator.class%
+        arguments:
+            - %hopitalnumerique_forum.bb_parser.tags%
+        tags:
+            - { name: ccdn_component_bb_code.tag }

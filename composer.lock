@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c1b6102607680472b1bd205692442e11",
+    "hash": "1f09d97f6e857cf2cffe94d359c7d9b7",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -2823,9 +2823,9 @@
         "white-october/pagerfanta-bundle": 20,
         "pagerfanta/pagerfanta": 20,
         "codeconsortium/ccdn-forum-bundle": 20,
+        "stof/doctrine-extensions-bundle": 20,
         "codeconsortium/ccdn-component-bb-code": 20,
-        "codeconsortium/ccdn-component-bb-code-bundle": 20,
-        "stof/doctrine-extensions-bundle": 20
+        "codeconsortium/ccdn-component-bb-code-bundle": 20
     },
     "platform": {
         "php": ">=5.3.3"
