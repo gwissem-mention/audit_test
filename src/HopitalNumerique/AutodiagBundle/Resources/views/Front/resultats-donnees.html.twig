@@ -86,7 +86,7 @@
 
                                     <tr>
                                         <td class="vertical-align categorie-{{id}}" rowspan="3"><b>{{categorie.title|capitalize}}</b></td>
-                                        <td>Nombre de réponses</td>
+                                        <td>Nombre de questions</td>
                                         {% for datas in categorie['chapitres'] %}
                                             <td class="text-center">
                                                 {{datas['nbRep']}}
@@ -134,7 +134,7 @@
                                 {% endfor %}
                                 <tr>
                                     <td class="title-total vertical-align" rowspan="3"><b>Total</b></td>
-                                    <td>Nombre de réponses</td>
+                                    <td>Nombre de questions</td>
                                     {% set nbRepTotal = 0 %}
                                     {% for datas in chart.datas.totauxChapitres %}
                                         <td class="text-center">
@@ -265,7 +265,7 @@
 
 {# Calcul de la note du chapitre #}
 {% macro calcNote(chapitre, pdf) %}  
-    {% if chapitre.noteChapitre < chapitre.noteMin %}
+    {% if chapitre.noteMin and chapitre.noteChapitre < chapitre.noteMin %}
         {% set publications = chapitre.id|getPublicationsForChapitre(pdf) %}
         {% if publications %}
             <div class="row">

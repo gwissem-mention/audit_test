@@ -19,8 +19,8 @@
             </div>
         </div>
         
-        <div class="col-md-6">
-            <div class="form-group">
+        <div class="col-md-6" >
+            <div class="form-group" style="{% if chapitre.parent is not null %}display:none{% endif %}">
                 {{ form_label(form.noteOptimale) }}
                 <div class="col-md-3">
                     {{ form_widget(form.noteOptimale) }}
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6" style="{% if chapitre.parent is not null %}display:none{% endif %}" >
+        <div class="col-md-6" >
             <div class="form-group">
                 {{ form_label(form.noteMinimale) }}
                 <div class="col-md-3">

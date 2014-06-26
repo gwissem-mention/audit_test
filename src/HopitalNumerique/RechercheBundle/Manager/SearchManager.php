@@ -320,7 +320,7 @@ class SearchManager extends BaseManager
             $sort['id'][$k]      = $v['id'];
         }
         //sort by primary desc and then nbRef asc
-        array_multisort($sort['primary'], SORT_DESC, $sort['nbRef'], SORT_ASC,$sort['id'], SORT_DESC,$fusion);
+        array_multisort($sort['primary'], SORT_DESC, $sort['nbRef'], SORT_ASC,$sort['id'], SORT_DESC, $fusion);
 
         return $fusion;
     }

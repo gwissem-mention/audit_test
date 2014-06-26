@@ -169,6 +169,14 @@ class ResultatManager extends BaseManager
 
 
 
+
+
+
+
+
+
+
+
     /**
      * Construit le tableau de données pour le rendu graphique Table
      *
@@ -219,19 +227,21 @@ class ResultatManager extends BaseManager
 
                         //Add Chapitre if not exist
                         if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitre] )  )
-                            $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
+                            $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0 );
                         if ( !isset($totalChapitres[ $chapitre ]) )
-                            $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
+                            $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0 );
 
                         //update Chapitre
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbRep']++;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints'] += $value;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']      += $one->max;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints'] += ($value * $one->ponderation);
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']      += ($one->max * $one->ponderation);
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['pond']     += $one->ponderation;
 
                         //update Total
                         $totalChapitres[ $chapitre ]['nbRep']++;
-                        $totalChapitres[ $chapitre ]['nbPoints'] += $value;
-                        $totalChapitres[ $chapitre ]['max']      += $one->max;
+                        $totalChapitres[ $chapitre ]['nbPoints'] += ($value * $one->ponderation);
+                        $totalChapitres[ $chapitre ]['max']      += ($one->max * $one->ponderation);
+                        $totalChapitres[ $chapitre ]['pond']     += $one->ponderation;
                     }
                 }
             }
@@ -239,8 +249,8 @@ class ResultatManager extends BaseManager
             //Set Default Values for Empty Cells
             foreach($chapitresOrdered as $one){
                 if( !isset($results->categories[ $categorieId ]['chapitres'][$one->id]) ){
-                    $results->categories[ $categorieId ]['chapitres'][$one->id] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
-                    $totalChapitres[ $one->id ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0 );
+                    $results->categories[ $categorieId ]['chapitres'][$one->id] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0 );
+                    $totalChapitres[ $one->id ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0 );
                 }
             }
         }
@@ -287,7 +297,14 @@ class ResultatManager extends BaseManager
     {
         $datas = array();
 
-        foreach($chapitres as $chapitre)
+        //reorder chapitres
+        $chapitresOrdered = array();
+        foreach($chapitres as $one){
+            $chapitresOrdered[ $one->order ] = $one;
+        }
+        ksort($chapitresOrdered);
+
+        foreach($chapitresOrdered as $chapitre)
         {
             $data        = new \StdClass;
             $data->title = $chapitre->title;
@@ -320,7 +337,7 @@ class ResultatManager extends BaseManager
             //get reponse
             if( isset($questionsReponses[$question->getId()]) ){
                 $reponse = $questionsReponses[$question->getId()];
-                if( ( $reponse->type == 415 || $reponse->type == 416 || ($reponse->type == 417 && $reponse->value != '') ) && $reponse->value <= $reponse->noteMinimale)
+                if( $reponse->value != '' )
                     $nbQuestionsRemplies++;
 
                 $nbQuestions++;
@@ -371,10 +388,8 @@ class ResultatManager extends BaseManager
             //get reponse
             if( isset($questionsReponses[$question->getId()]) ){
                 $reponse = $questionsReponses[$question->getId()];
-                if( $reponse->value != -1 && $reponse->value != '' ) {
-                    $sommeValues       += ($reponse->value * $reponse->ponderation);
-                    $sommePonderations += $reponse->ponderation;
-                }
+                $sommeValues       += ($reponse->value * $reponse->ponderation);
+                $sommePonderations += $reponse->ponderation;
             }
         }
 
@@ -456,8 +471,8 @@ class ResultatManager extends BaseManager
             {
                 //on ajoute seulement les questions valides pour les résultats
                 $one = $questionsReponses[ $question->getId() ];
-                if( $one->type == 415  || $one->type == 416 || ($one->type == 417 && $one->value != '') ){
-                    if( $one->value <= $one->noteMinimale ){
+                if( $one->value != '' ){
+                    if( $one->noteMinimale != '' and $one->value <= $one->noteMinimale ){
                         $results[]     = $one;
                         $noteChapitre += $one->value;
                     }
