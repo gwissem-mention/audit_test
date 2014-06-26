@@ -6,6 +6,15 @@
     {{- 'title.admin.manage-forums.create' |trans({}, ForumBundle.translation ) -}}
 {%- endblock title -%}
 
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-forum-admin-forum-create.js"
+        'bundles/hopitalnumeriqueforum/js/Forum/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {%- block sidebar -%}
     {%- spaceless -%}
     {{- parent() -}}
@@ -41,18 +50,15 @@
                 {{- form_row(form.name) -}}
                 
                 <div class="row">
-                    <button type="button" class="btn btn-link col-lg-offset-2 col-lg-2" onclick="selectionnerAllRoles();">
+                    <button type="button" class="btn btn-link col-lg-offset-2 col-lg-2" onclick="selectionnerAllRolesCreateForum();">
                         <span class="fa fa-check-square-o"></span> Sélectionner tout
                     </button>
-                    <button type="button" class="btn btn-link col-lg-offset-1 col-lg-3" onclick="deselectionnerAllRoles();">
+                    <button type="button" class="btn btn-link col-lg-offset-1 col-lg-3" onclick="deselectionnerAllRolesCreateForum();">
                         <span class="fa fa-square-o"></span> Désélectionner tout
                     </button>
                 </div>
 
                 {{form_row(form.readAuthorisedRoles)}}
-
-                <script type="text/javascript">
-                </script>
 
                 {{- form_rest(form) -}}
 
