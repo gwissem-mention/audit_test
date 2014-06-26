@@ -251,3 +251,7 @@ flash:
         board:
             topic_create:
                 not_found:             "La board sur laquelle vous essayez de poster n'existe pas. Désolé !"
+
+#Autres textes brut
+"Enter URL"       : "Entrez un lien"
+"Enter Image URL" : "Entrez le lien d'une image"
