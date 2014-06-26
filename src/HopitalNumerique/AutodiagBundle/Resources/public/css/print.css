@@ -6,6 +6,7 @@ body{background-color :#fff;}
 img{ width:auto !important }
 
 #resultats{width:100%;}
+#resultats #graphiques{width: 100%}
 #resultats #graphiques, #chapitres 
     {display: block !important}
 #resultats #graphiques #radarChart{width: 100% !important; height: 600px; margin: 0 auto}

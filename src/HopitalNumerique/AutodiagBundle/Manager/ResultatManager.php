@@ -337,7 +337,8 @@ class ResultatManager extends BaseManager
             //get reponse
             if( isset($questionsReponses[$question->getId()]) ){
                 $reponse = $questionsReponses[$question->getId()];
-                if( $reponse->value !== '' )
+                
+                if( $reponse->initialValue !== '' )
                     $nbQuestionsRemplies++;
 
                 $nbQuestions++;
@@ -471,8 +472,8 @@ class ResultatManager extends BaseManager
                 //on ajoute seulement les questions valides pour les résultats
                 $one = $questionsReponses[ $question->getId() ];
 
-                if( $one->value !== '' ){
-                    if( $one->noteMinimale !== '' and $one->value <= $one->noteMinimale ){
+                if( $one->initialValue !== '' ){
+                    if( $one->noteMinimale !== '' and $one->initialValue <= $one->noteMinimale ){
                         $results[]     = $one;
                         $noteChapitre += $one->value;
                     }
@@ -507,7 +508,7 @@ class ResultatManager extends BaseManager
     {
         $results = array();
         foreach($reponses as $reponse) {
-            if( $reponse->getValue() !== -1 ){
+            if( $reponse->getValue() != -1 ){
                 $rep = new \StdClass;
 
                 //reponses values
@@ -535,6 +536,8 @@ class ResultatManager extends BaseManager
                     $rep->value = $reponse->getValue();
                     $rep->max   = 0;
                 }
+
+                $rep->initialValue = $reponse->getValue();
 
                 $results[ $reponse->getQuestion()->getId() ] = $rep;
             }
