@@ -169,6 +169,14 @@ class ResultatManager extends BaseManager
 
 
 
+
+
+
+
+
+
+
+
     /**
      * Construit le tableau de données pour le rendu graphique Table
      *
@@ -287,7 +295,14 @@ class ResultatManager extends BaseManager
     {
         $datas = array();
 
-        foreach($chapitres as $chapitre)
+        //reorder chapitres
+        $chapitresOrdered = array();
+        foreach($chapitres as $one){
+            $chapitresOrdered[ $one->order ] = $one;
+        }
+        ksort($chapitresOrdered);
+
+        foreach($chapitresOrdered as $chapitre)
         {
             $data        = new \StdClass;
             $data->title = $chapitre->title;
