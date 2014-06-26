@@ -337,7 +337,7 @@ class ResultatManager extends BaseManager
             //get reponse
             if( isset($questionsReponses[$question->getId()]) ){
                 $reponse = $questionsReponses[$question->getId()];
-                if( $reponse->value != '' && $reponse->value <= $reponse->noteMinimale)
+                if( $reponse->value != '' )
                     $nbQuestionsRemplies++;
 
                 $nbQuestions++;
@@ -388,10 +388,8 @@ class ResultatManager extends BaseManager
             //get reponse
             if( isset($questionsReponses[$question->getId()]) ){
                 $reponse = $questionsReponses[$question->getId()];
-                if( $reponse->value != -1 && $reponse->value != '' ) {
-                    $sommeValues       += ($reponse->value * $reponse->ponderation);
-                    $sommePonderations += $reponse->ponderation;
-                }
+                $sommeValues       += ($reponse->value * $reponse->ponderation);
+                $sommePonderations += $reponse->ponderation;
             }
         }
 
