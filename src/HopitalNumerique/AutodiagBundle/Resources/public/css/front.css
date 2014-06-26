@@ -67,9 +67,9 @@
         #resultats #graphiques .tableContainer{overflow: hidden; overflow-x:auto;}
         #resultats #graphiques .table .vertical-align{vertical-align: middle}
 
-        #resultats #graphiques .table .success{background-color: #449d44!important}
-        #resultats #graphiques .table .danger{background-color: #c9302c!important}
-        #resultats #graphiques .table .warning{background-color: #ec971f!important}
+        #resultats #graphiques .table .success{background-color: #449d44!important; color:#FFFFFF;}
+        #resultats #graphiques .table .danger{background-color: #c9302c!important; color:#FFFFFF;}
+        #resultats #graphiques .table .warning{background-color: #ec971f!important; color:#FFFFFF;}
         
 /* Partie Compte HN */
     .autodiagTable thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}

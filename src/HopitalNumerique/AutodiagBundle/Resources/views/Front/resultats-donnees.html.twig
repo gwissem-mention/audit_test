@@ -265,7 +265,7 @@
 
 {# Calcul de la note du chapitre #}
 {% macro calcNote(chapitre, pdf) %}  
-    {% if chapitre.noteChapitre < chapitre.noteMin %}
+    {% if chapitre.noteMin and chapitre.noteChapitre < chapitre.noteMin %}
         {% set publications = chapitre.id|getPublicationsForChapitre(pdf) %}
         {% if publications %}
             <div class="row">

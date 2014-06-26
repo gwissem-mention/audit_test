@@ -474,7 +474,7 @@ class ResultatManager extends BaseManager
                 //on ajoute seulement les questions valides pour les résultats
                 $one = $questionsReponses[ $question->getId() ];
                 if( $one->type == 415  || $one->type == 416 || ($one->type == 417 && $one->value != '') ){
-                    if( $one->value <= $one->noteMinimale ){
+                    if( $one->noteMinimale != '' and $one->value <= $one->noteMinimale ){
                         $results[]     = $one;
                         $noteChapitre += $one->value;
                     }
