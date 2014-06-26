@@ -237,12 +237,12 @@ ccdn_forum_forum:
                 deleted_datetime_format:  d-m-Y - H:i
             create:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                #form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
-                form_theme:           HopitalNumeriqueQuestionnaireBundle:Questionnaire:Theme/theme.vertical.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.vertical.html.twig
+                #form_theme:           HopitalNumeriqueQuestionnaireBundle:Questionnaire:Theme/theme.vertical.html.twig
             reply:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                #form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
-                form_theme:           HopitalNumeriqueQuestionnaireBundle:Questionnaire:Theme/theme.vertical.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.vertical.html.twig
+                #form_theme:           HopitalNumeriqueQuestionnaireBundle:Questionnaire:Theme/theme.vertical.html.twig
     post:
         moderator:
             unlock:
