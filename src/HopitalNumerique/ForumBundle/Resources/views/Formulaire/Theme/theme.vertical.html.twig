@@ -87,6 +87,24 @@
     {%- endfor -%}
 {%- endmacro -%}
 
+{%- macro button_row(groups) -%}
+    {%- import _self as bb_macros -%}
+
+    <div class="btn-toolbar">
+        {%- for group_name, group in groups -%}
+            {%- for button_group_name, button_group in group -%}
+                {%- if button_group_name == '' or button_group_name == 'none' -%}
+                    {{- bb_macros.button_group(button_group) -}}
+                {%- else -%}
+                    <div class="btn-group">
+                        {{- bb_macros.button_group(button_group) -}}
+                    </div>
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endfor -%}
+    </div>
+{%- endmacro -%}
+
 {% block bb_editor_widget %}
     <div class="bb-editor">
         {% set attr = attr|merge({ 'class': attr.class|default('') ~ 'form-control bb-editor', 'style': attr.style|default('') ~ 'height:250px;'}) %}

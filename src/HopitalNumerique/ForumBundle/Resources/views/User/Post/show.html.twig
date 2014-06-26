@@ -18,14 +18,6 @@
 
     {%- include "CCDNForumForumBundle:User:Topic/Partial/stat_vitals.html.twig" -%}
 
-    {%- if topic.isDeleted or topic.isClosed or topic.isSticky -%}
-        {# Affichage uniquement si l'utilisateur a le droit de visioner #}
-        {% if (app.user is not null and app.user.getRole() in topic.getBoard.readAuthorisedRoles)
-             or (app.user is null  and 'ROLE_ANONYME_10' in topic.getBoard.readAuthorisedRoles) %}
-            {%- include "CCDNForumForumBundle:User:Topic/Partial/stat_mods.html.twig" -%}
-        {% endif %}
-    {%- endif -%}
-
     <br>
 
     <section class="row clearfix">
