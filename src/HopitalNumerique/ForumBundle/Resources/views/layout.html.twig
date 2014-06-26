@@ -26,19 +26,11 @@
         "@fancybox_js"
         "@jquery_toggles_js"
         "@validationEngine_js"
-        "@tinymce_js"
-        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
-        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriqueforum/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
-    <script type="text/javascript">
-        NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
-        NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
-    </script>
 {% endblock %}
 
 {% block prebody %}
