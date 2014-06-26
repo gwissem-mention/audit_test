@@ -63,7 +63,7 @@ class SessionGrid extends Grid implements IGrid
         $etatColumn->setOperatorsVisible( false );
         $this->addColonne( $etatColumn );
         
-        $archiverColumn = new Column\BooleanColumn('archiver', 'Archiver');
+        $archiverColumn = new Column\BooleanColumn('archiver', 'Archivée');
         $archiverColumn->setSize( 70 );
         $archiverColumn->setFilterType('select');
         $archiverColumn->setOperatorsVisible( false );
