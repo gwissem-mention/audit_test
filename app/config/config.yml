@@ -183,3 +183,6 @@ stof_doctrine_extensions:
     orm:
         default: 
             loggable: true
+
+composer.dependencies_not_installable:
+    enabled: false
