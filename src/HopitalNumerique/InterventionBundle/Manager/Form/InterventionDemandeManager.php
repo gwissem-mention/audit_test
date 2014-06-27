@@ -81,8 +81,6 @@ class InterventionDemandeManager
      */
     public function getObjetsChoices(User $ambassadeur = null)
     {
-        if ($ambassadeur == null)
-            return array();
-        return $this->objetManager->getObjetsByAmbassadeur($ambassadeur);
+        return is_null($ambassadeur) ? $this->objetManager->getObjetsByTypes( array(175, 176, 177, 178, 179, 180, 181, 182) ) : $this->objetManager->getObjetsByAmbassadeur($ambassadeur);
     }
 }
