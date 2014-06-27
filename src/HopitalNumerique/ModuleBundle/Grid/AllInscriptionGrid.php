@@ -41,19 +41,15 @@ class AllInscriptionGrid extends BaseInscriptionGrid
         $this->addColonne( $moduleColumn );
         
         $dateSessionColumn = new Column\DateColumn('dateSession', 'Date de début de la session');
-        // $dateSessionColumn->setSize( 150 );
         $this->addColonne( $dateSessionColumn );
         
         $prenomNomParticipantColumn = new Column\TextColumn('nomPrenom', 'Participant');
-        // $prenomNomParticipantColumn->setSize( 150 );
         $this->addColonne( $prenomNomParticipantColumn );
         
         $regionParticipantColumn = new Column\TextColumn('userRegion', 'Sa région');
-        // $regionParticipantColumn->setSize( 150 );
         $this->addColonne( $regionParticipantColumn );
         
         $profilParticipantColumn = new Column\TextColumn('userProfil', 'Son profil');
-        // $profilParticipantColumn->setSize( 150 );
         $this->addColonne( $profilParticipantColumn );
         
         $roleColumn = new Column\ArrayColumn('roles', 'Groupe associé');
@@ -71,7 +67,6 @@ class AllInscriptionGrid extends BaseInscriptionGrid
         $this->addColonne( new Column\TextColumn('commentaire', 'Commentaire') );
 
         $etatInscriptionColumn = new Column\TextColumn('etatInscription', 'Etat de l\'inscription');
-        // $etatInscriptionColumn->setSize( 170 );
         $etatInscriptionColumn->setFilterType('select');
         $etatInscriptionColumn->setOperatorsVisible( false );
         $this->addColonne( $etatInscriptionColumn );
