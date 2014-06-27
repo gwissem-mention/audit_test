@@ -18,12 +18,12 @@
 
     <div class="row clearfix">
         {# Nom du board #}
-        <div class="col-md-9">
+        <div class="col-md-8">
             <span class="lead" title="{{- board.name -}}">{{- board.name -}}</span>
         </div>
 
         {# Bouton création topic #}
-        <div class="col-md-3">
+        <div class="col-md-4">
             {% set is_topic_create_disabled = board.isAuthorisedToCreateTopic(app.security) ? '': ' disabled' %}
 
             <a class="btn btn-success{{ is_topic_create_disabled }} pull-right" rel="nofollow" href="{{- path('ccdn_forum_user_topic_create', {'forumName': forumName, 'boardId': board.getId }) -}}">
