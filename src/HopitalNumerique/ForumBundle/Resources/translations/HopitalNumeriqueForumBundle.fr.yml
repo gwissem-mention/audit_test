@@ -162,7 +162,7 @@ category:
     roles:
         board-view-label:              "Rôles autorisés à voir le thème :"
     index:                             "Index du forum"
-    none:                              "Il n'y a pas de catégories."
+    none:                              "Il n'y a pas de catégorie."
     no-boards:                         "Il n'y a pas de thème pour cette catégorie."
 board:
     th:                                "Thème"
@@ -187,7 +187,7 @@ board:
         topic-create-label:            "Rôles autorisés à créer des fils de discussion : "
         topic-view-label:              "Rôles autorisés à voir les fils de discussion : "
         topic-reply-label:             "Rôles autorisés à répondre aux fils de discussion : "
-    no-topics:                         "Il n'y a pas de fils de discussion pour ce thème, soyez le premier à en poster un !"
+    no-topics:                         "Il n'y a pas de fil de discussion pour ce thème, soyez le premier à en poster un !"
 topic:
     label:                             "Fil de discussion : "
     board-label:                       "Thème : "
