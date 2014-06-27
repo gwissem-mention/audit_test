@@ -70,10 +70,21 @@ $(document).ready(function() {
         },
         series : [
             {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:,.0f}%',
+                    softConnector: true
+                },
                 name  : 'Ma valeur',
                 color : '#ff0000',
                 data  : values
-            }, {
+            },
+            {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:,.0f}%',
+                    softConnector: true
+                },
                 name  : 'Valeur optimale préconisée par l\'ANAP',
                 data  : optimale,
                 color : '#6f3596'

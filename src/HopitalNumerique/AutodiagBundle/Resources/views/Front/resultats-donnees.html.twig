@@ -44,6 +44,9 @@
                                             Fort
                                         </div>
                                         <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(0)}}%"{% endif %} data-position="{{panel.value|number_format(0)}}%" title="<span>Ma Valeur : {{panel.value|number_format(0)}}%</span>" ></div>
+                                        {% if pdf %}
+                                            <div class="cursor-value" style="left:{{panel.value|number_format(0)}}%">{{panel.value|number_format(0)}}%</div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
