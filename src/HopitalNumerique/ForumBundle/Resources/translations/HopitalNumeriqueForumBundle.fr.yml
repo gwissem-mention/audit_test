@@ -15,40 +15,40 @@ layout:
 
 title:
     admin:
-        index:                         "Index de l'admin"
+        index:                         "Mon Hôpital Numérique - Index de l'admin"
         manage-forums:
-            index:                     "Gérer les forums"
-            create:                    "Créer un nouveau forum"
-            edit:                      "Éditer le forum %forum_name%"
-            delete:                    "Supprimer le forum %forum_name%"
+            index:                     "Mon Hôpital Numérique - Gérer les forums"
+            create:                    "Mon Hôpital Numérique - Créer un nouveau forum"
+            edit:                      "Mon Hôpital Numérique - Éditer le forum %forum_name%"
+            delete:                    "Mon Hôpital Numérique - Supprimer le forum %forum_name%"
         manage-categories:
-            index:                     "Gérer les catégories"
-            create:                    "Créer une nouvelle catégorie"
-            edit:                      "Éditer la catégorie %category_name%"
-            delete:                    "Supprimer la catégorie %category_name%"
+            index:                     "Mon Hôpital Numérique - Gérer les catégories"
+            create:                    "Mon Hôpital Numérique - Créer une nouvelle catégorie"
+            edit:                      "Mon Hôpital Numérique - Éditer la catégorie %category_name%"
+            delete:                    "Mon Hôpital Numérique - Supprimer la catégorie %category_name%"
         manage-boards:
-            index:                     "Gérer les thèmes"
-            create:                    "Créer un nouveau thème"
-            edit:                      "Éditer le thème %board_name%"
-            delete:                    "Supprimer le thème %board_name%"
+            index:                     "Mon Hôpital Numérique - Gérer les thèmes"
+            create:                    "Mon Hôpital Numérique - Créer un nouveau thème"
+            edit:                      "Mon Hôpital Numérique - Éditer le thème %board_name%"
+            delete:                    "Mon Hôpital Numérique - Supprimer le thème %board_name%"
     category:
-        index:                         "Forum"
-        show:                          "%category_name% catégorie"
+        index:                         "Mon Hôpital Numérique - Forum"
+        show:                          "Mon Hôpital Numérique - %category_name% catégorie"
     board:
-        show:                          "%board_name% board"
+        show:                          "Mon Hôpital Numérique - %board_name% board"
     topic:
-        show:                          "Fil de discussion : %topic_title%"
-        create:                        "Créer le fil de discussion"
-        reply:                         "Répondre au fil de discussion"
-        edit:                          "Éditer le fil de discussion"
-        delete:                        "Supprimer le fil de discussion"
-        change_board:                  "Changer le thème pour le fil de discussion"
+        show:                          "Mon Hôpital Numérique - Fil de discussion : %topic_title%"
+        create:                        "Mon Hôpital Numérique - Créer le fil de discussion"
+        reply:                         "Mon Hôpital Numérique - Répondre au fil de discussion"
+        edit:                          "Mon Hôpital Numérique - Éditer le fil de discussion"
+        delete:                        "Mon Hôpital Numérique - Supprimer le fil de discussion"
+        change_board:                  "Mon Hôpital Numérique - Changer le thème pour le fil de discussion"
     post:
-        show:                          "Message #%post_id%"
-        edit:                          "Éditer le message #%post_id%"
-        delete:                        "Supprimer le message #%post_id%"
+        show:                          "Mon Hôpital Numérique - Message #%post_id%"
+        edit:                          "Mon Hôpital Numérique - Éditer le message #%post_id%"
+        delete:                        "Mon Hôpital Numérique - Supprimer le message #%post_id%"
     subscription:
-        index:                         "Abonnements"
+        index:                         "Mon Hôpital Numérique - Abonnements"
 
 crumbs:
     admin:
