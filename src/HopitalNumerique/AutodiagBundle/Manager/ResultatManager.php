@@ -60,9 +60,12 @@ class ResultatManager extends BaseManager
         $questionsReponses = $this->buildQuestionsReponses( $resultat->getReponses() );
 
         //build chapitres and add previous responses
-        $chapitres      = $resultat->getOutil()->getChapitres();
-        $parents        = array();
-        $enfants        = array();
+        $parents     = array();
+        $enfants     = array();
+        $numQuestion = 1;
+
+        //preorder chapters
+        $chapitres = $this->makeChaptersOrdered( $resultat->getOutil()->getChapitres() );
 
         foreach($chapitres as $one) {
             $chapitre = new \StdClass;
@@ -78,12 +81,15 @@ class ResultatManager extends BaseManager
             $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
             //handle questions/reponses
-            $chapitre = $front ? $this->buildQuestionsForFront( $one->getQuestions(), $chapitre, $questionsReponses ) : $this->buildQuestionsForBack( $one->getQuestions(), $chapitre, $questionsReponses );
+            $chapitre = $front ? $this->buildQuestionsForFront( $one->getQuestions(), $chapitre, $questionsReponses, $numQuestion ) : $this->buildQuestionsForBack( $one->getQuestions(), $chapitre, $questionsReponses );
+
+            //update Numéro de la question
+            $numQuestion += count( $one->getQuestions() );
 
             //handle parents / enfants
-            if( is_null($one->getParent()) ){
+            if( is_null($one->getParent()) )
                 $parents[ $one->getId() ] = $chapitre;
-            }else
+            else
                 $enfants[] = $chapitre;
         }
 
@@ -92,7 +98,7 @@ class ResultatManager extends BaseManager
             $parent = $parents[ $enfant->parent ];
             $parent->childs[] = $enfant;
         }
-
+        
         return $parents;
     }
 
@@ -174,8 +180,41 @@ class ResultatManager extends BaseManager
 
 
 
+    /**
+     * Ordonne les chapitres parents (by order) puis ses enfants (by order)
+     *
+     * @param array $chapitres Les chapitres
+     *
+     * @return array
+     */
+    private function makeChaptersOrdered( $chapitres )
+    {
+        $parentsOrdered = array();
+        $enfantsOrdered = array();
+        foreach($chapitres as $one){
+            if( is_null($one->getParent()) )
+                $parentsOrdered[ $one->getOrder() ] = $one;
+            else{
+                if( !isset($enfantsOrdered[ $one->getParent()->getId() ]) )
+                    $enfantsOrdered[ $one->getParent()->getId() ] = array();
 
+                $enfantsOrdered[ $one->getParent()->getId() ][ $one->getOrder() ] = $one;
+            }
+        }
+        ksort($parentsOrdered);
+        $chapitresOrdered = array();
+        foreach($parentsOrdered as $one){
+            $chapitresOrdered[] = $one;
 
+            if( isset($enfantsOrdered[ $one->getId() ]) ){
+                ksort($enfantsOrdered[ $one->getId() ]);
+                foreach($enfantsOrdered[ $one->getId() ] as $child)
+                    $chapitresOrdered[] = $child;
+            }
+        }
+
+        return $chapitresOrdered;
+    }
 
     /**
      * Construit le tableau de données pour le rendu graphique Table
@@ -458,7 +497,7 @@ class ResultatManager extends BaseManager
      *
      * @return array
      */
-    private function buildQuestionsForFront( $questions, $chapitre, $questionsReponses )
+    private function buildQuestionsForFront( $questions, $chapitre, $questionsReponses, $numQuestion )
     {
         $results             = array();
         $forCharts           = array();
@@ -471,6 +510,7 @@ class ResultatManager extends BaseManager
             {
                 //on ajoute seulement les questions valides pour les résultats
                 $one = $questionsReponses[ $question->getId() ];
+                $one->question = $numQuestion . '. ' . $one->question;
 
                 if( $one->initialValue !== '' ){
                     if( $one->noteMinimale !== '' and $one->initialValue <= $one->noteMinimale ){
@@ -486,6 +526,8 @@ class ResultatManager extends BaseManager
 
                 $nbQuestions++;
             }
+
+            $numQuestion++;
         }
 
         $chapitre->questions           = $results;

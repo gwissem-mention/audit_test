@@ -25,6 +25,9 @@ class AmbassadeurController extends Controller
         //Recupère l'utilisateur connecté
         $user = $this->get('security.context')->getToken()->getUser();
     
+        if( $user === 'anon.' )
+            $this->get('session')->getFlashBag()->add('warning', 'Solliciter un ambassadeur nécessite d\'être identifié. Créez un compte ou identifiez-vous.');
+            
         //get User Role
         //Si il n'y pas d'utilisateur connecté, le tableau de role est vide
         $roles  = 'anon.' === $user ? array() : $user->getRoles();

@@ -1,4 +1,20 @@
 $(document).ready(function() {
+    //cache les chapitres inutiles
+    chaptersToHide = jQuery.parseJSON($('#chaptersToHide').val());
+    $.each(chaptersToHide, function(index, value) {
+        $('#chapitres .chapitre-' + value).hide();
+    });
+
+    //si on a cacher TOUS les chapitres, on affiche le message empty
+    allHidden = true;
+    $('#chapitres .chapter').each(function(){
+        if( $(this).css('display') == 'block' )
+            allHidden = false;
+    });
+
+    if( allHidden )
+        $('#chaptersToHide').parent().show();
+    
     /* Manage values */
     var datas      = $.parseJSON( $('#datas-radar').val() );
     var categories = [];
@@ -54,10 +70,21 @@ $(document).ready(function() {
         },
         series : [
             {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:,.0f}%',
+                    softConnector: true
+                },
                 name  : 'Ma valeur',
                 color : '#ff0000',
                 data  : values
-            }, {
+            },
+            {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y:,.0f}%',
+                    softConnector: true
+                },
                 name  : 'Valeur optimale préconisée par l\'ANAP',
                 data  : optimale,
                 color : '#6f3596'
