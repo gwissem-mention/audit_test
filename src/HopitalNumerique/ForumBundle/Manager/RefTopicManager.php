@@ -13,7 +13,6 @@ class RefTopicManager extends BaseManager
 
     /**
      * Retourne la liste des références topics pour la recherche
-     * @todo  : Voir comment récupérer le répository RepTopicRepository
      *
      * @param array $references Liste des références
      *

@@ -57,6 +57,11 @@ class MailManager extends BaseManager
         $this->_mailAnap           = isset($options['mailAnap'])          ? $options['mailAnap']          : array();
     }
 
+    public function getDestinataire()
+    {
+        return $this->_destinataire;
+    }
+
     /**
      * L'ajout de mail est-il autorisé ?
      * 
@@ -388,6 +393,34 @@ class MailManager extends BaseManager
     }
     
     /**
+     * Envoie un courriel concernant les demandes d'intervention.
+     *
+     * @param \Nodevo\MailBundle\Entity\Mail $mail Le courriel à envoyer
+     * @param \HopitalNumerique\UserBundle\Entity\User $destinataire Le destinataire du message
+     * @param array $options Les paramètres à remplacer
+     * @return \Swift_Message Le message près à être envoyer
+     */
+    public function sendInterventionMail(\Nodevo\MailBundle\Entity\Mail $mail, \HopitalNumerique\UserBundle\Entity\User $destinataire, $options)
+    {
+        return $this->generationMail($destinataire, $mail, $options);
+    }
+    
+    /**
+     * [sendInscriptionSession description]
+     *
+     * @param  [type] $user    [description]
+     * @param  [type] $options [description]
+     *
+     * @return [type]
+     */
+    public function sendInscriptionSession( $user, $options )
+    {
+        $mail = $this->findOneById(34);
+    
+        return $this->generationMail($user, $mail, $options);
+    }
+
+    /**
      * Envoi un mail de contact (différent des autres envoie de mail)
      *
      * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
@@ -408,72 +441,29 @@ class MailManager extends BaseManager
             $options["maildestinataire"] = $recepteurMail;
             
             //prepare content
-            $content         = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), NULL , $options);
-            $expediteurMail  = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getExpediteurMail()), NULL, $options);
-            $expediteurName  = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getExpediteurName()), NULL, $options);
-            $content         = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), NULL, $options);
-            $templateFile    = "NodevoMailBundle::template.mail.html.twig";
-            $templateContent = $this->_twig->loadTemplate($templateFile);
+            $content        = $this->replaceContent($mail->getBody(), NULL , $options);
+            $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), NULL, $options);
+            $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
+            $content        = $this->replaceContent($mail->getBody(), NULL, $options);
+            $from           = array($expediteurMail => $expediteurName );
             
-            // Render the whole template including any layouts etc
-            $body = $templateContent->render( array("content" => $content) );
-
-            $from = array($expediteurMail => $expediteurName );
-            
-            $cci = $this->_mailAnap;
-            
-            $mailsToSend[] = \Swift_Message::newInstance()
-                                ->setSubject( $mail->getObjet() )
-                                ->setFrom( $from )
-                                ->setTo( array($recepteurMail => $recepteurName) )
-                                ->setBcc( $cci )
-                                ->setBody( strip_tags($body, '<style>' ) )
-                                ->addPart( quoted_printable_decode($body), 'text/html' );
+            $mailsToSend[] = $this->sendMail( $mail->getObjet(), $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
         }
-        return $mailsToSend;
-    }
 
-    /**
-     * Envoie un courriel concernant les demandes d'intervention.
-     *
-     * @param \Nodevo\MailBundle\Entity\Mail $mail Le courriel à envoyer
-     * @param \HopitalNumerique\UserBundle\Entity\User $destinataire Le destinataire du message
-     * @param array $options Les paramètres à remplacer
-     * @return \Swift_Message Le message près à être envoyer
-     */
-    public function sendInterventionMail(\Nodevo\MailBundle\Entity\Mail $mail, \HopitalNumerique\UserBundle\Entity\User $destinataire, $options)
-    {
-        return $this->generationMail($destinataire, $mail, $options);
-    }
-    
-    public function sendInscriptionSession( $user, $options )
-    {
-        $mail = $this->findOneById(34);
-    
-        return $this->generationMail($user, $mail, $options);
+        return $mailsToSend;
     }
 
     /**
      * Retourne un email de test
      *
-     * @param  [type] $id   [description]
-     * @param  [type] $user [description]
+     * @param integer $id   ID du mail
+     * @param User    $user Utilisateur destinataire
      *
      * @return Swift_Message
      */
-    public function getMessageTest( $id, $user )
+    public function sendMessageTest( $id, $user )
     {
         $mail = $this->findOneById($id);
-
-        //prepare content
-        $content = $mail->getBody();
-        $content = str_replace( array("\r\n","\n"), '<br />', $content );
-
-        $templateFile    = "NodevoMailBundle::template.mail.html.twig";
-        $templateContent = $this->_twig->loadTemplate($templateFile);
-
-        // Render the whole template including any layouts etc
-        $body = $templateContent->render(array("content" => $content));
 
         // on remplace les champs par les valeurs récupérées si les champs sont vides
         $this->_mailExpediteur = ($this->_mailExpediteur == '') ? $mail->getExpediteurMail() : $this->_mailExpediteur;
@@ -483,17 +473,41 @@ class MailManager extends BaseManager
         $from = array($this->_mailExpediteur => $this->_nomExpediteur );
         
         //return test email
-        return \Swift_Message::newInstance()
-                        ->setSubject( $mail->getObjet() )
-                        ->setFrom( $from )
-                        ->setTo( $this->_destinataire )
-                        ->setBody( strip_tags($body, '<style>' ) )
-                        ->addPart( quoted_printable_decode($body), 'text/html' );
+        return $this->sendMail( $mail->getObjet(), $from, $this->_destinataire, $mail->getBody() );
     }
 
-    public function getDestinataire()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Génération du mail avec le template NodevoMailBundle::template.mail.html.twig + envoi à l'user
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @param \Nodevo\MailBundle\Entity\Mail           $mail
+     * @param array                                    $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     * 
+     * @return Swift_Message objet \Swift pour l'envoie du mail
+     */
+    private function generationMail( $user, $mail, $options = array() )
     {
-        return $this->_destinataire;
+        //prepare content
+        $body = $this->replaceContent($mail->getBody(), $user, $options);
+        $from = array($mail->getExpediteurMail() => $mail->getExpediteurName() );
+        $cci  = $this->_expediteurEnCopie ? array_merge( $this->_mailAnap, $from ) : $this->_mailAnap;
+        $cci  = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
+
+        return $this->sendMail( $mail->getObjet(), $from, $user->getEmail(), $body, $cci );
     }
 
     /**
@@ -506,7 +520,7 @@ class MailManager extends BaseManager
      * @return string
      */
     private function replaceContent( $content, $user, $options)
-    {        
+    {
         //Si il y a des variables spécifique dans le template courant
         if(!empty($options))
         {
@@ -531,40 +545,47 @@ class MailManager extends BaseManager
 
         return $content;
     }
-    
-    /**
-     * Génération du mail avec le template NodevoMailBundle::template.mail.html.twig + envoi à l'user
-     * 
-     * @param \HopitalNumerique\UserBundle\Entity\User $user
-     * @param \Nodevo\MailBundle\Entity\Mail           $mail
-     * @param array                                    $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
-     * 
-     * @return Swift_Message objet \Swift pour l'envoie du mail
-     */
-    private function generationMail( $user, $mail, $options = array() )
-    {        
-        //prepare content
-        $content         = $this->replaceContent(str_replace(array("\r\n","\n"),'<br />',$mail->getBody()), $user, $options);
-        $templateFile    = "NodevoMailBundle::template.mail.html.twig";
-        $templateContent = $this->_twig->loadTemplate($templateFile);
-        
-        $from = array($mail->getExpediteurMail() => $mail->getExpediteurName() );
-                
-        if($this->_expediteurEnCopie)
-            $cci = array_merge( $this->_mailAnap, $from );
-        else
-            $cci = $this->_mailAnap;
-    
-        // Render the whole template including any layouts etc
-        $body = $templateContent->render( array("content" => $content) );
 
-        //send email to users with new password
-        return \Swift_Message::newInstance()
-                            ->setSubject( $mail->getObjet() )
-                            ->setFrom( $from )
-                            ->setTo( $user->getEmail() )
-                            ->setBcc( ($mail->getId() === 1 || $mail->getId() === 2) ? null : $cci )
-                            ->setBody( strip_tags($body, '<style>' ) )
-                            ->addPart( quoted_printable_decode($body), 'text/html' );
+    /**
+     * Envoi un mail
+     *
+     * @param string $subject      Sujet du mail
+     * @param string $from         Expéditeur
+     * @param string $destinataire Destinataire
+     * @param string $body         Contenu du mail
+     *
+     * @return \Swift_Message
+     */
+    private function sendMail( $subject, $from, $destinataire, $body, $bcc = false )
+    {
+        $body = quoted_printable_decode($body);
+
+        //prepare content HTML
+        $bodyHtml = str_replace( array("\r\n","\n"), '<br />', $body );
+        $template = $this->_twig->loadTemplate( "NodevoMailBundle::template.mail.html.twig" );
+        $bodyHtml = $template->render(array("content" => $bodyHtml));
+
+        //prepare content TEXT
+        $pattern = '/<a[^>]+href=([\'"])(.+?)\1[^>]*>(.*)<\/a>/i';
+        if( preg_match_all($pattern, $body, $matches) ){
+            foreach($matches[1] as $key => $value)
+                $body = str_replace($matches[0][$key], '(' . $matches[2][$key] . ')' . $matches[3][$key] , $body);
+        }
+        $template = $this->_twig->loadTemplate( "NodevoMailBundle::template.mail.txt.twig" );
+        $bodyTxt  = $template->render(array("content" => strip_tags($body) ));
+
+        //prepare Mail
+        $mail = \Swift_Message::newInstance()
+                        ->setSubject( $subject )
+                        ->setFrom( $from )
+                        ->setTo( $destinataire )
+                        ->setBody( $bodyTxt )
+                        ->addPart( $bodyHtml, 'text/html' );
+
+        if( $bcc )
+            $mail->setBcc( $bcc );
+
+        //return mail
+        return $mail;
     }
 }
