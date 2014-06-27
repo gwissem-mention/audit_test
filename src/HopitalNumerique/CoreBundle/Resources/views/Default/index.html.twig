@@ -63,7 +63,7 @@
                         </p>
                         {# Mode connecté (obligé de séparer les deux car app.user|checkAuthorization pète si pas connecté car app.user = null #}
                         {% if app.user is not null %}
-                            {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Expert'})) 
+                            {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Experts'})) 
                                and app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Ambassadeurs'}))
                                and app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'CMSI'}))
                             %}
@@ -72,8 +72,8 @@
                                     <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Public'}) -}}">
                                         > Public
                                     </a>
-                                    <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Expert'}) -}}">
-                                        > Expert
+                                    <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Experts'}) -}}">
+                                        > Experts
                                     </a>
                                     </div>
                                     <div class="pull-left">
@@ -91,9 +91,9 @@
                                     <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Public'}) -}}">
                                         > Forum Public
                                     </a>
-                                    {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Expert'})) %}
-                                        <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Expert'}) -}}">
-                                            > Forum Expert
+                                    {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Experts'})) %}
+                                        <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Experts'}) -}}">
+                                            > Forum Experts
                                         </a>
                                     {% endif %}
                                     {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Ambassadeurs'})) %}
