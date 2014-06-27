@@ -89,16 +89,16 @@
                             {% else %}
                                 <div class="groupe-lien">
                                     <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Public'}) -}}">
-                                        > Forum Public
+                                        > Forum public
                                     </a>
                                     {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Experts'})) %}
                                         <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Experts'}) -}}">
-                                            > Forum Experts
+                                            > Forum des experts
                                         </a>
                                     {% endif %}
                                     {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Ambassadeurs'})) %}
                                         <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Ambassadeurs'}) -}}">
-                                            > Forum des Ambassadeurs
+                                            > Forum des ambassadeurs
                                         </a>
                                     {% endif %}
                                     {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'CMSI'})) %}
@@ -112,7 +112,7 @@
                         {% else %}
                             <div class="groupe-lien">
                                 <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Public'}) -}}">
-                                    > Forum Public
+                                    > Forum public
                                 </a>
                             </div>
                         {% endif %}
