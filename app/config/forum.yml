@@ -166,6 +166,8 @@ ccdn_forum_forum:
         helper:
             role:
                 class:                HopitalNumerique\ForumBundle\Component\Helper\RoleHelper
+        crumb_builder:
+            class:                    HopitalNumerique\ForumBundle\Component\Crumbs\CrumbBuilder
     forum:
         admin:
             create:
