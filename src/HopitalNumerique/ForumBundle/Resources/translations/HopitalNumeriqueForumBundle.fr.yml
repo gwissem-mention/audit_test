@@ -130,6 +130,8 @@ form:
             create:                    "Publier le fil de discussion"
             reply:                     "Publier la réponse"
             move:                      "Déplacer le fil de discussion"
+        post:
+            delete:                    "Supprimer"
         preview:                       "Prévisualiser"
         cancel:                        "Annuler"
         yes:                           "Oui"

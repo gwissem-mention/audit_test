@@ -34,13 +34,14 @@
 
                 {{- form_rest(form) -}}
 
-                <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-10">
-                        <input type="submit" class="btn btn-success" value="
+
+                <div class="row">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-success col-lg-offset-2 col-lg-3" value="
                             {{- 'form.button.post.delete' | trans({}, ForumBundle.translation ) -}}
                         " name="submit[post]" id="submit[post]">
 
-                        <a class="btn btn-default" href="{{- path('ccdn_forum_user_topic_show', {'forumName': forumName, 'topicId': post.getTopic.getId}) -}}">
+                        <a class="btn btn-default col-lg-offset-1 col-lg-2" href="{{- path('ccdn_forum_user_topic_show', {'forumName': forumName, 'topicId': post.getTopic.getId}) -}}">
                             {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}
                         </a>
                     </div>
