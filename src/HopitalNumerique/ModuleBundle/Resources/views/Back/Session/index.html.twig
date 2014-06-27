@@ -19,11 +19,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts output="compiled/hopitalnumerique-module-session-index.js"
-        'bundles/hopitalnumeriquemodule/js/session/index.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
     {{ block('grid_javascripts')}}
 {% endblock %}
 
