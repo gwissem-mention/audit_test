@@ -22,7 +22,17 @@
     {# displaying the item #}
     {% import _self as knp_menu %}
     <option value="{{ item.uri }}" {{selected}}>
+        {{ _self.afficheItemTabulation(item.parent) }}
         {{ block('spanElement') }}
+        {% if item.children|length > 0 and item.displayChildren %}
+            {{ block('children') }}
+        {% endif %}
     </option>
 {% endif %}
 {% endblock %}
+
+{% macro afficheItemTabulation(item) %}
+    {% if item.parent is not null %}
+        &nbsp; &nbsp; {{ _self.afficheItemTabulation(item.parent) }}
+    {% endif %}
+{% endmacro %}
