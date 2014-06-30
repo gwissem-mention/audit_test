@@ -35,7 +35,7 @@ h4 {font-size: 15px;}
 #content .dropdown-menu i{ margin: 0 5px 0 0;}
 
 /* --- Admin --- */
-.checkboxCustom input{width: 20px;height: 20px;}
+.checkboxCustom input{width: 14px;height: 14px;margin: 4px 10px 0 0!important;padding:0!important}
 .checkboxCustom label{text-align: left;}
 .checkboxCustom .control-label{text-align: left;}
 
@@ -51,5 +51,8 @@ h4 {font-size: 15px;}
 }
 
 /* - Création */
-#titre-creation h4{ font-size: 18px; text-align: center;font-weight:bold;}
-#titre-creation h5{ font-size: 15px; text-align: center;font-weight:bold;}
+#titre-creation {padding: 0 15px;}
+#titre-creation h4{ font-size: 18px;font-weight:bold;}
+#titre-creation h5{ font-size: 15px;font-weight:bold;}
+
+.form-buttons input{margin:0 15px}
