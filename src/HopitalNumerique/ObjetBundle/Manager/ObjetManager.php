@@ -140,6 +140,14 @@ class ObjetManager extends BaseManager
     {
         return $this->getRepository()->getObjetsByTypes( $types, $limit )->getQuery()->getResult();
     }
+    
+    /**
+     * Retourne l'ensemble des productions actives
+     */
+    public function getProductionsActive()
+    {
+        return $this->getRepository()->getProductionsActive()->getQuery()->getResult();
+    }
 
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté

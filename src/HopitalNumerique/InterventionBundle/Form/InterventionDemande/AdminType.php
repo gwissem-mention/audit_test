@@ -9,7 +9,6 @@ namespace HopitalNumerique\InterventionBundle\Form\InterventionDemande;
 use Symfony\Component\Form\FormBuilderInterface;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemandeType;
 use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\Validator\Validator\LegacyValidator;
 use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager as FormInterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\InterventionInitiateurManager as FormInterventionInitiateurManager;
@@ -128,7 +127,7 @@ class AdminType extends InterventionDemandeType
                 'attr'     => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_referent')
             ))
             ->add('objets', 'entity', array(
-                'choices'  => $this->objetManager->findAll(),
+                'choices'  => $this->objetManager->getProductionsActive(),
                 'label'    => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
                 'class'    => 'HopitalNumeriqueObjetBundle:Objet',
                 'property' => 'titre',

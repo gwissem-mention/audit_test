@@ -14,22 +14,6 @@ use HopitalNumerique\UserBundle\Entity\User;
 class ObjetManager
 {
     /**
-     * @var \HopitalNumerique\ObjetBundle\Manager\ObjetManager Manager de Objet
-     */
-    private $objetManager;
-
-    /**
-     * Constructeur du manager des objets pour les formulaires.
-     *
-     * @param \HopitalNumerique\ObjetBundle\Manager\ObjetManager $objetManager Manager de Objet
-     * @return void
-     */
-    public function __construct(\HopitalNumerique\ObjetBundle\Manager\ObjetManager $objetManager)
-    {
-        $this->objetManager = $objetManager;
-    }
-
-    /**
      * Retourne la liste jsonifiée des objets d'un ambassadeur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur
