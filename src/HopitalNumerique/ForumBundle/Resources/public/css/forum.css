@@ -1,5 +1,5 @@
 #content h3{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; background: #f6f6f6}
-#content .lienAdmin {font-size: 13px;cursor: pointer;}
+#content .lienAdmin {font-size: 13px;cursor: pointer;line-height:18px}
 
 /*#content .pagination {}
 #content .pagination ul{ list-style:none;}
