@@ -44,7 +44,7 @@
             {%- if board.getLastPost -%}
                 {%- if board.getLastPost.getTopic -%}
                     {{- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -}}
-                    {{- board.getLastPost.getCreatedBy -}}
+                    {{- board.getLastPost.getCreatedBy.getAppellation() -}}
 
                     <br>
                     {%- set page = 1 -%}

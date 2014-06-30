@@ -15,7 +15,7 @@
 
 /* ---  Menu  --- */
 
-#sidebar .menu-main{ margin:0 auto; list-style: none; padding:0; background: #f8f8f8; width: 100%;}
+#sidebar .menu-main{0 auto 15px auto; list-style: none; padding:0; background: #f8f8f8; width: 100%;}
 #sidebar .menu-main li a{display: block; padding: 20px 10px 20px 10px; margin: 0; font-size: 14px; color: #5d5e5e; background: url('../img/menu-tdb-sep.jpg') no-repeat top; border-left:5px solid #f8f8f8;}
 #sidebar .menu-main li a span{color:#777777; font-size: 14px; }
 #sidebar .menu-main li.active a, #sidebar .menu-main li.active-son a, #sidebar .menu-main li a:hover, #sidebar .menu-main li.forum a{border-left:5px solid #7635AB;text-decoration: none ;border-radius:0px;}
