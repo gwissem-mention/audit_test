@@ -33,6 +33,6 @@
 
 {% macro afficheItemTabulation(item) %}
     {% if item.parent is not null %}
-        &nbsp; &nbsp; {{ _self.afficheItemTabulation(item.parent) }}
+        |-- {{ _self.afficheItemTabulation(item.parent) }}
     {% endif %}
 {% endmacro %}
