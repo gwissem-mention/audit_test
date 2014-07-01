@@ -17,7 +17,7 @@
     {%- spaceless -%}
 
     <section class="clearfix">
-        {%- form_theme form ccdn_forum_forum.post.user.edit.form_theme -%}
+        {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.vertical.html.twig' %}
         <form action="{{- path('ccdn_forum_user_post_edit_process', {'forumName': forumName, 'postId': post.id } ) -}}"
          method="post" {{ form_enctype(form) }} class="form-horizontal toValidate" novalidate>
             <fieldset>
