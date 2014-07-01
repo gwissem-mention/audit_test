@@ -50,10 +50,10 @@
                 {{- form_row(form.name) -}}
                 
                 <div class="row">
-                    <button type="button" class="btn btn-link col-lg-offset-2 col-lg-2" onclick="selectionnerAllRolesCreateForum();">
+                    <button type="button" class="btn btn-link" onclick="selectionnerAllRolesCreateForum();">
                         <span class="fa fa-check-square-o"></span> Sélectionner tout
                     </button>
-                    <button type="button" class="btn btn-link col-lg-offset-1 col-lg-3" onclick="deselectionnerAllRolesCreateForum();">
+                    <button type="button" class="btn btn-link" onclick="deselectionnerAllRolesCreateForum();">
                         <span class="fa fa-square-o"></span> Désélectionner tout
                     </button>
                 </div>
@@ -62,14 +62,18 @@
 
                 {{- form_rest(form) -}}
 
-                <div class="row">
-                    <input type="submit" class="btn btn-success col-lg-offset-2 col-lg-3" value="
-                        {{- 'form.button.save' |trans({}, ForumBundle.translation ) -}}
-                    " name="submit[post]" id="submit[post]">
+                <div class="row form-buttons">
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <input type="submit" class="btn btn-success" value="
+                                {{- 'form.button.save' |trans({}, ForumBundle.translation ) -}}
+                            " name="submit[post]" id="submit[post]">
 
-                    <a class="btn btn-default col-lg-offset-1 col-lg-2" href="{{- path('ccdn_forum_admin_forum_list') -}}">
-                        {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}
-                    </a>
+                            <a class="btn btn-default" href="{{- path('ccdn_forum_admin_forum_list') -}}">
+                                {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
             </fieldset>
