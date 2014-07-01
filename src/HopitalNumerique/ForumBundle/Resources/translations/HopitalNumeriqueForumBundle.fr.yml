@@ -38,7 +38,7 @@ title:
         show:                          "Mon Hôpital Numérique - %board_name% board"
     topic:
         show:                          "Mon Hôpital Numérique - Fil de discussion : %topic_title%"
-        create:                        "Mon Hôpital Numérique - Créer le fil de discussion"
+        create:                        "Mon Hôpital Numérique - Créer un fil de discussion"
         reply:                         "Mon Hôpital Numérique - Répondre au fil de discussion"
         edit:                          "Mon Hôpital Numérique - Éditer le fil de discussion"
         delete:                        "Mon Hôpital Numérique - Supprimer le fil de discussion"
