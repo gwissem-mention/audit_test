@@ -55,9 +55,7 @@
 
 {% block checkbox_widget %}
 {% spaceless %}
-    <div class="checkboxCustom pull-left">
-        <input style="margin:0 5px 2px 0;" type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-    </div>
+    <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %}>
 {% endspaceless %}
 {% endblock checkbox_widget %}
 
