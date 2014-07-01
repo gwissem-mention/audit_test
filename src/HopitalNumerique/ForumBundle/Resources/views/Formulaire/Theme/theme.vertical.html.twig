@@ -117,8 +117,14 @@
             {# Permet de supprimer les boutons de vidéo #}
             {% set assetCustom = [] %}
             {% set assetCustom = assetCustom|merge({'none' : tag_groups['Asset']['none']}) %}
+            
+            {% set tagsFormat = [] %}
+            {% set tagsFormat = tagsFormat|merge({ 'style':tag_groups['Format']['style'] }) %}
+            {% set tagsFormat = tagsFormat|merge({ 'none':tag_groups['Format']['none'] }) %}
+            {% set tagsFormat = tagsFormat|merge({ 'list':tag_groups['Format']['list'] }) %}
+            {% set tagsFormat = tagsFormat|merge({ 'script':tag_groups['Format']['script'] }) %}
 
-            {{- bb_macros.button_row({'Format': tag_groups['Format'], 'Asset': assetCustom}) -}}
+            {{- bb_macros.button_row({'Format':tagsFormat, 'Asset': assetCustom}) -}}
                 
         </div>
 
