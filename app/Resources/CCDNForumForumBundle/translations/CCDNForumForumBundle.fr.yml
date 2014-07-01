@@ -35,7 +35,7 @@ title:
         index:                         "Mon Hôpital Numérique - Forum"
         show:                          "Mon Hôpital Numérique - %category_name% catégorie"
     board:
-        show:                          "Mon Hôpital Numérique - %board_name% board"
+        show:                          "Mon Hôpital Numérique - Thème %board_name%"
     topic:
         show:                          "Mon Hôpital Numérique - Fil de discussion : %topic_title%"
         create:                        "Mon Hôpital Numérique - Créer le fil de discussion"
@@ -210,7 +210,7 @@ post:
     posted-by:                         "Posté par "
     edited-by:                         "Édité par "
     deleted-by:                        "Supprimé par "
-    locked-by:                         "Verrouillé par "
+    locked-by:                         "Verrouillé by "
     confirm-delete-label:              "Je confirme que je veux supprimer ce message."
     body-label:                        "Contenu :"
     subscribe-label:                   "S'abonner à ce fil de discussion."
@@ -253,8 +253,3 @@ flash:
         board:
             topic_create:
                 not_found:             "Le thème sur lequel vous essayez de poster n'existe pas."
-
-
-#Autres textes brut
-"Enter URL"       : "Entrez un lien"
-"Enter Image URL" : "Entrez le lien d'une image"
