@@ -464,7 +464,8 @@ class ObjetManager extends BaseManager
 
                 //resume
                 $tab = explode('<!-- pagebreak -->', $article->getResume());
-                $actu->resume = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+                //$actu->resume = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+                $actu->resume = $tab[0];
 
                 //types / catégories
                 $types            = $article->getTypes();
