@@ -56,13 +56,14 @@ class PostUpdateFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('body', 'textarea',
+            ->add('body', 'bb_editor',
                 array(
                     'label'              => 'post.body-label',
                     'translation_domain' => 'CCDNForumForumBundle',
                     'attr'               => array(
                         'class' => 'validate[required,minSize[15],maxSize[255]]',
-                        'rows' => 8
+                        'rows' => 8,
+                        'acl_group' => 'default'
                     )
                 )
             )
