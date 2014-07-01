@@ -18,12 +18,12 @@
 
     <div class="row clearfix">
         {# Nom du board #}
-        <div class="col-md-9">
+        <div class="col-md-8">
             <span class="lead" title="{{- board.name -}}">{{- board.name -}}</span>
         </div>
 
         {# Bouton création topic #}
-        <div class="col-md-3">
+        <div class="col-md-4">
             {% set is_topic_create_disabled = board.isAuthorisedToCreateTopic(app.security) ? '': ' disabled' %}
 
             <a class="btn btn-success{{ is_topic_create_disabled }} pull-right" rel="nofollow" href="{{- path('ccdn_forum_user_topic_create', {'forumName': forumName, 'boardId': board.getId }) -}}">
@@ -85,7 +85,11 @@
 
                 {%- for row, topic in pager.getItems() -%}
                     {%- if not topic.isDeleted or is_granted('ROLE_MODERATOR') -%}
-                        {%- include 'CCDNForumForumBundle:User:Board/Partial/item_topic_list.html.twig' -%}
+                        {# Affichage uniquement si l'utilisateur a le droit de visioner #}
+                        {% if (app.user is not null and app.user.getRole() in topic.getBoard.readAuthorisedRoles)
+                            or (app.user is null and 'ROLE_ANONYME_10' in topic.getBoard.readAuthorisedRoles)  %}
+                            {%- include 'CCDNForumForumBundle:User:Board/Partial/item_topic_list.html.twig' -%}
+                        {% endif %}
                     {%- endif -%}
                 {%- else -%}
                     <tr>

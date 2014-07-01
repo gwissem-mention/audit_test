@@ -1,32 +1,37 @@
-<style type="text/css">
-span { color: #868686;font-size: 12px; text-decoration: none; }
-div, table, tr, td { font-family: Arial; font-weight: normal; }
-a { color: #6C3694; text-decoration: none; }
-a:hover { color: #6C3694; text-decoration: underline; }
-.normal { font-family: Arial; font-weight: bold; }
-</style>
-<table width="100%;">
-    <tr class="normal">
-        <img style="margin-left:5px; float:left;" src="{{app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/hopitalnumeriquecore/img/hopitalnumerique.jpg')}}"></img>
-        <img style="float:right;" src="{{app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}"></img>
-        <br style="clear:both;" />
-    </tr>
-    <tr>
-        <span style="width: 100%; margin-top:10px; display:block;background:url('{{app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/nodevomail/img/barre-grise.jpg')}}'); background-repeat: repeat-x;">&nbsp;</span>
-        <br />
-    </tr>
-    <tr>
-        <body>
-            {{ content|raw }}
-        </body>
-    </tr>
-    <tr>
-        &nbsp;
-    </tr>
-    <tr>
-        &nbsp;
-    </tr>
-    <tr>
-        <p class="normal"><img src="{{app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/hopitalnumeriquecore/img/common-sprite/users.jpg')}}"></img> <span>L'équipe Hôpital Numérique</span></p>
-    </tr>
-</table>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style type="text/css">
+            * { font-family: Arial; font-weight: normal; }
+            span { color: #868686;font-size: 12px; text-decoration: none; }
+            a { color: #6C3694; text-decoration: none; }
+            a:hover { color: #6C3694; text-decoration: underline; }
+        </style>
+    </head>
+    <body>
+        <table style="width:100%">
+            <tr>
+                <img style="margin-left:5px; float:left;" src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/hopitalnumerique.jpg')}}" />
+                <img style="float:right;" src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" />
+                <br style="clear:both;" />
+            </tr>
+            <tr>
+                <br />
+                <hr style="width: 100%; margin: 10px 0; border-top:2px solid #cacaca; border-bottom:0; border-left:0; border-right: 0" />
+                <br />
+            </tr>
+            <tr>
+                {{ content|raw }}
+            </tr>
+            <tr>
+                <br />
+                <p style="font-weight: bold;">
+                    <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/common-sprite/users.jpg')}}"></img> 
+                    <span>L'équipe Hôpital Numérique</span>
+                </p>
+            </tr>
+        </table>
+    </body>
+</html>

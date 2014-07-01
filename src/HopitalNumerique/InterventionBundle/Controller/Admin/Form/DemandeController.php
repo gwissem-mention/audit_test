@@ -9,7 +9,6 @@ namespace HopitalNumerique\InterventionBundle\Controller\Admin\Form;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
-use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Contrôleur des formulaires de demandes d'intervention dans l'administration.

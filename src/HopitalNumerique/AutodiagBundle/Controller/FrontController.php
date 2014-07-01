@@ -33,45 +33,36 @@ class FrontController extends Controller
     public function outilAction( Outil $outil )
     {
         //init some vars
-        $ponderationMax = 100;
-        $questions      = array();
         $chapitres      = $outil->getChapitres();
         $parents        = array();
         $enfants        = array();
         
-        //build big array of questions
+        //build chapitres
         foreach($chapitres as $chapitre){
-            $questions = array_merge($questions, $chapitre->getQuestions()->toArray() );
-
             if( is_null($chapitre->getParent()) ){
                 $parents[ $chapitre->getId() ]['parent'] = $chapitre;
                 $parents[ $chapitre->getId() ]['childs'] = array();
             }else
                 $enfants[] = $chapitre;
         }
-        
-        //calcul pondération
-        foreach( $questions as $key => $question) {
-            $ponderation = $question->getPonderation();
-
-            if( $ponderation != 0 )
-                $ponderationMax -= $ponderation;
-        }
-
-        $ponderationMax = ceil($ponderationMax);
-
-        //max Pondération invalid
-        if( $ponderationMax != 0 ) {
-            // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
-            $this->get('session')->getFlashBag()->add( 'danger', 'L\'outil n\'est pas correctement configuré, il n\'est donc pas accessible');
-            return $this->redirect( $this->generateUrl('hopital_numerique_homepage'));
-        }
 
         //reformate les chapitres
         foreach($enfants as $enfant) {
             $parentId = $enfant->getParent()->getId();
-            $parents[ $parentId ]['childs'][] = $enfant;
+            $parents[ $parentId ]['childs'][$enfant->getOrder()] = $enfant;
         }
+
+        //reorder parents
+        $chapitresOrdered = array();
+        foreach($parents as $one){
+            $tmp = $one['parent'];
+
+            //sort childs
+            ksort($one['childs']);
+
+            $chapitresOrdered[ $tmp->getOrder() ] = $one;
+        }
+        ksort($chapitresOrdered);
 
         //get Existing responses (for connected user only)
         $user     = $this->get('security.context')->getToken()->getUser();
@@ -88,14 +79,16 @@ class FrontController extends Controller
 
             if( $resultat ){
                 $datas = $resultat->getReponses();
-                foreach($datas as $one)
-                    $reponses[ $one->getQuestion()->getId() ] = $one->getValue();
+                foreach($datas as $one){
+                    $reponses[ $one->getQuestion()->getId() ]['value'] = $one->getValue();
+                    $reponses[ $one->getQuestion()->getId() ]['remarque'] = $one->getRemarque();
+                }
             }
         }
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
             'outil'     => $outil,
-            'chapitres' => $parents,
+            'chapitres' => $chapitresOrdered,
             'reponses'  => $reponses
         ));
     }
@@ -119,6 +112,7 @@ class FrontController extends Controller
         $user = $user != 'anon.' ? $user : false;
 
         //create Resultat entity
+        $resultat = false;
         if( $user ) {
             $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
             
@@ -183,7 +177,7 @@ class FrontController extends Controller
         $this->get('hopitalnumerique_autodiag.manager.reponse')->save( $reponses );
 
         // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
-        $this->get('session')->getFlashBag()->add( 'success', 'Autodiagnostic ' . ($action == 'valid' ? 'validé':'enregistré') );
+        $this->get('session')->getFlashBag()->add( 'success', 'Autodiagnostic ' . ($action == 'valid' ? 'validé.':'enregistré.') );
 
         return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array( 'id' => $resultat->getId() ) ) );
     }
@@ -203,7 +197,7 @@ class FrontController extends Controller
             ( $user && !is_null($resultat->getUser()) && $resultat->getUser() != $user ) || 
             (!$user && !is_null($resultat->getUser()) ) 
         ) {
-            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à ces résultats');
+            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à ces résultats.');
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage' ) );
         }
 
@@ -213,7 +207,7 @@ class FrontController extends Controller
 
         //PDF généré
         if( is_null($resultat->getPdf()) ){
-            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $user );
+            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request );
             $resultat->setPdf( $pdf );
             $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
         }
@@ -253,7 +247,7 @@ class FrontController extends Controller
             ( $user && !is_null($resultat->getUser()) && $resultat->getUser() != $user ) || 
             (!$user && !is_null($resultat->getUser()) ) 
         ) {
-            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à ces résultats');
+            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à ces résultats.');
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage' ) );
         }
 
@@ -282,13 +276,12 @@ class FrontController extends Controller
      * @param array    $graphiques Liste des graphiques
      * @param Resultat $resultat   Objet résultat
      * @param Request  $request    Objet Request
-     * @param User     $user       User connecté
      *
      * @return string PDF name
      */
-    private function generatePdf( $chapitres, $graphiques, $resultat, $request, $user )
+    private function generatePdf( $chapitres, $graphiques, $resultat, $request )
     {
-        $filename = $resultat->getId() . $resultat->getOutil()->getId() . $user->getId() . time() . '.pdf';
+        $filename = $resultat->getId() . $resultat->getOutil()->getId() . time() . '.pdf';
 
         $html = $this->renderView( 'HopitalNumeriqueAutodiagBundle:Front:pdf.html.twig' , array(
             'resultat'   => $resultat,
@@ -302,7 +295,7 @@ class FrontController extends Controller
             'margin-right'     => 5,
             'margin-top'       => 4,
             'encoding'         => 'UTF-8',
-            //'javascript-delay' => 500
+            'javascript-delay' => 500
         );
 
         $html = str_replace('/publication', $request->getSchemeAndHttpHost() . '/publication', $html);

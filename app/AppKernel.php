@@ -55,11 +55,12 @@ class AppKernel extends Kernel
             new HopitalNumerique\PaiementBundle\HopitalNumeriquePaiementBundle(),
             new HopitalNumerique\AutodiagBundle\HopitalNumeriqueAutodiagBundle(),
             new HopitalNumerique\ForumBundle\HopitalNumeriqueForumBundle(),
+            new HopitalNumerique\FlashBundle\HopitalNumeriqueFlashBundle(),
             //-v- Bundles du Forum -v-
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new CCDNForum\ForumBundle\CCDNForumForumBundle(),
+            new CCDNComponent\BBCodeBundle\CCDNComponentBBCodeBundle(),
             //-^- Bundles du Forum -^-,
-            new HopitalNumerique\FlashBundle\HopitalNumeriqueFlashBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

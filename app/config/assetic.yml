@@ -29,6 +29,7 @@ assetic:
         - HopitalNumeriqueAutodiagBundle
         - HopitalNumeriqueForumBundle
         - HopitalNumeriqueFlashBundle
+        - CCDNForumForumBundle
         - FOSUserBundle
     filters:
         cssrewrite: ~
@@ -40,6 +41,10 @@ assetic:
             jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.8.jar
     assets:
         #JS
+        bbcode_js: 
+            inputs:
+                - '%kernel.root_dir%/../vendor/codeconsortium/ccdn-component-bb-code/src/CCDNComponent/BBCode/Resources/public/js/jquery.bbeditor.js'
+            filters : [ ?yui_js ]
         tinymce_js:
             inputs:
                 - "bundles/nodevotools/js/tinymce/tinymce.min.js"
@@ -124,6 +129,9 @@ assetic:
                 - "%kernel.root_dir%/Resources/components/qtip2/jquery.qtip.min.js"
             filters : [ ?yui_js ]
         #CSS
+        bbcode_css:
+            inputs:
+                - '%kernel.root_dir%/../vendor/codeconsortium/ccdn-component-bb-code/src/CCDNComponent/BBCode/Resources/public/css/default.css'
         font_awesome_css:
             inputs:
                 - "bundles/nodevotools/fonts/font-awesome/css/font-awesome.min.css"

@@ -24,6 +24,7 @@ class AllSessionGrid extends Grid implements IGrid
         $this->setSource( 'hopitalnumerique_module.manager.session' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('- Aucune session planifiée -');
+        $this->setDefaultFilters( array('archiver' => 'false') );
     }
 
     /**
@@ -60,6 +61,12 @@ class AllSessionGrid extends Grid implements IGrid
         
         $nbInscritsColumn = new Column\TextColumn('placeRestantes', 'Nombres de places restantes');
         $this->addColonne( $nbInscritsColumn );
+        
+        $archiverColumn = new Column\BooleanColumn('archiver', 'Archivée');
+        $archiverColumn->setSize( 70 );
+        $archiverColumn->setFilterType('select');
+        $archiverColumn->setOperatorsVisible( false );
+        $this->addColonne( $archiverColumn );
         
         $etatColumn = new Column\TextColumn('etat', 'Etat');
         $etatColumn->setSize( 60 );

@@ -1,12 +1,12 @@
 
 #ccdn_forum_user_category_index:
 #    pattern: /index
-#    defaults: { _controller: CCDNForumForumBundle:UserCategory:index, _locale: fr, forumName: default }
+#    defaults: { _controller: CCDNForumForumBundle:UserCategory:index, _locale: fr, forumName: Public }
 
 ccdn_forum_user_category_index:
     path:     /{forumName}
-    defaults: { _controller: CCDNForumForumBundle:UserCategory:index, _locale: fr, forumName: MonHopitalNumerique } #Mettre le nom du forum HN
+    defaults: { _controller: CCDNForumForumBundle:UserCategory:index, _locale: fr, forumName: Public } #Mettre le nom du forum HN
 
 ccdn_forum_user_category_show:
     path:     /{forumName}/category/{categoryId}
-    defaults: { _controller: CCDNForumForumBundle:UserCategory:show, _locale: fr, forumName: MonHopitalNumerique } #Mettre le nom du forum HN
+    defaults: { _controller: CCDNForumForumBundle:UserCategory:show, _locale: fr, forumName: Public } #Mettre le nom du forum HN

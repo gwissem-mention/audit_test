@@ -5,11 +5,12 @@ jQuery(document).ready(function() {
 
 $(function() {
     $('.dd3-content a, .manageReferences, .uploadSommaire').fancybox({
-        'padding'   : 0,
-        'scrolling' : 'auto',
-        'width'     : '80%',
-        'height'    : 'auto'
-    });
+        'padding'   : 0,
+        'autoSize'  : false,
+        'width'     : '80%',
+        'scrolling' : 'no',
+        'modal'     : true
+    });
 });
 
 //Met à jour le nombre d'enfants sélectionés dans la popin

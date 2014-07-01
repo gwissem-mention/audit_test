@@ -401,7 +401,9 @@ class UserRepository extends EntityRepository
         }
         else
         {
-            for ($i = 0; $i < count($role); $i++)
+            $nbRole = count($role);
+
+            for ($i = 0; $i < $nbRole; $i++)
             {
                 $qb
                     ->orWhere('user.roles LIKE :role'.$i)->setParameter('role'.$i, '%'.$role[$i].'%')

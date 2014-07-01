@@ -18,10 +18,6 @@
 
     {%- include "CCDNForumForumBundle:User:Topic/Partial/stat_vitals.html.twig" -%}
 
-    {%- if topic.isDeleted or topic.isClosed or topic.isSticky -%}
-        {%- include "CCDNForumForumBundle:User:Topic/Partial/stat_mods.html.twig" -%}
-    {%- endif -%}
-
     <br>
 
     <section class="row clearfix">

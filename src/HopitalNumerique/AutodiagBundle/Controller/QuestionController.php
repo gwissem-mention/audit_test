@@ -104,11 +104,6 @@ class QuestionController extends Controller
         $form = $this->createForm( 'hopitalnumerique_autodiag_question', $question);
 
         if ( $form->handleRequest($request)->isValid() ) {
-            //calcul question ponderation
-            $ponderation = $this->get('hopitalnumerique_autodiag.manager.question')->calculPonderationLeft($question);
-            if( $ponderation !== true )
-                return new Response('ponderation:'.$ponderation, 200);
-
             $this->get('hopitalnumerique_autodiag.manager.question')->saveQuestion( $question );
 
             //actualise render
@@ -137,12 +132,4 @@ class QuestionController extends Controller
         //return success.true si le fichier existe deja
         return new Response('{"success":true}', 200);
     }
-
-
-
-
-
-
-
-
 }

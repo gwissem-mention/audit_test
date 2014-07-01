@@ -130,7 +130,7 @@ class Question
      */
     public function __construct()
     {
-        $this->ponderation = 0;
+        $this->ponderation = 1;
     }
 
     /**

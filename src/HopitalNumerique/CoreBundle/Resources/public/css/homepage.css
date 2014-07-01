@@ -15,7 +15,7 @@
 
 /* Block Droit */
 #homepage .home-right{ color:#ffffff; }
-#homepage .home-right p{font-size: 13px; text-align: justify; margin:0;}
+#homepage .home-right p{font-size: 13px; text-align: center; margin:0;}
 
 #homepage .home-right .recherche{ height: 282px; }
 #homepage .home-right .recherche a{ display:block; background-color: #df0d4e; padding:30px; height: 100%; }
@@ -23,12 +23,13 @@
 #homepage .home-right .recherche .icone{ background-position: -202px -33px; width: 96px; height: 96px; margin:0 auto 10px; }
 #homepage .home-right .recherche h3{text-align: center; font-size: 24px; font-weight: bold; margin:0 0 15px 0; color: #ffffff; text-transform: uppercase;}
 #homepage .home-right .recherche p{color: #ffffff;}
-#homepage .home-right .forum{ height: 282px; }
-#homepage .home-right .forum a{ display:block; background-color: #b1138a; padding:30px; height: 100%;}
-#homepage .home-right .forum:hover a{text-decoration: none; background-color: #8d0b63; }
+#homepage .home-right .forum{ display:block; background-color: #b1138a; padding:30px; height: 282px;}
+#homepage .home-right .forum:hover{text-decoration: none; background-color: #8d0b63; }
 #homepage .home-right .forum .icone{ background-position: -102px -33px; width: 96px; height: 96px; margin:0 auto 10px; }
-#homepage .home-right .forum h3{text-align: center; font-size: 24px; font-weight: bold; margin:0 0 15px 0; color: #ffffff; text-transform: uppercase;}
-#homepage .home-right .forum p{color: #ffffff;}
+#homepage .home-right .forum h3{text-align: center; font-size: 24px; font-weight: bold; margin:0 0 5px 0; color: #ffffff; text-transform: uppercase;}
+#homepage .home-right .forum p{color: #ffffff; text-align: center; line-height: 15px;}
+#homepage .home-right .forum .groupe-lien{background: #ffffff;border-radius: 4px;margin: 9px auto 0; padding: 5px 0; width: 200px;}
+#homepage .home-right .forum .groupe-lien a{ color:#b1138a; display: block; width: auto; height: 15px; padding:0; margin:0 0 0 20px; text-align: left; font-weight: bold; font-size: 12px; line-height: 14px;}
 
 #homepage .home-right .creation-compte{ margin-top: 25px; }
 #homepage .home-right .creation-compte .icone { width: 96px; height: 96px; background-position: -2px -33px; }

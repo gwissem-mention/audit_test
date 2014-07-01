@@ -1,0 +1,31 @@
+{%- spaceless -%}
+
+	<li>
+		<ul class="nav nav-pills nav-stacked menu-main">
+			{% for subscribed_forum in subscribed_forums %}
+				{%- if forum is not null -%}
+					{%- if forumName == subscribed_forum['forum'].name -%}
+						<li class="active">
+							<a href="{{- path('ccdn_forum_user_subscription_index', {'forumName': subscribed_forum['forum'].name}) -}}">
+					{%- else -%}
+						<li>
+							<a href="{{- path('ccdn_forum_user_subscription_index', {'forumName': subscribed_forum['forum'].name}) -}}">
+					{%- endif -%}
+				{%- else -%}
+						<li>
+							<a href="{{- path('ccdn_forum_user_subscription_index', {'forumName': subscribed_forum['forum'].name}) -}}">
+				{%- endif -%}
+								{{- subscribed_forum['forum'].name -}}
+
+								<span class="badge">
+									{{- subscribed_forum['count_unread'] -}}
+									&nbsp;/&nbsp;
+									{{- subscribed_forum['count_total'] -}}
+								</span>
+							</a>
+						</li>
+			{% endfor %}
+		</ul>
+	</li>
+
+{%- endspaceless -%}

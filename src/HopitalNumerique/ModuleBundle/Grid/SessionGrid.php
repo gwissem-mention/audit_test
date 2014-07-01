@@ -63,7 +63,7 @@ class SessionGrid extends Grid implements IGrid
         $etatColumn->setOperatorsVisible( false );
         $this->addColonne( $etatColumn );
         
-        $archiverColumn = new Column\BooleanColumn('archiver', 'Archiver');
+        $archiverColumn = new Column\BooleanColumn('archiver', 'Archivée');
         $archiverColumn->setSize( 70 );
         $archiverColumn->setFilterType('select');
         $archiverColumn->setOperatorsVisible( false );
@@ -89,7 +89,6 @@ class SessionGrid extends Grid implements IGrid
         //--------- GME 16/06 : Cadenas lock/unlock -------
         //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
         $unlockButton = new Action\LockButton( 'hopitalnumerique_module_module_session_archiver' );
-        // $unlockButton->setRouteParameters( array('id', 'message'=>true) );
         $unlockButton->setAttributes( array('class'=>'btn btn-warning fa fa-unlock','title' => 'Dévérouiller') );
         $unlockButton->manipulateRender(function($action, $row) {
             return $row->getField('archiver') ? $action : null;
@@ -98,7 +97,6 @@ class SessionGrid extends Grid implements IGrid
 
         //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
         $lockButton = new Action\LockButton( 'hopitalnumerique_module_module_session_archiver' );
-        // $lockButton->setRouteParameters( array('id', 'message'=>true) );
         $lockButton->setAttributes( array('class'=>'btn btn-warning fa fa-lock','title' => 'Vérouiller') );
         $lockButton->manipulateRender(function($action, $row) {
             return $row->getField('archiver') ? null : $action;

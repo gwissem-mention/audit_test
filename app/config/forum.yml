@@ -8,7 +8,7 @@ services:
 ccdn_forum_forum:
     template:
         engine:               twig
-        pager_theme:          KnpPaginatorBundle:Pagination:twitter_bootstrap_pagination.html.twig
+        pager_theme:          KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig
     entity:
         forum:
             class:                HopitalNumerique\ForumBundle\Entity\Forum
@@ -154,7 +154,7 @@ ccdn_forum_forum:
             post_create:
                 class:                HopitalNumerique\ForumBundle\Form\Type\User\Post\PostCreateFormType
             post_update:
-                class:                CCDNForum\ForumBundle\Form\Type\User\Post\PostUpdateFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\User\Post\PostUpdateFormType
             post_delete:
                 class:                HopitalNumerique\ForumBundle\Form\Type\User\Post\PostDeleteFormType
             post_unlock:
@@ -166,6 +166,8 @@ ccdn_forum_forum:
         helper:
             role:
                 class:                HopitalNumerique\ForumBundle\Component\Helper\RoleHelper
+        crumb_builder:
+            class:                    HopitalNumerique\ForumBundle\Component\Crumbs\CrumbBuilder
     forum:
         admin:
             create:
@@ -214,7 +216,7 @@ ccdn_forum_forum:
         user:
             show:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                topics_per_page:      50
+                topics_per_page:      20
                 topic_title_truncate:  50
                 first_post_datetime_format:  d-m-Y - H:i
                 last_post_datetime_format:  d-m-Y - H:i
@@ -237,10 +239,12 @@ ccdn_forum_forum:
                 deleted_datetime_format:  d-m-Y - H:i
             create:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.vertical.html.twig
+                #form_theme:           HopitalNumeriqueQuestionnaireBundle:Questionnaire:Theme/theme.vertical.html.twig
             reply:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.vertical.html.twig
+                #form_theme:           HopitalNumeriqueQuestionnaireBundle:Questionnaire:Theme/theme.vertical.html.twig
     post:
         moderator:
             unlock:
@@ -254,7 +258,7 @@ ccdn_forum_forum:
                 form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
             delete:
                 layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.default.html.twig
+                form_theme:           HopitalNumeriqueForumBundle:Formulaire:Theme/theme.vertical.html.twig
             lock:
                 enable:               true
                 after_days:           7
@@ -266,7 +270,7 @@ ccdn_forum_forum:
     subscription:
         list:
             layout_template:      HopitalNumeriqueForumBundle::layout.html.twig
-            topics_per_page:      50
+            topics_per_page:      20
             topic_title_truncate:  50
             first_post_datetime_format:  d-m-Y - H:i
             last_post_datetime_format:  d-m-Y - H:i
@@ -274,3 +278,5 @@ ccdn_forum_forum:
         user_admin:           user-admin
     seo:
         title_length:         67
+
+ccdn_component_bb_code:

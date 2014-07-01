@@ -2,7 +2,8 @@
 
 <div id="resultats">
     <div class="col-md-12">
-        <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn pull-right"><i class="fa fa-print"></i></a>
+        <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-save"></i></a>
+        <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
 
         <h1 class="text-center">{{resultat.outil.title}}</h1>
 
@@ -24,8 +25,8 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">{{panel.title}}</h3>
-                                    <div class="options">
-                                        {{panel.taux|number_format(0)}}%
+                                    <div class="options" title="Taux remplissage : {{panel.taux|number_format(0)}}%">
+                                        Taux remplissage : {{panel.taux|number_format(0)}}%
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -42,7 +43,10 @@
                                         <div class="progress-bar progress-bar-success" style="width: 33.3%">
                                             Fort
                                         </div>
-                                        <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(2,'.')}}%"{% endif %} data-position="{{panel.value|number_format(2,'.')}}%" title="<span>Ma Valeur : </span><b>{{panel.value|number_format(2,'.')}}%</b>" ></div>
+                                        <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(0)}}%"{% endif %} data-position="{{panel.value|number_format(0)}}%" title="<span>Ma Valeur : {{panel.value|number_format(0)}}%</span>" ></div>
+                                        {% if pdf %}
+                                            <div class="cursor-value" style="left:{{panel.value|number_format(0)}}%">{{panel.value|number_format(0)}}%</div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -68,7 +72,7 @@
                 {% set chart = graphiques['table'] %}
                 <h3>{{chart.title|capitalize}}</h3>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 tableContainer">
                         <table class="table table-hover table-bordered">
                             <thead>
                                 <th colspan="2"></th>
@@ -85,7 +89,7 @@
 
                                     <tr>
                                         <td class="vertical-align categorie-{{id}}" rowspan="3"><b>{{categorie.title|capitalize}}</b></td>
-                                        <td>Nombre de réponses</td>
+                                        <td>Nombre de questions</td>
                                         {% for datas in categorie['chapitres'] %}
                                             <td class="text-center">
                                                 {{datas['nbRep']}}
@@ -133,7 +137,7 @@
                                 {% endfor %}
                                 <tr>
                                     <td class="title-total vertical-align" rowspan="3"><b>Total</b></td>
-                                    <td>Nombre de réponses</td>
+                                    <td>Nombre de questions</td>
                                     {% set nbRepTotal = 0 %}
                                     {% for datas in chart.datas.totauxChapitres %}
                                         <td class="text-center">
@@ -201,68 +205,86 @@
             </p>
 
             {# Affichage des publications #}
+            {% set chaptersToHide = [] %}
             {% for chapitre in chapitres %}
-                <div class="chapitre-{{chapitre.id}}">
+                {% set doTheChapterHavePublications = false %}
+                <div class="chapter chapitre-{{chapitre.id}}" style="{% if chapitre.questions|length == 0 and chapitre.childs|length == 0 %}display:none{% endif %}" >
                     <h3 class="violet">{{chapitre.title}}</h3>
                     <hr>
 
                     {% if chapitre.synthese %}
-                        <p class="violet synthese">{{chapitre.synthese}}</p>
+                        <p class="violet synthese">{{chapitre.synthese|nl2br}}</p>
                     {% endif %}
 
                     {# Résultats liés au chapitre #}
                     {{ mySelf.calcNote(chapitre, pdf) }}
 
                     {# Résultats liés aux questions #}
-                    {{ mySelf.buildQuestion(chapitre, pdf) }}
+                    {% for question in chapitre.questions %}
+                        {% set publications = question.id|getPublicationsForQuestion(pdf) %}
+                        {% if publications %}
+                            {{ mySelf.buildQuestion(question, publications) }}
+                            {% set doTheChapterHavePublications = true %}
+                        {% endif %}
+                    {% endfor %}
                     
                     {# Sous Chapitres #}
                     {% if chapitre.childs|length > 0 %}
                         <div class="row sous-chapitre">
                             <div class="col-md-12">
                                 {% for child in chapitre.childs %}
-                                    <h4 class="violet">{{child.title}}</h4>
+                                    <div style="{% if child.questions|length == 0 %}display:none{% endif %}">
+                                        <h4 class="violet">{{child.title}}</h4>
 
-                                    {% if child.synthese %}
-                                        <p class="violet synthese">{{child.synthese}}</p>
-                                    {% endif %}
-                                    
-                                    {# Résultats liés au chapitre #}
-                                    {{ mySelf.calcNote(child, pdf) }}
+                                        {% if child.synthese %}
+                                            <p class="violet synthese">{{child.synthese}}</p>
+                                        {% endif %}
+                                        
+                                        {# Résultats liés au chapitre #}
+                                        {{ mySelf.calcNote(child, pdf) }}
 
-                                    {# Résultats liés aux questions #}
-                                    {{ mySelf.buildQuestion(child) }}
+                                        {# Résultats liés aux questions #}
+                                        {% for question in child.questions %}
+                                            {% set publications = question.id|getPublicationsForQuestion(pdf) %}
+                                            {% if publications %}
+                                                {{ mySelf.buildQuestion(question, publications) }}
+                                                {% set doTheChapterHavePublications = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
                                 {% endfor %}
                             </div>
                         </div>
                     {% endif %}
+
+                    {% if not doTheChapterHavePublications %}
+                        {% set chaptersToHide = chaptersToHide|merge([chapitre.id]) %}
+                    {% endif %}
                 </div>
             {% endfor %}
+
+            <p class="text-center" style="{% if chapitres|length > 0 %}display:none{% endif %}" >
+                - Aucune recommandation de l'ANAP nécessaire -
+                <input type="hidden" id="chaptersToHide" value="{{chaptersToHide|json_encode}}" />
+            </p>
         </div>
     </div>
 </div>
 
 {# Construit les lignes associées aux résultats #}
-{% macro buildQuestion(chapitre, pdf) %}
-    {% if chapitre.questions|length > 0 %}
-        {% for question in chapitre.questions %}
-            {% set publications = question.id|getPublicationsForQuestion(pdf) %}
-            {% if publications %}
-                <div class="row">
-                    <div class="col-md-12">
-                        <p class="question">{{question.question}}</p>
-                        <p class="violet synthese">{{question.synthese}}</p>
-                        {{publications|raw}}
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+{% macro buildQuestion(question, publications) %}
+    <div class="row">
+        <div class="col-md-12">
+            <p class="question">{{question.question}}</p>
+            <p class="violet synthese">{{question.synthese}}</p>
+            {{publications|raw}}
+        </div>
+    </div>
 {% endmacro %}
 
 {# Calcul de la note du chapitre #}
-{% macro calcNote(chapitre, pdf) %}  
-    {% if chapitre.noteChapitre < chapitre.noteMin %}
+{% macro calcNote(chapitre, pdf) %}
+    {% if chapitre.noteMin and chapitre.noteChapitre <= chapitre.noteMin %}
         {% set publications = chapitre.id|getPublicationsForChapitre(pdf) %}
         {% if publications %}
             <div class="row">

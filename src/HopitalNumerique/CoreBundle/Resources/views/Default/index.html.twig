@@ -54,14 +54,69 @@
                         </p>
                     </a>
                 </div>
-                <div class="forum col-md-6">
-                    <a href="javascript:alert('Forum Hôpital Numérique bientôt disponible.');">
+                <div class="col-md-6">
+                    <div class="forum">
                         <div class="common-sprite icone"></div>
-                        <h3>Forum</h3>
+                        <h3>Forums</h3>
                         <p>
                             Pour consulter et participer à des discussions thématiques
                         </p>
-                    </a>
+                        {# Mode connecté (obligé de séparer les deux car app.user|checkAuthorization pète si pas connecté car app.user = null #}
+                        {% if app.user is not null %}
+                            {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Experts'})) 
+                               and app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Ambassadeurs'}))
+                               and app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'CMSI'}))
+                            %}
+                                <div class="groupe-lien">
+                                    <div class="pull-left">
+                                    <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Public'}) -}}">
+                                        > Public
+                                    </a>
+                                    <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Experts'}) -}}">
+                                        > Experts
+                                    </a>
+                                    </div>
+                                    <div class="pull-left">
+                                    <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Ambassadeurs'}) -}}">
+                                        > Ambassadeurs
+                                    </a>
+                                    <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'CMSI'}) -}}">
+                                        > CMSI
+                                    </a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            {% else %}
+                                <div class="groupe-lien">
+                                    <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Public'}) -}}">
+                                        > Forum public
+                                    </a>
+                                    {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Experts'})) %}
+                                        <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Experts'}) -}}">
+                                            > Forum des experts
+                                        </a>
+                                    {% endif %}
+                                    {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Ambassadeurs'})) %}
+                                        <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Ambassadeurs'}) -}}">
+                                            > Forum des ambassadeurs
+                                        </a>
+                                    {% endif %}
+                                    {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'CMSI'})) %}
+                                        <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'CMSI'}) -}}">
+                                            > Forum des CMSI
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {# Mode non-connecté #}
+                        {% else %}
+                            <div class="groupe-lien">
+                                <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Public'}) -}}">
+                                    > Forum public
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
             

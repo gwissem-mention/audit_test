@@ -56,10 +56,15 @@ class PostCreateFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('body', 'textarea',
+            ->add('body', 'bb_editor',
                 array(
                     'label'              => 'post.body-label',
                     'translation_domain' => 'CCDNForumForumBundle',
+                    'attr'               => array(
+                        'class'     => 'validate[required,minSize[15],maxSize[255]]',
+                        'rows'      => 8,
+                        'acl_group' => 'default'
+                    )
                 )
             )
             ->add('subscribe', 'checkbox',
@@ -68,11 +73,9 @@ class PostCreateFormType extends AbstractType
                     'required'           => false,
                     'label'              => 'post.subscribe-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                    'attr'               => array(
-                        'class' => 'validate[required]'
-                    ),
                     'attr'     => array(
-                        'checked' => 'checked'
+                        'checked' => 'checked',
+                        'class'   => 'checkbox'
                     )
                 )
             )
@@ -93,7 +96,7 @@ class PostCreateFormType extends AbstractType
             // a unique key to help generate the secret token
             'intention'           => 'forum_post_create_item',
             'validation_groups'   => array('forum_post_create'),
-            'cascade_validation'  => true,
+            'cascade_validation'  => true
         ));
     }
 

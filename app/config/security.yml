@@ -14,7 +14,7 @@ security:
 
         # Formulaire FRONT : connexion + reset password (accessible aux anonymes)
         comptehn_login:
-            pattern: (^/compte-hn/(connexion|mot-de-passe-perdu(.*))$)|(^/compte-hn/inscription) # Cette expression régulière permet de prendre /login
+            pattern: (^/compte-hn/(connexion|mot-de-passe-perdu(.*))$)|(^/compte-hn/inscription)|(/forum) # Cette expression régulière permet de prendre /login
             anonymous: true
             context: application
 
@@ -25,7 +25,7 @@ security:
 
         # Si on essaye d'accéder à l'url  /compte-hn, on redirige vers le form /compte-hn/login
         frontoffice_connecte:
-            pattern: ^/(compte-hn|registre-ambassadeurs|module|forum)
+            pattern: ^/(compte-hn|module)
             anonymous: false
             form_login:
                 login_path: account_login

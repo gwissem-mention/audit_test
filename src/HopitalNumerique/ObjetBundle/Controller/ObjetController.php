@@ -266,8 +266,6 @@ class ObjetController extends Controller
                             'id'                   => 'ID publication', 
                             'titre'                => 'Titre publication',
                             'alias'                => 'Alias publication',
-                            //'synthese'           => 'Synthèse de la publication',
-                            //'resume'             => 'Résumé de la publication',
                             'commentaires'         => 'Commentaires autorisé ?',
                             'notes'                => 'Notes autorisé ?',
                             'dateCreation'         => 'Date de création de la publication',
@@ -288,7 +286,6 @@ class ObjetController extends Controller
                             'titreC'               => 'Titre infra-doc',
                             'aliasC'               => 'Alias infra-doc',
                             'orderC'               => 'Ordre de l\'infra-doc',
-                            //'contenuC'           => 'Contenu de l\'infra-doc',
                             'dateCreationC'        => 'Date de création de l\'infra-doc',
                             'dateModificationC'    => 'Date de modification de l\'infra-doc',
                             'nbVueC'               => 'Nombre de visualisation de l\'infra-doc'

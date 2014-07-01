@@ -1,5 +1,20 @@
 $(document).ready(function() {
+    //cache les chapitres inutiles
+    chaptersToHide = jQuery.parseJSON($('#chaptersToHide').val());
+    $.each(chaptersToHide, function(index, value) {
+        $('#chapitres .chapitre-' + value).hide();
+    });
 
+    //si on a cacher TOUS les chapitres, on affiche le message empty
+    allHidden = true;
+    $('#chapitres .chapter').each(function(){
+        if( $(this).css('display') == 'block' )
+            allHidden = false;
+    });
+
+    if( allHidden )
+        $('#chaptersToHide').parent().show();
+        
     /* Handle Title click for collapse */
     $('#resultats h2').click(function(){
         $('#' + $(this).data('toggle') ).slideToggle();
@@ -24,7 +39,7 @@ $(document).ready(function() {
     var values     = [];
     var optimale   = [];
     $(datas).each(function(index, element ){
-        categories.push( element.title + ' ( '+ element.taux+'% )' );
+        categories.push( element.title + ' ( Taux remplissage : '+ element.taux+'% )' );
         values.push( element.value );
         optimale.push( element.opti );
     })
@@ -42,7 +57,7 @@ $(document).ready(function() {
             enabled : false
         },
         pane : {
-            size : '100%'
+            size : '90%'
         },
         xAxis : {
             categories        : categories,
@@ -62,7 +77,7 @@ $(document).ready(function() {
         },
         tooltip : {
             shared      : true,
-            pointFormat : '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}%</b><br/>'
+            pointFormat : '<span style="color:{series.color}; font-size:10px">{series.name} : {point.y:,.0f}%<br/>'
         },
         series : [
             {

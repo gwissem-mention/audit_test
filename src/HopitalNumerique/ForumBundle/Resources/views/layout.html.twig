@@ -11,6 +11,7 @@
         "@fancybox_css"
         "@jquery_toggles_css"
         "@validationEngine_css"
+        "@bbcode_css"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriqueobjet/css/style.css'
         'bundles/nodevoadmin/css/toggles.css'
@@ -26,8 +27,12 @@
         "@fancybox_js"
         "@jquery_toggles_js"
         "@validationEngine_js"
+        "@bbcode_js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriqueforum/js/script.js'
+        'bundles/hopitalnumeriqueforum/js/Forum/script.js'
+        'bundles/hopitalnumeriqueforum/js/Category/script.js'
+        'bundles/hopitalnumeriqueforum/js/Board/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -43,12 +48,24 @@
 {% block block_du_body %}
 
     {% block information_page %}
+
         <div class="col-md-12">
-            <h3 class="violet">Forum {% if is_granted("ROLE_ADMINISTRATEUR_1") %}<a href="{{path('ccdn_forum_admin_index')}}" target="_blank" class="pull-right lienAdmin"><i style="margin:0 5px 0 0;" class="fa fa-cog"></i>Accès à l'administration</a> {% endif %} </h3>
+            <h3 class="violet">Forum 
+                {% if app.user is not null %} / <a href="{{- path('ccdn_forum_user_subscription_index', {'forumName': forum.name}) -}}">Mes abonnements</a>{% endif %}
+                {% if is_granted("ROLE_ADMINISTRATEUR_1") %}<a href="{{path('ccdn_forum_admin_index')}}" target="_blank" class="pull-right lienAdmin"><i style="margin:0 5px 0 0;" class="fa fa-cog"></i>Accès à l'administration</a> {% endif %} 
+            </h3>
+        </div>
+
+        <div id="breadcrumbs-forum" class="col-md-12">
+            {%- block crumb_trail -%}
+                {%- if crumbs is defined -%}
+                        {%- include 'CCDNForumForumBundle:Common:Layout/crumbs.html.twig' with {'crumbs': crumbs } -%}
+                {%- endif -%}
+            {%- endblock crumb_trail -%}
         </div>
     {% endblock information_page %}
 
-    <div style="margin-top:20px;">
+    <div style="margin-top:30px;">
         <div class="col-md-3 page-sidebar-left">
             {{ block('prebody') }}
             <div class="clearfix"></div>

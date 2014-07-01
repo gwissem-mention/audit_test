@@ -1,0 +1,8 @@
+.panel-midnightblue .panel-heading {background-color: #34495e;border-color: #34495e;color: #fff;}
+.panel-heading {border-bottom: none;}
+.panel-primary {border-color: #7635AB;}
+.panel-primary > .panel-heading {background-image: linear-gradient(to bottom, #7635AB 0px, #8746BC 100%);background-repeat: repeat-x;}
+.panel-primary > .panel-heading a i.glyphicon{color:#CECECE;}
+
+#panel-references { border-bottom:1px solid #f0f0f0;}
+#panel-reference h4 {font-size: 18px;}

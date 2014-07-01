@@ -23,7 +23,7 @@
             <fieldset>
 
                 <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-10">
+                    <div id="titre-creation">
                         <h4>
                             {{- 'title.topic.reply' | trans({}, ForumBundle.translation ) -}}
                         </h4>
@@ -37,8 +37,8 @@
 
                 {{- form_widget(form) -}}
 
-                <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-10">
+                <div class="row form-buttons">
+                    <div class="form-group">
                         <input type="submit" class="btn btn-success" value="
                             {{- 'form.button.topic.reply' | trans({}, ForumBundle.translation ) -}}
                         " name="submit[post]" id="submit[post]">

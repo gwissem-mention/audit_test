@@ -1,26 +1,41 @@
 #content h3{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; background: #f6f6f6}
-#content .lienAdmin {font-size: 13px;cursor: pointer;}
+#content .lienAdmin {font-size: 13px;cursor: pointer;line-height:18px}
+
+/*#content .pagination {}
+#content .pagination ul{ list-style:none;}
+#content .pagination li{ display: inline-block;}
+#content .pagination a,.pagination span {display: block;border: 1px solid blue;color: blue;padding: 3px 4px;}
+#content .pagination a {text-decoration: none;}
+#content .pagination a:hover { background: #428BCA;}
+#content .pagination .active {background: #428BCA;font-weight: bold;}
+#content .pagination .disabled {border-color: #428BCA;color: #428BCA;}*/
+
+/* ---  Breadcrumb --- */
+#breadcrumbs-forum .breadcrumb a{color:#6931A0; font-size: 12px}
 
 /* ---  Menu  --- */
 
-#sidebar .menu-main{ margin:0 auto; list-style: none; padding:0; background: #f8f8f8; width: 100%;}
+#sidebar .menu-main{0 auto 15px auto; list-style: none; padding:0; background: #f8f8f8; width: 100%;}
 #sidebar .menu-main li a{display: block; padding: 20px 10px 20px 10px; margin: 0; font-size: 14px; color: #5d5e5e; background: url('../img/menu-tdb-sep.jpg') no-repeat top; border-left:5px solid #f8f8f8;}
 #sidebar .menu-main li a span{color:#777777; font-size: 14px; }
 #sidebar .menu-main li.active a, #sidebar .menu-main li.active-son a, #sidebar .menu-main li a:hover, #sidebar .menu-main li.forum a{border-left:5px solid #7635AB;text-decoration: none ;border-radius:0px;}
 #sidebar .menu-main li.last{border-bottom:1px solid #f0f0f0; }
 
 /* ---  En-tête FO  --- */
+#informations-topic { margin: 0 0 10px 0;}
 #informations-topic span.label{background-color: #CECECE;margin:0 5px 0 0; height: 22px; text-align: center; padding: 5px 5px 0; }
 #informations-topic .manageReferences, #informations-topic .text-muted {margin:0 0 15px 5px;}
+#information-board { margin: 10px 0 0 0;}
 #information-board span.label{background-color: #CECECE;margin:0 0 0 5px;}
 
-/* --- Présentation des boards --- */
+/* --- FO --- */
 
 h4 {font-size: 15px;}
-#content .blockquote-reduit{ border-left: 5px solid #eee; font-size: 12px; margin: 0 0 20px; padding: 10px 20px;}
+#content .blockquote-reduit{ border-left: 5px solid #eee; font-size: 12px; padding: 10px 0 0 6px;}
+#content .dropdown-menu i{ margin: 0 5px 0 0;}
 
 /* --- Admin --- */
-.checkboxCustom input{width: 20px;height: 20px;}
+.checkboxCustom input{width: 14px;height: 14px;margin: 4px 10px 0 0!important;padding:0!important}
 .checkboxCustom label{text-align: left;}
 .checkboxCustom .control-label{text-align: left;}
 
@@ -36,4 +51,8 @@ h4 {font-size: 15px;}
 }
 
 /* - Création */
-#titre-creation h4{ font-size: 18px; text-align: center;font-weight:bold;}
+#titre-creation {padding: 0 15px;}
+#titre-creation h4{ font-size: 18px;font-weight:bold;}
+#titre-creation h5{ font-size: 15px;font-weight:bold;}
+
+.form-buttons input{margin:0 15px}

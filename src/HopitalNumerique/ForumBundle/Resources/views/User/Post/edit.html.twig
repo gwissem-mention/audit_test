@@ -17,13 +17,13 @@
     {%- spaceless -%}
 
     <section class="clearfix">
-        {%- form_theme form ccdn_forum_forum.post.user.edit.form_theme -%}
+        {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.vertical.html.twig' %}
         <form action="{{- path('ccdn_forum_user_post_edit_process', {'forumName': forumName, 'postId': post.id } ) -}}"
          method="post" {{ form_enctype(form) }} class="form-horizontal toValidate" novalidate>
             <fieldset>
 
                 <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-10">
+                    <div id="titre-creation">
                         <h4>
                             {{- 'title.post.edit' | trans({'%post_id%': post.getId, '%topic_title%': post.getTopic.getTitle }, 'CCDNForumForumBundle') -}}
                         </h4>
@@ -33,13 +33,13 @@
                 {{- form_errors(form) -}}
 
                 {%- if form.Topic is defined -%}
-                    {{- form_row(form.Topic.title) -}}
+                    {{- form_row(form.Topic.title, {'attr': {'class': 'validate[required,minSize[10],maxSize[255]]'}}) -}}
                 {%- endif -%}
 
                 {{- form_rest(form) -}}
 
-                <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-10">
+                <div class="row form-buttons">
+                    <div class="form-group">
                         <input type="submit" class="btn btn-success" value="
                             {{- 'form.button.save-changes' | trans({}, ForumBundle.translation ) -}}
                         " name="submit[post]" id="submit[post]">

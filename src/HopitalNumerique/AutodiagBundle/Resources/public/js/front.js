@@ -29,10 +29,22 @@ $(document).ready(function() {
     $('#wizard fieldset .radios input').on('click', function(){
         calcAvancement();
     });
+
+    //remove les title des fieldset pour empecher l'effet bizarre
+    $('fieldset').each(function(){
+        $(this).attr('title', '');
+    });
+
+    if( $('.badge').length > 0 ){
+        $('.badge').qtip({ 
+            style : 'qtip-tipsy'
+        });
+    }
 });
 
 //Truncate l'avancement affiché
-function truncate(n) {
+function truncate(n)
+{
     return Math[n > 0 ? "floor" : "ceil"](n);
 }
 
@@ -73,7 +85,7 @@ function calcAvancement()
         //update liste
         avancement = avancement < 100 ? '<span class="text-muted">'+avancement+'%</span>' : '<span class="text-success"><i class="fa fa-check"></i></span>';
         $('#wizard-header li#wizard-head-'+step+' div span').remove();
-        $('#wizard-header li#wizard-head-'+step+' div').append( avancement );
+        $('#wizard-header li#wizard-head-'+step+' div').prepend( avancement );
 
         totalQuestions += nbQuestions;
         totalQuestionsAnswered += nbQuestionsAnswered;
@@ -85,16 +97,43 @@ function calcAvancement()
 }
 
 //enregistre ou valide le questionnaire
-function saveQuestionnaire( type )
+function saveQuestionnaire( type, userConnected )
 {
     $('#action').val( type );
 
-    if( type == 'valid' ){
-        apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+    if( type == 'valid' && userConnected ){
+        apprise('La validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci.', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
             if(r) { 
                 $('#wizard').submit();
             }
         });
     }else
         $('#wizard').submit();
+}
+
+//Vide le questionnaire
+function emptyAutodiag()
+{
+    $('#wizard fieldset .emptyChapter').each(function(){
+        $(this).click();
+    });
+}
+
+//vide le chapitre
+function emptyChapter( that )
+{
+    //empty select + inputs
+    $(that).parent().find('.form-control').each(function(){
+        if( $(this).is('input') )
+            $(this).val('');
+        else if( $(this).is('select') )
+            $(this).val( $(this).find('option:first').val() );
+    });
+
+    //empty radios
+    $(that).parent().find('.radio').each(function(){
+        $(this).find('input').prop('checked', '');
+    });
+
+    calcAvancement();
 }

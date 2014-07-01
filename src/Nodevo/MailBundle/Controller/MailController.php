@@ -82,7 +82,7 @@ class MailController extends Controller
     public function sendTestAction( $id )
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $mail = $this->get('nodevo_mail.manager.mail')->getMessageTest( $id, $user );
+        $mail = $this->get('nodevo_mail.manager.mail')->sendMessageTest( $id, $user );
 
         $this->get('mailer')->send($mail);
 
