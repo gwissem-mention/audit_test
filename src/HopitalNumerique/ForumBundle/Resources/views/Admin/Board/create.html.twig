@@ -45,10 +45,10 @@
                 {{- form_row(form.description) -}}
                 
                 <div class="row">
-                    <button type="button" class="btn btn-link col-lg-offset-2 col-lg-2" onclick="selectionnerAllRolesReadCreateBoard();">
+                    <button type="button" class="btn btn-link" onclick="selectionnerAllRolesReadCreateBoard();">
                         <span class="fa fa-check-square-o"></span> Sélectionner tout
                     </button>
-                    <button type="button" class="btn btn-link col-lg-offset-1 col-lg-3" onclick="deselectionnerAllRolesReadCreateBoard();">
+                    <button type="button" class="btn btn-link" onclick="deselectionnerAllRolesReadCreateBoard();">
                         <span class="fa fa-square-o"></span> Désélectionner tout
                     </button>
                 </div>
@@ -56,10 +56,10 @@
                 {{form_row(form.readAuthorisedRoles)}}
                 
                 <div class="row">
-                    <button type="button" class="btn btn-link col-lg-offset-2 col-lg-2" onclick="selectionnerAllRolesNewCreateBoard();">
+                    <button type="button" class="btn btn-link" onclick="selectionnerAllRolesNewCreateBoard();">
                         <span class="fa fa-check-square-o"></span> Sélectionner tout
                     </button>
-                    <button type="button" class="btn btn-link col-lg-offset-1 col-lg-3" onclick="deselectionnerAllRolesNewCreateBoard();">
+                    <button type="button" class="btn btn-link" onclick="deselectionnerAllRolesNewCreateBoard();">
                         <span class="fa fa-square-o"></span> Désélectionner tout
                     </button>
                 </div>
@@ -67,10 +67,10 @@
                 {{form_row(form.topicCreateAuthorisedRoles)}}
                 
                 <div class="row">
-                    <button type="button" class="btn btn-link col-lg-offset-2 col-lg-2" onclick="selectionnerAllRolesReplyCreateBoard();">
+                    <button type="button" class="btn btn-link" onclick="selectionnerAllRolesReplyCreateBoard();">
                         <span class="fa fa-check-square-o"></span> Sélectionner tout
                     </button>
-                    <button type="button" class="btn btn-link col-lg-offset-1 col-lg-3" onclick="deselectionnerAllRolesReplyCreateBoard();">
+                    <button type="button" class="btn btn-link" onclick="deselectionnerAllRolesReplyCreateBoard();">
                         <span class="fa fa-square-o"></span> Désélectionner tout
                     </button>
                 </div>
@@ -79,14 +79,18 @@
 
                 {{- form_rest(form) -}}
 
-                <div class="row">
-                    <input type="submit" class="btn btn-success col-lg-offset-2 col-lg-3" value="
-                        {{- 'form.button.save' |trans({}, ForumBundle.translation ) -}}
-                    " name="submit[post]" id="submit[post]">
+                <div class="row form-buttons">
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <input type="submit" class="btn btn-success" value="
+                                {{- 'form.button.save' |trans({}, ForumBundle.translation ) -}}
+                            " name="submit[post]" id="submit[post]">
 
-                    <a class="btn btn-default col-lg-offset-1 col-lg-2" href="{{- path('ccdn_forum_admin_board_list', {'forum_filter': forum_filter, 'category_filter': category_filter}) -}}">
-                        {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}
-                    </a>
+                            <a class="btn btn-default" href="{{- path('ccdn_forum_admin_board_list', {'forum_filter': forum_filter, 'category_filter': category_filter}) -}}">
+                                {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
             </fieldset>

@@ -44,7 +44,7 @@ twig:
             translation: HopitalNumeriqueForumBundle
     form:
         resources:
-            - 'CCDNComponentBBCodeBundle:Form:fields.html.twig'
+            - 'HopitalNumeriqueForumBundle:Formulaire/Theme:theme.vertical.html.twig'
 
 # Doctrine Configuration
 doctrine:

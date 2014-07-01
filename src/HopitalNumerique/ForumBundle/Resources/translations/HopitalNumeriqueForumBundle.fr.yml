@@ -243,7 +243,7 @@ flash:
             delete:                    "Message #%post_id% supprimé avec succès."
     warning:
         topic:
-            flood_control:             "Contrôle du flood - Tu as trop posté, attend un peu avant de pouvoir reposter."
+            flood_control:             "Contrôle du flood - Tu as trop posté, attends un peu avant de pouvoir reposter."
     error:
         topic:
             reply:
@@ -252,7 +252,7 @@ flash:
                 not_found:             "Vous ne pouvez pas vous abonner à ce fil de discussion car il n'existe pas."
         board:
             topic_create:
-                not_found:             "Le thème sur laquelle vous essayez de poster n'existe pas."
+                not_found:             "Le thème sur lequel vous essayez de poster n'existe pas."
 
 #Autres textes brut
 "Enter URL"       : "Entrez un lien"

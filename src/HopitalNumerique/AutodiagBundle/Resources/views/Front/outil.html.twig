@@ -175,7 +175,7 @@
             <input type="text" class="form-control input-sm remarque" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="{% if reponse['remarque'] is not defined or reponse['remarque'] == '' %}display:none{% endif %}" placeholder="Remarques" value="{% if reponse['remarque'] is defined and reponse['remarque'] != '' %}{{reponse['remarque']}}{% endif %}" />
         </div>
         <div class="col-md-1 col-sm-1">
-            <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i class="fa fa-edit"></i></div>
+            <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i title="Ajouter un commentaire" class="fa fa-comment"></i></div>
         </div>
     </div>
 {% endmacro %}

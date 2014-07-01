@@ -39,19 +39,21 @@
 
                 <div class="row form-buttons">
                     <div class="form-group">
-                        <input type="submit" class="btn btn-success" value="
-                            {{- 'form.button.topic.reply' | trans({}, ForumBundle.translation ) -}}
-                        " name="submit[post]" id="submit[post]">
+                        <div class="col-lg-12">
+                            <input type="submit" class="btn btn-success" value="
+                                {{- 'form.button.topic.reply' | trans({}, ForumBundle.translation ) -}}
+                            " name="submit[post]" id="submit[post]">
 
-                    {#
-                        <input type="submit" class="btn" value="
-                            {{- 'form.button.preview' | trans({}, ForumBundle.translation ) -}}
-                        " name="submit[preview]">
-                    #}
+                        {#
+                            <input type="submit" class="btn" value="
+                                {{- 'form.button.preview' | trans({}, ForumBundle.translation ) -}}
+                            " name="submit[preview]">
+                        #}
 
-                        <a class="btn btn-default" href="{{- path('ccdn_forum_user_topic_show', {'forumName': forumName, 'topicId': topic.id}) -}}">
-                            {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}
-                        </a>
+                            <a class="btn btn-default" href="{{- path('ccdn_forum_user_topic_show', {'forumName': forumName, 'topicId': topic.id}) -}}">
+                                {{- 'form.button.cancel' |trans({}, ForumBundle.translation ) -}}
+                            </a>
+                        </div>
                     </div>
                 </div>
 

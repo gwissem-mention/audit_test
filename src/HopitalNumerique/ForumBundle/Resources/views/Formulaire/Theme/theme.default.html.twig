@@ -33,13 +33,17 @@
                 {% if label is empty %}
                     {% set label = name|humanize %}
                 {% endif %}
+                <div class="col-md-1">
+                {{ form_widget(child) }}
+                </div>
+                <div class="col-md-11">
                 <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
                     {{ label|trans({}, translation_domain) }}
-                    {{ form_widget(child) }}
                 {% if child.vars.required %}
                     <span style="color:red;font-size:10px" title="Ce champ est requis">*</span>
                 {% endif %}
                 </label>
+                </div>
             {% endif %}
         </div>
     {% endfor %}
@@ -55,9 +59,7 @@
 
 {% block checkbox_widget %}
 {% spaceless %}
-    <div class="checkboxCustom pull-left">
-        <input style="margin:0 5px 2px 0;" type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-    </div>
+    <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %}>
 {% endspaceless %}
 {% endblock checkbox_widget %}
 
