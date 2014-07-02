@@ -14,6 +14,7 @@ class SearchManager extends BaseManager
     private $_pointDur          = 184;
     private $_refObjetManager   = null;
     private $_refContenuManager = null;
+    private $_refsPonderees     = null;
     private $_refTopicManager   = null;
     
     /**
@@ -38,12 +39,13 @@ class SearchManager extends BaseManager
      *
      * @return array
      */
-    public function getObjetsForRecherche( $references, $role )
+    public function getObjetsForRecherche( $references, $role, $refsPonderees )
     {
         //prepare some vars
         $nbCateg              = 4;
         $objetsToIntersect    = array();
         $contenusToIntersect  = array();
+        $this->_refsPonderees = $refsPonderees;
         $filsForumToIntersect = array();
 
         //get objets from each Categ
@@ -315,12 +317,12 @@ class SearchManager extends BaseManager
         //make a $sort array for multi-sort function
         $sort = array();
         foreach($fusion as $k=>$v) {
-            $sort['primary'][$k] = $v['primary'];
-            $sort['nbRef'][$k]   = $v['nbRef'];
-            $sort['id'][$k]      = $v['id'];
+            $sort['primary'][$k]  = $v['primary'];
+            $sort['countRef'][$k] = $v['countRef'];
+            $sort['id'][$k]       = $v['id'];
         }
-        //sort by primary desc and then nbRef asc
-        array_multisort($sort['primary'], SORT_DESC, $sort['nbRef'], SORT_ASC,$sort['id'], SORT_DESC, $fusion);
+        //sort by primary desc and then countRef asc
+        array_multisort($sort['primary'], SORT_DESC, $sort['countRef'], SORT_ASC,$sort['id'], SORT_DESC,$fusion);
 
         return $fusion;
     }
@@ -353,7 +355,7 @@ class SearchManager extends BaseManager
 
         $item['id']       = $contenu->getId();
         $item['titre']    = $contenu->getTitre();
-        $item['nbRef']    = count($contenu->getReferences());
+        $item['countRef'] = $this->getNoteReferencement($contenu->getReferences());
         $item['objet']    = $objet->getId();
         $item['aliasO']   = $objet->getAlias();
         $item['aliasC']   = $contenu->getAlias();
@@ -406,7 +408,7 @@ class SearchManager extends BaseManager
         
         $item['id']       = $objet->getId();
         $item['titre']    = $objet->getTitre();
-        $item['nbRef']    = count($objet->getReferences());
+        $item['countRef'] = $this->getNoteReferencement($objet->getReferences());
         $item['objet']    = null;
         $item['alias']    = $objet->getAlias();
         $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
@@ -429,6 +431,26 @@ class SearchManager extends BaseManager
     }
 
     /**
+     * Calcul la note de la publication/contenu basée sur ses références
+     *
+     * @param array $references Liste des références
+     *
+     * @return integer
+     */
+    private function getNoteReferencement( $references )
+    {
+        $note = 0;
+        foreach($references as $reference){
+            $id = $reference->getReference()->getId();
+
+            if( isset($this->_refsPonderees[ $id ]) )
+                $note += $this->_refsPonderees[ $id ]['poids'];
+        }
+        
+        return $note;
+    }
+   
+    /*
      * Formatte Correctement les refTopic
      *
      * @param RefTopic $one  L'entité RefTopic
@@ -444,9 +466,9 @@ class SearchManager extends BaseManager
         //topic
         $topic = $one->getTopic();
         
-        $item['id']    = $topic->getId();
-        $item['titre'] = $topic->getTitle();
-        $item['nbRef'] = count($topic->getReferences());
+        $item['id']       = $topic->getId();
+        $item['titre']    = $topic->getTitle();
+        $item['countRef'] = $this->getNoteReferencement($topic->getReferences());
         
         //get Type
         $item['categ'] = 'forum';

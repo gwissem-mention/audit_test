@@ -128,7 +128,7 @@ form:
         save-changes:                  "Sauvegarder les changements"
         topic:
             create:                    "Publier le fil de discussion"
-            reply:                     "Publier la réponse"
+            reply:                     "Publier le message"
             move:                      "Déplacer le fil de discussion"
         post:
             delete:                    "Supprimer"
@@ -174,7 +174,7 @@ board:
     reply-count-th:                    "Réponses"
     topic-count-th:                    "Fils de discussion"
     post-count-th:                     "Messages"
-    last-post-th:                      "Dernière réponse"
+    last-post-th:                      "Derniers messages"
     announcements-th:                  "Annonces"
     label:                             "Thème : "
     name-label:                        "Nom : "

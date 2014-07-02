@@ -56,7 +56,8 @@ class ObjetController extends Controller
             $objet->setArticle(true);
 
         $options = array(
-            'toRef' => 0
+            'toRef' => 0,
+            'note'  => 0
         );
 
         return $this->renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig', $options );
@@ -80,12 +81,18 @@ class ObjetController extends Controller
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->lock($objet, $user);
 
         //get Contenus
+        $this->get('hopitalnumerique_objet.manager.contenu')->setRefPonderees( $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees() );
         $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id );
+
+        //get Note referencement
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $objet->getReferences(), $refsPonderees );
 
         $options = array(
             'contenus' => $contenus,
             'infra'    => $infra,
-            'toRef'    => $toRef
+            'toRef'    => $toRef,
+            'note'     => $note
         );
 
         return $this->renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig', $options );
@@ -341,6 +348,7 @@ class ObjetController extends Controller
                     'contenus' => isset($options['contenus']) ? $options['contenus'] : array(),
                     'infra'    => isset($options['infra'])    ? $options['infra']    : false,
                     'toRef'    => isset($options['toRef'])    ? $options['toRef']    : false,
+                    'note'     => isset($options['note'])     ? $options['note']     : 0
                 ));
             }
 
@@ -362,6 +370,7 @@ class ObjetController extends Controller
                         'contenus' => isset($options['contenus']) ? $options['contenus'] : array(),
                         'infra'    => isset($options['infra'])    ? $options['infra']    : false,
                         'toRef'    => isset($options['toRef'])    ? $options['toRef']    : false,
+                        'note'     => isset($options['note'])     ? $options['note']     : 0
                     ));
                 }
 
@@ -395,6 +404,7 @@ class ObjetController extends Controller
             'contenus' => isset($options['contenus']) ? $options['contenus'] : array(),
             'infra'    => isset($options['infra'])    ? $options['infra']    : false,
             'toRef'    => isset($options['toRef'])    ? $options['toRef']    : false,
+            'note'     => isset($options['note'])     ? $options['note']     : 0
         ));
     }
 }

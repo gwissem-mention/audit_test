@@ -120,7 +120,6 @@ class ReferenceController extends Controller
         $objet->setReferencement( array() );
 
         //ajoute les nouvelles références
-        $nbRef      = 0;
         $references = json_decode( $this->get('request')->request->get('references') );
         $refsToSave = array();
         foreach( $references as $reference ) {
@@ -137,14 +136,16 @@ class ReferenceController extends Controller
 
             //save it
             $refsToSave[] = $ref;
-
-            $nbRef++;
         }
 
         //save Refs AND objet (implicite)
         $this->get('hopitalnumerique_objet.manager.refobjet')->save( $refsToSave );
 
-        return new Response('{"success":true, "nbRef":'.$nbRef.'}', 200);
+        //get Object Note
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $objet->getReferences(), $refsPonderees );
+
+        return new Response('{"success":true, "note":"' . number_format($note, 2, ',', ' ') . '"}', 200);
     }
 
     /**
@@ -163,8 +164,8 @@ class ReferenceController extends Controller
         $this->get('hopitalnumerique_objet.manager.refcontenu')->delete( $oldRefs );
 
         //ajoute les nouvelles références
-        $nbRef      = 0;
         $references = json_decode( $this->get('request')->request->get('references') );
+        $refsToSave = array();
         foreach( $references as $reference ) {
             $ref = $this->get('hopitalnumerique_objet.manager.refcontenu')->createEmpty();
             $ref->setContenu( $contenu );
@@ -174,11 +175,14 @@ class ReferenceController extends Controller
             $ref->setReference( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $reference->id) ) );
 
             //save it
-            $this->get('hopitalnumerique_objet.manager.refcontenu')->save( $ref );
-
-            $nbRef++;
+            $refsToSave[] = $ref;
         }
+        $this->get('hopitalnumerique_objet.manager.refcontenu')->save( $refsToSave );
 
-        return new Response('{"success":true, "nbRef":'.$nbRef.'}', 200);
+        //get Object Note
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $contenu->getReferences(), $refsPonderees );
+
+        return new Response('{"success":true, "note":"' . number_format($note, 2, ',', ' ') . '"}', 200);
     }
 }

@@ -58,7 +58,8 @@
 /* Résultats */
     #recherche #resultats{ margin-top: 20px; }
     #recherche #resultats span.label{ font-size:9px; line-height: 2; vertical-align: top }
-
+    #recherche #resultats .niveau{ margin-bottom: 4px }
+    
     /* Points Dur*/
         #resultats #pointsdurs{padding:0;}
         #resultats #pointsdurs h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal}

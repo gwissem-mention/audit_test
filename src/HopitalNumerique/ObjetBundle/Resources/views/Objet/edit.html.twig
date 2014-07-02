@@ -297,7 +297,7 @@
                                     <div class="col-md-10">
                                         <a href="{{path('hopitalnumerique_objet_reference_objet_own', {'id':objet.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-eye"></i></a>
                                         <a href="{{path('hopitalnumerique_objet_reference_objet', {'id':objet.id})}}" class="manageReferences edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
-                                        <p class="text-muted text-right pull-right"><span class="nbRefs">{% if not objet.id %}0{% else %}{{objet.references|length}}{% endif %}</span> éléments référencés</p>
+                                        <p class="text-muted text-right pull-right">Note référencement : <span class="nbRefs">{{note|number_format(2,',')}}</span> / 400</p>
                                     </div>
                                     <div class="col-md-10 hide">
                                         {{ form_widget(form.references) }}
@@ -385,7 +385,7 @@
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
             <a href="{{path('hopitalnumerique_objet_contenu_edit', {'id': contenu.id })}}" class="fancybox.ajax" >{{contenu.order ~ ' ' ~ contenu.titre}}</a>
-            <p class="text-muted pull-right">{{contenu.nbVue}} vues - <span>{{contenu.references}}</span> éléments référencés</p>
+            <p class="text-muted pull-right">{{contenu.nbVue}} vues - Note référencement : <span>{{contenu.note}}</span> / 400</p>
         </div>
         <div class="dd3-actions">
             <div onclick="deleteContenu( {{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_delete', {'id':contenu.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>

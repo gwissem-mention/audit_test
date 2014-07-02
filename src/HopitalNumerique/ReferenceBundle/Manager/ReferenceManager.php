@@ -178,6 +178,61 @@ class ReferenceManager extends BaseManager
         return $domaines;
     }
 
+    /**
+     * Récupère les références Pondérées
+     *
+     * @return array
+     */
+    public function getReferencesPonderees()
+    {
+        $references = $this->getArboFormat(false, false, true);
+        $references = $references['CATEGORIES_RECHERCHE'];
+        $results    = array();
+
+        foreach($references as &$reference)
+        {
+            $reference['poids'] = 100;
+
+            if( $reference['childs'] )
+            {
+                $keys        = array_keys($reference['childs']);
+                $childs      = $reference['childs'][$keys[0]];
+                $childWeight = 100 / count($childs);
+                
+                foreach($childs as &$child)
+                {
+                    $child['poids'] = $childWeight;
+                    if( $child['childs'] )
+                    {
+                        $keys             = array_keys($child['childs']);
+                        $smallChilds      = $child['childs'][$keys[0]];
+                        $smallChildWeight = $childWeight / count($smallChilds);
+
+                        foreach ($smallChilds as &$smallChild)
+                        {
+                            $smallChild['poids'] = $smallChildWeight;
+                            if( $smallChild['childs'] )
+                            {
+                                $keys                  = array_keys($smallChild['childs']);
+                                $verySmallChilds       = $smallChild['childs'][$keys[0]];
+                                $verySmallChildsWeight = $smallChildWeight / count($verySmallChilds);
+
+                                foreach($verySmallChilds as &$verySmallChild)
+                                {
+                                    $verySmallChild['poids']          = $verySmallChildsWeight;
+                                    $results[ $verySmallChild['id'] ] = $verySmallChild;
+                                }
+                            }else
+                                $results[ $smallChild['id'] ] = $smallChild;
+                        }
+                    }else
+                        $results[ $child['id'] ] = $child;
+                }
+            }
+        }
+
+        return $results;
+    }
 
 
 
@@ -286,7 +341,7 @@ class ReferenceManager extends BaseManager
      * @return array
      */
     private function getArboRecursive( ArrayCollection $items, $elements, $tab)
-    {        
+    {
         foreach($elements as $element) {
             //construction de l'element current
             $id = $element['id'];
