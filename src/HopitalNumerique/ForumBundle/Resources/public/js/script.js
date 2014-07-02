@@ -99,9 +99,9 @@ function saveReferences( topic, idContenu )
         success  : function( data ){
             //update ref number
             if(topic)
-                $('.nbRefs').html( data.nbRef );    
+                $('.nbRefs').html( data.note );    
             else
-                $('#sommaire #contenu-'+idContenu+' > .dd3-content .text-muted span').html( data.nbRef );
+                $('#sommaire #contenu-'+idContenu+' > .dd3-content .text-muted span').html( data.note );
             
             loader.finished();
             $.fancybox.close(true);

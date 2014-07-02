@@ -527,6 +527,26 @@ class ObjetManager extends BaseManager
         return $item;
     }
 
+    /**
+     * Retourne la note de l'objet
+     *
+     * @param array $references   Tableau des références
+     * @param array $ponderations Tableau des pondérations
+     *
+     * @return integer
+     */
+    public function getNoteReferencement( $references, $ponderations )
+    {
+        $note = 0;
+        foreach($references as $reference){
+            $id = $reference->getReference()->getId();
+
+            if( isset($ponderations[ $id ]) )
+                $note += $ponderations[ $id ]['poids'];
+        }
+        
+        return $note;
+    }
 
 
 

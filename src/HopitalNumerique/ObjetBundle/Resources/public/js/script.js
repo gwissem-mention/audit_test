@@ -242,12 +242,13 @@ function saveReferences( objet, idContenu )
         },
         type     : 'POST',
         dataType : 'json',
+        async    : false,
         success  : function( data ){
             //update ref number
             if(objet)
-                $('.nbRefs').html( data.nbRef );    
+                $('.nbRefs').html( data.note );    
             else
-                $('#sommaire #contenu-'+idContenu+' > .dd3-content .text-muted span').html( data.nbRef );
+                $('#sommaire #contenu-'+idContenu+' > .dd3-content .text-muted span').html( data.note );
             
             loader.finished();
             $.fancybox.close(true);

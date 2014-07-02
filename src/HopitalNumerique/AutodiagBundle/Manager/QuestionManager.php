@@ -31,9 +31,22 @@ class QuestionManager extends BaseManager
      *
      * @return integer
      */
-    public function getQuestionsOrdered( $chapitre )
+    public function getQuestionsOrdered( $chapitre, $refPonderees )
     {
-        return $this->getRepository()->getQuestionsOrdered($chapitre)->getQuery()->getResult();
+        $questions = $this->getRepository()->getQuestionsOrdered($chapitre)->getQuery()->getResult();
+
+        $datas = array();
+        foreach($questions as $one) {
+            $question              = new \StdClass;
+            $question->id          = $one->getId();
+            $question->texte       = $one->getTexte();
+            $question->ponderation = $one->getPonderation();
+            $question->note        = $this->getNoteReferencement( $one->getReferences(), $refPonderees );
+
+            $datas[] = $question;
+        }
+
+        return $datas;
     }
 
     /**
@@ -114,7 +127,26 @@ class QuestionManager extends BaseManager
 
 
 
+    /**
+     * Retourne la note des références
+     *
+     * @param array $references   Tableau des références
+     * @param array $ponderations Tableau des pondérations
+     *
+     * @return integer
+     */
+    private function getNoteReferencement( $references, $refPonderees )
+    {
+        $note = 0;
+        foreach($references as $reference){
+            $id = $reference->getReference()->getId();
 
+            if( isset($refPonderees[ $id ]) )
+                $note += $refPonderees[ $id ]['poids'];
+        }
+        
+        return $note;
+    }
 
     /**
      * Calcul l'ordre de la question par rapport au chapitre

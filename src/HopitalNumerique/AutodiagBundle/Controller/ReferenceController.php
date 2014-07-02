@@ -43,8 +43,8 @@ class ReferenceController extends Controller
         $this->get('hopitalnumerique_autodiag.manager.refchapitre')->delete( $oldRefs );
 
         //ajoute les nouvelles références
-        $nbRef      = 0;
         $references = json_decode( $this->get('request')->request->get('references') );
+        $refToSave  = array();
         foreach( $references as $reference ) {
             $ref = $this->get('hopitalnumerique_autodiag.manager.refchapitre')->createEmpty();
             $ref->setChapitre( $chapitre );
@@ -54,12 +54,15 @@ class ReferenceController extends Controller
             $ref->setReference( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $reference->id) ) );
 
             //save it
-            $this->get('hopitalnumerique_autodiag.manager.refchapitre')->save( $ref );
-
-            $nbRef++;
+            $refToSave[] = $ref;
         }
+        $this->get('hopitalnumerique_autodiag.manager.refchapitre')->save( $refToSave );
 
-        return new Response('{"success":true, "nbRef":'.$nbRef.'}', 200);
+        //get Chapitre Note
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $chapitre->getReferences(), $refsPonderees );
+
+        return new Response('{"success":true, "note":"' . number_format($note, 2, ',', ' ') . '"}', 200);
     }
 
     /**
@@ -93,8 +96,8 @@ class ReferenceController extends Controller
         $this->get('hopitalnumerique_autodiag.manager.refquestion')->delete( $oldRefs );
 
         //ajoute les nouvelles références
-        $nbRef      = 0;
         $references = json_decode( $this->get('request')->request->get('references') );
+        $refToSave  = array();
         foreach( $references as $reference ) {
             $ref = $this->get('hopitalnumerique_autodiag.manager.refquestion')->createEmpty();
             $ref->setQuestion( $question );
@@ -104,12 +107,15 @@ class ReferenceController extends Controller
             $ref->setReference( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $reference->id) ) );
 
             //save it
-            $this->get('hopitalnumerique_autodiag.manager.refquestion')->save( $ref );
-
-            $nbRef++;
+            $refToSave[] = $ref;
         }
+        $this->get('hopitalnumerique_autodiag.manager.refquestion')->save( $refToSave );
 
-        return new Response('{"success":true, "nbRef":'.$nbRef.'}', 200);
+        //get question Note
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $question->getReferences(), $refsPonderees );
+
+        return new Response('{"success":true, "note":"' . number_format($note, 2, ',', ' ') . '"}', 200);
     }
 
 
