@@ -69,7 +69,7 @@ class RoleController extends Controller
         }else{
             $users = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole( $role->getRole() );
             
-            if( !is_null($users) ){
+            if(count($users) > 0){
                 $message = 'Ce groupe n\'a pas pu être supprimé car il a encore des utilisateurs associés.';
                 $this->get('session')->getFlashBag()->add('danger', $message);
             }else{

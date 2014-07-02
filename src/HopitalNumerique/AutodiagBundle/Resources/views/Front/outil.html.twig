@@ -137,8 +137,8 @@
     {# Build form group #}
     <div class="form-group">
         <label for="{{questionName}}" class="col-md-7 col-sm-12">
-            {% if question.infoBulle %}<span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>{% endif %}
             {{questionNumber ~ '. ' ~ question.texte}}
+            {% if question.infoBulle %}<span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>{% endif %}
         </label>
         <div class="col-md-4 col-sm-11">
             {# SELECT #}
