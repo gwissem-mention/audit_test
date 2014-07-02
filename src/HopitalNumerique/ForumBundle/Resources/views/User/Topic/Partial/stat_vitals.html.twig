@@ -12,18 +12,9 @@
                 {%- set board = topic.getBoard -%}
             {%- endif -%}
 
-            {%- if canReplyToTopic(topic, forum) -%}
-                <a class="btn btn-danger pull-right" rel="nofollow"
-                 href="{{- path('ccdn_forum_user_topic_reply', {'forumName': forumName, 'topicId': topic.getId }) -}}">
-                    {{- 'link.topic.reply' | trans({}, ForumBundle.translation ) -}}
-                </a>
-            {%- else -%}
-                <a class="btn btn-danger disabled pull-right" rel="nofollow"
-                 href="{{- path('ccdn_forum_user_topic_reply', {'forumName': forumName, 'topicId': topic.getId }) -}}">
-                    {{- 'link.topic.reply' | trans({}, ForumBundle.translation ) -}}
-                </a>
-            {%- endif -%}
-
+            <a class="btn btn-danger pull-right" rel="nofollow" href="{{- path('ccdn_forum_user_topic_reply', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                {{- 'link.topic.reply' | trans({}, ForumBundle.translation ) -}}
+            </a>
 
             {%- if canSubscribeToTopic(topic, forum, (subscription is defined ? subscription : null)) -%}
                 <a class="btn btn-success pull-right" href="{{- path('ccdn_forum_user_subscription_subscribe', {'forumName': forumName, 'topicId': topic.getId }) -}}">

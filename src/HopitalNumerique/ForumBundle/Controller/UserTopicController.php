@@ -2,6 +2,8 @@
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserTopicController as UserTopicControllerCCDN;
+use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
+use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicResponseEvent;
 
 /**
  *
@@ -52,5 +54,39 @@ class UserTopicController extends UserTopicControllerCCDN
         ));
 
         return $response;
+    }
+    
+    /**
+     *
+     * @access public
+     * @param  string                          $forumName
+     * @param  int                             $boardId
+     * @return RedirectResponse|RenderResponse
+     */
+    public function createAction($forumName, $boardId)
+    {
+        //<-- Alerte si on n'est pas connectée
+        if (!$this->isGranted('ROLE_USER'))
+            $this->container->get('session')->getFlashBag()->add('warning', 'Vous devez vous identifier pour créer un fil de discussion.');
+        //-->
+    
+        return parent::createAction($forumName, $boardId);
+    }
+    
+    /**
+     *
+     * @access public
+     * @param  string                          $forumName
+     * @param  int                             $topicId
+     * @return RedirectResponse|RenderResponse
+     */
+    public function replyAction($forumName, $topicId)
+    {
+        //<-- Alerte si on n'est pas connectée
+        if (!$this->isGranted('ROLE_USER'))
+            $this->container->get('session')->getFlashBag()->add('warning', 'Vous devez vous identifier pour poster une réponse.');
+        //-->
+        
+        return parent::replyAction($forumName, $topicId);
     }
 }
