@@ -14,7 +14,7 @@ security:
 
         # Formulaire FRONT : connexion + reset password (accessible aux anonymes)
         comptehn_login:
-            pattern: (^/compte-hn/(connexion|mot-de-passe-perdu(.*))$)|(^/compte-hn/inscription)|(/forum) # Cette expression régulière permet de prendre /login
+            pattern: (^/compte-hn/(connexion|mot-de-passe-perdu(.*))$)|(^/compte-hn/inscription) # Cette expression régulière permet de prendre /login
             anonymous: true
             context: application
 
@@ -99,4 +99,6 @@ security:
         - { path: ^/compte-hn/connexion$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/compte-hn/inscription, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/compte-hn/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/forum/$, role: ROLE_USER }
+        - { path: ^/forum/Public$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
