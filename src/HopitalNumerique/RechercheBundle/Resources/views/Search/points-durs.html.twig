@@ -7,6 +7,14 @@
                 <span class="label label-danger">Nouveau</span>
             {% endif %}
 
+            {% if objet['primary'] == 1 %}
+                <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-1.png')}}" alt="Niveau 1" title="Contenus les plus pertinents" />
+            {% elseif objet['countRef'] <= 200 %}
+                <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-2.png')}}" alt="Niveau 2" title="Contenus pertinents" />
+            {% elseif objet['countRef'] > 200 %}
+                <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-3.png')}}" alt="Niveau 3" title="Contenus potentiellement pertinents" />
+            {% endif %}
+
             {% if objet['objet'] is not null %}
                 <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >
             {% else %}

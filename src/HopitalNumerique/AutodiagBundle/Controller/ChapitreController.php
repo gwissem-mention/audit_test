@@ -19,7 +19,11 @@ class ChapitreController extends Controller
      */
     public function indexAction(Outil $outil)
     {
-        $chapitres = $this->get('hopitalnumerique_autodiag.manager.chapitre')->getArbo( $outil );
+        //get ponderations
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+
+        //get chapitres
+        $chapitres = $this->get('hopitalnumerique_autodiag.manager.chapitre')->getArbo( $outil, $refsPonderees );
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Chapitre:index.html.twig' , array(
             'outil'     => $outil,

@@ -18,7 +18,11 @@ class QuestionController extends Controller
      */
     public function indexAction(Chapitre $chapitre)
     {
-        $questions = $this->get('hopitalnumerique_autodiag.manager.question')->getQuestionsOrdered( $chapitre );
+        //get ponderations
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+
+        //get questions
+        $questions = $this->get('hopitalnumerique_autodiag.manager.question')->getQuestionsOrdered( $chapitre, $refsPonderees );
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Question:index.html.twig' , array(
             'questions' => $questions,
