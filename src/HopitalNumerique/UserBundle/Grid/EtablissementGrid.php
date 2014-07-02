@@ -21,6 +21,7 @@ class EtablissementGrid extends Grid implements IGrid
         $this->setFunctionName('getEtablissementForGrid');
         $this->setNoDataMessage('Aucun établissement "autre" référencé.');
         $this->setButtonSize(43);
+        $this->setDefaultFilters(array('archiver' => false));
     }
 
     /**

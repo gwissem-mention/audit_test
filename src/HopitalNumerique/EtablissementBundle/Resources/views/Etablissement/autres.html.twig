@@ -11,6 +11,11 @@
 {% block javascripts %}
     {{ parent() }}
     {{ block('grid_javascripts')}}
+    {% javascripts output="compiled/hopitalnumerique-etablissement-etablissement-autres.js"
+        'bundles/hopitalnumeriqueetablissement/js/etablissement_autres.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
 {# Template Stuff #}
