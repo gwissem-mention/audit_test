@@ -39,8 +39,6 @@ abstract class DemandesAbstractGrid extends Grid implements IGrid
         $this->setSource('hopitalnumerique_intervention.manager.intervention_demande');
         $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setNoDataMessage('- Aucune intervention à afficher -');
-        $this->setDefaultLimit(1000);
-        $this->setLimits(array(5, 10, 15, 1000));
     }
 
     /**
