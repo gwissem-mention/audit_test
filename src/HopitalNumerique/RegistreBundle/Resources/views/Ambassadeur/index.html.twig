@@ -91,13 +91,13 @@
 
                                                 <div class="col-md-3">
                                                     {% if ambassadeur.getPath() is not null and ambassadeur.getPath() is not empty %}
-                                                        <img class="photo-profil" src="/{{ ambassadeur.getWebPath() }}" width="90px" height="130px">
+                                                        <img class="photo-silhouette" src="/{{ ambassadeur.getWebPath() }}" width="90px" height="130px">
                                                     {% elseif ambassadeur.civilite.id == 8 %}
                                                         {# Monsieur #}
-                                                        <img class="photo-profil" src="/medias/Utilisateurs/profil-homme.png" width="90px" height="130px">
+                                                        <img class="photo-silhouette" src="/medias/Utilisateurs/silhouette-homme.png" width="90px" height="130px">
                                                     {% else %}
                                                         {# Madame #}
-                                                        <img class="photo-profil" src="/medias/Utilisateurs/profil-femme.png" width="90px" height="130px">
+                                                        <img class="photo-silhouette" src="/medias/Utilisateurs/silhouette-femme.png" width="90px" height="130px">
                                                     {% endif %}
                                                 </div>
 
@@ -105,22 +105,22 @@
                                                     <div class="description">
     					                                {% if ambassadeur.etablissementRattachementSante %}
     					                                   <div class="etab" title="ambassadeur.etablissementRattachementSante.nom - {% if ambassadeur.etablissementRattachementSante.ville is not null %}{{ ambassadeur.etablissementRattachementSante.ville }}{% if ambassadeur.etablissementRattachementSante.codepostal is not null %} ({{ ambassadeur.etablissementRattachementSante.codepostal }}){% endif %}{% endif %}">    
-    					                                       {{ambassadeur.etablissementRattachementSante.nom|truncate(35,true,'...')}}
+    					                                       {{ambassadeur.etablissementRattachementSante.nom}}
     				                                       </div>
     					                                {% elseif ambassadeur.autreStructureRattachementSante is not empty %}
     					                                   <div class="etab" title="{{ambassadeur.autreStructureRattachementSante}}">
-    					                                       {{ambassadeur.autreStructureRattachementSante|truncate(35,true,'...')}}
+    					                                       {{ambassadeur.autreStructureRattachementSante}}
     				                                       </div>
                                                         {% else %}
                                                            <div class="etab" title="{{ambassadeur.nomStructure}}">
-                                                               {{ambassadeur.nomStructure|truncate(35,true,'...')}}
+                                                               {{ambassadeur.nomStructure}}
                                                            </div>
     					                                {% endif %}
         					                            <div class="fonction" title="{% if ambassadeur.fonctionDansEtablissementSante is not empty %}{{ambassadeur.fonctionDansEtablissementSante}}{% else %}{{ambassadeur.fonctionStructure}}{% endif %}">
         					                                {% if ambassadeur.fonctionDansEtablissementSante is not empty %}
-        					                                    {{ambassadeur.fonctionDansEtablissementSante|truncate(26,true,'...')}}
+        					                                    {{ambassadeur.fonctionDansEtablissementSante}}
         					                                {% else %}
-        					                                    {{ambassadeur.fonctionStructure|truncate(26,true,'...')}}
+        					                                    {{ambassadeur.fonctionStructure}}
         					                                {% endif %}
         					                            </div>
     					                            
@@ -131,7 +131,7 @@
                                                             <a class="link violet fancybox.ajax outilsMaitrises" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a>
                                                         </div>
         					
-        					                            <div class="col-md-12">
+        					                            <div class="col-md-12 sol-button">
                                                             {% if app.user and not app.user|checkAuthorization( path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id}) ) %}
                                                                 <a class="btn background-violet disabled" href="#">Solliciter cet ambassadeur</a>
                                                             {% else %}
