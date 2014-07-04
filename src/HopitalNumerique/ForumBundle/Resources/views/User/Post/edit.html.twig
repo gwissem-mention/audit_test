@@ -33,7 +33,7 @@
                 {{- form_errors(form) -}}
 
                 {%- if form.Topic is defined -%}
-                    {{- form_row(form.Topic.title, {'attr': {'class': 'validate[required,minSize[10],maxSize[255]]'}}) -}}
+                    {{- form_row(form.Topic.title, {'attr': {'class': 'validate[required,minSize[3],maxSize[255]]'}}) -}}
                 {%- endif -%}
 
                 {{- form_row(form.body) -}}
