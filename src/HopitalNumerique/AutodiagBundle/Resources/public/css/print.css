@@ -16,7 +16,3 @@ img{ width:auto !important }
 #resultats #graphiques .tableContainer{overflow:visible;}
 
 .copyright{margin-top:30px;}
-
-.progress-bar-danger{background-color:#c9302c !important; color:#FFFFFF !important; font-weight: bold!important}
-.progress-bar-warning{background-color:#ec971f !important; color:#FFFFFF !important; font-weight: bold!important}
-.progress-bar-success{background-color:#449d44 !important; color:#FFFFFF !important; font-weight: bold!important}
