@@ -1,7 +1,8 @@
 <div class="panel panel-midnightblue" style="margin:0" >
     <div class="panel-heading" style="height:65px">
-        <h4 style="line-height:22px; padding: 10px 0">{{titre}} - Gestion des références</h4>
+        <h4 style="line-height:22px; padding:0">{{titre}} - Gestion des références</h4>
     </div>
+    <div class="clearfix"></div>
 
     <div class="panel-body" id="panel-references" >
         <div class="tableContent" >
@@ -50,7 +51,7 @@
             <div class="row">
                 <div class="btn-toolbar pull-right" style="margin:0 10px 0 0;">
                     <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
-                    <div onclick="saveReferences( {{topic}}, {{contenu}} );" class="btn-success btn">Enregistrer</div>
+                    <div onclick="saveReferences( {{topic}}, {{contenu}} );" class="btn-primary btn">Enregistrer</div>
                 </div>
             </div>
         </div>
