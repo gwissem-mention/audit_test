@@ -262,6 +262,22 @@ class FrontController extends Controller
         return $this->get('igorw_file_serve.response_factory')->create( $fileName , 'application/pdf', $options);
     }
 
+    /**
+     * Supprime un résultat
+     *
+     * @param  Resultat $resultat [description]
+     *
+     * @return [type]
+     */
+    public function deleteAction( Resultat $resultat )
+    {
+        $this->get('hopitalnumerique_autodiag.manager.resultat')->delete( $resultat );
+
+        // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
+        $this->get('session')->getFlashBag()->add( 'success', 'Résultats supprimés');
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_comptehn').'"}', 200);
+    }
 
 
 
