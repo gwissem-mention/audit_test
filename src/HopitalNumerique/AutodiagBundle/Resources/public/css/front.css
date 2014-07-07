@@ -72,6 +72,7 @@
         #resultats #graphiques #radarChart{min-width: 400px; max-width: 100%; height: 700px; margin: 0 auto}
         #resultats #graphiques .tableContainer{overflow: hidden; overflow-x:auto;}
         #resultats #graphiques .table .vertical-align{vertical-align: middle}
+        #resultats #graphiques .table .reverse{cursor:pointer;}
         
 /* Partie Compte HN */
     .autodiagTable thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}
