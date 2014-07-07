@@ -60,10 +60,12 @@
         #resultats #graphiques .panel .panel-heading{padding:7px 15px; }
         #resultats #graphiques .panel .panel-heading h3.panel-title{margin-bottom: 0; font-size: 14px; float: left; font-weight: bold}
         #resultats #graphiques .panel .panel-heading .options{float:right;}
+        #resultats #graphiques .panel .panel-heading .options img{margin-bottom: 4px; margin-left:5px;}
         #resultats #graphiques .panel .progress{position: relative; height: 30px; margin-bottom: 0; overflow: visible;}
-        #resultats #graphiques .panel .progress .progress-bar-danger{background:#d9534f !important; color:#FFFFFF !important; font-weight: bold!important}
-        #resultats #graphiques .panel .progress .progress-bar-warning{background:#f0ad4e !important; color:#FFFFFF !important; font-weight: bold!important}
-        #resultats #graphiques .panel .progress .progress-bar-success{background:#5cb85c !important; color:#FFFFFF !important; font-weight: bold!important}
+        #resultats #graphiques .panel .progress .progress-bar{color:#000000 !important; font-weight: bold!important}
+        #resultats #graphiques .panel .progress .progress-bar-danger{background:#f2dede !important; }
+        #resultats #graphiques .panel .progress .progress-bar-warning{background:#fcf8e3 !important; }
+        #resultats #graphiques .panel .progress .progress-bar-success{background:#dff0d8 !important; }
         #resultats #graphiques .panel .cursor{ width:0; height:0; border:10px solid transparent; border-bottom:20px solid black; position: absolute; bottom: 0; margin-left:-11px;}
         #resultats #graphiques .panel .cursor-value{ position: absolute; bottom: -14px; margin-left:-9px; font-size: 10px}
         #resultats #graphiques .panel h3.toPrint{display: none}
