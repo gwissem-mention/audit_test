@@ -16,6 +16,6 @@ services:
     #--Type
     hopital_numerique_contact.form.type.contact:
         class: "%hopital_numerique_contact.form.type.contact%"
-        arguments: ["@hopital_numerique_contact.manager.contact", "@validator"]
+        arguments: ["@hopital_numerique_contact.manager.contact", "@validator", "@security.context"]
         tags:
             - { name: form.type, alias: hopital_numerique_contact_contact }
