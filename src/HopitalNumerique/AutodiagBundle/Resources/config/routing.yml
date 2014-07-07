@@ -209,6 +209,12 @@ hopitalnumerique_autodiag_front_comptehn:
     pattern:  /compte-hn/autodiagnostic
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:autodiag" }
 
+hopitalnumerique_autodiag_front_comptehn_delete:
+    pattern:  /compte-hn/autodiagnostic/{id}/delete
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:delete" }
+    requirements:
+        id: \d+
+
 #CRON
 hopitalnumerique_autodiag_cron:
     pattern:  /cron-autodiag/{id}

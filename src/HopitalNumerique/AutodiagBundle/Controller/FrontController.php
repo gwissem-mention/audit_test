@@ -6,6 +6,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use HopitalNumerique\AutodiagBundle\Entity\Resultat;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Front controller.
@@ -262,6 +263,26 @@ class FrontController extends Controller
         return $this->get('igorw_file_serve.response_factory')->create( $fileName , 'application/pdf', $options);
     }
 
+    /**
+     * Supprime un résultat
+     *
+     * @param  Resultat $resultat [description]
+     *
+     * @return [type]
+     */
+    public function deleteAction( Resultat $resultat )
+    {
+        //Delete le PDF s'il existe
+        if( !is_null($resultat->getPdf()) && file_exists(__ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf() ) )
+            unlink(__ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf() );
+
+        $this->get('hopitalnumerique_autodiag.manager.resultat')->delete( $resultat );
+
+        // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
+        $this->get('session')->getFlashBag()->add( 'success', 'Résultats supprimés.');
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_comptehn').'"}', 200);
+    }
 
 
 

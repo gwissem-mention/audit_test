@@ -25,8 +25,17 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">{{panel.title}}</h3>
-                                    <div class="options" title="Taux remplissage : {{panel.taux|number_format(0)}}%">
-                                        Taux remplissage : {{panel.taux|number_format(0)}}%
+                                    <div class="options">
+                                        Mon résultat : {{panel.value|number_format(0)}}%
+
+                                        {% set tauxChapitre = panel.taux|number_format(0) %}
+                                        {% if tauxChapitre <= 33 %}
+                                            <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-3.png')}}" alt="Taux Remplissage" title="Taux remplissage : {{tauxChapitre}}%" />
+                                        {% elseif tauxChapitre <= 66 %}
+                                            <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-2.png')}}" alt="Taux Remplissage" title="Taux remplissage : {{tauxChapitre}}%" />
+                                        {% else %}
+                                            <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-1.png')}}" alt="Taux Remplissage" title="Taux remplissage : {{tauxChapitre}}%" />
+                                        {% endif %}
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
