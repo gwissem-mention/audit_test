@@ -48,7 +48,7 @@ $(document).ready(function() {
     $('#radarChart').highcharts({
         chart : {
             polar : true,
-            type  : 'line'
+            type  : 'area'
         },
         title : {
             text : null
@@ -81,13 +81,14 @@ $(document).ready(function() {
         },
         series : [
             {
-                name  : 'Ma valeur',
+                name  : 'Mon résultat',
                 color : '#ff0000',
                 data  : values
             }, {
                 name  : 'Valeur optimale préconisée par l\'ANAP',
                 data  : optimale,
-                color : '#6f3596'
+                color : '#6f3596',
+                type  : 'line'
             }
         ]
     });
