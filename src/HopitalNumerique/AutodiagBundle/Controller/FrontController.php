@@ -312,12 +312,13 @@ class FrontController extends Controller
         ));
 
         $options = array(
-            'margin-bottom'    => 0,
-            'margin-left'      => 5,
-            'margin-right'     => 5,
-            'margin-top'       => 4,
+            'margin-bottom'    => 2,
+            'margin-left'      => 2,
+            'margin-right'     => 2,
+            'margin-top'       => 2,
             'encoding'         => 'UTF-8',
-            'javascript-delay' => 500
+            'javascript-delay' => 500,
+            'footer-right'     => 'Page [page] sur [toPage]'
         );
 
         $html = str_replace('/publication', $request->getSchemeAndHttpHost() . '/publication', $html);

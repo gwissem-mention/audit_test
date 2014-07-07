@@ -65,7 +65,7 @@ class UserTopicController extends UserTopicControllerCCDN
      */
     public function createAction($forumName, $boardId)
     {
-        //<-- Alerte si on n'est pas connectée
+        //<-- Alerte si on n'est pas connecté
         if (!$this->isGranted('ROLE_USER'))
             $this->container->get('session')->getFlashBag()->add('warning', 'Vous devez vous identifier pour créer un fil de discussion.');
         //-->
@@ -82,7 +82,7 @@ class UserTopicController extends UserTopicControllerCCDN
      */
     public function replyAction($forumName, $topicId)
     {
-        //<-- Alerte si on n'est pas connectée
+        //<-- Alerte si on n'est pas connecté
         if (!$this->isGranted('ROLE_USER'))
             $this->container->get('session')->getFlashBag()->add('warning', 'Vous devez vous identifier pour poster une réponse.');
         //-->

@@ -5,7 +5,13 @@
         <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-save"></i></a>
         <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
 
+        {% if pdf %}
+            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="Logo anap" class="pull-left" />
+        {% endif %}
+
         <h1 class="text-center">{{resultat.outil.title}}</h1>
+
+        <div class="clearfix"></div>
 
         <h2 class="violet open" data-toggle="graphiques" >Résultats de l'outil - Graphiques</h2>
 
@@ -82,9 +88,11 @@
                 <h3>{{chart.title|capitalize}}</h3>
                 <div class="row">
                     <div class="col-md-12 tableContainer">
-                        <table class="table table-hover table-bordered">
+                        <table class="table table-hover table-bordered" id="tableau_resultats" >
                             <thead>
-                                <th colspan="2"></th>
+                                <th colspan="2" class="text-center vertical-align">
+                                    <div onclick="reverse_table(document.getElementById('tableau_resultats'));" ><i class="fa fa-refresh"></i></div>
+                                </th>
                                 {% for id, chapitre in chart.datas.chapitres %}
                                     <th class="text-center chapitre-{{id}}">{{chapitre|capitalize}}</th>
                                 {% endfor %}
@@ -97,8 +105,8 @@
                                     {% set maxCateg = 0 %}
 
                                     <tr>
-                                        <td class="vertical-align categorie-{{id}}" rowspan="3"><b>{{categorie.title|capitalize}}</b></td>
-                                        <td>Nombre de questions</td>
+                                        <td class="text-center vertical-align categorie-{{id}}" rowspan="3"><b>{{categorie.title|capitalize}}</b></td>
+                                        <td class="text-center">Nombre de réponses</td>
                                         {% for datas in categorie['chapitres'] %}
                                             <td class="text-center">
                                                 {{datas['nbRep']}}
@@ -110,7 +118,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Nombre de points</td>
+                                        <td class="text-center">Nombre de points</td>
                                         {% for datas in categorie['chapitres'] %}
                                             <td class="text-center">
                                                 {{datas['nbPoints']}} sur {{datas['max']}}
@@ -123,7 +131,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Note</td>
+                                        <td class="text-center">Score</td>
                                         {% for datas in categorie['chapitres'] %}
                                             {% if datas['max'] != 0 %}
                                                 {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
@@ -145,8 +153,8 @@
                                     </tr>
                                 {% endfor %}
                                 <tr>
-                                    <td class="title-total vertical-align" rowspan="3"><b>Total</b></td>
-                                    <td>Nombre de questions</td>
+                                    <td class="text-center title-total vertical-align" rowspan="3"><b>Total</b></td>
+                                    <td class="text-center">Nombre de réponses</td>
                                     {% set nbRepTotal = 0 %}
                                     {% for datas in chart.datas.totauxChapitres %}
                                         <td class="text-center">
@@ -159,7 +167,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Nombre de points</td>
+                                    <td class="text-center">Nombre de points</td>
                                     {% set nbPointsTotal = 0 %}
                                     {% set maxTotal = 0 %}
                                     {% for datas in chart.datas.totauxChapitres %}
@@ -174,7 +182,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Note</td>
+                                    <td class="text-center">Score</td>
                                     {% for idChapitre,datas in chart.datas.totauxChapitres %}
                                         {% if datas['max'] != 0 %}
                                             {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
@@ -279,6 +287,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    
+</script>
 
 {# Construit les lignes associées aux résultats #}
 {% macro buildQuestion(question, publications) %}

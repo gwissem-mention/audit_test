@@ -355,8 +355,8 @@ class MailManager extends BaseManager
         foreach ($inscriptions as $key => $inscription) 
         {
             $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
-                            'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
-                            'module'  => $inscription->getSession()->getModule()->getTitre(),
+                            'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                            'module'    => $inscription->getSession()->getModule()->getTitre(),
                             'texteMail' => $inscription->getSession()->getTextMailRappel()
             ));
         }
@@ -416,6 +416,28 @@ class MailManager extends BaseManager
     public function sendInscriptionSession( $user, $options )
     {
         $mail = $this->findOneById(34);
+    
+        return $this->generationMail($user, $mail, $options);
+    }
+    
+    /**
+     * [sendInscriptionSession description]
+     *
+     * @param  [type] $user    [description]
+     * @param  [type] $options [description]
+     *
+     * @return [type]
+     */
+    public function sendNouveauMessageForumMail( $user, $options, $topicId )
+    {
+
+        //Création du lien dans le mail
+        $options['lienversmessage'] = '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'ccdn_forum_user_subscription_index', array(
+                                            'forumName' => $options['forum'],
+                                            'filter'    => 'unread' 
+                                        ))) .'" target="_blank" >Nouveau message</a>';
+
+        $mail = $this->findOneById(36);
     
         return $this->generationMail($user, $mail, $options);
     }

@@ -53,7 +53,7 @@ class UserExtension extends \Twig_Extension
             //Si 'etablissement de rattachement' n'est pas renseigné on vérifie le 'autre structure' 
             $resultat['rattachementSante']     = (is_null($user->getEtablissementRattachementSante())) ? (is_null($user->getAutreStructureRattachementSante()) ? array('label' => 'Etablissement de rattachement / Nom de votre établissement si non disponible dans la liste précédente') : array()) : array();
             $resultat['fonctionEtablissement'] = (is_null($user->getFonctionDansEtablissementSante())) ? array('label' => 'Fonction dans l\'établissement') : array();
-            $resultat['profilEtablissement']   = (is_null($user->getProfilEtablissementSante())) ? array('label' => 'Profil de l\'établissement') : array();
+            $resultat['profilEtablissement']   = (is_null($user->getProfilEtablissementSante())) ? array('label' => 'Profil') : array();
         }
         
         //Si l'un des éléments ci-dessus est manquant
