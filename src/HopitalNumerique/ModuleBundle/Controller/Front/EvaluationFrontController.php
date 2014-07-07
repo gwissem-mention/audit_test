@@ -142,13 +142,21 @@ class EvaluationFrontController extends Controller
             $inscription->setEtatEvaluation( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 29)));
 
             //Vérification de l'ensemble des inscriptions de la session : Si toutes les inscriptions sont évaluée alors la session est archiver
-            $sessionAArchiver = true;
-            foreach ($session->getInscriptions() as $inscription) 
+            $sessionAArchiver = false;
+            if( $session->getDateSession() < new \DateTime() )
             {
-                if( 29 !== $inscription->getEtatEvaluation()->getId() )
+                $sessionAArchiver = true;
+                foreach ($session->getInscriptions() as $inscription) 
                 {
-                    $sessionAArchiver = false;
-                    break;
+                    if( 407 === $inscription->getEtatInscription()->getId()
+                        && 411 === $inscription->getEtatParticipation()->getId() )
+                    {
+                        if( 29 !== $inscription->getEtatEvaluation()->getId() )
+                        {
+                            $sessionAArchiver = false;
+                            break;
+                        }
+                    }
                 }
             }
 
