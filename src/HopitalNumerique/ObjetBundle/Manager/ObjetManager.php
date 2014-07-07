@@ -44,7 +44,7 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForExport( $ids )
+    public function getDatasForExport( $ids, $refsPonderees )
     {
         $objets  = $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
         $results = array();
@@ -65,6 +65,7 @@ class ObjetManager extends BaseManager
             $row['fichier2']     = $objet->getPath2();
             $row['fichierEdit']  = $objet->getPathEdit();
             $row['vignette']     = $objet->getVignette();
+            $row['note']         = number_format($this->getNoteReferencement($objet->getReferences(), $refsPonderees), 0);
 
             //quelques Dates
             $row['dateCreation']         = !is_null($objet->getDateCreation())         ? $objet->getDateCreation()->format('d/m/Y')         : '';
@@ -94,7 +95,7 @@ class ObjetManager extends BaseManager
             $row['ambassadeurs'] = implode(', ', $row['ambassadeurs']);
 
             //set empty values for objet (infra doc)
-            $row['idC'] = $row['titreC'] = $row['aliasC'] = $row['orderC'] = $row['contenuC'] = $row['dateCreationC'] = $row['dateModificationC'] = $row['nbVueC'] = '';
+            $row['idC'] = $row['titreC'] = $row['aliasC'] = $row['orderC'] = $row['contenuC'] = $row['dateCreationC'] = $row['dateModificationC'] = $row['nbVueC'] = $row['noteC'] = '';
 
             //add Object To Results
             $results[] = $row;
@@ -108,7 +109,7 @@ class ObjetManager extends BaseManager
                         //init empty for infra doc
                         $row['id'] = $row['titre'] = $row['alias'] = $row['synthese'] = $row['resume'] = $row['commentaires'] = $row['notes'] = $row['type'] = $row['nbVue'] = $row['etat'] = '';
                         $row['dateCreation'] = $row['dateDebutPublication'] = $row['dateFinPublication'] = $row['dateModification'] = $row['roles'] = $row['types'] = $row['ambassadeurs'] = '';
-                        $row['fichier1'] = $row['fichier2'] = $row['fichierEdit'] = $row['vignette'] = '';
+                        $row['fichier1'] = $row['fichier2'] = $row['fichierEdit'] = $row['vignette'] = $row['note'] = '';
 
                         //Infra doc values
                         $row['idC']               = $contenu->getId();
@@ -118,6 +119,7 @@ class ObjetManager extends BaseManager
                         $row['dateCreationC']     = !is_null($contenu->getDateCreation()) ? $contenu->getDateCreation()->format('d/m/Y') : '';
                         $row['dateModificationC'] = !is_null($contenu->getDateModification()) ? $contenu->getDateModification()->format('d/m/Y') : '';
                         $row['nbVueC']            = $contenu->getNbVue();
+                        $row['noteC']             = number_format($this->getNoteReferencement($contenu->getReferences(), $refsPonderees), 0);
 
                         //add Infra-doc To Results
                         $results[] = $row;

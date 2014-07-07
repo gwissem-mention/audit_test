@@ -33,7 +33,7 @@
             <div id="chapitres"></div>
             <div class="avancement-global">
                 <div class="progress progress-striped">
-                    <div class="progress-bar progress-bar-success" style="width: 0">0%</div>
+                    <div class="progress-bar progress-bar-success" style="width: 0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                 </div>
                 <p>
                     <span class="text-muted pull-left" >0%</span>
@@ -47,9 +47,12 @@
 
             <div class="options">
                 <div class="btn-toolbar">
-                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success btn-sm" ><i class="fa fa-check"></i> Valider le questionnaire</div>
+                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success btn-sm" title="Résultats" ><i class="fa fa-bar-chart-o"></i></div>
+                    {% if app.user %}
+                        <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary btn-sm save" title="Enregistrer"><i class="fa fa-save"></i></div>
+                    {% endif %}
                     {% if reponses %}
-                        <div onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger btn-sm" ><i class="fa fa-trash-o"></i></div>
+                        <div onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger btn-sm" title="Vider le questionnaire"><i class="fa fa-trash-o"></i></div>
                     {% endif %}
                 </div>
             </div>
@@ -77,7 +80,7 @@
                         {# Build step #}
                         <fieldset title="<p>{{parent.title}}</p>" >
                             {% if reponses %}
-                                <div onclick="emptyChapter(this);" class="emptyChapter btn btn-default btn-sm pull-right"><i class="fa fa-trash-o"></i></div>
+                                <div onclick="emptyChapter(this);" class="emptyChapter btn btn-default btn-sm pull-right" title="Vider le chapitre"><i class="fa fa-trash-o"></i></div>
                             {% endif %}
                             <h2>{{parent.title}}</h2>
 
@@ -120,9 +123,12 @@
                     <input type="hidden" name="remplissage" id="remplissage" value="0" />
                 </form>
 
-                {% if app.user %}
-                    <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary btn-sm save" ><i class="fa fa-save"></i> Enregistrer le questionnaire</div>
-                {% endif %}
+                <div class="saveBtns">
+                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success btn-sm" ><i class="fa fa-bar-chart-o"></i> Résultats</div>
+                    {% if app.user %}
+                        <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary btn-sm save" ><i class="fa fa-save"></i> Enregistrer</div>
+                    {% endif %}
+                </div>
             </div>
             <div class="clearfix"></div>
         </div>

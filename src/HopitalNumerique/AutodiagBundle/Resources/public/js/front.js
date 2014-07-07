@@ -125,6 +125,7 @@ function calcAvancement()
     avancementTotal = totalQuestions > 0 ? number_format((totalQuestionsAnswered * 100) / totalQuestions, 0) : 0;
     $('#autodiag .progress-bar').css('width', avancementTotal + '%');
     $('#autodiag .progress-bar').html(avancementTotal + '%');
+    $('#autodiag .progress-bar').attr('aria-valuenow', avancementTotal);
     $('#autodiag #remplissage').val( avancementTotal );
 }
 
