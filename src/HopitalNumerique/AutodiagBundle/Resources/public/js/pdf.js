@@ -48,6 +48,9 @@ $(document).ready(function() {
             tickmarkPlacement : 'on',
             lineWidth         : 0
         },
+        legend:{
+            padding : 20
+        },
         yAxis : {
             gridLineInterpolation : 'polygon',
             lineWidth             : 0,

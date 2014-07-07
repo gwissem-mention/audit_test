@@ -5,7 +5,13 @@
         <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-save"></i></a>
         <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
 
+        {% if pdf %}
+            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="Logo anap" class="pull-left" />
+        {% endif %}
+
         <h1 class="text-center">{{resultat.outil.title}}</h1>
+
+        <div class="clearfix"></div>
 
         <h2 class="violet open" data-toggle="graphiques" >Résultats de l'outil - Graphiques</h2>
 
