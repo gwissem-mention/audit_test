@@ -42,10 +42,41 @@ $(document).ready(function() {
     }
 });
 
-//Truncate l'avancement affiché
-function truncate(n)
+/**
+ * [number_format description]
+ *
+ * @param  {[type]} number        [description]
+ * @param  {[type]} decimals      [description]
+ * @param  {[type]} dec_point     [description]
+ * @param  {[type]} thousands_sep [description]
+ *
+ * @return {[type]}
+ */
+function number_format(number, decimals, dec_point, thousands_sep)
 {
-    return Math[n > 0 ? "floor" : "ceil"](n);
+    number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+    var n    = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep  = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec  = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s    = '',
+        toFixedFix = function(n, prec) {
+          var k = Math.pow(10, prec);
+          return '' + (Math.round(n * k) / k)
+            .toFixed(prec);
+        };
+
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+    if (s[0].length > 3)
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    
+    if ((s[1] || '').length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    
+    return s.join(dec);
 }
 
 //calcul l'avancement/le remplissage du questionnaire
@@ -80,7 +111,7 @@ function calcAvancement()
             nbQuestions++;
         });
 
-        avancement = nbQuestions > 0 ? truncate((nbQuestionsAnswered * 100) / nbQuestions) : 0;
+        avancement = nbQuestions > 0 ? number_format((nbQuestionsAnswered * 100) / nbQuestions, 0) : 0;
 
         //update liste
         avancement = avancement < 100 ? '<span class="text-muted">'+avancement+'%</span>' : '<span class="text-success"><i class="fa fa-check"></i></span>';
@@ -91,8 +122,10 @@ function calcAvancement()
         totalQuestionsAnswered += nbQuestionsAnswered;
     });
 
-    avancementTotal = totalQuestions > 0 ? truncate((totalQuestionsAnswered * 100) / totalQuestions) : 0;
+    avancementTotal = totalQuestions > 0 ? number_format((totalQuestionsAnswered * 100) / totalQuestions, 0) : 0;
     $('#autodiag .progress-bar').css('width', avancementTotal + '%');
+    $('#autodiag .progress-bar').html(avancementTotal + '%');
+    $('#autodiag .progress-bar').attr('aria-valuenow', avancementTotal);
     $('#autodiag #remplissage').val( avancementTotal );
 }
 

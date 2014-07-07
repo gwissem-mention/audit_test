@@ -145,7 +145,8 @@ class FrontController extends Controller
             $pdfName = $resultat->getPdf();
             $resultat->setPdf( null );
 
-            unlink(__ROOT_DIRECTORY__ . '/files/autodiag/' . $pdfName);
+            if( file_exists(__ROOT_DIRECTORY__ . '/files/autodiag/' . $pdfName) )
+                unlink(__ROOT_DIRECTORY__ . '/files/autodiag/' . $pdfName);
         }
 
         //cas user connecté

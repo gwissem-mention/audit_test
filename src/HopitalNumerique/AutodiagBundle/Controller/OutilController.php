@@ -239,7 +239,7 @@ class OutilController extends Controller
                         $row['outil']      = $outil->getTitle();
                         $row['question']   = $question->getTexte();
                         $row['lastSave']   = $resultat->getDateLastSave()->format('d/m/Y');
-                        $row['validation'] = $resultat->getDateValidation()->format('d/m/Y');
+                        $row['validation'] = !is_null($resultat->getDateValidation()) ? $resultat->getDateValidation()->format('d/m/Y') : '';
                         $row['chapitre1']  = $question->getChapitre()->getTitle();
                         $row['chapitre0']  = !is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getParent()->getTitle() : '';
 
