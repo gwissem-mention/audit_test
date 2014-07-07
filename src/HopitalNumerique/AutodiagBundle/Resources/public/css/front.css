@@ -29,7 +29,8 @@
     #autodiag .content .badge-primary{background-color:#6f3596; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
     #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer}
     #autodiag .content .radio{float: left; margin-right: 30px;}
-    #autodiag .content .save{margin: 20px auto; display: block; width: 200px; }
+    #autodiag .content .saveBtns{margin: 20px auto; width: 410px }
+    #autodiag .content .saveBtns .btn{ width: 200px; text-align: center}
     #autodiag .content .sous-chapitre label{padding-left:40px;}
 
     #autodiag .stepy-navigator{}
