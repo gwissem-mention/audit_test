@@ -2,7 +2,7 @@
 
 <div id="resultats">
     <div class="col-md-12">
-        <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-save"></i></a>
+        <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download"></i></a>
         <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
 
         {% if pdf %}
@@ -32,7 +32,7 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title">{{panel.title}}</h3>
                                     <div class="options">
-                                        Mon résultat : {{panel.value|number_format(0)}}%
+                                        Mon résultat : {{panel.value|number_format(0)}}
 
                                         {% set tauxChapitre = panel.taux|number_format(0) %}
                                         {% if tauxChapitre <= 33 %}
@@ -58,9 +58,9 @@
                                         <div class="progress-bar progress-bar-success" style="width: 33.3%">
                                             Fort
                                         </div>
-                                        <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(0)}}%"{% endif %} data-position="{{panel.value|number_format(0)}}%" title="<span>Mon résultat : {{panel.value|number_format(0)}}%</span>" ></div>
+                                        <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(0)}}%"{% endif %} data-position="{{panel.value|number_format(0)}}%" title="<span>Mon résultat : {{panel.value|number_format(0)}}</span>" ></div>
                                         {% if pdf %}
-                                            <div class="cursor-value" style="left:{{panel.value|number_format(0)}}%">{{panel.value|number_format(0)}}%</div>
+                                            <div class="cursor-value" style="left:{{panel.value|number_format(0)}}%">{{panel.value|number_format(0)}}</div>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -290,10 +290,6 @@
         </div>
     </div>
 </div>
-
-<script>
-    
-</script>
 
 {# Construit les lignes associées aux résultats #}
 {% macro buildQuestion(question, publications) %}

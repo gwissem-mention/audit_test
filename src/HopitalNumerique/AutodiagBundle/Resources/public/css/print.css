@@ -5,7 +5,7 @@ body{background-color :#fff;}
 #header, #footer, #menu, #sommaire, #mesrequetes, .print {display: none}
 img{ width:auto !important }
 
-#resultats{width:100%;}
+#resultats{width:700px;}
 #resultats h1{float:right;}
 #resultats #graphiques{width: 100%}
 #resultats #graphiques, #chapitres 
