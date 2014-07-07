@@ -5,6 +5,16 @@ services:
             - @security.context
             - @nodevo_role.manager.role
 
+    ccdn_forum_forum.component.event_listener.subscriber:
+            class: %ccdn_forum_forum.component.event_listener.subscriber.class%
+            arguments:
+                - @ccdn_forum_forum.model.subscription
+                - @security.context
+                - @nodevo_mail.manager.mail
+                - @mailer
+            tags:
+                - { name: kernel.event_subscriber }
+
 ccdn_forum_forum:
     template:
         engine:               twig
@@ -163,6 +173,8 @@ ccdn_forum_forum:
         event_listener:
             flash:
                 class:                HopitalNumerique\ForumBundle\Component\Dispatcher\Listener\FlashListener
+            subscriber:
+                class:                HopitalNumerique\ForumBundle\Component\Dispatcher\Listener\SubscriberListener
         helper:
             role:
                 class:                HopitalNumerique\ForumBundle\Component\Helper\RoleHelper
