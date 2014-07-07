@@ -16,6 +16,6 @@ services:
     #--Type
     nodevo_contact.form.type.contact:
         class: "%nodevo_contact.form.type.contact%"
-        arguments: ["@nodevo_contact.manager.contact", "@validator"]
+        arguments: ["@nodevo_contact.manager.contact", "@validator", "@security.context"]
         tags:
             - { name: form.type, alias: nodevo_contact_contact }

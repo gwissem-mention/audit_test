@@ -14,10 +14,12 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class ContactType extends AbstractType
 {
     private $_constraints = array();
+    protected $_securityContext;
 
-    public function __construct($manager, $validator)
+    public function __construct($manager, $validator, $securityContext)
     {
-        $this->_constraints = $manager->getConstraints( $validator );
+        $this->_constraints     = $manager->getConstraints( $validator );
+        $this->_securityContext = $securityContext;
     }
 
     /**
@@ -30,22 +32,26 @@ class ContactType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $user = $this->_securityContext->getToken()->getUser();
+
         $builder
             ->add('prenom', 'text', array(
-                'max_length' => $this->_constraints['prenom']['maxlength'],
-                'required' => true, 
-                'label'    => 'Prénom',
-                'attr'        => array(
-                        'class' => $this->_constraints['prenom']['class']
-                ),
+                        'max_length' => $this->_constraints['prenom']['maxlength'],
+                        'required'   => true, 
+                        'label'      => 'Prénom',
+                        'attr'       => array(
+                        'class'      => $this->_constraints['prenom']['class']
+                        ),
+                        'data'       => ('anon.' != $user && !is_null($user->getPrenom())) ? $user->getPrenom() : ''
             ))
             ->add('nom', 'text', array(
-                'max_length' => $this->_constraints['nom']['maxlength'],
-                'required' => true, 
-                'label'    => 'Nom',
-                'attr'        => array(
-                        'class' => $this->_constraints['nom']['class']
-                ),
+                        'max_length' => $this->_constraints['nom']['maxlength'],
+                        'required'   => true, 
+                        'label'      => 'Nom',
+                        'attr'       => array(
+                        'class'      => $this->_constraints['nom']['class']
+                        ),
+                        'data'       => ('anon.' != $user && !is_null($user->getNom())) ? $user->getNom() : ''
             ))
             ->add('mail', 'repeated', array(
                     'type'           => 'text',
@@ -57,30 +63,18 @@ class ContactType extends AbstractType
                             'attr' => array(
                                     'autocomplete' => 'off',
                                     'class' => $this->_constraints['mail']['class']
-                            )),
+                            ),
+                            'data'       => ('anon.' != $user && !is_null($user->getEmail())) ? $user->getEmail() : ''
+                            ),
                     'second_options' => array(
                             'label' => 'Confirmer l\'adresse email',
                             'max_length' => $this->_constraints['mail']['maxlength'],
                             'attr' => array(
                                     'autocomplete' => 'off',
                                     'class' => $this->_constraints['mail']['class'] . 'validate[equals[hopital_numerique_contact_contact_mail_first]]'
-                            ))
-            ))
-            ->add('ville', 'text', array(
-                    'max_length' => $this->_constraints['ville']['maxlength'],
-                    'required' => false,
-                    'label'    => 'Ville',
-                    'attr'        => array(
-                            'class' => $this->_constraints['ville']['class']
-                    ),
-            ))
-            ->add('codepostal', 'text', array(
-                'max_length' => $this->_constraints['codepostal']['maxlength'],
-                'required' => false, 
-                'label'    => 'Code Postal',
-                'attr'        => array(
-                        'class' => $this->_constraints['codepostal']['class']
-                ),
+                            ),
+                            'data'       => ('anon.' != $user && !is_null($user->getEmail())) ? $user->getEmail() : ''
+                            ),
             ))
             ->add('telephone', 'text', array(
                     'max_length' => $this->_constraints['telephone']['maxlength'],
@@ -90,6 +84,7 @@ class ContactType extends AbstractType
                             'class' => $this->_constraints['telephone']['class'], 
                             'data-mask' => $this->_constraints['telephone']['mask']
                     ),
+                    'data'       => ('anon.' != $user && !is_null($user->getTelephoneDirect()) && !is_null($user->getTelephonePortable())) ? $user->getTelephoneDirect() . ' - ' . $user->getTelephonePortable() : ''
             ))
             ->add('message', 'textarea', array(
                     'required' => true,
@@ -97,7 +92,7 @@ class ContactType extends AbstractType
                     'attr'        => array(
                             'class' => $this->_constraints['message']['class'],
                             'rows'   => 8
-                    ),
+                    )
             ))
             
             ;
