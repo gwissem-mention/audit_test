@@ -50,9 +50,11 @@
                         <td>{{resultat.dateCreation|date('d/m/Y')}}</td>
                         <td>{{resultat.dateLastSave|date('d/m/Y')}}</td>
                         <td>{{resultat.tauxRemplissage}}%</td>
-                        <td class="btn-group">
-                            <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="btn btn-success" title="Continuer le questionnaire"><i class="fa fa-external-link"></i></a>
-                            <div class="btn btn-danger" onclick='deleteWithConfirm("{{ path('hopitalnumerique_autodiag_front_comptehn_delete', { 'id': resultat.id }) }}");' title="Vider mon questionnaire"><i class="fa fa-trash-o"></i></div>
+                        <td>
+                            <div class="btn-group" >
+                                <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="btn btn-success" title="Continuer le questionnaire"><i class="fa fa-external-link"></i></a>
+                                <div class="btn btn-danger" onclick='deleteWithConfirm("{{ path('hopitalnumerique_autodiag_front_comptehn_delete', { 'id': resultat.id }) }}");' title="Vider mon questionnaire"><i class="fa fa-trash-o"></i></div>
+                            </div>
                         </td>
                     </tr>
                 {% else %}
@@ -82,9 +84,11 @@
                         <td>{{resultat.outil.title}}</td>
                         <td>{{resultat.dateValidation|date('d/m/Y')}}</td>
                         
-                        <td class="btn-group">
-                            <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="btn btn-success" title="Télécharger le PDF du résultat"><i class="fa fa-download"></i></a>
-                            <div class="btn btn-danger" onclick='deleteWithConfirm("{{ path('hopitalnumerique_autodiag_front_comptehn_delete', { 'id': resultat.id }) }}");' title="Supprimer mes réponses"><i class="fa fa-trash-o"></i></div>
+                        <td>
+                            <div class="btn-group" >
+                                <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="btn btn-success" title="Télécharger le PDF du résultat"><i class="fa fa-download"></i></a>
+                                <div class="btn btn-danger" onclick='deleteWithConfirm("{{ path('hopitalnumerique_autodiag_front_comptehn_delete', { 'id': resultat.id }) }}");' title="Supprimer mes réponses"><i class="fa fa-trash-o"></i></div>
+                            </div>
                         </td>
                     </tr>
                 {% else %}
