@@ -66,7 +66,7 @@ $(document).ready(function() {
         },
         tooltip : {
             shared      : true,
-            pointFormat : '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}%</b><br/>'
+            pointFormat : '<span style="color:#333333">{series.name}: <b>{point.y:,.0f}</b><br/>'
         },
         plotOptions : {
             series : {
@@ -77,7 +77,7 @@ $(document).ready(function() {
             {
                 dataLabels: {
                     enabled: true,
-                    format: '{point.y:,.0f}%',
+                    format: '{point.y:,.0f}',
                     softConnector: true
                 },
                 name  : 'Mon résultat',
@@ -87,7 +87,7 @@ $(document).ready(function() {
             {
                 dataLabels: {
                     enabled: true,
-                    format: '{point.y:,.0f}%',
+                    format: '{point.y:,.0f}',
                     softConnector: true
                 },
                 name  : 'Valeur optimale préconisée par l\'ANAP',

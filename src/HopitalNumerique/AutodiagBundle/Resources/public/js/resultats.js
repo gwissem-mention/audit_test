@@ -82,7 +82,7 @@ $(document).ready(function() {
         },
         tooltip : {
             shared      : true,
-            pointFormat : '<span style="color:{series.color}; font-size:10px">{series.name} : {point.y:,.0f}%<br/>'
+            pointFormat : '<span style="color:#333333; font-size:10px">{series.name} : {point.y:,.0f}<br/>'
         },
         series : [
             {

@@ -60,7 +60,7 @@ class ObjetManager extends BaseManager
             $row['notes']        = $objet->getNotes()        ? 'Oui' : 'Non';
             $row['type']         = $objet->isArticle()       ? 'Article' : 'Objet';
             $row['nbVue']        = $objet->getNbVue();
-            $row['etat']         = $objet->getEtat()->getLibelle();
+            $row['etat']         = $objet->getEtat() ? $objet->getEtat()->getLibelle() : '';
             $row['fichier1']     = $objet->getPath();
             $row['fichier2']     = $objet->getPath2();
             $row['fichierEdit']  = $objet->getPathEdit();
