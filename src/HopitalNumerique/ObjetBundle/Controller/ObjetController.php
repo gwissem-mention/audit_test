@@ -260,12 +260,14 @@ class ObjetController extends Controller
                 $primaryKeys[] = $data['id'];
         }
 
-        $objets = $this->get('hopitalnumerique_objet.manager.objet')->getDatasForExport( $primaryKeys );
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $objets        = $this->get('hopitalnumerique_objet.manager.objet')->getDatasForExport( $primaryKeys, $refsPonderees );
 
         $colonnes = array( 
                             'id'                   => 'ID publication', 
                             'titre'                => 'Titre publication',
                             'alias'                => 'Alias publication',
+                            'note'                 => 'Note référencement',
                             'commentaires'         => 'Commentaires autorisé ?',
                             'notes'                => 'Notes autorisé ?',
                             'dateCreation'         => 'Date de création de la publication',
@@ -285,6 +287,7 @@ class ObjetController extends Controller
                             'idC'                  => 'ID infra-doc',
                             'titreC'               => 'Titre infra-doc',
                             'aliasC'               => 'Alias infra-doc',
+                            'noteC'                => 'Note référencement de l\'infra-doc',
                             'orderC'               => 'Ordre de l\'infra-doc',
                             'dateCreationC'        => 'Date de création de l\'infra-doc',
                             'dateModificationC'    => 'Date de modification de l\'infra-doc',
