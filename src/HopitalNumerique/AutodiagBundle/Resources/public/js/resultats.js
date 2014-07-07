@@ -64,6 +64,9 @@ $(document).ready(function() {
             tickmarkPlacement : 'on',
             lineWidth         : 0
         },
+        legend:{
+            padding : 20
+        },
         yAxis : {
             gridLineInterpolation : 'polygon',
             lineWidth             : 0,
@@ -94,16 +97,16 @@ $(document).ready(function() {
     });
 
     //récupère les note des chapitres et applique la couleur
-    $('.total-chapitre').each(function(){
-        noteClass = $(this).attr('class').replace('total-chapitre text-center ','');
-        $('.chapitre-'+$(this).data('chapitre')).addClass( noteClass );
-    });
+    // $('.total-chapitre').each(function(){
+    //     noteClass = $(this).attr('class').replace('total-chapitre text-center ','');
+    //     $('.chapitre-'+$(this).data('chapitre')).addClass( noteClass );
+    // });
 
     //récupère les note des catégories et applique la couleur
-    $('.total-categorie').each(function(){
-        noteClass = $(this).attr('class').replace('total-categorie text-center ','');
-        $('.categorie-'+$(this).data('categorie')).addClass( noteClass );
-    });
+    // $('.total-categorie').each(function(){
+    //     noteClass = $(this).attr('class').replace('total-categorie text-center ','');
+    //     $('.categorie-'+$(this).data('categorie')).addClass( noteClass );
+    // });
 
     //récupère le total et applique la couleur
     noteClass = $('.last-note').attr('class').replace('last-note text-center ','');

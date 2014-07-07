@@ -5,7 +5,13 @@
         <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-save"></i></a>
         <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
 
+        {% if pdf %}
+            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="Logo anap" class="pull-left" />
+        {% endif %}
+
         <h1 class="text-center">{{resultat.outil.title}}</h1>
+
+        <div class="clearfix"></div>
 
         <h2 class="violet open" data-toggle="graphiques" >Résultats de l'outil - Graphiques</h2>
 
@@ -25,8 +31,17 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">{{panel.title}}</h3>
-                                    <div class="options" title="Taux remplissage : {{panel.taux|number_format(0)}}%">
-                                        Taux remplissage : {{panel.taux|number_format(0)}}%
+                                    <div class="options">
+                                        Mon résultat : {{panel.value|number_format(0)}}%
+
+                                        {% set tauxChapitre = panel.taux|number_format(0) %}
+                                        {% if tauxChapitre <= 33 %}
+                                            <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-3.png')}}" alt="Taux Remplissage" title="Taux remplissage : {{tauxChapitre}}%" />
+                                        {% elseif tauxChapitre <= 66 %}
+                                            <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-2.png')}}" alt="Taux Remplissage" title="Taux remplissage : {{tauxChapitre}}%" />
+                                        {% else %}
+                                            <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-1.png')}}" alt="Taux Remplissage" title="Taux remplissage : {{tauxChapitre}}%" />
+                                        {% endif %}
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -89,7 +104,7 @@
 
                                     <tr>
                                         <td class="vertical-align categorie-{{id}}" rowspan="3"><b>{{categorie.title|capitalize}}</b></td>
-                                        <td>Nombre de questions</td>
+                                        <td>Nombre de réponses</td>
                                         {% for datas in categorie['chapitres'] %}
                                             <td class="text-center">
                                                 {{datas['nbRep']}}
@@ -137,7 +152,7 @@
                                 {% endfor %}
                                 <tr>
                                     <td class="title-total vertical-align" rowspan="3"><b>Total</b></td>
-                                    <td>Nombre de questions</td>
+                                    <td>Nombre de réponses</td>
                                     {% set nbRepTotal = 0 %}
                                     {% for datas in chart.datas.totauxChapitres %}
                                         <td class="text-center">

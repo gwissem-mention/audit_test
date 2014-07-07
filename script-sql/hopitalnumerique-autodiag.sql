@@ -14,8 +14,7 @@ UPDATE `hn_objet` SET `obj_autodiag` = 'a:0:{}';
 /* Items de menu pour les autodiag */
 INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
 VALUES
-    (150, 68, 3, 'Autodiagnostics', 'hopitalnumerique_autodiag_front_comptehn', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
-    (151, NULL, 4, 'Autodiagnostics', 'hopitalnumerique_autodiag_front_comptehn', NULL, NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 12);
+    (NULL, 68, 3, 'Autodiagnostics', 'hopitalnumerique_autodiag_front_comptehn', NULL, NULL, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1);
 
 /* Références résultat */
 INSERT INTO `hn_reference` (`ref_id`, `parent_id`, `ref_libelle`, `ref_code`, `ref_etat`, `ref_dictionnaire`, `ref_recherche`, `ref_lock`, `ref_order`)
