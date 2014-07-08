@@ -35,6 +35,8 @@ class ContactType extends NodevoContactType
     {
         parent::buildForm($builder, $options);
         
+        $user = $this->_securityContext->getToken()->getUser();
+        
         $builder
 
         ->add('civilite', 'entity', array(
@@ -44,6 +46,7 @@ class ContactType extends NodevoContactType
                 'label'         => 'Civilite',
                 'empty_value'   => ' - ',
                 'attr'          => array('class' => $this->_constraints['civilite']['class'] ),
+                'data'          => ('anon.' != $user && !is_null($user->getCivilite())) ? $user->getCivilite() : '',
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
                         ->where('ref.code = :etat')

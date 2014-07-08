@@ -84,7 +84,7 @@ class ContactType extends AbstractType
                             'class' => $this->_constraints['telephone']['class'], 
                             'data-mask' => $this->_constraints['telephone']['mask']
                     ),
-                    'data'       => ('anon.' != $user && !is_null($user->getTelephoneDirect()) && !is_null($user->getTelephonePortable())) ? $user->getTelephoneDirect() . ' - ' . $user->getTelephonePortable() : ''
+                    'data'       => ('anon.' != $user && !is_null($user->getTelephoneDirect())) ? $user->getTelephoneDirect() : ''
             ))
             ->add('message', 'textarea', array(
                     'required' => true,
