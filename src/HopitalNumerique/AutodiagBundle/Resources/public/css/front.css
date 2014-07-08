@@ -24,6 +24,7 @@
     #autodiag p.text-muted{font-size: 12px}
     #autodiag .content{background-color: #f8f8f8; padding-bottom: 20px}
     #autodiag .content .emptyChapter{margin-top:10px;}
+    #autodiag .content .chapitreNonConcerne{margin-top:10px; margin-right:10px;}
     #autodiag .content form{clear:both;}
     #autodiag .content h2{color:#6f3596; text-transform: uppercase;}
     #autodiag .content h3{color:#6f3596; margin-bottom: 20px; font-size: 18px}

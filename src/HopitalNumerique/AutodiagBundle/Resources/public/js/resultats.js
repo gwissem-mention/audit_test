@@ -43,7 +43,7 @@ $(document).ready(function() {
     var nonConcernes = [];
     $(datas).each(function(index, element ){
         if( element.value != 'NC' ){
-            categories.push( element.title + ' (Taux de remplissage: '+ element.taux+'%)' );
+            categories.push( '<b>' + element.title + '</b> (Taux de remplissage: '+ element.taux+'%)' );
             values.push( element.value );
             optimale.push( element.opti );
         }else
@@ -104,10 +104,20 @@ $(document).ready(function() {
             },
             series : [
                 {
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y:,.0f}%',
+                        softConnector: true
+                    },
                     name  : 'Score',
                     color : '#d9edf7',
                     data  : values
                 }, {
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y:,.0f}%',
+                        softConnector: true
+                    },
                     name  : 'Valeur optimale préconisée par l\'ANAP',
                     data  : optimale,
                     color : '#6f3596',
