@@ -121,13 +121,13 @@
                                         <td class="text-center">Nombre de points</td>
                                         {% for datas in categorie['chapitres'] %}
                                             <td class="text-center">
-                                                {{datas['nbPoints']}} sur {{datas['max']}}
+                                                {{datas['nbPoints']}} / {{datas['max']}}
                                             </td>
                                             {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
                                             {% set maxCateg = maxCateg + datas['max'] %}
                                         {% endfor %}
                                         <td class="text-center">
-                                            {{nbPointsCateg}} sur {{maxCateg}}
+                                            {{nbPointsCateg}} / {{maxCateg}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -174,13 +174,13 @@
                                         {% set maxTotal = 0 %}
                                         {% for datas in chart.datas.totauxChapitres %}
                                             <td class="text-center">
-                                                {{datas['nbPoints']}} sur {{datas['max']}}
+                                                {{datas['nbPoints']}} / {{datas['max']}}
                                             </td>
                                             {% set nbPointsTotal = nbPointsTotal + datas['nbPoints'] %}
                                             {% set maxTotal = maxTotal + datas['max'] %}
                                         {% endfor %}
                                         <td class="text-center">
-                                            {{nbPointsTotal}} sur {{maxTotal}}
+                                            {{nbPointsTotal}} / {{maxTotal}}
                                         </td>
                                     </tr>
                                     <tr>
