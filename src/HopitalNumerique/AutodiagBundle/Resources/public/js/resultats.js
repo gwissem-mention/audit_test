@@ -102,7 +102,7 @@ $(document).ready(function() {
         },
         series : [
             {
-                name  : 'Mon résultat',
+                name  : 'Score',
                 color : '#d9edf7',
                 data  : values
             }, {

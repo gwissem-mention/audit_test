@@ -96,7 +96,7 @@ $(document).ready(function() {
                     format: '{point.y:,.0f}%',
                     softConnector: true
                 },
-                name  : 'Mon résultat',
+                name  : 'Score',
                 color : '#d9edf7',
                 data  : values
             },
