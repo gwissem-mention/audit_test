@@ -31,10 +31,10 @@ $(document).ready(function() {
     /* Créer le Spider Chart */
     $('#radarChart').highcharts({
         chart : {
-            polar : true,
-            type  : 'area',
-            width : 800,
-            animation: false
+            polar     : true,
+            type      : 'area',
+            width     : 700,
+            animation : false
         },
         title : {
             text : null
@@ -43,7 +43,7 @@ $(document).ready(function() {
             enabled : false
         },
         pane : {
-            size : '90%'
+            size : '78%'
         },
         xAxis : {
             categories        : categories,
