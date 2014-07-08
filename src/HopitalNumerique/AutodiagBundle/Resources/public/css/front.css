@@ -58,10 +58,11 @@
         #resultats #chapitres .sous-chapitre .question{padding-left:40px;}
 
     /* Graphiques */
-        #resultats #graphiques .panel .panel-heading{padding:7px 15px; }
+        #resultats #graphiques .panel .panel-heading{padding:7px 15px; height: 35px}
         #resultats #graphiques .panel .panel-heading h3.panel-title{margin-bottom: 0; font-size: 14px; float: left; font-weight: bold}
         #resultats #graphiques .panel .panel-heading .options{float:right;}
         #resultats #graphiques .panel .panel-heading .options img{margin-bottom: 4px; margin-left:5px;}
+        #resultats #graphiques .panel .panel-body{height: 65px}
         #resultats #graphiques .panel .progress{position: relative; height: 30px; margin-bottom: 0; overflow: visible;}
         #resultats #graphiques .panel .progress .progress-bar{color:#000000 !important; font-weight: bold!important}
         #resultats #graphiques .panel .progress .progress-bar-danger{background:#f2dede !important; }

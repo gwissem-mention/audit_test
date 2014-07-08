@@ -25,14 +25,14 @@
             {% if graphiques['barre'] is defined %}
                 {% set chart = graphiques['barre'] %}
                 <h3>{{chart.title|capitalize}}</h3>
-                <div class="row">
+                <div class="row" id="graphiques-barres" >
                     {% for panel in chart.panels %}
                         <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">{{panel.title}}</h3>
                                     <div class="options">
-                                        {% if panel.value != 'NC' %}
+                                        {% if panel.value|checkNC %}
                                             Score : {{panel.value|number_format(0)}}%
 
                                             {% set tauxChapitre = panel.taux|number_format(0) %}
@@ -52,7 +52,7 @@
 
                                 <div class="panel-body">
                                     <h3 class="toPrint">{{panel.title}}</h3>
-                                    {% if panel.value != 'NC' %}
+                                    {% if panel.value|checkNC %}
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-danger" style="width: 33.3%">
                                                 Faible

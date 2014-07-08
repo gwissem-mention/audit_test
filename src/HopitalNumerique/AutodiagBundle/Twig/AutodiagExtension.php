@@ -25,7 +25,8 @@ class AutodiagExtension extends \Twig_Extension
     {
         return array(
             'getPublicationsForQuestion' => new \Twig_Filter_Method($this, 'getPublicationsForQuestion'),
-            'getPublicationsForChapitre' => new \Twig_Filter_Method($this, 'getPublicationsForChapitre')
+            'getPublicationsForChapitre' => new \Twig_Filter_Method($this, 'getPublicationsForChapitre'),
+            'checkNC' => new \Twig_Filter_Method($this, 'checkNC')
         );
     }
 
@@ -57,6 +58,10 @@ class AutodiagExtension extends \Twig_Extension
         return $this->buildRefs( $chapitre->getReferences(), $pdf );
     }
 
+    public function checkNC( $value )
+    {
+        return $value !== 'NC';
+    }
 
 
 

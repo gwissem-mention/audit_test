@@ -466,7 +466,7 @@ class ResultatManager extends BaseManager
 
                 $chapitreConcerne = true;
             }   
-        }
+        }        
 
         if( $chapitreConcerne === false )
             return 'NC';
