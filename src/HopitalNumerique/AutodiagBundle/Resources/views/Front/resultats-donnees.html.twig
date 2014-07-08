@@ -110,6 +110,7 @@
                             <tbody>
                                 {% for id,categorie in chart.datas.categories %}
                                     {% set nbRepCateg = 0 %}
+                                    {% set nbQueCateg = 0 %}
                                     {% set nbPointsCateg = 0 %}
                                     {% set maxCateg = 0 %}
 
@@ -119,9 +120,10 @@
                                         {% for datas in categorie['chapitres'] %}
                                             {% if not datas['nc'] %}
                                                 <td class="text-center">
-                                                    {{datas['nbRep']}}
+                                                    {{datas['nbRep']}} / {{datas['nbQue']}}
                                                 </td>
                                                 {% set nbRepCateg = nbRepCateg + datas['nbRep'] %}
+                                                {% set nbQueCateg = nbQueCateg + datas['nbQue'] %}
                                             {% else %}
                                                 <td class="text-center vertical-align" rowspan="3">
                                                     - Non diagnostiqué -
@@ -129,7 +131,7 @@
                                             {% endif %}
                                         {% endfor %}
                                         <td class="text-center">
-                                            {{nbRepCateg}}
+                                            {{nbRepCateg}} / {{nbQueCateg}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -177,12 +179,14 @@
                                         <td class="text-center title-total vertical-align" rowspan="3"><b>Total</b></td>
                                         <td class="text-center">Nombre de réponses</td>
                                         {% set nbRepTotal = 0 %}
+                                        {% set nbQueTotal = 0 %}
                                         {% for datas in chart.datas.totauxChapitres %}
                                             {% if not datas['nc'] %}
                                                 <td class="text-center">
-                                                    {{datas['nbRep']}}
+                                                    {{datas['nbRep']}} / {{datas['nbQue']}}
                                                 </td>
                                                 {% set nbRepTotal = nbRepTotal + datas['nbRep'] %}
+                                                {% set nbQueTotal = nbQueTotal + datas['nbQue'] %}
                                             {% else %}
                                                 <td class="text-center vertical-align" rowspan="3">
                                                     - Non diagnostiqué -
@@ -190,7 +194,7 @@
                                             {% endif %}
                                         {% endfor %}
                                         <td class="text-center">
-                                            {{nbRepTotal}}
+                                            {{nbRepTotal}} / {{nbQueTotal}}
                                         </td>
                                     </tr>
                                     <tr>

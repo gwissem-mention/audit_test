@@ -262,25 +262,30 @@ class ResultatManager extends BaseManager
 
                     //Add Chapitre if not exist
                     if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitre] )  )
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true );
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true );
                     if ( !isset($totalChapitres[ $chapitre ]) )
-                        $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true );
+                        $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true );
 
                     //check If Question is concernée
                     if( isset($questionsReponses[ $question->getId() ]) ){
                         $one   = $questionsReponses[ $question->getId() ];
-                        $value = $one->tableValue;
 
                         //update Chapitre
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbRep']++;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints'] += ($value * $one->ponderation);
+                        if( $one->tableValue != '' )
+                            $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbRep']++;
+
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbQue']++;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints'] += ($one->tableValue * $one->ponderation);
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']      += ($one->max * $one->ponderation);
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['pond']     += $one->ponderation;
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['nc']        = false;
 
                         //update Total
-                        $totalChapitres[ $chapitre ]['nbRep']++;
-                        $totalChapitres[ $chapitre ]['nbPoints'] += ($value * $one->ponderation);
+                        if( $one->tableValue != '' )
+                            $totalChapitres[ $chapitre ]['nbRep']++;
+                        
+                        $totalChapitres[ $chapitre ]['nbQue']++;
+                        $totalChapitres[ $chapitre ]['nbPoints'] += ($one->tableValue * $one->ponderation);
                         $totalChapitres[ $chapitre ]['max']      += ($one->max * $one->ponderation);
                         $totalChapitres[ $chapitre ]['pond']     += $one->ponderation;
                         $totalChapitres[ $chapitre ]['nc']        = false;
