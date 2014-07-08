@@ -93,7 +93,7 @@ $(document).ready(function() {
             {
                 dataLabels: {
                     enabled: true,
-                    format: '{point.y:,.0f}',
+                    format: '{point.y:,.0f}%',
                     softConnector: true
                 },
                 name  : 'Mon résultat',
@@ -103,7 +103,7 @@ $(document).ready(function() {
             {
                 dataLabels: {
                     enabled: true,
-                    format: '{point.y:,.0f}',
+                    format: '{point.y:,.0f}%',
                     softConnector: true
                 },
                 name  : 'Valeur optimale préconisée par l\'ANAP',
