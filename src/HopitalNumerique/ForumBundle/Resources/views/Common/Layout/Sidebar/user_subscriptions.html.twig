@@ -30,7 +30,10 @@
 			{%- endif -%}
 		{%- endif -%}
 
-
+		
+	    {%- spaceless -%}
+	    {%- include 'HopitalNumeriqueForumBundle:Common:Layout/Sidebar/user_forum.html.twig' -%}
+	    {%- endspaceless -%}
 
 		{%- if is_granted('ROLE_USER') -%}
 			{%- if route|slice(0,28) == 'ccdn_forum_user_subscription' -%}
