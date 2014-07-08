@@ -47,12 +47,12 @@
 
             <div class="options">
                 <div class="btn-toolbar">
-                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success btn-sm" title="Résultats" ><i class="fa fa-bar-chart-o"></i></div>
+                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success" title="Résultats" ><i class="fa fa-bar-chart-o"></i></div>
                     {% if app.user %}
-                        <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary btn-sm save" title="Enregistrer"><i class="fa fa-save"></i></div>
+                        <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary save" title="Enregistrer"><i class="fa fa-save"></i></div>
                     {% endif %}
                     {% if reponses %}
-                        <div onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger btn-sm" title="Vider le questionnaire"><i class="fa fa-trash-o"></i></div>
+                        <div onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger" title="Vider le questionnaire"><i class="fa fa-trash-o"></i></div>
                     {% endif %}
                 </div>
             </div>
@@ -82,6 +82,7 @@
                             {% if reponses %}
                                 <div onclick="emptyChapter(this);" class="emptyChapter btn btn-default btn-sm pull-right" title="Vider le chapitre"><i class="fa fa-trash-o"></i></div>
                             {% endif %}
+                            <div onclick="chapterNonConcerne(this);" class="chapitreNonConcerne btn btn-default btn-sm pull-right" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></div>
                             <h2>{{parent.title}}</h2>
 
                             <hr>

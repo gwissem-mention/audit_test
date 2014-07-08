@@ -170,3 +170,23 @@ function emptyChapter( that )
 
     calcAvancement();
 }
+
+//Met tout le chapitre en non concerné
+function chapterNonConcerne( that )
+{
+    //empty select
+    $(that).parent().find('.form-control').each(function(){
+        if( $(this).is('select') )
+            $(this).val( -1 );
+    });
+
+    //empty radios
+    $(that).parent().find('.radio').each(function(){
+        if( $(this).find('input').val() !== -1 )
+            $(this).find('input').prop('checked', '');
+        else
+            $(this).find('input').prop('checked', 'checked');
+    });
+
+    calcAvancement();
+}
