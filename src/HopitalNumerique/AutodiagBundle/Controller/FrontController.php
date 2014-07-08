@@ -314,7 +314,10 @@ class FrontController extends Controller
         $options = array(
             'encoding'         => 'UTF-8',
             'javascript-delay' => 500,
-            'footer-center'    => 'Page [page] sur [toPage]'
+            'footer-center'    => 'Page [page] sur [toPage]
+
+            ', //ATTENTION : ne pas retirer ces sauts de ligne, il s'agit un hack pour le PDF
+            'margin-bottom'    => 0,
         );
 
         $html = str_replace('/publication', $request->getSchemeAndHttpHost() . '/publication', $html);
