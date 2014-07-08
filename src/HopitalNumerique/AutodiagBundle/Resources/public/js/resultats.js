@@ -63,56 +63,59 @@ $(document).ready(function() {
     }
 
     /* Créer le Spider Chart */
-    $('#radarChart').highcharts({
-        chart : {
-            polar : true,
-            type  : 'area'
-        },
-        title : {
-            text : null
-        },
-        credits : {
-            enabled : false
-        },
-        pane : {
-            size : '90%'
-        },
-        xAxis : {
-            categories        : categories,
-            tickmarkPlacement : 'on',
-            lineWidth         : 0
-        },
-        legend:{
-            padding : 20
-        },
-        yAxis : {
-            gridLineInterpolation : 'polygon',
-            lineWidth             : 0,
-            min                   : 0,
-            max                   : 100,
-            tickInterval          : 20,
-            gridLineDashStyle     : 'Dash',
-            labels                : {
+    if( categories.length > 0 ) {
+        $('#radarChart').highcharts({
+            chart : {
+                polar  : true,
+                type   : 'area',
+                height : 700
+            },
+            title : {
+                text : null
+            },
+            credits : {
                 enabled : false
-            }
-        },
-        tooltip : {
-            shared      : true,
-            pointFormat : '<span style="color:#333333; font-size:10px">{series.name} : {point.y:,.0f}%<br/>'
-        },
-        series : [
-            {
-                name  : 'Score',
-                color : '#d9edf7',
-                data  : values
-            }, {
-                name  : 'Valeur optimale préconisée par l\'ANAP',
-                data  : optimale,
-                color : '#6f3596',
-                type  : 'line'
-            }
-        ]
-    });
+            },
+            pane : {
+                size : '90%'
+            },
+            xAxis : {
+                categories        : categories,
+                tickmarkPlacement : 'on',
+                lineWidth         : 0
+            },
+            legend:{
+                padding : 20
+            },
+            yAxis : {
+                gridLineInterpolation : 'polygon',
+                lineWidth             : 0,
+                min                   : 0,
+                max                   : 100,
+                tickInterval          : 20,
+                gridLineDashStyle     : 'Dash',
+                labels                : {
+                    enabled : false
+                }
+            },
+            tooltip : {
+                shared      : true,
+                pointFormat : '<span style="color:#333333; font-size:10px">{series.name} : {point.y:,.0f}%<br/>'
+            },
+            series : [
+                {
+                    name  : 'Score',
+                    color : '#d9edf7',
+                    data  : values
+                }, {
+                    name  : 'Valeur optimale préconisée par l\'ANAP',
+                    data  : optimale,
+                    color : '#6f3596',
+                    type  : 'line'
+                }
+            ]
+        });
+    }
 
     //récupère le total et applique la couleur
     noteClass = $('.last-note').attr('class').replace('last-note text-center ','');
