@@ -255,42 +255,37 @@ class ResultatManager extends BaseManager
             $questions = $categorie->getQuestions();
             foreach($questions as $question)
             {
-                //check If Question != texte and != Non concerné
-                if( isset($questionsReponses[ $question->getId() ]) ){
-                    $one   = $questionsReponses[ $question->getId() ];
-                    $value = $one->tableValue;
+                //check If Question != texte
+                if( $question->getType()->getId() != 417 ) {
+                    //get parent chapitre ID
+                    $chapitre = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getId() : $question->getChapitre()->getParent()->getId();
 
-                    if( ($one->type != 417 && $value !== 0) || $value != -1 ){
-                        //get parent chapitre ID
-                        $chapitre = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getId() : $question->getChapitre()->getParent()->getId();
+                    //Add Chapitre if not exist
+                    if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitre] )  )
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true );
+                    if ( !isset($totalChapitres[ $chapitre ]) )
+                        $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true );
 
-                        //Add Chapitre if not exist
-                        if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitre] )  )
-                            $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0 );
-                        if ( !isset($totalChapitres[ $chapitre ]) )
-                            $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0 );
+                    //check If Question is concernée
+                    if( isset($questionsReponses[ $question->getId() ]) ){
+                        $one   = $questionsReponses[ $question->getId() ];
+                        $value = $one->tableValue;
 
                         //update Chapitre
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbRep']++;
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints'] += ($value * $one->ponderation);
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']      += ($one->max * $one->ponderation);
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['pond']     += $one->ponderation;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nc']        = false;
 
                         //update Total
                         $totalChapitres[ $chapitre ]['nbRep']++;
                         $totalChapitres[ $chapitre ]['nbPoints'] += ($value * $one->ponderation);
                         $totalChapitres[ $chapitre ]['max']      += ($one->max * $one->ponderation);
                         $totalChapitres[ $chapitre ]['pond']     += $one->ponderation;
+                        $totalChapitres[ $chapitre ]['nc']        = false;
                     }
-                }
-            }
-
-            //Set Default Values for Empty Cells
-            foreach($chapitresOrdered as $one){
-                if( !isset($results->categories[ $categorieId ]['chapitres'][$one->id]) ){
-                    $results->categories[ $categorieId ]['chapitres'][$one->id] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0 );
-                    $totalChapitres[ $one->id ] = array( 'nbRep' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0 );
-                }
+                }                
             }
         }
 
@@ -447,11 +442,14 @@ class ResultatManager extends BaseManager
     {
         $sommeValues       = 0;
         $sommePonderations = 0;
+        $chapitreConcerne  = false;
 
         $questions = $chapitre->questionsForCharts;
         foreach($questions as $question){
             $sommeValues       += ($question->value * $question->ponderation);
             $sommePonderations += $question->ponderation;
+
+            $chapitreConcerne = true;
         }
 
         $childs = $chapitre->childs;
@@ -460,8 +458,13 @@ class ResultatManager extends BaseManager
             foreach($questions as $question){
                 $sommeValues       += ($question->value * $question->ponderation);
                 $sommePonderations += $question->ponderation;
+
+                $chapitreConcerne = true;
             }   
         }
+
+        if( $chapitreConcerne === false )
+            return 'NC';
 
         return $sommePonderations != 0 ? ($sommeValues / $sommePonderations) : 0;
     }

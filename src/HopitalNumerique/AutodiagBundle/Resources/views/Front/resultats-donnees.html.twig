@@ -32,15 +32,17 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title">{{panel.title}}</h3>
                                     <div class="options">
-                                        Mon résultat : {{panel.value|number_format(0)}}
+                                        {% if panel.value != 'NC' %}
+                                            Mon résultat : {{panel.value|number_format(0)}}
 
-                                        {% set tauxChapitre = panel.taux|number_format(0) %}
-                                        {% if tauxChapitre <= 33 %}
-                                            <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-3.png')}}" alt="Taux Remplissage" title="Taux remplissage : {{tauxChapitre}}%" />
-                                        {% elseif tauxChapitre <= 66 %}
-                                            <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-2.png')}}" alt="Taux Remplissage" title="Taux remplissage : {{tauxChapitre}}%" />
-                                        {% else %}
-                                            <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-1.png')}}" alt="Taux Remplissage" title="Taux remplissage : {{tauxChapitre}}%" />
+                                            {% set tauxChapitre = panel.taux|number_format(0) %}
+                                            {% if tauxChapitre <= 33 %}
+                                                <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-3.png')}}" alt="Taux Remplissage" title="Taux remplissage : {{tauxChapitre}}%" />
+                                            {% elseif tauxChapitre <= 66 %}
+                                                <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-2.png')}}" alt="Taux Remplissage" title="Taux remplissage : {{tauxChapitre}}%" />
+                                            {% else %}
+                                                <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-1.png')}}" alt="Taux Remplissage" title="Taux remplissage : {{tauxChapitre}}%" />
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                     <div class="clearfix"></div>
@@ -48,21 +50,25 @@
 
                                 <div class="panel-body">
                                     <h3 class="toPrint">{{panel.title}}</h3>
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-danger" style="width: 33.3%">
-                                            Faible
+                                    {% if panel.value != 'NC' %}
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-danger" style="width: 33.3%">
+                                                Faible
+                                            </div>
+                                            <div class="progress-bar progress-bar-warning" style="width: 33.3%">
+                                                Moyen
+                                            </div>
+                                            <div class="progress-bar progress-bar-success" style="width: 33.3%">
+                                                Fort
+                                            </div>
+                                            <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(0)}}%"{% endif %} data-position="{{panel.value|number_format(0)}}%" title="<span>Mon résultat : {{panel.value|number_format(0)}}</span>" ></div>
+                                            {% if pdf %}
+                                                <div class="cursor-value" style="left:{{panel.value|number_format(0)}}%">{{panel.value|number_format(0)}}</div>
+                                            {% endif %}
                                         </div>
-                                        <div class="progress-bar progress-bar-warning" style="width: 33.3%">
-                                            Moyen
-                                        </div>
-                                        <div class="progress-bar progress-bar-success" style="width: 33.3%">
-                                            Fort
-                                        </div>
-                                        <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(0)}}%"{% endif %} data-position="{{panel.value|number_format(0)}}%" title="<span>Mon résultat : {{panel.value|number_format(0)}}</span>" ></div>
-                                        {% if pdf %}
-                                            <div class="cursor-value" style="left:{{panel.value|number_format(0)}}%">{{panel.value|number_format(0)}}</div>
-                                        {% endif %}
-                                    </div>
+                                    {% else %}
+                                        <p class="text-center">- Le chapitre n'a pas été diagnostiqué -</p>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -78,6 +84,9 @@
                 <div class="row">
                     <div id="radarChart"></div>
                     <input type="hidden" id="datas-radar" value="{{chart.datas|json_encode()}}">
+                    <div class="col-md-12">
+                        <p id="chaptersNonConcernes"></p>
+                    </div>
                 </div>
                 <div class="page-break"></div>
             {% endif %}
@@ -108,10 +117,16 @@
                                         <td class="active text-center vertical-align categorie-{{id}}" rowspan="3"><b>{{categorie.title|capitalize}}</b></td>
                                         <td class="text-center">Nombre de réponses</td>
                                         {% for datas in categorie['chapitres'] %}
-                                            <td class="text-center">
-                                                {{datas['nbRep']}}
-                                            </td>
-                                            {% set nbRepCateg = nbRepCateg + datas['nbRep'] %}
+                                            {% if not datas['nc'] %}
+                                                <td class="text-center">
+                                                    {{datas['nbRep']}}
+                                                </td>
+                                                {% set nbRepCateg = nbRepCateg + datas['nbRep'] %}
+                                            {% else %}
+                                                <td class="text-center vertical-align" rowspan="3">
+                                                    - Non diagnostiqué -
+                                                </td>
+                                            {% endif %}
                                         {% endfor %}
                                         <td class="text-center">
                                             {{nbRepCateg}}
@@ -120,11 +135,13 @@
                                     <tr>
                                         <td class="text-center">Nombre de points</td>
                                         {% for datas in categorie['chapitres'] %}
-                                            <td class="text-center">
-                                                {{datas['nbPoints']}} / {{datas['max']}}
-                                            </td>
-                                            {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
-                                            {% set maxCateg = maxCateg + datas['max'] %}
+                                            {% if not datas['nc'] %}
+                                                <td class="text-center">
+                                                    {{datas['nbPoints']}} / {{datas['max']}}
+                                                </td>
+                                                {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
+                                                {% set maxCateg = maxCateg + datas['max'] %}
+                                            {% endif %}
                                         {% endfor %}
                                         <td class="text-center">
                                             {{nbPointsCateg}} / {{maxCateg}}
@@ -133,14 +150,16 @@
                                     <tr>
                                         <td class="text-center">Score</td>
                                         {% for datas in categorie['chapitres'] %}
-                                            {% if datas['max'] != 0 %}
-                                                {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
-                                            {% else %}
-                                                {% set note = 0 %}
+                                            {% if not datas['nc'] %}
+                                                {% if datas['max'] != 0 %}
+                                                    {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
+                                                {% else %}
+                                                    {% set note = 0 %}
+                                                {% endif %}
+                                                <td class="text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
+                                                    {{ note|number_format(0) }}%
+                                                </td>
                                             {% endif %}
-                                            <td class="text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
-                                                {{ note|number_format(0) }}%
-                                            </td>
                                         {% endfor %}
                                         {% if maxCateg != 0 %}
                                             {% set note = (nbPointsCateg * 100) / maxCateg %}
@@ -159,10 +178,16 @@
                                         <td class="text-center">Nombre de réponses</td>
                                         {% set nbRepTotal = 0 %}
                                         {% for datas in chart.datas.totauxChapitres %}
-                                            <td class="text-center">
-                                                {{datas['nbRep']}}
-                                            </td>
-                                            {% set nbRepTotal = nbRepTotal + datas['nbRep'] %}
+                                            {% if not datas['nc'] %}
+                                                <td class="text-center">
+                                                    {{datas['nbRep']}}
+                                                </td>
+                                                {% set nbRepTotal = nbRepTotal + datas['nbRep'] %}
+                                            {% else %}
+                                                <td class="text-center vertical-align" rowspan="3">
+                                                    - Non diagnostiqué -
+                                                </td>
+                                            {% endif %}
                                         {% endfor %}
                                         <td class="text-center">
                                             {{nbRepTotal}}
@@ -173,11 +198,13 @@
                                         {% set nbPointsTotal = 0 %}
                                         {% set maxTotal = 0 %}
                                         {% for datas in chart.datas.totauxChapitres %}
-                                            <td class="text-center">
-                                                {{datas['nbPoints']}} / {{datas['max']}}
-                                            </td>
-                                            {% set nbPointsTotal = nbPointsTotal + datas['nbPoints'] %}
-                                            {% set maxTotal = maxTotal + datas['max'] %}
+                                            {% if not datas['nc'] %}
+                                                <td class="text-center">
+                                                    {{datas['nbPoints']}} / {{datas['max']}}
+                                                </td>
+                                                {% set nbPointsTotal = nbPointsTotal + datas['nbPoints'] %}
+                                                {% set maxTotal = maxTotal + datas['max'] %}
+                                            {% endif %}
                                         {% endfor %}
                                         <td class="text-center">
                                             {{nbPointsTotal}} / {{maxTotal}}
@@ -186,14 +213,16 @@
                                     <tr>
                                         <td class="text-center">Score</td>
                                         {% for idChapitre,datas in chart.datas.totauxChapitres %}
-                                            {% if datas['max'] != 0 %}
-                                                {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
-                                            {% else %}
-                                                {% set note = 0 %}
+                                            {% if not datas['nc'] %}
+                                                {% if datas['max'] != 0 %}
+                                                    {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
+                                                {% else %}
+                                                    {% set note = 0 %}
+                                                {% endif %}
+                                                <td data-chapitre="{{idChapitre}}" class="total-chapitre text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
+                                                    {{ note|number_format(0) }}%
+                                                </td>
                                             {% endif %}
-                                            <td data-chapitre="{{idChapitre}}" class="total-chapitre text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
-                                                {{ note|number_format(0) }}%
-                                            </td>
                                         {% endfor %}
                                         {% if maxTotal != 0 %}
                                             {% set note = (nbPointsTotal * 100) / maxTotal %}

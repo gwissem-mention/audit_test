@@ -22,11 +22,27 @@ $(document).ready(function() {
     var categories = [];
     var values     = [];
     var optimale   = [];
+    var nonConcernes = [];
     $(datas).each(function(index, element ){
-        categories.push( element.title + ' ( '+ element.taux+'% )' );
-        values.push( element.value );
-        optimale.push( element.opti );
-    })
+        if( element.value != 'NC' ){
+            categories.push( element.title + ' ( '+ element.taux+'% )' );
+            values.push( element.value );
+            optimale.push( element.opti );
+        }else
+            nonConcernes.push( element.title );
+    });
+
+    //Gestion des chapitres non concernes
+    if( nonConcernes.length > 0 ){
+        var html = '<b>Les chapitres suivants n\'ont pas été diagnostiqués :</b> <ul>';
+
+        $(nonConcernes).each(function(index, element ){
+            html += '<li>' + element + '</li>';
+        });
+
+        html += '</ul>';
+        $('#chaptersNonConcernes').html(html);
+    }
 
     /* Créer le Spider Chart */
     $('#radarChart').highcharts({
@@ -43,7 +59,7 @@ $(document).ready(function() {
             enabled : false
         },
         pane : {
-            size : '78%'
+            size : '75%'
         },
         xAxis : {
             categories        : categories,
