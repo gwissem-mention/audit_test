@@ -43,7 +43,7 @@ $(document).ready(function() {
     var nonConcernes = [];
     $(datas).each(function(index, element ){
         if( element.value != 'NC' ){
-            categories.push( element.title + ' ( Taux remplissage : '+ element.taux+'% )' );
+            categories.push( element.title + ' (Taux de remplissage: '+ element.taux+'%)' );
             values.push( element.value );
             optimale.push( element.opti );
         }else
