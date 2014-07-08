@@ -314,7 +314,7 @@ class FrontController extends Controller
         $options = array(
             'encoding'         => 'UTF-8',
             'javascript-delay' => 500,
-            'footer-right'     => 'Page [page] sur [toPage]'
+            'footer-center'    => 'Page [page] sur [toPage]'
         );
 
         $html = str_replace('/publication', $request->getSchemeAndHttpHost() . '/publication', $html);

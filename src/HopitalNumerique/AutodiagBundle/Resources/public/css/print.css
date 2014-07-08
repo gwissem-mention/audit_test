@@ -6,7 +6,7 @@ body{background-color :#fff;}
 img{ width:auto !important }
 
 #resultats{width:94%;}
-#resultats h1{float:right; margin-top:0;}
+#resultats h1{float:right; margin-top:0; font-style: 22px}
 #resultats #graphiques{width: 100%}
 #resultats #graphiques, #chapitres {display: block !important}
 #resultats #graphiques #radarChart{width: 100%; height: 750px; margin: 0!important}
@@ -15,4 +15,4 @@ img{ width:auto !important }
 #resultats #graphiques .panel .panel-heading{display: none}
 #resultats #graphiques .tableContainer{overflow:visible;}
 
-.copyright{width:94%; margin-top:30px;}
+.copyright{width:94%; margin-top:80px;}
