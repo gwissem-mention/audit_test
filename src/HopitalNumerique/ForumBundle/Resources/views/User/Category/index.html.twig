@@ -15,6 +15,7 @@
 
 {%- block body_content -%}
     {%- spaceless -%}
+    
     {%- for category in categories -%}
         {# Affichage uniquement si l'utilisateur a le droit de visioner #}
         {% if (app.user is not null and app.user.getRole() in category.readAuthorisedRoles) 

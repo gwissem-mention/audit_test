@@ -19,6 +19,8 @@ HopitalNumerique\ForumBundle\Entity\Category:
         boards:
             targetEntity: HopitalNumerique\ForumBundle\Entity\Board
             mappedBy: category
+            orderBy:
+                listOrderPriority: ASC
             cascade: ["persist", "remove"]
     manyToOne:
         forum:
