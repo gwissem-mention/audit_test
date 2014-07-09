@@ -457,7 +457,7 @@ class SearchManager extends BaseManager
      * 
      * @return stdClass
      */
-    private function formateTopic( $one )
+    private function formateTopic( $one, $role = null )
     {
         //Références
         $item            = array();
@@ -465,7 +465,9 @@ class SearchManager extends BaseManager
 
         //topic
         $topic = $one->getTopic();
+     
         
+
         $item['id']       = $topic->getId();
         $item['titre']    = $topic->getTitle();
         $item['countRef'] = $this->getNoteReferencement($topic->getReferences());
