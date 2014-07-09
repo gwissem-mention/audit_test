@@ -61,7 +61,7 @@ $(document).ready(function() {
                 enabled : false
             },
             pane : {
-                size : '75%'
+                size : '80%'
             },
             xAxis : {
                 categories        : categories,
@@ -69,7 +69,7 @@ $(document).ready(function() {
                 lineWidth         : 0
             },
             legend:{
-                padding : 20
+                padding : 0
             },
             yAxis : {
                 gridLineInterpolation : 'polygon',
