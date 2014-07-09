@@ -1,3 +1,4 @@
+#smallMesRequetes{display: none; color: white}
 #recherche{margin-top: 20px}
 #recherche ol{list-style: none; }
 #recherche .requete{border:1px solid #bfbfbf; padding: 15px 17px; background: #f4f4f4}
@@ -114,10 +115,16 @@
         #resultats #forum .results .carousel-control.right {background: none}
         #resultats #forum .results .carousel-control.left {background: none}
 
+@media screen and (max-width: 1270px) {
+    #smallMesRequetes{display: block}
+}
+
 @media screen and (max-width: 991px) {
     #recherche .requete h2{height: auto}
     #recherche .requete h2.rclose{background: none; }
     #recherche .requete h2.ropen{background: none; }
 
     #resultats #ressources .results .carousel-inner{width:92%;}
+
+    #mesrequetes.open{width: 100%; max-width: 100%}
 }
