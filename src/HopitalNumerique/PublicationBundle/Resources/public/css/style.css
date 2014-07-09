@@ -101,7 +101,7 @@
     #autresResultats .carousel-control.right {background: none}
     #autresResultats .carousel-control.left {background: none}
     #autresResultats .carousel-control span{top:30%;font-size: 20px; margin-left: 0; margin-top: 0}
-    #autresResultats .results{padding:0 15px;height:150px;}
+    #autresResultats .results{padding:0 15px;height:155px;}
     #autresResultats .results p.noresult{margin-top:29px;}
     #autresResultats span.label{font-size: 9px;line-height: 2; vertical-align: top}
 
@@ -122,7 +122,7 @@
     #autresResultats #forum h3{background: url('../img/forum.png') no-repeat left center; padding-left: 45px}
     #autresResultats .bottom .results h4{margin-bottom: 5px; margin-top: 5px; text-transform: none; }
     #autresResultats .bottom .results h4 a{color: #ffffff; font-size: 14px; font-weight: bold; }
-    #autresResultats .bottom .results p{color: #ffffff; font-size: 12px; font-weight: normal; height: 75px; overflow-y:auto;} 
+    #autresResultats .bottom .results p{color: #ffffff; font-size: 12px; font-weight: normal; height: 85px; overflow-y:auto;} 
 
 /**
  * MEDIA QUERIES

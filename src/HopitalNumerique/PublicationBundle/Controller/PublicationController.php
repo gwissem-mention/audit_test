@@ -157,7 +157,8 @@ class PublicationController extends Controller
         $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
 
         //on récupère sa recherche
-        $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $refs, $role );
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $refs, $role, $refsPonderees );
         $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
     
         //make array unique

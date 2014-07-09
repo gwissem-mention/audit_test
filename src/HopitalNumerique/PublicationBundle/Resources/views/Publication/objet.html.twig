@@ -211,23 +211,37 @@
             {% for item in objets if item['categ'] == key %}
                 {% if count <= 10 %}
                     <div class="item" data-pos="{{count}}" >
-                        <h4>
-                            {% if item['updated'] %}
-                                <span class="label label-success">MaJ</span>
-                            {% elseif item['new'] %}
-                                <span class="label label-danger">Nouveau</span>
-                            {% endif %}
+                        {% if key != 'forum' %}
+                            <h4>
+                                {% if key != 'ressource' %}
+                                    {% if item['updated'] %}
+                                        <span class="label label-success">MaJ</span>
+                                    {% elseif item['new'] %}
+                                        <span class="label label-danger">Nouveau</span>
+                                    {% endif %}
+                                {% else %}
+                                    {% if item['updated'] %}
+                                        <span class="label label-default">MaJ</span>
+                                    {% elseif item['new'] %}
+                                        <span class="label label-default">Nouveau</span>
+                                    {% endif %}
+                                {% endif %}
 
-                            {% if item['objet'] is not null %}
-                                <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':item['objet'],'alias':item['aliasO'],'idc':item['id'],'aliasc':item['aliasC']})}}" >
-                            {% else %}
-                                <a href="{{path('hopital_numerique_publication_publication_objet', {'id':item['id'],'alias':item['alias']})}}" >
-                            {% endif %}
-                                {{item['titre']}}{% if item['objet'] is not null %}<small> - Extrait d'une production</small>{% endif %}
-                            </a>
-                        </h4>
+                                {% if item['objet'] is not null %}
+                                    <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':item['objet'],'alias':item['aliasO'],'idc':item['id'],'aliasc':item['aliasC']})}}" >
+                                {% else %}
+                                    <a href="{{path('hopital_numerique_publication_publication_objet', {'id':item['id'],'alias':item['alias']})}}" >
+                                {% endif %}
+                                    {{item['titre']}}{% if item['objet'] is not null %}<small> - Extrait d'une production</small>{% endif %}
+                                </a>
+                            </h4>
 
-                        <p>{{ item['resume']|trim }}</p>
+                            <p>{{ item['resume']|trim }}</p>
+                        {% else %}
+                            <h4>
+                                <a href="{{path('ccdn_forum_user_topic_show', {'topicId':item['id']})}}">{{item['titre']}}</a>
+                            </h4>
+                        {% endif %}
                     </div>
                 {% endif %}
 

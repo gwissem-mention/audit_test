@@ -1,5 +1,5 @@
 <div class="item {% if count == 1 %}active{% endif %}" >
     <h4>
-        <a href="#">{{objet['titre']}}</a>
+        <a href="{{path('ccdn_forum_user_topic_show', {'topicId':objet['id']})}}">{{objet['titre']}}</a>
     </h4>
 </div>
