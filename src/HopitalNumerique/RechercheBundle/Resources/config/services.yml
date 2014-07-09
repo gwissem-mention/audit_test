@@ -6,7 +6,7 @@ parameters:
 services:
     hopitalnumerique_recherche.manager.search:
         class: %hopitalnumerique_recherche.manager.search.class%
-        arguments: ["@hopitalnumerique_objet.manager.refobjet", "@hopitalnumerique_objet.manager.refcontenu", "@hopitalnumerique_forum.manager.reftopic"]
+        arguments: ["@hopitalnumerique_objet.manager.refobjet", "@hopitalnumerique_objet.manager.refcontenu", "@hopitalnumerique_forum.manager.reftopic", "@ccdn_forum_forum.component.security.authorizer"]
 
     hopitalnumerique_recherche.manager.requete:
         class: %hopitalnumerique_recherche.manager.requete.class%
