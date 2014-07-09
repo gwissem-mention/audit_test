@@ -25,7 +25,7 @@ $(document).ready(function() {
     var nonConcernes = [];
     $(datas).each(function(index, element ){
         if( element.value != 'NC' ){
-            categories.push( '<b>' + element.title + '</b> (Taux de remplissage: '+ element.taux+'%)' );
+            categories.push( '<b>' + element.title + '</b>' );
             values.push( element.value );
             optimale.push( element.opti );
         }else
