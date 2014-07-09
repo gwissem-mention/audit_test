@@ -91,11 +91,14 @@ $(document).ready(function() {
                 gridLineInterpolation : 'polygon',
                 lineWidth             : 0,
                 min                   : 0,
-                max                   : 100,
-                tickInterval          : 20,
+                max                   : 110,
+                tickInterval          : 10,
                 gridLineDashStyle     : 'Dash',
                 labels                : {
-                    enabled : false
+                    enabled : true,
+                    formatter: function() {
+                        return this.value +'%';
+                    }
                 }
             },
             tooltip : {
@@ -107,21 +110,25 @@ $(document).ready(function() {
                     dataLabels: {
                         enabled: true,
                         format: '{point.y:,.0f}%',
-                        softConnector: true
+                        softConnector: true,
+                        align: 'left'
                     },
                     name  : 'Score',
                     color : '#d9edf7',
-                    data  : values
+                    data  : values,
+                    pointPlacement: 'on'
                 }, {
                     dataLabels: {
                         enabled: true,
                         format: '{point.y:,.0f}%',
-                        softConnector: true
+                        softConnector: true,
+                        align: 'left'
                     },
                     name  : 'Valeur optimale préconisée par l\'ANAP',
                     data  : optimale,
                     color : '#6f3596',
-                    type  : 'line'
+                    type  : 'line',
+                    pointPlacement: 'on'
                 }
             ]
         });
