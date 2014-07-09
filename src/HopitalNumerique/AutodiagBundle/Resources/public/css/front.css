@@ -28,6 +28,7 @@
     #autodiag .content form{clear:both;}
     #autodiag .content h2{color:#6f3596; text-transform: uppercase;}
     #autodiag .content h3{color:#6f3596; margin-bottom: 20px; font-size: 18px}
+    #autodiag .content h3 .chapitreNonConcerne{cursor: pointer}
     #autodiag .content .badge-primary{background-color:#6f3596; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
     #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer}
     #autodiag .content .radio{float: left; margin-right: 30px;}

@@ -68,4 +68,74 @@ class FactureController extends Controller
             'total' => $total
         ));
     }
+
+    /**
+     * Exporte la facture
+     *
+     * @return Pdf
+     */
+    public function exportAction( Facture $facture )
+    {
+        $options = array(
+            'serve_filename' => $facture->getName(),
+            'absolute_path'  => false,
+            'inline'         => false,
+        );
+        
+        $fileName = __ROOT_DIRECTORY__.'/files/factures/' . $facture->getName();
+    
+        if( file_exists($fileName) ) {
+            return $this->get('igorw_file_serve.response_factory')->create( $fileName, 'application/pdf', $options);
+        } else {
+            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
+            $this->get('session')->getFlashBag()->add( ('danger') , 'Le document n\'existe plus sur le serveur.' );
+
+            return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_facture') );
+        }
+    }
+
+    /**
+     * [regenerateAction description]
+     *
+     * @param  Facture $facture [description]
+     *
+     * @return [type]
+     */
+    public function regenerateAction( Facture $facture )
+    {
+        //On récupère l'user connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        //get Reponses
+        $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( 2 , $user->getId(), true );
+        $infos    = $this->get('hopitalnumerique_paiement.manager.facture')->formateInfos( $reponses );
+        $code     = $facture->getUser()->getId() . $facture->getId();
+
+        //delete old file
+        if( file_exists(__ROOT_DIRECTORY__ . '/files/factures/facture'.$code.'.pdf') )
+            unlink(__ROOT_DIRECTORY__ . '/files/factures/facture'.$code.'.pdf');
+
+        //Generate PDF
+        $this->get('knp_snappy.pdf')->generateFromHtml(
+            $this->renderView( 'HopitalNumeriquePaiementBundle:Pdf:facture.html.twig', array(
+                'code'       => $code,
+                'facture'    => $facture,
+                'infos'      => $infos,
+                'formations' => array()
+            )),
+            __ROOT_DIRECTORY__ . '/files/factures/facture'.$code.'.pdf',
+            array('margin-bottom' => 10, 'margin-left' => 4, 'margin-right' => 4, 'margin-top' => 10, 'encoding' => 'UTF-8')
+        );
+
+        //save file Name
+        $facture->setName( 'facture' . $code . '.pdf' );
+        $this->get('hopitalnumerique_paiement.manager.facture')->save( $facture );
+
+        $this->get('session')->getFlashBag()->add( 'success' , 'Facture re-générée avec succès' );
+        return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_facture') );
+    }
+
+
+
+
 }

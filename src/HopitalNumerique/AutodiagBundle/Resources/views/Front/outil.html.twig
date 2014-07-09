@@ -102,19 +102,21 @@
                             {% if chapitre['childs']|length > 0 %}
                                 <div class="sous-chapitre">
                                     {% for child in chapitre['childs'] %}
-                                        <h3>{{child.title}}</h3>
+                                        <h3>{{child.title}} - <span onclick="chapterNonConcerne(this, true);" class="chapitreNonConcerne" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></span></h3>
                                         
                                         <hr>
                                         
-                                        {% for question in child.questions %}
-                                            {% if reponses[question.id] is defined %}
-                                                {% set reponse = reponses[question.id] %}
-                                            {% else %}
-                                                {% set reponse = {'value' : null} %}
-                                            {% endif %}
-                                            {{ mySelf.buildQuestion(question, reponse, formName, questionNumber) }}
-                                            {% set questionNumber = questionNumber + 1 %}
-                                        {% endfor %}
+                                        <div class="childs">
+                                            {% for question in child.questions %}
+                                                {% if reponses[question.id] is defined %}
+                                                    {% set reponse = reponses[question.id] %}
+                                                {% else %}
+                                                    {% set reponse = {'value' : null} %}
+                                                {% endif %}
+                                                {{ mySelf.buildQuestion(question, reponse, formName, questionNumber) }}
+                                                {% set questionNumber = questionNumber + 1 %}
+                                            {% endfor %}
+                                        </div>
                                     {% endfor %}
                                 </div>
                             {% endif %}

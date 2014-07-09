@@ -8,6 +8,7 @@
 
 {% block toolbarButton %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_paiement_facture') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_paiement_facture_regenerate', {'id':facture.id}) }}" title="Regénère la facture"><i class="fa fa-refresh"></i></a>
 {% endblock %}
 
 {% block body %}

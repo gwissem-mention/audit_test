@@ -21,6 +21,18 @@ hopitalnumerique_paiement_facture_total:
     requirements:
         id: \d+
 
+hopitalnumerique_paiement_facture_export:
+    pattern:  /admin/facture/export/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:export" }
+    requirements:
+        id: \d+
+
+hopitalnumerique_paiement_facture_regenerate:
+    pattern:  /admin/facture/regenerate/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:regenerate" }
+    requirements:
+        id: \d+
+
 #Config
 hopitalnumerique_paiement_config:
     pattern:  /admin/facture/config
