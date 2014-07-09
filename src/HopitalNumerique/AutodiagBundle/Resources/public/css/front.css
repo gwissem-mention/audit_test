@@ -74,6 +74,7 @@
         #resultats #graphiques .panel .cursor-value{ position: absolute; bottom: -14px; margin-left:-9px; font-size: 10px}
         #resultats #graphiques .panel h3.toPrint{display: none}
         #resultats #graphiques #radarChart{min-width: 400px; max-width: 100%; margin: 0 auto}
+        #resultats #graphiques #chaptersNonConcernes{margin-top:15px}
         #resultats #graphiques .tableContainer{overflow: hidden; overflow-x:auto;}
         #resultats #graphiques .table .vertical-align{vertical-align: middle}
         #resultats #graphiques .table .reverse{cursor:pointer;}
