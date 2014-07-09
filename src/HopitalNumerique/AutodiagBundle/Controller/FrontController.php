@@ -314,10 +314,17 @@ class FrontController extends Controller
         $options = array(
             'encoding'         => 'UTF-8',
             'javascript-delay' => 500,
-            'footer-center'    => 'Page [page] sur [toPage]
-
-            ', //ATTENTION : ne pas retirer ces sauts de ligne, il s'agit un hack pour le PDF
-            'margin-bottom'    => 0,
+            'margin-top'       => '10',
+            'margin-bottom'    => '30',
+            'margin-right'     => '15',
+            'margin-left'      => '15',
+            'header-spacing'   => '2',
+            'header-right'     => 'Page [page]/[toPage]',
+            'footer-spacing'   => '10',
+            'footer-html'      => '<p style="font-size:10px;text-align:center;color:#999">
+                                     &copy; ANAP - Mon H&ocirc;pital Num&eacute;rique<br/>
+                                     Ces contenus extraits de la plateforme de l\'Anap www.MonHopitalNumerique.fr sont diffus&eacute;s gratuitement.<br/>
+                                     Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP - Mon H&ocirc;pital Num&eacute;rique"'
         );
 
         $html = str_replace('/publication', $request->getSchemeAndHttpHost() . '/publication', $html);

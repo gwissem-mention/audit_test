@@ -1,5 +1,6 @@
 *{border:none; font-family:Serif;font-size :10pt; background-image: none !important; box-shadow: none !important}
 body{background-color :#fff;}
+body .col-md-12:first-child{margin:0!important;padding:0!important}
 @page{ margin: 0cm; size: portrait; }
 .page-break {page-break-after: always}
 #header, #footer, #menu, #sommaire, #mesrequetes, .print, .reverse {display: none}

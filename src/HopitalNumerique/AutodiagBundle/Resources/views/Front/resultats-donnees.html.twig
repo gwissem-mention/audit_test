@@ -18,7 +18,6 @@
         <div id="graphiques">
             <p class="text-justify">
                 <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, repudiandae quibusdam voluptate nesciunt quaerat culpa ab at neque voluptatibus aut natus ipsam ut nisi eos adipisci temporibus omnis sunt consequatur.</span>
-                <span>Quas, suscipit, dolor, maiores laudantium ullam esse at fugiat delectus voluptatem tempora ipsam facilis alias modi nulla quae perferendis iusto dignissimos dolorum reprehenderit ut recusandae soluta asperiores! Sit, repudiandae, nemo.</span>
             </p>
 
             {# Affichage du graphique barre #}
@@ -65,7 +64,7 @@
                                             </div>
                                             <div class="cursor" {% if pdf %}style="left:{{panel.value|number_format(0)}}%"{% endif %} data-position="{{panel.value|number_format(0)}}%" title="<span>Score : {{panel.value|number_format(0)}}%</span>" ></div>
                                             {% if pdf %}
-                                                <div class="cursor-value" style="left:{{panel.value|number_format(0)}}%">{{panel.value|number_format(0)}}</div>
+                                                <div class="cursor-value" style="left:{{panel.value|number_format(0)}}%">{{panel.value|number_format(0)}}%</div>
                                             {% endif %}
                                         </div>
                                     {% else %}
