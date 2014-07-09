@@ -1,0 +1,64 @@
+<h3 class="pull-left">{{expBesoin.libelle}}</h3>
+<div class="options pull-right">
+    <div onclick="addReponse('{{path('hopitalnumerique_expbesoin_reponse_add', {'id':expBesoin.id})}}' );" class="btn btn-success addReponse"><i class="fa fa-plus"></i></div>
+</div>
+<div class="clearfix"></div>
+<span class="designForBlank" style="{% if expBesoin.reponses|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour ajouter une reponse.</span>
+
+<div id="designForForm">
+    <form novalidate="novalidate" class="form-horizontal toValidate" action="" method="post" name="hopitalnumerique_autodiag_question">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-sm-2 control-label required" for="libelle_reponse">
+                    Libelle
+                    <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" id="libelle_reponse" name="reponse[libelle]" required="required" maxlength="50" class="validate[required,minSize[1]] form-control">
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </form>
+</div>
+
+<div class="dd">
+    <ol class="dd-list">
+        {% for reponse in expBesoin.reponses %}
+            <li class="dd-item dd3-item" data-id="{{reponse.id}}" id="reponse-{{reponse.id}}" >
+                <div class="dd-handle dd3-handle"></div>
+                <div class="dd3-content">
+                    <a href="{{path('hopitalnumerique_autodiag_reponse_edit',{'id':reponse.id})}}" class="fancy fancybox.ajax" title="{{reponse.texte}}">{{reponse.texte|truncate(95, true, '...')}}</a>
+                    <p class="text-muted pull-right">
+                        {% if reponse.ponderation %}Pond. : {{reponse.ponderation}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
+                        Note référencement : <span>{{reponse.note}}</span> / 400
+                    </p>
+                </div>
+                <div class="dd3-actions">
+                    <div onclick="deleteQuestion( {{reponse.id}}, '{{path('hopitalnumerique_autodiag_reponse_delete', {'id':reponse.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+                    <a href="{{path('hopitalnumerique_autodiag_reference_reponse', {'id':reponse.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
+                </div>
+            </li>
+        {% endfor %}
+    </ol>
+</div>
+
+<input type="hidden" id="order-reponse-url" value="{{path('hopitalnumerique_expbesoin_reponse_reorder',{'id':expBesoin.id})}}" />
+
+<script type="text/javascript" >
+    $('#reponses div.dd').nestable({'maxDepth':1,'group':0}).on('change', function() {
+        var serializedDatas = $(this).nestable('serialize');
+
+        $.ajax({
+            url  : $('#order-reponse-url').val(),
+            data : {
+                datas : serializedDatas
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                //console.log( 'reorder executed' );
+            }
+        });
+    });
+</script>

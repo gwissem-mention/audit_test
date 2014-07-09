@@ -1,6 +1,8 @@
 parameters:
     hopitalnumerique_recherche.manager.search.class: HopitalNumerique\RechercheBundle\Manager\SearchManager
     hopitalnumerique_recherche.manager.requete.class: HopitalNumerique\RechercheBundle\Manager\RequeteManager
+    hopitalnumerique_recherche.manager.expbesoin.class: HopitalNumerique\RechercheBundle\Manager\ExpBesoinManager
+    hopitalnumerique_recherche.manager.expbesoinreponses.class: HopitalNumerique\RechercheBundle\Manager\ExpBesoinReponsesManager
     hopitalnumerique_recherche.service.logger.cronlogger.class: HopitalNumerique\RechercheBundle\DependencyInjection\Logger\CronLogger
 
 services:
@@ -10,6 +12,18 @@ services:
 
     hopitalnumerique_recherche.manager.requete:
         class: %hopitalnumerique_recherche.manager.requete.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_recherche.manager.expbesoin:
+        class: %hopitalnumerique_recherche.manager.expbesoin.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_recherche.manager.expbesoinreponses:
+        class: %hopitalnumerique_recherche.manager.expbesoinreponses.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

@@ -56,6 +56,65 @@ hopital_numerique_requete_consultation_delete:
     requirements: 
         id: \d+
 
+#Expression du besoin
+hopital_numerique_expbesoin_index:
+    pattern:  /admin/aide-expression-besoin
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:index }
+
+hopital_numerique_expbesoin_addquestion:
+    pattern:  /admin/aide-expression-besoin/add-question
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:addQuestion }
+
+hopital_numerique_expbesoin_editquestion:
+    pattern:  /admin/aide-expression-besoin/edit-question
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:editQuestion }
+
+hopital_numerique_expbesoin_deletequestion:
+    pattern:  /admin/aide-expression-besoin/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoin:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+#Expression du besoin réponse
+hopitalnumerique_expbesoin_question:
+    pattern:  /admin/aide-expression-besoin/{id}/reponse
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:index" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_expbesoin_reponse_add:
+    pattern:  /admin/aide-expression-besoin/chapitre/{id}/question/add
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:add" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_expbesoin_reponse_delete:
+    pattern:  /admin/aide-expression-besoin/question/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+hopitalnumerique_expbesoin_reponse_edit:
+    pattern:  /admin/aide-expression-besoin/question/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:edit" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_expbesoin_reponse_save:
+    pattern:  /admin/aide-expression-besoin/question/save/{id}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:save", id: 0 }
+    requirements: 
+        id : \d+
+        _method: POST
+
+hopitalnumerique_expbesoin_reponse_reorder:
+    pattern:  /admin/aide-expression-besoin/{id}/question/reorder
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:reorder" }
+    requirements: 
+        id : \d+
+
 #CRON
 hopital_numerique_cron_requetes:
     pattern:  /cron-requetes/{id}

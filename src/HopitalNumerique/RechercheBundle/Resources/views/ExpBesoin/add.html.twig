@@ -1,0 +1,10 @@
+<li class="dd-item dd3-item" data-id="{{expBesoin.id}}" id="expBesoin-{{expBesoin.id}}" >
+    <div class="dd-handle dd3-handle"></div>
+    <div class="dd3-content">
+        <a href="javascript:selectQuestion({{expBesoin.id}}, '{{path('hopitalnumerique_expbesoin_question', {'id':expBesoin.id})}}')">{{expBesoin.libelle}}</a>
+    </div>
+    <div class="dd3-actions">
+        <div onclick="deleteQuestion( {{expBesoin.id}}, '{{path('hopital_numerique_expbesoin_deletequestion', {'id':expBesoin.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+        <div onclick="editQuestion( {{expBesoin.id}}, '{{path('hopital_numerique_expbesoin_editquestion', {'id':expBesoin.id})}}' );" class="pull-right dd3-edit question-edit"><i class="fa fa-edit"></i></div>
+    </div>
+</li>
