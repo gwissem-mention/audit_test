@@ -48,6 +48,11 @@ class FactureGrid extends Grid implements IGrid
      */
     public function setActionsButtons()
     {
+        $downloadButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_paiement_facture_export');
+        $downloadButton->setRouteParameters( array('id') );
+        $downloadButton->setAttributes( array('class'=>'btn btn-info fa fa-download','title' => 'Télécharger la facture') );
+        $this->addActionButton( $downloadButton );
+
         $payeButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_paiement_facture_paye');
         $payeButton->setRouteParameters( array('id') );    
         $payeButton->setAttributes( array('class'=>'btn btn-green fa fa-money','title' => 'Payer') );
