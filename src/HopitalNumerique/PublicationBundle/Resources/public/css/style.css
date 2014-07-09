@@ -103,7 +103,7 @@
     #autresResultats .carousel-control span{top:30%;font-size: 20px; margin-left: 0; margin-top: 0}
     #autresResultats .results{padding:0 15px;height:155px;}
     #autresResultats .results p.noresult{margin-top:29px;}
-    #autresResultats span.label{font-size: 9px;line-height: 2; vertical-align: top}
+    #autresResultats span.label{font-size: 9px;line-height: 1.1; vertical-align: top}
 
     /* Productions et points dur */
     #autresResultats .top {background: #f6f6f6; border:1px solid #e3e3e3;}
