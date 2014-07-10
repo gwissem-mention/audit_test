@@ -91,9 +91,8 @@ $(document).ready(function() {
                 }
             },
             tooltip : {
-                shared      : true,
-                pointFormat : '<span style="color:#333333">{series.name}: <b>{point.y:,.0f}</b><br/>'
-                formatter: function() {
+                shared    : true,
+                formatter : function() {
                     var s   = this.x;
                     var tau = taux[this.x]
 
@@ -144,8 +143,10 @@ $(document).ready(function() {
     }
 
     //récupère le total et applique la couleur
-    noteClass = $('.last-note').attr('class').replace('last-note text-center ','');
-    $('.title-total').addClass( noteClass );
+    if( $('.last-note').length > 0 ){
+        noteClass = $('.last-note').attr('class').replace('last-note text-center ','');
+        $('.title-total').addClass( noteClass );
+    }
 });
 
 
@@ -236,4 +237,41 @@ var reverse_table = function(thetable)
     }
     
     thetable.parentNode.replaceChild(rtable, thetable);
+}
+
+/**
+ * [number_format description]
+ *
+ * @param  {[type]} number        [description]
+ * @param  {[type]} decimals      [description]
+ * @param  {[type]} dec_point     [description]
+ * @param  {[type]} thousands_sep [description]
+ *
+ * @return {[type]}
+ */
+function number_format(number, decimals, dec_point, thousands_sep)
+{
+    number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+    var n    = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep  = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec  = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s    = '',
+        toFixedFix = function(n, prec) {
+          var k = Math.pow(10, prec);
+          return '' + (Math.round(n * k) / k)
+            .toFixed(prec);
+        };
+
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+    if (s[0].length > 3)
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    
+    if ((s[1] || '').length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    
+    return s.join(dec);
 }
