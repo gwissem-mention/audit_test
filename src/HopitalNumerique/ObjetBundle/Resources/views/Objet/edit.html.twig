@@ -75,6 +75,9 @@
                         {% if objet.id and not objet.isArticle() %}
                             <li class="{% if infra %}active{% endif %}"><a href="#infra" data-toggle="tab">Infra-documentaire</a></li>
                         {% endif %}
+                        {% if objet.id and objet.types[0].id == 184 %}
+                            <li><a href="#productions" data-toggle="tab">Productions liées</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -356,6 +359,41 @@
                                         </ol>
                                     </div>
                                 </fieldset>
+                            </div>
+                        {% endif %}
+
+                        {% if objet.id and objet.types[0].id == 184 %}
+                            <div class="tab-pane" id="productions">
+                                <div class="sous_options">
+                                    <div class="btn-toolbar">
+                                        <a href="{{path('hopitalnumerique_objet_objet_addLink', {'id':objet.id})}}" class="addProd fancy fancybox.ajax btn btn-default pull-right" title="Ajouter une production liée"><i class="fa fa-plus"></i></a>
+                                    </div>
+                                </div>
+
+                                {# Liste des prod maitrisées #}
+                                <fieldset>
+                                    <table id="productions" class="table table-hover table-bordered">
+                                        <thead>
+                                            <th>Titre</th>
+                                            <th width="50px">Actions</th>
+                                        </thead>
+                                        <tbody>
+                                            {% for one in objet.objets %}
+                                                <tr>
+                                                    <td>{{one.titre}}</td>
+                                                    <td>
+                                                        <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_objet_objet_deleteLink', { 'pointDur':objet.id, 'id': one.id }) }}");' class="btn btn-danger"><i class="fa fa-trash-o"></i></div>
+                                                    </td>
+                                                </tr>
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="2" class="text-center">- Aucunes productions liées -</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </fieldset>
+                                
                             </div>
                         {% endif %}
                     </div>

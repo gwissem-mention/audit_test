@@ -115,6 +115,22 @@
             </div>
         {% endif %}
         
+        {# Productions fortement liées #}
+        {% if objet.objets|length > 0 %}
+            <div class="col-md-12" id="productions" >
+                <h2 class="open">Productions fortements liées</h2>
+                <div class="row">
+                    <ul>
+                        {% for one in objet.objets %}
+                            <li>
+                                <a href="{{path('hopital_numerique_publication_publication_objet', {'id':one.id, 'alias': one.alias})}}">{{one.titre}}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+
         {# Autres résultats de recherche#}
         {% if contenu is not defined %}
             {% set contenu = false %}

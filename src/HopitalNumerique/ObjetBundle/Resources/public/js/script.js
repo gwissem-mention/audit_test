@@ -66,7 +66,7 @@ $(document).ready(function() {
 
     //fancybox d'édition d'un contenu
     //fancybox de gestion des références liées à l'objet et au contenu
-    $('.dd3-content a, .manageReferences, .uploadSommaire').fancybox({
+    $('.dd3-content a, .manageReferences, .uploadSommaire, .addProd').fancybox({
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '80%',
@@ -315,4 +315,21 @@ function updateNbChilds()
         $(this).find('.nbChilds').html( nbChecked );
         $(this).find('.nbChildsDirect').html( nbChildsDirect );
     })
+}
+
+//Sauvegarde de la liaison Point Dur => objets
+function addObjet( id )
+{
+    $.ajax({
+        url  : $('#save-link-url').val(),
+        data : {
+            idObjet : id,
+            objets  : $('#objets-linked').val()
+        },
+        type     : 'POST',
+        dataType : 'json',
+        success  : function( data ){
+            window.location = data.url;
+        }
+    });
 }

@@ -36,6 +36,11 @@ $(document).ready(function() {
         $('#autresResultats .row').slideToggle();
     });
 
+    $('#productions h2').click(function(){
+        $(this).toggleClass('open closed');
+        $('#productions .row').slideToggle();
+    });
+
     //Style WYSIWYG custom : titre pliable
     $('h2 .titre_depliable').click(function(){
         $(this).parent().nextAll().each(function(){

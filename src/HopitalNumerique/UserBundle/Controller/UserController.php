@@ -427,7 +427,8 @@ class UserController extends Controller
                             'dateInscriptionString'              => 'Date d\'inscription',
                             'fonctionDansEtablissementSante'     => 'Fonction dans l\'établissement de Santé',
                             'nbVisites'                          => 'Nombre de visites',
-                            'raisonDesinscription'               => 'Raison de désinscription'
+                            'raisonDesinscription'               => 'Raison de désinscription',
+                            'remarque'                           => 'Remarque pour la gestion'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
@@ -660,6 +661,7 @@ class UserController extends Controller
         if($this->_informationsPersonnelles)
         {
             $form->remove('plainPassword');
+            $form->remove('remarque');
             $form->remove('raisonDesinscription');
             $form->remove('file');
         }

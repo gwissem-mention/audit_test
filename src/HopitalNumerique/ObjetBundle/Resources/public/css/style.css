@@ -15,6 +15,9 @@ ul.list-unstyled{margin-bottom:0;}
     #infra fieldset{position: relative;}
     #infra #sommaire .text-muted {margin-right: 90px}
 
+    /* Tabl productions */
+    #productions{margin-top:20px;}
+
 /* fancybox References */
 #panel-references{padding:0;}
 #panel-references .tableContent{overflow-y:auto; height:470px}

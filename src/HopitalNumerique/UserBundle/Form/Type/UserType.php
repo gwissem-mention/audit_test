@@ -168,6 +168,10 @@ class UserType extends AbstractType
                         },
                         'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
                     ))
+                    ->add('remarque', 'textarea', array(
+                        'required'   => false, 
+                        'label'      => 'Remarque pour la gestion'
+                    ))
                     ->add('raisonDesinscription', 'textarea', array(
                         'required'   => false, 
                         'label'      => 'Raison de la désinscription'

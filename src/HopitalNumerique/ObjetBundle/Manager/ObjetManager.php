@@ -275,13 +275,7 @@ class ObjetManager extends BaseManager
      */
     public function getObjetsNonMaitrises( $id, $types )
     {
-        //Remove Points Dur et Ressources Externes
-        foreach($types as $key => $type){
-            if( $type->getId() == 183 || $type->getId() == 184)
-                unset($types[$key]);
-        }
-
-        $results = $this->getObjetsByTypes( $types );
+        $results = $this->getProductions( $types );
         $objets  = array();
 
         foreach ($results as $one)
@@ -306,6 +300,24 @@ class ObjetManager extends BaseManager
         }
 
         return $objets;
+    }
+
+    /**
+     * Retourne la liste des productions
+     *
+     * @param array   $types Liste des types
+     *
+     * @return array
+     */
+    public function getProductions( $types )
+    {
+        //Remove Points Dur et Ressources Externes
+        foreach($types as $key => $type){
+            if( $type->getId() == 183 || $type->getId() == 184)
+                unset($types[$key]);
+        }
+
+        return $this->getObjetsByTypes( $types );
     }
 
     /**
