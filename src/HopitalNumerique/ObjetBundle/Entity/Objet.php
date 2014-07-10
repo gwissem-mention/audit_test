@@ -269,6 +269,7 @@ class Objet
      *      joinColumns={ @ORM\JoinColumn(name="obj1_id", referencedColumnName="obj_id")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="obj2_id", referencedColumnName="obj_id")}
      * )
+     * @ORM\OrderBy({"titre" = "ASC"})
      */
     protected $objets;
     
