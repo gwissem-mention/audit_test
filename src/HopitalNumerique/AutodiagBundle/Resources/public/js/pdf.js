@@ -98,7 +98,7 @@ $(document).ready(function() {
                 {
                     dataLabels: {
                         enabled: true,
-                        format: '{point.y:,.0f}%',
+                        format: '<b>{point.y:,.0f}%</b>',
                         softConnector: true,
                         align: 'left'
                     },
@@ -109,7 +109,7 @@ $(document).ready(function() {
                 }, {
                     dataLabels: {
                         enabled: true,
-                        format: '{point.y:,.0f}%',
+                        format: '<b>{point.y:,.0f}%</b>',
                         softConnector: true,
                         align: 'left'
                     },
