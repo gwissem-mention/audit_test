@@ -39,20 +39,19 @@ $(document).ready(function() {
     var datas        = $.parseJSON( $('#datas-radar').val() );
     var categories   = [];
     var values       = [];
+    var taux         = [];
     var optimale     = [];
     var nonConcernes = [];
     $(datas).each(function(index, element ){
         if( element.value != 'NC' || element.taux != 0 ){
-            categories.push( '<b>' + element.title + '</b> (Taux de remplissage: '+ element.taux + '%)' );
+            title = '<b>' + element.title + '</b> (Taux de remplissage: ' + element.taux + '%)';
+            categories.push( title );
             values.push( element.value );
             optimale.push( element.opti );
-        }else{
-            categories.push( '<b>' + element.title + '</b> (Taux de remplissage: 0%)' );
-            values.push( 'NC' );
-            optimale.push( element.opti );
 
-            //nonConcernes.push( element.title );
-        }
+            taux[ title ] = element.taux;
+        }else
+            nonConcernes.push( element.title );
     });
 
     //Gestion des chapitres non concernes
@@ -108,13 +107,26 @@ $(document).ready(function() {
             },
             tooltip : {
                 shared      : true,
-                pointFormat : '<span style="color:#333333; font-size:10px">{series.name} : {point.y:,.0f}%<br/>'
+                formatter: function() {
+                    var s   = this.x;
+                    var tau = taux[this.x]
+
+                    $.each(this.points, function(i, point) {
+                        val = ( tau == 0 && point.series.name == "Score" ) ? 'NC' : number_format(point.y, 0) + '%';
+                        s += '<br/><span style="color:#333333; font-size:10px">'+ point.series.name + ': '+ val + '</span>';
+                    });
+                    
+                    return s;
+                }
             },
             series : [
                 {
                     dataLabels: {
                         enabled: true,
-                        format: '<b>{point.y:,.0f}%</b>',
+                        formatter: function() {
+                            var tau = taux[this.point.category];
+                            return ( tau == 0 && this.point.series.name == "Score" ) ? '' : '<b>' + number_format(this.point.y, 0) + '%</b>'
+                        },
                         softConnector: true,
                         align: 'left'
                     },
@@ -140,8 +152,10 @@ $(document).ready(function() {
     }
 
     //récupère le total et applique la couleur
-    noteClass = $('.last-note').attr('class').replace('last-note text-center ','');
-    $('.title-total').addClass( noteClass );
+    if( $('.last-note').length > 0 ){
+        noteClass = $('.last-note').attr('class').replace('last-note text-center ','');
+        $('.title-total').addClass( noteClass );    
+    }
 });
 
 var copyStyle = function(source, dest)
@@ -231,4 +245,41 @@ var reverse_table = function(thetable)
     }
     
     thetable.parentNode.replaceChild(rtable, thetable);
+}
+
+/**
+ * [number_format description]
+ *
+ * @param  {[type]} number        [description]
+ * @param  {[type]} decimals      [description]
+ * @param  {[type]} dec_point     [description]
+ * @param  {[type]} thousands_sep [description]
+ *
+ * @return {[type]}
+ */
+function number_format(number, decimals, dec_point, thousands_sep)
+{
+    number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+    var n    = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep  = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec  = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s    = '',
+        toFixedFix = function(n, prec) {
+          var k = Math.pow(10, prec);
+          return '' + (Math.round(n * k) / k)
+            .toFixed(prec);
+        };
+
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+    if (s[0].length > 3)
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    
+    if ((s[1] || '').length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    
+    return s.join(dec);
 }

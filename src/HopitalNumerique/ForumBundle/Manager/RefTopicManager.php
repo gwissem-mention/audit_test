@@ -20,15 +20,6 @@ class RefTopicManager extends BaseManager
      */
     public function getTopicForRecherche( $references )
     {
-        $qb = $this->_em->createQueryBuilder();
-
-        return $qb->select('refO')
-                        ->from('\HopitalNumerique\ForumBundle\Entity\RefTopic', 'refO')
-                        ->leftJoin('refO.topic','top')
-                        ->andWhere('refO.reference in (:references)','top.isClosed = false')
-                        ->setParameter('references', $references )
-                        ->orderBy('refO.primary', 'ASC')
-                        ->getQuery()
-                        ->getResult();
+        return $this->getRepository()->getTopicForRecherche( $references )->getQuery()->getResult();
     }
 }

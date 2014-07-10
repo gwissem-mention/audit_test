@@ -60,13 +60,6 @@
                                 <div class="panel-body">
                                     <h3 class="toPrint">{{panel.title}}</h3>
                                     {% if panel.value|checkNC %}
-
-                                        {% if tauxChapitre == 0 %}
-                                            {% set value = 'NC' %}
-                                        {% else %}
-                                            {% set value = panel.value|number_format(0) ~ '%' %}
-                                        {% endif %}
-
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-danger" style="width: 33.3%">
                                                 Faible
@@ -77,9 +70,13 @@
                                             <div class="progress-bar progress-bar-success" style="width: 33.3%">
                                                 Fort
                                             </div>
-                                            <div class="cursor" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{value}}" title="<span>Score : {{value}}</span>" ></div>
-                                            {% if pdf %}
-                                                <div class="cursor-value" style="left:{{value}}">{{value}}</div>
+
+                                            {% if tauxChapitre != 0 %}
+                                                {% set value = panel.value|number_format(0) ~ '%' %}
+                                                <div class="cursor" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{value}}" title="<span>Score : {{value}}</span>" ></div>
+                                                {% if pdf %}
+                                                    <div class="cursor-value" style="left:{{value}}">{{value}}</div>
+                                                {% endif %}
                                             {% endif %}
                                         </div>
                                     {% else %}
@@ -352,7 +349,7 @@
 {% macro buildQuestion(question, publications) %}
     <div class="row">
         <div class="col-md-12">
-            <p class="question">{{question.question}}</p>
+            <p class="question">{% if question.code != '' %}{{question.code ~ '. '}}{% endif %}{{question.question}}</p>
             <p class="violet synthese">{{question.synthese}}</p>
             {{publications|raw}}
         </div>

@@ -21,13 +21,18 @@ $(document).ready(function() {
     var datas      = $.parseJSON( $('#datas-radar').val() );
     var categories = [];
     var values     = [];
+    var taux       = [];
     var optimale   = [];
     var nonConcernes = [];
     $(datas).each(function(index, element ){
         if( element.value != 'NC' ){
-            categories.push( '<b>' + element.title + '</b>' );
+            title = '<b>' + element.title + '</b>';
+
+            categories.push( title );
             values.push( element.value );
             optimale.push( element.opti );
+
+            taux[ title ] = element.taux;
         }else
             nonConcernes.push( element.title );
     });
@@ -88,6 +93,17 @@ $(document).ready(function() {
             tooltip : {
                 shared      : true,
                 pointFormat : '<span style="color:#333333">{series.name}: <b>{point.y:,.0f}</b><br/>'
+                formatter: function() {
+                    var s   = this.x;
+                    var tau = taux[this.x]
+
+                    $.each(this.points, function(i, point) {
+                        val = ( tau == 0 && point.series.name == "Score" ) ? 'NC' : number_format(point.y, 0) + '%';
+                        s += '<br/><span style="color:#333333">'+ point.series.name + ': '+ val + '</span>';
+                    });
+                    
+                    return s;
+                }
             },
             plotOptions : {
                 series : {
@@ -98,7 +114,10 @@ $(document).ready(function() {
                 {
                     dataLabels: {
                         enabled: true,
-                        format: '<b>{point.y:,.0f}%</b>',
+                        formatter: function() {
+                            var tau = taux[this.point.category];
+                            return ( tau == 0 && this.point.series.name == "Score" ) ? '' : '<b>' + number_format(this.point.y, 0) + '%</b>'
+                        },
                         softConnector: true,
                         align: 'left'
                     },
