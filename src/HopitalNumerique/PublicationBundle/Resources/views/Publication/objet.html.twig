@@ -116,12 +116,12 @@
         {% endif %}
         
         {# Productions fortement liées #}
-        {% if objet.objets|length > 0 %}
+        {% if productions|length > 0 %}
             <div class="col-md-12" id="productions" >
                 <h2 class="open">Productions fortements liées</h2>
                 <div class="row">
                     <ul>
-                        {% for one in objet.objets %}
+                        {% for one in productions %}
                             <li>
                                 <a href="{{path('hopital_numerique_publication_publication_objet', {'id':one.id, 'alias': one.alias})}}">{{one.titre}}</a>
                             </li>

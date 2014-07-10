@@ -29,12 +29,21 @@ class PublicationController extends Controller
         //set Consultation entry
         $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $objet );
 
+        //build productions with authorizations
+        $productions = array();
+        $prodLiees   = $objet->getObjets();
+        foreach( $prodLiees as $one){
+            if( $this->checkAuthorization( $one ) === true )
+                $productions[] = $one;
+        }
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
             'objets'       => $this->getObjetsFromRecherche( $objet ),
             'types'        => $types,
             'contenus'     => $contenus,
+            'productions'  => $productions,
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
             'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() )
         ));
