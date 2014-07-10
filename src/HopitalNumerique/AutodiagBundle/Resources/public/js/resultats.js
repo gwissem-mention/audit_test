@@ -42,12 +42,17 @@ $(document).ready(function() {
     var optimale     = [];
     var nonConcernes = [];
     $(datas).each(function(index, element ){
-        if( element.value != 'NC' ){
-            categories.push( '<b>' + element.title + '</b> (Taux de remplissage: '+ element.taux+'%)' );
+        if( element.value != 'NC' || element.taux != 0 ){
+            categories.push( '<b>' + element.title + '</b> (Taux de remplissage: '+ element.taux + '%)' );
             values.push( element.value );
             optimale.push( element.opti );
-        }else
-            nonConcernes.push( element.title );
+        }else{
+            categories.push( '<b>' + element.title + '</b> (Taux de remplissage: 0%)' );
+            values.push( 'NC' );
+            optimale.push( element.opti );
+
+            //nonConcernes.push( element.title );
+        }
     });
 
     //Gestion des chapitres non concernes
