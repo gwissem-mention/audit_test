@@ -84,6 +84,7 @@ class PublicationController extends Controller
             'types'        => $types,
             'contenu'      => $contenu,
             'prefix'       => $prefix,
+            'productions'  => array(),
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() ),
             'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() )
         ));

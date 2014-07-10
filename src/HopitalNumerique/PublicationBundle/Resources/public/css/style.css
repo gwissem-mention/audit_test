@@ -87,12 +87,12 @@
         #articles .actus ul li:hover a{color:#6f3596;}
 
 /* Productions fortement liées */
-    #productions h2{display: block; margin-bottom:15px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer}
+    #productions h2{display: block; margin-bottom:15px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
     #productions h2.open{background-position: right -38px;}
     #productions h2.closed{background-position: right -5px; }
 
 /* Autres résultats */
-    #autresResultats h2{display: block; margin-bottom:15px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer}
+    #autresResultats h2{display: block; margin-bottom:15px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
     #autresResultats h2.open{background-position: right -38px;}
     #autresResultats h2.closed{background-position: right -5px; }
     #autresResultats .separator{height: 20px}

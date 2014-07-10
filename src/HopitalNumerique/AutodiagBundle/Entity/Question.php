@@ -43,6 +43,18 @@ class Question
     /**
      * @var string
      *
+     * @ORM\Column(name="que_code", type="string", length=8, options = {"comment" = "Code de la question"}, nullable=true)
+     * @Assert\Length(
+     *      max = "8",
+     *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans le code."
+     * )
+     * @Nodevo\Javascript(class="validate[maxSize[8]]")
+     */
+    private $code;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="que_info_bulle", type="text", options = {"comment" = "Info Bulle de la question"}, nullable=true)
      */
     private $infoBulle;
@@ -166,6 +178,27 @@ class Question
         return $this->texte;
     }
 
+    /**
+     * Get code
+     *
+     * @return string $code
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+    
+    /**
+     * Set code
+     *
+     * @param string $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+        return $this;
+    }
+    
     /**
      * Set infoBulle
      *

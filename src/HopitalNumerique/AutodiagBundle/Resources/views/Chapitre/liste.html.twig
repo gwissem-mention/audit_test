@@ -39,7 +39,7 @@
                     {% set questionNumber = 1 %}
                     {% for chapitre in chapitres %}
                         <h2>
-                            {{chapitre.title}}
+                            {% if chapitre.code != '' %}{{chapitre.code ~ '. '}}{% endif %}{{chapitre.title}}
                             <span class="pull-right">
                                 {% if chapitre.noteOpt %}Note optimal : {{chapitre.noteOpt}}{% endif %}
                                 {% if chapitre.noteOpt and chapitre.noteMin %}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
@@ -59,7 +59,7 @@
                                 <div class="col-md-12">
                                     {% for child in chapitre.childs %}
                                         <h3>
-                                            {{child.title}}
+                                            {% if child.code != '' %}{{child.code ~ '. '}}{% endif %}{{child.title}}
                                             <span class="pull-right">
                                                 {% if chapitre.noteOpt %}Note optimal : {{chapitre.noteOpt}}{% endif %}
                                                 {% if chapitre.noteOpt and chapitre.noteMin %}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}

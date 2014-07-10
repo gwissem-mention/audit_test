@@ -101,7 +101,7 @@
     <li class="dd-item dd3-item" data-id="{{chapitre.id}}" id="chapitre-{{chapitre.id}}" >
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
-            <a href="javascript:selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')">{{chapitre.title}}</a>
+            <a href="javascript:selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')">{% if chapitre.code != '' %}{{chapitre.code ~ '. '}}{% endif %}{{chapitre.title}}</a>
             <p class="text-muted pull-right">
                 {% if chapitre.noteOptimale %}Note optimal : {{chapitre.noteOptimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
                 {% if chapitre.noteMinimale %}Note minimale de déclenchement : {{chapitre.noteMinimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}

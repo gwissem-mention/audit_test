@@ -46,6 +46,13 @@ class QuestionType extends AbstractType
                 'label'      => 'Texte',
                 'attr'       => array('class' => $this->_constraints['texte']['class'] )
             ))
+            ->add('code', 'text', array(
+                'max_length' => $this->_constraints['code']['maxlength'],
+                'required'   => false, 
+                'label'      => 'Code',
+                'label_attr'   => array('class' => 'col-md-4 control-label'),
+                'attr'       => array('class' => $this->_constraints['code']['class'] )
+            ))
             ->add('infoBulle', 'textarea', array( 
                 'required' => false, 
                 'label'    => 'Texte de l\'info-bulle'

@@ -71,19 +71,18 @@
 
             <div class="col-md-12 content">
                 {% set formName = outil.alias %}
-                {% set questionNumber = 1 %}
                 {% import _self as mySelf %}
                 <form action="{{path('hopitalnumerique_autodiag_front_save', {'id':outil.id})}}" id="wizard" class="form-horizontal" method="POST">
                     {% for chapitre in chapitres %}
                         {% set parent = chapitre['parent'] %}
 
                         {# Build step #}
-                        <fieldset title="<p>{{parent.title}}</p>" >
+                        <fieldset title="<p>{% if parent.code != '' %}{{parent.code ~ '. '}}{% endif %}{{parent.title}}</p>" >
                             {% if reponses %}
                                 <div onclick="emptyChapter(this);" class="emptyChapter btn btn-default btn-sm pull-right" title="Vider le chapitre"><i class="fa fa-trash-o"></i></div>
                             {% endif %}
                             <div onclick="chapterNonConcerne(this);" class="chapitreNonConcerne btn btn-default btn-sm pull-right" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></div>
-                            <h2>{{parent.title}}</h2>
+                            <h2>{% if parent.code != '' %}{{parent.code ~ '. '}}{% endif %}{{parent.title}}</h2>
 
                             <hr>
 
@@ -94,15 +93,14 @@
                                     {% else %}
                                         {% set reponse = {'value': null} %}
                                     {% endif %}
-                                    {{ mySelf.buildQuestion(question, reponse, formName, questionNumber) }}
-                                    {% set questionNumber = questionNumber + 1 %}
+                                    {{ mySelf.buildQuestion(question, reponse, formName) }}
                                 {% endfor %}
                             {% endif %}
                             
                             {% if chapitre['childs']|length > 0 %}
                                 <div class="sous-chapitre">
                                     {% for child in chapitre['childs'] %}
-                                        <h3>{{child.title}} - <span onclick="chapterNonConcerne(this, true);" class="chapitreNonConcerne" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></span></h3>
+                                        <h3>{% if child.code != '' %}{{child.code ~ '. '}}{% endif %}{{child.title}} - <span onclick="chapterNonConcerne(this, true);" class="chapitreNonConcerne" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></span></h3>
                                         
                                         <hr>
                                         
@@ -113,8 +111,7 @@
                                                 {% else %}
                                                     {% set reponse = {'value' : null} %}
                                                 {% endif %}
-                                                {{ mySelf.buildQuestion(question, reponse, formName, questionNumber) }}
-                                                {% set questionNumber = questionNumber + 1 %}
+                                                {{ mySelf.buildQuestion(question, reponse, formName) }}
                                             {% endfor %}
                                         </div>
                                     {% endfor %}
@@ -138,7 +135,7 @@
     </div>
 {% endblock %}
 
-{% macro buildQuestion(question, reponse, formName, questionNumber) %}
+{% macro buildQuestion(question, reponse, formName) %}
     {# Build vars to make it cleaner #}
     {% set questionName = formName ~ '[' ~ question.chapitre.id ~ ']' ~ '[' ~ question.id ~ ']' %}
     {% set questionId   = formName ~ '_' ~ question.chapitre.id ~ '_' ~ question.id %}
@@ -146,7 +143,7 @@
     {# Build form group #}
     <div class="form-group">
         <label for="{{questionName}}" class="col-md-7 col-sm-12">
-            {{questionNumber ~ '. ' ~ question.texte}}
+            {% if question.code != '' %}{{question.code ~ '. '}}{% endif %}{{question.texte}}
             {% if question.infoBulle %}<span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>{% endif %}
         </label>
         <div class="col-md-4 col-sm-11">

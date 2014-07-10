@@ -48,7 +48,7 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Formatte les résultats pour la partie backoffice
+     * Formatte les résultats
      *
      * @param Resultat $resultat L'objet Résultat
      *
@@ -73,7 +73,7 @@ class ResultatManager extends BaseManager
             //build chapitre values
             $chapitre->id       = $one->getId();
             $chapitre->synthese = $one->getSynthese();
-            $chapitre->title    = $one->getTitle();
+            $chapitre->title    = $one->getCode() != '' ? $one->getCode() . '. ' . $one->getTitle() : $one->getTitle();
             $chapitre->childs   = array();
             $chapitre->noteMin  = $one->getNoteMinimale();
             $chapitre->noteOpt  = $one->getNoteOptimale();
