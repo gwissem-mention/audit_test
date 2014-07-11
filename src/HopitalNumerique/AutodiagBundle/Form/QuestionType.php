@@ -103,7 +103,10 @@ class QuestionType extends AbstractType
                 'required' => false, 
                 'label'    => 'Phrase de synthese'
             ))
-
+            ->add('colored', 'checkbox', array(
+                'required'   => false,
+                'label'      => 'Colorer la réponse'
+            ))
             ->add('chapitre', 'hidden', array(
                 'mapped' => false,
                 'data'   => $datas->getChapitre()->getId()

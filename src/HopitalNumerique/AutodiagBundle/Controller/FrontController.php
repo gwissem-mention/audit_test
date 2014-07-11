@@ -189,7 +189,7 @@ class FrontController extends Controller
      *
      * @param  Resultat $resultat L'entitée résultat
      */
-    public function resultatAction( Resultat $resultat, Request $request )
+    public function resultatAction( Resultat $resultat, $back, Request $request )
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $user = $user != 'anon.' ? $user : false;
@@ -214,10 +214,14 @@ class FrontController extends Controller
             $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
         }
 
+        if( !$user || $back === 0 )
+            $back = false;
+
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
             'resultat'   => $resultat,
             'chapitres'  => $chapitres,
-            'graphiques' => $graphiques
+            'graphiques' => $graphiques,
+            'back'       => $back
         ));
     }
 

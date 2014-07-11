@@ -113,6 +113,13 @@ class Question
     private $order;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="que_colored", type="boolean", options = {"comment" = "Colorer la question ?"})
+     */
+    private $colored;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_type", referencedColumnName="ref_id")
      * @Nodevo\Javascript(class="validate[required]")
@@ -143,6 +150,7 @@ class Question
     public function __construct()
     {
         $this->ponderation = 1;
+        $this->colored     = 0;
     }
 
     /**
@@ -383,6 +391,27 @@ class Question
         return $this->order;
     }
 
+    /**
+     * Get colored
+     *
+     * @return boolean $colored
+     */
+    public function getColored()
+    {
+        return $this->colored;
+    }
+    
+    /**
+     * Set colored
+     *
+     * @param boolean $colored
+     */
+    public function setColored($colored)
+    {
+        $this->colored = $colored;
+        return $this;
+    }
+    
     /**
      * Get type
      *

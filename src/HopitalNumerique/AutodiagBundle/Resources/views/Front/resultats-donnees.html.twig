@@ -3,7 +3,12 @@
 <div id="resultats">
     <div class="col-md-12">
         <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download"></i></a>
-        <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
+
+        {% if back is defined and back %}
+            <a href="{{path('hopitalnumerique_autodiag_front_comptehn')}}" class="print btn btn-success pull-left" title="Retour à mon compte"><i class="fa fa-reply"></i></a>
+        {% else %}
+            <a href="{{path('hopitalnumerique_autodiag_front_outil', {'alias':resultat.outil.alias})}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
+        {% endif %}
 
         {% if pdf %}
             <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="Logo anap" class="pull-left" />

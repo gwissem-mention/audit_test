@@ -194,8 +194,8 @@ hopitalnumerique_autodiag_front_save:
         id: \d+
 
 hopitalnumerique_autodiag_front_resultat:
-    pattern:  /autodiagnostic/resultat/{id}
-    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:resultat" }
+    pattern:  /autodiagnostic/resultat/{id}/{back}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:resultat", back: 0 }
     requirements:
         id: \d+
 
