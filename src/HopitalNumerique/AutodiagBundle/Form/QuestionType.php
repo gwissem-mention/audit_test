@@ -105,7 +105,6 @@ class QuestionType extends AbstractType
             ))
             ->add('colored', 'checkbox', array(
                 'required'   => false,
-                'data'       => !empty($datas) ? (bool)$datas->getColored() : false, 
                 'label'      => 'Colorer la réponse'
             ))
             ->add('chapitre', 'hidden', array(
