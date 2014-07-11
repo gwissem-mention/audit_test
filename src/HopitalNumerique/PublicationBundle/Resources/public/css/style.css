@@ -38,13 +38,14 @@
     #publication .col-md-4 div.wrapper .fa-download{margin:3px 0 0 7px;}
 
     /* Bloc Productions associés */
-    #publication #productions{padding:0;}
-    #publication #productions h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal}
-    #publication #productions .wrapper-results{ background: #f4f4f4; padding:20px; position: relative; }
-    #publication #productions .wrapper-results .background-violet{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
-    #publication #productions .wrapper-results .results h4{margin-bottom: 5px}
-    #publication #productions .wrapper-results .results h4 a{color:#703695; font-size: 18px; font-weight: bold; }
-    #publication #productions .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top: 10px; display: block; height: 18px; text-align: right}
+    #publication #productions{ margin-top: 30px; }
+    #publication #productions h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal }
+    #publication #productions .wrapper-results{ padding:20px 0; position: relative;}
+    #publication #productions .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+    #publication #productions .wrapper-results .results h4{clear: both; margin-top: 0}
+    #publication #productions .wrapper-results .results h4 a{color:#070005; font-size: 18px; font-weight: bold}
+    #publication #productions .wrapper-results .results h5{color:#b71c8b; font-size: 13px; font-weight: normal; text-transform: uppercase; margin-bottom: 5px}
+    #publication #productions .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top:10px; display: block; height: 18px; text-align: right}
     #publication #productions .wrapper-results .results p{font-size: 13px; color:#070707; }
     #publication #productions .wrapper-results .results .fa-refresh{ color:#3da20b; }
 

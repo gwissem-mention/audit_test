@@ -140,6 +140,28 @@ class PublicationController extends Controller
 
 
 
+    /**
+     * Retorune le type de la prod
+     *
+     * @param  [type] $objet [description]
+     *
+     * @return [type]
+     */
+    private function getType( $objet ) 
+    {
+        $type  = array();
+        $types = $objet->getTypes();
+
+        foreach ($types as $one) {
+            $parent = $one->getParent();
+            if( $parent->getId() == 175 )
+                $type[] = $one->getLibelle();
+        }
+        //reformatte proprement les types
+        $type = implode(' ♦ ', $type);
+
+        return $type;
+    }
 
     /**
      * Build productions with authorizations
@@ -160,6 +182,7 @@ class PublicationController extends Controller
                 $production->titre    = $one->getTitre();
                 $production->synthese = $one->getSynthese();
                 $production->created  = $one->getDateCreation();
+                $production->type     = $this->getType($one);
                 $tab                  = explode('<!-- pagebreak -->', $one->getResume() );
                 $production->resume   = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
                 $production->updated  = false;

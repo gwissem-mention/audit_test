@@ -133,6 +133,48 @@
             <div class="clearfix"></div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            
+            prepareColoredQuestions();
+        });
+
+        function prepareColoredQuestions()
+        {
+            $('select.colored').each(function(){
+                var minVal = null;
+                var maxVal = null;
+                var icon   = $(this).parent().parent().find('.icon i');
+
+                $(this).find('option').each(function(){
+                    val = parseInt($(this).val());
+                    //get all options except : Non concerné + vide
+                    if( !isNaN(val) && val != -1){
+                        //Min value of all options
+                        if( minVal == null || val < minVal )
+                            minVal = val;
+                        //Max value of each options
+                        if( maxVal == null || val > maxVal )
+                            maxVal = val;
+                    }
+                });
+
+                $(this).on('change', function(){
+                    if( $(this).val() == minVal ){
+                        icon.addClass('fa-times-circle').removeClass('fa-check-circle');
+                    }else if( $(this).val() == maxVal ){
+                        icon.addClass('fa-check-circle').removeClass('fa-times-circle');
+                    }else{
+                        val = parseInt($(this).val());
+                        if( !isNaN(val) && val != -1)
+                            icon.addClass('fa-exclamation-circle').removeClass('fa-check-circle fa-times-circle');
+                    }
+                });
+            });
+        }
+
+    </script>
 {% endblock %}
 
 {% macro buildQuestion(question, reponse, formName) %}
@@ -151,7 +193,7 @@
             {% if question.type.id == '415' %}
                 {% set options = question.options|nl2br|split('<br />') %}
 
-                <select name="{{questionName}}" id="{{questionId}}" class="form-control">
+                <select name="{{questionName}}" id="{{questionId}}" class="form-control {% if question.colored %}colored{% endif %}" >
                     <option value=""> - </option>
                     <option value="-1" {% if reponse['value'] == -1 %}selected="selected"{% endif %} >Non concerné</option>
                     {% for option in options %}
@@ -162,7 +204,7 @@
             {# RADIO #}
             {% elseif question.type.id == '416' %}
                 {% set options = question.options|nl2br|split('<br />') %}
-                <div class="radios">
+                <div class="radios {% if question.colored %}colored{% endif %}">
                     {% set isChecked = false %}
                     <div class="radio block"><label><input type="radio" value="-1" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] != '' and reponse['value'] == -1 %}{% set isChecked = true %}checked="checked"{% endif %} />Non concerné</label></div>
                     {% for option in options %}
@@ -172,6 +214,7 @@
                     <div class="hide">
                         <div class="radio block"><input type="radio" value="" name="{{questionName}}" id="{{questionId}}" {% if isChecked == false %}checked="checked"{% endif %} /></div>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
             {# TEXT #}
             {% else %}
@@ -180,8 +223,9 @@
 
             <input type="text" class="form-control input-sm remarque" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="{% if reponse['remarque'] is not defined or reponse['remarque'] == '' %}display:none{% endif %}" placeholder="Remarques" value="{% if reponse['remarque'] is defined and reponse['remarque'] != '' %}{{reponse['remarque']}}{% endif %}" />
         </div>
-        <div class="col-md-1 col-sm-1">
-            <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i title="Ajouter un commentaire" class="fa fa-comment"></i></div>
+        <div class="col-md-1 col-sm-1 qOptions">
+            <div class="icon pull-left"><i class="fa"></i></div>
+            <div class="remarques-toggle pull-right" data-target="{{questionId}}_remarque" ><i title="Ajouter un commentaire" class="fa fa-comment"></i></div>
         </div>
     </div>
 {% endmacro %}
