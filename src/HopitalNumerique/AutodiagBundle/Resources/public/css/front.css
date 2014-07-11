@@ -30,7 +30,7 @@
     #autodiag .content h3{color:#6f3596; margin-bottom: 20px; font-size: 18px}
     #autodiag .content h3 .chapitreNonConcerne{cursor: pointer}
     #autodiag .content .badge-primary{background-color:#6f3596; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
-    #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer; margin-top: 6px}
+    #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer; margin-top: 5px}
     #autodiag .content .radio{float: left; margin-right: 30px;}
     #autodiag .content .saveBtns{margin: 20px auto; width: 410px }
     #autodiag .content .saveBtns .btn{ width: 200px; text-align: center}
@@ -39,9 +39,9 @@
     #autodiag .content .radios{ border: 1px solid #CCCCCC; padding: 0 0 10px 10px; }
     #autodiag .content .qOptions{padding-left: 0}
     #autodiag .content .icon{margin-top: 5px}
-    #autodiag .content .icon .fa-check-circle{color: green}
-    #autodiag .content .icon .fa-times-circle{color: red}
-    #autodiag .content .icon .fa-exclamation-circle{color: orange}
+    #autodiag .content .icon .fa-check-circle{color:#B4DC00}
+    #autodiag .content .icon .fa-times-circle{color:#C82F5B}
+    #autodiag .content .icon .fa-exclamation-circle{color:#E88824}
 
     #autodiag .stepy-navigator{}
     #autodiag .stepy-navigator .button-back,
@@ -103,5 +103,6 @@
     #autodiag .content h2{margin-top: 0}
     #autodiag .blockLeft{margin-bottom: 20px}
     #autodiag .content .sous-chapitre label{padding-left: 15px}
-    #autodiag .content div.remarques-toggle{margin-top: 7px}
+    #autodiag .content div.remarques-toggle{margin:7px 5px 0 0}
+    #autodiag .content .icon {margin:5px 0 0 20px}
 }

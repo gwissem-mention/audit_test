@@ -268,7 +268,7 @@ class PublicationController extends Controller
 
         //test si l'user connecté à le rôle requis pour voir l'objet
         if( !$this->get('hopitalnumerique_objet.manager.objet')->checkAccessToObjet($role, $objet) ) {
-            $this->get('session')->getFlashBag()->add('warning', $message );
+            //$this->get('session')->getFlashBag()->add('warning', $message );
             return false;
         }
 
