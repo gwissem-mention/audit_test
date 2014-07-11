@@ -39,9 +39,9 @@
     #autodiag .content .radios{ border: 1px solid #CCCCCC; padding: 0 0 10px 10px; }
     #autodiag .content .qOptions{padding-left: 0}
     #autodiag .content .icon{margin-top: 5px}
-    #autodiag .content .icon .fa-check-circle{background: green}
-    #autodiag .content .icon .fa-times-circle{background: red}
-    #autodiag .content .icon .fa-exclamation-circle{background: orange}
+    #autodiag .content .icon .fa-check-circle{color: green}
+    #autodiag .content .icon .fa-times-circle{color: red}
+    #autodiag .content .icon .fa-exclamation-circle{color: orange}
 
     #autodiag .stepy-navigator{}
     #autodiag .stepy-navigator .button-back,
