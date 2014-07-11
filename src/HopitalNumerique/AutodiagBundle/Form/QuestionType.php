@@ -105,6 +105,7 @@ class QuestionType extends AbstractType
             ))
             ->add('colored', 'checkbox', array(
                 'required'   => false,
+                'data'       => !empty($datas) ? (bool)$datas->getColored() : false, 
                 'label'      => 'Colorer la réponse'
             ))
             ->add('chapitre', 'hidden', array(
@@ -112,6 +113,7 @@ class QuestionType extends AbstractType
                 'data'   => $datas->getChapitre()->getId()
             ))
         ;
+    
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
