@@ -10,11 +10,11 @@
     <form id="hopitalnumerique_reponse" novalidate="novalidate" class="form-horizontal toValidate" action="" method="post" name="hopitalnumerique_reponse">
         <div class="form-group">
             <label class="col-sm-1 control-label required" for="libelle_reponse">
-                Libelle
+                Libellé
                 <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
             </label>
             <div class="col-sm-2">
-                <input type="text" id="libelle_reponse" name="libelle" required="required" maxlength="50" class="validate[required,minSize[1]] form-control">
+                <input type="text" id="libelle_reponse" name="libelle" required="required" maxlength="255" class="validate[required,minSize[1],maxSize[255]] form-control">
             </div>
             <div class="col-sm-1" style="margin-top:6px;">
                 <div class="toggle toggle-success on" style="width:60px;height:20px;line-height:10px;font-size:8px;"></div>
