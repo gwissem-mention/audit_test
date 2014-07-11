@@ -53,16 +53,16 @@ class ExpBesoinReponses
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
-     * @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", nullable=true, onDelete="CASCADE")
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\RechercheBundle\Entity\RefExpBesoinReponses", mappedBy="expBesoinReponses", cascade={"persist"})
+     * @ORM\JoinColumn(name="refexpbr_id", referencedColumnName="refexpbr_id", nullable=true, onDelete="CASCADE")
      */
-    protected $redirigeReference;
+    protected $references;
     
     /**
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\RechercheBundle\Entity\ExpBesoin")
-     * @ORM\JoinColumn(name="expb_id", referencedColumnName="expb_id", nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="expb_id_redirection", referencedColumnName="expb_id", nullable=true, onDelete="CASCADE")
      */
     protected $redirigeQuestion;
 
@@ -169,9 +169,9 @@ class ExpBesoinReponses
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
      */
-    public function getReference()
+    public function getReferences()
     {
-        return $this->reference;
+        return $this->references;
     }
     
     /**
@@ -179,9 +179,9 @@ class ExpBesoinReponses
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
      */
-    public function setReference(\HopitalNumerique\ReferenceBundle\Entity\Reference $reference)
+    public function setReferences(\HopitalNumerique\ReferenceBundle\Entity\Reference $references)
     {
-        $this->reference = $reference;
+        $this->references = $references;
     }
 
     /**

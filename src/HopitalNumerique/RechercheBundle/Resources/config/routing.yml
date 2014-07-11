@@ -97,8 +97,8 @@ hopitalnumerique_expbesoin_reponse_delete:
         _method: POST|DELETE
 
 hopitalnumerique_expbesoin_reponse_edit:
-    pattern:  /admin/aide-expression-besoin/question/edit/{id}
-    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:edit" }
+    pattern:  /admin/aide-expression-besoin/question/edit/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:edit",  _format: json }
     requirements: 
         id : \d+
 
@@ -114,6 +114,18 @@ hopitalnumerique_expbesoin_reponse_reorder:
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:reorder" }
     requirements: 
         id : \d+
+
+hopitalnumerique_expbesoin_reponse_reference:
+    pattern:  /admin/aide-expression-besoin/reponse/{id}/reference
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:reference"}
+    requirements:
+        id: \d+
+
+hopitalnumerique_expbesoin_reponse_reference_save:
+    pattern:  /admin/aide-expression-besoin/reponse/{id}/reference/save
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:referenceSave" }
+    requirements:
+        id: \d+
 
 #CRON
 hopital_numerique_cron_requetes:

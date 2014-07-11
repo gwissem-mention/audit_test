@@ -1,51 +1,193 @@
 <h3 class="pull-left">{{expBesoin.libelle}}</h3>
 <div class="options pull-right">
+    <span class="designForBlank" style="margin-right:10px;">Cliquez sur le bouton '+' pour ajouter une reponse.</span>
     <div onclick="addReponse('{{path('hopitalnumerique_expbesoin_reponse_add', {'id':expBesoin.id})}}' );" class="btn btn-success addReponse"><i class="fa fa-plus"></i></div>
 </div>
 <div class="clearfix"></div>
-<span class="designForBlank" style="{% if expBesoin.reponses|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour ajouter une reponse.</span>
 
+{# Formulaire d'ajout d'une réponse #}
 <div id="designForForm">
-    <form novalidate="novalidate" class="form-horizontal toValidate" action="" method="post" name="hopitalnumerique_autodiag_question">
-        <div class="col-md-12">
-            <div class="form-group">
-                <label class="col-sm-2 control-label required" for="libelle_reponse">
-                    Libelle
-                    <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
-                </label>
-                <div class="col-sm-10">
-                    <input type="text" id="libelle_reponse" name="reponse[libelle]" required="required" maxlength="50" class="validate[required,minSize[1]] form-control">
+    <form id="hopitalnumerique_reponse" novalidate="novalidate" class="form-horizontal toValidate" action="" method="post" name="hopitalnumerique_reponse">
+        <div class="form-group">
+            <label class="col-sm-1 control-label required" for="libelle_reponse">
+                Libelle
+                <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+            </label>
+            <div class="col-sm-2">
+                <input type="text" id="libelle_reponse" name="libelle" required="required" maxlength="50" class="validate[required,minSize[1]] form-control">
+            </div>
+            <div class="col-sm-1" style="margin-top:6px;">
+                <div class="toggle toggle-success on" style="width:60px;height:20px;line-height:10px;font-size:8px;"></div>
+            </div>
+            <div class="col-sm-8">
+                <div class="blocQuestion">
+                    <select name="redirigeQuestion" id="expBesoin-reponse" class="form-control col-md-12">
+                        {% for expBesoinCourrante in expBesoinAll %}
+                            {% if expBesoinCourrante.id != expBesoin.id %}
+                                <option value="{{expBesoinCourrante.id}}" >{{expBesoinCourrante.libelle}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="blocReference" style="margin-top:6px;">
+                    Veuillez d'abord ajouter cette réponse avant de pouvoir gérer le référencement.
                 </div>
             </div>
+            <input type="hidden" name="question" id="expBesoinId" value="{{expBesoin.id}}" />
+            <input type="hidden" name="autreQuestion" id="autreQuestion" value="true" />
         </div>
         <div class="clearfix"></div>
     </form>
 </div>
 
-<div class="dd">
-    <ol class="dd-list">
-        {% for reponse in expBesoin.reponses %}
-            <li class="dd-item dd3-item" data-id="{{reponse.id}}" id="reponse-{{reponse.id}}" >
-                <div class="dd-handle dd3-handle"></div>
-                <div class="dd3-content">
-                    <a href="{{path('hopitalnumerique_autodiag_reponse_edit',{'id':reponse.id})}}" class="fancy fancybox.ajax" title="{{reponse.texte}}">{{reponse.texte|truncate(95, true, '...')}}</a>
-                    <p class="text-muted pull-right">
-                        {% if reponse.ponderation %}Pond. : {{reponse.ponderation}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
-                        Note référencement : <span>{{reponse.note}}</span> / 400
-                    </p>
-                </div>
-                <div class="dd3-actions">
-                    <div onclick="deleteQuestion( {{reponse.id}}, '{{path('hopitalnumerique_autodiag_reponse_delete', {'id':reponse.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-                    <a href="{{path('hopitalnumerique_autodiag_reference_reponse', {'id':reponse.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
-                </div>
-            </li>
-        {% endfor %}
-    </ol>
+<div id="reponses-dd">
+    <div class="dd">
+        <ol class="dd-list">
+            {% for reponse in expBesoin.reponses %}
+                <li class="dd-item dd3-item" data-id="{{reponse.id}}" id="reponse-{{reponse.id}}" >
+                    <div class="dd-handle dd3-handle"></div>
+                    <div class="dd3-content" style="padding:1px 50px 5px 40px;">
+                        <div class="col-sm-6 row" style="margin-top:4px">
+                            {{reponse.libelle}}
+                        </div>
+                        <div class="col-sm-2 row" style="margin-top:4px">
+                            <div class="pull-right" id="toggle-concernant-reponse">
+                                <div class="toggle toggle-success {% if reponse.autreQuestion %}on{% else %}off{% endif %}" style="width:60px;height:20px;line-height:10px;font-size:8px;"></div>
+                            </div>
+                            <input type="hidden" id="toggle-reponses-{{reponse.id}}" value="{% if reponse.autreQuestion %}true{% else %}false{% endif %}" />
+                        </div>
+                        <div class="col-sm-4 row note-referencement {% if reponse.autreQuestion %}hide{% endif %}" style="margin-top:4px">
+                            <p class="text-muted text-right pull-right">Note référencement : <span class="nbRefs">{{notes[reponse.id]|number_format(2, ',')}}</span> / 400</p>
+                        </div>
+                        <div class="col-sm-4 row question {% if not reponse.autreQuestion %}hide{% endif %}">
+                            <div class="pull-right">
+                                <select name="redirigeQuestion" id="expBesoin-reponse-{{reponse.id}}" style="width:250px;">
+                                    {% for expBesoinCourrante in expBesoinAll %}
+                                        {% if expBesoinCourrante.id != expBesoin.id %}
+                                            <option value="{{expBesoinCourrante.id}}" >{{expBesoinCourrante.libelle}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                <input type="hidden" id="select-reponses-{{reponse.id}}" value="{{reponse.redirigeQuestion.id}}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dd3-actions">
+                        <div onclick="deleteQuestion( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_delete', {'id':reponse.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+                        <div onclick="saveReponse( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_edit', {'id':reponse.id})}}' );" class="pull-right dd3-edit"><i class="fa fa-pencil-square-o"></i></div>
+                        <div id="reference-reponse-{{reponse.id}}" class="pull-right dd3-cog {% if reponse.autreQuestion %}hide{% endif %}"><a href="{{path('hopitalnumerique_expbesoin_reponse_reference', {'id':reponse.id})}}" class="fancy fancybox.ajax"></a></div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
 </div>
 
 <input type="hidden" id="order-reponse-url" value="{{path('hopitalnumerique_expbesoin_reponse_reorder',{'id':expBesoin.id})}}" />
+<input type="hidden" id="save-reponse-url" value="{{path('hopitalnumerique_expbesoin_reponse_edit',{'id':expBesoin.id})}}" />
 
 <script type="text/javascript" >
+    $(document).ready(function() {
+        if( $('form.toValidate').length > 0 )
+            $('form.toValidate').validationEngine();
+
+        $('.blocReference').hide();
+
+        //toggles primary
+        $('#designForForm .toggle.on').toggles( { on : true, text : { on : 'Question', off : 'Référence' }, type : 'select' } ).on('toggle', function (e, active) {
+            if (active) 
+            {
+                //type = Question
+                $('.blocReference').hide();
+                $('.blocQuestion').show();
+                $('#autreQuestion').val('true');
+            }
+            else 
+            {
+                //type = Référence
+                $('.blocQuestion').hide();
+                $('.blocReference').show();
+                $('#autreQuestion').val('false');
+            }
+        });
+        $('#designForForm .toggle.off').toggles( { on : false, text : { on : 'Question', off : 'Référence' }, type : 'select' } ).on('toggle', function (e, active) {
+            if (active) 
+            {
+                //type = Question
+                $('.blocReference').hide();
+                $('.blocQuestion').show();
+                $('#autreQuestion').val('true');
+            }
+            else 
+            {
+                //type = Référence
+                $('.blocQuestion').hide();
+                $('.blocReference').show();
+                $('#autreQuestion').val('false');
+            }
+        });
+
+        //toggles primary
+        $('#toggle-concernant-reponse .toggle.on').toggles( { on : true, text : { on : 'Question', off : 'Référence' }, type : 'select' } ).on('toggle', function (e, active) {
+            var idReponse = $(this).parent().parent().parent().parent().data('id');
+            if (active) 
+            {
+                $(this).parent().parent().parent().parent().find('.note-referencement').hide();
+                $(this).parent().parent().parent().parent().find('.question').show();
+                $(this).parent().parent().parent().parent().find('.question').removeClass('hide');
+
+                $('#reference-reponse-' + idReponse).hide();
+            }
+            else 
+            {
+                $(this).parent().parent().parent().parent().find('.note-referencement').show();
+                $(this).parent().parent().parent().parent().find('.note-referencement').removeClass('hide');
+                $(this).parent().parent().parent().parent().find('.question').hide();
+
+                $('#reference-reponse-' + idReponse).removeClass('hide');
+                $('#reference-reponse-' + idReponse).show();
+
+            }
+            $('#toggle-reponses-' + idReponse).val(active);
+        });
+        $('#toggle-concernant-reponse .toggle.off').toggles( { on : false, text : { on : 'Question', off : 'Référence' }, type : 'select' } ).on('toggle', function (e, active) {
+            var idReponse = $(this).parent().parent().parent().parent().data('id');
+            if (active) 
+            {
+                $(this).parent().parent().parent().parent().find('.note-referencement').hide();
+                $(this).parent().parent().parent().parent().find('.question').show();
+                $(this).parent().parent().parent().parent().find('.question').removeClass('hide');
+
+                $('#reference-reponse-' + idReponse).hide();
+            }
+            else 
+            {
+                $(this).parent().parent().parent().parent().find('.note-referencement').show();
+                $(this).parent().parent().parent().parent().find('.note-referencement').removeClass('hide');
+                $(this).parent().parent().parent().parent().find('.question').hide();
+
+                $('#reference-reponse-' + idReponse).removeClass('hide');
+                $('#reference-reponse-' + idReponse).show();
+
+            }
+            $('#toggle-reponses-' + idReponse).val(active);
+        });
+    });
+
+    //Fancybox
+    if( $('.fancy').length > 0 )
+        initFancyBox();
+
+    $('#expBesoin-reponse').select2();
+    $('.dd .question select').select2();
+
+    //Pointe sur la bonne réponse du select2
+    $('#reponses-dd .dd ol li').each(function(){
+        var idReponse = $(this).data('id');
+
+        $(this).find('select').select2('val', $('#select-reponses-' + idReponse).val());
+    });
+
     $('#reponses div.dd').nestable({'maxDepth':1,'group':0}).on('change', function() {
         var serializedDatas = $(this).nestable('serialize');
 
@@ -61,4 +203,67 @@
             }
         });
     });
+
+    function saveReponse(idReponse, url)
+    {
+        var idQuestion      = $('#expBesoin-reponse-' + idReponse).val();
+        var isAutreQuestion = $('#toggle-reponses-' + idReponse).val();
+
+        $.ajax({
+            url  : url,
+            data : {
+                idReponse : idReponse,
+                isAutreQuestion : isAutreQuestion,
+                idQuestion : idQuestion
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                apprise('Reponse modifiée.');
+            }
+        });
+    }
+
+    //Sauvegarde les références de l'objet et du contenu
+    function saveReferences( expBesoin, reponse )
+    {
+        var references = [];
+        var loader     = $('.panel-body').nodevoLoader().start();
+
+        $('#references-tab .ref').each(function() {
+            //si la référence est cochée, on l'ajoute dans les références à linker
+            if ( $(this).find('.checkbox').prop('checked') ) {
+                var ref = {};
+
+                //ref id
+                ref.id = $(this).data('id');
+
+                //type primary
+                ref.type = $(this).find('.toggle-slide').hasClass('active');
+
+                references.push( ref );    
+            }
+        });
+
+        //JSONify IT !
+        json = JSON.stringify( references );
+
+        //save the value
+        $.ajax({
+            url  : $('#save-references-url').val(),
+            data : {
+                references : json
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                //$('#questions #question-'+question+' > .dd3-content .text-muted span').html( data.note );
+
+                loader.finished();
+                $.fancybox.close(true);
+            }
+        });
+
+        saveReponse($('#expbesoinreponse-id').val(), $('#save-reponse-url').val());
+    }
 </script>

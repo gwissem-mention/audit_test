@@ -3,6 +3,7 @@
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-recherche-chapitre-index.css" filter="cssrewrite, ?yui_css" 
+        "@select2_css" 
         "@fancybox_css"
         "@validationEngine_css"
         "@jquery_toggles_css"
@@ -17,6 +18,7 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-recherche-chapitre-index.js" 
+        "@select2_js" 
         "@fancybox_js" 
         "@nestable_js"
         "@tinymce_js"
@@ -144,6 +146,8 @@ function addQuestion( titre )
                     $('.designForBlank').hide();
                 }
 
+                //Forcer le click sur la question ajoutée
+
                 apprise('Question ajoutée.');
             }else
                 apprise('Une erreur est survenue lors de l\'ajout de votre question, merci de réessayer.');
@@ -168,6 +172,8 @@ function editQuestion( id, url)
                     if( data != '' )
                     {
                         location.reload();
+                        //Forcer le click sur la question éditée
+                        
                         // $.ajax({
                         //     url: "",
                         //     context: document.body,
@@ -290,10 +296,11 @@ function addReponse( url )
 {
     $.ajax({
         url     : url,
+        data    :  $('#designForForm form').serialize(),
         type    : 'POST',
         success : function( data ){
             //Ajout de la réponse
-            //$('#reponses .results .designForForm').html( data );
+            window.location.reload();
         }
     });
 }
@@ -359,48 +366,17 @@ function manageCollapse(element, way)
     $(element).find('i').toggleClass('fa-arrow-down fa-arrow-right');
 }
 
-//Sauvegarde les références de l'objet et du contenu
-function saveReferences( chapitre, question )
+// Initialise la fancybox
+function initFancyBox()
 {
-    var references = [];
-    var loader     = $('.panel-body').nodevoLoader().start();
-
-    $('#references-tab .ref').each(function() {
-        //si la référence est cochée, on l'ajoute dans les références à linker
-        if ( $(this).find('.checkbox').prop('checked') ) {
-            var ref = {};
-
-            //ref id
-            ref.id = $(this).data('id');
-
-            //type primary
-            ref.type = $(this).find('.toggle-slide').hasClass('active');
-
-            references.push( ref );    
-        }
-    });
-
-    //JSONify IT !
-    json = JSON.stringify( references );
-
-    //save the value
-    $.ajax({
-        url  : $('#save-references-url').val(),
-        data : {
-            references : json
-        },
-        type     : 'POST',
-        dataType : 'json',
-        success  : function( data ){
-            if( chapitre != null)
-                $('#questions #chapitre-'+chapitre+' > .dd3-content .text-muted span').html( data.note );
-            else
-                $('#questions #question-'+question+' > .dd3-content .text-muted span').html( data.note );
-
-            loader.finished();
-            $.fancybox.close(true);
-        }
-    });
+    $('.fancy').fancybox({
+            'padding'   : 0,
+            'autoSize'  : false,
+            'width'     : '80%',
+            'height'    : '600px',
+            'scrolling' : 'no',
+            'modal'     : true
+        });
 }
 </script>
 
@@ -438,6 +414,11 @@ div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
 #listeChapitres .question span{font-weight: normal;}
 #listeChapitres h3{background: #efefef; margin-top: 20px; padding: 5px 20px;color: #6f3596}
 #listeChapitres h3 span{color:#4d4d4d; font-size: 17px; padding:5px 0;}
+
+/* Affichage des réponses */
+#designForForm {border-bottom:1px solid #E5E5E5;}
+.toggle .toggle-on,  .toggle .toggle-off{color:#1DA4C5;}
+.toggle .toggle-on.active, .toggle .toggle-off.active{color:#FFFFFF;}
 </style>
 
     <div class="col-sm-12">

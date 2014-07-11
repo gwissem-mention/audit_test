@@ -12,4 +12,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class ExpBesoinReponsesRepository extends EntityRepository
 {
+    /**
+     * Compte le nombre de réponses liées à la question
+     *
+     * @param expBesoin $expBesoin id de la question
+     *
+     * @return QueryBuilder
+     */
+    public function countReponses($expBesoin)
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('count(expb_rep)')
+                         ->from('\HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses', 'expb_rep')
+                         ->andWhere('expb_rep.question = :expBesoin')
+                         ->setParameter('expBesoin', $expBesoin);
+    }
 }
