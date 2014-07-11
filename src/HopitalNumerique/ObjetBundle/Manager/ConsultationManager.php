@@ -122,4 +122,48 @@ class ConsultationManager extends BaseManager
         
         return $objets;
     }
+
+    /**
+     * Met à jour le tableau de productions avec les prod consultées par l'user connecté
+     *
+     * @param array $objets Liste des productions concernés
+     *
+     * @return array
+     */
+    public function updateProductionsWithConnectedUser( $productions, $user )
+    {
+        if( $user != "anon.") {
+            //get date Inscription user
+            $dateInscription = $user->getDateInscription();
+
+            //get consulted objets and formate them
+            $results   = $this->getLastsConsultations( $user );
+            $consulted = array();
+            foreach($results as $one){
+                //Si la date de dernière mise à jour de l'objet est postérieure à la dernière consultation de l'objet : Notif updated
+                if( is_null($one->getContenu()) )
+                    $consulted[ $one->getObjet()->getId() ] = $one->getObjet()->getDateModification() > $one->getDateLastConsulted();
+            }
+
+            //Parcours des objets retournés par la recherche
+            foreach($productions as &$production)
+            {
+                $id          = $production->id;
+                $isConsulted = false;
+                
+                //la publication fait partie des publications déjà consultées par l'utilisateur
+                if( isset( $consulted[ $id ] ) ){
+                    $isConsulted         = true;
+                    $production->updated = $consulted[ $id ];
+                }
+
+                //Si la publication n'a jamais été consulté ET
+                //Si la date de création de l'objet est postérieure à la date d'inscription de l'utilisateur : Notif new
+                if( $isConsulted === false && ($production->created > $dateInscription) )
+                    $production->new = true;
+            }
+        }
+        
+        return $productions;
+    }
 }

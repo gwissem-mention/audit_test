@@ -30,12 +30,7 @@ class PublicationController extends Controller
         $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $objet );
 
         //build productions with authorizations
-        $productions = array();
-        $prodLiees   = $objet->getObjets();
-        foreach( $prodLiees as $one){
-            if( $this->checkAuthorization( $one ) === true )
-                $productions[] = $one;
-        }
+        $productions = $this->getProductionsAssocies($objet->getObjets());
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
@@ -146,8 +141,40 @@ class PublicationController extends Controller
 
 
 
+    /**
+     * Build productions with authorizations
+     *
+     * @param  [type] $prodLiees [description]
+     *
+     * @return [type]
+     */
+    private function getProductionsAssocies( $prodLiees )
+    {
+        $productions = array();
+        foreach( $prodLiees as $one){
+            if( $this->checkAuthorization( $one ) === true ){
+                //formate datas
+                $production           = new \StdClass;
+                $production->id       = $one->getId();
+                $production->alias    = $one->getAlias();
+                $production->titre    = $one->getTitre();
+                $production->synthese = $one->getSynthese();
+                $production->created  = $one->getDateCreation();
+                $tab                  = explode('<!-- pagebreak -->', $one->getResume() );
+                $production->resume   = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+                $production->updated  = false;
+                $production->new      = false;
 
+                $productions[] = $production;
+            }
+        }
 
+        //update status updated + new
+        $user        = $this->get('security.context')->getToken()->getUser();
+        $productions = $this->get('hopitalnumerique_objet.manager.consultation')->updateProductionsWithConnectedUser( $productions, $user );
+
+        return $productions;
+    }
 
     /**
      * Récupère les objets de la recherche et filtre sur 10 résulats maxi par catégorie
