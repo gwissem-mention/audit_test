@@ -16,10 +16,10 @@
             <div class="col-sm-2">
                 <input type="text" id="libelle_reponse" name="libelle" required="required" maxlength="255" class="validate[required,minSize[1],maxSize[255]] form-control">
             </div>
-            <div class="col-sm-1" style="margin-top:6px;">
-                <div class="toggle toggle-success on" style="width:60px;height:20px;line-height:10px;font-size:8px;"></div>
+            <div class="col-sm-2" style="margin-top:6px;">
+                <div class="toggle toggle-success on" style="width:70px;height:20px;line-height:10px;font-size:8px;"></div>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-7">
                 <div class="blocQuestion">
                     <select name="redirigeQuestion" id="expBesoin-reponse" class="form-control col-md-12">
                         {% for expBesoinCourrante in expBesoinAll %}
@@ -47,19 +47,19 @@
                 <li class="dd-item dd3-item" data-id="{{reponse.id}}" id="reponse-{{reponse.id}}" >
                     <div class="dd-handle dd3-handle"></div>
                     <div class="dd3-content" style="padding:1px 50px 5px 40px;">
-                        <div class="col-sm-6 row" style="margin-top:4px">
-                            {{reponse.libelle}}
+                        <div class="col-sm-5 row" style="margin-top:4px">
+                            <span title="{{reponse.libelle}}">{{reponse.libelle|truncate(25,'...')}}</span>
                         </div>
                         <div class="col-sm-2 row" style="margin-top:4px">
                             <div class="pull-right" id="toggle-concernant-reponse">
-                                <div class="toggle toggle-success {% if reponse.autreQuestion %}on{% else %}off{% endif %}" style="width:60px;height:20px;line-height:10px;font-size:8px;"></div>
+                                <div class="toggle toggle-success {% if reponse.autreQuestion %}on{% else %}off{% endif %}" style="width:70px;height:20px;line-height:10px;font-size:8px;"></div>
                             </div>
                             <input type="hidden" id="toggle-reponses-{{reponse.id}}" value="{% if reponse.autreQuestion %}true{% else %}false{% endif %}" />
                         </div>
-                        <div class="col-sm-4 row note-referencement {% if reponse.autreQuestion %}hide{% endif %}" style="margin-top:4px">
-                            <p class="text-muted text-right pull-right">Note référencement : <span class="nbRefs">{{notes[reponse.id]|number_format(2, ',')}}</span> / 400</p>
+                        <div class="col-sm-5 row note-referencement {% if reponse.autreQuestion %}hide{% endif %}" style="margin-top:4px">
+                            <p class="text-muted text-right pull-right">Note référencement : <span class="nbRefs">{{notes[reponse.id]|number_format(0)}}</span> / 400</p>
                         </div>
-                        <div class="col-sm-4 row question {% if not reponse.autreQuestion %}hide{% endif %}">
+                        <div class="col-sm-5 row question {% if not reponse.autreQuestion %}hide{% endif %}">
                             <div class="pull-right">
                                 <select name="redirigeQuestion" id="expBesoin-reponse-{{reponse.id}}" style="width:250px;">
                                     {% for expBesoinCourrante in expBesoinAll %}
@@ -85,7 +85,6 @@
 
 <input type="hidden" id="order-reponse-url" value="{{path('hopitalnumerique_expbesoin_reponse_reorder',{'id':expBesoin.id})}}" />
 <input type="hidden" id="save-reponse-url" value="{{path('hopitalnumerique_expbesoin_reponse_edit',{'id':expBesoin.id})}}" />
-<input type="hidden" id="order-question-url" value="{{path('hopitalnumerique_expbesoin_reponse_reorder',{'id':expBesoin.id})}}" />
 
 <script type="text/javascript" >
     $(document).ready(function() {
@@ -95,7 +94,7 @@
         $('.blocReference').hide();
 
         //toggles primary
-        $('#designForForm .toggle.on').toggles( { on : true, text : { on : 'Question', off : 'Référence' }, type : 'select' } ).on('toggle', function (e, active) {
+        $('#designForForm .toggle.on').toggles( { on : true, text : { on : 'Question', off : 'Référence' }} ).on('toggle', function (e, active) {
             if (active) 
             {
                 //type = Question
@@ -111,7 +110,7 @@
                 $('#autreQuestion').val('false');
             }
         });
-        $('#designForForm .toggle.off').toggles( { on : false, text : { on : 'Question', off : 'Référence' }, type : 'select' } ).on('toggle', function (e, active) {
+        $('#designForForm .toggle.off').toggles( { on : false, text : { on : 'Question', off : 'Référence' }} ).on('toggle', function (e, active) {
             if (active) 
             {
                 //type = Question
@@ -129,7 +128,7 @@
         });
 
         //toggles primary
-        $('#toggle-concernant-reponse .toggle.on').toggles( { on : true, text : { on : 'Question', off : 'Référence' }, type : 'select' } ).on('toggle', function (e, active) {
+        $('#toggle-concernant-reponse .toggle.on').toggles( { on : true, text : { on : 'Question', off : 'Référence' }} ).on('toggle', function (e, active) {
             var idReponse = $(this).parent().parent().parent().parent().data('id');
             if (active) 
             {
@@ -151,7 +150,7 @@
             }
             $('#toggle-reponses-' + idReponse).val(active);
         });
-        $('#toggle-concernant-reponse .toggle.off').toggles( { on : false, text : { on : 'Question', off : 'Référence' }, type : 'select' } ).on('toggle', function (e, active) {
+        $('#toggle-concernant-reponse .toggle.off').toggles( { on : false, text : { on : 'Question', off : 'Référence' }} ).on('toggle', function (e, active) {
             var idReponse = $(this).parent().parent().parent().parent().data('id');
             if (active) 
             {
@@ -204,67 +203,4 @@
             }
         });
     });
-
-    function saveReponse(idReponse, url)
-    {
-        var idQuestion      = $('#expBesoin-reponse-' + idReponse).val();
-        var isAutreQuestion = $('#toggle-reponses-' + idReponse).val();
-
-        $.ajax({
-            url  : url,
-            data : {
-                idReponse : idReponse,
-                isAutreQuestion : isAutreQuestion,
-                idQuestion : idQuestion
-            },
-            type     : 'POST',
-            dataType : 'json',
-            success  : function( data ){
-                apprise('Reponse modifiée.');
-            }
-        });
-    }
-
-    //Sauvegarde les références de l'objet et du contenu
-    function saveReferences( expBesoin, reponse )
-    {
-        var references = [];
-        var loader     = $('.panel-body').nodevoLoader().start();
-
-        $('#references-tab .ref').each(function() {
-            //si la référence est cochée, on l'ajoute dans les références à linker
-            if ( $(this).find('.checkbox').prop('checked') ) {
-                var ref = {};
-
-                //ref id
-                ref.id = $(this).data('id');
-
-                //type primary
-                ref.type = $(this).find('.toggle-slide').hasClass('active');
-
-                references.push( ref );    
-            }
-        });
-
-        //JSONify IT !
-        json = JSON.stringify( references );
-
-        //save the value
-        $.ajax({
-            url  : $('#save-references-url').val(),
-            data : {
-                references : json
-            },
-            type     : 'POST',
-            dataType : 'json',
-            success  : function( data ){
-                //$('#questions #question-'+question+' > .dd3-content .text-muted span').html( data.note );
-
-                loader.finished();
-                $.fancybox.close(true);
-            }
-        });
-
-        saveReponse($('#expbesoinreponse-id').val(), $('#save-reponse-url').val());
-    }
 </script>

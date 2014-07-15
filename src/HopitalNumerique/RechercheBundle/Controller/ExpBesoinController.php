@@ -12,12 +12,11 @@ class ExpBesoinController extends Controller
 {
     public function indexAction()
     {
-        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findAll();
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array(), array('order' => 'ASC'));
 
         return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:index.html.twig', array(
                 'expBesoins' => $expBesoins
-            ));    
-
+            ));
     }
 
     /**
@@ -72,6 +71,22 @@ class ExpBesoinController extends Controller
         //delete
         $this->get('hopitalnumerique_recherche.manager.expbesoin')->delete( $expBesoin );
 
+        return new Response('{"success":true}', 200);
+    }
+
+    /**
+     * Met à jour l'ordre des différentes questions
+     */
+    public function reorderAction()
+    {
+        //get datas serialzed
+        $datas = $this->get('request')->request->get('datas');
+
+        //execute reorder
+        $this->get('hopitalnumerique_recherche.manager.expbesoin')->reorder( $datas );
+        $this->getDoctrine()->getManager()->flush();
+
+        //return success.true si le fichier existe deja
         return new Response('{"success":true}', 200);
     }
 

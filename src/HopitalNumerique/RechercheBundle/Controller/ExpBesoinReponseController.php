@@ -120,20 +120,13 @@ class ExpBesoinReponseController extends Controller
         return new Response('{"success":true}', 200); 
     }
 
-    public function saveAction()
-    {
-        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoinReponse:save.html.twig', array(
-                // ...
-            ));    
-    }
-
     public function reorderAction()
     {
         //get datas serialzed
         $datas = $this->get('request')->request->get('datas');
 
         //execute reorder
-        $this->get('hopitalnumerique_autodiag.manager.chapitre')->reorder( $datas, null );
+        $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->reorder( $datas, null );
         $this->getDoctrine()->getManager()->flush();
 
         //return success.true si le fichier existe deja
@@ -197,7 +190,7 @@ class ExpBesoinReponseController extends Controller
         $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
         $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $expBesoinReponses->getReferences(), $refsPonderees );
 
-        return new Response('{"success":true, "note":'.$note.'}', 200);
+        return new Response('{"success":true, "note":"'.$note.'"}', 200);
     }
 
 }

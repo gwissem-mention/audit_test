@@ -103,13 +103,9 @@ class ExpBesoinReponsesManager extends BaseManager
 
         foreach($elements as $element) 
         {
-            $chapitre = $this->findOneBy( array('id' => $element['id']) );
-            $chapitre->setOrder( $order );
-            $chapitre->setParent( $parent );
+            $reponse = $this->findOneBy( array('id' => $element['id']) );
+            $reponse->setOrder( $order );
             $order++;
-
-            if( isset($element['children']) )
-                $this->reorder( $element['children'], $chapitre );
         }
     }
     

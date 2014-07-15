@@ -43,7 +43,7 @@ class ExpBesoin
      * @var /HopitalNumerique/RechercheBundle/Entity/ExpBesoinReponses
      *
      * @ORM\OneToMany(targetEntity="ExpBesoinReponses", mappedBy="question", cascade={"persist", "remove" })
-     * @ORM\OrderBy({"libelle" = "ASC"})
+     * @ORM\OrderBy({"order" = "ASC"})
      */
     protected $reponses;
 

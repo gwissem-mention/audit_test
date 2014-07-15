@@ -1,0 +1,38 @@
+/* Second Toolbar  */
+div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
+
+/* Gestion des questions */
+#questions .text-muted {margin-right:120px}
+#reponses-dd .dd3-actions .dd3-valid { background: #85c744;}
+#reponses-dd .dd3-actions .dd3-valid:hover { background: #71AE34; }
+#reponses-dd .dd3-actions .dd3-valid:before{ content: '\f00c'; }
+
+/* Gestion des reponses */
+#reponses .text-muted {margin-right:60px}
+
+/* fancybox References */
+#panel-references{padding:0;}
+#panel-references .tableContent{overflow-y:scroll; height:470px}
+#panel-references .tableContent thead .checkAll{display: block; margin: 0 auto}
+#panel-references .tableContent .level1{background: #34495e}
+#panel-references .tableContent .level1 td{color: #ffffff; font-size: 16px; font-weight: bold}
+#panel-references .tableContent .level2{background: #D8D8D8}
+#panel-references .tableContent .level3{background: #E6E6E6}
+#panel-references .panel-footer{margin:0;}
+
+/* Affichage d'un résultat */
+#resultat-detail h3{margin-left:30px;}
+
+/* Affichage de la liste des questions/réponses d'un outil */
+#listeChapitres h2{background: #cfcfcf; margin-top: 20px; padding: 5px 20px; color: #6f3596}
+#listeChapitres h2 span{color:#4d4d4d; font-size: 20px; padding:10px 0;}
+#listeChapitres .sous-chapitre .row{padding-left:20px;}
+#listeChapitres .question{font-weight: bold; margin-left: 5px}
+#listeChapitres .question span{font-weight: normal;}
+#listeChapitres h3{background: #efefef; margin-top: 20px; padding: 5px 20px;color: #6f3596}
+#listeChapitres h3 span{color:#4d4d4d; font-size: 17px; padding:5px 0;}
+
+/* Affichage des réponses */
+#designForForm {border-bottom:1px solid #E5E5E5;}
+.toggle .toggle-on, .toggle .toggle-off{color:#1DA4C5;}
+.toggle .toggle-on.active, .toggle .toggle-off.active{color:#FFFFFF;}

@@ -16,4 +16,24 @@ class ExpBesoinManager extends BaseManager
         return $this->getRepository()->countQuestions()->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * Met à jour l'ordre des questions
+     *
+     * @param array  $elements Les éléments
+     * @param Object $parent   L'élément parent | null
+     *
+     * @return empty
+     */
+    public function reorder( $elements )
+    {
+        $order = 1;
+
+        foreach($elements as $element) 
+        {
+            $question = $this->findOneBy( array('id' => $element['id']) );
+            $question->setOrder( $order );
+            $order++;
+        }
+    }
+
 }

@@ -76,6 +76,10 @@ hopital_numerique_expbesoin_deletequestion:
         id: \d+
         _method: POST|DELETE
 
+hopital_numerique_expbesoin_reorderquestion:
+    pattern:  /admin/aide-expression-besoin/reorder
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:reorder }
+
 #Expression du besoin réponse
 hopitalnumerique_expbesoin_question:
     pattern:  /admin/aide-expression-besoin/{id}/reponse
@@ -102,15 +106,8 @@ hopitalnumerique_expbesoin_reponse_edit:
     requirements: 
         id : \d+
 
-hopitalnumerique_expbesoin_reponse_save:
-    pattern:  /admin/aide-expression-besoin/question/save/{id}
-    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:save", id: 0 }
-    requirements: 
-        id : \d+
-        _method: POST
-
 hopitalnumerique_expbesoin_reponse_reorder:
-    pattern:  /admin/aide-expression-besoin/{id}/question/reorder
+    pattern:  /admin/aide-expression-besoin/{id}/reponse/reorder
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:reorder" }
     requirements: 
         id : \d+
