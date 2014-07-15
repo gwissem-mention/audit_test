@@ -35,6 +35,8 @@ class ExpBesoinReponseController extends Controller
 
     public function addAction(Request $request)
     {
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findAll();
+
         //créer un question
         $reponse = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->createEmpty();
 
@@ -57,7 +59,24 @@ class ExpBesoinReponseController extends Controller
         //save
         $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->save( $reponse );
 
-        return new Response('{"success":true}', 200);   
+        $notes = array();
+
+        foreach ($question->getReponses() as $reponseQuestion) 
+        {
+            //get ponderations
+            $refsPonderees = $this->container->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+            $note          = is_null($reponseQuestion->getReferences()) ? 0 : $this->container->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $reponseQuestion->getReferences(), $refsPonderees );
+
+            $notes[$reponseQuestion->getId()] = $note;
+        }
+
+        //return new Response('{"success":true}', 200;
+        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoinReponse:add.html.twig', array(
+            'reponse'      => $reponse,
+            'expBesoin'    => $question,
+            'expBesoinAll' => $expBesoins,
+            'notes'        => $notes
+        ));  
     }
 
     public function editAction(Request $request)
@@ -110,10 +129,17 @@ class ExpBesoinReponseController extends Controller
 
     public function reorderAction()
     {
-        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoinReponse:reorder.html.twig', array(
-                // ...
-            ));    
+        //get datas serialzed
+        $datas = $this->get('request')->request->get('datas');
+
+        //execute reorder
+        $this->get('hopitalnumerique_autodiag.manager.chapitre')->reorder( $datas, null );
+        $this->getDoctrine()->getManager()->flush();
+
+        //return success.true si le fichier existe deja
+        return new Response('{"success":true}', 200);    
     }
+
     /**
      * [topicAction description]
      *

@@ -1,0 +1,118 @@
+<li class="dd-item dd3-item" data-id="{{reponse.id}}" id="reponse-{{reponse.id}}" >
+    <div class="dd-handle dd3-handle"></div>
+    <div class="dd3-content" style="padding:1px 50px 5px 40px;">
+        <div class="col-sm-6 row" style="margin-top:4px">
+            {{reponse.libelle}}
+        </div>
+        <div class="col-sm-2 row" style="margin-top:4px">
+            <div class="pull-right" id="toggle-concernant-reponse">
+                <div class="toggle toggle-success {% if reponse.autreQuestion %}on{% else %}off{% endif %}" style="width:60px;height:20px;line-height:10px;font-size:8px;"></div>
+            </div>
+            <input type="hidden" id="toggle-reponses-{{reponse.id}}" value="{% if reponse.autreQuestion %}true{% else %}false{% endif %}" />
+        </div>
+        <div class="col-sm-4 row note-referencement {% if reponse.autreQuestion %}hide{% endif %}" style="margin-top:4px">
+            <p class="text-muted text-right pull-right">Note référencement : <span class="nbRefs">{{notes[reponse.id]|number_format(2, ',')}}</span> / 400</p>
+        </div>
+        <div class="col-sm-4 row question {% if not reponse.autreQuestion %}hide{% endif %}">
+            <div class="pull-right">
+                <select name="redirigeQuestion" id="expBesoin-reponse-{{reponse.id}}" style="width:250px;">
+                    {% for expBesoinCourrante in expBesoinAll %}
+                        {% if expBesoinCourrante.id != expBesoin.id %}
+                            <option value="{{expBesoinCourrante.id}}" >{{expBesoinCourrante.libelle}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <input type="hidden" id="select-reponses-{{reponse.id}}" value="{{reponse.redirigeQuestion.id}}" />
+            </div>
+        </div>
+    </div>
+    <div class="dd3-actions">
+        <div onclick="deleteQuestion( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_delete', {'id':reponse.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+        <div onclick="saveReponse( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_edit', {'id':reponse.id})}}' );" class="pull-right dd3-valid"><i class="fa fa-check"></i></div>
+        <div id="reference-reponse-{{reponse.id}}" class="pull-right dd3-cog {% if reponse.autreQuestion %}hide{% endif %}"><a href="{{path('hopitalnumerique_expbesoin_reponse_reference', {'id':reponse.id})}}" class="fancy fancybox.ajax"></a></div>
+    </div>
+</li>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        if( $('form.toValidate').length > 0 )
+            $('form.toValidate').validationEngine();
+
+        $('#reponse-' + {{reponse.id}} +' .blocReference').hide();
+
+        //toggles primary
+        $('#reponse-' + {{reponse.id}} +' #toggle-concernant-reponse .toggle.on').toggles( { on : true, text : { on : 'Question', off : 'Référence' }, type : 'select' } ).on('toggle', function (e, active) {
+            var idReponse = $(this).parent().parent().parent().parent().data('id');
+            if (active) 
+            {
+                $(this).parent().parent().parent().parent().find('.note-referencement').hide();
+                $(this).parent().parent().parent().parent().find('.question').show();
+                $(this).parent().parent().parent().parent().find('.question').removeClass('hide');
+
+                $('#reference-reponse-' + idReponse).hide();
+            }
+            else 
+            {
+                $(this).parent().parent().parent().parent().find('.note-referencement').show();
+                $(this).parent().parent().parent().parent().find('.note-referencement').removeClass('hide');
+                $(this).parent().parent().parent().parent().find('.question').hide();
+
+                $('#reference-reponse-' + idReponse).removeClass('hide');
+                $('#reference-reponse-' + idReponse).show();
+
+            }
+            $('#toggle-reponses-' + idReponse).val(active);
+        });
+        $('#reponse-' + {{reponse.id}} +' #toggle-concernant-reponse .toggle.off').toggles( { on : false, text : { on : 'Question', off : 'Référence' }, type : 'select' } ).on('toggle', function (e, active) {
+            var idReponse = $(this).parent().parent().parent().parent().data('id');
+            if (active) 
+            {
+                $(this).parent().parent().parent().parent().find('.note-referencement').hide();
+                $(this).parent().parent().parent().parent().find('.question').show();
+                $(this).parent().parent().parent().parent().find('.question').removeClass('hide');
+
+                $('#reference-reponse-' + idReponse).hide();
+            }
+            else 
+            {
+                $(this).parent().parent().parent().parent().find('.note-referencement').show();
+                $(this).parent().parent().parent().parent().find('.note-referencement').removeClass('hide');
+                $(this).parent().parent().parent().parent().find('.question').hide();
+
+                $('#reference-reponse-' + idReponse).removeClass('hide');
+                $('#reference-reponse-' + idReponse).show();
+
+            }
+            $('#toggle-reponses-' + idReponse).val(active);
+        });
+    });
+
+    //Fancybox
+    if( $('.fancy').length > 0 )
+        initFancyBox();
+
+    $('#reponse-' + {{reponse.id}} +' select').select2();
+
+    //Pointe sur la bonne réponse du select2
+    $('#reponses-dd .dd ol li').each(function(){
+        var idReponse = $(this).data('id');
+
+        $(this).find('select').select2('val', $('#select-reponses-' + idReponse).val());
+    });
+
+    $('#reponses div.dd').nestable({'maxDepth':1,'group':0}).on('change', function() {
+        var serializedDatas = $(this).nestable('serialize');
+
+        $.ajax({
+            url  : $('#order-reponse-url').val(),
+            data : {
+                datas : serializedDatas
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                //console.log( 'reorder executed' );
+            }
+        });
+    });
+</script>

@@ -38,7 +38,8 @@ class ChapitreManager extends BaseManager
     {
         $order = 1;
 
-        foreach($elements as $element) {
+        foreach($elements as $element) 
+        {
             $chapitre = $this->findOneBy( array('id' => $element['id']) );
             $chapitre->setOrder( $order );
             $chapitre->setParent( $parent );

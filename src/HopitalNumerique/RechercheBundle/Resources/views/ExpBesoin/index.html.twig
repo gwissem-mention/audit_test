@@ -111,24 +111,6 @@ function toggle( block )
     }   
 }
 
-//toggle le type de la question et cache les champs inutiles
-function toggleTypeQuestion()
-{
-    if( $('#hopitalnumerique_autodiag_question_type').val() == 417 ){
-        $('.txt').show();
-        $('.not-txt').hide();
-        $('#hopitalnumerique_autodiag_question_options').removeClass('validate[required]');
-    }else if ($('#hopitalnumerique_autodiag_question_type').val() == 415 || $('#hopitalnumerique_autodiag_question_type').val() == 416 ){
-        $('.txt').hide();
-        $('.not-txt').show();
-        $('#hopitalnumerique_autodiag_question_options').addClass('validate[required]');
-    }else{
-        $('.txt').hide();
-        $('.not-txt').hide();
-        $('#hopitalnumerique_autodiag_question_options').removeClass('validate[required]');
-    }
-}
-
 //ajoute une question
 function addQuestion( titre )
 {
@@ -251,7 +233,6 @@ function deleteReponse( id, url )
                 dataType : 'json',
                 success  : function( data ){
                     if( data.success ){
-                        //correction effectuée : si on a supprimer tous les enfants alors on enlève le petit '-' du parent
                         if( data.childs == 0 ){
                             $('#questions #question-' + id).parent().parent().find('button').each(function(){
                                 $(this).remove();
@@ -293,15 +274,18 @@ function selectQuestion( id, url )
 //Selectionne un chapitre et charge l'ensemble des questions liés
 function addReponse( url )
 {
-    $.ajax({
-        url     : url,
-        data    :  $('#designForForm form').serialize(),
-        type    : 'POST',
-        success : function( data ){
-            //Ajout de la réponse
-            window.location.reload();
-        }
-    });
+    if ( $('#designForForm form').validationEngine('validate') ) {
+        $.ajax({
+            url     : url,
+            data    :  $('#designForForm form').serialize(),
+            type    : 'POST',
+            success : function( data ){
+                //Ajout de la réponse
+                $('#reponses-dd ol:first').append( data );
+                //window.location.reload();
+            }
+        });
+    }
 }
 
 //sauvegarde le chapitre
@@ -364,19 +348,6 @@ function manageCollapse(element, way)
 
     $(element).find('i').toggleClass('fa-arrow-down fa-arrow-right');
 }
-
-// Initialise la fancybox
-function initFancyBox()
-{
-    $('.fancy').fancybox({
-            'padding'   : 0,
-            'autoSize'  : false,
-            'width'     : '80%',
-            'height'    : '600px',
-            'scrolling' : 'no',
-            'modal'     : true
-        });
-}
 </script>
 
 <style type="text/css">
@@ -385,9 +356,9 @@ div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
 
 /* Gestion des questions */
 #questions .text-muted {margin-right:120px}
-#questions .dd3-actions .dd3-plus { background: #85c744;}
-#questions .dd3-actions .dd3-plus:hover { background: #71AE34; }
-#questions .dd3-actions .dd3-plus:before{ content: '\f067'; }
+#reponses-dd .dd3-actions .dd3-valid { background: #85c744;}
+#reponses-dd .dd3-actions .dd3-valid:hover { background: #71AE34; }
+#reponses-dd .dd3-actions .dd3-valid:before{ content: '\f067'; }
 
 /* Gestion des reponses */
 #reponses .text-muted {margin-right:60px}
@@ -443,8 +414,7 @@ div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
                 </div>
 
                 <input type="hidden" id="add-question-url" value="{{path('hopital_numerique_expbesoin_addquestion')}}" />
-                {#<input type="hidden" id="order-question-url" value="{{path('hopitalnumerique_autodiag_chapitre_reorder',{'id':outil.id})}}" />
-                <input type="hidden" id="calc-ponderation-url" value="{{path('hopitalnumerique_autodiag_outil_ponderation',{'id':outil.id})}}" />#}
+                {#<input type="hidden" id="calc-ponderation-url" value="{{path('hopitalnumerique_autodiag_outil_ponderation',{'id':outil.id})}}" />#}
 
             </div>
 

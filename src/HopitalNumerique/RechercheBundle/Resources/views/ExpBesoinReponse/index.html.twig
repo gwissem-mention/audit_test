@@ -74,7 +74,7 @@
                     </div>
                     <div class="dd3-actions">
                         <div onclick="deleteQuestion( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_delete', {'id':reponse.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-                        <div onclick="saveReponse( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_edit', {'id':reponse.id})}}' );" class="pull-right dd3-edit"><i class="fa fa-pencil-square-o"></i></div>
+                        <div onclick="saveReponse( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_edit', {'id':reponse.id})}}' );" class="pull-right dd3-valid"><i class="fa fa-check"></i></div>
                         <div id="reference-reponse-{{reponse.id}}" class="pull-right dd3-cog {% if reponse.autreQuestion %}hide{% endif %}"><a href="{{path('hopitalnumerique_expbesoin_reponse_reference', {'id':reponse.id})}}" class="fancy fancybox.ajax"></a></div>
                     </div>
                 </li>
@@ -85,6 +85,7 @@
 
 <input type="hidden" id="order-reponse-url" value="{{path('hopitalnumerique_expbesoin_reponse_reorder',{'id':expBesoin.id})}}" />
 <input type="hidden" id="save-reponse-url" value="{{path('hopitalnumerique_expbesoin_reponse_edit',{'id':expBesoin.id})}}" />
+<input type="hidden" id="order-question-url" value="{{path('hopitalnumerique_expbesoin_reponse_reorder',{'id':expBesoin.id})}}" />
 
 <script type="text/javascript" >
     $(document).ready(function() {

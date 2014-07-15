@@ -88,6 +88,30 @@ class ExpBesoinReponsesManager extends BaseManager
             $retour[ $key ]['childs'] = $this->getChilds($retour, $one);
         }
     }
+
+    /**
+     * Met à jour l'ordre des chapitres de manière récursive
+     *
+     * @param array  $elements Les éléments
+     * @param Object $parent   L'élément parent | null
+     *
+     * @return empty
+     */
+    public function reorder( $elements, $parent )
+    {
+        $order = 1;
+
+        foreach($elements as $element) 
+        {
+            $chapitre = $this->findOneBy( array('id' => $element['id']) );
+            $chapitre->setOrder( $order );
+            $chapitre->setParent( $parent );
+            $order++;
+
+            if( isset($element['children']) )
+                $this->reorder( $element['children'], $chapitre );
+        }
+    }
     
     /**
      * [getChilds description]
