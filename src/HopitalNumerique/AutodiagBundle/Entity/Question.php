@@ -150,7 +150,7 @@ class Question
     public function __construct()
     {
         $this->ponderation = 1;
-        $this->colored     = 0;
+        $this->colored     = true;
     }
 
     /**
