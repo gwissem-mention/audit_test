@@ -200,7 +200,7 @@ hopitalnumerique_autodiag_front_resultat:
         id: \d+
 
 hopitalnumerique_autodiag_front_resultat_pdf:
-    pattern:  /autodiagnostic/resultat/{id}/pdf
+    pattern:  /autodiagnostic/resultat/pdf/{id}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:pdf" }
     requirements:
         id: \d+
