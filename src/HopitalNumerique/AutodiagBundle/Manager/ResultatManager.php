@@ -167,7 +167,24 @@ class ResultatManager extends BaseManager
         return $results;
     }
 
+    public function buildSynthese( User $user, Outil $outil, $statut )
+    {
+        //create Synthese Object
+        $today    = new \DateTime();
+        $synthese = $this->createEmpty();
 
+        $synthese->setOutil( $outil );
+        $synthese->setName( 'Synthèse du ' . $today->format('d/m/Y') );
+        $synthese->setDateLastSave( $today );
+        $synthese->setDateValidation( $today );
+        $synthese->setUser( $user );
+        $synthese->setSynthese( true );
+        $synthese->setStatut( $statut );
+
+        $this->save( $synthese );
+
+        return $synthese;
+    }
 
 
 

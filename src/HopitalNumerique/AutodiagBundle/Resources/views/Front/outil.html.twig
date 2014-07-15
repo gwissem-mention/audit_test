@@ -125,6 +125,7 @@
                     {% endfor %}
                     <input type="hidden" name="action" id="action" value="" />
                     <input type="hidden" name="remplissage" id="remplissage" value="0" />
+                    <input type="hidden" name="name-resultat" id="name-resultat" value="" />
                 </form>
 
                 <div class="saveBtns">
@@ -137,7 +138,6 @@
             <div class="clearfix"></div>
         </div>
     </div>
-
 {% endblock %}
 
 {% macro buildQuestion(question, reponse, formName) %}

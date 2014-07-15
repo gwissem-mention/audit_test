@@ -44,7 +44,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for resultat in resultats if resultat.dateValidation is null %}
+                {% for resultat in resultats if resultat.dateValidation is null and not resultat.synthese %}
                     <tr>
                         <td>{{resultat.outil.title}}</td>
                         <td>{{resultat.dateCreation|date('d/m/Y')}}</td>
@@ -68,19 +68,25 @@
 
     <div class="clearfix"></div>
 
-    <h2>Historique de mes autodiagnostics</h2>
+    <h2 class="pull-left">Historique de mes autodiagnostics</h2>
+    <div class="btn btn-default pull-right create">Créer une synthèse des autodiags selectionnés</div>
+    
     <div class="col-md-12">
         <table class="table autodiagTable">
             <thead>
                 <tr>
-                    <th>Titre</th>
+                    <th></th>
+                    <th>Nom</th>
+                    <th>Type Autodiagnostic</th>
                     <th>Date validation</th>
                     <th width="140px">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {% for resultat in resultats if resultat.dateValidation is not null %}
+                {% for resultat in resultats if resultat.dateValidation is not null and not resultat.synthese %}
                     <tr>
+                        <td align="center"><input type="checkbox" class="checkbox" value="{{resultat.id}}" data-outil="{{resultat.outil.id}}" /></td>
+                        <td>{{resultat.name}}</td>
                         <td>{{resultat.outil.title}}</td>
                         <td>{{resultat.dateValidation|date('d/m/Y')}}</td>
                         
@@ -94,7 +100,46 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="3" align="center"> - Aucun formulaire d'autodiagnostic validé - </td>
+                        <td colspan="4" align="center"> - Aucun formulaire d'autodiagnostic validé - </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <input type="hidden" id="generate-synthese-url" value="{{path('hopitalnumerique_autodiag_front_comptehn_generate_synthese')}}" />
+    </div>
+
+    <div class="clearfix"></div>
+
+    <h2>Mes synthèses d'autodiagnostics</h2>
+    <div class="col-md-12">
+        <table class="table syntheseTable">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Résultats liés</th>
+                    <th width="140px">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resultat in resultats if resultat.synthese %}
+                    <tr>
+                        <td>{{resultat.name}}</td>
+                        <td>
+
+                        </td>
+
+                        <td>
+                            <div class="btn-group" >
+                                <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="btn btn-success" title="Télécharger le PDF du résultat"><i class="fa fa-download"></i></a>
+                                <a href="{{path('hopitalnumerique_autodiag_front_resultat', {'id':resultat.id, 'back': 1})}}" class="btn btn-warning" title="Voir les résultats"><i class="fa fa-eye"></i></a>
+                                <div class="btn btn-danger" onclick='deleteWithConfirm("{{ path('hopitalnumerique_autodiag_front_comptehn_delete', { 'id': resultat.id }) }}");' title="Supprimer mes réponses"><i class="fa fa-trash-o"></i></div>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" align="center"> - Aucune synthèse d'autodiagnostic - </td>
                     </tr>
                 {% endfor %}
             </tbody>

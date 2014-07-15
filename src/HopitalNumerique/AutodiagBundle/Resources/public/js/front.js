@@ -138,10 +138,12 @@ function saveQuestionnaire( type, userConnected )
     $('#action').val( type );
 
     if( type == 'valid' && userConnected ){
-        apprise('La validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci.', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+        apprise('La validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci. <br />Si vous souhaitez poursuivre, merci de remplir un nom pour cette occurence.', {'input':true,'textOk':'Valider','textCancel':'Annuler'}, function(r) {
             if(r) { 
+                $('#name-resultat').val( r );
                 $('#wizard').submit();
-            }
+            }else
+                apprise('Merci de saisir un nom valide.');
         });
     }else
         $('#wizard').submit();

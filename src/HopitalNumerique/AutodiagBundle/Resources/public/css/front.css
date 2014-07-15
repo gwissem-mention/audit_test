@@ -28,11 +28,11 @@
     #autodiag .content form{clear:both;}
     #autodiag .content h2{color:#6f3596; text-transform: uppercase;}
     #autodiag .content h2.prev{font-size: 24px; color:#de0d4d;}
-    #autodiag .content h3{color:#6f3596; margin-bottom: 20px; font-size: 18px; padding-left:10px;}
+    #autodiag .content h3{color:#6f3596; margin-bottom: 10px; font-size: 18px; padding-left:10px;}
     #autodiag .content h3.prev{font-size: 20px; color:#de0d4d;7}
     #autodiag .content h3 .chapitreNonConcerne{cursor: pointer}
-    #autodiag .content .p.text-muted.level1{font-size: 14px}
-    #autodiag .content .p.text-muted.level2{font-size: 13px; margin: 0 0 0 12px;}
+    #autodiag .content .level1{font-size: 14px}
+    #autodiag .content .level2{font-size: 13px; margin: 0 0 0 12px;}
     #autodiag .content .badge-primary{background-color:#6f3596; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
     #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer; margin-top: 5px}
     #autodiag .content .radio{float: left; margin-right: 30px;}
@@ -92,16 +92,17 @@
         #resultats #graphiques .table .reverse{cursor:pointer;}
         
 /* Partie Compte HN */
+    .create{margin-right: 18px;margin-top: 10px;}
     .autodiagTable thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}
     .autodiagTable thead tr a { color:#FFFFFF; font-size: 12px }
     .autodiagTable thead th { background-color:#6F3596; vertical-align: middle }
     .autodiagTable th, .autodiagTable td { border: 1px solid #ddd;padding:4px; }
 
 /* Partie liste des autodiag */
-#autodiag-liste p.intro{margin-bottom: 20px}
-#autodiag-liste .panel-heading{color:#703695;cursor: pointer; font-weight: bold}
-#autodiag-liste .panel-heading.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
-#autodiag-liste .panel-heading.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}
+    #autodiag-liste p.intro{margin-bottom: 20px}
+    #autodiag-liste .panel-heading{color:#703695;cursor: pointer; font-weight: bold}
+    #autodiag-liste .panel-heading.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
+    #autodiag-liste .panel-heading.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}
 
 @media screen and (max-width: 991px) {
     #autodiag h1{ float: none; clear: both; margin-bottom: 15px}

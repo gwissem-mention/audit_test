@@ -15,44 +15,51 @@ class Resultat
     /**
      * @var integer
      *
-     * @ORM\Column(name="res_id", type="integer")
+     * @ORM\Column(name="res_id", type="integer", options = {"comment" = "ID du résultat"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="res_name", type="string", length=255, nullable=true, options = {"comment" = "Nom du résultat"})
+     */
+    private $name;
+
+    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="res_date_last_save", type="datetime")
+     * @ORM\Column(name="res_date_last_save", type="datetime", options = {"comment" = "Date de dernière sauvegarde du résultat"})
      */
     private $dateLastSave;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="res_date_validation", type="datetime", nullable=true)
+     * @ORM\Column(name="res_date_validation", type="datetime", nullable=true, options = {"comment" = "Date de validation du résultat"})
      */
     private $dateValidation;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="res_date_creation", type="datetime")
+     * @ORM\Column(name="res_date_creation", type="datetime", options = {"comment" = "Date de création du résultat"})
      */
     private $dateCreation;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="res_taux_remplissage", type="float")
+     * @ORM\Column(name="res_taux_remplissage", type="float", options = {"comment" = "Taux de remplissage du résultat"})
      */
     private $tauxRemplissage;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="res_pdf", type="string", length=255, nullable=true)
+     * @ORM\Column(name="res_pdf", type="string", length=255, nullable=true, options = {"comment" = "Lien pour le PDF du résultat"})
      */
     private $pdf;
 
@@ -80,6 +87,22 @@ class Resultat
     protected $reponses;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="res_synthese", type="boolean", options = {"comment" = "Est-ce une synthèse ?"})
+     */
+    protected $synthese;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\Resultat")
+     * @ORM\JoinTable(name="hn_outil_synthese",
+     *      joinColumns={ @ORM\JoinColumn(name="syn_id", referencedColumnName="res_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="res_id", referencedColumnName="res_id")}
+     * )
+     */
+    protected $resultats;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -87,7 +110,9 @@ class Resultat
         $this->tauxRemplissage = 0;
         $this->dateCreation    = new \DateTime;
         $this->reponses        = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->resultats       = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pdf             = null;
+        $this->synthese        = false;
     }
 
     /**
@@ -99,6 +124,28 @@ class Resultat
     {
         return $this->id;
     }
+
+    /**
+     * Get name
+     *
+     * @return string $name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+    
+    /**
+     * Set name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+    
 
     /**
      * Set dateLastSave
@@ -282,5 +329,72 @@ class Resultat
     public function getReponses()
     {
         return $this->reponses;
+    }
+
+    /**
+     * Get synthese
+     *
+     * @return boolean $synthese
+     */
+    public function getSynthese()
+    {
+        return $this->synthese;
+    }
+    
+    /**
+     * Set synthese
+     *
+     * @param boolean $synthese
+     */
+    public function setSynthese($synthese)
+    {
+        $this->synthese = $synthese;
+        return $this;
+    }
+    
+    /**
+     * Add resultat
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Resultat $resultat
+     * @return Resultat
+     */
+    public function addResultat(\HopitalNumerique\AutodiagBundle\Entity\Resultat $resultat)
+    {
+        $this->resultats[] = $resultat;
+    
+        return $this;
+    }
+
+    /**
+     * Remove resultat
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Resultat $resultat
+     */
+    public function removeResultat(\HopitalNumerique\AutodiagBundle\Entity\Resultat $resultat)
+    {
+        $this->resultats->removeElement($resultat);
+    }
+
+    /**
+     * Set resultats
+     *
+     * @param \Doctrine\Common\Collections\Collection $resultats
+     * @return Resultat
+     */
+    public function setResultats(array $resultats)
+    {        
+        $this->resultats = $resultats;
+    
+        return $this;
+    }
+
+    /**
+     * Get resultats
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResultats()
+    {
+        return $this->resultats;
     }
 }
