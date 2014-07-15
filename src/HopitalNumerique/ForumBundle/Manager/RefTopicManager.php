@@ -20,6 +20,7 @@ class RefTopicManager extends BaseManager
      */
     public function getTopicForRecherche( $references )
     {
+        //return $this->getRepository()->getTopicForRecherche( $references )->getQuery()->getResult();
         $qb = $this->_em->createQueryBuilder();
 
         return $qb->select('refO')

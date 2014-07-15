@@ -71,19 +71,18 @@
 
             <div class="col-md-12 content">
                 {% set formName = outil.alias %}
-                {% set questionNumber = 1 %}
                 {% import _self as mySelf %}
                 <form action="{{path('hopitalnumerique_autodiag_front_save', {'id':outil.id})}}" id="wizard" class="form-horizontal" method="POST">
                     {% for chapitre in chapitres %}
                         {% set parent = chapitre['parent'] %}
 
                         {# Build step #}
-                        <fieldset title="<p>{{parent.title}}</p>" >
+                        <fieldset title="<p>{% if parent.code != '' %}{{parent.code ~ '. '}}{% endif %}{{parent.title}}</p>" >
                             {% if reponses %}
                                 <div onclick="emptyChapter(this);" class="emptyChapter btn btn-default btn-sm pull-right" title="Vider le chapitre"><i class="fa fa-trash-o"></i></div>
                             {% endif %}
                             <div onclick="chapterNonConcerne(this);" class="chapitreNonConcerne btn btn-default btn-sm pull-right" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></div>
-                            <h2>{{parent.title}}</h2>
+                            <h2>{% if parent.code != '' %}{{parent.code ~ '. '}}{% endif %}{{parent.title}}</h2>
 
                             <hr>
 
@@ -94,15 +93,14 @@
                                     {% else %}
                                         {% set reponse = {'value': null} %}
                                     {% endif %}
-                                    {{ mySelf.buildQuestion(question, reponse, formName, questionNumber) }}
-                                    {% set questionNumber = questionNumber + 1 %}
+                                    {{ mySelf.buildQuestion(question, reponse, formName) }}
                                 {% endfor %}
                             {% endif %}
                             
                             {% if chapitre['childs']|length > 0 %}
                                 <div class="sous-chapitre">
                                     {% for child in chapitre['childs'] %}
-                                        <h3>{{child.title}} - <span onclick="chapterNonConcerne(this, true);" class="chapitreNonConcerne" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></span></h3>
+                                        <h3>{% if child.code != '' %}{{child.code ~ '. '}}{% endif %}{{child.title}} - <span onclick="chapterNonConcerne(this, true);" class="chapitreNonConcerne" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></span></h3>
                                         
                                         <hr>
                                         
@@ -113,8 +111,7 @@
                                                 {% else %}
                                                     {% set reponse = {'value' : null} %}
                                                 {% endif %}
-                                                {{ mySelf.buildQuestion(question, reponse, formName, questionNumber) }}
-                                                {% set questionNumber = questionNumber + 1 %}
+                                                {{ mySelf.buildQuestion(question, reponse, formName) }}
                                             {% endfor %}
                                         </div>
                                     {% endfor %}
@@ -136,9 +133,10 @@
             <div class="clearfix"></div>
         </div>
     </div>
+
 {% endblock %}
 
-{% macro buildQuestion(question, reponse, formName, questionNumber) %}
+{% macro buildQuestion(question, reponse, formName) %}
     {# Build vars to make it cleaner #}
     {% set questionName = formName ~ '[' ~ question.chapitre.id ~ ']' ~ '[' ~ question.id ~ ']' %}
     {% set questionId   = formName ~ '_' ~ question.chapitre.id ~ '_' ~ question.id %}
@@ -146,7 +144,7 @@
     {# Build form group #}
     <div class="form-group">
         <label for="{{questionName}}" class="col-md-7 col-sm-12">
-            {{questionNumber ~ '. ' ~ question.texte}}
+            {% if question.code != '' %}{{question.code ~ '. '}}{% endif %}{{question.texte}}
             {% if question.infoBulle %}<span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>{% endif %}
         </label>
         <div class="col-md-4 col-sm-11">
@@ -154,7 +152,7 @@
             {% if question.type.id == '415' %}
                 {% set options = question.options|nl2br|split('<br />') %}
 
-                <select name="{{questionName}}" id="{{questionId}}" class="form-control">
+                <select name="{{questionName}}" id="{{questionId}}" class="form-control {% if question.colored %}colored{% endif %}" >
                     <option value=""> - </option>
                     <option value="-1" {% if reponse['value'] == -1 %}selected="selected"{% endif %} >Non concerné</option>
                     {% for option in options %}
@@ -165,7 +163,7 @@
             {# RADIO #}
             {% elseif question.type.id == '416' %}
                 {% set options = question.options|nl2br|split('<br />') %}
-                <div class="radios">
+                <div class="radios {% if question.colored %}colored{% endif %}">
                     {% set isChecked = false %}
                     <div class="radio block"><label><input type="radio" value="-1" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] != '' and reponse['value'] == -1 %}{% set isChecked = true %}checked="checked"{% endif %} />Non concerné</label></div>
                     {% for option in options %}
@@ -175,6 +173,7 @@
                     <div class="hide">
                         <div class="radio block"><input type="radio" value="" name="{{questionName}}" id="{{questionId}}" {% if isChecked == false %}checked="checked"{% endif %} /></div>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
             {# TEXT #}
             {% else %}
@@ -183,8 +182,9 @@
 
             <input type="text" class="form-control input-sm remarque" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="{% if reponse['remarque'] is not defined or reponse['remarque'] == '' %}display:none{% endif %}" placeholder="Remarques" value="{% if reponse['remarque'] is defined and reponse['remarque'] != '' %}{{reponse['remarque']}}{% endif %}" />
         </div>
-        <div class="col-md-1 col-sm-1">
-            <div class="remarques-toggle" data-target="{{questionId}}_remarque" ><i title="Ajouter un commentaire" class="fa fa-comment"></i></div>
+        <div class="col-md-1 col-sm-1 qOptions">
+            <div class="icon pull-left"><i class="fa"></i></div>
+            <div class="remarques-toggle pull-right" data-target="{{questionId}}_remarque" ><i title="Ajouter un commentaire" class="fa fa-comment"></i></div>
         </div>
     </div>
 {% endmacro %}

@@ -106,8 +106,12 @@ class QuestionController extends Controller
         if ( $form->handleRequest($request)->isValid() ) {
             $this->get('hopitalnumerique_autodiag.manager.question')->saveQuestion( $question );
 
-            //actualise render
-            $questions = $this->get('hopitalnumerique_autodiag.manager.question')->findBy( array('chapitre' => $chapitre ) );
+            //get ponderations
+            $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+
+            //get questions
+            $questions = $this->get('hopitalnumerique_autodiag.manager.question')->getQuestionsOrdered( $chapitre, $refsPonderees );
+
             return $this->render( 'HopitalNumeriqueAutodiagBundle:Question:index.html.twig' , array(
                 'questions' => $questions,
                 'chapitre'  => $chapitre

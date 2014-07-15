@@ -48,9 +48,21 @@ class Chapitre
      *      max = "255",
      *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans le titre."
      * )
-     * @Nodevo\Javascript(class="validate[maxSize[255]] checkAliasUnique")
+     * @Nodevo\Javascript(class="validate[maxSize[255]]")
      */
     private $alias;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cha_code", type="string", length=8, options = {"comment" = "Code du chapitre"}, nullable=true)
+     * @Assert\Length(
+     *      max = "8",
+     *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans le code."
+     * )
+     * @Nodevo\Javascript(class="validate[maxSize[8]]")
+     */
+    private $code;
 
     /**
      * @var integer
@@ -169,6 +181,27 @@ class Chapitre
         return $this->alias;
     }
 
+    /**
+     * Get code
+     *
+     * @return string $code
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+    
+    /**
+     * Set code
+     *
+     * @param string $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+        return $this;
+    }
+    
     /**
      * Get noteOptimale
      *

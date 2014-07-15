@@ -2,9 +2,9 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Symfony\Component\HttpFoundation\Response;
 use \Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
@@ -299,9 +299,63 @@ class ObjetController extends Controller
         return $this->get('hopitalnumerique_objet.manager.objet')->exportCsv( $colonnes, $objets, 'export-publications.csv', $kernelCharset );
     }
 
+    /**
+     * Fancybox d'ajout d'objet à l'utilisateur
+     */
+    public function addLinkAction( Objet $objet )
+    {
+        $types  = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code'=>'CATEGORIE_OBJET'));
+        $objets = $this->get('hopitalnumerique_objet.manager.objet')->getProductions( $types );
+        
+        return $this->render('HopitalNumeriqueObjetBundle:Objet:add_link.html.twig', array(
+            'objets'  => $objets,
+            'idObjet' => $objet->getId()
+        ));
+    }
 
+    /**
+     * Sauvegarde le lien point dur -> objets
+     */
+    public function saveLinkAction()
+    {
+        //get posted vars
+        $id     = $this->get('request')->request->get('idObjet');
+        $objets = $this->get('request')->request->get('objets');
 
+        //bind Objet
+        $pointDur = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
+        $currentObjets = $pointDur->getObjets();
 
+        //bind objects
+        $objets = $this->get('hopitalnumerique_objet.manager.objet')->findBy( array( 'id' => $objets ) );
+        foreach($objets as $one){
+            if( !$currentObjets->contains($one) )
+                $pointDur->addObjet( $one );
+        }
+        
+        $this->get('hopitalnumerique_objet.manager.objet')->save( $pointDur );
+        
+        $this->get('session')->getFlashBag()->add( 'success' ,  'Les productions ont été liées au point dur.' );
+
+        return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_objet_objet_edit', array('id' => $id)).'"}', 200);
+    }
+
+    /**
+     * Suppresion d'un lien point dur -> objet.
+     *
+     * METHOD = POST|DELETE
+     */
+    public function deleteLinkAction( $pointDur, Objet $objet )
+    {
+        $pointDur = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $pointDur) );
+        
+        $pointDur->removeObjet( $objet );
+        $this->get('hopitalnumerique_objet.manager.objet')->save( $pointDur );
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_objet_objet_edit', array('id' => $pointDur->getId())).'"}', 200);
+    }
 
 
 

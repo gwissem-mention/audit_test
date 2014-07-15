@@ -29,12 +29,16 @@ class PublicationController extends Controller
         //set Consultation entry
         $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $objet );
 
+        //build productions with authorizations
+        $productions = $this->getProductionsAssocies($objet->getObjets());
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
             'objets'       => $this->getObjetsFromRecherche( $objet ),
             'types'        => $types,
             'contenus'     => $contenus,
+            'productions'  => $productions,
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
             'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() )
         ));
@@ -75,6 +79,7 @@ class PublicationController extends Controller
             'types'        => $types,
             'contenu'      => $contenu,
             'prefix'       => $prefix,
+            'productions'  => array(),
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() ),
             'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() )
         ));
@@ -135,9 +140,64 @@ class PublicationController extends Controller
 
 
 
+    /**
+     * Retorune le type de la prod
+     *
+     * @param  [type] $objet [description]
+     *
+     * @return [type]
+     */
+    private function getType( $objet ) 
+    {
+        $type  = array();
+        $types = $objet->getTypes();
 
+        foreach ($types as $one) {
+            $parent = $one->getParent();
+            if( $parent->getId() == 175 )
+                $type[] = $one->getLibelle();
+        }
+        //reformatte proprement les types
+        $type = implode(' ♦ ', $type);
 
+        return $type;
+    }
 
+    /**
+     * Build productions with authorizations
+     *
+     * @param  [type] $prodLiees [description]
+     *
+     * @return [type]
+     */
+    private function getProductionsAssocies( $prodLiees )
+    {
+        $productions = array();
+        foreach( $prodLiees as $one){
+            if( $this->checkAuthorization( $one ) === true ){
+                //formate datas
+                $production           = new \StdClass;
+                $production->id       = $one->getId();
+                $production->alias    = $one->getAlias();
+                $production->titre    = $one->getTitre();
+                $production->synthese = $one->getSynthese();
+                $production->created  = $one->getDateCreation();
+                $production->type     = $this->getType($one);
+                $tab                  = explode('<!-- pagebreak -->', $one->getResume() );
+                $production->resume   = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+                $production->updated  = false;
+                $production->new      = false;
+
+                $productions[] = $production;
+            }
+        }
+
+        //update status updated + new
+        $user        = $this->get('security.context')->getToken()->getUser();
+        $productions = $this->get('hopitalnumerique_objet.manager.consultation')->updateProductionsWithConnectedUser( $productions, $user );
+
+        return $productions;
+    }
 
     /**
      * Récupère les objets de la recherche et filtre sur 10 résulats maxi par catégorie
@@ -208,7 +268,7 @@ class PublicationController extends Controller
 
         //test si l'user connecté à le rôle requis pour voir l'objet
         if( !$this->get('hopitalnumerique_objet.manager.objet')->checkAccessToObjet($role, $objet) ) {
-            $this->get('session')->getFlashBag()->add('warning', $message );
+            //$this->get('session')->getFlashBag()->add('warning', $message );
             return false;
         }
 

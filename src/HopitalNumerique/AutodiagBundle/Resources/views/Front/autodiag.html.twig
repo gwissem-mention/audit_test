@@ -75,7 +75,7 @@
                 <tr>
                     <th>Titre</th>
                     <th>Date validation</th>
-                    <th width="100px">Actions</th>
+                    <th width="140px">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -87,6 +87,7 @@
                         <td>
                             <div class="btn-group" >
                                 <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="btn btn-success" title="Télécharger le PDF du résultat"><i class="fa fa-download"></i></a>
+                                <a href="{{path('hopitalnumerique_autodiag_front_resultat', {'id':resultat.id, 'back': 1})}}" class="btn btn-warning" title="Voir les résultats"><i class="fa fa-eye"></i></a>
                                 <div class="btn btn-danger" onclick='deleteWithConfirm("{{ path('hopitalnumerique_autodiag_front_comptehn_delete', { 'id': resultat.id }) }}");' title="Supprimer mes réponses"><i class="fa fa-trash-o"></i></div>
                             </div>
                         </td>

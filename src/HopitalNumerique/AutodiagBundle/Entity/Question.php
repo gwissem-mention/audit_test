@@ -43,6 +43,18 @@ class Question
     /**
      * @var string
      *
+     * @ORM\Column(name="que_code", type="string", length=8, options = {"comment" = "Code de la question"}, nullable=true)
+     * @Assert\Length(
+     *      max = "8",
+     *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans le code."
+     * )
+     * @Nodevo\Javascript(class="validate[maxSize[8]]")
+     */
+    private $code;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="que_info_bulle", type="text", options = {"comment" = "Info Bulle de la question"}, nullable=true)
      */
     private $infoBulle;
@@ -101,6 +113,13 @@ class Question
     private $order;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="que_colored", type="boolean", options = {"comment" = "Colorer la question ?"})
+     */
+    private $colored;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_type", referencedColumnName="ref_id")
      * @Nodevo\Javascript(class="validate[required]")
@@ -131,6 +150,7 @@ class Question
     public function __construct()
     {
         $this->ponderation = 1;
+        $this->colored     = true;
     }
 
     /**
@@ -166,6 +186,27 @@ class Question
         return $this->texte;
     }
 
+    /**
+     * Get code
+     *
+     * @return string $code
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+    
+    /**
+     * Set code
+     *
+     * @param string $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+        return $this;
+    }
+    
     /**
      * Set infoBulle
      *
@@ -350,6 +391,27 @@ class Question
         return $this->order;
     }
 
+    /**
+     * Get colored
+     *
+     * @return boolean $colored
+     */
+    public function getColored()
+    {
+        return $this->colored;
+    }
+    
+    /**
+     * Set colored
+     *
+     * @param boolean $colored
+     */
+    public function setColored($colored)
+    {
+        $this->colored = $colored;
+        return $this;
+    }
+    
     /**
      * Get type
      *

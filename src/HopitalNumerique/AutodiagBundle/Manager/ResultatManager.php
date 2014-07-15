@@ -48,7 +48,7 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Formatte les résultats pour la partie backoffice
+     * Formatte les résultats
      *
      * @param Resultat $resultat L'objet Résultat
      *
@@ -62,7 +62,6 @@ class ResultatManager extends BaseManager
         //build chapitres and add previous responses
         $parents     = array();
         $enfants     = array();
-        $numQuestion = 1;
 
         //preorder chapters
         $chapitres = $this->makeChaptersOrdered( $resultat->getOutil()->getChapitres() );
@@ -73,7 +72,7 @@ class ResultatManager extends BaseManager
             //build chapitre values
             $chapitre->id       = $one->getId();
             $chapitre->synthese = $one->getSynthese();
-            $chapitre->title    = $one->getTitle();
+            $chapitre->title    = $one->getCode() != '' ? $one->getCode() . '. ' . $one->getTitle() : $one->getTitle();
             $chapitre->childs   = array();
             $chapitre->noteMin  = $one->getNoteMinimale();
             $chapitre->noteOpt  = $one->getNoteOptimale();
@@ -81,10 +80,7 @@ class ResultatManager extends BaseManager
             $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
             //handle questions/reponses
-            $chapitre = $front ? $this->buildQuestionsForFront( $one->getQuestions(), $chapitre, $questionsReponses, $numQuestion ) : $this->buildQuestionsForBack( $one->getQuestions(), $chapitre, $questionsReponses );
-
-            //update Numéro de la question
-            $numQuestion += count( $one->getQuestions() );
+            $chapitre = $front ? $this->buildQuestionsForFront( $one->getQuestions(), $chapitre, $questionsReponses ) : $this->buildQuestionsForBack( $one->getQuestions(), $chapitre, $questionsReponses );
 
             //handle parents / enfants
             if( is_null($one->getParent()) )
@@ -505,7 +501,7 @@ class ResultatManager extends BaseManager
      *
      * @return array
      */
-    private function buildQuestionsForFront( $questions, $chapitre, $questionsReponses, $numQuestion )
+    private function buildQuestionsForFront( $questions, $chapitre, $questionsReponses )
     {
         $results             = array();
         $forCharts           = array();
@@ -518,7 +514,7 @@ class ResultatManager extends BaseManager
             {
                 //on ajoute seulement les questions valides pour les résultats
                 $one = $questionsReponses[ $question->getId() ];
-                $one->question = $numQuestion . '. ' . $one->question;
+                $one->question = $one->code != '' ? $one->code . '. ' . $one->question : $one->question;
 
                 if( $one->initialValue !== '' ){
                     if( $one->noteMinimale !== '' and $one->initialValue <= $one->noteMinimale ){
@@ -534,8 +530,6 @@ class ResultatManager extends BaseManager
 
                 $nbQuestions++;
             }
-
-            $numQuestion++;
         }
 
         $chapitre->questions           = $results;
@@ -569,6 +563,7 @@ class ResultatManager extends BaseManager
                 //questions values
                 $rep->id            = $question->getId();
                 $rep->question      = $question->getTexte();
+                $rep->code          = $question->getCode();
                 $rep->ordreResultat = $question->getOrdreResultat();
                 $rep->noteMinimale  = $question->getNoteMinimale();
                 $rep->synthese      = $question->getSynthese();

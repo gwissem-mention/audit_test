@@ -462,6 +462,14 @@ class User extends BaseUser
      */
     protected $raisonDesinscription;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="usr_remarque", nullable=true, type="text")
+     * @Gedmo\Versioned
+     */
+    protected $remarque;
+
     // ------- Ambassadeurs  -------
     /**
      * @Assert\File(
@@ -1321,6 +1329,27 @@ class User extends BaseUser
         $this->raisonDesinscription = $raisonDesinscription;
     }
 
+    /**
+     * Get remarque
+     *
+     * @return string $remarque
+     */
+    public function getRemarque()
+    {
+        return $this->remarque;
+    }
+    
+    /**
+     * Set remarque
+     *
+     * @param string $remarque
+     */
+    public function setRemarque($remarque)
+    {
+        $this->remarque = $remarque;
+        return $this;
+    }
+    
     /**
      * Get dateLastUpdate
      *

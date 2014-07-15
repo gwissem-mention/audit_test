@@ -118,6 +118,7 @@ class ChapitreManager extends BaseManager
             
             $chapitre->id      = $one->getId();
             $chapitre->title   = $one->getTitle();
+            $chapitre->code    = $one->getCode();
             $chapitre->noteMin = $one->getNoteMinimale();
             $chapitre->noteOpt = $one->getNoteOptimale();
             $chapitre->order   = $one->getOrder();
@@ -200,6 +201,7 @@ class ChapitreManager extends BaseManager
             $item->title        = $element->getTitle();
             $item->id           = $element->getId();
             $item->order        = $element->getOrder();
+            $item->code         = $element->getCode();
             $item->noteMinimale = $element->getNoteMinimale();
             $item->noteOptimale = $element->getNoteOptimale();
             $item->note         = $this->getNoteReferencement($element->getReferences());

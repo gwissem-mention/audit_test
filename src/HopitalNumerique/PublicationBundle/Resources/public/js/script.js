@@ -21,19 +21,18 @@ $(document).ready(function() {
 
     // Met en place la pagination
     $('.carousel').each(function(){
-        //if( $(this).find('.carousel-inner .item.active').length == 0 ){
-            $(this).find('.carousel-inner .item:first').addClass('active');
-            pos = 1;
-        // }else
-        //     pos = $(this).find('.carousel-inner .item.active').data('pos');
-
-        if( pos != undefined )
-            $(this).find('.carousel-indicators li.pos-'+pos).addClass('active');
+        $(this).find('.carousel-inner .item:first').addClass('active');
+        $(this).find('.carousel-indicators li.pos-1').addClass('active');
     });
 
     $('#autresResultats h2').click(function(){
         $(this).toggleClass('open closed');
         $('#autresResultats .row').slideToggle();
+    });
+
+    $('#productions h2').click(function(){
+        $(this).toggleClass('open closed');
+        $('#productions .row').slideToggle();
     });
 
     //Style WYSIWYG custom : titre pliable

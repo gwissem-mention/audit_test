@@ -115,6 +115,47 @@
             </div>
         {% endif %}
         
+        {# Productions fortement liées #}
+        {% if productions|length > 0 %}
+            <div class="col-md-12" id="productions" >
+                <h2 class="open">Productions associées</h2>
+                <div class="wrapper-results">
+                    <div class="background-rose"></div>
+                    <div class="results">
+                        {% for one in productions %}
+                            <div class="row" >
+                                <div class="col-md-10">
+                                    <h5>{{one.type}}</h5>
+                                </div>
+                                <div class="col-md-2">
+                                    {% if one.synthese is not null %}
+                                        <a class="synthese fancybox.iframe" href="{{path('hopital_numerique_publication_synthese',{'id':one.id})}}">synthèse</a>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-md-12">
+                                    <h4>
+                                        {% if one.updated %}
+                                            <span class="label label-success">MaJ</span>
+                                        {% elseif one.new %}
+                                            <span class="label label-danger">Nouveau</span>
+                                        {% endif %}
+
+                                        <a href="{{path('hopital_numerique_publication_publication_objet', {'id':one.id, 'alias': one.alias})}}">{{one.titre}}</a>
+                                    </h4>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <p>{{ one.resume }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         {# Autres résultats de recherche#}
         {% if contenu is not defined %}
             {% set contenu = false %}

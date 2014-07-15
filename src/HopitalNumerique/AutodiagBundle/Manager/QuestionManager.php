@@ -40,6 +40,7 @@ class QuestionManager extends BaseManager
             $question              = new \StdClass;
             $question->id          = $one->getId();
             $question->texte       = $one->getTexte();
+            $question->code        = $one->getCode();
             $question->ponderation = $one->getPonderation();
             $question->note        = $this->getNoteReferencement( $one->getReferences(), $refPonderees );
 

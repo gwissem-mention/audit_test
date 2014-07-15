@@ -23,11 +23,15 @@ class ReferenceController extends Controller
         $results    = $this->get('hopitalnumerique_reference.manager.reference')->getRefsForGestionObjets();
         $references = $this->get('hopitalnumerique_autodiag.manager.chapitre')->getReferences($chapitre, $results);
 
+        $titre = $chapitre->getTitle();
+        if( $chapitre->getCode() != '' )
+            $titre = $chapitre->getCode() . '. ' . $chapitre->getTitle();
+
         return $this->render('HopitalNumeriqueAutodiagBundle:Reference:manage.html.twig', array(
             'references' => $references,
             'chapitre'   => $chapitre->getId(),
             'question'   => 'null',
-            'titre'      => $chapitre->getTitle()
+            'titre'      => $titre
         ));
     }
 
@@ -76,11 +80,15 @@ class ReferenceController extends Controller
         $results    = $this->get('hopitalnumerique_reference.manager.reference')->getRefsForGestionObjets();
         $references = $this->get('hopitalnumerique_autodiag.manager.question')->getReferences($question, $results);
 
+        $titre = $question->getTexte();
+        if( $question->getCode() != '' )
+            $titre = $question->getCode() . '. ' . $question->getTexte();
+
         return $this->render('HopitalNumeriqueAutodiagBundle:Reference:manage.html.twig', array(
             'references' => $references,
             'chapitre'   => 'null',
             'question'   => $question->getId(),
-            'titre'      => $question->getTexte()
+            'titre'      => $titre
         ));
     }
 
