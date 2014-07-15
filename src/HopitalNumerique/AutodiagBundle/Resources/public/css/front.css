@@ -27,8 +27,12 @@
     #autodiag .content .chapitreNonConcerne{margin-top:10px; margin-right:10px;}
     #autodiag .content form{clear:both;}
     #autodiag .content h2{color:#6f3596; text-transform: uppercase;}
-    #autodiag .content h3{color:#6f3596; margin-bottom: 20px; font-size: 18px}
+    #autodiag .content h2.prev{font-size: 24px; color:#de0d4d;}
+    #autodiag .content h3{color:#6f3596; margin-bottom: 20px; font-size: 18px; padding-left:10px;}
+    #autodiag .content h3.prev{font-size: 20px; color:#de0d4d;7}
     #autodiag .content h3 .chapitreNonConcerne{cursor: pointer}
+    #autodiag .content .p.text-muted.level1{font-size: 14px}
+    #autodiag .content .p.text-muted.level2{font-size: 13px; padding-left:10px;}
     #autodiag .content .badge-primary{background-color:#6f3596; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
     #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer; margin-top: 5px}
     #autodiag .content .radio{float: left; margin-right: 30px;}
@@ -42,6 +46,7 @@
     #autodiag .content .icon .fa-check-circle{color:#B4DC00}
     #autodiag .content .icon .fa-times-circle{color:#C82F5B}
     #autodiag .content .icon .fa-exclamation-circle{color:#E88824}
+    #autodiag .content .form-group .text-muted{padding-left:25px;}
 
     #autodiag .stepy-navigator{}
     #autodiag .stepy-navigator .button-back,

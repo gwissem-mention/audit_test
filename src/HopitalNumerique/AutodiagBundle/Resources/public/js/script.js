@@ -45,7 +45,7 @@ function initFancyBox()
             'padding'   : 0,
             'autoSize'  : false,
             'width'     : '80%',
-            'height'    : '600px',
+            'height'    : '630px',
             'scrolling' : 'no',
             'modal'     : true
         });

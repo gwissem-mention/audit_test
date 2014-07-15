@@ -48,7 +48,19 @@ class ChapitreType extends AbstractType
                 'required'   => false, 
                 'label'      => 'Phrase de synthèse',
                 'label_attr' => array('class' => 'col-md-12'),
-                'attr'       => array('rows' => 10)
+                'attr'       => array('rows' => 4)
+            ))
+            ->add('intro', 'textarea', array(
+                'required'   => false, 
+                'label'      => 'Texte avant le nom du chapitre',
+                'label_attr' => array('class' => 'col-md-12'),
+                'attr'       => array('rows' => 3)
+            ))
+            ->add('desc', 'textarea', array(
+                'required'   => false, 
+                'label'      => 'Texte après le nom du chapitre',
+                'label_attr' => array('class' => 'col-md-12'),
+                'attr'       => array('rows' => 3)
             ))
         ;
     }

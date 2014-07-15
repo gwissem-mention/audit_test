@@ -88,6 +88,20 @@ class Chapitre
     private $synthese;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="cha_intro", type="text", nullable=true, options = {"comment" = "Introduction du chapitre"})
+     */
+    private $intro;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cha_desc", type="text", nullable=true, options = {"comment" = "Description du chapitre"})
+     */
+    private $desc;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="cha_order", type="smallint", options = {"comment" = "Ordre du chapitre"})
@@ -265,6 +279,48 @@ class Chapitre
     public function getSynthese()
     {
         return $this->synthese;
+    }
+
+    /**
+     * Get intro
+     *
+     * @return string $intro
+     */
+    public function getIntro()
+    {
+        return $this->intro;
+    }
+    
+    /**
+     * Set intro
+     *
+     * @param string $intro
+     */
+    public function setIntro($intro)
+    {
+        $this->intro = $intro;
+        return $this;
+    }
+    
+    /**
+     * Get desc
+     *
+     * @return string $desc
+     */
+    public function getDesc()
+    {
+        return $this->desc;
+    }
+    
+    /**
+     * Set desc
+     *
+     * @param string $desc
+     */
+    public function setDesc($desc)
+    {
+        $this->desc = $desc;
+        return $this;
     }
 
     /**
