@@ -60,6 +60,13 @@ class Question
     private $infoBulle;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="que_intro", type="text", options = {"comment" = "Intro de la question"}, nullable=true)
+     */
+    private $intro;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="que_ponderation", type="float", options = {"comment" = "Ponderation de la question"})
@@ -228,6 +235,27 @@ class Question
     public function getInfoBulle()
     {
         return $this->infoBulle;
+    }
+
+    /**
+     * Get intro
+     *
+     * @return string $intro
+     */
+    public function getIntro()
+    {
+        return $this->intro;
+    }
+    
+    /**
+     * Set intro
+     *
+     * @param string $intro
+     */
+    public function setIntro($intro)
+    {
+        $this->intro = $intro;
+        return $this;
     }
 
     /**

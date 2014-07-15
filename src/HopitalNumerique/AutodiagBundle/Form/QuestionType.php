@@ -57,6 +57,10 @@ class QuestionType extends AbstractType
                 'required' => false, 
                 'label'    => 'Texte de l\'info-bulle'
             ))
+            ->add('intro', 'textarea', array( 
+                'required' => false, 
+                'label'    => 'Introduction'
+            ))
             ->add('ponderation', 'text', array(
                 'required'   => true, 
                 'label'      => 'Pondération de la question',
