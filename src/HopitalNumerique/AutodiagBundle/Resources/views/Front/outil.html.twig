@@ -178,7 +178,7 @@
                         <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] == datas[0] %}{% set isChecked = true %}checked="checked"{% endif %} />{{datas[1]|capitalize}}</label></div>
                     {% endfor %}
                     <div class="hide">
-                        <div class="radio block"><input type="radio" value="" name="{{questionName}}" id="{{questionId}}" {% if isChecked == false %}checked="checked"{% endif %} /></div>
+                        <div class="radio block"><input type="radio" value="" class="hiddenRadio" name="{{questionName}}" id="{{questionId}}" {% if isChecked == false %}checked="checked"{% endif %} /></div>
                     </div>
                     <div class="clearfix"></div>
                 </div>
