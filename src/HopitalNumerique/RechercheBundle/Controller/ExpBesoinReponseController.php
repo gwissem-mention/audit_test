@@ -52,7 +52,8 @@ class ExpBesoinReponseController extends Controller
 
         $reponse->setOrder( $order );
         $reponse->setLibelle( $libelle );
-        $reponse->setRedirigeQuestion( $redirigeQuestion );
+        if($redirigeQuestion != null)
+            $reponse->setRedirigeQuestion( $redirigeQuestion );
         $reponse->setAutreQuestion( $autreQuestion == 'true' ? true : false );
         $reponse->setQuestion( $question );
 

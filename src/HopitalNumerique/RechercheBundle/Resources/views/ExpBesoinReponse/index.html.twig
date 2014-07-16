@@ -68,7 +68,9 @@
                                         {% endif %}
                                     {% endfor %}
                                 </select>
-                                <input type="hidden" id="select-reponses-{{reponse.id}}" value="{{reponse.redirigeQuestion.id}}" />
+                                {% if reponse.redirigeQuestion is not null %}
+                                    <input type="hidden" id="select-reponses-{{reponse.id}}" value="{{reponse.redirigeQuestion.id}}" />
+                                {% endif %}
                             </div>
                         </div>
                     </div>
