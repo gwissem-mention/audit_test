@@ -180,6 +180,7 @@ function emptyChapter( that )
     });
 
     calcAvancement();
+    prepareColoredQuestions();
 }
 
 //Met tout le chapitre en non concerné
@@ -206,6 +207,80 @@ function chapterNonConcerne( that, sousChapitre )
     });
 
     calcAvancement();
+    prepareColoredQuestions();
 }
 
+//Prépare les couleurs en fonction des réponses
+function prepareColoredQuestions()
+{
+    //select
+    $('select.colored').each(function(){
+        var icon   = $(this).parent().parent().find('.icon i');
+        var values = getMinAndMaxValue( $(this).find('option') );
 
+        changeColorQuestions( values, icon, $(this).val());
+        $(this).on('change', function(){
+            changeColorQuestions( values, icon, $(this).val() );
+        });
+    });
+
+    //Radios
+    $('.radios.colored').each(function(){
+        var icon   = $(this).parent().parent().find('.icon i');
+        var values = getMinAndMaxValue( $(this).find('.radio input') );
+
+        changeColorQuestions( values, icon);
+
+        $(this).find('.radio input').on('change', function() {
+            changeColorQuestions( values, icon, $(this).val() );
+        });
+    });
+}
+
+//Application des couleurs au doc ready + onChange
+function changeColorQuestions( values, icon, myVal )
+{
+    icon.removeClass('fa-check-circle fa-exclamation-circle fa-times-circle');
+
+    var myVal = myVal != undefined ? myVal : values.val;
+
+    if( myVal != '' && myVal == values.minVal ){
+        icon.addClass('fa-times-circle');
+    }else if( myVal != '' && myVal == values.maxVal ){
+        icon.addClass('fa-check-circle');
+    }else{
+        myVal = parseInt(myVal);
+        if( !isNaN(myVal) && myVal != -1)
+            icon.addClass('fa-exclamation-circle');
+    }
+}
+
+//Récupère la valeur min et la valeur max des elements (si on est sur des radios, on récupère la current value aussi)
+function getMinAndMaxValue( elements )
+{
+    var values = {
+        val    : null,
+        minVal : null,
+        maxVal : null
+    }
+
+    $(elements).each(function(){
+        val = parseInt($(this).val());
+        //get all options except : Non concerné + vide
+        if( !isNaN(val) && val != -1){
+            //Min value of all options
+            if( values.minVal == null || val < values.minVal )
+                values.minVal = val;
+            //Max value of each options
+            if( values.maxVal == null || val > values.maxVal )
+                values.maxVal = val;
+        }
+
+        if( $(this)[0].nodeName == 'INPUT' ){
+            if( $(this).prop('checked') )
+                values.val = $(this).val();
+        }
+    });
+
+    return values;
+}
