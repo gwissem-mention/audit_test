@@ -13,7 +13,7 @@ class ExpBesoinReponseController extends Controller
 {
     public function indexAction(ExpBesoin $expBesoin)
     {
-        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findAll();
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array(), array('order' => 'ASC'));
 
         $notes = array();
 
@@ -35,7 +35,7 @@ class ExpBesoinReponseController extends Controller
 
     public function addAction(Request $request)
     {
-        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findAll();
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array(), array('order' => 'ASC'));
 
         //créer un question
         $reponse = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->createEmpty();

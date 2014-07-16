@@ -1,0 +1,12 @@
+<label class="col-md-12" for="reponse-a-expression-besoin-{{expBesoin.id}}">
+    {{expBesoin.libelle}}
+</label>
+<div class="col-md-12">
+    <select name="reponse-a-expression-besoin-{{expBesoin.id}}" id="expBesoin-reponse-{{expBesoin.id}}" class="form-control">
+        <option> - </option>
+        {% for reponse in expBesoin.reponses %}
+            <option value="{{reponse.id}}" title="{{reponse.libelle}}">{{reponse.libelle|truncate(30,'...')}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="clearfix"></div>

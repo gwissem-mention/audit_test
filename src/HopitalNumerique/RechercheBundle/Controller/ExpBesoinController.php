@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoin;
+use HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses;
 
 class ExpBesoinController extends Controller
 {
@@ -86,10 +87,83 @@ class ExpBesoinController extends Controller
         $this->get('hopitalnumerique_recherche.manager.expbesoin')->reorder( $datas );
         $this->getDoctrine()->getManager()->flush();
 
-        //return success.true si le fichier existe deja
         return new Response('{"success":true}', 200);
     }
 
 
+    //**********************
+    //**** FRONT OFFICE ****
+    //**********************
+
+    /**
+     * POPIN : Recherche en Front de l'aide à l'expression du besoin
+     */
+    public function rechercheAction()
+    {
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array(), array('order' => 'ASC'));
+        $reponses = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->getAllReponsesInArrayById();
+
+        return $this->render( 'HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/fancy_front.html.twig' , array(
+            'expBesoins' => $expBesoins,
+            'reponses'   => $reponses
+        ));
+    }
+
+    /**
+     * Met à jour l'ordre des différentes questions
+     */
+    public function modificationSessionAction(Request $request)
+    {
+        $idExpBesoinReponses = $request->request->get('id');
+
+        $expBesoinReponses = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->findOneBy(array('id' => $idExpBesoinReponses));
+
+        //Création du tableau pour la session de recherche
+        $resultats = array(
+            'categ1' => array(),
+            'categ2' => array(),
+            'categ3' => array(),
+            'categ4' => array()
+        );
+
+        //Parcourt les références de la réponse, puis les tris pour l'affichage de la recherche
+        foreach ($expBesoinReponses->getReferences() as $refExpBesoinReponses) 
+        {
+            //Récupère la référence courante
+            $reference     = $refExpBesoinReponses->getReference();
+            $referenceTemp = $reference;
+
+            //Récupère le premier parent
+            while(!is_null($referenceTemp->getParent())
+                    && $referenceTemp->getParent()->getId() != null)
+            {
+                $referenceTemp = $referenceTemp->getParent();
+            }
+
+            //Trie la référence dans la bonne catégorie
+            switch ($referenceTemp->getId()) 
+            {
+                case 220:
+                    $resultats['categ1'][] = $reference->getId();
+                    break;
+                case 221:
+                    $resultats['categ2'][] = $reference->getId();
+                    break;
+                case 223:
+                    $resultats['categ3'][] = $reference->getId();
+                    break;
+                case 222:
+                    $resultats['categ4'][] = $reference->getId();
+                    break;
+            }
+        }
+
+        //on prépare la session
+        $session = $this->getRequest()->getSession();
+        $session->set('requete-refs', json_encode($resultats) );
+
+        //return success.true si le fichier existe deja
+        return new Response('{"success":true}', 200);
+    }
 
 }

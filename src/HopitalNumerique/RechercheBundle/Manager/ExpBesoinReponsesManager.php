@@ -76,20 +76,6 @@ class ExpBesoinReponsesManager extends BaseManager
     }
 
     /**
-     * [formatReferencesOwn description]
-     *
-     * @param  [type] $retour [description]
-     *
-     * @return [type]
-     */
-    private function formatReferencesOwn( &$retour )
-    {
-        foreach( $retour as $key => $one ){
-            $retour[ $key ]['childs'] = $this->getChilds($retour, $one);
-        }
-    }
-
-    /**
      * Met à jour l'ordre des chapitres de manière récursive
      *
      * @param array  $elements Les éléments
@@ -106,6 +92,43 @@ class ExpBesoinReponsesManager extends BaseManager
             $reponse = $this->findOneBy( array('id' => $element['id']) );
             $reponse->setOrder( $order );
             $order++;
+        }
+    }
+
+    /**
+     * Récupère l'ensemble des réponses dans un tableau avec comme clé l'id de la réponse
+     *
+     * @return array[ExpBesoinReponses] $expBesoinReponses
+     * 
+     */
+    public function getAllReponsesInArrayById()
+    {
+        $resultats         = array();
+        $expBesoinReponses = $this->findBy(array(), array('order' => 'ASC'));
+
+        foreach ($expBesoinReponses as $expBesoinReponse)
+        {
+            $resultats[$expBesoinReponse->getId()]                  = array();
+            $resultats[$expBesoinReponse->getId()]['libelle']       = $expBesoinReponse->getLibelle();
+            $resultats[$expBesoinReponse->getId()]['autreQuestion'] = $expBesoinReponse->isAutreQuestion();
+            $resultats[$expBesoinReponse->getId()]['idQuestion']    = $expBesoinReponse->getRedirigeQuestion()->getId();
+            //$resultats[$expBesoinReponse->getId()]['reference'] = $expBesoinReponse->getReferences();
+        }
+
+        return json_encode($resultats);
+    }
+
+    /**
+     * [formatReferencesOwn description]
+     *
+     * @param  [type] $retour [description]
+     *
+     * @return [type]
+     */
+    private function formatReferencesOwn( &$retour )
+    {
+        foreach( $retour as $key => $one ){
+            $retour[ $key ]['childs'] = $this->getChilds($retour, $one);
         }
     }
     

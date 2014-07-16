@@ -109,14 +109,6 @@ function editQuestion( id, url)
                     {
                         location.reload();
                         //Forcer le click sur la question éditée
-                        
-                        // $.ajax({
-                        //     url: "",
-                        //     context: document.body,
-                        //     success: function(s,x){
-                        //         $('#questions').html(s);
-                        //     }
-                        // });
                     }
                     else
                     {
@@ -302,7 +294,6 @@ function saveReponse(idReponse, url)
         type     : 'POST',
         dataType : 'json',
         success  : function( data ){
-            apprise('Reponse modifiée.');
         }
     });
 }
@@ -340,8 +331,6 @@ function saveReferences( expBesoin, reponse )
         type     : 'POST',
         dataType : 'json',
         success  : function( data ){
-            alert(reponse);
-            alert(data.note);
             $('#reponses-dd #reponse-'+reponse+' > .dd3-content .text-muted span').html( data.note );
 
             loader.finished();

@@ -124,6 +124,16 @@ hopitalnumerique_expbesoin_reponse_reference_save:
     requirements:
         id: \d+
 
+#Expression du besoin - FO
+hopital_numerique_expbesoin_rechercheFancy:
+    pattern:  /recherche-par-referencement/aide-expression-besoin/fancy
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoin:recherche" }
+
+#Expression du besoin - Modification de la requete
+hopital_numerique_expbesoin_modification_session_recherche:
+    pattern:  /recherche-par-referencement/aide-expression-besoin/session
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoin:modificationSession" }
+
 #CRON
 hopital_numerique_cron_requetes:
     pattern:  /cron-requetes/{id}
