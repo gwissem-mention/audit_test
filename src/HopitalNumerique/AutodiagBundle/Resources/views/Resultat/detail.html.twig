@@ -36,6 +36,7 @@
 
                 <div id="resultat-detail" class="content">
                     {% import _self as mySelf %}
+                    <p>{{resultat.remarque}}</p>
                     {% for chapitre in chapitres %}
                         <div class="chapitre-{{chapitre.id}}">
                             <h2>{{chapitre.title}}</h2>
