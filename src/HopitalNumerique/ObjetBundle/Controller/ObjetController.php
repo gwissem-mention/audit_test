@@ -304,11 +304,11 @@ class ObjetController extends Controller
      */
     public function addLinkAction( Objet $objet )
     {
-        $types  = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code'=>'CATEGORIE_OBJET'));
-        $objets = $this->get('hopitalnumerique_objet.manager.objet')->getProductions( $types );
-        
+        $types = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code'=>'CATEGORIE_OBJET'));
+        $arbo  = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo( $types );
+
         return $this->render('HopitalNumeriqueObjetBundle:Objet:add_link.html.twig', array(
-            'objets'  => $objets,
+            'arbo'    => $arbo,
             'idObjet' => $objet->getId()
         ));
     }
@@ -323,10 +323,13 @@ class ObjetController extends Controller
         $objets = $this->get('request')->request->get('objets');
 
         //bind Objet
-        $pointDur = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
+        $pointDur      = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
         $currentObjets = $pointDur->getObjets();
 
         //bind objects
+        echo '<pre>';
+        var_dump($objets);
+        die();
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->findBy( array( 'id' => $objets ) );
         foreach($objets as $one){
             if( !$currentObjets->contains($one) )

@@ -266,8 +266,8 @@ class Objet
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet")
      * @ORM\JoinTable(name="hn_objet_objets",
-     *      joinColumns={ @ORM\JoinColumn(name="obj1_id", referencedColumnName="obj_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="obj2_id", referencedColumnName="obj_id")}
+     *      joinColumns={ @ORM\JoinColumn(name="par_id", referencedColumnName="obj_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")}
      * )
      * @ORM\OrderBy({"titre" = "ASC"})
      */
