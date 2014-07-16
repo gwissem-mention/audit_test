@@ -36,3 +36,4 @@ div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
 #designForForm {border-bottom:1px solid #E5E5E5;}
 .toggle .toggle-on, .toggle .toggle-off{color:#1DA4C5;}
 .toggle .toggle-on.active, .toggle .toggle-off.active{color:#FFFFFF;}
+.question select{padding: 2px 0; height: 28px;}

@@ -294,6 +294,7 @@ function saveReponse(idReponse, url)
         type     : 'POST',
         dataType : 'json',
         success  : function( data ){
+            apprise('La réponse est modifiée avec succès.');
         }
     });
 }

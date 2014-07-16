@@ -21,7 +21,7 @@
             </div>
             <div class="col-sm-7">
                 <div class="blocQuestion">
-                    <select name="redirigeQuestion" id="expBesoin-reponse" class="form-control col-md-12">
+                    <select name="redirigeQuestion" id="expBesoin-reponse" class="form-control col-md-12 validate[required]">
                         {% for expBesoinCourrante in expBesoinAll %}
                             {% if expBesoinCourrante.id != expBesoin.id %}
                                 <option value="{{expBesoinCourrante.id}}" >{{expBesoinCourrante.libelle}}</option>
@@ -178,14 +178,12 @@
     if( $('.fancy').length > 0 )
         initFancyBox();
 
-    $('#expBesoin-reponse').select2();
-    $('.dd .question select').select2();
-
     //Pointe sur la bonne réponse du select2
     $('#reponses-dd .dd ol li').each(function(){
         var idReponse = $(this).data('id');
 
-        $(this).find('select').select2('val', $('#select-reponses-' + idReponse).val());
+        //$(this).find('select').select2('val', $('#select-reponses-' + idReponse).val());
+        $(this).find('select').val($('#select-reponses-' + idReponse).val());
     });
 
     $('#reponses div.dd').nestable({'maxDepth':1,'group':0}).on('change', function() {
