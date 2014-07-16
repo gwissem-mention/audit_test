@@ -68,6 +68,7 @@ class FrontController extends Controller
         //get Existing responses (for connected user only)
         $user     = $this->get('security.context')->getToken()->getUser();
         $reponses = false;
+        $remarque = false;
         if( $user != 'anon.' ) {
             $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
             
@@ -79,6 +80,7 @@ class FrontController extends Controller
                 $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->getLastResultatValided( $outil, $user );
 
             if( $resultat ){
+                $remarque = $resultat->getRemarque();
                 $datas = $resultat->getReponses();
                 foreach($datas as $one){
                     $reponses[ $one->getQuestion()->getId() ]['value'] = $one->getValue();
@@ -90,7 +92,8 @@ class FrontController extends Controller
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
             'outil'     => $outil,
             'chapitres' => $chapitresOrdered,
-            'reponses'  => $reponses
+            'reponses'  => $reponses,
+            'remarque'  => $remarque
         ));
     }
 
@@ -103,11 +106,12 @@ class FrontController extends Controller
     public function saveAction( Outil $outil, Request $request )
     {
         //get posted Datas
-        $chapitres    = $request->request->get( $outil->getAlias() );
-        $remarques    = $request->request->get( 'remarques-' . $outil->getAlias() );
+        $chapitres    = $request->request->get($outil->getAlias());
+        $remarques    = $request->request->get('remarques-' . $outil->getAlias());
         $action       = $request->request->get('action');
         $remplissage  = $request->request->get('remplissage');
         $nameResultat = $request->request->get('name-resultat');
+        $remarque     = $request->request->get('remarque');
 
         //try to get the connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -134,6 +138,7 @@ class FrontController extends Controller
         
         $resultat->setTauxRemplissage( $remplissage );
         $resultat->setDateLastSave( new \DateTime() );
+        $resultat->setRemarque( $remarque );
 
         //cas ou l'user à validé le questionnaire
         if( $action == 'valid'){

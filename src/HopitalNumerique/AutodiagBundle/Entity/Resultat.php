@@ -64,6 +64,13 @@ class Resultat
     private $pdf;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="res_remarque", type="text", options = {"comment" = "Remarque sur le questionnaire"}, nullable=true)
+     */
+    private $remarque;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_statut", referencedColumnName="ref_id")
      */
@@ -112,6 +119,7 @@ class Resultat
         $this->reponses        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->resultats       = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pdf             = null;
+        $this->remarque        = null;
         $this->synthese        = false;
     }
 
@@ -352,6 +360,27 @@ class Resultat
         return $this;
     }
     
+    /**
+     * Get remarque
+     *
+     * @return string $remarque
+     */
+    public function getRemarque()
+    {
+        return $this->remarque;
+    }
+    
+    /**
+     * Set remarque
+     *
+     * @param string $remarque
+     */
+    public function setRemarque($remarque)
+    {
+        $this->remarque = $remarque;
+        return $this;
+    }
+
     /**
      * Add resultat
      *

@@ -157,14 +157,14 @@
                                         {% for datas in categorie['chapitres'] %}
                                             {% if not datas['nc'] %}
                                                 <td class="text-center">
-                                                    {{datas['nbPoints']}} / {{datas['max']}}
+                                                    {{datas['nbPoints']|number_format(0)}} / {{datas['max']}}
                                                 </td>
                                                 {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
                                                 {% set maxCateg = maxCateg + datas['max'] %}
                                             {% endif %}
                                         {% endfor %}
                                         <td class="text-center">
-                                            {{nbPointsCateg}} / {{maxCateg}}
+                                            {{nbPointsCateg|number_format(0)}} / {{maxCateg}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -226,14 +226,14 @@
                                         {% for datas in chart.datas.totauxChapitres %}
                                             {% if not datas['nc'] %}
                                                 <td class="text-center">
-                                                    {{datas['nbPoints']}} / {{datas['max']}}
+                                                    {{datas['nbPoints']|number_format(0)}} / {{datas['max']}}
                                                 </td>
                                                 {% set nbPointsTotal = nbPointsTotal + datas['nbPoints'] %}
                                                 {% set maxTotal = maxTotal + datas['max'] %}
                                             {% endif %}
                                         {% endfor %}
                                         <td class="text-center">
-                                            {{nbPointsTotal}} / {{maxTotal}}
+                                            {{nbPointsTotal|number_format(0)}} / {{maxTotal}}
                                         </td>
                                     </tr>
                                     <tr>

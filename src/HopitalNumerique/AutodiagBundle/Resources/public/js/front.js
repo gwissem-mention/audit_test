@@ -172,7 +172,11 @@ function emptyChapter( that )
 
     //empty radios
     $(that).parent().find('.radio').each(function(){
-        $(this).find('input').prop('checked', '');
+        //si on vide les radio, on pense à cocher par défaut l'empty radio
+        if( $(this).find('input').hasClass('hiddenRadio') )
+            $(this).find('input').prop('checked', 'checked');
+        else
+            $(this).find('input').prop('checked', '');
     });
 
     calcAvancement();
@@ -232,6 +236,7 @@ function prepareColoredQuestions()
 
     });
 }
+
 //Application des couleurs au doc ready + onChange
 function changeColorQuestions(obj, minVal, maxVal, icon)
 {
