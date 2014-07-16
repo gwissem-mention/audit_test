@@ -208,48 +208,4 @@ function chapterNonConcerne( that, sousChapitre )
     calcAvancement();
 }
 
-//Prépare les couleurs en fonction des réponses
-function prepareColoredQuestions()
-{
-    $('select.colored').each(function(){
-        var minVal = null;
-        var maxVal = null;
-        var icon   = $(this).parent().parent().find('.icon i');
-
-        $(this).find('option').each(function(){
-            val = parseInt($(this).val());
-            //get all options except : Non concerné + vide
-            if( !isNaN(val) && val != -1){
-                //Min value of all options
-                if( minVal == null || val < minVal )
-                    minVal = val;
-                //Max value of each options
-                if( maxVal == null || val > maxVal )
-                    maxVal = val;
-            }
-        });
-
-        changeColorQuestions(this, minVal, maxVal, icon);
-        $(this).on('change', function(){
-            changeColorQuestions(this, minVal, maxVal, icon);
-        });
-
-    });
-}
-
-//Application des couleurs au doc ready + onChange
-function changeColorQuestions(obj, minVal, maxVal, icon)
-{
-    if( $(obj).val() == -1 || $(obj).val() == '' ){
-        icon.addClass('fa-times-circle').removeClass('fa-check-circle fa-exclamation-circle fa-times-circle');
-    }else if( $(obj).val() == minVal ){
-        icon.addClass('fa-times-circle').removeClass('fa-check-circle fa-exclamation-circle ');
-    }else if( $(obj).val() == maxVal ){
-        icon.addClass('fa-check-circle').removeClass('fa-times-circle fa-exclamation-circle ');
-    }else{
-        val = parseInt($(obj).val());
-        if( !isNaN(val) && val != -1)
-            icon.addClass('fa-exclamation-circle').removeClass('fa-check-circle fa-times-circle');
-    }
-}
 
