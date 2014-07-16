@@ -164,8 +164,10 @@ function emptyChapter( that )
     $(that).parent().find('.form-control').each(function(){
         if( $(this).is('input') )
             $(this).val('');
-        else if( $(this).is('select') )
+        else if( $(this).is('select') ){
             $(this).val( $(this).find('option:first').val() );
+            $(this).change();
+        }
     });
 
     //empty radios
@@ -188,6 +190,7 @@ function chapterNonConcerne( that, sousChapitre )
     $(that).find('.form-control').each(function(){
         if( $(this).is('select') )
             $(this).val( -1 );
+            $(this).change();
     });
 
     //empty radios
