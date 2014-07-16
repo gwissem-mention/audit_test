@@ -180,7 +180,7 @@ function emptyChapter( that )
 function chapterNonConcerne( that, sousChapitre )
 {
     if( sousChapitre != undefined )
-        that = $(that).parent().next().next();
+        that = $(that).parent().next().next().next();
     else
         that = $(that).parent();
 

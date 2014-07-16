@@ -25,6 +25,7 @@ class ResultatRepository extends EntityRepository
                          ->select('res')
                          ->from('\HopitalNumerique\AutodiagBundle\Entity\Resultat', 'res')
                          ->andWhere('res.outil = :outil', 'res.user = :user')
+                         ->andWhere('res.synthese = 0')
                          ->setParameter('user', $user )
                          ->setParameter('outil', $outil )
                          ->setMaxResults(1)

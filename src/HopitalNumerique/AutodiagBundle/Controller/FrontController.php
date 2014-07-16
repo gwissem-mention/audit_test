@@ -308,7 +308,7 @@ class FrontController extends Controller
 
         $this->get('session')->getFlashBag()->add( 'success', 'Synthèse créée.' );
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_comptehn').'"}', 200);
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_resultat', array('id' => $synthese->getId(), 'back' => 1 )).'"}', 200);
     }
 
 
@@ -361,19 +361,21 @@ class FrontController extends Controller
             $nbVal = 0;
             $val   = 0;
 
+            //calc moyenne
             foreach($reponses as $reponse) {
                 if ( $reponse->getValue() != -1 ){
                     $val += $reponse->getValue() != '' ? $reponse->getValue() : 0;
                     $nbVal++;
                 }
             }
+            $val = $nbVal != 0 ? ( $val / $nbVal ) : -1;
 
             //create entity Reponse
             $rep = $this->get('hopitalnumerique_autodiag.manager.reponse')->createEmpty();
             $rep->setQuestion( $question );
             $rep->setResultat( $synthese );
             $rep->setRemarque( '' );
-            $rep->setValue( $nbVal != 0 ? ($val/$nbVal) : 0 );
+            $rep->setValue( $val );
 
             $moyennes[] = $rep;
         }

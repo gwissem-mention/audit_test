@@ -167,6 +167,15 @@ class ResultatManager extends BaseManager
         return $results;
     }
 
+    /**
+     * Construit l'entitée Synthèse
+     *
+     * @param  User      $user   L'utilisateur connecté
+     * @param  Outil     $outil  L'outil/l'autodiag concerné
+     * @param  Reference $statut Le statut 'validé' de la synthèse
+     *
+     * @return Resultat
+     */
     public function buildSynthese( User $user, Outil $outil, $statut )
     {
         //create Synthese Object
@@ -174,7 +183,7 @@ class ResultatManager extends BaseManager
         $synthese = $this->createEmpty();
 
         $synthese->setOutil( $outil );
-        $synthese->setName( 'Synthèse du ' . $today->format('d/m/Y') );
+        $synthese->setName( 'Synthèse du ' . $today->format('d/m/Y à H:i') );
         $synthese->setDateLastSave( $today );
         $synthese->setDateValidation( $today );
         $synthese->setUser( $user );
@@ -185,6 +194,19 @@ class ResultatManager extends BaseManager
 
         return $synthese;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
