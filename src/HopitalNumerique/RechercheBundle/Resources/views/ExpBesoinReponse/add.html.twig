@@ -1,8 +1,8 @@
 <li class="dd-item dd3-item" data-id="{{reponse.id}}" id="reponse-{{reponse.id}}" >
     <div class="dd-handle dd3-handle"></div>
     <div class="dd3-content" style="padding:1px 50px 5px 40px;">
-        <div class="col-sm-6 row" style="margin-top:4px">
-            {{reponse.libelle}}
+        <div class="col-sm-5 row" style="margin-top:4px">
+            <span title="{{reponse.libelle}}">{{reponse.libelle|truncate(25,'...')}}</span>
         </div>
         <div class="col-sm-2 row" style="margin-top:4px">
             <div class="pull-right" id="toggle-concernant-reponse">
@@ -10,10 +10,10 @@
             </div>
             <input type="hidden" id="toggle-reponses-{{reponse.id}}" value="{% if reponse.autreQuestion %}true{% else %}false{% endif %}" />
         </div>
-        <div class="col-sm-4 row note-referencement {% if reponse.autreQuestion %}hide{% endif %}" style="margin-top:4px">
-            <p class="text-muted text-right pull-right">Note référencement : <span class="nbRefs">{{notes[reponse.id]|number_format(2, ',')}}</span> / 400</p>
+        <div class="col-sm-5 row note-referencement {% if reponse.autreQuestion %}hide{% endif %}" style="margin-top:4px">
+            <p class="text-muted text-right pull-right">Note référencement : <span class="nbRefs">{{notes[reponse.id]|number_format(0)}}</span> / 400</p>
         </div>
-        <div class="col-sm-4 row question {% if not reponse.autreQuestion %}hide{% endif %}">
+        <div class="col-sm-5 row question {% if not reponse.autreQuestion %}hide{% endif %}">
             <div class="pull-right">
                 <select name="redirigeQuestion" id="expBesoin-reponse-{{reponse.id}}" style="width:250px;">
                     {% for expBesoinCourrante in expBesoinAll %}
@@ -41,7 +41,7 @@
         $('#reponse-' + {{reponse.id}} +' .blocReference').hide();
 
         //toggles primary
-        $('#reponse-' + {{reponse.id}} +' #toggle-concernant-reponse .toggle.on').toggles( { on : true, text : { on : 'Question', off : 'Référence' }, type : 'select' } ).on('toggle', function (e, active) {
+        $('#reponse-' + {{reponse.id}} +' #toggle-concernant-reponse .toggle.on').toggles( { on : true, text : { on : 'Question', off : 'Référence' } } ).on('toggle', function (e, active) {
             var idReponse = $(this).parent().parent().parent().parent().data('id');
             if (active) 
             {
@@ -63,7 +63,7 @@
             }
             $('#toggle-reponses-' + idReponse).val(active);
         });
-        $('#reponse-' + {{reponse.id}} +' #toggle-concernant-reponse .toggle.off').toggles( { on : false, text : { on : 'Question', off : 'Référence' }, type : 'select' } ).on('toggle', function (e, active) {
+        $('#reponse-' + {{reponse.id}} +' #toggle-concernant-reponse .toggle.off').toggles( { on : false, text : { on : 'Question', off : 'Référence' } } ).on('toggle', function (e, active) {
             var idReponse = $(this).parent().parent().parent().parent().data('id');
             if (active) 
             {
