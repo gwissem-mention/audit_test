@@ -73,9 +73,9 @@
                 {% set formName = outil.alias %}
                 {% import _self as mySelf %}
                 <form action="{{path('hopitalnumerique_autodiag_front_save', {'id':outil.id})}}" id="wizard" class="form-horizontal" method="POST">
+                    <textarea name="remarque" id="remarque" rows="5" placeholder="Commentaires (nom des participants, etc.)" >{{remarque}}</textarea>
                     {% for chapitre in chapitres %}
                         {% set parent = chapitre['parent'] %}
-
                         {# Build step #}
                         <fieldset title="<p>{% if parent.code != '' %}{{parent.code ~ '. '}}{% endif %}{{parent.title}}</p>" >
                             {% if reponses %}
