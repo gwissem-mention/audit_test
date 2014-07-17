@@ -45,25 +45,17 @@
         
         <div class="col-md-7 home-right" >
             <div class="row">
-                <div class="col-md-4">
-                    <div class="rechercheAideExp">
+                <div class="rechercheAideExp col-md-4">
+                    <a href="javascript:rechercheAideEtBesoin();">
                         <div class="common-sprite icone"></div>
                         <h3>Expression du besoin</h3>
                         <p>
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a orci vehicula.
                         </p>
-                        <div class="groupe-lien">
-                            <div class="pull-left">
-                                <a class="btn btn-link" href="javascript:rechercheAideEtBesoin();">
-                                    > Commencer !
-                                </a>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="recherche col-md-4">
-                    <a href="{{path('hopital_numerique_recherche_homepage')}}" class="background-rose">
+                    <a href="{{path('hopital_numerique_recherche_homepage')}}">
                         <div class="common-sprite icone"></div>
                         <h3>Recherche de production</h3>
                         <p>
@@ -72,9 +64,9 @@
                     </a>
                 </div>
                 <div class="rechercheEtapeProjet col-md-4">
-                    <a href="javascript:alert('Bientôt disponible.');" class="background-rose">
+                    <a href="javascript:alert('Bientôt disponible.');">
                         <div class="common-sprite icone"></div>
-                        <h3>Parcourir les étapes du projet</h3>
+                        <h3>Parcourir les étapes projet</h3>
                         <p>
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a orci vehicula, fermentum lacus.
                         </p>
@@ -105,7 +97,7 @@
                             <div class="buttons">
                                 <div class="buttons-centrer">
                                     <a href="{{path('account_login')}}" class="btn btn-default login">Connexion</a>
-                                    <a href="{{path('hopital_numerique_user_inscription')}}" class="btn btn-default signup">Créer compte</a>
+                                    <a href="{{path('hopital_numerique_user_inscription')}}" class="btn btn-default signup">Créer un compte</a>
                                 </div>
                             </div>
                         {% endif %}
