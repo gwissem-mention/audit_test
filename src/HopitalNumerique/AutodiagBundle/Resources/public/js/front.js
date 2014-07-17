@@ -240,18 +240,18 @@ function prepareColoredQuestions()
 //Application des couleurs au doc ready + onChange
 function changeColorQuestions( values, icon, myVal )
 {
-    icon.removeClass('fa-check-circle fa-exclamation-circle fa-times-circle');
+    icon.removeClass('fa-smile-o fa-meh-o fa-frown-o fa-2x');
 
     var myVal = myVal != undefined ? myVal : values.val;
 
     if( myVal != '' && myVal == values.minVal ){
-        icon.addClass('fa-times-circle');
+        icon.addClass('fa-frown-o fa-2x');
     }else if( myVal != '' && myVal == values.maxVal ){
-        icon.addClass('fa-check-circle');
+        icon.addClass('fa-smile-o fa-2x');
     }else{
         myVal = parseInt(myVal);
         if( !isNaN(myVal) && myVal != -1)
-            icon.addClass('fa-exclamation-circle');
+            icon.addClass('fa-meh-o fa-2x');
     }
 }
 
