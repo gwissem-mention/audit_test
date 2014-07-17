@@ -5,8 +5,8 @@ body{ background: #E5E5E5;}
 .common-sprite { background-image: url('../img/common-sprite.png'); background-repeat: no-repeat; display: block; }
 a, a:hover, a:active {color:#6f3596}
 a.readmore{display: block; color:#000000; font-family: Arial; font-weight: bold}
-a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: -2px -2px; float: left; margin: 6px 6px 0 0}
-a.fancybox-close{background-position: 0px 0px}
+a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 0 0; float: left; margin: 6px 6px 0 0}
+a.fancybox-close{background-position: -16px 0}
 .lock-screen{background:#000000 !important; position:fixed; top:0; left:0; width:100%; height:100%; opacity:0.5; z-index: 19}
 h2{font-size: 22px}
 h3{font-size: 20px}
@@ -21,7 +21,7 @@ h3{font-size: 20px}
 
 /* HEADER */
     #header{ height: 93px; position:relative;}
-    #header .common-sprite-header{ width: 100%; height: 14px; background-position: -2px -15px; position: absolute; bottom: 0; overflow:hidden;}
+    #header .common-sprite-header{ width: 100%; height: 14px; background-position: -26px 0; position: absolute; bottom: 0; overflow:hidden;}
     #header #logoAnap { margin:25px 78px 14px 55px;  }
     #header #titre{ margin-top: 27px; width: 350px;  }
     #header #titre .h1, #header #titre .h1 span{ font-size:25px; text-transform: uppercase; margin:0; padding: 0; font-family: 'Viga', sans-serif}
@@ -29,11 +29,11 @@ h3{font-size: 20px}
     #header #titre .h2{ font-size: 11px; text-transform: uppercase; padding: 0; margin:0;}
     #header .connexion{position: absolute; right:0; bottom:0; z-index: 5}
     #header .connexion a{display: block; color:black;margin-right: 18px; text-transform: uppercase; font-size: 10px; width: 130px}
-    #header .connexion a .common-sprite-user { width: 14px; height: 13px; background-position: -302px -33px; float: left; margin-right: 5px}
-    #header .connexion a .common-sprite-close { width: 9px; height: 9px; background-position: -15px -2px; float: left; margin: 3px 4px 0 0;}
+    #header .connexion a .common-sprite-user { width: 14px; height: 13px; background-position: -1507px 0; float: left; margin-right: 5px}
+    #header .connexion a .common-sprite-close { width: 9px; height: 9px; background-position: -16px 0; float: left; margin: 3px 4px 0 0;}
     #header .loggedUser{width: 180px;height:79px;padding:13px 20px 10px 30px; position: relative;}
     #header .loggedUser p{font-size: 11px; margin-bottom: 0}
-    #header .loggedUser p .common-sprite-user-red{ width: 14px; height: 13px; background-position: -320px -33px; float: left; margin-right: 5px }
+    #header .loggedUser p .common-sprite-user-red{ width: 14px; height: 13px; background-position: -1492px 0; float: left; margin-right: 5px }
     #header .loggedUser p .nom{ padding-left:20px; margin-bottom: 10px}
     #header .loggedUser .infos{font-size: 10px; position: absolute; bottom: 14px;}
     #header #logoHn{margin:3px 0 0 10px;display: block}

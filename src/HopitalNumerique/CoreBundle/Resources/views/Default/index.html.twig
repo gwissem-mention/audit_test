@@ -90,19 +90,23 @@
                         {% if app.user %}
                             <h3>Tableau de bord</h3>
                             <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a orci vehicula, fermentum lacus ultrices, ullamcorper eros. Aliquam vel libero aliquet, pretium enim quis, tincidunt nunc. Quisque vitae ipsum sodales, egestas eros blandit, imperdiet nullam. 
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                             </p>
-                            <div class="buttons pull-right">
-                                <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-default pull-right">Accès au tableau de bord</a>
+                            <div class="buttons">
+                                <div class="buttons-centrer">
+                                    <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-default">Accès au tableau de bord</a>
+                                </div>
                             </div>
                         {% else %}
                             <h3>Creation de compte</h3>
                             <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a orci vehicula, fermentum lacus ultrices, ullamcorper eros. Aliquam vel libero aliquet, pretium enim quis, tincidunt nunc. Quisque vitae ipsum sodales, egestas eros blandit, imperdiet nullam. 
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.                             
                             </p>
-                            <div class="buttons pull-right">
-                                <a href="{{path('account_login')}}" class="btn btn-default pull-right login">Connexion</a>
-                                <a href="{{path('hopital_numerique_user_inscription')}}" class="btn btn-default pull-right signup">Créer compte</a>
+                            <div class="buttons">
+                                <div class="buttons-centrer">
+                                    <a href="{{path('account_login')}}" class="btn btn-default login">Connexion</a>
+                                    <a href="{{path('hopital_numerique_user_inscription')}}" class="btn btn-default signup">Créer compte</a>
+                                </div>
                             </div>
                         {% endif %}
                         

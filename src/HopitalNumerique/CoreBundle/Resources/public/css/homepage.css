@@ -21,7 +21,7 @@
 /* Aide à l'expression du besoin */
 #homepage .home-right .rechercheAideExp{  padding:30px; height: 282px;display:block; background-color: #FBBE03;}
 #homepage .home-right .rechercheAideExp:hover { text-decoration: none; background-color: #FBAD05; }
-#homepage .home-right .rechercheAideExp .icone{ background-position: -202px -33px; width: 48px; height: 48px; margin:0 auto 10px; }
+#homepage .home-right .rechercheAideExp .icone{ background-position: -1223px 0; width: 69px; height: 48px; margin:0 auto 10px; }
 #homepage .home-right .rechercheAideExp h3{text-align: center; font-size: 20px; font-weight: bold; margin:0 0 15px 0; color: #ffffff; text-transform: uppercase;}
 #homepage .home-right .rechercheAideExp p{color: #ffffff;}
 #homepage .home-right .rechercheAideExp .groupe-lien{background: #ffffff;border-radius: 4px;margin: 9px auto 0; padding: 5px 0; width: 125px;}
@@ -30,33 +30,34 @@
 #homepage .home-right .recherche{ height: 282px; }
 #homepage .home-right .recherche a{ display:block; background-color: #F97D03; padding:30px; height: 100%; }
 #homepage .home-right .recherche:hover a{ text-decoration: none; background-color: #FA4E04; }
-#homepage .home-right .recherche .icone{ background-position: -202px -33px; width: 48px; height: 48px; margin:0 auto 10px; }
+#homepage .home-right .recherche .icone{ background-position: -1443px 0; width: 48px; height: 48px; margin:0 auto 10px; }
 #homepage .home-right .recherche h3{text-align: center; font-size: 18px; font-weight: bold; margin:0 0 15px 0; color: #ffffff; text-transform: uppercase;}
 #homepage .home-right .recherche p{color: #ffffff;}
 
 #homepage .home-right .rechercheEtapeProjet{ height: 282px; }
 #homepage .home-right .rechercheEtapeProjet a{ display:block; background-color: #df0d4e; padding:30px; height: 100%; }
 #homepage .home-right .rechercheEtapeProjet:hover a{ text-decoration: none; background-color: #CB072D; }
-#homepage .home-right .rechercheEtapeProjet .icone{ background-position: -202px -33px; width: 48px; height: 48px; margin:0 auto 10px; }
+#homepage .home-right .rechercheEtapeProjet .icone{ background-position: -1293px 0; width: 50px; height: 50px; margin:0 auto 10px; }
 #homepage .home-right .rechercheEtapeProjet h3{text-align: center; font-size: 18px; font-weight: bold; margin:0 0 15px 0; color: #ffffff; text-transform: uppercase;}
 #homepage .home-right .rechercheEtapeProjet p{color: #ffffff;}
 
 #homepage .home-right .forum{ margin-top: 25px; display:block; background-color: #b1138a; padding:30px; height: 282px;}
 #homepage .home-right .forum:hover{text-decoration: none; background-color: #8d0b63; }
-#homepage .home-right .forum .icone{ background-position: -102px -33px; width: 48px; height: 48px; margin:0 auto 10px; }
+#homepage .home-right .forum .icone{ background-position: -1394px 0; width: 48px; height: 48px; margin:0 auto 10px; }
 #homepage .home-right .forum h3{text-align: center; font-size: 24px; font-weight: bold; margin:0 0 5px 0; color: #ffffff; text-transform: uppercase;}
 #homepage .home-right .forum p{color: #ffffff; text-align: center; line-height: 15px;}
 #homepage .home-right .forum .groupe-lien{background: #ffffff;border-radius: 4px;margin: 9px auto 0; padding: 5px 0; width: 200px;}
 #homepage .home-right .forum .groupe-lien a{ color:#b1138a; display: block; width: auto; height: 15px; padding:0; margin:0 0 0 15px; text-align: left; font-weight: bold; font-size: 12px; line-height: 14px;}
 
 #homepage .home-right .creation-compte{ margin-top: 25px; }
-#homepage .home-right .creation-compte .icone { width: 48px; height: 48px; background-position: -2px -33px;margin:0 auto 10px;  }
+#homepage .home-right .creation-compte .icone { width: 48px; height: 48px; background-position: -1345px 0;margin:0 auto 10px;  }
 #homepage .home-right .creation-compte > div{ padding:30px; background: #9abc0d }
 #homepage .home-right .creation-compte:hover > div{ background: #779f08 }
 #homepage .home-right .creation-compte p{ color :#ffffff; font-size: 13px; text-align: center; }
 #homepage .home-right .creation-compte h3{text-align: center; font-size: 22px; font-weight: bold; margin:0 0 5px 0; color: #ffffff; text-transform: uppercase;}
-#homepage .home-right .creation-compte .buttons{margin-top:10px;}
-#homepage .home-right .creation-compte .buttons .signup{margin-right:10px;}
+#homepage .home-right .creation-compte .buttons{margin-top:10px;float:right;}
+#homepage .home-right .creation-compte .buttons .signup{margin-right:10px; float:right;}
+#homepage .home-right .creation-compte .buttons .login{float:right;}
 
 @media screen and (max-width: 1180px) {
     #homepage .home-right .rechercheAideExp{  padding:25px; }
@@ -89,9 +90,11 @@
 @media screen and (max-width: 991px) {
     #homepage .home-right .rechercheAideExp{margin:25px 0;}
 
-    #homepage .home-right .rechercheAideExp{margin:25px 0;height: auto;}
+    #homepage .home-right .rechercheAideExp{margin:25px 0;height: auto; padding: 30px;}
     #homepage .home-right .recherche{margin:25px 0;height: auto;}
     #homepage .home-right .rechercheEtapeProjet{height: auto;}
+    #homepage .home-right .recherche a{ padding: 30px; }
+    #homepage .home-right .rechercheEtapeProjet a{ padding: 30px; }
     #homepage .home-right .creation-compte{height: auto;}
     #homepage .home-right .forum{height: auto;}
 
@@ -99,11 +102,13 @@
     
     #homepage .home-right .forum p{text-align: center}
 
-    #homepage .home-right .creation-compte .icone{margin:20px auto;}
+    #homepage .home-right .creation-compte .icone{margin:0 auto 10px;}
     #homepage .home-right .creation-compte p.titre{text-align: center}
     #homepage .home-right .creation-compte ul{padding-left: 0px}
-    #homepage .home-right .creation-compte .buttons .login{margin: 10px 0 0 0;}
-    #homepage .home-right .creation-compte .buttons .signup{margin: 10px 10px 0 0;}
+    #homepage .home-right .creation-compte .buttons {margin: 0 auto; float:none; width: 225px;}
+    #homepage .home-right .creation-compte .buttons .buttons-centrer{margin: 0 auto;}
+    #homepage .home-right .creation-compte .buttons .login{margin: 10px 0 0 0; float:none;}
+    #homepage .home-right .creation-compte .buttons .signup{margin: 10px 10px 0 0; float:none;}
 }
 
 @media screen and (max-width: 600px) {
