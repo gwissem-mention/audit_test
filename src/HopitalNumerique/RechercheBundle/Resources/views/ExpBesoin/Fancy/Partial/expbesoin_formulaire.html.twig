@@ -5,7 +5,7 @@
     <select name="reponse-a-expression-besoin-{{expBesoin.id}}" id="expBesoin-reponse-{{expBesoin.id}}" class="form-control">
         <option> - </option>
         {% for reponse in expBesoin.reponses %}
-            <option value="{{reponse.id}}" title="{{reponse.libelle}}">{{reponse.libelle|truncate(30,'...')}}</option>
+            <option value="{{reponse.id}}" title="{{reponse.libelle}}">{{reponse.libelle}}</option>
         {% endfor %}
     </select>
 </div>
