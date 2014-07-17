@@ -154,7 +154,7 @@ class PublicationController extends Controller
 
         foreach ($types as $one) {
             $parent = $one->getParent();
-            if( $parent->getId() == 175 )
+            if( !is_null($parent) && $parent->getId() == 175 )
                 $type[] = $one->getLibelle();
         }
         //reformatte proprement les types
