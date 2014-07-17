@@ -141,7 +141,11 @@
                                             <span class="label label-danger">Nouveau</span>
                                         {% endif %}
 
-                                        <a href="{{path('hopital_numerique_publication_publication_objet', {'id':one.id, 'alias': one.alias})}}">{{one.titre}}</a>
+                                        {% if one.objet %}
+                                            <a href="{{path('hopital_numerique_publication_publication_objet', {'id':one.id, 'alias': one.alias})}}">{{one.titre}}</a>
+                                        {% else %}
+                                            <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':one.id, 'alias': one.alias, 'idc':one.idc, 'aliasc': one.aliasc})}}">{{one.titre}}</a>
+                                        {% endif %}
                                     </h4>
                                 </div>
                                 
@@ -162,6 +166,7 @@
         {% endif %}
         <div class="col-md-12" id="autresResultats" >
             <h2 class="open">Résultats annexes à cette publication</h2>
+            <div class="mysep background-rose"></div>
             <div class="row">
                 <div class="col-md-6">
                     <div id="points-durs" class="top" >

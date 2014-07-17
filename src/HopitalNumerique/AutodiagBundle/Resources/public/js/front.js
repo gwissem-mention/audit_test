@@ -138,10 +138,12 @@ function saveQuestionnaire( type, userConnected )
     $('#action').val( type );
 
     if( type == 'valid' && userConnected ){
-        apprise('La validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci.', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+        apprise('La validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci. <br />Si vous souhaitez poursuivre, merci de remplir un nom pour cette occurence.', {'input':true,'textOk':'Valider','textCancel':'Annuler'}, function(r) {
             if(r) { 
+                $('#name-resultat').val( r );
                 $('#wizard').submit();
-            }
+            }else
+                apprise('Merci de saisir un nom valide.');
         });
     }else
         $('#wizard').submit();
@@ -162,23 +164,30 @@ function emptyChapter( that )
     $(that).parent().find('.form-control').each(function(){
         if( $(this).is('input') )
             $(this).val('');
-        else if( $(this).is('select') )
+        else if( $(this).is('select') ){
             $(this).val( $(this).find('option:first').val() );
+            $(this).change();
+        }
     });
 
     //empty radios
     $(that).parent().find('.radio').each(function(){
-        $(this).find('input').prop('checked', '');
+        //si on vide les radio, on pense à cocher par défaut l'empty radio
+        if( $(this).find('input').hasClass('hiddenRadio') )
+            $(this).find('input').prop('checked', 'checked');
+        else
+            $(this).find('input').prop('checked', '');
     });
 
     calcAvancement();
+    prepareColoredQuestions();
 }
 
 //Met tout le chapitre en non concerné
 function chapterNonConcerne( that, sousChapitre )
 {
     if( sousChapitre != undefined )
-        that = $(that).parent().next().next();
+        that = $(that).parent().next().next().next();
     else
         that = $(that).parent();
 
@@ -186,6 +195,7 @@ function chapterNonConcerne( that, sousChapitre )
     $(that).find('.form-control').each(function(){
         if( $(this).is('select') )
             $(this).val( -1 );
+            $(this).change();
     });
 
     //empty radios
@@ -197,49 +207,80 @@ function chapterNonConcerne( that, sousChapitre )
     });
 
     calcAvancement();
+    prepareColoredQuestions();
 }
 
 //Prépare les couleurs en fonction des réponses
 function prepareColoredQuestions()
 {
+    //select
     $('select.colored').each(function(){
-        var minVal = null;
-        var maxVal = null;
         var icon   = $(this).parent().parent().find('.icon i');
+        var values = getMinAndMaxValue( $(this).find('option') );
 
-        $(this).find('option').each(function(){
-            val = parseInt($(this).val());
-            //get all options except : Non concerné + vide
-            if( !isNaN(val) && val != -1){
-                //Min value of all options
-                if( minVal == null || val < minVal )
-                    minVal = val;
-                //Max value of each options
-                if( maxVal == null || val > maxVal )
-                    maxVal = val;
-            }
-        });
-
-        changeColorQuestions(this, minVal, maxVal, icon);
+        changeColorQuestions( values, icon, $(this).val());
         $(this).on('change', function(){
-            changeColorQuestions(this, minVal, maxVal, icon);
+            changeColorQuestions( values, icon, $(this).val() );
         });
+    });
 
+    //Radios
+    $('.radios.colored').each(function(){
+        var icon   = $(this).parent().parent().find('.icon i');
+        var values = getMinAndMaxValue( $(this).find('.radio input') );
+
+        changeColorQuestions( values, icon);
+
+        $(this).find('.radio input').on('change', function() {
+            changeColorQuestions( values, icon, $(this).val() );
+        });
     });
 }
+
 //Application des couleurs au doc ready + onChange
-function changeColorQuestions(obj, minVal, maxVal, icon)
+function changeColorQuestions( values, icon, myVal )
 {
-    if( $(obj).val() == -1 || $(obj).val() == '' ){
-        icon.addClass('fa-times-circle').removeClass('fa-check-circle fa-exclamation-circle fa-times-circle');
-    }else if( $(obj).val() == minVal ){
-        icon.addClass('fa-times-circle').removeClass('fa-check-circle fa-exclamation-circle ');
-    }else if( $(obj).val() == maxVal ){
-        icon.addClass('fa-check-circle').removeClass('fa-times-circle fa-exclamation-circle ');
+    icon.removeClass('fa-smile-o fa-meh-o fa-frown-o fa-2x');
+
+    var myVal = myVal != undefined ? myVal : values.val;
+
+    if( myVal != '' && myVal == values.minVal ){
+        icon.addClass('fa-frown-o fa-2x');
+    }else if( myVal != '' && myVal == values.maxVal ){
+        icon.addClass('fa-smile-o fa-2x');
     }else{
-        val = parseInt($(obj).val());
-        if( !isNaN(val) && val != -1)
-            icon.addClass('fa-exclamation-circle').removeClass('fa-check-circle fa-times-circle');
+        myVal = parseInt(myVal);
+        if( !isNaN(myVal) && myVal != -1)
+            icon.addClass('fa-meh-o fa-2x');
     }
 }
 
+//Récupère la valeur min et la valeur max des elements (si on est sur des radios, on récupère la current value aussi)
+function getMinAndMaxValue( elements )
+{
+    var values = {
+        val    : null,
+        minVal : null,
+        maxVal : null
+    }
+
+    $(elements).each(function(){
+        val = parseInt($(this).val());
+        //get all options except : Non concerné + vide
+        if( !isNaN(val) && val != -1){
+            //Min value of all options
+            if( values.minVal == null || val < values.minVal )
+                values.minVal = val;
+            //Max value of each options
+            if( values.maxVal == null || val > values.maxVal )
+                values.maxVal = val;
+        }
+
+        if( $(this)[0].nodeName == 'INPUT' ){
+            if( $(this).prop('checked') )
+                values.val = $(this).val();
+        }
+    });
+
+    return values;
+}

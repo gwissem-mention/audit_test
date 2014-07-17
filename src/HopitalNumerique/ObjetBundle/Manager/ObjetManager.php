@@ -73,6 +73,9 @@ class ObjetManager extends BaseManager
             $row['dateFinPublication']   = !is_null($objet->getDateFinPublication())   ? $objet->getDateFinPublication()->format('d/m/Y')   : '';
             $row['dateModification']     = !is_null($objet->getDateModification())     ? $objet->getDateModification()->format('d/m/Y')     : '';
             
+            //handle Productions liées
+            $row['objets'] = json_encode($objet->getObjets());
+
             //handle Roles
             $roles        = $objet->getRoles();
             $row['roles'] = array();
@@ -109,7 +112,7 @@ class ObjetManager extends BaseManager
                         //init empty for infra doc
                         $row['id'] = $row['titre'] = $row['alias'] = $row['synthese'] = $row['resume'] = $row['commentaires'] = $row['notes'] = $row['type'] = $row['nbVue'] = $row['etat'] = '';
                         $row['dateCreation'] = $row['dateDebutPublication'] = $row['dateFinPublication'] = $row['dateModification'] = $row['roles'] = $row['types'] = $row['ambassadeurs'] = '';
-                        $row['fichier1'] = $row['fichier2'] = $row['fichierEdit'] = $row['vignette'] = $row['note'] = '';
+                        $row['fichier1'] = $row['fichier2'] = $row['fichierEdit'] = $row['vignette'] = $row['note'] = $row['objets'] = '';
 
                         //Infra doc values
                         $row['idC']               = $contenu->getId();

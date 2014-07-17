@@ -215,6 +215,10 @@ hopitalnumerique_autodiag_front_comptehn_delete:
     requirements:
         id: \d+
 
+hopitalnumerique_autodiag_front_comptehn_generate_synthese:
+    pattern:  /compte-hn/autodiagnostic/generate-synthese
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:synthese" }
+
 #CRON
 hopitalnumerique_autodiag_cron:
     pattern:  /cron-autodiag/{id}

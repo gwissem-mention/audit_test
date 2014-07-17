@@ -68,6 +68,7 @@ class FrontController extends Controller
         //get Existing responses (for connected user only)
         $user     = $this->get('security.context')->getToken()->getUser();
         $reponses = false;
+        $remarque = false;
         if( $user != 'anon.' ) {
             $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
             
@@ -79,6 +80,7 @@ class FrontController extends Controller
                 $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->getLastResultatValided( $outil, $user );
 
             if( $resultat ){
+                $remarque = $resultat->getRemarque();
                 $datas = $resultat->getReponses();
                 foreach($datas as $one){
                     $reponses[ $one->getQuestion()->getId() ]['value'] = $one->getValue();
@@ -90,7 +92,8 @@ class FrontController extends Controller
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
             'outil'     => $outil,
             'chapitres' => $chapitresOrdered,
-            'reponses'  => $reponses
+            'reponses'  => $reponses,
+            'remarque'  => $remarque
         ));
     }
 
@@ -103,10 +106,12 @@ class FrontController extends Controller
     public function saveAction( Outil $outil, Request $request )
     {
         //get posted Datas
-        $chapitres   = $request->request->get( $outil->getAlias() );
-        $remarques   = $request->request->get( 'remarques-' . $outil->getAlias() );
-        $action      = $request->request->get('action');
-        $remplissage = $request->request->get('remplissage');
+        $chapitres    = $request->request->get($outil->getAlias());
+        $remarques    = $request->request->get('remarques-' . $outil->getAlias());
+        $action       = $request->request->get('action');
+        $remplissage  = $request->request->get('remplissage');
+        $nameResultat = $request->request->get('name-resultat');
+        $remarque     = $request->request->get('remarque');
 
         //try to get the connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -127,15 +132,17 @@ class FrontController extends Controller
             $resultat->setOutil( $outil );
         }else{
             //empty old reponses
-            $oldReponses = $this->get('hopitalnumerique_autodiag.manager.reponse')->findBy( array('resultat'=>$resultat) );
+            $oldReponses = $this->get('hopitalnumerique_autodiag.manager.reponse')->findBy( array('resultat' => $resultat) );
             $this->get('hopitalnumerique_autodiag.manager.reponse')->delete( $oldReponses );
         }
         
         $resultat->setTauxRemplissage( $remplissage );
         $resultat->setDateLastSave( new \DateTime() );
+        $resultat->setRemarque( $remarque );
 
         //cas ou l'user à validé le questionnaire
         if( $action == 'valid'){
+            $resultat->setName( $nameResultat );
             $resultat->setDateValidation( new \DateTime() );
             $resultat->setStatut( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 419) ) );
         }else
@@ -231,7 +238,7 @@ class FrontController extends Controller
     public function autodiagAction()
     {
         $user      = $this->get('security.context')->getToken()->getUser();
-        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy( array( 'user' => $user ) );        
+        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy( array( 'user' => $user ), array('dateLastSave' => 'DESC') );        
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:autodiag.html.twig' , array(
             'resultats' => $resultats
@@ -288,12 +295,98 @@ class FrontController extends Controller
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_comptehn').'"}', 200);
     }
 
+    /**
+     * Génère la synthèse d'un groupe de résultat
+     *
+     * @return empty
+     */
+    public function syntheseAction( Request $request )
+    {
+        //create Synthese Object
+        $user     = $this->get('security.context')->getToken()->getUser();
+        $outil    = $this->get('hopitalnumerique_autodiag.manager.outil')->findOneBy( array( 'id' => $request->request->get('outil') ) );
+        $statut   = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 419 ) );
+        $synthese = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildSynthese( $user, $outil, $statut, $request->request->get('nom') );
+        
+        //generate Reponses
+        $this->buildNewReponses( $request->request->get('resultats'), $synthese );
+
+        $this->get('session')->getFlashBag()->add( 'success', 'Synthèse créée.' );
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_resultat', array('id' => $synthese->getId(), 'back' => 1 )).'"}', 200);
+    }
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Prépare le tableau de réponse, effectue les calculs de moyenne et ajoute les réponses
+     *
+     * @param array    $resultats Liste des Résultats
+     * @param Resultat $synthese  Objet Synthese
+     *
+     * @return empty
+     */
+    private function buildNewReponses( $resultats, $synthese )
+    {
+        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy( array( 'id' => $resultats ) );
+        $syntheseReponses = array();
+
+        foreach( $resultats as $resultat ) {
+            $reponses = $resultat->getReponses();
+            foreach( $reponses as $reponse) {
+                //prepare entry
+                if( !isset( $syntheseReponses[ $reponse->getQuestion()->getId() ] ) )
+                    $syntheseReponses[ $reponse->getQuestion()->getId() ] = array();
+                //add entry
+                $syntheseReponses[ $reponse->getQuestion()->getId() ][] = $reponse;
+            }
+
+            //link Resultat object
+            $synthese->addResultat( $resultat );
+        }
+
+        $moyennes = array();
+        foreach($syntheseReponses as $idQuestion => $reponses ){
+            //get entity Question
+            $question = $this->get('hopitalnumerique_autodiag.manager.question')->findOneBy( array('id' => $idQuestion ) );
+
+            $nbVal = 0;
+            $val   = 0;
+
+            //calc moyenne
+            foreach($reponses as $reponse) {
+                if ( $reponse->getValue() != -1 ){
+                    $val += $reponse->getValue() != '' ? $reponse->getValue() : 0;
+                    $nbVal++;
+                }
+            }
+            $val = $nbVal != 0 ? ( $val / $nbVal ) : -1;
+
+            //create entity Reponse
+            $rep = $this->get('hopitalnumerique_autodiag.manager.reponse')->createEmpty();
+            $rep->setQuestion( $question );
+            $rep->setResultat( $synthese );
+            $rep->setRemarque( '' );
+            $rep->setValue( $val );
+
+            $moyennes[] = $rep;
+        }
+
+        $this->get('hopitalnumerique_autodiag.manager.reponse')->save( $moyennes );
+    }
 
     /**
      * Génère un pdf pour le résultat

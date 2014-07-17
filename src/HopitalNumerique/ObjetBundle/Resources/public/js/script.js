@@ -64,6 +64,23 @@ $(document).ready(function() {
         });
     });
 
+    //Création et gestion de l'arborescence des productions liées
+    $('#productions-nestable').nestable({'maxDepth':1,'group':0}).on('change', function() {
+        var serializedDatas = $(this).nestable('serialize');
+
+        $.ajax({
+            url  : $('#reorder-prods-url').val(),
+            data : {
+                datas : serializedDatas
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                
+            }
+        });
+    });
+
     //fancybox d'édition d'un contenu
     //fancybox de gestion des références liées à l'objet et au contenu
     $('.dd3-content a, .manageReferences, .uploadSommaire, .addProd').fancybox({

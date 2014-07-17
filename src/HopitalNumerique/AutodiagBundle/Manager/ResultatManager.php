@@ -167,6 +167,46 @@ class ResultatManager extends BaseManager
         return $results;
     }
 
+    /**
+     * Construit l'entitée Synthèse
+     *
+     * @param  User      $user   L'utilisateur connecté
+     * @param  Outil     $outil  L'outil/l'autodiag concerné
+     * @param  Reference $statut Le statut 'validé' de la synthèse
+     * @param  string    $nom    Nom de la synthèse
+     *
+     * @return Resultat
+     */
+    public function buildSynthese( User $user, Outil $outil, $statut, $nom )
+    {
+        //create Synthese Object
+        $today    = new \DateTime();
+        $synthese = $this->createEmpty();
+
+        $synthese->setOutil( $outil );
+        $synthese->setName( $nom );
+        $synthese->setDateLastSave( $today );
+        $synthese->setDateValidation( $today );
+        $synthese->setUser( $user );
+        $synthese->setSynthese( true );
+        $synthese->setStatut( $statut );
+
+        $this->save( $synthese );
+
+        return $synthese;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

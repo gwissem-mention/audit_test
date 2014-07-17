@@ -6,6 +6,7 @@
     #autodiag h1{ margin:0 0 50px 0; float:left; font-size:30px;}
     #autodiag .options{display: inline;float: right;position: relative;top: 0px;right: 0;}
     #autodiag .options .btn{width: 45px}
+    #autodiag #remarque{width: 100%; margin: 20px 0;}
 
 /* Colonne left */
     #autodiag p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
@@ -28,13 +29,13 @@
     #autodiag .content form{clear:both;}
     #autodiag .content h2{color:#6f3596; text-transform: uppercase;}
     #autodiag .content h2.prev{font-size: 24px; color:#de0d4d;}
-    #autodiag .content h3{color:#6f3596; margin-bottom: 20px; font-size: 18px; padding-left:10px;}
+    #autodiag .content h3{color:#6f3596; margin-bottom: 10px; font-size: 18px; padding-left:10px;}
     #autodiag .content h3.prev{font-size: 20px; color:#de0d4d;7}
     #autodiag .content h3 .chapitreNonConcerne{cursor: pointer}
-    #autodiag .content .p.text-muted.level1{font-size: 14px}
-    #autodiag .content .p.text-muted.level2{font-size: 13px; margin: 0 0 0 12px;}
+    #autodiag .content .level1{font-size: 14px}
+    #autodiag .content .level2{font-size: 13px; margin: 0 0 0 12px;}
     #autodiag .content .badge-primary{background-color:#6f3596; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
-    #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer; margin-top: 5px}
+    #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer; margin-top: 7px}
     #autodiag .content .radio{float: left; margin-right: 30px;}
     #autodiag .content .saveBtns{margin: 20px auto; width: 410px }
     #autodiag .content .saveBtns .btn{ width: 200px; text-align: center}
@@ -43,9 +44,9 @@
     #autodiag .content .radios{ border: 1px solid #CCCCCC; padding: 0 0 10px 10px; }
     #autodiag .content .qOptions{padding-left: 0}
     #autodiag .content .icon{margin-top: 5px}
-    #autodiag .content .icon .fa-check-circle{color:#B4DC00}
-    #autodiag .content .icon .fa-times-circle{color:#C82F5B}
-    #autodiag .content .icon .fa-exclamation-circle{color:#E88824}
+    #autodiag .content .icon .fa-smile-o{color:#B4DC00}
+    #autodiag .content .icon .fa-frown-o {color:#C82F5B}
+    #autodiag .content .icon .fa-meh-o{color:#E88824}
     #autodiag .content .form-group .text-muted{padding-left:25px; margin: 0 0 5px 0;}
 
     #autodiag .stepy-navigator{}
@@ -92,16 +93,17 @@
         #resultats #graphiques .table .reverse{cursor:pointer;}
         
 /* Partie Compte HN */
+    .create{margin-right: 18px;margin-top: 10px;}
     .autodiagTable thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}
     .autodiagTable thead tr a { color:#FFFFFF; font-size: 12px }
     .autodiagTable thead th { background-color:#6F3596; vertical-align: middle }
     .autodiagTable th, .autodiagTable td { border: 1px solid #ddd;padding:4px; }
 
 /* Partie liste des autodiag */
-#autodiag-liste p.intro{margin-bottom: 20px}
-#autodiag-liste .panel-heading{color:#703695;cursor: pointer; font-weight: bold}
-#autodiag-liste .panel-heading.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
-#autodiag-liste .panel-heading.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}
+    #autodiag-liste p.intro{margin-bottom: 20px}
+    #autodiag-liste .panel-heading{color:#703695;cursor: pointer; font-weight: bold}
+    #autodiag-liste .panel-heading.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
+    #autodiag-liste .panel-heading.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}
 
 @media screen and (max-width: 991px) {
     #autodiag h1{ float: none; clear: both; margin-bottom: 15px}
