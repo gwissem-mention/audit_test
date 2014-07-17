@@ -111,7 +111,8 @@ class ExpBesoinReponsesManager extends BaseManager
             $resultats[$expBesoinReponse->getId()]                  = array();
             $resultats[$expBesoinReponse->getId()]['libelle']       = $expBesoinReponse->getLibelle();
             $resultats[$expBesoinReponse->getId()]['autreQuestion'] = $expBesoinReponse->isAutreQuestion();
-            $resultats[$expBesoinReponse->getId()]['idQuestion']    = $expBesoinReponse->getRedirigeQuestion()->getId();
+            if(!is_null($expBesoinReponse->getRedirigeQuestion())
+                $resultats[$expBesoinReponse->getId()]['idQuestion']    = $expBesoinReponse->getRedirigeQuestion()->getId();
             //$resultats[$expBesoinReponse->getId()]['reference'] = $expBesoinReponse->getReferences();
         }
 
