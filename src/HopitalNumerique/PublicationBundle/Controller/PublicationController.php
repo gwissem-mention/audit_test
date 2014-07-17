@@ -173,20 +173,46 @@ class PublicationController extends Controller
     private function getProductionsAssocies( $prodLiees )
     {
         $productions = array();
-        foreach( $prodLiees as $one){
-            if( $this->checkAuthorization( $one ) === true ){
-                //formate datas
-                $production           = new \StdClass;
-                $production->id       = $one->getId();
-                $production->alias    = $one->getAlias();
-                $production->titre    = $one->getTitre();
-                $production->synthese = $one->getSynthese();
-                $production->created  = $one->getDateCreation();
-                $production->type     = $this->getType($one);
-                $tab                  = explode('<!-- pagebreak -->', $one->getResume() );
-                $production->resume   = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+        foreach( $prodLiees as $prod){
+            $tab = explode(':', $prod);
+
+            //switch Objet / Infra-doc
+            if( $tab[0] == 'PUBLICATION' ){
+                $objet   = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $tab[1] ) );
+                $contenu = false;
+            }else if( $tab[0] == 'INFRADOC' ){
+                $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $tab[1] ) );
+                $objet   = $contenu->getObjet();
+            }
+            
+            if( $this->checkAuthorization( $objet ) === true ){
+                $production        = new \StdClass;
+                $production->id    = $objet->getId();
+                $production->alias = $objet->getAlias();
+
+                //Cas Objet
+                if( $contenu === false ) {
+                    //formate datas
+                    $production->titre    = $objet->getTitre();
+                    $production->created  = $objet->getDateCreation();
+                    $production->objet    = true;
+                    $resume               = explode('<!-- pagebreak -->', $objet->getResume() );
+                    $production->synthese = $objet->getSynthese();
+                }else{
+                    //formate datas
+                    $production->idc      = $contenu->getId();
+                    $production->aliasc   = $contenu->getAlias();
+                    $production->titre    = $contenu->getTitre();
+                    $production->created  = $contenu->getDateCreation();
+                    $production->objet    = false;
+                    $production->synthese = null;
+                    $resume               = explode('<!-- pagebreak -->', $contenu->getContenu() );
+                }
+
+                $production->resume   = html_entity_decode(strip_tags($resume[0]), 2 | 0, 'UTF-8');
                 $production->updated  = false;
                 $production->new      = false;
+                $production->type     = $this->getType($objet);
 
                 $productions[] = $production;
             }

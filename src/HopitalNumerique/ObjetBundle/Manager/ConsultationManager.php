@@ -138,11 +138,17 @@ class ConsultationManager extends BaseManager
 
             //get consulted objets and formate them
             $results   = $this->getLastsConsultations( $user );
-            $consulted = array();
+            $consulted = array('objets' => array(), 'contenus' => array() );
             foreach($results as $one){
-                //Si la date de dernière mise à jour de l'objet est postérieure à la dernière consultation de l'objet : Notif updated
-                if( is_null($one->getContenu()) )
-                    $consulted[ $one->getObjet()->getId() ] = $one->getObjet()->getDateModification() > $one->getDateLastConsulted();
+                //Cas objet
+                if( is_null($one->getContenu()) ) {
+                    //Si la date de dernière mise à jour de l'objet est postérieure à la dernière consultation de l'objet : Notif updated
+                    $consulted['objets'][ $one->getObjet()->getId() ] = $one->getObjet()->getDateModification() > $one->getDateLastConsulted();
+                //Cas contenu
+                }else{
+                    //Si la date de dernière mise à jour du contenu est postérieure à la dernière consultation du contenu : Notif updated
+                    $consulted['contenus'][ $one->getContenu()->getId() ] = $one->getContenu()->getDateModification() > $one->getDateLastConsulted();
+                }
             }
 
             //Parcours des objets retournés par la recherche
@@ -150,11 +156,12 @@ class ConsultationManager extends BaseManager
             {
                 $id          = $production->id;
                 $isConsulted = false;
+                $type        = $production->objet ? 'objets' : 'contenus';
                 
                 //la publication fait partie des publications déjà consultées par l'utilisateur
-                if( isset( $consulted[ $id ] ) ){
+                if( isset( $consulted[$type][ $id ] ) ){
                     $isConsulted         = true;
-                    $production->updated = $consulted[ $id ];
+                    $production->updated = $consulted[$type][ $id ];
                 }
 
                 //Si la publication n'a jamais été consulté ET

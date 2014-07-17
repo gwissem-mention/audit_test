@@ -185,6 +185,13 @@ class Objet
     /**
      * @var array
      *
+     * @ORM\Column(name="obj_objets", type="array", options = {"comment" = "Liste des productions liés à l objet"})
+     */
+    private $objets;
+
+    /**
+     * @var array
+     *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_referencement", type="array", options = {"comment" = "Copie du référencement pour l historique"})
      */
@@ -262,16 +269,6 @@ class Objet
      * )
      */
     protected $ambassadeurs;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet")
-     * @ORM\JoinTable(name="hn_objet_objets",
-     *      joinColumns={ @ORM\JoinColumn(name="par_id", referencedColumnName="obj_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")}
-     * )
-     * @ORM\OrderBy({"titre" = "ASC"})
-     */
-    protected $objets;
     
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ModuleBundle\Entity\Module", mappedBy="productions")
@@ -314,11 +311,11 @@ class Objet
         $this->lock          = false;
         $this->vignette      = new \Doctrine\Common\Collections\ArrayCollection();
         $this->autodiags     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objets        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->referencement = new \Doctrine\Common\Collections\ArrayCollection();
         $this->roles         = new \Doctrine\Common\Collections\ArrayCollection();
         $this->types         = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ambassadeurs  = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->objets        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->modules       = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -912,6 +909,48 @@ class Objet
     }
 
     /**
+     * Get objets
+     *
+     * @return array $objets
+     */
+    public function getObjets()
+    {
+        return $this->objets;
+    }
+    
+    /**
+     * Set objets
+     *
+     * @param array $objets
+     */
+    public function setObjets(array $objets)
+    {
+        $this->objets = $objets;
+        return $this;
+    }
+
+    /**
+     * Remove objet
+     *
+     * @param string $objet
+     */
+    public function removeObjet($objet)
+    {
+        $this->objets->removeElement($objet);
+    }
+    
+    /**
+     * add objet
+     *
+     * @param string $objet
+     */
+    public function addObjet($objet)
+    {
+        $this->objets[] = $objet;
+        return $this;
+    }
+
+    /**
      * Get referencement
      *
      * @return array $referencement
@@ -987,52 +1026,6 @@ class Objet
     public function getAmbassadeurs()
     {
         return $this->ambassadeurs;
-    }
-
-    /**
-     * Add objet
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet
-     * @return Objet
-     */
-    public function addObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objet)
-    {
-        $this->objets[] = $objet;
-    
-        return $this;
-    }
-
-    /**
-     * Remove objet
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet
-     */
-    public function removeObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objet)
-    {
-        $this->objets->removeElement($objet);
-    }
-
-    /**
-     * Set objets
-     *
-     * @param \Doctrine\Common\Collections\Collection $objets
-     * @return Objet
-     */
-    public function setObjets(array $objets)
-    {        
-        $this->objets = $objets;
-    
-        return $this;
-    }
-
-    /**
-     * Get objets
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getObjets()
-    {
-        return $this->objets;
     }
 
     /**

@@ -67,7 +67,7 @@ class ObjetController extends Controller
      * Affiche le formulaire d'édition de Objet.
      */
     public function editAction( $id, $infra, $toRef )
-    {   
+    {
         //Récupération de l'entité passée en paramètre
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
         $user  = $this->get('security.context')->getToken()->getUser();
@@ -86,13 +86,17 @@ class ObjetController extends Controller
 
         //get Note referencement
         $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-        $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $objet->getReferences(), $refsPonderees );
+        $note          = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $objet->getReferences(), $refsPonderees );
+
+        //build Productions liées
+        $productions = $this->formatteProductionsLiees( $objet->getObjets() );
 
         $options = array(
-            'contenus' => $contenus,
-            'infra'    => $infra,
-            'toRef'    => $toRef,
-            'note'     => $note
+            'contenus'    => $contenus,
+            'infra'       => $infra,
+            'toRef'       => $toRef,
+            'note'        => $note,
+            'productions' => $productions
         );
 
         return $this->renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig', $options );
@@ -291,7 +295,8 @@ class ObjetController extends Controller
                             'orderC'               => 'Ordre de l\'infra-doc',
                             'dateCreationC'        => 'Date de création de l\'infra-doc',
                             'dateModificationC'    => 'Date de modification de l\'infra-doc',
-                            'nbVueC'               => 'Nombre de visualisation de l\'infra-doc'
+                            'nbVueC'               => 'Nombre de visualisation de l\'infra-doc',
+                            'objets'               => 'Productions liées'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
@@ -324,13 +329,9 @@ class ObjetController extends Controller
 
         //bind Objet
         $pointDur      = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
-        $currentObjets = $pointDur->getObjets();
+        $currentObjets = new \Doctrine\Common\Collections\ArrayCollection($pointDur->getObjets());
 
         //bind objects
-        echo '<pre>';
-        var_dump($objets);
-        die();
-        $objets = $this->get('hopitalnumerique_objet.manager.objet')->findBy( array( 'id' => $objets ) );
         foreach($objets as $one){
             if( !$currentObjets->contains($one) )
                 $pointDur->addObjet( $one );
@@ -348,16 +349,44 @@ class ObjetController extends Controller
      *
      * METHOD = POST|DELETE
      */
-    public function deleteLinkAction( $pointDur, Objet $objet )
+    public function deleteLinkAction( Objet $pointDur, $id, $obj )
     {
-        $pointDur = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $pointDur) );
-        
-        $pointDur->removeObjet( $objet );
+        $objets = $pointDur->getObjets();
+
+        $linkName = ($obj == 1 ? 'PUBLICATION' : 'INFRADOC') . ':' . $id;
+        foreach($objets as $key => $objet){
+            if( $objet == $linkName )
+                unset($objets[$key]);
+        }
+        $pointDur->setObjets( $objets );
         $this->get('hopitalnumerique_objet.manager.objet')->save( $pointDur );
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
 
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_objet_objet_edit', array('id' => $pointDur->getId())).'"}', 200);
+    }
+
+    /**
+     * Reordonne les productions
+     *
+     * @param Objet $objet L'objet point dur
+     *
+     * @return Response
+     */
+    public function reorderAction( Objet $objet )
+    {
+        //get datas serialzed
+        $datas = $this->get('request')->request->get('datas');
+        
+        $doctrineArray = new \Doctrine\Common\Collections\ArrayCollection();
+        foreach($datas as $one)
+            $doctrineArray->add( $one['id'] );
+
+        $objet->setObjets( $doctrineArray->toArray() );
+        $this->get('hopitalnumerique_objet.manager.objet')->save( $objet );
+        
+        //return success.true si le fichier existe deja
+        return new Response('{"success":true}', 200);
     }
 
 
@@ -375,11 +404,42 @@ class ObjetController extends Controller
 
 
 
+    /**
+     * Formatte les productions pour l'affichage des productions liées
+     *
+     * @param array $datas Liste des prod liées
+     *
+     * @return array
+     */
+    private function formatteProductionsLiees( $datas )
+    {
+        $productions = array();
 
+        foreach($datas as $one) {
+            //explode to get datas
+            $tab = explode(':', $one);
 
+            //build new object
+            $element       = new \StdClass;
+            $element->id   = $tab[1];
+            $element->brut = $one;
 
-    
-    
+            //switch Objet / Infra-doc
+            if( $tab[0] == 'PUBLICATION' ){
+                $objet            = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $tab[1] ) );
+                $element->titre   = $objet->getTitre();
+                $element->isObjet = 1;
+            }else if( $tab[0] == 'INFRADOC' ){
+                $contenu          = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $tab[1] ) );
+                $element->titre   = '|--' . $contenu->getTitre();
+                $element->isObjet = 0;
+            }
+
+            $productions[] = $element;
+        }
+
+        return $productions;
+    }
 
     /**
      * Effectue le render du formulaire Objet.
@@ -403,12 +463,13 @@ class ObjetController extends Controller
             if( is_null($formTypes) ) {
                 $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un type d\'objet.' );
                 return $this->render( $view , array(
-                    'form'     => $form->createView(),
-                    'objet'    => $objet,
-                    'contenus' => isset($options['contenus']) ? $options['contenus'] : array(),
-                    'infra'    => isset($options['infra'])    ? $options['infra']    : false,
-                    'toRef'    => isset($options['toRef'])    ? $options['toRef']    : false,
-                    'note'     => isset($options['note'])     ? $options['note']     : 0
+                    'form'        => $form->createView(),
+                    'objet'       => $objet,
+                    'contenus'    => isset($options['contenus'])    ? $options['contenus']    : array(),
+                    'infra'       => isset($options['infra'])       ? $options['infra']       : false,
+                    'toRef'       => isset($options['toRef'])       ? $options['toRef']       : false,
+                    'note'        => isset($options['note'])        ? $options['note']        : 0,
+                    'productions' => isset($options['productions']) ? $options['productions'] : array()
                 ));
             }
 
@@ -425,12 +486,13 @@ class ObjetController extends Controller
                 if( $this->get('hopitalnumerique_objet.manager.objet')->testAliasExist( $objet, $new ) ){
                     $this->get('session')->getFlashBag()->add('danger', 'Cet Alias existe déjà.' );
                     return $this->render( $view , array(
-                        'form'     => $form->createView(),
-                        'objet'    => $objet,
-                        'contenus' => isset($options['contenus']) ? $options['contenus'] : array(),
-                        'infra'    => isset($options['infra'])    ? $options['infra']    : false,
-                        'toRef'    => isset($options['toRef'])    ? $options['toRef']    : false,
-                        'note'     => isset($options['note'])     ? $options['note']     : 0
+                        'form'        => $form->createView(),
+                        'objet'       => $objet,
+                        'contenus'    => isset($options['contenus'])    ? $options['contenus']    : array(),
+                        'infra'       => isset($options['infra'])       ? $options['infra']       : false,
+                        'toRef'       => isset($options['toRef'])       ? $options['toRef']       : false,
+                        'note'        => isset($options['note'])        ? $options['note']        : 0,
+                        'productions' => isset($options['productions']) ? $options['productions'] : array()
                     ));
                 }
 
@@ -459,12 +521,13 @@ class ObjetController extends Controller
         }
 
         return $this->render( $view , array(
-            'form'     => $form->createView(),
-            'objet'    => $objet,
-            'contenus' => isset($options['contenus']) ? $options['contenus'] : array(),
-            'infra'    => isset($options['infra'])    ? $options['infra']    : false,
-            'toRef'    => isset($options['toRef'])    ? $options['toRef']    : false,
-            'note'     => isset($options['note'])     ? $options['note']     : 0
+            'form'        => $form->createView(),
+            'objet'       => $objet,
+            'contenus'    => isset($options['contenus'])    ? $options['contenus']    : array(),
+            'infra'       => isset($options['infra'])       ? $options['infra']       : false,
+            'toRef'       => isset($options['toRef'])       ? $options['toRef']       : false,
+            'note'        => isset($options['note'])        ? $options['note']        : 0,
+            'productions' => isset($options['productions']) ? $options['productions'] : array()
         ));
     }
 }
