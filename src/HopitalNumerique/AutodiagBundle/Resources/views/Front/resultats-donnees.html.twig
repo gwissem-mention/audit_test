@@ -18,6 +18,23 @@
 
         <div class="clearfix"></div>
 
+        {% if resultat.synthese %}
+            <div class="autodiags">
+                <h2 class="violet open" data-toggle="results" >Synthèse - {{resultat.name}}</h2>
+                
+                <div id="results">
+                    <p>Autodiagnostics concernés par cette synthèse :</p>
+                    <ul>
+                        {% for result in resultat.resultats %}
+                            <li><a href="{{path('hopitalnumerique_autodiag_front_resultat', {'id':result.id, 'back':1})}}" target="_blank">{{result.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="page-break"></div>
+        {% endif %}
+
         <h2 class="violet open" data-toggle="graphiques" >Résultats de l'outil - Graphiques</h2>
 
         <div id="graphiques">

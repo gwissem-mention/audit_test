@@ -306,7 +306,7 @@ class FrontController extends Controller
         $user     = $this->get('security.context')->getToken()->getUser();
         $outil    = $this->get('hopitalnumerique_autodiag.manager.outil')->findOneBy( array( 'id' => $request->request->get('outil') ) );
         $statut   = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 419 ) );
-        $synthese = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildSynthese( $user, $outil, $statut );
+        $synthese = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildSynthese( $user, $outil, $statut, $request->request->get('nom') );
         
         //generate Reponses
         $this->buildNewReponses( $request->request->get('resultats'), $synthese );

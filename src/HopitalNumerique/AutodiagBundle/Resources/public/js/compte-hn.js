@@ -18,19 +18,24 @@ $(document).ready(function() {
 
         //Do stuff for min 2 results and only if from same autodiag
         if( resultats.length >= 2 && sameAutodiag ) {
-            $.ajax({
-                url  : $('#generate-synthese-url').val(),
-                data : {
-                    outil     : typeOutil,
-                    resultats : resultats
-                },
-                type     : 'POST',
-                dataType : 'json',
-                success  : function( data ){
-                    window.location = data.url;
-                }
-            });
-            
+            apprise('Merci de saisir un nom pour cette synthèse', {'input':true,'textOk':'Valider','textCancel':'Annuler'}, function(r) {
+                if(r) { 
+                    $.ajax({
+                        url  : $('#generate-synthese-url').val(),
+                        data : {
+                            outil     : typeOutil,
+                            resultats : resultats,
+                            nom       : r
+                        },
+                        type     : 'POST',
+                        dataType : 'json',
+                        success  : function( data ){
+                            window.location = data.url;
+                        }
+                    });
+                }else
+                    apprise('Merci de saisir un nom valide.');
+            });            
         }else if( resultats.length < 2 )
             apprise('Merci de sélectionner au moins 2 résultats.');
         else
