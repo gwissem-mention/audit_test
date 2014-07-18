@@ -211,12 +211,14 @@ class FrontController extends Controller
         }
 
         //récupère les chapitres et les formate pour l'affichage des liens des publications
-        $chapitres  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat, true );
-        $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
-
+        $tab            = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+        $chapitresFront = $tab['front'];
+        $chapitresBack  = $tab['back'];
+        $graphiques     = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitresFront );
+        
         //PDF généré
         if( is_null($resultat->getPdf()) ){
-            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request );
+            $pdf = $this->generatePdf( $tab, $graphiques, $resultat, $request );
             $resultat->setPdf( $pdf );
             $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
         }
@@ -225,10 +227,11 @@ class FrontController extends Controller
             $back = false;
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
-            'resultat'   => $resultat,
-            'chapitres'  => $chapitres,
-            'graphiques' => $graphiques,
-            'back'       => $back
+            'resultat'          => $resultat,
+            'chapitres'         => $chapitresFront,
+            'questionsReponses' => $chapitresBack,
+            'graphiques'        => $graphiques,
+            'back'              => $back
         ));
     }
 
@@ -403,9 +406,10 @@ class FrontController extends Controller
         $filename = $resultat->getId() . $resultat->getOutil()->getId() . time() . '.pdf';
 
         $html = $this->renderView( 'HopitalNumeriqueAutodiagBundle:Front:pdf.html.twig' , array(
-            'resultat'   => $resultat,
-            'chapitres'  => $chapitres,
-            'graphiques' => $graphiques
+            'resultat'          => $resultat,
+            'chapitres'         => $chapitres['front'],
+            'questionsReponses' => $chapitres['back'],
+            'graphiques'        => $graphiques
         ));
 
         $options = array(

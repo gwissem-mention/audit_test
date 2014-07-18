@@ -54,14 +54,18 @@ class ResultatManager extends BaseManager
      *
      * @return array
      */
-    public function formateResultat( Resultat $resultat, $front = false )
+    public function formateResultat( Resultat $resultat )
     {
         //build reponses array
-        $questionsReponses = $this->buildQuestionsReponses( $resultat->getReponses() );
+        $tab                   = $this->buildQuestionsReponses( $resultat->getReponses() );
+        $questionsReponses     = $tab['front'];
+        $questionsReponsesBack = $tab['back'];
 
         //build chapitres and add previous responses
-        $parents     = array();
-        $enfants     = array();
+        $parentsFront = array();
+        $parentsBack  = array();
+        $enfantsFront = array();
+        $enfantsBack  = array();
 
         //preorder chapters
         $chapitres = $this->makeChaptersOrdered( $resultat->getOutil()->getChapitres() );
@@ -80,22 +84,33 @@ class ResultatManager extends BaseManager
             $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
             //handle questions/reponses
-            $chapitre = $front ? $this->buildQuestionsForFront( $one->getQuestions(), $chapitre, $questionsReponses ) : $this->buildQuestionsForBack( $one->getQuestions(), $chapitre, $questionsReponses );
+            $chapitreFront = $this->buildQuestionsForFront( $one->getQuestions(), $chapitre, $questionsReponses );
+            $chapitreBack  = $this->buildQuestionsForBack( $one->getQuestions(), $chapitre, $questionsReponsesBack );
 
             //handle parents / enfants
-            if( is_null($one->getParent()) )
-                $parents[ $one->getId() ] = $chapitre;
-            else
-                $enfants[] = $chapitre;
+            if( is_null($one->getParent()) ){
+                $parentsFront[ $one->getId() ] = $chapitreFront;
+                $parentsBack[ $one->getId() ]  = $chapitreBack;
+            }
+            else{
+                $enfantsFront[] = $chapitreFront;
+                $enfantsBack[]  = $chapitreBack;
+            }
         }
 
-        //reformate les chapitres
-        foreach($enfants as $enfant){
-            $parent = $parents[ $enfant->parent ];
+        //reformate les chapitres FRONT
+        foreach($enfantsFront as $enfant){
+            $parent = $parentsFront[ $enfant->parent ];
+            $parent->childs[] = $enfant;
+        }
+
+        //reformate les chapitres BACK
+        foreach($enfantsBack as $enfant){
+            $parent = $parentsBack[ $enfant->parent ];
             $parent->childs[] = $enfant;
         }
         
-        return $parents;
+        return array('front' => $parentsFront, 'back' => $parentsBack);
     }
 
     /**
@@ -129,6 +144,7 @@ class ResultatManager extends BaseManager
 
         //récupère le gros tableau de questions / réponses
         $questionsReponses = $this->buildQuestionsReponses( $resultat->getReponses() );
+        $questionsReponses = $questionsReponses['front'];
 
         //get Datas for Each axes : Chapitres / Catégories
         $datasAxeChapitre   = $this->buildDatasAxeChapitre( $chapitres );
@@ -590,45 +606,56 @@ class ResultatManager extends BaseManager
      */
     private function buildQuestionsReponses( $reponses )
     {
-        $results = array();
+        $results        = array();
+        $resultsForBack = array();
+
         foreach($reponses as $reponse) {
-            if( $reponse->getValue() != -1 ){
-                $rep = new \StdClass;
+            
+            $rep = new \StdClass;
 
-                //reponses values
-                $question           = $reponse->getQuestion();
-                $rep->tableValue    = $reponse->getValue();
-                $rep->remarque      = $reponse->getRemarque();
+            //reponses values
+            $question           = $reponse->getQuestion();
+            $rep->tableValue    = $reponse->getValue();
+            $rep->remarque      = $reponse->getRemarque();
 
-                //questions values
-                $rep->id            = $question->getId();
-                $rep->question      = $question->getTexte();
-                $rep->code          = $question->getCode();
-                $rep->ordreResultat = $question->getOrdreResultat();
-                $rep->noteMinimale  = $question->getNoteMinimale();
-                $rep->synthese      = $question->getSynthese();
-                $rep->ponderation   = $question->getPonderation();
-                $rep->order         = $question->getOrder();
-                $rep->type          = $question->getType()->getId();
+            //questions values
+            $rep->id            = $question->getId();
+            $rep->question      = $question->getTexte();
+            $rep->code          = $question->getCode();
+            $rep->ordreResultat = $question->getOrdreResultat();
+            $rep->noteMinimale  = $question->getNoteMinimale();
+            $rep->synthese      = $question->getSynthese();
+            $rep->ponderation   = $question->getPonderation();
+            $rep->order         = $question->getOrder();
+            $rep->type          = $question->getType()->getId();
+            $rep->colored       = $question->getColored();
+            $rep->options       = explode( '<br />', nl2br( $question->getOptions() ) );
 
-                //Si != Texte, on calcul la réponse Max
-                if( $rep->type != 417 ){
-                    $rep->max = $this->calculMaxOption( $question );
+            //Si != Texte, on calcul la réponse Max
+            if( $rep->type != 417 ){
+                $tab = $this->calculMinAndMaxOption( $question );
+                $rep->max = $tab['max'];
+                $rep->min = $tab['min'];
 
-                    //on rapporte la valeur de note question sur 100
-                    $rep->value = $rep->max != 0 ? ($reponse->getValue() * 100) / $rep->max : 0;
-                }else{
-                    $rep->value = $reponse->getValue();
-                    $rep->max   = 0;
-                }
-
-                $rep->initialValue = $reponse->getValue();
-
-                $results[ $reponse->getQuestion()->getId() ] = $rep;
+                //on rapporte la valeur de note question sur 100
+                $rep->value = $rep->max != 0 ? ($reponse->getValue() * 100) / $rep->max : 0;
+            }else{
+                $rep->value = $reponse->getValue();
+                $rep->max   = 0;
+                $rep->min   = 0;
             }
+
+            $rep->initialValue = $reponse->getValue();
+
+            //pour le front, on ajoute QUE les réponses valides (! non concernés)
+            if( $reponse->getValue() != -1 )
+                $results[ $reponse->getQuestion()->getId() ] = $rep;
+
+            //On ajoute TOUTE les questions pour le back (même les non concernés)
+            $resultsForBack[ $reponse->getQuestion()->getId() ] = $rep;
         }
 
-        return $results;
+        return array( 'front' => $results, 'back' => $resultsForBack );
     }
 
     /**
@@ -638,17 +665,19 @@ class ResultatManager extends BaseManager
      *
      * @return integer
      */
-    private function calculMaxOption( $question )
+    private function calculMinAndMaxOption( $question )
     {
-        $max = 0;
-        $options  = nl2br($question->getOptions());
-        $options  = explode('<br />', $options);
+        $max     = 0;
+        $min     = null;
+        $options = nl2br($question->getOptions());
+        $options = explode('<br />', $options);
 
         foreach($options as $option){
             $tmp = explode(';', $option);
             $max = (isset($tmp[0]) && intval(trim($tmp[0])) > $max ) ? intval(trim($tmp[0])) : $max;
+            $min = ( (isset($tmp[0]) && intval(trim($tmp[0])) < $min) || is_null($min) ) ? intval(trim($tmp[0])) : $min;
         }
 
-        return $max;
+        return array('max' => $max, 'min' => $min );
     }
 }
