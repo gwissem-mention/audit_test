@@ -365,7 +365,7 @@
             </p>
         </div>
         
-        {% if pdf %}
+        {% if pdf or true %}
             <div class="page-break"></div>
 
             <h2 class="violet open" data-toggle="reponses" >Résultats de l'outil - Réponses</h2>
@@ -373,7 +373,9 @@
             <div id="reponses">
                 {% for chapitre in questionsReponses %}
                     <div class="chapitre-{{chapitre.id}}">
+                        <h3 class="prev">{{chapitre.intro}}</h3>
                         <h3 class="violet">{{chapitre.title}}</h3>
+                        <p class="text-muted level1">{{chapitre.desc}}</p>
                         
                         <hr>
 
@@ -384,7 +386,9 @@
                         {% if chapitre.childs|length > 0 %}
                             <div class="row sous-chapitre col-md-12">
                                 {% for child in chapitre.childs %}
+                                    <h4 class="prev">{{child.intro}}</h4>
                                     <h4 class="violet">{{child.title}}</h4>
+                                    <p class="text-muted level1">{{child.desc}}</p>
                                     
                                     {{ mySelf.buildQuestionReponse(child.questions) }}
                                 {% endfor %}
@@ -403,7 +407,7 @@
     <div class="row">
         <div class="col-md-12"><p class="text-muted">{{question.intro}}</p></div>
         <div class="col-md-12">
-            <p class="question">{% if question.code != '' %}{{question.code ~ '. '}}{% endif %}{{question.question}}</p>
+            <p class="question">{{question.question}}</p>
             <p class="violet synthese">{{question.synthese}}</p>
             {{publications|raw}}
         </div>
@@ -427,6 +431,7 @@
 {% macro buildQuestionReponse(questions) %}
     {% for question in questions %}
         <div class="clearfix">
+            <p class="text-muted">{{question.intro}}</p>
             <div>
                 <p>
                     {{question.question}} : 
@@ -452,7 +457,7 @@
                     {% endfor %}
                 </p>
                 {% if question.colored and question.initialValue != -1 %}
-                    <div class="icon pull-left">
+                    <div class="icon pull-right">
                         {% if question.min == question.initialValue %}
                             <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bad.jpg')}}" class="pull-right" alt="bad" />
                         {% elseif question.max == question.initialValue %}

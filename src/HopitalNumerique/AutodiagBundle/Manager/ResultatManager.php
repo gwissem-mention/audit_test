@@ -101,15 +101,15 @@ class ResultatManager extends BaseManager
         }
 
         //reformate les chapitres FRONT
-        foreach($enfantsFront as $enfant){
-            $parent = $parentsFront[ $enfant->parent ];
-            $parent->childs[] = $enfant;
+        foreach($enfantsFront as $enfantF){
+            $parent = $parentsFront[ $enfantF->parent ];
+            $parent->childs[] = $enfantF;
         }
 
         //reformate les chapitres BACK
-        foreach($enfantsBack as $enfant){
-            $parent = $parentsBack[ $enfant->parent ];
-            $parent->childs[] = $enfant;
+        foreach($enfantsBack as $enfantB){
+            $parent = $parentsBack[ $enfantB->parent ];
+            $parent->childs[] = $enfantB;
         }
         
         return array('front' => $parentsFront, 'back' => $parentsBack);

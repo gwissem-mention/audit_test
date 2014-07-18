@@ -94,6 +94,12 @@
         #resultats #graphiques .table .vertical-align{vertical-align: middle}
         #resultats #graphiques .table .reverse{cursor:pointer;}
         
+    /* Réponses */
+        #resultats #reponses h3{ text-transform: uppercase;}
+        #resultats #reponses h3.prev{font-size: 24px; color:#de0d4d;}
+        #resultats #reponses h4{ font-size: 18px}
+        #resultats #reponses h4.prev{font-size: 20px; color:#de0d4d;7}
+
 /* Partie Compte HN */
     .create{margin-right: 18px;margin-top: 10px;}
     .autodiagTable thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}
