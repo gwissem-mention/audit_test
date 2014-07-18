@@ -13,6 +13,8 @@ class CronController extends Controller
     {
         if ($id == 'FHFURJYIHOLPMFKVIDUESQGEUDRCTUFT')
         {
+            ini_set('max_execution_time', 0);
+
             $context = $this->container->get('router')->getContext();
             $urlSite = $context->getScheme() . '://' . $context->getHost().$context->getBaseUrl();
 
