@@ -27,11 +27,11 @@ class ResultatController extends Controller
      */
     public function detailAction( Resultat $resultat )
     {
-        $tab = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+        $chapitres = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Resultat:detail.html.twig' , array(
             'resultat'  => $resultat,
-            'chapitres' => $tab['back']
+            'chapitres' => $chapitres
         ));
     }
 }

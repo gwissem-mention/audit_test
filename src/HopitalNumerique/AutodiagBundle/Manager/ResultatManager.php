@@ -62,10 +62,8 @@ class ResultatManager extends BaseManager
         $questionsReponsesBack = $tab['back'];
 
         //build chapitres and add previous responses
-        $parentsFront = array();
-        $parentsBack  = array();
-        $enfantsFront = array();
-        $enfantsBack  = array();
+        $parents = array();
+        $enfants = array();
 
         //preorder chapters
         $chapitres = $this->makeChaptersOrdered( $resultat->getOutil()->getChapitres() );
@@ -86,33 +84,22 @@ class ResultatManager extends BaseManager
             $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
             //handle questions/reponses
-            $chapitreFront = $this->buildQuestionsForFront( $one->getQuestions(), $chapitre, $questionsReponses );
-            $chapitreBack  = $this->buildQuestionsForBack( $one->getQuestions(), $chapitre, $questionsReponsesBack );
+            $chapitre = $this->buildQuestions( $one->getQuestions(), $chapitre, $questionsReponses, $questionsReponsesBack );
 
             //handle parents / enfants
-            if( is_null($one->getParent()) ){
-                $parentsFront[ $one->getId() ] = $chapitreFront;
-                $parentsBack[ $one->getId() ]  = $chapitreBack;
-            }
-            else{
-                $enfantsFront[] = $chapitreFront;
-                $enfantsBack[]  = $chapitreBack;
-            }
+            if( is_null($one->getParent()) )
+                $parents[ $one->getId() ] = $chapitre;
+            else
+                $enfants[] = $chapitre;
         }
 
         //reformate les chapitres FRONT
-        foreach($enfantsFront as $enfantF){
-            $parent = $parentsFront[ $enfantF->parent ];
-            $parent->childs[] = $enfantF;
+        foreach($enfants as $enfant){
+            $parent = $parents[ $enfant->parent ];
+            $parent->childs[] = $enfant;
         }
 
-        //reformate les chapitres BACK
-        foreach($enfantsBack as $enfantB){
-            $parent = $parentsBack[ $enfantB->parent ];
-            $parent->childs[] = $enfantB;
-        }
-        
-        return array('front' => $parentsFront, 'back' => $parentsBack);
+        return $parents;
     }
 
     /**
@@ -529,28 +516,6 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Construit la liste des questions pour le backoffice
-     *
-     * @param array    $questions         Liste des questions
-     * @param StdClass $chapitre          L'objet chapitre
-     * @param array    $questionsReponses Liste des questionsréponses
-     *
-     * @return array
-     */
-    private function buildQuestionsForBack( $questions, $chapitre, $questionsReponses )
-    {
-        $results = array();
-        foreach ($questions as $question) {
-            if( isset($questionsReponses[ $question->getId() ]) )
-                $results[] = $questionsReponses[ $question->getId() ];
-        }
-
-        $chapitre->questions = $results;
-
-        return $chapitre;
-    }
-
-    /**
      * Construit la liste des questions pour le frontoffice
      *
      * @param array    $questions         Liste des questions
@@ -559,9 +524,10 @@ class ResultatManager extends BaseManager
      *
      * @return array
      */
-    private function buildQuestionsForFront( $questions, $chapitre, $questionsReponses )
+    private function buildQuestions( $questions, $chapitre, $questionsReponses, $questionsReponsesBack )
     {
         $results             = array();
+        $forBack             = array();
         $forCharts           = array();
         $noteChapitre        = 0;
         $nbQuestions         = 0;
@@ -588,10 +554,14 @@ class ResultatManager extends BaseManager
 
                 $nbQuestions++;
             }
+
+            if( isset($questionsReponsesBack[ $question->getId() ]) )
+                $forBack[] = $questionsReponsesBack[ $question->getId() ];
         }
 
         $chapitre->questions           = $results;
         $chapitre->questionsForCharts  = $forCharts;
+        $chapitre->questionsBack       = $forBack;
         $chapitre->noteChapitre        = $noteChapitre;
         $chapitre->nbQuestions         = $nbQuestions;
         $chapitre->nbQuestionsRemplies = $nbQuestionsRemplies;

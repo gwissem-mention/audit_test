@@ -43,8 +43,8 @@
                             
                             <hr>
 
-                            {% if chapitre.questions|length > 0 %}
-                                {{ mySelf.buildQuestion(chapitre.questions) }}
+                            {% if chapitre.questionsBack|length > 0 %}
+                                {{ mySelf.buildQuestion(chapitre.questionsBack) }}
                             {% endif %}
                             
                             {% if chapitre.childs|length > 0 %}
@@ -52,7 +52,7 @@
                                     {% for child in chapitre.childs %}
                                         <h3>{{child.title}}</h3>
                                         
-                                        {{ mySelf.buildQuestion(child.questions) }}
+                                        {{ mySelf.buildQuestion(child.questionsBack) }}
                                     {% endfor %}
                                 </div>
                             {% endif %}
