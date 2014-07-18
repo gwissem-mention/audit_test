@@ -299,8 +299,11 @@
             {% set chaptersToHide = [] %}
             {% for chapitre in chapitres %}
                 {% set doTheChapterHavePublications = false %}
-                <div class="chapter chapitre-{{chapitre.id}}" style="{% if chapitre.questions|length == 0 and chapitre.childs|length == 0 %}display:none{% endif %}" >
+                <div class="chapter chapitre-{{chapitre.id}}" style="{% if chapitre.questions|length == 0 and chapitre.childs|length == 0 %}display:none{% endif %}" >                    
+                    <h3 class="prev">{{chapitre.intro}}</h3>
                     <h3 class="violet">{{chapitre.title}}</h3>
+                    <p class="text-muted level1">{{chapitre.desc}}</p>
+
                     <hr>
 
                     {% if chapitre.synthese %}
@@ -325,7 +328,9 @@
                             <div class="col-md-12">
                                 {% for child in chapitre.childs %}
                                     <div style="{% if child.questions|length == 0 %}display:none{% endif %}">
+                                        <h4 class="prev">{{child.intro}}</h4>
                                         <h4 class="violet">{{child.title}}</h4>
+                                        <p class="text-muted level1">{{child.desc}}</p>
 
                                         {% if child.synthese %}
                                             <p class="violet synthese">{{child.synthese}}</p>
@@ -396,6 +401,7 @@
 {# Construit les lignes associées aux résultats #}
 {% macro buildQuestion(question, publications) %}
     <div class="row">
+        <div class="col-md-12"><p class="text-muted">{{question.intro}}</p></div>
         <div class="col-md-12">
             <p class="question">{% if question.code != '' %}{{question.code ~ '. '}}{% endif %}{{question.question}}</p>
             <p class="violet synthese">{{question.synthese}}</p>
@@ -420,14 +426,14 @@
 
 {% macro buildQuestionReponse(questions) %}
     {% for question in questions %}
-        <div class="row">
-            <div class="col-md-5">
-                <p class="text-right">
+        <div class="clearfix">
+            <div>
+                <p>
                     {{question.question}} : 
                 </p>
             </div>
             
-            <div class="col-md-5">
+            <div>
                 {% set options = question.options %}
                 <p class="pull-left">
                     {% if question.initialValue != -1 %}
@@ -448,11 +454,11 @@
                 {% if question.colored and question.initialValue != -1 %}
                     <div class="icon pull-left">
                         {% if question.min == question.initialValue %}
-                            <i class="fa fa-frown-o fa-2x"></i>
+                            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bad.jpg')}}" class="pull-right" alt="bad" />
                         {% elseif question.max == question.initialValue %}
-                            <i class="fa fa-smile-o fa-2x"></i>
+                            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/good.jpg')}}" class="pull-right" alt="good" />
                         {% else %}
-                            <i class="fa fa-meh-o fa-2x"></i>
+                            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bof.jpg')}}" class="pull-right" alt="bof" />
                         {% endif %}
                     </div>
                 {% endif %}

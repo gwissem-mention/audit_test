@@ -80,6 +80,8 @@ class ResultatManager extends BaseManager
             $chapitre->childs   = array();
             $chapitre->noteMin  = $one->getNoteMinimale();
             $chapitre->noteOpt  = $one->getNoteOptimale();
+            $chapitre->intro    = $one->getIntro();
+            $chapitre->desc     = $one->getDesc();
             $chapitre->order    = $one->getOrder();
             $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
@@ -622,6 +624,7 @@ class ResultatManager extends BaseManager
             $rep->id            = $question->getId();
             $rep->question      = $question->getTexte();
             $rep->code          = $question->getCode();
+            $rep->intro         = $question->getIntro();
             $rep->ordreResultat = $question->getOrdreResultat();
             $rep->noteMinimale  = $question->getNoteMinimale();
             $rep->synthese      = $question->getSynthese();
