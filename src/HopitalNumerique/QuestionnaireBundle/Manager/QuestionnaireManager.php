@@ -26,6 +26,19 @@ class QuestionnaireManager extends BaseManager
         $this->_questionnaireArray = isset($options['idRoles']) ? $options['idRoles'] : array();
         $this->_managerReponse     = $managerReponse;
     }
+
+    /**
+     * Override : Récupère les données pour le grid sous forme de tableau
+     *
+     * @return array
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function getDatasForGrid( $condition = null )
+    {
+        return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+    }
     
     /**
      * [getQuestionsReponses description]

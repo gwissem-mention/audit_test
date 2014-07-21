@@ -5,12 +5,16 @@ parameters:
     #Questionnaire
     hopitalnumerique_questionnaire.manager.questionnaire.class: HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager
     hopitalnumerique_questionnaire.form.type.questionnaire: HopitalNumerique\QuestionnaireBundle\Form\Type\QuestionnaireType
+    hopitalnumerique_questionnaire.grid.questionnaire.class: HopitalNumerique\QuestionnaireBundle\Grid\QuestionnaireGrid
+    hopitalnumerique_questionnaire.form.type.questionnairegestion: HopitalNumerique\QuestionnaireBundle\Form\Type\QuestionnaireGestionType
     #Question
     hopitalnumerique_questionnaire.manager.question.class: HopitalNumerique\QuestionnaireBundle\Manager\QuestionManager
 #    hopitalnumerique_questionnaire.form.type.question: HopitalNumerique\QuestionnaireBundle\Form\Type\QuestionType
     #Reponse
     hopitalnumerique_questionnaire.manager.reponse.class: HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager
 #    hopitalnumerique_questionnaire.form.type.reponse: HopitalNumerique\QuestionnaireBundle\Form\Type\ReponseType
+    #Type de question
+    hopitalnumerique_questionnaire.manager.typequestion.class: HopitalNumerique\QuestionnaireBundle\Manager\TypeQuestionManager
     #Extensions twig
     hopitalnumerique_questionnaire.twig.extensions.class: HopitalNumerique\QuestionnaireBundle\Twig\QuestionnaireExtension
 
@@ -32,6 +36,17 @@ services:
         arguments: ["@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.question", "@hopitalnumerique_questionnaire.manager.questionnaire", "@validator", "@hopitalnumerique_intervention.manager.intervention_demande"]
         tags:
             - { name: form.type, alias: nodevo_questionnaire_questionnaire }
+    #-Gestion des questionnaires
+    #--Grid
+    hopitalnumerique_questionnaire.grid.questionnaire:
+        class: %hopitalnumerique_questionnaire.grid.questionnaire.class%
+        arguments: ["@service_container"]
+    #--Type
+    hopitalnumerique_questionnaire.form.type.questionnairegestion:
+        class: "%hopitalnumerique_questionnaire.form.type.questionnairegestion%"
+        arguments: ["@hopitalnumerique_questionnaire.manager.questionnaire", "@validator",]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_questionnaire_gestion_questionnaire }
     #Question:
     #--Manager
     hopitalnumerique_questionnaire.manager.question:
@@ -43,6 +58,13 @@ services:
     #--Manager
     hopitalnumerique_questionnaire.manager.reponse:
         class: "%hopitalnumerique_questionnaire.manager.reponse.class%"
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
+    #TypeQuestion:
+    #--Manager
+    hopitalnumerique_questionnaire.manager.typequestion:
+        class: "%hopitalnumerique_questionnaire.manager.typequestion.class%"
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
             - [ setCache, ["@liip_doctrine_cache.ns.main"] ]

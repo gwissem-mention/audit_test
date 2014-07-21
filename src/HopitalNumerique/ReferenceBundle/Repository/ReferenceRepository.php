@@ -69,4 +69,22 @@ class ReferenceRepository extends EntityRepository
             
         return $qb;
     }
+
+
+
+    /**
+     * Récupère les différents ref_code des références
+     *
+     * @return QueryBuilder
+     */
+    public function getAllRefCode()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('ref')
+            ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
+            ->groupBy('ref.code')
+            ->orderBy('ref.libelle');
+            
+        return $qb;
+    }
 }

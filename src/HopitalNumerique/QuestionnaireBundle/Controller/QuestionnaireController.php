@@ -41,6 +41,41 @@ class QuestionnaireController extends Controller
      * @var boolean
      */
     private $_envoieDeMail;
+
+    /* Gestionnaire des questionnaires */
+
+    /**
+     * Affiche la liste des questionnaires.
+     */
+    public function indexQuestionnaireAction()
+    {
+        $grid = $this->get('hopitalnumerique_questionnaire.grid.questionnaire');
+
+        return $grid->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/index.html.twig');
+    }
+
+    /**
+     * Editer le questionnaire.
+     */
+    public function editQuestionnaireAction(HopiQuestionnaire $questionnaire)
+    {
+        return $this->renderGestionForm('hopitalnumerique_questionnaire_gestion_questionnaire', $questionnaire, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/edit.html.twig' );
+    }
+
+    /**
+     * Affiche le formulaire d'ajout de Module.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function addQuestionnaireAction()
+    {
+        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->createEmpty();
+
+        return $this->renderGestionForm('hopitalnumerique_questionnaire_gestion_questionnaire', $questionnaire, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/edit.html.twig' );
+    }
+
+    /* Gestionnaire des formulaires */
     
     /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
@@ -458,6 +493,55 @@ class QuestionnaireController extends Controller
                 'questionnaire' => $questionnaire,
                 'user'          => $user,
                 'theme'         => $this->_themeQuestionnaire
+        ));
+    }
+
+    /**
+     * Effectue le render du formulaire Module.
+     *
+     * @param string $formName Nom du service associé au formulaire
+     * @param Module   $entity   Entité $questionnaire
+     * @param string $view     Chemin de la vue ou sera rendu le formulaire
+     *
+     * @return Form | redirect
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    private function renderGestionForm( $formName, $questionnaire, $view )
+    {
+        //Création du formulaire via le service
+        $form = $this->createForm( $formName, $questionnaire);
+
+        $request = $this->get('request');
+        
+        // Si l'utilisateur soumet le formulaire
+        if ('POST' == $request->getMethod()) 
+        {
+            // On bind les données du form
+            $form->handleRequest($request);
+
+            //si le formulaire est valide
+            if ($form->isValid()) {
+                //test ajout ou edition
+                $new = is_null($questionnaire->getId());
+                
+                //On utilise notre Manager pour gérer la sauvegarde de l'objet
+                $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->save($questionnaire);
+                
+                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Questionnaire ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
+                
+                //on redirige vers la page index ou la page edit selon le bouton utilisé
+                $do = $request->request->get('do');
+                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_questionnaire_index') : $this->generateUrl('hopitalnumerique_questionnaire_edit_questionnaire', array( 'id' => $questionnaire->getId() ) ) ) );
+            }
+        }
+
+        return $this->render( $view , array(
+            'form'          => $form->createView(),
+            'questionnaire' => $questionnaire,
+            'theme'         => 'vertical'
         ));
     }
 }

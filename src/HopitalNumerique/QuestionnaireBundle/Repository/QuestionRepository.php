@@ -33,4 +33,20 @@ class QuestionRepository extends EntityRepository
     
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * Compte le nombre de question du questionnaire passé en param
+     *
+     * @param int $idQuestionnaire Identifiant du questionnaire
+     *
+     * @return QueryBuilder
+     */
+    public function countQuestions($idQuestionnaire)
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('count(question)')
+                         ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Question', 'question')
+                         ->where('question.questionnaire = :idQuestionnaire')
+                         ->setParameter('idQuestionnaire', $idQuestionnaire);
+    }
 }

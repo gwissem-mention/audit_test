@@ -73,6 +73,16 @@ class ReferenceManager extends BaseManager
     }
 
     /**
+     * Récupère les données pour l'export CSV
+     *
+     * @return array
+     */
+    public function getAllRefCode()
+    {
+        return $this->getRepository()->getAllRefCode()->getQuery()->getResult();
+    }
+
+    /**
      * Réordonne les options en mode parent |-- enfants
      *
      * @param array $options Tableau d'options

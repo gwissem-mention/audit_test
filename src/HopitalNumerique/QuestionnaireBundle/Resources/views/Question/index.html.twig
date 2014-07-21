@@ -1,0 +1,235 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-questionnaire-question-index.css" filter="cssrewrite, ?yui_css" 
+        "@select2_css"
+        "@validationEngine_css"
+        "@jquery_toggles_css"
+        'bundles/nodevoadmin/css/jquery.nestable.css'
+        'bundles/nodevoadmin/css/toggles.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique--questionnaire-question-index.js" 
+        "@select2_js"
+        "@nestable_js"
+        "@tinymce_js"
+        "@jquery_toggles_js"
+        "@validationEngine_js"
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block h1Title %}
+    Gestion des questions du questionnaire {{questionnaire.nom}}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_questionnaire_index') }}" title="Retour à la liste des questionnaires"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+
+<script type="text/javascript">
+$(document).ready(function() {
+    if( $('.addQuestion').length > 0 )
+    {
+        //Ajoute un chapitre
+        $('.addQuestion').click(function(){
+            apprise('Titre de la question', {'input' : true, 'textOk' : 'Ajouter', 'textCancel' : 'Annuler'}, function(r) {
+                if(r) { 
+                    addQuestion( r );
+                }
+            });
+        });
+    }
+
+    //Création et gestion de l'arborescence des chapitres
+    if( $('#questions').length > 0 ){
+        $('#questions').nestable({'maxDepth':1,'group':0}).on('change', function() {
+            var serializedDatas = $(this).nestable('serialize');
+
+            $.ajax({
+                url  : $('#order-question-url').val(),
+                data : {
+                    datas : serializedDatas,
+                },
+                type     : 'POST',
+                dataType : 'json',
+                success  : function( data ){
+                    //console.log( 'reorder executed' );
+                }
+            });
+        });
+    }
+    
+    //bind de Validation Engine
+    if( $('form.toValidate').length > 0 )
+        $('form.toValidate').validationEngine();
+});
+
+//ajoute une question
+function addQuestion( titre )
+{
+    $.ajax({
+        url  : $('#add-question-url').val(),
+        data : {
+            titre : titre,
+            idQuestionnaire : $('#id-questionnaire').val()
+        },
+        type     : 'POST',
+        success  : function( data ){
+            if( data != '' ){
+                $('#questions ol:first').append( data );
+
+                if( $('#questions ol li').length > 0)
+                {
+                    $('.designForBlank').hide();
+                }
+
+                //Forcer le click sur la question ajoutée
+                var derniereLigne = $('#questions ol li').last();
+                var idQuestion    = derniereLigne.data('id');
+
+                selectQuestion(idQuestion, $('#select-question-url-' + idQuestion).val());
+
+            }else
+                apprise('Une erreur est survenue lors de l\'ajout de votre question, merci de réessayer.');
+        }
+    });
+}
+
+//sauvegarde la question
+function saveQuestion( url )
+{
+    $.ajax({
+        url      : url,
+        data     : 
+        {
+            id              : $('#idQuestion').val(),
+            libelle         : $('#libelle_question').val(),
+            typeQuestion    : $('#typeQuestion').val(),
+            refTypeQuestion : $('#typeQuestion_reference').val(),
+            obligatoire     : $('#questionObligatoire').val()
+        },
+        type     : 'POST',
+        dataType : 'json',
+        success  : function( data ){
+            if( data.success ){
+                window.location.reload();
+            }
+        }
+    });
+}
+
+//Supprime le contenu en cours de visualisation
+function deleteQuestion( id, url )
+{
+    apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+        if(r) { 
+            $.ajax({
+                url  : url,
+                data : {
+                    id : id
+                },
+                type     : 'POST',
+                dataType : 'json',
+                success  : function( data ){
+                    if( data.success ){
+                        location.reload();
+                    }
+                }
+            });
+        }
+    });
+}
+
+//Selectionne un chapitre et charge l'ensemble des questions liés
+function selectQuestion( id, url )
+{
+    $('#reponses .selectionQuestion').hide();
+    
+    //bind de Validation Engine
+    if( $('form.toValidate').length > 0 )
+        $('form.toValidate').validationEngine();
+
+    $.ajax({
+        url     : url,
+        type    : 'POST',
+        success : function( data ){
+            $('#reponses .results').html( data );
+        }
+    });
+
+    $('#reponses .question').val( id );
+}
+</script>
+<style type="text/css">
+/* Second Toolbar  */
+div.sous_options {text-align: right; margin: 0px 10px 20px 0px;}
+form .checkbox input{margin: 5px 0 0 0}
+</style>
+
+    <div class="col-sm-12">
+
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="well well-lg">
+                    <span class="designForBlank" style="{% if questionnaire.questions|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton 'Ajouter une question' pour ajouter une question.</span>
+                    <div class="dd" id="questions">
+                        <ol class="dd-list">
+                            {% import _self as mySelf %}
+                            {% for question in questionnaire.questions %}
+                                {{ mySelf.buildTree(question) }}
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+
+                <input type="hidden" id="id-questionnaire" value="{{ questionnaire.id }}" />
+                <input type="hidden" id="add-question-url" value="{{path('hopitalnumerique_questionnaire_question_add')}}" />
+                <input type="hidden" id="order-question-url" value="{{path('hopitalnumerique_questionnaire_question_reorder')}}" />
+
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="sous_options">
+                <div class="btn-toolbar">
+                    <div class="btn btn-default addQuestion">Ajouter une question</div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="well well-lg" id="reponses">
+                    <span class="selectionQuestion">Vous devez sélectionner une question avant de visualiser le formulaire d'édition.</span>
+                    <div class="results">
+                        
+                    </div>
+                    <input type="hidden" class="question" value="0" />
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% macro buildTree(question) %}
+    <li class="dd-item dd3-item" data-id="{{question.id}}" id="question-{{question.id}}" >
+        <div class="dd-handle dd3-handle"></div>
+        <div class="dd3-content">
+            <a href="javascript:selectQuestion({{question.id}}, '{{path('hopitalnumerique_questionnaire_question_edition', {'id':question.id})}}')" title="{{question.libelle}}">{{question.libelle|truncate(80,'...')}}</a>
+        </div>
+        <div class="dd3-actions">
+            <div onclick="deleteQuestion( {{question.id}}, '{{path('hopitalnumerique_questionnaire_question_delete', {'id':question.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+        </div>
+    </li>
+    <input type="hidden" id="select-question-url-{{question.id}}" value="{{path('hopitalnumerique_questionnaire_question_edition', {'id':question.id})}}" />
+{% endmacro %}
