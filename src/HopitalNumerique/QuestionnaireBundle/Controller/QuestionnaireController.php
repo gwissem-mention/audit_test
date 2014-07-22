@@ -50,7 +50,7 @@ class QuestionnaireController extends Controller
     public function indexQuestionnaireAction()
     {
         //Récupérations de l'ensemble des questionnaires pour l'export
-        $questionnaires = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findBy(array('lock' => false));
+        $questionnaires = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findBy(array('lock' => false), array('nom' => 'ASC'));
 
         //Génération du grid
         $grid = $this->get('hopitalnumerique_questionnaire.grid.questionnaire');

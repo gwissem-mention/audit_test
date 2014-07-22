@@ -174,7 +174,16 @@ class QuestionnaireManager extends BaseManager
                     switch ($question->getTypeQuestion()->getLibelle())
                     {
                         case 'entity':
-                            $row[$field] = $reponse->getReference()->getLibelle();
+                            $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
+                            break;
+                        case 'entityradio':
+                            $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
+                            break;
+                        case 'entitymultiple':
+                            $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
+                            break;
+                        case 'entitycheckbox':
+                            $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
                             break;
                         case 'checkbox':
                             $row[$field] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );
