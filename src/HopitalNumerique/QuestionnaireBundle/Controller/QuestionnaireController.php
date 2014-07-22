@@ -174,6 +174,19 @@ class QuestionnaireController extends Controller
         return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $results['colonnes'], $results['datas'], $questionnaire->getNom() . '-reponses.csv', $kernelCharset );
     }
 
+    /**
+     * Action appelée dans le plugin "Questionnaire" pour tinymce
+     */
+    public function getQuestionnairesAction()
+    {
+        $questionnaires = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findBy(array(), array('nom' => 'ASC'));
+
+        return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/getQuestionnaires.html.twig', array(
+            'questionnaires' => $questionnaires,
+            'texte'  => $this->get('request')->request->get('texte')
+        ));
+    }
+
 
 
 

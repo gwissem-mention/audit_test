@@ -24,6 +24,10 @@ hopitalnumerique_questionnaire_exportCSV_questionnaire:
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:exportCSV", id: 1 }
     requirements:
         id: \d+
+#---Plugin pour les WYSIWYG
+hopitalnumerique_questionnaire_get_questionnaires:
+    pattern:  /admin//questionnaire/getQuestionnaires
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:getQuestionnaires" }
 
 # Back-office
 hopitalnumerique_questionnaire_edit:
