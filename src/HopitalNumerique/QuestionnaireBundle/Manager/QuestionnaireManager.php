@@ -55,6 +55,18 @@ class QuestionnaireManager extends BaseManager
     }
     
     /**
+     * Get les utilisateurs qui ont répondu à ce questionnaire
+     *
+     * @param  int $idQuestionnaire [description]
+     *
+     * @return [type]
+     */
+    public function getQuestionnaireRepondant( $idQuestionnaire )
+    {
+        return $this->getRepository()->getQuestionnaireRepondant( $idQuestionnaire )->getQuery()->getResult();
+    }
+    
+    /**
      * Id du questionnaire
      * 
      * @param string $label Nom du questionnaire

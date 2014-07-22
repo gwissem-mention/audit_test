@@ -236,4 +236,16 @@ class UserManager extends BaseManager
     {
         return $this->getRepository()->getESAndEnregistres($criteres);
     }
+
+    /**
+     * Récupère les utilisateurs ayant répondues au questionnaire passé en paramètre
+     *
+     * @param  int idQuestionnaire Identifiant du questionnaire
+     *
+     * @return result
+     */
+    public function getUsersByQuestionnaire( $idQuestionnaire )
+    {
+        return $this->getRepository()->getUsersByQuestionnaire( $idQuestionnaire )->getQuery()->getResult();
+    }
 }

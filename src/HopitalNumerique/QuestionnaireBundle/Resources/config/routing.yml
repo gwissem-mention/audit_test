@@ -18,6 +18,12 @@ hopitalnumerique_questionnaire_add_questionnaire:
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:addQuestionnaire", id: 1 }
     requirements:
         id: \d+
+#---Export CSV
+hopitalnumerique_questionnaire_exportCSV_questionnaire:
+    pattern:  /admin/questionnaire/gestion/exportcsv/{id}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:exportCSV", id: 1 }
+    requirements:
+        id: \d+
 
 # Back-office
 hopitalnumerique_questionnaire_edit:

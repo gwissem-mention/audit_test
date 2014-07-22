@@ -49,9 +49,15 @@ class QuestionnaireController extends Controller
      */
     public function indexQuestionnaireAction()
     {
+        //Récupérations de l'ensemble des questionnaires pour l'export
+        $questionnaires = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findBy(array('lock' => false));
+
+        //Génération du grid
         $grid = $this->get('hopitalnumerique_questionnaire.grid.questionnaire');
 
-        return $grid->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/index.html.twig');
+        return $grid->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/index.html.twig', array(
+            'questionnaires' => $questionnaires
+        ));
     }
 
     /**
@@ -148,6 +154,24 @@ class QuestionnaireController extends Controller
             ) ,
             'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit.html.twig'
         );
+    }
+
+    /**
+     * Export CSV du questionnaire passé en paramètre
+     *
+     * @param HopiQuestionnaire $questionnaire Questionnaire à exporter
+     *
+     * @return \Symfony\Component\HttpFoundation\Response 
+     */
+    public function exportCSVAction( HopiQuestionnaire $questionnaire)
+    {
+        //Récupère tout les utilisateurs qui ont répondu à ce questionnaire
+        $users = $this->get('hopitalnumerique_user.manager.user')->getUsersByQuestionnaire($questionnaire->getId());
+
+        $results = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->buildForExport( $questionnaire->getId(), $users);
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $results['colonnes'], $results['datas'], $questionnaire->getNom() . '-reponses.csv', $kernelCharset );
     }
 
 

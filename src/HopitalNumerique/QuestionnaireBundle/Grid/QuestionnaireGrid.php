@@ -55,6 +55,5 @@ class QuestionnaireGrid extends Grid implements IGrid
      */
     public function setMassActions()
     {
-        
     }
 }
