@@ -83,7 +83,7 @@ function saveQuestion( url )
         dataType : 'json',
         success  : function( data ){
             if( data.success ){
-                window.location.reload();
+                location.reload();
             }
         }
     });

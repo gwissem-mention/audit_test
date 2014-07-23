@@ -65,10 +65,9 @@ hopitalnumerique_questionnaire_question_index:
         _method: GET|POST
 #---Add
 hopitalnumerique_questionnaire_question_add:
-    pattern:  /admin/questionnaire/question/add/{id}/view
-    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:addQuestion", id: 1}
-    requirements: 
-        id: \d+  
+    pattern:  /admin/questionnaire/question/add/view
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:addQuestion"}
+    requirements:
         _method: GET|POST
 #---Sauvegarde
 hopitalnumerique_questionnaire_question_save:
