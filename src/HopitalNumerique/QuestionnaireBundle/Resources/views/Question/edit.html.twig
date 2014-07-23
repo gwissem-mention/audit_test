@@ -37,7 +37,7 @@
                 <select name="typeQuestionSelect" id="typeQuestion" class="form-control typeQuestion col-md-12 validate[required]">
                     <option value=""> - </option>
                     {% for typeQuestion in typeQuestions %}
-                        {% if typeQuestion.id != 7 %}
+                        {% if typeQuestion.id != 3 and typeQuestion.id != 7 %}
                             <option value="{{typeQuestion.id}}" >{{typeQuestion.nom}}</option>
                         {% endif %}
                     {% endfor %}

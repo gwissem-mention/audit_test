@@ -83,7 +83,7 @@ class ReferenceRepository extends EntityRepository
         $qb->select('ref')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->groupBy('ref.code')
-            ->orderBy('ref.libelle');
+            ->orderBy('ref.code');
             
         return $qb;
     }

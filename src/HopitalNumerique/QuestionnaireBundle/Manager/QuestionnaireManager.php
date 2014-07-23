@@ -180,10 +180,42 @@ class QuestionnaireManager extends BaseManager
                             $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
                             break;
                         case 'entitymultiple':
-                            $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
+                            //Si il y a des réponses à exporter on exporte les libellés des références concaténés
+                            if(is_null($reponse->getReferenceMulitple()))
+                            {
+                                $row[$field] = '-';
+                            }
+                            else
+                            {
+                                $lib = '';
+                                $compteur = 0;
+                                foreach ($reponse->getReferenceMulitple() as $reference) 
+                                {
+                                    $compteur++;
+                                    //Récupération du libellé de la référence + ajout d'un tiret si on est pas à la fin
+                                    $lib .= $reference->getLibelle() . ($compteur == count($reponse->getReferenceMulitple()) ? '' : ' - ');
+                                }
+                                $row[$field] = $lib;
+                            }
                             break;
                         case 'entitycheckbox':
-                            $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
+                            //Si il y a des réponses à exporter on exporte les libellés des références concaténés
+                            if(is_null($reponse->getReferenceMulitple()))
+                            {
+                                $row[$field] = '-';
+                            }
+                            else
+                            {
+                                $lib = '';
+                                $compteur = 0;
+                                foreach ($reponse->getReferenceMulitple() as $reference) 
+                                {
+                                    $compteur++;
+                                    //Récupération du libellé de la référence + ajout d'un tiret si on est pas à la fin
+                                    $lib .= $reference->getLibelle() . ($compteur == count($reponse->getReferenceMulitple()) ? '' : ' - ');
+                                }
+                                $row[$field] = $lib;
+                            }
                             break;
                         case 'checkbox':
                             $row[$field] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );

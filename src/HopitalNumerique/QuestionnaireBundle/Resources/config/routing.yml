@@ -6,16 +6,20 @@ hopitalnumerique_questionnaire_index:
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:indexQuestionnaire"}
     requirements: 
         _method: GET|POST
+#---Ajout
+hopitalnumerique_questionnaire_add_questionnaire:
+    pattern:  /admin/questionnaire/gestion/add
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:addQuestionnaire" }
 #---Edition
 hopitalnumerique_questionnaire_edit_questionnaire:
     pattern:  /admin/questionnaire/gestion/edit/{id}
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editQuestionnaire", id: 1 }
     requirements:
         id: \d+
-#---Ajout
-hopitalnumerique_questionnaire_add_questionnaire:
-    pattern:  /admin/questionnaire/gestion/add/{id}
-    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:addQuestionnaire", id: 1 }
+#---Delete
+hopitalnumerique_questionnaire_delete_questionnaire:
+    pattern:  /admin/questionnaire/gestion/delete/{id}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:deleteQuestionnaire", id: 1 }
     requirements:
         id: \d+
 #---Export CSV
@@ -28,6 +32,12 @@ hopitalnumerique_questionnaire_exportCSV_questionnaire:
 hopitalnumerique_questionnaire_get_questionnaires:
     pattern:  /admin//questionnaire/getQuestionnaires
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:getQuestionnaires" }
+#---Front-office
+hopitalnumerique_questionnaire_edit_front_gestionnaire:
+    pattern:  /questionnaire/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFrontGestionnaire", id: 1 }
+    requirements: 
+        id: \d+
 
 # Back-office
 hopitalnumerique_questionnaire_edit:

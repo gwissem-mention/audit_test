@@ -51,7 +51,7 @@
                     {{ form_errors(form) }}
                     {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
                     {{ form_javascript(form) }}
-                    {{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit_questionnaire', {'id' :questionnaire.id }) } ) }}
+                    {{ form(form) }}
                 </div>
             </div>
         </div>

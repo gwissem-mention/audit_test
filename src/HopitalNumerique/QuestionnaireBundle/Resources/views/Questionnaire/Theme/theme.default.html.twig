@@ -19,10 +19,12 @@
 {% spaceless %}
     <div {{ block('widget_container_attributes') }}>
     {% for child in form %}
+        {% if loop.index is divisible by(6) %}<div class="row">{% endif %}
         <div class="col-md-2">
             {{ form_widget(child) }}
             {{ form_label(child) }}
         </div>
+        {% if loop.index is divisible by(6) %}</div>{% endif %}
     {% endfor %}
     </div>
 {% endspaceless %}

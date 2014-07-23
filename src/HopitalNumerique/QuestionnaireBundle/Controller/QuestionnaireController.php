@@ -3,8 +3,11 @@
 namespace HopitalNumerique\QuestionnaireBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+
 use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire as HopiQuestionnaire;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 
@@ -79,6 +82,58 @@ class QuestionnaireController extends Controller
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->createEmpty();
 
         return $this->renderGestionForm('hopitalnumerique_questionnaire_gestion_questionnaire', $questionnaire, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/edit.html.twig' );
+    }
+
+    /**
+     * Suppresion d'un Module.
+     * 
+     * @param integer $id Id de Module.
+     * METHOD = POST|DELETE
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function deleteQuestionnaireAction( $id )
+    {
+        $module = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array( 'id' => $id) );
+
+        //Suppression de l'entitée
+        $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->delete( $module );
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_questionnaire_index').'"}', 200);
+    }
+
+    /**
+     * Affichage du formulaire d'utilisateur
+     * 
+     * @param integer $id Identifiant de l'utilisateur
+     */
+    public function editFrontGestionnaireAction(HopiQuestionnaire $questionnaire)
+    {
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
+        $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
+
+        return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Front/index.html.twig',array(
+            'questionnaire'      => $questionnaire,
+            'user'               => $user,
+            'optionRenderForm'   => array(
+                'showAllQuestions'   => false,
+                'readOnly'           => false,
+                'envoieDeMail'       => false,
+                'themeQuestionnaire' => 'vertical',
+                'routeRedirect'      => json_encode(array(
+                    'quit' => array(
+                        'route'     => 'hopitalnumerique_questionnaire_edit_front_gestionnaire',
+                        'arguments' => array('id' => $questionnaire->getId())
+                    )
+                ))
+            )
+        ));
     }
 
     /* Gestionnaire des formulaires */
@@ -351,13 +406,13 @@ class QuestionnaireController extends Controller
                     {
                         $reponse->setReference($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $param)));
                     }
-                    elseif('entitymultiple' === $typeParam)
+                    elseif('entitymultiple' === $typeParam || 'entitycheckbox' === $typeParam)
                     {
                         $reponse->setReponse("");
 
                         $reponse->setReferenceMulitple(array());
 
-                        foreach ($param as $value) 
+                        foreach ($param as $value)
                         {
                             $reponse->addReferenceMulitple($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $value)));
                         }
@@ -509,7 +564,7 @@ class QuestionnaireController extends Controller
                             }
                             break;
                         default:
-                            throw new \Exception('Ce type de questionnaire ne possède pas de mail en base.');
+                            //throw new \Exception('Ce type de questionnaire ne possède pas de mail en base.');
                             break;
                     }
                 }

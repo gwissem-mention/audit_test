@@ -35,6 +35,7 @@ class QuestionController extends Controller
     public function addQuestionAction(Request $request)
     {
         $typeQuestions = $this->get('hopitalnumerique_questionnaire.manager.typequestion')->findOneBy(array(), array('nom' => 'ASC'));
+        $typeQuestionDefault = $this->get('hopitalnumerique_questionnaire.manager.typequestion')->findOneBy(array('id' => 1));
 
         //créer un question
         $question        = $this->get('hopitalnumerique_questionnaire.manager.question')->createEmpty();
@@ -50,6 +51,7 @@ class QuestionController extends Controller
         $question->setAlias( $tool->minifie() );
         $question->setObligatoire( false );
         $question->setQuestionnaire( $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy(array('id' => $idQuestionnaire)) );
+        $question->setTypeQuestion($typeQuestionDefault);
 
         //save
         $this->get('hopitalnumerique_questionnaire.manager.question')->save( $question );
@@ -96,14 +98,25 @@ class QuestionController extends Controller
         //Récupération des ids passés en data
         $idQuestion     = $request->request->get('id');
         $idTypeQuestion = $request->request->get('typeQuestion');
+        $obligatoire    = $request->request->get('obligatoire');
         //Récupère la question
         $question     = $this->get('hopitalnumerique_questionnaire.manager.question')->findOneBy(array('id' => $idQuestion));
         //Récupère le type de la question sélectionné
         $typeQuestion = $this->get('hopitalnumerique_questionnaire.manager.typequestion')->findOneBy(array('id' => $idTypeQuestion));
 
+        $verifJS = '';
+        if($typeQuestion->getId() == 1)
+        {
+            $verifJS = $obligatoire ? 'validate[required,minSize[1],maxSize[255]]' : 'validate[maxSize[255]]';
+        }
+        else
+        {
+            $verifJS = $obligatoire ? 'validate[required]' : '';
+        }
+
         $question->setLibelle( trim($request->request->get('libelle')) ? : 'Question '.$question->getId() );
-        $question->setObligatoire( $request->request->get('obligatoire') );
-        $question->setVerifJS( $question->getObligatoire() ? 'validate[required]' : '' );
+        $question->setObligatoire( $obligatoire );
+        $question->setVerifJS( $verifJS );
         $question->setTypeQuestion( $typeQuestion );
         $question->setReferenceParamTri( $request->request->get('refTypeQuestion') );
 

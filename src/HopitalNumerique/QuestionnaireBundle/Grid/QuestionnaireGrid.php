@@ -48,6 +48,8 @@ class QuestionnaireGrid extends Grid implements IGrid
         $listQuestionsButton->setRouteParameters( array('id') );
         $listQuestionsButton->setAttributes( array('class'=>'btn btn-success fa fa-list','title' => 'Lister les questions') );
         $this->addActionButton( $listQuestionsButton );
+        
+        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_questionnaire_delete_questionnaire' ) );
     }
 
     /**

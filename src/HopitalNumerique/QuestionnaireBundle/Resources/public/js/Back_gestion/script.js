@@ -39,7 +39,7 @@ $(document).ready(function() {
 function addQuestion( titre )
 {
     $.ajax({
-        url  : $('#add-question-url').val(),
+        url  : $('#add-btn-question-url').val(),
         data : {
             titre : titre,
             idQuestionnaire : $('#id-questionnaire').val()
