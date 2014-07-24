@@ -437,4 +437,28 @@ class UserRepository extends EntityRepository
         
         return $qb;
     }
+
+
+    /**
+     * Récupère les utilisateurs ayant répondues au questionnaire passé en paramètre
+     *
+     * @param  int idQuestionnaire Identifiant du questionnaire
+     *
+     * @return result
+     */
+    public function getUsersByQuestionnaire( $idQuestionnaire )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('user')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->innerJoin('user.reponses','reponses')
+            ->innerJoin('reponses.question','question')
+            ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
+            ->setParameter('idQuestionnaire', $idQuestionnaire )
+            ->groupBy('user')
+            ->orderBy('user.nom', 'ASC')
+            ->addOrderBy('user.prenom');
+        
+        return $qb;
+    }
 }

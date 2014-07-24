@@ -54,4 +54,36 @@ class QuestionManager extends BaseManager
                 return $question;
         return null;
     }
+
+    /**
+     * Récupère le nombre de question pour un questionnaire donné en parametre
+     *
+     * @param [int] $idQuestionnaire Identifiant du questionnaire
+     *
+     * @return int Nombre de questions
+     */
+    public function countQuestions($idQuestionnaire)
+    {
+        return $this->getRepository()->countQuestions($idQuestionnaire)->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Met à jour l'ordre des questions
+     *
+     * @param array  $elements Les éléments
+     * @param Object $parent   L'élément parent | null
+     *
+     * @return empty
+     */
+    public function reorder( $elements )
+    {
+        $order = 1;
+
+        foreach($elements as $element) 
+        {
+            $question = $this->findOneBy( array('id' => $element['id']) );
+            $question->setOrdre( $order );
+            $order++;
+        }
+    }
 }

@@ -1,0 +1,59 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{# Grid mandatory Stuff #}
+{% use 'NodevoGridBundle::grid.config.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique--questionnaire-gestion-edit.css" filter="cssrewrite, ?yui_css" 
+        "@validationEngine_css"
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique--questionnaire-gestion-edit.js" 
+        "@validationEngine_js"
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {# Je n'ai pas fais de fichier js ici pour aléger la génération pour 2lignes de code, au besoin créer un fichier script.js #}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            //Mise en place du validator JS
+            if( $('form.toValidate').length > 0 )
+                $('form.toValidate').validationEngine();
+        });
+    </script>
+{% endblock %}
+
+{% block h1Title %}
+    Edition questionnaire
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_questionnaire_index') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body">
+                <div id="form_questionnaire_back" class="col-md-12">
+                    {{ form_errors(form) }}
+                    {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
+                    {{ form_javascript(form) }}
+                    {{ form(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

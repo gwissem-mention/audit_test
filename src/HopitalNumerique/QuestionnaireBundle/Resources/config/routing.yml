@@ -1,12 +1,43 @@
 #Questionnaire
 
-# Front-office
-hopitalnumerique_questionnaire_edit_front:
-    pattern:  /compte-hn/questionnaire/edit/{user}/{questionnaire}
-    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", user: 1, questionnaire: 1 }
+#---Index - grid
+hopitalnumerique_questionnaire_index:
+    pattern:  /admin/questionnaire/gestion/index
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:indexQuestionnaire"}
+    requirements: 
+        _method: GET|POST
+#---Ajout
+hopitalnumerique_questionnaire_add_questionnaire:
+    pattern:  /admin/questionnaire/gestion/add
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:addQuestionnaire" }
+#---Edition
+hopitalnumerique_questionnaire_edit_questionnaire:
+    pattern:  /admin/questionnaire/gestion/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editQuestionnaire", id: 1 }
     requirements:
-        user: \d+  
-        questionnaire: \d+
+        id: \d+
+#---Delete
+hopitalnumerique_questionnaire_delete_questionnaire:
+    pattern:  /admin/questionnaire/gestion/delete/{id}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:deleteQuestionnaire", id: 1 }
+    requirements:
+        id: \d+
+#---Export CSV
+hopitalnumerique_questionnaire_exportCSV_questionnaire:
+    pattern:  /admin/questionnaire/gestion/exportcsv/{id}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:exportCSV", id: 1 }
+    requirements:
+        id: \d+
+#---Plugin pour les WYSIWYG
+hopitalnumerique_questionnaire_get_questionnaires:
+    pattern:  /admin//questionnaire/getQuestionnaires
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:getQuestionnaires" }
+#---Front-office
+hopitalnumerique_questionnaire_edit_front_gestionnaire:
+    pattern:  /questionnaire/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFrontGestionnaire", id: 1 }
+    requirements: 
+        id: \d+
 
 # Back-office
 hopitalnumerique_questionnaire_edit:
@@ -16,7 +47,56 @@ hopitalnumerique_questionnaire_edit:
         user: \d+  
         questionnaire: \d+
 
+# Front-office
+hopitalnumerique_questionnaire_edit_front:
+    pattern:  /compte-hn/questionnaire/edit/{user}/{questionnaire}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", user: 1, questionnaire: 1 }
+    requirements:
+        user: \d+  
+        questionnaire: \d+
+
 #Question
+#---Index
+hopitalnumerique_questionnaire_question_index:
+    pattern:  /admin/questionnaire/{id}/question/index
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:index", id: 1}
+    requirements: 
+        id: \d+  
+        _method: GET|POST
+#---Add
+hopitalnumerique_questionnaire_question_add:
+    pattern:  /admin/questionnaire/question/add/view
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:addQuestion"}
+    requirements:
+        _method: GET|POST
+#---Sauvegarde
+hopitalnumerique_questionnaire_question_save:
+    pattern:  /admin/questionnaire/question/{id}/save.{_format}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:save", id: 1, _format: json}
+    requirements: 
+        id: \d+  
+        _method: GET|POST
+#---Edition
+hopitalnumerique_questionnaire_question_edition:
+    pattern:  /admin/questionnaire/question/edit/{id}/view
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:editView", id: 1}
+    requirements: 
+        id: \d+  
+        _method: GET|POST
+#---Delete
+hopitalnumerique_questionnaire_question_delete:
+    pattern:  /admin/questionnaire/question/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+#---Reorder
+hopitalnumerique_questionnaire_question_reorder:
+    pattern:  /admin/questionnaire/question/reorder.{_format}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:reorder", id: 1, _format: json}
+    requirements: 
+        id: \d+  
+        _method: GET|POST
 
 #Réponse
 hopitalnumerique_reponse_download:

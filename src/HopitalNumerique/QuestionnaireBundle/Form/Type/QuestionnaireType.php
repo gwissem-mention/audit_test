@@ -200,7 +200,7 @@ class QuestionnaireType extends AbstractType
                                 ->setParameter('etat', $question->getReferenceParamTri())
                                 ->orderBy('ref.order', 'ASC');
                             },
-                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReference()
+                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReferenceMulitple()
                     ));
                     break;
                 //Les entity ne sont prévues que pour des entités de Référence (TODO : mettre en base la class et le property ?)
@@ -226,6 +226,34 @@ class QuestionnaireType extends AbstractType
                                 ->orderBy('ref.order', 'ASC');
                             },
                             'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReference()
+                    ));
+                    break;
+                //Entité avec des checkbox
+                case 'entitycheckbox':
+                    if (isset($attr['class']))
+                        $attr['class'] = $attr['class'].' checbox';
+                    else  
+                        $attr['class'] = 'checkbox';
+
+                    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'entity', array(
+                            'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                            'property'    => 'libelle',
+                            'required'    => $question->getObligatoire(),
+                            'label'       => $question->getLibelle(),
+                            'mapped'      => false,
+                            'multiple'    => true,
+                            'read_only'   => $this->_readOnly,
+                            'disabled'    => $this->_readOnly,
+                            'expanded'    => true,
+                            'empty_value' => ' - ',
+                            'attr'        => $attr,
+                            'query_builder' => function(EntityRepository $er) use ($question){
+                                return $er->createQueryBuilder('ref')
+                                ->where('ref.code = :etat')
+                                ->setParameter('etat', $question->getReferenceParamTri())
+                                ->orderBy('ref.order', 'ASC');
+                            },
+                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReferenceMulitple()
                     ));
                     break;
             	case 'file':  

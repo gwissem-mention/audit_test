@@ -105,6 +105,24 @@ class PublicationExtension extends \Twig_Extension
                         $content = str_replace($pattern, $replacement, $content);
                                 
                         break;
+                    case 'QUESTIONNAIRE':
+                        //cas Questionnaire
+                        $questionnaire  = $this->getManagerQuestionnaire()->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
+                        if($questionnaire)
+                        {
+                            $label       = $matches[3][$key] ? $matches[3][$key] : $questionnaire->getNom();
+                            $replacement = '<a href="/questionnaire/edit/'. $questionnaire->getId() . '" '.$target.'>' . $label . '</a>';
+                        }
+                        else
+                        {
+                            $replacement = "<a href=\"javascript:alert('Ce questionnaire n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
+                        }
+
+                        $pattern = $matches[0][$key];
+                        $content = str_replace($pattern, $replacement, $content);
+                                
+                        break;
                 }
             }
         }
@@ -140,6 +158,16 @@ class PublicationExtension extends \Twig_Extension
     private function getManagerOutil()
     {
         return $this->container->get('hopitalnumerique_autodiag.manager.outil');
+    }
+
+    /**
+     * Retourne le manager questionnaire
+     *
+     * @return QuestionnaireManager
+     */
+    private function getManagerQuestionnaire()
+    {
+        return $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire');
     }
 
     /**
