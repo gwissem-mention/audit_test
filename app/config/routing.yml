@@ -7,6 +7,10 @@ hopital_numerique_recherche:
     resource: "@HopitalNumeriqueRechercheBundle/Resources/config/routing.yml"
     prefix:   /
 
+hopital_numerique_recherche_parcours:
+    resource: "@HopitalNumeriqueRechercheParcoursBundle/Resources/config/routing.yml"
+    prefix:   /
+
 hopital_numerique_registre:
     resource: "@HopitalNumeriqueRegistreBundle/Resources/config/routing.yml"
     prefix:   /
