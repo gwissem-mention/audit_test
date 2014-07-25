@@ -48,27 +48,27 @@
                 <div class="rechercheAideExp col-md-4">
                     <a href="javascript:rechercheAideEtBesoin();">
                         <div class="common-sprite icone"></div>
-                        <h3>Expression du besoin</h3>
+                        <h3>Recherche aidée</h3>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a orci vehicula.
+                            Je décris mon besoin, Mon Hôpital Numérique trouve la solution !
                         </p>
                     </a>
                 </div>
                 <div class="recherche col-md-4">
                     <a href="{{path('hopital_numerique_recherche_homepage')}}">
                         <div class="common-sprite icone"></div>
-                        <h3>Recherche de production</h3>
+                        <h3>Recherche avancée</h3>
                         <p>
-                            Vous trouverez des questions communes aux établissements de santé, des productions apportant des réponses et des fils de discussion sur le forum
+                            Je choisis mes critères de recherche, je trouve les productions utiles à mon contexte.
                         </p>
                     </a>
                 </div>
                 <div class="rechercheEtapeProjet col-md-4">
                     <a href="javascript:alert('Bientôt disponible.');">
                         <div class="common-sprite icone"></div>
-                        <h3>Parcourir les étapes projet</h3>
+                        <h3>Parcours guidé</h3>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a orci vehicula, fermentum lacus.
+                            Etape par étape, j'identifie les risques à venir, et les solutions pour les maîtriser.
                         </p>
                     </a>
                 </div>
@@ -80,19 +80,19 @@
                     <div>
                         <div class="common-sprite icone"></div>
                         {% if app.user %}
-                            <h3>Tableau de bord</h3>
+                            <h3>Mon tableau de bord</h3>
                             <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                Je bénéficie de nombreux services : enregistrement de mon contexte, de mes auto-diagnostics, notification des mises à jour, sollicitation d'un ambassadeur, etc.
                             </p>
-                            <div class="buttons">
+                            <div class="buttons-tdb">
                                 <div class="buttons-centrer">
-                                    <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-default">Accès au tableau de bord</a>
+                                    <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-default tdb">Accès au tableau de bord</a>
                                 </div>
                             </div>
                         {% else %}
-                            <h3>Creation de compte</h3>
+                            <h3>Mon compte</h3>
                             <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.                             
+                                En créant mon compte, je bénéficie de nombreux services {#<a target="_blank" href="{{path('hopital_numerique_publication_publication_article',{'id':BonIdAMettreICI, 'alias':BonAliasAMettreICI,'categorie':BonneCategorieAMettreICI|lower})}}">Lien vers pourquoi créer un compte.</a>.#}                             
                             </p>
                             <div class="buttons">
                                 <div class="buttons-centrer">
@@ -110,7 +110,7 @@
                         <div class="common-sprite icone"></div>
                         <h3>Forums</h3>
                         <p>
-                            Pour consulter et participer à des discussions thématiques
+                            Je partage mes questions et mon expérience avec mes pairs.
                         </p>
                         {# Mode connecté (obligé de séparer les deux car app.user|checkAuthorization pète si pas connecté car app.user = null #}
                         {% if app.user is not null %}
