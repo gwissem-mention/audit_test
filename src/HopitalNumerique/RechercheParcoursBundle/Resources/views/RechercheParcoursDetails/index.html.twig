@@ -1,7 +1,7 @@
 <h3 class="pull-left">{{rechercheParcours.reference.libelle}}</h3>
 <div class="options pull-right">
     <span class="designForBlank" style="margin-right:10px;">Cliquez sur le bouton '+' pour ajouter une reponse.</span>
-    <div onclick="addReponse('{{path('hopitalnumerique_expbesoin_reponse_add', {'id':rechercheParcours.reference.id})}}' );" class="btn btn-success addReponse"><i class="fa fa-plus"></i></div>
+    <div onclick="addDetails('{{path('hopital_numerique_recherche_parcours_details_add', {'id':rechercheParcours.id})}}' );" class="btn btn-success addReponse"><i class="fa fa-plus"></i></div>
 </div>
 <div class="clearfix"></div>
 
@@ -11,7 +11,7 @@
         <div class="form-group">
             <div class="col-sm-6">
                 <div class="blocQuestion">
-                    <select name="redirigeQuestion" id="rechercheParcours.reference-reponse" class="form-control col-md-12 validate[required]">
+                    <select name="etape" id="rechercheParcours.reference-reponse" class="form-control col-md-12 validate[required]">
                         {% for etape in etapes %}
                             {% if etapesSelected is not empty %}
                                 {% if etape.id not in etapesSelected %}
@@ -34,14 +34,14 @@
     <div class="dd">
         <ol class="dd-list">
             {% for details in rechercheParcours.recherchesParcoursDetails %}
-                <li class="dd-item dd3-item" data-id="{{details.id}}" id="details-{{details.id}}" >
+                <li class="dd-item dd3-item" data-id="{{details.id}}" data-etape="{{details.reference.id}}" id="details-{{details.id}}" >
                     <div class="dd-handle dd3-handle"></div>
                     <div class="dd3-content" style="padding:1px 50px 5px 40px;">
                         <span style="margin-top:4px" title="{{details.reference.libelle}}">{{details.reference.libelle|truncate(25,'...')}}</span>
                     </div>
                     <div class="dd3-actions">
-                        <div onclick="deleteQuestion( {{details.id}}, '{{path('hopital_numerique_recherche_parcours_details_delete', {'id':details.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-                        <div onclick="saveReponse( {{details.id}}, '{{path('hopital_numerique_recherche_parcours_details_edit', {'id':details.id})}}' );" class="pull-right dd3-valid"><i class="fa fa-check"></i></div>
+                        <div onclick="deleteDetails( {{details.id}}, '{{path('hopital_numerique_recherche_parcours_details_delete', {'id':details.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+                        <a href="{{path('hopital_numerique_recherche_parcours_details_edit',{'id':details.id})}}" class="fancy pull-right dd3-edit fancybox.ajax"><i class="fa fa-edit"></i></a>
                     </div>
                 </li>
             {% endfor %}
@@ -49,8 +49,7 @@
     </div>
 </div>
 
-<input type="hidden" id="order-details-url" value="{{path('hopital_numerique_recherche_parcours_details_reorder',{'id':rechercheParcours.id})}}" />
-<input type="hidden" id="save-details-url" value="{{path('hopital_numerique_recherche_parcours_details_edit',{'id':rechercheParcours.id})}}" />
+<input type="hidden" id="order-details-url" value="{{path('hopital_numerique_recherche_parcours_details_reorder')}}" />
 
 <script type="text/javascript" >
     $(document).ready(function() {

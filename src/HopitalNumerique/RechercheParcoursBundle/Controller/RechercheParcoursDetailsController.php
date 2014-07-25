@@ -3,28 +3,37 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
+use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
+use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails;
 
 class RechercheParcoursDetailsController extends Controller
 {
     public function indexAction(RechercheParcours $rechercheParcours)
     {
-        //Création du tableau des étapes pour lié un détail
-        $etapes = array();
-        $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 233));
-        $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 234));
-        $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 235));
-        $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 236));
-        $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 237));
-        $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 226));
-
         //Récupération des étapes déjà sélectionnées sur la recherche de parcours
         $etapesSelected = array();
         foreach ($rechercheParcours->getRecherchesParcoursDetails() as $detail) 
         {
             $etapesSelected[] = $detail->getReference()->getId();
         }
+
+        //Création du tableau des étapes pour lié un détail
+        $etapes = array();
+        if(!in_array(234, $etapesSelected))
+            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 234));
+        if(!in_array(237, $etapesSelected))
+            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 237));
+        if(!in_array(235, $etapesSelected))
+            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 235));
+        if(!in_array(236, $etapesSelected))
+            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 236));
+        if(!in_array(233, $etapesSelected))
+            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 233));
+        if(!in_array(226, $etapesSelected))
+            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 226));
 
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:index.html.twig', array(
                 'etapes'            => $etapes,
@@ -33,103 +42,46 @@ class RechercheParcoursDetailsController extends Controller
             ));    
     }
 
-    public function addAction(Request $request)
+    public function addAction(Request $request, RechercheParcours $rechercheParcours)
     {
-        //Création du tableau des étapes pour lié un détail
-        $etapes = array();
-        $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 233));
-        $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 234));
-        $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 235));
-        $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 236));
-        $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 237));
-        $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 226));
+        //Récupération de l'id de l'étape sélectionnée dans la select
+        $etapeId = $request->request->get('etape');
+        $etape   = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $etapeId) );
 
-        //Récupération des étapes déjà sélectionnées sur la recherche de parcours
-        $etapesSelected = array();
-        foreach ($rechercheParcours->getRecherchesParcoursDetails() as $detail) 
-        {
-            $etapesSelected[] = $detail->getReference()->getId();
-        }
-
-        //créer un question
+        //créer du détails
         $detail = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->createEmpty();
 
-        $libelle           = $request->request->get('libelle');
-        $rechercheParcours = $request->request->get('rechercheParcours');
-
+        $libelle = $request->request->get('libelle');
         //Calcul de l'ordre
-        $order             = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->countDetails() + 1;
-        $rechercheParcours = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findOneBy(array('id' => $rechercheParcours));
+        $order   = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->countDetails() + 1;
 
-        $reponse->setOrder( $order );
-        $reponse->setLibelle( $libelle );
-        if($redirigeQuestion != null)
-            $reponse->setRedirigeQuestion( $redirigeQuestion );
-        $reponse->setAutreQuestion( $autreQuestion == 'true' ? true : false );
-        $reponse->setQuestion( $question );
+        $detail->setOrder( $order );
+        $detail->setReference( $etape );
+        $detail->setDescription('');
+        $detail->setRechercheParcours($rechercheParcours);
 
         //save
-        $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->save( $reponse );
+        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->save( $detail );
 
-        $notes = array();
-
-        foreach ($question->getReponses() as $reponseQuestion) 
-        {
-            //get ponderations
-            $refsPonderees = $this->container->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-            $note          = is_null($reponseQuestion->getReferences()) ? 0 : $this->container->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $reponseQuestion->getReferences(), $refsPonderees );
-
-            $notes[$reponseQuestion->getId()] = $note;
-        }
-
-        //return new Response('{"success":true}', 200;
-        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoinReponse:add.html.twig', array(
-            'reponse'      => $reponse,
-            'expBesoin'    => $question,
-            'expBesoinAll' => $expBesoins,
-            'notes'        => $notes
+        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:add.html.twig', array(
+                'details' => $detail,
         ));  
-    }
-
-    public function editAction(Request $request)
-    {
-        //Récupération des données envoyées par la requete AJAX
-        $idReponse       = $request->request->get('idReponse');
-        $isAutreQuestion = $request->request->get('isAutreQuestion') == 'true' ? true : false;
-        //Modification de la réponse
-        $reponse = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->findOneBy(array('id' => $idReponse));
-
-        if($isAutreQuestion)
-        {
-            //efface toutes les références
-            $oldRefs = $this->get('hopitalnumerique_recherche.manager.refexpbesoinreponses')->findBy( array('expBesoinReponses' => $idReponse) );
-            $this->get('hopitalnumerique_recherche.manager.refexpbesoinreponses')->delete( $oldRefs );
-
-            //Set la question
-            $idQuestion = $request->request->get('idQuestion');
-
-            $question   = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findOneBy(array('id' => $idQuestion));
-            $reponse->setRedirigeQuestion($question);
-        }
-
-        $reponse->setAutreQuestion( $isAutreQuestion );
-
-        //save
-        $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->save( $reponse );
-
-        return new Response('{"success":true}', 200);   
     }
 
     public function deleteAction(Request $request)
     {
         //Récupération des données envoyées par la requete AJAX
-        $idReponse       = $request->request->get('id');
-        $reponse = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->findOneBy(array('id' => $idReponse));
+        $idDetails = $request->request->get('id');
+        $details   = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findOneBy(array('id' => $idDetails));
+        $refLibelle   = $details->getReference()->getLibelle();
+        $refId        = $details->getReference()->getId();
 
         //save
-        $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->delete( $reponse );
+        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->delete( $details );
 
-        return new Response('{"success":true}', 200); 
+        $reponse = json_encode(array("success" => true, "refLibelle" => $refLibelle, "refId" => $refId));
+
+        return new Response($reponse, 200); 
     }
 
     public function reorderAction()
@@ -138,11 +90,41 @@ class RechercheParcoursDetailsController extends Controller
         $datas = $this->get('request')->request->get('datas');
 
         //execute reorder
-        $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->reorder( $datas, null );
+        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->reorder( $datas, null );
         $this->getDoctrine()->getManager()->flush();
 
         //return success.true si le fichier existe deja
         return new Response('{"success":true}', 200);    
+    }
+
+    /**
+     * [editFancyAction description]
+     *
+     * @param  RechercheParcoursDetails  $rechercheParcoursDetails [description]
+     *
+     * @return Fancy
+     */
+    public function editFancyAction( RechercheParcoursDetails $rechercheParcoursDetails )
+    {   
+        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:edit.html.twig', array(
+            'rechercheParcoursDetails' => $rechercheParcoursDetails
+        ));
+    }
+
+    /**
+     * [editSaveAction description]
+     *
+     * @param  RechercheParcoursDetails  $rechercheParcoursDetails [description]
+     *
+     * @return Response
+     */
+    public function editSaveAction( Request $request, RechercheParcoursDetails $rechercheParcoursDetails )
+    {
+        $rechercheParcoursDetails->setDescription($request->request->get('description'));
+
+        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->save( $rechercheParcoursDetails );
+
+        return new Response('{"success":true}', 200);
     }
 
 }

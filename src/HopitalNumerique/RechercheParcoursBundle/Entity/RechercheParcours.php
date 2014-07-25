@@ -64,7 +64,7 @@ class RechercheParcours
      * @param \HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails $rechercheParcoursDetails
      * @return Menu
      */
-    public function addRechercheParcoursDetails(\HopitalNumerique\RechercheBundle\Entity\RechercheParcoursDetails $rechercheParcoursDetails)
+    public function addRecherchesParcoursDetail(\HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails $rechercheParcoursDetails)
     {
         $this->recherchesParcoursDetails[] = $rechercheParcoursDetails;
     
@@ -76,7 +76,7 @@ class RechercheParcours
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\RechercheParcoursDetails $rechercheParcoursDetails
      */
-    public function removeRechercheParcoursDetails(\HopitalNumerique\RechercheBundle\Entity\RechercheParcoursDetails $rechercheParcoursDetails)
+    public function removeRecherchesParcoursDetail(\HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails $rechercheParcoursDetails)
     {
         $this->recherchesParcoursDetails->removeElement($rechercheParcoursDetails);
     }

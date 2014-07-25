@@ -2,34 +2,42 @@ hopital_numerique_recherche_parcours_homepage:
     pattern:  /admin/recherche-par-parcours
     defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:index }
 
+hopital_numerique_recherche_parcours_reorder:
+    pattern:  /admin/recherche-par-parcours/reorder
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:reorder }
+
 #Recherche par parcours - détails
 hopital_numerique_recherche_parcours_details_index:
     pattern:  /admin/recherche-par-parcours/{id}/details
-    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:index" }
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:index", id: 1 }
     requirements: 
         id : \d+
 
 hopital_numerique_recherche_parcours_details_add:
     pattern:  /admin/recherche-par-parcours/{id}/details/add
-    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:add" }
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:add", id: 1}
     requirements: 
         id : \d+
 
 hopital_numerique_recherche_parcours_details_delete:
     pattern:  /admin/recherche-par-parcours/details/delete/{id}.{_format}
-    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:delete", _format: json }
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:delete", _format: json, id: 1 }
     requirements: 
         id: \d+
         _method: POST|DELETE
 
 hopital_numerique_recherche_parcours_details_edit:
     pattern:  /admin/recherche-par-parcours/details/edit/{id}.{_format}
-    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:edit",  _format: json }
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:editFancy",  _format: json, id: 1 }
     requirements: 
         id : \d+
 
+hopital_numerique_recherche_parcours_details_save:
+    pattern:  /admin/recherche-par-parcours/details/save/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:editSave", _format: json, id: 1 }
+    requirements:
+        id: \d+
+
 hopital_numerique_recherche_parcours_details_reorder:
-    pattern:  /admin/recherche-par-parcours/{id}/details/reorder
+    pattern:  /admin/recherche-par-parcours/details/reorder
     defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:reorder" }
-    requirements: 
-        id : \d+
