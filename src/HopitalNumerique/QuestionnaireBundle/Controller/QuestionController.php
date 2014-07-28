@@ -98,7 +98,8 @@ class QuestionController extends Controller
         //Récupération des ids passés en data
         $idQuestion     = $request->request->get('id');
         $idTypeQuestion = $request->request->get('typeQuestion');
-        $obligatoire    = $request->request->get('obligatoire');
+        $obligatoire    = $request->request->get('obligatoire') === "true" ? true : false;
+
         //Récupère la question
         $question     = $this->get('hopitalnumerique_questionnaire.manager.question')->findOneBy(array('id' => $idQuestion));
         //Récupère le type de la question sélectionné
@@ -122,6 +123,9 @@ class QuestionController extends Controller
 
         //save
         $this->get('hopitalnumerique_questionnaire.manager.question')->save( $question );
+
+        // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+        $this->get('session')->getFlashBag()->add( 'success' , 'Question ' . $question->getLibelle() . ' mise à jour.'); 
 
         return new Response('{"success":true}', 200);
     }

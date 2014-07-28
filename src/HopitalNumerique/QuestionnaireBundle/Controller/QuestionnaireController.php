@@ -114,6 +114,8 @@ class QuestionnaireController extends Controller
     {
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
+
+        $this->_envoieDeMail = false;
         
         //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
         $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
@@ -234,7 +236,7 @@ class QuestionnaireController extends Controller
      */
     public function getQuestionnairesAction()
     {
-        $questionnaires = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findBy(array(), array('nom' => 'ASC'));
+        $questionnaires = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findBy(array('lock' => false), array('nom' => 'ASC'));
 
         return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/getQuestionnaires.html.twig', array(
             'questionnaires' => $questionnaires,
@@ -406,16 +408,18 @@ class QuestionnaireController extends Controller
                     {
                         $reponse->setReference($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $param)));
                     }
-                    elseif('entitymultiple' === $typeParam || 'entitycheckbox' === $typeParam)
+                    elseif('entitymultiple' === $typeParam)
                     {
-                        $reponse->setReponse("");
-
                         $reponse->setReferenceMulitple(array());
 
                         foreach ($param as $value)
                         {
                             $reponse->addReferenceMulitple($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $value)));
                         }
+                    }
+                    elseif('entitycheckbox' === $typeParam)
+                    {
+                        $reponse->setReponse("");
                     }
 
                     if('module-evaluation' === $questionnaire->getNomMinifie())

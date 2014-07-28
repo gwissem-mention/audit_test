@@ -77,7 +77,7 @@ function saveQuestion( url )
             libelle         : $('#libelle_question').val(),
             typeQuestion    : $('#typeQuestion').val(),
             refTypeQuestion : $('#typeQuestion_reference').val(),
-            obligatoire     : $('#questionObligatoire').val()
+            obligatoire     : $('#questionObligatoire').is(":checked")
         },
         type     : 'POST',
         dataType : 'json',
