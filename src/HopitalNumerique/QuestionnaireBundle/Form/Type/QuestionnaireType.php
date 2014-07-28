@@ -178,10 +178,7 @@ class QuestionnaireType extends AbstractType
             	    break;
                 //Les entity ne sont prévues que pour des entités de Référence (TODO : mettre en base la class et le property ?)
                 case 'entitymultiple':
-                    if (isset($attr['class']))
-                        $attr['class'] = $attr['class'].' select2-multiple-entity';
-                    else  
-                        $attr['class'] = 'select2-multiple-entity';
+                    $attr['class'] = 'select2-multiple-entity';
 
                     $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'genemu_jqueryselect2_entity', array(
                             'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
@@ -231,7 +228,7 @@ class QuestionnaireType extends AbstractType
                 //Entité avec des checkbox
                 case 'entitycheckbox':
                     if (isset($attr['class']))
-                        $attr['class'] = $attr['class'].' checbox';
+                        $attr['class'] = $attr['class'].' checkbox';
                     else  
                         $attr['class'] = 'checkbox';
 
