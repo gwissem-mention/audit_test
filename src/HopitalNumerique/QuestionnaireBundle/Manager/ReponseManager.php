@@ -97,6 +97,34 @@ class ReponseManager extends BaseManager
         
         $this->delete($reponses);
     }
+
+
+    
+    /**
+     * Supprime toutes les réponses pour tout les utilisateurs correspondant au questionnaire passé en paramètre
+     * 
+     * @param int $idUser
+     * @param int $idQuestionnaire
+     * 
+     * @return empty
+     */
+    public function deleteAllByQuestionnaire( $idQuestionnaire)
+    {
+        $reponses = $this->getRepository()->reponsesByQuestionnaire( $idQuestionnaire )->getResult();
+        
+        foreach($reponses as $key => $reponse)
+        {
+            if('file' === $reponse->getQuestion()->getTypeQuestion()->getLibelle())
+            {
+                $file = $this->getUploadRootDir($reponse->getQuestion()->getQuestionnaire()->getNomMinifie()) . '/' . $reponse->getReponse();
+                
+                if (file_exists($file) )
+                    unlink($file);
+            }
+        }
+        
+        $this->delete($reponses);
+    }
     
     /**
      * Téléchargement des fichiers attaché au questionnaire expert.

@@ -98,7 +98,8 @@ class QuestionController extends Controller
         //Récupération des ids passés en data
         $idQuestion     = $request->request->get('id');
         $idTypeQuestion = $request->request->get('typeQuestion');
-        $obligatoire    = $request->request->get('obligatoire');
+        $obligatoire    = $request->request->get('obligatoire') === "true" ? true : false;
+
         //Récupère la question
         $question     = $this->get('hopitalnumerique_questionnaire.manager.question')->findOneBy(array('id' => $idQuestion));
         //Récupère le type de la question sélectionné

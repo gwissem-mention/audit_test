@@ -111,3 +111,9 @@ hopitalnumerique_reponse_deleteAll:
     requirements:
         user: \d+ 
         questionnaire: \d+
+
+hopitalnumerique_reponse_deleteAllByQuestionnaire:
+    pattern: /admin/questionnaire/reponse/deleteAllByQuestionnaire/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Reponse:deleteAllByQuestionnaire", _format: json, id:1}
+    requirements:
+        id: \d+
