@@ -24,7 +24,7 @@ class MaitriseUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="rmu_pourcentageMaitrise", type="integer", options = {"comment" = "Pourcentage de maitrise du point dur par l'utilisateur."})
+     * @ORM\Column(name="rmu_pourcentageMaitrise", type="integer", options = {"comment" = "Pourcentage de maitrise du point dur par l utilisateur."})
      */
     protected $pourcentageMaitrise;
 
