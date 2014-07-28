@@ -41,3 +41,10 @@ hopital_numerique_recherche_parcours_details_save:
 hopital_numerique_recherche_parcours_details_reorder:
     pattern:  /admin/recherche-par-parcours/details/reorder
     defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:reorder" }
+
+#----------------------------------------------------------------------
+#-----------------------------------FRONT------------------------------
+#----------------------------------------------------------------------
+hopital_numerique_recherche_parcours_homepage:
+    pattern:  /recherche-par-parcours
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:indexFront }

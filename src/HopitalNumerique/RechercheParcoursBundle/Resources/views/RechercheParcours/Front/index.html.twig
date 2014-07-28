@@ -1,0 +1,39 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{% block metadesc %}Page de recherche par parcours{% endblock %}
+{% block metakeywords %}recherche par parcours{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-front-index.css" filter="cssrewrite, ?yui_css"
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+    <style type="text/css">
+        #recherche-par-parcours h3{color:#672F9E;}
+        #recherche-par-parcours .description p{color:#808081; font-size: 11px;}
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-recherche-parcours-front-index.js"
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-12" id="recherche-par-parcours">
+        <h3>Titre</h3>
+        
+        <div class="description">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent fermentum nisi quis dolor lobortis, nec luctus velit mollis. Nulla a sapien at nisl bibendum luctus et ut lorem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent sit amet adipiscing massa, at consectetur nunc. Suspendisse dignissim eget libero non scelerisque. Etiam consequat posuere ante sed dignissim. Cras lacinia magna dictum metus lobortis, nec rutrum eros tristique. Proin et nunc velit. Fusce nisi risus, porttitor id semper in, interdum sit amet felis. Sed laoreet magna vitae ullamcorper rhoncus. Nulla eget vehicula lectus. Aenean eget purus a nisl cursus lobortis. Praesent quis orci blandit, fermentum ligula ac, venenatis tellus. Integer pharetra viverra est sollicitudin rutrum. 
+            </p>
+        </div>
+        
+    </div>
+{% endblock %}
