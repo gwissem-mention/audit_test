@@ -16,14 +16,16 @@
         <div class="col-md-12">
             <input type="text" id="libelle_question" name="libelle" required="required" maxlength="255" class="validate[required,minSize[1],maxSize[255]] form-control" value="{{question.libelle}}"/>
         </div>
-        <div class="col-md-12">
-            <label class="control-label" for="questionObligatoire">
-                La question sera obligatoire pour la validation du questionnaire
-            </label>
-        </div>
-        <div class="col-md-12">
-            <div class="checkbox">
-                <input type="checkbox" {% if question.obligatoire %}checked="checked"{% endif %} class="checkbox form-control" name="question_obligatoire" id="questionObligatoire">
+        <div class="bloc-obligatoire">
+            <div class="col-md-12">
+                <label class="control-label" for="questionObligatoire">
+                    La question sera obligatoire pour la validation du questionnaire
+                </label>
+            </div>
+            <div class="col-md-12">
+                <div class="checkbox">
+                    <input type="checkbox" {% if question.obligatoire %}checked="checked"{% endif %} class="checkbox form-control" name="question_obligatoire" id="questionObligatoire">
+                </div>
             </div>
         </div>
         <div class="col-md-12">
@@ -83,6 +85,12 @@
         {
             //Set le code ref
             $('#typeQuestion_reference').val($('#refParamTri').val());
+
+            if(idTypeQuestion == 10  || idTypeQuestion == 11)
+            {
+                $('#questionObligatoire').removeAttr( "checked" );
+                $('.bloc-obligatoire').hide();
+            }
         }
         else
         {
@@ -101,13 +109,19 @@
                 case '6':
                     $('#typeQuestion_reference').val('');
                     $('#zoneReferenceTypeQuestion').hide();
+                    $('.bloc-obligatoire').show();
                     break;
                 //Référence unique
                 case '5':
                 case '8':
+                    $('#zoneReferenceTypeQuestion').show();
+                    $('.bloc-obligatoire').show();
+                    break;
                 //Liste déroulante à choix multiple
-                case '10':
                 case '11':
+                case '10':
+                    $('#questionObligatoire').removeAttr( "checked" );
+                    $('.bloc-obligatoire').hide();
                     $('#zoneReferenceTypeQuestion').show();
                     break;
             }

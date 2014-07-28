@@ -227,9 +227,6 @@ class QuestionnaireType extends AbstractType
                     break;
                 //Entité avec des checkbox
                 case 'entitycheckbox':
-                    if (isset($attr['class']))
-                        $attr['class'] = $attr['class'].' checkbox';
-                    else  
                         $attr['class'] = 'checkbox';
 
                     $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'entity', array(
