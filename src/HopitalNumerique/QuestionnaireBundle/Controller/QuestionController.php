@@ -124,6 +124,9 @@ class QuestionController extends Controller
         //save
         $this->get('hopitalnumerique_questionnaire.manager.question')->save( $question );
 
+        // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+        $this->get('session')->getFlashBag()->add( 'success' , 'Question ' . $question->getLibelle() . ' mise à jour.'); 
+
         return new Response('{"success":true}', 200);
     }
 
