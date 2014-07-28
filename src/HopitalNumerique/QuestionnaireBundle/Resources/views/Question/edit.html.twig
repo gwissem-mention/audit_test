@@ -23,7 +23,7 @@
         </div>
         <div class="col-md-12">
             <div class="checkbox">
-                <input type="checkbox" value="{% if question.obligatoire %}1{% else %}0{% endif %}" class="checkbox form-control" name="question_obligatoire" id="questionObligatoire">
+                <input type="checkbox" {% if question.obligatoire %}checked="checked"{% endif %} class="checkbox form-control" name="question_obligatoire" id="questionObligatoire">
             </div>
         </div>
         <div class="col-md-12">
