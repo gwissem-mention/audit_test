@@ -1,9 +1,11 @@
 <div class="panel panel-midnightblue" style="margin:0" >
     <div class="panel-heading" style="height:65px">
-        <h4 style="line-height:22px; padding:0">Aide à l'expression du besoin</h4>
+        <h4 style="line-height:22px; padding:0">Recherche aidée</h4>
     </div>
     <div class="clearfix"></div>
-
+    <div class="col-md-12" style="margin: 15px 0 5px 0;">
+        <p>Je décris mon besoin, Mon Hôpital Numérique trouve la solution !</p>
+    </div>
     <div id="panel-recherche">
         <div class="tableContent" id="expression-du-besoin">
             {% for expBesoin in expBesoins %}
@@ -13,7 +15,10 @@
             {% endfor %}
 
             <div id="redirection-references">
-                <div class="resume col-md-12">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet est et est mollis rhoncus a eu dolor. Pellentesque adipiscing lacinia magna id tempus. Ut non iaculis eros. Morbi sagittis magna nec dui molestie, vel sodales sem dapibus cras amet. <a href="{{path("hopital_numerique_recherche_homepage")}}">Atteindre la recherche.</a></div>
+                <div class="resume col-md-12">
+                    Merci pour vos réponses. Nous avons pu déterminer une requête de recherche qui se rapproche au plus prêt de votre problématique. <br/><br/>
+                    <a href="{{path("hopital_numerique_recherche_homepage")}}">> Consulter les recommendations.</a>
+                </div>
             </div>
 
             <input type="hidden" id="expBesoin-actif-id" value="" />
