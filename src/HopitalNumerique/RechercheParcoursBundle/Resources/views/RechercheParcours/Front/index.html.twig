@@ -6,34 +6,90 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-front-index.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquerechercheparcours/css/front/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
     <style type="text/css">
-        #recherche-par-parcours h3{color:#672F9E;}
-        #recherche-par-parcours .description p{color:#808081; font-size: 11px;}
-    </style>
-{% endblock %}
 
-{% block javascripts %}
-    {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-recherche-parcours-front-index.js"
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    <script type="text/javascript">
-    </script>
+    </style>
 {% endblock %}
 
 {% block body %}
     <div class="col-md-12" id="recherche-par-parcours">
-        <h3>Titre</h3>
+        <h3>Parcourir les étapes-projets</h3>
         
         <div class="description">
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent fermentum nisi quis dolor lobortis, nec luctus velit mollis. Nulla a sapien at nisl bibendum luctus et ut lorem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent sit amet adipiscing massa, at consectetur nunc. Suspendisse dignissim eget libero non scelerisque. Etiam consequat posuere ante sed dignissim. Cras lacinia magna dictum metus lobortis, nec rutrum eros tristique. Proin et nunc velit. Fusce nisi risus, porttitor id semper in, interdum sit amet felis. Sed laoreet magna vitae ullamcorper rhoncus. Nulla eget vehicula lectus. Aenean eget purus a nisl cursus lobortis. Praesent quis orci blandit, fermentum ligula ac, venenatis tellus. Integer pharetra viverra est sollicitudin rutrum. 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent fermentum nisi quis dolor lobortis, nec luctus velit mollis. Nulla a sapien at nisl bibendum luctus et ut lorem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent sit amet adipiscing massa, at consectetur nunc. Suspendisse dignissim eget libero non scelerisque. Etiam consequat posuere ante sed dignissim. Cras lacinia magna dictum metus lobortis, nec rutrum eros tristique. Proin et nunc velit. Fusce nisi risus, porttitor id semper in, interdum sit amet felis. Sed laoreet magna vitae ullamcorper rhoncus.
             </p>
         </div>
         
+        <div class="bandeau">
+            {# Bloc de gauche #}
+            {% if app.user %}
+                <div class="col-md-12 bloc-gauche">
+            {% else %}
+                <div class="col-md-8 bloc-gauche">
+            {% endif %}
+                <div class="row parcours">
+                    {# Bloc de présentation #}
+                    <div class="col-md-4 parcours-presentation">
+                        <div class="entete row">
+                            <div class="icone"></div>
+                            <div class="titre">parcourir les étapes projets</div>
+                        </div>
+                        <div class="description">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent fermentum nisi quis dolor lobortis, nec luctus velit mollis.
+                            </p>
+                        </div>
+                    </div>
+                    {# Bloc de la liste des étapes #}
+                    <div class="col-md-8 parcours-liens">
+                        {% for etape in etapes %}
+                            {# Include vue de l'étape #}
+                            {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:Front/partials/etape.html.twig' with { 'etape' : etape } %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="bloc-tablette">
+                <div class="clearfix"></div>
+            </div>
+            {# Bloc de droite #}
+            {% if app.user is null %}
+                {# Mode non connecté : bloc de création de compte #}
+                <div class="col-md-4 bloc-droit-offline">
+                    <div class="bloc-creation">
+                        <div class="common-sprite icone"></div>
+                        {% if app.user %}
+                            <h3>Mon tableau de bord</h3>
+                            <p>
+                                Je bénéficie de nombreux services : enregistrement de mon contexte, de mes auto-diagnostics, notification des mises à jour, sollicitation d'un ambassadeur, etc.
+                            </p>
+                            <div class="buttons-tdb">
+                                <div class="buttons-centrer">
+                                    <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-default tdb">Accès au tableau de bord</a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <h3>Mon compte</h3>
+                            <p>
+                                En créant mon compte, je bénéficie de nombreux services. <br />
+                                <a target="_blank" href="{{path('hopital_numerique_publication_publication_article',{'id':314, 'alias':'pourquoi-creer-un-compte','categorie':'publication'|lower})}}">Pourquoi créer un compte ?</a>                             
+                            </p>
+                            <div class="buttons">
+                                <div class="buttons-centrer">
+                                    <a href="{{path('account_login')}}" class="btn btn-default login">Connexion</a>
+                                    <a href="{{path('hopital_numerique_user_inscription')}}" class="btn btn-default signup">Créer un compte</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            
+        </div>
     </div>
 {% endblock %}

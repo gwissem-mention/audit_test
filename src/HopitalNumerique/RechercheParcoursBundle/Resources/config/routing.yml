@@ -45,6 +45,6 @@ hopital_numerique_recherche_parcours_details_reorder:
 #----------------------------------------------------------------------
 #-----------------------------------FRONT------------------------------
 #----------------------------------------------------------------------
-hopital_numerique_recherche_parcours_homepage:
+hopital_numerique_recherche_parcours_homepage_front:
     pattern:  /recherche-par-parcours
     defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:indexFront }

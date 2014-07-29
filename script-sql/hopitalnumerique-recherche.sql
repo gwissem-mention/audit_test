@@ -5,3 +5,11 @@ VALUES
 INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
 VALUES
     (NULL, 66, 3, 'Recherche JS', NULL, '[]', NULL, 'javascript:rechercheAideEtBesoin();', NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1);
+
+
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (NULL, 66, 3, 'Recherche par parcours', NULL, '[]', NULL, 'hopital_numerique_recherche_parcours_homepage_front', NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1);
+INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`)
+VALUES
+    (NULL, 'FrontOffice - Accès à la recherche par parcours', '/^\\/recherche-par-parcours/', 39, 2);
