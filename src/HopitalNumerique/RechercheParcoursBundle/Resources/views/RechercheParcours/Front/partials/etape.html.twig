@@ -1,7 +1,10 @@
 <a href="{{ path("hopital_numerique_recherche_parcours_homepage" , {'id':etape.id}) }}">
     <div class="col-md-12 etape">
         <div class="bloc-etape">
-            <p>
+            <p class="mode-tablette" title="{{etape.reference.libelle}}">
+                {{etape.reference.libelle|truncate(30,'...')}}
+            </p>
+            <p class="mode-normal">
                 {{etape.reference.libelle}}
             </p>
             <div class="icone"></div>
