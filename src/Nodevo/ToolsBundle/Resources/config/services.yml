@@ -1,3 +1,10 @@
 parameters:
+    #Extensions twig
+    nodevo_tools.twig.extensions.class: Nodevo\ToolsBundle\Twig\ToolsExtension
 
 services:
+    #Extension Twig        
+    nodevo_tools.twig.tools_extension:
+        class: %nodevo_tools.twig.extensions.class%
+        tags:
+            - { name: twig.extension }

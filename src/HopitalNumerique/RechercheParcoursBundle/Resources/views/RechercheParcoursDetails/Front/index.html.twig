@@ -1,0 +1,69 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{% block metadesc %}Page de recherche par parcours{% endblock %}
+{% block metakeywords %}recherche par parcours{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-details-front-index.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquerechercheparcours/css/front/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+    <style type="text/css">
+
+/* En-tête de la page */
+#recherche-par-parcours-details h3{color:#672F9E;font-size: 24px;font-weight: bold;}
+#recherche-par-parcours-details .en-tete {margin-top: 25px;overflow: scroll;padding-bottom:10px;border-bottom:1px solid #E5E5E5;}
+/* -- Chemin de fer -- */
+#recherche-par-parcours-details .en-tete .chemin-de-fer {min-width: 900px; height: 63px;background-color: #F4F4F4; position: relative; z-index:1;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer ul{list-style:none; padding: 0; margin: 0;}
+
+#recherche-par-parcours-details .en-tete .chemin-de-fer .marge-blanche{width: 29px;height: 63px; ;position: absolute; background-color: #FFFFFF; right: 0px; z-index:2;}
+
+#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape{height: 63px; background-color: #F4F4F4;float: left; z-index:2;position: relative;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape .marge-violette{width: 29px;height: 63px; ;position: absolute; background-color: #712F98; right: 0px; z-index:2;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape a{color: #672F9E; font-size: 15px; text-transform: uppercase; margin: 20px 40px 20px 20px;float: left; z-index:2;}
+
+#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape-selected{height: 63px; background-color: #712F98;float: left; z-index:2; position: relative;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape-selected .marge-grise{width: 29px;height: 63px; ;position: absolute; background-color: #F4F4F4; right: 0px; z-index:2;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape-selected a{color: #F4F4F4; font-size: 15px; text-transform: uppercase; margin: 20px 40px 20px 20px;float: left; z-index:2;}
+/* -- Description + moyenne générale -- */
+#recherche-par-parcours-details .en-tete .description { margin-top: 20px; padding-left: O;}
+#recherche-par-parcours-details .en-tete .description p{ border-left:5px solid #712F98; padding-left: 15px;}
+#recherche-par-parcours-details .en-tete .description #note-moyenne { margin-left: auto; margin-right: auto;}
+
+/* Général */
+#recherche-par-parcours-details .note { width: 300px; height: 40px; background-color:#F4F4F4; }
+
+@media screen and (max-width: 991px) {
+}
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-12" id="recherche-par-parcours-details">
+        <h3>{{rechercheParcours.reference.libelle}}</h3>
+        
+        <div class="en-tete">
+            {# Include du chemin de fer #}
+            {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/chemin_de_fer.html.twig' with { 'rechercheParcours' : rechercheParcours, 'etapeSelected' : etapesSelected.id } %}
+
+            <div class="description">
+                <div class="col-md-8 row">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam dictum turpis dui, sed bibendum ligula iaculis eget. Praesent vel lacus et ligula faucibus vehicula. Pellentesque, consectetur adipiscing elit. Nullam dictum turpis dui, sed bibendum ligula iaculis eget. Praesent vel lacus et ligula faucibus vehicula. Pellentesque.
+                        {#{etapeSelected.description}#}
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    {% if not app.user %}
+                        <div id="note-moyenne" class="note">
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}

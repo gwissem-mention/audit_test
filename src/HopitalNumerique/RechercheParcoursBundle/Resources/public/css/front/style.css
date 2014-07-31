@@ -45,6 +45,12 @@
 #recherche-par-parcours .bandeau .bloc-droit-offline .buttons-tdb .buttons-centrer{margin:10px auto 0; width: 200px;}
 #recherche-par-parcours .bandeau .bloc-droit-offline .buttons-tdb .tdb{margin:auto; width: 200px;}
 
+/* -- Page du détail -- */
+#recherche-par-parcours-details .en-tete .chemin-de-fer .icone{background: transparent url('../../img/pointe_grise.png')  no-repeat bottom left;width: 29px; height: 63px; position: absolute; right: 0; z-index:3;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer .icone-selected{background: transparent url('../../img/pointe_violette.png')  no-repeat bottom left;width: 29px; height: 63px;position: absolute; right: 0; z-index:3;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape .icone{background: transparent url('../../img/pointe_grise.png')  no-repeat bottom left;width: 29px; height: 63px;float:left; z-index:3;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape-selected .icone{background: transparent url('../../img/pointe_violette.png')  no-repeat bottom left;width: 29px; height: 63px;float:left; z-index:3;}
+
 
 @media screen and (max-width: 1127px) {
     #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-tablette{display:block;}
