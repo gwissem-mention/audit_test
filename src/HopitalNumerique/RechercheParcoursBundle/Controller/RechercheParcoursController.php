@@ -34,6 +34,7 @@ class RechercheParcoursController extends Controller
         return new Response('{"success":true}', 200);
     }
 
+    // ----------- FRONT --------------
 
     /**
      * Index du front Action

@@ -1,4 +1,4 @@
-<a href="{{ path("hopital_numerique_recherche_parcours_homepage" , {'id':etape.id}) }}">
+<a href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':etape.id, 'alias':etape.reference.libelle|minifieMoi()}) }}">
     <div class="col-md-12 etape">
         <div class="bloc-etape">
             <p class="mode-tablette" title="{{etape.reference.libelle}}">

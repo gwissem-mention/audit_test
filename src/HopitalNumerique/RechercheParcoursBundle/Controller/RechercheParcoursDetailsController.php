@@ -2,12 +2,15 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails;
+
+use Nodevo\ToolsBundle\Tools\Chaine;
 
 class RechercheParcoursDetailsController extends Controller
 {
@@ -39,7 +42,7 @@ class RechercheParcoursDetailsController extends Controller
                 'etapes'            => $etapes,
                 'etapesSelected'    => $etapesSelected,
                 'rechercheParcours' => $rechercheParcours
-            ));    
+            ));
     }
 
     public function addAction(Request $request, RechercheParcours $rechercheParcours)
@@ -125,6 +128,58 @@ class RechercheParcoursDetailsController extends Controller
         $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->save( $rechercheParcoursDetails );
 
         return new Response('{"success":true}', 200);
+    }
+
+    // ----------- FRONT --------------
+
+    /**
+     * Index du front Action
+     *
+     * @param int     $id      Identifiant de la recherche par parcours
+     * @param string  $alias   Alias de l'identifiant par parcours
+     * @param int     $idEtape Identifiant de l'étape sélectionnée si il y en a une, sinon -1
+     * @param string  $etape   Alias de l'étape sélectionné
+     *
+     * @return [type]
+     */
+    public function indexFrontAction($id, $alias, $idEtape, $etape )
+    {
+        $rechercheParcours   = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findOneBy( array( 'id' => $id ) );
+
+        //Vérifie si une étape a été spécifiée ou récupère la première étape de la recherche par parcours sélectionnée.
+        if($idEtape !== 0)
+        {
+            $rechercheParcoursDetails = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findOneBy( array( 'id' => $idEtape ));
+        }
+        else
+        {
+            $etapes = $rechercheParcours->getRecherchesParcoursDetails();
+
+            //Si il y a bien des étapes à la recherche par parcours on récupère la 1ere
+            if( !is_null($etapes)
+                && isset($etapes)
+                && !empty($etapes)
+                && !is_null($etapes[0]) )
+            {
+                $idEtape      = $etapes[0]->getId();
+                $tool         = new Chaine( $etapes[0]->getReference()->getLibelle() );
+                $etapeLibelle = $tool->minifie();
+
+                return $this->redirect( $this->generateUrl('hopital_numerique_recherche_parcours_details_index_front', array('id' => intval($id), 'alias' => $alias, 'idEtape' => $idEtape, 'etape' => $etapeLibelle) ) );
+                
+            }
+            //Sinon on retourne sur la sélection de la recherche par parcours + message à l'utilisateur
+            else
+            {
+                $this->get('session')->getFlashBag()->add( 'danger' , 'Il n\'existe aucune étape pour cette rubrique.');
+                return $this->redirect( $this->generateUrl('hopital_numerique_recherche_parcours_homepage_front' ) );
+            }
+        }
+
+        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/index.html.twig', array(
+            'rechercheParcours' => $rechercheParcours,
+            'etapesSelected'    => $rechercheParcoursDetails
+        ));
     }
 
 }
