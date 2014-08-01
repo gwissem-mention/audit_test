@@ -10,7 +10,7 @@
 #recherche-par-parcours .bandeau .bloc-gauche {padding:0;height: auto;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours {background-color:#F4F4F4; margin: 0 15px 0 0;height: auto;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete {margin: 25px 15px 0 15px;}
-#recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete .icone{background: transparent url('../../img/fleche-parcours.png')  no-repeat bottom left;width: 51px; height: 49px; float:left;}
+#recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete .icone{display:block;background: transparent url('../../img/fleche-parcours.png')  no-repeat bottom left;width: 51px; height: 49px; float:left;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete .titre{text-transform: uppercase; float:left; color:#E11954; font-weight: bold;width: 125px;margin: 5px 0 0 10px;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .description {padding: 15px;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .description p{color:#828282; font-size: 13px;}
@@ -92,6 +92,9 @@
 #pointsdurs .bloc-offline .buttons-tdb .tdb{margin:auto; width: 200px;}
 
 
+@media screen and (max-width: 1195px) {
+    #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete .icone{display: none;}
+}
 @media screen and (max-width: 1127px) {
     #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-tablette{display:block;}
     #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-normal{display:none;}
