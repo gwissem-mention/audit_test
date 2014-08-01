@@ -36,9 +36,9 @@
 #recherche-par-parcours .bandeau .bloc-droit-offline > div{ padding:30px; background: #9abc0d }
 #recherche-par-parcours .bandeau .bloc-droit-offline:hover > div{ background: #779f08 }
 #recherche-par-parcours .bandeau .bloc-droit-offline p{ color :#ffffff; font-size: 13px; text-align: center; }
-#recherche-par-parcours .bandeau .bloc-droit-offline p a{ color :#b1138a; }
+#recherche-par-parcours .bandeau .bloc-droit-offline p a{ color :#ffffff; }
 #recherche-par-parcours .bandeau .bloc-droit-offline h3{text-align: center; font-size: 25px; font-weight: bold; margin:0 0 5px 0; color: #ffffff; text-transform: uppercase;}
-#recherche-par-parcours .bandeau .bloc-droit-offline .buttons{margin:20px auto 0;width: 236px;}
+#recherche-par-parcours .bandeau .bloc-droit-offline .buttons{margin:20px auto 0;text-align: center;}
 #recherche-par-parcours .bandeau .bloc-droit-offline .buttons .signup{margin:0 auto;}
 #recherche-par-parcours .bandeau .bloc-droit-offline .buttons .login{margin:0 auto;}
 #recherche-par-parcours .bandeau .bloc-droit-offline .buttons-tdb{margin-top:10px;}
@@ -96,6 +96,9 @@
     #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-tablette{display:block;}
     #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-normal{display:none;}
 }
+@media screen and (max-width: 1005px) {
+    #recherche-par-parcours .bandeau .bloc-droit-offline > div {padding-right: 20px; padding-left: 20px;}
+}
 @media screen and (max-width: 991px) {
     #recherche-par-parcours .bandeau .bloc-tablette{display: block;}
     #recherche-par-parcours .bandeau .bloc-gauche{ height: auto;}
@@ -109,4 +112,8 @@
 
     #recherche-par-parcours .bandeau .bloc-droit-offline { height: auto;margin-top: 30px;}
     #recherche-par-parcours .bandeau .bloc-droit-offline .bloc-creation{ margin: 20px 0 0 0;height: auto;}
+}
+@media screen and (max-width: 550px) {
+    #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-tablette{display:block;}
+    #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-normal{display:none;}
 }

@@ -1,4 +1,4 @@
-<div class="col-md-12">
+<div class="col-md-12 row">
     <h4>
         {% if objet['updated'] %}
             <span class="label label-success">MaJ</span>
@@ -24,11 +24,11 @@
     </h4>
 </div>
 
-<div class="col-md-2">
+<div class="col-md-2 row">
     {% if objet['synthese'] is not null %}
         <a class="synthese fancybox.iframe" href="{{path('hopital_numerique_publication_synthese',{'id':objet['synthese']})}}">synthèse</a>
     {% endif %}
 </div>
-<div class="col-md-12">
+<div class="col-md-12 row">
     <p>{{ objet['resume'] }}</p>
 </div>

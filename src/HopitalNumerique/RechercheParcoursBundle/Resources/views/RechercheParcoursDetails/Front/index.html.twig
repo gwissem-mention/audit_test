@@ -7,6 +7,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-details-front-index.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriquerechercheparcours/css/front/style.css'
+        'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -15,25 +16,48 @@
 #pointsdurs .bloc-presentation {padding:0;margin-bottom: 15px;}
 #pointsdurs .bloc-presentation > div{ padding:30px; background: #F4F4F4; margin: 0 0 0 15px;}
 #pointsdurs .bloc-presentation p{ font-size: 13px; text-align: center; }
+
+#pointsdurs{padding:0;}
+#pointsdurs h4{ color: #595959; font-size: 14px; text-transform: uppercase; margin: 10px 0; font-weight: normal}
+#pointsdurs .wrapper-results{  padding:10px 20px 20px 0; position: relative; }
+#pointsdurs .wrapper-results .background-violet{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+#pointsdurs .wrapper-results .results h5{margin-bottom: 5px}
+#pointsdurs .wrapper-results .results h5 a{color:#703695; font-size: 18px; font-weight: bold; }
+#pointsdurs .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top: 10px; display: block; height: 18px; text-align: right}
+#pointsdurs .wrapper-results .results p{font-size: 13px; color:#070707; }
+#pointsdurs .wrapper-results .results .fa-refresh{ color:#3da20b; }
     </style>
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts output="compiled/hopitalnumerique-recherche-parcours-details-front-index.js" 
+        "@jquery_ui_js"
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
 {% block body %}
     <script type="text/javascript">
         $(document).ready(function() {
+            calculNoteMoyenne();
+        });
+
+        function calculNoteMoyenne()
+        {
             var noteTotal = 0;
             var compteur  = 0;
 
             $(".resultats-points-durs .note .noteValue").each(function(){
-                noteTotal = ((int) $(this).val()) + noteTotal;
+                noteTotal += parseInt($(this).val(),0);
                 compteur++;
             });
 
-            alert(noteTotal);
-
-            $("#note-moyenne").val(noteTotal);
-
-        });
+            if(compteur != 0)
+                $("#note-moyenne").val(parseInt(noteTotal / compteur, 0));
+            else
+                $("#note-moyenne").val(parseInt("0", 0));
+        }
     </script>
 
     <div class="col-md-12" id="recherche-par-parcours-details">
