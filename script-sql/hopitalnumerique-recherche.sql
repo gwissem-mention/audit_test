@@ -20,3 +20,13 @@ VALUES
 INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`)
 VALUES
     (NULL, 'BackOffice - Gestion de la recherche par parcours', '/^\\admin\/recherche-par-parcours/', 40, 1);
+
+
+/* Recherche par parcours : id fixe */
+INSERT INTO `hn_recherche_recherche_parcours` (`rrp_id`, `ref_id`, `rrp_order`)
+VALUES
+    (1, 291, 2),
+    (2, 292, 3),
+    (3, 293, 5),
+    (4, 294, 1),
+    (5, 295, 4);

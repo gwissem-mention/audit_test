@@ -144,10 +144,12 @@ class RechercheParcoursDetailsController extends Controller
      */
     public function indexFrontAction($id, $alias, $idEtape, $etape )
     {
+        //Récup!ère la recherche par parcours passé en param
         $rechercheParcours   = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findOneBy( array( 'id' => $id ) );
 
         //Vérifie si une étape a été spécifiée ou récupère la première étape de la recherche par parcours sélectionnée.
-        if($idEtape !== 0)
+        if($idEtape !== 0 
+            && in_array($idEtape, $rechercheParcours->getRecherchesParcoursDetailsIds()))
         {
             $rechercheParcoursDetails = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findOneBy( array( 'id' => $idEtape ));
         }
@@ -176,9 +178,86 @@ class RechercheParcoursDetailsController extends Controller
             }
         }
 
+        //On récupère l'user connecté et son rôle
+        $user = $this->get('security.context')->getToken()->getUser();
+        $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
+
+        //Récupération des références + Tri pour l'affichage des points dur
+        $referenceRechercheParcours        = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => intval($rechercheParcours->getReference()->getId()) ) );
+        $referenceRechercheParcoursDetails = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => intval($rechercheParcoursDetails->getReference()->getId()) ) );
+
+        $referencesTemp = array();
+        $referencesTemp[] = $referenceRechercheParcours;
+        $referencesTemp[] = $referenceRechercheParcoursDetails;
+
+        foreach ($this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => intval($rechercheParcoursDetails->getReference()->getId()) ) ) as $refChild)
+        {
+            $referencesTemp[] = $refChild;
+        }
+
+        //Parcourt les références de la réponse, puis les tris pour l'affichage de la recherche
+        foreach ($referencesTemp as $reference) 
+        {
+            //Récupère la référence courante
+            $referenceTemp = $reference;
+
+            //Récupère le premier parent
+            while(!is_null($referenceTemp->getParent())
+                    && $referenceTemp->getParent()->getId() != null)
+            {
+                $referenceTemp = $referenceTemp->getParent();
+            }
+
+            //Trie la référence dans la bonne catégorie
+            switch ($referenceTemp->getId()) 
+            {
+                case 220:
+                    $references['categ1'][] = $reference->getId();
+                    break;
+                case 221:
+                    $references['categ2'][] = $reference->getId();
+                    break;
+                case 223:
+                    $references['categ3'][] = $reference->getId();
+                    break;
+                case 222:
+                    $references['categ4'][] = $reference->getId();
+                    break;
+            }
+        }
+
+        //Récupérations
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
+        $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
+
+        //Récupération des notes existante sur les points dur pour l'utilisateur courant 
+        $notes         = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAllOrderedByPointDur( $user );
+        foreach ($objets as $objet) 
+        {
+            if("point-dur" === $objet["categ"]
+                && !array_key_exists($objet['id'], $notes))
+            {
+                //Si il n'y a pas encore de note pour ce point dur, dans cette étape associé à l'utilisateur courant alors on le créé.
+                $note = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->createEmpty();
+                $note->setRechercheParcoursDetails($rechercheParcoursDetails);
+                $note->setPourcentageMaitrise(0);
+                $note->setObjet( $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $objet['id']) ) );
+                $note->setUser($user);
+
+                $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->save( $note );
+
+                //Puis on l'ajoute aux notes
+                $notes[$objet['id']] = $note;
+            }
+        }
+
+
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/index.html.twig', array(
             'rechercheParcours' => $rechercheParcours,
-            'etapesSelected'    => $rechercheParcoursDetails
+            'etapesSelected'    => $rechercheParcoursDetails,
+            'objets'            => $objets,
+            'notes'             => $notes
         ));
     }
 

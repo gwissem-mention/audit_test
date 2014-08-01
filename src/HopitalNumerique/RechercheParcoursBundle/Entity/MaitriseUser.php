@@ -32,15 +32,21 @@ class MaitriseUser
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="RechercheParcoursDetails", inversedBy="maitriseUsers")
-     * @ORM\JoinColumn(name="rrpd_id", referencedColumnName="rrpd_id")
+     * @ORM\JoinColumn(name="rrpd_id", referencedColumnName="rrpd_id", onDelete="CASCADE")
      */
     protected $rechercheParcoursDetails;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet", cascade={"persist"})
+     * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
+     */
+    protected $objet;
 
     /**
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="usr_user", referencedColumnName="usr_id")
+     * @ORM\JoinColumn(name="usr_user", referencedColumnName="usr_id", onDelete="CASCADE")
      */
     protected $user;
 
@@ -85,6 +91,26 @@ class MaitriseUser
     public function getPourcentageMaitrise()
     {
         return $this->pourcentageMaitrise;
+    }
+    
+    /**
+     * Get objet
+     *
+     * @return Objet $objet
+     */
+    public function getObjet()
+    {
+        return $this->objet;
+    }
+    
+    /**
+     * Set objet
+     *
+     * @param Objet $objet
+     */
+    public function setObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objet)
+    {
+        $this->objet = $objet;
     }
 
     /**

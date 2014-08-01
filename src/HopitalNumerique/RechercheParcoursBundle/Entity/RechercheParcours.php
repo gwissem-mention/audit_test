@@ -92,6 +92,23 @@ class RechercheParcours
     }
 
     /**
+     * Get recherchesParcoursDetails ids
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRecherchesParcoursDetailsIds()
+    {
+        $ids = array();
+
+        foreach ($this->recherchesParcoursDetails as $etape)
+        {
+            $ids[] = $etape->getId();
+        }
+        
+        return $ids;
+    }
+
+    /**
      * Get reference
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $reference

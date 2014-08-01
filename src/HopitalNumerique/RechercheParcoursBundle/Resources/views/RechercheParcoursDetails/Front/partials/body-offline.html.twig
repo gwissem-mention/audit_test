@@ -1,0 +1,47 @@
+<div id="pointsdurs" class="col-md-12">
+    {% set count = 0 %}
+    {% for objet in objets if objet['categ'] == "point-dur" %}
+        {% set count = count + 1 %}
+    {% endfor %}
+    <h4>Points Durs ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h4>
+    <div class="wrapper-results">
+        <div class="background-violet"></div>
+        <div class="col-md-8">
+            {% set count = 0 %}
+            {% for objet in objets if objet['categ'] == "point-dur" %}
+                {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/points-durs-offline.html.twig' with {'objet': objet } %}
+            {% else %}
+                <p> - Aucun point dur trouvé - </p>
+            {% endfor %}
+            <div class="clearfix"></div>
+        </div>
+        <div class="col-md-4">
+            {# Bloc de présentation #}
+            <div class="bloc-presentation">
+                <div class="row">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis gravida gravida ante non lobortis. Etiam vulputate augue ac sapien pulvinar mollis. Nullam semper lectus interdum vehicula gravida. Proin gravida aliquam velit ac euismod. Cras porta vulputate sem, a porta neque.
+                    </p>
+                </div>
+            </div>
+            {# Bloc de création de compte #}
+            <div class="bloc-offline">
+                <div class="bloc-creation row">
+                    <div class="common-sprite icone"></div>
+                    <h3>Mon compte</h3>
+                    <p>
+                        En créant mon compte, je bénéficie de nombreux services. <br />
+                        <a target="_blank" href="{{path('hopital_numerique_publication_publication_article',{'id':314, 'alias':'pourquoi-creer-un-compte','categorie':'publication'|lower})}}">Pourquoi créer un compte ?</a>                             
+                    </p>
+                    <div class="buttons">
+                        <div class="buttons-centrer">
+                            <a href="{{path('account_login')}}" class="btn btn-default login">Connexion</a>
+                            <a href="{{path('hopital_numerique_user_inscription')}}" class="btn btn-default signup">Créer un compte</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>   
+</div>
