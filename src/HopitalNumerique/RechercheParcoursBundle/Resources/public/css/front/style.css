@@ -51,7 +51,7 @@
 #recherche-par-parcours-details h3{color:#672F9E;font-size: 24px;font-weight: bold;}
 #recherche-par-parcours-details .en-tete {margin-top: 25px;overflow: scroll;padding-bottom:10px;border-bottom:1px solid #E5E5E5;}
 /* -- Chemin de fer -- */
-#recherche-par-parcours-details .en-tete .chemin-de-fer {min-width: 900px; height: 63px;background-color: #F4F4F4; position: relative; z-index:1;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer {min-width: 1430px; height: 63px;background-color: #F4F4F4; position: relative; z-index:1;}
 #recherche-par-parcours-details .en-tete .chemin-de-fer ul{list-style:none; padding: 0; margin: 0;}
 
 #recherche-par-parcours-details .en-tete .chemin-de-fer .marge-blanche{width: 29px;height: 63px; ;position: absolute; background-color: #FFFFFF; right: 0px; z-index:2;}
