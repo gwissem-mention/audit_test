@@ -1,9 +1,10 @@
 <li class="dd-item dd3-item" data-id="{{details.id}}" data-etape="{{details.reference.id}}" id="details-{{details.id}}" >
     <div class="dd-handle dd3-handle"></div>
-    <div class="dd3-content" style="padding:1px 50px 5px 40px;">
+    <div class="dd3-content" style="line-height:18px;">
         <span style="margin-top:4px" title="{{details.reference.libelle}}">{{details.reference.libelle|truncate(25,'...')}}</span>
     </div>
     <div class="dd3-actions">
         <div onclick="deleteDetails( {{details.id}}, '{{path('hopital_numerique_recherche_parcours_details_delete', {'id':details.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+        <a href="{{path('hopital_numerique_recherche_parcours_details_edit',{'id':details.id})}}" class="fancy pull-right dd3-edit fancybox.ajax"><i class="fa fa-edit"></i></a>
     </div>
 </li>
