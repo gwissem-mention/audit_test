@@ -1,6 +1,7 @@
 parameters:
     hopitalnumerique_recherche_parcours.manager.recherche_parcours.class: HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager
     hopitalnumerique_recherche_parcours.manager.recherche_parcours_details.class: HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursDetailsManager
+    hopitalnumerique_recherche_parcours.manager.matrise_user.class: HopitalNumerique\RechercheParcoursBundle\Manager\MaitriseUserManager
 
 services:
     #RechercheParcours
@@ -12,6 +13,12 @@ services:
     #RechercheParcours Détails
     hopitalnumerique_recherche_parcours.manager.recherche_parcours_details:
         class: %hopitalnumerique_recherche_parcours.manager.recherche_parcours_details.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    #RechercheParcours Détails
+    hopitalnumerique_recherche_parcours.manager.matrise_user:
+        class: %hopitalnumerique_recherche_parcours.manager.matrise_user.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
