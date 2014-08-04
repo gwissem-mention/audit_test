@@ -37,14 +37,13 @@
 
 {% block javascripts %}
     {% javascripts output="compiled/hopitalnumerique-recherche-parcours-details-front-index.js" 
-        "@fancybox_js"
+        "@jquery_js"
         "@jquery_ui_js"
+        "@fancybox_js"
+        "@enquire_js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-{% endblock %}
-
-{% block body %}
     <script type="text/javascript">
         $(document).ready(function() {
             calculNoteMoyenne();
@@ -94,7 +93,9 @@
                 $("#note-moyenne").val(parseInt("0", 0));
         }
     </script>
+{% endblock %}
 
+{% block body %}
     <div class="col-md-12" id="recherche-par-parcours-details">
         <h3>{{rechercheParcours.reference.libelle}}</h3>
         
