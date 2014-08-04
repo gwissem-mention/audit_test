@@ -1,0 +1,49 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-glossaire-glossaire-edit.js"
+        "@tinymce_js"
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    
+    <script type="text/javascript">
+        NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
+        NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
+    </script>
+{% endblock %}
+
+{% block h1Title %}
+    {% if glossaire.id %}
+        Editer un élément du glossaire
+    {% else %}
+        Ajouter un élément au glossaire
+    {% endif %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_glossaire_glossaire') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+    {% if glossaire.id %}
+        <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_glossaire_glossaire_delete', { 'id': glossaire.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body">
+                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

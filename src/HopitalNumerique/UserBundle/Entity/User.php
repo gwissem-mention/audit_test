@@ -187,6 +187,7 @@ class User extends BaseUser
     
     /**
      * @var string
+     * 
      * @Assert\NotBlank(message="L'adresse éléctronique ne peut pas être vide.")
      * @Assert\Regex(pattern= "/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]{2,}[.][a-zA-Z]{2,3}$/")
      * @Assert\Length(

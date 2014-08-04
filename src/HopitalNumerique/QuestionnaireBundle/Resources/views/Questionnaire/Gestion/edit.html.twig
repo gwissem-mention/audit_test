@@ -5,7 +5,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {% stylesheets output="compiled/hopitalnumerique--questionnaire-gestion-edit.css" filter="cssrewrite, ?yui_css" 
+    {% stylesheets output="compiled/hopitalnumerique-questionnaire-gestion-edit.css" filter="cssrewrite, ?yui_css" 
         "@validationEngine_css"
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -14,7 +14,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts output="compiled/hopitalnumerique--questionnaire-gestion-edit.js" 
+    {% javascripts output="compiled/hopitalnumerique-questionnaire-gestion-edit.js" 
         "@validationEngine_js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

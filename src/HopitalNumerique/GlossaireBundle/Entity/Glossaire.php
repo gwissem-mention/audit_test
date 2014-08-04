@@ -4,6 +4,10 @@ namespace HopitalNumerique\GlossaireBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+//Asserts Stuff
+use Symfony\Component\Validator\Constraints as Assert;
+use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
+
 /**
  * Glossaire
  *
@@ -24,6 +28,14 @@ class Glossaire
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="Le mot ne peut pas être vide.")
+     * @Assert\Length(
+     *      min = "1",
+     *      max = "255",
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le mot.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le mot."
+     * )
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="glo_mot", type="string", length=255, options = {"comment" = "Mot du glossaire"})
      */
     private $mot;
@@ -45,6 +57,7 @@ class Glossaire
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_statut", referencedColumnName="ref_id")
+     * @Nodevo\Javascript(class="validate[required]")
      */
     protected $etat;
 

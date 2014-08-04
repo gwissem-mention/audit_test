@@ -16,7 +16,7 @@
 {% block javascripts %}
     {{ parent() }}
     {{ block('grid_javascripts')}}
-    {% javascripts output="compiled/hopitalnumerique--questionnaire-gestion-index.js"
+    {% javascripts output="compiled/hopitalnumerique-questionnaire-gestion-index.js"
         'bundles/hopitalnumeriquequestionnaire/js/Back_gestion/index.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
