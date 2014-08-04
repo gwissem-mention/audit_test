@@ -1,12 +1,14 @@
-<div class="row">
-    <div class="col-md-8">
-        {# Inclu la vue de l'affichage des points dur #}
-        {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/details-points-durs.html.twig' with {'objet': objet } %}
-    </div>
-    <div class="col-md-4">
-        <div class="note">
-            {{notes[objet['id']].pourcentageMaitrise}}
-            <input type="hidden" class="noteValue" value="{{notes[objet['id']].pourcentageMaitrise}}" />
+<div style="margin:10px 0;">
+    <div class="row">
+        <div class="col-md-8">
+            {# Inclu la vue de l'affichage des points dur #}
+            {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/details-points-durs.html.twig' with {'objet': objet } %}
+        </div>
+        <div class="col-md-4">
+            <div class="note">
+                {{notes[objet['id']].pourcentageMaitrise}}
+                <input type="hidden" class="noteValue" value="{{notes[objet['id']].pourcentageMaitrise}}" />
+            </div>
         </div>
     </div>
 </div>

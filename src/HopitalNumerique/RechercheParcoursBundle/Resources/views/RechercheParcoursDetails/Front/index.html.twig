@@ -6,12 +6,16 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-details-front-index.css" filter="cssrewrite, ?yui_css"
+        "@fancybox_css"
         'bundles/hopitalnumeriquerechercheparcours/css/front/style.css'
         'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-    <style type="text/css">    
+    <style type="text/css"> 
+/* Général */
+#recherche-par-parcours-details .note { width: 300px; height: 40px; background-color:#F4F4F4; margin-top: 10px;}
+
 /* Mode non connecté */
 #pointsdurs .bloc-presentation {padding:0;margin-bottom: 15px;}
 #pointsdurs .bloc-presentation > div{ padding:30px; background: #F4F4F4; margin: 0 0 0 15px;}
@@ -21,9 +25,11 @@
 #pointsdurs h4{ color: #595959; font-size: 14px; text-transform: uppercase; margin: 10px 0; font-weight: normal}
 #pointsdurs .wrapper-results{  padding:10px 20px 20px 0; position: relative; }
 #pointsdurs .wrapper-results .background-violet{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
-#pointsdurs .wrapper-results .results h5{margin-bottom: 5px}
-#pointsdurs .wrapper-results .results h5 a{color:#703695; font-size: 18px; font-weight: bold; }
-#pointsdurs .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top: 10px; display: block; height: 18px; text-align: right}
+#pointsdurs .wrapper-results .results h4{margin-bottom: 5px;}
+#pointsdurs .wrapper-results .results h4 img{margin-bottom: 5px;}
+#pointsdurs .wrapper-results .results h4 span.label{margin-bottom: 5px; font-size: 9px; line-height: 2; vertical-align: top;}
+#pointsdurs .wrapper-results .results h4 a{color:#703695; font-size: 18px; font-weight: bold; }
+
 #pointsdurs .wrapper-results .results p{font-size: 13px; color:#070707; }
 #pointsdurs .wrapper-results .results .fa-refresh{ color:#3da20b; }
     </style>
@@ -31,6 +37,7 @@
 
 {% block javascripts %}
     {% javascripts output="compiled/hopitalnumerique-recherche-parcours-details-front-index.js" 
+        "@fancybox_js"
         "@jquery_ui_js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -41,6 +48,34 @@
     <script type="text/javascript">
         $(document).ready(function() {
             calculNoteMoyenne();
+        });
+
+        $('a.synthese').fancybox({
+            'padding'   : 0,
+            'autoSize'  : false,
+            'width'     : '80%',
+            'scrolling' : 'no'
+        });
+
+        //fancybox daffichage de la synthese
+        enquire.register("screen and (max-width: 991px)", {
+            match : function() {
+                $(function() {
+                    $(document).unbind('click.fb-start');
+                    $('a.synthese').attr('target','_blank');
+                });
+            },
+            unmatch : function() {
+                $(function() {
+                    $('a.synthese').fancybox({
+                        'padding'   : 0,
+                        'autoSize'  : false,
+                        'width'     : '80%',
+                        'scrolling' : 'no'
+                    });
+                    $('a.synthese').attr('target','');
+                });
+            }
         });
 
         function calculNoteMoyenne()
@@ -64,8 +99,10 @@
         <h3>{{rechercheParcours.reference.libelle}}</h3>
         
         <div class="en-tete">
-            {# Include du chemin de fer #}
-            {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/chemin_de_fer.html.twig' with { 'rechercheParcours' : rechercheParcours, 'etapeSelected' : etapesSelected.id } %}
+            <div class="en-tete-scroll">
+                {# Include du chemin de fer #}
+                {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/chemin_de_fer.html.twig' with { 'rechercheParcours' : rechercheParcours, 'etapeSelected' : etapesSelected.id } %}
+            </div>
 
             <div class="description">
                 <div class="col-md-8 row">
@@ -80,6 +117,7 @@
                     {% endif %}
                 </div>
             </div>
+            <div class="clearfix"></div>
         </div>
 
         <div class="resultats-points-durs">

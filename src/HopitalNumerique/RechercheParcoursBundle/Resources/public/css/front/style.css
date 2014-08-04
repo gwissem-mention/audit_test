@@ -49,24 +49,25 @@
 
 /* En-tête de la page */
 #recherche-par-parcours-details h3{color:#672F9E;font-size: 24px;font-weight: bold;}
-#recherche-par-parcours-details .en-tete {margin-top: 25px;overflow: scroll;padding-bottom:10px;border-bottom:1px solid #E5E5E5;}
+#recherche-par-parcours-details .en-tete {margin-top: 25px;padding-bottom:10px;border-bottom:1px solid #E5E5E5;}
 /* -- Chemin de fer -- */
-#recherche-par-parcours-details .en-tete .chemin-de-fer {min-width: 1430px; height: 63px;background-color: #F4F4F4; position: relative; z-index:1;}
-#recherche-par-parcours-details .en-tete .chemin-de-fer ul{list-style:none; padding: 0; margin: 0;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll {overflow: scroll;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer {min-width: 1430px; height: 63px;background-color: #F4F4F4; position: relative; z-index:1;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer ul{list-style:none; padding: 0; margin: 0;}
 
-#recherche-par-parcours-details .en-tete .chemin-de-fer .marge-blanche{width: 29px;height: 63px; ;position: absolute; background-color: #FFFFFF; right: 0px; z-index:2;}
-#recherche-par-parcours-details .en-tete .chemin-de-fer .icone{background: transparent url('../../img/pointe_grise.png')  no-repeat bottom left;width: 29px; height: 63px; position: absolute; right: 0; z-index:3;}
-#recherche-par-parcours-details .en-tete .chemin-de-fer .icone-selected{background: transparent url('../../img/pointe_violette.png')  no-repeat bottom left;width: 29px; height: 63px;position: absolute; right: 0; z-index:3;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .marge-blanche{width: 29px;height: 63px; ;position: absolute; background-color: #FFFFFF; right: 0px; z-index:2;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .icone{background: transparent url('../../img/pointe_grise.png')  no-repeat bottom left;width: 29px; height: 63px; position: absolute; right: 0; z-index:3;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .icone-selected{background: transparent url('../../img/pointe_violette.png')  no-repeat bottom left;width: 29px; height: 63px;position: absolute; right: 0; z-index:3;}
 
-#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape{height: 63px; background-color: #F4F4F4;float: left; z-index:2;position: relative;}
-#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape .marge-violette{width: 29px;height: 63px; ;position: absolute; background-color: #712F98; right: 0px; z-index:2;}
-#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape a{color: #672F9E; font-size: 15px; text-transform: uppercase; margin: 20px 40px 20px 20px;float: left; z-index:2;}
-#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape .icone{background: transparent url('../../img/pointe_grise.png')  no-repeat bottom left;width: 29px; height: 63px;float:left; z-index:3;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape{height: 63px; background-color: #F4F4F4;float: left; z-index:2;position: relative;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape .marge-violette{width: 29px;height: 63px; ;position: absolute; background-color: #712F98; right: 0px; z-index:2;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a{color: #672F9E; font-size: 15px; text-transform: uppercase; margin: 20px 40px 20px 20px;float: left; z-index:2;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape .icone{background: transparent url('../../img/pointe_grise.png')  no-repeat bottom left;width: 29px; height: 63px;float:left; z-index:3;}
 
-#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape-selected{height: 63px; background-color: #712F98;float: left; z-index:2; position: relative;}
-#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape-selected .marge-grise{width: 29px;height: 63px; ;position: absolute; background-color: #F4F4F4; right: 0px; z-index:2;}
-#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape-selected a{color: #F4F4F4; font-size: 15px; text-transform: uppercase; margin: 20px 40px 20px 20px;float: left; z-index:2;}
-#recherche-par-parcours-details .en-tete .chemin-de-fer .bloc-etape-selected .icone{background: transparent url('../../img/pointe_violette.png')  no-repeat bottom left;width: 29px; height: 63px;float:left; z-index:3;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected{height: 63px; background-color: #712F98;float: left; z-index:2; position: relative;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected .marge-grise{width: 29px;height: 63px; ;position: absolute; background-color: #F4F4F4; right: 0px; z-index:2;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a{color: #F4F4F4; font-size: 15px; text-transform: uppercase; margin: 20px 40px 20px 20px;float: left; z-index:2;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected .icone{background: transparent url('../../img/pointe_violette.png')  no-repeat bottom left;width: 29px; height: 63px;float:left; z-index:3;}
 /* -- Description + moyenne générale -- */
 #recherche-par-parcours-details .en-tete .description { margin-top: 20px; padding-left: O;}
 #recherche-par-parcours-details .en-tete .description p{ border-left:5px solid #712F98; padding-left: 15px;}
@@ -91,9 +92,13 @@
 #pointsdurs .bloc-offline .buttons-tdb .buttons-centrer{margin:10px auto 0; width: 200px;}
 #pointsdurs .bloc-offline .buttons-tdb .tdb{margin:auto; width: 200px;}
 
+/* Mode connecté */
+#pointsdurs .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../../img/synthese.png') no-repeat right center; padding-right:25px; margin-top: 10px; display: block; height: 18px; text-align: right}
+
 
 @media screen and (max-width: 1195px) {
     #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete .icone{display: none;}
+    #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete .titre{margin-left: 0px;}
 }
 @media screen and (max-width: 1127px) {
     #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-tablette{display:block;}

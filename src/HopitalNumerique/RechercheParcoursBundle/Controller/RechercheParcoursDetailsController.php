@@ -257,7 +257,8 @@ class RechercheParcoursDetailsController extends Controller
             'rechercheParcours' => $rechercheParcours,
             'etapesSelected'    => $rechercheParcoursDetails,
             'objets'            => $objets,
-            'notes'             => $notes
+            'notes'             => $notes,
+            'notesJSON'         => json_encode($notes)
         ));
     }
 

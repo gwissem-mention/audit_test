@@ -1,33 +1,35 @@
-<div class="col-md-12 row">
-    <h4>
-        {% if objet['updated'] %}
-            <span class="label label-success">MaJ</span>
-        {% elseif objet['new'] %}
-            <span class="label label-danger">Nouveau</span>
-        {% endif %}
+<div class="row">
+    <div class="col-md-10">
+        <h4>
+            {% if objet['updated'] %}
+                <span class="label label-success">MaJ</span>
+            {% elseif objet['new'] %}
+                <span class="label label-danger">Nouveau</span>
+            {% endif %}
 
-        {% if objet['primary'] == 1 %}
-            <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-1.png')}}" alt="Niveau 1" title="Contenus les plus pertinents" />
-        {% elseif objet['countRef'] <= 200 %}
-            <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-2.png')}}" alt="Niveau 2" title="Contenus pertinents" />
-        {% elseif objet['countRef'] > 200 %}
-            <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-3.png')}}" alt="Niveau 3" title="Contenus potentiellement pertinents" />
-        {% endif %}
+            {% if objet['primary'] == 1 %}
+                <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-1.png')}}" alt="Niveau 1" title="Contenus les plus pertinents" />
+            {% elseif objet['countRef'] <= 200 %}
+                <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-2.png')}}" alt="Niveau 2" title="Contenus pertinents" />
+            {% elseif objet['countRef'] > 200 %}
+                <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-3.png')}}" alt="Niveau 3" title="Contenus potentiellement pertinents" />
+            {% endif %}
 
-        {% if objet['objet'] is not null %}
-            <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >
-        {% else %}
-            <a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
-        {% endif %}
-            {{objet['titre']}}{% if objet['objet'] is not null %}<small class="violet"> - Extrait d'une production</small>{% endif %}
-        </a>
-    </h4>
-</div>
+            {% if objet['objet'] is not null %}
+                <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >
+            {% else %}
+                <a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
+            {% endif %}
+                {{objet['titre']}}{% if objet['objet'] is not null %}<small class="violet"> - Extrait d'une production</small>{% endif %}
+            </a>
+        </h4>
+    </div>
 
-<div class="col-md-2 row">
-    {% if objet['synthese'] is not null %}
-        <a class="synthese fancybox.iframe" href="{{path('hopital_numerique_publication_synthese',{'id':objet['synthese']})}}">synthèse</a>
-    {% endif %}
+    <div class="col-md-2">
+        {% if objet['synthese'] is not null %}
+            <a class="synthese fancybox.iframe" href="{{path('hopital_numerique_publication_synthese',{'id':objet['synthese']})}}">synthèse</a>
+        {% endif %}
+    </div>
 </div>
 <div class="col-md-12 row">
     <p>{{ objet['resume'] }}</p>
