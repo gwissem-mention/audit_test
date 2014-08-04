@@ -25,6 +25,7 @@ use \Nodevo\ToolsBundle\Tools\Chaine;
  * @UniqueEntity(fields="email", message="Cette adresse email existe déjà.")
  * @UniqueEntity(fields="username", message="Ce nom de compte existe déjà.")
  * @Gedmo\Loggable
+ * 
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="username",
  *          column=@ORM\Column(
