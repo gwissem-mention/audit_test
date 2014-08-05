@@ -93,11 +93,11 @@ class GlossaireController extends Controller
         $datas = $this->get('hopitalnumerique_glossaire.manager.glossaire')->findBy( array('id' => $primaryKeys) );
 
         $colonnes = array( 
-                            'id'           => 'ID', 
+                            'id'           => 'id', 
                             'mot'          => 'Mot',
                             'intitule'     => 'Intitulé',
                             'description'  => 'Description',
-                            'etat.libelle' => 'Etat',
+                            'etat.libelle' => 'Etat'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
