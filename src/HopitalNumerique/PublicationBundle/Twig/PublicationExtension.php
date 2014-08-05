@@ -2,6 +2,7 @@
 namespace HopitalNumerique\PublicationBundle\Twig;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Nodevo\ToolsBundle\Tools\Chaine;
 
 class PublicationExtension extends \Twig_Extension
 {
@@ -130,8 +131,10 @@ class PublicationExtension extends \Twig_Extension
         //Glossaire stuff
         if( $glossaires ){
             $words = $this->getManagerGlossaire()->findBy( array('mot' => $glossaires) );
+
             foreach($words as $word){
-                $html = '<abbr title="' . $word->getIntitule() . '" >'. $word->getMot(). ' <a target="_blank" href="/glossaire#'.$word->getMot().'" ><i class="fa fa-info-circle"></i></a></abbr>';
+                $tool    = new Chaine( $word->getMot() );
+                $html    = '<abbr title="' . $word->getIntitule() . '" >'. $word->getMot(). ' <a target="_blank" href="/glossaire#'. $tool->minifie() .'" ><i class="fa fa-info-circle"></i></a></abbr>';
                 $content = str_replace( $word->getMot(), $html, $content );
             }    
         }

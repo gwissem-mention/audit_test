@@ -6,8 +6,9 @@
 #glossaire .alphabet a:hover { color: #6f3596; background: #f4f4f4; border-radius: 3px; text-decoration: none; }
 #glossaire .liste .col-md-12{margin-bottom: 25px}
 #glossaire .liste .col-md-12 h2{ font-size: 48px; margin: 0 0 10px 0; }
-#glossaire .liste .col-md-12 .sep{ height: 1px; width: 100%; background: #c8c8c8; margin-bottom: 15px; }
+#glossaire .liste .col-md-12 > .sep{ height: 1px; width: 100%; background: #c8c8c8; margin-bottom: 15px; }
 #glossaire .liste .col-md-12 .elements{ width: 100%; }
+#glossaire .liste .col-md-12 .elements > .sep { width: 50%; height: 1px; background: #F4F4F4; margin:15px auto;}
 #glossaire .liste .col-md-12 .elements .col-md-6 p{ margin: 0}
 #glossaire .liste .col-md-12 .elements .col-md-6 p.titre{ font-weight: bold; font-size: 12px; color: #5d5d5d }
 #glossaire .liste .col-md-12 .elements .col-md-6 p.desc{ font-size: 12px; color: #5d5d5d }
