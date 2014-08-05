@@ -57,3 +57,8 @@ hopital_numerique_recherche_parcours_details_index_front:
     requirements:
         id : \d+
         idEtape : \d+
+
+#sauvegarde des notes
+hopital_numerique_recherche_parcours_details_save_front:
+    pattern:  /recherche-par-parcours/details/save.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:MaitriseUser:save", _format: json}

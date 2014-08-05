@@ -9,12 +9,45 @@
         "@fancybox_css"
         'bundles/hopitalnumeriquerechercheparcours/css/front/style.css'
         'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-    <style type="text/css"> 
+    
+<style type="text/css"> 
 /* Général */
 #recherche-par-parcours-details .note { width: 300px; height: 40px; background-color:#F4F4F4; margin-top: 10px;}
+#recherche-par-parcours-details .en-tete .description #note-moyenne span{ font-size: 22px;font-weight: bold; margin: 5px 40%; width: 20%;display: block;padding-top: 3px;}
+#recherche-par-parcours-details .en-tete .description #note-moyenne span.green{ color:#5CB85C;}
+#recherche-par-parcours-details .en-tete .description #note-moyenne span.yellow{ color:#DA7F2C;}
+#recherche-par-parcours-details .en-tete .description #note-moyenne span.red{ color:#C93358;}
+
+/*#recherche-par-parcours-details .en-tete .description #note-moyenne span.green{ color:#DFF0D8;}
+#recherche-par-parcours-details .en-tete .description #note-moyenne span.yellow{ color:#FCF8E3;}
+#recherche-par-parcours-details .en-tete .description #note-moyenne span.red{ color:#F2DEDE;}
+*/
+
+#recherche-par-parcours-details .en-tete .en-tete-scroll {overflow: scroll;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer {min-width: 1136px; height: 63px;background-color: #F4F4F4; position: relative; z-index:1;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer ul{list-style:none; padding: 0; margin: 0;}
+
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .marge-blanche{width: 29px;height: 63px; ;position: absolute; background-color: #FFFFFF; right: 0px; z-index:2;}
+
+
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape{height: 63px; background-color: #F4F4F4;float: left; z-index:2;position: relative;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape .marge-violette{width: 29px;height: 63px; ;position: absolute; background-color: #712F98; right: 0px; z-index:2;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a{color: #672F9E; font-size: 13px; text-transform: uppercase; margin: 20px 30px 20px 10px;float: left; z-index:2;letter-spacing: -0.3px;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.green{border-bottom: 3px solid #5CB85C}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.yellow{border-bottom: 3px solid #DA7F2C}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.red{border-bottom: 3px solid #C93358}
+
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected{height: 63px; background-color: #712F98;float: left; z-index:2; position: relative;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected .marge-grise{width: 29px;height: 63px; ;position: absolute; background-color: #F4F4F4; right: 0px; z-index:2;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a{color: #F4F4F4; font-size: 13px; text-transform: uppercase; margin: 20px 30px 20px 10px;float: left; z-index:2;letter-spacing: -0.3px;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.green{border-bottom: 3px solid #5CB85C}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.yellow{border-bottom: 3px solid #DA7F2C}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.red{border-bottom: 3px solid #C93358}
+
 
 /* Mode non connecté */
 #pointsdurs .bloc-presentation {padding:0;margin-bottom: 15px;}
@@ -32,7 +65,8 @@
 
 #pointsdurs .wrapper-results .results p{font-size: 13px; color:#070707; }
 #pointsdurs .wrapper-results .results .fa-refresh{ color:#3da20b; }
-    </style>
+</style>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -41,14 +75,57 @@
         "@jquery_ui_js"
         "@fancybox_js"
         "@enquire_js"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <script type="text/javascript">
+        var loader;
+
         $(document).ready(function() {
             calculNoteMoyenne();
+
+            //Récupération du tableau de note jsonifié
+            var notes = jQuery.parseJSON( $("#note-json").val() );
+
+            //Pour chaque note, setage du slider avec la valeur associée
+            $('.note').each(function(){
+                //Slider
+                $(this).children( ".slider-range-min" ).slider({
+                    range: "min",
+                    value: notes[$(this).data('id')],
+                    min: 0,
+                    max: 100,
+                    stop: function(event, ui){
+                        loader = $(this).parent('.note').nodevoLoader();
+                        loader.start();
+
+                        $.ajax({
+                            url      : $("#sauvegarde-note-url").val(),
+                            data     : {
+                                idObjet                  : $(this).parent('.note').data('id'),
+                                value                    : ui.value,
+                                rechercheParcoursDetails : $("#etape-selected").val()
+                            },
+                            type     : 'POST',
+                            dataType : 'json',
+                            success : function( data ){
+                                loader.finished();
+                            }
+                        });
+                    },
+                    slide: function( event, ui ) {
+                        $( "#pourcentage-" + $(this).parent('.note').data('id') ).val( ui.value );
+                        calculNoteMoyenne();
+                    }
+                });
+                
+                //Label
+                $( "#pourcentage-" + $(this).data('id') ).val( $( "#slider-range-min-" + $(this).data('id') ).slider( "value" ) );
+            });
         });
 
+        //Fancybox de la synthese
         $('a.synthese').fancybox({
             'padding'   : 0,
             'autoSize'  : false,
@@ -82,15 +159,41 @@
             var noteTotal = 0;
             var compteur  = 0;
 
-            $(".resultats-points-durs .note .noteValue").each(function(){
+            $(".resultats-points-durs .note .poucentage").each(function(){
                 noteTotal += parseInt($(this).val(),0);
                 compteur++;
             });
 
-            if(compteur != 0)
-                $("#note-moyenne").val(parseInt(noteTotal / compteur, 0));
+            var couleur;
+            //Choix de la couleur à appliquer
+            if(parseInt(noteTotal / compteur, 0) < 33)
+                couleur = "red";
+            else if(parseInt(noteTotal / compteur, 0) < 67)
+                couleur = "yellow";
             else
-                $("#note-moyenne").val(parseInt("0", 0));
+                couleur = "green";
+
+            //Calcul de la moyenne
+            if(compteur != 0)
+            {
+                $("#note-moyenne span").html(parseInt(noteTotal / compteur, 0) + ' %');
+                $("#note-moyenne span").attr("class", function(i, val){
+                    return couleur;
+                });
+                $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr("class", function(i, val){
+                    return couleur;
+                });
+            }
+            else
+            {
+                $("#note-moyenne span").html(parseInt("0", 0) + ' %');
+                $("#note-moyenne span").attr("class", function(i, val){
+                    return couleur;
+                });
+                $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr("class", function(i, val){
+                    return couleur;
+                });
+            }
         }
     </script>
 {% endblock %}
@@ -114,6 +217,7 @@
                 <div class="col-md-4">
                     {% if app.user %}
                         <div id="note-moyenne" class="note">
+                            <span></span>
                         </div>
                     {% endif %}
                 </div>
@@ -122,9 +226,15 @@
         </div>
 
         <div class="resultats-points-durs">
+            <input type="hidden" id="app-user" value="{% if app.user %}{{app.user.id}}{% else %}0{% endif %}" />
+            <input type="hidden" id="etape-selected" value="{{etapesSelected.id}}" />
+            <input type="hidden" id="sauvegarde-note-url" value="{{path("hopital_numerique_recherche_parcours_details_save_front")}}" />
             {% if app.user %}
                 {# Include du body en mode connecté #}
                 {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/body-online.html.twig' with { 'rechercheParcours' : rechercheParcours, 'etapeSelected' : etapesSelected.id } %}
+
+                {# Input hidden permettant de stocker le tableau des notes triés par objet #}
+                <input type="hidden" id="note-json" value="{{ notesJSON }}" />
             {% else %}
                 {# Include du body en mode non connecté #}
                 {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/body-offline.html.twig' with { 'rechercheParcours' : rechercheParcours, 'etapeSelected' : etapesSelected.id } %}

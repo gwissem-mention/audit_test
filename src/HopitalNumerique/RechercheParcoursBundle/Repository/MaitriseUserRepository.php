@@ -12,4 +12,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class MaitriseUserRepository extends EntityRepository
 {
+    /**
+     * Retourne la moyenne des notes pour les étapes passées en param
+     *
+     * @param array $etapesId [description]
+     *
+     * @return QueryBuilder
+     */
+    public function getAverage(array $etapesId)
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne')
+                         ->from('\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser', 'notes')
+                                ->leftJoin('notes.rechercheParcoursDetails', 'etape')
+                                ->andWhere('etape.id IN (:ids)')
+                                ->setParameter('ids', $etapesId)
+                         ->groupBy('etape.id');
+    }
 }

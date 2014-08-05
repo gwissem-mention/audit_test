@@ -18,10 +18,10 @@ class MaitriseUserManager extends BaseManager
      *
      * @return array(HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser)
      */
-    public function getAllOrderedByPointDur( $user )
+    public function getAllOrderedByPointDurForParcoursEtape( $user, $idParcoursEtape )
     {
         $notesByPointDur = array();
-        $notes = $this->findAll(array('user' => $user));
+        $notes = $this->findBy(array('user' => $user, 'rechercheParcoursDetails' => $idParcoursEtape));
 
         foreach ($notes as $note)
         {
@@ -29,5 +29,29 @@ class MaitriseUserManager extends BaseManager
         }
 
         return $notesByPointDur;
+    }
+
+    /**
+     * Retourne la moyenne des notes pour les étapes passées en param
+     *
+     * @param RechercheParcours $rechercheParcours
+     *
+     * @return array Tableau des moyenne triées par étape
+     */
+    public function getAverage( $rechercheParcours )
+    {
+        $etapesId = $rechercheParcours->getRecherchesParcoursDetailsIds();
+
+        //Récupération du tableau des objets maitrisés
+        $objetsMaitrises = $this->getRepository()->getAverage( $etapesId )->getQuery()->getResult();
+
+        $moyennes = array();
+        //Cast des moyenne en int arrondi à l'entier
+        foreach ($objetsMaitrises as $key => $etape) 
+        {
+            $moyennes[$etape['etapeId']] = intval($etape['moyenne'], 0);
+        }
+
+        return $moyennes;
     }
 }

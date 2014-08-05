@@ -232,7 +232,8 @@ class RechercheParcoursDetailsController extends Controller
         $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
 
         //Récupération des notes existante sur les points dur pour l'utilisateur courant 
-        $notes         = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAllOrderedByPointDur( $user );
+        $notes         = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAllOrderedByPointDurForParcoursEtape( $user, $rechercheParcoursDetails->getId() );
+
         foreach ($objets as $objet) 
         {
             if("point-dur" === $objet["categ"]
@@ -252,13 +253,23 @@ class RechercheParcoursDetailsController extends Controller
             }
         }
 
+        $notesJSON = array();
+        //Set d'un tableau de note en JSOn pour le chargement des slides
+        foreach ($notes as $key => $note) 
+        {
+            $notesJSON[$key] = $note->getPourcentageMaitrise();
+        }
+
+        //Récupération de la note moyenne par étapes dans un tableau (étapeId => moyenne arrondie à l'entier)
+        $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage( $rechercheParcours );
 
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/index.html.twig', array(
-            'rechercheParcours' => $rechercheParcours,
-            'etapesSelected'    => $rechercheParcoursDetails,
-            'objets'            => $objets,
-            'notes'             => $notes,
-            'notesJSON'         => json_encode($notes)
+            'rechercheParcours'    => $rechercheParcours,
+            'etapesSelected'       => $rechercheParcoursDetails,
+            'objets'               => $objets,
+            'notes'                => $notes,
+            'notesJSON'            => json_encode($notesJSON),
+            'notesMoyenneParEtape' => $notesMoyenneParEtape
         ));
     }
 
