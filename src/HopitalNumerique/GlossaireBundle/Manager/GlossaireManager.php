@@ -51,23 +51,48 @@ class GlossaireManager extends BaseManager
         $keys = array_keys($glossaires);
 
         //objets
-        foreach($objets as $objet){
-            $motsFounds = array();
-            //parse Resume + Synthese
-            $words = array_merge( explode( ' ', strip_tags($objet->getResume()) ), explode( ' ', strip_tags($objet->getSynthese()) ) );
+        if( count($objets) > 0){
+            foreach($objets as $objet){
+                $motsFounds = array();
+                //parse Resume + Synthese
+                $words = array_merge( explode( ' ', strip_tags($objet->getResume()) ), explode( ' ', strip_tags($objet->getSynthese()) ) );
 
-            foreach($words as $word){
-                if( in_array( $word, $keys) ) 
-                    $motsFounds[] = $word;
-            }
+                foreach($words as $word){
+                    if( in_array( $word, $keys) ) 
+                        $motsFounds[] = $word;
+                }
 
-            //on dédoublonne les mots trouvés
-            $motsFounds = array_unique($motsFounds);
+                //on dédoublonne les mots trouvés
+                $motsFounds = array_unique($motsFounds);
 
-            if( count($motsFounds) > 0 )
-                $objet->setGlossaires( $motsFounds );
-            else
-                $objet->setGlossaires( array() );
+                if( count($motsFounds) > 0 )
+                    $objet->setGlossaires( $motsFounds );
+                else
+                    $objet->setGlossaires( array() );
+            }    
         }
+
+        //contenus
+        if( count($contenus) > 0){
+            foreach($contenus as $contenu){
+                $motsFounds = array();
+                //parse Contenu
+                $words = array_merge( explode( ' ', strip_tags($contenu->getContenu()) ) );
+
+                foreach($words as $word){
+                    if( in_array( $word, $keys) ) 
+                        $motsFounds[] = $word;
+                }
+
+                //on dédoublonne les mots trouvés
+                $motsFounds = array_unique($motsFounds);
+
+                if( count($motsFounds) > 0 )
+                    $contenu->setGlossaires( $motsFounds );
+                else
+                    $contenu->setGlossaires( array() );
+            }    
+        }
+        
     }
 }

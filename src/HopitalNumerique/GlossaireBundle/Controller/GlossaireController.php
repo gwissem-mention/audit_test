@@ -112,8 +112,9 @@ class GlossaireController extends Controller
      */
     public function parsePublicationsAction()
     {
-        $objets = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
-        $this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( $objets );
+        $objets   = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
+        $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->findAll();
+        $this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( $objets, $contenus );
 
         //save changes
         $this->getDoctrine()->getManager()->flush();
