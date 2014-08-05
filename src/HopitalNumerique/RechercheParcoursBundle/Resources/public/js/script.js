@@ -110,9 +110,10 @@ function selectRecherche( id, url )
 function addDetails( url )
 {
     loader = $('#details').nodevoLoader();
-    loader.start();
 
     if ( $('#designForForm form').validationEngine('validate') ) {
+        loader.start();
+        
         $.ajax({
             url     : url,
             data    :  $('#designForForm form').serialize(),
