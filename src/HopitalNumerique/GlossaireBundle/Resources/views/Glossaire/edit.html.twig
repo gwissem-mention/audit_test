@@ -1,5 +1,23 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-glossaire-glossaire-edit.css" filter="cssrewrite, ?yui_css" 
+        "@validationEngine_css"
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-glossaire-glossaire-edit.js" 
+        "@validationEngine_js"
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block h1Title %}
     {% if glossaire.id %}
         Editer un élément du glossaire
