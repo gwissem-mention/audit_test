@@ -1,3 +1,5 @@
+var loader;
+    
 $(document).ready(function() {
     
     //Création et gestion de l'arborescence des chapitres
@@ -107,6 +109,9 @@ function selectRecherche( id, url )
 //Selectionne un chapitre et charge l'ensemble des questions liés
 function addDetails( url )
 {
+    loader = $('#details').nodevoLoader();
+    loader.start();
+
     if ( $('#designForForm form').validationEngine('validate') ) {
         $.ajax({
             url     : url,
@@ -117,6 +122,8 @@ function addDetails( url )
                 $('#details-dd ol:first').append( data );
                 //Supprime l'élément de la liste
                 $(".blocQuestion option:selected").remove();
+                
+                loader.finished();
             }
         });
     }

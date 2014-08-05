@@ -22,10 +22,7 @@
 #recherche-par-parcours-details .en-tete .description #note-moyenne span.yellow{ color:#DA7F2C;}
 #recherche-par-parcours-details .en-tete .description #note-moyenne span.red{ color:#C93358;}
 
-/*#recherche-par-parcours-details .en-tete .description #note-moyenne span.green{ color:#DFF0D8;}
-#recherche-par-parcours-details .en-tete .description #note-moyenne span.yellow{ color:#FCF8E3;}
-#recherche-par-parcours-details .en-tete .description #note-moyenne span.red{ color:#F2DEDE;}
-*/
+.slider-range-min{width: 90%; margin: 0 10px 10px 10px;}
 
 #recherche-par-parcours-details .en-tete .en-tete-scroll {overflow: scroll;}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer {min-width: 1136px; height: 63px;background-color: #F4F4F4; position: relative; z-index:1;}
@@ -36,14 +33,14 @@
 
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape{height: 63px; background-color: #F4F4F4;float: left; z-index:2;position: relative;}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape .marge-violette{width: 29px;height: 63px; ;position: absolute; background-color: #712F98; right: 0px; z-index:2;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a{color: #672F9E; font-size: 13px; text-transform: uppercase; margin: 20px 30px 20px 10px;float: left; z-index:2;letter-spacing: -0.3px;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a{color: #672F9E; font-size: 13px; text-transform: uppercase; margin: 20px 30px 20px 10px;float: left; z-index:2;letter-spacing: -0.3px;padding-bottom: 7px;}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.green{border-bottom: 3px solid #5CB85C}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.yellow{border-bottom: 3px solid #DA7F2C}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.red{border-bottom: 3px solid #C93358}
 
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected{height: 63px; background-color: #712F98;float: left; z-index:2; position: relative;}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected .marge-grise{width: 29px;height: 63px; ;position: absolute; background-color: #F4F4F4; right: 0px; z-index:2;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a{color: #F4F4F4; font-size: 13px; text-transform: uppercase; margin: 20px 30px 20px 10px;float: left; z-index:2;letter-spacing: -0.3px;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a{color: #F4F4F4; font-size: 13px; text-transform: uppercase; margin: 20px 30px 20px 10px;float: left; z-index:2;letter-spacing: -0.3px;padding-bottom: 7px;}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.green{border-bottom: 3px solid #5CB85C}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.yellow{border-bottom: 3px solid #DA7F2C}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.red{border-bottom: 3px solid #C93358}
@@ -217,7 +214,7 @@
                 <div class="col-md-4">
                     {% if app.user %}
                         <div id="note-moyenne" class="note">
-                            <span></span>
+                            <span title="Taux de maîtrise de l'étape"></span>
                         </div>
                     {% endif %}
                 </div>
