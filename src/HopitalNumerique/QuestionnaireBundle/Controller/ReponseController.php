@@ -55,4 +55,19 @@ class ReponseController extends Controller
         
         return new Response('{"success":true, "url" : "'.$this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']).'"}', 200);
     }
+    
+    /**
+     * Suppression de toutes les réponses de tout les utilisateurs pour le questionnaire passé en param
+     *
+     * @param int $idQuestionnaire
+     */
+    public function deleteAllByQuestionnaireAction( Questionnaire $questionnaire )
+    {
+        //Suppression des entitées
+        $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAllByQuestionnaire( $questionnaire->getId() );
+
+        $this->get('session')->getFlashBag()->add( 'success' ,  'Le questionnaire '. $questionnaire->getNomMinifie() .' a été vidé de ses réponses.' );
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_questionnaire_index').'"}', 200);
+    }
 }

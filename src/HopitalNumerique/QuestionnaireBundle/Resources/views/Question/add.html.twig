@@ -1,0 +1,10 @@
+<li class="dd-item dd3-item" data-id="{{question.id}}" id="question-{{question.id}}" >
+    <div class="dd-handle dd3-handle"></div>
+    <div class="dd3-content">
+        <a href="javascript:selectQuestion({{question.id}}, '{{path('hopitalnumerique_questionnaire_question_edition', {'id':question.id})}}')" title="{{question.libelle}}">{{question.libelle|truncate(80,'...')}}</a>
+    </div>
+    <div class="dd3-actions">
+        <div onclick="deleteQuestion( {{question.id}}, '{{path('hopitalnumerique_questionnaire_question_delete', {'id':question.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+    </div>
+</li>
+<input type="hidden" id="select-question-url-{{question.id}}" value="{{path('hopitalnumerique_questionnaire_question_edition', {'id':question.id})}}" />

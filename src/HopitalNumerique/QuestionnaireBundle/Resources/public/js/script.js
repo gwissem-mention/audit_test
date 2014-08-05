@@ -1,7 +1,7 @@
 $(document).ready(function() {
     
     $('input.question-type-date').datepicker({
-        dateFormat:'yy-mm-dd'
+        dateFormat:'dd-mm-yy'
     });
 
     //Select2

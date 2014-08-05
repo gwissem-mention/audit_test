@@ -1,0 +1,37 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Élément du glossaire
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_glossaire_glossaire') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if glossaire.id %}
+        <a href="{{ path('hopitalnumerique_glossaire_glossaire_edit', { 'id': glossaire.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                <p>
+                    <strong>Mot : </strong>
+                    {{ glossaire.mot }}
+                </p>
+                <p>
+                    <strong>Intitulé : </strong>
+                    {{ glossaire.intitule }}
+                </p>
+                <p>
+                    <strong>Description complète : </strong>
+                    {{ glossaire.description }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

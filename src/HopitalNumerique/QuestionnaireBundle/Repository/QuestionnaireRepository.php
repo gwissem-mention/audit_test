@@ -12,6 +12,31 @@ use Doctrine\ORM\EntityRepository;
  */
 class QuestionnaireRepository extends EntityRepository
 {    
+
+    /**
+     * Récupère les données du grid sous forme de tableau correctement formaté
+     *
+     * @return array
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function getDatasForGrid()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('questionnaire.id, questionnaire.nom, count(DISTINCT user.id) as nbUser')
+            ->from('HopitalNumeriqueQuestionnaireBundle:Questionnaire', 'questionnaire')
+            ->leftJoin('questionnaire.questions' , 'questions')
+            ->leftJoin('questions.reponses', 'reponses')
+            ->leftJoin('reponses.user', 'user')
+            ->where('questionnaire.lock = :locked')
+            ->setParameter('locked', false)
+            ->orderBy('questionnaire.nom')
+            ->groupBy('questionnaire.id');
+        
+        return $qb;
+    }
+
     /**
      * Récupère les questions/réponses d'un questionnaire
      *

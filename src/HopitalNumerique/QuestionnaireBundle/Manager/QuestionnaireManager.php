@@ -26,6 +26,19 @@ class QuestionnaireManager extends BaseManager
         $this->_questionnaireArray = isset($options['idRoles']) ? $options['idRoles'] : array();
         $this->_managerReponse     = $managerReponse;
     }
+
+    /**
+     * Override : Récupère les données pour le grid sous forme de tableau
+     *
+     * @return array
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function getDatasForGrid( $condition = null )
+    {
+        return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+    }
     
     /**
      * [getQuestionsReponses description]
@@ -39,6 +52,18 @@ class QuestionnaireManager extends BaseManager
     public function getQuestionsReponses( $idQuestionnaire, $idUser, $paramId = null )
     {
         return $this->getRepository()->getQuestionsReponses( $idQuestionnaire , $idUser, $paramId );
+    }
+    
+    /**
+     * Get les utilisateurs qui ont répondu à ce questionnaire
+     *
+     * @param  int $idQuestionnaire [description]
+     *
+     * @return [type]
+     */
+    public function getQuestionnaireRepondant( $idQuestionnaire )
+    {
+        return $this->getRepository()->getQuestionnaireRepondant( $idQuestionnaire )->getQuery()->getResult();
     }
     
     /**
@@ -149,7 +174,48 @@ class QuestionnaireManager extends BaseManager
                     switch ($question->getTypeQuestion()->getLibelle())
                     {
                         case 'entity':
-                            $row[$field] = $reponse->getReference()->getLibelle();
+                            $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
+                            break;
+                        case 'entityradio':
+                            $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
+                            break;
+                        case 'entitymultiple':
+                            //Si il y a des réponses à exporter on exporte les libellés des références concaténés
+                            if(is_null($reponse->getReferenceMulitple()))
+                            {
+                                $row[$field] = '-';
+                            }
+                            else
+                            {
+                                $lib = '';
+                                $compteur = 0;
+                                foreach ($reponse->getReferenceMulitple() as $reference) 
+                                {
+                                    $compteur++;
+                                    //Récupération du libellé de la référence + ajout d'un tiret si on est pas à la fin
+                                    $lib .= $reference->getLibelle() . ($compteur == count($reponse->getReferenceMulitple()) ? '' : ' - ');
+                                }
+                                $row[$field] = $lib;
+                            }
+                            break;
+                        case 'entitycheckbox':
+                            //Si il y a des réponses à exporter on exporte les libellés des références concaténés
+                            if(is_null($reponse->getReferenceMulitple()))
+                            {
+                                $row[$field] = '-';
+                            }
+                            else
+                            {
+                                $lib = '';
+                                $compteur = 0;
+                                foreach ($reponse->getReferenceMulitple() as $reference) 
+                                {
+                                    $compteur++;
+                                    //Récupération du libellé de la référence + ajout d'un tiret si on est pas à la fin
+                                    $lib .= $reference->getLibelle() . ($compteur == count($reponse->getReferenceMulitple()) ? '' : ' - ');
+                                }
+                                $row[$field] = $lib;
+                            }
                             break;
                         case 'checkbox':
                             $row[$field] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );

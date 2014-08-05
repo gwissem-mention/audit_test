@@ -1,0 +1,46 @@
+#Front
+hopitalnumerique_glossaire:
+    pattern:  /glossaire
+    defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Front:index" }
+    requirements: 
+        _method: GET
+
+#Admin
+hopitalnumerique_glossaire_glossaire:
+    pattern:  /admin/glossaire
+    defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Glossaire:index" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_glossaire_glossaire_add:
+    pattern:  /admin/glossaire/add
+    defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Glossaire:add" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_glossaire_glossaire_show:
+    pattern:  /admin/glossaire/show/{id}
+    defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Glossaire:show" }
+    requirements:
+        id: \d+
+        _method: GET
+
+hopitalnumerique_glossaire_glossaire_edit:
+    pattern:  /admin/glossaire/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Glossaire:edit" }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+hopitalnumerique_glossaire_glossaire_delete:
+    pattern:  /admin/glossaire/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Glossaire:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+hopitalnumerique_glossaire_glossaire_parse:
+    pattern:  /admin/glossaire/parse-publications
+    defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Glossaire:parsePublications" }
+    requirements: 
+        _method: GET|POST

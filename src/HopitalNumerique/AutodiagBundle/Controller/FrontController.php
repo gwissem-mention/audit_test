@@ -211,7 +211,7 @@ class FrontController extends Controller
         }
 
         //récupère les chapitres et les formate pour l'affichage des liens des publications
-        $chapitres  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat, true );
+        $chapitres  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
         $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
 
         //PDF généré
@@ -225,10 +225,10 @@ class FrontController extends Controller
             $back = false;
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
-            'resultat'   => $resultat,
-            'chapitres'  => $chapitres,
-            'graphiques' => $graphiques,
-            'back'       => $back
+            'resultat'          => $resultat,
+            'chapitres'         => $chapitres,
+            'graphiques'        => $graphiques,
+            'back'              => $back
         ));
     }
 

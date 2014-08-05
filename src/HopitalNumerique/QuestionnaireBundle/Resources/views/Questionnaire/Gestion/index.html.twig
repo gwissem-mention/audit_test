@@ -1,0 +1,60 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{# Grid mandatory Stuff #}
+{% use 'NodevoGridBundle::grid.config.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('grid_stylesheets')}}
+    {% stylesheets output="compiled/hopitalnumerique-questionnaire-gestion-index.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquequestionnaire/css/Back_gestion/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ block('grid_javascripts')}}
+    {% javascripts output="compiled/hopitalnumerique-questionnaire-gestion-index.js"
+        'bundles/hopitalnumeriquequestionnaire/js/Back_gestion/index.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block h1Title %}
+    Gestion des questionnaires
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_questionnaire_add_questionnaire') }}" title="Ajouter un questionnaire"><i class="fa fa-plus"></i></a>
+{% endblock %}
+
+{% block body %}
+    {{ grid(grid, _self) }}
+    <div class="clearfix"></div>
+    <div class="col-md-5">
+        <div class="float-right">
+            <label class="control-label required" for="questionnaireExport">
+                Choix du questionnaire des réponses à exporter
+                <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+            </label>
+            <div class="blocQuestion">
+                <select name="questionnaireExportSelect" id="questionnaireExport" class="form-control col-md-12">
+                    <option value=""> - </option>
+                    {% for questionnaire in questionnaires %}
+                        <option value="{{questionnaire.id}}" >{{questionnaire.nom}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7" id="export-csv-buttons">
+        {% for questionnaire in questionnaires %}
+            <div id="export-csv-{{questionnaire.id}}">
+                <a class="btn btn-success" href="{{ path('hopitalnumerique_questionnaire_exportCSV_questionnaire', {'id': questionnaire.id}) }}" title="Télécharger l'export CSV du questionnaire {{questionnaire.nom}}"><i class="fa fa-download"></i></a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

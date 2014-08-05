@@ -43,8 +43,8 @@
                             
                             <hr>
 
-                            {% if chapitre.questions|length > 0 %}
-                                {{ mySelf.buildQuestion(chapitre.questions) }}
+                            {% if chapitre.questionsBack|length > 0 %}
+                                {{ mySelf.buildQuestion(chapitre.questionsBack) }}
                             {% endif %}
                             
                             {% if chapitre.childs|length > 0 %}
@@ -52,7 +52,7 @@
                                     {% for child in chapitre.childs %}
                                         <h3>{{child.title}}</h3>
                                         
-                                        {{ mySelf.buildQuestion(child.questions) }}
+                                        {{ mySelf.buildQuestion(child.questionsBack) }}
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -74,9 +74,34 @@
             </div>
             
             <div class="col-md-8">
-                <p>
-                    {{question.value}}
+                {% set options = question.options %}
+                <p class="pull-left">
+                    {% if question.initialValue != -1 %}
+                        <span>Non concerné</span><br />
+                    {% else %}
+                        <span><b>Non concerné</b></span><br />
+                    {% endif %}
+                    
+                    {% for option in options %}
+                        {% set tab = option|split(';') %}
+                        {% if tab[0] == question.initialValue %}
+                            <span><b>{{tab[1]|trim}}</b></span><br />
+                        {% else %}
+                            <span>{{tab[1]|trim}}</span><br />
+                        {% endif %}
+                    {% endfor %}
                 </p>
+                {% if question.colored and question.initialValue != -1 %}
+                    <div class="icon pull-left">
+                        {% if question.min == question.initialValue %}
+                            <i class="fa fa-frown-o fa-2x"></i>
+                        {% elseif question.max == question.initialValue %}
+                            <i class="fa fa-smile-o fa-2x"></i>
+                        {% else %}
+                            <i class="fa fa-meh-o fa-2x"></i>
+                        {% endif %}
+                    </div>
+                {% endif %}
                 <p class="text-muted">
                     <em>{{question.remarque}}</em>
                 </p>

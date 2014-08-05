@@ -1,0 +1,96 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-questionnaire-question-index.css" filter="cssrewrite, ?yui_css" 
+        "@select2_css"
+        "@validationEngine_css"
+        "@jquery_toggles_css"
+        'bundles/nodevoadmin/css/jquery.nestable.css'
+        'bundles/nodevoadmin/css/toggles.css'
+        'bundles/hopitalnumeriquequestionnaire/css/Back_gestion/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-questionnaire-question-index.js" 
+        "@select2_js"
+        "@nestable_js"
+        "@tinymce_js"
+        "@jquery_toggles_js"
+        "@validationEngine_js"
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
+        'bundles/hopitalnumeriquequestionnaire/js/Back_gestion/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block h1Title %}
+    Gestion des questions du questionnaire {{questionnaire.nom}}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_questionnaire_index') }}" title="Retour à la liste des questionnaires"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="well well-lg">
+                    <span class="designForBlank" style="{% if questionnaire.questions|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton 'Ajouter une question' pour ajouter une question.</span>
+                    <div class="dd" id="questions">
+                        <ol class="dd-list">
+                            {% import _self as mySelf %}
+                            {% for question in questionnaire.questions %}
+                                {{ mySelf.buildTree(question) }}
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+
+                <input type="hidden" id="id-questionnaire" value="{{ questionnaire.id }}" />
+                <input type="hidden" id="add-btn-question-url" value="{{path('hopitalnumerique_questionnaire_question_add')}}" />
+                <input type="hidden" id="order-question-url" value="{{path('hopitalnumerique_questionnaire_question_reorder')}}" />
+
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="sous_options">
+                <div class="btn-toolbar">
+                    <div class="btn btn-default addQuestion">Ajouter une question</div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="well well-lg" id="reponses">
+                    <span class="selectionQuestion">Vous devez sélectionner une question avant de visualiser le formulaire d'édition.</span>
+                    <div class="results">
+                        
+                    </div>
+                    <input type="hidden" class="question" value="0" />
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% macro buildTree(question) %}
+    <li class="dd-item dd3-item" data-id="{{question.id}}" id="question-{{question.id}}" >
+        <div class="dd-handle dd3-handle"></div>
+        <div class="dd3-content">
+            <a href="javascript:selectQuestion({{question.id}}, '{{path('hopitalnumerique_questionnaire_question_edition', {'id':question.id})}}')" title="{{question.libelle}}">{{question.libelle|truncate(80,'...')}}</a>
+        </div>
+        <div class="dd3-actions">
+            <div onclick="deleteQuestion( {{question.id}}, '{{path('hopitalnumerique_questionnaire_question_delete', {'id':question.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+        </div>
+    </li>
+    <input type="hidden" id="select-question-url-{{question.id}}" value="{{path('hopitalnumerique_questionnaire_question_edition', {'id':question.id})}}" />
+{% endmacro %}
