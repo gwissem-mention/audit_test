@@ -15,13 +15,7 @@ class FrontController extends Controller
      */
     public function indexAction()
     {
-        $glossaires = $this->get('hopitalnumerique_glossaire.manager.glossaire')->findAll();
-
-        $datas = array();
-        foreach($glossaires as $one){
-            $firstL = substr( ucfirst($one->getMot()), 0, 1);
-            $datas[ $firstL ][] = $one;
-        }
+        $datas = $this->get('hopitalnumerique_glossaire.manager.glossaire')->findGlossaireTable();
 
         return $this->render('HopitalNumeriqueGlossaireBundle:Front:index.html.twig', array(
             'datas' => $datas,

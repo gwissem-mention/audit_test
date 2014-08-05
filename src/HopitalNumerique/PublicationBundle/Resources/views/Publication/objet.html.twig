@@ -71,7 +71,7 @@
             </div>
             
             <div class="col-md-12">
-                {{contenu.contenu|parsePublication|raw}}
+                {{contenu.contenu|parsePublication(contenu.objet.glossaires)|raw}}
             </div>
         {# Cas Objet #}
         {% else %}
@@ -88,7 +88,7 @@
             </div>
             
             <div class="col-md-12">
-                {{objet.resume|parsePublication|raw}}
+                {{objet.resume|parsePublication(objet.glossaires)|raw}}
             </div>
         {% endif %}
 

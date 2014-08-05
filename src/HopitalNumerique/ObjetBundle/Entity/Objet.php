@@ -192,6 +192,13 @@ class Objet
     /**
      * @var array
      *
+     * @ORM\Column(name="obj_glossaires", type="array", options = {"comment" = "Mots du glossaire liés à l objet"})
+     */
+    private $glossaires;
+
+    /**
+     * @var array
+     *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_referencement", type="array", options = {"comment" = "Copie du référencement pour l historique"})
      */
@@ -312,6 +319,7 @@ class Objet
         $this->vignette      = new \Doctrine\Common\Collections\ArrayCollection();
         $this->autodiags     = new \Doctrine\Common\Collections\ArrayCollection();
         $this->objets        = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->glossaires    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->referencement = new \Doctrine\Common\Collections\ArrayCollection();
         $this->roles         = new \Doctrine\Common\Collections\ArrayCollection();
         $this->types         = new \Doctrine\Common\Collections\ArrayCollection();
@@ -947,6 +955,48 @@ class Objet
     public function addObjet($objet)
     {
         $this->objets[] = $objet;
+        return $this;
+    }
+    
+    /**
+     * Get glossaires
+     *
+     * @return array $glossaires
+     */
+    public function getGlossaires()
+    {
+        return $this->glossaires;
+    }
+    
+    /**
+     * Set glossaires
+     *
+     * @param array $glossaires
+     */
+    public function setGlossaires(array $glossaires)
+    {
+        $this->glossaires = $glossaires;
+        return $this;
+    }
+
+    /**
+     * Remove glossaire
+     *
+     * @param string $glossaire
+     */
+    public function removeGlossaire($glossaire)
+    {
+        $this->glossaires->removeElement($glossaire);
+    }
+    
+    /**
+     * add glossaire
+     *
+     * @param string $glossaire
+     */
+    public function addGlossaire($glossaire)
+    {
+        $this->glossaires[] = $glossaire;
         return $this;
     }
 

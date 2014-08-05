@@ -38,3 +38,9 @@ hopitalnumerique_glossaire_glossaire_delete:
     requirements: 
         id: \d+
         _method: POST|DELETE
+
+hopitalnumerique_glossaire_glossaire_parse:
+    pattern:  /admin/glossaire/parse-publications
+    defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Glossaire:parsePublications" }
+    requirements: 
+        _method: GET|POST

@@ -509,6 +509,10 @@ class ObjetController extends Controller
                 $do = $request->request->get('do');
                 $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
                 
+                //reload glossaire stuff
+                $this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( array($objet) );
+                $this->getDoctrine()->getManager()->flush();
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 if( $do == "save-auto" )
                     $this->get('session')->getFlashBag()->add( 'info' , 'Objet sauvegardé automatiquement.' ); 

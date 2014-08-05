@@ -1,0 +1,1 @@
+UPDATE hn_objet SET obj_glossaires = "a:0:{}";

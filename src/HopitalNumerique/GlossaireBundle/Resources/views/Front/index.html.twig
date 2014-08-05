@@ -39,12 +39,20 @@
                                 <div class="sep"></div>
                                 <div class="elements">
                                     {% for element in glossaires %}
-                                        <div class="element" id="{{element.mot}}">
-                                            <p class="titre">{{ element.mot ~ ' : ' ~ element.intitule }}</p>
-                                            <p class="desc">
-                                                {{ element.description }}
-                                            </p>
-                                        </div>
+                                        {% if loop.index % 2 == 1 %}<div class="row">{% endif %}
+                                            <div class="col-md-6" id="{{element.mot}}">
+                                                <p class="titre">
+                                                    {% if element.intitule %}
+                                                        {{ element.mot ~ ' : ' ~ element.intitule }}
+                                                    {% else %}
+                                                        {{ element.mot }}
+                                                    {% endif %}
+                                                </p>
+                                                <p class="desc">
+                                                    {{ element.description }}
+                                                </p>
+                                            </div>
+                                        {% if loop.index % 2 == 0 %}</div>{% endif %}
                                     {% endfor %}
                                 </div>
                             </div>

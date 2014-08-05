@@ -34,7 +34,7 @@ class PublicationExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function parsePublication($content)
+    public function parsePublication($content, $glossaires)
     {
         $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]+)\]/';
         preg_match_all($pattern, $content, $matches);
@@ -127,9 +127,28 @@ class PublicationExtension extends \Twig_Extension
             }
         }
         
+        //Glossaire stuff
+        if( $glossaires ){
+            $words = $this->getManagerGlossaire()->findBy( array('mot' => $glossaires) );
+            foreach($words as $word){
+                $html = '<abbr title="' . $word->getIntitule() . '" >'. $word->getMot(). ' <a target="_blank" href="/glossaire#'.$word->getMot().'" ><i class="fa fa-info-circle"></i></a></abbr>';
+                $content = str_replace( $word->getMot(), $html, $content );
+            }    
+        }
+        
         return $content;
     }
 
+    /**
+     * Retourne le manager glossaire
+     *
+     * @return GlossaireManager
+     */
+    private function getManagerGlossaire()
+    {
+        return $this->container->get('hopitalnumerique_glossaire.manager.glossaire'); 
+    }
+    
     /**
      * Retourne le manager contenu
      *
