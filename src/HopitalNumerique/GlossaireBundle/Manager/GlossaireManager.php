@@ -45,7 +45,7 @@ class GlossaireManager extends BaseManager
         $datas = $this->findAll();
         $glossaires = array();
         foreach($datas as $one)
-            $glossaires[ $one->getMot() ] = $one;
+            $glossaires[ trim(htmlentities($one->getMot())) ] = $one;
         
         $keys = array_keys($glossaires);
 
@@ -56,7 +56,7 @@ class GlossaireManager extends BaseManager
             $words = array_merge( explode( ' ', strip_tags($objet->getResume()) ), explode( ' ', strip_tags($objet->getSynthese()) ) );
 
             foreach($words as $word){
-                if( in_array($word, $keys) ) 
+                if( in_array( $word, $keys) ) 
                     $motsFounds[] = $word;
             }
 
