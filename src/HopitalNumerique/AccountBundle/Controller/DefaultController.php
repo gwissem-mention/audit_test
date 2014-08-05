@@ -3,6 +3,8 @@
 namespace HopitalNumerique\AccountBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -23,10 +25,79 @@ class DefaultController extends Controller
         //get Sessions
         $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForDashboard( $user );
 
+
+
+
+
+
+
+
+        //récupère la conf (l'ordre) des blocks du dashboard de l'user connecté
+        $userConf = $this->buildDashboardRows( json_decode($user->getDashboardFront(), true) );
+
         return $this->render('HopitalNumeriqueAccountBundle:Default:index.html.twig', array(
             'messages' => $messages,
             'requetes' => $requetes,
-            'sessions' => $sessions
+            'sessions' => $sessions,
+            'userConf' => $userConf
         ));
+    }
+
+    /**
+     * Enregistre l'ordre des blocks du dashboard front de l'utilisateur
+     *
+     * @param  Request $request La requete
+     *
+     * @return json
+     */
+    public function reorderAction(Request $request)
+    {
+        $datas = $request->request->get('datas');
+        $dashboardFront = array();
+        foreach($datas as $one)
+            $dashboardFront[ $one['id'] ] = array( 'row' => $one['row'], 'col' => $one['col'] );
+        
+        //On récupère l'user connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+        $user->setDashboardFront( json_encode($dashboardFront) );
+        $this->getDoctrine()->getManager()->flush();
+
+        return new Response('{"success":true}', 200);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Construit le tableau du dashboard user
+     *
+     * @param array $dashboardFront Tableau de la config dashboard
+     *
+     * @return array
+     */
+    private function buildDashboardRows( $dashboardFront )
+    {
+        $datas               = array();
+        $datas[ 'messages' ] = array( 'row' => 1, 'col' => 2);
+        $datas[ 'requetes' ] = array( 'row' => 1, 'col' => 1);
+        $datas[ 'modules' ]  = array( 'row' => 1, 'col' => 1);
+
+        if( !is_null($dashboardFront) )
+            $datas = array_replace($datas, $dashboardFront);
+        
+        return $datas;
     }
 }
