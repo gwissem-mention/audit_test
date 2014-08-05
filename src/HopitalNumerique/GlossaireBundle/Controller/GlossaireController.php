@@ -93,11 +93,11 @@ class GlossaireController extends Controller
         $datas = $this->get('hopitalnumerique_glossaire.manager.glossaire')->findBy( array('id' => $primaryKeys) );
 
         $colonnes = array( 
-                            'id'           => 'ID du glossaire', 
-                            'mot'          => 'Mot du glossaire',
-                            'intitule'     => 'Intitulé du glossaire',
-                            'description'  => 'Intitulé du glossaire',
-                            'etat.libelle' => 'Etat du glossaire',
+                            'id'           => 'id', 
+                            'mot'          => 'Mot',
+                            'intitule'     => 'Intitulé',
+                            'description'  => 'Description',
+                            'etat.libelle' => 'Etat'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
@@ -105,10 +105,16 @@ class GlossaireController extends Controller
         return $this->get('hopitalnumerique_glossaire.manager.glossaire')->exportCsv( $colonnes, $datas, 'export-glossaire.csv', $kernelCharset );
     }
 
+    /**
+     * Parse les publication à la recherche de mots du glossaire
+     *
+     * @return redirect
+     */
     public function parsePublicationsAction()
     {
-        $objets = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
-        $this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( $objets );
+        $objets   = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
+        $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->findAll();
+        $this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( $objets, $contenus );
 
         //save changes
         $this->getDoctrine()->getManager()->flush();

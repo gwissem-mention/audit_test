@@ -35,7 +35,7 @@ class PublicationExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function parsePublication($content, $glossaires)
+    public function parsePublication($content, $glossaires = false )
     {
         $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]+)\]/';
         preg_match_all($pattern, $content, $matches);
@@ -130,13 +130,17 @@ class PublicationExtension extends \Twig_Extension
         
         //Glossaire stuff
         if( $glossaires ){
-            $words = $this->getManagerGlossaire()->findBy( array('mot' => $glossaires) );
+            $words = $this->getManagerGlossaire()->findAll();
+            foreach($words as $key => $word){
+                if( !in_array( trim(htmlentities($word->getMot())), $glossaires) )
+                    unset( $words[$key] );
+            }
 
             foreach($words as $word){
                 $tool    = new Chaine( $word->getMot() );
-                $html    = '<abbr title="' . $word->getIntitule() . '" >'. $word->getMot(). ' <a target="_blank" href="/glossaire#'. $tool->minifie() .'" ><i class="fa fa-info-circle"></i></a></abbr>';
-                $content = str_replace( $word->getMot(), $html, $content );
-            }    
+                $html    = '<abbr title="' . ($word->getIntitule() ? $word->getIntitule() : $word->getMot() ) . '" >'. $word->getMot(). ' <a target="_blank" href="/glossaire#'. $tool->minifie() .'" ><i class="fa fa-info-circle"></i></a></abbr>';
+                $content = str_replace( trim(htmlentities($word->getMot())), $html, $content );
+            }
         }
         
         return $content;

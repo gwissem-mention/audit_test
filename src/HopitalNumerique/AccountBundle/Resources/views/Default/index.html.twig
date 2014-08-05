@@ -4,6 +4,7 @@
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-account-default-index.js"
         '@jquery_gridster_js'
+        "bundles/hopitalnumeriqueaccount/js/script.js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -32,7 +33,7 @@
 {% block content %}
     <div class="gridster">
         <ul class="list-unstyled">
-            <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" data-id="messages" >
+            <li data-row="{{userConf['messages']['row']}}" data-col="{{userConf['messages']['col']}}" data-sizex="1" data-sizey="1" data-id="messages" >
                 <div class="scroll">
                     {% for message in messages %}
                         <p class="titre">{{message.title}}</p>
@@ -42,7 +43,7 @@
                     {% endfor %}
                 </div>
             </li>
-            <li data-row="1" data-col="2" data-sizex="1" data-sizey="1" data-id="requetes" >
+            <li data-row="{{userConf['requetes']['row']}}" data-col="{{userConf['requetes']['col']}}" data-sizex="1" data-sizey="1" data-id="requetes" >
                 <div class="scroll">
                     {% for requete in requetes %}
                         <a href="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">{{requete.nom|capitalize}}</a><br />
@@ -51,35 +52,18 @@
                     {% endfor %}
                 </div>
             </li>
-            <li data-row="2" data-col="1" data-sizex="1" data-sizey="1" data-id="modules" >
+            <li data-row="{{userConf['modules']['row']}}" data-col="{{userConf['modules']['col']}}" data-sizex="1" data-sizey="1" data-id="modules" >
                 <div class="scroll">
                     
                 </div>
             </li>
-            <li data-row="2" data-col="2" data-sizex="1" data-sizey="1" data-id="4" >4</li>
-            <li data-row="3" data-col="1" data-sizex="1" data-sizey="1" data-id="5" >5</li>
-            <li data-row="3" data-col="2" data-sizex="1" data-sizey="1" data-id="6" >6</li>
         </ul>
     </div>
 
-    <script>
-        $(function() {
-            var gridster = $(".gridster ul").gridster({
-                widget_margins         : [5, 5],
-                widget_base_dimensions : [410, 200],
-                max_cols               : 2,
-                min_cols               : 2,
-                serialize_params       : function($w, wgd) { return { col: wgd.col, row: wgd.row, id: $w.data('id') } },
-                draggable              : {
-                    stop : function(event, ui){ console.log( gridster.serialize() ); }
-                }
-            }).data('gridster');
-        });
-    </script>
+    <input type="hidden" id="account-reorder-url" value="{{path('hopital_numerique_account_homepage_reorder')}}" />
 
     <style>
-        .gridster ul li:nth-child(even){background-color: red; color: #FFF; font-size: 35px}
-        .gridster ul li:nth-child(odd){background-color: blue; color: #FFF; font-size: 35px }
+        .gridster ul li{background-color: red; color: #FFF; font-size: 35px}
         .gridster ul li .scroll{overflow: hidden; overflow-y:auto; height: 200px}
     </style>
 

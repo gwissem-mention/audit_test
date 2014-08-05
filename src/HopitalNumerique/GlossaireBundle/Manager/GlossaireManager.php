@@ -23,8 +23,11 @@ class GlossaireManager extends BaseManager
         $datas = array();
         foreach($glossaires as $one){
             $firstL = substr( ucfirst($one->getMot()), 0, 1);
-            $datas[ $firstL ][] = $one;
+            $datas[ $firstL ][ strtolower($one->getMot()) ] = $one;
         }
+
+        foreach($datas as &$data)
+            ksort($data);
 
         return $datas;
     }
@@ -33,37 +36,72 @@ class GlossaireManager extends BaseManager
      * Parse la liste des publications à la recherche de mots du glossaires
      *
      * @param array $objets Liste des objets
+     * @param array $contenus Liste des contenus
      *
      * @return empty
      */
-    public function parsePublications( $objets )
+    public function parsePublications( $objets = array(), $contenus = array() )
     {
         //éléments du glossaire
         $datas = $this->findAll();
-        $glossaires = array();
+        $glossairesWords = array();
         foreach($datas as $one)
-            $glossaires[ $one->getMot() ] = $one;
+            $glossairesWords[ trim(htmlentities($one->getMot())) ] = trim(htmlentities($one->getMot()));
         
-        $keys = array_keys($glossaires);
+        //tri des éléments les plus longs aux plus petits
+        array_multisort(
+            array_map(create_function('$v', 'return strlen($v);'), array_keys($glossairesWords)), SORT_DESC, 
+            $glossairesWords
+        );
 
         //objets
-        foreach($objets as $objet){
-            $motsFounds = array();
-            //parse Resume + Synthese
-            $words = array_merge( explode( ' ', strip_tags($objet->getResume()) ), explode( ' ', strip_tags($objet->getSynthese()) ) );
+        if( count($objets) > 0){
+            foreach($objets as $objet){
+                $motsFounds = array();
+                $posFounds  = array();
 
-            foreach($words as $word){
-                if( in_array($word, $keys) ) 
-                    $motsFounds[] = $word;
-            }
+                //parse Resume + Synthese
+                $words = strip_tags($objet->getResume()) . ' ' . strip_tags($objet->getSynthese());
 
-            //on dédoublonne les mots trouvés
-            $motsFounds = array_unique($motsFounds);
+                foreach($glossairesWords as $glossairesWord){
+                    $pos = strpos($words, $glossairesWord);
 
-            if( count($motsFounds) > 0 )
-                $objet->setGlossaires( $motsFounds );
-            else
-                $objet->setGlossaires( array() );
+                    if( $pos !== false && !in_array($pos, $posFounds) ){
+                        $motsFounds[] = $glossairesWord;
+                        $posFounds[]  = $pos;
+                    }
+                }
+
+                if( count($motsFounds) > 0 )
+                    $objet->setGlossaires( $motsFounds );
+                else
+                    $objet->setGlossaires( array() );
+            }    
+        }
+
+        //contenus
+        if( count($contenus) > 0){
+            foreach($contenus as $contenu){
+                $motsFounds = array();
+                $posFounds  = array();
+
+                //parse Contenu
+                $words = strip_tags($contenu->getContenu());
+
+                foreach($glossairesWords as $glossairesWord){
+                    $pos = strpos($words, $glossairesWord);
+
+                    if( $pos !== false && !in_array($pos, $posFounds) ){
+                        $motsFounds[] = $glossairesWord;
+                        $posFounds[]  = $pos;
+                    }
+                }
+
+                if( count($motsFounds) > 0 )
+                    $contenu->setGlossaires( $motsFounds );
+                else
+                    $contenu->setGlossaires( array() );
+            }    
         }
     }
 }

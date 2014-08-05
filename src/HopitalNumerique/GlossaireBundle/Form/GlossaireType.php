@@ -33,7 +33,7 @@ class GlossaireType extends AbstractType
             ->add('description', 'textarea', array(
                 'required'   => false, 
                 'label'      => 'Description complète',
-                'attr'     => array('class' => 'tinyMce')
+                'attr'     => array('rows' => 10)
             ))
             ->add('etat', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',

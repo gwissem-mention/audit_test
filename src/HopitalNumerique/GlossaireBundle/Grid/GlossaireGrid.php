@@ -19,6 +19,7 @@ class GlossaireGrid extends Grid implements IGrid
     {
         $this->setSource( 'HopitalNumeriqueGlossaireBundle:Glossaire' );
         $this->setNoDataMessage('Aucun élément du glossaire à afficher.');
+        $this->setDefaultOrder('mot', 'ASC');
     }
 
     /**
