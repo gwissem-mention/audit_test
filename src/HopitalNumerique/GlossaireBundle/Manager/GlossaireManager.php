@@ -36,10 +36,11 @@ class GlossaireManager extends BaseManager
      * Parse la liste des publications à la recherche de mots du glossaires
      *
      * @param array $objets Liste des objets
+     * @param array $contenus Liste des contenus
      *
      * @return empty
      */
-    public function parsePublications( $objets )
+    public function parsePublications( $objets = array(), $contenus = array() )
     {
         //éléments du glossaire
         $datas = $this->findAll();
