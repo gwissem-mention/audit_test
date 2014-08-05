@@ -38,8 +38,12 @@
                                 <h2 class="{{ cycle(['rose', 'violet'], loop.index) }}" id="{{letter}}">{{letter}}</h2>
                                 <div class="sep"></div>
                                 <div class="elements">
+                                    {% set opened = false %}
                                     {% for element in glossaires %}
-                                        {% if loop.index % 2 == 1 %}<div class="row">{% endif %}
+                                        {% if loop.index % 2 == 1 %}
+                                            <div class="row">
+                                            {% set opened = true %}
+                                        {% endif %}
                                             <div class="col-md-6" id="{{element.mot|minifieMoi}}">
                                                 <p class="titre">
                                                     {% if element.intitule %}
@@ -52,8 +56,13 @@
                                                     {{ element.description }}
                                                 </p>
                                             </div>
-                                        {% if loop.index % 2 == 0 %}</div><div class="sep"></div>{% endif %}
+                                        {% if loop.index % 2 == 0 %}
+                                            </div>
+                                            <div class="sep"></div>
+                                            {% set opened = false %}
+                                        {% endif %}
                                     {% endfor %}
+                                    {% if opened %}</div><div class="sep"></div>{% endif %}
                                 </div>
                             </div>
                         </div>
