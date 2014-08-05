@@ -13,57 +13,6 @@
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-    
-<style type="text/css"> 
-/* Général */
-#recherche-par-parcours-details .note { width: 300px; height: 40px; background-color:#F4F4F4; margin-top: 10px;}
-#recherche-par-parcours-details .en-tete .description #note-moyenne span{ font-size: 22px;font-weight: bold; margin: 5px 40%; width: 20%;display: block;padding-top: 3px;}
-#recherche-par-parcours-details .en-tete .description #note-moyenne span.green{ color:#5CB85C;}
-#recherche-par-parcours-details .en-tete .description #note-moyenne span.yellow{ color:#DA7F2C;}
-#recherche-par-parcours-details .en-tete .description #note-moyenne span.red{ color:#C93358;}
-
-.slider-range-min{width: 90%; margin: 0 10px 10px 10px;}
-
-#recherche-par-parcours-details .en-tete .en-tete-scroll {overflow: scroll;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer {min-width: 1136px; height: 63px;background-color: #F4F4F4; position: relative; z-index:1;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer ul{list-style:none; padding: 0; margin: 0;}
-
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .marge-blanche{width: 29px;height: 63px; ;position: absolute; background-color: #FFFFFF; right: 0px; z-index:2;}
-
-
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape{height: 63px; background-color: #F4F4F4;float: left; z-index:2;position: relative;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape .marge-violette{width: 29px;height: 63px; ;position: absolute; background-color: #712F98; right: 0px; z-index:2;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a{color: #672F9E; font-size: 13px; text-transform: uppercase; margin: 20px 30px 20px 10px;float: left; z-index:2;letter-spacing: -0.3px;padding-bottom: 7px;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.green{border-bottom: 3px solid #5CB85C}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.yellow{border-bottom: 3px solid #DA7F2C}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.red{border-bottom: 3px solid #C93358}
-
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected{height: 63px; background-color: #712F98;float: left; z-index:2; position: relative;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected .marge-grise{width: 29px;height: 63px; ;position: absolute; background-color: #F4F4F4; right: 0px; z-index:2;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a{color: #F4F4F4; font-size: 13px; text-transform: uppercase; margin: 20px 30px 20px 10px;float: left; z-index:2;letter-spacing: -0.3px;padding-bottom: 7px;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.green{border-bottom: 3px solid #5CB85C}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.yellow{border-bottom: 3px solid #DA7F2C}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.red{border-bottom: 3px solid #C93358}
-
-
-/* Mode non connecté */
-#pointsdurs .bloc-presentation {padding:0;margin-bottom: 15px;}
-#pointsdurs .bloc-presentation > div{ padding:30px; background: #F4F4F4; margin: 0 0 0 15px;}
-#pointsdurs .bloc-presentation p{ font-size: 13px; text-align: center; }
-
-#pointsdurs{padding:0;}
-#pointsdurs h4{ color: #595959; font-size: 14px; text-transform: uppercase; margin: 10px 0; font-weight: normal}
-#pointsdurs .wrapper-results{  padding:10px 20px 20px 0; position: relative; }
-#pointsdurs .wrapper-results .background-violet{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
-#pointsdurs .wrapper-results .results h4{margin-bottom: 5px;}
-#pointsdurs .wrapper-results .results h4 img{margin-bottom: 5px;}
-#pointsdurs .wrapper-results .results h4 span.label{margin-bottom: 5px; font-size: 9px; line-height: 2; vertical-align: top;}
-#pointsdurs .wrapper-results .results h4 a{color:#703695; font-size: 18px; font-weight: bold; }
-
-#pointsdurs .wrapper-results .results p{font-size: 13px; color:#070707; }
-#pointsdurs .wrapper-results .results .fa-refresh{ color:#3da20b; }
-</style>
-
 {% endblock %}
 
 {% block javascripts %}
@@ -93,6 +42,22 @@
                     value: notes[$(this).data('id')],
                     min: 0,
                     max: 100,
+                    //A la création on set les couleurs
+                    create: function(event, ui){
+                        var couleur;
+                        //Choix de la couleur à appliquer
+                        if(parseInt(notes[$(this).parent('.note').data('id')], 0) < 33)
+                            couleur = "red";
+                        else if(parseInt(notes[$(this).parent('.note').data('id')], 0) < 67)
+                            couleur = "yellow";
+                        else
+                            couleur = "green";
+
+                        $( "#pourcentage-" + $(this).parent('.note').data('id') ).attr("class", function(i, val){
+                            return 'pourcentage ' + couleur;
+                        });
+                    },
+                    //Sauvegarde de la note en base
                     stop: function(event, ui){
                         loader = $(this).parent('.note').nodevoLoader();
                         loader.start();
@@ -111,8 +76,21 @@
                             }
                         });
                     },
+                    //Calcul de la moyenne + modifs de la couleur
                     slide: function( event, ui ) {
+                        var couleur;
+                        //Choix de la couleur à appliquer
+                        if(parseInt(ui.value, 0) < 33)
+                            couleur = "red";
+                        else if(parseInt(ui.value, 0) < 67)
+                            couleur = "yellow";
+                        else
+                            couleur = "green";
+
                         $( "#pourcentage-" + $(this).parent('.note').data('id') ).val( ui.value );
+                        $( "#pourcentage-" + $(this).parent('.note').data('id') ).attr("class", function(i, val){
+                            return 'pourcentage ' + couleur;
+                        });
                         calculNoteMoyenne();
                     }
                 });
@@ -156,14 +134,14 @@
             var noteTotal = 0;
             var compteur  = 0;
 
-            $(".resultats-points-durs .note .poucentage").each(function(){
+            $(".resultats-points-durs .note .pourcentage").each(function(){
                 noteTotal += parseInt($(this).val(),0);
                 compteur++;
             });
 
             var couleur;
             //Choix de la couleur à appliquer
-            if(parseInt(noteTotal / compteur, 0) < 33)
+            if(compteur == 0 || parseInt(noteTotal / compteur, 0) < 33)
                 couleur = "red";
             else if(parseInt(noteTotal / compteur, 0) < 67)
                 couleur = "yellow";
@@ -197,7 +175,15 @@
 
 {% block body %}
     <div class="col-md-12" id="recherche-par-parcours-details">
-        <h3>{{rechercheParcours.reference.libelle}}</h3>
+        
+        <div class="row">
+            <div class="col-md-11">
+                <h3>{{rechercheParcours.reference.libelle}}</h3>
+            </div>
+            <div class="col-md-1 toolbar">
+                <a class="btn btn-default" href="{{ path('hopital_numerique_recherche_parcours_homepage_front') }}" title="Retour à la recherche guidée"><i class="fa fa-reply"></i></a>
+            </div>
+        </div>
         
         <div class="en-tete">
             <div class="en-tete-scroll">

@@ -51,7 +51,6 @@ class RechercheParcoursDetails
      */
     protected $order;
 
-
     /**
      * Get id
      *

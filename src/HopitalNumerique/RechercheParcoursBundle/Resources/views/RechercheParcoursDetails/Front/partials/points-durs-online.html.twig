@@ -7,8 +7,19 @@
         <div class="col-md-4">
             <div class="note" id="note-{{objet['id']}}" data-id="{{objet['id']}}">
                 <p>
-                    <label for="pourcentage-{{objet['id']}}">Taux de maîtrise :</label>
-                    <input type="text" class="poucentage" value="{{notes[objet['id']].pourcentageMaitrise}}" id="pourcentage-{{objet['id']}}" readonly style="border:0;background-color:#F4F4F4; color:#CE2E52; font-weight:bold;">
+                    {# Choix de la couleur à appliquer #}
+                    {% set couleurEtape = 'red' %}
+                    {% if notesMoyenneParEtape is not null and notesMoyenneParEtape is not empty and etapesSelected.id in notesMoyenneParEtape|keys %}
+                        {% if notesMoyenneParEtape[etapesSelected.id] < 33 %}
+                            {% set couleurEtape = 'red' %}
+                        {% elseif notesMoyenneParEtape[etapesSelected.id] < 67 %}
+                            {% set couleurEtape = 'yellow' %}
+                        {% else %}
+                            {% set couleurEtape = 'green' %}
+                        {% endif %}
+                    {% endif %}
+                    <label for="pourcentage-{{objet['id']}}">Taux de maîtrise % :</label>
+                    <input type="text" class="pourcentage {{couleurEtape}}" value="{{notes[objet['id']].pourcentageMaitrise}}" id="pourcentage-{{objet['id']}}" readonly >
                 </p>
                 <div id="slider-range-min-{{objet['id']}}" class="slider-range-min"></div>
             </div>

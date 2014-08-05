@@ -15,6 +15,9 @@
                         {% set couleurEtape = 'green' %}
                     {% endif %}
                 {% endif %}
+                {% if app.user is null %}
+                    {% set couleurEtape = 'none' %}
+                {% endif %}
                 {# Si l'étape courante est sélectionnée on change les images/background en violet #}
                 {% if recherchesParcoursDetail.id == etapeSelected %}
                     {# Vérifie si on est sur le dernier élément pour savoir quelle icone mettre à la fin #}
@@ -22,7 +25,9 @@
                         {% set lastEtapeSelected = true %}
                     {% endif %}
                     <div class="bloc-etape-selected">
-                        <a class="{{couleurEtape}}" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':rechercheParcours.id, 'alias':rechercheParcours.reference.libelle|minifieMoi(),'idEtape':recherchesParcoursDetail.id, 'etape':recherchesParcoursDetail.reference.libelle|minifieMoi()}) }}" title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[recherchesParcoursDetail.id]}} %">{{recherchesParcoursDetail.reference.libelle}}</a>
+                        <a class="{{couleurEtape}}" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':rechercheParcours.id, 'alias':rechercheParcours.reference.libelle|minifieMoi(),'idEtape':recherchesParcoursDetail.id, 'etape':recherchesParcoursDetail.reference.libelle|minifieMoi()}) }}" {% if app.user %}title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[recherchesParcoursDetail.id]}} %"{% endif %}>
+                            {{recherchesParcoursDetail.reference.libelle}}
+                        </a>
                         {% if not loop.last %}
                             <div class="icone"></div>
                             <div class="marge-grise"></div>
@@ -30,7 +35,7 @@
                     </div>
                 {% else %}
                     <div class="bloc-etape">
-                        <a class="{{couleurEtape}}" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':rechercheParcours.id, 'alias':rechercheParcours.reference.libelle|minifieMoi(),'idEtape':recherchesParcoursDetail.id, 'etape':recherchesParcoursDetail.reference.libelle|minifieMoi()}) }}" title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[recherchesParcoursDetail.id]}} %">
+                        <a class="{{couleurEtape}}" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':rechercheParcours.id, 'alias':rechercheParcours.reference.libelle|minifieMoi(),'idEtape':recherchesParcoursDetail.id, 'etape':recherchesParcoursDetail.reference.libelle|minifieMoi()}) }}" {% if app.user %}title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[recherchesParcoursDetail.id]}} %"{% endif %}>
                             {{recherchesParcoursDetail.reference.libelle}}
                         </a>
                         {% if not loop.last %}

@@ -49,10 +49,20 @@
 
 /* En-tête de la page */
 #recherche-par-parcours-details h3{color:#672F9E;font-size: 24px;font-weight: bold;}
+#recherche-par-parcours-details .toolbar .btn {margin-top: 20px;}
 #recherche-par-parcours-details .en-tete {margin-top: 25px;padding-bottom:10px;border-bottom:1px solid #E5E5E5;}
+
+/* -- Description + moyenne générale -- */
+#recherche-par-parcours-details .en-tete .description { margin-top: 20px; padding-left: O;}
+#recherche-par-parcours-details .en-tete .description p{ border-left:5px solid #712F98; padding-left: 15px;}
+#recherche-par-parcours-details .en-tete .description #note-moyenne { margin-left: auto; margin-right: auto;}
+#recherche-par-parcours-details .en-tete .description #note-moyenne span{ font-size: 22px;font-weight: bold; margin: 5px 40%; width: 25%;display: block;padding-top: 3px;}
+#recherche-par-parcours-details .en-tete .description #note-moyenne span.green{ color:#5CB85C;}
+#recherche-par-parcours-details .en-tete .description #note-moyenne span.yellow{ color:#DA7F2C;}
+#recherche-par-parcours-details .en-tete .description #note-moyenne span.red{ color:#C93358;}
 /* -- Chemin de fer -- */
-#recherche-par-parcours-details .en-tete .en-tete-scroll {overflow: scroll;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer {min-width: 1430px; height: 63px;background-color: #F4F4F4; position: relative; z-index:1;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll {}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer {min-width: 1136px; height: 63px;background-color: #F4F4F4; position: relative; z-index:1;}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer ul{list-style:none; padding: 0; margin: 0;}
 
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .marge-blanche{width: 29px;height: 63px; ;position: absolute; background-color: #FFFFFF; right: 0px; z-index:2;}
@@ -61,26 +71,31 @@
 
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape{height: 63px; background-color: #F4F4F4;float: left; z-index:2;position: relative;}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape .marge-violette{width: 29px;height: 63px; ;position: absolute; background-color: #712F98; right: 0px; z-index:2;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a{color: #672F9E; font-size: 15px; text-transform: uppercase; margin: 20px 40px 20px 20px;float: left; z-index:2;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.green{border-bottom: 3px solid #DFF0D8}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.yellow{border-bottom: 3px solid #FCF8E3}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.red{border-bottom: 3px solid #F2DEDE}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a{color: #672F9E; font-size: 13px; text-transform: uppercase; margin: 20px 30px 20px 10px;float: left; z-index:2;letter-spacing: -0.3px;padding-bottom: 7px;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.green{border-bottom: 3px solid #5CB85C}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.yellow{border-bottom: 3px solid #DA7F2C}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape a.red{border-bottom: 3px solid #C93358}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape .icone{background: transparent url('../../img/pointe_grise.png')  no-repeat bottom left;width: 29px; height: 63px;float:left; z-index:3;}
 
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected{height: 63px; background-color: #712F98;float: left; z-index:2; position: relative;}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected .marge-grise{width: 29px;height: 63px; ;position: absolute; background-color: #F4F4F4; right: 0px; z-index:2;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a{color: #F4F4F4; font-size: 15px; text-transform: uppercase; margin: 20px 40px 20px 20px;float: left; z-index:2;}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.green{border-bottom: 3px solid #DFF0D8}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.yellow{border-bottom: 3px solid #FCF8E3}
-#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.red{border-bottom: 3px solid #F2DEDE}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a{color: #F4F4F4; font-size: 13px; text-transform: uppercase; margin: 20px 30px 20px 10px;float: left; z-index:2;letter-spacing: -0.3px;padding-bottom: 7px;}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.green{border-bottom: 3px solid #5CB85C}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.yellow{border-bottom: 3px solid #DA7F2C}
+#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.red{border-bottom: 3px solid #C93358}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected .icone{background: transparent url('../../img/pointe_violette.png')  no-repeat bottom left;width: 29px; height: 63px;float:left; z-index:3;}
-/* -- Description + moyenne générale -- */
-#recherche-par-parcours-details .en-tete .description { margin-top: 20px; padding-left: O;}
-#recherche-par-parcours-details .en-tete .description p{ border-left:5px solid #712F98; padding-left: 15px;}
-#recherche-par-parcours-details .en-tete .description #note-moyenne { margin-left: auto; margin-right: auto;}
 
 /* Général */
-#recherche-par-parcours-details .note { width: 300px; height: 40px; background-color:#F4F4F4; }
+#recherche-par-parcours-details .note { width: 300px; height: 40px; background-color:#F4F4F4; margin-top: 10px;}
+#recherche-par-parcours-details .note .pourcentage{border:0;background-color:#F4F4F4; font-weight:bold;}
+#recherche-par-parcours-details .note .pourcentage.green{color:#5CB85C;}
+#recherche-par-parcours-details .note .pourcentage.yellow{color:#DA7F2C;}
+#recherche-par-parcours-details .note .pourcentage.red{color:#C93358;}
+
+#pointsdurs .slider-range-min{width: 90%; margin: 0 auto;}
+#pointsdurs .note{height: 55px; border-radius: 0.25em;}
+#pointsdurs .note label{padding-top: 2px; margin: 5px 0 0 20px;}
+#pointsdurs .note .pourcentage{width: 100px;}
 
 /* Mode non connecté */
 #pointsdurs .bloc-offline {padding:0;height: 260px;}
@@ -97,6 +112,22 @@
 #pointsdurs .bloc-offline .buttons-tdb{margin-top:10px;}
 #pointsdurs .bloc-offline .buttons-tdb .buttons-centrer{margin:10px auto 0; width: 200px;}
 #pointsdurs .bloc-offline .buttons-tdb .tdb{margin:auto; width: 200px;}
+
+#pointsdurs .bloc-presentation {padding:0;margin-bottom: 15px;}
+#pointsdurs .bloc-presentation > div{ padding:30px; background: #F4F4F4; margin: 0 0 0 15px;}
+#pointsdurs .bloc-presentation p{ font-size: 13px; text-align: center; }
+
+#pointsdurs{padding:0;}
+#pointsdurs h4{ color: #595959; font-size: 14px; text-transform: uppercase; margin: 10px 0; font-weight: normal}
+#pointsdurs .wrapper-results{  padding:10px 20px 20px 0; position: relative; }
+#pointsdurs .wrapper-results .background-violet{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+#pointsdurs .wrapper-results .results h4{margin-bottom: 5px;}
+#pointsdurs .wrapper-results .results h4 img{margin-bottom: 5px;}
+#pointsdurs .wrapper-results .results h4 span.label{margin-bottom: 5px; font-size: 9px; line-height: 2; vertical-align: top;}
+#pointsdurs .wrapper-results .results h4 a{color:#703695; font-size: 18px; font-weight: bold; }
+
+#pointsdurs .wrapper-results .results p{font-size: 13px; color:#070707; }
+#pointsdurs .wrapper-results .results .fa-refresh{ color:#3da20b; }
 
 /* Mode connecté */
 #pointsdurs .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../../img/synthese.png') no-repeat right center; padding-right:25px; margin-top: 10px; display: block; height: 18px; text-align: right}

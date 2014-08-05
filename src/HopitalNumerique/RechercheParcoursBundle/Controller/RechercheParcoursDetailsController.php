@@ -147,15 +147,45 @@ class RechercheParcoursDetailsController extends Controller
         //Récup!ère la recherche par parcours passé en param
         $rechercheParcours   = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findOneBy( array( 'id' => $id ) );
 
+        //On récupère l'user connecté et son rôle
+        $user = $this->get('security.context')->getToken()->getUser();
+        $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
+
         //Vérifie si une étape a été spécifiée ou récupère la première étape de la recherche par parcours sélectionnée.
         if($idEtape !== 0 
             && in_array($idEtape, $rechercheParcours->getRecherchesParcoursDetailsIds()))
         {
-            $rechercheParcoursDetails = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findOneBy( array( 'id' => $idEtape ));
+             $rechercheParcoursDetails = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findOneBy( array( 'id' => $idEtape ));
         }
         else
         {
-            $etapes = $rechercheParcours->getRecherchesParcoursDetails();
+            //Si aucune étape n'est spécifiée et pas d'user connecté on affiche la premier qu'on trouve pour cette recherche par parcours
+            if('anon.' === $user)
+            {
+                $etapes = $rechercheParcours->getRecherchesParcoursDetails();
+            }
+            //Si un utilisateur est connecté on cherche la premiere qui n'a pas une moyenne de 100%
+            else
+            {
+                $idEtapeMoyenne = 0;
+                //Récupération de la note moyenne par étapes dans un tableau (étapeId => moyenne arrondie à l'entier)
+                $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage( $rechercheParcours );
+                foreach ($notesMoyenneParEtape as $key => $noteMoyenne)
+                {
+                    //Récupération de la premiere note pas à 100%
+                    if($noteMoyenne !== 100)
+                    {
+                        $idEtapeMoyenne = $key;
+                        break;
+                    }
+                    else
+                    {
+                        $idEtapeMoyenne = $idEtapeMoyenne === 0 ? $key : $idEtapeMoyenne;
+                    }
+                }
+
+                $etapes = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findBy( array( 'id' => $idEtapeMoyenne ));
+            }
 
             //Si il y a bien des étapes à la recherche par parcours on récupère la 1ere
             if( !is_null($etapes)
@@ -178,10 +208,6 @@ class RechercheParcoursDetailsController extends Controller
             }
         }
 
-        //On récupère l'user connecté et son rôle
-        $user = $this->get('security.context')->getToken()->getUser();
-        $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
-
         //Récupération des références + Tri pour l'affichage des points dur
         $referenceRechercheParcours        = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => intval($rechercheParcours->getReference()->getId()) ) );
         $referenceRechercheParcoursDetails = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => intval($rechercheParcoursDetails->getReference()->getId()) ) );
@@ -190,7 +216,10 @@ class RechercheParcoursDetailsController extends Controller
         $referencesTemp[] = $referenceRechercheParcours;
         $referencesTemp[] = $referenceRechercheParcoursDetails;
 
-        foreach ($this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => intval($rechercheParcoursDetails->getReference()->getId()) ) ) as $refChild)
+        $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 
+                        'parent' => intval( $rechercheParcoursDetails->getReference()->getId() )
+                    ));
+        foreach ( $refChilds as $refChild)
         {
             $referencesTemp[] = $refChild;
         }
@@ -231,37 +260,48 @@ class RechercheParcoursDetailsController extends Controller
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
         $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
 
-        //Récupération des notes existante sur les points dur pour l'utilisateur courant 
-        $notes         = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAllOrderedByPointDurForParcoursEtape( $user, $rechercheParcoursDetails->getId() );
-
-        foreach ($objets as $objet) 
+        //En mode connecté
+        if('anon.' !== $user)
         {
-            if("point-dur" === $objet["categ"]
-                && !array_key_exists($objet['id'], $notes))
+            //Récupération des notes existante sur les points dur pour l'utilisateur courant 
+            $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAllOrderedByPointDurForParcoursEtape( $user, $rechercheParcoursDetails->getId() );
+
+            foreach ($objets as $objet) 
             {
-                //Si il n'y a pas encore de note pour ce point dur, dans cette étape associé à l'utilisateur courant alors on le créé.
-                $note = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->createEmpty();
-                $note->setRechercheParcoursDetails($rechercheParcoursDetails);
-                $note->setPourcentageMaitrise(0);
-                $note->setObjet( $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $objet['id']) ) );
-                $note->setUser($user);
+                if("point-dur" === $objet["categ"]
+                    && !array_key_exists($objet['id'], $notes))
+                {
+                    //Si il n'y a pas encore de note pour ce point dur, dans cette étape associé à l'utilisateur courant alors on le créé.
+                    $note = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->createEmpty();
+                    $note->setRechercheParcoursDetails($rechercheParcoursDetails);
+                    $note->setPourcentageMaitrise(0);
+                    $note->setObjet( $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $objet['id']) ) );
+                    $note->setUser($user);
 
-                $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->save( $note );
+                    $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->save( $note );
 
-                //Puis on l'ajoute aux notes
-                $notes[$objet['id']] = $note;
+                    //Puis on l'ajoute aux notes
+                    $notes[$objet['id']] = $note;
+                }
             }
-        }
 
-        $notesJSON = array();
-        //Set d'un tableau de note en JSOn pour le chargement des slides
-        foreach ($notes as $key => $note) 
+            $notesJSON = array();
+            //Set d'un tableau de note en JSOn pour le chargement des slides
+            foreach ($notes as $key => $note) 
+            {
+                $notesJSON[$key] = $note->getPourcentageMaitrise();
+            }
+
+            //Récupération de la note moyenne par étapes dans un tableau (étapeId => moyenne arrondie à l'entier)
+            $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage( $rechercheParcours );
+        }
+        //Mode non connecté : pas de notes
+        else
         {
-            $notesJSON[$key] = $note->getPourcentageMaitrise();
+            $notes                = array();
+            $notesJSON            = json_encode(array('id' => 0));
+            $notesMoyenneParEtape = array();
         }
-
-        //Récupération de la note moyenne par étapes dans un tableau (étapeId => moyenne arrondie à l'entier)
-        $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage( $rechercheParcours );
 
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/index.html.twig', array(
             'rechercheParcours'    => $rechercheParcours,
