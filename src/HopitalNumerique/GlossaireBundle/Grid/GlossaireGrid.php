@@ -28,6 +28,10 @@ class GlossaireGrid extends Grid implements IGrid
     {
         $this->addColonne( new Column\TextColumn('mot', 'Mot') );
         $this->addColonne( new Column\TextColumn('intitule', 'Intitule') );
+
+
+        /* Colonnes inactives */
+        $this->addColonne( new Column\BlankColumn('description') );
     }
 
     /**

@@ -108,6 +108,15 @@ class GlossaireController extends Controller
 
 
 
+
+
+
+
+
+
+
+
+
     /**
      * Effectue le render du formulaire Glossaire.
      *

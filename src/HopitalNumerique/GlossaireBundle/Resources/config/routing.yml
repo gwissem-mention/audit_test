@@ -1,3 +1,11 @@
+#Front
+hopitalnumerique_glossaire:
+    pattern:  /glossaire
+    defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Front:index" }
+    requirements: 
+        _method: GET
+
+#Admin
 hopitalnumerique_glossaire_glossaire:
     pattern:  /admin/glossaire
     defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Glossaire:index" }

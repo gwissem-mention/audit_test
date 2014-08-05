@@ -1,0 +1,57 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Glossaire{% endblock %}
+
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-glossaire-front-index.css" filter="cssrewrite, ?yui_css" 
+        'bundles/hopitalnumeriqueglossaire/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div id="glossaire">
+        <div class="col-md-12">
+            <h1 class="violet">Glossaire</h1>
+            <div class="alphabet">
+                {% for letter in 'a'|upper..'z'|upper %}
+                    {% if letter in datas|keys %}
+                        <a href="#{{letter}}">{{letter}}</a>
+                    {% else %}
+                        <p>{{letter}}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="liste">
+                {% for letter in 'a'|upper..'z'|upper %}
+                    {% if letter in datas|keys %}
+                        {% set glossaires = datas[letter] %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h2 class="{{ cycle(['rose', 'violet'], loop.index) }}" id="{{letter}}">{{letter}}</h2>
+                                <div class="sep"></div>
+                                <div class="elements">
+                                    {% for element in glossaires %}
+                                        <div class="element" id="{{element.mot}}">
+                                            <p class="titre">{{ element.mot ~ ' : ' ~ element.intitule }}</p>
+                                            <p class="desc">
+                                                {{ element.description }}
+                                            </p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
