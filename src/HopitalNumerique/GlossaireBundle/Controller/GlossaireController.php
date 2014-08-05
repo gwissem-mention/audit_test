@@ -105,6 +105,11 @@ class GlossaireController extends Controller
         return $this->get('hopitalnumerique_glossaire.manager.glossaire')->exportCsv( $colonnes, $datas, 'export-glossaire.csv', $kernelCharset );
     }
 
+    /**
+     * Parse les publication à la recherche de mots du glossaire
+     *
+     * @return redirect
+     */
     public function parsePublicationsAction()
     {
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
