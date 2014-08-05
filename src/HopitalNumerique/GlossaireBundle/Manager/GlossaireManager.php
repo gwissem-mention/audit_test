@@ -46,62 +46,77 @@ class GlossaireManager extends BaseManager
         $datas = $this->findAll();
         $glossairesWords = array();
         foreach($datas as $one)
-            $glossairesWords[ trim(htmlentities($one->getMot())) ] = trim(htmlentities($one->getMot()));
+            $glossairesWords[] = trim(htmlentities($one->getMot()));
         
         //tri des éléments les plus longs aux plus petits
         array_multisort(
-            array_map(create_function('$v', 'return strlen($v);'), array_keys($glossairesWords)), SORT_DESC, 
+            array_map(create_function('$v', 'return strlen($v);'), $glossairesWords), SORT_DESC, 
             $glossairesWords
         );
 
         //objets
         if( count($objets) > 0){
             foreach($objets as $objet){
-                $motsFounds = array();
-                $posFounds  = array();
-
                 //parse Resume + Synthese
-                $words = strip_tags($objet->getResume()) . ' ' . strip_tags($objet->getSynthese());
+                $words      = strip_tags($objet->getResume()) . ' ' . strip_tags($objet->getSynthese());
+                $motsFounds = $this->searchWords( $words, $glossairesWords );
 
-                foreach($glossairesWords as $glossairesWord){
-                    $pos = strpos($words, $glossairesWord);
-
-                    if( $pos !== false && !in_array($pos, $posFounds) ){
-                        $motsFounds[] = $glossairesWord;
-                        $posFounds[]  = $pos;
-                    }
-                }
-
-                if( count($motsFounds) > 0 )
-                    $objet->setGlossaires( $motsFounds );
-                else
-                    $objet->setGlossaires( array() );
+                $objet->setGlossaires( $motsFounds );
             }    
         }
 
         //contenus
         if( count($contenus) > 0){
             foreach($contenus as $contenu){
-                $motsFounds = array();
-                $posFounds  = array();
-
                 //parse Contenu
-                $words = strip_tags($contenu->getContenu());
+                $words      = strip_tags($contenu->getContenu());
+                $motsFounds = $this->searchWords( $words, $glossairesWords );
 
-                foreach($glossairesWords as $glossairesWord){
-                    $pos = strpos($words, $glossairesWord);
-
-                    if( $pos !== false && !in_array($pos, $posFounds) ){
-                        $motsFounds[] = $glossairesWord;
-                        $posFounds[]  = $pos;
-                    }
-                }
-
-                if( count($motsFounds) > 0 )
-                    $contenu->setGlossaires( $motsFounds );
-                else
-                    $contenu->setGlossaires( array() );
+                $contenu->setGlossaires( $motsFounds );
             }    
         }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private function searchWords( $words, $glossairesWords )
+    {
+        $motsFounds = array();
+        $posFounds  = array();
+
+        foreach($glossairesWords as $glossairesWord){
+            $pattern = "|$glossairesWord|";
+            preg_match_all($pattern, $words, $matches, PREG_OFFSET_CAPTURE);
+
+            if( $matches[0] ){
+                foreach($matches[0] as $match){
+                    if( !in_array($match[1], $posFounds) ){
+                        $motsFounds[] = $glossairesWord;
+                        $posFounds[]  = $match[1];
+                    }
+                }
+            }
+        }
+
+        return array_unique($motsFounds);
     }
 }

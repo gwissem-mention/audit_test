@@ -136,6 +136,12 @@ class PublicationExtension extends \Twig_Extension
                     unset( $words[$key] );
             }
 
+            //tri des éléments les plus longs aux plus petits
+            // array_multisort(
+            //     array_map(create_function('$v', 'return strlen($v);'), $words), SORT_DESC, 
+            //     $words
+            // );
+
             foreach($words as $word){
                 $tool    = new Chaine( $word->getMot() );
                 $html    = '<abbr title="' . ($word->getIntitule() ? $word->getIntitule() : $word->getMot() ) . '" >'. $word->getMot(). ' <a target="_blank" href="/glossaire#'. $tool->minifie() .'" ><i class="fa fa-info-circle"></i></a></abbr>';
