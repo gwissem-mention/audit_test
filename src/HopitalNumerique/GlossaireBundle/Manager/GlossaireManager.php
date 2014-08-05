@@ -23,8 +23,11 @@ class GlossaireManager extends BaseManager
         $datas = array();
         foreach($glossaires as $one){
             $firstL = substr( ucfirst($one->getMot()), 0, 1);
-            $datas[ $firstL ][] = $one;
+            $datas[ $firstL ][ $one->getMot() ] = $one;
         }
+
+        foreach($datas as &$data)
+            ksort($data);
 
         return $datas;
     }
