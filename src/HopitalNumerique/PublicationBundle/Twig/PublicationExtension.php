@@ -133,7 +133,7 @@ class PublicationExtension extends \Twig_Extension
             $words      = $this->getManagerGlossaire()->findAll();
             $motsFounds = array();
             foreach($words as $key => $word){
-                if( in_array( trim(htmlentities($word->getMot())), $glossaires) )
+                if( $word->getEtat()->getId() == 3 && in_array( trim(htmlentities($word->getMot())), $glossaires) )
                     $motsFounds[ trim(htmlentities($word->getMot())) ] = $word->getIntitule();
             }
 

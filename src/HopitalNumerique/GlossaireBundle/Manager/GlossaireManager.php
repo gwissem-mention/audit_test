@@ -22,8 +22,10 @@ class GlossaireManager extends BaseManager
 
         $datas = array();
         foreach($glossaires as $one){
-            $firstL = substr( ucfirst($one->getMot()), 0, 1);
-            $datas[ $firstL ][ strtolower($one->getMot()) ] = $one;
+            if( $one->getEtat()->getId() == 3){
+                $firstL = substr( ucfirst($one->getMot()), 0, 1);
+                $datas[ $firstL ][ strtolower($one->getMot()) ] = $one;
+            }
         }
 
         foreach($datas as &$data)
@@ -45,8 +47,10 @@ class GlossaireManager extends BaseManager
         //éléments du glossaire
         $datas = $this->findAll();
         $glossairesWords = array();
-        foreach($datas as $one)
-            $glossairesWords[] = trim(htmlentities($one->getMot()));
+        foreach($datas as $one){
+            if( $one->getEtat()->getId() == 3)
+                $glossairesWords[] = trim(htmlentities($one->getMot()));
+        }
         
         //tri des éléments les plus longs aux plus petits
         array_multisort(
