@@ -24,15 +24,10 @@ class DefaultController extends Controller
 
         //get Sessions
         $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForDashboard( $user );
-        $sessionsFormateur = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateur( $user );
+        $sessionsFormateur = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateurForDashboard( $user );
 
-
-        echo '<pre>';
-        var_dump($sessionsFormateur);
-        die();
-
-
-
+        //factures
+        $factures = count($this->get('hopitalnumerique_paiement.manager.facture')->findBy( array('user' => $user, 'payee' => false ) ));
 
 
 
@@ -40,10 +35,12 @@ class DefaultController extends Controller
         $userConf = $this->buildDashboardRows( json_decode($user->getDashboardFront(), true) );
 
         return $this->render('HopitalNumeriqueAccountBundle:Default:index.html.twig', array(
-            'messages' => $messages,
-            'requetes' => $requetes,
-            'sessions' => $sessions,
-            'userConf' => $userConf
+            'messages'          => $messages,
+            'requetes'          => $requetes,
+            'sessions'          => $sessions,
+            'factures'          => $factures,
+            'sessionsFormateur' => $sessionsFormateur,
+            'userConf'          => $userConf
         ));
     }
 
@@ -94,11 +91,13 @@ class DefaultController extends Controller
      */
     private function buildDashboardRows( $dashboardFront )
     {
-        $datas                = array();
-        $datas[ 'messages' ]  = array( 'row' => 1, 'col' => 1);
-        $datas[ 'requetes' ]  = array( 'row' => 1, 'col' => 2);
-        $datas[ 'modules' ]   = array( 'row' => 2, 'col' => 1);
-        $datas[ 'formateur' ] = array( 'row' => 2, 'col' => 2);
+        $datas                   = array();
+        $datas[ 'messages' ]     = array( 'row' => 1, 'col' => 1);
+        $datas[ 'requetes' ]     = array( 'row' => 1, 'col' => 2);
+        $datas[ 'modules' ]      = array( 'row' => 2, 'col' => 1);
+        $datas[ 'formateur' ]    = array( 'row' => 2, 'col' => 2);
+        $datas[ 'intervention' ] = array( 'row' => 3, 'col' => 1);
+        $datas[ 'factures' ]     = array( 'row' => 3, 'col' => 2);
 
         if( !is_null($dashboardFront) )
             $datas = array_replace($datas, $dashboardFront);

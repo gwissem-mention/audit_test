@@ -63,15 +63,27 @@ class SessionRepository extends EntityRepository
      * 
      * @return QueryBuilder
      */
-    public function getSessionsForFormateur( $user )
+    public function getSessionsForFormateur( $user, $withDate = false )
     {
-        return $this->_em->createQueryBuilder()
+        $qb = $this->_em->createQueryBuilder()
                         ->select('ses')
                         ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
                         ->leftJoin('ses.etat','refEtat')
                         ->andWhere('ses.formateur = :user', 'refEtat.id = 403')
                         ->setParameter('user', $user)
                         ->orderBy('ses.dateSession', 'DESC');
+
+        if( $withDate !== false){
+            if( $withDate == 'beforeToday' ){
+                $qb->andWhere('ses.dateSession < :today')
+                   ->setParameter('today', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);
+            }else{
+                $qb->andWhere('ses.dateSession > :today')
+                   ->setParameter('today', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);
+            }
+        }
+
+        return $qb;
     }
 
     /**
