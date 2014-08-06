@@ -169,7 +169,7 @@ class RechercheParcoursDetailsController extends Controller
             {
                 $idEtapeMoyenne = 0;
                 //Récupération de la note moyenne par étapes dans un tableau (étapeId => moyenne arrondie à l'entier)
-                $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage( $rechercheParcours );
+                $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage( $rechercheParcours, $user );
                 foreach ($notesMoyenneParEtape as $key => $noteMoyenne)
                 {
                     //Récupération de la premiere note pas à 100%
