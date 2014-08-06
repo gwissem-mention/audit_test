@@ -126,7 +126,7 @@ class QuestionnaireController extends Controller
             'optionRenderForm'   => array(
                 'showAllQuestions'   => false,
                 'readOnly'           => false,
-                'envoieDeMail'       => false,
+                'envoieDeMail'       => true,
                 'themeQuestionnaire' => 'vertical',
                 'routeRedirect'      => json_encode(array(
                     'quit' => array(
@@ -392,7 +392,7 @@ class QuestionnaireController extends Controller
                         continue;
     
                     //récupération de la réponse courante
-                    $reponse = key_exists($idQuestion, $reponses) ? $reponses[$idQuestion] : null;    
+                    $reponse = key_exists($idQuestion, $reponses) ? $reponses[$idQuestion] : null;
     
                     //Mode ajout
                     if(is_null($reponse))
@@ -506,7 +506,6 @@ class QuestionnaireController extends Controller
                         }
                     }
                 }
-
                 //Envoie du mail à l'utilisateur pour l'alerter de la validation de sa candidature
                 if($this->_envoieDeMail)
                 {
@@ -566,7 +565,37 @@ class QuestionnaireController extends Controller
                             }
                             break;
                         default:
-                            //throw new \Exception('Ce type de questionnaire ne possède pas de mail en base.');
+                            //Récupère les questions / réponses formatées correctement pour l'affichage dans les mails génériques
+                            $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
+                            
+                            //Formate les données de l'utilisateur qui a répondu au questionnaire
+                            $etablissement = is_null($user->getEtablissementRattachementSante()) ? $user->getAutreStructureRattachementSante() : $user->getEtablissementRattachementSante()->getNom();
+                            
+                            $candidat = '<ul>';
+                            $candidat .= '<li><strong>Prénom</strong> : ' . (trim($user->getPrenom()) === '' ? '-' : $user->getPrenom() ). '</li>';
+                            $candidat .= '<li><strong>Nom</strong> : ' . (trim($user->getNom()) == '' ? '-' : $user->getNom() ). '</li>';
+                            $candidat .= '<li><strong>Adresse e-mail</strong> : ' . (trim($user->getEmail()) === '' ? '-' : $user->getEmail() ). '</li>';
+                            $candidat .= '<li><strong>Téléphone direct</strong> : ' . (trim($user->getTelephoneDirect()) === '' ? '-' : $user->getTelephoneDirect() ). '</li>';
+                            $candidat .= '<li><strong>Téléphone portable</strong> : ' . (trim($user->getTelephonePortable()) === '' ? '-' : $user->getTelephonePortable() ). '</li>';
+                            $candidat .= '<li><strong>Profil</strong> : ' . (trim($user->getProfilEtablissementSante()->getLibelle()) === '' ? '-' : $user->getProfilEtablissementSante()->getLibelle() ). '</li>';
+                            $candidat .= '<li><strong>Établissement de rattrachement</strong> : ' . (trim($etablissement) === '' ? '-' : $etablissement ). '</li>';
+                            $candidat .= '<li><strong>Nom de votre établissement si non disponible dans la liste précédente</strong> : ' . (trim($user->getAutreStructureRattachementSante()) === '' ? '-' : $user->getAutreStructureRattachementSante() ). '</li>';
+                            $candidat .= '<li><strong>Fonction dans l\'établissement</strong> : ' . (trim($user->getFonctionDansEtablissementSante()) === '' ? '-' : $user->getFonctionDansEtablissementSante() ). '</li>';
+                            $candidat .= '</ul>';
+
+                            //Récupération de l'adresse mail en parameter.yml
+                            $adressesMails = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getMailReponses();
+                            
+                            //Set des variables du gabarit du mail
+                            $variablesTemplate = array(
+                                'nomQuestionnaire' => $questionnaire->getNom(),
+                                'candidat'         => $candidat,
+                                'questionnaire'    => $candidature
+                            );
+                            $mailsAEnvoyer = $this->get('nodevo_mail.manager.mail')->sendReponsesQuestionnairesMail($adressesMails, $variablesTemplate);
+
+                            foreach($mailsAEnvoyer as $mailAEnvoyer)
+                                $this->get('mailer')->send($mailAEnvoyer);
                             break;
                     }
                 }

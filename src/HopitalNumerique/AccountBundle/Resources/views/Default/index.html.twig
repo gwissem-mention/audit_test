@@ -114,11 +114,57 @@
                     </div>
 
                     <div class="panel-body">
-                        
+                        <h4>A venir</h4>
+                        <ol>
+                            {% for session in sessionsFormateur['after'] %}
+                                <li>{{ session.module.titre }} ( {{session.inscriptions|length}} inscrit(s) )</li>
+                            {% else %}
+                                <li>- Aucune session à venir -</li>
+                            {% endfor %}
+                        </ol>
+                        <h4>Précédentes</h4>
+                        <ol>
+                            {% for session in sessionsFormateur['before'] %}
+                                <li>{{ session.module.titre }} <a href="{{path('hopitalnumerique_module_session_evaluation_front', {'id' : session.id})}}"><i class="fa fa-file"></i></a></li>
+                            {% else %}
+                                <li>- Aucune session précédente -</li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+            </li>
+            <li data-row="{{userConf['intervention']['row']}}" data-col="{{userConf['intervention']['col']}}" data-sizex="1" data-sizey="1" data-id="intervention" >
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a href="#">Mes demandes interventions</a></h3>
+                        <div class="options">
+                            <i class="fa fa-arrows"></i>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
                         
                     </div>
                 </div>
             </li>
+
+            {% if factures > 0 %}
+                <li data-row="{{userConf['factures']['row']}}" data-col="{{userConf['factures']['col']}}" data-sizex="1" data-sizey="1" data-id="factures" >
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><a href="{{path('hopitalnumerique_paiement_front')}}">Mes factures</a></h3>
+                            <div class="options">
+                                <i class="fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <h4>Vous pouvez envoyer une facture à l'ANAP</h4>
+                            <p class="text-center">{{factures}} facture(s) émises, non payées</p>
+                        </div>
+                    </div>
+                </li>
+            {% endif %}
         </ul>
     </div>
 

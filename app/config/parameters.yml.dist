@@ -27,6 +27,12 @@ parameters:
         gmelchilsen@nodevo.com: adresse de copie
     #Permet de définir si tout les mails sont envoyé en copie à l'expéditeur pour en avoir une copie des "mails qu'il a envoyés"
     confighn_nodevomail_expediteurEnCopie: false
+
+    #HopitalNumerique_Questionnaire
+    confighn_hopitalnumerique_questionnaire_mailReponse:
+        qsomazzi@nodevo.com: Quentin
+        gmelchilsen@nodevo.com: 'Gaëtan M.'
+        tdauriac@nodevo.com: 'Thomas D.'
     
     #HopitalNumerique_Contact
     confighn_hopitalnumerique_contact:
