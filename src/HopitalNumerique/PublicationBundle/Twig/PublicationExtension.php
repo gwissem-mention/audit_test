@@ -145,8 +145,8 @@ class PublicationExtension extends \Twig_Extension
             
             foreach($motsFounds as $mot => $intitule ){
                 //search word in content
-                $pattern = '/[\;\<\>\,\"\(\) ]{1,1}'.$mot.'[\;\<\>\,\"\(\) ]{1,1}/';
-                preg_match_all($pattern, $contentModified, $matches);
+                $pattern = '/[\;\<\>\,\"\(\)\'\& ]{1,1}'.$mot.'[\;\<\>\,\"\(\)\'\& ]{1,1}/';
+                preg_match_all($pattern, $content, $matches);
 
                 //when founded
                 if( $matches[0] ){
