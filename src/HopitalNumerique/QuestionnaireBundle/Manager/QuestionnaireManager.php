@@ -13,8 +13,9 @@ class QuestionnaireManager extends BaseManager
     protected $_class = 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire';
 
     protected $_questionnaireArray = array();
+    protected $_mailReponses       = array();
     protected $_managerReponse;
-    	
+        
     /**
      * Constructeur du manager
      *
@@ -24,6 +25,7 @@ class QuestionnaireManager extends BaseManager
     {
         parent::__construct($em);
         $this->_questionnaireArray = isset($options['idRoles']) ? $options['idRoles'] : array();
+        $this->_mailReponses       = isset($options['mailReponses']) ? $options['mailReponses'] : array();
         $this->_managerReponse     = $managerReponse;
     }
 
@@ -64,6 +66,16 @@ class QuestionnaireManager extends BaseManager
     public function getQuestionnaireRepondant( $idQuestionnaire )
     {
         return $this->getRepository()->getQuestionnaireRepondant( $idQuestionnaire )->getQuery()->getResult();
+    }
+
+    /**
+     * Get les adresses mails dans le config.yml/parameter.yml de l'envoies des réponses
+     *
+     * @return array( 'adresse' => 'nom' )
+     */
+    public function getMailReponses()
+    {
+        return $this->_mailReponses;
     }
     
     /**
@@ -107,21 +119,42 @@ class QuestionnaireManager extends BaseManager
      */
     public function getQuestionnaireFormateMail($reponses)
     {
-        $candidature = '<ul>';
+        $candidature          = '<ul>';
+
         foreach ($reponses as $key => $reponse)
         {
             switch($reponse->getQuestion()->getTypeQuestion()->getLibelle())
             {
+                case 'entityradio':
             	case 'entity':
-            	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . $reponse->getReference()->getLibelle() . "</li>";
+                    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : '; 
+                    if(!is_null($reponse->getReference()))
+                    {
+                        $candidature .= $reponse->getReference()->getLibelle();
+                    }
+            	    $candidature .= "</li>";
             	    break;
             	case 'checkbox':
             	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . ('1' == $reponse->getReponse() ? 'Oui' : 'Non' ). "</li>";
             	    break;
+                //Gestion très sale, à revoir au moment de la construction du tableau de réponses avec des niveaux d'enfants/parents etc.
+                case 'entitymultiple':
+                case 'entitycheckbox':
+                    //Affichage pour une possibilité de plusieurs réponses à cette question
+                    $candidature .= "<li><strong>" . $reponse->getQuestion()->getLibelle() . "</strong> : <ul>";
+                    foreach ($reponse->getReferenceMulitple() as $key => $referenceMultiple) 
+                    {
+                        $candidature .=  "<li>";
+                        $candidature .= $referenceMultiple->getLibelle();
+                        $candidature .= "</li>";
+                    }
+                    $candidature .= "</ul></li>";
+                    break;
             	default:
             	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . $reponse->getReponse() . "</li>";
             	    break;
             }
+            $questionsDejaAffiche[] = $reponse->getQuestion()->getId();
         }
         $candidature .= '</ul>';
         
