@@ -27,6 +27,7 @@ class MaitriseUserRepository extends EntityRepository
                                 ->leftJoin('notes.rechercheParcoursDetails', 'etape')
                                 ->andWhere('etape.id IN (:ids)')
                                 ->setParameter('ids', $etapesId)
-                         ->groupBy('etape.id');
+                         ->groupBy('etape.id')
+                         ->orderBy('etape.order');
     }
 }
