@@ -130,17 +130,46 @@ class PublicationExtension extends \Twig_Extension
         
         //Glossaire stuff
         if( $glossaires ){
-            $words = $this->getManagerGlossaire()->findAll();
+            $words      = $this->getManagerGlossaire()->findAll();
+            $motsFounds = array();
             foreach($words as $key => $word){
-                if( !in_array( trim(htmlentities($word->getMot())), $glossaires) )
-                    unset( $words[$key] );
+                if( $word->getEtat()->getId() == 3 && in_array( trim(htmlentities($word->getMot())), $glossaires) )
+                    $motsFounds[ trim(htmlentities($word->getMot())) ] = $word->getIntitule();
             }
 
-            foreach($words as $word){
-                $tool    = new Chaine( $word->getMot() );
-                $html    = '<abbr title="' . ($word->getIntitule() ? $word->getIntitule() : $word->getMot() ) . '" >'. $word->getMot(). ' <a target="_blank" href="/glossaire#'. $tool->minifie() .'" ><i class="fa fa-info-circle"></i></a></abbr>';
-                $content = str_replace( trim(htmlentities($word->getMot())), $html, $content );
+            //tri des éléments les plus longs aux plus petits
+            array_multisort(
+                array_map(create_function('$v', 'return strlen($v);'), array_keys($motsFounds)), SORT_DESC, 
+                $motsFounds
+            );
+            
+            $contentModified = $content;
+            $searchElements  = array();
+            $replacements    = array();
+
+            foreach($motsFounds as $mot => $intitule ){
+                //search word in content
+                $pattern = "|.{0,3}$mot.{0,3}|";
+                preg_match_all($pattern, $contentModified, $matches);
+
+                //when founded
+                if( $matches[0] ){
+                    //prepare Replacement stuff
+                    $tool       = new Chaine( $mot );
+                    $html       = '<abbr title="' . ($intitule ? $intitule : $mot ) . '" >'. $mot. ' <a target="_blank" href="/glossaire#'. $tool->minifie() .'" ><i class="fa fa-info-circle"></i></a></abbr>';
+
+                    //iterate over matches
+                    foreach($matches[0] as $match){
+                        $tab              = explode($mot, $match);
+                        $searchElements[] = $match;
+                        $replacements[]   = $tab[0] . $html . $tab[1];
+
+                        $contentModified = str_replace($match, '', $contentModified);
+                    }
+                }
             }
+
+            $content = str_replace($searchElements, $replacements, $content);
         }
         
         return $content;
