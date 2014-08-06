@@ -19,7 +19,7 @@ class MaitriseUserRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getAverage(array $etapesId)
+    public function getAverage(array $etapesId, $user)
     {
         return $this->_em->createQueryBuilder()
                          ->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne')
@@ -27,6 +27,8 @@ class MaitriseUserRepository extends EntityRepository
                                 ->leftJoin('notes.rechercheParcoursDetails', 'etape')
                                 ->andWhere('etape.id IN (:ids)')
                                 ->setParameter('ids', $etapesId)
+                                ->andWhere('notes.user = :user')
+                                ->setParameter('user', $user)
                          ->groupBy('etape.id')
                          ->orderBy('etape.order');
     }

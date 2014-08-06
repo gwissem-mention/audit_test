@@ -38,12 +38,12 @@ class MaitriseUserManager extends BaseManager
      *
      * @return array Tableau des moyenne triées par étape
      */
-    public function getAverage( $rechercheParcours )
+    public function getAverage( $rechercheParcours, $user )
     {
         $etapesId = $rechercheParcours->getRecherchesParcoursDetailsIds();
 
         //Récupération du tableau des objets maitrisés
-        $objetsMaitrises = $this->getRepository()->getAverage( $etapesId )->getQuery()->getResult();
+        $objetsMaitrises = $this->getRepository()->getAverage( $etapesId, $user )->getQuery()->getResult();
 
         $moyennes = array();
         //Cast des moyenne en int arrondi à l'entier
