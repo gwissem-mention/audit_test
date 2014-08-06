@@ -41,7 +41,7 @@
                         {%- if topic.getFirstPost -%}
 
                             {{- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -}}
-                            {{- topic.getFirstPost.getCreatedBy.getAppellation() -}}
+                            {{- topic.getFirstPost.getCreatedBy.getNomPrenom() -}}
 
                             &nbsp;&#183;
                             <a href="{{- path('ccdn_forum_user_topic_show', {'forumName': topic.board.category.forumName, 'topicId': topic.getId }) -}}">
@@ -65,7 +65,7 @@
                         {%- if topic.getLastPost -%}
 
                             {{- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -}}
-                            {{- topic.getLastPost.getCreatedBy.getAppellation() -}}
+                            {{- topic.getLastPost.getCreatedBy.getNomPrenom() -}}
 
                             <br>
 

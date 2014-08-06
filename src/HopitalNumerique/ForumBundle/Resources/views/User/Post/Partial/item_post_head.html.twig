@@ -4,7 +4,7 @@
             <h4 class="panel-title">
                 {%- if post.getCreatedBy -%}
                     {{- 'post.posted-by' |trans({}, ForumBundle.translation ) |raw -}}
-                    {{- post.getCreatedBy.getAppellation() -}}
+                    {{- post.getCreatedBy.getNomPrenom() -}}
 
                     &nbsp;&#183;&nbsp;
 
