@@ -149,21 +149,22 @@ class PublicationExtension extends \Twig_Extension
 
             foreach($motsFounds as $mot => $intitule ){
                 //search word in content
-                $pattern = "|.{10,10}$mot.{10,10}|";
-                preg_match_all($pattern, $contentModified, $matches, PREG_OFFSET_CAPTURE);
+                $pattern = "|.{0,3}$mot.{0,3}|";
+                preg_match_all($pattern, $contentModified, $matches);
 
                 //when founded
                 if( $matches[0] ){
                     //prepare Replacement stuff
                     $tool       = new Chaine( $mot );
-                    $html       = ' <abbr title="' . ($intitule ? $intitule : $mot ) . '" >'. $mot. ' <a target="_blank" href="/glossaire#'. $tool->minifie() .'" ><i class="fa fa-info-circle"></i></a></abbr> ';
+                    $html       = '<abbr title="' . ($intitule ? $intitule : $mot ) . '" >'. $mot. ' <a target="_blank" href="/glossaire#'. $tool->minifie() .'" ><i class="fa fa-info-circle"></i></a></abbr>';
 
                     //iterate over matches
                     foreach($matches[0] as $match){
-                        $searchElements[] = $match[0];
-                        $replacements[]   = $html;
+                        $tab              = explode($mot, $match);
+                        $searchElements[] = $match;
+                        $replacements[]   = $tab[0] . $html . $tab[1];
 
-                        $contentModified = str_replace($match[0], '', $contentModified);
+                        $contentModified = str_replace($match, '', $contentModified);
                     }
                 }
             }
