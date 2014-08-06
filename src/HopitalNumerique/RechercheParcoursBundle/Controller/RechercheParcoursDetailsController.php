@@ -285,6 +285,9 @@ class RechercheParcoursDetailsController extends Controller
                 }
             }
 
+            //Dans le cas où des points-dur ont une date dépassée, changement de groupe de restriction ou passé inactif
+            $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->cleanNotesByObjet( $notes, $objets );
+
             $notesJSON = array();
             //Set d'un tableau de note en JSOn pour le chargement des slides
             foreach ($notes as $key => $note) 

@@ -19,7 +19,7 @@
                         {% endif %}
                     {% endif %}
                     <label for="pourcentage-{{objet['id']}}">Taux de maîtrise % :</label>
-                    <input type="text" class="pourcentage {{couleurEtape}}" value="{{notes[objet['id']].pourcentageMaitrise}}" id="pourcentage-{{objet['id']}}" readonly >
+                    <input type="text" class="pourcentage {{couleurEtape}}" value="{% if objet['id'] in notes|keys %}{{notes[objet['id']].pourcentageMaitrise}}{% else %}0{% endif %}" id="pourcentage-{{objet['id']}}" readonly >
                 </p>
                 <div id="slider-range-min-{{objet['id']}}" class="slider-range-min"></div>
             </div>
