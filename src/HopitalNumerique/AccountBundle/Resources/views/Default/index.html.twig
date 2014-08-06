@@ -34,27 +34,54 @@
     <div class="gridster">
         <ul class="list-unstyled">
             <li data-row="{{userConf['messages']['row']}}" data-col="{{userConf['messages']['col']}}" data-sizex="1" data-sizey="1" data-id="messages" >
-                <div class="scroll">
-                    {% for message in messages %}
-                        <p class="titre">{{message.title}}</p>
-                        <p>{{message.content|nl2br}}</p>
-                    {% else %}
-                        - Aucun message -
-                    {% endfor %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a href="#">Mes messages</a></h3>
+                        <div class="options">
+                            <i class="fa fa-arrows"></i>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        {% for message in messages %}
+                            <p class="titre">{{message.title}}</p>
+                            <p>{{message.content|nl2br}}</p>
+                        {% else %}
+                            - Aucun message -
+                        {% endfor %}
+                    </div>
                 </div>
             </li>
             <li data-row="{{userConf['requetes']['row']}}" data-col="{{userConf['requetes']['col']}}" data-sizex="1" data-sizey="1" data-id="requetes" >
-                <div class="scroll">
-                    {% for requete in requetes %}
-                        <a href="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">{{requete.nom|capitalize}}</a><br />
-                    {% else %}
-                        - Aucune requête -
-                    {% endfor %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a href="#">Mes requêtes</a></h3>
+                        <div class="options">
+                            <i class="fa fa-arrows"></i>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        {% for requete in requetes %}
+                            <a href="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">{{requete.nom|capitalize}}</a><br />
+                        {% else %}
+                            - Aucune requête -
+                        {% endfor %}
+                    </div>
                 </div>
             </li>
             <li data-row="{{userConf['modules']['row']}}" data-col="{{userConf['modules']['col']}}" data-sizex="1" data-sizey="1" data-id="modules" >
-                <div class="scroll">
-                    
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a href="#">Mes modules</a></h3>
+                        <div class="options">
+                            <i class="fa fa-arrows"></i>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        
+                    </div>
                 </div>
             </li>
         </ul>
@@ -63,8 +90,11 @@
     <input type="hidden" id="account-reorder-url" value="{{path('hopital_numerique_account_homepage_reorder')}}" />
 
     <style>
-        .gridster ul li{background-color: red; color: #FFF; font-size: 35px}
-        .gridster ul li .scroll{overflow: hidden; overflow-y:auto; height: 200px}
+        #tableau-de-bord .gridster ul li{}
+        #tableau-de-bord .gridster ul li .panel{ margin: 0;}
+        #tableau-de-bord .gridster ul li .panel .panel-heading h3.panel-title{ font-size: 16px; font-weight: normal; padding: 0; margin: 0; background: none; display: inline-block; width: 95%}
+        #tableau-de-bord .gridster ul li .panel .panel-heading .options{display: inline-block; text-align: right; cursor: pointer}
+        #tableau-de-bord .gridster ul li .panel .panel-body{overflow: hidden; overflow-y:auto; height: 162px; background: #FFF}
     </style>
 
 {% endblock %}
