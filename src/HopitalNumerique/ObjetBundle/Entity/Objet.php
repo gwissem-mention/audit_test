@@ -276,7 +276,14 @@ class Objet
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ModuleBundle\Entity\Module", mappedBy="productions")
      */
-    protected $modules;
+    protected $modules; 
+
+    /**
+     * Ensemble des notes de maitrise liées à cette publication
+     *
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser", mappedBy="objet", cascade={"persist", "remove" })
+     */
+    protected $maitriseUsers;
 
     /**
      * @Assert\File(
@@ -320,6 +327,7 @@ class Objet
         $this->ambassadeurs  = new \Doctrine\Common\Collections\ArrayCollection();
         $this->objets        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->modules       = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->maitriseUsers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -987,6 +995,16 @@ class Objet
     public function getAmbassadeurs()
     {
         return $this->ambassadeurs;
+    }
+
+    /**
+     * Get roles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMaitriseUsers()
+    {
+        return $this->maitriseUsers;
     }
 
     /**

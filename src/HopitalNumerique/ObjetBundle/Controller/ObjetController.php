@@ -280,6 +280,8 @@ class ObjetController extends Controller
                             'roles'                => 'Accès interdit aux groupes',
                             'types'                => 'Catégories de la publication',
                             'ambassadeurs'         => 'Ambassadeurs concernés par la publication',
+                            'noteMoyenne'          => 'Maîtrise moyenne',
+                            'nombreUserMaitrise'   => 'Nombre de notes',
                             'fichier1'             => 'Fichier 1',
                             'fichier2'             => 'Fichier 2',
                             'fichierEdit'          => 'Fichier Editable',

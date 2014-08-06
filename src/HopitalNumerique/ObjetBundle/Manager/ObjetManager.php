@@ -94,6 +94,16 @@ class ObjetManager extends BaseManager
                 $row['ambassadeurs'][] = $ambassadeur->getPrenomNom();
             $row['ambassadeurs'] = implode(', ', $row['ambassadeurs']);
 
+            //Récupération de la moyenne des notes de maitrises de cette publication
+            $notes                     = $objet->getMaitriseUsers();
+            $row['noteMoyenne']        = 0;
+            $row['nombreUserMaitrise'] = 0;
+            foreach ($notes as $note) {
+                $row['noteMoyenne'] += $note->getPourcentageMaitrise();
+                $row['nombreUserMaitrise']++;
+            }
+            $row['noteMoyenne'] /= $row['nombreUserMaitrise'] != 0 ? $row['nombreUserMaitrise'] : 1;
+
             //set empty values for objet (infra doc)
             $row['idC'] = $row['titreC'] = $row['aliasC'] = $row['orderC'] = $row['contenuC'] = $row['dateCreationC'] = $row['dateModificationC'] = $row['nbVueC'] = $row['noteC'] = '';
 
@@ -109,7 +119,7 @@ class ObjetManager extends BaseManager
                         //init empty for infra doc
                         $row['id'] = $row['titre'] = $row['alias'] = $row['synthese'] = $row['resume'] = $row['commentaires'] = $row['notes'] = $row['type'] = $row['nbVue'] = $row['etat'] = '';
                         $row['dateCreation'] = $row['dateDebutPublication'] = $row['dateFinPublication'] = $row['dateModification'] = $row['roles'] = $row['types'] = $row['ambassadeurs'] = '';
-                        $row['fichier1'] = $row['fichier2'] = $row['fichierEdit'] = $row['vignette'] = $row['note'] = '';
+                        $row['fichier1'] = $row['fichier2'] = $row['fichierEdit'] = $row['vignette'] = $row['note'] = $row['noteMoyenne'] = $row['nombreUserMaitrise'] = '';
 
                         //Infra doc values
                         $row['idC']               = $contenu->getId();

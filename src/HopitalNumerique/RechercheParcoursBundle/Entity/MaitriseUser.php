@@ -31,7 +31,7 @@ class MaitriseUser
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="RechercheParcoursDetails", inversedBy="maitriseUsers")
+     * @ORM\ManyToOne(targetEntity="RechercheParcoursDetails")
      * @ORM\JoinColumn(name="rrpd_id", referencedColumnName="rrpd_id", onDelete="CASCADE")
      */
     protected $rechercheParcoursDetails;
