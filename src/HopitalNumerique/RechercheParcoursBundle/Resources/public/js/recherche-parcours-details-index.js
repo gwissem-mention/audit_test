@@ -13,8 +13,9 @@ $(document).ready(function() {
         $(this).children( ".slider-range-min" ).slider({
             range: "min",
             value: notes[$(this).data('id')],
-            min: 0,
-            max: 100,
+            min : 0,
+            step: 5,
+            max : 100,
             //A la création on set les couleurs
             create: function(event, ui){
                 var couleur;
