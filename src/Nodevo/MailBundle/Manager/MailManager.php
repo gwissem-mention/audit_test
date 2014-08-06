@@ -492,6 +492,8 @@ class MailManager extends BaseManager
         
         foreach ($users as $recepteurMail => $recepteurName)
         {   
+            $options["u"]  = $recepteurName;
+
             //prepare content
             $content        = $this->replaceContent($mail->getBody(), NULL , $options);
             $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), NULL, $options);
