@@ -136,4 +136,19 @@ class SessionManager extends BaseManager
     {
         return $this->getRepository()->getSessionsForDashboard( $user )->getQuery()->getResult();
     }
+
+    /**
+     * Retourne la liste des sessions ou l'user connecté est formateur
+     *
+     * @param User $user L'utilisateur connecté
+     *
+     * @return array
+     */
+    public function getSessionsForFormateurForDashboard( $user )
+    {
+        $before = $this->getRepository()->getSessionsForFormateur( $user, 'beforeToday' )->getQuery()->getResult();
+        $after  = $this->getRepository()->getSessionsForFormateur( $user, 'afterToday' )->getQuery()->getResult();
+
+        return array('before' => $before, 'after' => $after);
+    }
 }

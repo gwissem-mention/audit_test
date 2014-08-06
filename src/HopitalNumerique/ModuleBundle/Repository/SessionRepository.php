@@ -63,19 +63,31 @@ class SessionRepository extends EntityRepository
      * 
      * @return QueryBuilder
      */
-    public function getSessionsForFormateur( $user )
+    public function getSessionsForFormateur( $user, $withDate = false )
     {
-        return $this->_em->createQueryBuilder()
+        $qb = $this->_em->createQueryBuilder()
                         ->select('ses')
                         ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
                         ->leftJoin('ses.etat','refEtat')
                         ->andWhere('ses.formateur = :user', 'refEtat.id = 403')
                         ->setParameter('user', $user)
                         ->orderBy('ses.dateSession', 'DESC');
+
+        if( $withDate !== false){
+            if( $withDate == 'beforeToday' ){
+                $qb->andWhere('ses.dateSession < :today')
+                   ->setParameter('today', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);
+            }else{
+                $qb->andWhere('ses.dateSession > :today')
+                   ->setParameter('today', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);
+            }
+        }
+
+        return $qb;
     }
 
     /**
-     * Retourne la liste des sessions à évaluer pour le dashboard user
+     * Retourne la liste des sessions ou l'utilisateur doit/à participé pour le dashboard user
      *
      * @param User $user L'utilisateur concerné
      * 
@@ -84,7 +96,7 @@ class SessionRepository extends EntityRepository
     public function getSessionsForDashboard( $user )
     {
         return $this->_em->createQueryBuilder()
-                        ->select('ses.id, module.titre, refEtatParticipation.id as refEtatParticipationId, refEtatEvaluation.id as refEtatEvaluationId')
+                        ->select('ses.id, module.titre, refEtatParticipation.id as refEtatParticipationId, refEtatEvaluation.id as refEtatEvaluationId, ses.dateSession, module.id as moduleId')
                         ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
                         ->leftJoin('ses.inscriptions','inscription')
                         ->leftJoin('ses.module','module')
