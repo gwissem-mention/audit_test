@@ -75,7 +75,7 @@ class SessionRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des sessions à évaluer pour le dashboard user
+     * Retourne la liste des sessions ou l'utilisateur doit/à participé pour le dashboard user
      *
      * @param User $user L'utilisateur concerné
      * 
@@ -84,7 +84,7 @@ class SessionRepository extends EntityRepository
     public function getSessionsForDashboard( $user )
     {
         return $this->_em->createQueryBuilder()
-                        ->select('ses.id, module.titre, refEtatParticipation.id as refEtatParticipationId, refEtatEvaluation.id as refEtatEvaluationId')
+                        ->select('ses.id, module.titre, refEtatParticipation.id as refEtatParticipationId, refEtatEvaluation.id as refEtatEvaluationId, ses.dateSession, module.id as moduleId')
                         ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
                         ->leftJoin('ses.inscriptions','inscription')
                         ->leftJoin('ses.module','module')

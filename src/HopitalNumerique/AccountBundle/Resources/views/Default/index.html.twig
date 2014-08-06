@@ -36,7 +36,7 @@
             <li data-row="{{userConf['messages']['row']}}" data-col="{{userConf['messages']['col']}}" data-sizex="1" data-sizey="1" data-id="messages" >
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><a href="#">Mes messages</a></h3>
+                        <h3 class="panel-title">Mes messages</h3>
                         <div class="options">
                             <i class="fa fa-arrows"></i>
                         </div>
@@ -55,31 +55,66 @@
             <li data-row="{{userConf['requetes']['row']}}" data-col="{{userConf['requetes']['col']}}" data-sizex="1" data-sizey="1" data-id="requetes" >
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><a href="#">Mes requêtes</a></h3>
+                        <h3 class="panel-title"><a href="{{path('hopital_numerique_requete_homepage')}}">Mes requêtes</a></h3>
                         <div class="options">
                             <i class="fa fa-arrows"></i>
                         </div>
                     </div>
 
                     <div class="panel-body">
-                        {% for requete in requetes %}
-                            <a href="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">{{requete.nom|capitalize}}</a><br />
-                        {% else %}
-                            - Aucune requête -
-                        {% endfor %}
+                        <ol>
+                            {% for requete in requetes %}
+                                <li><a href="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">{{requete.nom|capitalize}}</a></li>
+                            {% else %}
+                                <li>- Aucune requête -</li>
+                            {% endfor %}
+                        </ol>
                     </div>
                 </div>
             </li>
             <li data-row="{{userConf['modules']['row']}}" data-col="{{userConf['modules']['col']}}" data-sizex="1" data-sizey="1" data-id="modules" >
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><a href="#">Mes modules</a></h3>
+                        <h3 class="panel-title"><a href="{{path('hopitalnumerique_module_inscription_index_front')}}">Mes modules</a></h3>
                         <div class="options">
                             <i class="fa fa-arrows"></i>
                         </div>
                     </div>
 
                     <div class="panel-body">
+                        <h4>Sessions à évaluer</h4>
+                        <ol>
+                            {% for session in sessions if session['refEtatEvaluationId'] == 28 %}
+                                <li>
+                                    <a href="{{path('hopitalnumerique_module_module_show_front', {'id': session['moduleId']})}}">{{ session['titre'] }}</a>
+                                    <a href="{{path('hopitalnumerique_module_inscription_attestation_front', {'id': session['moduleId']})}}"><i class="fa fa-file"></i></a>
+                                </li>
+                            {% else %}
+                                <li>- Aucune session à évaluer -</li>
+                            {% endfor %}
+                        </ol>
+                        <h4>Sessions à venir</h4>
+                        <ol>
+                            {% for session in sessions if session['refEtatParticipationId'] == 410 %}
+                                <li><a href="{{path('hopitalnumerique_module_module_show_front', {'id':session['moduleId']})}}">{{ session['titre'] }}</a></li>
+                            {% else %}
+                                <li>- Aucune session à venir -</li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+            </li>
+            <li data-row="{{userConf['formateur']['row']}}" data-col="{{userConf['formateur']['col']}}" data-sizex="1" data-sizey="1" data-id="formateur" >
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a href="{{path('hopitalnumerique_module_inscription_index_front')}}">Mes modules en tant que formateur</a></h3>
+                        <div class="options">
+                            <i class="fa fa-arrows"></i>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        
                         
                     </div>
                 </div>
@@ -95,6 +130,7 @@
         #tableau-de-bord .gridster ul li .panel .panel-heading h3.panel-title{ font-size: 16px; font-weight: normal; padding: 0; margin: 0; background: none; display: inline-block; width: 95%}
         #tableau-de-bord .gridster ul li .panel .panel-heading .options{display: inline-block; text-align: right; cursor: pointer}
         #tableau-de-bord .gridster ul li .panel .panel-body{overflow: hidden; overflow-y:auto; height: 162px; background: #FFF}
+        #tableau-de-bord .gridster ul li .panel .panel-body ol{list-style: none; padding-left: 20px;}
     </style>
 
 {% endblock %}

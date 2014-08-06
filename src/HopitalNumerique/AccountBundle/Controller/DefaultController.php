@@ -24,8 +24,12 @@ class DefaultController extends Controller
 
         //get Sessions
         $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForDashboard( $user );
+        $sessionsFormateur = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateur( $user );
 
 
+        echo '<pre>';
+        var_dump($sessionsFormateur);
+        die();
 
 
 
@@ -90,10 +94,11 @@ class DefaultController extends Controller
      */
     private function buildDashboardRows( $dashboardFront )
     {
-        $datas               = array();
-        $datas[ 'messages' ] = array( 'row' => 1, 'col' => 2);
-        $datas[ 'requetes' ] = array( 'row' => 1, 'col' => 1);
-        $datas[ 'modules' ]  = array( 'row' => 1, 'col' => 1);
+        $datas                = array();
+        $datas[ 'messages' ]  = array( 'row' => 1, 'col' => 1);
+        $datas[ 'requetes' ]  = array( 'row' => 1, 'col' => 2);
+        $datas[ 'modules' ]   = array( 'row' => 2, 'col' => 1);
+        $datas[ 'formateur' ] = array( 'row' => 2, 'col' => 2);
 
         if( !is_null($dashboardFront) )
             $datas = array_replace($datas, $dashboardFront);
