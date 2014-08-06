@@ -33,6 +33,7 @@ class GlossaireGrid extends Grid implements IGrid
 
         /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('description') );
+        $this->addColonne( new Column\BlankColumn('sensitive') );
     }
 
     /**

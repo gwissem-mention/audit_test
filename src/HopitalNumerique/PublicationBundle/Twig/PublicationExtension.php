@@ -134,7 +134,7 @@ class PublicationExtension extends \Twig_Extension
             $motsFounds = array();
             foreach($words as $key => $word){
                 if( $word->getEtat()->getId() == 3 && in_array( trim(htmlentities($word->getMot())), $glossaires) )
-                    $motsFounds[ trim(htmlentities($word->getMot())) ] = $word->getIntitule();
+                    $motsFounds[ trim(htmlentities($word->getMot())) ] = array('intitule' => $word->getIntitule(), 'sensitive' => $word->isSensitive() );
             }
 
             //tri des éléments les plus longs aux plus petits
@@ -143,21 +143,25 @@ class PublicationExtension extends \Twig_Extension
                 $motsFounds
             );
             
-            foreach($motsFounds as $mot => $intitule ){
+            foreach($motsFounds as $mot => $data ){
                 //search word in content
                 $pattern = '/[\;\<\>\,\"\(\)\'\& ]{1,1}'.$mot.'[\;\<\>\,\"\(\)\'\& ]{1,1}/';
-                preg_match_all($pattern, $content, $matches);
+                if( !$data['sensitive'] )
+                    $pattern .= 'i';
 
+                preg_match_all($pattern, $content, $matches);
+                
                 //when founded
                 if( $matches[0] ){
                     //prepare Replacement stuff
                     $tool = new Chaine( $mot );
-                    $html = '<abbr title="¬' . ($intitule ? $intitule : $mot ) . '¬" >¬'. $mot. '¬ <a target="_blank" href="/glossaire#'. $tool->minifie() .'" ><i class="fa fa-info-circle"></i></a></abbr>';
 
                     //iterate over matches
-                    foreach($matches[0] as $match){
-                        $tab     = explode($mot, $match);
-                        $content = str_replace($match, $tab[0] . $html . $tab[1], $content);
+                    foreach($matches[0] as $match)
+                    {
+                        $html    = '<abbr title="¬' . ($data['intitule'] ? $data['intitule'] : substr($match, 1, -1) ) . '¬" >¬'. substr($match, 1, -1) . '¬ <a target="_blank" href="/glossaire#¬'. $tool->minifie() .'¬" ><i class="fa fa-info-circle"></i></a></abbr>';
+                        $html    = substr($match, 0, 1) . $html . substr($match, -1);
+                        $content = str_replace($match, $html, $content);
                     }
                 }
             }

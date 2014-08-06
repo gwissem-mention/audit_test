@@ -49,12 +49,12 @@ class GlossaireManager extends BaseManager
         $glossairesWords = array();
         foreach($datas as $one){
             if( $one->getEtat()->getId() == 3)
-                $glossairesWords[] = trim(htmlentities($one->getMot()));
+                $glossairesWords[ trim(htmlentities($one->getMot())) ] = $one->isSensitive();
         }
         
         //tri des éléments les plus longs aux plus petits
         array_multisort(
-            array_map(create_function('$v', 'return strlen($v);'), $glossairesWords), SORT_DESC, 
+            array_map(create_function('$v', 'return strlen($v);'), array_keys($glossairesWords)), SORT_DESC, 
             $glossairesWords
         );
 
@@ -101,16 +101,26 @@ class GlossaireManager extends BaseManager
 
 
 
-
+    /**
+     * [searchWords description]
+     *
+     * @param  [type] $words           [description]
+     * @param  [type] $glossairesWords [description]
+     *
+     * @return [type]
+     */
     private function searchWords( $words, $glossairesWords )
     {
         $motsFounds = array();
         $posFounds  = array();
 
-        foreach($glossairesWords as $glossairesWord){
+        foreach($glossairesWords as $glossairesWord => $sensitive){
             $pattern = "|$glossairesWord|";
-            preg_match_all($pattern, $words, $matches, PREG_OFFSET_CAPTURE);
+            if( !$sensitive )
+                $pattern .= 'i';
 
+            preg_match_all($pattern, $words, $matches, PREG_OFFSET_CAPTURE);
+            
             if( $matches[0] ){
                 foreach($matches[0] as $match){
                     if( !in_array($match[1], $posFounds) ){

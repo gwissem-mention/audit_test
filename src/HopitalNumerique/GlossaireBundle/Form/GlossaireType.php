@@ -35,6 +35,11 @@ class GlossaireType extends AbstractType
                 'label'      => 'Description complète',
                 'attr'     => array('rows' => 10)
             ))
+            ->add('sensitive', 'checkbox', array(
+                'required'   => false,
+                'label'      => 'Case sensitive',
+                'attr'       => array( 'class'=> 'checkbox', 'style' => 'padding:0; margin:8px 0 0 0' )
+            ))
             ->add('etat', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'      => 'libelle',

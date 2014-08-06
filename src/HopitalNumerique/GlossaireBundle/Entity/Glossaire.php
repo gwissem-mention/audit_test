@@ -55,6 +55,13 @@ class Glossaire
     private $description;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="glo_sensitive", type="boolean", options = {"comment" = "Element du glossaire case sensitive ?"})
+     */
+    private $sensitive;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_statut", referencedColumnName="ref_id")
      * @Nodevo\Javascript(class="validate[required]")
@@ -66,6 +73,7 @@ class Glossaire
      */
     public function __construct()
     {
+        $this->sensitive   = false;
         $this->intitule    = null;
         $this->description = null;
         $this->etat        = 3;
@@ -150,6 +158,27 @@ class Glossaire
         return $this->description;
     }
 
+    /**
+     * Get sensitive
+     *
+     * @return boolean $sensitive
+     */
+    public function isSensitive()
+    {
+        return $this->sensitive;
+    }
+    
+    /**
+     * Set sensitive
+     *
+     * @param boolean $sensitive
+     */
+    public function setSensitive($sensitive)
+    {
+        $this->sensitive = $sensitive;
+        return $this;
+    }
+    
     /**
      * Get etat
      *
