@@ -183,8 +183,9 @@ class RechercheParcoursDetailsController extends Controller
                         $idEtapeMoyenne = $idEtapeMoyenne === 0 ? $key : $idEtapeMoyenne;
                     }
                 }
-
                 $etapes = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findBy( array( 'id' => $idEtapeMoyenne ));
+                $etapes = empty($etapes) ? $rechercheParcours->getRecherchesParcoursDetails() : $etapes; 
+            
             }
 
             //Si il y a bien des étapes à la recherche par parcours on récupère la 1ere
