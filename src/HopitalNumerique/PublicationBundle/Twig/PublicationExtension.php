@@ -143,33 +143,26 @@ class PublicationExtension extends \Twig_Extension
                 $motsFounds
             );
             
-            $contentModified = $content;
-            $searchElements  = array();
-            $replacements    = array();
-
             foreach($motsFounds as $mot => $intitule ){
                 //search word in content
-                $pattern = "|.{0,3}$mot.{0,3}|";
+                $pattern = '/[\;\<\>\,\"\(\) ]{1,1}'.$mot.'[\;\<\>\,\"\(\) ]{1,1}/';
                 preg_match_all($pattern, $contentModified, $matches);
 
                 //when founded
                 if( $matches[0] ){
                     //prepare Replacement stuff
-                    $tool       = new Chaine( $mot );
-                    $html       = '<abbr title="' . ($intitule ? $intitule : $mot ) . '" >'. $mot. ' <a target="_blank" href="/glossaire#'. $tool->minifie() .'" ><i class="fa fa-info-circle"></i></a></abbr>';
+                    $tool = new Chaine( $mot );
+                    $html = '<abbr title="¬' . ($intitule ? $intitule : $mot ) . '¬" >¬'. $mot. '¬ <a target="_blank" href="/glossaire#'. $tool->minifie() .'" ><i class="fa fa-info-circle"></i></a></abbr>';
 
                     //iterate over matches
                     foreach($matches[0] as $match){
-                        $tab              = explode($mot, $match);
-                        $searchElements[] = $match;
-                        $replacements[]   = $tab[0] . $html . $tab[1];
-
-                        $contentModified = str_replace($match, '', $contentModified);
+                        $tab     = explode($mot, $match);
+                        $content = str_replace($match, $tab[0] . $html . $tab[1], $content);
                     }
                 }
             }
 
-            $content = str_replace($searchElements, $replacements, $content);
+            $content = str_replace('¬', '', $content);
         }
         
         return $content;
