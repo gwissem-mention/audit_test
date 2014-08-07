@@ -185,7 +185,7 @@
                                     <li>Nb interventions acceptées par l'ambassadeur : {{nbAmbassadeurs}}</li>
                                     
                                 {% else %}
-                                    {% for intervention in interventions %}
+                                    {% for intervention in interventions if intervention.interventionEtat.id != 22 and intervention.interventionEtat.id != 23 and intervention.interventionEtat.id != 26 %}
                                         <li>Le {{intervention.dateCreation|date('d/m/Y')}} : {{intervention.interventionEtat.libelle}}</li>
                                     {% else %}
                                         <li>- Aucune demande en cours -</li>
