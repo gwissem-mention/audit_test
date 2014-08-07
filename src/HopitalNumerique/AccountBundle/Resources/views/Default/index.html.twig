@@ -22,12 +22,14 @@
 
 {% block headerTitle %}Tableau de bord{% endblock %}
 {% block headerDesc %}
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
 {% endblock %}
 
 {% block content %}
@@ -98,7 +100,7 @@
                             <ol>
                                 {% for session in sessions if session['refEtatEvaluationId'] == 28 %}
                                     <li>
-                                        - <a href="{{path('hopitalnumerique_module_evaluation_form_front', {'id': session['id']})}}">{{ session['titre'] }}</a>
+                                        - <a href="{{path('hopitalnumerique_module_evaluation_form_front', {'id': session['id']})}}" title="Session du {{session['dateSession']|date('d/m/Y')}}">{{ session['titre'] }}</a>
                                         <a href="{{path('hopitalnumerique_module_inscription_attestation_front', {'id': session['moduleId']})}}"><i class="fa fa-file"></i></a>
                                     </li>
                                 {% else %}
@@ -108,7 +110,7 @@
                             <h4>Sessions à venir</h4>
                             <ol>
                                 {% for session in sessions if session['refEtatParticipationId'] == 410 %}
-                                    <li>- <a href="{{path('hopitalnumerique_module_module_show_front', {'id':session['moduleId']})}}">{{ session['titre'] }}</a></li>
+                                    <li>- <a href="{{path('hopitalnumerique_module_module_show_front', {'id':session['moduleId']})}}" title="Session du {{session['dateSession']|date('d/m/Y')}}">{{ session['titre'] }}</a></li>
                                 {% else %}
                                     <li>- Aucune session à venir -</li>
                                 {% endfor %}
@@ -129,7 +131,7 @@
                             <h4>Sessions à venir</h4>
                             <ol>
                                 {% for session in sessionsFormateur['after'] %}
-                                    <li>- <a href="{{path('hopitalnumerique_module_inscription_index_front')}}">{{ session.module.titre }}</a> ( {{session.inscriptions|length}} inscrit(s) )</li>
+                                    <li>- <a href="{{path('hopitalnumerique_module_inscription_index_front')}}" title="Session du {{session.dateSession|date('d/m/Y')}}" >{{ session.module.titre }}</a> ( {{session.inscriptions|length}} inscrit(s) )</li>
                                 {% else %}
                                     <li>- Aucune session à venir -</li>
                                 {% endfor %}
@@ -137,7 +139,7 @@
                             <h4>Sessions précédentes</h4>
                             <ol>
                                 {% for session in sessionsFormateur['before'] %}
-                                    <li>- <a href="{{path('hopitalnumerique_module_inscription_index_front')}}">{{ session.module.titre }}</a> <a href="{{path('hopitalnumerique_module_session_evaluation_front', {'id' : session.id})}}"><i class="fa fa-file"></i></a></li>
+                                    <li>- <a href="{{path('hopitalnumerique_module_inscription_index_front')}}" title="Session du {{session.dateSession|date('d/m/Y')}}" >{{ session.module.titre }}</a> <a href="{{path('hopitalnumerique_module_session_evaluation_front', {'id' : session.id})}}"><i class="fa fa-file"></i></a></li>
                                 {% else %}
                                     <li>- Aucune session précédente -</li>
                                 {% endfor %}
@@ -219,6 +221,40 @@
             {% endif %}
         </ul>
     </div>
+
+    <script>
+        enquire.register("screen and (max-width: 1196px)", {
+        match : function() {
+            $('#tableau-de-bord .gridster ul li .panel .panel-heading .options i').remove();
+        },
+        unmatch : function() {
+            $(function() {
+                var gridster = $(".gridster ul").gridster({
+                    widget_margins         : [5, 10],
+                    widget_base_dimensions : [410, 200],
+                    max_cols               : 2,
+                    min_cols               : 2,
+                    serialize_params       : function($w, wgd) { return { col: wgd.col, row: wgd.row, id: $w.data('id') } },
+                    draggable              : {
+                        stop : function(event, ui){ 
+                            $.ajax({
+                                url  : $('#account-reorder-url').val(),
+                                data : {
+                                    datas : gridster.serialize()
+                                },
+                                type     : 'POST',
+                                dataType : 'json',
+                                success  : function( data ){
+                                   //reorder done with success
+                                }
+                            });
+                        }
+                    }
+                }).data('gridster');
+            });
+        }
+    });
+</script>
 
     <input type="hidden" id="account-reorder-url" value="{{path('hopital_numerique_account_homepage_reorder')}}" />
 {% endblock %}

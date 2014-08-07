@@ -7,3 +7,7 @@
 #tableau-de-bord .gridster ul li .panel .panel-body{overflow: hidden; overflow-y:auto; height: 132px; background: #FFF; margin: 15px 0; padding: 0 15px 15px 15px}
 #tableau-de-bord .gridster ul li .panel .panel-body h4{font-size: 16px}
 #tableau-de-bord .gridster ul li .panel .panel-body ol{list-style: none; padding-left: 20px;}
+
+@media screen and (max-width: 1196px) {
+    #tableau-de-bord .gridster ul li{margin-bottom: 20px}
+}
