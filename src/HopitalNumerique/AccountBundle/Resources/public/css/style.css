@@ -9,5 +9,6 @@
 #tableau-de-bord .gridster ul li .panel .panel-body ol{list-style: none; padding-left: 20px;}
 
 @media screen and (max-width: 1196px) {
-    #tableau-de-bord .gridster ul li{margin-bottom: 20px}
+    #tableau-de-bord .gridster ul li{margin-bottom: 20px; display: block; width: 100%; position: relative;}
+    #tableau-de-bord .gridster ul li .panel .panel-heading .options i{display: none}
 }
