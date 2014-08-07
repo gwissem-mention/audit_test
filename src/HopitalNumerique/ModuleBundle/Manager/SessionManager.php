@@ -146,8 +146,8 @@ class SessionManager extends BaseManager
      */
     public function getSessionsForFormateurForDashboard( $user )
     {
-        $before = $this->getRepository()->getSessionsForFormateur( $user, 'beforeToday' )->getQuery()->getResult();
-        $after  = $this->getRepository()->getSessionsForFormateur( $user, 'afterToday' )->getQuery()->getResult();
+        $before = $this->getRepository()->getSessionsForFormateur( $user, 'beforeToday', 2 )->getQuery()->getResult();
+        $after  = $this->getRepository()->getSessionsForFormateur( $user, 'afterToday', 2 )->getQuery()->getResult();
 
         return array('before' => $before, 'after' => $after);
     }

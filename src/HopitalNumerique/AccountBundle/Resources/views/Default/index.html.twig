@@ -68,6 +68,9 @@
                         </div>
 
                         <div class="panel-body">
+                            {% if requetes %}
+                                <h4>Nouveautées et mises à jour</h4>
+                            {% endif %}
                             <ol>
                                 {% for requete in requetes %}
                                     <li>- <a href="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">{{requete.nom|capitalize}}</a></li>
@@ -95,7 +98,7 @@
                             <ol>
                                 {% for session in sessions if session['refEtatEvaluationId'] == 28 %}
                                     <li>
-                                        - <a href="{{path('hopitalnumerique_module_module_show_front', {'id': session['moduleId']})}}">{{ session['titre'] }}</a>
+                                        - <a href="{{path('hopitalnumerique_module_evaluation_form_front', {'id': session['id']})}}">{{ session['titre'] }}</a>
                                         <a href="{{path('hopitalnumerique_module_inscription_attestation_front', {'id': session['moduleId']})}}"><i class="fa fa-file"></i></a>
                                     </li>
                                 {% else %}
@@ -126,7 +129,7 @@
                             <h4>Sessions à venir</h4>
                             <ol>
                                 {% for session in sessionsFormateur['after'] %}
-                                    <li>- {{ session.module.titre }} ( {{session.inscriptions|length}} inscrit(s) )</li>
+                                    <li>- <a href="{{path('hopitalnumerique_module_inscription_index_front')}}">{{ session.module.titre }}</a> ( {{session.inscriptions|length}} inscrit(s) )</li>
                                 {% else %}
                                     <li>- Aucune session à venir -</li>
                                 {% endfor %}
@@ -134,7 +137,7 @@
                             <h4>Sessions précédentes</h4>
                             <ol>
                                 {% for session in sessionsFormateur['before'] %}
-                                    <li>- {{ session.module.titre }} <a href="{{path('hopitalnumerique_module_session_evaluation_front', {'id' : session.id})}}"><i class="fa fa-file"></i></a></li>
+                                    <li>- <a href="{{path('hopitalnumerique_module_inscription_index_front')}}">{{ session.module.titre }}</a> <a href="{{path('hopitalnumerique_module_session_evaluation_front', {'id' : session.id})}}"><i class="fa fa-file"></i></a></li>
                                 {% else %}
                                     <li>- Aucune session précédente -</li>
                                 {% endfor %}
@@ -186,7 +189,7 @@
                                     
                                 {% else %}
                                     {% for intervention in interventions if intervention.interventionEtat.id != 22 and intervention.interventionEtat.id != 23 and intervention.interventionEtat.id != 26 %}
-                                        <li>Le {{intervention.dateCreation|date('d/m/Y')}} : {{intervention.interventionEtat.libelle}}</li>
+                                        <li>- <a href="{{path('hopital_numerique_intervention_demande_voir', {'id' : intervention.id})}}">Le {{intervention.dateCreation|date('d/m/Y')}} : {{intervention.interventionEtat.libelle}}</a></li>
                                     {% else %}
                                         <li>- Aucune demande en cours -</li>
                                     {% endfor %}
