@@ -71,7 +71,7 @@ class SubscriberListener extends CCDNSubscriberListener
 
                         //envoi du mail de confirmation d'inscription
                         $options = array(
-                            'user'              => $subscription->getOwnedBy()->getAppellation(),
+                            'user'              => $subscription->getOwnedBy()->getNomPrenom(),
                             'forum'             => $topic->getBoard()->getCategory()->getForum()->getName(),
                             'categorie'         => $topic->getBoard()->getCategory()->getName(),
                             'theme'             => $topic->getBoard()->getName(),
