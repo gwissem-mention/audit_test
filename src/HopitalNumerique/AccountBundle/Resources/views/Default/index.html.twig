@@ -45,16 +45,16 @@
                     </div>
 
                     <div class="panel-body">
-                        <ol>
-                            {% for message in messages %}
-                                <li>
-                                    <p class="titre">{{message.title}}</p>
-                                    <p>{{message.content|nl2br}}</p>
-                                </li>
-                            {% else %}
+                        {% for message in messages %}
+                            <div class="message">
+                                <p class="titre">{{message.title}}</p>
+                                <p>{{message.content|nl2br}}</p>
+                            </div>
+                        {% else %}
+                            <ol>
                                 <li>- Aucun message -</li>
-                            {% endfor %}
-                        </ol>
+                            </ol>
+                        {% endfor %}
                     </div>
                 </div>
             </li>
@@ -161,34 +161,28 @@
 
                         <div class="panel-body">
                             <ol>
-                                {% if role == 'CMSI' %}
+                                {% if role == 'CMSI' or role == 'AMBASSADEUR' %}
                                     {% set nbOuvertes = 0 %}
                                     {% set nbInitiales = 0 %}
                                     {% set nbAcceptees = 0 %}
+                                    {% set nbAmbassadeurs = 0 %}
+
                                     {% for intervention in interventions %}
                                         {% if intervention.evaluationEtat and intervention.evaluationEtat.id == 28 %}{% set nbOuvertes = nbOuvertes + 1 %}{% endif %}
                                         {% if intervention.interventionEtat.id == 14 %}{% set nbInitiales = nbInitiales + 1 %}{% endif %}
                                         {% if intervention.interventionEtat.id == 17 or intervention.interventionEtat.id == 18 or intervention.interventionEtat.id == 19 %}{% set nbAcceptees = nbAcceptees + 1 %}{% endif %}
-                                    {% endfor %}
-
-                                    <li>Nb interventions ouvertes non évaluée : {{nbOuvertes}}</li>
-                                    <li>Nb interventions initiales : {{nbInitiales}}</li>
-                                    <li>Nb interventions accepté par le CMSI : {{nbAcceptees}}</li>
-                                {% elseif role == 'AMBASSADEUR' %}
-                                    {% set nbOuvertes = 0 %}
-                                    {% set nbAcceptees = 0 %}
-                                    {% set nbAmbassadeurs = 0 %}
-                                    
-                                    {% for intervention in interventions %}
-                                        {% if intervention.evaluationEtat and intervention.evaluationEtat.id == 28 %}{% set nbOuvertes = nbOuvertes + 1 %}{% endif %}
                                         {% if intervention.interventionEtat.id == 21 %}{% set nbAmbassadeurs = nbAmbassadeurs + 1 %}{% endif %}
-                                        {% if intervention.interventionEtat.id == 17 or intervention.interventionEtat.id == 18 or intervention.interventionEtat.id == 19 %}{% set nbAcceptees = nbAcceptees + 1 %}{% endif %}
                                     {% endfor %}
 
-                                    <li>Nb interventions ouvertes non évaluée : {{nbOuvertes}}</li>
-                                    <li>Nb interventions acceptées par le CMSI : {{nbAcceptees}}</li>
-                                    <li>Nb interventions acceptées par l'ambassadeur : {{nbAmbassadeurs}}</li>
-                                    
+                                    {% if role == 'CMSI' %}
+                                        <li>Nb interventions ouvertes non évaluée : {{nbOuvertes}}</li>
+                                        <li>Nb interventions initiales : {{nbInitiales}}</li>
+                                        <li>Nb interventions accepté par le CMSI : {{nbAcceptees}}</li>
+                                    {% else %}
+                                        <li>Nb interventions ouvertes non évaluée : {{nbOuvertes}}</li>
+                                        <li>Nb interventions acceptées par le CMSI : {{nbAcceptees}}</li>
+                                        <li>Nb interventions acceptées par l'ambassadeur : {{nbAmbassadeurs}}</li>
+                                    {% endif %}
                                 {% else %}
                                     {% for intervention in interventions if intervention.interventionEtat.id != 22 and intervention.interventionEtat.id != 23 and intervention.interventionEtat.id != 26 %}
                                         <li>- <a href="{{path('hopital_numerique_intervention_demande_voir', {'id' : intervention.id})}}">Le {{intervention.dateCreation|date('d/m/Y')}} : {{intervention.interventionEtat.libelle}}</a></li>
