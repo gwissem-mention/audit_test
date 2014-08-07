@@ -63,7 +63,7 @@ class SessionRepository extends EntityRepository
      * 
      * @return QueryBuilder
      */
-    public function getSessionsForFormateur( $user, $withDate = false )
+    public function getSessionsForFormateur( $user, $withDate = false, $limit = false )
     {
         $qb = $this->_em->createQueryBuilder()
                         ->select('ses')
@@ -81,6 +81,10 @@ class SessionRepository extends EntityRepository
                 $qb->andWhere('ses.dateSession > :today')
                    ->setParameter('today', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);
             }
+        }
+
+        if( $limit !== false ){
+            $qb->setMaxResults($limit);
         }
 
         return $qb;

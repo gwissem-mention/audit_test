@@ -154,7 +154,7 @@ class PublicationExtension extends \Twig_Extension
                 //when founded
                 if( $matches[0] ){
                     //prepare Replacement stuff
-                    $tool = new Chaine( $mot );
+                    $tool = new Chaine( html_entity_decode($mot) );
 
                     //iterate over matches
                     foreach($matches[0] as $match)
