@@ -24,6 +24,7 @@ class Role implements RoleInterface
     public static $ROLE_DIRECTEUR_LABEL   = 'ROLE_ES_DIRECTION_GENERALE_5';
     public static $ROLE_AMBASSADEUR_LABEL = 'ROLE_AMBASSADEUR_7';
     public static $ROLE_ES_LABEL          = 'ROLE_ES_8';
+    public static $ROLE_EXPERT_LABEL      = 'ROLE_EXPERT_6';
     public static $ROLE_ENREGISTRE_LABEL  = 'ROLE_ENREGISTRE_9';
     
     /**

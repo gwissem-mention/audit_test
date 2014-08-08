@@ -59,7 +59,7 @@ class ReponseManager extends BaseManager
         
         foreach ($reponses as $key => $reponse)
         {
-            if( key_exists($key, $reponses) )
+            if( array_key_exists($key, $reponses) )
             {
                 $result[$reponse['userId']][] = $reponse['questId'];
             }
