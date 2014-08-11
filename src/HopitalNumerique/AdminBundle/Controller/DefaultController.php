@@ -126,8 +126,26 @@ class DefaultController extends Controller
         $blocForum = array();
         $forums    = $this->get('ccdn_forum_forum.model.forum')->findAllForums();
         foreach($forums as $forum){
-            $tool = new Chaine( $forum->getName() );
-            $blocForum[ $tool->minifie() ] = array( 'titre' => $forum->getName(), 'topics' => 0, 'contributions' => 0, 'topics-sans-reponses' => 0  );
+            $tool       = new Chaine( $forum->getName() );
+            $forumDatas = array( 'titre' => $forum->getName(), 'topics' => 0, 'contributions' => 0, 'topics-sans-reponses' => 0  );
+
+            $categories = $forum->getCategories();
+            foreach ($categories as $categorie) {
+                $boards = $categorie->getBoards();
+                foreach ($boards as $board) {
+                    $topics = $board->getTopics();
+                    foreach ($topics as $topic) {
+                        if( $topic->getCachedReplyCount() == 0)
+                            $forumDatas['topics-sans-reponses']++;
+
+                        $post = $topic->getLastPost();
+                        if( $post->getCreatedDate()->modify('+ 1 month') >= new \DateTime() )
+                            $forumDatas['topics']++;
+                    }
+                }
+            }
+
+            $blocForum[ $tool->minifie() ] = $forumDatas;
         }
 
         return $blocForum;
@@ -208,7 +226,7 @@ class DefaultController extends Controller
             'nb'                 => 0, 
             'actif'              => 0, 
             'es'                 => 0, 
-            'ambCandidats'        => 0, 
+            'ambCandidats'       => 0, 
             'ambassadeurs'       => 0, 
             'ambassadeursMAPF'   => 0, 
             'ambCandidatsRecues' => 0, 

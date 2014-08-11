@@ -45,7 +45,7 @@ services:
 
     nodevo_menu.loader.breadcrumb.node:
         class: Nodevo\MenuBundle\Provider\BreadcrumbNodeLoader
-        arguments: ["@knp_menu.factory", "@security.context", "@service_container", "%nodevo_menu.options%"]
+        arguments: ["@knp_menu.factory", "@service_container", "%nodevo_menu.options%"]
 
     nodevo_menu.provider:
         class: Nodevo\MenuBundle\Provider\MenuProvider

@@ -541,7 +541,7 @@ class ResultatManager extends BaseManager
                 $one->question = $one->code != '' ? $one->code . '. ' . $one->question : $one->question;
 
                 if( $one->initialValue !== '' ){
-                    if( $one->noteMinimale !== '' and $one->initialValue <= $one->noteMinimale ){
+                    if( $one->noteMinimale !== '' && $one->initialValue <= $one->noteMinimale ){
                         $results[]     = $one;
                         $noteChapitre += $one->value;
                     }
