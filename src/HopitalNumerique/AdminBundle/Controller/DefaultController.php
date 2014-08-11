@@ -61,7 +61,7 @@ class DefaultController extends Controller
         //Bloc Paiements
 
 
-
+        //Contributions Forum Experts
         $date = new \DateTime();
         $date->modify('-7 day');
 
@@ -75,15 +75,9 @@ class DefaultController extends Controller
 
                     if( $post->getCreatedDate() >= $date && $user->hasRoleExpert())
                         $blocUser['contribution']++;
-
-                    
                 }
             }
         }
-
-
-
-
 
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', array(
             'userConf'          => $userConf,
