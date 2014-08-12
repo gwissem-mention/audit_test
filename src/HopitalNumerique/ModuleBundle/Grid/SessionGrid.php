@@ -90,7 +90,7 @@ class SessionGrid extends Grid implements GridInterface
         //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
         $unlockButton = new Action\LockButton( 'hopitalnumerique_module_module_session_archiver' );
         $unlockButton->setAttributes( array('class'=>'btn btn-warning fa fa-unlock','title' => 'Dévérouiller') );
-        $unlockButton->manipulateRender(function($action, $row) {
+        $unlockButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row  $row) {
             return $row->getField('archiver') ? $action : null;
         });
         $this->addActionButton( $unlockButton );
@@ -98,7 +98,7 @@ class SessionGrid extends Grid implements GridInterface
         //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
         $lockButton = new Action\LockButton( 'hopitalnumerique_module_module_session_archiver' );
         $lockButton->setAttributes( array('class'=>'btn btn-warning fa fa-lock','title' => 'Vérouiller') );
-        $lockButton->manipulateRender(function($action, $row) {
+        $lockButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row  $row) {
             return $row->getField('archiver') ? null : $action;
         });
         $this->addActionButton( $lockButton );

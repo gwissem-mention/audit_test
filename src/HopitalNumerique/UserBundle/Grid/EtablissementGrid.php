@@ -58,7 +58,7 @@ class EtablissementGrid extends Grid implements GridInterface
         //Custom Archive button : Affiche le bouton archiver
         $archiveButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_etablissement_archiver');
         $archiveButton->setRouteParameters( array('id') );
-        $archiveButton->manipulateRender(function($action, $row) {
+        $archiveButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
             if( !$row->getField( 'archiver') )
                 $action->setAttributes( array('class'=>'btn btn-warning fa fa-archive', 'title' => 'Archiver') );
             else

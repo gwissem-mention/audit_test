@@ -53,7 +53,7 @@ class RoleHelper
      * @access public
      * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
      */
-    public function __construct(SecurityContextInterface $securityContext, $managerRole)
+    public function __construct(SecurityContextInterface $securityContext, \Nodevo\RoleBundle\Manager\RoleManager $managerRole)
     {
         $this->securityContext = $securityContext;
 
