@@ -22,12 +22,14 @@
 
 {% block headerTitle %}Tableau de bord{% endblock %}
 {% block headerDesc %}
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
 {% endblock %}
 
 {% block content %}
@@ -36,7 +38,7 @@
             <li data-row="{{userConf['messages']['row']}}" data-col="{{userConf['messages']['col']}}" data-sizex="1" data-sizey="1" data-id="messages" >
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Mes messages</h3>
+                        <h3 class="panel-title"><i class="fa fa-comment"></i>Messages de l'ANAP</h3>
                         <div class="options">
                             <i class="fa fa-arrows"></i>
                         </div>
@@ -44,115 +46,161 @@
 
                     <div class="panel-body">
                         {% for message in messages %}
-                            <p class="titre">{{message.title}}</p>
-                            <p>{{message.content|nl2br}}</p>
+                            <div class="message">
+                                <p class="titre">{{message.title}}</p>
+                                <p>{{message.content|nl2br}}</p>
+                            </div>
                         {% else %}
-                            - Aucun message -
+                            <ol>
+                                <li>- Aucun message -</li>
+                            </ol>
                         {% endfor %}
                     </div>
                 </div>
             </li>
-            <li data-row="{{userConf['requetes']['row']}}" data-col="{{userConf['requetes']['col']}}" data-sizex="1" data-sizey="1" data-id="requetes" >
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><a href="{{path('hopital_numerique_requete_homepage')}}">Mes requêtes</a></h3>
-                        <div class="options">
-                            <i class="fa fa-arrows"></i>
+
+            {% if app.user|checkAuthorization(path('hopital_numerique_requete_homepage'))  %}
+                <li data-row="{{userConf['requetes']['row']}}" data-col="{{userConf['requetes']['col']}}" data-sizex="1" data-sizey="1" data-id="requetes" >
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><a href="{{path('hopital_numerique_requete_homepage')}}"><i class="fa fa-search"></i>Nouveautés dans mes requêtes</a></h3>
+                            <div class="options">
+                                <i class="fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            {% if requetes %}
+                                <h4>Nouveautées et mises à jour</h4>
+                            {% endif %}
+                            <ol>
+                                {% for requete in requetes %}
+                                    <li>- <a href="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">{{requete.nom|capitalize}}</a></li>
+                                {% else %}
+                                    <li>- Aucune nouveauté -</li>
+                                {% endfor %}
+                            </ol>
                         </div>
                     </div>
+                </li>
+            {% endif %}
 
-                    <div class="panel-body">
-                        <ol>
-                            {% for requete in requetes %}
-                                <li><a href="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">{{requete.nom|capitalize}}</a></li>
-                            {% else %}
-                                <li>- Aucune requête -</li>
-                            {% endfor %}
-                        </ol>
-                    </div>
-                </div>
-            </li>
-            <li data-row="{{userConf['modules']['row']}}" data-col="{{userConf['modules']['col']}}" data-sizex="1" data-sizey="1" data-id="modules" >
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><a href="{{path('hopitalnumerique_module_inscription_index_front')}}">Mes modules</a></h3>
-                        <div class="options">
-                            <i class="fa fa-arrows"></i>
+            {% if app.user|checkAuthorization(path('hopitalnumerique_module_inscription_index_front'))  %}
+                <li data-row="{{userConf['modules']['row']}}" data-col="{{userConf['modules']['col']}}" data-sizex="1" data-sizey="1" data-id="modules" >
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><a href="{{path('hopitalnumerique_module_inscription_index_front')}}"><i class="fa fa-adjust"></i>Mes modules</a></h3>
+                            <div class="options">
+                                <i class="fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <h4>Sessions à évaluer</h4>
+                            <ol>
+                                {% for session in sessions if session['refEtatEvaluationId'] == 28 %}
+                                    <li>
+                                        - <a href="{{path('hopitalnumerique_module_evaluation_form_front', {'id': session['id']})}}" title="Session du {{session['dateSession']|date('d/m/Y')}}">{{ session['titre'] }}</a>
+                                        <a href="{{path('hopitalnumerique_module_inscription_attestation_front', {'id': session['moduleId']})}}"><i class="fa fa-file"></i></a>
+                                    </li>
+                                {% else %}
+                                    <li>- Aucune session à évaluer -</li>
+                                {% endfor %}
+                            </ol>
+                            <h4>Sessions à venir</h4>
+                            <ol>
+                                {% for session in sessions if session['refEtatParticipationId'] == 410 %}
+                                    <li>- <a href="{{path('hopitalnumerique_module_module_show_front', {'id':session['moduleId']})}}" title="Session du {{session['dateSession']|date('d/m/Y')}}">{{ session['titre'] }}</a></li>
+                                {% else %}
+                                    <li>- Aucune session à venir -</li>
+                                {% endfor %}
+                            </ol>
                         </div>
                     </div>
+                </li>
+                <li data-row="{{userConf['formateur']['row']}}" data-col="{{userConf['formateur']['col']}}" data-sizex="1" data-sizey="1" data-id="formateur" >
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><a href="{{path('hopitalnumerique_module_inscription_index_front')}}"><i class="fa fa-users"></i>Mes modules en tant que formateur</a></h3>
+                            <div class="options">
+                                <i class="fa fa-arrows"></i>
+                            </div>
+                        </div>
 
-                    <div class="panel-body">
-                        <h4>Sessions à évaluer</h4>
-                        <ol>
-                            {% for session in sessions if session['refEtatEvaluationId'] == 28 %}
-                                <li>
-                                    <a href="{{path('hopitalnumerique_module_module_show_front', {'id': session['moduleId']})}}">{{ session['titre'] }}</a>
-                                    <a href="{{path('hopitalnumerique_module_inscription_attestation_front', {'id': session['moduleId']})}}"><i class="fa fa-file"></i></a>
-                                </li>
-                            {% else %}
-                                <li>- Aucune session à évaluer -</li>
-                            {% endfor %}
-                        </ol>
-                        <h4>Sessions à venir</h4>
-                        <ol>
-                            {% for session in sessions if session['refEtatParticipationId'] == 410 %}
-                                <li><a href="{{path('hopitalnumerique_module_module_show_front', {'id':session['moduleId']})}}">{{ session['titre'] }}</a></li>
-                            {% else %}
-                                <li>- Aucune session à venir -</li>
-                            {% endfor %}
-                        </ol>
-                    </div>
-                </div>
-            </li>
-            <li data-row="{{userConf['formateur']['row']}}" data-col="{{userConf['formateur']['col']}}" data-sizex="1" data-sizey="1" data-id="formateur" >
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><a href="{{path('hopitalnumerique_module_inscription_index_front')}}">Mes modules en tant que formateur</a></h3>
-                        <div class="options">
-                            <i class="fa fa-arrows"></i>
+                        <div class="panel-body">
+                            <h4>Sessions à venir</h4>
+                            <ol>
+                                {% for session in sessionsFormateur['after'] %}
+                                    <li>- <a href="{{path('hopitalnumerique_module_inscription_index_front')}}" title="Session du {{session.dateSession|date('d/m/Y')}}" >{{ session.module.titre }}</a> ( {{session.inscriptions|length}} inscrit(s) )</li>
+                                {% else %}
+                                    <li>- Aucune session à venir -</li>
+                                {% endfor %}
+                            </ol>
+                            <h4>Sessions précédentes</h4>
+                            <ol>
+                                {% for session in sessionsFormateur['before'] %}
+                                    <li>- <a href="{{path('hopitalnumerique_module_inscription_index_front')}}" title="Session du {{session.dateSession|date('d/m/Y')}}" >{{ session.module.titre }}</a> <a href="{{path('hopitalnumerique_module_session_evaluation_front', {'id' : session.id})}}"><i class="fa fa-file"></i></a></li>
+                                {% else %}
+                                    <li>- Aucune session précédente -</li>
+                                {% endfor %}
+                            </ol>
                         </div>
                     </div>
+                </li>
+            {% endif %}
 
-                    <div class="panel-body">
-                        <h4>A venir</h4>
-                        <ol>
-                            {% for session in sessionsFormateur['after'] %}
-                                <li>{{ session.module.titre }} ( {{session.inscriptions|length}} inscrit(s) )</li>
-                            {% else %}
-                                <li>- Aucune session à venir -</li>
-                            {% endfor %}
-                        </ol>
-                        <h4>Précédentes</h4>
-                        <ol>
-                            {% for session in sessionsFormateur['before'] %}
-                                <li>{{ session.module.titre }} <a href="{{path('hopitalnumerique_module_session_evaluation_front', {'id' : session.id})}}"><i class="fa fa-file"></i></a></li>
-                            {% else %}
-                                <li>- Aucune session précédente -</li>
-                            {% endfor %}
-                        </ol>
-                    </div>
-                </div>
-            </li>
-            <li data-row="{{userConf['intervention']['row']}}" data-col="{{userConf['intervention']['col']}}" data-sizex="1" data-sizey="1" data-id="intervention" >
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><a href="#">Mes demandes interventions</a></h3>
-                        <div class="options">
-                            <i class="fa fa-arrows"></i>
+            {% if app.user|checkAuthorization(path('hopital_numerique_intervention_demande_liste'))  %}
+                <li data-row="{{userConf['intervention']['row']}}" data-col="{{userConf['intervention']['col']}}" data-sizex="1" data-sizey="1" data-id="intervention" >
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><a href="{{path('hopital_numerique_intervention_demande_liste')}}"><i class="fa fa-list-alt"></i>Mes demandes interventions</a></h3>
+                            <div class="options">
+                                <i class="fa fa-arrows"></i>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol>
+                                {% if role == 'CMSI' or role == 'AMBASSADEUR' %}
+                                    {% set nbOuvertes = 0 %}
+                                    {% set nbInitiales = 0 %}
+                                    {% set nbAcceptees = 0 %}
+                                    {% set nbAmbassadeurs = 0 %}
+
+                                    {% for intervention in interventions %}
+                                        {% if intervention.evaluationEtat and intervention.evaluationEtat.id == 28 %}{% set nbOuvertes = nbOuvertes + 1 %}{% endif %}
+                                        {% if intervention.interventionEtat.id == 14 %}{% set nbInitiales = nbInitiales + 1 %}{% endif %}
+                                        {% if intervention.interventionEtat.id == 17 or intervention.interventionEtat.id == 18 or intervention.interventionEtat.id == 19 %}{% set nbAcceptees = nbAcceptees + 1 %}{% endif %}
+                                        {% if intervention.interventionEtat.id == 21 %}{% set nbAmbassadeurs = nbAmbassadeurs + 1 %}{% endif %}
+                                    {% endfor %}
+
+                                    {% if role == 'CMSI' %}
+                                        <li>Nb interventions ouvertes non évaluée : {{nbOuvertes}}</li>
+                                        <li>Nb interventions initiales : {{nbInitiales}}</li>
+                                        <li>Nb interventions accepté par le CMSI : {{nbAcceptees}}</li>
+                                    {% else %}
+                                        <li>Nb interventions ouvertes non évaluée : {{nbOuvertes}}</li>
+                                        <li>Nb interventions acceptées par le CMSI : {{nbAcceptees}}</li>
+                                        <li>Nb interventions acceptées par l'ambassadeur : {{nbAmbassadeurs}}</li>
+                                    {% endif %}
+                                {% else %}
+                                    {% for intervention in interventions if intervention.interventionEtat.id != 22 and intervention.interventionEtat.id != 23 and intervention.interventionEtat.id != 26 %}
+                                        <li>- <a href="{{path('hopital_numerique_intervention_demande_voir', {'id' : intervention.id})}}">Le {{intervention.dateCreation|date('d/m/Y')}} : {{intervention.interventionEtat.libelle}}</a></li>
+                                    {% else %}
+                                        <li>- Aucune demande en cours -</li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ol>
                         </div>
                     </div>
-
-                    <div class="panel-body">
-                        
-                    </div>
-                </div>
-            </li>
+                </li>                
+            {% endif %}
 
             {% if factures > 0 %}
                 <li data-row="{{userConf['factures']['row']}}" data-col="{{userConf['factures']['col']}}" data-sizex="1" data-sizey="1" data-id="factures" >
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><a href="{{path('hopitalnumerique_paiement_front')}}">Mes factures</a></h3>
+                            <h3 class="panel-title"><a href="{{path('hopitalnumerique_paiement_front')}}"><i class="fa fa-credit-card"></i>Mes factures</a></h3>
                             <div class="options">
                                 <i class="fa fa-arrows"></i>
                             </div>
@@ -169,14 +217,4 @@
     </div>
 
     <input type="hidden" id="account-reorder-url" value="{{path('hopital_numerique_account_homepage_reorder')}}" />
-
-    <style>
-        #tableau-de-bord .gridster ul li{}
-        #tableau-de-bord .gridster ul li .panel{ margin: 0;}
-        #tableau-de-bord .gridster ul li .panel .panel-heading h3.panel-title{ font-size: 16px; font-weight: normal; padding: 0; margin: 0; background: none; display: inline-block; width: 95%}
-        #tableau-de-bord .gridster ul li .panel .panel-heading .options{display: inline-block; text-align: right; cursor: pointer}
-        #tableau-de-bord .gridster ul li .panel .panel-body{overflow: hidden; overflow-y:auto; height: 162px; background: #FFF}
-        #tableau-de-bord .gridster ul li .panel .panel-body ol{list-style: none; padding-left: 20px;}
-    </style>
-
 {% endblock %}

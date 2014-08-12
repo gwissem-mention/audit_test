@@ -29,7 +29,18 @@ class DefaultController extends Controller
         //factures
         $factures = count($this->get('hopitalnumerique_paiement.manager.facture')->findBy( array('user' => $user, 'payee' => false ) ));
 
-
+        //interventions
+        $role = '';
+        if( $user->hasRoleCmsi() ){
+            $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findBy( array('cmsi' => $user ) );
+            $role = 'CMSI';
+        }
+        elseif( $user->hasRoleAmbassadeur() ) {
+            $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findBy( array('ambassadeur' => $user ) );
+            $role = 'AMBASSADEUR';
+        }
+        else
+            $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findBy( array('referent' => $user ) );
 
         //récupère la conf (l'ordre) des blocks du dashboard de l'user connecté
         $userConf = $this->buildDashboardRows( json_decode($user->getDashboardFront(), true) );
@@ -40,6 +51,8 @@ class DefaultController extends Controller
             'sessions'          => $sessions,
             'factures'          => $factures,
             'sessionsFormateur' => $sessionsFormateur,
+            'interventions'     => $interventions,
+            'role'              => $role,
             'userConf'          => $userConf
         ));
     }

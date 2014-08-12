@@ -63,7 +63,7 @@ class SessionRepository extends EntityRepository
      * 
      * @return QueryBuilder
      */
-    public function getSessionsForFormateur( $user, $withDate = false )
+    public function getSessionsForFormateur( $user, $withDate = false, $limit = false )
     {
         $qb = $this->_em->createQueryBuilder()
                         ->select('ses')
@@ -81,6 +81,10 @@ class SessionRepository extends EntityRepository
                 $qb->andWhere('ses.dateSession > :today')
                    ->setParameter('today', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);
             }
+        }
+
+        if( $limit !== false ){
+            $qb->setMaxResults($limit);
         }
 
         return $qb;
@@ -105,6 +109,27 @@ class SessionRepository extends EntityRepository
                         ->leftJoin('inscription.etatEvaluation','refEtatEvaluation')
                         ->andWhere('inscription.user = :user', 'refEtatInscription.id = 407')
                         ->setParameter('user', $user)
+                        ->orderBy('ses.dateSession', 'DESC');
+    }
+
+    /**
+     * Retourne les sessions des 15 prochains jours
+     *
+     * @return QueryBuilder
+     */
+    public function getNextSessions()
+    {
+        $today    = new \DateTime();
+        $in15days = new \DateTime();
+        $in15days->add(new \DateInterval('P15D'));
+
+        return $this->_em->createQueryBuilder()
+                        ->select('ses')
+                        ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
+                        ->andWhere('ses.dateSession > :today', 'ses.dateSession < :in15days')
+                        ->setParameter('today', $today, \Doctrine\DBAL\Types\Type::DATETIME)
+                        ->setParameter('in15days', $in15days, \Doctrine\DBAL\Types\Type::DATETIME)
+                        ->setMaxResults(5)
                         ->orderBy('ses.dateSession', 'DESC');
     }
 }

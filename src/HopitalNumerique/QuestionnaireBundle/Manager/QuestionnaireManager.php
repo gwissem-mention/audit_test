@@ -86,7 +86,7 @@ class QuestionnaireManager extends BaseManager
      */
     public function getQuestionnaireId($label)
     {
-        if(key_exists($label, $this->_questionnaireArray))
+        if(array_key_exists($label, $this->_questionnaireArray))
             return $this->_questionnaireArray[$label];
         else 
              throw new \Exception('Le label \''. $label .'\' ne correspond à aucun questionnaire dans le QuestionnaireManager. Liste des labels attentu : ' . self::getLabelsQuestionnaire() );
