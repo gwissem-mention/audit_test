@@ -62,8 +62,8 @@ class DefaultController extends Controller
         $factures = $this->get('hopitalnumerique_paiement.manager.facture')->findAll();
         $firstJanuary = new \DateTime( '01-01-' . date('Y') );
         foreach($factures as $facture){
-            if( $facture->isPayee() && $facture->getDateCreation() >= $firstJanuary )
-                $blocPaiements['janvier']++;
+            if( $facture->isPayee() && $facture->getDatePaiement() >= $firstJanuary )
+                $blocPaiements['janvier'] += $facture->getTotal();
             
             if( !$facture->isPayee() )
                 $blocPaiements['apayer'] += $facture->getTotal();
@@ -138,11 +138,14 @@ class DefaultController extends Controller
      */
     private function getBlockForum()
     {
+        $since1Month = new \DateTime();
+        $since1Month->modify(' - 1 month');
+
         $blocForum = array();
         $forums    = $this->get('ccdn_forum_forum.model.forum')->findAllForums();
         foreach($forums as $forum){
             $tool       = new Chaine( $forum->getName() );
-            $forumDatas = array( 'titre' => $forum->getName(), 'topics' => 0, 'contributions' => 0, 'topics-sans-reponses' => 0  );
+            $forumDatas = array( 'titre' => 'Forum ' . $forum->getName(), 'topics' => 0, 'contributions' => 0, 'topics-sans-reponses' => 0  );
 
             $categories = $forum->getCategories();
             foreach ($categories as $categorie) {
@@ -156,6 +159,9 @@ class DefaultController extends Controller
                         $post = $topic->getLastPost();
                         if( $post->getCreatedDate()->modify('+ 1 month') >= new \DateTime() )
                             $forumDatas['topics']++;
+
+                        if( $post->getCreatedDate() >= $since1Month )
+                            $forumDatas['contributions']++;
                     }
                 }
             }

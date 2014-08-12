@@ -135,6 +135,7 @@ class FactureManager extends BaseManager
         
         //change facture state
         $facture->setPayee( true );
+        $facture->setDatePaiement( new \DateTime() );
 
         //save facture => implicit save interventions
         $this->save( $facture );
