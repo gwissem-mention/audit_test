@@ -47,7 +47,8 @@ class BreadcrumbNodeLoader implements LoaderInterface
             $menu->addChild('Accueil', array('route' => $this->_rootNode ) );
 
         //récupère l'arborescence
-        $nodesArray = $this->getDatas($data)->getBreadcrumbsArray();
+        $manipulator = new \Knp\Menu\Util\MenuManipulator();
+        $nodesArray = $manipulator->getBreadcrumbsArray( $this->getDatas($data) );
         $nodesArray = $nodesArray[0]['item'];
 
         //get children
