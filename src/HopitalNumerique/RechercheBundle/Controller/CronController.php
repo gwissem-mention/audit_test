@@ -17,7 +17,7 @@ class CronController extends Controller
 
             $context = $this->container->get('router')->getContext();
             $urlSite = $context->getScheme() . '://' . $context->getHost().$context->getBaseUrl();
-
+            $today   = new \DateTime();
 
             $users = $this->get('hopitalnumerique_user.manager.user')->findAll();
             foreach( $users as $user )
@@ -46,27 +46,27 @@ class CronController extends Controller
                     foreach($objets as $objet)
                     {
                         //si l'objet est nouveau : la requete doit etre taggué nouvelle
-                        if( isset($objet['new']) && $objet['new'] === true && !$requeteNew )
+                        if( (isset($objet['new']) && $objet['new'] === true && !$requeteNew) && $objet['created']->modify('+ 1 day')->format('d-m-Y') == $today->format('d-m-Y') )
                         {
                             $requeteNew = true;
                             
                             if( !is_null($objet['objet']) )
                                 $url = $this->generateUrl('hopital_numerique_publication_publication_contenu', array('id'=>$objet['objet'], 'alias'=>$objet['aliasO'], 'idc'=>$objet['id'], 'aliasc'=>$objet['aliasC']) );
                             else
-                                $url = $this->generateUrl('hopital_numerique_publication_publication_contenu', array('id'=>$objet['id'], 'alias'=>$objet['alias']) );
+                                $url = $this->generateUrl('hopital_numerique_publication_publication_objet', array('id'=>$objet['id'], 'alias'=>$objet['alias']) );
 
                             $news .= '<li><a target="_blank" href="'.$urlSite.$url.'" >'.ucfirst($objet['titre']).'</a></li>';
                         }
 
                         //si l'objet est mis à jour : la requete doit etre taggué mise à jour
-                        if( isset($objet['updated']) && $objet['updated'] === true && !$requeteUpdated )
+                        if( (isset($objet['updated']) && $objet['updated'] === true && !$requeteUpdated) && $objet['modified']->modify('+ 1 day')->format('d-m-Y') == $today->format('d-m-Y') )
                         {
                             $requeteUpdated = true;
 
                             if( !is_null($objet['objet']) )
                                 $url = $this->generateUrl('hopital_numerique_publication_publication_contenu', array('id'=>$objet['objet'], 'alias'=>$objet['aliasO'], 'idc'=>$objet['id'], 'aliasc'=>$objet['aliasC']) );
                             else
-                                $url = $this->generateUrl('hopital_numerique_publication_publication_contenu', array('id'=>$objet['id'], 'alias'=>$objet['alias']) );
+                                $url = $this->generateUrl('hopital_numerique_publication_publication_objet', array('id'=>$objet['id'], 'alias'=>$objet['alias']) );
 
                             $updateds .= '<li><a target="_blank" href="'.$urlSite.$url.'" >'.ucfirst($objet['titre']).'</a></li>';
                         }

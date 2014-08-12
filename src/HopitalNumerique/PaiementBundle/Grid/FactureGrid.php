@@ -56,7 +56,7 @@ class FactureGrid extends Grid implements IGrid
         $payeButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_paiement_facture_paye');
         $payeButton->setRouteParameters( array('id') );    
         $payeButton->setAttributes( array('class'=>'btn btn-green fa fa-money','title' => 'Payer') );
-        $payeButton->manipulateRender(function($action, $row) {
+        $payeButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
             return !$row->getField('payee') ? $action : null;
         });
         $this->addActionButton( $payeButton );
