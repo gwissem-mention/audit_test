@@ -157,10 +157,10 @@ class DefaultController extends Controller
                             $forumDatas['topics-sans-reponses']++;
 
                         $post = $topic->getLastPost();
-                        if( $post->getCreatedDate()->modify('+ 1 month') >= new \DateTime() )
+                        if( !is_null($post) && $post->getCreatedDate()->modify('+ 1 month') >= new \DateTime() )
                             $forumDatas['topics']++;
 
-                        if( $post->getCreatedDate() >= $since1Month )
+                        if( !is_null($post) && $post->getCreatedDate() >= $since1Month )
                             $forumDatas['contributions']++;
                     }
                 }
