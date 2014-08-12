@@ -136,7 +136,7 @@ class FactureManager extends BaseManager
         //change facture state
         $facture->setPayee( true );
 
-        //save factue = implicit save interventions
+        //save facture => implicit save interventions
         $this->save( $facture );
     }
 

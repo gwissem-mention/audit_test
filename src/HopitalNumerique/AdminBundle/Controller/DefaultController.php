@@ -59,7 +59,22 @@ class DefaultController extends Controller
         }
 
         //Bloc Paiements
+        $factures = $this->get('hopitalnumerique_paiement.manager.facture')->findAll();
+        $firstJanuary = new \DateTime( '01-01-' . date('Y') );
+        foreach($factures as $facture){
+            if( $facture->isPayee() && $facture->getDateCreation() >= $firstJanuary )
+                $blocPaiements['janvier']++;
+            
+            if( !$facture->isPayee() )
+                $blocPaiements['apayer'] += $facture->getTotal();
+        }
 
+        //get interventions + formations => montant en attente de paiement
+        $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForFactures();
+        $formations    = $this->get('hopitalnumerique_module.manager.inscription')->getForFactures();
+        $datas         = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
+        foreach($datas as $data)
+            $blocPaiements['attente'] += $data->total;
 
         //Contributions Forum Experts
         $date = new \DateTime();
@@ -169,41 +184,43 @@ class DefaultController extends Controller
         );
 
         //Bloc "Publication" + TOP + BOTTOM
-        $publications = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
-        $interval     = new \DateInterval('P1M');
-        $today        = new \DateTime('now');
+        $datas        = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsForDashboard();
+        $publications = array();
+        foreach( $datas as $one){
+            if( !isset($publications[ $one['id'] ]))
+                $publications[ $one['id'] ] = $one;
+
+            $publications[ $one['id'] ]['types'][] = $one['typeId'];
+            if( !is_null($one['parentId']) )
+                $publications[ $one['id'] ]['types'][] = $one['parentId'];
+        }
+
+        $interval = new \DateInterval('P1M');
+        $today    = new \DateTime('now');
         foreach($publications as $publication) {
-            if( $publication->getEtat()->getId() == 4 )
+            if( $publication['etat'] == 4 )
                 $blocObjets['publications-non-publiees']++;
 
-            $types = $publication->getTypes();
-            foreach($types as $type){
+            //Points Durs
+            if( in_array('184', $publication['types']) ){
+                $blocObjets['points-durs']++;
 
-                //Points Durs
-                if( $type->getId() == 184 ){
-                    $blocObjets['points-durs']++;
+                //Build Top 5
+                $blocObjets['top5-points-dur'][] = $publication;
 
-                    //Build Top 5
-                    $blocObjets['top5-points-dur'][] = array('nbVue' => $publication->getNbVue(), 'titre' => $publication->getTitre(), 'id' => $publication->getId() );
+                //Bottom 5
+                if( $publication['dateCreation']->add( $interval ) <= $today )
+                    $blocObjets['bottom5-points-dur'][] = $publication;
+            //Productions
+            }else if( in_array('175', $publication['types']) ){
+                $blocObjets['productions']++;
 
-                    //Bottom 5
-                    if( $publication->getDateCreation()->add( $interval) <= $today )
-                        $blocObjets['bottom5-points-dur'][] = array('nbVue' => $publication->getNbVue(), 'titre' => $publication->getTitre(), 'id' => $publication->getId() );
+                //Build Top 5
+                $blocObjets['top5-productions'][] = $publication;
 
-                    break;
-                //Productions
-                }else if( $type->getId() == 175 || ($type->getParent() && $type->getparent()->getId() == 175 ) ){
-                    $blocObjets['productions']++;
-
-                    //Build Top 5
-                    $blocObjets['top5-productions'][] = array('nbVue' => $publication->getNbVue(), 'titre' => $publication->getTitre(), 'id' => $publication->getId() );
-
-                    //Bottom 5
-                    if( $publication->getDateCreation()->add( $interval) <= $today )
-                        $blocObjets['bottom5-productions'][] = array('nbVue' => $publication->getNbVue(), 'titre' => $publication->getTitre(), 'id' => $publication->getId() );
-                    
-                    break;
-                }
+                //Bottom 5
+                if( $publication['dateCreation']->add( $interval ) <= $today )
+                    $blocObjets['bottom5-productions'][] = $publication;
             }
         }
 
@@ -247,11 +264,6 @@ class DefaultController extends Controller
         //Récupération des questionnaires et users
         $questionnaireByUser = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponseExiste($idExpert, $idAmbassadeur);
         
-        //On enlève un mois à la date courante pour prévenir 1mois à l'avance
-        $today       = new \DateTime('now');
-        $interval    = new \DateInterval('P1M');
-        $interval->m = -1;
-
         //On récupère les candidatures refusées
         $refusCandidature = $this->get('hopitalnumerique_user.manager.refus_candidature')->getRefusCandidatureByQuestionnaire();
 
@@ -263,12 +275,11 @@ class DefaultController extends Controller
                 $blocUser['es']++;
             elseif( $user->hasRoleAmbassadeur() )
                 $blocUser['ambassadeurs']++;
-            elseif( $user->hasRoleExpert() ){
+            elseif( $user->hasRoleExpert() )
                 $blocUser['experts']++;
-            }
 
             //Récupération des questionnaires rempli par l'utilisateur courant
-            $questionnairesByUser = array_key_exists($user->getId(), $questionnaireByUser) ? $questionnaireByUser[$user->getId()] : array();
+            $questionnairesByUser = array_key_exists($user->getId(), $questionnaireByUser) ? $questionnaireByUser[ $user->getId() ] : array();
             
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             if (in_array($idExpert, $questionnairesByUser) && !$user->hasRoleExpert() && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idExpert, $refusCandidature))
@@ -278,28 +289,15 @@ class DefaultController extends Controller
             if (in_array($idAmbassadeur, $questionnairesByUser) && !$user->hasRoleAmbassadeur() && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idAmbassadeur, $refusCandidature))
                 $blocUser['ambCandidats']++;
 
-            //Get Contractualisation stuff
-            $contractualisations = $user->getContractualisations();
-            $minDate = null;
-            foreach($contractualisations as $contractualisation){
-                if( $contractualisation->getArchiver() == 0 ){
-                    if( is_null($minDate) && $contractualisation->getDateRenouvellement() > $minDate )
-                        $minDate = $contractualisation->getDateRenouvellement();
-                }
-            }
-
-            $dateCourante = new \DateTime( $minDate );
-            $dateCourante->add($interval);
-            $contra = (!is_null($minDate)) ? ($dateCourante >= $today) : false;
-            if( $contra )
-                $blocUser['conventions']++;
-
             if (in_array($idExpert, $questionnairesByUser) && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idExpert, $refusCandidature))
                 $blocUser['expCandidatsRecues']++;
 
             if (in_array($idAmbassadeur, $questionnairesByUser) && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idAmbassadeur, $refusCandidature))
                 $blocUser['ambCandidatsRecues']++;
         }
+
+        //get contractualisation stuff
+        $blocUser['conventions'] = $this->get('hopitalnumerique_user.manager.contractualisation')->getContractualisationsARenouveler();
 
         return $blocUser;
     }
@@ -314,6 +312,9 @@ class DefaultController extends Controller
      */
     private function get5($type, $datas)
     {
+        if( count($datas) == 0 )
+            return $datas;
+
         $sort = array();
         foreach($datas as $k=>$v) {
             $sort['nbVue'][$k] = $v['nbVue'];
