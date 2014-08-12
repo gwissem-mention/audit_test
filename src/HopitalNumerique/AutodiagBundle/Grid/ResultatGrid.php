@@ -3,14 +3,14 @@
 namespace HopitalNumerique\AutodiagBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du grid Resultat.
  */
-class ResultatGrid extends Grid implements IGrid
+class ResultatGrid extends Grid implements GridInterface
 {
     /**
      * Définie la config spécifique au grid Resultat.

@@ -4,7 +4,6 @@ namespace HopitalNumerique\UserBundle\Manager;
 
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 use FOS\UserBundle\FOSUserEvents;
 use HopitalNumerique\UserBundle\Manager\UserEvent;
 

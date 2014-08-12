@@ -32,10 +32,6 @@ class InterventionCourrielManager
      */
     private $mailer;
     /**
-     * @var \Twig_Environment Environnement Twig de l'application
-     */
-    private $twig;
-    /**
      * @var \HopitalNumerique\InterventionBundle\DependencyInjection\Demande\EnvoiCourrielsAffichageLogs Service de logs des envois de courriel
      */
     private $envoiCourrielsAffichageLogs;
@@ -46,16 +42,14 @@ class InterventionCourrielManager
      * @param \Nodevo\MailBundle\Manager\MailManager $mailManager Manager de Mail
      * @param \Swift_Mailer $mailer Service d'envoi de courriels
      * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router Router de l'application
-     * @param \Twig_Environment $twig L'environnement Twig de l'application
      * @param \HopitalNumerique\InterventionBundle\DependencyInjection\Demande\EnvoiCourrielsAffichageLogs $envoiCourrielsAffichageLogs Service de logs des envois de courriel
      * @return void
      */
-    public function __construct(MailManager $mailManager, \Swift_Mailer $mailer, Router $router, \Twig_Environment $twig, EnvoiCourrielsAffichageLogs $envoiCourrielsAffichageLogs)
+    public function __construct(MailManager $mailManager, \Swift_Mailer $mailer, Router $router, EnvoiCourrielsAffichageLogs $envoiCourrielsAffichageLogs)
     {
-        $this->mailManager = $mailManager;
-        $this->mailer = $mailer;
-        $this->router = $router;
-        $this->twig = $twig;
+        $this->mailManager                 = $mailManager;
+        $this->mailer                      = $mailer;
+        $this->router                      = $router;
         $this->envoiCourrielsAffichageLogs = $envoiCourrielsAffichageLogs;
     }
 

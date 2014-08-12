@@ -4,7 +4,7 @@ namespace Nodevo\GridBundle\Grid;
 /**
  * Interface Grid
  */
-interface IGrid
+interface GridInterface
 {
     public function setConfig();
     public function setColumns();

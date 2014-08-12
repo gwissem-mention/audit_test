@@ -6,7 +6,7 @@ namespace HopitalNumerique\InterventionBundle\Grid;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
@@ -14,7 +14,7 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
 /**
  * Configuration du grid des demandes d'intervention.
  */
-abstract class DemandesAbstractGrid extends Grid implements IGrid
+abstract class DemandesAbstractGrid extends Grid implements GridInterface
 {
     protected $utilisateurConnecte;
     

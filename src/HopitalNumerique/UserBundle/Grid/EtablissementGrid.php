@@ -2,14 +2,14 @@
 namespace HopitalNumerique\UserBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du Grid User
  */
-class EtablissementGrid extends Grid implements IGrid
+class EtablissementGrid extends Grid implements GridInterface
 {
     /**
     * Set la config propre au Grid User (Source + config par défaut)
