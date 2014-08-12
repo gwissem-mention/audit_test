@@ -339,7 +339,8 @@ class UserRepository extends EntityRepository
         }
         else
         {
-            for ($i = 0; $i < count($role); $i++)
+            # Correction QSO : on fait pas de count dans une boucle FOR
+            for ($i = 0, $count = count($role); $i < $count; $i++)
             {
                 $requete
                     ->orWhere('user.roles LIKE :role'.$i)->setParameter('role'.$i, '%'.$role[$i].'%')

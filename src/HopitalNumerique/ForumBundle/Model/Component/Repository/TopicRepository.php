@@ -11,5 +11,5 @@ use CCDNForum\ForumBundle\Model\Component\Repository\TopicRepository as CCDNTopi
  */
 class TopicRepository extends CCDNTopicRepository
 {
-    
+  
 }

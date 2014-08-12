@@ -19,6 +19,8 @@
             <h3 class="violet">Tableau de bord</h3>
         </div>
         
+        {% set mainBlockClass = "col-md-9 col-sm-12" %}
+
         <div class="col-md-3 col-sm-12">
             {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
             {#{% set currentPath = path(app.request.attributes.get('_route')) %}#}
@@ -46,10 +48,12 @@
             {% if parent is not null %}
                 {% set menu = root[parent] %}
                 {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+            {% else %}
+                {% set mainBlockClass = "col-md-12 col-sm-12" %}
             {% endif %}
         </div>
         
-        <div class="content col-md-9 col-sm-12">
+        <div class="content {{mainBlockClass}}">
             {% block header %}
                 <div class="header-account">
                     <h1 class="violet">{% block headerTitle %}{% endblock %}</h1>

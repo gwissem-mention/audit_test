@@ -359,7 +359,7 @@ class Reference
      *
      * @return integer
      */
-    private function getLevel( $currentLevel, $ref )
+    private function getLevel( $currentLevel, Reference $ref )
     {
         $currentLevel++;
         if( $ref->getParent() )

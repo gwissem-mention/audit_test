@@ -14,7 +14,6 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 class BreadcrumbNodeLoader implements LoaderInterface
 {
     private $_factory;
-    private $_security;
     private $_container;
     private $_rootNode;
 
@@ -22,14 +21,12 @@ class BreadcrumbNodeLoader implements LoaderInterface
      * [__construct description]
      *
      * @param FactoryInterface         $factory   [description]
-     * @param SecurityContextInterface $security  [description]
      * @param [type]                   $container [description]
      * @param array                    $options   [description]
      */
-    public function __construct( FactoryInterface $factory, SecurityContextInterface $security, $container, $options = array() )
+    public function __construct( FactoryInterface $factory, $container, $options = array() )
     {
         $this->_factory   = $factory;
-        $this->_security  = $security;
         $this->_container = $container;
         $this->_rootNode  = isset($options['breadcrumbRoot']) ? $options['breadcrumbRoot'] : false;
     }
@@ -50,7 +47,8 @@ class BreadcrumbNodeLoader implements LoaderInterface
             $menu->addChild('Accueil', array('route' => $this->_rootNode ) );
 
         //récupère l'arborescence
-        $nodesArray = $this->getDatas($data)->getBreadcrumbsArray();
+        $manipulator = new \Knp\Menu\Util\MenuManipulator();
+        $nodesArray = $manipulator->getBreadcrumbsArray( $this->getDatas($data) );
         $nodesArray = $nodesArray[0]['item'];
 
         //get children

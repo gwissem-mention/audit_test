@@ -92,7 +92,7 @@ class InterventionDemandeManager extends BaseManager
      *
      * @return array
      */
-    public function getForFactures( $user )
+    public function getForFactures( $user = null )
     {
         return $this->getRepository()->getForFactures( $user )->getQuery()->getResult();
     }

@@ -111,4 +111,25 @@ class SessionRepository extends EntityRepository
                         ->setParameter('user', $user)
                         ->orderBy('ses.dateSession', 'DESC');
     }
+
+    /**
+     * Retourne les sessions des 15 prochains jours
+     *
+     * @return QueryBuilder
+     */
+    public function getNextSessions()
+    {
+        $today    = new \DateTime();
+        $in15days = new \DateTime();
+        $in15days->add(new \DateInterval('P15D'));
+
+        return $this->_em->createQueryBuilder()
+                        ->select('ses')
+                        ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
+                        ->andWhere('ses.dateSession > :today', 'ses.dateSession < :in15days')
+                        ->setParameter('today', $today, \Doctrine\DBAL\Types\Type::DATETIME)
+                        ->setParameter('in15days', $in15days, \Doctrine\DBAL\Types\Type::DATETIME)
+                        ->setMaxResults(5)
+                        ->orderBy('ses.dateSession', 'DESC');
+    }
 }

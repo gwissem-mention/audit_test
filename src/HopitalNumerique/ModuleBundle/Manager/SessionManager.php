@@ -138,6 +138,16 @@ class SessionManager extends BaseManager
     }
 
     /**
+     * Retourne les sessions des 15 prochains jours
+     * 
+     * @return array
+     */
+    public function getNextSessions()
+    {
+        return $this->getRepository()->getNextSessions()->getQuery()->getResult();
+    }
+
+    /**
      * Retourne la liste des sessions ou l'user connecté est formateur
      *
      * @param User $user L'utilisateur connecté

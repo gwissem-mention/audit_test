@@ -12,6 +12,7 @@ assetic:
         - NodevoFaqBundle
         - NodevoContactBundle
         - NodevoGestionnaireMediaBundle
+        - HopitalNumeriqueAdminBundle
         - HopitalNumeriqueInterventionBundle
         - HopitalNumeriqueUserBundle
         - HopitalNumeriqueReferenceBundle

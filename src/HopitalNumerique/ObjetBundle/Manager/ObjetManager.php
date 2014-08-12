@@ -40,6 +40,16 @@ class ObjetManager extends BaseManager
     }
 
     /**
+     * Récupère les objets pour le dashboard Back
+     *
+     * @return array
+     */
+    public function getObjetsForDashboard()
+    {
+        return $this->getRepository()->getObjetsForDashboard()->getQuery()->getResult();
+    }
+
+    /**
      * Récupère les objets pour l'export
      *
      * @return array

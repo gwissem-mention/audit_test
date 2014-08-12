@@ -1197,6 +1197,26 @@ class User extends BaseUser
     }
 
     /**
+     * Retourne si l'utilisateur a le rôle ES ou pas.
+     *
+     * @return boolean VRAI ssi l'utilisateur a le rôle es
+     */
+    public function hasRoleEs()
+    {
+        return $this->hasRole(Role::$ROLE_ES_LABEL);
+    }
+
+    /**
+     * Retourne si l'utilisateur a le rôle Expert ou pas.
+     *
+     * @return boolean VRAI ssi l'utilisateur a le rôle expert
+     */
+    public function hasRoleExpert()
+    {
+        return $this->hasRole(Role::$ROLE_EXPERT_LABEL);
+    }
+
+    /**
      * Add domaine
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $domaine

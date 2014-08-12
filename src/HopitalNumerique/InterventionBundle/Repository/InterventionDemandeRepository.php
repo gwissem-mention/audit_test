@@ -22,9 +22,9 @@ class InterventionDemandeRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getForFactures( $user )
+    public function getForFactures( $user = null )
     {
-        return $this->_em->createQueryBuilder()
+        $qb = $this->_em->createQueryBuilder()
                          ->select('interventionDemande')
                          ->from('\HopitalNumerique\InterventionBundle\Entity\InterventionDemande', 'interventionDemande')
                          ->leftJoin('interventionDemande.remboursementEtat', 'refRemboursement')
@@ -32,9 +32,14 @@ class InterventionDemandeRepository extends EntityRepository
                          ->leftJoin('interventionDemande.evaluationEtat', 'refEvaluation')
                          ->andWhere('refRemboursement.id = 5 ', 'refEtat.id = 22')
                          ->andWhere('refEvaluation.id = 29 ', 'interventionDemande.facture IS NULL')
-                         ->andWhere('interventionDemande.ambassadeur = :user')
-                         ->setParameter('user', $user)
                          ->orderBy('interventionDemande.dateCreation');
+
+        if( !is_null($user) ){
+            $qb->andWhere('interventionDemande.ambassadeur = :user')
+               ->setParameter('user', $user);
+        }
+
+        return $qb;
     }
 
     /**
