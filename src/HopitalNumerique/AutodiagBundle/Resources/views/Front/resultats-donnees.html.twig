@@ -18,13 +18,26 @@
 
         <div class="clearfix"></div>
 
+        {% if resultat.synthese %}
+            <div class="autodiags">
+                <h2 class="violet open" data-toggle="results" >Synthèse - {{resultat.name}}</h2>
+                
+                <div id="results">
+                    <p>Autodiagnostics concernés par cette synthèse :</p>
+                    <ul>
+                        {% for result in resultat.resultats %}
+                            <li><a href="{{path('hopitalnumerique_autodiag_front_resultat', {'id':result.id, 'back':1})}}" target="_blank">{{result.name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="page-break"></div>
+        {% endif %}
+
         <h2 class="violet open" data-toggle="graphiques" >Résultats de l'outil - Graphiques</h2>
 
         <div id="graphiques">
-            <p class="text-justify">
-                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, repudiandae quibusdam voluptate nesciunt quaerat culpa ab at neque voluptatibus aut natus ipsam ut nisi eos adipisci temporibus omnis sunt consequatur.</span>
-            </p>
-
             {# Affichage du graphique barre #}
             {% if graphiques['barre'] is defined %}
                 {% set chart = graphiques['barre'] %}
@@ -157,14 +170,14 @@
                                         {% for datas in categorie['chapitres'] %}
                                             {% if not datas['nc'] %}
                                                 <td class="text-center">
-                                                    {{datas['nbPoints']}} / {{datas['max']}}
+                                                    {{datas['nbPoints']|number_format(0)}} / {{datas['max']}}
                                                 </td>
                                                 {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
                                                 {% set maxCateg = maxCateg + datas['max'] %}
                                             {% endif %}
                                         {% endfor %}
                                         <td class="text-center">
-                                            {{nbPointsCateg}} / {{maxCateg}}
+                                            {{nbPointsCateg|number_format(0)}} / {{maxCateg}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -226,14 +239,14 @@
                                         {% for datas in chart.datas.totauxChapitres %}
                                             {% if not datas['nc'] %}
                                                 <td class="text-center">
-                                                    {{datas['nbPoints']}} / {{datas['max']}}
+                                                    {{datas['nbPoints']|number_format(0)}} / {{datas['max']}}
                                                 </td>
                                                 {% set nbPointsTotal = nbPointsTotal + datas['nbPoints'] %}
                                                 {% set maxTotal = maxTotal + datas['max'] %}
                                             {% endif %}
                                         {% endfor %}
                                         <td class="text-center">
-                                            {{nbPointsTotal}} / {{maxTotal}}
+                                            {{nbPointsTotal|number_format(0)}} / {{maxTotal}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -279,16 +292,18 @@
 
         <div id="chapitres" style="display:none">
             <p class="text-justify">
-                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita, repudiandae quibusdam voluptate nesciunt quaerat culpa ab at neque voluptatibus aut natus ipsam ut nisi eos adipisci temporibus omnis sunt consequatur.</span>
-                <span>Quas, suscipit, dolor, maiores laudantium ullam esse at fugiat delectus voluptatem tempora ipsam facilis alias modi nulla quae perferendis iusto dignissimos dolorum reprehenderit ut recusandae soluta asperiores! Sit, repudiandae, nemo.</span>
+                <span>Compte tenu de vos réponses, l'Anap vous propose l'analyse suivante (l'ordre d'affichage correspond à l'ordre de priorité de traitement, le plus important en premier) :</span>
             </p>
 
             {# Affichage des publications #}
             {% set chaptersToHide = [] %}
             {% for chapitre in chapitres %}
                 {% set doTheChapterHavePublications = false %}
-                <div class="chapter chapitre-{{chapitre.id}}" style="{% if chapitre.questions|length == 0 and chapitre.childs|length == 0 %}display:none{% endif %}" >
+                <div class="chapter chapitre-{{chapitre.id}}" style="{% if chapitre.questions|length == 0 and chapitre.childs|length == 0 %}display:none{% endif %}" >                    
+                    <h3 class="prev">{{chapitre.intro}}</h3>
                     <h3 class="violet">{{chapitre.title}}</h3>
+                    <p class="text-muted level1">{{chapitre.desc}}</p>
+
                     <hr>
 
                     {% if chapitre.synthese %}
@@ -313,7 +328,9 @@
                             <div class="col-md-12">
                                 {% for child in chapitre.childs %}
                                     <div style="{% if child.questions|length == 0 %}display:none{% endif %}">
+                                        <h4 class="prev">{{child.intro}}</h4>
                                         <h4 class="violet">{{child.title}}</h4>
+                                        <p class="text-muted level1">{{child.desc}}</p>
 
                                         {% if child.synthese %}
                                             <p class="violet synthese">{{child.synthese}}</p>
@@ -347,14 +364,50 @@
                 <input type="hidden" id="chaptersToHide" value="{{chaptersToHide|json_encode}}" />
             </p>
         </div>
+        
+        {% if pdf or true %}
+            <div class="page-break"></div>
+
+            <h2 class="violet open" data-toggle="reponses" >Résultats de l'outil - Réponses</h2>
+
+            <div id="reponses">
+                {% for chapitre in chapitres %}
+                    <div class="chapitre-{{chapitre.id}}">
+                        <h3 class="prev">{{chapitre.intro}}</h3>
+                        <h3 class="violet">{{chapitre.title}}</h3>
+                        <p class="text-muted level1">{{chapitre.desc}}</p>
+                        
+                        <hr>
+
+                        {% if chapitre.questionsBack|length > 0 %}
+                            {{ mySelf.buildQuestionReponse(chapitre.questionsBack) }}
+                        {% endif %}
+                        
+                        {% if chapitre.childs|length > 0 %}
+                            <div class="row sous-chapitre col-md-12">
+                                {% for child in chapitre.childs %}
+                                    <h4 class="prev">{{child.intro}}</h4>
+                                    <h4 class="violet">{{child.title}}</h4>
+                                    <p class="text-muted level1">{{child.desc}}</p>
+                                    
+                                    {{ mySelf.buildQuestionReponse(child.questionsBack) }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="clearfix"></div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 </div>
 
 {# Construit les lignes associées aux résultats #}
 {% macro buildQuestion(question, publications) %}
     <div class="row">
+        <div class="col-md-12"><p class="text-muted">{{question.intro}}</p></div>
         <div class="col-md-12">
-            <p class="question">{% if question.code != '' %}{{question.code ~ '. '}}{% endif %}{{question.question}}</p>
+            <p class="question">{{question.question}}</p>
             <p class="violet synthese">{{question.synthese}}</p>
             {{publications|raw}}
         </div>
@@ -373,4 +426,51 @@
             </div>
         {% endif %}
     {% endif %}
+{% endmacro %}
+
+{% macro buildQuestionReponse(questions) %}
+    {% for question in questions %}
+        <div class="clearfix">
+            <p class="text-muted">{{question.intro}}</p>
+            <div>
+                <p>
+                    {{question.question}} : 
+                </p>
+            </div>
+            
+            <div>
+                {% set options = question.options %}
+                <p class="pull-left">
+                    {% if question.initialValue != -1 %}
+                        <span>Non concerné</span><br />
+                    {% else %}
+                        <span><b>Non concerné</b></span><br />
+                    {% endif %}
+                    
+                    {% for option in options %}
+                        {% set tab = option|split(';') %}
+                        {% if tab[0] == question.initialValue %}
+                            <span><b>{{tab[1]|trim}}</b></span><br />
+                        {% else %}
+                            <span>{{tab[1]|trim}}</span><br />
+                        {% endif %}
+                    {% endfor %}
+                </p>
+                {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
+                    <div class="icon pull-right">
+                        {% if question.min == question.initialValue %}
+                            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bad.jpg')}}" class="pull-right" alt="bad" />
+                        {% elseif question.max == question.initialValue %}
+                            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/good.jpg')}}" class="pull-right" alt="good" />
+                        {% else %}
+                            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bof.jpg')}}" class="pull-right" alt="bof" />
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <p class="text-muted">
+                    <em>{{question.remarque}}</em>
+                </p>
+            </div>
+        </div>
+    {% endfor %}
 {% endmacro %}

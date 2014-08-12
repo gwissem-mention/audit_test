@@ -6,7 +6,6 @@ div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
 #chapitres .dd3-actions .dd3-plus { background: #85c744;}
 #chapitres .dd3-actions .dd3-plus:hover { background: #71AE34; }
 #chapitres .dd3-actions .dd3-plus:before{ content: '\f067'; }
-
 /* Gestion des questions */
 #questions .text-muted {margin-right:60px}
 
@@ -22,6 +21,10 @@ div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
 
 /* Affichage d'un résultat */
 #resultat-detail h3{margin-left:30px;}
+#resultat-detail .icon{ margin: 0 0 0 30px; }
+#resultat-detail .icon .fa-smile-o{color:#B4DC00}
+#resultat-detail .icon .fa-frown-o {color:#C82F5B}
+#resultat-detail .icon .fa-meh-o{color:#E88824}
 
 /* Affichage de la liste des chapitres/question d'un outil */
 #listeChapitres h2{background: #cfcfcf; margin-top: 20px; padding: 5px 20px; color: #6f3596}

@@ -56,8 +56,15 @@ hopitalnumerique_objet_objet_saveLink:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:saveLink" }
 
 hopitalnumerique_objet_objet_deleteLink:
-    pattern:  /objet/deleteLink/{pointDur}/{id}.{_format}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:deleteLink", _format: json }
+    pattern:  /objet/deleteLink/{pointDur}/{id}/{obj}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:deleteLink" }
+    requirements: 
+        id: \d+
+        pointDur: \d+
+
+hopitalnumerique_objet_objet_reorder:
+    pattern:  /objet/reorder/{id}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:reorder" }
     requirements: 
         id: \d+
 

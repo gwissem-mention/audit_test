@@ -4,7 +4,7 @@
             <h4 class="panel-title">
                 {%- if post.getCreatedBy -%}
                     {{- 'post.posted-by' |trans({}, ForumBundle.translation ) |raw -}}
-                    {{- post.getCreatedBy.getAppellation() -}}
+                    {{- post.getCreatedBy.getNomPrenom() }} {% if post.getCreatedBy.getEtablissementRattachementSante() is not null %}({{post.getCreatedBy.getEtablissementRattachementSante().nom}}){% else %}{% if post.getCreatedBy.getAutreStructureRattachementSante|trim != '' %}({{post.getCreatedBy.getAutreStructureRattachementSante}}){% endif %}{% endif %}
 
                     &nbsp;&#183;&nbsp;
 

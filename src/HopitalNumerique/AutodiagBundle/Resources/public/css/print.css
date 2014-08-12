@@ -9,12 +9,17 @@ img{ width:auto !important }
 #resultats{width:100%;}
 #resultats h1{float:right; margin-top:0; font-size: 22px}
 #resultats #graphiques{width: 100%}
-#resultats #graphiques, #chapitres {display: block !important}
+#resultats #graphiques, #chapitres, #results {display: block !important}
 #resultats #graphiques #radarChart{width: 100%; margin: 0!important}
 #resultats #graphiques .panel{box-shadow: none !important; border-radius: 0}
 #resultats #graphiques .panel-default{height:90px}
 #resultats #graphiques .panel h3.toPrint{color:#6f3596; display: block; margin-bottom: 10px; font-size: 14px; margin-top: 0 }
 #resultats #graphiques .panel .panel-heading{display: none}
 #resultats #graphiques .tableContainer{overflow:visible;}
+
+#reponses h3{text-transform: uppercase;}
+#reponses h4{margin-bottom: 20px; font-size: 18px;}
+#reponses .icon{ margin: 0 0 0 30px; }
+#reponses .icon img{width: 100%}
 
 .copyright{width:94%; margin-top:80px;}

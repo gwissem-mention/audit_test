@@ -74,6 +74,38 @@
                 </div>
             </div>
         </div>
+
+        <div class="clearfix"></div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_label(form.intro) }}
+                <div class="col-md-12">
+                    {{ form_widget(form.intro) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.intro) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                {{ form_label(form.desc) }}
+                <div class="col-md-12">
+                    {{ form_widget(form.desc) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.desc) }}
+                    </div>
+                </div>
+            </div>
+        </div>
     {{ form_end(form) }}
 {% endblock %}
 

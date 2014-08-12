@@ -185,6 +185,20 @@ class Objet
     /**
      * @var array
      *
+     * @ORM\Column(name="obj_objets", type="array", options = {"comment" = "Liste des productions liés à l objet"})
+     */
+    private $objets;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="obj_glossaires", type="array", options = {"comment" = "Mots du glossaire liés à l objet"})
+     */
+    private $glossaires;
+
+    /**
+     * @var array
+     *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_referencement", type="array", options = {"comment" = "Copie du référencement pour l historique"})
      */
@@ -262,16 +276,6 @@ class Objet
      * )
      */
     protected $ambassadeurs;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet")
-     * @ORM\JoinTable(name="hn_objet_objets",
-     *      joinColumns={ @ORM\JoinColumn(name="obj1_id", referencedColumnName="obj_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="obj2_id", referencedColumnName="obj_id")}
-     * )
-     * @ORM\OrderBy({"titre" = "ASC"})
-     */
-    protected $objets;
     
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ModuleBundle\Entity\Module", mappedBy="productions")
@@ -321,11 +325,12 @@ class Objet
         $this->lock          = false;
         $this->vignette      = new \Doctrine\Common\Collections\ArrayCollection();
         $this->autodiags     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objets        = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->glossaires    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->referencement = new \Doctrine\Common\Collections\ArrayCollection();
         $this->roles         = new \Doctrine\Common\Collections\ArrayCollection();
         $this->types         = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ambassadeurs  = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->objets        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->modules       = new \Doctrine\Common\Collections\ArrayCollection();
         $this->maitriseUsers = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -916,6 +921,90 @@ class Objet
     public function addAutodiag($autodiag)
     {
         $this->autodiags[] = $autodiag;
+        return $this;
+    }
+
+    /**
+     * Get objets
+     *
+     * @return array $objets
+     */
+    public function getObjets()
+    {
+        return $this->objets;
+    }
+    
+    /**
+     * Set objets
+     *
+     * @param array $objets
+     */
+    public function setObjets(array $objets)
+    {
+        $this->objets = $objets;
+        return $this;
+    }
+
+    /**
+     * Remove objet
+     *
+     * @param string $objet
+     */
+    public function removeObjet($objet)
+    {
+        $this->objets->removeElement($objet);
+    }
+    
+    /**
+     * add objet
+     *
+     * @param string $objet
+     */
+    public function addObjet($objet)
+    {
+        $this->objets[] = $objet;
+        return $this;
+    }
+    
+    /**
+     * Get glossaires
+     *
+     * @return array $glossaires
+     */
+    public function getGlossaires()
+    {
+        return $this->glossaires;
+    }
+    
+    /**
+     * Set glossaires
+     *
+     * @param array $glossaires
+     */
+    public function setGlossaires(array $glossaires)
+    {
+        $this->glossaires = $glossaires;
+        return $this;
+    }
+
+    /**
+     * Remove glossaire
+     *
+     * @param string $glossaire
+     */
+    public function removeGlossaire($glossaire)
+    {
+        $this->glossaires->removeElement($glossaire);
+    }
+    
+    /**
+     * add glossaire
+     *
+     * @param string $glossaire
+     */
+    public function addGlossaire($glossaire)
+    {
+        $this->glossaires[] = $glossaire;
         return $this;
     }
 

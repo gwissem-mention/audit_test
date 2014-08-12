@@ -3,8 +3,11 @@
 namespace HopitalNumerique\QuestionnaireBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+
 use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire as HopiQuestionnaire;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 
@@ -41,6 +44,101 @@ class QuestionnaireController extends Controller
      * @var boolean
      */
     private $_envoieDeMail;
+
+    /* Gestionnaire des questionnaires */
+
+    /**
+     * Affiche la liste des questionnaires.
+     */
+    public function indexQuestionnaireAction()
+    {
+        //Récupérations de l'ensemble des questionnaires pour l'export
+        $questionnaires = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findBy(array('lock' => false), array('nom' => 'ASC'));
+
+        //Génération du grid
+        $grid = $this->get('hopitalnumerique_questionnaire.grid.questionnaire');
+
+        return $grid->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/index.html.twig', array(
+            'questionnaires' => $questionnaires
+        ));
+    }
+
+    /**
+     * Editer le questionnaire.
+     */
+    public function editQuestionnaireAction(HopiQuestionnaire $questionnaire)
+    {
+        return $this->renderGestionForm('hopitalnumerique_questionnaire_gestion_questionnaire', $questionnaire, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/edit.html.twig' );
+    }
+
+    /**
+     * Affiche le formulaire d'ajout de Module.
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function addQuestionnaireAction()
+    {
+        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->createEmpty();
+
+        return $this->renderGestionForm('hopitalnumerique_questionnaire_gestion_questionnaire', $questionnaire, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/edit.html.twig' );
+    }
+
+    /**
+     * Suppresion d'un Module.
+     * 
+     * @param integer $id Id de Module.
+     * METHOD = POST|DELETE
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function deleteQuestionnaireAction( $id )
+    {
+        $module = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array( 'id' => $id) );
+
+        //Suppression de l'entitée
+        $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->delete( $module );
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_questionnaire_index').'"}', 200);
+    }
+
+    /**
+     * Affichage du formulaire d'utilisateur
+     * 
+     * @param integer $id Identifiant de l'utilisateur
+     */
+    public function editFrontGestionnaireAction(HopiQuestionnaire $questionnaire)
+    {
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        $this->_envoieDeMail = false;
+        
+        //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
+        $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
+
+        return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Front/index.html.twig',array(
+            'questionnaire'      => $questionnaire,
+            'user'               => $user,
+            'optionRenderForm'   => array(
+                'showAllQuestions'   => false,
+                'readOnly'           => false,
+                'envoieDeMail'       => true,
+                'themeQuestionnaire' => 'vertical',
+                'routeRedirect'      => json_encode(array(
+                    'quit' => array(
+                        'route'     => 'hopitalnumerique_questionnaire_edit_front_gestionnaire',
+                        'arguments' => array('id' => $questionnaire->getId())
+                    )
+                ))
+            )
+        ));
+    }
+
+    /* Gestionnaire des formulaires */
     
     /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
@@ -113,6 +211,37 @@ class QuestionnaireController extends Controller
             ) ,
             'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit.html.twig'
         );
+    }
+
+    /**
+     * Export CSV du questionnaire passé en paramètre
+     *
+     * @param HopiQuestionnaire $questionnaire Questionnaire à exporter
+     *
+     * @return \Symfony\Component\HttpFoundation\Response 
+     */
+    public function exportCSVAction( HopiQuestionnaire $questionnaire)
+    {
+        //Récupère tout les utilisateurs qui ont répondu à ce questionnaire
+        $users = $this->get('hopitalnumerique_user.manager.user')->getUsersByQuestionnaire($questionnaire->getId());
+
+        $results = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->buildForExport( $questionnaire->getId(), $users);
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $results['colonnes'], $results['datas'], $questionnaire->getNom() . '-reponses.csv', $kernelCharset );
+    }
+
+    /**
+     * Action appelée dans le plugin "Questionnaire" pour tinymce
+     */
+    public function getQuestionnairesAction()
+    {
+        $questionnaires = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findBy(array('lock' => false), array('nom' => 'ASC'));
+
+        return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/getQuestionnaires.html.twig', array(
+            'questionnaires' => $questionnaires,
+            'texte'  => $this->get('request')->request->get('texte')
+        ));
     }
 
 
@@ -255,15 +384,15 @@ class QuestionnaireController extends Controller
                     $arrayParamKey = explode('_', $key);
     
                     //Le tableau de arrayParamKey : 0 => type du champ - 1 => Id de la question - 2+=> alias du champ
-                    $typeParam  = isset($arrayParamKey) && key_exists(0, $arrayParamKey)  ? $arrayParamKey[0] : '';
-                    $idQuestion = isset($arrayParamKey) && key_exists(1, $arrayParamKey)  ? $arrayParamKey[1] : 0;
+                    $typeParam  = isset($arrayParamKey) && array_key_exists(0, $arrayParamKey)  ? $arrayParamKey[0] : '';
+                    $idQuestion = isset($arrayParamKey) && array_key_exists(1, $arrayParamKey)  ? $arrayParamKey[1] : 0;
 
                     //Si l'id de la question n'a pas été récupéré alors on ne sauvegarde pas la question (exemple avec le cas particulier du token du formulaire)
                     if(0 === $idQuestion || '' === $idQuestion || '_token' === $key)
                         continue;
     
                     //récupération de la réponse courante
-                    $reponse = key_exists($idQuestion, $reponses) ? $reponses[$idQuestion] : null;    
+                    $reponse = array_key_exists($idQuestion, $reponses) ? $reponses[$idQuestion] : null;
     
                     //Mode ajout
                     if(is_null($reponse))
@@ -279,16 +408,16 @@ class QuestionnaireController extends Controller
                     {
                         $reponse->setReference($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $param)));
                     }
-                    elseif('entitymultiple' === $typeParam)
+                    elseif('entitymultiple' === $typeParam || 'entitycheckbox' === $typeParam)
                     {
-                        $reponse->setReponse("");
-
-                        $reponse->setReferenceMulitple(array());
-
-                        foreach ($param as $value) 
-                        {
-                            $reponse->addReferenceMulitple($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $value)));
+                        if(is_null($reponse->getReferenceMulitple())){
+                            $reponse->setReferenceMulitple(array());
+                            foreach ($param as $value)
+                            {
+                                $reponse->addReferenceMulitple($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $value)));
+                            }
                         }
+                        $reponse->setReponse("");
                     }
 
                     if('module-evaluation' === $questionnaire->getNomMinifie())
@@ -377,7 +506,6 @@ class QuestionnaireController extends Controller
                         }
                     }
                 }
-
                 //Envoie du mail à l'utilisateur pour l'alerter de la validation de sa candidature
                 if($this->_envoieDeMail)
                 {
@@ -437,7 +565,37 @@ class QuestionnaireController extends Controller
                             }
                             break;
                         default:
-                            throw new \Exception('Ce type de questionnaire ne possède pas de mail en base.');
+                            //Récupère les questions / réponses formatées correctement pour l'affichage dans les mails génériques
+                            $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
+                            
+                            //Formate les données de l'utilisateur qui a répondu au questionnaire
+                            $etablissement = is_null($user->getEtablissementRattachementSante()) ? $user->getAutreStructureRattachementSante() : $user->getEtablissementRattachementSante()->getNom();
+                            
+                            $candidat = '<ul>';
+                            $candidat .= '<li><strong>Prénom</strong> : ' . (trim($user->getPrenom()) === '' ? '-' : $user->getPrenom() ). '</li>';
+                            $candidat .= '<li><strong>Nom</strong> : ' . (trim($user->getNom()) == '' ? '-' : $user->getNom() ). '</li>';
+                            $candidat .= '<li><strong>Adresse e-mail</strong> : ' . (trim($user->getEmail()) === '' ? '-' : $user->getEmail() ). '</li>';
+                            $candidat .= '<li><strong>Téléphone direct</strong> : ' . (trim($user->getTelephoneDirect()) === '' ? '-' : $user->getTelephoneDirect() ). '</li>';
+                            $candidat .= '<li><strong>Téléphone portable</strong> : ' . (trim($user->getTelephonePortable()) === '' ? '-' : $user->getTelephonePortable() ). '</li>';
+                            $candidat .= '<li><strong>Profil</strong> : ' . (trim($user->getProfilEtablissementSante()->getLibelle()) === '' ? '-' : $user->getProfilEtablissementSante()->getLibelle() ). '</li>';
+                            $candidat .= '<li><strong>Établissement de rattrachement</strong> : ' . (trim($etablissement) === '' ? '-' : $etablissement ). '</li>';
+                            $candidat .= '<li><strong>Nom de votre établissement si non disponible dans la liste précédente</strong> : ' . (trim($user->getAutreStructureRattachementSante()) === '' ? '-' : $user->getAutreStructureRattachementSante() ). '</li>';
+                            $candidat .= '<li><strong>Fonction dans l\'établissement</strong> : ' . (trim($user->getFonctionDansEtablissementSante()) === '' ? '-' : $user->getFonctionDansEtablissementSante() ). '</li>';
+                            $candidat .= '</ul>';
+
+                            //Récupération de l'adresse mail en parameter.yml
+                            $adressesMails = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getMailReponses();
+                            
+                            //Set des variables du gabarit du mail
+                            $variablesTemplate = array(
+                                'nomQuestionnaire' => $questionnaire->getNom(),
+                                'candidat'         => $candidat,
+                                'questionnaire'    => $candidature
+                            );
+                            $mailsAEnvoyer = $this->get('nodevo_mail.manager.mail')->sendReponsesQuestionnairesMail($adressesMails, $variablesTemplate);
+
+                            foreach($mailsAEnvoyer as $mailAEnvoyer)
+                                $this->get('mailer')->send($mailAEnvoyer);
                             break;
                     }
                 }
@@ -458,6 +616,55 @@ class QuestionnaireController extends Controller
                 'questionnaire' => $questionnaire,
                 'user'          => $user,
                 'theme'         => $this->_themeQuestionnaire
+        ));
+    }
+
+    /**
+     * Effectue le render du formulaire Module.
+     *
+     * @param string $formName Nom du service associé au formulaire
+     * @param Module   $entity   Entité $questionnaire
+     * @param string $view     Chemin de la vue ou sera rendu le formulaire
+     *
+     * @return Form | redirect
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    private function renderGestionForm( $formName, $questionnaire, $view )
+    {
+        //Création du formulaire via le service
+        $form = $this->createForm( $formName, $questionnaire);
+
+        $request = $this->get('request');
+        
+        // Si l'utilisateur soumet le formulaire
+        if ('POST' == $request->getMethod()) 
+        {
+            // On bind les données du form
+            $form->handleRequest($request);
+
+            //si le formulaire est valide
+            if ($form->isValid()) {
+                //test ajout ou edition
+                $new = is_null($questionnaire->getId());
+                
+                //On utilise notre Manager pour gérer la sauvegarde de l'objet
+                $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->save($questionnaire);
+                
+                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Questionnaire ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
+                
+                //on redirige vers la page index ou la page edit selon le bouton utilisé
+                $do = $request->request->get('do');
+                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_questionnaire_index') : $this->generateUrl('hopitalnumerique_questionnaire_edit_questionnaire', array( 'id' => $questionnaire->getId() ) ) ) );
+            }
+        }
+
+        return $this->render( $view , array(
+            'form'          => $form->createView(),
+            'questionnaire' => $questionnaire,
+            'theme'         => 'vertical'
         ));
     }
 }

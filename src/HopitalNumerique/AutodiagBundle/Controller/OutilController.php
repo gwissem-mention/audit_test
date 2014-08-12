@@ -214,16 +214,18 @@ class OutilController extends Controller
             'outil'      => 'Outil',
             'chapitre0'  => 'Chapitre',
             'chapitre1'  => 'Chapitre',
-            'lastSave'   => 'Date de dernière sauvegarde',
-            'validation' => 'Date de validation',
             'question'   => 'Question'
         );
 
         $datas     = array();
         $emptyCols = array();
         foreach($outils as $outil) {
-            $resultats = $outil->getResultats();
-            $colId     = 0;
+            $resultats   = $outil->getResultats();
+            $colId       = 0;
+            $remarques   = array();
+            $lastSaves   = array();
+            $validations = array();
+
             foreach($resultats as $resultat) {
                 //add colonne ID
                 $user                   = !is_null($resultat->getUser()) ? $resultat->getUser()->getPrenomNom() : 'Guest';
@@ -238,8 +240,6 @@ class OutilController extends Controller
                         $row               = array();
                         $row['outil']      = $outil->getTitle();
                         $row['question']   = $question->getTexte();
-                        $row['lastSave']   = $resultat->getDateLastSave()->format('d/m/Y');
-                        $row['validation'] = !is_null($resultat->getDateValidation()) ? $resultat->getDateValidation()->format('d/m/Y') : '';
                         $row['chapitre1']  = $question->getChapitre()->getTitle();
                         $row['chapitre0']  = !is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getParent()->getTitle() : '';
 
@@ -249,8 +249,16 @@ class OutilController extends Controller
                     $datas[$question->getId()]['col'.$colId] = $reponse->getValue();
                 }
 
+                $remarques['col'.$colId]   = $resultat->getRemarque();
+                $lastSaves['col'.$colId]   = $resultat->getDateLastSave()->format('d/m/Y');
+                $validations['col'.$colId] = !is_null($resultat->getDateValidation()) ? $resultat->getDateValidation()->format('d/m/Y') : '';
+
                 $colId++;
             }
+
+            $datas[] = $this->addLine( 'Date de dernière sauvegarde', $outil, $lastSaves );
+            $datas[] = $this->addLine( 'Date de validation', $outil, $validations );
+            $datas[] = $this->addLine( 'Remarque', $outil, $remarques );
         }
 
         //reparse all result to add empty cols
@@ -264,5 +272,22 @@ class OutilController extends Controller
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
         return $this->get('hopitalnumerique_autodiag.manager.outil')->exportCsv( $colonnes, $datas, 'export-resultats.csv', $kernelCharset );
+    }
+
+    /**
+     * Ajoute les lignes différentes des questions
+     *
+     * @param [type] $titre [description]
+     * @param [type] $outil [description]
+     * @param [type] $datas [description]
+     */
+    private function addLine( $titre, $outil, $datas )
+    {
+        $datas['outil']     = $outil->getTitle();
+        $datas['chapitre1'] = '';
+        $datas['chapitre0'] = '';
+        $datas['question']  = $titre;
+            
+        return $datas;
     }
 }

@@ -12,6 +12,7 @@ assetic:
         - NodevoFaqBundle
         - NodevoContactBundle
         - NodevoGestionnaireMediaBundle
+        - HopitalNumeriqueAdminBundle
         - HopitalNumeriqueInterventionBundle
         - HopitalNumeriqueUserBundle
         - HopitalNumeriqueReferenceBundle
@@ -30,6 +31,7 @@ assetic:
         - HopitalNumeriqueAutodiagBundle
         - HopitalNumeriqueForumBundle
         - HopitalNumeriqueFlashBundle
+        - HopitalNumeriqueGlossaireBundle
         - CCDNForumForumBundle
         - FOSUserBundle
     filters:

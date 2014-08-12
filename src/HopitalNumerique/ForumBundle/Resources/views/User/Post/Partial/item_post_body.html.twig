@@ -7,7 +7,7 @@
                     <i class="glyphicon glyphicon-pencil" style="margin: 0 5px 0 0;"></i>
 
                     {{- 'post.edited-by' |trans({}, ForumBundle.translation ) |raw -}}
-                    {{- post.getEditedBy.getAppellation() -}}
+                    {{- post.getEditedBy.getNomPrenom() -}}
 
                     &nbsp;&#183;
 
@@ -25,7 +25,7 @@
                 <i class="glyphicon glyphicon-trash"></i>
 
                 {{- 'post.deleted-by' |trans({}, ForumBundle.translation ) |raw -}}
-                {{- post.getDeletedBy.getAppellation() -}}
+                {{- post.getDeletedBy.getNomPrenom() -}}
 
                 &nbsp;&#183;
 

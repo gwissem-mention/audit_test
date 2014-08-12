@@ -49,7 +49,7 @@ class UserManager extends BaseManager
         foreach ($users as $key => $user)
         {              
             //Récupération des questionnaires rempli par l'utilisateur courant
-            $questionnairesByUser = key_exists($user['id'], $questionnaireByUser) ? $questionnaireByUser[$user['id']] : array();
+            $questionnairesByUser = array_key_exists($user['id'], $questionnaireByUser) ? $questionnaireByUser[$user['id']] : array();
             
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             $users[$key]['expert'] = (in_array($idExpert, $questionnairesByUser) 
@@ -235,5 +235,17 @@ class UserManager extends BaseManager
     public function getESAndEnregistres(array $criteres = array())
     {
         return $this->getRepository()->getESAndEnregistres($criteres);
+    }
+
+    /**
+     * Récupère les utilisateurs ayant répondues au questionnaire passé en paramètre
+     *
+     * @param  int idQuestionnaire Identifiant du questionnaire
+     *
+     * @return result
+     */
+    public function getUsersByQuestionnaire( $idQuestionnaire )
+    {
+        return $this->getRepository()->getUsersByQuestionnaire( $idQuestionnaire )->getQuery()->getResult();
     }
 }

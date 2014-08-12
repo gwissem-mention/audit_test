@@ -200,7 +200,7 @@ hopitalnumerique_autodiag_front_resultat:
         id: \d+
 
 hopitalnumerique_autodiag_front_resultat_pdf:
-    pattern:  /autodiagnostic/resultat/{id}/pdf
+    pattern:  /autodiagnostic/resultat/pdf/{id}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:pdf" }
     requirements:
         id: \d+
@@ -214,6 +214,10 @@ hopitalnumerique_autodiag_front_comptehn_delete:
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:delete" }
     requirements:
         id: \d+
+
+hopitalnumerique_autodiag_front_comptehn_generate_synthese:
+    pattern:  /compte-hn/autodiagnostic/generate-synthese
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:synthese" }
 
 #CRON
 hopitalnumerique_autodiag_cron:

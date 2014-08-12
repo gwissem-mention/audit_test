@@ -476,6 +476,38 @@ class MailManager extends BaseManager
     }
 
     /**
+     * Envoi un mail des réponses+question d'un questionnaire rempli par un utilisateur (différent des autres envoie de mail)
+     *
+     * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml/parameters.yml)
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendReponsesQuestionnairesMail( $users, $options )
+    {
+        $mail = $this->findOneById(37);
+        
+        //tableau de SwiftMessage a envoyé
+        $mailsToSend = array();
+        
+        foreach ($users as $recepteurMail => $recepteurName)
+        {   
+            $options["u"]  = $recepteurName;
+
+            //prepare content
+            $content        = $this->replaceContent($mail->getBody(), NULL , $options);
+            $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), NULL, $options);
+            $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
+            $content        = $this->replaceContent($mail->getBody(), NULL, $options);
+            $from           = array($expediteurMail => $expediteurName );
+            
+            $mailsToSend[] = $this->sendMail( $mail->getObjet(), $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
+        }
+
+        return $mailsToSend;
+    }
+
+    /**
      * Retourne un email de test
      *
      * @param integer $id   ID du mail

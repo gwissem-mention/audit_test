@@ -39,6 +39,31 @@ class ReponseRepository extends EntityRepository
     
         return $qb->getQuery();
     }
+
+    /**
+     * Récupère les réponses du questionnaire passés en param
+     *
+     * @return array
+     */
+    public function reponsesByQuestionnaire( $idQuestionnaire, $paramId = null)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('reponse')
+            ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
+            ->leftJoin('reponse.question', 'question');
+            
+            if ($paramId != null) {
+                $qb->andWhere('reponse.paramId = :paramId')
+                    ->setParameter('paramId', $paramId);
+            }
+            
+            $qb->leftJoin('reponse.reference', 'reference')
+            ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
+            ->setParameter('idQuestionnaire', $idQuestionnaire )
+            ->leftJoin('question.typeQuestion', 'typeQuestion');
+    
+        return $qb->getQuery();
+    }
     
     /**
      * Récupère les réponses pour l'utilisateur en fonction du questionnaire passés en param pour les questions de type 'file'

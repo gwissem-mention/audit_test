@@ -2,6 +2,7 @@
 namespace HopitalNumerique\PublicationBundle\Twig;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Nodevo\ToolsBundle\Tools\Chaine;
 
 class PublicationExtension extends \Twig_Extension
 {
@@ -34,7 +35,7 @@ class PublicationExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function parsePublication($content)
+    public function parsePublication($content, $glossaires = false )
     {
         $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]+)\]/';
         preg_match_all($pattern, $content, $matches);
@@ -105,13 +106,82 @@ class PublicationExtension extends \Twig_Extension
                         $content = str_replace($pattern, $replacement, $content);
                                 
                         break;
+                    case 'QUESTIONNAIRE':
+                        //cas Questionnaire
+                        $questionnaire  = $this->getManagerQuestionnaire()->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
+                        if($questionnaire)
+                        {
+                            $label       = $matches[3][$key] ? $matches[3][$key] : $questionnaire->getNom();
+                            $replacement = '<a href="/questionnaire/edit/'. $questionnaire->getId() . '" '.$target.'>' . $label . '</a>';
+                        }
+                        else
+                        {
+                            $replacement = "<a href=\"javascript:alert('Ce questionnaire n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
+                        }
+
+                        $pattern = $matches[0][$key];
+                        $content = str_replace($pattern, $replacement, $content);
+                                
+                        break;
                 }
             }
+        }
+        
+        //Glossaire stuff
+        if( $glossaires ){
+            $words      = $this->getManagerGlossaire()->findAll();
+            $motsFounds = array();
+            foreach($words as $key => $word){
+                if( $word->getEtat()->getId() == 3 && in_array( trim(htmlentities($word->getMot())), $glossaires) )
+                    $motsFounds[ trim(htmlentities($word->getMot())) ] = array('intitule' => $word->getIntitule(), 'sensitive' => $word->isSensitive() );
+            }
+
+            //tri des éléments les plus longs aux plus petits
+            array_multisort(
+                array_map(create_function('$v', 'return strlen($v);'), array_keys($motsFounds)), SORT_DESC, 
+                $motsFounds
+            );
+            
+            foreach($motsFounds as $mot => $data ){
+                //search word in content
+                $pattern = '/[\;\<\>\,\"\(\)\'\& ]{1,1}'.$mot.'[\;\<\>\,\"\(\)\'\& ]{1,1}/';
+                if( !$data['sensitive'] )
+                    $pattern .= 'i';
+
+                preg_match_all($pattern, $content, $matches);
+                
+                //when founded
+                if( $matches[0] ){
+                    //prepare Replacement stuff
+                    $tool = new Chaine( html_entity_decode($mot) );
+
+                    //iterate over matches
+                    foreach($matches[0] as $match)
+                    {
+                        $html    = '<abbr title="¬' . ($data['intitule'] ? $data['intitule'] : substr($match, 1, -1) ) . '¬" >¬'. substr($match, 1, -1) . '¬ <a target="_blank" href="/glossaire#¬'. $tool->minifie() .'¬" ><i class="fa fa-info-circle"></i></a></abbr>';
+                        $html    = substr($match, 0, 1) . $html . substr($match, -1);
+                        $content = str_replace($match, $html, $content);
+                    }
+                }
+            }
+
+            $content = str_replace('¬', '', $content);
         }
         
         return $content;
     }
 
+    /**
+     * Retourne le manager glossaire
+     *
+     * @return GlossaireManager
+     */
+    private function getManagerGlossaire()
+    {
+        return $this->container->get('hopitalnumerique_glossaire.manager.glossaire'); 
+    }
+    
     /**
      * Retourne le manager contenu
      *
@@ -140,6 +210,16 @@ class PublicationExtension extends \Twig_Extension
     private function getManagerOutil()
     {
         return $this->container->get('hopitalnumerique_autodiag.manager.outil');
+    }
+
+    /**
+     * Retourne le manager questionnaire
+     *
+     * @return QuestionnaireManager
+     */
+    private function getManagerQuestionnaire()
+    {
+        return $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire');
     }
 
     /**

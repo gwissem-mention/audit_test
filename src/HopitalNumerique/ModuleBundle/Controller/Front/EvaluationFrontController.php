@@ -79,15 +79,15 @@ class EvaluationFrontController extends Controller
                 $arrayParamKey = explode('_', $key);
 
                 //Le tableau de arrayParamKey : 0 => type du champ - 1 => Id de la question - 2+=> alias du champ
-                $typeParam  = isset($arrayParamKey) && key_exists(0, $arrayParamKey)  ? $arrayParamKey[0] : '';
-                $idQuestion = isset($arrayParamKey) && key_exists(1, $arrayParamKey)  ? $arrayParamKey[1] : 0;
+                $typeParam  = isset($arrayParamKey) && array_key_exists(0, $arrayParamKey)  ? $arrayParamKey[0] : '';
+                $idQuestion = isset($arrayParamKey) && array_key_exists(1, $arrayParamKey)  ? $arrayParamKey[1] : 0;
 
                 //Si l'id de la question n'a pas été récupéré alors on ne sauvegarde pas la question (exemple avec le cas particulier du token du formulaire)
                 if(0 === $idQuestion || '' === $idQuestion || '_token' === $key)
                     continue;
 
                 //récupération de la réponse courante
-                $reponse = key_exists($idQuestion, $reponses) ? $reponses[$idQuestion] : null;    
+                $reponse = array_key_exists($idQuestion, $reponses) ? $reponses[$idQuestion] : null;    
 
                 //Mode ajout
                 if(is_null($reponse))

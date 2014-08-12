@@ -73,16 +73,18 @@
                 {% set formName = outil.alias %}
                 {% import _self as mySelf %}
                 <form action="{{path('hopitalnumerique_autodiag_front_save', {'id':outil.id})}}" id="wizard" class="form-horizontal" method="POST">
+                    <textarea name="remarque" id="remarque" rows="5" placeholder="Commentaires (nom des participants, etc.)" >{{remarque}}</textarea>
                     {% for chapitre in chapitres %}
                         {% set parent = chapitre['parent'] %}
-
                         {# Build step #}
                         <fieldset title="<p>{% if parent.code != '' %}{{parent.code ~ '. '}}{% endif %}{{parent.title}}</p>" >
                             {% if reponses %}
                                 <div onclick="emptyChapter(this);" class="emptyChapter btn btn-default btn-sm pull-right" title="Vider le chapitre"><i class="fa fa-trash-o"></i></div>
                             {% endif %}
                             <div onclick="chapterNonConcerne(this);" class="chapitreNonConcerne btn btn-default btn-sm pull-right" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></div>
+                            <h2 class="prev">{{parent.intro}}</h2>
                             <h2>{% if parent.code != '' %}{{parent.code ~ '. '}}{% endif %}{{parent.title}}</h2>
+                            <p class="text-muted level1">{{parent.desc}}</p>
 
                             <hr>
 
@@ -100,8 +102,10 @@
                             {% if chapitre['childs']|length > 0 %}
                                 <div class="sous-chapitre">
                                     {% for child in chapitre['childs'] %}
+                                        <h3 class="prev">{{child.intro}}</h3>
                                         <h3>{% if child.code != '' %}{{child.code ~ '. '}}{% endif %}{{child.title}} - <span onclick="chapterNonConcerne(this, true);" class="chapitreNonConcerne" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></span></h3>
-                                        
+                                        <p class="text-muted level2">{{child.desc}}</p>
+
                                         <hr>
                                         
                                         <div class="childs">
@@ -121,6 +125,7 @@
                     {% endfor %}
                     <input type="hidden" name="action" id="action" value="" />
                     <input type="hidden" name="remplissage" id="remplissage" value="0" />
+                    <input type="hidden" name="name-resultat" id="name-resultat" value="" />
                 </form>
 
                 <div class="saveBtns">
@@ -133,7 +138,6 @@
             <div class="clearfix"></div>
         </div>
     </div>
-
 {% endblock %}
 
 {% macro buildQuestion(question, reponse, formName) %}
@@ -143,6 +147,9 @@
 
     {# Build form group #}
     <div class="form-group">
+        <div class="col-md-12">
+            <p class="text-muted">{{question.intro}}</p>
+        </div>
         <label for="{{questionName}}" class="col-md-7 col-sm-12">
             {% if question.code != '' %}{{question.code ~ '. '}}{% endif %}{{question.texte}}
             {% if question.infoBulle %}<span class="badge badge-primary" title="{{question.infoBulle}}" >?</span>{% endif %}
@@ -171,7 +178,7 @@
                         <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] == datas[0] %}{% set isChecked = true %}checked="checked"{% endif %} />{{datas[1]|capitalize}}</label></div>
                     {% endfor %}
                     <div class="hide">
-                        <div class="radio block"><input type="radio" value="" name="{{questionName}}" id="{{questionId}}" {% if isChecked == false %}checked="checked"{% endif %} /></div>
+                        <div class="radio block"><input type="radio" value="" class="hiddenRadio" name="{{questionName}}" id="{{questionId}}" {% if isChecked == false %}checked="checked"{% endif %} /></div>
                     </div>
                     <div class="clearfix"></div>
                 </div>

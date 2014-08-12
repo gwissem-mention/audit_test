@@ -360,34 +360,21 @@
                             </div>
 
                             <div class="tab-pane" id="productions">
-                                <div class="sous_options">
-                                    <div class="btn-toolbar">
-                                        <a href="{{path('hopitalnumerique_objet_objet_addLink', {'id':objet.id})}}" class="addProd fancy fancybox.ajax btn btn-default pull-right" title="Ajouter une production liée"><i class="fa fa-plus"></i></a>
-                                    </div>
-                                </div>
+                                <a href="{{path('hopitalnumerique_objet_objet_addLink', {'id':objet.id})}}" class="addProd fancy fancybox.ajax btn btn-default pull-right" title="Ajouter une production liée"><i class="fa fa-plus"></i></a>
 
                                 {# Liste des prod maitrisées #}
                                 <fieldset>
-                                    <table id="productions" class="table table-hover table-bordered">
-                                        <thead>
-                                            <th>Titre</th>
-                                            <th width="50px">Actions</th>
-                                        </thead>
-                                        <tbody>
-                                            {% for one in objet.objets %}
-                                                <tr>
-                                                    <td>{{one.titre}}</td>
-                                                    <td>
-                                                        <div title="Supprimer" onclick='deleteWithConfirm("{{ path('hopitalnumerique_objet_objet_deleteLink', { 'pointDur':objet.id, 'id': one.id }) }}");' class="btn btn-danger"><i class="fa fa-trash-o"></i></div>
-                                                    </td>
-                                                </tr>
-                                            {% else %}
-                                                <tr>
-                                                    <td colspan="2" class="text-center">- Aucunes productions liées -</td>
-                                                </tr>
+                                    <legend>Productions liées</legend>
+
+                                    <p class="designForBlank" style="{% if productions|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour lier une production.</p>
+                                    <div class="dd" id="productions-nestable">
+                                        <ol class="dd-list">
+                                            {% import _self as mySelf %}
+                                            {% for production in productions %}
+                                                {{ mySelf.buildProductionListe(production, objet.id) }}
                                             {% endfor %}
-                                        </tbody>
-                                    </table>
+                                        </ol>
+                                    </div>
                                 </fieldset>
                             </div>
                         {% endif %}
@@ -398,6 +385,7 @@
             {% if objet.id %}
                 <input type="hidden" id="add-contenu-url" value="{{path('hopitalnumerique_objet_contenu_add', {'id':objet.id})}}" />
                 <input type="hidden" id="reorder-objet-url" value="{{path('hopitalnumerique_objet_contenu_reorder')}}" />
+                <input type="hidden" id="reorder-prods-url" value="{{path('hopitalnumerique_objet_objet_reorder', {'id':objet.id})}}" />
                 <input type="hidden" id="objet-id" value="{{objet.id}}" />
                 <input type="hidden" id="save-references-objet-url" value="{{path('hopitalnumerique_objet_reference_objet_save',{'id':objet.id})}}" />
                 <input type="hidden" id="parse-upload-url" value="{{path('hopitalnumerique_objet_contenu_uploadparse',{'id':objet.id})}}" />
@@ -406,6 +394,7 @@
             <input type="hidden" id="toRef" value="{{toRef}}" />
             <input type="hidden" id="getObjets" value="{{path('hopitalnumerique_objet_objet_getObjets')}}" />
             <input type="hidden" id="getOutils" value="{{path('hopitalnumerique_autodiag_get_outils')}}" />
+            <input type="hidden" id="getQuestionnaires" value="{{path('hopitalnumerique_questionnaire_get_questionnaires')}}" />
             <input type="hidden" id="objet-file-url" value="{{path('hopitalnumerique_objet_objet_isFileExist')}}" />
             <input type="hidden" id="objet-addobjet-url" value="{{path('hopitalnumerique_objet_objet_add')}}" />
             <input type="hidden" id="objet-addarticle-url" value="{{path('hopitalnumerique_objet_objet_add', {'type':2})}}" />
@@ -436,3 +425,18 @@
         {% endif %}
     </li>
 {% endmacro %}
+
+{% macro buildProductionListe(production, objetId) %}
+    <li class="dd-item dd3-item" data-id="{{production.brut}}" id="prod-{{production.id}}" >
+        <div class="dd-handle dd3-handle"></div>
+        <div class="dd3-content">
+            {{production.titre}}
+        </div>
+        <div class="dd3-actions">
+            <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_objet_objet_deleteLink', { 'pointDur':objetId, 'id': production.id, 'obj': production.isObjet }) }}");' class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+        </div>
+    </li>
+{% endmacro %}
+
+
+

@@ -1,0 +1,22 @@
+parameters:
+parameters:
+    hopitalnumerique_glossaire.manager.glossaire.class: HopitalNumerique\GlossaireBundle\Manager\GlossaireManager
+    hopitalnumerique_glossaire.grid.glossaire.class: HopitalNumerique\GlossaireBundle\Grid\GlossaireGrid
+    hopitalnumerique_glossaire.form.glossaire.class: HopitalNumerique\GlossaireBundle\Form\GlossaireType
+
+services:
+    hopitalnumerique_glossaire.manager.glossaire:
+        class: %hopitalnumerique_glossaire.manager.glossaire.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_glossaire.grid.glossaire:
+        class: %hopitalnumerique_glossaire.grid.glossaire.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_glossaire.form.glossaire:
+        class: %hopitalnumerique_glossaire.form.glossaire.class%
+        arguments: ["@hopitalnumerique_glossaire.manager.glossaire", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_glossaire_glossaire }

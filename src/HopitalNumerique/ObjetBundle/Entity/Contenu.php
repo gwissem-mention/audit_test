@@ -111,6 +111,13 @@ class Contenu
     protected $nbVue;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="con_glossaires", type="array", options = {"comment" = "Mots du glossaire liés au contenu"})
+     */
+    private $glossaires;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -123,6 +130,7 @@ class Contenu
         $this->order        = 0;
         $this->nbVue        = 0;
         $this->references   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->glossaires   = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -371,6 +379,48 @@ class Contenu
     {        
         $this->consultations = $consultations;
     
+        return $this;
+    }
+
+    /**
+     * Get glossaires
+     *
+     * @return array $glossaires
+     */
+    public function getGlossaires()
+    {
+        return $this->glossaires;
+    }
+    
+    /**
+     * Set glossaires
+     *
+     * @param array $glossaires
+     */
+    public function setGlossaires(array $glossaires)
+    {
+        $this->glossaires = $glossaires;
+        return $this;
+    }
+
+    /**
+     * Remove glossaire
+     *
+     * @param string $glossaire
+     */
+    public function removeGlossaire($glossaire)
+    {
+        $this->glossaires->removeElement($glossaire);
+    }
+    
+    /**
+     * add glossaire
+     *
+     * @param string $glossaire
+     */
+    public function addGlossaire($glossaire)
+    {
+        $this->glossaires[] = $glossaire;
         return $this;
     }
 }

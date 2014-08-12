@@ -37,7 +37,7 @@ class MaitriseUser
     protected $rechercheParcoursDetails;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet",inversedBy="maitriseUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
      */
     protected $objet;

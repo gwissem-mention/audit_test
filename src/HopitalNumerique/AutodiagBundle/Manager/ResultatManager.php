@@ -54,14 +54,16 @@ class ResultatManager extends BaseManager
      *
      * @return array
      */
-    public function formateResultat( Resultat $resultat, $front = false )
+    public function formateResultat( Resultat $resultat )
     {
         //build reponses array
-        $questionsReponses = $this->buildQuestionsReponses( $resultat->getReponses() );
+        $tab                   = $this->buildQuestionsReponses( $resultat->getReponses() );
+        $questionsReponses     = $tab['front'];
+        $questionsReponsesBack = $tab['back'];
 
         //build chapitres and add previous responses
-        $parents     = array();
-        $enfants     = array();
+        $parents = array();
+        $enfants = array();
 
         //preorder chapters
         $chapitres = $this->makeChaptersOrdered( $resultat->getOutil()->getChapitres() );
@@ -76,11 +78,13 @@ class ResultatManager extends BaseManager
             $chapitre->childs   = array();
             $chapitre->noteMin  = $one->getNoteMinimale();
             $chapitre->noteOpt  = $one->getNoteOptimale();
+            $chapitre->intro    = $one->getIntro();
+            $chapitre->desc     = $one->getDesc();
             $chapitre->order    = $one->getOrder();
             $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
             //handle questions/reponses
-            $chapitre = $front ? $this->buildQuestionsForFront( $one->getQuestions(), $chapitre, $questionsReponses ) : $this->buildQuestionsForBack( $one->getQuestions(), $chapitre, $questionsReponses );
+            $chapitre = $this->buildQuestions( $one->getQuestions(), $chapitre, $questionsReponses, $questionsReponsesBack );
 
             //handle parents / enfants
             if( is_null($one->getParent()) )
@@ -89,12 +93,12 @@ class ResultatManager extends BaseManager
                 $enfants[] = $chapitre;
         }
 
-        //reformate les chapitres
+        //reformate les chapitres FRONT
         foreach($enfants as $enfant){
             $parent = $parents[ $enfant->parent ];
             $parent->childs[] = $enfant;
         }
-        
+
         return $parents;
     }
 
@@ -129,6 +133,7 @@ class ResultatManager extends BaseManager
 
         //récupère le gros tableau de questions / réponses
         $questionsReponses = $this->buildQuestionsReponses( $resultat->getReponses() );
+        $questionsReponses = $questionsReponses['front'];
 
         //get Datas for Each axes : Chapitres / Catégories
         $datasAxeChapitre   = $this->buildDatasAxeChapitre( $chapitres );
@@ -166,6 +171,46 @@ class ResultatManager extends BaseManager
 
         return $results;
     }
+
+    /**
+     * Construit l'entitée Synthèse
+     *
+     * @param  User      $user   L'utilisateur connecté
+     * @param  Outil     $outil  L'outil/l'autodiag concerné
+     * @param  Reference $statut Le statut 'validé' de la synthèse
+     * @param  string    $nom    Nom de la synthèse
+     *
+     * @return Resultat
+     */
+    public function buildSynthese( User $user, Outil $outil, $statut, $nom )
+    {
+        //create Synthese Object
+        $today    = new \DateTime();
+        $synthese = $this->createEmpty();
+
+        $synthese->setOutil( $outil );
+        $synthese->setName( $nom );
+        $synthese->setDateLastSave( $today );
+        $synthese->setDateValidation( $today );
+        $synthese->setUser( $user );
+        $synthese->setSynthese( true );
+        $synthese->setStatut( $statut );
+
+        $this->save( $synthese );
+
+        return $synthese;
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -471,28 +516,6 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Construit la liste des questions pour le backoffice
-     *
-     * @param array    $questions         Liste des questions
-     * @param StdClass $chapitre          L'objet chapitre
-     * @param array    $questionsReponses Liste des questionsréponses
-     *
-     * @return array
-     */
-    private function buildQuestionsForBack( $questions, $chapitre, $questionsReponses )
-    {
-        $results = array();
-        foreach ($questions as $question) {
-            if( isset($questionsReponses[ $question->getId() ]) )
-                $results[] = $questionsReponses[ $question->getId() ];
-        }
-
-        $chapitre->questions = $results;
-
-        return $chapitre;
-    }
-
-    /**
      * Construit la liste des questions pour le frontoffice
      *
      * @param array    $questions         Liste des questions
@@ -501,9 +524,10 @@ class ResultatManager extends BaseManager
      *
      * @return array
      */
-    private function buildQuestionsForFront( $questions, $chapitre, $questionsReponses )
+    private function buildQuestions( $questions, $chapitre, $questionsReponses, $questionsReponsesBack )
     {
         $results             = array();
+        $forBack             = array();
         $forCharts           = array();
         $noteChapitre        = 0;
         $nbQuestions         = 0;
@@ -517,7 +541,7 @@ class ResultatManager extends BaseManager
                 $one->question = $one->code != '' ? $one->code . '. ' . $one->question : $one->question;
 
                 if( $one->initialValue !== '' ){
-                    if( $one->noteMinimale !== '' and $one->initialValue <= $one->noteMinimale ){
+                    if( $one->noteMinimale !== '' && $one->initialValue <= $one->noteMinimale ){
                         $results[]     = $one;
                         $noteChapitre += $one->value;
                     }
@@ -530,10 +554,14 @@ class ResultatManager extends BaseManager
 
                 $nbQuestions++;
             }
+
+            if( isset($questionsReponsesBack[ $question->getId() ]) )
+                $forBack[] = $questionsReponsesBack[ $question->getId() ];
         }
 
         $chapitre->questions           = $results;
         $chapitre->questionsForCharts  = $forCharts;
+        $chapitre->questionsBack       = $forBack;
         $chapitre->noteChapitre        = $noteChapitre;
         $chapitre->nbQuestions         = $nbQuestions;
         $chapitre->nbQuestionsRemplies = $nbQuestionsRemplies;
@@ -550,45 +578,57 @@ class ResultatManager extends BaseManager
      */
     private function buildQuestionsReponses( $reponses )
     {
-        $results = array();
+        $results        = array();
+        $resultsForBack = array();
+
         foreach($reponses as $reponse) {
-            if( $reponse->getValue() != -1 ){
-                $rep = new \StdClass;
+            
+            $rep = new \StdClass;
 
-                //reponses values
-                $question           = $reponse->getQuestion();
-                $rep->tableValue    = $reponse->getValue();
-                $rep->remarque      = $reponse->getRemarque();
+            //reponses values
+            $question           = $reponse->getQuestion();
+            $rep->tableValue    = $reponse->getValue();
+            $rep->remarque      = $reponse->getRemarque();
 
-                //questions values
-                $rep->id            = $question->getId();
-                $rep->question      = $question->getTexte();
-                $rep->code          = $question->getCode();
-                $rep->ordreResultat = $question->getOrdreResultat();
-                $rep->noteMinimale  = $question->getNoteMinimale();
-                $rep->synthese      = $question->getSynthese();
-                $rep->ponderation   = $question->getPonderation();
-                $rep->order         = $question->getOrder();
-                $rep->type          = $question->getType()->getId();
+            //questions values
+            $rep->id            = $question->getId();
+            $rep->question      = $question->getTexte();
+            $rep->code          = $question->getCode();
+            $rep->intro         = $question->getIntro();
+            $rep->ordreResultat = $question->getOrdreResultat();
+            $rep->noteMinimale  = $question->getNoteMinimale();
+            $rep->synthese      = $question->getSynthese();
+            $rep->ponderation   = $question->getPonderation();
+            $rep->order         = $question->getOrder();
+            $rep->type          = $question->getType()->getId();
+            $rep->colored       = $question->getColored();
+            $rep->options       = explode( '<br />', nl2br( $question->getOptions() ) );
 
-                //Si != Texte, on calcul la réponse Max
-                if( $rep->type != 417 ){
-                    $rep->max = $this->calculMaxOption( $question );
+            //Si != Texte, on calcul la réponse Max
+            if( $rep->type != 417 ){
+                $tab = $this->calculMinAndMaxOption( $question );
+                $rep->max = $tab['max'];
+                $rep->min = $tab['min'];
 
-                    //on rapporte la valeur de note question sur 100
-                    $rep->value = $rep->max != 0 ? ($reponse->getValue() * 100) / $rep->max : 0;
-                }else{
-                    $rep->value = $reponse->getValue();
-                    $rep->max   = 0;
-                }
-
-                $rep->initialValue = $reponse->getValue();
-
-                $results[ $reponse->getQuestion()->getId() ] = $rep;
+                //on rapporte la valeur de note question sur 100
+                $rep->value = $rep->max != 0 ? ($reponse->getValue() * 100) / $rep->max : 0;
+            }else{
+                $rep->value = $reponse->getValue();
+                $rep->max   = 0;
+                $rep->min   = 0;
             }
+
+            $rep->initialValue = $reponse->getValue();
+
+            //pour le front, on ajoute QUE les réponses valides (! non concernés)
+            if( $reponse->getValue() != -1 )
+                $results[ $reponse->getQuestion()->getId() ] = $rep;
+
+            //On ajoute TOUTE les questions pour le back (même les non concernés)
+            $resultsForBack[ $reponse->getQuestion()->getId() ] = $rep;
         }
 
-        return $results;
+        return array( 'front' => $results, 'back' => $resultsForBack );
     }
 
     /**
@@ -598,17 +638,19 @@ class ResultatManager extends BaseManager
      *
      * @return integer
      */
-    private function calculMaxOption( $question )
+    private function calculMinAndMaxOption( $question )
     {
-        $max = 0;
-        $options  = nl2br($question->getOptions());
-        $options  = explode('<br />', $options);
+        $max     = 0;
+        $min     = null;
+        $options = nl2br($question->getOptions());
+        $options = explode('<br />', $options);
 
         foreach($options as $option){
             $tmp = explode(';', $option);
             $max = (isset($tmp[0]) && intval(trim($tmp[0])) > $max ) ? intval(trim($tmp[0])) : $max;
+            $min = ( (isset($tmp[0]) && intval(trim($tmp[0])) < $min) || is_null($min) ) ? intval(trim($tmp[0])) : $min;
         }
 
-        return $max;
+        return array('max' => $max, 'min' => $min );
     }
 }

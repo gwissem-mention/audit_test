@@ -33,7 +33,7 @@
                         {%- endif -%}
 
                         <a href="{{- path('ccdn_forum_user_topic_show', {'forumName': topic.board.category.forumName, 'topicId': topic.getId }) -}}" title="{{- topic.getTitle -}}">
-                            {{- topic.getTitle |title -}}
+                            {{- topic.getTitle -}}
                         </a>
 
                         <br>
@@ -41,7 +41,7 @@
                         {%- if topic.getFirstPost -%}
 
                             {{- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -}}
-                            {{- topic.getFirstPost.getCreatedBy -}}
+                            {{- topic.getFirstPost.getCreatedBy.getNomPrenom() -}}
 
                             &nbsp;&#183;
                             <a href="{{- path('ccdn_forum_user_topic_show', {'forumName': topic.board.category.forumName, 'topicId': topic.getId }) -}}">
@@ -65,7 +65,7 @@
                         {%- if topic.getLastPost -%}
 
                             {{- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -}}
-                            {{- topic.getLastPost.getCreatedBy -}}
+                            {{- topic.getLastPost.getCreatedBy.getNomPrenom() -}}
 
                             <br>
 

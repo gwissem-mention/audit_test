@@ -1,0 +1,16 @@
+#tableau-de-bord .gridster ul li{}
+#tableau-de-bord .gridster ul li.dragging{background: #FFF}
+#tableau-de-bord .gridster ul li .panel{ margin: 0; background: #FFF; }
+#tableau-de-bord .gridster ul li .panel .panel-heading h3.panel-title{ font-size: 16px; font-weight: normal; padding: 0; margin: 0; background: none; display: inline-block; width: 95%}
+#tableau-de-bord .gridster ul li .panel .panel-heading h3.panel-title i{ margin-right: 10px }
+#tableau-de-bord .gridster ul li .panel .panel-heading .options{display: inline-block; text-align: right; cursor: pointer}
+#tableau-de-bord .gridster ul li .panel .panel-body{overflow: hidden; overflow-y:auto; height: 132px; background: #FFF; margin: 15px 0; padding: 0 15px 15px 15px}
+#tableau-de-bord .gridster ul li .panel .panel-body div.message { border-bottom: 1px solid #F4F4F4; margin-bottom: 10px}
+#tableau-de-bord .gridster ul li .panel .panel-body div.message p.titre{text-decoration: underline; margin: 0;}
+#tableau-de-bord .gridster ul li .panel .panel-body h4{font-size: 16px}
+#tableau-de-bord .gridster ul li .panel .panel-body ol{list-style: none; padding-left: 20px;}
+
+@media screen and (max-width: 1196px) {
+    #tableau-de-bord .gridster ul li{margin-bottom: 20px; display: block; width: 100%; position: relative;}
+    #tableau-de-bord .gridster ul li .panel .panel-heading .options i{display: none}
+}

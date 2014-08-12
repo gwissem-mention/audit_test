@@ -13,6 +13,8 @@ class CronController extends Controller
     {
         if ($id == 'FHFURJYIHOLPMFKVIDUESQGEUDRCTUFT')
         {
+            ini_set('max_execution_time', 0);
+
             $context = $this->container->get('router')->getContext();
             $urlSite = $context->getScheme() . '://' . $context->getHost().$context->getBaseUrl();
 
@@ -30,7 +32,8 @@ class CronController extends Controller
                 foreach($requetes as &$requete)
                 {
                     //get objets and format them
-                    $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $requete->getRefs(), $role );
+                    $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+                    $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $requete->getRefs(), $role, $refsPonderees );
                     $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
 
                     //prepare somes vars
@@ -43,7 +46,7 @@ class CronController extends Controller
                     foreach($objets as $objet)
                     {
                         //si l'objet est nouveau : la requete doit etre taggué nouvelle
-                        if( $objet['new'] === true && !$requeteNew )
+                        if( isset($objet['new']) && $objet['new'] === true && !$requeteNew )
                         {
                             $requeteNew = true;
                             
@@ -56,7 +59,7 @@ class CronController extends Controller
                         }
 
                         //si l'objet est mis à jour : la requete doit etre taggué mise à jour
-                        if( $objet['updated'] === true && !$requeteUpdated )
+                        if( isset($objet['updated']) && $objet['updated'] === true && !$requeteUpdated )
                         {
                             $requeteUpdated = true;
 

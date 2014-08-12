@@ -1,0 +1,131 @@
+<h3 class="pull-left">{{question.libelle}}</h3>
+<div class="options pull-right">
+    <span class="designForBlank" style="margin-right:10px;">Cliquez sur le bouton '√' pour sauvegarder vos changements.</span>
+    <div onclick="saveQuestion('{{path('hopitalnumerique_questionnaire_question_save', {'id':question.id})}}' );" class="btn btn-success saveQuestion" title="Sauvegarder"><i class="fa fa-check"></i></div>
+</div>
+<div class="clearfix"></div>
+
+<div id="designForForm">
+    <form id="hopitalnumerique_reponse" novalidate="novalidate" class="form-horizontal toValidate" action="" method="post" name="hopitalnumerique_reponse">
+        <div class="col-md-12">
+            <label class="control-label required" for="libelle_question">
+                Libellé
+                <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+            </label>
+        </div>
+        <div class="col-md-12">
+            <input type="text" id="libelle_question" name="libelle" required="required" maxlength="255" class="validate[required,minSize[1],maxSize[255]] form-control" value="{{question.libelle}}"/>
+        </div>
+        <div class="bloc-obligatoire">
+            <div class="col-md-12">
+                <label class="control-label" for="questionObligatoire">
+                    La question sera obligatoire pour la validation du questionnaire
+                </label>
+            </div>
+            <div class="col-md-12">
+                <div class="checkbox">
+                    <input type="checkbox" {% if question.obligatoire %}checked="checked"{% endif %} class="checkbox form-control" name="question_obligatoire" id="questionObligatoire">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="control-label required" for="typeQuestion">
+                Le type de la question
+                <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+            </label>
+        </div>
+        <div class="col-md-12">
+            <div class="blocQuestion">
+                <select name="typeQuestionSelect" id="typeQuestion" class="form-control typeQuestion col-md-12 validate[required]">
+                    <option value=""> - </option>
+                    {% for typeQuestion in typeQuestions %}
+                        {% if typeQuestion.id != 3 and typeQuestion.id != 7 %}
+                            <option value="{{typeQuestion.id}}" >{{typeQuestion.nom}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div id="zoneReferenceTypeQuestion">
+            <div class="col-md-12">
+                <label class="control-label required" for="typeQuestion_reference">
+                    La référence sur laquelle seront récupérées les réponses
+                </label>
+            </div>
+            <div class="col-md-12">
+                <select name="typeQuestionSelect_reference" id="typeQuestion_reference" class="form-control typeQuestion col-md-12">
+                    <option value=""> - </option>
+                    {% for reference in references %}
+                        <option value="{{reference.code}}" >{{reference.code}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <input type="hidden" name="questionId" id="idQuestion" value="{{question.id}}" />
+        <input type="hidden" name="typeQuestionId" id="idTypeQuestion" value="{% if question.typeQuestion is defined and question.typeQuestion is not null %}{{question.typeQuestion.id}}{% endif %}" />
+        <input type="hidden" name="filtreReferenceParamTri" id="refParamTri" value="{{question.referenceParamTri}}" />
+        <div class="clearfix"></div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        //Mise en place du validator JS
+        if( $('form.toValidate').length > 0 )
+            $('form.toValidate').validationEngine();
+
+        var idTypeQuestion = $("#idTypeQuestion").val();
+
+        //Set la valeur de la liste déroulante du type de question que l'on vient de charger
+        $('#typeQuestion').val(idTypeQuestion);
+
+        //Cache la liste déroulante du choix de la référence en fonction du type, sinon l'affichage avec le code lié
+        if(idTypeQuestion == 5 || idTypeQuestion == 8 || idTypeQuestion == 10 || idTypeQuestion == 11)
+        {
+            //Set le code ref
+            $('#typeQuestion_reference').val($('#refParamTri').val());
+
+            if(idTypeQuestion == 10  || idTypeQuestion == 11)
+            {
+                $('#questionObligatoire').removeAttr( "checked" );
+                $('.bloc-obligatoire').hide();
+            }
+        }
+        else
+        {
+            //Cache la liste des codes refs
+            $('#zoneReferenceTypeQuestion').hide();
+        }
+
+        //
+        $("#typeQuestion").change(function() {
+            switch($(this).val())
+            {
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '6':
+                    $('#typeQuestion_reference').val('');
+                    $('#zoneReferenceTypeQuestion').hide();
+                    $('.bloc-obligatoire').show();
+                    break;
+                //Référence unique
+                case '5':
+                case '8':
+                    $('#zoneReferenceTypeQuestion').show();
+                    $('.bloc-obligatoire').show();
+                    break;
+                //Liste déroulante à choix multiple
+                case '11':
+                case '10':
+                    $('#questionObligatoire').removeAttr( "checked" );
+                    $('.bloc-obligatoire').hide();
+                    $('#zoneReferenceTypeQuestion').show();
+                    break;
+            }
+
+        });
+    });
+</script>

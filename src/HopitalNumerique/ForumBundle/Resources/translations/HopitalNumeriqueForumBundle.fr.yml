@@ -174,7 +174,7 @@ board:
     reply-count-th:                    "Réponses"
     topic-count-th:                    "Fils de discussion"
     post-count-th:                     "Messages"
-    last-post-th:                      "Derniers messages"
+    last-post-th:                      "Dernier message"
     announcements-th:                  "Annonces"
     label:                             "Thème : "
     name-label:                        "Nom : "
