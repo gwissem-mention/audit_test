@@ -923,48 +923,6 @@ class Objet
         $this->autodiags[] = $autodiag;
         return $this;
     }
-
-    /**
-     * Get objets
-     *
-     * @return array $objets
-     */
-    public function getObjets()
-    {
-        return $this->objets;
-    }
-    
-    /**
-     * Set objets
-     *
-     * @param array $objets
-     */
-    public function setObjets(array $objets)
-    {
-        $this->objets = $objets;
-        return $this;
-    }
-
-    /**
-     * Remove objet
-     *
-     * @param string $objet
-     */
-    public function removeObjet($objet)
-    {
-        $this->objets->removeElement($objet);
-    }
-    
-    /**
-     * add objet
-     *
-     * @param string $objet
-     */
-    public function addObjet($objet)
-    {
-        $this->objets[] = $objet;
-        return $this;
-    }
     
     /**
      * Get glossaires
