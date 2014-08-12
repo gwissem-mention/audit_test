@@ -14,15 +14,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class MotDePasseType extends AbstractType
 {
-    private $_constraints = array();
-    private $_securityContext;
-
-    public function __construct($manager, $validator, $securityContext)
-    {
-        $this->_constraints = $manager->getConstraints( $validator );
-        $this->_securityContext = $securityContext;
-    }
-
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(

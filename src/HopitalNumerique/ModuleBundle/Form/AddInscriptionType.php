@@ -13,14 +13,7 @@ use Doctrine\ORM\EntityRepository;
  * @copyright Nodevo
  */
 class AddInscriptionType extends AbstractType
-{
-    private $_constraints = array();
-    
-    public function __construct($manager, $validator)
-    {
-        $this->_constraints = $manager->getConstraints( $validator );
-    }
-    
+{    
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $roleNames = (isset($options['label_attr']['roleNames']) && !is_null($options['label_attr']['roleNames'])) ? $options['label_attr']['roleNames'] : array();

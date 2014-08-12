@@ -81,7 +81,7 @@ class ItemType extends AbstractType
                 'empty_value' => ' - ',
                 'required'    => false,
                 'label'       => 'Fils de l\'item',
-                'query_builder' => function(EntityRepository $er) use ($options) {
+                'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('item')
                               ->andWhere('item.display = 1')
                               ->orderBy('item.name');

@@ -11,24 +11,16 @@ class QuestionnaireType extends AbstractType
 {
     private $_readOnly = false;
     private $_managerReponse;
-    private $_managerQuestion;
     private $_managerQuestionnaire;
-    private $_managerInterventionDemande;
-    private $_constraints = array();
 
     /**
      * @param HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager       $managerReponse
-     * @param HopitalNumerique\QuestionnaireBundle\Manager\QuestionManager      $managerQuestion
      * @param HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager $managerQuestionnaire
-     * @param Validator $validator
      */
-    public function __construct($managerReponse, $managerQuestion, $managerQuestionnaire, $validator, $managerInterventionDemande)
+    public function __construct($managerReponse, $managerQuestionnaire)
     {
-        $this->_managerReponse             = $managerReponse;
-        $this->_managerQuestion            = $managerQuestion;
-        $this->_managerQuestionnaire       = $managerQuestionnaire;
-        $this->_managerInterventionDemande = $managerInterventionDemande;
-        $this->_constraints                = $managerQuestionnaire->getConstraints( $validator );
+        $this->_managerReponse       = $managerReponse;
+        $this->_managerQuestionnaire = $managerQuestionnaire;
     }
 
     /**

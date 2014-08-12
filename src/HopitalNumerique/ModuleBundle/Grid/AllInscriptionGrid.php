@@ -2,11 +2,7 @@
 
 namespace HopitalNumerique\ModuleBundle\Grid;
 
-use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
 use Nodevo\GridBundle\Grid\Column;
-use Nodevo\GridBundle\Grid\Action;
-
 use HopitalNumerique\ModuleBundle\Grid\BaseInscriptionGrid;
 
 /**
