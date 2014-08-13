@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1f09d97f6e857cf2cffe94d359c7d9b7",
+    "hash": "400389084183d2ef40bd247aa9845239",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -1669,12 +1669,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpSnappyBundle.git",
-                "reference": "0a30395f3379f29f2572b5b478ab6be3059a0468"
+                "reference": "0a30395"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/KnpLabs/KnpSnappyBundle/zipball/0a30395f3379f29f2572b5b478ab6be3059a0468",
-                "reference": "0a30395f3379f29f2572b5b478ab6be3059a0468",
+                "reference": "0a30395",
                 "shasum": ""
             },
             "require": {
