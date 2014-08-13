@@ -3,8 +3,7 @@
 namespace HopitalNumerique\ModuleBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
-use Nodevo\GridBundle\Grid\Column;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
@@ -13,7 +12,7 @@ use Nodevo\GridBundle\Grid\Action;
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
-class BaseInscriptionGrid extends Grid implements IGrid
+class BaseInscriptionGrid extends Grid implements GridInterface
 {
     /**
      * Définie la config spécifique au grid Session.

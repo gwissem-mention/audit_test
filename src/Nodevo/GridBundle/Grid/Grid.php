@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\Criteria;
  *
  * @author Quentin SOMAZZI <qsomazzi@nodevo.com>
  */
-abstract class Grid implements IGrid
+abstract class Grid implements GridInterface
 {
     // Constantes de class
     const SOURCE_TYPE_ENTITY   = 1;

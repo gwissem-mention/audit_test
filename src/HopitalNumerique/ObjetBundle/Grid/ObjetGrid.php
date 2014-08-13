@@ -3,14 +3,14 @@
 namespace HopitalNumerique\ObjetBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du grid Objet.
  */
-class ObjetGrid extends Grid implements IGrid
+class ObjetGrid extends Grid implements GridInterface
 {
     /**
      * Définie la config spécifique au grid Objet.
@@ -69,7 +69,7 @@ class ObjetGrid extends Grid implements IGrid
         $referencesButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_objet_objet_edit');
         $referencesButton->setRouteParameters( array('id', 'infra'=>0, 'toRef'=>1) );
         $referencesButton->setAttributes( array('class'=>'btn btn-primary fa fa-cog','title' => 'Accès direct aux références') );
-        $referencesButton->manipulateRender(function($action, $row) {
+        $referencesButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
             return !$row->getField('isArticle') ? $action : null;
         });
         $this->addActionButton( $referencesButton );
@@ -81,7 +81,7 @@ class ObjetGrid extends Grid implements IGrid
         $unlockButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_objet_objet_cancel');
         $unlockButton->setRouteParameters( array('id', 'message'=>true) );
         $unlockButton->setAttributes( array('class'=>'btn btn-warning fa fa-unlock','title' => 'Dévérouiller') );
-        $unlockButton->manipulateRender(function($action, $row) {
+        $unlockButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
             return $row->getField('lock') ? $action : null;
         });
         $this->addActionButton( $unlockButton );

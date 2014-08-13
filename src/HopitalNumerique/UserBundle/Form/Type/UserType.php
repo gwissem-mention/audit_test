@@ -207,11 +207,11 @@ class UserType extends AbstractType
                         'label'       => 'Département',
                         'empty_value' => ' - ',
                         'attr'        => array(),
-                        'query_builder' => function(EntityRepository $er) use($options) {
+                        'query_builder' => function(EntityRepository $er) {
                             return $er->createQueryBuilder('ref')
-                            ->where('ref.code = :etat')
-                            ->setParameter('etat', 'DEPARTEMENT')
-                            ->orderBy('ref.libelle', 'ASC');
+                                ->where('ref.code = :etat')
+                                ->setParameter('etat', 'DEPARTEMENT')
+                                ->orderBy('ref.libelle', 'ASC');
                         }
                 ));
             }

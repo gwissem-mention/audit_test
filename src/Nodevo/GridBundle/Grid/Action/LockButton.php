@@ -11,7 +11,7 @@ class LockButton extends RowAction
 
         $this->setRouteParameters( array('id') );
 
-        $this->manipulateRender(function($action, $row) {
+        $this->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
             if( $row->getField( 'lock') )
                 $action->setAttributes( array('class'=>'btn btn-warning fa fa-lock', 'title' => 'Vérouiller') );
             else

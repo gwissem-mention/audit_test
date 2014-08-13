@@ -3,14 +3,14 @@
 namespace HopitalNumerique\PaiementBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du grid Facture.
  */
-class FactureGrid extends Grid implements IGrid
+class FactureGrid extends Grid implements GridInterface
 {
     /**
      * Définie la config spécifique au grid Facture.
@@ -56,7 +56,7 @@ class FactureGrid extends Grid implements IGrid
         $payeButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_paiement_facture_paye');
         $payeButton->setRouteParameters( array('id') );    
         $payeButton->setAttributes( array('class'=>'btn btn-green fa fa-money','title' => 'Payer') );
-        $payeButton->manipulateRender(function($action, $row) {
+        $payeButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
             return !$row->getField('payee') ? $action : null;
         });
         $this->addActionButton( $payeButton );

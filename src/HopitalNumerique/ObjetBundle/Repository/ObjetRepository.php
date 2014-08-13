@@ -132,4 +132,19 @@ class ObjetRepository extends EntityRepository
         
         return $qb;
     }
+
+    /**
+     * Retourne l'ensemble des productions actives
+     */
+    public function getObjetsForDashboard()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('obj.id, obj.nbVue, obj.titre, refType.id as typeId, parentType.id as parentId, refEtat.id as etat, obj.dateCreation, obj.dateDebutPublication, obj.dateFinPublication')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->innerJoin('obj.types','refType')
+            ->leftJoin('obj.etat','refEtat')
+            ->leftJoin('refType.parent','parentType');
+        
+        return $qb;
+    }
 }

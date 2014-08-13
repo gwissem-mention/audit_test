@@ -2,13 +2,9 @@
 namespace HopitalNumerique\ForumBundle\Component\Dispatcher\Listener;
 
 use CCDNForum\ForumBundle\Component\Dispatcher\Listener\SubscriberListener as CCDNSubscriberListener;
+use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicEvent;
 
 use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
-use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicEvent;
 
 use Nodevo\MailBundle\Manager\MailManager;
 

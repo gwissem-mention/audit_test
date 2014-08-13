@@ -6,8 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use HopitalNumerique\UserBundle\Entity\User as HopiUser;
-use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire as HopiQuestionnaire;
 use HopitalNumerique\QuestionnaireBundle\Entity\Question as HopiQuestion;
 
 use Nodevo\ToolsBundle\Tools\Chaine;

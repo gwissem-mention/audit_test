@@ -4,7 +4,7 @@ namespace {{ namespace }}\Grid;
 
 {% block use_statements %}
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 {% endblock use_statements %}
@@ -15,7 +15,7 @@ use Nodevo\GridBundle\Grid\Action;
 {% endblock phpdoc_class_header %}
  */
 {% block class_definition %}
-class {{ entity_class }}Grid extends Grid implements IGrid
+class {{ entity_class }}Grid extends Grid implements GridInterface
 {% endblock class_definition %}
 {
 {% block class_body %}

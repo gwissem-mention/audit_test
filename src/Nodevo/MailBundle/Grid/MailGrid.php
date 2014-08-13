@@ -3,14 +3,14 @@
 namespace Nodevo\MailBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du grid Mail.
  */
-class MailGrid extends Grid implements IGrid
+class MailGrid extends Grid implements GridInterface
 {
     private $_allowDelete;
 

@@ -2,14 +2,14 @@
 namespace HopitalNumerique\UserBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du Grid User
  */
-class UserGrid extends Grid implements IGrid
+class UserGrid extends Grid implements GridInterface
 {
     private $_arrayRolesDateContractualisation = array(
     	   'ROLE_AMBASSADEUR_7',
@@ -68,7 +68,7 @@ class UserGrid extends Grid implements IGrid
         $contractualisationColumn->setAlign('center');
         //Affichage de l'icone uniquement si le role fait parti de $arrayRolesDateContractualisation
         $contractualisationColumn->manipulateRenderCell(
-            function($value, $row) use ($arrayRolesDateContractualisation) {
+            function($value, \APY\DataGridBundle\Grid\Row $row) use ($arrayRolesDateContractualisation) {
                 $roles = $row->getField('roles');
                 return in_array( reset($roles), $arrayRolesDateContractualisation, true ) ? ($value ? 'true' : 'false') : null;
             }

@@ -79,17 +79,23 @@ class InscriptionRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getForFactures( $user )
+    public function getForFactures( $user = null )
     {
-        return $this->_em->createQueryBuilder()
+        $qb = $this->_em->createQueryBuilder()
                          ->select('insc')
                          ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
                          ->leftJoin('insc.etatRemboursement', 'refRemboursement')
                          ->leftJoin('insc.etatEvaluation', 'refEvaluation')
                          ->leftJoin('insc.etatParticipation', 'refParticipation')
                          ->andWhere('refParticipation.id = 411','insc.facture IS NULL')
-                         ->andWhere('insc.user = :user', 'refEvaluation.id = 29')
-                         ->setParameter('user', $user);
+                         ->andWhere('refEvaluation.id = 29');
+
+        if( !is_null($user) ) {
+            $qb->andWhere('insc.user = :user')
+               ->setParameter('user', $user);
+        }
+
+        return $qb;
     }
 
     /**

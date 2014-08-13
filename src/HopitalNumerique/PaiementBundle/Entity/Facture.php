@@ -37,6 +37,13 @@ class Facture
     private $dateCreation;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fac_date_paiement", type="datetime", options = {"comment" = "Date de paiement de la facture"}, nullable=true)
+     */
+    private $datePaiement;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
      *
@@ -135,6 +142,29 @@ class Facture
     public function getDateCreation()
     {
         return $this->dateCreation;
+    }
+
+    /**
+     * Set datePaiement
+     *
+     * @param \DateTime $datePaiement
+     * @return Facture
+     */
+    public function setDatePaiement($datePaiement)
+    {
+        $this->datePaiement = $datePaiement;
+
+        return $this;
+    }
+
+    /**
+     * Get datePaiement
+     *
+     * @return \DateTime 
+     */
+    public function getDatePaiement()
+    {
+        return $this->datePaiement;
     }
 
     /**

@@ -53,3 +53,8 @@ HopitalNumeriqueForumBundle-User-Post:
 HopitalNumeriqueForumBundle-User-Subscription:
     resource: "@HopitalNumeriqueForumBundle/Resources/config/routing/user-subscription.yml"
     prefix: /forum/{forumName}/subscription
+
+#CRON
+hopitalnumerique_forum_cron:
+    pattern:  /cron-forum/{id}
+    defaults: { _controller: HopitalNumeriqueForumBundle:Cron:cron}

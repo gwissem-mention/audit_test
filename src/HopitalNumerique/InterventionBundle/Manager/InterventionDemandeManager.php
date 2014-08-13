@@ -12,7 +12,6 @@ use Doctrine\ORM\EntityManager;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager;
-use HopitalNumerique\UserBundle\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
@@ -32,10 +31,6 @@ class InterventionDemandeManager extends BaseManager
      * @var \Symfony\Bundle\FrameworkBundle\Routing\Router Router de l'application
      */
     private $router;
-    /**
-     * @var \HopitalNumerique\UserBundle\Manager\UserManager Le manager de l'entité User
-     */
-    private $userManager;
     /**
      * @var \HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager Le manager de l'entité InterventionEtat
      */
@@ -65,18 +60,16 @@ class InterventionDemandeManager extends BaseManager
      * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
      * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
      * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router Router de l'application
-     * @param \HopitalNumerique\UserBundle\Manager\UserManager $userManager Le manager de l'entité User
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager $interventionEtatManager Le manager de l'entité InterventionEtat
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionRegroupementManager $interventionRegroupementManager Le manager de l'entité InterventionRegroupement
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager $interventionCourrielManager Le manager de l'entité InterventionCourriel
      * @return void
      */
-    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, UserManager $userManager, InterventionEtatManager $interventionEtatManager, InterventionEvaluationEtatManager $interventionEvaluationEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager)
+    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, InterventionEtatManager $interventionEtatManager, InterventionEvaluationEtatManager $interventionEvaluationEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager)
     {
         parent::__construct($entityManager);
         $this->securityContext                   = $securityContext;
         $this->router                            = $router;
-        $this->userManager                       = $userManager;
         $this->interventionEtatManager           = $interventionEtatManager;
         $this->interventionEvaluationEtatManager = $interventionEvaluationEtatManager;
         $this->interventionRegroupementManager   = $interventionRegroupementManager;
@@ -92,7 +85,7 @@ class InterventionDemandeManager extends BaseManager
      *
      * @return array
      */
-    public function getForFactures( $user )
+    public function getForFactures( $user = null )
     {
         return $this->getRepository()->getForFactures( $user )->getQuery()->getResult();
     }
