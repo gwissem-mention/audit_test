@@ -217,6 +217,20 @@ class RechercheParcoursDetailsController extends Controller
         $referencesTemp[] = $referenceRechercheParcours;
         $referencesTemp[] = $referenceRechercheParcoursDetails;
 
+
+        //Récupération des infos de l'utilisateur, si il y en a un connecté, pour ajouter les filtres "Etablissement" et "Métier"
+        if('anon.' !== $user)
+        {
+            //Type d'établissement
+            if(!is_null($user->getStatutEtablissementSante()))
+               $referencesTemp[] =  $user->getStatutEtablissementSante();
+
+            //Métier internaute
+            if(!is_null($user->getProfilEtablissementSante()))
+               $referencesTemp[] =  $user->getProfilEtablissementSante();
+                
+        }
+
         $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 
                         'parent' => intval( $rechercheParcoursDetails->getReference()->getId() )
                     ));
