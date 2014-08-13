@@ -44,7 +44,7 @@ class DemandesNouvellesGrid extends DemandesAbstractGrid
         $colonneDateButoir->setAlign('center');
         $colonneDateButoir->setFilterable(false)->setSortable(false);
         $colonneDateButoir->manipulateRenderCell(
-            function($value, $row, $router) {
+            function($value, \APY\DataGridBundle\Grid\Row $row) {
                 if ($row->getField('interventionEtatId') == InterventionEtat::getInterventionEtatDemandeInitialeId())
                 {
                     $dateCreation = $row->getField('dateCreationLibelle');

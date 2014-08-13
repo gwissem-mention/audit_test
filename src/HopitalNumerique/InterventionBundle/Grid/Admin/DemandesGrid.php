@@ -38,8 +38,8 @@ class DemandesGrid extends DemandesAbstractGrid
         $colonneInterventionInitiateurType->setAlign('center');
         $colonneInterventionInitiateurType->setFilterable(false);
         $colonneInterventionInitiateurType->manipulateRenderCell(
-            function($value, $row, $router) {
-                return DemandesAbstractGrid::renderCellInitiateur($value, $row, $router);
+            function($value, \APY\DataGridBundle\Grid\Row $row) {
+                return DemandesAbstractGrid::renderCellInitiateur($value, $row);
             }
         );
         $this->addColonne($colonneInterventionInitiateurType);
@@ -52,24 +52,24 @@ class DemandesGrid extends DemandesAbstractGrid
         
         $colonneCmsiInformations = new Column\TextColumn('cmsi_nom', 'CMSI');
         $colonneCmsiInformations->manipulateRenderCell(
-            function($value, $row, $router) {
-                return DemandesAbstractGrid::renderCellCmsi($value, $row, $router);
+            function($value, \APY\DataGridBundle\Grid\Row $row) {
+                return DemandesAbstractGrid::renderCellCmsi($value, $row);
             }
         );
         $this->addColonne($colonneCmsiInformations);
         
         $colonneAmbassadeurInformations = new Column\TextColumn('ambassadeur_nom', 'Ambassadeur');
         $colonneAmbassadeurInformations->manipulateRenderCell(
-            function($value, $row, $router) {
-                return DemandesAbstractGrid::renderCellAmbassadeur($value, $row, $router);
+            function($value, \APY\DataGridBundle\Grid\Row $row) {
+                return DemandesAbstractGrid::renderCellAmbassadeur($value, $row);
             }
         );
         $this->addColonne($colonneAmbassadeurInformations);
         
         $colonneDemandeurInformations = new Column\TextColumn('referent_nom', 'Demandeur');
         $colonneDemandeurInformations->manipulateRenderCell(
-            function($value, $row, $router) {
-                return DemandesAbstractGrid::renderCellReferent($value, $row, $router);
+            function($value, \APY\DataGridBundle\Grid\Row $row) {
+                return DemandesAbstractGrid::renderCellReferent($value, $row);
             }
         );
         $this->addColonne($colonneDemandeurInformations);
@@ -83,8 +83,8 @@ class DemandesGrid extends DemandesAbstractGrid
        
         $colonneDateChoix = new Column\TextColumn('dateChoix', 'Date choix');
         $colonneDateChoix->manipulateRenderCell(
-            function($value, $row, $router) {
-                return DemandesAbstractGrid::renderCellDateChoix($value, $row, $router);
+            function($value, \APY\DataGridBundle\Grid\Row $row) {
+                return DemandesAbstractGrid::renderCellDateChoix($value, $row);
             }
         );
         $this->addColonne($colonneDateChoix);
@@ -93,7 +93,7 @@ class DemandesGrid extends DemandesAbstractGrid
         $colonneEvaluation->setFilterable(false)->setSortable(false);
         $colonneEvaluation->setAlign('center');
         $colonneEvaluation->manipulateRenderCell(
-            function($value, $row, $router) use ($utilisateurConnecte)
+            function($value, \APY\DataGridBundle\Grid\Row $row, $router) use ($utilisateurConnecte)
             {
                 if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
                 {

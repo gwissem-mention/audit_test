@@ -207,7 +207,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      * 
      * @return string Le contenu de la cellule Référent
      */
-    public static function renderCellReferent($value, $row, $router)
+    public static function renderCellReferent($value, $row)
     {
         return
             '<strong>'.$row->getField('referent_nom').'</strong>'.
@@ -220,7 +220,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      * 
      * @return string Le contenu de la cellule Ambassadeur
      */
-    public static function renderCellAmbassadeur($value, $row, $router)
+    public static function renderCellAmbassadeur($value, $row)
     {
         return
             '<strong>'.$row->getField('ambassadeur_nom').'</strong>'.
@@ -232,7 +232,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      * 
      * @return string Le contenu de la cellule CMSI
      */
-    public static function renderCellCmsi($value, $row, $router)
+    public static function renderCellCmsi($value, $row)
     {
         return
             '<strong>'.$row->getField('cmsi_nom').'</strong>'
@@ -243,7 +243,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      * 
      * @return string Le contenu de la cellule Date choix
      */
-    public static function renderCellDateChoix($value, $row, $router)
+    public static function renderCellDateChoix($value, $row)
     {
         $dateChoix = '';
         if ($row->getField('cmsiDateChoixLibelle') != null)
@@ -263,7 +263,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      *
      * @return string Le contenu de la cellule Date choix
      */
-    public static function renderCellInitiateur($value, $row, $router)
+    public static function renderCellInitiateur($value, $row)
     {
         if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurCmsiId())
         {

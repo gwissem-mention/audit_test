@@ -33,8 +33,8 @@ class DemandesGrid extends DemandesAbstractGrid
         $colonneInitiateur = new Column\TextColumn('interventionInitiateurId', '');
         $colonneInitiateur->setAlign('center');
         $colonneInitiateur->manipulateRenderCell(
-            function($value, $row, $router) {
-                return DemandesAbstractGrid::renderCellInitiateur($value, $row, $router);
+            function($value, \APY\DataGridBundle\Grid\Row $row) {
+                return DemandesAbstractGrid::renderCellInitiateur($value, $row);
             }
         );
         $this->addColonne($colonneInitiateur->setFilterable(false)->setSortable(false));
@@ -47,7 +47,7 @@ class DemandesGrid extends DemandesAbstractGrid
         $colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
         $colonneEvaluation->setAlign('center');
         $colonneEvaluation->manipulateRenderCell(
-            function($value, $row, $router)
+            function($value, \APY\DataGridBundle\Grid\Row $row, $router)
             {
                 if (intval($row->getField('nombreDemandesPrincipales')) == 0)
                 {
