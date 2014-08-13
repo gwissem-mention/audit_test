@@ -1,3 +1,0 @@
-INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`)
-VALUES
-    (37, '[HOPITALNUMERIQUE] - Nouvelles réponses à un questionnaire', 'Nouvelle réponses à un questionnaire dynamique', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\r\n\nL\'utilisateur suivant vient de soumettre ses réponses au questionnaire %nomQuestionnaire : %candidat\r\n\r\nVoici ses réponses : %questionnaire \r\n\r\nCordialement,', '{\"%u\":\"Nom d\'utilisateur\",\"%nomQuestionnaire\":\"Nom du questionnaire\",\"%candidat\":\"Nom du candidat\",\"%questionnaire\":\"Questionnaire\"}');
