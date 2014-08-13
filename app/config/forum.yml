@@ -183,6 +183,9 @@ ccdn_forum_forum:
                 class:                HopitalNumerique\ForumBundle\Component\Helper\RoleHelper
         crumb_builder:
             class:                    HopitalNumerique\ForumBundle\Component\Crumbs\CrumbBuilder
+        security:
+            authorizer:
+                class:                HopitalNumerique\ForumBundle\Component\Security\Authorizer
     forum:
         admin:
             create:

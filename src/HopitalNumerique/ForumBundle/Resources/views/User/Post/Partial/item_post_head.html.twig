@@ -49,7 +49,7 @@
                             </li>
                         {%- endif -%}
 
-                        {%- if canEditPost(post) or is_granted('ROLE_ADMINISTRATEUR_1') -%}
+                        {%- if canEditPost(post) -%}
                             <li>
                                 <a rel="nofollow" id="post_edit[{{- post.getBody |slice(0,24) -}}]"
                                  href="{{- path('ccdn_forum_user_post_edit', {'forumName': forumName, 'postId': post.getId }) -}}">
@@ -59,7 +59,7 @@
                             </li>
                         {%- endif -%}
 
-                        {%- if canDeletePost(post) or is_granted('ROLE_ADMINISTRATEUR_1') -%}
+                        {%- if canDeletePost(post) -%}
                             <li>
                                 <a rel="nofollow"
                                  href="{{- path('ccdn_forum_user_post_delete', {'forumName': forumName, 'postId': post.getId }) -}}">
