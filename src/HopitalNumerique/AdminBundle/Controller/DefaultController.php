@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
- * 
+ * DefaultController
  */
 class DefaultController extends Controller
 {
