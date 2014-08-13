@@ -71,6 +71,6 @@ class EtablissementGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Export CSV', 'HopitalNumeriqueEtablissementBundle:Etablissement:exportCsv') );
+        $this->addMassAction( new Action\ActionMass('Export CSV', 'HopitalNumeriqueEtablissementBundle:Export:exportCsv') );
     }
 }

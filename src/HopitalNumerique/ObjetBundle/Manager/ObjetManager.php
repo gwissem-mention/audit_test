@@ -32,7 +32,7 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForGrid( $condition = null )
+    public function getDatasForGrid( \StdClass $condition = null )
     {
         $results = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
 

@@ -22,7 +22,7 @@ class SessionManager extends BaseManager
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function getDatasForGrid( $condition = null )
+    public function getDatasForGrid( \StdClass $condition = null )
     {
         $sessions = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
 

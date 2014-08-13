@@ -153,8 +153,10 @@ class FixturesCommand extends GeneratorCommand
     protected function getGenerator(BundleInterface $bundle = null)
     {
         if (null === $this->generator) {
+            $path = $this->getContainer()->get('kernel')->locateResource('@NodevoToolsBundle/Resources/skeleton/');
+
             $this->generator = $this->createGenerator();
-            $skeletonDirs    = array(__DIR__.'/../Resources/skeleton');
+            $skeletonDirs    = array($path);
 
             $this->generator->setSkeletonDirs( $skeletonDirs );
         }
