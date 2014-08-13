@@ -135,3 +135,24 @@ hopitalnumerique_objet_reference_contenu_own:
 hopitalnumerique_objet_reference_contenu_save:
     pattern:  /objet/reference/save/contenu
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:saveContenu" }
+
+
+hopitalnumerique_objet_admin_commentaire:
+    pattern:  /objet/commentaire
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:index" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_objet_admin_commentaire_edit:
+    pattern:  /objet/commentaire/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:edit" }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+hopitalnumerique_objet_admin_commentaire_delete:
+    pattern:  /objet/commentaire/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
