@@ -1,8 +1,12 @@
 parameters:
-    hopitalnumerique_forum.manager.topic.class: HopitalNumerique\ForumBundle\Manager\TopicManager
-    hopitalnumerique_forum.manager.reftopic.class: HopitalNumerique\ForumBundle\Manager\RefTopicManager
+    hopitalnumerique_forum.manager.subscription.class : HopitalNumerique\ForumBundle\Manager\SubscriptionManager
+    hopitalnumerique_forum.manager.post.class         : HopitalNumerique\ForumBundle\Manager\PostManager
+    hopitalnumerique_forum.manager.topic.class        : HopitalNumerique\ForumBundle\Manager\TopicManager
+    hopitalnumerique_forum.manager.reftopic.class     : HopitalNumerique\ForumBundle\Manager\RefTopicManager
     #BBCode
     hopitalnumerique_forum.component.bb_code.tag_integrator.class: HopitalNumerique\ForumBundle\Component\BBCode\TagIntegrator
+    #CronLogger
+    hopitalnumerique_forum.service.logger.cronlogger.class: HopitalNumerique\ForumBundle\DependencyInjection\Logger\CronLogger
     hopitalnumerique_forum.bb_parser.tags:
         - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Bold'
         - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Heading1'
@@ -32,6 +36,22 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    #--Post
+    hopitalnumerique_forum.manager.post:
+        class: %hopitalnumerique_forum.manager.post.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    #--Subscription
+    hopitalnumerique_forum.manager.subscription:
+        class: %hopitalnumerique_forum.manager.subscription.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    #Cronlogger
+    hopitalnumerique_forum.service.logger.cronlogger:
+        class: "%hopitalnumerique_forum.service.logger.cronlogger.class%"
+        arguments: ["@logger", "@session"]
     #BBCode
     hopitalnumerique_forum.component.bb_code.tag_integrator:
         class: %hopitalnumerique_forum.component.bb_code.tag_integrator.class%
