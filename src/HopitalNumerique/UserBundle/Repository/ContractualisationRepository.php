@@ -19,18 +19,13 @@ class ContractualisationRepository extends EntityRepository
         $today    = new \DateTime();
         $in45Days = new \DateTime();
         $in45Days->modify('+ 45 days');
-        
 
         $qb = $this->_em->createQueryBuilder();
         $qb->select('count(con)')
             ->from('HopitalNumeriqueUserBundle:Contractualisation', 'con')
-            ->andWhere('con.archiver = 0', 
-                $qb->expr()->between(
-                    'con.dateRenouvellement',
-                    $today->getTimestamp(),
-                    $in45Days->getTimestamp()
-                )
-            );
+            ->andWhere('con.archiver = 0', 'con.dateRenouvellement BETWEEN :today AND :in45Days')
+            ->setParameter('today', $today->format('Y-m-d') )
+            ->setParameter('in45Days', $in45Days->format('Y-m-d') );
         
         return $qb;
     }
