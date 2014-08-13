@@ -204,7 +204,7 @@ class DefaultController extends Controller
         $interval = new \DateInterval('P1M');
         $today    = new \DateTime('now');
         foreach($publications as $publication) {
-            if( $publication['etat'] == 4 )
+            if( $publication['etat'] == 4 || (!is_null($publication['dateDebutPublication']) && $publication['dateDebutPublication'] > $today) || ( !is_null($publication['dateFinPublication']) && $publication['dateFinPublication'] < $today) )
                 $blocObjets['publications-non-publiees']++;
 
             //Points Durs
