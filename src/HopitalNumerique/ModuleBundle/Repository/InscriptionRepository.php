@@ -20,7 +20,7 @@ class InscriptionRepository extends EntityRepository
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function getDatasForGrid( $condition )
+    public function getDatasForGrid( \StdClass $condition )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('insc.id, 

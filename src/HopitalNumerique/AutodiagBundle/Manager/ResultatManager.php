@@ -19,7 +19,7 @@ class ResultatManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForGrid( $condition = null )
+    public function getDatasForGrid( \StdClass $condition = null )
     {
         $resultats = $this->findBy( array( $condition->field => $condition->value) );
         $results   = array();

@@ -93,7 +93,7 @@ class DemandesGrid extends DemandesAbstractGrid
         $colonneEvaluation->setFilterable(false)->setSortable(false);
         $colonneEvaluation->setAlign('center');
         $colonneEvaluation->manipulateRenderCell(
-            function($value, \APY\DataGridBundle\Grid\Row $row, $router) use ($utilisateurConnecte)
+            function($value, \APY\DataGridBundle\Grid\Row $row, \Symfony\Component\Routing\Router $router) use ($utilisateurConnecte)
             {
                 if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
                 {

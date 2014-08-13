@@ -22,7 +22,7 @@ class InscriptionManager extends BaseManager
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function getDatasForGrid( $condition = null )
+    public function getDatasForGrid( \StdClass $condition = null )
     {
         $inscriptions = array();
         

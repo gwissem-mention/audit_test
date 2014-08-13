@@ -47,7 +47,7 @@ class DemandesGrid extends DemandesAbstractGrid
         $colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
         $colonneEvaluation->setAlign('center');
         $colonneEvaluation->manipulateRenderCell(
-            function($value, \APY\DataGridBundle\Grid\Row $row, $router)
+            function($value, \APY\DataGridBundle\Grid\Row $row, \Symfony\Component\Routing\Router $router)
             {
                 if (intval($row->getField('nombreDemandesPrincipales')) == 0)
                 {
