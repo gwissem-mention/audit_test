@@ -154,7 +154,6 @@ class QuestionnaireManager extends BaseManager
             	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . $reponse->getReponse() . "</li>";
             	    break;
             }
-            $questionsDejaAffiche[] = $reponse->getQuestion()->getId();
         }
         $candidature .= '</ul>';
         

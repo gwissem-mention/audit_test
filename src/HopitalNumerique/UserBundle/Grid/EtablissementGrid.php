@@ -2,14 +2,14 @@
 namespace HopitalNumerique\UserBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du Grid User
  */
-class EtablissementGrid extends Grid implements IGrid
+class EtablissementGrid extends Grid implements GridInterface
 {
     /**
     * Set la config propre au Grid User (Source + config par défaut)
@@ -58,7 +58,7 @@ class EtablissementGrid extends Grid implements IGrid
         //Custom Archive button : Affiche le bouton archiver
         $archiveButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_etablissement_archiver');
         $archiveButton->setRouteParameters( array('id') );
-        $archiveButton->manipulateRender(function($action, $row) {
+        $archiveButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
             if( !$row->getField( 'archiver') )
                 $action->setAttributes( array('class'=>'btn btn-warning fa fa-archive', 'title' => 'Archiver') );
             else

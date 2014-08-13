@@ -6,8 +6,6 @@ use Knp\Menu\FactoryInterface;
 use Knp\Menu\NodeInterface;
 use Knp\Menu\Loader\LoaderInterface;
 
-use Symfony\Component\Security\Core\SecurityContextInterface;
-
 /**
  * BreadcrumbNodeLoader
  */

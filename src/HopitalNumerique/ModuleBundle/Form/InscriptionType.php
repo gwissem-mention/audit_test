@@ -13,13 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class InscriptionType extends AbstractType
 {
-    private $_constraints = array();
-    
-    public function __construct($manager, $validator)
-    {
-        $this->_constraints = $manager->getConstraints( $validator );
-    }
-    
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

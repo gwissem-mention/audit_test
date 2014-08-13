@@ -27,10 +27,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  * @category CCDNForum
  * @package  ForumBundle
  *
- * @author   Reece Fowell <reece@codeconsortium.com>
- * @license  http://opensource.org/licenses/MIT MIT
- * @version  Release: 2.0
- * @link     https://github.com/codeconsortium/CCDNForumForumBundle
+ * @author   Gaëtan MELCHILSEN
+ * @license  Nodevo
  *
  */
 class BoardDeleteFormType extends AbstractType

@@ -33,7 +33,7 @@ services:
     #--Type
     hopitalnumerique_questionnaire.form.type.questionnaire:
         class: "%hopitalnumerique_questionnaire.form.type.questionnaire%"
-        arguments: ["@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.question", "@hopitalnumerique_questionnaire.manager.questionnaire", "@validator", "@hopitalnumerique_intervention.manager.intervention_demande"]
+        arguments: ["@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.questionnaire"]
         tags:
             - { name: form.type, alias: nodevo_questionnaire_questionnaire }
     #-Gestion des questionnaires

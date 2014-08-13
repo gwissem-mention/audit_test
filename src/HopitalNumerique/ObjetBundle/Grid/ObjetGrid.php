@@ -3,14 +3,14 @@
 namespace HopitalNumerique\ObjetBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du grid Objet.
  */
-class ObjetGrid extends Grid implements IGrid
+class ObjetGrid extends Grid implements GridInterface
 {
     /**
      * Définie la config spécifique au grid Objet.

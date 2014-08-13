@@ -156,12 +156,15 @@ class DefaultController extends Controller
                         if( $topic->getCachedReplyCount() == 0)
                             $forumDatas['topics-sans-reponses']++;
 
-                        $post = $topic->getLastPost();
-                        if( !is_null($post) && $post->getCreatedDate()->modify('+ 1 month') >= new \DateTime() )
+                        $lastPost = $topic->getLastPost();
+                        if( !is_null($lastPost) && $lastPost->getCreatedDate()->modify('+ 1 month') >= new \DateTime() )
                             $forumDatas['topics']++;
 
-                        if( !is_null($post) && $post->getCreatedDate() >= $since1Month )
-                            $forumDatas['contributions']++;
+                        $posts = $topic->getPosts();
+                        foreach($posts as $post){
+                            if( $post->getCreatedDate() >= $since1Month )
+                                $forumDatas['contributions']++;
+                        }
                     }
                 }
             }
@@ -204,7 +207,7 @@ class DefaultController extends Controller
         $interval = new \DateInterval('P1M');
         $today    = new \DateTime('now');
         foreach($publications as $publication) {
-            if( $publication['etat'] == 4 )
+            if( $publication['etat'] == 4 || (!is_null($publication['dateDebutPublication']) && $publication['dateDebutPublication'] > $today) || ( !is_null($publication['dateFinPublication']) && $publication['dateFinPublication'] < $today) )
                 $blocObjets['publications-non-publiees']++;
 
             //Points Durs

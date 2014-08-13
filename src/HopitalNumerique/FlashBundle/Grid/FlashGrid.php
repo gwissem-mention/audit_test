@@ -3,14 +3,14 @@
 namespace HopitalNumerique\FlashBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du grid Flash.
  */
-class FlashGrid extends Grid implements IGrid
+class FlashGrid extends Grid implements GridInterface
 {
     /**
      * Définie la config spécifique au grid Flash.

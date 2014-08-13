@@ -2,14 +2,14 @@
 namespace Nodevo\MenuBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du Grid Menu
  */
-class ItemGrid extends Grid implements IGrid
+class ItemGrid extends Grid implements GridInterface
 {
     /**
      * Set la config propre au Menu Grid (Source + config par défaut)
