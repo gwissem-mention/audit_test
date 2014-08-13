@@ -38,6 +38,9 @@ ccdn_forum_forum:
         helper:
             role:
                 class:            HopitalNumerique\ForumBundle\Component\Helper\RoleHelper
+        security:
+            authorizer:
+                class:            HopitalNumerique\ForumBundle\Component\Security\Authorizer
     gateway:
         forum:
             class:                CCDNForum\ForumBundle\Model\Component\Gateway\ForumGateway
@@ -180,6 +183,9 @@ ccdn_forum_forum:
                 class:                HopitalNumerique\ForumBundle\Component\Helper\RoleHelper
         crumb_builder:
             class:                    HopitalNumerique\ForumBundle\Component\Crumbs\CrumbBuilder
+        security:
+            authorizer:
+                class:                HopitalNumerique\ForumBundle\Component\Security\Authorizer
     forum:
         admin:
             create:
