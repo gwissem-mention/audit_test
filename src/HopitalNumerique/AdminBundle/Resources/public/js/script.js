@@ -21,4 +21,6 @@ $(function() {
             }
         }
     }).data('gridster');
+
+    $('#page-content').attr('style', '');
 });
