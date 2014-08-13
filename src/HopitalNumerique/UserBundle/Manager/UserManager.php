@@ -27,7 +27,7 @@ class UserManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForGrid( $condition = null )
+    public function getDatasForGrid( \StdClass $condition = null )
     {
         $users = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
 

@@ -1,9 +1,10 @@
 <?php
 namespace Nodevo\ToolsBundle\Manager;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Cache\Cache;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator;
 
 /**
  * Classe de base des Managers de la librairie
@@ -53,7 +54,7 @@ abstract class Manager
      *
      * @return array
      */
-    public function getDatasForGrid( $condition = null )
+    public function getDatasForGrid( \StdClass $condition = null )
     {
         $req = $this->getRepository()->createQueryBuilder('entity');
         
@@ -88,7 +89,7 @@ abstract class Manager
      *
      * @return array
      */
-    public function getConstraints( $validator )
+    public function getConstraints( Validator $validator )
     {
         $metadata    = $validator->getMetadataFactory()->getMetadataFor( $this->_class );
         $constraints = array();

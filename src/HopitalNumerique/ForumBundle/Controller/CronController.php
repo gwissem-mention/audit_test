@@ -41,7 +41,6 @@ class CronController extends Controller
             $posts = $this->get('hopitalnumerique_forum.manager.post')->findBy(array('isDeleted' => true));
             //Suppression des topics si il n'y a plus de posts de dedans
             $topicsTemp = array();
-            $postIds    = array();
             foreach ($posts as $post) 
             {
                 $topicTemp    = $post->getTopic();

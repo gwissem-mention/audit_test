@@ -45,7 +45,7 @@ class OutilManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForGrid( $condition = null )
+    public function getDatasForGrid( \StdClass $condition = null )
     {
         $outils  = $this->findAllOrdered('title','asc');
         $results = array();

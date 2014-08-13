@@ -224,8 +224,10 @@ class EntityCommand extends GenerateDoctrineEntityCommand
     protected function getGenerator(BundleInterface $bundle = null)
     {
         if (null === $this->generator) {
+            $path = $this->getContainer()->get('kernel')->locateResource('@NodevoToolsBundle/Resources/skeleton/');
+
             $this->generator = $this->createGenerator();
-            $skeletonDirs    = array_merge( array(__DIR__.'/../Resources/skeleton'), $this->getSkeletonDirs($bundle) );
+            $skeletonDirs    = array_merge( array($path), $this->getSkeletonDirs($bundle) );
 
             $this->generator->setSkeletonDirs( $skeletonDirs );
         }

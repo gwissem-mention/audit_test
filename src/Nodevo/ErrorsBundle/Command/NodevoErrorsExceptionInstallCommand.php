@@ -39,8 +39,10 @@ class NodevoErrorsExceptionInstallCommand extends Command
     {
         $filesystem = $this->container->get('filesystem');
 
+        $originDir = $this->container->get('kernel')->locateResource('@NodevoErrorsBundle/Resources/views/TwigBundle/');
+
         // Create the bundles directory otherwise symlink will fail.
-        if (is_dir($originDir = __DIR__.'/../Resources/views/TwigBundle')) {
+        if ( is_dir($originDir) ) {
             $output->writeln(sprintf('Installation des pages d\'erreurs vers <comment>app/Resources/TwigBundle</comment>'));
 
             $targetDir = $this->container->getParameter('kernel.root_dir').'/Resources/TwigBundle';

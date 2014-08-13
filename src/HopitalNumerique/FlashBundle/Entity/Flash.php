@@ -130,7 +130,7 @@ class Flash
      * @param boolean $isPublished
      * @return Flash
      */
-    public function setIsPublished($isPublished)
+    public function setPublished($isPublished)
     {
         $this->isPublished = $isPublished;
 
@@ -142,7 +142,7 @@ class Flash
      *
      * @return boolean 
      */
-    public function getIsPublished()
+    public function isPublished()
     {
         return $this->isPublished;
     }
