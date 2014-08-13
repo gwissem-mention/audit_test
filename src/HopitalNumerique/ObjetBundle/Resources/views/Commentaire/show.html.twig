@@ -1,0 +1,41 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Fiche Commentaire
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_admin_commentaire') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if commentaire.id %}
+        <a href="{{ path('hopitalnumerique_objet_admin_commentaire_edit', { 'id': commentaire.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                <p>
+                    <strong>Id : </strong>
+                    {{ commentaire.id }}
+                </p>
+                <p>
+                    <strong>Datecreation : </strong>
+                    {{ commentaire.dateCreation }}
+                </p>
+                <p>
+                    <strong>Texte : </strong>
+                    {{ commentaire.texte }}
+                </p>
+                <p>
+                    <strong>Publier : </strong>
+                    {{ commentaire.publier }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

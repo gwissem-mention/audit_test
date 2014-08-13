@@ -574,6 +574,50 @@ class ObjetManager extends BaseManager
         return $note;
     }
 
+    /**
+     * Formatte les productions pour l'affichage des productions liées
+     *
+     * @param array $datas Liste des prod liées
+     *
+     * @return array
+     */
+    public function formatteProductionsLiees( $datas )
+    {
+        $productions = array();
+
+        foreach($datas as $one) {
+            //explode to get datas
+            $tab = explode(':', $one);
+
+            //build new object
+            $element       = new \StdClass;
+            $element->id   = $tab[1];
+            $element->brut = $one;
+
+            //switch Objet / Infra-doc
+            if( $tab[0] == 'PUBLICATION' ){
+                $objet            = $this->findOneBy( array('id' => $tab[1] ) );
+                $element->titre   = $objet->getTitre();
+                $element->isObjet = 1;
+            }else if( $tab[0] == 'INFRADOC' ){
+                $contenu          = $this->__contenuManager->findOneBy( array('id' => $tab[1] ) );
+                $element->titre   = '|--' . $contenu->getTitre();
+                $element->isObjet = 0;
+            }
+
+            $productions[] = $element;
+        }
+
+        return $productions;
+    }
+
+
+
+
+
+
+
+
 
 
 
