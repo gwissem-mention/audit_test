@@ -117,9 +117,6 @@ class QuestionnaireController extends Controller
 
         $this->_envoieDeMail = false;
         
-        //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
-        $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
-
         return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Front/index.html.twig',array(
             'questionnaire'      => $questionnaire,
             'user'               => $user,

@@ -5,17 +5,9 @@ namespace HopitalNumerique\QuestionnaireBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
 
 class QuestionnaireGestionType extends AbstractType
 {
-    private $_constraints = array();
-    
-    public function __construct($manager, $validator)
-    {
-        $this->_constraints = $manager->getConstraints( $validator );
-    }
-    
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

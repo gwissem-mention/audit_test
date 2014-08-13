@@ -2,14 +2,14 @@
 namespace Nodevo\RoleBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du Grid Role
  */
-class RoleGrid extends Grid implements IGrid
+class RoleGrid extends Grid implements GridInterface
 {
     /**
      * Set la config propre au Role Grid (Source + config par défaut)

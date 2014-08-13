@@ -21,10 +21,8 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  * @category CCDNForum
  * @package  ForumBundle
  *
- * @author   Reece Fowell <reece@codeconsortium.com>
- * @license  http://opensource.org/licenses/MIT MIT
- * @version  Release: 2.0
- * @link     https://github.com/codeconsortium/CCDNForumForumBundle
+ * @author   Gaëtan MELCHILSEN
+ * @license  Nodevo
  *
  */
 class RoleHelper
@@ -55,7 +53,7 @@ class RoleHelper
      * @access public
      * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
      */
-    public function __construct(SecurityContextInterface $securityContext, $managerRole)
+    public function __construct(SecurityContextInterface $securityContext, \Nodevo\RoleBundle\Manager\RoleManager $managerRole)
     {
         $this->securityContext = $securityContext;
 

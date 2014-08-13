@@ -16,10 +16,6 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 class DemandeController extends Controller
 {
     /**
-     * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté actuellement
-     */
-    private $utilisateurConnecte;
-    /**
      * @var \HopitalNumerique\InterventionBundle\Entity\InterventionDemande Demande d'intervention en cours
      */
     private $interventionDemande;
@@ -31,7 +27,6 @@ class DemandeController extends Controller
      */
     public function nouveauAction()
     {
-        $this->utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         $this->interventionDemande = new InterventionDemande();
         $this->interventionDemande->setInterventionInitiateur($this->container->get('hopitalnumerique_intervention.manager.intervention_initiateur')->getInterventionInitiateurAnap());
         $this->interventionDemande->setInterventionEtat($this->container->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatAcceptationCmsi());
@@ -103,7 +98,6 @@ class DemandeController extends Controller
      */
     public function editAction(InterventionDemande $id)
     {
-        $this->utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         $this->interventionDemande = $id;
 
         $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_edition_admin', $this->interventionDemande, array('interventionDemande' => $this->interventionDemande));

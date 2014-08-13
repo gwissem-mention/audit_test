@@ -2,18 +2,14 @@
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserTopicController as UserTopicControllerCCDN;
-use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
-use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicResponseEvent;
 
 /**
  *
  * @category CCDNForum
  * @package  ForumBundle
  *
- * @author   Reece Fowell <reece@codeconsortium.com>
- * @license  http://opensource.org/licenses/MIT MIT
- * @version  Release: 2.0
- * @link     https://github.com/codeconsortium/CCDNForumForumBundle
+ * @author   Gaëtan MELCHILSEN
+ * @license  Nodevo
  *
  */
 class UserTopicController extends UserTopicControllerCCDN

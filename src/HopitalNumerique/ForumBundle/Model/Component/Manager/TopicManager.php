@@ -4,13 +4,7 @@ namespace HopitalNumerique\ForumBundle\Model\Component\Manager;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
-use CCDNForum\ForumBundle\Model\Component\Gateway\GatewayInterface;
-use CCDNForum\ForumBundle\Model\Component\Manager\ManagerInterface;
-use CCDNForum\ForumBundle\Model\Component\Manager\BaseManager;
-use CCDNForum\ForumBundle\Component\Helper\PostLockHelper;
-
 use CCDNForum\ForumBundle\Entity\Topic;
-
 use CCDNForum\ForumBundle\Model\Component\Manager\TopicManager as CCDNTopicManager;
 
 class TopicManager extends CCDNTopicManager

@@ -56,14 +56,14 @@ services:
     #--Formulaire    
     hopitalnumerique_user.form.type.motdepasse:
         class: %hopitalnumerique_user.form.type.motdepasse%
-        arguments: ["@hopitalnumerique_user.manager.user", "@validator", "@security.context"]
+        arguments: ["@hopitalnumerique_user.manager.user"]
         tags:
             - { name: form.type, alias: nodevo_user_motdepasse }
     #Desinscription:
     #--Formulaire    
     hopitalnumerique_user.form.type.desinscription:
         class: %hopitalnumerique_user.form.type.desinscription%
-        arguments: ["@hopitalnumerique_user.manager.user", "@validator", "@security.context"]
+        arguments: ["@hopitalnumerique_user.manager.user"]
         tags:
             - { name: form.type, alias: nodevo_user_desinscription }
 
@@ -137,7 +137,7 @@ services:
     #--Manager
     hopitalnumerique_user.manager.login:
         class: %hopitalnumerique_user.manager.login.class%
-        arguments: ['@security.context', '@doctrine']
+        arguments: ['@security.context']
         tags:
             - { name: 'kernel.event_subscriber'}
             - { name: 'kernel.event_listener', event: 'security.interactive_login' }

@@ -3,7 +3,7 @@
 namespace HopitalNumerique\ReferenceBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
-use Nodevo\GridBundle\Grid\IGrid;
+use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
@@ -12,7 +12,7 @@ use APY\DataGridBundle\Grid\Action\RowAction;
 /**
  * Configuration du grid Reference.
  */
-class ReferenceGrid extends Grid implements IGrid
+class ReferenceGrid extends Grid implements GridInterface
 {
     /**
      * Définie la config spécifique au grid Reference.
