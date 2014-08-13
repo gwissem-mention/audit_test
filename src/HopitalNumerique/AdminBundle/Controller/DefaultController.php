@@ -156,12 +156,15 @@ class DefaultController extends Controller
                         if( $topic->getCachedReplyCount() == 0)
                             $forumDatas['topics-sans-reponses']++;
 
-                        $post = $topic->getLastPost();
-                        if( !is_null($post) && $post->getCreatedDate()->modify('+ 1 month') >= new \DateTime() )
+                        $lastPost = $topic->getLastPost();
+                        if( !is_null($lastPost) && $lastPost->getCreatedDate()->modify('+ 1 month') >= new \DateTime() )
                             $forumDatas['topics']++;
 
-                        if( !is_null($post) && $post->getCreatedDate() >= $since1Month )
-                            $forumDatas['contributions']++;
+                        $posts = $topic->getPosts();
+                        foreach($posts as $post){
+                            if( $post->getCreatedDate() >= $since1Month )
+                                $forumDatas['contributions']++;
+                        }
                     }
                 }
             }
