@@ -31,7 +31,7 @@
                 -->
             {% endif %}
 
-            {%- if is_granted('ROLE_USER') and post.id and (is_granted('ROLE_MODERATOR') or not post.isDeleted) -%}
+            {%- if is_granted('ROLE_USER') and post.id and (is_granted('ROLE_ADMINISTRATEUR_1') or not post.isDeleted) -%}
                 &nbsp;
                 <div class="dropdown btn-group text-left">
                     <a class="dropdown-toggle btn btn-xs btn-icon-only" data-toggle="dropdown" href="#">
@@ -59,7 +59,7 @@
                             </li>
                         {%- endif -%}
 
-                        {%- if canDeletePost(post) -%}
+                        {%- if canDeletePost(post) or is_granted('ROLE_ADMINISTRATEUR_1') -%}
                             <li>
                                 <a rel="nofollow"
                                  href="{{- path('ccdn_forum_user_post_delete', {'forumName': forumName, 'postId': post.getId }) -}}">
