@@ -59,8 +59,8 @@ class AmbassadeurController extends Controller
      *
      * @param integer $id Identifiant de l'utilisateur
      */
-     public function editAction( HopiUser $user )
-     {
+    public function editAction( HopiUser $user )
+    {
         //Récupération du questionnaire de l'expert
         $idQuestionnaireExpert = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
