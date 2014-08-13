@@ -93,7 +93,7 @@ class DefaultController extends Controller
                 }
             }
         }
-
+        
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', array(
             'userConf'          => $userConf,
             'blocUser'          => $blocUser,
@@ -169,7 +169,7 @@ class DefaultController extends Controller
                 }
             }
 
-            $blocForum[ $tool->minifie() ] = $forumDatas;
+            $blocForum[ 'forum-' . $tool->minifie() ] = $forumDatas;
         }
 
         return $blocForum;
@@ -368,7 +368,7 @@ class DefaultController extends Controller
         $col    = 1;
         foreach($forums as $forum){
             $tool = new Chaine( $forum->getName() );
-            $datas[ $tool->minifie() ] = array( 'row' => $row, 'col' => $col);
+            $datas[ 'forum-' . $tool->minifie() ] = array( 'row' => $row, 'col' => $col);
 
             $col++;
             if( $col == 4){
