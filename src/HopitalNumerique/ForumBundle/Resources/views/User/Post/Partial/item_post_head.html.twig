@@ -6,7 +6,7 @@
                     {{- 'post.posted-by' |trans({}, ForumBundle.translation ) |raw -}}
                     {{- post.getCreatedBy.getNomPrenom() }} {% if post.getCreatedBy.getEtablissementRattachementSante() is not null %}({{post.getCreatedBy.getEtablissementRattachementSante().nom}}){% else %}{% if post.getCreatedBy.getAutreStructureRattachementSante|trim != '' %}({{post.getCreatedBy.getAutreStructureRattachementSante}}){% endif %}{% endif %}
 
-                    &nbsp;&#183;&nbsp;
+                     &#183; 
 
                 {%- endif -%}
 
@@ -32,7 +32,7 @@
             {% endif %}
 
             {%- if is_granted('ROLE_USER') and post.id and (is_granted('ROLE_ADMINISTRATEUR_1') or not post.isDeleted) -%}
-                &nbsp;
+                 
                 <div class="dropdown btn-group text-left">
                     <a class="dropdown-toggle btn btn-xs btn-icon-only" data-toggle="dropdown" href="#">
                         <i class="glyphicon glyphicon-cog"></i>
@@ -49,7 +49,7 @@
                             </li>
                         {%- endif -%}
 
-                        {%- if canEditPost(post) -%}
+                        {%- if canEditPost(post) or is_granted('ROLE_ADMINISTRATEUR_1') -%}
                             <li>
                                 <a rel="nofollow" id="post_edit[{{- post.getBody |slice(0,24) -}}]"
                                  href="{{- path('ccdn_forum_user_post_edit', {'forumName': forumName, 'postId': post.getId }) -}}">

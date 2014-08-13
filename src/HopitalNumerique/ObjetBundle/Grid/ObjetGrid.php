@@ -92,6 +92,6 @@ class ObjetGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Export CSV', 'HopitalNumeriqueObjetBundle:Objet:exportCsv') );
+        $this->addMassAction( new Action\ActionMass('Export CSV', 'HopitalNumeriqueObjetBundle:Export:exportCsv') );
     }
 }
