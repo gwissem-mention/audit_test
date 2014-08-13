@@ -276,14 +276,21 @@ class DefaultController extends Controller
         //On récupère les candidatures refusées
         $refusCandidature = $this->get('hopitalnumerique_user.manager.refus_candidature')->getRefusCandidatureByQuestionnaire();
 
+        //get contractualisation stuff
+        $blocUser['conventions'] = $this->get('hopitalnumerique_user.manager.contractualisation')->getContractualisationsARenouveler();
+
         foreach ($users as $user) {
             if( $user->getNbVisites() > 0 )
                 $blocUser['actif']++;
 
             if( $user->hasRoleDirecteur() || $user->hasRoleEs() )
                 $blocUser['es']++;
-            elseif( $user->hasRoleAmbassadeur() )
+            elseif( $user->hasRoleAmbassadeur() ){
                 $blocUser['ambassadeurs']++;
+
+                if( count($user->getContractualisations()) == 0)
+                    $blocUser['conventions']++;
+            }
             elseif( $user->hasRoleExpert() )
                 $blocUser['experts']++;
 
@@ -305,8 +312,7 @@ class DefaultController extends Controller
                 $blocUser['ambCandidatsRecues']++;
         }
 
-        //get contractualisation stuff
-        $blocUser['conventions'] = $this->get('hopitalnumerique_user.manager.contractualisation')->getContractualisationsARenouveler();
+        
 
         return $blocUser;
     }
