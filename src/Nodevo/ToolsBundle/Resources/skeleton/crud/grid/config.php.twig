@@ -9,6 +9,6 @@
     {
 {% block method_body %}
         $this->setSource( '{{namespace|replace({'\\': ''})}}:{{entity}}' );
-        $this->setNoDataMessage('Aucun {{entity}} à afficher.');
+        $this->setNoDataMessage('Aucun {{entity|lower}} à afficher.');
 {% endblock method_body %}
     }
