@@ -137,7 +137,7 @@ hopitalnumerique_objet_reference_contenu_save:
     pattern:  /objet/reference/save/contenu
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:saveContenu" }
 
-
+#---Commentaire
 hopitalnumerique_objet_admin_commentaire:
     pattern:  /objet/commentaire
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:index" }
@@ -150,6 +150,13 @@ hopitalnumerique_objet_admin_commentaire_edit:
     requirements:
         id: \d+
         _method: GET|POST
+
+hopitalnumerique_objet_admin_commentaire_toggle_publication:
+    pattern:  /objet/commentaire/toggle-publication/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:togglePublication", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|GET
 
 hopitalnumerique_objet_admin_commentaire_delete:
     pattern:  /objet/commentaire/delete/{id}.{_format}

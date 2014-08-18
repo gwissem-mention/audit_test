@@ -101,6 +101,16 @@ class Commentaire
     }
 
     /**
+     * Get dateCreation
+     *
+     * @return String 
+     */
+    public function getDateCreationString()
+    {
+        return $this->dateCreation->format('d/m/Y');
+    }
+
+    /**
      * Set texte
      *
      * @param string $texte

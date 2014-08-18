@@ -264,6 +264,11 @@ class Objet
     protected $consultations;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Commentaire", mappedBy="objet", cascade={"persist", "remove" })
+     */
+    protected $listeCommentaires;
+
+    /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Contenu", mappedBy="objet", cascade={"persist", "remove" })
      */
     protected $contenus;
@@ -1120,6 +1125,29 @@ class Objet
     public function setConsultations(\Doctrine\Common\Collections\ArrayCollection $consultations)
     {        
         $this->consultations = $consultations;
+    
+        return $this;
+    }
+
+    /**
+     * Get listeCommentaires
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $listeCommentaires
+     */
+    public function getListeCommentaires()
+    {
+        return $this->listeCommentaires;
+    }
+
+    /**
+     * Set listeCommentaires
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $listeCommentaires
+     * @return Objet
+     */
+    public function setListeCommentaires(\Doctrine\Common\Collections\ArrayCollection $listeCommentaires)
+    {        
+        $this->listeCommentaires = $listeCommentaires;
     
         return $this;
     }

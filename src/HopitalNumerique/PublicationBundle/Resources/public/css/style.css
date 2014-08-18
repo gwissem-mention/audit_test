@@ -96,6 +96,9 @@
     #productions h2.open{background-position: right -38px;}
     #productions h2.closed{background-position: right -5px; }
 
+/* Commentaires */
+    #commentaires h2{display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
+
 /* Autres résultats */
     #autresResultats h2{display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
     #autresResultats h2.open{background-position: right -38px;}

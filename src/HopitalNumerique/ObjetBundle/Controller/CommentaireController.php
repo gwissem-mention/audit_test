@@ -51,6 +51,28 @@ class CommentaireController extends Controller
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_objet_admin_commentaire').'"}', 200);
     }
 
+    /**
+     * Publication/déplication d'un Commentaire.
+     * 
+     * @param integer $id Id de Commentaire.
+     * METHOD = POST|DELETE
+     */
+    public function togglePublicationAction( $id )
+    {
+        $commentaire = $this->get('hopitalnumerique_objet.manager.commentaire')->findOneBy( array( 'id' => $id) );
+
+        $publication = !$commentaire->getPublier();
+
+        $commentaire->setPublier($publication);
+
+        //Suppression de l'entitée
+        $this->get('hopitalnumerique_objet.manager.commentaire')->save( $commentaire );
+
+        $this->get('session')->getFlashBag()->add('info', ($publication ? 'Le commentaire est maintenant publié.' : 'Le commentaire n\'est plus publié.') );
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_objet_admin_commentaire').'"}', 200);
+    }
+
 
 
 
