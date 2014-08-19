@@ -4,7 +4,7 @@ parameters:
     database_port: null
     database_name: wwwhopitalnumeriquecom
     database_user: dbuser
-    database_password: LpqdPpp2SWCtTyB7
+    database_password:
 
     mailer_transport: smtp
     mailer_host: smtp.nodevo.com
