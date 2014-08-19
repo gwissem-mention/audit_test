@@ -68,6 +68,11 @@ $(document).ready(function() {
     //bind de Validation Engine
     if( $('form.toValidate').length > 0 )
         $('form.toValidate').validationEngine();
+
+    //tooltip sur les mot trouvés du glossaire
+    $(".glosstool").tooltip({
+        placement : 'top'
+    });
 });
 
 //fancybox daffichage de la synthese
