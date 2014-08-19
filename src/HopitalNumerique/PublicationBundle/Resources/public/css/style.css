@@ -4,6 +4,7 @@
 .mobile .label-requete{ background-color: #6F3596; margin-left:10px; }
 .btnprint{position: absolute; top: -10px; right:0;}
 .btnBack{position: absolute; top: -10px; right:40px;}
+.tooltip hr{margin:5px;}
 
 /* Sommaire */
     #sommaire{ position: fixed; left:0; top:0; height: 100%; max-width: 33% }

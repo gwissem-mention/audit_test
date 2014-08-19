@@ -29,6 +29,8 @@
 
             <div class="clearfix"></div>
 
+            <p>Sauf indication contraire, les définitions apportées sont issues des productions ANAP.</p>
+
             <div class="liste">
                 {% for letter in 'a'|upper..'z'|upper %}
                     {% if letter in datas|keys %}
@@ -38,13 +40,9 @@
                                 <h2 class="{{ cycle(['rose', 'violet'], loop.index) }}" id="{{letter}}">{{letter}}</h2>
                                 <div class="sep"></div>
                                 <div class="elements">
-                                    {% set opened = false %}
                                     {% for element in glossaires %}
-                                        {% if loop.index % 2 == 1 %}
-                                            <div class="row">
-                                            {% set opened = true %}
-                                        {% endif %}
-                                            <div class="col-md-6" id="{{element.mot|minifieMoi}}">
+                                        <div class="row">
+                                            <div class="col-md-12" id="{{element.mot|minifieMoi}}">
                                                 <p class="titre">
                                                     {% if element.intitule %}
                                                         {{ element.mot ~ ' : ' ~ element.intitule }}
@@ -56,13 +54,9 @@
                                                     {{ element.description|nl2br }}
                                                 </p>
                                             </div>
-                                        {% if loop.index % 2 == 0 %}
-                                            </div>
-                                            <div class="sep"></div>
-                                            {% set opened = false %}
-                                        {% endif %}
+                                        </div>
+                                        <div class="sep"></div>
                                     {% endfor %}
-                                    {% if opened %}</div><div class="sep"></div>{% endif %}
                                 </div>
                             </div>
                         </div>
