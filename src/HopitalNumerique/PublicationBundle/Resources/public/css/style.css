@@ -110,8 +110,6 @@
     #commentaires .commentaire .date-post{ color:#B5B5B5; font-size: 12px;}
     #commentaires .commentaire .texte{ margin-top: 5px; margin-bottom: 5px;}
 
-    #commentaires .ajout-commentaire .mysep.background-violet{width: 85px; height: 4px; margin-bottom: 10px}
-
 /* Autres résultats */
     #autresResultats h2{display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
     #autresResultats h2.open{background-position: right -38px;}

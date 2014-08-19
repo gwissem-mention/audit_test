@@ -68,7 +68,7 @@ class CommentaireGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Export CSV - Accepter inscription'  ,'HopitalNumeriqueObjetBundle:MassCommentaire:exportCSV') );
+        $this->addMassAction( new Action\ActionMass('Export CSV'  ,'HopitalNumeriqueObjetBundle:MassCommentaire:exportCSV') );
         $this->addMassAction( new Action\ActionMass('Publication - Publier'  ,'HopitalNumeriqueObjetBundle:MassCommentaire:publierMass') );
         $this->addMassAction( new Action\ActionMass('Publication - Dépublier'  ,'HopitalNumeriqueObjetBundle:MassCommentaire:depublierMass') );
         $this->addMassAction( new Action\ActionMass('Suppression'  ,'HopitalNumeriqueObjetBundle:MassCommentaire:deleteMass') );
