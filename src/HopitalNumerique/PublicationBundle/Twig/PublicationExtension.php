@@ -134,7 +134,7 @@ class PublicationExtension extends \Twig_Extension
             $motsFounds = array();
             foreach($words as $key => $word){
                 if( $word->getEtat()->getId() == 3 && in_array( trim(htmlentities($word->getMot())), $glossaires) )
-                    $motsFounds[ trim(htmlentities($word->getMot())) ] = array('intitule' => $word->getIntitule(), 'sensitive' => $word->isSensitive() );
+                    $motsFounds[ trim(htmlentities($word->getMot())) ] = array('intitule' => $word->getIntitule(), 'sensitive' => $word->isSensitive(), 'description' => $word->getDescription());
             }
 
             //tri des éléments les plus longs aux plus petits
@@ -159,7 +159,7 @@ class PublicationExtension extends \Twig_Extension
                     //iterate over matches
                     foreach($matches[0] as $match)
                     {
-                        $html    = '¬<a target="_blank" href="/glossaire#¬'. $tool->minifie() .'¬" style="text-decoration:none"><abbr class="glosstool" data-html="true" title="¬' . ($data['intitule'] ? $data['intitule'] : substr($match, 1, -1) ) . '<hr>'  . ($data['intitule'] ? $data['intitule'] : substr($match, 1, -1) ). '¬" >¬'. substr($match, 1, -1) . '</abbr></a>';
+                        $html    = '¬<a target="_blank" href="/glossaire#¬'. $tool->minifie() .'¬" style="text-decoration:none"><abbr class="glosstool" data-html="true" title="¬' . ($data['intitule'] ? $data['intitule'] : substr($match, 1, -1) ) . '<hr>'  . $data['description']. '¬" >¬'. substr($match, 1, -1) . '</abbr></a>';
                         $html    = substr($match, 0, 1) . $html . substr($match, -1);
                         $content = str_replace($match, $html, $content);
                     }

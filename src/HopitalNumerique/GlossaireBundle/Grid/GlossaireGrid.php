@@ -29,11 +29,13 @@ class GlossaireGrid extends Grid implements GridInterface
     {
         $this->addColonne( new Column\TextColumn('mot', 'Mot') );
         $this->addColonne( new Column\TextColumn('intitule', 'Intitule') );
-
+        
+        $sensitive = new Column\BooleanColumn('sensitive', 'Sensible à la casse');
+        $sensitive->setSize(130);
+        $this->addColonne($sensitive);
 
         /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('description') );
-        $this->addColonne( new Column\BlankColumn('sensitive') );
     }
 
     /**
