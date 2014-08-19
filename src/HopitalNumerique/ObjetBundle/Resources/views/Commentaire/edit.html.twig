@@ -1,11 +1,7 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
 {% block h1Title %}
-    {% if commentaire.id %}
-        Editer un Commentaire
-    {% else %}
-        Ajouter un Commentaire
-    {% endif %}
+    Editer un commentaire
 {% endblock %}
 
 {% block toolbarButton %}
@@ -21,7 +17,9 @@
     <div class="col-sm-12">
         <div class="panel panel-midnightblue">
             <div class="panel-heading">
-                <h4>Informations</h4>
+                <h4>
+                    Commentaire de : <strong>{{commentaire.user.getAppellation()}}</strong>, sur l'article : <strong>{{commentaire.objet.titre}}</strong>
+                </h4>
             </div>
 
             <div class="panel-body">

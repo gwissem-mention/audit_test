@@ -1,0 +1,47 @@
+<div class="col-md-12" id="commentaires" >
+    <h2 class="open">Commentaires</h2>
+    <div class="mysep background-rose"></div>
+    <div class="bloc-commentaire">
+        {% for commentaire in objet.listeCommentaires %}
+            {# Cas contenu : affichage uniquement des commentaires de contenu #}
+            {# Cas objet : affichage uniquement des objets = là où contenu est null #}
+            {% if isContenu 
+                or ( not isContenu and commentaire.contenu is null ) 
+            %}
+                {# Include commentaire #}
+                {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/commentaire.html.twig' with { 'commentaire' : commentaire } %}
+            {% endif %}
+        {% endfor %}
+        <div id="nouveau-commentaire"></div>
+        <div class="ajout-commentaire"> 
+            {# Ajout d'un commentaire uniquement si il y a un user connecté #}
+            {% if app.user %}
+                <h3 class="open">Postez votre commentaire</h3>
+                <div class="mysep background-violet"></div>
+                <div id="form-ajout">
+                    <form id="hopitalnumerique_commentaire" novalidate="novalidate" class="form-horizontal toValidate" action="" method="post" name="hopitalnumerique_commentaire">
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <textarea class="form-control" rows="8" required="required" name="hopitalnumerique_commentaire[texte]" id="hopitalnumerique_commentaire_texte"></textarea>
+                            </div>
+                            <div class="col-sm-2 bouton-valider">
+                                <div onclick="ajoutCommentaire('{{ path('hopital_numerique_publication_commentaire_add') }}' );" class="btn btn-success col-md-12 background-violet">ENVOYER</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="objetId" name="objetId" value="{{ objet.id }}" />
+                        <input type="hidden" id="isContenu" name="isContenu" value="{{ isContenu }}" />
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            {# Sinon demande à l'utilisateur de se connecter #}
+            {% else %}
+                <h3 class="open">Postez votre commentaire</h3>
+                <div class="mysep background-violet"></div>
+                <p>
+                    Pour poster un commentaire vous devez soit vous <a href="{{path('account_login')}}">connecter</a>, soit vous <a href="{{path('hopital_numerique_user_inscription')}}" >créer un compte</a>.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>

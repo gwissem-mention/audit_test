@@ -13,36 +13,16 @@ class CommentaireType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dateCreation', 'text', array(
-                'max_length' => 255, 
+            ->add('texte', 'textarea', array(
                 'required'   => true, 
-                'label'      => 'dateCreation'
+                'label'      => 'Texte du commentaire',
+                'attr'       => array(
+                    'rows' => 8
+                )
             ))
-            ->add('texte', 'text', array(
-                'max_length' => 255, 
-                'required'   => true, 
-                'label'      => 'texte'
-            ))
-            ->add('publier', 'text', array(
-                'max_length' => 255, 
-                'required'   => true, 
-                'label'      => 'publier'
-            ))
-            ->add('objet', 'text', array(
-                'max_length' => 255, 
-                'required'   => true, 
-                'label'      => 'objet'
-            ))
-            ->add('contenu', 'text', array(
-                'max_length' => 255, 
-                'required'   => true, 
-                'label'      => 'contenu'
-            ))
-            ->add('user', 'text', array(
-                'max_length' => 255, 
-                'required'   => true, 
-                'label'      => 'user'
-            ))        ;
+            ->add('publier', 'checkbox', array(
+                'label'      => 'Publier ?'
+            ))      ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

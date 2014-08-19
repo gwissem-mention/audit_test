@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
-use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use \Nodevo\ToolsBundle\Tools\Chaine;

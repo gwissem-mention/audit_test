@@ -35,6 +35,11 @@ $(document).ready(function() {
         $('#productions .row').slideToggle();
     });
 
+    $('#commentaires h2').click(function(){
+        $(this).toggleClass('open closed');
+        $('#commentaires .bloc-commentaire').slideToggle();
+    });
+
     //Style WYSIWYG custom : titre pliable
     $('h2 .titre_depliable').click(function(){
         $(this).parent().nextAll().each(function(){
@@ -59,6 +64,15 @@ $(document).ready(function() {
         'width'     : '80%',
         'scrolling' : 'no'
     });
+
+    //bind de Validation Engine
+    if( $('form.toValidate').length > 0 )
+        $('form.toValidate').validationEngine();
+
+    //tooltip sur les mot trouvés du glossaire
+    $(".glosstool").tooltip({
+        placement : 'top'
+    });
 });
 
 //fancybox daffichage de la synthese
@@ -81,3 +95,40 @@ enquire.register("screen and (max-width: 991px)", {
         });
     }
 });
+
+function deleteWithConfirm(path)
+{
+    apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+        if(r) { 
+            $.ajax({
+                url      : path,
+                type     : 'POST',
+                dataType : 'json',
+                success  : function( data ){
+                   location.reload();
+                }
+            });
+        }
+    });
+}
+
+function ajoutCommentaire(path)
+{
+    var loader = $('#form-ajout').nodevoLoader();
+
+    if ( $('#form-ajout form').validationEngine('validate') ) {
+        loader.start();
+        
+        $.ajax({
+            url     : path,
+            data    :  $('#form-ajout form').serialize(),
+            type    : 'POST',
+            success : function( data ){
+                //Ajout de la réponse
+                $('#nouveau-commentaire').append( data );
+                
+                loader.finished();
+            }
+        });
+    }
+}

@@ -5,42 +5,35 @@ namespace HopitalNumerique\ObjetBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Commentaire
+ * Note
  *
- * @ORM\Table(name="hn_objet_commentaire")
- * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\CommentaireRepository")
+ * @ORM\Table(name="hn_objet_note")
+ * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\NoteRepository")
  */
-class Commentaire
+class Note
 {
     /**
      * @var integer
      *
-     * @ORM\Column(name="comm_id", type="integer")
+     * @ORM\Column(name="note_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="comm_dateCreation", type="datetime")
+     * @ORM\Column(name="note_dateNote", type="datetime")
      */
-    protected $dateCreation;
+    private $dateNote;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="comm_texte", type="text")
+     * @ORM\Column(name="note_note", type="integer")
      */
-    protected $texte;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="comm_publier", type="boolean")
-     */
-    protected $publier;
+    private $note;
     
     /**
      * @var integer
@@ -65,6 +58,11 @@ class Commentaire
      * @ORM\JoinColumn(name="usr_user", referencedColumnName="usr_id", onDelete="CASCADE")
      */
     protected $user;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Note", mappedBy="objet", cascade={"persist", "remove" })
+     */
+    protected $listeNotes;
 
 
     /**
@@ -78,92 +76,49 @@ class Commentaire
     }
 
     /**
-     * Set dateCreation
+     * Set dateNote
      *
-     * @param \DateTime $dateCreation
-     * @return Commentaire
+     * @param \DateTime $dateNote
+     * @return Note
      */
-    public function setDateCreation($dateCreation)
+    public function setDateNote($dateNote)
     {
-        $this->dateCreation = $dateCreation;
+        $this->dateNote = $dateNote;
 
         return $this;
     }
 
     /**
-     * Get dateCreation
+     * Get dateNote
      *
      * @return \DateTime 
      */
-    public function getDateCreation()
+    public function getDateNote()
     {
-        return $this->dateCreation;
+        return $this->dateNote;
     }
 
     /**
-     * Get dateCreation
+     * Set note
      *
-     * @return String 
+     * @param integer $note
+     * @return Note
      */
-    public function getDateCreationString()
+    public function setNote($note)
     {
-        return $this->dateCreation->format('d/m/Y');
-    }
-
-    /**
-     * Set texte
-     *
-     * @param string $texte
-     * @return Commentaire
-     */
-    public function setTexte($texte)
-    {
-        $this->texte = $texte;
+        $this->note = $note;
 
         return $this;
     }
 
     /**
-     * Get texte
+     * Get note
      *
-     * @return string 
+     * @return integer 
      */
-    public function getTexte()
+    public function getNote()
     {
-        return $this->texte;
-    }
-
-    /**
-     * Set publier
-     *
-     * @param boolean $publier
-     * @return Commentaire
-     */
-    public function setPublier($publier)
-    {
-        $this->publier = $publier;
-
-        return $this;
-    }
-
-    /**
-     * Get publier
-     *
-     * @return boolean 
-     */
-    public function getPublier()
-    {
-        return $this->publier;
-    }
-    
-    /**
-     * Get objet
-     *
-     * @return Objet $objet
-     */
-    public function getObjet()
-    {
-        return $this->objet;
+        return $this->note;
     }
     
     /**

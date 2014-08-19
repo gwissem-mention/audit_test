@@ -12,4 +12,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class CommentaireRepository extends EntityRepository
 {
+    /**
+     * Récupère les données du grid sous forme de tableau correctement formaté
+     *
+     * @return array
+     */
+    public function getDatasForGrid()
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('comm.id, comm.dateCreation, comm.texte, comm.publier, objet.titre as objTitre, contenu.titre as contTitre, user.nom as userNom, user.prenom as userPrenom')
+            ->from('HopitalNumeriqueObjetBundle:Commentaire', 'comm')
+            ->leftJoin('comm.objet','objet')
+            ->leftJoin('comm.contenu','contenu')
+            ->leftJoin('comm.user','user');
+            
+        return $qb;
+    }
 }

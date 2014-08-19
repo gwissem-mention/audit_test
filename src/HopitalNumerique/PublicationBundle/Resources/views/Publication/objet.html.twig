@@ -9,6 +9,9 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-publication-publication-objet.css" filter="cssrewrite, ?yui_css"
         "@fancybox_css" 
+        "@validationEngine_css"
+        'bundles/nodevoadmin/plugins/apprise/apprise.css'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriquepublication/css/style.css'
         'bundles/nodevotools/css/wysiwyg.css'
     %}
@@ -22,6 +25,9 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-publication-publication-objet.js"
         "@fancybox_js" 
+        "@validationEngine_js"
+        'bundles/nodevoadmin/plugins/apprise/apprise.js'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriquepublication/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -160,7 +166,20 @@
             </div>
         {% endif %}
 
-        {# Autres résultats de recherche#}
+        {# Gestion des commantaires #}
+        {% if objet.commentaires %}
+            {# Cas Contenu #}
+            {% if contenu is defined %}
+                {# Include la liste des commentaires #}
+                {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/liste_commentaires.html.twig' with { 'objet' : contenu, 'isContenu' : true } %}
+            {# Cas objet #}
+            {% else %}
+                {# Include la liste des commentaires #}
+                {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/liste_commentaires.html.twig' with { 'objet' : objet, 'isContenu' : false } %}
+            {% endif %}
+        {% endif %}
+
+        {# Autres résultats de recherche - "Résultats annexes à cette publication" #}
         {% if contenu is not defined %}
             {% set contenu = false %}
         {% endif %}
