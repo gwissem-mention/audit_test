@@ -118,6 +118,11 @@ class Contenu
     private $glossaires;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Commentaire", mappedBy="contenu", cascade={"persist", "remove" })
+     */
+    protected $listeCommentaires;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -421,6 +426,29 @@ class Contenu
     public function addGlossaire($glossaire)
     {
         $this->glossaires[] = $glossaire;
+        return $this;
+    }
+
+    /**
+     * Get listeCommentaires
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $listeCommentaires
+     */
+    public function getListeCommentaires()
+    {
+        return $this->listeCommentaires;
+    }
+
+    /**
+     * Set listeCommentaires
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $listeCommentaires
+     * @return Objet
+     */
+    public function setListeCommentaires(\Doctrine\Common\Collections\ArrayCollection $listeCommentaires)
+    {        
+        $this->listeCommentaires = $listeCommentaires;
+    
         return $this;
     }
 }

@@ -4,6 +4,7 @@ namespace HopitalNumerique\ObjetBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Commentaire controller.
@@ -18,6 +19,48 @@ class CommentaireController extends Controller
         $grid = $this->get('hopitalnumerique_objet.grid.commentaire');
 
         return $grid->render('HopitalNumeriqueObjetBundle:Commentaire:index.html.twig');
+    }
+
+    /**
+     * Ajout d'un commentaire en AJAX.
+     *
+     * @param integer $id Id de Commentaire.
+     */
+    public function addAction(Request $request)
+    {
+        $commentaire = $this->get('hopitalnumerique_objet.manager.commentaire')->createEmpty();
+
+        //récupération de l'objet du commentaire passé en param de la requete
+        $isContenu = $request->request->get('isContenu') === "1";
+        //Si c'est un Infradoc
+        if( $isContenu )
+        {
+            $idInfraDoc = $request->request->get('objetId');
+            $infraDoc = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $idInfraDoc) );
+            $objet    = $infraDoc->getObjet();
+            $commentaire->setContenu($infraDoc);
+        }
+        //Ou un objet
+        else
+        {
+            $idObjet = $request->request->get('objetId');
+            $objet   = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $idObjet));
+        }
+        $user    = $this->get('security.context')->getToken()->getUser();
+
+        $commentaire->setObjet( $objet );
+        $commentaire->setUser( $user );
+        $commentaire->setDateCreation( new \DateTime() );
+        $commentaire->setPublier(true);
+        $commentaire->setTexte($request->request->get('hopitalnumerique_commentaire')['texte']);
+
+        //save
+        $this->get('hopitalnumerique_objet.manager.commentaire')->save( $commentaire );
+
+        //return new Response('{"success":true}', 200);
+        return $this->render('HopitalNumeriquePublicationBundle:Publication:Partials/commentaire.html.twig', array(
+                'commentaire' => $commentaire,
+        ));  
     }
 
     /**
