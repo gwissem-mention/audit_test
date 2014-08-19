@@ -31,7 +31,8 @@
     "stepy": "https://github.com/wbotelhos/stepy.git",
     "highcharts.com": "4.0.0",
     "qtip2": "2.2.0",
-    "gridster": "0.5.2"
+    "gridster": "0.5.2",
+    "bootstrap-star-rating": "master"
   },
   "resolutions": {
     "jquery": "1.11.0"

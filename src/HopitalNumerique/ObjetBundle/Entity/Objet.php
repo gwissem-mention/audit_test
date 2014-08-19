@@ -269,6 +269,11 @@ class Objet
     protected $listeCommentaires;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Note", mappedBy="objet", cascade={"persist", "remove" })
+     */
+    protected $listeNotes;
+
+    /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Contenu", mappedBy="objet", cascade={"persist", "remove" })
      */
     protected $contenus;
@@ -1148,6 +1153,39 @@ class Objet
     public function setListeCommentaires(\Doctrine\Common\Collections\ArrayCollection $listeCommentaires)
     {        
         $this->listeCommentaires = $listeCommentaires;
+    
+        return $this;
+    }
+
+    /**
+     * Get listeNotes
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $listeNotes
+     */
+    public function getListeNotes()
+    {
+        return $this->listeNotes;
+    }
+
+    /**
+     * Get listeNotes JSONifié
+     *
+     * @return JSON $listeNotes
+     */
+    public function getListeNotesJSON()
+    {
+        return json_encode($this->listeNotes);
+    }
+
+    /**
+     * Set listeNotes
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $listeNotes
+     * @return Objet
+     */
+    public function setListeNotes(\Doctrine\Common\Collections\ArrayCollection $listeNotes)
+    {        
+        $this->listeNotes = $listeNotes;
     
         return $this;
     }

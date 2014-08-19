@@ -451,4 +451,27 @@ class Contenu
     
         return $this;
     }
+
+    /**
+     * Get listeNotes
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $listeNotes
+     */
+    public function getListeNotes()
+    {
+        return $this->listeNotes;
+    }
+
+    /**
+     * Set listeNotes
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $listeNotes
+     * @return Objet
+     */
+    public function setListeNotes(\Doctrine\Common\Collections\ArrayCollection $listeNotes)
+    {        
+        $this->listeNotes = $listeNotes;
+    
+        return $this;
+    }
 }

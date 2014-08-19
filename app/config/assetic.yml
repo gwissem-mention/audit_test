@@ -89,6 +89,10 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/bootstrap-iconpicker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"
             filters : [ ?yui_js ]
+        bootstrap_star_rating_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/bootstrap-star-rating/js/star-rating.min.js"
+            filters : [ ?yui_js ]
         nestable_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/Nestable/jquery.nestable.js"
@@ -171,3 +175,7 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/bootstrap-iconpicker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"
             filters: [ cssembed, ?yui_css ]
+        bootstrap_star_rating_css:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/bootstrap-star-rating/css/star-rating.min.css"
+            filters : [ ?yui_js ]

@@ -10,6 +10,7 @@ parameters:
     hopitalnumerique_objet.manager.commentaire.class: HopitalNumerique\ObjetBundle\Manager\CommentaireManager
     hopitalnumerique_objet.grid.commentaire.class: HopitalNumerique\ObjetBundle\Grid\CommentaireGrid
     hopitalnumerique_objet.form.commentaire.class: HopitalNumerique\ObjetBundle\Form\CommentaireType
+    hopitalnumerique_objet.manager.note.class: HopitalNumerique\ObjetBundle\Manager\NoteManager
 
 services:
     #managers
@@ -85,3 +86,11 @@ services:
         arguments: ["@hopitalnumerique_objet.manager.commentaire", "@validator"]
         tags:
             - { name: form.type, alias: hopitalnumerique_objet_commentaire }
+
+    #Note
+    #--Manager
+    hopitalnumerique_objet.manager.note:
+        class: %hopitalnumerique_objet.manager.note.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
