@@ -45,9 +45,15 @@ hopital_numerique_publication_commentaire_delete:
     requirements: 
         id: \d+
         _method: POST|DELETE
-
+#--Ajout
 hopital_numerique_publication_commentaire_add:
     pattern:  /publication/commentaire/add
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:add"}
-    requirements: 
-        id: \d+
+
+#Note
+#--Ajout
+hopital_numerique_publication_note_add:
+    pattern:  /publication/note/add.{_format}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Note:add", _format: json }
+    requirements:
+        _method: POST
