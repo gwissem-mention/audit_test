@@ -98,7 +98,6 @@ enquire.register("screen and (max-width: 991px)", {
 
 function deleteWithConfirm(path)
 {
-    //TODO : Mettre message de confirmation
     apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
         if(r) { 
             $.ajax({
