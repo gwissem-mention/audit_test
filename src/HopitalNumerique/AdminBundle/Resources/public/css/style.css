@@ -1,4 +1,4 @@
-.gridster ul li{}
+.gridster ul li{color: #4d4d4d !important;}
 .gridster ul li.dragging .panel{background: #34495E; color: #FFFFFF !important;}
 .gridster ul li .panel{ margin: 0; }
 .gridster ul li .panel .panel-heading h3.panel-title{ font-size: 16px; font-weight: normal; padding: 0; margin: 0; background: none; display: inline-block;}
