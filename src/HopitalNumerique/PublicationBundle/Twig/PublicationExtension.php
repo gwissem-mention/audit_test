@@ -144,8 +144,20 @@ class PublicationExtension extends \Twig_Extension
             );
             
             foreach($motsFounds as $mot => $data ){
+                
+                // On converti la description en ASCII pour ne pas trouver un des mots du glossaire dans la description
+                $description = ''; 
+                if(!empty($data['description']))
+                {
+                    $data['description'] = utf8_decode($data['description']);
+                    foreach (str_split($data['description']) as $obj) 
+                    { 
+                        $description .= '&#' . ord($obj) . ';'; 
+                    }
+                }
+
                 //search word in content
-                $pattern = '/[\;\<\>\,\"\(\)\'\& ]{1,1}'.$mot.'[\;\<\>\,\"\(\)\'\& ]{1,1}/';
+                $pattern = '/[\;\<\>\,\"\(\)\'\& ]{1,1}'.$mot.'[\;\<\>\,\"\(\)\'\.\& ]{1,1}/';
                 if( !$data['sensitive'] )
                     $pattern .= 'i';
 
@@ -159,7 +171,12 @@ class PublicationExtension extends \Twig_Extension
                     //iterate over matches
                     foreach($matches[0] as $match)
                     {
-                        $html    = '¬<a target="_blank" href="/glossaire#¬'. $tool->minifie() .'¬" style="text-decoration:none"><abbr class="glosstool" data-html="true" title="¬' . ($data['intitule'] ? $data['intitule'] : substr($match, 1, -1) ) . ' :<br>'  . $data['description']. '¬" >¬'. substr($match, 1, -1) . '</abbr></a>';
+
+                        $html    = '¬<a target="_blank" href="/glossaire#¬'. $tool->minifie() .'¬" style="text-decoration:none"><abbr class="glosstool" data-html="true" title="¬';
+                        $html .= ($data['intitule'] ? $data['intitule'] : substr($match, 1, -1) );
+                        $html .= (!empty($description)) ? ' : <br>' . $description  : '';
+                        $html .= '¬" >¬' . substr($match, 1, -1) . '</abbr></a>';
+
                         $html    = substr($match, 0, 1) . $html . substr($match, -1);
                         $content = str_replace($match, $html, $content);
                     }
