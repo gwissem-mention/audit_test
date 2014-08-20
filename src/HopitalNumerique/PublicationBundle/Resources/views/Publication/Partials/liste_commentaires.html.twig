@@ -17,12 +17,11 @@
             {# Ajout d'un commentaire uniquement si il y a un user connecté #}
             {% if app.user %}
                 <h3 class="open">Postez votre commentaire</h3>
-                <div class="mysep background-violet"></div>
                 <div id="form-ajout">
                     <form id="hopitalnumerique_commentaire" novalidate="novalidate" class="form-horizontal toValidate" action="" method="post" name="hopitalnumerique_commentaire">
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <textarea class="form-control" rows="8" required="required" name="hopitalnumerique_commentaire[texte]" id="hopitalnumerique_commentaire_texte"></textarea>
+                                <textarea class="form-control validate[required,minSize[10]]" rows="8" required="required" name="hopitalnumerique_commentaire[texte]" id="hopitalnumerique_commentaire_texte"></textarea>
                             </div>
                             <div class="col-sm-2 bouton-valider">
                                 <div onclick="ajoutCommentaire('{{ path('hopital_numerique_publication_commentaire_add') }}' );" class="btn btn-success col-md-12 background-violet">ENVOYER</div>
@@ -36,7 +35,6 @@
             {# Sinon demande à l'utilisateur de se connecter #}
             {% else %}
                 <h3 class="open">Postez votre commentaire</h3>
-                <div class="mysep background-violet"></div>
                 <p>
                     Pour poster un commentaire vous devez soit vous <a href="{{path('account_login')}}">connecter</a>, soit vous <a href="{{path('hopital_numerique_user_inscription')}}" >créer un compte</a>.
                 </p>
