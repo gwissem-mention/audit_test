@@ -41,10 +41,10 @@
 
                         <div class="panel-body">
                             <ol>
-                                <li>Nb de comptes : {{blocUser['nb']}}</li>
-                                <li>Nb de comptes actifs : {{blocUser['actif']}}</li>
-                                <li>Nb de comptes de type ES : {{blocUser['es']}}</li>
-                                <li>Nb de compte de type "Autres ES" : {{ blocUser['nb'] - blocUser['es'] }}</li>
+                                <li><strong>{{blocUser['nb']}}</strong> comptes</li>
+                                <li><strong>{{blocUser['actif']}}</strong> comptes actifs</li>
+                                <li><strong>{{blocUser['es']}}</strong> comptes de type ES</li>
+                                <li><strong>>{{ blocUser['nb'] - blocUser['es'] }}</strong> compte de type "Autres ES"</li>
                             </ol>
                         </div>
                     </div>
@@ -61,11 +61,11 @@
 
                         <div class="panel-body">
                             <ol>
-                                <li>Nb de candidats : {{blocUser['ambCandidats']}}</li>
-                                <li>Nb ambassadeurs : {{blocUser['ambassadeurs']}}</li>
-                                <li>Nb ambassadeurs ayant suivi un MAPF : {{blocUser['ambassadeursMAPF']}}</li>
-                                <li>Nb candidatures reçues : {{blocUser['ambCandidatsRecues']}}</li>
-                                <li>Nb ambassadeurs avec docs à renouveler : {{blocUser['conventions']}}</li>
+                                <li><strong>{{blocUser['ambCandidats']}}</strong> candidats</li>
+                                <li><strong>{{blocUser['ambassadeurs']}}</strong> ambassadeurs</li>
+                                <li><strong>{{blocUser['ambassadeursMAPF']}}</strong> ambassadeurs ayant suivi un MAPF</li>
+                                <li><strong>{{blocUser['ambCandidatsRecues']}}</strong> candidatures reçues</li>
+                                <li><strong>{{blocUser['conventions']}}</strong> ambassadeurs avec docs à renouveler</li>
                             </ol>
                         </div>
                     </div>
@@ -82,10 +82,10 @@
 
                         <div class="panel-body">
                             <ol>
-                                <li>Nb de candidats : {{blocUser['expCandidats']}}</li>
-                                <li>Nb experts : {{blocUser['experts']}}</li>
-                                <li>Nb candidatures reçues : {{blocUser['expCandidatsRecues']}}</li>
-                                <li>Nb contributions au forum depuis 7 jours : {{blocUser['contribution']}}</li>
+                                <li><strong>{{blocUser['expCandidats']}}</strong> candidats</li>
+                                <li><strong>{{blocUser['experts']}}</strong> experts</li>
+                                <li><strong>{{blocUser['expCandidatsRecues']}}</strong> candidatures reçues</li>
+                                <li><strong>{{blocUser['contribution']}}</strong> contributions au forum depuis 7 jours</li>
                             </ol>
                         </div>
                     </div>
@@ -102,9 +102,9 @@
 
                         <div class="panel-body">
                             <ol>
-                                <li>Nb points durs : {{blocObjets['points-durs']}}</li>
-                                <li>Nb productions : {{blocObjets['productions']}}</li>
-                                <li>Nb publications non publiées : {{blocObjets['publications-non-publiees']}}</li>
+                                <li><strong>{{blocObjets['points-durs']}}</strong> points durs</li>
+                                <li><strong>{{blocObjets['productions']}}</strong> productions</li>
+                                <li><strong>{{blocObjets['publications-non-publiees']}}</strong> publications non publiées</li>
                             </ol>
                         </div>
                     </div>
@@ -197,11 +197,11 @@
 
                         <div class="panel-body">
                             <ol>
-                                <li>Nb interventions demandées : {{blocInterventions['demandees']}}</li>
-                                <li>Nb interventions mises en attente : {{blocInterventions['attente']}}</li>
-                                <li>Nb interventions en cours : {{blocInterventions['en-cours']}}</li>
-                                <li>Nb interventions refusées : {{blocInterventions['refusees']}}</li>
-                                <li>Nb interventions annulées : {{blocInterventions['annulees']}}</li>
+                                <li><strong>{{blocInterventions['demandees']}}</strong> interventions demandées</li>
+                                <li><strong>{{blocInterventions['attente']}}</strong> interventions mises en attente</li>
+                                <li><strong>{{blocInterventions['en-cours']}}</strong> interventions en cours</li>
+                                <li><strong>{{blocInterventions['refusees']}}</strong> interventions refusées</li>
+                                <li><strong>{{blocInterventions['annulees']}}</strong> interventions annulées</li>
                             </ol>
                         </div>
                     </div>
@@ -218,7 +218,7 @@
 
                         <div class="panel-body">
                             <ol>
-                                <li>Nb de demandes d'inscriptions en attente : {{blocSessions['inscriptions']}}</li>
+                                <li><strong>{{blocSessions['inscriptions']}}</strong> demandes d'inscriptions en attente</li>
                             </ol>
                         </div>
                     </div>
@@ -277,9 +277,9 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li>Nombre de topics commentés depuis 1 mois : {{datas['topics']}}</li>
-                                    <li>Nombre de contributions depuis 1 mois : {{datas['contributions']}}</li>
-                                    <li>Nombre de topics sans réponse : {{datas['topics-sans-reponses']}}</li>
+                                    <li><strong>{{datas['topics']}}</strong> topics commentés depuis 1 mois</li>
+                                    <li><strong>{{datas['contributions']}}</strong> contributions depuis 1 mois</li>
+                                    <li><strong>{{datas['topics-sans-reponses']}}</strong> topics sans réponse</li>
                                 </ol>
                             </div>
                         </div>

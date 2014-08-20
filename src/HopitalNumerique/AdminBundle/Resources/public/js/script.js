@@ -1,7 +1,7 @@
 $(function() {
     gridster = $(".gridster ul").gridster({
         widget_margins         : [5, 10],
-        widget_base_dimensions : [330, 200],
+        widget_base_dimensions : [330, 155],
         max_cols               : 3,
         min_cols               : 3,
         serialize_params       : function($w, wgd) { return { col: wgd.col, row: wgd.row, id: $w.data('id') } },
