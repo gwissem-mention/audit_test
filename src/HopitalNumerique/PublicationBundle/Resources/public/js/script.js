@@ -209,7 +209,6 @@ function calculMoyenne()
 
 function deleteNote()
 {
-
     //Mise en place d'un loader le temps de la sauvegarde
     var loader = $("#bloc-notation-objet .wrapper").nodevoLoader();
     loader.start();

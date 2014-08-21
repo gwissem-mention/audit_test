@@ -1,5 +1,13 @@
 <div class="col-md-12" id="commentaires" >
-    <h2 class="open">Commentaires</h2>
+    {% set nbCommentaire = 0 %}
+    {% for commentaire in objet.listeCommentaires %}
+        {% if isContenu 
+                or ( not isContenu and commentaire.contenu is null ) 
+            %}
+            {% set nbCommentaire = nbCommentaire + 1 %}
+        {% endif %}
+    {% endfor %}
+    <h2 class="open">Commentaires ( {{nbCommentaire }} ){% if nbCommentaire != 0 %} - Ajouter un commentaire{% endif %}</h2>
     <div class="mysep background-rose"></div>
     <div class="bloc-commentaire">
         {% for commentaire in objet.listeCommentaires %}
@@ -12,6 +20,9 @@
                 {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/commentaire.html.twig' with { 'commentaire' : commentaire } %}
             {% endif %}
         {% endfor %}
+        {% if nbCommentaire == 0 %}
+            <p>Soyez le premier à déposer un commentaire.</p>
+        {% endif %}
         <div id="nouveau-commentaire"></div>
         <div class="ajout-commentaire"> 
             {# Ajout d'un commentaire uniquement si il y a un user connecté #}
@@ -36,10 +47,16 @@
             {% else %}
                 <h3 class="open">Postez votre commentaire</h3>
                 <p>
-                    Pour poster un commentaire vous devez soit vous <a href="{{path('account_login')}}">connecter</a>, soit vous <a href="{{path('hopital_numerique_user_inscription')}}" >créer un compte</a>.
+                    Pour poster un commentaire vous devez vous <a href="{{path('account_login')}}">identifier</a>.
                 </p>
             {% endif %}
         </div>
     </div>
 </div>
 <div class="clearfix"></div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#commentaires h2").click();
+    });
+</script>
