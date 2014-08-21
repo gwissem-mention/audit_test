@@ -29,6 +29,22 @@ class PublicationExtension extends \Twig_Extension
     }
 
     /**
+     * to assci
+     */
+    private function toascii($string)
+    {
+        if(!empty($string)){
+            $tempo = utf8_decode($string);
+            $string = '';
+            foreach (str_split($tempo) as $obj)
+            {
+                $string .= '&#' . ord($obj) . ';';
+            }
+         }
+         return $string;
+    }
+
+    /**
      * Parse le contenu pour créer les liens vers les publications
      *
      * @param string $content Contenu
@@ -47,13 +63,17 @@ class PublicationExtension extends \Twig_Extension
         {
             foreach($matches[1] as $key => $value)
             {
+                
+                // Pour éviter les liens dans les liens 
+                $matches[3][$key] = $this->toascii($matches[3][$key]);
+
                 switch($value){
                     case 'PUBLICATION':
                         //cas Objet
                         $objet  = $this->getManagerObjet()->findOneBy( array( 'id' => $matches[2][$key] ) );
                         $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
                         if($objet){
-                            $label = $matches[3][$key] ? $matches[3][$key] : $objet->getTitre();
+                            $label = $matches[3][$key] ? $matches[3][$key] : $this->toascii($objet->getTitre());
                             $replacement = '<a href="/publication/' . $matches[2][$key] . '-' . $objet->getAlias() . '" '.$target.'>' . $label . '</a>';
                         } else {
                             $replacement = "<a href=\"javascript:alert('Cette publication n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
@@ -69,7 +89,7 @@ class PublicationExtension extends \Twig_Extension
                         $target  = $matches[5][$key] == 1 ? 'target="_blank"' : "";
                         if( $contenu ){
                             $objet       = $contenu->getObjet();
-                            $label       = $matches[3][$key] ? $matches[3][$key] : $contenu->getTitre();
+                            $label       = $matches[3][$key] ? $matches[3][$key] : $this->toascii($contenu->getTitre());
                             $replacement = '<a href="/publication/'.$objet->getId().'-' . $objet->getAlias() . '/'.$matches[2][$key].'-'.$contenu->getAlias().'" '.$target.'>' . $label.'</a>';
                         } else {
                             $replacement = "<a href=\"javascript:alert('Cet infra-doc n\'existe pas')\" ".$target.">" . $matches[3][$key].'</a>';
@@ -83,7 +103,7 @@ class PublicationExtension extends \Twig_Extension
                         $objet  = $this->getManagerObjet()->findOneBy( array( 'id' => $matches[2][$key] ) );
                         $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
                         if($objet){
-                            $label = $matches[3][$key] ? $matches[3][$key] : $objet->getTitre();
+                            $label = $matches[3][$key] ? $matches[3][$key] : $this->toascii($objet->getTitre());
                             $replacement = '<a href="/publication/article/'.$matches[2][$key].'-' . $objet->getAlias() . '" '.$target.'>' . $label . '</a>';
                         } else {
                             $replacement = "<a href=\"javascript:alert('Cet article n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
@@ -112,7 +132,7 @@ class PublicationExtension extends \Twig_Extension
                         $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
                         if($questionnaire)
                         {
-                            $label       = $matches[3][$key] ? $matches[3][$key] : $questionnaire->getNom();
+                            $label       = $matches[3][$key] ? $matches[3][$key] : $this->toascii($questionnaire->getNom());
                             $replacement = '<a href="/questionnaire/edit/'. $questionnaire->getId() . '" '.$target.'>' . $label . '</a>';
                         }
                         else
@@ -146,15 +166,7 @@ class PublicationExtension extends \Twig_Extension
             foreach($motsFounds as $mot => $data ){
                 
                 // On converti la description en ASCII pour ne pas trouver un des mots du glossaire dans la description
-                $description = ''; 
-                if(!empty($data['description']))
-                {
-                    $data['description'] = utf8_decode($data['description']);
-                    foreach (str_split($data['description']) as $obj) 
-                    { 
-                        $description .= '&#' . ord($obj) . ';'; 
-                    }
-                }
+                $description = $this->toascii($data['description']);
 
                 //search word in content
                 $pattern = '/[\;\<\>\,\"\(\)\'\& ]{1,1}'.$mot.'[\;\<\>\,\"\(\)\'\.\& ]{1,1}/';
