@@ -31,7 +31,9 @@ class CommentaireGrid extends Grid implements GridInterface
         $this->addColonne( new Column\TextColumn('nomPrenom', 'Utilisateur') );
         $this->addColonne( new Column\TextColumn('texte', 'Texte') );
         $this->addColonne( new Column\DateColumn('dateCreation', 'Date du commentaire') );
+        $this->addColonne( new Column\TextColumn('objId', 'Objet Id') );
         $this->addColonne( new Column\TextColumn('objTitre', 'Objet concerné') );
+        $this->addColonne( new Column\TextColumn('contId', 'Infradoc Id') );
         $this->addColonne( new Column\TextColumn('contTitre', 'Infradoc concerné') );
         $this->addColonne( new Column\BooleanColumn('publier', 'Publier') );        
     }

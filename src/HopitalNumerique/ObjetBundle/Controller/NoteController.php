@@ -13,56 +13,118 @@ use Symfony\Component\HttpFoundation\Request;
 class NoteController extends Controller
 {
     /**
-     * Ajout d'un commentaire en AJAX.
+     * Ajout d'une note en AJAX ou modification d'une existante.
      *
-     * @param integer $id Id de Commentaire.
+     * @param Request $request
      */
     public function addAction(Request $request)
     {
-        // $commentaire = $this->get('hopitalnumerique_objet.manager.commentaire')->createEmpty();
+        $infraDoc = null;
 
-        // //récupération de l'objet du commentaire passé en param de la requete
-        // $isContenu = $request->request->get('isContenu') === "1";
-        // //Si c'est un Infradoc
-        // if( $isContenu )
-        // {
-        //     $idInfraDoc = $request->request->get('objetId');
-        //     $infraDoc = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $idInfraDoc) );
-        //     $objet    = $infraDoc->getObjet();
-        //     $commentaire->setContenu($infraDoc);
-        // }
-        // //Ou un objet
-        // else
-        // {
-        //     $idObjet = $request->request->get('objetId');
-        //     $objet   = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $idObjet));
-        // }
-        // $user    = $this->get('security.context')->getToken()->getUser();
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
 
-        // $commentaire->setObjet( $objet );
-        // $commentaire->setUser( $user );
-        // $commentaire->setDateCreation( new \DateTime() );
-        // $commentaire->setPublier(true);
-        // $commentaire->setTexte($request->request->get('hopitalnumerique_commentaire')['texte']);
+        //récupération de l'objet du commentaire passé en param de la requete
+        $isContenu = $request->request->get('isContenu') === "1";
 
-        // //save
-        // $this->get('hopitalnumerique_objet.manager.commentaire')->save( $commentaire );
+        //Si c'est un Infradoc
+        if( $isContenu )
+        {
+            $idInfraDoc = $request->request->get('objetId');
+            $infraDoc   = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $idInfraDoc) );
+            $objet      = $infraDoc->getObjet();
+            $note       = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('contenu' => $infraDoc, 'user' => $user));
+        }
+        //Ou un objet
+        else
+        {
+            $idObjet = $request->request->get('objetId');
+            $objet   = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $idObjet));
+            $note    = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('objet' => $objet, 'user' => $user));
+        }
 
-        // //return new Response('{"success":true}', 200);
+        //Récupération de la note
+        $noteValeur = intval($request->request->get('note'));
+        //Si null, on le créé
+        if(is_null($note))
+        {
+            $note = $this->get('hopitalnumerique_objet.manager.note')->createEmpty();
+
+            $note->setUser($user);
+            $note->setObjet($objet);
+            if(!is_null($infraDoc))
+                $note->setContenu($infraDoc);
+        }
         
-        // return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_objet_admin_commentaire').'"}', 200); 
+        //Set de la nouvelle valeur de la note + modif de la date
+        $note->setNote($noteValeur);
+        $note->setDateNote(new \DateTime());
+
+        //Sauvegarde / Insertion
+        $this->get('hopitalnumerique_objet.manager.note')->save($note);
+
+        return new Response('{"success":true}', 200);
     }
 
     /**
-     * Affiche le formulaire d'édition de Commentaire.
+     * Calcul de la note moyenne en AJAX d'un objet.
      *
-     * @param integer $id Id de Commentaire.
+     * @param Request $request
      */
-    public function editAction( $id )
+    public function calculNoteMoyenneAction(Request $request)
     {
-        // //Récupération de l'entité passée en paramètre
-        // $commentaire = $this->get('hopitalnumerique_objet.manager.commentaire')->findOneBy( array('id' => $id) );
+        //récupération de l'objet du commentaire passé en param de la requete
+        $isContenu = $request->request->get('isContenu') === "1";
 
-        // return $this->renderForm('hopitalnumerique_objet_commentaire', $commentaire, 'HopitalNumeriqueObjetBundle:Commentaire:edit.html.twig' );
+        $idObjet     = $request->request->get('objetId');
+
+        //Si c'est un Infradoc
+        if( $isContenu )
+        {
+            $objet = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $idObjet));
+        }
+        else
+        {
+            $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $idObjet));
+        }
+        $noteMoyenne = $this->get('hopitalnumerique_objet.manager.note')->getMoyenneNoteByObjet($objet->getId(), $isContenu);
+
+        $nombreNotes = $this->get('hopitalnumerique_objet.manager.note')->countNbNoteByObjet($objet->getId(), $isContenu);
+
+        return new Response('{"success":true, "nbNote" : "'.$nombreNotes.'", "noteMoyenne" : "'. $noteMoyenne .'"}', 200);
+    }
+
+    /**
+     * Suppression de la note de l'utilisateur courant pour un objet donné (click sur reset note).
+     *
+     * @param Request $request
+     */
+    public function deleteNoteAction(Request $request)
+    {
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        //récupération de l'objet du commentaire passé en param de la requete
+        $isContenu = $request->request->get('isContenu') === "1";
+
+        //Si c'est un Infradoc
+        if( $isContenu )
+        {
+            $idInfraDoc = $request->request->get('objetId');
+            $infraDoc   = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $idInfraDoc) );
+            $objet      = $infraDoc->getObjet();
+            $note       = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('contenu' => $infraDoc, 'user' => $user));
+        }
+        //Ou un objet
+        else
+        {
+            $idObjet = $request->request->get('objetId');
+            $objet   = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $idObjet));
+            $note    = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('objet' => $objet, 'user' => $user));
+        }
+            
+        $this->get('hopitalnumerique_objet.manager.note')->delete($note);
+
+        return new Response('{"success":true}', 200);
     }
 }

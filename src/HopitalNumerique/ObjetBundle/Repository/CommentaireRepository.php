@@ -21,7 +21,7 @@ class CommentaireRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
 
-        $qb->select('comm.id, comm.dateCreation, comm.texte, comm.publier, objet.titre as objTitre, contenu.titre as contTitre, user.nom as userNom, user.prenom as userPrenom')
+        $qb->select('comm.id, comm.dateCreation, comm.texte, comm.publier, objet.id as objId, objet.titre as objTitre, contenu.id as contId, contenu.titre as contTitre, user.nom as userNom, user.prenom as userPrenom')
             ->from('HopitalNumeriqueObjetBundle:Commentaire', 'comm')
             ->leftJoin('comm.objet','objet')
             ->leftJoin('comm.contenu','contenu')

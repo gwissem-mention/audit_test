@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 
 /**
  * NoteRepository
@@ -12,4 +13,59 @@ use Doctrine\ORM\EntityRepository;
  */
 class NoteRepository extends EntityRepository
 {
+    /**
+     * Récupère la moyenne des 
+     *
+     * @return QueryBuilder
+     */
+    public function getMoyenneNoteByObjet( $idObjet, $isContenu )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('avg(note.note)')
+            ->from('HopitalNumeriqueObjetBundle:Note', 'note');
+        if($isContenu)
+        {
+            $qb->leftJoin('note.contenu','contenu')
+               ->where('contenu.id = :contenuId')
+               ->setParameter('contenuId', $idObjet );
+        }
+        else
+        {
+            $qb->leftJoin('note.objet','objet')
+               ->where('objet.id = :objetId')
+               ->setParameter('objetId', $idObjet )
+               ->leftJoin('note.contenu','contenu')
+               ->andWhere($qb->expr()->isNull('contenu.id'));
+        }
+        
+        return $qb;
+    }
+
+    /**
+     * Récupère le nombre de notes de l'objet passé en param 
+     *
+     * @return QueryBuilder
+     */
+    public function countNbNoteByObjet( $idObjet, $isContenu )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('count(note.note)')
+            ->from('HopitalNumeriqueObjetBundle:Note', 'note');
+        if($isContenu)
+        {
+            $qb->leftJoin('note.contenu','contenu')
+               ->where('contenu.id = :contenuId')
+               ->setParameter('contenuId', $idObjet );
+        }
+        else
+        {
+            $qb->leftJoin('note.objet','objet')
+               ->where('objet.id = :objetId')
+               ->setParameter('objetId', $idObjet )
+               ->leftJoin('note.contenu','contenu')
+               ->andWhere($qb->expr()->isNull('contenu.id'));
+        }
+        
+        return $qb;
+    }
 }

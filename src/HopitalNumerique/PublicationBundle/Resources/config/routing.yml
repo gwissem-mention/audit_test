@@ -57,3 +57,17 @@ hopital_numerique_publication_note_add:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Note:add", _format: json }
     requirements:
         _method: POST
+
+#--Calcul note moyenne
+hopital_numerique_publication_note_moyenne_objet:
+    pattern:  /publication/note/note_moyenne.{_format}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Note:calculNoteMoyenne", _format: json }
+    requirements:
+        _method: GET|POST
+
+#--Suppression
+hopital_numerique_publication_note_delete:
+    pattern:  /publication/note/delete.{_format}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Note:deleteNote", _format: json }
+    requirements:
+        _method: POST
