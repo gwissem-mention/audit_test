@@ -45,7 +45,7 @@ class Commentaire
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="Objet")
+     * @ORM\ManyToOne(targetEntity="Objet", inversedBy="listeCommentaires")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
      */
     protected $objet;
@@ -53,7 +53,7 @@ class Commentaire
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="Contenu")
+     * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="listeCommentaires")
      * @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE", nullable=true)
      */
     protected $contenu;

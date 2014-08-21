@@ -123,6 +123,11 @@ class Contenu
     protected $listeCommentaires;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Note", mappedBy="contenu", cascade={"persist", "remove" })
+     */
+    protected $listeNotes;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()

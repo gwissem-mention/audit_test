@@ -32,10 +32,17 @@ class PublicationController extends Controller
         //build productions with authorizations
         $productions = $this->getProductionsAssocies($objet->getObjets());
 
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+        //Récupération de la note pour l'objet de l'utilisateur courant
+        $note = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('user' => $user, 'objet' => $objet));
+
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
             'objets'       => $this->getObjetsFromRecherche( $objet ),
+            'note'         => $note,
             'types'        => $types,
             'contenus'     => $contenus,
             'productions'  => $productions,
@@ -68,6 +75,11 @@ class PublicationController extends Controller
         //get Contenus : for sommaire
         $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
 
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+        //Récupération de la note pour l'objet de l'utilisateur courant
+        $note = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('user' => $user, 'contenu' => $contenu));
+
         //set Consultation entry
         $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $contenu, true );
 
@@ -75,6 +87,7 @@ class PublicationController extends Controller
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
             'objets'       => $this->getObjetsFromRecherche( $contenu ),
+            'note'         => $note,
             'contenus'     => $contenus,
             'types'        => $types,
             'contenu'      => $contenu,

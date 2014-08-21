@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset=utf-8 />
+        <title></title>
+        <link rel="stylesheet" type="text/css" media="screen" href="css/master.css" />
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+         <!--// plugin-specific resources //-->
+            <script src='jquery.js' type="text/javascript"></script>
+            <script src='jquery.MetaData.js' type="text/javascript" language="javascript"></script>
+         <script src='jquery.rating.js' type="text/javascript" language="javascript"></script>
+         <link href='jquery.rating.css' type="text/css" rel="stylesheet"/>
+         <!--// documentation resources //-->
+         <!--<script src="http://code.jquery.com/jquery-migrate-1.1.1.js" type="text/javascript"></script>-->
+         <link type="text/css" href="/@/js/jquery/ui/jquery.ui.css" rel="stylesheet" />
+
+         <link href='documentation/documentation.css' type="text/css" rel="stylesheet"/>
+        <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        
+        <script type="text/javascript">
+$(function(){
+    $('#toto form .test').rating({
+        focus: function(value, link){
+            alert('aaa');
+            var tip = $('#hover-test');
+            tip[0].data = tip[0].data || tip.html();
+            tip.html(link.title || 'value: '+value);
+        },
+        blur: function(value, link){
+            alert('bbb');
+            var tip = $('#hover-test');
+            $('#hover-test').html(tip[0].data || '');
+        },
+        callback: function(value, link){
+            alert(value);
+        }
+    });
+});
+        
+        </script>
+
+        <div id="toto">
+            <form>
+                <input name="star1" type="radio" class="star test" value="1" title="Nul"/>
+                <input name="star1" type="radio" class="star test" value="2" title="Pas terrible"/>
+                <input name="star1" type="radio" class="star test" value="3" title="Moyen"/>
+                <input name="star1" type="radio" class="star test" value="4" title="Bien"/>
+                <input name="star1" type="radio" class="star test" value="5" title="Excellent"/>
+                <span style="margin:0 0 0 20px;" id="hover-test">Ici texte du hover</span>
+
+                <input type="submit" value="Submit scores!">
+            </form>
+        </div>
+        <div class="clearfix"></div>
+
+
+    </body>
+</html>

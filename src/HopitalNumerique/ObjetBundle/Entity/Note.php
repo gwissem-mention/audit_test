@@ -19,26 +19,26 @@ class Note
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="note_dateNote", type="datetime")
      */
-    private $dateNote;
+    protected $dateNote;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="note_note", type="integer")
      */
-    private $note;
+    protected $note;
     
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="Objet")
+     * @ORM\ManyToOne(targetEntity="Objet", inversedBy="listeNotes")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
      */
     protected $objet;
@@ -46,7 +46,7 @@ class Note
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="Contenu")
+     * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="listeNotes")
      * @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE", nullable=true)
      */
     protected $contenu;
@@ -58,11 +58,6 @@ class Note
      * @ORM\JoinColumn(name="usr_user", referencedColumnName="usr_id", onDelete="CASCADE")
      */
     protected $user;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Note", mappedBy="objet", cascade={"persist", "remove" })
-     */
-    protected $listeNotes;
 
 
     /**
