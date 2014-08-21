@@ -77,16 +77,17 @@
         NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
         
         tinyMCE.init({
-            selector     : "textarea",
-            theme        : "modern",
-            theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
-            skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
-            plugins      : 'moxiemanager image table code textcolor pagebreak importcss link',
-            height       : 210,
-            menubar      : false,
-            content_css  : '/bundles/nodevotools/css/wysiwyg.css',
-            toolbar1     : "code | undo redo cut copy paste | pagebreak | link | insertfile image ",
-            toolbar2     : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
+            entity_encoding : "raw",
+            selector        : "textarea",
+            theme           : "modern",
+            theme_url       : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
+            skin_url        : '/bundles/nodevotools/js/tinymce/skins/lightgray',
+            plugins         : 'moxiemanager image table code textcolor pagebreak importcss link',
+            height          : 210,
+            menubar         : false,
+            content_css     : '/bundles/nodevotools/css/wysiwyg.css',
+            toolbar1        : "code | undo redo cut copy paste | pagebreak | link | insertfile image ",
+            toolbar2        : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
             style_formats: [
                 {title: 'Titres', items: [
                     {title: 'Titre 2', block: 'h2'},
