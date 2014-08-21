@@ -85,10 +85,10 @@
                 <div class="col-md-12">
                     <div id="bloc-notation-moyenne-objet">
                         <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
-                        <span class="bloc-star">
+                        <div class="bloc-star pull-left">
                             <div class="rateit" id="note-moyenne-etoile" data-rateit-max="3" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
-                        </span>
-                        <span id="info-note-moyenne"></span>
+                        </div>
+                        <div class="pull-left" id="info-note-moyenne"></div>
                         <div class="clearfix"></div>
                     </div>
                 </div>
@@ -117,10 +117,10 @@
                 <div class="col-md-12">
                     <div id="bloc-notation-moyenne-objet">
                         <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
-                        <span class="bloc-star">
+                        <div class="bloc-star pull-left">
                             <div class="rateit" id="note-moyenne-etoile" data-rateit-max="3" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
-                        </span>
-                        <span id="info-note-moyenne"></span>
+                        </div>
+                        <div class="pull-left" id="info-note-moyenne"></div>
                         <div class="clearfix"></div>
                     </div>
                 </div>
@@ -153,13 +153,6 @@
             </div>
         {% endif %}
 
-
-
-<script type="text/javascript">
-
-</script>
-
-
         {% if app.user and objet.notes %}
             <div id="bloc-notation-objet" class="col-md-5">
                 <div class="wrapper">
@@ -167,8 +160,8 @@
                     <input type="hidden" id="note-delete-url" value="{{path('hopital_numerique_publication_note_delete' ) }}">
                     <input type="hidden" id="note-valeur" style="display: none;" value="0">
                     <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">
-                    <span>Cette production vous-a-t-elle été utile ? </span>
-                    <div class="rateit" id="note-etoile" data-rateit-step="1" data-rateit-value="{% if note is not null %}{{note.note}}{% else %}0{% endif %}" data-rateit-max="3"></div>
+                    <div class="pull-left">Cette production vous-a-t-elle été utile ? </div>
+                    <div class="rateit pull-left" id="note-etoile" data-rateit-step="1" data-rateit-value="{% if note is not null %}{{note.note}}{% else %}0{% endif %}" data-rateit-max="3"></div>
                     <div class="clearfix"></div>
                 </div>
                 <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" />
