@@ -78,7 +78,8 @@
                 </div>
             </div>
             
-
+            <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" /> 
+            <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">
             <input type="hidden" id="notesAutorisees" style="display: none;" value="{{objet.notes}}">
             {% if objet.notes %}
                 {# Ajout la moyenne de l'objet #}
@@ -110,7 +111,7 @@
                 </div>
             </div>
             
-
+            <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">
             <input type="hidden" id="notesAutorisees" style="display: none;" value="{{objet.notes}}">
             {% if objet.notes %}
                 {# Ajout la moyenne de l'objet #}
@@ -159,8 +160,7 @@
                     <input type="hidden" id="note-sauvegarde-url" value="{{path('hopital_numerique_publication_note_add' ) }}">
                     <input type="hidden" id="note-delete-url" value="{{path('hopital_numerique_publication_note_delete' ) }}">
                     <input type="hidden" id="note-valeur" style="display: none;" value="0">
-                    <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">
-                    <div class="pull-left">Cette production vous-a-t-elle été utile ? </div>
+                    <div class="pull-left" style="line-height:16px">Cette production vous-a-t-elle été utile ? </div>
                     <div class="rateit pull-left" id="note-etoile" data-rateit-step="1" data-rateit-value="{% if note is not null %}{{note.note}}{% else %}0{% endif %}" data-rateit-max="3"></div>
                     <div class="clearfix"></div>
                 </div>

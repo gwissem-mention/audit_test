@@ -151,8 +151,8 @@ function ajoutCommentaire(path)
             success : function( data ){
                 //Ajout de la réponse
                 $('#nouveau-commentaire').append( data );
-                
                 loader.finished();
+                $('#info-com').html(' - Merci pour votre commentaire !');
             }
         });
     }
