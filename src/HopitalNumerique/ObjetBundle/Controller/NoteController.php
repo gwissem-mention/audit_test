@@ -122,8 +122,9 @@ class NoteController extends Controller
             $objet   = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $idObjet));
             $note    = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('objet' => $objet, 'user' => $user));
         }
-            
-        $this->get('hopitalnumerique_objet.manager.note')->delete($note);
+        
+        if(!is_null($note))
+            $this->get('hopitalnumerique_objet.manager.note')->delete($note);
 
         return new Response('{"success":true}', 200);
     }

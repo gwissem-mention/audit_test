@@ -40,6 +40,8 @@ class ExportController extends Controller
                             'dateModification'     => 'Date de modification de la publication',
                             'type'                 => 'Type de la publication',
                             'nbVue'                => 'Nombre de visualisation de la publication',
+                            'noteMoyenne'          => 'Note moyenne de la publication',
+                            'nombreNote'           => 'Nombre de note de la publication',
                             'etat'                 => 'Etat de la publication',
                             'roles'                => 'Accès interdit aux groupes',
                             'types'                => 'Catégories de la publication',
@@ -56,7 +58,10 @@ class ExportController extends Controller
                             'dateCreationC'        => 'Date de création de l\'infra-doc',
                             'dateModificationC'    => 'Date de modification de l\'infra-doc',
                             'nbVueC'               => 'Nombre de visualisation de l\'infra-doc',
+                            'noteMoyenneC'         => 'Note moyenne de l\'infra-doc',
+                            'nombreNoteC'          => 'Nombre de notes de l\'infra-doc',
                             'objets'               => 'Productions liées'
+
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
