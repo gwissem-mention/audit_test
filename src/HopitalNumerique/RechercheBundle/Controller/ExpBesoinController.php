@@ -160,6 +160,7 @@ class ExpBesoinController extends Controller
 
         //on prépare la session
         $session = $this->getRequest()->getSession();
+        $session->set('requete-id', null);
         $session->set('requete-refs', json_encode($resultats) );
 
         //return success.true si le fichier existe deja

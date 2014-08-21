@@ -1,11 +1,6 @@
 <div class="panel panel-midnightblue" style="margin:0" >
-    <div class="panel-heading" style="height:65px">
-        <h4 style="line-height:22px; padding:0">Recherche aidée</h4>
-    </div>
+    <div class="panel-heading" style="height:5px"></div>
     <div class="clearfix"></div>
-    <div class="col-md-12" style="margin: 15px 0 5px 0;">
-        <p>Je décris mon besoin, Mon Hôpital Numérique trouve la solution !</p>
-    </div>
     <div id="panel-recherche">
         <div class="tableContent" id="expression-du-besoin">
             {% for expBesoin in expBesoins %}
@@ -14,19 +9,14 @@
                 </div>
             {% endfor %}
 
-            <div id="redirection-references">
-                <div class="resume col-md-12">
-                    Merci pour vos réponses. Nous avons pu déterminer une requête de recherche qui se rapproche au plus prêt de votre problématique. <br/><br/>
-                    <a href="{{path("hopital_numerique_recherche_homepage")}}">> Consulter les recommendations.</a>
-                </div>
-            </div>
-
             <input type="hidden" id="expBesoin-actif-id" value="" />
             <input type="hidden" id="reponses-json" value="{{ reponses }}" />
+
         </div>
         <div class="clearfix"></div>
 
         <input type="hidden" id="url-modification-session-recherche" value="{{ path("hopital_numerique_expbesoin_modification_session_recherche") }}" />
+        <input type="hidden" id="url-recherche" value="{{ path("hopital_numerique_recherche_homepage") }}" />
         
         <div class="panel-footer" >
             <div class="row">
@@ -37,6 +27,7 @@
         </div>
     </div>
 </div>
+
 <script type="text/javascript" >
     $(document).ready(function() {
         //Cache le bloc de références
@@ -48,51 +39,52 @@
 
         //Ré-Affiche la première question (l'ordre le plus bas)
         $('#expression-du-besoin .expression-du-besoin-form').first().show();
-
-        //Assigne la fonction de gestion de la question suivante ou de référencement sur le changement dans un select
-        $('#expression-du-besoin .expression-du-besoin-form select').change(function(){
-            //Récupération des réponses
-            var reponses = $.parseJSON($('#reponses-json').val());
-
-            //Récupération de la réponse courante
-            var reponsesCourante = reponses[$(this).val()];
-
-            //Cache la question courante
-            $(this).parents('.expression-du-besoin-form').hide();
-
-            //Vérifie si on pointe sur une nouvelle question ou si on doit rediriger vers la recherche
-            if(reponsesCourante['autreQuestion'])
-            {
-                //Affiche celle sur laquelle la réponse pointe
-                $(this).parents('#expression-du-besoin').find('#expBesoin-' + reponsesCourante['idQuestion']).show();
-            }
-            else
-            {
-                var loader = $('#expression-du-besoin').nodevoLoader().start();
-                var path   = $('#url-modification-session-recherche').val();
-
-                //Génération du cookie JS pour la recherche
-                $.ajax({
-                    url      : path,
-                    data : {
-                        id : $(this).val()
-                    },
-                    type     : 'POST',
-                    dataType : 'json',
-                    success : function( data ){
-                        loader.finished();
-                        if( data.success )
-                        {
-                            //Affichage du bloc
-                            $('#redirection-references').show();
-                        }
-                        else
-                        {
-                            apprise('Une erreur est survenue lors du chargement du calcul de votre recherche, merci de réessayer.');
-                        }
-                    }
-                });
-            }
-        });
     });
+
+    function clickReponse( idReponse, idQuestion )
+    {
+        var loader = $('#expression-du-besoin').nodevoLoader().start();
+
+        //Récupération des réponses
+        var reponses = $.parseJSON($('#reponses-json').val());
+
+        //Récupération de la réponse courante
+        var reponsesCourante = reponses[idReponse];
+
+        //Cache la question courante
+        //$(this).parents('.expression-du-besoin-form').hide();
+        $('#expression-du-besoin').find('#expBesoin-' + idQuestion).hide();
+
+        //Vérifie si on pointe sur une nouvelle question ou si on doit rediriger vers la recherche
+        if(reponsesCourante['autreQuestion'])
+        {
+            //Affiche celle sur laquelle la réponse pointe
+            $('#expression-du-besoin').find('#expBesoin-' + reponsesCourante['idQuestion']).show();
+            loader.finished();
+        }
+        else
+        {
+            var path   = $('#url-modification-session-recherche').val();
+
+            //Génération du cookie JS pour la recherche
+            $.ajax({
+                url      : path,
+                data : {
+                    id : idReponse
+                },
+                type     : 'POST',
+                dataType : 'json',
+                success : function( data ){
+                    if( data.success )
+                    {
+                        window.location = $("#url-recherche").val();                    }
+                    else
+                    {
+                        apprise('Une erreur est survenue lors du chargement du calcul de votre recherche, merci de réessayer.');
+                        loader.finished();
+                    }
+                }
+            });
+        }
+    }
 </script>
