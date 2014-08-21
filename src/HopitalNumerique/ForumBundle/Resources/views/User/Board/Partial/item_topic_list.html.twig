@@ -59,15 +59,12 @@
         </td>
         <td class="center">
             {%- if topic.getLastPost -%}
-                {{- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -}}
-                {{- topic.getLastPost.getCreatedBy.getNomPrenom() -}}
-
-                <br>
+                {# {- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -} #}
+                {# {- topic.getLastPost.getCreatedBy.getNomPrenom() -} #}
 
                 {%- set page = 1 -%}
                 {%- if page < 2 -%}
                     <a href="{{- path('ccdn_forum_user_topic_show', {'forumName': forumName, 'topicId': topic.getId } ) -}}#{{- topic.getLastPost.getId -}}">
-                        <i class="glyphicon glyphicon-arrow-right"></i>
                         <abbr class="timestamper" title="{{- topic.getLastPost.getCreatedDate |date(ccdn_forum_forum.board.user.show.last_post_datetime_format) -}}">
                             {{- topic.getLastPost.getCreatedDate |date(ccdn_forum_forum.board.user.show.last_post_datetime_format) -}}
                         </abbr>
