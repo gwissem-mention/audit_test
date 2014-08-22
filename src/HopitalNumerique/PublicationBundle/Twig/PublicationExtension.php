@@ -152,7 +152,7 @@ class PublicationExtension extends \Twig_Extension
         if( $glossaires ){
             
             // Ontransforme en ASCII les texte à ne pas parser
-            $noPattern = '/(<a href=\"([^\"]*)\">(.*)<\/a>)|(<img.*\/>)/iU';
+            $noPattern = '/(<a(.*)<\/a>)|(<img.*\/>)/iU';
             preg_match_all($noPattern, $content, $noMatches);
             if( $noMatches[0] ){
                 foreach($noMatches[0] as $match)
