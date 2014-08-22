@@ -84,7 +84,7 @@ $(document).ready(function() {
         calculMoyenne();
 
         //Initialisation du vote
-        $('#note-etoile').rateit({ max: 3, step: 1 });
+        $('#note-etoile').rateit({ max: 5, step: 1 });
 
         //Mise à jour des
         $("#note-etoile").bind('rated', function (event, value) { 
@@ -197,9 +197,9 @@ function calculMoyenne()
         dataType : 'json',
         success  : function( data ){
             //Mise à jour du nombre de note
-            $("#info-note-moyenne").text("( " + data.nbNote + " note(s) )");
+            $("#info-note-moyenne").text("( " + data.nbNote + " avis )");
             //Mise à jour de la moyenne des notes de l'objet + relancement du pluggin d'étoile
-            $("#bloc-notation-moyenne-objet .bloc-star").html("<div class='rateit' id='note-moyenne-etoile' data-rateit-step='0.5' data-rateit-max='3' data-rateit-value='" + data.noteMoyenne + "' data-rateit-ispreset='true' data-rateit-readonly='true'></div>");
+            $("#bloc-notation-moyenne-objet .bloc-star").html("<div class='rateit' id='note-moyenne-etoile' data-rateit-step='0.5' data-rateit-max='5' data-rateit-value='" + data.noteMoyenne + "' data-rateit-ispreset='true' data-rateit-readonly='true'></div>");
             $('#note-moyenne-etoile').rateit();
             //Fin chargement
             loader.finished();

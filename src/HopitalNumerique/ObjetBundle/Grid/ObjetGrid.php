@@ -45,16 +45,17 @@ class ObjetGrid extends Grid implements GridInterface
 
         $this->addColonne( new Column\DateColumn('dateCreation', 'Date de création') );
 
-        $dateColonne = new Column\DateColumn('dateModification', 'Date de dernière mise à jour');
-        $dateColonne->setSize( 180 );
-        $this->addColonne( $dateColonne );
-        
         $this->addColonne( new Column\NumberColumn('nbVue', 'Nombre de vue') );
+        
+        $this->addColonne( new Column\NumberColumn('moyenne', 'Note moyenne') );
+
+        $this->addColonne( new Column\NumberColumn('nbNotes', 'Nombre de notes') );
 
         $this->addColonne( new Column\LockedColumn() );
 
         /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('lockedBy') );
+        $this->addColonne( new Column\BlankColumn('dateModification') );
     }
 
     /**

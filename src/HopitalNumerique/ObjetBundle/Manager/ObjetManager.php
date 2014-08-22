@@ -38,6 +38,13 @@ class ObjetManager extends BaseManager
     public function getDatasForGrid( \StdClass $condition = null )
     {
         $results = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        
+        // Nombre de notes et moyenne
+        foreach ($results as $key => $result)
+        {
+            $results[$key]['moyenne'] = number_format($this->_noteManager->getMoyenneNoteByObjet($results[$key]['id'], false),2);;
+            $results[$key]['nbNotes'] = $this->_noteManager->countNbNoteByObjet($results[$key]['id'], false);;
+        }
 
         return $this->rearangeForTypes( $results );
     }
