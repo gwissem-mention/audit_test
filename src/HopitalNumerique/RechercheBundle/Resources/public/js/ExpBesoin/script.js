@@ -238,7 +238,7 @@ function addReponse( url )
 //Editer le libelleé d'une reponse
 function editLibelleReponse( id, url )
 { 
-    apprise('Titre de la question', {'input' : true, 'textOk' : 'Modifier', 'textCancel' : 'Annuler'}, function(rep) {
+    apprise('Titre de la réponse', {'input' : true, 'textOk' : 'Modifier', 'textCancel' : 'Annuler'}, function(rep) {
         if(rep)
         { 
             $.ajax({
