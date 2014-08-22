@@ -1,0 +1,64 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{# Grid mandatory Stuff #}
+{% use 'NodevoGridBundle::grid.config.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('grid_stylesheets')}}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ block('grid_javascripts')}}
+    <script type="text/javascript">
+        function toggle(path)
+        {
+            $.ajax({
+                url      : path,
+                type     : 'POST',
+                dataType : 'json',
+                success : function( data ){
+                    location.reload();
+                }
+            });
+        }
+    </script>
+{% endblock %}
+
+{% block h1Title %}
+    Gestion des commentaires
+{% endblock %}
+
+{% block toolbarButton %}
+{% endblock %}
+
+{% block body %}
+    {{ grid(grid, _self) }}
+{% endblock %}
+
+{# Boutons d'actions des lignes du grid #}
+{% block grid_column_actions_cell %}
+    {% set actions = column.getActionsToRender(row) %}
+    <div class="btn-group">
+        {% for action in actions %}
+            {% if app.user|checkAuthorization( path(action.route, column.routeParameters(row, action), false) ) %}
+                {# Si le mot delete est présent dans la route, on modifie le lien pour avoir le delete with confirm #}
+                {% if 'delete' in action.route %}
+                    <div onclick="deleteWithConfirm('{{ url(action.route, column.routeParameters(row, action), false) }}')" {% for name, value in action.attributes %} {{ name }}="{{ value }}" {% endfor %} >
+                        {{ action.title|trans }}
+                    </div>
+                {% elseif 'toggle' in action.route %}
+                    <div onclick="toggle('{{ url(action.route, column.routeParameters(row, action), false) }}')" {% for name, value in action.attributes %} {{ name }}="{{ value }}" {% endfor %} >
+                        {{ action.title|trans }}
+                    </div>
+                {% else %}
+                    <a href="{{ url(action.route, column.routeParameters(row, action), false) }}" {% for name, value in action.attributes %} {{ name }}="{{ value }}" {% endfor %}>
+                        {{ action.title|trans }}
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock grid_column_actions_cell %}
+

@@ -1,0 +1,23 @@
+{% if commentaire.publier %}
+    <div class="commentaire">
+        {# Permet à l'admin ou l'utilisateur courant de supprimer son commentaire #}
+        {% if app.user is not null and 
+            (is_granted("ROLE_ADMINISTRATEUR_1") or app.user.id == commentaire.user.id ) %}
+            <div class="btn-delete">
+                <div onclick="deleteWithConfirm(' {{ url('hopital_numerique_publication_commentaire_delete', { 'id':commentaire.id }) }} ');" class="btn btn-danger btn-xs" title="Suppression du commentaire"><i class="fa fa-times-circle"></i></div>
+            </div>
+        {% endif %}
+        <div class="col-md-11 user">
+            <span title="{{- commentaire.user.getNomPrenom() }} {% if commentaire.user.getEtablissementRattachementSante() is not null %}({{commentaire.user.getEtablissementRattachementSante().nom}}){% else %}{% if commentaire.user.getAutreStructureRattachementSante|trim != '' %}({{commentaire.user.getAutreStructureRattachementSante}}){% endif %}{% endif %}">
+                <strong>{{- commentaire.user.getNomPrenom() }} {% if commentaire.user.getEtablissementRattachementSante() is not null %}({{commentaire.user.getEtablissementRattachementSante().nom}}){% else %}{% if commentaire.user.getAutreStructureRattachementSante|trim != '' %}({{commentaire.user.getAutreStructureRattachementSante}}){% endif %}{% endif %}</strong>
+            </span>
+        </div>
+        <div class="col-md-12 date-post">
+            posté le {{ commentaire.dateCreation|date('d/m/Y') }}
+        </div>
+        <div class="col-md-12 texte">
+            <p>{{ commentaire.texte|nl2br }}</p>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+{% endif %}

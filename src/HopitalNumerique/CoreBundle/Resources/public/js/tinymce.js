@@ -13,6 +13,7 @@ $(document).ready(function() {
     NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
     
     tinyMCE.init({
+        entity_encoding : "raw",
         selector     : "textarea.tinyMce",
         theme        : "modern",
         theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',

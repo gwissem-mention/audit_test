@@ -43,7 +43,7 @@ class ItemManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForGrid( $condition = null )
+    public function getDatasForGrid( \StdClass $condition = null )
     {        
         return $this->getRepository()->getDatasForGrid( $condition );
     }    

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
- * 
+ * DefaultController
  */
 class DefaultController extends Controller
 {
@@ -93,7 +93,7 @@ class DefaultController extends Controller
                 }
             }
         }
-
+        
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', array(
             'userConf'          => $userConf,
             'blocUser'          => $blocUser,
@@ -169,7 +169,7 @@ class DefaultController extends Controller
                 }
             }
 
-            $blocForum[ $tool->minifie() ] = $forumDatas;
+            $blocForum[ 'forum-' . $tool->minifie() ] = $forumDatas;
         }
 
         return $blocForum;
@@ -276,14 +276,21 @@ class DefaultController extends Controller
         //On récupère les candidatures refusées
         $refusCandidature = $this->get('hopitalnumerique_user.manager.refus_candidature')->getRefusCandidatureByQuestionnaire();
 
+        //get contractualisation stuff
+        $blocUser['conventions'] = $this->get('hopitalnumerique_user.manager.contractualisation')->getContractualisationsARenouveler();
+
         foreach ($users as $user) {
             if( $user->getNbVisites() > 0 )
                 $blocUser['actif']++;
 
             if( $user->hasRoleDirecteur() || $user->hasRoleEs() )
                 $blocUser['es']++;
-            elseif( $user->hasRoleAmbassadeur() )
+            elseif( $user->hasRoleAmbassadeur() ){
                 $blocUser['ambassadeurs']++;
+
+                if( count($user->getContractualisations()) == 0)
+                    $blocUser['conventions']++;
+            }
             elseif( $user->hasRoleExpert() )
                 $blocUser['experts']++;
 
@@ -305,8 +312,7 @@ class DefaultController extends Controller
                 $blocUser['ambCandidatsRecues']++;
         }
 
-        //get contractualisation stuff
-        $blocUser['conventions'] = $this->get('hopitalnumerique_user.manager.contractualisation')->getContractualisationsARenouveler();
+        
 
         return $blocUser;
     }
@@ -368,7 +374,7 @@ class DefaultController extends Controller
         $col    = 1;
         foreach($forums as $forum){
             $tool = new Chaine( $forum->getName() );
-            $datas[ $tool->minifie() ] = array( 'row' => $row, 'col' => $col);
+            $datas[ 'forum-' . $tool->minifie() ] = array( 'row' => $row, 'col' => $col);
 
             $col++;
             if( $col == 4){

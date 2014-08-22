@@ -27,7 +27,7 @@ class FlashType extends AbstractType
                 'label'    => 'Accessible aux groupes',
                 'attr'     => array( 'placeholder' => 'Selectionnez le ou les rôles qui auront accès à cette publication' )
             ))
-            ->add('isPublished', 'checkbox', array(
+            ->add('published', 'checkbox', array(
                 'required' => false,
                 'label'    => 'Publié ?',
                 'attr'     => array( 'class'=> 'checkbox', 'style' => 'margin-top:10px' )

@@ -57,7 +57,7 @@ class ContractualisationGrid extends Grid implements GridInterface
         //Custom Archive button : Affiche le bouton archiver
         $archiveButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_user_contractualisation_archiver');
         $archiveButton->setRouteParameters( array('id') );
-        $archiveButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
+        $archiveButton->manipulateRender(function(\APY\DataGridBundle\Grid\Action\RowAction $action, \APY\DataGridBundle\Grid\Row $row) {
             if( $row->getField( 'archiver') )
                 $action->setAttributes( array('class'=>'btn btn-warning fa fa-archive', 'title' => 'Archiver') );
             else

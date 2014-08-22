@@ -57,12 +57,12 @@ class AppKernel extends Kernel
             new HopitalNumerique\AutodiagBundle\HopitalNumeriqueAutodiagBundle(),
             new HopitalNumerique\ForumBundle\HopitalNumeriqueForumBundle(),
             new HopitalNumerique\FlashBundle\HopitalNumeriqueFlashBundle(),
+            new HopitalNumerique\GlossaireBundle\HopitalNumeriqueGlossaireBundle(),
             //-v- Bundles du Forum -v-
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new CCDNForum\ForumBundle\CCDNForumForumBundle(),
             new CCDNComponent\BBCodeBundle\CCDNComponentBBCodeBundle(),
             //-^- Bundles du Forum -^-,
-            new HopitalNumerique\GlossaireBundle\HopitalNumeriqueGlossaireBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

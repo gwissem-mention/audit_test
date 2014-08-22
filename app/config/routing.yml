@@ -1,7 +1,3 @@
-hopital_numerique_glossaire:
-    resource: "@HopitalNumeriqueGlossaireBundle/Resources/config/routing.yml"
-    prefix:   /
-
 # Bundles Hopital Numérique : partie Front
 hopital_numerique_core:
     resource: "@HopitalNumeriqueCoreBundle/Resources/config/routing.yml"
@@ -117,6 +113,10 @@ hopital_numerique_autodiag:
 
 hopital_numerique_flash:
     resource: "@HopitalNumeriqueFlashBundle/Resources/config/routing.yml"
+    prefix:   /
+
+hopital_numerique_glossaire:
+    resource: "@HopitalNumeriqueGlossaireBundle/Resources/config/routing.yml"
     prefix:   /
 
 # Bundles Nodevo

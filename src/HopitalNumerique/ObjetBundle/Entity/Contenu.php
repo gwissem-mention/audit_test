@@ -118,6 +118,16 @@ class Contenu
     private $glossaires;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Commentaire", mappedBy="contenu", cascade={"persist", "remove" })
+     */
+    protected $listeCommentaires;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Note", mappedBy="contenu", cascade={"persist", "remove" })
+     */
+    protected $listeNotes;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -421,6 +431,52 @@ class Contenu
     public function addGlossaire($glossaire)
     {
         $this->glossaires[] = $glossaire;
+        return $this;
+    }
+
+    /**
+     * Get listeCommentaires
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $listeCommentaires
+     */
+    public function getListeCommentaires()
+    {
+        return $this->listeCommentaires;
+    }
+
+    /**
+     * Set listeCommentaires
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $listeCommentaires
+     * @return Objet
+     */
+    public function setListeCommentaires(\Doctrine\Common\Collections\ArrayCollection $listeCommentaires)
+    {        
+        $this->listeCommentaires = $listeCommentaires;
+    
+        return $this;
+    }
+
+    /**
+     * Get listeNotes
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection $listeNotes
+     */
+    public function getListeNotes()
+    {
+        return $this->listeNotes;
+    }
+
+    /**
+     * Set listeNotes
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $listeNotes
+     * @return Objet
+     */
+    public function setListeNotes(\Doctrine\Common\Collections\ArrayCollection $listeNotes)
+    {        
+        $this->listeNotes = $listeNotes;
+    
         return $this;
     }
 }

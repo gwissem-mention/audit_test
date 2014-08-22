@@ -49,7 +49,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
         $colonneRegroupements = new Column\TextColumn('nombreRegroupements', '');
         $colonneRegroupements->setFilterable(false)->setSortable(false);
         $colonneRegroupements->manipulateRenderCell(
-            function($value, $row, $router) {
+            function($value, \APY\DataGridBundle\Grid\Row $row) {
                 if (intval($row->getField('nombreDemandesRegroupees')) > 0)
                     return '<img src="/bundles/hopitalnumeriqueintervention/img/regroupement_principale.png" width="16" height="14" title="Demande principale">';
                 if (intval($row->getField('nombreDemandesPrincipales')) > 0)
@@ -170,8 +170,8 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
         $colonneDateChoix = new Column\TextColumn('dateChoix', 'Date choix');
         $colonneDateChoix->setFilterable(false)->setSortable(false);
         $colonneDateChoix->manipulateRenderCell(
-            function($value, $row, $router) {
-                return DemandesAbstractGrid::renderCellDateChoix($value, $row, $router);
+            function($value, \APY\DataGridBundle\Grid\Row $row) {
+                return DemandesAbstractGrid::renderCellDateChoix($value, $row);
             }
         );
         $this->addColonne($colonneDateChoix);
@@ -187,7 +187,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
         $colonneEvaluation->setFilterable(false)->setSortable(false);
         $colonneEvaluation->setAlign('center');
         $colonneEvaluation->manipulateRenderCell(
-            function($value, $row, $router) {
+            function($value, \APY\DataGridBundle\Grid\Row $row, \Symfony\Component\Routing\Router $router) {
                 if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
                 {
                     return '<button class="btn btn-warning btn-xs" data-evaluation-demande="'.$row->getField('id').'" title="Envoyer une relance"><span class="glyphicon glyphicon-send"></span></button>';
@@ -207,7 +207,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      * 
      * @return string Le contenu de la cellule Référent
      */
-    public static function renderCellReferent($value, $row, $router)
+    public static function renderCellReferent($value, $row)
     {
         return
             '<strong>'.$row->getField('referent_nom').'</strong>'.
@@ -220,7 +220,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      * 
      * @return string Le contenu de la cellule Ambassadeur
      */
-    public static function renderCellAmbassadeur($value, $row, $router)
+    public static function renderCellAmbassadeur($value, $row)
     {
         return
             '<strong>'.$row->getField('ambassadeur_nom').'</strong>'.
@@ -232,7 +232,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      * 
      * @return string Le contenu de la cellule CMSI
      */
-    public static function renderCellCmsi($value, $row, $router)
+    public static function renderCellCmsi($value, $row)
     {
         return
             '<strong>'.$row->getField('cmsi_nom').'</strong>'
@@ -243,7 +243,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      * 
      * @return string Le contenu de la cellule Date choix
      */
-    public static function renderCellDateChoix($value, $row, $router)
+    public static function renderCellDateChoix($value, $row)
     {
         $dateChoix = '';
         if ($row->getField('cmsiDateChoixLibelle') != null)
@@ -263,7 +263,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      *
      * @return string Le contenu de la cellule Date choix
      */
-    public static function renderCellInitiateur($value, $row, $router)
+    public static function renderCellInitiateur($value, $row)
     {
         if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurCmsiId())
         {

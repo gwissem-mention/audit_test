@@ -27,8 +27,10 @@ class CrudCommand extends GenerateDoctrineCrudCommand
     protected function getGenerator(BundleInterface $bundle = null)
     {
         if (null === $this->generator) {
+            $path = $this->getContainer()->get('kernel')->locateResource('@NodevoToolsBundle/Resources/skeleton/');
+
             $this->generator = $this->createGenerator();
-            $skeletonDirs    = array_merge( array(__DIR__.'/../Resources/skeleton'), $this->getSkeletonDirs($bundle) );
+            $skeletonDirs    = array_merge( array($path), $this->getSkeletonDirs($bundle) );
 
             $this->generator->setSkeletonDirs( $skeletonDirs );
         }
@@ -42,9 +44,11 @@ class CrudCommand extends GenerateDoctrineCrudCommand
     protected function getFormGenerator($bundle = null)
     {
         if (null === $this->formGenerator) {
+            $path = $this->getContainer()->get('kernel')->locateResource('@NodevoToolsBundle/Resources/skeleton/');
+
             $this->formGenerator = new DoctrineFormGenerator($this->getContainer()->get('filesystem'));
 
-            $skeletonDirs = array_merge( array(__DIR__.'/../Resources/skeleton'), $this->getSkeletonDirs($bundle) );
+            $skeletonDirs = array_merge( array($path), $this->getSkeletonDirs($bundle) );
             $this->formGenerator->setSkeletonDirs( $skeletonDirs );
         }
 

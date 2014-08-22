@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
-use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use \Nodevo\ToolsBundle\Tools\Chaine;
@@ -89,7 +88,7 @@ class ObjetController extends Controller
         $note          = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $objet->getReferences(), $refsPonderees );
 
         //build Productions liées
-        $productions = $this->formatteProductionsLiees( $objet->getObjets() );
+        $productions = $this->get('hopitalnumerique_objet.manager.objet')->formatteProductionsLiees( $objet->getObjets() );
 
         $options = array(
             'contenus'    => $contenus,
@@ -249,199 +248,9 @@ class ObjetController extends Controller
         return new Response(json_encode($result), 200);
     }
 
-    /**
-     * Export CSV de la liste des objets sélectionnés
-     *
-     * @param array $primaryKeys    ID des lignes sélectionnées
-     * @param array $allPrimaryKeys allPrimaryKeys ???
-     */
-    public function exportCsvAction( $primaryKeys, $allPrimaryKeys )
-    {
-        //get all selected Users
-        if($allPrimaryKeys == 1){
-            $rawDatas = $this->get('hopitalnumerique_objet.grid.objet')->getRawData();
-            foreach($rawDatas as $data)
-                $primaryKeys[] = $data['id'];
-        }
-
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-        $objets        = $this->get('hopitalnumerique_objet.manager.objet')->getDatasForExport( $primaryKeys, $refsPonderees );
-
-        $colonnes = array( 
-                            'id'                   => 'ID publication', 
-                            'titre'                => 'Titre publication',
-                            'alias'                => 'Alias publication',
-                            'note'                 => 'Note référencement',
-                            'commentaires'         => 'Commentaires autorisé ?',
-                            'notes'                => 'Notes autorisé ?',
-                            'dateCreation'         => 'Date de création de la publication',
-                            'dateDebutPublication' => 'Date de début de la publication',
-                            'dateFinPublication'   => 'Date de fin de la publication',
-                            'dateModification'     => 'Date de modification de la publication',
-                            'type'                 => 'Type de la publication',
-                            'nbVue'                => 'Nombre de visualisation de la publication',
-                            'etat'                 => 'Etat de la publication',
-                            'roles'                => 'Accès interdit aux groupes',
-                            'types'                => 'Catégories de la publication',
-                            'ambassadeurs'         => 'Ambassadeurs concernés par la publication',
-                            'noteMoyenne'          => 'Maîtrise moyenne',
-                            'nombreUserMaitrise'   => 'Nombre de notes',
-                            'fichier1'             => 'Fichier 1',
-                            'fichier2'             => 'Fichier 2',
-                            'fichierEdit'          => 'Fichier Editable',
-                            'vignette'             => 'Vignette',
-                            'idC'                  => 'ID infra-doc',
-                            'titreC'               => 'Titre infra-doc',
-                            'aliasC'               => 'Alias infra-doc',
-                            'noteC'                => 'Note référencement de l\'infra-doc',
-                            'orderC'               => 'Ordre de l\'infra-doc',
-                            'dateCreationC'        => 'Date de création de l\'infra-doc',
-                            'dateModificationC'    => 'Date de modification de l\'infra-doc',
-                            'nbVueC'               => 'Nombre de visualisation de l\'infra-doc',
-                            'objets'               => 'Productions liées'
-                        );
-
-        $kernelCharset = $this->container->getParameter('kernel.charset');
-
-        return $this->get('hopitalnumerique_objet.manager.objet')->exportCsv( $colonnes, $objets, 'export-publications.csv', $kernelCharset );
-    }
-
-    /**
-     * Fancybox d'ajout d'objet à l'utilisateur
-     */
-    public function addLinkAction( Objet $objet )
-    {
-        $types = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code'=>'CATEGORIE_OBJET'));
-        $arbo  = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo( $types );
-
-        return $this->render('HopitalNumeriqueObjetBundle:Objet:add_link.html.twig', array(
-            'arbo'    => $arbo,
-            'idObjet' => $objet->getId()
-        ));
-    }
-
-    /**
-     * Sauvegarde le lien point dur -> objets
-     */
-    public function saveLinkAction()
-    {
-        //get posted vars
-        $id     = $this->get('request')->request->get('idObjet');
-        $objets = $this->get('request')->request->get('objets');
-
-        //bind Objet
-        $pointDur      = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
-        $currentObjets = new \Doctrine\Common\Collections\ArrayCollection($pointDur->getObjets());
-
-        //bind objects
-        foreach($objets as $one){
-            if( !$currentObjets->contains($one) )
-                $pointDur->addObjet( $one );
-        }
-        
-        $this->get('hopitalnumerique_objet.manager.objet')->save( $pointDur );
-        
-        $this->get('session')->getFlashBag()->add( 'success' ,  'Les productions ont été liées au point dur.' );
-
-        return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_objet_objet_edit', array('id' => $id)).'"}', 200);
-    }
-
-    /**
-     * Suppresion d'un lien point dur -> objet.
-     *
-     * METHOD = POST|DELETE
-     */
-    public function deleteLinkAction( Objet $pointDur, $id, $obj )
-    {
-        $objets = $pointDur->getObjets();
-
-        $linkName = ($obj == 1 ? 'PUBLICATION' : 'INFRADOC') . ':' . $id;
-        foreach($objets as $key => $objet){
-            if( $objet == $linkName )
-                unset($objets[$key]);
-        }
-        $pointDur->setObjets( $objets );
-        $this->get('hopitalnumerique_objet.manager.objet')->save( $pointDur );
-
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
-
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_objet_objet_edit', array('id' => $pointDur->getId())).'"}', 200);
-    }
-
-    /**
-     * Reordonne les productions
-     *
-     * @param Objet $objet L'objet point dur
-     *
-     * @return Response
-     */
-    public function reorderAction( Objet $objet )
-    {
-        //get datas serialzed
-        $datas = $this->get('request')->request->get('datas');
-        
-        $doctrineArray = new \Doctrine\Common\Collections\ArrayCollection();
-        foreach($datas as $one)
-            $doctrineArray->add( $one['id'] );
-
-        $objet->setObjets( $doctrineArray->toArray() );
-        $this->get('hopitalnumerique_objet.manager.objet')->save( $objet );
-        
-        //return success.true si le fichier existe deja
-        return new Response('{"success":true}', 200);
-    }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Formatte les productions pour l'affichage des productions liées
-     *
-     * @param array $datas Liste des prod liées
-     *
-     * @return array
-     */
-    private function formatteProductionsLiees( $datas )
-    {
-        $productions = array();
-
-        foreach($datas as $one) {
-            //explode to get datas
-            $tab = explode(':', $one);
-
-            //build new object
-            $element       = new \StdClass;
-            $element->id   = $tab[1];
-            $element->brut = $one;
-
-            //switch Objet / Infra-doc
-            if( $tab[0] == 'PUBLICATION' ){
-                $objet            = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $tab[1] ) );
-                $element->titre   = $objet->getTitre();
-                $element->isObjet = 1;
-            }else if( $tab[0] == 'INFRADOC' ){
-                $contenu          = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $tab[1] ) );
-                $element->titre   = '|--' . $contenu->getTitre();
-                $element->isObjet = 0;
-            }
-
-            $productions[] = $element;
-        }
-
-        return $productions;
-    }
 
     /**
      * Effectue le render du formulaire Objet.

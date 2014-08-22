@@ -37,7 +37,7 @@ class QuestionnaireManager extends BaseManager
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function getDatasForGrid( $condition = null )
+    public function getDatasForGrid( \StdClass $condition = null )
     {
         return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
     }

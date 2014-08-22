@@ -43,14 +43,12 @@
         <td class="center" style="width:170px;">
             {%- if board.getLastPost -%}
                 {%- if board.getLastPost.getTopic -%}
-                    {{- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -}}
-                    {{- board.getLastPost.getCreatedBy.getNomPrenom() -}}
+                    {# {- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -} #}
+                    {# {- board.getLastPost.getCreatedBy.getNomPrenom() -} #}
 
-                    <br>
                     {%- set page = 1 -%}
                     {%- if page < 2 -%}
                         <a href="{{- path('ccdn_forum_user_topic_show', {'forumName': forumName, 'topicId': board.getLastPost.getTopic.getId } ) -}}#{{- board.getLastPost.getId -}}">
-                            <i class="glyphicon glyphicon-arrow-right"></i>
                             <abbr class="timestamper" title="{{- board.getLastPost.getCreatedDate |date(ccdn_forum_forum.category.user.last_post_datetime_format) -}}">
                                 {{- board.getLastPost.getCreatedDate |date(ccdn_forum_forum.category.user.last_post_datetime_format) -}}
                             </abbr>

@@ -13,18 +13,21 @@ class ObjetManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Objet';
     protected $_contenuManager;
+    protected $_noteManager;
 
     /**
      * Construct 
      *
-     * @param EntityManager  $em      Entity Mangager de doctrine
-     * @param ContenuManager $manager ContenuManager
+     * @param EntityManager  $em              Entity Mangager de doctrine
+     * @param ContenuManager $contenuManager  ContenuManager
+     * @param NoteManager    $noteManager     NoteManager
      */
-    public function __construct( EntityManager $em, ContenuManager $manager )
+    public function __construct( EntityManager $em, ContenuManager $contenuManager, NoteManager $noteManager )
     {
         parent::__construct($em);
 
-        $this->_contenuManager = $manager;
+        $this->_contenuManager = $contenuManager;
+        $this->_noteManager    = $noteManager;
     }
 
     /**
@@ -32,7 +35,7 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForGrid( $condition = null )
+    public function getDatasForGrid( \StdClass $condition = null )
     {
         $results = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
 
@@ -118,7 +121,11 @@ class ObjetManager extends BaseManager
             $row['noteMoyenne'] /= $row['nombreUserMaitrise'] != 0 ? $row['nombreUserMaitrise'] : 1;
 
             //set empty values for objet (infra doc)
-            $row['idC'] = $row['titreC'] = $row['aliasC'] = $row['orderC'] = $row['contenuC'] = $row['dateCreationC'] = $row['dateModificationC'] = $row['nbVueC'] = $row['noteC'] = '';
+            $row['idC'] = $row['titreC'] = $row['aliasC'] = $row['orderC'] = $row['contenuC'] = $row['dateCreationC'] = $row['dateModificationC'] = $row['nbVueC'] = $row['noteC']= $row['noteMoyenneC']= $row['nombreNoteC'] = '';
+
+            //Récupération + Calcul note moyenne
+            $row['noteMoyenne'] = number_format($this->_noteManager->getMoyenneNoteByObjet($objet->getId(), false),2);
+            $row['nombreNote']  = $this->_noteManager->countNbNoteByObjet($objet->getId(), false);
 
             //add Object To Results
             $results[] = $row;
@@ -127,26 +134,26 @@ class ObjetManager extends BaseManager
                 $contenus = $objet->getContenus();
                 if( $contenus ){
                     foreach($contenus as $contenu) {                        
-                        $row = array();
+                        $rowInfradoc = array();
 
-                        //init empty for infra doc
-                        $row['id'] = $row['titre'] = $row['alias'] = $row['synthese'] = $row['resume'] = $row['commentaires'] = $row['notes'] = $row['type'] = $row['nbVue'] = $row['etat'] = '';
-                        $row['dateCreation'] = $row['dateDebutPublication'] = $row['dateFinPublication'] = $row['dateModification'] = $row['roles'] = $row['types'] = $row['ambassadeurs'] = '';
-                        $row['fichier1'] = $row['fichier2'] = $row['fichierEdit'] = $row['vignette'] = $row['note'] = $row['objets'] = $row['noteMoyenne'] = $row['nombreUserMaitrise'] = '';
-
+                        $rowInfradoc['id'] = $rowInfradoc['titre'] = $rowInfradoc['alias'] = $rowInfradoc['synthese'] = $rowInfradoc['resume'] = $rowInfradoc['commentaires'] = $rowInfradoc['notes'] = $rowInfradoc['type'] = $rowInfradoc['nbVue'] = $rowInfradoc['etat'] = '';
+                        $rowInfradoc['dateCreation'] = $rowInfradoc['dateDebutPublication'] = $rowInfradoc['dateFinPublication'] = $rowInfradoc['dateModification'] = $rowInfradoc['roles'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
+                        $rowInfradoc['fichier1'] = $rowInfradoc['fichier2'] = $rowInfradoc['fichierEdit'] = $rowInfradoc['vignette'] = $rowInfradoc['note'] = $rowInfradoc['objets'] = $rowInfradoc['noteMoyenne'] = $rowInfradoc['nombreNote'] = $row['nombreUserMaitrise'] = '';
 
                         //Infra doc values
-                        $row['idC']               = $contenu->getId();
-                        $row['titreC']            = $contenu->getTitre();
-                        $row['aliasC']            = $contenu->getAlias();
-                        $row['orderC']            = $contenu->getOrder();
-                        $row['dateCreationC']     = !is_null($contenu->getDateCreation()) ? $contenu->getDateCreation()->format('d/m/Y') : '';
-                        $row['dateModificationC'] = !is_null($contenu->getDateModification()) ? $contenu->getDateModification()->format('d/m/Y') : '';
-                        $row['nbVueC']            = $contenu->getNbVue();
-                        $row['noteC']             = number_format($this->getNoteReferencement($contenu->getReferences(), $refsPonderees), 0);
+                        $rowInfradoc['idC']               = $contenu->getId();
+                        $rowInfradoc['titreC']            = $contenu->getTitre();
+                        $rowInfradoc['aliasC']            = $contenu->getAlias();
+                        $rowInfradoc['orderC']            = $contenu->getOrder();
+                        $rowInfradoc['dateCreationC']     = !is_null($contenu->getDateCreation()) ? $contenu->getDateCreation()->format('d/m/Y') : '';
+                        $rowInfradoc['dateModificationC'] = !is_null($contenu->getDateModification()) ? $contenu->getDateModification()->format('d/m/Y') : '';
+                        $rowInfradoc['nbVueC']            = $contenu->getNbVue();
+                        $rowInfradoc['noteC']             = number_format($this->getNoteReferencement($contenu->getReferences(), $refsPonderees), 0);
+                        $rowInfradoc['noteMoyenneC']      = number_format($this->_noteManager->getMoyenneNoteByObjet($contenu->getId(), true),2);
+                        $rowInfradoc['nombreNoteC']       = $this->_noteManager->countNbNoteByObjet($contenu->getId(), true);
 
                         //add Infra-doc To Results
-                        $results[] = $row;
+                        $results[] = $rowInfradoc;
                     }
                 }
             }
@@ -584,6 +591,50 @@ class ObjetManager extends BaseManager
         
         return $note;
     }
+
+    /**
+     * Formatte les productions pour l'affichage des productions liées
+     *
+     * @param array $datas Liste des prod liées
+     *
+     * @return array
+     */
+    public function formatteProductionsLiees( $datas )
+    {
+        $productions = array();
+
+        foreach($datas as $one) {
+            //explode to get datas
+            $tab = explode(':', $one);
+
+            //build new object
+            $element       = new \StdClass;
+            $element->id   = $tab[1];
+            $element->brut = $one;
+
+            //switch Objet / Infra-doc
+            if( $tab[0] == 'PUBLICATION' ){
+                $objet            = $this->findOneBy( array('id' => $tab[1] ) );
+                $element->titre   = $objet->getTitre();
+                $element->isObjet = 1;
+            }else if( $tab[0] == 'INFRADOC' ){
+                $contenu          = $this->__contenuManager->findOneBy( array('id' => $tab[1] ) );
+                $element->titre   = '|--' . $contenu->getTitre();
+                $element->isObjet = 0;
+            }
+
+            $productions[] = $element;
+        }
+
+        return $productions;
+    }
+
+
+
+
+
+
+
 
 
 

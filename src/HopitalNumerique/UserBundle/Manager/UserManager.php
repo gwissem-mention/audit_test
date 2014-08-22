@@ -16,10 +16,10 @@ class UserManager extends BaseManager
     {
         parent::__construct($managerUser);
         //Récupération des managers Réponses et Questionnaire
-        $this->_managerReponse       = $managerReponse;
-        $this->_managerQuestionnaire = $managerQuestionnaire;
+        $this->_managerReponse          = $managerReponse;
+        $this->_managerQuestionnaire    = $managerQuestionnaire;
         $this->_managerRefusCandidature = $managerRefusCandidature;
-        $this->_options              = array();
+        $this->_options                 = array();
     }
 
     /**
@@ -27,7 +27,7 @@ class UserManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForGrid( $condition = null )
+    public function getDatasForGrid( \StdClass $condition = null )
     {
         $users = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
 

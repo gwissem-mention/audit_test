@@ -29,12 +29,8 @@
             {%- endif -%}
 
 
-            {%- if is_granted('ROLE_MODERATOR') -%}
+            {%- if is_granted('ROLE_ADMINISTRATEUR_1') -%}
                 <div class="btn-group">
-                    <a class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown" href="#">
-                        {{- 'link.admin.index' |trans({}, ForumBundle.translation ) -}}
-                        <span class="caret"></span>
-                    </a>
                     <ul class="dropdown-menu">
 
                         {%- if canStickyTopic(topic, forum) -%}

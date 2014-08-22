@@ -7,12 +7,16 @@ parameters:
     hopitalnumerique_objet.manager.refobjet.class: HopitalNumerique\ObjetBundle\Manager\RefObjetManager
     hopitalnumerique_objet.manager.refcontenu.class: HopitalNumerique\ObjetBundle\Manager\RefContenuManager
     hopitalnumerique_objet.manager.consultation.class: HopitalNumerique\ObjetBundle\Manager\ConsultationManager
+    hopitalnumerique_objet.manager.commentaire.class: HopitalNumerique\ObjetBundle\Manager\CommentaireManager
+    hopitalnumerique_objet.grid.commentaire.class: HopitalNumerique\ObjetBundle\Grid\CommentaireGrid
+    hopitalnumerique_objet.form.commentaire.class: HopitalNumerique\ObjetBundle\Form\CommentaireType
+    hopitalnumerique_objet.manager.note.class: HopitalNumerique\ObjetBundle\Manager\NoteManager
 
 services:
     #managers
     hopitalnumerique_objet.manager.objet:
         class: %hopitalnumerique_objet.manager.objet.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_objet.manager.contenu"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_objet.manager.contenu", "@hopitalnumerique_objet.manager.note"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
@@ -64,3 +68,29 @@ services:
         arguments : ["@hopitalnumerique_reference.manager.reference"]
         tags:
             - { name: twig.extension }
+
+    #Commentaire
+    #--Manager
+    hopitalnumerique_objet.manager.commentaire:
+        class: %hopitalnumerique_objet.manager.commentaire.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    #--Grid
+    hopitalnumerique_objet.grid.commentaire:
+        class: %hopitalnumerique_objet.grid.commentaire.class%
+        arguments: ["@service_container"]
+    #--Form
+    hopitalnumerique_objet.form.commentaire:
+        class: %hopitalnumerique_objet.form.commentaire.class%
+        arguments: ["@hopitalnumerique_objet.manager.commentaire", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_objet_commentaire }
+
+    #Note
+    #--Manager
+    hopitalnumerique_objet.manager.note:
+        class: %hopitalnumerique_objet.manager.note.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\UserBundle\Util;
 
+use HopitalNumerique\UserBundle\Entity\User;
+
 class GestionAffichageOnglets
 {
 	private $_managerReponse;
@@ -19,7 +21,7 @@ class GestionAffichageOnglets
      * @param User $user
      * @return array
      */
-    public function getOptions( $user )
+    public function getOptions( User $user )
     {
         $options = array(
                 'ambassadeur' => false,
