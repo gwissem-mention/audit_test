@@ -163,6 +163,19 @@ class PublicationExtension extends \Twig_Extension
                 $motsFounds
             );
             
+            // Ontransforme en ASCII les texte à ne pas parser
+            foreach($motsFounds as $mot => $data ){
+
+                $noPattern = '/(<a.*'.$mot.'.*<\/a>)|(<img.*'.$mot.'.*\/>)/';
+                preg_match_all($noPattern, $content, $noMatches);
+                if( $noMatches[0] ){
+                    foreach($noMatches[0] as $match)
+                    {
+                        $content = str_replace($match, $this->toascii($match), $content);
+                    } 
+                }
+             }
+             
             foreach($motsFounds as $mot => $data ){
                 
                 // On converti la description en ASCII pour ne pas trouver un des mots du glossaire dans la description
@@ -198,6 +211,8 @@ class PublicationExtension extends \Twig_Extension
             $content = str_replace('¬', '', $content);
         }
         
+        $content = html_entity_decode($content);
+
         return $content;
     }
 
