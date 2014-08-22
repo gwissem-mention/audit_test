@@ -23,7 +23,7 @@
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape:hover{ background: #E11954; }
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape:hover > .bloc-etape p{ color:#FFFFFF ; }
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape:hover > .bloc-etape .icone{width: 9px; height: 10px; float: right;margin:4px 0 0;background: transparent url('../../img/chevron-blanc.png')  no-repeat bottom right;}
-#recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape p{text-transform: uppercase; color:#5C5C5C; float:left;margin:0 0 0 10px; font-size: 13px;}
+#recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape p{ color:#5C5C5C; float:left;margin:0 0 0 10px; font-size: 13px;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-normal{display:block;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-tablette{display:none;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .icone{width: 9px; height: 10px; float: right;margin:4px 0 0;background: transparent url('../../img/chevron.png')  no-repeat bottom right;}

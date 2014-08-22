@@ -3,6 +3,8 @@ var loader;
 $(document).ready(function() {
     calculNoteMoyenne();
 
+    $("a").tooltip({ position: { my: "center bottom-15", at: "top center" } });
+
     //Pour chaque note, setage du slider avec la valeur associée
     $('.note').each(function(){
 

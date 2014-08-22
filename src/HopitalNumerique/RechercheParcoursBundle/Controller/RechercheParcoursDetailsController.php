@@ -275,6 +275,8 @@ class RechercheParcoursDetailsController extends Controller
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
         $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
 
+        
+
         //En mode connecté
         if('anon.' !== $user)
         {
