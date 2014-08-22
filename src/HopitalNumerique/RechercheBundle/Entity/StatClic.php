@@ -27,19 +27,20 @@ class StatClic
      * @ORM\Column(name="rsc_dateClic", type="datetime")
      */
     protected $dateClic;
-
+    
     /**
      * @var integer
      *
-     * @ORM\Column(name="rsc_nombreClic", type="integer")
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses")
+     * @ORM\JoinColumn(name="expbr_id", referencedColumnName="expbr_id", onDelete="CASCADE")
      */
-    protected $nombreClic;
+    protected $reponse;
 
     /**
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="usr_user", referencedColumnName="usr_id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="usr_user", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
      */
     protected $user;
 
@@ -78,29 +79,6 @@ class StatClic
     }
 
     /**
-     * Set nombreClic
-     *
-     * @param integer $nombreClic
-     * @return StatClic
-     */
-    public function setNombreClic($nombreClic)
-    {
-        $this->nombreClic = $nombreClic;
-
-        return $this;
-    }
-
-    /**
-     * Get nombreClic
-     *
-     * @return integer 
-     */
-    public function getNombreClic()
-    {
-        return $this->nombreClic;
-    }
-
-    /**
      * Set user
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
@@ -121,5 +99,28 @@ class StatClic
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set reponse
+     *
+     * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $reponse
+     * @return StatClic
+     */
+    public function setReponse(\HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $reponse = null)
+    {
+        $this->reponse = $reponse;
+
+        return $this;
+    }
+
+    /**
+     * Get reponse
+     *
+     * @return \HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses 
+     */
+    public function getReponse()
+    {
+        return $this->reponse;
     }
 }

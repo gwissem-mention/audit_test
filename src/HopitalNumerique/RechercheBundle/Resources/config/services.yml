@@ -1,6 +1,7 @@
 parameters:
     hopitalnumerique_recherche.manager.search.class: HopitalNumerique\RechercheBundle\Manager\SearchManager
     hopitalnumerique_recherche.manager.requete.class: HopitalNumerique\RechercheBundle\Manager\RequeteManager
+    hopitalnumerique_recherche.manager.statClic.class: HopitalNumerique\RechercheBundle\Manager\StatClicManager
     hopitalnumerique_recherche.manager.expbesoin.class: HopitalNumerique\RechercheBundle\Manager\ExpBesoinManager
     hopitalnumerique_recherche.manager.expbesoinreponses.class: HopitalNumerique\RechercheBundle\Manager\ExpBesoinReponsesManager
     hopitalnumerique_recherche.manager.refexpbesoinreponses.class: HopitalNumerique\RechercheBundle\Manager\RefExpBesoinReponsesManager
@@ -31,6 +32,12 @@ services:
 
     hopitalnumerique_recherche.manager.refexpbesoinreponses:
         class: %hopitalnumerique_recherche.manager.refexpbesoinreponses.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_recherche.manager.statClic:
+        class: %hopitalnumerique_recherche.manager.statClic.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

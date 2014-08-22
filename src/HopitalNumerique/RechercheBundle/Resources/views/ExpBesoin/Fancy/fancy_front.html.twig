@@ -17,6 +17,7 @@
 
         <input type="hidden" id="url-modification-session-recherche" value="{{ path("hopital_numerique_expbesoin_modification_session_recherche") }}" />
         <input type="hidden" id="url-recherche" value="{{ path("hopital_numerique_recherche_homepage") }}" />
+        <input type="hidden" id="url-sauvegarde-clic-stat" value="{{ path("hopital_numerique_expbesoin_stat_add") }}" />
         
         <div class="panel-footer" >
             <div class="row">
@@ -43,6 +44,9 @@
     function clickReponse( idReponse, idQuestion )
     {
         var loader = $('#expression-du-besoin').nodevoLoader().start();
+
+        //Sauvegarde du clic sur la réponse en base
+        sauvegardeClicStat(idReponse);
 
         //Récupération des réponses
         var reponses = $.parseJSON($('#reponses-json').val());
@@ -85,5 +89,21 @@
                 }
             });
         }
+    }
+
+    function sauvegardeClicStat( idReponse )
+    {
+        var path   = $('#url-sauvegarde-clic-stat').val();
+
+        $.ajax({
+            url      : path,
+            data : {
+                id : idReponse
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success : function( data ){
+            }
+        });
     }
 </script>
