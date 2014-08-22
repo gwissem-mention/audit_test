@@ -106,6 +106,12 @@ hopitalnumerique_expbesoin_reponse_edit:
     requirements: 
         id : \d+
 
+hopitalnumerique_expbesoin_reponse_edit_libelle:
+    pattern:  /admin/aide-expression-besoin/question/edit-libelle/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:editLibelle",  _format: json }
+    requirements: 
+        id : \d+
+
 hopitalnumerique_expbesoin_reponse_reorder:
     pattern:  /admin/aide-expression-besoin/{id}/reponse/reorder
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:reorder" }

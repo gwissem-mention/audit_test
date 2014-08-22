@@ -235,6 +235,35 @@ function addReponse( url )
     }
 }
 
+//Editer le libelleé d'une reponse
+function editLibelleReponse( id, url )
+{ 
+    apprise('Titre de la question', {'input' : true, 'textOk' : 'Modifier', 'textCancel' : 'Annuler'}, function(rep) {
+        if(rep)
+        { 
+            $.ajax({
+                url  : url,
+                data : {
+                    id : id,
+                    titre : rep
+                },
+                type     : 'POST',
+                success  : function( data ){
+                    if( data != '' )
+                    {
+                        location.reload();
+                        //Forcer le click sur la question éditée
+                    }
+                    else
+                    {
+                        apprise('Une erreur est survenue lors de la modification du nom de votre réponse, merci de réessayer.');
+                    }
+                }
+            });
+        }
+    });
+}
+
 //Met à jour le nombre d'enfants sélectionés dans la popin
 function updateNbChilds()
 {

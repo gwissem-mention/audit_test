@@ -31,6 +31,7 @@
     <div class="dd3-actions">
         <div onclick="deleteQuestion( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_delete', {'id':reponse.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
         <div onclick="saveReponse( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_edit', {'id':reponse.id})}}' );" class="pull-right dd3-valid"><i class="fa fa-check"></i></div>
+        <div onclick="editLibelleReponse( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_edit_libelle', {'id':reponse.id})}}' );" class="pull-right dd3-edit question-edit"><i class="fa fa-edit"></i></div>
         <div id="reference-reponse-{{reponse.id}}" class="pull-right dd3-cog {% if reponse.autreQuestion %}hide{% endif %}"><a href="{{path('hopitalnumerique_expbesoin_reponse_reference', {'id':reponse.id})}}" class="fancy fancybox.ajax"></a></div>
     </div>
 </li>

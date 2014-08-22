@@ -109,6 +109,24 @@ class ExpBesoinReponseController extends Controller
         return new Response('{"success":true}', 200);   
     }
 
+
+    /**
+     * Edit libellé d'une réponse
+     */
+    public function editLibelleAction(Request $request)
+    {
+        $idReponse = $request->request->get('id');
+        //créer un question
+        $reponse = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->findOneBy(array('id' => $idReponse));
+
+        $reponse->setLibelle( trim($request->request->get('titre')) ? : 'Réponse '.$order );
+
+        //save
+        $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->save( $reponse );
+
+        return new Response('{"success":true}', 200); 
+    }
+
     public function deleteAction(Request $request)
     {
         //Récupération des données envoyées par la requete AJAX
