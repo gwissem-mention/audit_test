@@ -7,7 +7,7 @@
             {% set nbCommentaire = nbCommentaire + 1 %}
         {% endif %}
     {% endfor %}
-    <h2 class="open">Commentaires <span style="font-size: 14px;" id="info-com">{% if nbCommentaire != 0 %}( {{nbCommentaire }} ) - Ajouter un commentaire{% else %} - Soyez le premier à déposer un commentaire{% endif %}</span></h2>
+    <h2 class="open">Commentaires <span style="font-size: 14px;" id="info-com">{% if nbCommentaire != 0 %}( {{nbCommentaire }} ){% else %} - Soyez le premier à déposer un commentaire{% endif %}</span></h2>
     <div class="mysep background-rose"></div>
     <div class="bloc-commentaire">
         {% for commentaire in objet.listeCommentaires %}
@@ -24,7 +24,7 @@
         <div class="ajout-commentaire"> 
             {# Ajout d'un commentaire uniquement si il y a un user connecté #}
             {% if app.user %}
-                <h3 class="open" style="margin-top:0">Postez votre commentaire</h3>
+                <h3 class="open" style="margin-top:0">Ajouter un commentaire</h3>
                 <div id="form-ajout">
                     <form id="hopitalnumerique_commentaire" novalidate="novalidate" class="form-horizontal toValidate" action="" method="post" name="hopitalnumerique_commentaire">
                         <div class="form-group">
@@ -43,7 +43,7 @@
             {# Sinon demande à l'utilisateur de se connecter #}
             {% else %}
                 <p>
-                    Pour poster un commentaire vous devez vous <a href="{{path('account_login')}}">identifier</a>.
+                    Pour ajouter un commentaire vous devez vous <a href="{{path('account_login')}}">identifier</a>.
                 </p>
             {% endif %}
         </div>

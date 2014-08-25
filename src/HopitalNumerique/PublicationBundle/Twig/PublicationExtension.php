@@ -150,6 +150,17 @@ class PublicationExtension extends \Twig_Extension
         
         //Glossaire stuff
         if( $glossaires ){
+            
+            // Ontransforme en ASCII les texte à ne pas parser
+            $noPattern = '/(<a(.*)<\/a>)|(<img.*\/>)/iU';
+            preg_match_all($noPattern, $content, $noMatches);
+            if( $noMatches[0] ){
+                foreach($noMatches[0] as $match)
+                {
+                    $content = str_replace($match, $this->toascii($match), $content);
+                }
+            }
+
             $words      = $this->getManagerGlossaire()->findAll();
             $motsFounds = array();
             foreach($words as $key => $word){
@@ -198,6 +209,8 @@ class PublicationExtension extends \Twig_Extension
             $content = str_replace('¬', '', $content);
         }
         
+        $content = html_entity_decode($content);
+
         return $content;
     }
 
