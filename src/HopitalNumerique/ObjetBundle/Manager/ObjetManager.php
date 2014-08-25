@@ -117,6 +117,16 @@ class ObjetManager extends BaseManager
                 $row['ambassadeurs'][] = $ambassadeur->getPrenomNom();
             $row['ambassadeurs'] = implode(', ', $row['ambassadeurs']);
 
+            //Récupération de la moyenne des notes de maitrises de cette publication
+            $notes                     = $objet->getMaitriseUsers();
+            $row['noteMoyenne']        = 0;
+            $row['nombreUserMaitrise'] = 0;
+            foreach ($notes as $note) {
+                $row['noteMoyenne'] += $note->getPourcentageMaitrise();
+                $row['nombreUserMaitrise']++;
+            }
+            $row['noteMoyenne'] /= $row['nombreUserMaitrise'] != 0 ? $row['nombreUserMaitrise'] : 1;
+
             //set empty values for objet (infra doc)
             $row['idC'] = $row['titreC'] = $row['aliasC'] = $row['orderC'] = $row['contenuC'] = $row['dateCreationC'] = $row['dateModificationC'] = $row['nbVueC'] = $row['noteC']= $row['noteMoyenneC']= $row['nombreNoteC'] = '';
 
@@ -133,10 +143,9 @@ class ObjetManager extends BaseManager
                     foreach($contenus as $contenu) {                        
                         $rowInfradoc = array();
 
-                        //init empty for infra doc
                         $rowInfradoc['id'] = $rowInfradoc['titre'] = $rowInfradoc['alias'] = $rowInfradoc['synthese'] = $rowInfradoc['resume'] = $rowInfradoc['commentaires'] = $rowInfradoc['notes'] = $rowInfradoc['type'] = $rowInfradoc['nbVue'] = $rowInfradoc['etat'] = '';
                         $rowInfradoc['dateCreation'] = $rowInfradoc['dateDebutPublication'] = $rowInfradoc['dateFinPublication'] = $rowInfradoc['dateModification'] = $rowInfradoc['roles'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
-                        $rowInfradoc['fichier1'] = $rowInfradoc['fichier2'] = $rowInfradoc['fichierEdit'] = $rowInfradoc['vignette'] = $rowInfradoc['note'] = $rowInfradoc['objets'] = $rowInfradoc['noteMoyenne'] = $rowInfradoc['nombreNote'] = '';
+                        $rowInfradoc['fichier1'] = $rowInfradoc['fichier2'] = $rowInfradoc['fichierEdit'] = $rowInfradoc['vignette'] = $rowInfradoc['note'] = $rowInfradoc['objets'] = $rowInfradoc['noteMoyenne'] = $rowInfradoc['nombreNote'] = $row['nombreUserMaitrise'] = '';
 
                         //Infra doc values
                         $rowInfradoc['idC']               = $contenu->getId();

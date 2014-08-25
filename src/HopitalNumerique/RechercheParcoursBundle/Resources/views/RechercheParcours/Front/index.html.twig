@@ -1,0 +1,86 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{% block metadesc %}Page de recherche par parcours{% endblock %}
+{% block metakeywords %}recherche par parcours{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-front-index.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquerechercheparcours/css/front/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-12" id="recherche-par-parcours">
+        <h3>Parcourir les étapes-projets</h3>
+        
+        <div class="description">
+            <p>
+                Vous comptez démarrer un nouveau projet SI dans votre établissement ? Vous êtes en cours de déploiement et vous souhaitez anticiper les difficultés à venir ?
+            </p>
+            <p>
+                Le parcours guidé vous propose, selon le domaine fonctionnel concerné, d'identifier les points durs que vous êtes susceptibles de rencontrer dans la vie de votre projet, étape par étape et d'identifier les productions de l'Anap qui pourront vous aider à mieux maîtriser les risques projets qui pourront survenir.
+            </p>
+            <p>
+                Laissez-vous guider !
+            </p>
+        </div>
+        
+        <div class="bandeau">
+            {# Bloc de gauche #}
+            {% if app.user %}
+                <div class="col-md-12 bloc-gauche">
+            {% else %}
+                <div class="col-md-8 bloc-gauche">
+            {% endif %}
+                <div class="row parcours">
+                    {# Bloc de présentation #}
+                    <div class="col-md-4 parcours-presentation">
+                        <div class="entete row">
+                            <div class="icone"></div>
+                            <div class="titre">parcourir les étapes projets</div>
+                        </div>
+                        <div class="description">
+                            <p>
+                                Etape par étape, j'identifie les risques à venir et les solutions pour les maîtriser.
+                            </p>
+                        </div>
+                    </div>
+                    {# Bloc de la liste des étapes #}
+                    <div class="col-md-8 parcours-liens">
+                        {% for etape in etapes %}
+                            {# Include vue de l'étape #}
+                            {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:Front/partials/etape.html.twig' with { 'etape' : etape } %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="bloc-tablette">
+                <div class="clearfix"></div>
+            </div>
+            {# Bloc de droite #}
+            {% if app.user is null %}
+                {# Mode non connecté : bloc de création de compte #}
+                <div class="col-md-4 bloc-droit-offline">
+                    <div class="bloc-creation">
+                        <div class="common-sprite icone"></div>
+                        <h3>Mon compte</h3>
+                        <p>
+                            En créant mon compte, je bénéficie de nombreux services. <br />
+                            <a target="_blank" href="{{path('hopital_numerique_publication_publication_article',{'id':314, 'alias':'pourquoi-creer-un-compte','categorie':'publication'|lower})}}">Pourquoi créer un compte ?</a>                             
+                        </p>
+                        <div class="buttons">
+                            <div class="buttons-centrer">
+                                <a href="{{path('account_login')}}" class="btn btn-default login">Connexion</a>
+                                <a href="{{path('hopital_numerique_user_inscription')}}" class="btn btn-default signup">Créer un compte</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            
+        </div>
+    </div>
+{% endblock %}

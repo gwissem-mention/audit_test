@@ -23,6 +23,7 @@ assetic:
         - HopitalNumeriqueQuestionnaireBundle
         - HopitalNumeriqueAccountBundle
         - HopitalNumeriqueRechercheBundle
+        - HopitalNumeriqueRechercheParcoursBundle
         - HopitalNumeriqueRegistreBundle
         - HopitalNumeriquePublicationBundle
         - HopitalNumeriqueFaqBundle

@@ -1,0 +1,26 @@
+<div class="aide">
+    {# Bloc de présentation #}
+    <div class="col-md-4 aide-presentation">
+        <div class="entete row">
+            <div class="icone"></div>
+            <div class="titre">recherche aidée</div>
+        </div>
+        <div class="description">
+            <p>
+                Je décris mon besoin, Mon Hôpital Numérique trouve la solution !
+            </p>
+        </div>
+    </div>
+    {# Bloc de la liste des étapes #}
+    <div class="col-md-8 aide-liens">
+        <label>
+            {{expBesoin.libelle}}
+        </label>
+        {% for reponse in expBesoin.reponses %}
+            {# Include vue de l'étape #}
+            {% include 'HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/Partial/expbesoin_formulaire_reponse.html.twig' with { 'reponse' : reponse, 'question' : expBesoin } %}
+        {% endfor %}
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="clearfix"></div>

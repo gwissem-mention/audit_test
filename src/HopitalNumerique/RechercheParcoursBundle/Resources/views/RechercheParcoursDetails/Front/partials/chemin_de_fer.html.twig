@@ -1,0 +1,63 @@
+<div class="chemin-de-fer">
+    <ul>
+        {% set lastEtapeSelected = false %}
+
+        {% for key,recherchesParcoursDetail in rechercheParcours.recherchesParcoursDetails %}
+            <li>
+                {# Choix de la couleur à appliquer #}
+                {% set couleurEtape = 'red' %}
+                {% if notesMoyenneParEtape is not null and notesMoyenneParEtape is not empty and recherchesParcoursDetail.id in notesMoyenneParEtape|keys %}
+                    {% if notesMoyenneParEtape[recherchesParcoursDetail.id] < 33 %}
+                        {% set couleurEtape = 'red' %}
+                    {% elseif notesMoyenneParEtape[recherchesParcoursDetail.id] < 67 %}
+                        {% set couleurEtape = 'yellow' %}
+                    {% else %}
+                        {% set couleurEtape = 'green' %}
+                    {% endif %}
+                {% endif %}
+                {% if app.user is null or recherchesParcoursDetail.id not in notesMoyenneParEtape|keys %}
+                    {% set couleurEtape = 'none' %}
+                {% endif %}
+                {# Si l'étape courante est sélectionnée on change les images/background en violet #}
+                {% if recherchesParcoursDetail.id == etapeSelected %}
+                    {# Vérifie si on est sur le dernier élément pour savoir quelle icone mettre à la fin #}
+                    {% if loop.last %}
+                        {% set lastEtapeSelected = true %}
+                    {% endif %}
+                    <div class="bloc-etape-selected">
+                        <a class="{{couleurEtape}} tooltip-etape" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':rechercheParcours.id, 'alias':rechercheParcours.reference.libelle|minifieMoi(),'idEtape':recherchesParcoursDetail.id, 'etape':recherchesParcoursDetail.reference.libelle|minifieMoi()}) }}" {% if app.user and recherchesParcoursDetail.id in notesMoyenneParEtape|keys %}title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[recherchesParcoursDetail.id]}} %"{% endif %}>
+                            {{recherchesParcoursDetail.reference.libelle}}
+                        </a>
+                        {% if not loop.last %}
+                            <div class="icone"></div>
+                            <div class="marge-grise"></div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="bloc-etape">
+                        <a class="{{couleurEtape}} tooltip-etape" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':rechercheParcours.id, 'alias':rechercheParcours.reference.libelle|minifieMoi(),'idEtape':recherchesParcoursDetail.id, 'etape':recherchesParcoursDetail.reference.libelle|minifieMoi()}) }}" {% if app.user and recherchesParcoursDetail.id in notesMoyenneParEtape|keys %}title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[recherchesParcoursDetail.id]}} %"{% endif %}>
+                            {{recherchesParcoursDetail.reference.libelle}}
+                        </a>
+                        {% if not loop.last %}
+                            <div class="icone"></div>
+                            {# Si l'élément suivant est sélectionné alors on met un bloc violet pour respecter le design des fleches intégrées #}
+                            {% if rechercheParcours.recherchesParcoursDetails[key + 1].id == etapeSelected %}
+                                <div class="marge-violette"></div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </li>
+        {% endfor %}
+        {# Choix de l'icone à appliquer à la fin + modification du fond du chemin de fer si jamais le dernier élément est sélectionné #}
+        {% if lastEtapeSelected %}
+            <div class="icone-selected"></div>
+            <style type="text/css">
+                #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer {background-color: #712F98;}
+            </style>
+        {% else %}
+            <div class="icone"></div>
+        {% endif %}
+        <div class="marge-blanche"></div>
+    </ul>
+</div>

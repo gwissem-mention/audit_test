@@ -1,0 +1,68 @@
+hopital_numerique_recherche_parcours_homepage:
+    pattern:  /admin/recherche-par-parcours
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:index }
+
+hopital_numerique_recherche_parcours_reorder:
+    pattern:  /admin/recherche-par-parcours/reorder
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:reorder }
+
+#Recherche par parcours - détails
+hopital_numerique_recherche_parcours_details_index:
+    pattern:  /admin/recherche-par-parcours/{id}/details
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:index", id: 1 }
+    requirements: 
+        id : \d+
+
+hopital_numerique_recherche_parcours_details_add:
+    pattern:  /admin/recherche-par-parcours/{id}/details/add
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:add", id: 1}
+    requirements: 
+        id : \d+
+
+hopital_numerique_recherche_parcours_details_delete:
+    pattern:  /admin/recherche-par-parcours/details/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:delete", _format: json, id: 1 }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+hopital_numerique_recherche_parcours_details_edit:
+    pattern:  /admin/recherche-par-parcours/details/edit/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:editFancy",  _format: json, id: 1 }
+    requirements: 
+        id : \d+
+
+hopital_numerique_recherche_parcours_details_save:
+    pattern:  /admin/recherche-par-parcours/details/save/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:editSave", _format: json, id: 1 }
+    requirements:
+        id: \d+
+
+hopital_numerique_recherche_parcours_details_reorder:
+    pattern:  /admin/recherche-par-parcours/details/reorder
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:reorder" }
+
+#----------------------------------------------------------------------
+#-----------------------------------FRONT------------------------------
+#----------------------------------------------------------------------
+hopital_numerique_recherche_parcours_homepage_front:
+    pattern:  /recherche-par-parcours
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:indexFront }
+
+
+#Recherche par parcours - détails
+hopital_numerique_recherche_parcours_details_index_front:
+    pattern:  /recherche-par-parcours/{id}-{alias}/{idEtape}-{etape}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:indexFront", id: 1 , idEtape: 0,alias: 'recherche-parcours',etape: '' }
+    requirements:
+        id : \d+
+        idEtape : \d+
+
+#sauvegarde des notes
+hopital_numerique_recherche_parcours_details_save_note_front:
+    pattern:  /recherche-par-parcours/details/saveNote.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:MaitriseUser:saveNote", _format: json}
+#sauvegarde du non concerné
+hopital_numerique_recherche_parcours_details_save_non_concerne_front:
+    pattern:  /recherche-par-parcours/details/saveNonConcerne.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:MaitriseUser:saveNonConcerne", _format: json}
