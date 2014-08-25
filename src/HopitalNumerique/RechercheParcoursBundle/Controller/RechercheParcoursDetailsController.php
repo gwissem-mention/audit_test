@@ -286,6 +286,7 @@ class RechercheParcoursDetailsController extends Controller
             foreach ($objets as $objet) 
             {
                 if("point-dur" === $objet["categ"]
+                    && $objet['primary']
                     && !array_key_exists($objet['id'], $notes))
                 {
                     //Si il n'y a pas encore de note pour ce point dur, dans cette étape associé à l'utilisateur courant alors on le créé.
