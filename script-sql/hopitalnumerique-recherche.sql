@@ -34,3 +34,5 @@ VALUES
 
 /* 22/08 */
 UPDATE hn_recherche_maitrise_user SET rmu_prendre_en_compte = FALSE;
+/* 25/08 */
+UPDATE hn_recherche_maitrise_user SET note_dateMaitrise = "2014-08-20 17:40:17";

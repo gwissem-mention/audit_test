@@ -30,6 +30,7 @@ class MaitriseUserController extends Controller
         $note = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->findOneBy(array('objet' => $idObjet, 'user' => $user, 'rechercheParcoursDetails' => $rechercheParcoursDetails));
         //Mise à jour de sa valeur
         $note->setPourcentageMaitrise($valeurMatrise);
+        $note->setDateMaitrise(new \DateTime());
 
         //Sauvegarde de la modif
         $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->save( $note );
@@ -58,6 +59,7 @@ class MaitriseUserController extends Controller
         $note = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->findOneBy(array('objet' => $idObjet, 'user' => $user, 'rechercheParcoursDetails' => $rechercheParcoursDetails));
         //Mise à jour de sa valeur
         $note->setNonConcerne($nonConcerne);
+        $note->setDateMaitrise(new \DateTime());
 
         //Sauvegarde de la modif
         $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->save( $note );

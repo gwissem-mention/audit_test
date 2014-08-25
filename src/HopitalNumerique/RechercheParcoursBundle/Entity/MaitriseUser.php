@@ -22,6 +22,13 @@ class MaitriseUser
     private $id;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="note_dateMaitrise", type="datetime")
+     */
+    protected $dateMaitrise;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="rmu_pourcentageMaitrise", type="integer", options = {"comment" = "Pourcentage de maitrise du point dur par l utilisateur."})
@@ -62,7 +69,8 @@ class MaitriseUser
      */
     public function __construct()
     {
-        $this->nonConcerne = false;
+        $this->nonConcerne  = false;
+        $this->dateMaitrise = new \DateTime();
     }
 
     /**
@@ -171,5 +179,28 @@ class MaitriseUser
     public function getNonConcerne()
     {
         return $this->nonConcerne;
+    }
+
+    /**
+     * Set dateMaitrise
+     *
+     * @param \DateTime $dateMaitrise
+     * @return MaitriseUser
+     */
+    public function setDateMaitrise($dateMaitrise)
+    {
+        $this->dateMaitrise = $dateMaitrise;
+
+        return $this;
+    }
+
+    /**
+     * Get dateMaitrise
+     *
+     * @return \DateTime 
+     */
+    public function getDateMaitrise()
+    {
+        return $this->dateMaitrise;
     }
 }
