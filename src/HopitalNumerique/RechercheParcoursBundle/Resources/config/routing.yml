@@ -59,6 +59,10 @@ hopital_numerique_recherche_parcours_details_index_front:
         idEtape : \d+
 
 #sauvegarde des notes
-hopital_numerique_recherche_parcours_details_save_front:
-    pattern:  /recherche-par-parcours/details/save.{_format}
-    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:MaitriseUser:save", _format: json}
+hopital_numerique_recherche_parcours_details_save_note_front:
+    pattern:  /recherche-par-parcours/details/saveNote.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:MaitriseUser:saveNote", _format: json}
+#sauvegarde du non concerné
+hopital_numerique_recherche_parcours_details_save_non_concerne_front:
+    pattern:  /recherche-par-parcours/details/saveNonConcerne.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:MaitriseUser:saveNonConcerne", _format: json}

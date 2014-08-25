@@ -30,3 +30,7 @@ VALUES
     (3, 293, 5),
     (4, 294, 1),
     (5, 295, 4);
+
+
+/* 22/08 */
+UPDATE hn_recherche_maitrise_user SET rmu_prendre_en_compte = FALSE;

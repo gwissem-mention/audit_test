@@ -51,6 +51,21 @@ class MaitriseUser
     protected $user;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="rmu_non_concerne", type="boolean", options = {"comment" = "Pas concerné par cet objet"})
+     */
+    protected $nonConcerne;
+
+    /**
+     * Initialisation de l'entitée (valeurs par défaut)
+     */
+    public function __construct()
+    {
+        $this->nonConcerne = false;
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -134,5 +149,27 @@ class MaitriseUser
     public function getUser()
     {
         return $this->user;
+    }
+    /**
+     * Set nonConcerne
+     *
+     * @param boolean $nonConcerne
+     * @return MaitriseUser
+     */
+    public function setNonConcerne($nonConcerne)
+    {
+        $this->nonConcerne = $nonConcerne;
+
+        return $this;
+    }
+
+    /**
+     * Get nonConcerne
+     *
+     * @return boolean 
+     */
+    public function getNonConcerne()
+    {
+        return $this->nonConcerne;
     }
 }

@@ -24,6 +24,8 @@ class MaitriseUserRepository extends EntityRepository
         return $this->_em->createQueryBuilder()
                          ->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne')
                          ->from('\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser', 'notes')
+                                ->andWhere('notes.nonConcerne = :nonConcerne')
+                                ->setParameter('nonConcerne', false)
                                 ->leftJoin('notes.rechercheParcoursDetails', 'etape')
                                 ->andWhere('etape.id IN (:ids)')
                                 ->setParameter('ids', $etapesId)

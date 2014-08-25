@@ -3,7 +3,7 @@ var loader;
 $(document).ready(function() {
     calculNoteMoyenne();
 
-    $("a").tooltip({ position: { my: "center bottom-15", at: "top center" } });
+    $("#recherche-par-parcours-details .chemin-de-fer li a").tooltip({ position: { my: "center bottom-15", at: "top center" } });
 
     //Pour chaque note, setage du slider avec la valeur associée
     $('.note').each(function(){
@@ -74,6 +74,59 @@ $(document).ready(function() {
         //Label
         $( "#pourcentage-" + $(this).data('id') ).val( $( "#slider-range-min-" + $(this).data('id') ).slider( "value" ) );
     });
+    
+    // -- vvv -- Gestion des checkboxs "Non concerné" -- vvv --
+    $("#pointsdurs .nonConcerne input.checkbox").each(function(){
+
+        //Initialisation du volet
+        var idNote    = $(this).data('id');
+        var isChecked = $(this).attr('checked');
+
+        if(isChecked)
+            $("#volet-" + idNote).show();
+        else
+            $("#volet-" + idNote).hide();
+
+        //Init de la fonction click
+        $(this).change(function(){
+            var idNote    = $(this).data('id');
+            var isChecked = $(this).attr('checked');
+
+            //Set manuel de la checkbox
+            if(isChecked)
+                $(this).removeAttr('checked');
+            else
+                $(this).attr('checked','checked');
+
+            //Récupération de la nouvelle valeur
+            var isChecked = $(this).attr('checked');
+
+            if(isChecked)
+                $("#volet-" + idNote).show();
+            else
+                $("#volet-" + idNote).hide();
+
+            loader = $("#nonConcerne-" + idNote).nodevoLoader();
+            loader.start();
+
+            $.ajax({
+                url      : $("#sauvegarde-nonconcerne-url").val(),
+                data     : {
+                    idObjet                  : $(this).data('id'),
+                    value                    : isChecked,
+                    rechercheParcoursDetails : $("#etape-selected").val()
+                },
+                type     : 'POST',
+                dataType : 'json',
+                success : function( data ){
+                    loader.finished();
+                    calculNoteMoyenne();
+                }
+            });
+        });
+    });
+    // -- ^^^ -- Gestion des checkboxs "Non concerné" -- ^^^ --
+
 });
 
 //Fancybox de la synthese
@@ -111,8 +164,14 @@ function calculNoteMoyenne()
     var compteur  = 0;
 
     $(".resultats-points-durs .note .pourcentage").each(function(){
-        noteTotal += parseInt($(this).val(),0);
-        compteur++;
+
+        var idNote = $(this).data('id');
+
+        if(! $("#checkbox-" + idNote ).attr('checked'))
+        {
+            noteTotal += parseInt($(this).val(),0);
+            compteur++;
+        }
     });
 
     var couleur;
@@ -133,6 +192,7 @@ function calculNoteMoyenne()
         $("#note-moyenne span").attr("class", function(i, val){
             return couleur;
         });
+        $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr('title','Taux de maîtrise de l\'étape : '+ parseInt(noteTotal / compteur, 0) +' %');
         $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr("class", function(i, val){
             return couleur;
         });
@@ -143,6 +203,7 @@ function calculNoteMoyenne()
         $("#note-moyenne span").attr("class", function(i, val){
             return couleur;
         });
+        $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr('title','Taux de maîtrise de l\'étape : '+ parseInt("0", 0) +' %');
         $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr("class", function(i, val){
             return couleur;
         });

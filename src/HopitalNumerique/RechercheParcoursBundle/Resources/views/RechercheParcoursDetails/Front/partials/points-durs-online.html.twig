@@ -4,8 +4,16 @@
             {# Inclu la vue de l'affichage des points dur #}
             {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/details-points-durs.html.twig' with {'objet': objet } %}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 notation" id="notation-{{objet['id']}}">
+            <div class="nonConcerne" id="nonConcerne-{{objet['id']}}">
+                <form>
+                    <input type="checkbox" class="checkbox pull-left" data-id="{{objet['id']}}" id="checkbox-{{objet['id']}}"{% if notes[objet['id']].nonConcerne %} checked="checked"{% endif %} />
+                    <div class="labelCheckbox pull-left">Non concerné par ce point dur</div>
+                </form>
+                <div class="clearfix"></div>
+            </div>
             <div class="note" id="note-{{objet['id']}}" data-id="{{objet['id']}}">
+                <div class="volet" id="volet-{{objet['id']}}"></div>
                 <p>
                     {# Choix de la couleur à appliquer #}
                     {% set couleurEtape = 'red' %}
@@ -19,7 +27,7 @@
                         {% endif %}
                     {% endif %}
                     <label for="pourcentage-{{objet['id']}}">Taux de maîtrise % :</label>
-                    <input type="text" class="pourcentage {{couleurEtape}}" value="{% if objet['id'] in notes|keys %}{{notes[objet['id']].pourcentageMaitrise}}{% else %}0{% endif %}" id="pourcentage-{{objet['id']}}" readonly >
+                    <input type="text" class="pourcentage {{couleurEtape}}" value="{% if objet['id'] in notes|keys %}{{notes[objet['id']].pourcentageMaitrise}}{% else %}0{% endif %}" id="pourcentage-{{objet['id']}}" readonly  data-id="{{objet['id']}}">
                 </p>
                 <div id="slider-range-min-{{objet['id']}}" class="slider-range-min"></div>
             </div>

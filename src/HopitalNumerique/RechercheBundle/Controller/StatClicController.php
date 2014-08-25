@@ -27,7 +27,7 @@ class StatClicController extends Controller
 
         $statClic = $this->get('hopitalnumerique_recherche.manager.statClic')->createEmpty();
 
-        if(!is_null($user))
+        if(!is_null($user) && $user !== "anon.")
             $statClic->setUser($user);
 
         $statClic->setReponse($expBesoinReponses);

@@ -72,7 +72,7 @@ class MaitriseUserManager extends BaseManager
         //Récupération de l'ensemble des Ids des objets pour le tri
         foreach ($objets as $objet) 
         {
-            if($objet['categ'] === 'point-dur')
+            if($objet['categ'] === 'point-dur' && $objet['primary'])
                 $objetIds[] = $objet['id'];
         }
 

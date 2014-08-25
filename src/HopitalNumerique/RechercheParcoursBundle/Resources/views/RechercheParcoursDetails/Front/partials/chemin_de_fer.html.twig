@@ -25,7 +25,7 @@
                         {% set lastEtapeSelected = true %}
                     {% endif %}
                     <div class="bloc-etape-selected">
-                        <a class="{{couleurEtape}}" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':rechercheParcours.id, 'alias':rechercheParcours.reference.libelle|minifieMoi(),'idEtape':recherchesParcoursDetail.id, 'etape':recherchesParcoursDetail.reference.libelle|minifieMoi()}) }}" {% if app.user and recherchesParcoursDetail.id in notesMoyenneParEtape|keys %}title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[recherchesParcoursDetail.id]}} %"{% endif %}>
+                        <a class="{{couleurEtape}} tooltip-etape" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':rechercheParcours.id, 'alias':rechercheParcours.reference.libelle|minifieMoi(),'idEtape':recherchesParcoursDetail.id, 'etape':recherchesParcoursDetail.reference.libelle|minifieMoi()}) }}" {% if app.user and recherchesParcoursDetail.id in notesMoyenneParEtape|keys %}title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[recherchesParcoursDetail.id]}} %"{% endif %}>
                             {{recherchesParcoursDetail.reference.libelle}}
                         </a>
                         {% if not loop.last %}
@@ -35,7 +35,7 @@
                     </div>
                 {% else %}
                     <div class="bloc-etape">
-                        <a class="{{couleurEtape}}" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':rechercheParcours.id, 'alias':rechercheParcours.reference.libelle|minifieMoi(),'idEtape':recherchesParcoursDetail.id, 'etape':recherchesParcoursDetail.reference.libelle|minifieMoi()}) }}" {% if app.user and recherchesParcoursDetail.id in notesMoyenneParEtape|keys %}title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[recherchesParcoursDetail.id]}} %"{% endif %}>
+                        <a class="{{couleurEtape}} tooltip-etape" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':rechercheParcours.id, 'alias':rechercheParcours.reference.libelle|minifieMoi(),'idEtape':recherchesParcoursDetail.id, 'etape':recherchesParcoursDetail.reference.libelle|minifieMoi()}) }}" {% if app.user and recherchesParcoursDetail.id in notesMoyenneParEtape|keys %}title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[recherchesParcoursDetail.id]}} %"{% endif %}>
                             {{recherchesParcoursDetail.reference.libelle}}
                         </a>
                         {% if not loop.last %}

@@ -93,6 +93,10 @@
 #recherche-par-parcours-details .note .pourcentage.red{color:#C93358;}
 
 #pointsdurs .slider-range-min{width: 90%; margin: 0 auto;}
+#pointsdurs .nonConcerne {width: 300px; margin-top: 5px;}
+#pointsdurs .nonConcerne .labelCheckbox{vertical-align: bottom;margin: 4px 0 0 5px;}
+#pointsdurs .note{position:relative; z-index: 1;}
+#pointsdurs .note .volet{width: 300px; height: 55px; opacity: 0.5;background-color:#A8A8A8; position: absolute; z-index:9999;border-radius: 4px;  }
 #pointsdurs .note{height: 55px; border-radius: 0.25em;}
 #pointsdurs .note label{padding-top: 2px; margin: 5px 0 0 20px;}
 #pointsdurs .note .pourcentage{width: 100px;}
