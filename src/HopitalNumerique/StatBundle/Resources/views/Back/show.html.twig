@@ -1,0 +1,44 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block title %}{{parent()}} - statistiques{% endblock %}
+
+{% block h1Title %}
+    Ensemble des statistiques
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-stats-show.js"
+        "@validationEngine_js"
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-stats-show.css" filter="cssrewrite, ?yui_css"
+        "@validationEngine_css"
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Ensemble des statistiques</h4>
+            </div>
+
+            <div class="panel-body" >
+                
+                <div class="row">
+                    {# Include de l'historique #}
+                    {{ render(controller("HopitalNumeriqueStatBundle:Pointdur:index")) }}
+                </div>
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}

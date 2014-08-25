@@ -63,6 +63,7 @@ class AppKernel extends Kernel
             new CCDNForum\ForumBundle\CCDNForumForumBundle(),
             new CCDNComponent\BBCodeBundle\CCDNComponentBBCodeBundle(),
             //-^- Bundles du Forum -^-,
+            new HopitalNumerique\StatBundle\HopitalNumeriqueStatBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
