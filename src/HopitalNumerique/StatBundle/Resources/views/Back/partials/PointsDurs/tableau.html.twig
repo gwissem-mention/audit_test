@@ -1,0 +1,30 @@
+<div class="table table-responsive">
+    <table class="table table-hover" style="margin:0 auto; border-collapse:collapse;">
+        <thead>
+            <tr class="grid-row-titles">
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="100/(1+{{entetesTableau|length}})" height="25px"></th>
+                {% for key,enteteTableau in entetesTableau %}
+                    <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="100/(1+{{entetesTableau|length}})" height="25px"><strong>{{enteteTableau}}</strong></th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for pointDur in pointsDur %}
+                <tr>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:left;" height="50px">
+                        {{pointDur.id}}- {{pointDur.titre}}
+                    </td>
+                    {% for key,enteteTableau in entetesTableau %}  
+                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                            {% if pointDur.id in notes|keys and key in notes[pointDur.id]|keys %}
+                                {% for categorie,nombreNote in notes[pointDur.id][key] %}
+                                    {{categorie}} : <strong>{{nombreNote}}</strong>;<br />
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}  
+        </tbody>
+    </table>
+</div>
