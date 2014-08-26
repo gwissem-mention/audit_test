@@ -173,7 +173,7 @@
             <div class="row">
                 <div class="col-md-4">Date de création</div>
                 <div class="col-md-8">
-                    {{ interventionDemande.dateCreation|date('m/d/Y') }}
+                    {{ interventionDemande.dateCreation|date('d/m/Y') }}
                 </div>
             </div>
             
@@ -196,13 +196,13 @@
             <div class="row">
                 <div class="col-md-4">Date de choix du CMSI</div>
                 <div class="col-md-8">
-                    {% if interventionDemande.cmsiDateChoix != null %}{{ interventionDemande.cmsiDateChoix|date('m/d/Y') }}{% endif %}
+                    {% if interventionDemande.cmsiDateChoix != null %}{{ interventionDemande.cmsiDateChoix|date('d/m/Y') }}{% endif %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">Date de choix de l'ambassadeur</div>
                 <div class="col-md-8">
-                    {% if interventionDemande.ambassadeurDateChoix != null %}{{ interventionDemande.ambassadeurDateChoix|date('m/d/Y') }}{% endif %}
+                    {% if interventionDemande.ambassadeurDateChoix != null %}{{ interventionDemande.ambassadeurDateChoix|date('d/m/Y') }}{% endif %}
                 </div>
             </div>
             
