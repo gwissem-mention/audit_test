@@ -1,0 +1,35 @@
+{# Tableau des stats des points durs #}
+{% set option = 'point-dur' %}
+<div class="panel panel-default gray">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapsePointDur" class="collapsed" id="tableau_point_dur">
+        <div class="panel-heading"><h4>Vue des points durs des parcours</h4></div>
+    </a>
+    <div id="collapsePointDur" class="collapse" style="height: 0px;">
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div id="date-point-dur">
+                        {% include 'HopitalNumeriqueStatBundle:Back:partials/Common/dates.html.twig' with { 'options' : option } %}
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() { 
+
+        //bind de Validation Engine
+        $('form.toValidate').validationEngine();
+
+        $( "#from" ).datepicker({
+            defaultDate    : "+1w",
+            changeMonth    : true,
+            numberOfMonths : 1,
+            onClose        : function( selectedDate ) {
+                $( "#to" ).datepicker( "option", "minDate", selectedDate );
+            }
+        });
+    });
+</script>
