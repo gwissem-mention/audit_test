@@ -1,0 +1,79 @@
+<h3 class="pull-left">{{rechercheParcours.reference.libelle}}</h3>
+<div class="options pull-right">
+    <span class="designForBlank" style="margin-right:10px;">Cliquez sur le bouton '+' pour ajouter une étape.</span>
+    <div onclick="addDetails('{{path('hopital_numerique_recherche_parcours_details_add', {'id':rechercheParcours.id})}}' );" class="btn btn-success addReponse"><i class="fa fa-plus"></i></div>
+</div>
+<div class="clearfix"></div>
+
+{# Formulaire d'ajout d'une réponse #}
+<div id="designForForm">
+    <form id="hopitalnumerique_reponse" novalidate="novalidate" class="form-horizontal toValidate" action="" method="post" name="hopitalnumerique_reponse">
+        <div class="form-group">
+            <div class="col-sm-6">
+                <div class="blocQuestion">
+                    <select name="etape" id="rechercheParcours.reference-reponse" class="form-control col-md-12 validate[required]">
+                        {% for etape in etapes %}
+                            {% if etapesSelected is not empty %}
+                                {% if etape.id not in etapesSelected %}
+                                    <option value="{{etape.id}}" >{{etape.libelle}}</option>
+                                {% endif %}
+                            {% else %}
+                                <option value="{{etape.id}}" >{{etape.libelle}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <input type="hidden" name="rechercheParcours" id="rechercheParcoursId" value="{{rechercheParcours.id}}" />
+        </div>
+        <div class="clearfix"></div>
+    </form>
+</div>
+
+<div id="details-dd">
+    <div class="dd">
+        <ol class="dd-list">
+            {% for details in rechercheParcours.recherchesParcoursDetails %}
+                <li class="dd-item dd3-item" data-id="{{details.id}}" data-etape="{{details.reference.id}}" id="details-{{details.id}}" >
+                    <div class="dd-handle dd3-handle"></div>
+                    <div class="dd3-content" style="line-height:18px;">
+                        <span style="margin-top:4px" title="{{details.reference.libelle}}">{{details.reference.libelle|truncate(25,'...')}}</span>
+                    </div>
+                    <div class="dd3-actions">
+                        <div onclick="deleteDetails( {{details.id}}, '{{path('hopital_numerique_recherche_parcours_details_delete', {'id':details.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+                        <a href="{{path('hopital_numerique_recherche_parcours_details_edit',{'id':details.id})}}" class="fancy pull-right dd3-edit fancybox.ajax"><i class="fa fa-edit"></i></a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>
+
+<input type="hidden" id="order-details-url" value="{{path('hopital_numerique_recherche_parcours_details_reorder')}}" />
+
+<script type="text/javascript" >
+    $(document).ready(function() {
+        if( $('form.toValidate').length > 0 )
+            $('form.toValidate').validationEngine();
+
+        //Fancybox
+        if( $('.fancy').length > 0 )
+            initFancyBox();
+    });
+
+    $('#details div.dd').nestable({'maxDepth':1,'group':0}).on('change', function() {
+        var serializedDatas = $(this).nestable('serialize');
+
+        $.ajax({
+            url  : $('#order-details-url').val(),
+            data : {
+                datas : serializedDatas
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                //console.log( 'reorder executed' );
+            }
+        });
+    });
+</script>

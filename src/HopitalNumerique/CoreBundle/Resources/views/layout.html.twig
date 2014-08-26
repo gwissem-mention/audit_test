@@ -15,7 +15,9 @@
         {% block stylesheets %}
             {% stylesheets output="compiled/hopitalnumerique-core.css" filter="cssrewrite, ?yui_css" 
                 "@bootstrap_css"
+                "@fancybox_css"
                 'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
+                'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
                 'bundles/hopitalnumeriquecore/css/layout.css'
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
@@ -28,7 +30,11 @@
                 "@jquery_ui_js"
                 "@bootstrap_js"
                 "@enquire_js"
+                "@fancybox_js"  
+                "@json_js"
                 'bundles/hopitalnumeriquecore/js/script.js'
+                'bundles/hopitalnumeriquecore/js/recherche.js'
+                'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
@@ -117,6 +123,8 @@
                     {% block body %}{% endblock body %}
                     <div class="clearfix"></div>
                 {% endblock %}
+
+                <input type="hidden" id="fancy-recherche-url" value="{{path('hopital_numerique_expbesoin_rechercheFancy')}}" />
             </div>
             <div class="col-md-12" id="footer">
                 {{ knp_menu_render('menu-footer-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}

@@ -1,0 +1,99 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-chapitre-index.css" filter="cssrewrite, ?yui_css" 
+        "@select2_css" 
+        "@fancybox_css"
+        "@validationEngine_css"
+        "@jquery_toggles_css"
+        'bundles/nodevoadmin/css/jquery.nestable.css'
+        'bundles/hopitalnumeriquerecherche/css/ExpBesoin/style.css'
+        'bundles/nodevoadmin/css/toggles.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-recherche-chapitre-index.js" 
+        "@select2_js" 
+        "@fancybox_js" 
+        "@nestable_js"
+        "@tinymce_js"
+        "@jquery_toggles_js"
+        "@validationEngine_js"
+        "@json_js"
+        'bundles/hopitalnumeriquerecherche/js/ExpBesoin/script.js'
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block h1Title %}
+    Gestion de l'aide à l'expression du besoin
+{% endblock %}
+
+{% block toolbarButton %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="col-sm-12">
+
+        <div class="panel-body">
+            <div class="sous_options">
+                <div class="btn-toolbar">
+                    <div class="btn btn-default addQuestion">Ajouter une question</div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="well well-lg">
+                    <span class="designForBlank" style="{% if expBesoins|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton 'Ajouter une question' pour ajouter une question.</span>
+                    <div class="dd" id="questions">
+                        <ol class="dd-list">
+                            {% import _self as mySelf %}
+                            {% for expBesoin in expBesoins %}
+                                {{ mySelf.buildTree(expBesoin) }}
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+
+                <input type="hidden" id="add-question-url" value="{{path('hopital_numerique_expbesoin_addquestion')}}" />
+                <input type="hidden" id="order-question-url" value="{{path('hopital_numerique_expbesoin_reorderquestion')}}" />
+                {#<input type="hidden" id="calc-ponderation-url" value="{{path('hopitalnumerique_autodiag_outil_ponderation',{'id':outil.id})}}" />#}
+
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12">
+                <div class="well well-lg" id="reponses">
+                    <span class="selectionQuestion">Vous devez sélectionner une question avant de visualiser les réponses.</span>
+                    <div class="results">
+                        
+                    </div>
+                    <input type="hidden" class="question" value="0" />
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% macro buildTree(expBesoin) %}
+    <li class="dd-item dd3-item" data-id="{{expBesoin.id}}" id="expBesoin-{{expBesoin.id}}" >
+        <div class="dd-handle dd3-handle"></div>
+        <div class="dd3-content">
+            <a href="javascript:selectQuestion({{expBesoin.id}}, '{{path('hopitalnumerique_expbesoin_question', {'id':expBesoin.id})}}')">{{expBesoin.libelle}}</a>
+        </div>
+        <div class="dd3-actions">
+            <div onclick="deleteQuestion( {{expBesoin.id}}, '{{path('hopital_numerique_expbesoin_deletequestion', {'id':expBesoin.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
+            <div onclick="editQuestion( {{expBesoin.id}}, '{{path('hopital_numerique_expbesoin_editquestion', {'id':expBesoin.id})}}' );" class="pull-right dd3-edit question-edit"><i class="fa fa-edit"></i></div>
+        </div>
+    </li>
+{% endmacro %}

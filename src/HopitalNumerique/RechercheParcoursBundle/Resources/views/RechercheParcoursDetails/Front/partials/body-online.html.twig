@@ -1,0 +1,19 @@
+<div id="pointsdurs" class="col-md-12">
+    {% set count = 0 %}
+    {% for objet in objets if (objet['categ'] == "point-dur" and objet['primary']) %}
+        {% set count = count + 1 %}
+    {% endfor %}
+    <h4>Points Durs ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h4>
+    <div class="wrapper-results">
+        <div class="background-violet"></div>
+        <div class="results">
+            {% set count = 0 %}
+            {% for objet in objets if (objet['categ'] == "point-dur" and objet['primary']) %}
+                {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/points-durs-online.html.twig' with {'objet': objet } %}
+            {% else %}
+                <p> - Aucun point dur trouvé - </p>
+            {% endfor %}
+            <div class="clearfix"></div>
+        </div>
+    </div>   
+</div>

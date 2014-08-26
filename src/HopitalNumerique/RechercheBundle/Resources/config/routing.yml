@@ -56,6 +56,97 @@ hopital_numerique_requete_consultation_delete:
     requirements: 
         id: \d+
 
+#Expression du besoin
+hopital_numerique_expbesoin_index:
+    pattern:  /admin/aide-expression-besoin
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:index }
+
+hopital_numerique_expbesoin_addquestion:
+    pattern:  /admin/aide-expression-besoin/add-question
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:addQuestion }
+
+hopital_numerique_expbesoin_editquestion:
+    pattern:  /admin/aide-expression-besoin/edit-question
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:editQuestion }
+
+hopital_numerique_expbesoin_deletequestion:
+    pattern:  /admin/aide-expression-besoin/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoin:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+hopital_numerique_expbesoin_reorderquestion:
+    pattern:  /admin/aide-expression-besoin/reorder
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:reorder }
+
+#Expression du besoin réponse
+hopitalnumerique_expbesoin_question:
+    pattern:  /admin/aide-expression-besoin/{id}/reponse
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:index" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_expbesoin_reponse_add:
+    pattern:  /admin/aide-expression-besoin/chapitre/{id}/question/add
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:add" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_expbesoin_reponse_delete:
+    pattern:  /admin/aide-expression-besoin/question/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+hopitalnumerique_expbesoin_reponse_edit:
+    pattern:  /admin/aide-expression-besoin/question/edit/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:edit",  _format: json }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_expbesoin_reponse_edit_libelle:
+    pattern:  /admin/aide-expression-besoin/question/edit-libelle/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:editLibelle",  _format: json }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_expbesoin_reponse_reorder:
+    pattern:  /admin/aide-expression-besoin/{id}/reponse/reorder
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:reorder" }
+    requirements: 
+        id : \d+
+
+hopitalnumerique_expbesoin_reponse_reference:
+    pattern:  /admin/aide-expression-besoin/reponse/{id}/reference
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:reference"}
+    requirements:
+        id: \d+
+
+hopitalnumerique_expbesoin_reponse_reference_save:
+    pattern:  /admin/aide-expression-besoin/reponse/{id}/reference/save
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:referenceSave" }
+    requirements:
+        id: \d+
+
+#Expression du besoin - FO
+hopital_numerique_expbesoin_rechercheFancy:
+    pattern:  /recherche-par-referencement/aide-expression-besoin/fancy
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoin:recherche" }
+
+#Expression du besoin - Modification de la requete
+hopital_numerique_expbesoin_modification_session_recherche:
+    pattern:  /recherche-par-referencement/aide-expression-besoin/session
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoin:modificationSession" }
+
+#Stat-clic
+hopital_numerique_expbesoin_stat_add:
+    pattern:  /recherche-par-referencement/stat/add.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:StatClic:add", _format: json }
+    requirements:
+        _method: POST
+
 #CRON
 hopital_numerique_cron_requetes:
     pattern:  /cron-requetes/{id}

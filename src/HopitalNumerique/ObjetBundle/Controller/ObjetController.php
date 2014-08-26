@@ -248,16 +248,6 @@ class ObjetController extends Controller
         return new Response(json_encode($result), 200);
     }
 
-   
-
-
-
-
-
-
-
-
-
 
 
 

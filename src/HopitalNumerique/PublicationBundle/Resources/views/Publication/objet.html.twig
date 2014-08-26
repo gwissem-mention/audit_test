@@ -87,7 +87,7 @@
                     <div id="bloc-notation-moyenne-objet">
                         <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
                         <div class="bloc-star pull-left">
-                            <div class="rateit" id="note-moyenne-etoile" data-rateit-max="3" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                            <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
                         </div>
                         <div class="pull-left" id="info-note-moyenne"></div>
                         <div class="clearfix"></div>
@@ -119,7 +119,7 @@
                     <div id="bloc-notation-moyenne-objet">
                         <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
                         <div class="bloc-star pull-left">
-                            <div class="rateit" id="note-moyenne-etoile" data-rateit-max="3" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                            <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
                         </div>
                         <div class="pull-left" id="info-note-moyenne"></div>
                         <div class="clearfix"></div>
@@ -160,8 +160,8 @@
                     <input type="hidden" id="note-sauvegarde-url" value="{{path('hopital_numerique_publication_note_add' ) }}">
                     <input type="hidden" id="note-delete-url" value="{{path('hopital_numerique_publication_note_delete' ) }}">
                     <input type="hidden" id="note-valeur" style="display: none;" value="0">
-                    <div class="pull-left" style="line-height:16px">Cette production vous-a-t-elle été utile ? </div>
-                    <div class="rateit pull-left" id="note-etoile" data-rateit-step="1" data-rateit-value="{% if note is not null %}{{note.note}}{% else %}0{% endif %}" data-rateit-max="3"></div>
+                    <div class="pull-left" style="line-height:19px;font-size: 13px;font-family:Arial">Cette réponse vous paraît-elle utile ?</div>
+                    <div class="rateit pull-left" id="note-etoile" data-rateit-step="1" data-rateit-value="{% if note is not null %}{{note.note}}{% else %}0{% endif %}" data-rateit-max="5"></div>
                     <div class="clearfix"></div>
                 </div>
                 <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" />

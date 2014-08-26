@@ -290,7 +290,14 @@ class Objet
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ModuleBundle\Entity\Module", mappedBy="productions")
      */
-    protected $modules;
+    protected $modules; 
+
+    /**
+     * Ensemble des notes de maitrise liées à cette publication
+     *
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser", mappedBy="objet", cascade={"persist", "remove" })
+     */
+    protected $maitriseUsers;
 
     /**
      * @Assert\File(
@@ -335,6 +342,7 @@ class Objet
         $this->types         = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ambassadeurs  = new \Doctrine\Common\Collections\ArrayCollection();
         $this->modules       = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->maitriseUsers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -925,48 +933,6 @@ class Objet
         $this->autodiags[] = $autodiag;
         return $this;
     }
-
-    /**
-     * Get objets
-     *
-     * @return array $objets
-     */
-    public function getObjets()
-    {
-        return $this->objets;
-    }
-    
-    /**
-     * Set objets
-     *
-     * @param array $objets
-     */
-    public function setObjets(array $objets)
-    {
-        $this->objets = $objets;
-        return $this;
-    }
-
-    /**
-     * Remove objet
-     *
-     * @param string $objet
-     */
-    public function removeObjet($objet)
-    {
-        $this->objets->removeElement($objet);
-    }
-    
-    /**
-     * add objet
-     *
-     * @param string $objet
-     */
-    public function addObjet($objet)
-    {
-        $this->objets[] = $objet;
-        return $this;
-    }
     
     /**
      * Get glossaires
@@ -1086,6 +1052,62 @@ class Objet
     public function getAmbassadeurs()
     {
         return $this->ambassadeurs;
+    }
+
+    /**
+     * Get roles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMaitriseUsers()
+    {
+        return $this->maitriseUsers;
+    }
+
+    /**
+     * Add objet
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet
+     * @return Objet
+     */
+    public function addObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objet)
+    {
+        $this->objets[] = $objet;
+    
+        return $this;
+    }
+
+    /**
+     * Remove objet
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet
+     */
+    public function removeObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objet)
+    {
+        $this->objets->removeElement($objet);
+    }
+
+    /**
+     * Set objets
+     *
+     * @param \Doctrine\Common\Collections\Collection $objets
+     * @return Objet
+     */
+    public function setObjets(array $objets)
+    {        
+        $this->objets = $objets;
+    
+        return $this;
+    }
+
+    /**
+     * Get objets
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getObjets()
+    {
+        return $this->objets;
     }
 
     /**

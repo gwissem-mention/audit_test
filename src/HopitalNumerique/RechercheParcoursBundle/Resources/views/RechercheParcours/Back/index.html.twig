@@ -1,0 +1,91 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-index.css" filter="cssrewrite, ?yui_css" 
+        "@select2_css" 
+        "@fancybox_css"
+        "@validationEngine_css"
+        "@jquery_toggles_css"
+        'bundles/nodevoadmin/css/jquery.nestable.css'
+        'bundles/nodevoadmin/css/toggles.css'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+        'bundles/hopitalnumeriquerechercheparcours/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-recherche-parcours-index.js" 
+        "@select2_js" 
+        "@fancybox_js" 
+        "@nestable_js"
+        "@tinymce_js"
+        "@jquery_toggles_js"
+        "@validationEngine_js"
+        "@json_js"
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/hopitalnumeriquerechercheparcours/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block h1Title %}
+    Gestion de la recherche par parcours
+{% endblock %}
+
+{% block toolbarButton %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="col-sm-12">
+
+        <div class="panel-body">
+
+            <div class="col-md-12">
+                <div class="well well-lg">
+                    <div class="dd" id="recherchesParcours">
+                        <ol class="dd-list">
+                            {% import _self as mySelf %}
+                            {% for rechercheParcours in recherchesParcours %}
+                                {{ mySelf.buildTree(rechercheParcours) }}
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+
+                <input type="hidden" id="order-recherche-parcours-url" value="{{path('hopital_numerique_recherche_parcours_reorder')}}" />
+
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12">
+                <div class="well well-lg" id="details">
+                    <span class="selectionQuestion">Vous devez sélectionner un périmètre fonctionnel avant d'y associer des étapes.</span>
+                    <div class="results">
+                        
+                    </div>
+                    <input type="hidden" class="question" value="0" />
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% macro buildTree(rechercheParcours) %}
+    <li class="dd-item dd3-item" data-id="{{rechercheParcours.id}}" id="rechercheParcours-{{rechercheParcours.id}}" >
+        <div class="dd-handle dd3-handle"></div>
+        <div class="dd3-content">
+            <a href="javascript:selectRecherche({{rechercheParcours.id}}, '{{path('hopital_numerique_recherche_parcours_details_index', {'id':rechercheParcours.id})}}')">{{rechercheParcours.reference.libelle}}</a>
+        </div>
+        <div class="dd3-actions">
+        </div>
+    </li>
+{% endmacro %}

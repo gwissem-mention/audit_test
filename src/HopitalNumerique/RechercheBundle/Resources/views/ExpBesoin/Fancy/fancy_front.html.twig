@@ -1,0 +1,109 @@
+<div class="panel panel-midnightblue" style="margin:0" >
+    <div class="panel-heading" style="height:5px"></div>
+    <div class="clearfix"></div>
+    <div id="panel-recherche">
+        <div class="tableContent" id="expression-du-besoin">
+            {% for expBesoin in expBesoins %}
+                <div id="expBesoin-{{expBesoin.id}}" class="expression-du-besoin-form" data-id="{{expBesoin.id}}">
+                    {% include "HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/Partial/expbesoin_formulaire.html.twig" with { 'expBesoin':expBesoin } %}
+                </div>
+            {% endfor %}
+
+            <input type="hidden" id="expBesoin-actif-id" value="" />
+            <input type="hidden" id="reponses-json" value="{{ reponses }}" />
+
+        </div>
+        <div class="clearfix"></div>
+
+        <input type="hidden" id="url-modification-session-recherche" value="{{ path("hopital_numerique_expbesoin_modification_session_recherche") }}" />
+        <input type="hidden" id="url-recherche" value="{{ path("hopital_numerique_recherche_homepage") }}" />
+        <input type="hidden" id="url-sauvegarde-clic-stat" value="{{ path("hopital_numerique_expbesoin_stat_add") }}" />
+        
+        <div class="panel-footer" >
+            <div class="row">
+                <div class="btn-toolbar pull-right" style="margin:0 10px 0 0;">
+                    <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" >
+    $(document).ready(function() {
+        //Cache le bloc de références
+        $('#redirection-references').hide();
+        //Cache toutes les questions
+        $('#expression-du-besoin .expression-du-besoin-form').each(function(){
+            $(this).hide();
+        });
+
+        //Ré-Affiche la première question (l'ordre le plus bas)
+        $('#expression-du-besoin .expression-du-besoin-form').first().show();
+    });
+
+    function clickReponse( idReponse, idQuestion )
+    {
+        var loader = $('#expression-du-besoin').nodevoLoader().start();
+
+        //Sauvegarde du clic sur la réponse en base
+        sauvegardeClicStat(idReponse);
+
+        //Récupération des réponses
+        var reponses = $.parseJSON($('#reponses-json').val());
+
+        //Récupération de la réponse courante
+        var reponsesCourante = reponses[idReponse];
+
+        //Cache la question courante
+        //$(this).parents('.expression-du-besoin-form').hide();
+        $('#expression-du-besoin').find('#expBesoin-' + idQuestion).hide();
+
+        //Vérifie si on pointe sur une nouvelle question ou si on doit rediriger vers la recherche
+        if(reponsesCourante['autreQuestion'])
+        {
+            //Affiche celle sur laquelle la réponse pointe
+            $('#expression-du-besoin').find('#expBesoin-' + reponsesCourante['idQuestion']).show();
+            loader.finished();
+        }
+        else
+        {
+            var path   = $('#url-modification-session-recherche').val();
+
+            //Génération du cookie JS pour la recherche
+            $.ajax({
+                url      : path,
+                data : {
+                    id : idReponse
+                },
+                type     : 'POST',
+                dataType : 'json',
+                success : function( data ){
+                    if( data.success )
+                    {
+                        window.location = $("#url-recherche").val();                    }
+                    else
+                    {
+                        apprise('Une erreur est survenue lors du chargement du calcul de votre recherche, merci de réessayer.');
+                        loader.finished();
+                    }
+                }
+            });
+        }
+    }
+
+    function sauvegardeClicStat( idReponse )
+    {
+        var path   = $('#url-sauvegarde-clic-stat').val();
+
+        $.ajax({
+            url      : path,
+            data : {
+                id : idReponse
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success : function( data ){
+            }
+        });
+    }
+</script>
