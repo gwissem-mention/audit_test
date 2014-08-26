@@ -27,6 +27,7 @@ assetic:
         - HopitalNumeriqueRegistreBundle
         - HopitalNumeriquePublicationBundle
         - HopitalNumeriqueFaqBundle
+        - HopitalNumeriqueStatBundle
         - HopitalNumeriquePaiementBundle
         - HopitalNumeriqueAutodiagBundle
         - HopitalNumeriqueForumBundle
