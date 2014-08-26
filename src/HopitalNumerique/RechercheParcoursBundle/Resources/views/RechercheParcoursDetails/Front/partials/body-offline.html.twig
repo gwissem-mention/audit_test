@@ -6,7 +6,8 @@
     <h4>Points Durs ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h4>
     <div class="wrapper-results">
         <div class="background-violet"></div>
-        <div class="col-md-8">
+        <div class="row">
+        <div class="col-md-8 results">
             {% set count = 0 %}
             {% for objet in objets if (objet['categ'] == "point-dur" and objet['primary']) %}
                 {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/points-durs-offline.html.twig' with {'objet': objet } %}
@@ -42,6 +43,7 @@
                 </div>
             </div>
 
+        </div>
         </div>
     </div>   
 </div>
