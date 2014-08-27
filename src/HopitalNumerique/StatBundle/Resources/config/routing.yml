@@ -1,3 +1,7 @@
 hopital_numerique_stat_show:
     pattern: /admin/statistiques/show
     defaults: { _controller: HopitalNumeriqueStatBundle:Stats:show}
+
+hopital_numerique_stat_point_dur_generate_tableau:
+    pattern: /admin/statistiques/show/pointdur/generate
+    defaults: { _controller: HopitalNumeriqueStatBundle:Pointdur:generateTableau}

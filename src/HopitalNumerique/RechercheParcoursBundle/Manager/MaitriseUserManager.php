@@ -31,6 +31,86 @@ class MaitriseUserManager extends BaseManager
         return $notesByPointDur;
     }
 
+    public function getAllNotesSortByObjet( $filtre, $dateDebut, $dateFin )
+    {
+        $notes     = $this->findAll();
+        $notesTemp = array();
+
+        //Trie de l'ensemble des notes par points dur
+        foreach ($notes as $note) 
+        {
+            if(!is_null($dateDebut) && $note->getDateMaitrise() <= $dateDebut)
+            {
+                continue;
+            }
+            if(!is_null($dateFin) && $note->getDateMaitrise() >= $dateFin)
+            {
+                continue;
+            }
+
+            //1er niveau : Récupération de l'id de l'objet courant
+            $objCourantId = $note->getObjet()->getId();
+            
+            //2eme niveau : filtre sur l'utilisateur
+            $userCourant  = $note->getUser();
+            //Type d'établissement
+            if(!is_null($userCourant->getStatutEtablissementSante()))
+               $referencesTemp[] =  $userCourant->getStatutEtablissementSante();
+
+            //Métier internaute
+            if(!is_null($userCourant->getProfilEtablissementSante()))
+               $referencesTemp[] =  $userCourant->getProfilEtablissementSante();
+
+            //Récupération de la valeur en fonction du filtre passé en param
+            switch ($filtre) {
+                case 'typeES':
+                    $referenceUser = is_null($userCourant->getStatutEtablissementSante()) ? 'NC' : $userCourant->getStatutEtablissementSante()->getId();
+                    break;
+                case 'profil':
+                    $referenceUser = is_null($userCourant->getProfilEtablissementSante()) ? 'NC' : $userCourant->getProfilEtablissementSante()->getId();
+                    break;
+                default:
+                    $referenceUser = 'NC';
+                    break;
+            }
+
+            //3eme niveau : catégorie de la note
+            //Non concerné sauf si "getNonConcerne" retourne false
+            $filtreNote = 'NC';
+            if(!$note->getNonConcerne())
+            {
+                if($note->getPourcentageMaitrise() == 0)
+                    $filtreNote = '0';
+                elseif($note->getPourcentageMaitrise() <= 20)
+                    $filtreNote = '1-20%';
+                elseif($note->getPourcentageMaitrise() <= 40)
+                    $filtreNote = '21-40%';
+                elseif($note->getPourcentageMaitrise() <= 60)
+                    $filtreNote = '41-60%';
+                elseif($note->getPourcentageMaitrise() <= 80)
+                    $filtreNote = '61-80%';
+                else
+                    $filtreNote = '81-100%';
+            }
+
+            //Création du premier niveau : l'Objet
+            if(!array_key_exists($objCourantId, $notesTemp))
+                $notesTemp[$objCourantId] = array();
+
+            //Création du second niveau : le filtre sur l'user
+            if(!array_key_exists($referenceUser, $notesTemp[$objCourantId]))
+                $notesTemp[$objCourantId][$referenceUser] = array();
+
+            //Création du troisième niveau : la catégorie de la note
+            if(!array_key_exists($filtreNote, $notesTemp[$objCourantId][$referenceUser]))
+                $notesTemp[$objCourantId][$referenceUser][$filtreNote] = 0;
+
+            $notesTemp[$objCourantId][$referenceUser][$filtreNote]++;
+        }
+
+        return $notesTemp;
+    }
+
     /**
      * Retourne la moyenne des notes pour les étapes passées en param
      *
