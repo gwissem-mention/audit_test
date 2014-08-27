@@ -81,26 +81,16 @@ class MaitriseUserManager extends BaseManager
             {
                 if($note->getPourcentageMaitrise() == 0)
                     $filtreNote = '0';
-                elseif($note->getPourcentageMaitrise() <= 10)
-                    $filtreNote = '1-10%';
                 elseif($note->getPourcentageMaitrise() <= 20)
-                    $filtreNote = '11-20%';
-                elseif($note->getPourcentageMaitrise() <= 30)
-                    $filtreNote = '21-30%';
+                    $filtreNote = '1-20%';
                 elseif($note->getPourcentageMaitrise() <= 40)
-                    $filtreNote = '31-40%';
-                elseif($note->getPourcentageMaitrise() <= 50)
-                    $filtreNote = '41-50%';
+                    $filtreNote = '21-40%';
                 elseif($note->getPourcentageMaitrise() <= 60)
-                    $filtreNote = '51-60%';
-                elseif($note->getPourcentageMaitrise() <= 70)
-                    $filtreNote = '61-70%';
+                    $filtreNote = '41-60%';
                 elseif($note->getPourcentageMaitrise() <= 80)
-                    $filtreNote = '71-80%';
-                elseif($note->getPourcentageMaitrise() <= 90)
-                    $filtreNote = '81-90%';
+                    $filtreNote = '61-80%';
                 else
-                    $filtreNote = '91-100%';
+                    $filtreNote = '81-100%';
             }
 
             //Création du premier niveau : l'Objet
