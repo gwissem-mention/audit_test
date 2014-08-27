@@ -50,6 +50,7 @@ h3{font-size: 20px}
 /* MENU */
     #menu{ margin:15px auto 0; list-style: none; padding:0; }
     #menu > li{ float: left; position: relative; }
+    #menu > li > span{ display: block; padding:3px 10px; text-transform: uppercase; color: #333333; font-size: 13px}
     #menu > li > a{ display: block; padding:3px 10px; text-transform: uppercase; color: #333333; font-size: 13px}
     #menu > li > a:hover{color:#6f3596; text-decoration: none;}
     #menu > li.active > a{ color:#de0d4d;}
