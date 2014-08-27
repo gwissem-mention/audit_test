@@ -12,16 +12,19 @@
                     
                     {# Points durs #}
                     <div id="point-dur-filtres">
-                        <form id ="form-point-dur">
+                        <form id ="form-point-dur" action="{{path('hopital_numerique_stat_point_dur_export_csv')}}" method="POST">
                             <div class="row">
+                                {# Date de début #}
                                 <div class="col-md-6">
                                     <label for="datepicker-datedebut">Date de début: </label><input type="text" class="form-control" id="datepicker-datedebut" name="datedebut">
                                 </div>
+                                {# Date de fin #}
                                 <div class="col-md-6">
                                     <label for="datepicker-datefin">Date de fin: </label><input type="text" class="form-control" name="dateFin" id="datepicker-datefin">
                                 </div>
                             </div>
                             <div class="row">
+                                {# Select du choix du périmetre fonctionnel #}
                                 <div class="col-md-12">
                                     <label class="control-label required" for="perimFonctionnelles">
                                         Choix du perimètre fonctionnel
@@ -38,6 +41,7 @@
                                 </div>
                             </div>
                             <div class="row">
+                                {# Select du choix entre profil et type ES #}
                                 <div class="col-md-12">
                                     <label class="control-label required" for="profilType">
                                         Choix entre le profil et le type ES
@@ -54,12 +58,15 @@
                             </div>
                         </form>
                         <div class="row">
+                            {# Boutton de génération du tableau #}
                             <div class="col-md-12 button-generation">
+                                <div id="export-csv-point-dur" onclick="exportCSV();" class="finish btn btn-primary pull-right" title="Export CSV" ><i class="fa fa-bar-chart-o"></i></div>
                                 <div id="generation-tableau-point-dur" onclick="generation( '{{path('hopital_numerique_stat_point_dur_generate_tableau')}}' );" class="finish btn btn-success pull-right" title="Générer le tableau" ><i class="fa fa-bar-chart-o"></i></div>
                             </div>
                         </div>
                         <div class="clearfix"></div>
                     </div>
+                    {# Bloc de génération du tableau #}
                     <div id="point-dur-tableau">
                     </div>
 
@@ -85,7 +92,7 @@
 
         //Date début
         $( "#datepicker-datedebut" ).datepicker({
-            defaultDate: "+1w",
+            defaultDate: "now",
             changeMonth: true,
             numberOfMonths: 1,
             dateFormat: "dd-mm-yy",
@@ -97,7 +104,7 @@
 
         //Date de fin
         $( "#datepicker-datefin" ).datepicker({
-            defaultDate: "+1w",
+            defaultDate: "+1d",
             changeMonth: true,
             numberOfMonths: 1,
             dateFormat: "dd-mm-yy",
@@ -112,6 +119,14 @@
             exportTableToCSV.apply(this, [$('#point-dur-table'), 'export.csv']);
         });
     });
+
+    function exportCSV()
+    {
+        if ( $('#form-point-dur').validationEngine('validate') ) 
+        {
+            $('form').submit();
+        }
+    }
 
     function generation(url)
     {

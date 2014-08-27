@@ -112,6 +112,44 @@ class MaitriseUserManager extends BaseManager
     }
 
     /**
+     * Récupère les notes pour l'export
+     *
+     * @return array
+     */
+    public function getDatasForExport( $donneesTab )
+    {
+        $results = array();
+
+        foreach($donneesTab["pointsDur"] as $pointDur) 
+        {
+            $row = array();
+
+            //simple stuff
+            $row['id']           = $pointDur["id"];
+            $row['titre']        = $pointDur["titre"];
+
+            //Parcours les colonnes du filtre typeES ou profil
+            foreach ($donneesTab["entetesTableau"] as $key => $enteteTableau) 
+            {
+                $row[$key] = '';
+                //Si il y a des notes pour ce point dur et ce filtre on l'affiche/les affiche
+                if(array_key_exists($pointDur["id"], $donneesTab["notes"])
+                    && array_key_exists($key, $donneesTab["notes"][$pointDur["id"]]))
+                {
+                    foreach ($donneesTab["notes"][$pointDur["id"]][$key] as $categ => $nbNote) 
+                    {
+                        $row[$key] .= $categ . ':' . $nbNote . '; ';
+                    }
+                }
+            }
+            //add row To Results
+            $results[] = $row;
+        }
+
+        return $results;
+    }
+
+    /**
      * Retourne la moyenne des notes pour les étapes passées en param
      *
      * @param RechercheParcours $rechercheParcours

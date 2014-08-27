@@ -5,3 +5,7 @@ hopital_numerique_stat_show:
 hopital_numerique_stat_point_dur_generate_tableau:
     pattern: /admin/statistiques/show/pointdur/generate
     defaults: { _controller: HopitalNumeriqueStatBundle:Pointdur:generateTableau}
+
+hopital_numerique_stat_point_dur_export_csv:
+    pattern: /admin/statistiques/show/pointdur/exportCSV
+    defaults: { _controller: HopitalNumeriqueStatBundle:Pointdur:exportCSV}
