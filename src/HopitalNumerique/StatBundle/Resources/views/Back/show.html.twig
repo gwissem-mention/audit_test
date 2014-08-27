@@ -10,6 +10,7 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-stats-show.js"
         "@validationEngine_js"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -19,6 +20,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-stats-show.css" filter="cssrewrite, ?yui_css"
         "@validationEngine_css"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
