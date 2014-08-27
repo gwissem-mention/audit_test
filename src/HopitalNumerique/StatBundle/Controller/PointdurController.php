@@ -42,7 +42,60 @@ class PointdurController extends Controller
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
 
+        $res = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType);
+        
+        return $this->render('HopitalNumeriqueStatBundle:Back:partials/PointsDurs/tableau.html.twig', array(
+            'notes'          => $res['notes'],
+            'pointsDur'      => $res['pointsDur'],
+            'entetesTableau' => $res['entetesTableau']
+        ));
+    }
 
+    /**
+     * Génération du tableau à exporter
+     *
+     * @param  Symfony\Component\HttpFoundation\Request  $request
+     * 
+     * @return View
+     */
+    public function exportCSVAction( Request $request )
+    {
+        //Récupération de la requete
+        $dateDebut    = $request->request->get('datedebut');
+        $dateFin      = $request->request->get('dateFin');
+        $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
+        $profilType   = $request->request->get('profilTypeSelect');
+
+        $res = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType);
+        
+        $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
+
+        $colonnes = array( 
+                            'id'                        => 'id', 
+                            'user.nom'                  => 'Nom', 
+                            'user.prenom'               => 'Prénom', 
+                            'user.username'             => 'Identifiant (login)', 
+                            'user.email'                => 'Adresse e-mail',
+                            'session.moduleTitre'       => 'Titre du module',
+                            'session.dateSessionString' => 'Début de la session',
+                            'etatInscription.libelle'   => 'Inscription',
+                            'etatParticipation.libelle' => 'Participation',
+                            'etatEvaluation.libelle'    => 'Evaluation',
+                            'dateInscriptionString'     => 'Date d\'inscription'
+                        );
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_module.manager.inscription')->exportCsv( $colonnes, $inscriptions, 'export-utilisateurs.csv', $kernelCharset );
+    }
+
+    /**
+     * Code appelé lors de la génération du tableau et de l'export CSV
+     *
+     * @return array
+     */
+    private function generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType)
+    {
         //Récupération des dates sous forme DateTime
         $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
         $dateFinDateTime   = $dateFin   === "" ? null : new \DateTime($dateFin);
@@ -122,20 +175,23 @@ class PointdurController extends Controller
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
 
         $pointsDur = array();
+
         foreach ($objets as $objet) 
         {
             if("point-dur" === $objet["categ"])
-                $pointsDur[] = $objet;
+                $pointsDur[$objet['id']] = $objet;
         }
         // ^^ -- Récupération des objets -- ^
+        
+        ksort($pointsDur);
         
         //Récupération des notes
         $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAllNotesSortByObjet($profilType, $dateDebutDateTime, $dateFinDateTime);
 
-        return $this->render('HopitalNumeriqueStatBundle:Back:partials/PointsDurs/tableau.html.twig', array(
+        return array(
             'notes'          => $notes,
             'pointsDur'      => $pointsDur,
             'entetesTableau' => $entetesTableau
-        ));
+        );
     }
 }

@@ -15,10 +15,10 @@
                         <form id ="form-point-dur">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p>Date de début: <input type="text" class="form-control" id="datepicker-datedebut" name="datedebut"></p>
+                                    <label for="datepicker-datedebut">Date de début: </label><input type="text" class="form-control" id="datepicker-datedebut" name="datedebut">
                                 </div>
                                 <div class="col-md-6">
-                                    <p>Date de fin: <input type="text" class="form-control" name="dateFin" id="datepicker-datefin"></p>
+                                    <label for="datepicker-datefin">Date de fin: </label><input type="text" class="form-control" name="dateFin" id="datepicker-datefin">
                                 </div>
                             </div>
                             <div class="row">
@@ -28,7 +28,7 @@
                                         <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
                                     </label>
                                     <div class="blocParamFonct">
-                                        <select name="perimFonctionnellesSelect" id="perimFonctionnelles" class="form-control validate[required]">
+                                        <select name="perimFonctionnellesSelect" id="perimFonctionnelles" class="form-control validate[required]" data-prompt-position="bottomLeft">
                                             <option value=""> - </option>
                                             {% for paramFonct in paramsFonct %}
                                                 <option value="{{paramFonct.id}}" >{{paramFonct.libelle}}</option>
@@ -44,7 +44,7 @@
                                         <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
                                     </label>
                                     <div class="blocProfilType">
-                                        <select name="profilTypeSelect" id="profilType" class="form-control validate[required]">
+                                        <select name="profilTypeSelect" id="profilType" class="form-control validate[required]" data-prompt-position="bottomLeft">
                                             <option value=""> - </option>
                                             <option value="profil"> Profil </option>
                                             <option value="typeES"> Type établissement </option>s
@@ -72,7 +72,9 @@
 <style type="text/css">
 #point-dur-filtres .button-generation {margin-top: 15px;}
 #point-dur-filtres {padding-bottom:15px;border-bottom: 1px solid #EDEEF0}
+#point-dur-filtres label{margin-top: 10px;margin-bottom: 2px;}
 #point-dur-tableau {margin-top: 15px;}
+
 </style>
 
 <script type="text/javascript">
@@ -104,6 +106,11 @@
             }
         });
         $( "#datepicker-datefin" ).datepicker( "option", "showAnim", "fadeIn" );
+
+        $("#clickExportCSV").on('click', function (event) {
+            // CSV
+            exportTableToCSV.apply(this, [$('#point-dur-table'), 'export.csv']);
+        });
     });
 
     function generation(url)
