@@ -87,7 +87,8 @@ class SearchController extends Controller
         $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
 
         //on prépare la session
-        $session = $this->getRequest()->getSession();
+        $session   = $this->getRequest()->getSession();
+        $isRequete = (!is_null($session->get('requete-id')));
         $session->set('requete-refs', json_encode($references) );
 
         //clean requete ID
@@ -106,7 +107,7 @@ class SearchController extends Controller
         if(!is_null($references))
         {
             $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
-            $this->get('hopitalnumerique_stat.manager.statrecherche')->sauvegardeRequete($references, $user, count($objets));
+            $this->get('hopitalnumerique_stat.manager.statrecherche')->sauvegardeRequete($references, $user, count($objets), $isRequete);
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(

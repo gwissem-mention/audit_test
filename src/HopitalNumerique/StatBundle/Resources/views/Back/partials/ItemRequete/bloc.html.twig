@@ -56,6 +56,22 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                {# Select du choix du type de requete #}
+                                <div class="col-md-12">
+                                    <label class="control-label required" for="isRequetSaved-itemRequete">
+                                        Restitution concerne les requêtes
+                                        <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+                                    </label>
+                                    <div class="blocModeleReferencement">
+                                        <select name="isRequetSaved-itemRequete" id="isRequetSaved-itemRequete" class="form-control validate[required]" data-prompt-position="bottomLeft">
+                                            <option value=""> - </option>
+                                            <option value="false" >Lancées</option>
+                                            <option value="true" >Enregistrées</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                         <div class="row">
                             {# Boutton de génération du tableau #}

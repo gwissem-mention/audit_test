@@ -40,8 +40,9 @@ class ItemRequeteController extends Controller
 
         $modelReferencementId = intval($request->request->get('categorieModeleReferencementItemRequeteSelect'));
         $contexteId           = intval($request->request->get('categorieContexteItemRequeteSelect'));
+        $isRequeteSaved       = ($request->request->get('isRequetSaved-itemRequete') === 'true' );
 
-        $res = $this->generationTableau($dateDebut , $dateFin, $modelReferencementId, $contexteId);
+        $res = $this->generationTableau($dateDebut , $dateFin, $modelReferencementId, $contexteId, $isRequeteSaved);
         
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/ItemRequete/tableau.html.twig', array(
             'entetes'   => $res['entetes'],
@@ -65,8 +66,9 @@ class ItemRequeteController extends Controller
 
         $modelReferencementId = intval($request->request->get('categorieModeleReferencementItemRequeteSelect'));
         $contexteId           = intval($request->request->get('categorieContexteItemRequeteSelect'));
+        $isRequeteSaved       = ($request->request->get('isRequetSaved-itemRequete') === 'true' );
 
-        $res = $this->generationTableau($dateDebut , $dateFin, $modelReferencementId, $contexteId);
+        $res = $this->generationTableau($dateDebut , $dateFin, $modelReferencementId, $contexteId, $isRequeteSaved);
 
         //Colonnes communes
         $colonnes = array(
@@ -90,7 +92,7 @@ class ItemRequeteController extends Controller
      *
      * @return array
      */
-    private function generationTableau($dateDebut , $dateFin, $modelReferencementId, $contexteId)
+    private function generationTableau($dateDebut , $dateFin, $modelReferencementId, $contexteId, $isRequeteSaved)
     {
         //Récupération des dates sous forme DateTime
         $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
@@ -110,7 +112,7 @@ class ItemRequeteController extends Controller
                 if(!array_key_exists($entete->getId(), $resultats))
                     $resultats[$entete->getId()] = array();
 
-                $resultats[$entete->getId()][$ligne->getId()] = $this->get('hopitalnumerique_stat.manager.statrecherche')->getStatRechercheByCoupleRef($entete->getId(), $ligne->getId(), $dateDebutDateTime, $dateFinDateTime);
+                $resultats[$entete->getId()][$ligne->getId()] = $this->get('hopitalnumerique_stat.manager.statrecherche')->getStatRechercheByCoupleRef($entete->getId(), $ligne->getId(), $dateDebutDateTime, $dateFinDateTime, $isRequeteSaved);
             }
         }
 
