@@ -1,3 +1,9 @@
 parameters:
-    #Options
-    hopital_numerique_stat.options:
+    hopitalnumerique_stat.manager.statrecherche.class: HopitalNumerique\StatBundle\Manager\StatRechercheManager
+
+services:
+    hopitalnumerique_stat.manager.statrecherche:
+        class: %hopitalnumerique_stat.manager.statrecherche.class%
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_reference.manager.reference"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

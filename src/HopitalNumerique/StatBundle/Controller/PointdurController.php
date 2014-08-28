@@ -37,8 +37,9 @@ class PointdurController extends Controller
     public function generateTableauAction( Request $request )
     {
         //Récupération de la requete
-        $dateDebut    = $request->request->get('datedebut');
-        $dateFin      = $request->request->get('dateFin');
+        $dateDebut    = $request->request->get('datedebut-pointDur');
+        $dateFin      = $request->request->get('dateFin-pointDur');
+
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
 
@@ -61,8 +62,8 @@ class PointdurController extends Controller
     public function exportCSVAction( Request $request )
     {
         //Récupération de la requete
-        $dateDebut    = $request->request->get('datedebut');
-        $dateFin      = $request->request->get('dateFin');
+        $dateDebut    = $request->request->get('datedebut-pointDur');
+        $dateFin      = $request->request->get('dateFin-pointDur');
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
 

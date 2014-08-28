@@ -1,0 +1,77 @@
+{# Tableau des stats des points durs #}
+<div class="panel panel-default gray">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapseItemRequete" class="collapsed" id="tableau_item_requete">
+        <div class="panel-heading"><h4>Vue des points durs des parcours</h4></div>
+    </a>
+    <div id="collapseItemRequete" class="collapse" style="height: 0px;">
+
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="form-group">
+                    
+                    {# Points durs #}
+                    <div id="item-requete-filtres">
+                        <form id ="form-item-requete" action="{{path('hopital_numerique_stat_item_requete_export_csv')}}" method="POST">
+                            <div class="row">
+                                {# Date de début #}
+                                <div class="col-md-6">
+                                    <label for="datepicker-datedebut-itemRequete">Date de début: </label><input type="text" class="form-control" id="datepicker-datedebut-itemRequete" name="datedebut-itemRequete">
+                                </div>
+                                {# Date de fin #}
+                                <div class="col-md-6">
+                                    <label for="datepicker-datefin-itemRequete">Date de fin: </label><input type="text" class="form-control" name="dateFin-itemRequete" id="datepicker-datefin-itemRequete">
+                                </div>
+                            </div>
+                            <div class="row">
+                                {# Select du choix du modèle de référencement #}
+                                <div class="col-md-12">
+                                    <label class="control-label required" for="categorieModeleReferencementItemRequete">
+                                        Choix de la catégorie du modèle de référencement
+                                        <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+                                    </label>
+                                    <div class="blocModeleReferencement">
+                                        <select name="categorieModeleReferencementItemRequeteSelect" id="categorieModeleReferencementItemRequete" class="form-control validate[required]" data-prompt-position="bottomLeft">
+                                            <option value=""> - </option>
+                                            {% for modelReferencement in modelsReferencement %}
+                                                <option value="{{modelReferencement.id}}" >{{modelReferencement.libelle}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                {# Select du choix de contexte #}
+                                <div class="col-md-12">
+                                    <label class="control-label required" for="categorieContexteItemRequete">
+                                        Choix de la catégorie du contexte
+                                        <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+                                    </label>
+                                    <div class="blocCategorieContexte">
+                                        <select name="categorieContexteItemRequeteSelect" id="categorieContexteItemRequete" class="form-control validate[required]" data-prompt-position="bottomLeft">
+                                            <option value=""> - </option>
+                                            {% for categContexte in categsContexte %}
+                                                <option value="{{categContexte.id}}" >{{categContexte.libelle}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row">
+                            {# Boutton de génération du tableau #}
+                            <div class="col-md-12 button-generation">
+                                <div id="export-csv-item-requete" onclick="exportCSVItemRequete();" class="finish btn btn-primary pull-right" title="Export CSV" ><i class="fa fa-download"></i></div>
+                                <div id="generation-tableau-item-requete" onclick="generationItemRequete( '{{path('hopital_numerique_stat_item_requete_generate_tableau')}}' );" class="finish btn btn-success pull-right" title="Générer le tableau" ><i class="fa fa-bar-chart-o"></i></div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    {# Bloc de génération du tableau #}
+                    <div id="item-requete-tableau">
+                    </div>
+
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>
