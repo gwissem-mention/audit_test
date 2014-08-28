@@ -30,6 +30,20 @@ class StatRecherche
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="stat_nombre_resultat", type="smallint", options = {"comment" = "Nombre de résultat"})
+     */
+    protected $nbResultats;
+
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="stat_requete", type="text")
+     */
+    protected $requete;
+
+    /**
+     * @var integer
      * 
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_statistiques_recherche_requete",
@@ -155,5 +169,51 @@ class StatRecherche
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set nbResultats
+     *
+     * @param integer $nbResultats
+     * @return StatRecherche
+     */
+    public function setNbResultats($nbResultats)
+    {
+        $this->nbResultats = $nbResultats;
+
+        return $this;
+    }
+
+    /**
+     * Get nbResultats
+     *
+     * @return integer 
+     */
+    public function getNbResultats()
+    {
+        return $this->nbResultats;
+    }
+
+    /**
+     * Set requete
+     *
+     * @param string $requete
+     * @return StatRecherche
+     */
+    public function setRequete($requete)
+    {
+        $this->requete = $requete;
+
+        return $this;
+    }
+
+    /**
+     * Get requete
+     *
+     * @return string 
+     */
+    public function getRequete()
+    {
+        return $this->requete;
     }
 }

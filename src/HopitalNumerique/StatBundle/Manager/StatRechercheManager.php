@@ -53,14 +53,29 @@ class StatRechercheManager extends BaseManager
     }
 
     /**
+     * Retourne les stats fantomes (nbRes = 0)
+     *
+     * @param DateTime or null $dateDebutDateTime DateTime de la date de début de la recherche si elle est renseignée, sinon null
+     * @param DateTime or null $dateFinDateTime   DateTime de la date de fin de la recherche si elle est renseignée, sinon null
+     *
+     * @return array(StatRecherche)
+     */
+    public function getStatFantome( $dateDebutDateTime, $dateFinDateTime )
+    { 
+        return $this->getRepository()->getStatFantome($dateDebutDateTime, $dateFinDateTime)->getQuery()->getResult();
+    }
+
+    /**
      * Sauvegarde l'ensemble de la requete affichée en base pour les stats
      *
      * @param array $tableauIdRef Tableau formaté par la requete de récupération des références dans la recherche
      *
      * @return Void
      */
-    public function sauvegardeRequete(array $tableauIdRef, $user)
+    public function sauvegardeRequete(array $tableauIdRef, $user, $nbResultats)
     {
+        $referencesJSON = json_encode($tableauIdRef);
+
         //Récupération des références correspondant à la requête
         $references = $this->getTabReferenceByArrayId($tableauIdRef);
 
@@ -71,6 +86,8 @@ class StatRechercheManager extends BaseManager
 
         $statRecherche->setReferences($references);
         $statRecherche->setDate(new \DateTime());
+        $statRecherche->setNbResultats($nbResultats);
+        $statRecherche->setRequete($referencesJSON);
 
         $this->save($statRecherche);
     }

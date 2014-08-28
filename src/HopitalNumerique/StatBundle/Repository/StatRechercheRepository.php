@@ -20,7 +20,7 @@ class StatRechercheRepository extends EntityRepository
      * @param DateTime or null $dateDebutDateTime DateTime de la date de début de la recherche si elle est renseignée, sinon null
      * @param DateTime or null $dateFinDateTime   DateTime de la date de fin de la recherche si elle est renseignée, sinon null
      *
-     * @return int
+     * @return QueryBuilder
      */
     public function getStatRechercheByCoupleRef( $idRef1 , $idRef2, $dateDebutDateTime, $dateFinDateTime )
     {
@@ -41,6 +41,38 @@ class StatRechercheRepository extends EntityRepository
                         }
 
                       $qb->join('stat.references','references');
+
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des stats fantomes en fonction des dates passées en param si non null
+     *
+     * @param DateTime or null $dateDebutDateTime DateTime de la date de début de la recherche si elle est renseignée, sinon null
+     * @param DateTime or null $dateFinDateTime   DateTime de la date de fin de la recherche si elle est renseignée, sinon null
+     *
+     * @return QueryBuilder
+     */
+    public function getStatFantome($dateDebutDateTime, $dateFinDateTime )
+    {
+        $qb = $this->_em->createQueryBuilder()
+                         ->select('stat.id, stat.requete, count(stat.id) as nbRequete, min(stat.date) as minDate, max(stat.date) as maxDate')
+                         ->from('\HopitalNumerique\StatBundle\Entity\StatRecherche', 'stat');
+
+                        if(!is_null($dateDebutDateTime))
+                        {
+                            $qb->andWhere('stat.date >= :dateDebut')
+                               ->setParameter('dateDebut', $dateDebutDateTime );
+                        }
+
+                        if(!is_null($dateFinDateTime))
+                        {
+                            $qb->andWhere('stat.date <= :dateFin')
+                               ->setParameter('dateFin', $dateFinDateTime );
+                        }
+                    
+                        $qb->andWhere('stat.nbResultats = 0')
+                           ->groupBy('stat.requete');
 
         return $qb;
     }

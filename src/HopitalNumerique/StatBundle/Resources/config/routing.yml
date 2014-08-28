@@ -20,3 +20,8 @@ hopital_numerique_stat_item_requete_generate_tableau:
 hopital_numerique_stat_item_requete_export_csv:
     pattern: /admin/statistiques/show/itemRequete/exportCSV
     defaults: { _controller: HopitalNumeriqueStatBundle:ItemRequete:exportCSV}
+
+#-Requete fantome
+hopital_numerique_stat_requete_fantome_generate_tableau:
+    pattern: /admin/statistiques/show/requeteFantome/generate
+    defaults: { _controller: HopitalNumeriqueStatBundle:RequeteFantome:generateTableau}
