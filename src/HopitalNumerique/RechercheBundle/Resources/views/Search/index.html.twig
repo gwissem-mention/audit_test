@@ -28,6 +28,39 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+<script type="text/javascript">
+
+/**
+ * Met à jour les résulats trouvés en fonction des paramètres de la requête
+ */
+function updateResultats( cleanSession )
+{
+    var loader = $('#resultats').nodevoLoader().start();
+    
+    //AJAX call for results
+    $.ajax({
+        url  : $('#resultats-url').val(),
+        data : {
+            references   : getReferences(),
+            cleanSession : cleanSession
+        },
+        type    : 'POST',
+        success : function( data ){
+            $('#resultats').html( data );
+
+            if( $('#dest li:not(.hide)').length == 0){
+                $('.requete h2').html( 'Requête de recherche' );
+                $('#resultats').html('');
+            }else if( $('#nbResults').val() == 1 || $('#nbResults').val() == 0 ){
+                $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultat)' );
+            }else
+                $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
+
+            loader.finished();
+        }
+    });
+}
+</script>
 {% endblock %}
 
 {% block body %}

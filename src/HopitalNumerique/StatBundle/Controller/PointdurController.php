@@ -37,8 +37,9 @@ class PointdurController extends Controller
     public function generateTableauAction( Request $request )
     {
         //Récupération de la requete
-        $dateDebut    = $request->request->get('datedebut');
-        $dateFin      = $request->request->get('dateFin');
+        $dateDebut    = $request->request->get('datedebut-pointDur');
+        $dateFin      = $request->request->get('dateFin-pointDur');
+
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
 
@@ -61,32 +62,29 @@ class PointdurController extends Controller
     public function exportCSVAction( Request $request )
     {
         //Récupération de la requete
-        $dateDebut    = $request->request->get('datedebut');
-        $dateFin      = $request->request->get('dateFin');
+        $dateDebut    = $request->request->get('datedebut-pointDur');
+        $dateFin      = $request->request->get('dateFin-pointDur');
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
 
-        $res = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType);
-        
-        $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
+        $donneesTab = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType);
 
+        //Colonnes communes
         $colonnes = array( 
-                            'id'                        => 'id', 
-                            'user.nom'                  => 'Nom', 
-                            'user.prenom'               => 'Prénom', 
-                            'user.username'             => 'Identifiant (login)', 
-                            'user.email'                => 'Adresse e-mail',
-                            'session.moduleTitre'       => 'Titre du module',
-                            'session.dateSessionString' => 'Début de la session',
-                            'etatInscription.libelle'   => 'Inscription',
-                            'etatParticipation.libelle' => 'Participation',
-                            'etatEvaluation.libelle'    => 'Evaluation',
-                            'dateInscriptionString'     => 'Date d\'inscription'
-                        );
+            'id'    => 'ID publication', 
+            'titre' => 'Titre publication',
+        );
+
+        //Récupération des références concernant le choix entre typeES et profil
+        foreach ($donneesTab["entetesTableau"] as $key => $enteteTableau) 
+        {
+            $colonnes[$key] = $enteteTableau;
+        }
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
+        $datas         = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getDatasForExport( $donneesTab );
 
-        return $this->get('hopitalnumerique_module.manager.inscription')->exportCsv( $colonnes, $inscriptions, 'export-utilisateurs.csv', $kernelCharset );
+        return $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->exportCsv( $colonnes, $datas, 'export-points-dur.csv', $kernelCharset );
     }
 
     /**

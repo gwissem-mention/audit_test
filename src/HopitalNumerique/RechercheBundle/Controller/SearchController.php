@@ -102,6 +102,13 @@ class SearchController extends Controller
         $showMorePointsDurs  = $cookies->has('showMorePointsDurs')  ? intval($cookies->get('showMorePointsDurs'))  : 2;
         $showMoreProductions = $cookies->has('showMoreProductions') ? intval($cookies->get('showMoreProductions')) : 2;
 
+        //Sauvegarde des stats
+        if(!is_null($references))
+        {
+            $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
+            $this->get('hopitalnumerique_stat.manager.statrecherche')->sauvegardeRequete($references, $user, count($objets));
+        }
+
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(
             'objets'              => $objets,
             'showMorePointsDurs'  => $showMorePointsDurs,

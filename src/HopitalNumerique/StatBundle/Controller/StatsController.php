@@ -14,11 +14,6 @@ class StatsController extends Controller
      */
     public function showAction( )
     {
-        //Récupération de l'entité en fonction du paramètre
-        //$module = $this->get('hopitalnumerique_module.manager.module')->findOneBy( array( 'id' => $id) );
-
-        return $this->render('HopitalNumeriqueStatBundle:Back:show.html.twig', array(
-            //'module' => $module,
-        ));
+        return $this->render('HopitalNumeriqueStatBundle:Back:show.html.twig', array());
     }
 }
