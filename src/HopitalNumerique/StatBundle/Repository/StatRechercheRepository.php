@@ -19,10 +19,11 @@ class StatRechercheRepository extends EntityRepository
      * @param int $idRef2 Id référence du couple n°2
      * @param DateTime or null $dateDebutDateTime DateTime de la date de début de la recherche si elle est renseignée, sinon null
      * @param DateTime or null $dateFinDateTime   DateTime de la date de fin de la recherche si elle est renseignée, sinon null
+     * @param Boolean $isRequeteSaved Si la recherche vient d'une requete sauvegardée
      *
      * @return QueryBuilder
      */
-    public function getStatRechercheByCoupleRef( $idRef1 , $idRef2, $dateDebutDateTime, $dateFinDateTime )
+    public function getStatRechercheByCoupleRef( $idRef1 , $idRef2, $dateDebutDateTime, $dateFinDateTime, $isRequeteSaved )
     {
         $qb = $this->_em->createQueryBuilder()
                          ->select('stat')
@@ -40,7 +41,9 @@ class StatRechercheRepository extends EntityRepository
                                ->setParameter('dateFin', $dateFinDateTime );
                         }
 
-                      $qb->join('stat.references','references');
+                      $qb->andWhere('stat.isRequeteSaved = :isRequeteSaved')
+                         ->setParameter('isRequeteSaved', $isRequeteSaved )
+                         ->join('stat.references','references');
 
         return $qb;
     }

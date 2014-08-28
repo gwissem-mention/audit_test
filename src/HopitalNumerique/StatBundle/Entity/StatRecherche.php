@@ -43,6 +43,13 @@ class StatRecherche
     protected $requete;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="stat_is_requete_saved", type="boolean", options = {"comment" = "Viens d une requete enregistrée en base ?"})
+     */
+    protected $isRequeteSaved;
+
+    /**
      * @var integer
      * 
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
@@ -215,5 +222,28 @@ class StatRecherche
     public function getRequete()
     {
         return $this->requete;
+    }
+
+    /**
+     * Set isRequeteSaved
+     *
+     * @param boolean $isRequeteSaved
+     * @return StatRecherche
+     */
+    public function setIsRequeteSaved($isRequeteSaved)
+    {
+        $this->isRequeteSaved = $isRequeteSaved;
+
+        return $this;
+    }
+
+    /**
+     * Get isRequeteSaved
+     *
+     * @return boolean 
+     */
+    public function getIsRequeteSaved()
+    {
+        return $this->isRequeteSaved;
     }
 }

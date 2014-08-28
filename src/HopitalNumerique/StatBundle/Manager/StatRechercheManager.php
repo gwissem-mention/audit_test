@@ -32,10 +32,10 @@ class StatRechercheManager extends BaseManager
      *
      * @return integer
      */
-    public function getStatRechercheByCoupleRef( $ref1, $ref2, $dateDebutDateTime, $dateFinDateTime )
+    public function getStatRechercheByCoupleRef( $ref1, $ref2, $dateDebutDateTime, $dateFinDateTime, $isRequeteSaved )
     {   
         $compteur = 0;
-        $statsRecherche = $this->getRepository()->getStatRechercheByCoupleRef($ref1, $ref2, $dateDebutDateTime, $dateFinDateTime)->getQuery()->getResult();
+        $statsRecherche = $this->getRepository()->getStatRechercheByCoupleRef($ref1, $ref2, $dateDebutDateTime, $dateFinDateTime, $isRequeteSaved)->getQuery()->getResult();
 
         foreach ($statsRecherche as $statRecherche) 
         {
@@ -72,7 +72,7 @@ class StatRechercheManager extends BaseManager
      *
      * @return Void
      */
-    public function sauvegardeRequete(array $tableauIdRef, $user, $nbResultats)
+    public function sauvegardeRequete(array $tableauIdRef, $user, $nbResultats, $isRequete)
     {
         $referencesJSON = json_encode($tableauIdRef);
 
@@ -88,6 +88,7 @@ class StatRechercheManager extends BaseManager
         $statRecherche->setDate(new \DateTime());
         $statRecherche->setNbResultats($nbResultats);
         $statRecherche->setRequete($referencesJSON);
+        $statRecherche->setIsRequeteSaved($isRequete);
 
         $this->save($statRecherche);
     }
