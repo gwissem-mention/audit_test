@@ -1070,7 +1070,7 @@ class Objet
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet
      * @return Objet
      */
-    public function addObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objet)
+    public function addObjet($objet)
     {
         $this->objets[] = $objet;
     
