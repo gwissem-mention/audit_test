@@ -40,6 +40,16 @@
                     {{ render(controller("HopitalNumeriqueStatBundle:Pointdur:index")) }}
                 </div>
                 
+                <div class="row">
+                    {# Include de l'historique #}
+                    {{ render(controller("HopitalNumeriqueStatBundle:ItemRequete:index")) }}
+                </div>
+                
+                <div class="row">
+                    {# Include de l'historique #}
+                    {{ render(controller("HopitalNumeriqueStatBundle:RequeteFantome:index")) }}
+                </div>
+                
             </div>
         </div>
     </div>

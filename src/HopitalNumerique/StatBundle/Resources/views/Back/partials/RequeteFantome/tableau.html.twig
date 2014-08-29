@@ -1,0 +1,69 @@
+<div class="table table-responsive">
+    <table id="item-requete-table" class="table table-hover" style="margin:0 auto; border-collapse:collapse;">
+        <thead>
+            <tr class="grid-row-titles">
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="20%" height="25px"><strong>Premier appel</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="20%" height="25px"><strong>Dernier appel</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="45%" height="25px"><strong>Requête</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="15%" height="25px"><strong>Nombre de reqûete</strong></th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            {% import _self as mySelf %}
+            {% for requeteFantome in requeteFantomes %}
+                <tr>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                        {{requeteFantome['minDate']}}
+                    </td>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                        {{requeteFantome['maxDate']}}
+                    </td>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:left;">
+                        {#{requeteFantome['requete']}#}
+                        {{ mySelf.buildTree(requeteFantome['requete'], 0) }}
+                        <div style="padding:15px" id="requete-fantome-{{requeteFantome['id']}}" class="requete-fantome-arbo">
+                            <ol class="arbo-requete">
+                                {% import _self as mySelf %}
+                                {{ mySelf.buildTree(elements, 0) }}
+                            </ol>
+                            <input type="hidden" class="requete-refs" id="requete-refs-{{requeteFantome['id']}}" value="{{requeteFantome['requete']}}" />
+                        </div>
+                    </td>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                        {{requeteFantome['nbRequete']}}
+                    </td>
+                </tr>
+            {% endfor %}  
+        </tbody>
+    </table>
+</div>
+
+{# Construit le système de parents > enfants des catégories #}
+{% macro buildTree(elements, level) %}
+    {% import _self as mySelf %}
+    {% for element in elements  %}
+        {% if level == 1 and element.childs %}
+            <li class="hide childs level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
+        {% else %}
+            <li class="hide level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
+        {% endif %}
+            <span>{{element.libelle}}</span>
+            {% if element.childs %}
+                <ol>
+                    {% for child in element.childs %}
+                        {{ mySelf.buildTree(child, level+1 ) }}
+                    {% endfor %}
+                </ol>
+            {% endif %}
+        </li>
+    {% endfor %}
+{% endmacro %}
+
+
+
+<script type="text/javascript" >
+    $(document).ready(function() {
+        handleRefs();
+    });
+</script>
