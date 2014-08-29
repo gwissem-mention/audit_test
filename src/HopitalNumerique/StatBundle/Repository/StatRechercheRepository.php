@@ -76,7 +76,7 @@ class StatRechercheRepository extends EntityRepository
                     
                         $qb->andWhere('stat.nbResultats = 0')
                            ->groupBy('stat.requete')
-                           ->orderBy('stat.date', 'ASC');
+                           ->orderBy('nbRequete', 'DESC', 'stat.date', 'DESC');
 
         return $qb;
     }
