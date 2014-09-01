@@ -104,12 +104,12 @@ class StatRechercheManager extends BaseManager
 
         $donnees = $donneesTab['resultats'];
 
-        foreach($donneesTab["lignes"] as $ligne) 
+        foreach($donneesTab["lignes"] as $key => $ligne) 
         {
             $row = array();
 
             //simple stuff
-            $row['titre'] = $ligne->getLibelle();
+            $row['titre'] = $key;
 
             //Parcours les colonnes du filtre typeES ou profil
             foreach ($donneesTab["entetes"] as $enteteTableau) 
@@ -127,6 +127,14 @@ class StatRechercheManager extends BaseManager
         }
 
         return $results;
+    }
+
+    public function test()
+    {
+        //Tableau des urls
+        $urls = array(
+            'https://www.google.fr'
+        );
     }
 
     /**

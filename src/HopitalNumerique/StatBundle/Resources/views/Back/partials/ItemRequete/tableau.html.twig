@@ -9,10 +9,10 @@
             </tr>
         </thead>
         <tbody>
-            {% for ligne in lignes %}
+            {% for key,ligne in lignes %}
                 <tr>
                     <td style="border:1px solid #e3e3e3;font-size:11px;text-align:left;">
-                        {{ligne.libelle}}
+                        {{key}}
                     </td>
                     {% for enteteTableau in entetes %}  
                         <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
