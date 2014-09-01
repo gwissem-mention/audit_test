@@ -98,9 +98,20 @@ class ItemRequeteController extends Controller
         $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
         $dateFinDateTime   = $dateFin   === "" ? null : new \DateTime($dateFin);
         $entetesTableau    = array();
+        $lignes            = array();
 
-        $entetes = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => $modelReferencementId));
-        $lignes  = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => $contexteId));
+        $modelReferencement = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $modelReferencementId));
+        
+        $entetes = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => $contexteId));
+        
+        $modelReferencement           = $this->get('hopitalnumerique_reference.manager.reference')->getArboFromAReference( $modelReferencement )[0];
+        $lastChildsModelReferencement = $this->getLastChildRecursive($modelReferencement, $tab = array(), '');
+
+        //Récupère les entités correspondantes aux lignes
+        foreach ($lastChildsModelReferencement as $key => $lastChild) 
+        {
+            $lignes[$key] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $lastChild['id']));
+        }
 
         $resultats = array();
 
@@ -121,5 +132,38 @@ class ItemRequeteController extends Controller
             'lignes'    => $lignes,
             'resultats' => $resultats
         );
+    }
+
+    /**
+     * Fonction récursive permettant de récuperer les derniers fils d'une reference
+     *
+     * @param stdClass $reference Tableau des references à fouiller
+     * @param array    $tab       Tableau des derniers fils de la référence
+     *
+     * @return array
+     */
+    private function getLastChildRecursive($reference, $tab, $lib)
+    {
+        $referenceArray = get_object_vars($reference);
+
+        //Transforme le stdClass en array
+        $childsArray = $referenceArray["childs"];
+        $lib         = ( $lib === "" ) ? $referenceArray['libelle'] : $lib . ' - ' . $referenceArray['libelle'];
+
+        //Si pas de fils alors on est au dernier niveau, on l'ajoute au tableau
+        if(empty($childsArray))
+        {
+            $tab[$lib] = $referenceArray;
+        }
+        //Sinon on parcourt les fils
+        else
+        {
+            foreach ( $childsArray as $childs) 
+            {
+                $tab = $this->getLastChildRecursive($childs, $tab, $lib);
+            }
+        }
+
+        return $tab;
     }
 }
