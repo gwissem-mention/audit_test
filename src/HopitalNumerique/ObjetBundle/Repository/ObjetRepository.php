@@ -147,4 +147,33 @@ class ObjetRepository extends EntityRepository
         
         return $qb;
     }
+
+    /**
+     * Retourne la liste des objets en fonction des dates passées en param
+     *
+     * @param DateTime $dateDebut Date début fourchette
+     * @param DateTime $dateFin   Date fin fourchette
+     *
+     * @return QueryBuilder
+     */
+    public function getObjetsByDate( $dateDebut, $dateFin )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('obj')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->leftJoin('obj.contenus','contenus');
+
+            if(!is_null($dateDebut))
+            {
+                $qb->andWhere('obj.dateDebutPublication >= :dateDebut')->setParameter('dateDebut', $dateDebut );
+            }
+
+            if(!is_null($dateFin))
+            {
+                $qb->andWhere('obj.dateFinPublication <= :dateFin')->setParameter('dateFin', $dateFin );
+            }
+            $qb->orderBy('obj.dateDebutPublication', 'DESC');
+
+        return $qb;
+    }
 }

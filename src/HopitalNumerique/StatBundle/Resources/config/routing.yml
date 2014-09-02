@@ -25,3 +25,12 @@ hopital_numerique_stat_item_requete_export_csv:
 hopital_numerique_stat_requete_fantome_generate_tableau:
     pattern: /admin/statistiques/show/requeteFantome/generate
     defaults: { _controller: HopitalNumeriqueStatBundle:RequeteFantome:generateTableau}
+
+#-Erreurs
+hopital_numerique_stat_erreurs_curl:
+    pattern: /admin/statistiques/show/erreurs
+    defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:curl}
+
+hopital_numerique_stat_erreurs_curl_generate_tableau:
+    pattern: /admin/statistiques/show/erreurs/generate
+    defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:generateTableau}

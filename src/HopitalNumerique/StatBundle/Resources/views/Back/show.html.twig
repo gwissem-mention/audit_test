@@ -11,6 +11,7 @@
     {% javascripts output="compiled/hopitalnumerique-stats-show.js"
         "@validationEngine_js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/hopitalnumeriquestat/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -21,6 +22,7 @@
     {% stylesheets output="compiled/hopitalnumerique-stats-show.css" filter="cssrewrite, ?yui_css"
         "@validationEngine_css"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+        'bundles/hopitalnumeriquestat/css/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -48,6 +50,11 @@
                 <div class="row">
                     {# Include de l'historique #}
                     {{ render(controller("HopitalNumeriqueStatBundle:RequeteFantome:index")) }}
+                </div>
+                
+                <div class="row">
+                    {# Include de l'historique #}
+                    {{ render(controller("HopitalNumeriqueStatBundle:Erreurs:index")) }}
                 </div>
                 
             </div>

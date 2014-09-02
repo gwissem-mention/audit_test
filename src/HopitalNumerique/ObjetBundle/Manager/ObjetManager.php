@@ -60,6 +60,19 @@ class ObjetManager extends BaseManager
     }
 
     /**
+     * Retourne la liste des objets en fonction des dates passées en param
+     *
+     * @param DateTime $dateDebut Date début fourchette
+     * @param DateTime $dateFin   Date fin fourchette
+     *
+     * @return array
+     */
+    public function getObjetsByDate($dateDebut, $dateFin)
+    {
+        return $this->getRepository()->getObjetsByDate($dateDebut, $dateFin)->getQuery()->getResult();
+    }
+
+    /**
      * Récupère les objets pour l'export
      *
      * @return array

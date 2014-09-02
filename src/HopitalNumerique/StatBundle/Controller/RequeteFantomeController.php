@@ -5,8 +5,6 @@ namespace HopitalNumerique\StatBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-use Nodevo\ToolsBundle\Tools\Curl as NodevoCurl;
-
 class RequeteFantomeController extends Controller
 {
     /**
