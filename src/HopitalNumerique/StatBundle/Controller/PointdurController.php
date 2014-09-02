@@ -149,6 +149,9 @@ class PointdurController extends Controller
             //Récupère la référence courante
             $referenceTemp = $reference;
 
+            if(is_null($referenceTemp))
+                continue;
+
             //Récupère le premier parent
             while(!is_null($referenceTemp->getParent())
                     && $referenceTemp->getParent()->getId() != null)
