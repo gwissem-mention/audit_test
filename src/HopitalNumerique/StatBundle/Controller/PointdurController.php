@@ -116,10 +116,14 @@ class PointdurController extends Controller
             $referencesTemp[] = $refTemp4 = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 269));
             $referencesTemp[] = $refTemp5 = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 307));
 
-            $entetesTableau[$refTemp2->getId()] = $refTemp2->getLibelle();
-            $entetesTableau[$refTemp3->getId()] = $refTemp3->getLibelle();
-            $entetesTableau[$refTemp4->getId()] = $refTemp4->getLibelle();
-            $entetesTableau[$refTemp5->getId()] = $refTemp5->getLibelle();
+            if(!is_null($refTemp2))
+                $entetesTableau[$refTemp2->getId()] = $refTemp2->getLibelle();
+            if(!is_null($refTemp3))
+                $entetesTableau[$refTemp3->getId()] = $refTemp3->getLibelle();
+            if(!is_null($refTemp4))
+                $entetesTableau[$refTemp4->getId()] = $refTemp4->getLibelle();
+            if(!is_null($refTemp5))
+                $entetesTableau[$refTemp5->getId()] = $refTemp5->getLibelle();
             $entetesTableau["NC"]               = "NC";
         }
         elseif('profil' === $profilType)
@@ -130,9 +134,12 @@ class PointdurController extends Controller
             $referencesTemp[] = $refTemp2 = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 284));
             $referencesTemp[] = $refTemp3 = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 285));
 
-            $entetesTableau[$refTemp->getId()]  = $refTemp->getLibelle();
-            $entetesTableau[$refTemp2->getId()] = $refTemp2->getLibelle();
-            $entetesTableau[$refTemp3->getId()] = $refTemp3->getLibelle();
+            if(!is_null($refTemp))
+                $entetesTableau[$refTemp->getId()]  = $refTemp->getLibelle();
+            if(!is_null($refTemp2))
+                $entetesTableau[$refTemp2->getId()] = $refTemp2->getLibelle();
+            if(!is_null($refTemp3))
+                $entetesTableau[$refTemp3->getId()] = $refTemp3->getLibelle();
             $entetesTableau["NC"]               = "NC";
         }
 
