@@ -1,0 +1,93 @@
+{# Tableau des stats des points durs #}
+<div class="panel panel-default gray">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapseItemProduction" class="collapsed" id="tableau_item_requete">
+        <div class="panel-heading"><h4>Requêtes de recherche des productions</h4></div>
+    </a>
+    <div id="collapseItemProduction" class="collapse" style="height: 0px;">
+
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="form-group">
+                    
+                    {# Points durs #}
+                    <div id="item-production-filtres">
+                        <form id ="form-item-production" action="{{path('hopital_numerique_stat_item_production_export_csv')}}" method="POST">
+                            <div class="row">
+                                {# Date de début #}
+                                <div class="col-md-6">
+                                    <label for="datepicker-datedebut-itemProduction">Date de début: </label><input type="text" class="form-control" id="datepicker-datedebut-itemProduction" name="datedebut-itemProduction">
+                                </div>
+                                {# Date de fin #}
+                                <div class="col-md-6">
+                                    <label for="datepicker-datefin-itemProduction">Date de fin: </label><input type="text" class="form-control" name="dateFin-itemProduction" id="datepicker-datefin-itemProduction">
+                                </div>
+                            </div>
+                            <div class="row">
+                                {# Select du choix du modèle de référencement #}
+                                <div class="col-md-12">
+                                    <label class="control-label required" for="categorieProductionItemProduction">
+                                        Choix de la catégorie de productions
+                                        <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+                                    </label>
+                                    <div class="blocCategorieProduction">
+                                        <select name="categorieProductionItemProductionSelect" id="categorieProductionItemProduction" class="form-control validate[required]" data-prompt-position="bottomLeft">
+                                            <option value=""> - </option>
+                                            {% for categorieProduction in categoriesProduction %}
+                                                <option value="{{categorieProduction.id}}" >{{categorieProduction.libelle}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                {# Select du choix de contexte #}
+                                <div class="col-md-12">
+                                    <label class="control-label required" for="categorieContexteItemProduction">
+                                        Choix de la catégorie du contexte
+                                        <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+                                    </label>
+                                    <div class="blocCategorieContexte">
+                                        <select name="categorieContexteItemProductionSelect" id="categorieContexteItemProduction" class="form-control validate[required]" data-prompt-position="bottomLeft">
+                                            <option value=""> - </option>
+                                            {% for categContexte in categsContexte %}
+                                                <option value="{{categContexte.id}}" >{{categContexte.libelle}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                {# Select du choix du type de requete #}
+                                <div class="col-md-12">
+                                    <label class="control-label required" for="isRequetSaved-itemProduction">
+                                        Restitution concerne les requêtes
+                                        <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+                                    </label>
+                                    <div class="blocRequestIsSaved">
+                                        <select name="isRequetSaved-itemProduction" id="isRequetSaved-itemProduction" class="form-control validate[required]" data-prompt-position="bottomLeft">
+                                            <option value=""> - </option>
+                                            <option value="false" >Lancées</option>
+                                            <option value="true" >Enregistrées</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row">
+                            {# Boutton de génération du tableau #}
+                            <div class="col-md-12 button-generation">
+                                <div id="export-csv-item-production" onclick="exportCSVItemProduction();" class="finish btn btn-primary pull-right" title="Export CSV" ><i class="fa fa-download"></i></div>
+                                <div id="generation-tableau-item-production" onclick="generationItemProduction( '{{path('hopital_numerique_stat_item_production_generate_tableau')}}' );" class="finish btn btn-success pull-right" title="Générer le tableau" ><i class="fa fa-bar-chart-o"></i></div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    {# Bloc de génération du tableau #}
+                    <div id="item-production-tableau">
+                    </div>
+
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>

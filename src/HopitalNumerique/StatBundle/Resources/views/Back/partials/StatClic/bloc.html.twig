@@ -1,0 +1,42 @@
+{# Tableau des stats des requetes fantomes #}
+<div class="panel panel-default gray">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapseStatClic" class="collapsed" id="tableau_stat_clic">
+        <div class="panel-heading"><h4>Statistiques recherche aidée</h4></div>
+    </a>
+    <div id="collapseStatClic" class="collapse" style="height: 0px;">
+
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="form-group">
+                    
+                    {# Points durs #}
+                    <div id="stat-clic-filtres">
+                        <form id ="form-stat-clic">
+                            <div class="row">
+                                {# Date de début #}
+                                <div class="col-md-6">
+                                    <label for="datepicker-datedebut-statClic">Date de début: </label><input type="text" class="form-control" id="datepicker-datedebut-statClic" name="datedebut-statClic">
+                                </div>
+                                {# Date de fin #}
+                                <div class="col-md-6">
+                                    <label for="datepicker-datefin-statClic">Date de fin: </label><input type="text" class="form-control" name="dateFin-statClic" id="datepicker-datefin-statClic">
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row">
+                            {# Boutton de génération du tableau #}
+                            <div class="col-md-12 button-generation">
+                                <div id="generation-tableau-stat-clic" onclick="generationStatClic( '{{path('hopital_numerique_stat_stat_clic_generate_tableau')}}' );" class="finish btn btn-success pull-right" title="Générer le tableau" ><i class="fa fa-bar-chart-o"></i></div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    {# Bloc de génération du tableau #}
+                    <div id="stat-clic-tableau">
+                    </div>
+
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>
