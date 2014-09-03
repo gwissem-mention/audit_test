@@ -107,6 +107,32 @@
             }
         });
         $( "#datepicker-datefin-erreursCurl" ).datepicker( "option", "showAnim", "fadeIn" );
+
+        //---Stat clic
+
+        //Date début
+        $( "#datepicker-datedebut-statClic" ).datepicker({
+            defaultDate: "now",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd-mm-yy",
+            onClose: function( selectedDate ) {
+                $( "#datepicker-datefin-statClic" ).datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        $( "#datepicker-datedebut-statClic" ).datepicker( "option", "showAnim", "fadeIn" );
+
+        //Date de fin
+        $( "#datepicker-datefin-statClic" ).datepicker({
+            defaultDate: "+1d",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd-mm-yy",
+            onClose: function( selectedDate ) {
+                $( "#datepicker-datedebut-statClic" ).datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+        $( "#datepicker-datefin-statClic" ).datepicker( "option", "showAnim", "fadeIn" );
     });
 
     function exportCSVPointDur()
@@ -237,6 +263,56 @@
                 }
             });
         });
+    }
+
+    function exportCSVItemProduction()
+    {
+        if ( $('#form-item-production').validationEngine('validate') ) 
+        {
+            $('#form-item-production').submit();
+        }
+    }
+
+    function generationItemProduction(url)
+    {
+        if ( $('#form-item-production').validationEngine('validate') ) 
+        {
+            var loaderButton  = $('#generation-tableau-item-production').nodevoLoader().start();
+            var loaderTableau = $('#item-production-tableau').nodevoLoader().start();
+
+            $.ajax({
+                url     : url,
+                data    :  $('#form-item-production').serialize(),
+                type    : 'POST',
+                success : function( data ){
+                    //Ajout de la réponse
+                    $('#item-production-tableau').html( data );
+                    loaderButton.finished();
+                    loaderTableau.finished();
+                }
+            });
+        }
+    }
+
+    function generationStatClic(url)
+    {
+        if ( $('#form-stat-clic').validationEngine('validate') ) 
+        {
+            var loaderButton  = $('#generation-tableau-stat-clic').nodevoLoader().start();
+            var loaderTableau = $('#stat-clic-tableau').nodevoLoader().start();
+
+            $.ajax({
+                url     : url,
+                data    :  $('#form-stat-clic').serialize(),
+                type    : 'POST',
+                success : function( data ){
+                    //Ajout de la réponse
+                    $('#stat-clic-tableau').html( data );
+                    loaderButton.finished();
+                    loaderTableau.finished();
+                }
+            });
+        }
     }
 
 

@@ -7,11 +7,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ItemRequeteController extends Controller
 {
+
+    /* ----  Item de Requête  ---- */
+
     /**
      * Affiche les statistiques des items de requete
-     * 
-     * @author Gaetan MELCHILSEN
-     * @copyright Nodevo™
      */
     public function indexAction( )
     {
@@ -86,6 +86,100 @@ class ItemRequeteController extends Controller
 
         return $this->get('hopitalnumerique_stat.manager.statrecherche')->exportCsv( $colonnes, $datas, 'export-item-requete.csv', $kernelCharset );
     }
+
+    /* ----  Vue des productions  ---- */
+
+    /**
+     * Affiche les statistiques des items de productions
+     */
+    public function indexProductionAction( )
+    {
+        $categsContexte       = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => 222), array('order' => 'ASC'));
+
+        $categoriesProduction   = array();
+        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '183'));
+        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '176'));
+        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '177'));
+        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '178'));
+        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '179'));
+        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '180'));
+        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '181'));
+        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '182'));
+
+        return $this->render('HopitalNumeriqueStatBundle:Back:partials/ItemProduction/bloc.html.twig', array(
+            'categoriesProduction' => $categoriesProduction,
+            'categsContexte'      => $categsContexte
+        ));
+    }
+
+
+    /**
+     * Génération du tableau à exporter
+     *
+     * @param  Symfony\Component\HttpFoundation\Request  $request
+     * 
+     * @return View
+     */
+    public function generateTableauProductionAction( Request $request )
+    {
+        //Récupération de la requete
+        $dateDebut    = $request->request->get('datedebut-itemProduction');
+        $dateFin      = $request->request->get('dateFin-itemProduction');
+
+        $categorieProductionId = intval($request->request->get('categorieProductionItemProductionSelect'));
+        $contexteId            = intval($request->request->get('categorieContexteItemProductionSelect'));
+        $isRequeteSaved        = ($request->request->get('isRequetSaved-itemProduction') === 'true' );
+
+        $res = $this->generationTableau($dateDebut , $dateFin, $categorieProductionId, $contexteId, $isRequeteSaved);
+        
+        return $this->render('HopitalNumeriqueStatBundle:Back:partials/ItemProduction/tableau.html.twig', array(
+            'entetes'   => $res['entetes'],
+            'lignes'    => $res['lignes'],
+            'resultats' => $res['resultats']
+        ));
+    }
+
+    /**
+     * Génération du tableau à exporter
+     *
+     * @param  Symfony\Component\HttpFoundation\Request  $request
+     * 
+     * @return View
+     */
+    public function exportCSVProductionAction( Request $request )
+    {
+        //Récupération de la requete
+        $dateDebut    = $request->request->get('datedebut-itemProduction');
+        $dateFin      = $request->request->get('dateFin-itemProduction');
+
+        $categorieProductionId = intval($request->request->get('categorieProductionItemProductionSelect'));
+        $contexteId           = intval($request->request->get('categorieContexteItemProductionSelect'));
+        $isRequeteSaved       = ($request->request->get('isRequetSaved-itemProduction') === 'true' );
+
+        $res = $this->generationTableau($dateDebut , $dateFin, $categorieProductionId, $contexteId, $isRequeteSaved);
+
+        //Colonnes communes
+        $colonnes = array(
+            'titre' => 'Modèle de référencement',
+        );
+
+        //Récupération des références concernant le choix entre typeES et profil
+        foreach ($res["entetes"] as $enteteTableau) 
+        {
+            $colonnes[$enteteTableau->getId()] = $enteteTableau->getLibelle();
+        }
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+        $datas         = $this->get('hopitalnumerique_stat.manager.statrecherche')->getDatasForExport( $res );
+
+        return $this->get('hopitalnumerique_stat.manager.statrecherche')->exportCsv( $colonnes, $datas, 'export-item-requete.csv', $kernelCharset );
+    }
+
+
+
+
+
+
 
     /**
      * Code appelé lors de la génération du tableau et de l'export CSV

@@ -38,25 +38,34 @@
             <div class="panel-body" >
                 
                 <div class="row">
-                    {# Include de l'historique #}
+                    {# Points-dur #}
                     {{ render(controller("HopitalNumeriqueStatBundle:Pointdur:index")) }}
                 </div>
                 
                 <div class="row">
-                    {# Include de l'historique #}
+                    {# Requete de recherche #}
                     {{ render(controller("HopitalNumeriqueStatBundle:ItemRequete:index")) }}
                 </div>
                 
                 <div class="row">
-                    {# Include de l'historique #}
+                    {# Requetes fantomes #}
                     {{ render(controller("HopitalNumeriqueStatBundle:RequeteFantome:index")) }}
                 </div>
                 
                 <div class="row">
-                    {# Include de l'historique #}
+                    {# Erreurs dans les urls #}
                     {{ render(controller("HopitalNumeriqueStatBundle:Erreurs:index")) }}
                 </div>
                 
+                <div class="row">
+                    {# Requetes des productions #}
+                    {{ render(controller("HopitalNumeriqueStatBundle:ItemRequete:indexProduction")) }}
+                </div>
+                
+                <div class="row">
+                    {# Statistiques recherche aidée #}
+                    {{ render(controller("HopitalNumeriqueStatBundle:StatClic:index")) }}
+                </div>
             </div>
         </div>
     </div>

@@ -8,6 +8,11 @@
 #item-requete-filtres label{margin-top: 10px;margin-bottom: 2px;}
 #item-requete-tableau {margin-top: 15px;}
 
+#item-production-filtres .button-generation {margin-top: 15px;}
+#item-production-filtres {padding-bottom:15px;border-bottom: 1px solid #EDEEF0}
+#item-production-filtres label{margin-top: 10px;margin-bottom: 2px;}
+#item-production-tableau {margin-top: 15px;}
+
 #requete-fantome-filtres .button-generation {margin-top: 15px;}
 #requete-fantome-filtres {padding-bottom:15px;border-bottom: 1px solid #EDEEF0}
 #requete-fantome-filtres label{margin-top: 10px;margin-bottom: 2px;}
@@ -17,6 +22,11 @@
 #erreurs-curl-filtres {padding-bottom:15px;border-bottom: 1px solid #EDEEF0}
 #erreurs-curl-filtres label{margin-top: 10px;margin-bottom: 2px;}
 #erreurs-curl-tableau {margin-top: 15px;}
+
+#stat-clic-filtres .button-generation {margin-top: 15px;}
+#stat-clic-filtres {padding-bottom:15px;border-bottom: 1px solid #EDEEF0}
+#stat-clic-filtres label{margin-top: 10px;margin-bottom: 2px;}
+#stat-clic-tableau {margin-top: 15px;}
 
 
 /* Popup details */

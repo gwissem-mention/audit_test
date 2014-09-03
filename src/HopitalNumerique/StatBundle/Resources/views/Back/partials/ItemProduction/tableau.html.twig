@@ -1,0 +1,29 @@
+<div class="table table-responsive">
+    <table id="item-requete-table" class="table table-hover" style="margin:0 auto; border-collapse:collapse;">
+        <thead>
+            <tr class="grid-row-titles">
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="100/(1+{{entetes|length}})" height="25px"></th>
+                {% for enteteTableau in entetes %}
+                    <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="100/(1+{{entetes|length}})" height="25px"><strong>{{enteteTableau.libelle}}</strong></th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for key,ligne in lignes %}
+                <tr>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:left;">
+                        {{key}}
+                    </td>
+                    {% for enteteTableau in entetes %}  
+                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                            {% if enteteTableau.id in resultats|keys
+                                and ligne.id in resultats[enteteTableau.id]|keys %}
+                                    {{ resultats[enteteTableau.id][ligne.id] }}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}  
+        </tbody>
+    </table>
+</div>
