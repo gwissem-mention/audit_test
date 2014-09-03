@@ -111,6 +111,38 @@ class Outil
     private $tableChart;
 
     /**
+     * @var boolean Afficher la restitution par processus ?
+     *
+     * @ORM\Column
+     * (
+     *   name = "out_process_chart",
+     *   type = "boolean",
+     *   options =
+     *   {
+     *     "comment" = "Afficher la restitution par processus ?"
+     *   }
+     * )
+     */
+    private $processChart;
+    
+    /**
+     * @var string Libellé du résultat par processus
+     * 
+     * @ORM\Column
+     * (
+     *   name = "out_process_chart_label",
+     *   type = "string",
+     *   length = 255,
+     *   nullable = true,
+     *   options =
+     *   {
+     *     "comment" = "Libellé du résultat par processus"
+     *   }
+     * )
+     */
+    private $processChartLabel;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_statut", referencedColumnName="ref_id")
      */
@@ -130,6 +162,28 @@ class Outil
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\Resultat", mappedBy="outil", cascade={"persist"})
      */
     protected $resultats;
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection Éléments de restitution par process
+     * 
+     * @ORM\OneToMany(
+     *   targetEntity = "Process",
+     *   mappedBy = "outil",
+     *   cascade = { "persist" }
+     * )
+     */
+    private $process;
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection Les chapitres lors d'une restitution par process
+     *
+     * @ORM\OneToMany(
+     *   targetEntity = "ProcessChapitre",
+     *   mappedBy = "outil",
+     *   cascade = { "persist" }
+     * )
+     */
+    private $processChapitres;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
