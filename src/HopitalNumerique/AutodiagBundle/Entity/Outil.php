@@ -196,6 +196,8 @@ class Outil
         $this->tableChart   = false;
         $this->chapitres    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->process   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->processChapitres   = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -344,6 +346,52 @@ class Outil
     public function getColumnChartAxe()
     {
         return $this->columnChartAxe;
+    }
+
+    /**
+     * Set processChart
+     *
+     * @param boolean $processChart
+     * @return Outil
+     */
+    public function setProcessChart($processChart)
+    {
+        $this->processChart = $processChart;
+    
+        return $this;
+    }
+    
+    /**
+     * Get processChart
+     *
+     * @return boolean
+     */
+    public function isProcessChart()
+    {
+        return $this->processChart;
+    }
+    
+    /**
+     * Set radarProcessLabel
+     *
+     * @param string $processChartLabel
+     * @return Outil
+     */
+    public function setProcessChartLabel($processChartLabel)
+    {
+        $this->processChartLabel = $processChartLabel;
+    
+        return $this;
+    }
+    
+    /**
+     * Get processChartLabel
+     *
+     * @return string
+     */
+    public function getProcessChartLabel()
+    {
+        return $this->processChartLabel;
     }
 
     /**
@@ -499,5 +547,46 @@ class Outil
         $this->resultats = $resultats;
         return $this;
     }
+
+    /**
+     * Get process
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getProcess()
+    {
+        return $this->process;
+    }
     
+    /**
+     * Set process
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $process
+     */
+    public function setProcess(\Doctrine\Common\Collections\ArrayCollection $process)
+    {
+        $this->process = $process;
+        return $this;
+    }
+
+    /**
+     * Get processChapitres
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getProcessChapitres()
+    {
+        return $this->processChapitres;
+    }
+    
+    /**
+     * Set processChapitres
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $processChapitres
+     */
+    public function setProcessChapitres(\Doctrine\Common\Collections\ArrayCollection $processChapitres)
+    {
+        $this->processChapitres = $processChapitres;
+        return $this;
+    }
 }

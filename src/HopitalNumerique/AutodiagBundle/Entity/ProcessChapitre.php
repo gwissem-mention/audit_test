@@ -85,4 +85,92 @@ class ProcessChapitre
      * )
      */
     private $order;
+    
+    
+    /**
+     * Constructeur de ProcessChapitre.
+     */
+    public function __construct()
+    {
+        
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    /**
+     * Set outil
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Outil $outil
+     * @return \HopitalNumerique\AutodiagBundle\Entity\ProcessChapitre
+     */
+    public function setOutil($outil)
+    {
+        $this->outil = $outil;
+    
+        return $this;
+    }
+    
+    /**
+     * Get outil
+     *
+     * @return \HopitalNumerique\AutodiagBundle\Entity\Outil
+     */
+    public function getOutil()
+    {
+        return $this->outil;
+    }
+    
+    /**
+     * Set chapitre
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Chapitre $chapitre
+     * @return \HopitalNumerique\AutodiagBundle\Entity\ProcessChapitre
+     */
+    public function setChapitre($chapitre)
+    {
+        $this->chapitre = $chapitre;
+    
+        return $this;
+    }
+    
+    /**
+     * Get chapitre
+     *
+     * @return \HopitalNumerique\AutodiagBundle\Entity\Chapitre
+     */
+    public function getChapitre()
+    {
+        return $this->chapitre;
+    }
+    
+    /**
+     * Set order
+     *
+     * @param integer $order
+     * @return \HopitalNumerique\AutodiagBundle\Entity\ProcessChapitre
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    
+        return $this;
+    }
+    
+    /**
+     * Get order
+     *
+     * @return integer
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
 }

@@ -50,13 +50,7 @@ class Process
      * )
      */
     private $libelle;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Outil", cascade={"persist"}, inversedBy="resultats")
-     * @ORM\JoinColumn(name="out_id", referencedColumnName="out_id", onDelete="CASCADE")
-     */
-    
-    
+
     /**
      * @var \HopitalNumerique\AutodiagBundle\Entity\Outil Outil de diagnostic
      * 
@@ -74,4 +68,85 @@ class Process
      * )
      */
     private $outil;
+    
+    
+    /**
+     * Constructeur de Process.
+     */
+    public function __construct()
+    {
+        
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    /**
+     * Set libelle
+     *
+     * @param string $libelle
+     * @return \HopitalNumerique\AutodiagBundle\Entity\Process
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+    
+        return $this;
+    }
+    
+    /**
+     * Get libelle
+     *
+     * @return string
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+    
+    /**
+     * Set outil
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Outil $outil
+     * @return \HopitalNumerique\AutodiagBundle\Entity\Process
+     */
+    public function setOutil($outil)
+    {
+        $this->outil = $outil;
+    
+        return $this;
+    }
+    
+    /**
+     * Get outil
+     *
+     * @return \HopitalNumerique\AutodiagBundle\Entity\Outil
+     */
+    public function getOutil()
+    {
+        return $this->outil;
+    }
+
+
+    public function getChapitres()
+    {
+        $chapitres = array();
+        
+        if ($this->outil != null)
+        {
+            foreach ($this->outil->getProcessChapitres() as $processChapitre)
+            {
+                $chapitres[] = $processChapitre->getChapitre();
+            }
+        }
+        
+        return $chapitres;
+    }
 }
