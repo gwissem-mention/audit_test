@@ -2,7 +2,9 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-autodiag-outil-edit.css" filter="cssrewrite, ?yui_css" 
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-outil-edit.css" filter="cssrewrite, ?yui_css"
+        "@fancybox_css"
+        "@select2_css"
         "@validationEngine_css"
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -11,9 +13,16 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-autodiag-outil-edit.js" 
+    {% javascripts output="compiled/hopitalnumerique-autodiag-outil-edit.js"
+        "@fancybox_js"
         "@validationEngine_js"
         'bundles/hopitalnumeriqueautodiag/js/script.js'
+        'bundles/hopitalnumeriqueautodiag/js/outil/Process.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {% javascripts output="compiled/hopitalnumerique-autodiag-outil-edit-select2.js"
+        "@select2_js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -55,6 +64,28 @@
                     <div class="columnChart" {% if not outil.columnChart %}style="display:none"{% endif %}>
                         {{ form_row(form.columnChartLabel) }}
                         {{ form_row(form.columnChartAxe) }}
+                    </div>
+                    
+                    {{ form_row(form.processChart) }}
+                    <div class="processChart" {% if not outil.processChart %}style="display:none"{% endif %}>
+                       {{ form_row(form.processChartLabel) }}
+                       <div class="form-group">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6">
+                                <div class="well">
+                                    <div class="pull-right">
+                                        <div class="btn-toolbar">
+                                            <a class="btn btn-success fancybox.ajax" id="autodiag_process_ajout" href="{{ path('hopitalnumerique_autodiag_process_add') }}"><i class="fa fa-plus"></i></a>
+                                        </div>
+                                    </div>
+                                    <h4>Éléments de restitution pas processus</h4>
+                                    <div id="outil_process">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3"></div>
+                        </div>
                     </div>
 
                     {{ form_row(form.radarChart) }}

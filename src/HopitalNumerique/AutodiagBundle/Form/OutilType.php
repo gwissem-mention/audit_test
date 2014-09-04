@@ -52,6 +52,17 @@ class OutilType extends AbstractType
                 'label'       => 'Axes du graphique barre',
                 'attr'        => array('class' => $outil->isColumnChart() ? 'validate[required]' : '' )
             ))
+            ->add('processChart', 'checkbox', array(
+                'label'    => 'Afficher la restitution par processus ?',
+                'required' => false,
+                'attr'     => array('onclick' => "toggle('processChart');")
+            ))
+            ->add('processChartLabel', 'text', array(
+                'max_length' => 255, 
+                'required'   => true,
+                'label'      => 'Libellé du résultat par processus',
+                'attr'       => array('class' => $outil->isProcessChart() ? 'validate[required,maxSize[255]]' : '' )
+            ))
             ->add('radarChart', 'checkbox', array(
                 'label'    => 'Afficher la restitution en graphique radar ?',
                 'required' => false,
