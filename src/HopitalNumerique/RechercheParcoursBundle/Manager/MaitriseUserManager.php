@@ -174,6 +174,27 @@ class MaitriseUserManager extends BaseManager
     }
 
     /**
+     * Retourne la moyenne des notes pour les étapes passées en param
+     *
+     * @return array Tableau des moyenne triées par étape
+     */
+    public function getAverageAllEtapesAllUser( $profilType )
+    {
+        //Récupération du tableau des objets maitrisés
+        $objetsMaitrises = $this->getRepository()->getAverageAllEtapesAllUser( $profilType )->getQuery()->getResult();
+        
+        $moyennes = array();
+        //Cast des moyenne en int arrondi à l'entier
+        foreach ($objetsMaitrises as $key => $etape) 
+        {
+            $filtre                               = $etape['filtreId'] == NULL ? 'NC' : $etape['filtreId'];
+            $moyennes[$etape['etapeId']][$filtre] = intval($etape['moyenne'], 0);
+        }
+
+        return $moyennes;
+    }
+
+    /**
      * Supprime les notes des objets qui ne sont plus d'actualités
      *
      * @param [type] $notes  Ensemble des notes à trier
