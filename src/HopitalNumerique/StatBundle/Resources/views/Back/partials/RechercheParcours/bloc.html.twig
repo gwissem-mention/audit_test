@@ -1,0 +1,75 @@
+{# Tableau des stats des points durs #}
+<div class="panel panel-default gray">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapseRechercheParcours" class="collapsed" id="tableau_point_dur">
+        <div class="panel-heading"><h4>Taux de maîtrise des étapes</h4></div>
+    </a>
+    <div id="collapseRechercheParcours" class="collapse" style="height: 0px;">
+
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="form-group">
+                    
+                    {# Points durs #}
+                    <div id="recherche-parcours-filtres">
+                        <form id ="form-recherche-parcours" action="{{path('hopital_numerique_stat_recherche_parcours_export_csv')}}" method="POST">
+                            <div class="row">
+                                {# Date de début #}
+                                <div class="col-md-6">
+                                    <label for="datepicker-datedebut-rechercheParcours">Date de début: </label><input type="text" class="form-control" id="datepicker-datedebut-rechercheParcours" name="datedebut-rechercheParcours">
+                                </div>
+                                {# Date de fin #}
+                                <div class="col-md-6">
+                                    <label for="datepicker-datefin-rechercheParcours">Date de fin: </label><input type="text" class="form-control" name="dateFin-rechercheParcours" id="datepicker-datefin-rechercheParcours">
+                                </div>
+                            </div>
+                            <div class="row">
+                                {# Select du choix du périmetre fonctionnel #}
+                                <div class="col-md-12">
+                                    <label class="control-label required" for="perimFonctionnelles">
+                                        Choix du perimètre fonctionnel
+                                    </label>
+                                    <div class="blocParamFonct">
+                                        <select name="perimFonctionnellesSelect" id="perimFonctionnelles" class="form-control" data-prompt-position="bottomLeft">
+                                            <option value=""> - </option>
+                                            {% for paramFonct in paramsFonct %}
+                                                <option value="{{paramFonct.id}}" >{{paramFonct.libelle}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                {# Select du choix entre profil et type ES #}
+                                <div class="col-md-12">
+                                    <label class="control-label required" for="profilType">
+                                        Choix entre le profil et le type ES
+                                        <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+                                    </label>
+                                    <div class="blocProfilType">
+                                        <select name="profilTypeSelect" id="profilType" class="form-control validate[required]" data-prompt-position="bottomLeft">
+                                            <option value=""> - </option>
+                                            <option value="profil"> Profil </option>
+                                            <option value="typeES"> Type établissement </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row">
+                            {# Boutton de génération du tableau #}
+                            <div class="col-md-12 button-generation">
+                                <div id="export-csv-recherche-parcours" onclick="exportCSVRechercheParcours();" class="finish btn btn-primary pull-right" title="Export CSV" ><i class="fa fa-download"></i></div>
+                                <div id="generation-tableau-recherche-parcours" onclick="generationRechercheParcours( '{{path('hopital_numerique_stat_recherche_parcours_generate_tableau')}}' );" class="finish btn btn-success pull-right" title="Générer le tableau" ><i class="fa fa-bar-chart-o"></i></div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    {# Bloc de génération du tableau #}
+                    <div id="recherche-parcours-tableau">
+                    </div>
+
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>

@@ -43,6 +43,11 @@
                 </div>
                 
                 <div class="row">
+                    {# Recherche par parcours #}
+                    {{ render(controller("HopitalNumeriqueStatBundle:RechercheParcours:index")) }}
+                </div>
+                
+                <div class="row">
                     {# Requete de recherche #}
                     {{ render(controller("HopitalNumeriqueStatBundle:ItemRequete:index")) }}
                 </div>
