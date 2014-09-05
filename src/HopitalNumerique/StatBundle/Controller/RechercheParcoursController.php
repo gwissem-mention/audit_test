@@ -71,8 +71,9 @@ class RechercheParcoursController extends Controller
 
         //Colonnes communes
         $colonnes = array( 
-            'id'    => 'ID publication', 
-            'titre' => 'Titre publication',
+            'df'    => 'Domaine Fonctionnel',
+            'id'    => 'ID Etape', 
+            'etape' => 'Nom Etape',
         );
 
         //Récupération des références concernant le choix entre typeES et profil
@@ -82,9 +83,9 @@ class RechercheParcoursController extends Controller
         }
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
-        $datas         = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getDatasForExport( $donneesTab );
+        $datas         = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getDatasForExportByEtape( $donneesTab );
 
-        return $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->exportCsv( $colonnes, $datas, 'export-recherche-parcours.csv', $kernelCharset );
+        return $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->exportCsv( $colonnes, $datas, 'export-recherche-parcours-par-etape.csv', $kernelCharset );
     }
 
     /**
