@@ -48,15 +48,15 @@ class MaitriseUserRepository extends EntityRepository
 
                     if("profil" === $profilType)
                     {
-                        $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, profilEtablissementSante.id as filtreId');
+                        $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, count(notes.pourcentageMaitrise) as nbNote, profilEtablissementSante.id as filtreId');
                     }
                     elseif("typeES" === $profilType)
                     {
-                        $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, statutEtablissementSante.id as filtreId');
+                        $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, count(notes.pourcentageMaitrise) as nbNote, statutEtablissementSante.id as filtreId');
                     }
                     else
                     {
-                        $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne');
+                        $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, count(notes.pourcentageMaitrise) as nbNote,');
 
                     }
                     
