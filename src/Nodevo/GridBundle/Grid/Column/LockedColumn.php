@@ -17,7 +17,7 @@ class LockedColumn extends ApyColumn
         parent::__construct(array(
             'id'               => 'lock',
             'field'            => 'lock',
-            'title'            => 'Vérrouillé',
+            'title'            => 'Verrouillé',
             'sortable'         => true,
             'source'           => true,
             'filterable'       => true,
@@ -28,7 +28,7 @@ class LockedColumn extends ApyColumn
             'operatorsVisible' => false
         ));
 
-        $this->setValues( array( 1 => 'Vérrouillé', 0 => 'Non Vérrouillé') );
+        $this->setValues( array( 1 => 'Verrouillé', 0 => 'Non Verrouillé') );
     }
 
     public function getType()

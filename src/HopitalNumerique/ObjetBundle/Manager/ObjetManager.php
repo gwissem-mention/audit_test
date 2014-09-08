@@ -638,7 +638,7 @@ class ObjetManager extends BaseManager
                 $element->titre   = $objet->getTitre();
                 $element->isObjet = 1;
             }else if( $tab[0] == 'INFRADOC' ){
-                $contenu          = $this->__contenuManager->findOneBy( array('id' => $tab[1] ) );
+                $contenu          = $this->_contenuManager->findOneBy( array('id' => $tab[1] ) );
                 $element->titre   = '|--' . $contenu->getTitre();
                 $element->isObjet = 0;
             }

@@ -81,7 +81,7 @@ class ObjetGrid extends Grid implements GridInterface
         //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
         $unlockButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_objet_objet_cancel');
         $unlockButton->setRouteParameters( array('id', 'message'=>true) );
-        $unlockButton->setAttributes( array('class'=>'btn btn-warning fa fa-unlock','title' => 'Dévérouiller') );
+        $unlockButton->setAttributes( array('class'=>'btn btn-warning fa fa-unlock','title' => 'Déverrouiller') );
         $unlockButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
             return $row->getField('lock') ? $action : null;
         });
