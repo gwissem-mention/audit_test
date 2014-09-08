@@ -67,6 +67,10 @@
             </div>
 
             <div class="col-md-12">
+                <div class="dateModif">le {% if objet.dateModification is not null %}{{objet.dateModification|date('d/m/Y')}}{% else %}{{objet.dateCreation|date('d/m/Y')}}{% endif %}</div>
+            </div>
+
+            <div class="col-md-12">
                 {{objet.resume|parsePublication(objet.glossaires)|raw}}
             </div>
             <div class="clearfix"></div>

@@ -525,6 +525,7 @@ class ObjetManager extends BaseManager
                 $actu->id    = $article->getId();
                 $actu->titre = $article->getTitre();
                 $actu->alias = $article->getAlias();
+                $actu->date  = (is_null($article->getDateModification())) ? $article->getDateCreation() : $article->getDateModification();
                 $actu->image = $article->getVignette() ? $article->getVignette() : false;
 
                 //resume

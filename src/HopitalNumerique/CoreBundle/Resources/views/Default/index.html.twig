@@ -31,6 +31,7 @@
                         <div class="actu">
                             <h6>{{actu.types}}</h6>
                             <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
+                            <span>le {{actu.date|date('d/m/Y')}}</span>
                             <p>
                                 {{actu.resume|parsePublication|raw}}
                             </p>
