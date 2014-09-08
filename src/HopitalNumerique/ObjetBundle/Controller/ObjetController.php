@@ -16,6 +16,7 @@ class ObjetController extends Controller
      */
     public function indexAction()
     {
+
         $grid = $this->get('hopitalnumerique_objet.grid.objet');
 
         return $grid->render('HopitalNumeriqueObjetBundle:Objet:index.html.twig');

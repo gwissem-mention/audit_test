@@ -161,6 +161,32 @@ $(document).ready(function() {
             }
         });
         $( "#datepicker-datefin-statClic" ).datepicker( "option", "showAnim", "fadeIn" );
+
+        //---Date de production
+
+        //Date début
+        $( "#datepicker-datedebut-itemProduction" ).datepicker({
+            defaultDate: "now",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd-mm-yy",
+            onClose: function( selectedDate ) {
+                $( "#datepicker-datefin-itemProduction" ).datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        $( "#datepicker-datedebut-itemProduction" ).datepicker( "option", "showAnim", "fadeIn" );
+
+        //Date de fin
+        $( "#datepicker-datefin-itemProduction" ).datepicker({
+            defaultDate: "+1d",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd-mm-yy",
+            onClose: function( selectedDate ) {
+                $( "#datepicker-datedebut-itemProduction" ).datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+        $( "#datepicker-datefin-itemProduction" ).datepicker( "option", "showAnim", "fadeIn" );
     });
 
     function exportCSVPointDur()
