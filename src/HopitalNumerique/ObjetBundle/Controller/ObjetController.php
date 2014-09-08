@@ -39,7 +39,7 @@ class ObjetController extends Controller
             if( !is_null($message ) )
                 $this->get('session')->getFlashBag()->add( 'info' , 'Objet dévérouillé.' );
         }else
-            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas l\'autorisation de dévérouiller cet objet.' );
+            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas l\'autorisation de déverrouiller cet objet.' );
         
         return $this->redirect( $this->generateUrl('hopitalnumerique_objet_objet') );
     }

@@ -13,9 +13,9 @@ class LockButton extends RowAction
 
         $this->manipulateRender(function( RowAction $action, \APY\DataGridBundle\Grid\Row $row) {
             if( $row->getField( 'lock') )
-                $action->setAttributes( array('class'=>'btn btn-warning fa fa-lock', 'title' => 'Vérouiller') );
+                $action->setAttributes( array('class'=>'btn btn-warning fa fa-lock', 'title' => 'Verrouiller') );
             else
-                $action->setAttributes( array('class'=>'btn btn-warning fa fa-unlock', 'title' => 'Dévérouiller') );
+                $action->setAttributes( array('class'=>'btn btn-warning fa fa-unlock', 'title' => 'Déverrouiller') );
 
             return $action;
         });
