@@ -60,6 +60,19 @@ class ObjetManager extends BaseManager
     }
 
     /**
+     * Retourne la liste des objets en fonction des dates passées en param
+     *
+     * @param DateTime $dateDebut Date début fourchette
+     * @param DateTime $dateFin   Date fin fourchette
+     *
+     * @return array
+     */
+    public function getObjetsByDate($dateDebut, $dateFin)
+    {
+        return $this->getRepository()->getObjetsByDate($dateDebut, $dateFin)->getQuery()->getResult();
+    }
+
+    /**
      * Récupère les objets pour l'export
      *
      * @return array
@@ -625,7 +638,7 @@ class ObjetManager extends BaseManager
                 $element->titre   = $objet->getTitre();
                 $element->isObjet = 1;
             }else if( $tab[0] == 'INFRADOC' ){
-                $contenu          = $this->__contenuManager->findOneBy( array('id' => $tab[1] ) );
+                $contenu          = $this->_contenuManager->findOneBy( array('id' => $tab[1] ) );
                 $element->titre   = '|--' . $contenu->getTitre();
                 $element->isObjet = 0;
             }

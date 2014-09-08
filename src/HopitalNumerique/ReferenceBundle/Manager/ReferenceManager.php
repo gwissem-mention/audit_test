@@ -36,6 +36,26 @@ class ReferenceManager extends BaseManager
         //call recursive function to handle all datas
         return $this->getArboRecursive($datas, $parents, array() );
     }
+
+    /**
+     * Récupère l'arbo depuis une référence
+     *
+     * @param Reference $reference [description]
+     *
+     * @return [type]
+     */
+    public function getArboFromAReference( Reference $reference )
+    {
+        //get All References, and convert to ArrayCollection
+        $datas = new ArrayCollection( $this->getRepository()->getArbo( false, false, false ) );
+
+        //Récupère uniquement les premiers parents
+        $criteria = Criteria::create()->where( Criteria::expr()->eq("id", $reference->getId() ) );
+        $parents  = $datas->matching( $criteria );
+        
+        //call recursive function to handle all datas
+        return $this->getArboRecursive($datas, $parents, array() );
+    }
     
     /**
      * Retourne l'arbo formatée

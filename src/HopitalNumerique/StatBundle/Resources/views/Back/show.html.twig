@@ -11,6 +11,7 @@
     {% javascripts output="compiled/hopitalnumerique-stats-show.js"
         "@validationEngine_js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/hopitalnumeriquestat/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -21,6 +22,7 @@
     {% stylesheets output="compiled/hopitalnumerique-stats-show.css" filter="cssrewrite, ?yui_css"
         "@validationEngine_css"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+        'bundles/hopitalnumeriquestat/css/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -36,20 +38,39 @@
             <div class="panel-body" >
                 
                 <div class="row">
-                    {# Include de l'historique #}
+                    {# Points-dur #}
                     {{ render(controller("HopitalNumeriqueStatBundle:Pointdur:index")) }}
                 </div>
                 
                 <div class="row">
-                    {# Include de l'historique #}
+                    {# Recherche par parcours #}
+                    {{ render(controller("HopitalNumeriqueStatBundle:RechercheParcours:index")) }}
+                </div>
+                
+                <div class="row">
+                    {# Requete de recherche #}
                     {{ render(controller("HopitalNumeriqueStatBundle:ItemRequete:index")) }}
                 </div>
                 
                 <div class="row">
-                    {# Include de l'historique #}
+                    {# Requetes fantomes #}
                     {{ render(controller("HopitalNumeriqueStatBundle:RequeteFantome:index")) }}
                 </div>
                 
+                <div class="row">
+                    {# Erreurs dans les urls #}
+                    {{ render(controller("HopitalNumeriqueStatBundle:Erreurs:index")) }}
+                </div>
+                
+                <div class="row">
+                    {# Requetes des productions #}
+                    {{ render(controller("HopitalNumeriqueStatBundle:ItemRequete:indexProduction")) }}
+                </div>
+                
+                <div class="row">
+                    {# Statistiques recherche aidée #}
+                    {{ render(controller("HopitalNumeriqueStatBundle:StatClic:index")) }}
+                </div>
             </div>
         </div>
     </div>

@@ -21,7 +21,39 @@ hopital_numerique_stat_item_requete_export_csv:
     pattern: /admin/statistiques/show/itemRequete/exportCSV
     defaults: { _controller: HopitalNumeriqueStatBundle:ItemRequete:exportCSV}
 
+#-Item requete - Productions
+hopital_numerique_stat_item_production_generate_tableau:
+    pattern: /admin/statistiques/show/itemProduction/generate
+    defaults: { _controller: HopitalNumeriqueStatBundle:ItemRequete:generateTableauProduction}
+
+hopital_numerique_stat_item_production_export_csv:
+    pattern: /admin/statistiques/show/itemProduction/exportCSV
+    defaults: { _controller: HopitalNumeriqueStatBundle:ItemRequete:exportCSVProduction}
+
 #-Requete fantome
 hopital_numerique_stat_requete_fantome_generate_tableau:
     pattern: /admin/statistiques/show/requeteFantome/generate
     defaults: { _controller: HopitalNumeriqueStatBundle:RequeteFantome:generateTableau}
+
+#-Erreurs
+hopital_numerique_stat_erreurs_curl:
+    pattern: /admin/statistiques/show/erreurs
+    defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:curl}
+
+hopital_numerique_stat_erreurs_curl_generate_tableau:
+    pattern: /admin/statistiques/show/erreurs/generate
+    defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:generateTableau}
+
+#-Stats clic
+hopital_numerique_stat_stat_clic_generate_tableau:
+    pattern: /admin/statistiques/show/statClic/generate
+    defaults: { _controller: HopitalNumeriqueStatBundle:StatClic:generateTableau}
+
+#-Recherche Parcours
+hopital_numerique_stat_recherche_parcours_generate_tableau:
+    pattern: /admin/statistiques/show/rechercheParcours/generate
+    defaults: { _controller: HopitalNumeriqueStatBundle:RechercheParcours:generateTableau}
+
+hopital_numerique_stat_recherche_parcours_export_csv:
+    pattern: /admin/statistiques/show/rechercheParcours/exportCSV
+    defaults: { _controller: HopitalNumeriqueStatBundle:RechercheParcours:exportCSV}

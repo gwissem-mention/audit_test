@@ -12,4 +12,33 @@ use Doctrine\ORM\EntityRepository;
  */
 class StatClicRepository extends EntityRepository
 {
+    /**
+     * Retourne la liste des clicks par réponse
+     *
+     * @return QueryBuilder
+     */
+    public function getNbNoteByReponse( $dateDebut, $dateFin )
+    {
+        $qb = $this->_em->createQueryBuilder()
+                         ->select('count(clic) as nbClic, reponse.id, reponse.libelle, question.libelle as questionLibelle')
+                         ->from('\HopitalNumerique\RechercheBundle\Entity\StatClic', 'clic')
+                         ->leftJoin('clic.reponse', 'reponse')
+                         ->leftJoin('reponse.question', 'question');
+
+                         if(!is_null($dateDebut))
+                         {
+                            $qb->andWhere('clic.dateClic >= :dateDebut')
+                               ->setParameter('dateDebut', $dateDebut );
+                         }
+                         if(!is_null($dateFin))
+                         {
+                            $qb->andWhere('clic.dateClic <= :dateFin')
+                               ->setParameter('dateFin', $dateFin );
+                         }
+                         
+                         $qb->groupBy('reponse.id')
+                            ->orderBy('nbClic', 'DESC');
+
+        return $qb;
+    }
 }
