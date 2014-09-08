@@ -221,10 +221,11 @@ hopitalnumerique_autodiag_front_comptehn_generate_synthese:
 
 # Processus
 hopitalnumerique_autodiag_process_add:
-    pattern: /admin/outil/process/add
+    pattern: /admin/outil/process/add/{numero}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Process:add" }
     requirements:
         _method: GET
+        numero: \d+
 
 #CRON
 hopitalnumerique_autodiag_cron:

@@ -5,20 +5,14 @@
 {% endblock %}
 
 {% block popinContent %}
-    {{ form(processFormulaire) }}
+    <div id="outil_processus_ajout_fenetre_{{ numeroProcessus }}" class="form-horizontal"></div>
 {% endblock %}
 
 {% block popinActions %}
-    <button onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</button>
-    <button onclick="ajouteProcess();" class="btn-primary btn">Enregistrer</button>
+    <button onclick="HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.fermeFenetreProcess({{ numeroProcessus }});" class="btn-danger btn">Fermer</button>
+    <button onclick="HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.enregistreFenetreProcess({{ numeroProcessus }});" class="btn-primary btn">Enregistrer</button>
 {% endblock %}
 
 {% block popinJavascript %}
-    $('#fancybox form.toValidate').validationEngine();
-    $('select[multiple]').select2({
-        formatNoMatches:function()
-        {
-            return 'Aucune option disponible'
-        }
-    });
+    HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.initFenetreProcessusEdition({{ numeroProcessus }});
 {% endblock %}

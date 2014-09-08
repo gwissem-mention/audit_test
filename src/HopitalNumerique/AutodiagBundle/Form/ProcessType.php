@@ -53,8 +53,9 @@ class ProcessType extends AbstractType
     {
         $builder
             ->add('libelle', 'text', array(
-                'label'    => 'Libellé du processus',
-                'required' => true
+                'label' => 'Libellé du processus',
+                'required' => true,
+                'attr' => array('class' => $this->_constraints['libelle']['class'])
             ))
             ->add('chapitres', 'entity', array(
                 'choices'  => $this->chapitreManager->findBy(array('parent' => null)),
@@ -72,9 +73,11 @@ class ProcessType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\AutodiagBundle\Entity\Process'
-        ));
+        $resolver
+            ->setDefaults(array(
+                'data_class' => 'HopitalNumerique\AutodiagBundle\Entity\Process'
+            ))
+        ;
     }
 
     /**

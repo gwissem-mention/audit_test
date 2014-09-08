@@ -173,17 +173,6 @@ class Outil
      * )
      */
     private $process;
-    
-    /**
-     * @var \Doctrine\Common\Collections\Collection Les chapitres lors d'une restitution par process
-     *
-     * @ORM\OneToMany(
-     *   targetEntity = "ProcessChapitre",
-     *   mappedBy = "outil",
-     *   cascade = { "persist" }
-     * )
-     */
-    private $processChapitres;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -551,7 +540,7 @@ class Outil
     /**
      * Get process
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getProcess()
     {
@@ -561,32 +550,13 @@ class Outil
     /**
      * Set process
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $process
+     * @param \Doctrine\Common\Collections\Collection $process
      */
-    public function setProcess(\Doctrine\Common\Collections\ArrayCollection $process)
+    public function setProcess(\Doctrine\Common\Collections\Collection $process)
     {
+        foreach ($process as $unProcess)
+            $unProcess->setOutil($this);
         $this->process = $process;
-        return $this;
-    }
-
-    /**
-     * Get processChapitres
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getProcessChapitres()
-    {
-        return $this->processChapitres;
-    }
-    
-    /**
-     * Set processChapitres
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $processChapitres
-     */
-    public function setProcessChapitres(\Doctrine\Common\Collections\ArrayCollection $processChapitres)
-    {
-        $this->processChapitres = $processChapitres;
         return $this;
     }
 }

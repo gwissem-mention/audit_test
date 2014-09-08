@@ -15,14 +15,13 @@ class ProcessController extends Controller
 {
     /**
      * Ajoute un processus.
+     * 
+     * @param integer $numero Le numéro de processus attribué par SF2 lors de l'ajout.
      */
-    public function addAction()
+    public function addAction($numero)
     {
-        $process = $this->get('hopitalnumerique_autodiag.manager.process')->createEmpty();
-        $processFormulaire = $this->createForm('hopitalnumerique_autodiag_process', $process);
-
         return $this->render('HopitalNumeriqueAutodiagBundle:Process:add.html.twig', array(
-            'processFormulaire' => $processFormulaire->createView()
+            'numeroProcessus' => $numero
         ));
     }
 }

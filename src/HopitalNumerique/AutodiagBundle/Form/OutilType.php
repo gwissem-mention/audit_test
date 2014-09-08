@@ -5,16 +5,24 @@ namespace HopitalNumerique\AutodiagBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\AutodiagBundle\Manager\ProcessManager;
+use HopitalNumerique\AutodiagBundle\Manager\ChapitreManager;
 
 class OutilType extends AbstractType
 {
     private $_constraints = array();
+    private $validator;
+    private $processManager;
+    private $chapitreManager;
 
-    public function __construct($manager, $validator)
+    public function __construct($manager, $validator, ProcessManager $processManager, ChapitreManager $chapitreManager)
     {
+        $this->validator = $validator;
         $this->_constraints = $manager->getConstraints( $validator );
+        
+        $this->processManager = $processManager;
+        $this->chapitreManager = $chapitreManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -62,6 +70,12 @@ class OutilType extends AbstractType
                 'required'   => true,
                 'label'      => 'Libellé du résultat par processus',
                 'attr'       => array('class' => $outil->isProcessChart() ? 'validate[required,maxSize[255]]' : '' )
+            ))
+            ->add('process', 'collection', array(
+                'type' => new ProcessType($this->processManager, $this->validator, $this->chapitreManager),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false
             ))
             ->add('radarChart', 'checkbox', array(
                 'label'    => 'Afficher la restitution en graphique radar ?',

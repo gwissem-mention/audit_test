@@ -1,6 +1,6 @@
 <?php
 /**
- * Entité de liaison entre un outil de diagnostique et un chapitre s'il y a restitution par processus.
+ * Entité de liaison entre un process de diagnostique et un chapitre s'il y a restitution par processus.
  * 
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
@@ -9,7 +9,7 @@ namespace HopitalNumerique\AutodiagBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Entité de liaison entre un outil de diagnostique et un chapitre s'il y a restitution par processus.
+ * Entité de liaison entre un process de diagnostique et un chapitre s'il y a restitution par processus.
  * 
  * @ORM\Entity
  * @ORM\Table(name="hn_outil_process_chap")
@@ -35,25 +35,25 @@ class ProcessChapitre
     private $id;
 
     /**
-     * @var \HopitalNumerique\AutodiagBundle\Entity\Outil Outil de diagnostic
+     * @var \HopitalNumerique\AutodiagBundle\Entity\Process Process de diagnostic
      * 
      * @ORM\ManyToOne
      * (
-     *   targetEntity = "Outil",
+     *   targetEntity = "Process",
      *   cascade = { "persist" },
      *   inversedBy = "processChapitres"
      * )
      * @ORM\JoinColumn
      * (
-     *   name = "out_id",
-     *   referencedColumnName = "out_id",
+     *   name = "proc_id",
+     *   referencedColumnName = "proc_id",
      *   onDelete = "CASCADE"
      * )
      */
-    private $outil;
+    private $process;
 
     /**
-     * @var \HopitalNumerique\AutodiagBundle\Entity\Outil Chapitre d'un outil de diagnostic
+     * @var \HopitalNumerique\AutodiagBundle\Entity\Process Chapitre d'un process de diagnostic
      * 
      * @ORM\ManyToOne
      * (
@@ -71,16 +71,16 @@ class ProcessChapitre
     private $chapitre;
     
     /**
-     * @var integer Ordre d'affichage du chapitre dans l'outil de diagnostique.
+     * @var integer Ordre d'affichage du chapitre dans l'process de diagnostique.
      * 
      * @ORM\Column(
-     *   name = "order",
+     *   name = "proc_cha_order",
      *   type = "integer",
      *   nullable = false,
      *   options =
      *   {
      *     "unsigned" = true,
-     *     "comment" = "Ordre d affichage du chapitre dans l outil"
+     *     "comment" = "Ordre d affichage du chapitre dans l process"
      *   }
      * )
      */
@@ -106,26 +106,26 @@ class ProcessChapitre
     }
     
     /**
-     * Set outil
+     * Set process
      *
-     * @param \HopitalNumerique\AutodiagBundle\Entity\Outil $outil
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Process $process
      * @return \HopitalNumerique\AutodiagBundle\Entity\ProcessChapitre
      */
-    public function setOutil($outil)
+    public function setProcess($process)
     {
-        $this->outil = $outil;
+        $this->process = $process;
     
         return $this;
     }
     
     /**
-     * Get outil
+     * Get process
      *
-     * @return \HopitalNumerique\AutodiagBundle\Entity\Outil
+     * @return \HopitalNumerique\AutodiagBundle\Entity\Process
      */
-    public function getOutil()
+    public function getProcess()
     {
-        return $this->outil;
+        return $this->process;
     }
     
     /**
