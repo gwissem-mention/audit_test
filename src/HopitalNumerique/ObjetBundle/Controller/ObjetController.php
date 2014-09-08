@@ -16,18 +16,6 @@ class ObjetController extends Controller
      */
     public function indexAction()
     {
-        $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->findAll();
-
-        foreach ($contenus as $key => $contenu) 
-        {
-            //on régénère l'alias à chaque fois
-            $tool = new Chaine( $contenu->getTitre() );
-            $contenu->setAlias( $tool->minifie() );
-
-            $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
-        }
-
-        die('pas plus loin');
 
         $grid = $this->get('hopitalnumerique_objet.grid.objet');
 
