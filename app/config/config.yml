@@ -161,7 +161,8 @@ hopital_numerique_questionnaire:
             expert: 1
             ambassadeur: 2
             module-evaluation: 4
-        mailReponses: %confighn_hopitalnumerique_questionnaire_mailReponse%
+        mailReponses       : %confighn_hopitalnumerique_questionnaire_mailReponse%
+        mailExpertReponses : %confighn_hopitalnumerique_questionnaire_mailExpertReponses%
 
 hopital_numerique_contact:
     options:
