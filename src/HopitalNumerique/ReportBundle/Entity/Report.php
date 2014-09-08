@@ -4,6 +4,10 @@ namespace HopitalNumerique\ReportBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+//Asserts Stuff
+use Symfony\Component\Validator\Constraints as Assert;
+use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
+
 /**
  * Report
  *
@@ -31,6 +35,8 @@ class Report
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="L'url ne peut pas être vide.")
+     * @Nodevo\Javascript(class="validate[required]")
      * @ORM\Column(name="url", type="string", length=255)
      */
     protected $url;
@@ -38,6 +44,8 @@ class Report
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="Il doit y avoir une observation.")
+     * @Nodevo\Javascript(class="validate[required]")
      * @ORM\Column(name="observations", type="text")
      */
     protected $observations;

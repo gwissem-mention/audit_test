@@ -11,6 +11,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ReportController extends Controller
 {
     /**
+    * BackOffice
+    */
+
+    /**
      * Affiche la liste des Report.
      */
     public function indexAction()
@@ -37,6 +41,25 @@ class ReportController extends Controller
             'user' => $user,
             'etablissement' => $etablissement,
         ));
+    }
+
+    /**
+    * FrontOffice
+    */
+
+    /**
+    * Affiche le formulaire de signalement de bug
+    *
+    */
+    public function signalerAction()
+    {
+        //Récupération de l'entité passée en paramètre
+        $report = $this->get('hopital_numerique_report.manager.report')->createEmpty();
+        
+        $formName         = 'hopitalnumerique_reportbundle_report';
+        $view             = 'HopitalNumeriqueReportBundle:Report:signaler.html.twig';
+        
+        return $this->renderForm( $formName, $report, $view );
     }
 
     /**
@@ -85,18 +108,14 @@ class ReportController extends Controller
 
             //si le formulaire est valide
             if ($form->isValid()) {
-                //test ajout ou edition
-                $new = is_null($report->getId());
-
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_report.manager.report')->save($report);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Report ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
+                $this->get('session')->getFlashBag()->add( 'success' , 'Bug signalé.' ); 
                 
-                //on redirige vers la page index ou la page edit selon le bouton utilisé
-                $do = $request->request->get('do');
-                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_report_admin_report') : $this->generateUrl('hopitalnumerique_report_admin_report_edit', array( 'id' => $report->getId() ) ) ) );
+                //on redirige vers la page index
+                return $this->redirect( $this->generateUrl('hopitalnumerique_homepage') );
             }
         }
 

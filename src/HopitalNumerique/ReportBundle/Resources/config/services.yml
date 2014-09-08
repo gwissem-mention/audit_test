@@ -20,4 +20,4 @@ services:
         class: %hopitalnumerique_report.form.report.class%
         arguments: ["@hopitalnumerique_report.manager.report", "@validator"]
         tags:
-            - { name: form.type, alias: hopitalnumerique_report_report }
+            - { name: form.type, alias: hopitalnumerique_reportbundle_report }
