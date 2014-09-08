@@ -1,3 +1,7 @@
+hopital_numerique_report:
+    resource: "@HopitalNumeriqueReportBundle/Resources/config/routing.yml"
+    prefix:   /
+
 hopital_numerique_stat:
     resource: "@HopitalNumeriqueStatBundle/Resources/config/routing.yml"
     prefix:   /

@@ -99,7 +99,7 @@ class SessionController extends Controller
         //Suppression de l'entitée
         $this->get('hopitalnumerique_module.manager.session')->save( $session );
 
-        $this->get('session')->getFlashBag()->add('info', 'La session ' . $session->getArchiver() ? ' est archivée.' : 'n\' est plus archivée.');
+        $this->get('session')->getFlashBag()->add('info', 'La session ' . ($session->getArchiver() ? ' est archivée.' : 'n\' est plus archivée.'));
 
         return $this->redirect( $url );
     }

@@ -11,13 +11,13 @@
                 <div class="col-md-1">
                     <label class="control-label">Titre <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5 titre-contenu">
                     {{ form_widget(form.titre) }}
                 </div>
                 <div class="col-md-1">
                     <label class="control-label">Alias</label>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5 alias-contenu">
                     {{ form_widget(form.alias) }}
                 </div>
                 <div class="col-md-5 col-md-offset-1 errorTitre">
@@ -58,6 +58,10 @@
 
 <script>
     $(document).ready(function() {
+        $(".titre-contenu input").on('focus', function(){
+            $(".alias-contenu input").val("");
+        });
+
         //Toggle notif mise à jour
         $('.toggle').toggles( { on : false, text : { on : 'OUI', off : 'NON' } } ).on('toggle', function (e, active) {
             if (active) {

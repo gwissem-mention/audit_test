@@ -33,6 +33,8 @@ parameters:
         qsomazzi@nodevo.com: Quentin
         gmelchilsen@nodevo.com: 'Gaëtan M.'
         tdauriac@nodevo.com: 'Thomas D.'
+    confighn_hopitalnumerique_questionnaire_mailExpertReponses:
+        reseaux-hn@anap.fr: 'Réseaux HN'
     
     #HopitalNumerique_Contact
     confighn_hopitalnumerique_contact:

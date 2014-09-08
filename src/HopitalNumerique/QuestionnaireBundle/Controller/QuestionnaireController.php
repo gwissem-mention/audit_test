@@ -515,16 +515,20 @@ class QuestionnaireController extends Controller
     
                             //send Mail to all admins
                             $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
-                            $admins      = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole('ROLE_ADMINISTRATEUR_1');
-                            if(!is_null($admins))
+                            //Récupération de l'adresse mail en parameter.yml
+                            $adressesMails = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getMailExpertReponses();
+                            echo '<pre>';
+                            \Doctrine\Common\Util\Debug::dump($adressesMails);
+                            die();
+                            if(!is_null($adressesMails))
                             {
                                 $variablesTemplate = array(
                                     'candidat'      => $user->getPrenom() . ' ' . $user->getNom(),
                                     'questionnaire' => $candidature
                                 );
-                                $mailsAdmins = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertAdminMail($admins, $variablesTemplate);
-                                foreach($mailsAdmins as $mailAdmins)
-                                    $this->get('mailer')->send($mailAdmins);
+                                $mailsExperts = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertAdminMail($adressesMails, $variablesTemplate);
+                                foreach($mailsExperts as $mailExperts)
+                                    $this->get('mailer')->send($mailExperts);
                             }
     
                             break;

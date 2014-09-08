@@ -13,6 +13,7 @@ class QuestionnaireManager extends BaseManager
     protected $_class = 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire';
 
     protected $_questionnaireArray = array();
+    protected $_mailExpertReponses = array();
     protected $_mailReponses       = array();
     protected $_managerReponse;
         
@@ -25,6 +26,7 @@ class QuestionnaireManager extends BaseManager
     {
         parent::__construct($em);
         $this->_questionnaireArray = isset($options['idRoles']) ? $options['idRoles'] : array();
+        $this->_mailExpertReponses = isset($options['mailExpertReponses']) ? $options['mailExpertReponses'] : array();
         $this->_mailReponses       = isset($options['mailReponses']) ? $options['mailReponses'] : array();
         $this->_managerReponse     = $managerReponse;
     }
@@ -66,6 +68,16 @@ class QuestionnaireManager extends BaseManager
     public function getQuestionnaireRepondant( $idQuestionnaire )
     {
         return $this->getRepository()->getQuestionnaireRepondant( $idQuestionnaire )->getQuery()->getResult();
+    }
+
+    /**
+     * Get les adresses mails dans le config.yml/parameter.yml de l'envoies des mails experts
+     *
+     * @return array( 'adresse' => 'nom' )
+     */
+    public function getMailExpertReponses()
+    {
+        return $this->_mailExpertReponses;
     }
 
     /**
