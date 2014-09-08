@@ -9,6 +9,14 @@
     }
 </style>
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".glosstool").tooltip({
+            placement : 'top'
+        });
+    });
+</script>
+
 {% block stylesheets %}
     {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese.css" filter="cssrewrite, ?yui_css" 
         "@bootstrap_css"
