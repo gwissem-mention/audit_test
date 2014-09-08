@@ -87,17 +87,17 @@ class SessionGrid extends Grid implements GridInterface
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_module_module_session_edit' ) );
 
         //--------- GME 16/06 : Cadenas lock/unlock -------
-        //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
+        //Custom Unlock button : Affiche le bouton déverrouillé si la ligne est verrouillée
         $unlockButton = new Action\LockButton( 'hopitalnumerique_module_module_session_archiver' );
-        $unlockButton->setAttributes( array('class'=>'btn btn-warning fa fa-unlock','title' => 'Dévérouiller') );
+        $unlockButton->setAttributes( array('class'=>'btn btn-warning fa fa-unlock','title' => 'Déverrouiller') );
         $unlockButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row  $row) {
             return $row->getField('archiver') ? $action : null;
         });
         $this->addActionButton( $unlockButton );
 
-        //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
+        //Custom Unlock button : Affiche le bouton déverrouillé si la ligne est verrouillée
         $lockButton = new Action\LockButton( 'hopitalnumerique_module_module_session_archiver' );
-        $lockButton->setAttributes( array('class'=>'btn btn-warning fa fa-lock','title' => 'Vérouiller') );
+        $lockButton->setAttributes( array('class'=>'btn btn-warning fa fa-lock','title' => 'Verrouiller') );
         $lockButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row  $row) {
             return $row->getField('archiver') ? null : $action;
         });

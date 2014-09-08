@@ -74,5 +74,15 @@ class InscriptionGrid extends BaseInscriptionGrid
         $etatEvaluationColumn->setFilterType('select');
         $etatEvaluationColumn->setOperatorsVisible( false );
         $this->addColonne( $etatEvaluationColumn );
+
+        $userIdColumn = new Column\TextColumn('userId', 'userId');
+        $userIdColumn->setVisible( false );
+        $userIdColumn->setFilterable( false );
+        $this->addColonne( $userIdColumn );
+
+        $sessionIdColumn = new Column\TextColumn('sessionId', 'sessionId');
+        $sessionIdColumn->setVisible( false );
+        $sessionIdColumn->setFilterable( false );
+        $this->addColonne( $sessionIdColumn );
     }
 }

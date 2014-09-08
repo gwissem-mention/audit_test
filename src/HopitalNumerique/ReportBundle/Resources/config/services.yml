@@ -1,0 +1,23 @@
+parameters:
+    #Options
+    hopital_numerique_report.options:parameters:
+    hopitalnumerique_report.manager.report.class: HopitalNumerique\ReportBundle\Manager\ReportManager
+    hopitalnumerique_report.grid.report.class: HopitalNumerique\ReportBundle\Grid\ReportGrid
+    hopitalnumerique_report.form.report.class: HopitalNumerique\ReportBundle\Form\ReportType
+
+services:
+    hopitalnumerique_report.manager.report:
+        class: %hopitalnumerique_report.manager.report.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_report.grid.report:
+        class: %hopitalnumerique_report.grid.report.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_report.form.report:
+        class: %hopitalnumerique_report.form.report.class%
+        arguments: ["@hopitalnumerique_report.manager.report", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_report_report }

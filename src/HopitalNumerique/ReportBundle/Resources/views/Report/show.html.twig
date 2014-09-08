@@ -1,0 +1,46 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Fiche Signalement de bug
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_report_admin_report') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                <p>
+                    <strong>Mail : </strong>
+                    {{ user.email }}
+                </p>
+                <p>
+                    <strong>Téléphone direct : </strong>
+                    {% if user.telephoneDirect is not null %}
+                        {{ user.telephoneDirect }}
+                    {% endif %}                    
+                </p>
+                <p>
+                    <strong>Téléphone portable : </strong>
+                    {% if user.telephonePortable is not null %}
+                        {{ user.telephonePortable }}
+                    {% endif %}
+                </p>
+                <p>
+                    <strong>Etablissement : </strong>
+                    {% if etablissement is not null %}
+                        {{ etablissement.nom }}
+                    {% else %}
+                        {{ user.autreStructureRattachementSante }}
+                    {% endif %}                     
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
