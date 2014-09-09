@@ -180,4 +180,16 @@
     #articles .actus{margin-bottom: 20px}
 
     #autresResultats .results {height: 190px}
+    .btnBack {float: right;position: static;}
+
+    #commentaires h2 {padding-right: 25px;height: auto;background-image:none;}
+    #commentaires h2.open .h2-arrow{background-position: right -38px;}
+    #commentaires h2.closed .h2-arrow{background-position: right -5px; }
+    #commentaires h2 .h2-arrow{background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; width: 30px;height: 25px;float: right;}
+
+    #autresResultats h2 {padding-right: 25px;height: auto;background-image:none;}
+    #autresResultats h2.open .h2-arrow{background-position: right -38px;}
+    #autresResultats h2.closed .h2-arrow{background-position: right -5px; }
+    #autresResultats h2 .h2-arrow{background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; width: 30px;height: 25px; float: right;}
+
 }
