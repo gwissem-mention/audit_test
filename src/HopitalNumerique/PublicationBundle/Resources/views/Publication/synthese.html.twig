@@ -9,14 +9,6 @@
     }
 </style>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $(".glosstool").tooltip({
-            placement : 'top'
-        });
-    });
-</script>
-
 {% block stylesheets %}
     {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese.css" filter="cssrewrite, ?yui_css" 
         "@bootstrap_css"
@@ -25,6 +17,21 @@
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts output="compiled/hopitalnumerique-publication-publication-synthese.js" 
+        "@jquery_js" 
+        "@jquery_ui_js"
+        "@bootstrap_js"
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#synthese-ajax .glosstool").tooltip({ position: { my: "center bottom-15", at: "top center" } });
+        });
+    </script>
 {% endblock %}
 
 <div id="synthese-ajax" >
