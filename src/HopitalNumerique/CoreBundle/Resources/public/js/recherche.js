@@ -6,7 +6,7 @@ function rechercheAideEtBesoin()
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '50%',
-        'height'    : 'auto',
+        'height'    : '360px',
         'scrolling' : 'no',
         'modal'     : true,
         'type'      : 'ajax',
@@ -21,7 +21,7 @@ $(function() {
         'width'     : '80%',
         'scrolling' : 'no',
         'showCloseButton' : true,
-        'height' : 'auto'
+        'height' : '360px'
     });
 });
 //fancybox daffichage de la synthese
@@ -38,7 +38,7 @@ enquire.register("screen and (max-width: 991px)", {
                 'autoSize'  : false,
                 'width'     : '80%',
                 'scrolling' : 'no',
-                'height' : 'auto',
+                'height' : '360px',
                 'showCloseButton' : true,
             });
             
