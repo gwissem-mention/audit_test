@@ -101,11 +101,12 @@
         {% else %}
             <div class="col-md-12">
                 <h1 class="violet">{{objet.titre}}</h1>
-                <div class="mobile">
-                    <a class="label label-success pull-left" href="javascript:$('#sommaire').click();">Sommaire</a>
+                <div class="mobile" style="margin-bottom:20px;">
+                    <div class="clearfix"></div>
+                    <a class="label label-success pull-left" style="cursor:pointer" onclick="javascript:$('#sommaire').click();">Sommaire</a>
                     {% if app.user %}
-                        <a class="label label-ambassadeur pull-right" href="javascript:$('#ambassadeurs').click();">Ambassadeurs</a>
-                        <a class="label label-requete pull-right" href="javascript:$('#mesrequetes').click();">Mes requetes</a>
+                        <a class="label label-ambassadeur pull-right" style="cursor:pointer" onclick="javascript:$('#ambassadeurs').click();">Ambassadeurs</a>
+                        <a class="label label-requete pull-right" style="cursor:pointer" onclick="javascript:$('#mesrequetes').click();">Mes requetes</a>
                     {% endif %}
                     <div class="clearfix"></div>
                 </div>
