@@ -43,11 +43,14 @@
                 {% endif %}
             </div>
         </div>
+
+        
         
         <div class="col-md-7 home-right" >
             <div class="row">
                 <div class="rechercheAideExp col-md-4">
-                    <a href="javascript:rechercheAideEtBesoin();">
+                    <a id="test" class="link fancybox.iframe" href="{{path('hopital_numerique_expbesoin_rechercheFancy')}}" >
+                    {#<a href="javascript:rechercheAideEtBesoin();">#}
                         <div class="common-sprite icone"></div>
                         <h3>Recherche aidée</h3>
                         <p>
