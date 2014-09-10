@@ -5,21 +5,31 @@ namespace HopitalNumerique\AutodiagBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\AutodiagBundle\Manager\ProcessManager;
+use HopitalNumerique\AutodiagBundle\Manager\ChapitreManager;
 
 class OutilType extends AbstractType
 {
     private $_constraints = array();
+    private $validator;
+    private $processManager;
+    private $chapitreManager;
 
-    public function __construct($manager, $validator)
+    public function __construct($manager, $validator, ProcessManager $processManager, ChapitreManager $chapitreManager)
     {
+        $this->validator = $validator;
         $this->_constraints = $manager->getConstraints( $validator );
+        
+        $this->processManager = $processManager;
+        $this->chapitreManager = $chapitreManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $outil = $options['data'];
+        $processFormulaire = new ProcessType($this->processManager, $this->validator, $this->chapitreManager);
+        $processFormulaire->setOutil($outil);
 
         $builder
             ->add('title', 'text', array(
@@ -51,6 +61,23 @@ class OutilType extends AbstractType
                 'empty_value' => ' - ',
                 'label'       => 'Axes du graphique barre',
                 'attr'        => array('class' => $outil->isColumnChart() ? 'validate[required]' : '' )
+            ))
+            ->add('processChart', 'checkbox', array(
+                'label'    => 'Afficher la restitution par processus ?',
+                'required' => false,
+                'attr'     => array('onclick' => "toggle('processChart');")
+            ))
+            ->add('processChartLabel', 'text', array(
+                'max_length' => 255, 
+                'required'   => true,
+                'label'      => 'Libellé du résultat par processus',
+                'attr'       => array('class' => $outil->isProcessChart() ? 'validate[required,maxSize[255]]' : '' )
+            ))
+            ->add('process', 'collection', array(
+                'type' => $processFormulaire,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false
             ))
             ->add('radarChart', 'checkbox', array(
                 'label'    => 'Afficher la restitution en graphique radar ?',

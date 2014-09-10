@@ -6,6 +6,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Outil controller.
@@ -32,8 +33,19 @@ class OutilController extends Controller
         //Création du formulaire via le service
         $form = $this->createForm('hopitalnumerique_autodiag_outil', $outil );
 
+        $processOriginaux = new ArrayCollection();
+        foreach ($outil->getProcess() as $process)
+            $processOriginaux->add($process);
+
         //si le formulaire est valide
         if ( $form->handleRequest($request)->isValid() ) {
+            
+            //<-- Suppression des process enlevés
+            foreach ($processOriginaux as $process)
+                if (!$outil->getProcess()->contains($process))
+                    $this->get('hopitalnumerique_autodiag.manager.process')->delete($process);
+            //-->
+            
             //Save
             $this->get('hopitalnumerique_autodiag.manager.outil')->saveOutil($outil);
             
@@ -55,12 +67,23 @@ class OutilController extends Controller
      * @param integer $id Id de Outil.
      */
     public function editAction( Outil $outil, Request $request )
-    {
+    { 
         //Création du formulaire via le service
         $form = $this->createForm( 'hopitalnumerique_autodiag_outil', $outil);
-        
+
+        $processOriginaux = new ArrayCollection();
+        foreach ($outil->getProcess() as $process)
+            $processOriginaux->add($process);
+
         //si le formulaire est valide
         if ( $form->handleRequest($request)->isValid() ) {
+
+            //<-- Suppression des process enlevés
+            foreach ($processOriginaux as $process)
+                if (!$outil->getProcess()->contains($process))
+                    $this->get('hopitalnumerique_autodiag.manager.process')->delete($process);
+            //-->
+            
             //Save
             $this->get('hopitalnumerique_autodiag.manager.outil')->saveOutil($outil);
 

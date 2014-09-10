@@ -181,3 +181,15 @@ h3{font-size: 20px}
     #header #logoAnap{display: none}
     #header #titre{margin: 10px auto 10px auto; float:none!important; width: 310px}
 }
+
+@media screen and (max-width: 550px) {
+    #expression-du-besoin .aide .aide-presentation .entete .titre{width: auto;}
+    #expression-du-besoin .aide .aide-presentation .description {padding: 10px;}
+    #expression-du-besoin .aide .aide-liens {height: auto; padding: 10px}
+
+    #expression-du-besoin .aide .aide-liens .reponse {background-color: #FFFFFF; height: auto; margin: 4px 4px; padding-top:7px;padding-bottom:7px;}
+    #expression-du-besoin .aide .aide-liens .reponse .bloc-reponse p{ color:#5C5C5C;}
+    #expression-du-besoin .aide .aide-liens .reponse .bloc-reponse .icone{width: 0; height: 0; float: none;margin:0;background: none;}
+    #expression-du-besoin .aide .aide-liens .reponse:hover > .bloc-reponse .icone{width: 0; height: 0; float: none;margin:0;background: none;}
+
+}
