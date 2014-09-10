@@ -29,6 +29,10 @@ class ProcessType extends AbstractType
      * @var \HopitalNumerique\AutodiagBundle\Manager\ChapitreManager Le manager de Chapitre
      */
     protected $chapitreManager;
+    /**
+     * @var \HopitalNumerique\AutodiagBundle\Entity\Outil L'outil à qui appartient le process
+     */
+    private $outil = null;
 
     /**
      * Constructeur du formulaire d'un processus d'outil.
@@ -43,6 +47,13 @@ class ProcessType extends AbstractType
         $this->_constraints = $processManager->getConstraints($validator);
         $this->processManager = $processManager;
         $this->chapitreManager = $chapitreManager;
+    }
+    /**
+     * Set outil
+     */
+    public function setOutil($outil)
+    {
+        $this->outil = $outil;
     }
 
     /**
@@ -61,7 +72,7 @@ class ProcessType extends AbstractType
                 'attr' => array('class' => $this->_constraints['libelle']['class'])
             ))
             ->add('chapitres', 'entity', array(
-                'choices'  => $this->chapitreManager->findBy(array('parent' => null)),
+                'choices'  => $this->chapitreManager->findBy(array('parent' => null, 'outil' => $this->outil)),
                 'class'    => 'HopitalNumerique\AutodiagBundle\Entity\Chapitre',
                 'property' => 'title',
                 'multiple' => true,

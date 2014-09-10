@@ -28,6 +28,8 @@ class OutilType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $outil = $options['data'];
+        $processFormulaire = new ProcessType($this->processManager, $this->validator, $this->chapitreManager);
+        $processFormulaire->setOutil($outil);
 
         $builder
             ->add('title', 'text', array(
@@ -72,7 +74,7 @@ class OutilType extends AbstractType
                 'attr'       => array('class' => $outil->isProcessChart() ? 'validate[required,maxSize[255]]' : '' )
             ))
             ->add('process', 'collection', array(
-                'type' => new ProcessType($this->processManager, $this->validator, $this->chapitreManager),
+                'type' => $processFormulaire,
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false
