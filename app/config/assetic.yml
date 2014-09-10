@@ -33,6 +33,7 @@ assetic:
         - HopitalNumeriqueForumBundle
         - HopitalNumeriqueFlashBundle
         - HopitalNumeriqueGlossaireBundle
+        - HopitalNumeriqueReportBundle
         - CCDNForumForumBundle
         - FOSUserBundle
     filters:

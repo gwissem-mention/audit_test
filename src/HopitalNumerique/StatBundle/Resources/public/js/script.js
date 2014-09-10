@@ -1,4 +1,6 @@
-    $(document).ready(function() { 
+//Script à optimiser
+
+$(document).ready(function() { 
 
         //bind de Validation Engine
         $('form.toValidate').validationEngine();
@@ -29,6 +31,32 @@
             }
         });
         $( "#datepicker-datefin-pointDur" ).datepicker( "option", "showAnim", "fadeIn" );
+
+        //---Etape
+
+        //Date début
+        $( "#datepicker-datedebut-rechercheParcours" ).datepicker({
+            defaultDate: "now",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd-mm-yy",
+            onClose: function( selectedDate ) {
+                $( "#datepicker-datefin-rechercheParcours" ).datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        $( "#datepicker-datedebut-rechercheParcours" ).datepicker( "option", "showAnim", "fadeIn" );
+
+        //Date de fin
+        $( "#datepicker-datefin-rechercheParcours" ).datepicker({
+            defaultDate: "+1d",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd-mm-yy",
+            onClose: function( selectedDate ) {
+                $( "#datepicker-datedebut-rechercheParcours" ).datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+        $( "#datepicker-datefin-rechercheParcours" ).datepicker( "option", "showAnim", "fadeIn" );
 
         //---Item requete
 
@@ -133,6 +161,32 @@
             }
         });
         $( "#datepicker-datefin-statClic" ).datepicker( "option", "showAnim", "fadeIn" );
+
+        //---Date de production
+
+        //Date début
+        $( "#datepicker-datedebut-itemProduction" ).datepicker({
+            defaultDate: "now",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd-mm-yy",
+            onClose: function( selectedDate ) {
+                $( "#datepicker-datefin-itemProduction" ).datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        $( "#datepicker-datedebut-itemProduction" ).datepicker( "option", "showAnim", "fadeIn" );
+
+        //Date de fin
+        $( "#datepicker-datefin-itemProduction" ).datepicker({
+            defaultDate: "+1d",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd-mm-yy",
+            onClose: function( selectedDate ) {
+                $( "#datepicker-datedebut-itemProduction" ).datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+        $( "#datepicker-datefin-itemProduction" ).datepicker( "option", "showAnim", "fadeIn" );
     });
 
     function exportCSVPointDur()
@@ -161,6 +215,35 @@
                     loaderTableau.finished();
                 }
             });
+        }
+    }
+
+    function generationRechercheParcours(url)
+    {
+        if ( $('#form-recherche-parcours').validationEngine('validate') ) 
+        {
+            var loaderButton  = $('#generation-tableau-recherche-parcours').nodevoLoader().start();
+            var loaderTableau = $('#recherche-parcours-tableau').nodevoLoader().start();
+
+            $.ajax({
+                url     : url,
+                data    :  $('#form-recherche-parcours').serialize(),
+                type    : 'POST',
+                success : function( data ){
+                    //Ajout de la réponse
+                    $('#recherche-parcours-tableau').html( data );
+                    loaderButton.finished();
+                    loaderTableau.finished();
+                }
+            });
+        }
+    }
+
+    function exportCSVRechercheParcours()
+    {
+        if ( $('#form-recherche-parcours').validationEngine('validate') ) 
+        {
+            $('#form-recherche-parcours').submit();
         }
     }
 

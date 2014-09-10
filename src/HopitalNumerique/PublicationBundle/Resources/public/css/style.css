@@ -70,7 +70,7 @@
 /* Bloc Articles */
     #articles{margin-top: 20px; position: relative}
     /* Colonne right */
-        #articles h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0;border-bottom: 1px solid #D5D5D5; padding-bottom: 5px}
+        #articles h1{font-size: 24px; font-weight: bold; margin:2px 0 0 0;}
         #articles h2{font-size: 20px;}
         #articles h3{font-size: 16px;}
         #articles h4{font-size: 13px; font-weight: normal; margin:13px 0 0 0;text-transform: uppercase;}
@@ -91,6 +91,8 @@
         #articles .actus ul li a{display: block; color: #777777; font-size: 14px; padding:0}
         #articles .actus ul li.first a{font-weight: bold; padding:6px 0}
         #articles .actus ul li:hover a{color:#6f3596;}
+
+        #articles .dateModif{color: #a2a2a2;font-size: 12px;font-style : italic; margin-bottom: 20px;border-bottom: 1px solid #d5d5d5;}
 
 /* Productions fortement liées */
     #productions h2{display: block; margin:0 0 5px 0;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
@@ -178,4 +180,16 @@
     #articles .actus{margin-bottom: 20px}
 
     #autresResultats .results {height: 190px}
+    .btnBack {float: right;position: static;}
+
+    #commentaires h2 {padding-right: 25px;height: auto;background-image:none;}
+    #commentaires h2.open .h2-arrow{background-position: right -38px;}
+    #commentaires h2.closed .h2-arrow{background-position: right -5px; }
+    #commentaires h2 .h2-arrow{background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; width: 30px;height: 25px;float: right;}
+
+    #autresResultats h2 {padding-right: 25px;height: auto;background-image:none;}
+    #autresResultats h2.open .h2-arrow{background-position: right -38px;}
+    #autresResultats h2.closed .h2-arrow{background-position: right -5px; }
+    #autresResultats h2 .h2-arrow{background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; width: 30px;height: 25px; float: right;}
+
 }

@@ -48,3 +48,12 @@ hopital_numerique_stat_erreurs_curl_generate_tableau:
 hopital_numerique_stat_stat_clic_generate_tableau:
     pattern: /admin/statistiques/show/statClic/generate
     defaults: { _controller: HopitalNumeriqueStatBundle:StatClic:generateTableau}
+
+#-Recherche Parcours
+hopital_numerique_stat_recherche_parcours_generate_tableau:
+    pattern: /admin/statistiques/show/rechercheParcours/generate
+    defaults: { _controller: HopitalNumeriqueStatBundle:RechercheParcours:generateTableau}
+
+hopital_numerique_stat_recherche_parcours_export_csv:
+    pattern: /admin/statistiques/show/rechercheParcours/exportCSV
+    defaults: { _controller: HopitalNumeriqueStatBundle:RechercheParcours:exportCSV}

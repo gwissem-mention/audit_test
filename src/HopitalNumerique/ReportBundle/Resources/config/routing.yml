@@ -1,0 +1,26 @@
+hopitalnumerique_report_admin_report:
+    pattern:  /admin/signalement
+    defaults: { _controller: "HopitalNumeriqueReportBundle:Report:index" }
+    requirements: 
+        _method: GET|POST
+
+
+hopitalnumerique_report_admin_report_show:
+    pattern:  /admin/signalement/show/{id}
+    defaults: { _controller: "HopitalNumeriqueReportBundle:Report:show" }
+    requirements:
+        id: \d+
+        _method: GET
+
+hopitalnumerique_report_archiver:
+    pattern:  /admin/signalement/archiver/{id}
+    defaults: { _controller: "HopitalNumeriqueReportBundle:Report:archiver", id: 1}
+    requirements: 
+        id: \d+
+        _method: GET|POST
+
+hopitalnumerique_report_homepage:
+    pattern:  /signalement
+    defaults: { _controller: "HopitalNumeriqueReportBundle:Report:signaler"}
+
+

@@ -31,6 +31,7 @@
                         <div class="actu">
                             <h6>{{actu.types}}</h6>
                             <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
+                            <span>Le {{actu.date|date('d/m/Y')}}</span>
                             <p>
                                 {{actu.resume|parsePublication|raw}}
                             </p>
@@ -42,11 +43,14 @@
                 {% endif %}
             </div>
         </div>
+
+        
         
         <div class="col-md-7 home-right" >
             <div class="row">
                 <div class="rechercheAideExp col-md-4">
-                    <a href="javascript:rechercheAideEtBesoin();">
+                    <a id="test" class="link fancybox.iframe" href="{{path('hopital_numerique_expbesoin_rechercheFancy')}}" >
+                    {#<a href="javascript:rechercheAideEtBesoin();">#}
                         <div class="common-sprite icone"></div>
                         <h3>Recherche aidée</h3>
                         <p>

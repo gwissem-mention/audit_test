@@ -1,0 +1,62 @@
+{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+
+{% block metadesc %}Page de signalement de bug{% endblock %}
+{% block metakeywords %}bug report{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <style>
+    	#report_form{}
+		#report_form h3{ color:#070707; font-size: 18px; font-weight: bold; margin: 40px 0 18px;}
+		#report_form form{ background: #f4f4f4; padding:60px 35px 15px 35px; position: relative; border:1px solid #e3e3e3;}
+		#report_form form .background-violet{width: 214px; height: 4px; position: absolute; top: 0; left: 0;}
+		#report_form form .background-rose{ background:#de0d4d; width: 214px; height: 4px; position: absolute; top: 0; left: 0;}
+		#report_form form label{ color:#333333; font-size: 14px }
+		#report_form form .champ-obligatoire{color: #5d5d5d;width: 139px; height: 4px; position: absolute; top: -20px; right: 0px;font-style:italic; font-size:12px;}
+		#report_form form .champ-obligatoire .etoile{color: #e01958;}
+		#report_form form .resetPass{display:block; font-size: 13px; color: #a3a3a3; margin-top: 20px}
+		#report_form form h4{ text-align:left; padding: 30px 0px 10px 0px; }
+		#footerDesc { background-color:#f8f8f8;border:1px solid #e3e3e3;margin:30px 0px 0px 0px;font-size:11px; padding:10px; font-style:italic; }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-10 col-md-offset-1" id="inscription">
+        <div id="report_form">  
+            <h3>Signalement de bug</h3>
+                {# Création du formulaire #}
+                {% form_theme form 'HopitalNumeriqueUserBundle:User/Theme:theme.inscription.html.twig' %}
+	            {{ form_javascript(form) }}
+		        {{ form_start(form, { 'action': path('hopitalnumerique_report_homepage') }) }}
+		        
+                    <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
+                    <div class="background-rose"></div>
+                  
+		            {{ form_row(form.url) }}
+		            {{ form_row(form.observations) }}
+			            
+					<div class="clearfix"></div>
+                    <div class="form-group">
+				        <div class="col-md-10 col-md-offset-2">
+				            <input onclick="$('form').submit();" class="btn btn-success col-md-2 pull-right submit" value="{{ 'signaler'|upper }}" type="button"/>
+				        </div>
+			        </div>
+		        {{ form_end(form) }}
+        </div>
+    
+	   <div id ="footerDesc">
+			<p>
+				Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés.
+			</p>
+			<p>
+				Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
+			</p>
+		</div>
+		<div class="clearfix"></div>
+    </div>
+{% endblock %}

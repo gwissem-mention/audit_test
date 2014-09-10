@@ -34,4 +34,57 @@ class MaitriseUserRepository extends EntityRepository
                          ->groupBy('etape.id')
                          ->orderBy('etape.order');
     }
+
+    /**
+     * Retourne la moyenne de l'ensemble des notes pour tout les utilisateurs
+     *
+     * @param string $profilType Choix sur le filtre profil ou type ES
+     *
+     * @return QueryBuilder
+     */
+    public function getAverageAllEtapesAllUser($profilType)
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+                    if("profil" === $profilType)
+                    {
+                        $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, count(notes.pourcentageMaitrise) as nbNote, profilEtablissementSante.id as filtreId');
+                    }
+                    elseif("typeES" === $profilType)
+                    {
+                        $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, count(notes.pourcentageMaitrise) as nbNote, statutEtablissementSante.id as filtreId');
+                    }
+                    else
+                    {
+                        $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, count(notes.pourcentageMaitrise) as nbNote,');
+
+                    }
+                    
+                    $qb->from('\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser', 'notes')
+                            ->andWhere('notes.nonConcerne = :nonConcerne')
+                            ->setParameter('nonConcerne', false)
+                            ->leftJoin('notes.rechercheParcoursDetails', 'etape')
+                            ->leftJoin('notes.user', 'user');
+
+                    if("profil" === $profilType)
+                    {
+                        $qb->leftJoin('user.profilEtablissementSante', 'profilEtablissementSante')
+                           ->groupBy('etape.id, profilEtablissementSante.id');
+                    }
+                    elseif("typeES" === $profilType)
+                    {
+                        $qb->leftJoin('user.statutEtablissementSante', 'statutEtablissementSante')
+                           ->groupBy('etape.id, statutEtablissementSante.id');
+                    }
+                    else
+                    {
+                        $qb->groupBy('etape.id');
+
+                    }
+                    
+                    $qb->orderBy('etape.order');
+
+
+        return $qb;
+    }
 }

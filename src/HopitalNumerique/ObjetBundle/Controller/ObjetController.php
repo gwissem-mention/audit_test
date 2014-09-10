@@ -16,6 +16,7 @@ class ObjetController extends Controller
      */
     public function indexAction()
     {
+
         $grid = $this->get('hopitalnumerique_objet.grid.objet');
 
         return $grid->render('HopitalNumeriqueObjetBundle:Objet:index.html.twig');
@@ -39,7 +40,7 @@ class ObjetController extends Controller
             if( !is_null($message ) )
                 $this->get('session')->getFlashBag()->add( 'info' , 'Objet dévérouillé.' );
         }else
-            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas l\'autorisation de dévérouiller cet objet.' );
+            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas l\'autorisation de déverrouiller cet objet.' );
         
         return $this->redirect( $this->generateUrl('hopitalnumerique_objet_objet') );
     }

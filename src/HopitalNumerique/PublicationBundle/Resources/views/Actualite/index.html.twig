@@ -29,6 +29,7 @@
                         {% endif %}
                         <h4>{{actu.types}}</h4>
                         <h3>{{actu.titre}}</h3>
+                        <span>Le {{actu.date|date('d/m/Y')}}</span>
                         <p>
                             {{actu.resume|parsePublication|raw}}
                             <br />

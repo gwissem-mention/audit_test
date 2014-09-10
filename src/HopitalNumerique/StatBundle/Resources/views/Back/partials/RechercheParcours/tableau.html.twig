@@ -1,0 +1,28 @@
+<div class="table table-responsive">
+    <table id="point-dur-table" class="table table-hover" style="margin:0 auto; border-collapse:collapse;">
+        <thead>
+            <tr class="grid-row-titles">
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="100/(1+{{entetesTableau|length}})" height="25px"></th>
+                {% for key,enteteTableau in entetesTableau %}
+                    <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="100/(1+{{entetesTableau|length}})" height="25px"><strong>{{enteteTableau}}</strong></th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for etape in etapes %}
+                <tr>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:left;">
+                        {{etape.rechercheParcours.reference.libelle}} <br /><strong>{{etape.reference.libelle}}</strong>
+                    </td>
+                    {% for key,enteteTableau in entetesTableau %}  
+                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                            {% if etape.id in notesMoyenneParEtape|keys and key in notesMoyenneParEtape[etape.id]|keys %}
+                                {{notesMoyenneParEtape[etape.id][key]['value']}} (sur {{notesMoyenneParEtape[etape.id][key]['nbNote']}} note(s))
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}  
+        </tbody>
+    </table>
+</div>

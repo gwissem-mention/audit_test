@@ -6,3 +6,8 @@
 #synthese-ajax .content{ min-height:480px; padding:0 15px 15px 15px; margin:20px }
 #synthese-ajax .btn{ margin-right:10px }
 #synthese-ajax .copyright{ margin-top:20px }
+#synthese-ajax ul{ list-style-position: inside; }
+
+.fancybox-overlay .fancybox-skin a.fancybox-close {
+    background-position: 0 0;
+}

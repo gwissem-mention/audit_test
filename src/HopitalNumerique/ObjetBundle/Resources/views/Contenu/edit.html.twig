@@ -11,13 +11,13 @@
                 <div class="col-md-1">
                     <label class="control-label">Titre <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5 titre-contenu">
                     {{ form_widget(form.titre) }}
                 </div>
                 <div class="col-md-1">
                     <label class="control-label">Alias</label>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5 alias-contenu">
                     {{ form_widget(form.alias) }}
                 </div>
                 <div class="col-md-5 col-md-offset-1 errorTitre">
@@ -58,6 +58,10 @@
 
 <script>
     $(document).ready(function() {
+        $(".titre-contenu input").on('focus', function(){
+            $(".alias-contenu input").val("");
+        });
+
         //Toggle notif mise à jour
         $('.toggle').toggles( { on : false, text : { on : 'OUI', off : 'NON' } } ).on('toggle', function (e, active) {
             if (active) {
@@ -74,6 +78,7 @@
         tinymce.PluginManager.load('link', '/bundles/nodevotools/js/tinymce/plugins/link/plugin.min.js');
         tinymce.PluginManager.load('media', '/bundles/nodevotools/js/tinymce/plugins/media/plugin.min.js');
         tinymce.PluginManager.load('textcolor', '/bundles/nodevotools/js/plugins/text-color/plugin.min.js');
+        tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.min.js');
         NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
         
         tinyMCE.init({
@@ -82,11 +87,11 @@
             theme           : "modern",
             theme_url       : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
             skin_url        : '/bundles/nodevotools/js/tinymce/skins/lightgray',
-            plugins         : 'moxiemanager image table code textcolor pagebreak importcss link',
+            plugins         : 'moxiemanager image table code textcolor pagebreak importcss link publication',
             height          : 210,
             menubar         : false,
             content_css     : '/bundles/nodevotools/css/wysiwyg.css',
-            toolbar1        : "code | undo redo cut copy paste | pagebreak | link | insertfile image ",
+            toolbar1        : "code | undo redo cut copy paste | pagebreak | link | publication | insertfile image ",
             toolbar2        : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
             style_formats: [
                 {title: 'Titres', items: [
