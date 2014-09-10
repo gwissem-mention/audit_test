@@ -74,10 +74,27 @@ class Process
      * (
      *   name = "out_id",
      *   referencedColumnName = "out_id",
+     *   nullable = false,
      *   onDelete = "CASCADE"
      * )
      */
     private $outil;
+    
+    /**
+     * @var integer Ordre d'affichage du chapitre dans le process de diagnostique.
+     * 
+     * @ORM\Column(
+     *   name = "proc_order",
+     *   type = "integer",
+     *   nullable = false,
+     *   options =
+     *   {
+     *     "unsigned" = true,
+     *     "comment" = "Ordre d affichage du process dans l outil"
+     *   }
+     * )
+     */
+    private $order;
     
     /**
      * @var \Doctrine\Common\Collections\Collection Les chapitres lors d'une restitution par process
@@ -87,6 +104,7 @@ class Process
      *   mappedBy = "process",
      *   cascade = { "persist" }
      * )
+     * @ORM\OrderBy({ "order":"ASC" })
      */
     private $processChapitres;
     
@@ -131,6 +149,29 @@ class Process
     {
         return $this->libelle;
     }
+
+    /**
+     * Set order
+     *
+     * @param string $order
+     * @return \HopitalNumerique\AutodiagBundle\Entity\Process
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    
+        return $this;
+    }
+    
+    /**
+     * Get order
+     *
+     * @return string
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
     
     /**
      * Set outil
@@ -141,7 +182,6 @@ class Process
     public function setOutil($outil)
     {
         $this->outil = $outil;
-    
         return $this;
     }
     
@@ -153,6 +193,29 @@ class Process
     public function getOutil()
     {
         return $this->outil;
+    }
+
+    /**
+     * Set process
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Process $process
+     * @return \HopitalNumerique\AutodiagBundle\Entity\ProcessChapitre
+     */
+    public function setProcess($process)
+    {
+        $this->process = $process;
+    
+        return $this;
+    }
+    
+    /**
+     * Get process
+     *
+     * @return \HopitalNumerique\AutodiagBundle\Entity\Process
+     */
+    public function getProcess()
+    {
+        return $this->process;
     }
 
     /**
@@ -204,6 +267,6 @@ class Process
     }
     public function removeChapitre(Chapitre $chapitre)
     {
-        $this->removeElement($chapitre);
+        $this->processChapitres->removeElement($chapitre);
     }
 }

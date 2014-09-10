@@ -18,28 +18,28 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-autodiag-outil-edit.js"
         "@fancybox_js"
+        "@validationEngine_js"
         'bundles/hopitalnumeriqueautodiag/js/script.js'
-        'bundles/hopitalnumeriqueautodiag/js/outil/Process.js'
         'bundles/hopitalnumeriqueautodiag/js/outil/ProcessFormulaire.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-    {% javascripts output="compiled/hopitalnumerique-autodiag-outil-edit-validationEngine.js"
-        "@validationEngine_js"
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    {% javascripts output="compiled/hopitalnumerique-autodiag-outil-edit-nestable.js"
+    {% javascripts output="compiled/hopitalnumerique-autodiag-outil-edit-libjs.js"
         '@nestable_js'
         "@jquery_toggles_js"
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    {% javascripts output="compiled/hopitalnumerique-autodiag-outil-edit-select2.js"
         "@select2_js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    {% if (form.process|length > 0) %}
+        <script type="text/javascript"><!--
+            $(document).ready(function() {
+                {% for process in outil.process %}
+                    HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.addProcessChamp({{ process.id }});
+                {% endfor %}
+            });
+        //--></script>
+    {% endif %}
 {% endblock %}
 
 {% block h1Title %}
@@ -94,11 +94,8 @@
                                     </div>
                                     <h3>Éléments de restitution pas processus</h3>
                                     <div class="dd" id="outil_process_conteneur">
-                                        <ol class="dd-list" id="outil_process" data-prototype="{{ form_widget(form.process.vars.prototype)|e }}">
-                                            {% for process in form.process %}
-                                                <li>{{ form_row(process.valeur) }}</li>
-                                            {% endfor %}
-                                        </ol>
+                                        <ol class="dd-list" id="outil_process" data-prototype="{{ form_widget(form.process.vars.prototype)|e }}"></ol>
+                                        <!-- On n'affiche pas les formulaires par défaut des process {{ form_row(form.process) }} -->
                                     </div>
                                 </div>
                             </div>

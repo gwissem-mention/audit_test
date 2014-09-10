@@ -71,7 +71,7 @@ class ProcessChapitre
     private $chapitre;
     
     /**
-     * @var integer Ordre d'affichage du chapitre dans l'process de diagnostique.
+     * @var integer Ordre d'affichage du chapitre dans le process de diagnostique.
      * 
      * @ORM\Column(
      *   name = "proc_cha_order",
@@ -80,7 +80,7 @@ class ProcessChapitre
      *   options =
      *   {
      *     "unsigned" = true,
-     *     "comment" = "Ordre d affichage du chapitre dans l process"
+     *     "comment" = "Ordre d affichage du chapitre dans le process"
      *   }
      * )
      */

@@ -171,8 +171,9 @@ class Outil
      *   mappedBy = "outil",
      *   cascade = { "persist" }
      * )
+     * @ORM\OrderBy({ "order":"ASC" })
      */
-    private $process;
+    protected $process;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)

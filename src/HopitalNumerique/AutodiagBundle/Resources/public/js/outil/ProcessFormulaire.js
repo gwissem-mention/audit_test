@@ -5,15 +5,24 @@
  */
 var HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire = function() {};
 
-HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.OUTIL_PROCESS_UL = null;
-HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.OUTIL_PROCESS_AJOUT_LI = $('<li></li>');
-
-
 $(document).ready(function() {
     HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.init();
+    $('form[name=hopitalnumerique_autodiag_outil]').on('submit', function() {
+        HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.initProcessOrdre();
+    });
 });
 
 
+
+//<-- Fenêtre d'édition d'un processus
+/**
+ * @var string Valeur initiale du libellé de processus ouvert.
+ */
+HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.PROCESSUS_LIBELLE_VALEUR = null;
+/**
+ * @var array Ids des chapitres initiaux du processus ouvert.
+ */
+HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.PROCESSUS_CHAPITRES_IDS = new Array();
 /**
  * Initialisation du formulaire d'édition d'un process.
  * 
@@ -21,7 +30,7 @@ $(document).ready(function() {
  */
 HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.init = function()
 {
-    HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.initListeProcesseurs();
+    HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.initListeProcess();
     
     HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.OUTIL_PROCESS_UL = $('#outil_process');
     
@@ -33,26 +42,6 @@ HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.init = function()
         HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.addProcessChamp();
     });
 };
-/**
- * Initialisation de la liste des processeurs.
- * 
- * @return void
- */
-HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.initListeProcesseurs = function()
-{
-    $('#outil_process_conteneur').nestable({
-        group:0
-    });
-};
-
-/**
- * @var string Valeur initiale du libellé de processus ouvert.
- */
-HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.PROCESSUS_LIBELLE_VALEUR = null;
-/**
- * @var array Ids des chapitres initiaux du processus ouvert.
- */
-HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.PROCESSUS_CHAPITRES_IDS = new Array();
 /**
  * Initialisation de la fenêtre d'édition d'un processus.
  * 
@@ -73,11 +62,15 @@ HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.initFenetreProcessusEditio
  */
 HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.fermeFenetreProcess = function(numeroProcessus)
 {
-    $('#hopitalnumerique_autodiag_outil_process_conteneur_' + numeroProcessus).append($('#outil_processus_ajout_fenetre_' + numeroProcessus).attr('id', 'hopitalnumerique_autodiag_outil_process_' + numeroProcessus));
-    //<-- On remet les valeurs initiales
-    $('#hopitalnumerique_autodiag_outil_process_' + numeroProcessus + '_libelle').val(HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.PROCESSUS_LIBELLE_VALEUR);
-    $('#hopitalnumerique_autodiag_outil_process_' + numeroProcessus + '_chapitres').val(HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.PROCESSUS_CHAPITRES_IDS);
-    //-->
+    if (HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.PROCESSUS_LIBELLE_VALEUR == '')
+    {
+        $('#outil_process_libelle_' + numeroProcessus).parent().remove();
+    }
+    else
+    {
+        $('#hopitalnumerique_autodiag_outil_process_conteneur_' + numeroProcessus).append($('#outil_processus_ajout_fenetre_' + numeroProcessus).attr('id', 'hopitalnumerique_autodiag_outil_process_' + numeroProcessus));
+        HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.setValeurs(numeroProcessus, HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.PROCESSUS_LIBELLE_VALEUR, HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.PROCESSUS_CHAPITRES_IDS);
+    }
     $.fancybox.close(true);
 };
 /**
@@ -88,12 +81,84 @@ HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.fermeFenetreProcess = func
  */
 HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.enregistreFenetreProcess = function(numeroProcessus)
 {
-    $('#hopitalnumerique_autodiag_outil_process_conteneur_' + numeroProcessus).append($('#outil_processus_ajout_fenetre_' + numeroProcessus).attr('id', 'hopitalnumerique_autodiag_outil_process_' + numeroProcessus));
-    $('#outil_process_libelle_' + numeroProcessus).html($('#hopitalnumerique_autodiag_outil_process_' + numeroProcessus + '_libelle').val());
-    $.fancybox.close(true);
+    if (HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.verifieFormulaire(numeroProcessus))
+    {
+        $('#hopitalnumerique_autodiag_outil_process_conteneur_' + numeroProcessus).append($('#outil_processus_ajout_fenetre_' + numeroProcessus).attr('id', 'hopitalnumerique_autodiag_outil_process_' + numeroProcessus));
+        $('#outil_process_libelle_' + numeroProcessus).html($('#hopitalnumerique_autodiag_outil_process_' + numeroProcessus + '_libelle').val());
+        $.fancybox.close(true);
+    }
 };
+/**
+ * Vérifie si le formulaire du process est correctement rempli.
+ * 
+ * @param integer numeroProcessus Numéro du formulaire attribué par SF2
+ * @return boolean VRAI si tout est OK
+ */
+HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.verifieFormulaire = function(numeroProcessus)
+{
+    var formulaireEstValide = true;
+    
+    var libelleChamp = $('#hopitalnumerique_autodiag_outil_process_' + numeroProcessus + '_libelle');
+    if ($(libelleChamp).val() == '')
+    {
+        $(libelleChamp).validationEngine('showPrompt', '* Ce champ est requis', 'red', 'topRight', true);
+        formulaireEstValide = false;
+    }
+    else
+    {
+        $(libelleChamp).validationEngine('hide');
+    }
+
+    var chapitresChamp = $('#hopitalnumerique_autodiag_outil_process_' + numeroProcessus + '_chapitres');
+    var chapitresChampValidationEngine = $('#s2id_hopitalnumerique_autodiag_outil_process_' + numeroProcessus + '_chapitres');
+    if (chapitresChamp.val() == null)
+    {
+        $(chapitresChampValidationEngine).validationEngine('showPrompt', '* Ce champ est requis', 'red', 'topRight', true);
+        formulaireEstValide = false;
+    }
+    else
+    {
+        $(chapitresChampValidationEngine).validationEngine('hide');
+    }
+
+    return formulaireEstValide;
+};
+/**
+ * Initialise les valeurs d'un process.
+ * 
+ * @param integer numeroProcessus Numéro du formulaire attribué par SF2
+ * @param string processLibelle Le libellé du process
+ * @param integer[] processChapitreIds Les ID des chapitres du processus
+ * @return void
+ */
+HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.setValeurs = function(numeroProcessus, processLibelle, processChapitreIds)
+{
+    $('#hopitalnumerique_autodiag_outil_process_' + numeroProcessus + '_libelle').val(processLibelle);
+    $('#hopitalnumerique_autodiag_outil_process_' + numeroProcessus + '_chapitres').val(processChapitreIds);
+    //<-- On rafraîchit le Select2
+    $('#hopitalnumerique_autodiag_outil_process_' + numeroProcessus + '_chapitres').select2('destroy');
+    $('#hopitalnumerique_autodiag_outil_process_' + numeroProcessus + '_chapitres').select2();
+    //-->
+    
+    $('#outil_process_libelle_' + numeroProcessus).html(processLibelle);
+};
+//-->
 
 
+//<-- Liste des processus
+HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.OUTIL_PROCESS_UL = null;
+HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.OUTIL_PROCESS_AJOUT_LI = $('<li></li>');
+/**
+ * Initialisation de la liste des processeurs.
+ * 
+ * @return void
+ */
+HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.initListeProcess = function()
+{
+    $('#outil_process_conteneur').nestable({
+        group:0
+    });
+};
 /**
  * Ajoute dans le formulaire un lien permettant de supprimer un process.
  * 
@@ -111,19 +176,9 @@ HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.addModificationProcessLien
         padding: 0,
         autoSize: false,
         width: '80%',
-        height: '400px',
-        scrolling: 'yes',
+        height: '320px',
+        scrolling: 'no',
         modal: true
-    });
-    
-    modificationProcessLien.on('click', function(e)
-    {
-        /*if (HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.OUTIL_PROCESS_UL.children().length > 2)
-        {
-            if (confirm('Confirmez-vous la suppression de cet élément ?'))
-                elementParent.remove();
-        }
-        else alert('Vous ne pouvez pas supprimer tous les éléments.');*/
     });
 };
 /**
@@ -150,12 +205,13 @@ HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.addSuppressionProcessLien 
 /**
  * Ajoute dans le formulaire un champ de création de process.
  * 
+ * @param integer|NULL processId ID du processus s'il existe déjà et qu'il faut l'initialiser
  * @return void
  */
-HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.addProcessChamp = function()
+HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.addProcessChamp = function(processId)
 {
     var prototype = HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.OUTIL_PROCESS_UL.attr('data-prototype');
-    var nouveauChamp = prototype.replace(/__name__/g, HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.OUTIL_PROCESS_UL.children().length);
+    var nouveauChamp = prototype.replace(/__name__/g, HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.OUTIL_PROCESS_UL.children().length - 1);
     var processusNumero = $(nouveauChamp).attr('id').substr(parseInt((new String('hopitalnumerique_autodiag_outil_process_')).length));
 
     nouveauChamp = '<div id="hopitalnumerique_autodiag_outil_process_conteneur_' + processusNumero + '">' + nouveauChamp + '</div>';
@@ -168,5 +224,47 @@ HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.addProcessChamp = function
     
     HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.OUTIL_PROCESS_AJOUT_LI.before(nouveauChampLi);
     
+    if (processId != undefined) // Ouverture d'un process existant
+    {
+        $.ajax({
+            dataType:'json',
+            url:'/outil/process/' + processId + '/json',
+            async:false,
+            success:function(jsonProcess)
+            {
+                HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.setValeurs(processusNumero, jsonProcess['libelle'], jsonProcess['chapitreIds']);
+            }
+        });
+    }
+    else
+    {
+        $.fancybox.open({
+            'padding'   : 0,
+            'autoSize'  : false,
+            'width'     : '80%',
+            'height'    : '320px',
+            'scrolling' : 'no',
+            'modal'     : true,
+            'type'      : 'ajax',
+            'href'      : '/admin/outil/process/add/' + processusNumero
+        });
+    }
+    
     $('#hopitalnumerique_autodiag_outil_process_' + processusNumero + '_chapitres').select2();
 };
+/**
+ * Initialise les ordres des process.
+ * 
+ * @return void
+ */
+HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.initProcessOrdre = function()
+{
+    var listeProcess = $('#outil_process').find('.dd3-content');
+    var processOrdre = 1;
+    listeProcess.each(function(i) {
+        var processId = $(this).attr('id');
+        var processNumero = parseInt(processId.substr(processId.lastIndexOf('_') + 1));
+        $('#hopitalnumerique_autodiag_outil_process_' + processNumero + '_order').val(processOrdre++);
+    });
+};
+//-->

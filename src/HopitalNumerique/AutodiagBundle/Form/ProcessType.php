@@ -52,6 +52,9 @@ class ProcessType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('order', 'hidden', array(
+                'required' => true
+            ))
             ->add('libelle', 'text', array(
                 'label' => 'Libellé du processus',
                 'required' => true,
