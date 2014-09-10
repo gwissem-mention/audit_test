@@ -219,6 +219,21 @@ hopitalnumerique_autodiag_front_comptehn_generate_synthese:
     pattern:  /compte-hn/autodiagnostic/generate-synthese
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:synthese" }
 
+# Processus
+hopitalnumerique_autodiag_process_add:
+    pattern: /admin/outil/process/add/{numero}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Process:add" }
+    requirements:
+        _method: GET
+        numero: \d+
+
+hopitalnumerique_autodiag_process_json:
+    pattern:  /outil/process/{process}/json
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Process:json" }
+    requirements:
+        _method: GET
+        _format: json
+
 #CRON
 hopitalnumerique_autodiag_cron:
     pattern:  /cron-autodiag/{id}

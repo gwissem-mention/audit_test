@@ -1,0 +1,18 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::popin.html.twig' %}
+
+{% block popinTitle %}
+    Éditer un processus
+{% endblock %}
+
+{% block popinContent %}
+    <div id="outil_processus_ajout_fenetre_{{ numeroProcessus }}" class="form-horizontal"></div>
+{% endblock %}
+
+{% block popinActions %}
+    <button onclick="HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.fermeFenetreProcess({{ numeroProcessus }});" class="btn-danger btn">Fermer</button>
+    <button onclick="HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.enregistreFenetreProcess({{ numeroProcessus }});" class="btn-primary btn">Enregistrer</button>
+{% endblock %}
+
+{% block popinJavascript %}
+    HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.initFenetreProcessusEdition({{ numeroProcessus }});
+{% endblock %}

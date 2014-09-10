@@ -130,6 +130,17 @@ class Chapitre
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\RefChapitre", mappedBy="chapitre", cascade={"persist"})
      */
     protected $references;
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection Les outils de diagnostique lors d'une restitution par process
+     *
+     * @ORM\OneToMany(
+     *   targetEntity = "ProcessChapitre",
+     *   mappedBy = "chapitre",
+     *   cascade = { "persist" }
+     * )
+     */
+    private $processChapitres;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)

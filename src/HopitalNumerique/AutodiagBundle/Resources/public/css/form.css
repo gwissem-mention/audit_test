@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+
+/* Formulaire Process */
+.outil_process_conteneur {}
+    .outil_process_conteneur h3 { color:#000;font-size:15px;font-weight:bold;margin:0px 0px 20px 0px; }
+    .outil_process_conteneur #outil_process { list-style-type:none;margin:0px;padding:0px; }
+        .outil_process_conteneur #outil_process .dd3-item {}
+            .outil_process_conteneur #outil_process .dd3-item .dd3-content {}
+                div[id^='hopitalnumerique_autodiag_outil_process_'] { display:none; }

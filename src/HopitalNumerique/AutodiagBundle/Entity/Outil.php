@@ -111,6 +111,38 @@ class Outil
     private $tableChart;
 
     /**
+     * @var boolean Afficher la restitution par processus ?
+     *
+     * @ORM\Column
+     * (
+     *   name = "out_process_chart",
+     *   type = "boolean",
+     *   options =
+     *   {
+     *     "comment" = "Afficher la restitution par processus ?"
+     *   }
+     * )
+     */
+    private $processChart;
+    
+    /**
+     * @var string Libellé du résultat par processus
+     * 
+     * @ORM\Column
+     * (
+     *   name = "out_process_chart_label",
+     *   type = "string",
+     *   length = 255,
+     *   nullable = true,
+     *   options =
+     *   {
+     *     "comment" = "Libellé du résultat par processus"
+     *   }
+     * )
+     */
+    private $processChartLabel;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_statut", referencedColumnName="ref_id")
      */
@@ -130,6 +162,18 @@ class Outil
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\Resultat", mappedBy="outil", cascade={"persist"})
      */
     protected $resultats;
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection Éléments de restitution par process
+     * 
+     * @ORM\OneToMany(
+     *   targetEntity = "Process",
+     *   mappedBy = "outil",
+     *   cascade = { "persist" }
+     * )
+     * @ORM\OrderBy({ "order":"ASC" })
+     */
+    protected $process;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -142,6 +186,8 @@ class Outil
         $this->tableChart   = false;
         $this->chapitres    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->process   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->processChapitres   = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -290,6 +336,52 @@ class Outil
     public function getColumnChartAxe()
     {
         return $this->columnChartAxe;
+    }
+
+    /**
+     * Set processChart
+     *
+     * @param boolean $processChart
+     * @return Outil
+     */
+    public function setProcessChart($processChart)
+    {
+        $this->processChart = $processChart;
+    
+        return $this;
+    }
+    
+    /**
+     * Get processChart
+     *
+     * @return boolean
+     */
+    public function isProcessChart()
+    {
+        return $this->processChart;
+    }
+    
+    /**
+     * Set radarProcessLabel
+     *
+     * @param string $processChartLabel
+     * @return Outil
+     */
+    public function setProcessChartLabel($processChartLabel)
+    {
+        $this->processChartLabel = $processChartLabel;
+    
+        return $this;
+    }
+    
+    /**
+     * Get processChartLabel
+     *
+     * @return string
+     */
+    public function getProcessChartLabel()
+    {
+        return $this->processChartLabel;
     }
 
     /**
@@ -445,5 +537,27 @@ class Outil
         $this->resultats = $resultats;
         return $this;
     }
+
+    /**
+     * Get process
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProcess()
+    {
+        return $this->process;
+    }
     
+    /**
+     * Set process
+     *
+     * @param \Doctrine\Common\Collections\Collection $process
+     */
+    public function setProcess(\Doctrine\Common\Collections\Collection $process)
+    {
+        foreach ($process as $unProcess)
+            $unProcess->setOutil($this);
+        $this->process = $process;
+        return $this;
+    }
 }
