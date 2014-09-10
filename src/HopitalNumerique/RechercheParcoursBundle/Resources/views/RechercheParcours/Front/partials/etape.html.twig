@@ -1,13 +1,19 @@
 <a href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':etape.id, 'alias':etape.reference.libelle|minifieMoi()}) }}">
-    <div class="col-md-12 etape">
+    <div class="col-md-12 row etape">
         <div class="bloc-etape">
-            <p class="mode-tablette" title="{{etape.reference.libelle}}">
-                {{etape.reference.libelle|truncate(30,'...')}}
-            </p>
             <p class="mode-normal">
                 {{etape.reference.libelle}}
             </p>
             <div class="icone"></div>
         </div>
     </div>
+    <div class="clearfix"></div>
 </a>
+
+<style type="text/css">
+
+@media screen and (max-width: 550px) {
+
+
+}
+</style>

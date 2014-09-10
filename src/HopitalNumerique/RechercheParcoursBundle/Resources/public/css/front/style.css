@@ -24,8 +24,6 @@
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape:hover > .bloc-etape p{ color:#FFFFFF ; }
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape:hover > .bloc-etape .icone{width: 9px; height: 10px; float: right;margin:4px 0 0;background: transparent url('../../img/chevron-blanc.png')  no-repeat bottom right;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape p{ color:#5C5C5C; float:left;margin:0 0 0 10px; font-size: 13px;}
-#recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-normal{display:block;}
-#recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-tablette{display:none;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .icone{width: 9px; height: 10px; float: right;margin:4px 0 0;background: transparent url('../../img/chevron.png')  no-repeat bottom right;}
 
 /* -- Bloc droit -- */
@@ -141,10 +139,6 @@
     #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete .icone{display: none;}
     #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete .titre{margin-left: 0px;}
 }
-@media screen and (max-width: 1127px) {
-    #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-tablette{display:block;}
-    #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-normal{display:none;}
-}
 @media screen and (max-width: 1005px) {
     #recherche-par-parcours .bandeau .bloc-droit-offline > div {padding-right: 20px; padding-left: 20px;}
 }
@@ -153,8 +147,6 @@
     #recherche-par-parcours .bandeau .bloc-gauche{ height: auto;}
     #recherche-par-parcours .bandeau .bloc-gauche .parcours{ height: auto;margin: 20px 0 0 0;}
     #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens {height: auto; padding: 0 25px 20px;}
-    #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-tablette{display:none;}
-    #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-normal{display:block;}
 
     #recherche-par-parcours .bandeau .bloc-droit-online {height: auto; margin-top: 30px;}
     #recherche-par-parcours .bandeau .bloc-droit-online .bloc-gris{ margin: 20px 0 0 0; height: auto;}
@@ -163,6 +155,9 @@
     #recherche-par-parcours .bandeau .bloc-droit-offline .bloc-creation{ margin: 20px 0 0 0;height: auto;}
 }
 @media screen and (max-width: 550px) {
-    #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-tablette{display:block;}
-    #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .mode-normal{display:none;}
+    
+#recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape {background-color: #FFFFFF; height: auto; margin: 4px 4px; padding-top:7px;padding-bottom:7px;}
+#recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape p{ color:#5C5C5C;}
+#recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .icone{width: 0; height: 0; float: none;margin:0;background: none;}
+#recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape:hover > .bloc-etape .icone{width: 0; height: 0; float: none;margin:0;background: none;}
 }
