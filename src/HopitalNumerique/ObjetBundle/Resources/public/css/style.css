@@ -29,3 +29,8 @@ ul.list-unstyled{margin-bottom:0;}
 #panel-references .panel-footer{margin:0;}
 
 input[type="date"]{min-width: 145px}
+
+
+    #infra #sommaire {border-bottom: 1px solid #e6e7e8; padding-bottom: 20px;margin-bottom: 20px;}
+    #edition-infradox.well{margin-bottom: 0;}
+    #edition-infradox .panel-body{border:1px solid #d2d3d6;}
