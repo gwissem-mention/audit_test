@@ -128,7 +128,30 @@ $(window).load(function(){
     if( $('#toRef').val() != "0" ){
         $('.manageReferences.edit').delay(800).click();
     }
+
+    $(".form-contenu").each(function(){
+        $(this).hide();
+    });
 });
+
+
+//Selectionne un chapitre et charge l'ensemble des questions liés
+function selectChapitre( id, url )
+{
+    $('#edition-infradox .selectionInfradoc').hide();
+    var loader = $('#edition-infradox').nodevoLoader().start();
+
+    $.ajax({
+        url     : url,
+        type    : 'POST',
+        success : function( data ){
+            $('#edition-infradox .results').html( data );
+            $('#edition-infradox .infradoc').val( id );
+            loader.finished();
+        }
+    });
+
+}
 
 //met un loader sur le formulaire et sauvegarde automatiquement le formulaire objet
 function saveAutomatique()

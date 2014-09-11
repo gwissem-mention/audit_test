@@ -360,36 +360,6 @@
                                     </div>
                                 </fieldset>
 
-<style type="text/css">
-    #infra #sommaire {border-bottom: 1px solid #e6e7e8; padding-bottom: 20px;margin-bottom: 20px;}
-    #edition-infradox.well{margin-bottom: 0;}
-    #edition-infradox .panel-body{border:1px solid #d2d3d6;}
-</style>
-
-<script type="text/javascript">
-$(".form-contenu").each(function(){
-    $(this).hide();
-});
-
-//Selectionne un chapitre et charge l'ensemble des questions liés
-function selectChapitre( id, url )
-{
-    $('#edition-infradox .selectionInfradoc').hide();
-    var loader = $('#edition-infradox').nodevoLoader().start();
-
-    $.ajax({
-        url     : url,
-        type    : 'POST',
-        success : function( data ){
-            $('#edition-infradox .results').html( data );
-            $('#edition-infradox .infradoc').val( id );
-            loader.finished();
-        }
-    });
-
-}
-</script>
-
                                 <div class="well well-lg" id="edition-infradox">
                                     <span class="selectionInfradoc">Vous devez sélectionner un élément avant de pouvoir l'éditer.</span>
                                     <div class="results">
