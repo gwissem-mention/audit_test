@@ -36,9 +36,9 @@
 #recherche-par-parcours .bandeau .bloc-droit-offline p{ color :#ffffff; font-size: 13px; text-align: center; }
 #recherche-par-parcours .bandeau .bloc-droit-offline p a{ color :#ffffff; }
 #recherche-par-parcours .bandeau .bloc-droit-offline h3{text-align: center; font-size: 25px; font-weight: bold; margin:0 0 5px 0; color: #ffffff; text-transform: uppercase;}
-#recherche-par-parcours .bandeau .bloc-droit-offline .buttons{margin:20px auto 0;text-align: center;}
-#recherche-par-parcours .bandeau .bloc-droit-offline .buttons .signup{margin:0 auto;}
-#recherche-par-parcours .bandeau .bloc-droit-offline .buttons .login{margin:0 auto;}
+#recherche-par-parcours .bandeau .bloc-droit-offline .buttons{margin-top:10px;}
+#recherche-par-parcours .bandeau .bloc-droit-offline .buttons .signup{margin: 10px auto 0; display: block;float: none;;}
+#recherche-par-parcours .bandeau .bloc-droit-offline .buttons .login{margin: 10px auto 0; display: block;float: none;;}
 #recherche-par-parcours .bandeau .bloc-droit-offline .buttons-tdb{margin-top:10px;}
 #recherche-par-parcours .bandeau .bloc-droit-offline .buttons-tdb .buttons-centrer{margin:10px auto 0; width: 200px;}
 #recherche-par-parcours .bandeau .bloc-droit-offline .buttons-tdb .tdb{margin:auto; width: 200px;}
@@ -100,17 +100,17 @@
 #pointsdurs .note .pourcentage{width: 100px;}
 
 /* Mode non connecté */
-#pointsdurs .bloc-offline {padding:0;height: 260px;}
-#pointsdurs .bloc-offline .bloc-creation{margin: 0 0 0 15px; height: 260px;}
+#pointsdurs .bloc-offline {padding:0;}
+#pointsdurs .bloc-offline .bloc-creation{margin: 0 0 0 15px;}
 #pointsdurs .bloc-offline .icone { width: 48px; height: 48px; background-position: -1345px 0;margin:0 auto 10px;  }
 #pointsdurs .bloc-offline > div{ padding:30px; background: #9abc0d }
 #pointsdurs .bloc-offline:hover > div{ background: #779f08 }
 #pointsdurs .bloc-offline p{ color :#ffffff; font-size: 13px; text-align: center; }
 #pointsdurs .bloc-offline p a{ color :#ffffff; }
 #pointsdurs .bloc-offline h3{text-align: center; font-size: 25px; font-weight: bold; margin:0 0 5px 0; color: #ffffff; text-transform: uppercase;}
-#pointsdurs .bloc-offline .buttons{margin:20px auto 0;width: 240px;}
-#pointsdurs .bloc-offline .buttons .signup{margin:0 auto;}
-#pointsdurs .bloc-offline .buttons .login{margin:0 auto;}
+#pointsdurs .bloc-offline .buttons{margin-top:10px;}
+#pointsdurs .bloc-offline .buttons .signup{margin: 10px auto 0; display: block;float: none;}
+#pointsdurs .bloc-offline .buttons .login{margin: 10px auto 0; display: block;float: none;}
 #pointsdurs .bloc-offline .buttons-tdb{margin-top:10px;}
 #pointsdurs .bloc-offline .buttons-tdb .buttons-centrer{margin:10px auto 0; width: 200px;}
 #pointsdurs .bloc-offline .buttons-tdb .tdb{margin:auto; width: 200px;}
