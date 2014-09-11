@@ -1,7 +1,7 @@
 <li class="dd-item dd3-item" data-id="{{id}}" id="contenu-{{id}}" >
     <div class="dd-handle dd3-handle"></div>
     <div class="dd3-content">
-        <a href="{{path('hopitalnumerique_objet_contenu_edit', {'id': id })}}" class="fancybox.ajax" >{{order}}. Nouveau contenu</a>
+        <a data-url="{{path('hopitalnumerique_objet_contenu_form', {'id':id})}}" href="javascript:selectChapitre({{id}}, '{{path('hopitalnumerique_objet_contenu_form', {'id':id})}}')">{{order}}. Nouveau contenu</a>
         <p class="text-muted pull-right">0 vues - Note référencement : <span>0</span> / 400</p>
     </div>
     <div class="dd3-actions">

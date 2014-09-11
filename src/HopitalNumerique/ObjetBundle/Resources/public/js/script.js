@@ -221,15 +221,15 @@ function deleteContenu( id, url )
                 dataType : 'json',
                 success  : function( data ){
                     if( data.success ){
-                        if( id == undefined )
-                            $.fancybox.close(true);
-                        
                         //correction effectuée : si on a supprimer tous les enfants alors on enlève le petit '-' du parent
                         if( data.childs == 0 ){
                             $('#contenu-' + idContenu).parent().parent().find('button').each(function(){
                                 $(this).remove();
                             })
                         }
+
+                        $('#edition-infradox .results').html('');
+                        $('#edition-infradox .selectionInfradoc').show();
 
                         //supprime l'élément dans le HTML
                         $('#contenu-' + idContenu).remove();
