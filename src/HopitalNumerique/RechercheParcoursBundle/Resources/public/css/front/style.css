@@ -153,6 +153,10 @@
 
     #recherche-par-parcours .bandeau .bloc-droit-offline { height: auto;margin-top: 30px;}
     #recherche-par-parcours .bandeau .bloc-droit-offline .bloc-creation{ margin: 20px 0 0 0;height: auto;}
+
+    #recherche-par-parcours-details .en-tete-scroll{overflow: scroll;}
+    #recherche-par-parcours-details .note {width: 260px;}
+    #pointsdurs .note .volet{width: 260px;}
 }
 @media screen and (max-width: 550px) {
     
