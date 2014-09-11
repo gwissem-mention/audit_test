@@ -58,6 +58,19 @@ class ContenuController extends Controller
     }
 
     /**
+     * Affiche le formulaire d'édition de Contenu.
+     */
+    public function formAction( $id )
+    {   
+        //Récupération de l'entité passée en paramètre
+        $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $id) );
+        
+        return $this->render('HopitalNumeriqueObjetBundle:Contenu:form.html.twig', array(
+            'contenu' => $contenu
+        ));
+    }
+
+    /**
      * Suppresion d'un Contenu.
      *
      * METHOD = POST|DELETE

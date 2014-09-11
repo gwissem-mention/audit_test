@@ -17,6 +17,7 @@
         "@fancybox_css"
         "@validationEngine_css"
         "@jquery_toggles_css"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriqueuser/js/nSelect/style.css'
         'bundles/nodevoadmin/css/jquery.nestable.css'
         'bundles/hopitalnumeriqueobjet/css/style.css'
@@ -36,6 +37,7 @@
         "@jquery_toggles_js"
         "@select2_js"
         "@tinymce_js"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriqueuser/js/nSelect/nSelect.min.js'
         'bundles/hopitalnumeriqueobjet/js/script.js'
         'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
@@ -357,6 +359,44 @@
                                         </ol>
                                     </div>
                                 </fieldset>
+
+<style type="text/css">
+    #infra #sommaire {border-bottom: 1px solid #e6e7e8; padding-bottom: 20px;margin-bottom: 20px;}
+    #edition-infradox.well{margin-bottom: 0;}
+    #edition-infradox .panel-body{border:1px solid #d2d3d6;}
+</style>
+
+<script type="text/javascript">
+$(".form-contenu").each(function(){
+    $(this).hide();
+});
+
+//Selectionne un chapitre et charge l'ensemble des questions liés
+function selectChapitre( id, url )
+{
+    $('#edition-infradox .selectionInfradoc').hide();
+    var loader = $('#edition-infradox').nodevoLoader().start();
+
+    $.ajax({
+        url     : url,
+        type    : 'POST',
+        success : function( data ){
+            $('#edition-infradox .results').html( data );
+            $('#edition-infradox .infradoc').val( id );
+            loader.finished();
+        }
+    });
+
+}
+</script>
+
+                                <div class="well well-lg" id="edition-infradox">
+                                    <span class="selectionInfradoc">Vous devez sélectionner un élément avant de pouvoir l'éditer.</span>
+                                    <div class="results">
+                                    </div>
+                                    <input type="hidden" class="infradoc" value="0" />
+                                </div>
+
                             </div>
 
                             <div class="tab-pane" id="productions">
@@ -406,7 +446,7 @@
     <li class="dd-item dd3-item" data-id="{{contenu.id}}" id="contenu-{{contenu.id}}" >
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
-            <a href="{{path('hopitalnumerique_objet_contenu_edit', {'id': contenu.id })}}" class="fancybox.ajax" >{{contenu.order ~ ' ' ~ contenu.titre}}</a>
+            <a data-url="{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}" href="javascript:selectChapitre({{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}')">{{contenu.order ~ ' ' ~ contenu.titre}}</a>
             <p class="text-muted pull-right">{{contenu.nbVue}} vues - Note référencement : <span>{{contenu.note}}</span> / 400</p>
         </div>
         <div class="dd3-actions">

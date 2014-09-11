@@ -143,6 +143,7 @@ function saveAutomatique()
 function saveContenu()
 {
     idContenu = $('#contenu-id').val();
+    var loader = $('#edition-infradox').nodevoLoader().start();
 
     $.ajax({
         url  : $('#save-contenu-url').val(),
@@ -157,7 +158,7 @@ function saveContenu()
         dataType : 'json',
         success  : function( data ){
             if( data.success ){
-                $.fancybox.close(true);
+                selectChapitre( idContenu, $('#contenu-' + idContenu + ' > .dd3-content a').data('url'));
                 $('#contenu-' + idContenu + ' > .dd3-content a').html( data.titre );
             }else{
                 if(data.alias)
@@ -170,6 +171,7 @@ function saveContenu()
                 else
                     $('.errorTitre .help-block p').html('');
             }
+            loader.finished();
         }
     });
 }
