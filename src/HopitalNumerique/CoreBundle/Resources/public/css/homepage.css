@@ -58,21 +58,15 @@
 #homepage .home-right .creation-compte p{ color :#ffffff; font-size: 13px; text-align: center; }
 #homepage .home-right .creation-compte p a{ color :#ffffff; }
 #homepage .home-right .creation-compte h3{text-align: center; font-size: 20px; font-weight: bold; margin:0 0 5px 0; color: #ffffff; text-transform: uppercase;}
-#homepage .home-right .creation-compte .buttons{margin-top:10px;float:right;}
-#homepage .home-right .creation-compte .buttons .signup{margin-right:10px; float:right;}
-#homepage .home-right .creation-compte .buttons .login{float:right;}
+#homepage .home-right .creation-compte .buttons{margin-top:10px;}
+#homepage .home-right .creation-compte .buttons .signup{margin: 10px auto 0; display: block;float: none;}
+#homepage .home-right .creation-compte .buttons .login{margin: 10px auto 0; display: block;float: none;}
 #homepage .home-right .creation-compte .buttons-tdb{margin-top:10px;}
 #homepage .home-right .creation-compte .buttons-tdb .buttons-centrer{margin:10px auto 0; width: 200px;}
 #homepage .home-right .creation-compte .buttons-tdb .tdb{margin:auto; width: 200px;}
 
-@media screen and (max-width: 1180px) {
-    #homepage .home-right .creation-compte .buttons{margin-top:10px;}
-    #homepage .home-right .creation-compte .buttons .signup{margin-right:0; margin-top:10px;}
-    #homepage .home-right .creation-compte .buttons .login{margin-left:20px;}
-}
 
 @media screen and (max-width: 1009px) {
-    #homepage .home-right .creation-compte .bloc-creation{ height: 295px;}
     #homepage .home-right .forum{ height: 295px;}
 }
 
@@ -92,12 +86,8 @@
     #homepage .home-right .creation-compte p.titre{text-align: center}
     #homepage .home-right .creation-compte ul{padding-left: 0px}
     #homepage .home-right .creation-compte .buttons {margin: 0 auto; float:none; width: 250px;}
-    #homepage .home-right .creation-compte .buttons .buttons-centrer{margin: 0 auto;}
-    #homepage .home-right .creation-compte .buttons .login{margin: 10px 0 0 0;}
-    #homepage .home-right .creation-compte .buttons .signup{margin: 10px 10px 0 0;}
 }
 
 @media screen and (max-width: 600px) {
-    #homepage .home-right .creation-compte .buttons .login{margin: 10px 0 0 250px;}
-    #homepage .home-right .creation-compte .buttons .signup{margin: 10px 0 0 0;}
+    #homepage .home-right .creation-compte .buttons {width: auto;}
 }
