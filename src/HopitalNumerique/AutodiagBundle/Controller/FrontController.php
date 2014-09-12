@@ -228,7 +228,8 @@ class FrontController extends Controller
             'resultat'          => $resultat,
             'chapitres'         => $chapitres,
             'graphiques'        => $graphiques,
-            'back'              => $back
+            'back'              => $back,
+            'processusDonnees'  => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
     }
 
