@@ -76,6 +76,12 @@ hopitalnumerique_objet_contenu_add:
     requirements:
         id: \d+
 
+hopitalnumerique_objet_contenu_form:
+    pattern:  /objet/contenu/form/{id}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:form", id:1}
+    requirements:
+        id: \d+
+
 hopitalnumerique_objet_contenu_edit:
     pattern:  /objet/contenu/edit/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:edit", id:1}
