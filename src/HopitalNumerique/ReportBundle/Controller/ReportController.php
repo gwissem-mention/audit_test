@@ -125,10 +125,11 @@ class ReportController extends Controller
                 $mailsReport = $this->get('hopitalnumerique_report.manager.report')->getMailsReport();
 
                 $options = array(
-                    'rapporteur' => $report->getUser()->getNomPrenom(),
-                    'date'       => $report->getDate()->format('d/m/Y'),
-                    'agentUser'  => $report->getUserAgent(),
-                    'url'        => '<a href="' . $report->getUrl() .'" target="_blank" >' . $report->getUrl() . '</a>'
+                    'rapporteur'   => $report->getUser()->getNomPrenom(),
+                    'date'         => $report->getDate()->format('d/m/Y'),
+                    'agentUser'    => $report->getUserAgent(),
+                    'url'          => '<a href="' . $report->getUrl() .'" target="_blank" >' . $report->getUrl() . '</a>',
+                    'observations' => $report->getObservations()
                 );
 
                 $mailsAEnvoyer = $this->get('nodevo_mail.manager.mail')->sendNouveauRapportDeBugMail($mailsReport, $options);
