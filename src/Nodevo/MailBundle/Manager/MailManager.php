@@ -456,6 +456,41 @@ class MailManager extends BaseManager
     }
 
     /**
+     * [sendInscriptionSession description]
+     *
+     * @param  [type] $users    [description]
+     * @param  [type] $options [description]
+     *
+     * @return Swift_Message
+     */
+    public function sendNouveauRapportDeBugMail( $users, $options)
+    {
+        //Création du lien dans le mail
+        $mail = $this->findOneById(40);
+        
+        //tableau de SwiftMessage a envoyé
+        $mailsToSend = array();
+        
+        foreach ($users as $recepteurMail => $recepteurName)
+        {
+            $options["nomdestinataire"]  = $recepteurName;
+            $options["maildestinataire"] = $recepteurMail;
+            $options["u"]  = $recepteurName;
+            
+            //prepare content
+            $content        = $this->replaceContent($mail->getBody(), NULL , $options);
+            $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), NULL, $options);
+            $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
+            $content        = $this->replaceContent($mail->getBody(), NULL, $options);
+            $from           = array($expediteurMail => $expediteurName );
+            
+            $mailsToSend[] = $this->sendMail( $mail->getObjet(), $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
+        }
+
+        return $mailsToSend;
+    }
+
+    /**
      * Envoi un mail de contact (différent des autres envoie de mail)
      *
      * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)

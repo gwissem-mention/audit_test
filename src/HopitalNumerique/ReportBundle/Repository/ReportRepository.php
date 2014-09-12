@@ -30,7 +30,9 @@ class ReportRepository extends EntityRepository
                      user.prenom as userPrenom,
                      user.email as userMail,
                      rep.observations,
-                     rep.archive')
+                     rep.archive,
+                     rep.url,
+                     rep.userAgent')
             ->from('HopitalNumeriqueReportBundle:Report', 'rep')
             ->innerJoin('rep.user','user');
     

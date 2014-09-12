@@ -517,7 +517,7 @@ class QuestionnaireController extends Controller
                             $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
                             //Récupération de l'adresse mail en parameter.yml
                             $adressesMails = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getMailExpertReponses();
-
+                            
                             if(!is_null($adressesMails))
                             {
                                 $variablesTemplate = array(

@@ -53,30 +53,9 @@ class Report
     /**
      * @var string
      *
-     * @ORM\Column(name="navigateur", type="string", length=255)
-     */
-    protected $navigateur;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="userAgent", type="string", length=255)
      */
     protected $userAgent;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="version", type="string", length=255)
-     */
-    protected $version;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="os", type="string", length=255)
-     */
-    protected $os;
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
@@ -91,6 +70,12 @@ class Report
     */
     protected $archive;
 
+    public function __construct()
+    {
+        $this->date    = new \DateTime();
+        $this->archive = false;
+    }
+
 
     /**
      * Get id
@@ -101,6 +86,8 @@ class Report
     {
         return $this->id;
     }
+
+    
 
     /**
      * Set date
@@ -172,29 +159,6 @@ class Report
     }
 
     /**
-     * Set navigateur
-     *
-     * @param string $navigateur
-     * @return Report
-     */
-    public function setNavigateur($navigateur)
-    {
-        $this->navigateur = $navigateur;
-
-        return $this;
-    }
-
-    /**
-     * Get navigateur
-     *
-     * @return string 
-     */
-    public function getNavigateur()
-    {
-        return $this->navigateur;
-    }
-
-    /**
      * Set userAgent
      *
      * @param string $userAgent
@@ -218,92 +182,48 @@ class Report
     }
 
     /**
-     * Set version
+     * Set archive
      *
-     * @param string $version
+     * @param boolean $archive
      * @return Report
      */
-    public function setVersion($version)
+    public function setArchive($archive)
     {
-        $this->version = $version;
+        $this->archive = $archive;
 
         return $this;
     }
 
     /**
-     * Get version
+     * Get archive
      *
-     * @return string 
+     * @return boolean 
      */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set os
-     *
-     * @param string $os
-     * @return Report
-     */
-    public function setOs($os)
-    {
-        $this->os = $os;
-
-        return $this;
-    }
-
-    /**
-     * Get os
-     *
-     * @return string 
-     */
-    public function getOs()
-    {
-        return $this->os;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \HopitalNumerique\UserBundle\Entity\User $user
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-    
-    /**
-     * Set user
-     *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user
-     */
-    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
-    {
-        $this->user = $user;
-        return $this;
-    }
-
-    /**
-    * Get archive
-    *
-    * @return boolean
-    */
     public function getArchive()
     {
         return $this->archive;
     }
 
     /**
-    * Set Archive
-    * 
-    * @param boolean $archive
-    * @return Report
-    */    
-    public function setArchive($archive)
+     * Set user
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @return Report
+     */
+    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
     {
-        $this->archive = $archive;
+        $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
