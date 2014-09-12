@@ -108,6 +108,36 @@
                 <div class="page-break"></div>
             {% endif %}
             
+            {# Affichage de la restitution par processus #}
+            {% if processusDonnees is defined %}
+                <div id="process_bloc">
+                    <h3>{{ resultat.outil.processChartLabel }}</h3>
+                    {% for process in processusDonnees %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{ process.libelle }}</h3>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    {% for chapitre in process.chapitres %}
+                                        <div class="col-md-4">
+                                            <h4 class="text-center">{{ chapitre.titre }}</h4>
+                                            <div class="chapitres">
+                                                {% for chapitreEnfant in chapitre.enfants %}
+                                                    <div class="resultat{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} {% if chapitreEnfant.moyenne > 66 %} resultat_fort{% elseif chapitreEnfant.moyenne > 33 %}resultat_moyen{% else %}resultat_faible{% endif %}{% endif %}">{{ chapitreEnfant.titre }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
             {# Affichage du graphique spider #}
             {% if graphiques['radar'] is defined %}
                 {% set chart = graphiques['radar'] %}

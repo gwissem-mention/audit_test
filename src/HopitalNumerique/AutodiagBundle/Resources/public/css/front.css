@@ -94,6 +94,19 @@
         #resultats #graphiques .table .vertical-align{vertical-align: middle}
         #resultats #graphiques .table .reverse{cursor:pointer;}
         
+    /* Process */
+    #resultats #process_bloc {}
+        .panel {}
+            .panel .panel-heading { margin:20px 0px 0px 0px; }
+                #resultats #process_bloc h4 { font-size:15px;font-weight:bold;height:33px;line-height:16px;overflow:hidden; }
+            .panel .panel-body { margin:20px 0px 0px 0px; }
+                .panel .panel-body .col-md-4:nth-child(3n+1) { clear:both; }
+                    #resultats #process_bloc .chapitres { font-size:13px;margin:6px 0px;padding:6px 0px;text-align:center; }
+                        #resultats #process_bloc .chapitres div.resultat { background-color:#eee;margin:8px 0px;padding:8px 0px; }
+                        #resultats #process_bloc .chapitres div.resultat_faible { background-color:#f2dede; }
+                        #resultats #process_bloc .chapitres div.resultat_moyen { background-color:#fcf8e3; }
+                        #resultats #process_bloc .chapitres div.resultat_fort { background-color:#dff0d8; }
+        
     /* Réponses */
         #resultats #reponses h3{ text-transform: uppercase;}
         #resultats #reponses h3.prev{font-size: 24px; color:#de0d4d;}

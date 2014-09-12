@@ -373,7 +373,7 @@ class ResultatManager extends BaseManager
      *
      * @return array
      */
-    private function buildDatasAxeChapitre( $chapitres )
+    public function buildDatasAxeChapitre( $chapitres )
     {
         $datas = array();
 
@@ -484,7 +484,7 @@ class ResultatManager extends BaseManager
      *
      * @return double
      */
-    private function calculMoyenneChapitre( $chapitre )
+    public function calculMoyenneChapitre( $chapitre )
     {
         $sommeValues       = 0;
         $sommePonderations = 0;
@@ -524,7 +524,7 @@ class ResultatManager extends BaseManager
      *
      * @return array
      */
-    private function buildQuestions( $questions, $chapitre, $questionsReponses, $questionsReponsesBack )
+    public function buildQuestions( $questions, $chapitre, $questionsReponses, $questionsReponsesBack )
     {
         $results             = array();
         $forBack             = array();
@@ -576,7 +576,7 @@ class ResultatManager extends BaseManager
      *
      * @return array
      */
-    private function buildQuestionsReponses( $reponses )
+    public function buildQuestionsReponses( $reponses )
     {
         $results        = array();
         $resultsForBack = array();

@@ -141,6 +141,15 @@ class Chapitre
      * )
      */
     private $processChapitres;
+    
+    /**
+     * @var float Moyenne des résultats
+     */
+    private $resultatsMoyenne;
+    /**
+     * @var int Nombre de questions qui ont été répondues
+     */
+    private $nombreQuestionsRepondues;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -427,6 +436,48 @@ class Chapitre
     {        
         $this->references = $references;
     
+        return $this;
+    }
+
+    /**
+     * Get resultatsMoyenne
+     *
+     * @return string $resultatsMoyenne
+     */
+    public function getResultatsMoyenne()
+    {
+        return $this->resultatsMoyenne;
+    }
+    
+    /**
+     * Set resultatsMoyenne
+     *
+     * @param string $resultatsMoyenne
+     */
+    public function setResultatsMoyenne($resultatsMoyenne)
+    {
+        $this->resultatsMoyenne = $resultatsMoyenne;
+        return $this;
+    }
+    
+    /**
+     * Get nombreQuestionsRepondues
+     *
+     * @return string $nombreQuestionsRepondues
+     */
+    public function getNombreQuestionsRepondues()
+    {
+        return $this->nombreQuestionsRepondues;
+    }
+    
+    /**
+     * Set nombreQuestionsRepondues
+     *
+     * @param string $nombreQuestionsRepondues
+     */
+    public function setNombreQuestionsRepondues($nombreQuestionsRepondues)
+    {
+        $this->nombreQuestionsRepondues = $nombreQuestionsRepondues;
         return $this;
     }
 }

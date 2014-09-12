@@ -5,6 +5,8 @@ namespace HopitalNumerique\AutodiagBundle\Manager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use HopitalNumerique\AutodiagBundle\Entity\Resultat;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Manager de l'entité Chapitre.
@@ -13,7 +15,26 @@ class ChapitreManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Chapitre';
     private $_refPonderees;
+    
+    /**
+     * @var \HopitalNumerique\AutodiagBundle\Manager\ResultatManager Le manager de l'entité Resultat
+     */
+    private $resultatManager;
 
+    /**
+     * Constructeur du manager gérant les chapitres d'outil.
+     *
+     * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
+     * @param \HopitalNumerique\AutodiagBundle\Manager\ResultatManager $resultatManager Le manager de l'entité Resultat
+     * @return void
+     */
+    public function __construct(EntityManager $entityManager, ResultatManager $resultatManager)
+    {
+        parent::__construct($entityManager);
+        $this->resultatManager = $resultatManager;
+    }
+
+    
     /**
      * Compte le nombre de chapitres lié à loutil
      *
@@ -160,9 +181,70 @@ class ChapitreManager extends BaseManager
         return $parents;
     }
 
+    /**
+     * Initialise la moyenne des résultats pour chaque chapitres.
+     * 
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Resultat $resultat Résultat des chapitres
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Chapitre[] $chapitres Chapitres dont il faut initialiser la moyenne
+     * @return \HopitalNumerique\AutodiagBundle\Entity\Chapitre[] Les mêmes chapitres avec les moyennes des résultats
+     */
+    public function setResultatsMoyennes(Resultat $resultat, array $chapitres)
+    {
+        $chapitresStdClasses = $this->formateChapitresStdclassesForResultatsMoyennes($resultat, $chapitres);
 
+        $graphiques = $this->resultatManager->buildDatasAxeChapitre($chapitresStdClasses);
+        foreach ($chapitresStdClasses as $chapitreStdClasse)
+        {
+            foreach ($chapitres as $chapitre)
+            {
+                if ($chapitre->getId() == $chapitreStdClasse->id)
+                {
+                    $chapitre->setResultatsMoyenne($this->resultatManager->calculMoyenneChapitre($chapitreStdClasse));
+                    $chapitre->setNombreQuestionsRepondues($chapitreStdClasse->nbQuestionsRemplies);
+                }
+            }
+        }
+        
+        return $chapitres;
+    }
 
+    /**
+     * 
+     * 
+     * @param Resultat $resultat
+     * @param array $chapitres
+     * @return multitype:unknown
+     */
+    private function formateChapitresStdclassesForResultatsMoyennes(Resultat $resultat, array $chapitres)
+    {
+        //build reponses array
+        $tab                   = $this->resultatManager->buildQuestionsReponses( $resultat->getReponses() );
+        $questionsReponses     = $tab['front'];
+        $questionsReponsesBack = $tab['back'];
+        
+        $chapitresStdclasses = array();
 
+        foreach($chapitres as $one) {
+            $chapitre = new \StdClass;
+        
+            //build chapitre values
+            $chapitre->id       = $one->getId();
+            $chapitre->synthese = $one->getSynthese();
+            $chapitre->title    = $one->getCode() != '' ? $one->getCode() . '. ' . $one->getTitle() : $one->getTitle();
+            $chapitre->childs   = array();
+            $chapitre->noteMin  = $one->getNoteMinimale();
+            $chapitre->noteOpt  = $one->getNoteOptimale();
+            $chapitre->intro    = $one->getIntro();
+            $chapitre->desc     = $one->getDesc();
+            $chapitre->order    = $one->getOrder();
+            $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
+        
+            //handle questions/reponses
+            $chapitresStdclasses[] = $this->resultatManager->buildQuestions( $one->getQuestions(), $chapitre, $questionsReponses, $questionsReponsesBack );
+        }
+
+        return $chapitresStdclasses;
+    }
 
 
 
