@@ -109,7 +109,7 @@
             {% endif %}
             
             {# Affichage de la restitution par processus #}
-            {% if processusDonnees is defined %}
+            {% if processusDonnees is defined and processusDonnees|length > 0 %}
                 <div id="process_bloc">
                     <h3>{{ resultat.outil.processChartLabel }}</h3>
                     {% for process in processusDonnees %}
@@ -137,6 +137,7 @@
                         <div class="clearfix"></div>
                     {% endfor %}
                 </div>
+                <div class="page-break"></div>
             {% endif %}
             
             {# Affichage du graphique spider #}
