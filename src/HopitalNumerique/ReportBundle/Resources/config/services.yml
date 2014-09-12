@@ -1,6 +1,7 @@
 parameters:
-    #Options
-    hopital_numerique_report.options:parameters:
+    #Permet d'avoir une valeur par défaut et/ou d'etre surchargé par le config.yml de app/config
+    hopital_numerique_report.options: ~
+
     hopitalnumerique_report.manager.report.class: HopitalNumerique\ReportBundle\Manager\ReportManager
     hopitalnumerique_report.grid.report.class: HopitalNumerique\ReportBundle\Grid\ReportGrid
     hopitalnumerique_report.form.report.class: HopitalNumerique\ReportBundle\Form\ReportType
@@ -8,7 +9,7 @@ parameters:
 services:
     hopitalnumerique_report.manager.report:
         class: %hopitalnumerique_report.manager.report.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "%hopital_numerique_report.options%"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 

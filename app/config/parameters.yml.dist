@@ -42,5 +42,9 @@ parameters:
         gmelchilsen@nodevo.com: Gaëtan M.
         tdauriac@nodevo.com: Thomas D.
 
+    #HopitalNumerique_Reporting
+    confighn_hopitalnumerique_report:
+        gmelchilsen@nodevo.com: Gaëtan
+
     #Extensions autorisées dans le gestionnaire de media
     nodevo_gestionnaire_media.moxie_manager.extensions_autorisees: jpg,jpeg,png,gif,html,htm,txt,docx,doc,zip,pdf,xls,xlsx,ppt,pptx

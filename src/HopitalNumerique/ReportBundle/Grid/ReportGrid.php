@@ -33,6 +33,7 @@ class ReportGrid extends Grid implements GridInterface
         $this->addColonne( new Column\TextColumn('nomPrenom', 'Nom / prénom') );   
         $this->addColonne( new Column\TextColumn('userMail', 'Mail rapporteur') );   
         $this->addColonne( new Column\TextColumn('url', 'Url') );
+        $this->addColonne( new Column\TextColumn('userAgent', 'User Agent') );
         $this->addColonne( new Column\TextColumn('observations', 'Observations') );
 
         $userIdColumn = new Column\TextColumn('userId', 'userId');
