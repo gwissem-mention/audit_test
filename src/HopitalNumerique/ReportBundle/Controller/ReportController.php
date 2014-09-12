@@ -119,7 +119,7 @@ class ReportController extends Controller
                 $this->get('hopitalnumerique_report.manager.report')->save($report);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( 'success' , 'Bug signalé.' );
+                $this->get('session')->getFlashBag()->add( 'success' , 'Votre anomalie à bien été rapportée, notre équipe reviendra vers vous dans les plus brefs délais.' );
 
                 //Récupération des destinataires dans le fichier de config
                 $mailsReport = $this->get('hopitalnumerique_report.manager.report')->getMailsReport();
