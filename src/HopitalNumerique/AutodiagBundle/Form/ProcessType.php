@@ -72,7 +72,7 @@ class ProcessType extends AbstractType
                 'attr' => array('class' => $this->_constraints['libelle']['class'])
             ))
             ->add('chapitres', 'entity', array(
-                'choices'  => $this->chapitreManager->findBy(array('parent' => null, 'outil' => $this->outil)),
+                'choices'  => $this->chapitreManager->findBy(array('parent' => null, 'outil' => $this->outil), array('order' => 'ASC')),
                 'class'    => 'HopitalNumerique\AutodiagBundle\Entity\Chapitre',
                 'property' => 'title',
                 'multiple' => true,
