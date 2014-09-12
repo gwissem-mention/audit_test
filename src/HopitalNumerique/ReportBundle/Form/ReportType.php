@@ -38,6 +38,7 @@ class ReportType extends AbstractType
                             'rows'       => 10,
                             )
             ))
+            ->add('userAgent', 'hidden', array())
             
         ;
     }

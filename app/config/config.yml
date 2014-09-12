@@ -168,6 +168,10 @@ hopital_numerique_contact:
     options:
         mailsContact: %confighn_hopitalnumerique_contact%
 
+hopital_numerique_report:
+    options:
+        mailsReport: %confighn_hopitalnumerique_report%
+
 #html to Pdf
 knp_snappy:
     pdf:

@@ -12,6 +12,44 @@ class ReportManager extends BaseManager
     protected $_class = 'HopitalNumerique\ReportBundle\Entity\Report';
 
     /**
+     * Adresses mails en Copie Caché de l'anap
+     * @var array() Tableau clé: Nom affiché => valeur : Adresse mail
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    protected $_mailsReport;
+    
+    /**
+     * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails
+     *
+     * @param EntityManager $em Entity      Manager de Doctrine
+     * @param Array         $options        Tableau d'options
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function __construct($em, $options = array())
+    {
+        parent::__construct($em);
+        
+        $this->_mailsReport = isset($options['mailsReport']) ? $options['mailsReport'] : array();
+    }
+    
+    /**
+     * Renvoie la liste des mails dans le config.yml
+     * 
+     * @return array(string)
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function getMailsReport()
+    {
+        return $this->_mailsReport;
+    }
+
+    /**
      * Override : Récupère les données pour le grid sous forme de tableau
      *
      * @return array
