@@ -292,6 +292,10 @@ class ResultatManager extends BaseManager
             $results->categories[ $categorieId ]['title']     = $categorie->getTitle();
             $results->categories[ $categorieId ]['chapitres'] = array();
 
+            foreach($chapitresOrdered as $chapitre)
+                $results->categories[ $categorieId ]['chapitres'][$chapitre->id] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true );
+            
+
             //get questions by catégorie
             $questions = $categorie->getQuestions();
             foreach($questions as $question)
@@ -331,10 +335,10 @@ class ResultatManager extends BaseManager
                         $totalChapitres[ $chapitre ]['pond']     += $one->ponderation;
                         $totalChapitres[ $chapitre ]['nc']        = false;
                     }
-                }                
+                }
             }
         }
-
+        
         //build Total chapitre
         $results->totauxChapitres = $totalChapitres;
 
