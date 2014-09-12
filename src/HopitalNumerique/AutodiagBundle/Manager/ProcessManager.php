@@ -81,7 +81,7 @@ class ProcessManager extends BaseManager
                     $donneesProcessChapitresEnfants[] = array
                     (
                         'titre' => $chapitreEnfant->getTitle(),
-                        'moyenne' => $chapitreEnfant->getResultatsMoyenne(),
+                        'moyenne' => ceil($chapitreEnfant->getResultatsMoyenne()),
                         'nombreQuestionsRepondues' => $chapitreEnfant->getNombreQuestionsRepondues()
                     );
                 }

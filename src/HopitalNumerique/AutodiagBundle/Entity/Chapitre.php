@@ -480,4 +480,15 @@ class Chapitre
         $this->nombreQuestionsRepondues = $nombreQuestionsRepondues;
         return $this;
     }
+
+    
+    /**
+     * Retourne le nom du chapitre pour l'affichage.
+     * 
+     * @return string Nom du chapitre
+     */
+    public function getNomAffichage()
+    {
+        return ($this->code != null ? $this->code.'. ' : '').$this->title;
+    }
 }

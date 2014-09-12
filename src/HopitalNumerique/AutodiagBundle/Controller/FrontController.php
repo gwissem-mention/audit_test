@@ -406,7 +406,8 @@ class FrontController extends Controller
         $html = $this->renderView( 'HopitalNumeriqueAutodiagBundle:Front:pdf.html.twig' , array(
             'resultat'   => $resultat,
             'chapitres'  => $chapitres,
-            'graphiques' => $graphiques
+            'graphiques' => $graphiques,
+            'processusDonnees'  => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
 
         $options = array(

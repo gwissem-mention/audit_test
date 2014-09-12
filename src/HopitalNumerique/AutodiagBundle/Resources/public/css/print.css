@@ -17,6 +17,12 @@ img{ width:auto !important }
 #resultats #graphiques .panel .panel-heading{display: none}
 #resultats #graphiques .tableContainer{overflow:visible;}
 
+/* <-- Process */
+#resultats #process_bloc {}
+    #resultats #process_bloc .panel-default { height:auto; }
+        #resultats #process_bloc .panel .panel-heading { display:block; }
+/* --> */
+
 #reponses h3{text-transform: uppercase;}
 #reponses h4{margin-bottom: 20px; font-size: 18px;}
 #reponses .icon{ margin: 0 0 0 30px; }

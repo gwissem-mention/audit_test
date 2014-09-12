@@ -125,11 +125,12 @@
                                             <h4 class="text-center">{{ chapitre.titre }}</h4>
                                             <div class="chapitres">
                                                 {% for chapitreEnfant in chapitre.enfants %}
-                                                    <div class="resultat{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} {% if chapitreEnfant.moyenne > 66 %} resultat_fort{% elseif chapitreEnfant.moyenne > 33 %}resultat_moyen{% else %}resultat_faible{% endif %}{% endif %}">{{ chapitreEnfant.titre }}</div>
+                                                    <div class="resultat{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} {% if chapitreEnfant.moyenne > 66 %} resultat_fort{% elseif chapitreEnfant.moyenne > 33 %}resultat_moyen{% else %}resultat_faible{% endif %}{% endif %}"{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} title="Score : {{ chapitreEnfant.moyenne }}%"{% endif %}>{{ chapitreEnfant.titre }}</div>
                                                 {% endfor %}
                                             </div>
                                         </div>
                                     {% endfor %}
+                                    <div class="clearfix"></div>
                                 </div>
                             </div>
                         </div>

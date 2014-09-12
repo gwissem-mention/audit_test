@@ -24,7 +24,7 @@ $(document).ready(function() {
     });
 
     /* Cursor Tooltip*/
-    $('.cursor').qtip({ 
+    $('.cursor, .resultat').qtip({
         style : 'qtip-bootstrap'
     });
 
