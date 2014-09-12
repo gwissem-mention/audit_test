@@ -18,10 +18,6 @@ class StatClicManager extends BaseManager
      */
     public function getNbNoteByReponse( $dateDebut, $dateFin )
     {
-        // echo '<pre>';
-        // \Doctrine\Common\Util\Debug::dump($this->getRepository()->getNbNoteByReponse( $dateDebut, $dateFin )->getQuery()->getSQL());
-        // die();
-
         $statClics = $this->getRepository()->getNbNoteByReponse( $dateDebut, $dateFin )->getQuery()->getResult();
 
         foreach ($statClics as $key => $statClic) 

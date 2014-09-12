@@ -20,7 +20,7 @@ hopitalnumerique_report_archiver:
         _method: GET|POST
 
 hopitalnumerique_report_homepage:
-    pattern:  /signalement
+    pattern:  /signalement/{url}
     defaults: { _controller: "HopitalNumeriqueReportBundle:Report:signaler"}
 
 
