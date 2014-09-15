@@ -21,6 +21,7 @@ class ReportGrid extends Grid implements GridInterface
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('Aucun signalement de bug à afficher.');
         $this->setDefaultOrder('date', 'ASC');
+        $this->setDefaultFilters( array('archive' => false) );
     }
 
     /**

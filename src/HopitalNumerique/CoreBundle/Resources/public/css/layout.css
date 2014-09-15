@@ -46,7 +46,7 @@ h3{font-size: 20px}
     #footer .menu-footer li{display: inline-block; text-align: center;}
     #footer .menu-footer li a{color:#5d5d5d; display: block; padding:0 6px; text-transform: uppercase; border-right: 1px solid #5d5d5d}
     #footer .menu-footer li.last a{border :0;}
-    #footer .reporting{width: auto; position: absolute; top: 24px; right: 20px;cursor: pointer; text-transform: uppercase;}
+    #footer .reporting{width:265px;cursor: pointer; text-transform: uppercase;margin:10px auto;display:block}
 
 /* MENU */
     #menu{ margin:15px auto 0; list-style: none; padding:0; }

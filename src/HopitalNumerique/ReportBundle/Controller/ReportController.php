@@ -56,7 +56,7 @@ class ReportController extends Controller
         //Suppression de l'entité
         $this->get('hopitalnumerique_report.manager.report')->save( $report );
 
-        $this->get('session')->getFlashBag()->add('info', 'Le signalement de bug ' . ($report->getArchive() ? ' est archivé.' : 'n\'est plus archivé.'));
+        $this->get('session')->getFlashBag()->add('info', 'L\'anomalie ' . ($report->getArchive() ? ' est archivé.' : 'n\'est plus archivé.'));
 
         return $this->redirect( $this->generateUrl('hopitalnumerique_report_admin_report') );
     }
@@ -124,7 +124,7 @@ class ReportController extends Controller
                 $this->get('hopitalnumerique_report.manager.report')->save($report);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( 'success' , 'Bug signalé.' );
+                $this->get('session')->getFlashBag()->add( 'success' , 'Votre anomalie à bien été rapportée, notre équipe reviendra vers vous dans les plus brefs délais.' );
 
                 //Récupération des destinataires dans le fichier de config
                 $mailsReport = $this->get('hopitalnumerique_report.manager.report')->getMailsReport();
