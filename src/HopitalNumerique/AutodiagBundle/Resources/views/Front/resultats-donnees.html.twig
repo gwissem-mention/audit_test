@@ -402,6 +402,10 @@
 
             <h2 class="violet open" data-toggle="reponses" >Résultats de l'outil - Réponses</h2>
 
+            {% if resultat.remarque is defined %}
+                <p class="text-muted"><em>{{ resultat.remarque|raw|nl2br }}</em></p>
+            {% endif %}
+            
             <div id="reponses">
                 {% for chapitre in chapitres %}
                     <div class="chapitre-{{chapitre.id}}">
@@ -482,7 +486,7 @@
                     {% for option in options %}
                         {% set tab = option|split(';') %}
                         {% if tab[0] == question.initialValue %}
-                            <span><b>{{tab[1]|trim}}</b></span><br />
+                            <span><b>{{tab[1]|trim}}</b></span> &nbsp; <em class="text-muted">{{question.remarque}}</em><br />
                         {% else %}
                             <span>{{tab[1]|trim}}</span><br />
                         {% endif %}
@@ -499,9 +503,6 @@
                         {% endif %}
                     </div>
                 {% endif %}
-                <p class="text-muted">
-                    <em>{{question.remarque}}</em>
-                </p>
             </div>
         </div>
     {% endfor %}
