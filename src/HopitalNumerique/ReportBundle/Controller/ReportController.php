@@ -56,7 +56,7 @@ class ReportController extends Controller
         //Suppression de l'entité
         $this->get('hopitalnumerique_report.manager.report')->save( $report );
 
-        $this->get('session')->getFlashBag()->add('info', 'Le signalement de bug ' . ($report->getArchive() ? ' est archivé.' : 'n\'est plus archivé.'));
+        $this->get('session')->getFlashBag()->add('info', 'L\'anomalie ' . ($report->getArchive() ? ' est archivé.' : 'n\'est plus archivé.'));
 
         return $this->redirect( $this->generateUrl('hopitalnumerique_report_admin_report') );
     }
