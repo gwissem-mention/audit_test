@@ -71,14 +71,19 @@ class ReportController extends Controller
     */
     public function signalerAction($url)
     {
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if("anon." == $user)
+        {
+            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous devez vous connecter pour avoir accès au signalement de bug.');
+            return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+        }
         //Récupération de l'entité passée en paramètre
         $report = $this->get('hopital_numerique_report.manager.report')->createEmpty();
 
         $url = base64_decode($url);
         //Récupération de l'url
         $report->setUrl($url);
-
-        $user = $this->get('security.context')->getToken()->getUser();
         $report->setUser($user);
         
         $formName         = 'hopitalnumerique_reportbundle_report';
