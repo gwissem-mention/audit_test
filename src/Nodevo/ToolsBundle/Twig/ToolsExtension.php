@@ -13,7 +13,8 @@ class ToolsExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'minifieMoi' => new \Twig_Filter_Method($this, 'minifie')
+            'minifieMoi'   => new \Twig_Filter_Method($this, 'minifie'),
+            'base64Nodevo' => new \Twig_Filter_Method($this, 'base64Nodevo')
         );
     }
 
@@ -32,6 +33,10 @@ class ToolsExtension extends \Twig_Extension
         $nomMinifier = $tool->minifie($caractereSeparateur, $toutEnMinuscule);
 
         return $nomMinifier;
+    }
+    public function base64Nodevo( $string )
+    {
+        return base64_encode($string);
     }
 
     /**

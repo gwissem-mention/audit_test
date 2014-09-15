@@ -21,6 +21,7 @@ class ReportGrid extends Grid implements GridInterface
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('Aucun signalement de bug à afficher.');
         $this->setDefaultOrder('date', 'ASC');
+        $this->setDefaultFilters( array('archive' => false) );
     }
 
     /**
@@ -33,6 +34,7 @@ class ReportGrid extends Grid implements GridInterface
         $this->addColonne( new Column\TextColumn('nomPrenom', 'Nom / prénom') );   
         $this->addColonne( new Column\TextColumn('userMail', 'Mail rapporteur') );   
         $this->addColonne( new Column\TextColumn('url', 'Url') );
+        $this->addColonne( new Column\TextColumn('userAgent', 'User Agent') );
         $this->addColonne( new Column\TextColumn('observations', 'Observations') );
 
         $userIdColumn = new Column\TextColumn('userId', 'userId');

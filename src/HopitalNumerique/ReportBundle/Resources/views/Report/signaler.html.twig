@@ -28,11 +28,11 @@
 {% block body %}
     <div class="col-md-10 col-md-offset-1" id="inscription">
         <div id="report_form">  
-            <h3>Signalement de bug</h3>
+            <h3>Signaler une anomalie</h3>
                 {# Création du formulaire #}
                 {% form_theme form 'HopitalNumeriqueUserBundle:User/Theme:theme.inscription.html.twig' %}
 	            {{ form_javascript(form) }}
-		        {{ form_start(form, { 'action': path('hopitalnumerique_report_homepage') }) }}
+		        {{ form_start(form) }}
 		        
                     <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
                     <div class="background-rose"></div>
@@ -43,11 +43,17 @@
 					<div class="clearfix"></div>
                     <div class="form-group">
 				        <div class="col-md-10 col-md-offset-2">
-				            <input onclick="$('form').submit();" class="btn btn-success col-md-2 pull-right submit" value="{{ 'signaler'|upper }}" type="button"/>
+                            <input onclick="$('form').submit();" class="btn btn-success col-md-2 pull-right submit" value="{{ 'signaler'|upper }}" type="button"/>
 				        </div>
 			        </div>
 		        {{ form_end(form) }}
         </div>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#hopitalnumerique_reportbundle_report_userAgent").val(navigator.userAgent);
+            });
+        </script>
     
 	   <div id ="footerDesc">
 			<p>

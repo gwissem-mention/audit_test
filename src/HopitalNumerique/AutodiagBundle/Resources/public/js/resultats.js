@@ -167,6 +167,9 @@ var copyStyle = function(source, dest)
 
 var reverse_table = function(thetable)
 {
+    if (thetable == undefined)
+        return;
+    
     var rtable = thetable.cloneNode(false);
     var rtable_body = rtable.appendChild(document.createElement("tbody"));
     

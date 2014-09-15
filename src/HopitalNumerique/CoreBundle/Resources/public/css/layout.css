@@ -41,11 +41,12 @@ h3{font-size: 20px}
     #header p.violet{width:93px;font-size: 9px; font-weight: 600; margin-top: 30px;line-height: 12px}
 
 /* FOOTER */
-    #footer{background:#f6f6f6; width: 100%; height: auto; padding:24px;}
+    #footer{background:#f6f6f6; width: 100%; height: auto; padding:24px;position: relative;}
     #footer .menu-footer{ width:100%; margin:0 auto; list-style: none; padding:0; display: inline-block; text-align: center;}
     #footer .menu-footer li{display: inline-block; text-align: center;}
     #footer .menu-footer li a{color:#5d5d5d; display: block; padding:0 6px; text-transform: uppercase; border-right: 1px solid #5d5d5d}
     #footer .menu-footer li.last a{border :0;}
+    #footer .reporting{width:265px;cursor: pointer; text-transform: uppercase;margin:10px auto;display:block}
 
 /* MENU */
     #menu{ margin:15px auto 0; list-style: none; padding:0; }

@@ -11,6 +11,11 @@
 {% block javascripts %}
     {{ parent() }}
     {{ block('grid_javascripts')}}
+    <script type="text/javascript">
+    $(document).ready(function() {
+       $( ".options a" ).click();
+    });
+    </script>
 {% endblock %}
 
 {% block h1Title %}

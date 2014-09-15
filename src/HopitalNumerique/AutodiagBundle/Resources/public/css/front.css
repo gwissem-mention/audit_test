@@ -99,7 +99,7 @@
         #resultats #process_bloc .panel {}
             #resultats #process_bloc .panel .panel-heading { margin:20px 0px 0px 0px; }
                 #resultats #process_bloc h4 { font-size:15px;font-weight:bold;height:33px;line-height:16px;overflow:hidden; }
-            #resultats #process_bloc .panel .panel-body { height:auto;margin:20px 0px 0px 0px; }
+            #resultats #process_bloc .panel .panel-body { height:auto;margin:0}
                 #resultats #process_bloc .panel .panel-body .col-md-4:nth-child(3n+1) { clear:both; }
                     #resultats #process_bloc .chapitres { font-size:13px;margin:6px 0px;padding:6px 0px;text-align:center; }
                         #resultats #process_bloc .chapitres div.resultat { background-color:#eee;margin:8px 0px;padding:8px 0px; }
