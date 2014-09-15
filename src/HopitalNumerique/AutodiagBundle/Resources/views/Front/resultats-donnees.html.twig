@@ -402,36 +402,40 @@
 
             <h2 class="violet open" data-toggle="reponses" >Résultats de l'outil - Réponses</h2>
 
-            {% if resultat.remarque is defined %}
-                <p class="text-muted"><em>{{ resultat.remarque|raw|nl2br }}</em></p>
-            {% endif %}
-            
             <div id="reponses">
+                {% if resultat.remarque is defined %}
+                    <p class="text-muted"><em>{{ resultat.remarque|raw|nl2br }}</em></p>
+                {% endif %}
+            
                 {% for chapitre in chapitres %}
-                    <div class="chapitre-{{chapitre.id}}">
-                        <h3 class="prev">{{chapitre.intro}}</h3>
-                        <h3 class="violet">{{chapitre.title}}</h3>
-                        <p class="text-muted level1">{{chapitre.desc}}</p>
-                        
-                        <hr>
-
-                        {% if chapitre.questionsBack|length > 0 %}
-                            {{ mySelf.buildQuestionReponse(chapitre.questionsBack) }}
-                        {% endif %}
-                        
-                        {% if chapitre.childs|length > 0 %}
-                            <div class="row sous-chapitre col-md-12">
-                                {% for child in chapitre.childs %}
-                                    <h4 class="prev">{{child.intro}}</h4>
-                                    <h4 class="violet">{{child.title}}</h4>
-                                    <p class="text-muted level1">{{child.desc}}</p>
-                                    
-                                    {{ mySelf.buildQuestionReponse(child.questionsBack) }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="clearfix"></div>
+                    {% if chapitre.nbQuestionsRemplies > 0 %}
+                        <div class="chapitre-{{chapitre.id}}">
+                            <h3 class="prev">{{chapitre.intro}}</h3>
+                            <h3 class="violet">{{chapitre.title}}</h3>
+                            <p class="text-muted level1">{{chapitre.desc}}</p>
+                            
+                            <hr>
+    
+                            {% if chapitre.questionsBack|length > 0 %}
+                                {{ mySelf.buildQuestionReponse(chapitre.questionsBack) }}
+                            {% endif %}
+                            
+                            {% if chapitre.childs|length > 0 %}
+                                <div class="row sous-chapitre col-md-12">
+                                    {% for child in chapitre.childs %}
+                                        {% if child.nbQuestionsRemplies > 0 %}
+                                            <h4 class="prev">{{child.intro}}</h4>
+                                            <h4 class="violet">{{child.title}}</h4>
+                                            <p class="text-muted level1">{{child.desc}}</p>
+                                            
+                                            {{ mySelf.buildQuestionReponse(child.questionsBack) }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="clearfix"></div>
+                    {% endif %}
                 {% endfor %}
             </div>
         {% endif %}
@@ -466,44 +470,46 @@
 
 {% macro buildQuestionReponse(questions) %}
     {% for question in questions %}
-        <div class="clearfix">
-            <p class="text-muted">{{question.intro}}</p>
-            <div>
-                <p>
-                    {{question.question}} : 
-                </p>
-            </div>
-            
-            <div>
-                {% set options = question.options %}
-                <p class="pull-left">
-                    {% if question.initialValue != -1 %}
-                        <span>Non concerné</span><br />
-                    {% else %}
-                        <span><b>Non concerné</b></span><br />
+        {% if question.initialValue != '' and question.initialValue != -1 %}
+            <div class="clearfix">
+                <p class="text-muted">{{question.intro}}</p>
+                <div>
+                    <p>
+                        {{question.question}} : 
+                    </p>
+                </div>
+                
+                <div>
+                    {% set options = question.options %}
+                    <p class="pull-left">
+                        {% if question.initialValue != -1 %}
+                            <span>Non concerné</span><br />
+                        {% else %}
+                            <span><b>Non concerné</b></span><br />
+                        {% endif %}
+                        
+                        {% for option in options %}
+                            {% set tab = option|split(';') %}
+                            {% if tab[0] == question.initialValue %}
+                                <span><b>{{tab[1]|trim}}</b></span> &nbsp; <em class="text-muted">{{question.remarque}}</em><br />
+                            {% else %}
+                                <span>{{tab[1]|trim}}</span><br />
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
+                        <div class="icon pull-right">
+                            {% if question.min == question.initialValue %}
+                                <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bad.jpg')}}" class="pull-right" alt="bad" />
+                            {% elseif question.max == question.initialValue %}
+                                <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/good.jpg')}}" class="pull-right" alt="good" />
+                            {% else %}
+                                <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bof.jpg')}}" class="pull-right" alt="bof" />
+                            {% endif %}
+                        </div>
                     {% endif %}
-                    
-                    {% for option in options %}
-                        {% set tab = option|split(';') %}
-                        {% if tab[0] == question.initialValue %}
-                            <span><b>{{tab[1]|trim}}</b></span> &nbsp; <em class="text-muted">{{question.remarque}}</em><br />
-                        {% else %}
-                            <span>{{tab[1]|trim}}</span><br />
-                        {% endif %}
-                    {% endfor %}
-                </p>
-                {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
-                    <div class="icon pull-right">
-                        {% if question.min == question.initialValue %}
-                            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bad.jpg')}}" class="pull-right" alt="bad" />
-                        {% elseif question.max == question.initialValue %}
-                            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/good.jpg')}}" class="pull-right" alt="good" />
-                        {% else %}
-                            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bof.jpg')}}" class="pull-right" alt="bof" />
-                        {% endif %}
-                    </div>
-                {% endif %}
+                </div>
             </div>
-        </div>
+        {% endif %}
     {% endfor %}
 {% endmacro %}

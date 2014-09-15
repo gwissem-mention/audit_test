@@ -68,7 +68,8 @@ class ResultatManager extends BaseManager
         //preorder chapters
         $chapitres = $this->makeChaptersOrdered( $resultat->getOutil()->getChapitres() );
 
-        foreach($chapitres as $one) {
+        foreach($chapitres as $one)
+        {
             $chapitre = new \StdClass;
             
             //build chapitre values
@@ -97,6 +98,8 @@ class ResultatManager extends BaseManager
         foreach($enfants as $enfant){
             $parent = $parents[ $enfant->parent ];
             $parent->childs[] = $enfant;
+            // RLE : On compte les réponses des enfants également
+            $parent->nbQuestionsRemplies += $enfant->nbQuestionsRemplies;
         }
 
         return $parents;
