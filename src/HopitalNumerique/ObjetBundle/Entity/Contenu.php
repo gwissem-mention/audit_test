@@ -139,8 +139,8 @@ class Contenu
         $this->parent       = null;
         $this->order        = 0;
         $this->nbVue        = 0;
-        $this->references   = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->glossaires   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->references   = array();
+        $this->glossaires   = array();
     }
 
     /**
