@@ -184,8 +184,10 @@ hopitalnumerique_autodiag_front_outil_index:
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:index" }
 
 hopitalnumerique_autodiag_front_outil:
-    pattern:  /autodiagnostic/{alias}
+    pattern:  /autodiagnostic/outil/{id}/{alias}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:outil" }
+    requirements:
+        id: \d+
 
 hopitalnumerique_autodiag_front_save:
     pattern:  /autodiagnostic/{id}/save
