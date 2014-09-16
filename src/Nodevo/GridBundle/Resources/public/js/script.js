@@ -21,3 +21,22 @@ $(function () {
         }
     });
 });
+
+/**
+ * Initialise le champ date d'u filtre.
+ * 
+ * @return void
+ */
+function NodevoGridBundle_Grid_initFiltreDate(gridHash, columnId)
+{
+    $('#' + gridHash + '__' + columnId + '__query__from').attr('type', 'hidden');
+    $('#' + gridHash + '__' + columnId + '__query__to').attr('type', 'hidden');
+    var dateFrom = $('#' + gridHash + '__' + columnId + '__query__from').val();
+    var dateTo = $('#' + gridHash + '__' + columnId + '__query__to').val();
+    if (dateFrom.length == 10)
+        $('#alt' + gridHash + '__' + columnId + '__query__from').val(dateFrom.substr(8, 2) + '/' + dateFrom.substr(5, 2) + '/' + dateFrom.substr(0, 4));
+    if (dateTo.length == 10)
+        $('#alt' + gridHash + '__' + columnId + '__query__to').val(dateTo.substr(8, 2) + '/' + dateTo.substr(5, 2) + '/' + dateTo.substr(0, 4));
+    $('#alt' + gridHash + '__' + columnId + '__query__from').datepicker({ altFormat:'yy-mm-dd', altField:'#' + gridHash + '__' + columnId + '__query__from' });
+    $('#alt' + gridHash + '__' + columnId + '__query__to').datepicker({ altFormat:'yy-mm-dd', altField:'#' + gridHash + '__' + columnId + '__query__to' });
+}
