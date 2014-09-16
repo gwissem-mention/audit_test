@@ -118,7 +118,7 @@ class PublicationExtension extends \Twig_Extension
                         $outil  = $this->getManagerOutil()->findOneBy( array( 'id' => $matches[2][$key] ) );
                         $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
                         if($outil)
-                            $replacement = '<a href="/autodiagnostic/'. $outil->getAlias() . '" '.$target.'>' . $matches[3][$key] . '</a>';
+                            $replacement = '<a href="/autodiagnostic/outil/'. $outil->getId() . '/' . $outil->getAlias() .'" '.$target.'>' . $matches[3][$key] . '</a>';
                         else
                             $replacement = "<a href=\"javascript:alert('Cet outil n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
 

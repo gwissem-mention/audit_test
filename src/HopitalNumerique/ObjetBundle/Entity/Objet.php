@@ -333,16 +333,16 @@ class Objet
         $this->isInfraDoc    = false;
         $this->isArticle     = false;
         $this->lock          = false;
-        $this->vignette      = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->autodiags     = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->objets        = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->glossaires    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->referencement = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->roles         = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->types         = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->ambassadeurs  = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->modules       = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->maitriseUsers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vignette      = array();
+        $this->autodiags     = array();
+        $this->objets        = array();
+        $this->glossaires    = array();
+        $this->referencement = array();
+        $this->roles         = array();
+        $this->types         = array();
+        $this->ambassadeurs  = array();
+        $this->modules       = array();
+        $this->maitriseUsers = array();
     }
 
     /**
