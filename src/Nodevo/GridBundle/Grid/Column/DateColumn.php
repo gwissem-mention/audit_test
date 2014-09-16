@@ -1,7 +1,7 @@
 <?php
 namespace Nodevo\GridBundle\Grid\Column;
 
-use APY\DataGridBundle\Grid\Column\DateTimeColumn as ApyColumn;
+use APY\DataGridBundle\Grid\Column\DateColumn as ApyColumn;
 
 /**
  * Type de colonne Date
