@@ -167,6 +167,7 @@
 @media screen and (max-width: 1270px) {
     #ambassadeurs.closed, #sommaire.closed{display: none}
     .mobile{display:block;}
+    #bloc-notation-moyenne-objet {margin-top: 0px;}
 }
 
 @media screen and (max-width: 991px) {
