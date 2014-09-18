@@ -30,6 +30,7 @@ assetic:
         - HopitalNumeriqueStatBundle
         - HopitalNumeriquePaiementBundle
         - HopitalNumeriqueAutodiagBundle
+        - HopitalNumeriqueImportExcelBundle
         - HopitalNumeriqueForumBundle
         - HopitalNumeriqueFlashBundle
         - HopitalNumeriqueGlossaireBundle

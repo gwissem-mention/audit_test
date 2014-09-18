@@ -12,6 +12,16 @@
     
     {# All other tabs : not available in add mode #}
     {% if outil.id %}
+        {% if route == 'hopitalnumerique_import_index' or route == 'hopitalnumerique_import_read_save' %}
+            <li class="active">
+                <a href="#">Import Excel</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{path('hopitalnumerique_import_index',{'id':outil.id})}}">Import Excel</a>
+            </li>
+        {% endif %}  
+
         {% if route == 'hopitalnumerique_autodiag_categorie' or route == 'hopitalnumerique_autodiag_categorie_add' or route == 'hopitalnumerique_autodiag_categorie_edit' %}
             <li class="active">
                 <a href="#">Gestion des catégories</a>

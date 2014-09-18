@@ -65,6 +65,8 @@ class AppKernel extends Kernel
             //-^- Bundles du Forum -^-,
             new HopitalNumerique\StatBundle\HopitalNumeriqueStatBundle(),
             new HopitalNumerique\ReportBundle\HopitalNumeriqueReportBundle(),
+            new HopitalNumerique\ImportExcelBundle\HopitalNumeriqueImportExcelBundle(),
+            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

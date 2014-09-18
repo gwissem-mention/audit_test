@@ -1,3 +1,7 @@
+hopital_numerique_import_excel:
+    resource: "@HopitalNumeriqueImportExcelBundle/Resources/config/routing.yml"
+    prefix:   /
+
 hopital_numerique_report:
     resource: "@HopitalNumeriqueReportBundle/Resources/config/routing.yml"
     prefix:   /
