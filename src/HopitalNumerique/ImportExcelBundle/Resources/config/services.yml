@@ -1,0 +1,29 @@
+parameters:
+    #Options
+    hopital_numerique_import_excel.options:
+    hopital_numerique_import_excel.manager.importexcel.class: HopitalNumerique\ImportExcelBundle\Manager\ImportExcelManager
+    hopital_numerique_import_excel.manager.categorie.class: HopitalNumerique\ImportExcelBundle\Manager\ImportExcelCategorieManager
+    hopital_numerique_import_excel.manager.chapitre.class: HopitalNumerique\ImportExcelBundle\Manager\ImportExcelChapitreManager
+    hopital_numerique_import_excel.manager.question.class: HopitalNumerique\ImportExcelBundle\Manager\ImportExcelQuestionManager
+
+services:
+    hopital_numerique_import_excel.manager.importexcel:
+        class: %hopital_numerique_import_excel.manager.importexcel.class%
+        arguments: ["@doctrine.orm.entity_manager",  "@hopital_numerique_import_excel.manager.categorie"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    hopital_numerique_import_excel.manager.categorie:
+        class: %hopital_numerique_import_excel.manager.categorie.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    hopital_numerique_import_excel.manager.chapitre:
+        class: %hopital_numerique_import_excel.manager.chapitre.class%
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.resultat"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    hopital_numerique_import_excel.manager.question:
+        class: %hopital_numerique_import_excel.manager.question.class%
+        arguments: ["@doctrine.orm.entity_manager", "@hopital_numerique_import_excel.manager.categorie", "@hopital_numerique_import_excel.manager.chapitre", "@hopitalnumerique_reference.manager.reference"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

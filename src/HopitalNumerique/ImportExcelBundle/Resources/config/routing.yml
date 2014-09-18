@@ -1,0 +1,7 @@
+hopitalnumerique_import_index:
+    path:      /admin/outil/{id}/import
+    defaults:  { _controller: HopitalNumeriqueImportExcelBundle:ImportExcel:index }
+
+hopitalnumerique_import_read_save:
+    path:      /admin/outil/{id}/import/read-save
+    defaults:  { _controller: HopitalNumeriqueImportExcelBundle:ImportExcel:readAndSave }
