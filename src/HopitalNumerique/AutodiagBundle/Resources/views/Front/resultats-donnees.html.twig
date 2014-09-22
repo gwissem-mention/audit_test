@@ -7,7 +7,7 @@
         {% if back is defined and back %}
             <a href="{{path('hopitalnumerique_autodiag_front_comptehn')}}" class="print btn btn-success pull-left" title="Retour à mon compte"><i class="fa fa-reply"></i></a>
         {% else %}
-            <a href="{{path('hopitalnumerique_autodiag_front_outil', { 'alias':resultat.outil.alias, 'id':resultat.outil.id })}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
+            <a href="{{path('hopitalnumerique_autodiag_front_outil', { 'alias':resultat.outil.alias, 'outil':resultat.outil.id })}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
         {% endif %}
 
         {% if pdf %}

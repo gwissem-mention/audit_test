@@ -44,7 +44,7 @@
                         <td>{{resultat.tauxRemplissage}}%</td>
                         <td>
                             <div class="btn-group" >
-                                <a href="{{path('hopitalnumerique_autodiag_front_outil', { 'alias':resultat.outil.alias, 'id':resultat.outil.id })}}" class="btn btn-success" title="Continuer le questionnaire"><i class="fa fa-external-link"></i></a>
+                                <a href="{{path('hopitalnumerique_autodiag_front_outil', { 'alias':resultat.outil.alias, 'outil':resultat.outil.id })}}" class="btn btn-success" title="Continuer le questionnaire"><i class="fa fa-external-link"></i></a>
                                 <div class="btn btn-danger" onclick='deleteWithConfirm("{{ path('hopitalnumerique_autodiag_front_comptehn_delete', { 'id': resultat.id }) }}");' title="Vider mon questionnaire"><i class="fa fa-trash-o"></i></div>
                             </div>
                         </td>
