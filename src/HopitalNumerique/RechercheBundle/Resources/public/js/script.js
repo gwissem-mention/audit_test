@@ -100,6 +100,29 @@ $(document).ready(function() {
         'width'     : '80%',
         'scrolling' : 'no'
     });
+    
+    $('#categ_production_select').multiselect({
+        nonSelectedText: 'Aucune catégorie de production sélectionnée ',
+        buttonContainer: '<div class="btn-group" />',
+        numberDisplayed: 1,
+        buttonWidth: '100%',
+        nSelectedText: 'catégories sélectionnées'
+    });
+
+    //Récupération 
+    var arraySelectCateg = $.parseJSON($("#categ_production_select_vals_chargement").val());
+    if(arraySelectCateg.length != 0)
+    { 
+        $.each(arraySelectCateg, function(){
+            $("#categ_production_select").multiselect('select', this, false);
+        });
+    }
+
+    $("#categ_production_select").change(function(){
+
+        $("#categ_production_select_vals").val($(this).val());
+        updateResultats( true );
+    });
 });
 
 //fancybox daffichage de la synthese
@@ -284,7 +307,8 @@ function updateResultats( cleanSession )
         url  : $('#resultats-url').val(),
         data : {
             references   : getReferences(),
-            cleanSession : cleanSession
+            cleanSession : cleanSession,
+            categPointDur: $("#categ_production_select_vals").val()
         },
         type    : 'POST',
         success : function( data ){
@@ -425,9 +449,10 @@ function handleRequeteSave( r, id )
     $.ajax({
         url  : $('#requete-save-url').val(),
         data : {
-            nom        : r,
-            id         : id,
-            references : getReferences()
+            nom           : r,
+            id            : id,
+            references    : getReferences(),
+            categPointDur : $("#categ_production_select_vals").val(),
         },
         type     : 'POST',
         dataType : 'json',
@@ -447,6 +472,7 @@ function handleRequeteSave( r, id )
         }
     });
 }
+
 
 /**
  * Bouton qui permet de clear les éléments filtrés
@@ -468,6 +494,15 @@ function cleanRequest()
             updateResultats( true );
 
             history.pushState({ path: this.path }, '', $('#search-homepage-url').val() );
+
+            $("#categ_production_select").multiselect('deselect', 183);
+            $("#categ_production_select").multiselect('deselect', 176);
+            $("#categ_production_select").multiselect('deselect', 177);
+            $("#categ_production_select").multiselect('deselect', 178);
+            $("#categ_production_select").multiselect('deselect', 179);
+            $("#categ_production_select").multiselect('deselect', 180);
+            $("#categ_production_select").multiselect('deselect', 181);
+            $("#categ_production_select").multiselect('deselect', 182);
         }
     });
 }

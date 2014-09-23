@@ -78,6 +78,13 @@ class Requete
     private $refs;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="req_categ_point_dur", type="string", length=256)
+     */
+    private $categPointDur;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
      */
@@ -294,5 +301,120 @@ class Requete
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * Set isDefault
+     *
+     * @param boolean $isDefault
+     * @return Requete
+     */
+    public function setIsDefault($isDefault)
+    {
+        $this->isDefault = $isDefault;
+
+        return $this;
+    }
+
+    /**
+     * Get isDefault
+     *
+     * @return boolean 
+     */
+    public function getIsDefault()
+    {
+        return $this->isDefault;
+    }
+
+    /**
+     * Set isNew
+     *
+     * @param boolean $isNew
+     * @return Requete
+     */
+    public function setIsNew($isNew)
+    {
+        $this->isNew = $isNew;
+
+        return $this;
+    }
+
+    /**
+     * Get isNew
+     *
+     * @return boolean 
+     */
+    public function getIsNew()
+    {
+        return $this->isNew;
+    }
+
+    /**
+     * Set isUpdated
+     *
+     * @param boolean $isUpdated
+     * @return Requete
+     */
+    public function setIsUpdated($isUpdated)
+    {
+        $this->isUpdated = $isUpdated;
+
+        return $this;
+    }
+
+    /**
+     * Get isUpdated
+     *
+     * @return boolean 
+     */
+    public function getIsUpdated()
+    {
+        return $this->isUpdated;
+    }
+
+    /**
+     * Set isUserNotified
+     *
+     * @param boolean $isUserNotified
+     * @return Requete
+     */
+    public function setIsUserNotified($isUserNotified)
+    {
+        $this->isUserNotified = $isUserNotified;
+
+        return $this;
+    }
+
+    /**
+     * Get isUserNotified
+     *
+     * @return boolean 
+     */
+    public function getIsUserNotified()
+    {
+        return $this->isUserNotified;
+    }
+
+    /**
+     * Set categPointDur
+     *
+     * @param string $categPointDur
+     * @return Requete
+     */
+    public function setCategPointDur($categPointDur)
+    {
+        $this->categPointDur = $categPointDur;
+
+        return $this;
+    }
+
+    /**
+     * Get categPointDur
+     *
+     * @return string 
+     */
+    public function getCategPointDur()
+    {
+        return $this->categPointDur;
     }
 }

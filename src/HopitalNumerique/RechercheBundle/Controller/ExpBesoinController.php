@@ -162,6 +162,7 @@ class ExpBesoinController extends Controller
         $session = $this->getRequest()->getSession();
         $session->set('requete-id', null);
         $session->set('requete-refs', json_encode($resultats) );
+        $session->set('requete-refs-categProd', '' );
 
         //return success.true si le fichier existe deja
         return new Response('{"success":true}', 200);

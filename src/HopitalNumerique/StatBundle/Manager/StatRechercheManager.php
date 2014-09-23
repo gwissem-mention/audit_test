@@ -35,7 +35,7 @@ class StatRechercheManager extends BaseManager
     public function getStatRechercheByCoupleRef( $ref1, $ref2, $dateDebutDateTime, $dateFinDateTime, $isRequeteSaved )
     {   
         $compteur = 0;
-        $statsRecherche = $this->getRepository()->getStatRechercheByCoupleRef($ref1, $ref2, $dateDebutDateTime, $dateFinDateTime, $isRequeteSaved)->getQuery()->getResult();
+        $statsRecherche = $this->getRepository()->getStatRechercheByDateAndRequeteSaved($dateDebutDateTime, $dateFinDateTime, $isRequeteSaved)->getQuery()->getResult();
 
         foreach ($statsRecherche as $statRecherche) 
         {
@@ -47,6 +47,42 @@ class StatRechercheManager extends BaseManager
 
             if(in_array($ref1, $refIdByStat) && in_array($ref2, $refIdByStat))
                 $compteur++;
+        }
+
+        return $compteur;
+    }
+
+    /**
+     * Compte le nombre de requetes faites pour un couple de ref donnée
+     *
+     * @param int $ref   Identifiant d'une référence
+     * @param int $categ Identifiant de la catégorie
+     * @param DateTime or null $dateDebutDateTime DateTime de la date de début de la recherche si elle est renseignée, sinon null
+     * @param DateTime or null $dateFinDateTime   DateTime de la date de fin de la recherche si elle est renseignée, sinon null
+     *
+     * @return integer
+     */
+    public function getStatRechercheByCategAndRef( $ref, $categ, $dateDebutDateTime, $dateFinDateTime, $isRequeteSaved )
+    {   
+        $compteur = 0;
+        $statsRecherche = $this->getRepository()->getStatRechercheByDateAndRequeteSaved($dateDebutDateTime, $dateFinDateTime, $isRequeteSaved)->getQuery()->getResult();
+
+        foreach ($statsRecherche as $statRecherche) 
+        {
+            $refIdByStat = array();
+            foreach ($statRecherche->getReferences() as $reference) 
+            {
+                $refIdByStat[] = $reference->getId();
+            }
+
+            if(in_array($ref, $refIdByStat))
+            {
+                $categsId = explode(',', $statRecherche->getCategPointDur());
+                if(in_array($categ, $categsId))
+                {
+                    $compteur++;
+                }
+            }
         }
 
         return $compteur;
@@ -72,7 +108,7 @@ class StatRechercheManager extends BaseManager
      *
      * @return Void
      */
-    public function sauvegardeRequete(array $tableauIdRef, $user, $nbResultats, $isRequete)
+    public function sauvegardeRequete(array $tableauIdRef, $user, $categ, $nbResultats, $isRequete)
     {
         $referencesJSON = json_encode($tableauIdRef);
 
@@ -89,6 +125,7 @@ class StatRechercheManager extends BaseManager
         $statRecherche->setNbResultats($nbResultats);
         $statRecherche->setRequete($referencesJSON);
         $statRecherche->setIsRequeteSaved($isRequete);
+        $statRecherche->setCategPointDur($categ);
 
         $this->save($statRecherche);
     }
@@ -127,14 +164,6 @@ class StatRechercheManager extends BaseManager
         }
 
         return $results;
-    }
-
-    public function test()
-    {
-        //Tableau des urls
-        $urls = array(
-            'https://www.google.fr'
-        );
     }
 
     /**

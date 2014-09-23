@@ -130,7 +130,7 @@ class ItemRequeteController extends Controller
         $contexteId            = intval($request->request->get('categorieContexteItemProductionSelect'));
         $isRequeteSaved        = ($request->request->get('isRequetSaved-itemProduction') === 'true' );
 
-        $res = $this->generationTableau($dateDebut , $dateFin, $categorieProductionId, $contexteId, $isRequeteSaved);
+        $res = $this->generationTableauProduction($dateDebut , $dateFin, $categorieProductionId, $contexteId, $isRequeteSaved);
         
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/ItemProduction/tableau.html.twig', array(
             'entetes'   => $res['entetes'],
@@ -156,7 +156,7 @@ class ItemRequeteController extends Controller
         $contexteId           = intval($request->request->get('categorieContexteItemProductionSelect'));
         $isRequeteSaved       = ($request->request->get('isRequetSaved-itemProduction') === 'true' );
 
-        $res = $this->generationTableau($dateDebut , $dateFin, $categorieProductionId, $contexteId, $isRequeteSaved);
+        $res = $this->generationTableauProduction($dateDebut , $dateFin, $categorieProductionId, $contexteId, $isRequeteSaved);
 
         //Colonnes communes
         $colonnes = array(
@@ -218,6 +218,44 @@ class ItemRequeteController extends Controller
                     $resultats[$entete->getId()] = array();
 
                 $resultats[$entete->getId()][$ligne->getId()] = $this->get('hopitalnumerique_stat.manager.statrecherche')->getStatRechercheByCoupleRef($entete->getId(), $ligne->getId(), $dateDebutDateTime, $dateFinDateTime, $isRequeteSaved);
+            }
+        }
+
+        return array(
+            'entetes'   => $entetes,
+            'lignes'    => $lignes,
+            'resultats' => $resultats
+        );
+    }
+
+    /**
+     * Code appelé lors de la génération du tableau et de l'export CSV
+     *
+     * @return array
+     */
+    private function generationTableauProduction($dateDebut , $dateFin, $categorieId, $contexteId, $isRequeteSaved)
+    {
+        //Récupération des dates sous forme DateTime
+        $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
+        $dateFinDateTime   = $dateFin   === "" ? null : new \DateTime($dateFin);
+        $entetesTableau    = array();
+        $lignes            = array();
+        
+        $entetes   = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => $contexteId));
+        $categorie = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $categorieId));
+        $lignes[$categorie->getLibelle()] = $categorie;
+
+        $resultats = array();
+
+        //Pour compter le nombre de requetes faite par ligne/colonne on va faire nbColonnes * nbLignes reqûete plutot que de récupérer tout et trier ensuite (table de plusieurs millions de lignes à terme)
+        foreach ($entetes as $entete)
+        {
+            foreach ($lignes as $ligne) 
+            {
+                if(!array_key_exists($entete->getId(), $resultats))
+                    $resultats[$entete->getId()] = array();
+
+                $resultats[$entete->getId()][$ligne->getId()] = $this->get('hopitalnumerique_stat.manager.statrecherche')->getStatRechercheByCategAndRef($entete->getId(), $ligne->getId(), $dateDebutDateTime, $dateFinDateTime, $isRequeteSaved);
             }
         }
 
