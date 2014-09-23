@@ -205,7 +205,7 @@ class ErreursController extends Controller
                         {
                             if(!array_key_exists($idObjet, $urls['AUTODIAG']))
                                 $urls['AUTODIAG'][$idObjet] = array();
-                            $urls['AUTODIAG'][$idObjet][$outil->getId()] = $this->getRequest()->getUriForPath('/autodiagnostic/'. $outil->getAlias());
+                            $urls['AUTODIAG'][$idObjet][$outil->getId()] = $this->getRequest()->getUriForPath('/autodiagnostic/outil/'.$outil->getId() . '-' . $outil->getAlias());
                         } 
                         break;
                     case 'QUESTIONNAIRE':
