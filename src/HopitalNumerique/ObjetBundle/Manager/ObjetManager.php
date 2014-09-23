@@ -642,6 +642,10 @@ class ObjetManager extends BaseManager
                 $contenu          = $this->_contenuManager->findOneBy( array('id' => $tab[1] ) );
                 $element->titre   = '|--' . $contenu->getTitre();
                 $element->isObjet = 0;
+            }else if( $tab[0] == 'ARTICLE' ){
+                $objet            = $this->findOneBy( array('id' => $tab[1] ) );
+                $element->titre   = $objet->getTitre();
+                $element->isObjet = 1;
             }
 
             $productions[] = $element;
