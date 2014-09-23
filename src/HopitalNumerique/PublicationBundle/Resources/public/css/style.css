@@ -81,9 +81,11 @@
     #articles{margin-top: 20px; position: relative}
     /* Colonne right */
         #articles h1{font-size: 24px; font-weight: bold; margin:2px 0 0 0;}
-        #articles h2{font-size: 20px;}
-        #articles h3{font-size: 16px;}
-        #articles h4{font-size: 13px; font-weight: normal; margin:13px 0 0 0;text-transform: uppercase;}
+        #articles h2{font-size: 18px; color: #6f3596; font-weight: bold;}
+        #articles h3{font-size: 16px; color: #6f3596; margin-left: 20px; font-weight: bold;}
+        #articles h4{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 50px; font-weight: bold;}
+        #articles h5{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;} 
+        #articles h6{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
 
     /* Colonne left */
         #articles p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
