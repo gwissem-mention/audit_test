@@ -102,7 +102,7 @@ $(document).ready(function() {
     });
     
     $('#categ_production_select').multiselect({
-        nonSelectedText: 'Aucune catégorie de production sélectionnée ',
+        nonSelectedText: 'Filtrer un type de production ',
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
         buttonWidth: '100%',
