@@ -16,9 +16,8 @@ class LinkController extends Controller
      */
     public function addLinkAction( Objet $objet )
     {
-        $types = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code'=>'CATEGORIE_OBJET'));
-        $arbo  = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo( $types );
-
+        $arbo    = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo();
+        
         return $this->render('HopitalNumeriqueObjetBundle:Objet:add_link.html.twig', array(
             'arbo'    => $arbo,
             'idObjet' => $objet->getId()
