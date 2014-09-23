@@ -14,14 +14,7 @@ class SearchController extends Controller
         $elements                  = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
         $categoriesProduction      = array();
         $categoriesProductionActif = "";
-        $categoriesProduction[]    = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '183'));
-        $categoriesProduction[]    = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '176'));
-        $categoriesProduction[]    = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '177'));
-        $categoriesProduction[]    = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '178'));
-        $categoriesProduction[]    = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '179'));
-        $categoriesProduction[]    = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '180'));
-        $categoriesProduction[]    = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '181'));
-        $categoriesProduction[]    = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '182'));
+        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('libelle' => 'ASC'));
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();

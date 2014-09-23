@@ -95,16 +95,7 @@ class ItemRequeteController extends Controller
     public function indexProductionAction( )
     {
         $categsContexte       = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => 222), array('order' => 'ASC'));
-
-        $categoriesProduction   = array();
-        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '183'));
-        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '176'));
-        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '177'));
-        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '178'));
-        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '179'));
-        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '180'));
-        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '181'));
-        $categoriesProduction[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => '182'));
+        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('libelle' => 'ASC'));
 
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/ItemProduction/bloc.html.twig', array(
             'categoriesProduction' => $categoriesProduction,
