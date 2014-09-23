@@ -196,6 +196,9 @@ class PublicationController extends Controller
             }else if( $tab[0] == 'INFRADOC' ){
                 $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $tab[1] ) );
                 $objet   = $contenu->getObjet();
+            }else if( $tab[0] == 'ARTICLE' ){
+                $objet   = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $tab[1] ) );
+                $contenu = false;
             }
             
             if( $this->checkAuthorization( $objet ) === true ){

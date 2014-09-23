@@ -1,12 +1,19 @@
 /* Pop-in de synthèse*/
 #synthese-ajax{ margin:0; background-color:#ffffff; padding-top:20px }
 #synthese-ajax #logoAnap{ margin:20px auto; width:130px; display:block }
-#synthese-ajax h1{margin-bottom: 5px; font-size: 18px}
-#synthese-ajax h2{margin-top:10px; font-weight: bold; font-size: 14px}
 #synthese-ajax .content{ min-height:480px; padding:0 15px 15px 15px; margin:20px }
 #synthese-ajax .btn{ margin-right:10px }
 #synthese-ajax .copyright{ margin-top:20px }
 #synthese-ajax ul{ list-style-position: inside; }
+
+/* Copie de publication */
+#synthese-ajax h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px}
+#synthese-ajax h2{font-size: 18px; color: #6f3596; font-weight: bold;}
+#synthese-ajax h3{font-size: 16px; color: #6f3596; margin-left: 20px;font-weight: bold;}
+#synthese-ajax h4{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 50px; font-weight: bold;}
+#synthese-ajax h5{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;}
+#synthese-ajax h6{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
+#synthese-ajax a abbr{color:#E0822A;}
 
 .fancybox-overlay .fancybox-skin a.fancybox-close {
     background-position: 0 0;
