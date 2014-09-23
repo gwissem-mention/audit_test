@@ -450,7 +450,8 @@ class ResultatManager extends BaseManager
         $childs = $chapitre->childs;
         foreach( $childs as $child ){
             $nbQuestions         += $child->nbQuestions;
-            $nbQuestionsRemplies += $child->nbQuestionsRemplies;
+            //Cette ligne active fait bugger le taux de remplissage...
+            //$nbQuestionsRemplies += $child->nbQuestionsRemplies;
         }
 
         return $nbQuestions != 0 ? number_format(( ($nbQuestionsRemplies * 100) / $nbQuestions), 0) : 0;

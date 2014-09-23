@@ -11,13 +11,16 @@ class SearchController extends Controller
      */
     public function indexAction( $id = null )
     {
-        $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
+        $elements                  = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
+        $categoriesProduction      = array();
+        $categoriesProductionActif = "";
+        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('libelle' => 'ASC'));
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
-
         //on prépare la session
         $session = $this->getRequest()->getSession();
+
 
         //si on à charger une requete, on load la bonne url
         if ( is_null($id) && !is_null($session->get('requete-id')) )
@@ -26,13 +29,16 @@ class SearchController extends Controller
         //on essaye de charger la requete par défaut
         if ( is_null($id) ){
             //si on a quelque chose en session, on charge la session
-            if( !is_null($session->get('requete-refs')) ){
+            if( !is_null($session->get('requete-refs')) )
+            {
+                $categoriesProductionActif = ( !is_null( $session->get('requete-refs-categProd') ) ) ? $session->get('requete-refs-categProd') : '';
                 $requete = null;
                 $refs    = $session->get('requete-refs');
             //sinon on charge la requete par défaut
             }else{
                 $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'isDefault' => true ) );
                 $refs    = $requete ? json_encode($requete->getRefs()) : '[]';
+                $categoriesProductionActif = $requete ? $requete->getCategPointDur() : '';
 
                 //set requete id in session
                 if( $requete )
@@ -44,6 +50,7 @@ class SearchController extends Controller
 
             if( $requete ) {
                 $refs = json_encode($requete->getRefs());
+                $categoriesProductionActif = is_null($requete->getCategPointDur()) ? '' : $requete->getCategPointDur();
 
                 //update request
                 $requete->setNew( false );
@@ -64,9 +71,12 @@ class SearchController extends Controller
         $session->set('requete-refs', $refs );
 
         return $this->render('HopitalNumeriqueRechercheBundle:Search:index.html.twig', array(
-            'elements' => $elements['CATEGORIES_RECHERCHE'],
-            'requete'  => $requete,
-            'refs'     => $refs
+            'elements'                      => $elements['CATEGORIES_RECHERCHE'],
+            'requete'                       => $requete,
+            'refs'                          => $refs,
+            'categoriesProduction'          => $categoriesProduction,
+            'categoriesProductionActif'     => $categoriesProductionActif,
+            'categoriesProductionActifJSON' => json_encode(explode(',', $categoriesProductionActif))
         ));
     }
 
@@ -79,17 +89,61 @@ class SearchController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
 
-        $request    = $this->get('request');
-        $references = $request->request->get('references');
+        $request       = $this->get('request');
+        $references    = $request->request->get('references');
 
         $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
         $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
 
+        //GME 19/09/2014 : Ajout du filtre des categ point dur (liste à choix multiples)
+        $categPointDur      = $request->request->get('categPointDur');
+
+        //Filtre uniquement si pas vide
+        if(!empty($categPointDur))
+        { 
+            $categPointDurIdsArray = explode(',', $categPointDur);
+            $categPointDurArray    = array();
+
+            foreach ($categPointDurIdsArray as $categPointDurId) 
+            {
+                $categPointDurArray[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $categPointDurId))->getLibelle();
+            }
+
+            foreach ($objets as $key => $objet) 
+            {
+               if($objet["categ"] === "production")
+               {
+                    //Récupèration de tout les types de l'objet
+                    $types = explode('♦', $objet["type"]);
+                    $isInArray = false;
+                    foreach ($types as $type) 
+                    {
+                        if(in_array(trim($type), $categPointDurArray))
+                        {
+                            $isInArray = true;
+                            break;
+                        }
+                    }
+
+                    if(!$isInArray)
+                    {
+                        //Supprime l'élément du tableau
+                        unset($objets[$key]);
+                    }
+               }
+            }
+        }
+        else
+        {
+            $categPointDurIdsArray = array();
+        }
+
         //on prépare la session
         $session   = $this->getRequest()->getSession();
         $isRequete = (!is_null($session->get('requete-id')));
         $session->set('requete-refs', json_encode($references) );
+        $session->set('requete-refs-categProd', $categPointDur );
 
         //clean requete ID
         $cleanSession = $request->request->get('cleanSession');
@@ -106,8 +160,9 @@ class SearchController extends Controller
         //Sauvegarde des stats
         if(!is_null($references))
         {
+            $categPointDur = is_null($categPointDur) ? '' : $categPointDur;
             $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
-            $this->get('hopitalnumerique_stat.manager.statrecherche')->sauvegardeRequete($references, $user, count($objets), $isRequete);
+            $this->get('hopitalnumerique_stat.manager.statrecherche')->sauvegardeRequete($references, $user, $categPointDur, count($objets), $isRequete);
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(

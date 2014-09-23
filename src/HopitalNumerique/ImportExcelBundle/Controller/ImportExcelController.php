@@ -19,6 +19,33 @@ class ImportExcelController extends Controller
     }
 
     /**
+     * Download le gabarit.
+     *
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function downloadGabaritAction()
+    {
+        $options = array(
+            'serve_filename' => 'Gabarit_autodiag.xlsx',
+            'absolute_path'  => false,
+            'inline'         => false,
+        );
+    
+        if( file_exists( __ROOT_DIRECTORY__ . '/files/autodiag/Gabarit_autodiag.xlsx') )
+        {
+            return $this->get('igorw_file_serve.response_factory')->create( __ROOT_DIRECTORY__ . '/files/autodiag/Gabarit_autodiag.xlsx', 'application/pdf', $options);
+        }
+        else
+        {
+            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
+            $this->get('session')->getFlashBag()->add( ('danger') , 'Le document n\'existe plus sur le serveur.' );
+    
+            return $this->redirect( $this->generateUrl('hopitalnumerique_import_index') );
+        }
+    }
+
+    /**
      * Lecture et insert en base d'un fichier
      *
      * @param Outil $outil [description]
@@ -107,7 +134,7 @@ class ImportExcelController extends Controller
 
             // ~~~ Questions
             $arrayQuestions = $this->get('hopital_numerique_import_excel.manager.importexcel')->getQuestionsImported($sheetQuestions);
-            $this->get('hopital_numerique_import_excel.manager.question')->saveQuestionImported($arrayQuestions);
+            $this->get('hopital_numerique_import_excel.manager.question')->saveQuestionImported($arrayQuestions, $outil));
             
         } catch (Exception $e) 
         {
