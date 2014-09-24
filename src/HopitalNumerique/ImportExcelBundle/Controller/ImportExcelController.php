@@ -134,7 +134,7 @@ class ImportExcelController extends Controller
 
             // ~~~ Questions
             $arrayQuestions = $this->get('hopital_numerique_import_excel.manager.importexcel')->getQuestionsImported($sheetQuestions);
-            $this->get('hopital_numerique_import_excel.manager.question')->saveQuestionImported($arrayQuestions, $outil));
+            $this->get('hopital_numerique_import_excel.manager.question')->saveQuestionImported($arrayQuestions, $outil);
             
         } catch (Exception $e) 
         {

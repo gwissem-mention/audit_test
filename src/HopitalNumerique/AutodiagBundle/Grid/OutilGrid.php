@@ -20,6 +20,8 @@ class OutilGrid extends Grid implements GridInterface
         $this->setSource( 'hopitalnumerique_autodiag.manager.outil' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('Aucun outil à afficher.');
+        $this->showIDColumn( true );
+        $this->setFilterIdColumn( true );
     }
 
     /**
