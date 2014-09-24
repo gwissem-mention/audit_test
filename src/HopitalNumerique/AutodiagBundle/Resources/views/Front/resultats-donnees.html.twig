@@ -178,7 +178,7 @@
                                     {% set maxCateg = 0 %}
 
                                     <tr>
-                                        <td class="active text-center vertical-align categorie-{{id}}" rowspan="3"><b>{{categorie.title|capitalize}}</b></td>
+                                        <td class="active text-center vertical-align categorie-{{id}}" rowspan="2"><b>{{categorie.title|capitalize}}</b></td>
                                         <td class="text-center">Nombre de réponses</td>
                                         {% for datas in categorie['chapitres'] %}
                                             {% if not datas['nc'] %}
@@ -195,21 +195,6 @@
                                         {% endfor %}
                                         <td class="text-center">
                                             {{nbRepCateg}} / {{nbQueCateg}}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">Nombre de points</td>
-                                        {% for datas in categorie['chapitres'] %}
-                                            {% if not datas['nc'] %}
-                                                <td class="text-center">
-                                                    {{datas['nbPoints']|number_format(0)}} / {{datas['max']}}
-                                                </td>
-                                                {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
-                                                {% set maxCateg = maxCateg + datas['max'] %}
-                                            {% endif %}
-                                        {% endfor %}
-                                        <td class="text-center">
-                                            {{nbPointsCateg|number_format(0)}} / {{maxCateg}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -243,7 +228,7 @@
 
                                 {% if chart.datas.categories|length > 1 %}
                                     <tr>
-                                        <td class="text-center title-total vertical-align" rowspan="3"><b>Total</b></td>
+                                        <td class="text-center title-total vertical-align" rowspan="2"><b>Total</b></td>
                                         <td class="text-center">Nombre de réponses</td>
                                         {% set nbRepTotal = 0 %}
                                         {% set nbQueTotal = 0 %}
@@ -262,23 +247,6 @@
                                         {% endfor %}
                                         <td class="text-center">
                                             {{nbRepTotal}} / {{nbQueTotal}}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">Nombre de points</td>
-                                        {% set nbPointsTotal = 0 %}
-                                        {% set maxTotal = 0 %}
-                                        {% for datas in chart.datas.totauxChapitres %}
-                                            {% if not datas['nc'] %}
-                                                <td class="text-center">
-                                                    {{datas['nbPoints']|number_format(0)}} / {{datas['max']}}
-                                                </td>
-                                                {% set nbPointsTotal = nbPointsTotal + datas['nbPoints'] %}
-                                                {% set maxTotal = maxTotal + datas['max'] %}
-                                            {% endif %}
-                                        {% endfor %}
-                                        <td class="text-center">
-                                            {{nbPointsTotal|number_format(0)}} / {{maxTotal}}
                                         </td>
                                     </tr>
                                     <tr>
