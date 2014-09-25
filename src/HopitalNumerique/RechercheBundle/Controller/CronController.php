@@ -31,6 +31,18 @@ class CronController extends Controller
                 //handle each requete
                 foreach($requetes as &$requete)
                 {
+                    //Récupération des catégories filtrées
+                    $categs       = $requete->getCategPointDur();
+                    $arrayCategId = explode(',', $categs);
+                    $arrayCateg   = array();
+                    foreach ($arrayCategId as $id) 
+                    {
+                        if(trim($id))
+                        {
+                            $arrayCateg[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $id))->getLibelle();
+                        }
+                    }
+
                     //get objets and format them
                     $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
                     $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $requete->getRefs(), $role, $refsPonderees );
@@ -45,8 +57,31 @@ class CronController extends Controller
                     //handles objets
                     foreach($objets as $objet)
                     {
+                        if(!empty($arrayCateg))
+                        {
+                            //Uniquement sur les prodcution
+                            if($objet["categ"] === "production")
+                            {
+                                //Récupèration de tout les types de l'objet
+                                $types = explode('♦', $objet["type"]);
+                                $isInArray = false;
+                                foreach ($types as $type) 
+                                {
+                                    if(in_array(trim($type), $arrayCateg))
+                                    {
+                                        $isInArray = true;
+                                        break;
+                                    }
+                                }
+                                //Si la categ n'est pas dans le tableau des types de l'objets, on ne le prend pas en compte
+                                if(!$isInArray)
+                                {
+                                    continue;
+                                }
+                            }
+                        }
                         //si l'objet est nouveau : la requete doit etre taggué nouvelle
-                        if( (isset($objet['new']) && $objet['new'] === true && !$requeteNew) && $objet['created']->modify('+ 1 day')->format('d-m-Y') == $today->format('d-m-Y') )
+                        if( (isset($objet['new']) && $objet['new'] === true && !$requeteNew) )//&& $objet['created']->modify('+ 1 day')->format('d-m-Y') == $today->format('d-m-Y') )
                         {
                             $requeteNew = true;
                             
@@ -59,7 +94,7 @@ class CronController extends Controller
                         }
 
                         //si l'objet est mis à jour : la requete doit etre taggué mise à jour
-                        if( (isset($objet['updated']) && $objet['updated'] === true && !$requeteUpdated) && $objet['modified']->modify('+ 1 day')->format('d-m-Y') == $today->format('d-m-Y') )
+                        if( (isset( $objet['updated'] ) && $objet['updated'] === true ))//&& !$requeteUpdated) && $objet['modified']->modify('+ 1 day')->format('d-m-Y') == $today->format('d-m-Y') )
                         {
                             $requeteUpdated = true;
 

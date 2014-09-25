@@ -56,6 +56,8 @@
     #recherche #origin li.level0 ol li.level1 ol li.level2 ol li.level3{}
     #recherche #origin li.level0 ol li.level1 ol li.level2 ol li.level3 span{font-style:italic; color:#070707; }
 
+    /* Liste déroulante */
+    .multiselect-container.dropdown-menu{width: 100%;}
 /* Résultats */
     #recherche #resultats{ margin-top: 20px; }
     #recherche #resultats span.label{ font-size:9px; line-height: 2; vertical-align: top }

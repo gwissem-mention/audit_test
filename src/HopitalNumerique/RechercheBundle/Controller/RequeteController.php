@@ -30,9 +30,10 @@ class RequeteController extends Controller
      */
     public function saveAction()
     {
-        $id         = $this->get('request')->request->get('id');
-        $nom        = $this->get('request')->request->get('nom');
-        $references = $this->get('request')->request->get('references');
+        $id               = $this->get('request')->request->get('id');
+        $nom              = $this->get('request')->request->get('nom');
+        $references       = $this->get('request')->request->get('references');
+        $categPointDur    = $this->get('request')->request->get('categPointDur');
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -50,6 +51,9 @@ class RequeteController extends Controller
 
         $requete->setRefs( $references );
         $requete->setUser( $user );
+
+        //Categ de la multi select
+        $requete->setCategPointDur( $categPointDur );
 
         //s'il n'existe pas encore de requête pour cet utilisateur, on met celle la en requête par défaut
         $tmp = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user ) );
@@ -149,8 +153,18 @@ class RequeteController extends Controller
         $requete  = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'id' => $id ) );
         $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
 
+        $categsId = explode(',' , $requete->getCategPointDur());
+
+        $categs   = array();
+        foreach ($categsId as $categId) 
+        {
+            if("" !== trim($categId))
+            $categs[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => trim($categId)));
+        }
+
         return $this->render('HopitalNumeriqueRechercheBundle:Requete:detail.html.twig', array(
             'refs'     => json_encode($requete->getRefs()),
+            'categs'   => $categs,
             'elements' => $elements['CATEGORIES_RECHERCHE']
         ));
     }

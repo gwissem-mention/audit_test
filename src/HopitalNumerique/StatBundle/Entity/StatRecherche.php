@@ -61,6 +61,13 @@ class StatRecherche
     protected $references;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="stat_categ_point_dur", type="string", length=255)
+     */
+    private $categPointDur;
+
+    /**
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
@@ -245,5 +252,28 @@ class StatRecherche
     public function getIsRequeteSaved()
     {
         return $this->isRequeteSaved;
+    }
+
+    /**
+     * Set categPointDur
+     *
+     * @param string $categPointDur
+     * @return StatRecherche
+     */
+    public function setCategPointDur($categPointDur)
+    {
+        $this->categPointDur = $categPointDur;
+
+        return $this;
+    }
+
+    /**
+     * Get categPointDur
+     *
+     * @return string 
+     */
+    public function getCategPointDur()
+    {
+        return $this->categPointDur;
     }
 }

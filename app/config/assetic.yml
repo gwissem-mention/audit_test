@@ -93,6 +93,10 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/bootstrap-iconpicker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js"
             filters : [ ?yui_js ]
+        bootstrap_multiselect_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/bootstrap-multiselect/js/bootstrap-multiselect.js"
+            filters : [ ?yui_js ]
         nestable_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/Nestable/jquery.nestable.js"
@@ -174,4 +178,8 @@ assetic:
         bootstrap_iconpicker_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/bootstrap-iconpicker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css"
+            filters: [ cssembed, ?yui_css ]
+        bootstrap_multiselect_css:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/bootstrap-multiselect/css/bootstrap-multiselect.css"
             filters: [ cssembed, ?yui_css ]

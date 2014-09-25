@@ -8,6 +8,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-recherche-search-index.css" filter="cssrewrite, ?yui_css"
         "@fancybox_css" 
+        "@bootstrap_multiselect_css"
         'bundles/hopitalnumeriquerecherche/css/style.css'
         'bundles/hopitalnumeriquerecherche/css/synthese.css'
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
@@ -22,45 +23,13 @@
     {% javascripts output="compiled/hopitalnumerique-recherche-search-index.js"
         "@fancybox_js" 
         "@jquery_cookie_js"
+        "@bootstrap_multiselect_js"
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriquerecherche/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-<script type="text/javascript">
-
-/**
- * Met à jour les résulats trouvés en fonction des paramètres de la requête
- */
-function updateResultats( cleanSession )
-{
-    var loader = $('#resultats').nodevoLoader().start();
-    
-    //AJAX call for results
-    $.ajax({
-        url  : $('#resultats-url').val(),
-        data : {
-            references   : getReferences(),
-            cleanSession : cleanSession
-        },
-        type    : 'POST',
-        success : function( data ){
-            $('#resultats').html( data );
-
-            if( $('#dest li:not(.hide)').length == 0){
-                $('.requete h2').html( 'Requête de recherche' );
-                $('#resultats').html('');
-            }else if( $('#nbResults').val() == 1 || $('#nbResults').val() == 0 ){
-                $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultat)' );
-            }else
-                $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
-
-            loader.finished();
-        }
-    });
-}
-</script>
 {% endblock %}
 
 {% block body %}
@@ -75,7 +44,21 @@ function updateResultats( cleanSession )
             {% if app.user %}
                 <div class="btn btn-block background-violet text-left" id="smallMesRequetes" onclick="$('#mesrequetes').click();"><i class="fa fa-list"></i> Mes requêtes</div>
             {% endif %}
+
+
+            <select multiple="multiple" class="form-control" placeholder="Sélectionnez un filtre pour un point dur" name="categ_production_select" id="categ_production_select" style="height:200px;">
+                {% for categorieProduction in categoriesProduction %}
+                    <option value="{{categorieProduction.id}}" >{{categorieProduction.libelle}}</option>
+                {% endfor %}
+            </select>
+            <input type="hidden" id="categ_production_select_vals" value="{{categoriesProductionActif}}" />
+            <input type="hidden" id="categ_production_select_vals_chargement" value="{{categoriesProductionActifJSON}}" />
         </div>
+
+        <style type="text/css">
+            #recherche button.multiselect {text-align: left;}
+            #recherche button.multiselect .caret{text-align: right;}
+        </style>
 
         <div class="col-md-8">
             <div class="requete">

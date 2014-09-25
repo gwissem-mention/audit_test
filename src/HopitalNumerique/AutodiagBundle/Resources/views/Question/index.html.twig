@@ -10,7 +10,7 @@
             <li class="dd-item dd3-item" data-id="{{question.id}}" id="question-{{question.id}}" >
                 <div class="dd-handle dd3-handle"></div>
                 <div class="dd3-content">
-                    <a href="{{path('hopitalnumerique_autodiag_question_edit',{'id':question.id})}}" class="fancy fancybox.ajax" title="{{question.texte}}">{% if question.code != '' %}{{question.code ~ '. '}}{% endif %}{{question.texte|truncate(90, true, '...')}}</a>
+                    <a href="{{path('hopitalnumerique_autodiag_question_edit',{'id':question.id})}}" class="fancy fancybox.ajax" title="{{question.texte}}">{% if question.code != '' %}{{question.code ~ '. '}}{% endif %}{{question.texte|truncate(85, true, '...')}}</a>
                     <p class="text-muted pull-right">
                         {% if question.ponderation %}Pond. : {{question.ponderation}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
                         Note référencement : <span>{{question.note}}</span> / 400
