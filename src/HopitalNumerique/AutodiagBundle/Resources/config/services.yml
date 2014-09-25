@@ -26,6 +26,8 @@ parameters:
     #Process
     hopitalnumerique_autodiag.manager.process.class: HopitalNumerique\AutodiagBundle\Manager\ProcessManager
     hopitalnumerique_autodiag.form.process.class: HopitalNumerique\AutodiagBundle\Form\ProcessType
+    #ProcessChapitre
+    hopitalnumerique_autodiag.manager.process_chapitre.class: HopitalNumerique\AutodiagBundle\Manager\ProcessChapitreManager
     #Twig
     hopitalnumerique_autodiag.twig.autodiag.class: HopitalNumerique\AutodiagBundle\Twig\AutodiagExtension
 
@@ -132,6 +134,13 @@ services:
         arguments: ["@hopitalnumerique_autodiag.manager.process", "@validator", "@hopitalnumerique_autodiag.manager.chapitre"]
         tags:
             - { name: form.type, alias: hopitalnumerique_autodiag_process }
+
+    #ProcessChapitre
+    hopitalnumerique_autodiag.manager.process_chapitre:
+        class: %hopitalnumerique_autodiag.manager.process_chapitre.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
     #Extension Twig
     hopitalnumerique_autodiag.twig.autodiag_extension:

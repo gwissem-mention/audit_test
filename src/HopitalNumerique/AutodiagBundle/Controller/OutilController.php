@@ -72,16 +72,41 @@ class OutilController extends Controller
         $form = $this->createForm( 'hopitalnumerique_autodiag_outil', $outil);
 
         $processOriginaux = new ArrayCollection();
+        $processChapitresOriginaux = array();
         foreach ($outil->getProcess() as $process)
+        {
             $processOriginaux->add($process);
+            $processChapitresOriginaux[$process->getId()] = new ArrayCollection();
+            foreach ($process->getProcessChapitres() as $processChapitre)
+                $processChapitresOriginaux[$process->getId()]->add($processChapitre);
+        }
 
         //si le formulaire est valide
         if ( $form->handleRequest($request)->isValid() ) {
 
-            //<-- Suppression des process enlevés
+            //<-- Suppression des process et chapitres enlevés
             foreach ($processOriginaux as $process)
+            {
                 if (!$outil->getProcess()->contains($process))
                     $this->get('hopitalnumerique_autodiag.manager.process')->delete($process);
+                else
+                {
+                    foreach ($processChapitresOriginaux[$process->getId()] as $processChapitre)
+                    {
+                        $processContientToujoursChapitre = false;
+                        foreach ($outil->getProcess() as $processExistant)
+                        {
+                            if ($processExistant->getProcessChapitres()->contains($processChapitre))
+                            {
+                                $processContientToujoursChapitre = true;
+                                break;
+                            }
+                        }
+                        if (!$processContientToujoursChapitre)
+                            $this->get('hopitalnumerique_autodiag.manager.process_chapitre')->delete($processChapitre);
+                    }
+                }
+            }
             //-->
             
             //Save
