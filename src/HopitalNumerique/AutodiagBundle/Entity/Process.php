@@ -102,7 +102,7 @@ class Process
      * @ORM\OneToMany(
      *   targetEntity = "ProcessChapitre",
      *   mappedBy = "process",
-     *   cascade = { "persist" }
+     *   cascade = { "persist","remove" }
      * )
      * @ORM\OrderBy({ "order":"ASC" })
      */
@@ -243,7 +243,23 @@ class Process
     {
         $this->processChapitres->add($processChapitre);
     }
-
+    public function removeProcessChapitre(ProcessChapitre $processChapitre)
+    {
+        $this->processChapitres->removeElement($processChapitre);
+    }
+    /**
+     * Retourne un ProcessChapitre du Process selon le Chapitre.
+     * 
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Chapitre $chapitre Le chapitre du ProcessChapitre
+     * @return \HopitalNumerique\AutodiagBundle\Entity\ProcessChapitre|NULL Le ProcessChapitre ou NIL si non existant
+     */
+    private function getProcessChapitreByChapitre(Chapitre $chapitre)
+    {
+        foreach ($this->processChapitres as $processChapitre)
+            if ($processChapitre->getChapitre()->getId() == $chapitre->getId())
+                return $processChapitre;
+        return null;
+    }
     
     public function getChapitres()
     {
@@ -267,6 +283,10 @@ class Process
     }
     public function removeChapitre(Chapitre $chapitre)
     {
-        $this->processChapitres->removeElement($chapitre);
+        $processChapitre = $this->getProcessChapitreByChapitre($chapitre);
+        if ($processChapitre != null)
+        {
+            $this->processChapitres->removeElement($processChapitre);
+        }
     }
 }
