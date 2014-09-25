@@ -288,78 +288,184 @@
         
         <div class="page-break"></div>
 
-        <h2 class="violet closed" data-toggle="chapitres" >Résultats de l'outil - Publications</h2>
+        <h2 class="violet closed" data-toggle="chapitres" >Résultats de l'outil - Analyse</h2>
 
         <div id="chapitres" style="display:none">
             <p class="text-justify">
                 <span>Compte tenu de vos réponses, l'Anap vous propose l'analyse suivante (l'ordre d'affichage correspond à l'ordre de priorité de traitement, le plus important en premier) :</span>
             </p>
 
-            {# Affichage des publications #}
-            {% set chaptersToHide = [] %}
-            {% for chapitre in chapitres %}
-                {% set doTheChapterHavePublications = false %}
-                <div class="chapter chapitre-{{chapitre.id}}" style="{% if chapitre.questions|length == 0 and chapitre.childs|length == 0 %}display:none{% endif %}" >                    
-                    <h3 class="prev">{{chapitre.intro}}</h3>
-                    <h3 class="violet">{{chapitre.title}}</h3>
-                    <p class="text-muted level1">{{chapitre.desc}}</p>
+            <style type="text/css">
+                #chapitres #table-analyse td, #table-analyse th {font-size: 11px;}
+            </style>
+            <script type="text/javascript">
+                $(window).load(function() {
+                    $('#chapitres #table-analyse thead tr th.forPrint').css('display', 'none');
+                    $('#chapitres #table-analyse tbody tr td.forPrint').css('display', 'none');
+                });
+            </script>
 
-                    <hr>
-
-                    {% if chapitre.synthese %}
-                        <p class="violet synthese">{{chapitre.synthese|nl2br}}</p>
-                    {% endif %}
-
-                    {# Résultats liés au chapitre #}
-                    {{ mySelf.calcNote(chapitre, pdf) }}
-
-                    {# Résultats liés aux questions #}
-                    {% for question in chapitre.questions %}
-                        {% set publications = question.id|getPublicationsForQuestion(pdf) %}
-                        {% if publications %}
-                            {{ mySelf.buildQuestion(question, publications) }}
-                            {% set doTheChapterHavePublications = true %}
-                        {% endif %}
-                    {% endfor %}
-                    
-                    {# Sous Chapitres #}
-                    {% if chapitre.childs|length > 0 %}
-                        <div class="row sous-chapitre">
-                            <div class="col-md-12">
-                                {% for child in chapitre.childs %}
-                                    <div style="{% if child.questions|length == 0 %}display:none{% endif %}">
-                                        <h4 class="prev">{{child.intro}}</h4>
-                                        <h4 class="violet">{{child.title}}</h4>
-                                        <p class="text-muted level1">{{child.desc}}</p>
-
-                                        {% if child.synthese %}
-                                            <p class="violet synthese">{{child.synthese}}</p>
-                                        {% endif %}
-                                        
-                                        {# Résultats liés au chapitre #}
-                                        {{ mySelf.calcNote(child, pdf) }}
-
-                                        {# Résultats liés aux questions #}
-                                        {% for question in child.questions %}
-                                            {% set publications = question.id|getPublicationsForQuestion(pdf) %}
-                                            {% if publications %}
-                                                {{ mySelf.buildQuestion(question, publications) }}
-                                                {% set doTheChapterHavePublications = true %}
+            {# Affichage des publications sous forme de tableau : GME 24/09/14 #}
+            <table class="table table-striped" id="table-analyse">
+                <!-- En-tête du tableau -->
+                <thead>
+                    <tr>
+                       <th>Chapitre</th>
+                       <th>Sous-chapitre</th>
+                       <th>Question</th>
+                       <th>Réponse</th>
+                       <th>Synthèse</th>
+                       <th class="forAffichage">Production</th>
+                       <th class="forPrint" style="width:100px;">Commentaire</th>
+                    </tr>
+                </thead>
+                
+                <!-- Corps du tableau -->
+                <tbody>
+                    {# Chapitres #}
+                    {% set chaptersToHide = [] %}
+                    {% for chapitre in chapitres %}
+                        {% set doTheChapterHavePublications = false %}
+                        <tr>
+                            <td>{{chapitre.title}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            {% if chapitre.synthese %}
+                                <td>{{chapitre.synthese|nl2br}}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td class="forAffichage">
+                                {% if chapitre.noteMin and chapitre.noteChapitre <= chapitre.noteMin %}
+                                    {% set publications = chapitre.id|getPublicationsForChapitre(pdf) %}
+                                    {% if publications %}
+                                        {{publications|raw}}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td class="forPrint"></td>
+                        </tr>
+                        
+                        {# Questions du chapitre #}
+                        {% for question in chapitre.questions %}
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>{{question.question}}</td>
+                                <td {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
+                                        {% if question.min == question.initialValue %}
+                                            style="color:#c82f5b"
+                                        {% elseif question.max == question.initialValue %}
+                                            style="color:#e88824"
+                                        {% else %}
+                                            style="color:#e88824"
+                                        {% endif %}{% endif %}>
+                                    {% if question.initialValue == -1 %}
+                                        Non concerné
+                                    {% else %}
+                                        {% for option in question.options %}
+                                            {% set tab = option|split(';') %}
+                                            {% if tab[0] == question.initialValue %}
+                                                {{tab[1]|trim}}
                                             {% endif %}
                                         {% endfor %}
-                                    </div>
+                                    {% endif %}
+                                </td>
+                                {% if question.synthese %}
+                                    <td>{{question.synthese|nl2br}}</td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                                <td class="forAffichage">
+                                    {% set publications = question.id|getPublicationsForQuestion(pdf) %}
+                                    {% if publications %}
+                                        {{publications|raw}}
+                                        {% set doTheChapterHavePublications = true %}
+                                    {% endif %}
+                                </td>
+                                <td class="forPrint"></td>
+                            </tr>
+                        {% endfor %}
+
+                        {# Sous Chapitres #}
+                        {% if chapitre.childs|length > 0 %}
+                            {% for child in chapitre.childs %}
+        
+                                <tr>
+                                    <td></td>
+                                    <td>{{child.title}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    {% if child.synthese %}
+                                        <td>{{child.synthese|nl2br}}</td>
+                                    {% else %}
+                                        <td></td>
+                                    {% endif %}
+                                    <td class="forAffichage">
+                                        {% if child.noteMin and child.noteChapitre <= child.noteMin %}
+                                            {% set publications = child.id|getPublicationsForChapitre(pdf) %}
+                                            {% if publications %}
+                                                {{publications|raw}}
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                    <td class="forPrint"></td>
+                                </tr>
+
+                                {# Question du sous chapitre #}
+                                {% for questionChild in child.questions %}
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{questionChild.question}}</td>
+                                            <td {% if questionChild.colored and questionChild.initialValue != -1 and questionChild.initialValue != '' %}
+                                                    {% if questionChild.min == questionChild.initialValue %}
+                                                        style="color:#c82f5b"
+                                                    {% elseif questionChild.max == questionChild.initialValue %}
+                                                        style="color:#e88824"
+                                                    {% else %}
+                                                        style="color:#e88824"
+                                                    {% endif %}{% endif %}>
+                                                {% if questionChild.initialValue == -1 %}
+                                                    Non concerné
+                                                {% else %}
+                                                    {% for option in questionChild.options %}
+                                                        {% set tab = option|split(';') %}
+                                                        {% if tab[0] == questionChild.initialValue %}
+                                                            {{tab[1]|trim}}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </td>
+                                            {% if questionChild.synthese %}
+                                                <td>{{questionChild.synthese|nl2br}}</td>
+                                            {% else %}
+                                                <td></td>
+                                            {% endif %}
+                                            <td class="forAffichage">
+                                                {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}
+                                                {% if publications %}
+                                                    {{publications|raw}}
+                                                    {% set doTheChapterHavePublications = true %}
+                                                {% endif %}
+                                            </td>
+                                            <td class="forPrint"></td>
+                                        </tr>
                                 {% endfor %}
-                            </div>
-                        </div>
-                    {% endif %}
 
-                    {% if not doTheChapterHavePublications %}
-                        {% set chaptersToHide = chaptersToHide|merge([chapitre.id]) %}
-                    {% endif %}
-                </div>
-            {% endfor %}
+                            {% endfor %}
+                        {% endif %}
 
-            <p class="text-center" style="{% if chapitres|length > 0 %}display:none{% endif %}" >
+                        {% if not doTheChapterHavePublications %}
+                            {% set chaptersToHide = chaptersToHide|merge([chapitre.id]) %}
+                        {% endif %}
+
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <p class="text-center {% if chapitres|length > 0 %}hide{% endif %}" >
                 - Aucune recommandation de l'ANAP nécessaire -
                 <input type="hidden" id="chaptersToHide" value="{{chaptersToHide|json_encode}}" />
             </p>
@@ -370,7 +476,7 @@
 
             <h2 class="violet open" data-toggle="reponses" >Résultats de l'outil - Vos réponses</h2>
 
-            <div id="reponses" style="display:none">
+            <div id="reponses" {% if not pdf %} style="display:none" {% endif %} >
             
                 <p>Vos réponses apparaissent en gras parmi les réponses possibles à chaque question.</p>
             
@@ -412,32 +518,6 @@
         {% endif %}
     </div>
 </div>
-
-{# Construit les lignes associées aux résultats #}
-{% macro buildQuestion(question, publications) %}
-    <div class="row">
-        <div class="col-md-12"><p class="text-muted">{{question.intro}}</p></div>
-        <div class="col-md-12">
-            <p class="question">{{question.question}}</p>
-            <p class="violet synthese">{{question.synthese}}</p>
-            {{publications|raw}}
-        </div>
-    </div>
-{% endmacro %}
-
-{# Calcul de la note du chapitre #}
-{% macro calcNote(chapitre, pdf) %}
-    {% if chapitre.noteMin and chapitre.noteChapitre <= chapitre.noteMin %}
-        {% set publications = chapitre.id|getPublicationsForChapitre(pdf) %}
-        {% if publications %}
-            <div class="row">
-                <div class="col-md-12">
-                    {{publications|raw}}
-                </div>
-            </div>
-        {% endif %}
-    {% endif %}
-{% endmacro %}
 
 {% macro buildQuestionReponse(questions) %}
     {% for question in questions %}

@@ -37,6 +37,8 @@ $(document).ready(function() {
             nonConcernes.push( element.title );
     });
 
+    $("#reponses").css("display", "block");
+
     //Gestion des chapitres non concernes
     if( nonConcernes.length > 0 ){
         var html = '<b>Les chapitres suivants n\'ont pas été diagnostiqués :</b> <ul>';
@@ -46,6 +48,7 @@ $(document).ready(function() {
         });
 
         html += '</ul>';
+
         $('#chaptersNonConcernes').html(html);
     }
 

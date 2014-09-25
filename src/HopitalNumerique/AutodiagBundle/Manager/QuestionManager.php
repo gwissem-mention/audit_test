@@ -139,11 +139,13 @@ class QuestionManager extends BaseManager
     private function getNoteReferencement( $references, $refPonderees )
     {
         $note = 0;
-        foreach($references as $reference){
-            $id = $reference->getReference()->getId();
+        if(!is_null($references)){
+            foreach($references as $reference){
+                $id = $reference->getReference()->getId();
 
-            if( isset($refPonderees[ $id ]) )
-                $note += $refPonderees[ $id ]['poids'];
+                if( isset($refPonderees[ $id ]) )
+                    $note += $refPonderees[ $id ]['poids'];
+            }
         }
         
         return $note;
