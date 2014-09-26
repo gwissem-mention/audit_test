@@ -188,7 +188,7 @@
                                                 {% set nbRepCateg = nbRepCateg + datas['nbRep'] %}
                                                 {% set nbQueCateg = nbQueCateg + datas['nbQue'] %}
                                             {% else %}
-                                                <td class="text-center vertical-align" rowspan="2">
+                                                <td class="text-center vertical-align">
                                                     - Non diagnostiqué -
                                                 </td>
                                             {% endif %}
@@ -485,7 +485,7 @@
         {% if pdf or true %}
             <div class="page-break"></div>
 
-            <h2 class="violet open" data-toggle="reponses" >Résultats de l'outil - Vos réponses</h2>
+            <h2 class="violet closed" data-toggle="reponses" >Résultats de l'outil - Vos réponses</h2>
 
             <div id="reponses" {% if not pdf %} style="display:none" {% endif %} >
             
