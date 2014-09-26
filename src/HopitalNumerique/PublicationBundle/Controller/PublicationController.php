@@ -66,6 +66,9 @@ class PublicationController extends Controller
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array( 'id' => $idc ) );
         $prefix  = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu);
 
+        $precedent = $this->get('hopitalnumerique_objet.manager.contenu')->getPrecedent( $objet, $contenu );
+        $suivant   = $this->get('hopitalnumerique_objet.manager.contenu')->getSuivant( $objet, $contenu );
+
         //add visualisation
         $contenu->setNbVue( ($contenu->getNbVue() + 1) );
 
@@ -94,7 +97,9 @@ class PublicationController extends Controller
             'prefix'       => $prefix,
             'productions'  => array(),
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() ),
-            'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() )
+            'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() ),
+            'precedent'    => $precedent,
+            'suivant'      => $suivant
         ));
     }
 

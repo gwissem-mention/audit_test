@@ -200,7 +200,31 @@ class ContenuManager extends BaseManager
         return true;
     }
 
+    public function getPrecedent( $objet, $contenu )
+    {
+        $contenus = $this->sortContenus( $objet );
 
+        $id = $contenu->getId();
+
+        $array = $contenus->toArray();
+
+        reset($array);
+        while ( current($array)->getId() !== $id ) next($array);        
+        return prev($array) == false ? null : current($array);
+    }
+
+    public function getSuivant( $objet, $contenu )
+    {
+        $contenus = $this->sortContenus( $objet );
+
+        $id = $contenu->getId();
+
+        $array = $contenus->toArray();
+
+        reset($array);
+        while ( current($array)->getId() !== $id ) next($array);
+        return next($array) == false ? null : current($array);
+    }   
 
 
 
@@ -391,5 +415,42 @@ class ContenuManager extends BaseManager
         
         if( $save )
             $this->save($objects);
+    }
+
+    /**
+     * Fonction qui trie les contenus d'un objet selon son order et celui de ses parents
+     */
+    private function sortContenus( $objet )
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null ))->orderBy( array( "order" => Criteria::ASC ) );
+        $contenus = $objet->getContenus()->matching( $criteria );  
+
+        $elements = array();
+
+        foreach ($contenus as $key => $item) {
+             $this->sortContenusRescursively( $item, $elements, $objet->getContenus() );
+        }
+
+        $sortedContenus = new ArrayCollection( $elements );
+
+        $criteria       = Criteria::create()->where(Criteria::expr()->neq("contenu", ""));
+        $sortedContenus = $sortedContenus->matching( $criteria );
+        
+        return $sortedContenus;
+    }
+
+    /**
+     * Fonction pour trier les contenus récursivement
+     */
+    private function sortContenusRescursively( $item, &$elements, $contenus )
+    {
+        $elements[] = $item;
+
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", $item ))->orderBy( array( "order" => Criteria::ASC ) );
+        $childs = $contenus->matching( $criteria );  
+
+        foreach ($childs as $key => $child) {
+             $this->sortContenusRescursively( $child, $elements, $contenus );
+        } 
     }
 }
