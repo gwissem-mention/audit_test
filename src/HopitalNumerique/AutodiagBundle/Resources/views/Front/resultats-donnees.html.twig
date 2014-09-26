@@ -415,43 +415,54 @@
 
                                 {# Question du sous chapitre #}
                                 {% for questionChild in child.questions %}
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{{questionChild.question}}</td>
-                                            <td {% if questionChild.colored and questionChild.initialValue != -1 and questionChild.initialValue != '' %}
-                                                    {% if questionChild.min == questionChild.initialValue %}
-                                                        style="color:#c82f5b"
-                                                    {% elseif questionChild.max == questionChild.initialValue %}
-                                                        style="color:#e88824"
-                                                    {% else %}
-                                                        style="color:#e88824"
-                                                    {% endif %}{% endif %}>
-                                                {% if questionChild.initialValue == -1 %}
-                                                    Non concerné
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{questionChild.question}}</td>
+                                        <td {% if questionChild.colored and questionChild.initialValue != -1 and questionChild.initialValue != '' %}
+                                                {% if questionChild.min == questionChild.initialValue %}
+                                                    style="color:#c82f5b"
+                                                {% elseif questionChild.max == questionChild.initialValue %}
+                                                    style="color:#e88824"
                                                 {% else %}
-                                                    {% for option in questionChild.options %}
-                                                        {% set tab = option|split(';') %}
-                                                        {% if tab[0] == questionChild.initialValue %}
-                                                            {{tab[1]|trim}}
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </td>
-                                            {% if questionChild.synthese %}
-                                                <td>{{questionChild.synthese|nl2br}}</td>
+                                                    style="color:#e88824"
+                                                {% endif %}{% endif %}>
+                                            {% if questionChild.initialValue == -1 %}
+                                                Non concerné
                                             {% else %}
-                                                <td></td>
+                                                {% for option in questionChild.options %}
+                                                    {% set tab = option|split(';') %}
+                                                    {% if tab[0] == questionChild.initialValue %}
+                                                        {{tab[1]|trim}}
+                                                    {% endif %}
+                                                {% endfor %}
                                             {% endif %}
-                                            <td class="forAffichage">
-                                                {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}
-                                                {% if publications %}
-                                                    {{publications|raw}}
-                                                    {% set doTheChapterHavePublications = true %}
-                                                {% endif %}
-                                            </td>
-                                            <td class="forPrint"></td>
-                                        </tr>
+                                        </td>
+                                        {% if questionChild.synthese %}
+                                            <td>{{questionChild.synthese|nl2br}}</td>
+                                        {% else %}
+                                            <td></td>
+                                        {% endif %}
+                                        <td class="forAffichage">
+                                            {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}
+                                            {% if publications %}
+                                                {{publications|raw}}
+                                                {% set doTheChapterHavePublications = true %}
+                                            {% endif %}
+                                        </td>
+                                        <td class="forPrint"></td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td colspan="4">Compte tenu de vos réponses, l' ANAP n'a pas de recommendation pour vous.</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="forAffichage"></td>
+                                        <td class="forPrint"></td>
+                                    </tr>
+                                
                                 {% endfor %}
 
                             {% endfor %}
