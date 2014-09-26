@@ -55,7 +55,7 @@ class AutodiagExtension extends \Twig_Extension
     {
         $chapitre = $this->getManagerChapitre()->findOneBy( array('id'=>$id) );
         
-        return $this->buildRefs( $chapitre->getReferences(), $pdf );
+        return $this->buildRefs( $chapitre->getReferences(), $pdf , true );
     }
 
     public function checkNC( $value )
@@ -77,7 +77,7 @@ class AutodiagExtension extends \Twig_Extension
      *
      * @return string
      */
-    private function buildRefs( $references, $pdf = false )
+    private function buildRefs( $references, $pdf = false, $primary = false )
     {
         $refs = array();
 
@@ -96,8 +96,11 @@ class AutodiagExtension extends \Twig_Extension
         $html = '<ul>';
         foreach ($objets as $objet)
         {
-            $href = !is_null($objet['objet']) ? $objet['objet'] . '-' . $objet['aliasO'] . '/' . $objet['id'] . '-' . $objet['aliasC'] : $objet['id'] . '-' . $objet['alias'];
-            $html .= '<li><a href="/publication/'.$href.'" >' . ($pdf ? '/publication/' . $href . ' - ' : '' ) . $objet['titre'] . '</a></li>';
+            if($objet['primary'] == 1)
+            {
+                $href = !is_null($objet['objet']) ? $objet['objet'] . '-' . $objet['primary'] . '-' . $objet['aliasO'] . '/' . $objet['id'] . '-' . $objet['aliasC'] : $objet['id'] . '-' . $objet['alias'];
+                $html .= '<li><a href="/publication/'.$href.'" >' . ($pdf ? '/publication/' . $href . ' - ' : '' ) . $objet['titre'] . '</a></li>';
+            }
         }
         $html .= '</ul>';
 

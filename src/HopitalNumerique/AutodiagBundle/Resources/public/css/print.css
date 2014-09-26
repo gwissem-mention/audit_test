@@ -17,6 +17,12 @@ img{ width:auto !important }
 #resultats #graphiques .panel .panel-heading{display: none}
 #resultats #graphiques .tableContainer{overflow:visible;}
 
+#table-analyse {size: portrait;}
+#table-analyse thead tr th.forAffichage{display: none !important}
+#table-analyse tbody tr td.forAffichage{display: none !important}
+#table-analyse thead tr th.forPrint{display: table-cell !important}
+#table-analyse tbody tr td.forPrint{display: table-cell !important}
+
 /* <-- Process */
 #resultats #process_bloc {}
     #resultats #process_bloc .panel-default { height:auto; }
