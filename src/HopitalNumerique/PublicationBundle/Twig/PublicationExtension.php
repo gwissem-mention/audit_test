@@ -34,6 +34,7 @@ class PublicationExtension extends \Twig_Extension
     private function toascii($string)
     {
         if(!empty($string)){
+            $string = str_replace('œ', 'oe', $string);
             $tempo = utf8_decode($string);
             $string = '';
             foreach (str_split($tempo) as $obj)
