@@ -59,6 +59,7 @@
                             {% import _self as mySelf %}
                             {% for expBesoin in expBesoins %}
                                 {{ mySelf.buildTree(expBesoin) }}
+                                <input type="hidden" id="formulaire-description-{{expBesoin.id}}-url" value="{{path('hopital_numerique_expbesoin_description', {'id': expBesoin.id})}}" />
                             {% endfor %}
                         </ol>
                     </div>
@@ -68,6 +69,15 @@
                 <input type="hidden" id="order-question-url" value="{{path('hopital_numerique_expbesoin_reorderquestion')}}" />
                 {#<input type="hidden" id="calc-ponderation-url" value="{{path('hopitalnumerique_autodiag_outil_ponderation',{'id':outil.id})}}" />#}
 
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12">
+                <div class="well well-lg" id="text-fancy">
+                    <span class="selectionDescription">Vous devez sélectionner une question avant de visualiser la description.</span>
+
+                </div>
             </div>
 
             <div class="clearfix"></div>

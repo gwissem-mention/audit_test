@@ -65,6 +65,19 @@ hopital_numerique_expbesoin_addquestion:
     pattern:  /admin/aide-expression-besoin/add-question
     defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:addQuestion }
 
+hopital_numerique_expbesoin_description:
+    pattern:  /admin/aide-expression-besoin/{id}/description
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:description }
+    requirements: 
+        id: \d+
+
+hopital_numerique_expbesoin_descriptionSave:
+    pattern:  /admin/aide-expression-besoin/{id}/description/save
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:descriptionSave }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
 hopital_numerique_expbesoin_editquestion:
     pattern:  /admin/aide-expression-besoin/edit-question
     defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:editQuestion }

@@ -9,11 +9,15 @@
             <p>
                 Je décris mon besoin, Mon Hôpital Numérique trouve la solution !
             </p>
+            <p>
+                {{expBesoin.description}}
+            </p>
         </div>
     </div>
     {# Bloc de la liste des étapes #}
     <div class="col-md-8 aide-liens">
-        <label>
+        <div id="question-precedente" onclick="retourDerniereQuestion({{expBesoin.id}});" class="btn btn-link pull-left" title="Question précédente" style="margin-right:5px;"><i class="fa fa-reply"></i></div>
+        <label style="margin-top:5px;">
             {{expBesoin.libelle}}
         </label>
         {% for reponse in expBesoin.reponses %}
