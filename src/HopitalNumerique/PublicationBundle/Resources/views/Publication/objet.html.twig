@@ -184,13 +184,13 @@
             <div id="precedent-suivant" style="margin-top:10px">                
                 <div class="col-md-6">
                     {% if precedent is defined and precedent is not null %}
-                        <a style="width:100%" href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':precedent.id, 'alias':objet.alias, 'aliasc':precedent.alias})}}" class="btn btn-link"><i class="fa fa-reply" style="margin-right:5px;"></i>Chapitre précédent : {{precedent.titre|truncate(40, true, '...')}}</a>
+                        <a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':precedent.id, 'alias':objet.alias, 'aliasc':precedent.alias})}}" class="btn btn-link"><i class="fa fa-arrow-left" style="margin-right:5px;"></i>Chapitre précédent : {{ precedentOrder ~ '. ' ~ precedent.titre|truncate(40, true, '...')}}</a>
                          <div class="clearfix"></div>
                         {% endif %}
                 </div>                
                 <div class="col-md-6">
                     {% if suivant is defined and suivant is not null %}
-                        <a style="width:100%" href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':suivant.id, 'alias':objet.alias, 'aliasc':suivant.alias})}}" class="btn btn-link">Chapitre suivant : {{suivant.titre|truncate(40, true, '...')}}<i class="fa fa-reply" style="margin-left:5px;"></i></a>
+                        <a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':suivant.id, 'alias':objet.alias, 'aliasc':suivant.alias})}}" class="btn btn-link">Chapitre suivant : {{suivantOrder ~ '. ' ~ suivant.titre|truncate(40, true, '...')}}<i class="fa fa-arrow-right" style="margin-left:5px;"></i></a>
                          <div class="clearfix"></div>
                     {% endif %}
                 </div>

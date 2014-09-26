@@ -119,6 +119,9 @@
     #bloc-notation-moyenne-objet #note-moyenne-etoile { margin-top: 2px;}
     #bloc-notation-moyenne-objet #info-note-moyenne { margin-left: 10px;}
 
+/*  Chapitre Précédent / Suivant */
+    #precedent-suivant a{width: 100%; color: #6f3596;}
+
 /* Commentaires */
     #commentaires h2{display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
     #commentaires h2.open{background-position: right -38px;}
