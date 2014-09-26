@@ -91,6 +91,26 @@ function addQuestion( titre )
     });
 }
 
+//Sauvegarde description
+function descriptionQuestion( id, url)
+{ 
+    var loader = $('#text-fancy').nodevoLoader().start();
+
+    if ( $('#text-fancy form').validationEngine('validate') ) {
+        $.ajax({
+            url  : url,
+            data : {
+                id : id,
+                form : $("#text-fancy form #description_fancy").val()
+            },
+            type     : 'POST',
+            success  : function( data ){
+                loader.finished();
+            }
+        });
+    }
+}
+
 //Editer une question
 function editQuestion( id, url)
 { 
@@ -212,6 +232,14 @@ function selectQuestion( id, url )
         type    : 'POST',
         success : function( data ){
             $('#reponses .results').html( data );
+        }
+    });
+
+    $.ajax({
+        url     : $("#formulaire-description-" + id + "-url").val(),
+        type    : 'POST',
+        success : function( data ){
+            $('#text-fancy').html( data );
         }
     });
 

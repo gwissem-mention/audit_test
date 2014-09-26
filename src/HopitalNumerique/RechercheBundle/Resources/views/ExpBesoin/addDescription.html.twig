@@ -1,0 +1,15 @@
+<form id="fancy_description" novalidate="novalidate" class="form-horizontal toValidate" action="" method="post" name="fancy_description">
+    <div class="form-group">
+        <div class="col-sm-12">
+            <label class="control-label" for="description_fancy">
+                Déscription présente dans la Pop-In dans le front office.
+            </label>
+        </div>
+        <div class="col-sm-12">
+            <textarea rows="5" class="form-control" name="description_fancy" id="description_fancy">{% if expBesoin.description is not null %}{{expBesoin.description}}{% endif %}</textarea>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</form>
+<div onclick="descriptionQuestion( {{expBesoin.id}}, '{{path('hopital_numerique_expbesoin_descriptionSave', {'id':expBesoin.id})}}' );" class="pull-right btn btn-success"><i class="fa fa-check"></i></div>
+<div class="clearfix"></div>
