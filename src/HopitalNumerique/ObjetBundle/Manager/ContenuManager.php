@@ -200,7 +200,69 @@ class ContenuManager extends BaseManager
         return true;
     }
 
+    /**
+     * Retourne le contenu précédant immédiatemment le contenu $contenu dans la liste $contenus
+     */
+    public function getPrecedent( $contenus, $contenu )
+    {
+        reset($contenus);
+        while ( current($contenus) !== false && current($contenus)->getId() !== $contenu->getId() ) next($contenus);        
+        return prev($contenus) == false ? null : current($contenus);
+    }
 
+    /**
+     * Retourne le contenu suivant immédiatemment le contenu $contenu dans la liste $contenus
+     */
+    public function getSuivant( $contenus, $contenu )
+    {
+        reset($contenus);
+        while ( current($contenus) !== false && current($contenus)->getId() !== $contenu->getId() ) next($contenus);
+        return next($contenus) == false ? null : current($contenus);
+    }   
+
+    /**
+     * Retourne la liste des contenus qui ont un contenu non vide, triés par ordre (ex : Chapitre 1 - Chapitre 1.1 - Chapitre 1.2 - Chapitre 2 - Chapitre 2.1)
+     */
+    public function getContenusNonVidesTries( $objet )
+    {
+        $criteria = Criteria::create()->orderBy( array( "parent" => Criteria::ASC, "order" => Criteria::ASC ) );
+        $contenus = $objet->getContenus()->matching( $criteria );  
+
+        $contenus = array_filter( $contenus->toArray(), function($item) {
+            return $item->getParent() == NULL;            
+        });
+
+        $elements = array();
+
+        foreach ($contenus as $key => $item) {
+             $this->sortContenusRescursively( $item, $elements, $objet->getContenus() );
+        }
+
+        $elements = array_filter( $elements, function($item) {
+            return $item->getContenu() != "";            
+        });         
+        
+        return $elements;
+    }
+
+    /**
+     * Retourne l'ordre complet d'un contenu (ex : retourne 2.1.1 si le contenu est le premier enfant du premier enfant du deuxième élément)
+     */
+    public function getFullOrder($contenu)
+    {
+        if (!isset($contenu))
+            return null;
+
+        $order  = $contenu->getOrder();
+        $parent = $contenu;
+
+        while ( ($parent = $parent->getParent()) != NULL )
+        {
+            $order = $parent->getOrder() . '.' . $order;
+        }
+
+        return $order;
+    }
 
 
 
@@ -391,5 +453,21 @@ class ContenuManager extends BaseManager
         
         if( $save )
             $this->save($objects);
+    }    
+
+    /**
+     * Fonction pour trier les contenus récursivement
+     */
+    private function sortContenusRescursively( $parent, &$elements, $contenus )
+    {
+        $elements[] = $parent;
+
+        $childs = array_filter( $contenus->toArray(), function($item) use ($parent) {
+            return $item->getParent() == $parent;            
+        });
+
+        foreach ($childs as $key => $child) {
+             $this->sortContenusRescursively( $child, $elements, $contenus );
+        } 
     }
 }

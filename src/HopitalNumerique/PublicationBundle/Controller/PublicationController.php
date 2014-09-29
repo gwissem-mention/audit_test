@@ -66,6 +66,12 @@ class PublicationController extends Controller
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array( 'id' => $idc ) );
         $prefix  = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu);
 
+        $contenusNonVidesTries  = $this->get('hopitalnumerique_objet.manager.contenu')->getContenusNonVidesTries( $objet );
+        $precedent      = $this->get('hopitalnumerique_objet.manager.contenu')->getPrecedent( $contenusNonVidesTries, $contenu );
+        $precedentOrder = $this->get('hopitalnumerique_objet.manager.contenu')->getFullOrder($precedent);
+        $suivant        = $this->get('hopitalnumerique_objet.manager.contenu')->getSuivant( $contenusNonVidesTries, $contenu );
+        $suivantOrder   = $this->get('hopitalnumerique_objet.manager.contenu')->getFullOrder($suivant);
+
         //add visualisation
         $contenu->setNbVue( ($contenu->getNbVue() + 1) );
 
@@ -85,16 +91,20 @@ class PublicationController extends Controller
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
-            'objet'        => $objet,
-            'objets'       => $this->getObjetsFromRecherche( $contenu ),
-            'note'         => $note,
-            'contenus'     => $contenus,
-            'types'        => $types,
-            'contenu'      => $contenu,
-            'prefix'       => $prefix,
-            'productions'  => array(),
-            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() ),
-            'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() )
+            'objet'             => $objet,
+            'objets'            => $this->getObjetsFromRecherche( $contenu ),
+            'note'              => $note,
+            'contenus'          => $contenus,
+            'types'             => $types,
+            'contenu'           => $contenu,
+            'prefix'            => $prefix,
+            'productions'       => array(),
+            'meta'              => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() ),
+            'ambassadeurs'      => $this->getAmbassadeursConcernes( $objet->getId() ),
+            'precedent'         => $precedent,
+            'precedentOrder'    => $precedentOrder,
+            'suivant'           => $suivant,
+            'suivantOrder'      => $suivantOrder
         ));
     }
 

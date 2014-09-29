@@ -366,15 +366,20 @@ class FrontController extends Controller
 
             $nbVal = 0;
             $val   = 0;
+            $exist = false;
 
             //calc moyenne
             foreach($reponses as $reponse) {
-                if ( $reponse->getValue() != -1 ){
+                if ( $reponse->getValue() != -1 && $reponse->getValue() != ''){
                     $val += $reponse->getValue() != '' ? $reponse->getValue() : 0;
                     $nbVal++;
+                    $exist = true;
                 }
             }
-            $val = $nbVal != 0 ? ( $val / $nbVal ) : -1;
+            if ($exist)
+            	$val = $nbVal != 0 ? ( $val / $nbVal ) : -1;
+            else
+                $val = '';
 
             //create entity Reponse
             $rep = $this->get('hopitalnumerique_autodiag.manager.reponse')->createEmpty();
