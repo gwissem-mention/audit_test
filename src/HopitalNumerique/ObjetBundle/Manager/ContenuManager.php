@@ -226,21 +226,23 @@ class ContenuManager extends BaseManager
     public function getContenusNonVidesTries( $objet )
     {
         $criteria = Criteria::create()->orderBy( array( "parent" => Criteria::ASC, "order" => Criteria::ASC ) );
-        $contenus = $objet->getContenus()->matching( $criteria );  
+        //Récupération de l'ensemble des contenus triés par Parent puis Order
+        $contenus = $objet->getContenus()->matching( $criteria );
 
-        $contenus = array_filter( $contenus->toArray(), function($item) {
-            return $item->getParent() == NULL;            
+        //Récupération des contnus de premier niveau
+        $contenusParent = array_filter( $contenus->toArray(), function($item) {
+            return $item->getParent() == NULL;
         });
 
         $elements = array();
 
-        foreach ($contenus as $key => $item) {
-             $this->sortContenusRescursively( $item, $elements, $objet->getContenus() );
+        foreach ($contenusParent as $key => $item) {
+             $this->sortContenusRescursively( $item, $elements, $contenus );
         }
 
         $elements = array_filter( $elements, function($item) {
-            return $item->getContenu() != "";            
-        });         
+            return $item->getContenu() != "";
+        });
         
         return $elements;
     }

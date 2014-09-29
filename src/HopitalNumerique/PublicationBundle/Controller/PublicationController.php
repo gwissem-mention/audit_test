@@ -67,6 +67,7 @@ class PublicationController extends Controller
         $prefix  = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu);
 
         $contenusNonVidesTries  = $this->get('hopitalnumerique_objet.manager.contenu')->getContenusNonVidesTries( $objet );
+
         $precedent      = $this->get('hopitalnumerique_objet.manager.contenu')->getPrecedent( $contenusNonVidesTries, $contenu );
         $precedentOrder = $this->get('hopitalnumerique_objet.manager.contenu')->getFullOrder($precedent);
         $suivant        = $this->get('hopitalnumerique_objet.manager.contenu')->getSuivant( $contenusNonVidesTries, $contenu );
@@ -89,22 +90,42 @@ class PublicationController extends Controller
         //set Consultation entry
         $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $contenu, true );
 
+        $contenuTemp      = $contenu;
+        $breadCrumbsArray = array();
+        //Ajout du contenu courant
+        $breadCrumbsArray[] = array(
+            'label'   => $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu) . ' ' . $contenu->getTitre(),
+            'contenu' => $contenu
+        );
+        $breadCrumbs      = "";
+
+        while(!is_null($contenuTemp->getParent()))
+        {
+            $contenuTemp      = $contenuTemp->getParent();
+            array_unshift($breadCrumbsArray, array(
+                    'label'   => $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenuTemp) . ' ' . $contenuTemp->getTitre(),
+                    'contenu' => $contenuTemp
+                )
+            );
+        }
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
-            'objet'             => $objet,
-            'objets'            => $this->getObjetsFromRecherche( $contenu ),
-            'note'              => $note,
-            'contenus'          => $contenus,
-            'types'             => $types,
-            'contenu'           => $contenu,
-            'prefix'            => $prefix,
-            'productions'       => array(),
-            'meta'              => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() ),
-            'ambassadeurs'      => $this->getAmbassadeursConcernes( $objet->getId() ),
-            'precedent'         => $precedent,
-            'precedentOrder'    => $precedentOrder,
-            'suivant'           => $suivant,
-            'suivantOrder'      => $suivantOrder
+            'objet'            => $objet,
+            'objets'           => $this->getObjetsFromRecherche( $contenu ),
+            'note'             => $note,
+            'contenus'         => $contenus,
+            'types'            => $types,
+            'contenu'          => $contenu,
+            'breadCrumbsArray' => $breadCrumbsArray,
+            'prefix'           => $prefix,
+            'productions'      => array(),
+            'meta'             => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() ),
+            'ambassadeurs'     => $this->getAmbassadeursConcernes( $objet->getId() ),
+            'precedent'        => $precedent,
+            'precedentOrder'   => $precedentOrder,
+            'suivant'          => $suivant,
+            'suivantOrder'     => $suivantOrder
         ));
     }
 
