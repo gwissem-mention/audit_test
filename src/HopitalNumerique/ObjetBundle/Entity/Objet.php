@@ -123,6 +123,7 @@ class Objet
     /**
      * @var \DateTime
      *
+     * @Gedmo\Versioned
      * @ORM\Column(name="obj_date_debut_parution", type="datetime", nullable=true, options = {"comment" = "Date de parution de l objet"})
      */
     private $dateParution;
