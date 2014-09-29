@@ -130,6 +130,7 @@ h3{font-size: 20px}
     #expression-du-besoin .aide .aide-presentation .entete .titre{text-transform: uppercase; float:left; color:#E11954; font-weight: bold;width: 125px;margin: 1px 0 0 10px;font-size:16px;}
     #expression-du-besoin .aide .aide-presentation .description {padding: 15px;}
     #expression-du-besoin .aide .aide-presentation .description p{color:#828282; font-size: 16px;}
+    #expression-du-besoin .aide .aide-presentation .description p.description_perso{font-size: 13px;}
 
     /* Liens des reponses */
     #expression-du-besoin .aide .aide-liens {height: auto; padding: 25px 25px 30px 5px;}
