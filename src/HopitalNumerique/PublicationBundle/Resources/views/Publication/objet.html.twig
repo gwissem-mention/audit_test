@@ -66,8 +66,8 @@
         {# Cas Contenu #}
         {% if contenu is defined %}
             <div class="col-md-12">
-                <a class="objetLink rose" href="{{path('hopital_numerique_publication_publication_objet', {'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a>
-                <h1 class="violet">{{prefix ~ ' ' ~ contenu.titre}}</h1>
+                <h1 class="violet"><a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a></h1>
+                <h2 class="violet">{{prefix ~ ' ' ~ contenu.titre}}</h2>
                 <div class="mobile">
                     {% if objet.isInfraDoc %}
                         <a class="label label-success pull-left" href="javascript:$('#sommaire').click();">Sommaire</a>
@@ -175,6 +175,25 @@
                     <div class="clearfix"></div>
                 </div>
                 <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" />
+            </div>
+        {% endif %}
+
+        <div class="clearfix"></div>
+
+        {% if contenu is defined %}
+            <div id="precedent-suivant" style="margin-top:10px">                
+                <div class="col-md-6">
+                    {% if precedent is defined and precedent is not null %}
+                        <a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':precedent.id, 'alias':objet.alias, 'aliasc':precedent.alias})}}" class="btn btn-link"><i class="fa fa-arrow-left" style="margin-right:5px;"></i>Chapitre précédent : {{ precedentOrder ~ '. ' ~ precedent.titre|truncate(40, true, '...')}}</a>
+                         <div class="clearfix"></div>
+                        {% endif %}
+                </div>                
+                <div class="col-md-6">
+                    {% if suivant is defined and suivant is not null %}
+                        <a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':suivant.id, 'alias':objet.alias, 'aliasc':suivant.alias})}}" class="btn btn-link">Chapitre suivant : {{suivantOrder ~ '. ' ~ suivant.titre|truncate(40, true, '...')}}<i class="fa fa-arrow-right" style="margin-left:5px;"></i></a>
+                         <div class="clearfix"></div>
+                    {% endif %}
+                </div>
             </div>
         {% endif %}
         

@@ -55,12 +55,14 @@ class Chapitre
     /**
      * @var string
      *
-     * @ORM\Column(name="cha_code", type="string", length=8, options = {"comment" = "Code du chapitre"}, nullable=true)
+     * @ORM\Column(name="cha_code", type="string", length=8, options = {"comment" = "Code du chapitre"})
      * @Assert\Length(
+     *      min = "1",
      *      max = "8",
+     *      minMessage = "Il doit y avoir au moins {{ limit }} caractères dans le code.",
      *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans le code."
      * )
-     * @Nodevo\Javascript(class="validate[maxSize[8]]")
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[8]]")
      */
     private $code;
 

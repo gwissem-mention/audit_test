@@ -48,7 +48,7 @@ class QuestionType extends AbstractType
             ))
             ->add('code', 'text', array(
                 'max_length' => $this->_constraints['code']['maxlength'],
-                'required'   => false, 
+                'required'   => true, 
                 'label'      => 'Code',
                 'label_attr'   => array('class' => 'col-md-4 control-label'),
                 'attr'       => array('class' => $this->_constraints['code']['class'] )

@@ -36,6 +36,13 @@ class ExpBesoin
      */
     protected $libelle;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="expbr_description", type="text", nullable=true)
+     */
+    protected $description;
+
 
     /**
      * Liste des inscriptions liées au module
@@ -133,5 +140,35 @@ class ExpBesoin
     public function getReponses()
     {
         return $this->reponses;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return ExpBesoin
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

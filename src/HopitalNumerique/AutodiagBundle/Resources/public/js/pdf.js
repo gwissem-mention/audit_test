@@ -58,8 +58,8 @@ $(document).ready(function() {
             chart : {
                 polar     : true,
                 type      : 'area',
-                width     : 700,
-                height    : 750,
+                width     : 650,
+                height    : 535,
                 animation : false
             },
             title : {

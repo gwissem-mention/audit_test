@@ -72,6 +72,9 @@
 
                 </div>
                 <div class="clearfix"></div>
+
+                {# Sauvegarde des différents clics des réponses #}
+                <input type="hidden" id="order-clic" value="[]" />
             </div>
 
     </body>
@@ -85,9 +88,30 @@
             $(this).hide();
         });
 
+        $('#question-precedente').hide();
+
         //Ré-Affiche la première question (l'ordre le plus bas)
         $('#expression-du-besoin .expression-du-besoin-form').first().show();
     });
+
+    function retourDerniereQuestion(idQuestion)
+    {
+        //Création du loader
+        var loader = $('#expression-du-besoin').nodevoLoader().start();
+
+        var arrayClics = $.parseJSON($("#order-clic").val());
+        $('#expression-du-besoin').find('#expBesoin-' + arrayClics[0]).show();
+        $('#expression-du-besoin').find('#expBesoin-' + idQuestion).hide();
+        
+        arrayClics.shift();
+
+        if(arrayClics.length === 0)
+            $('#question-precedente').hide();
+
+        //Mise à jour de l'input hidden
+        $("#order-clic").val(JSON.stringify(arrayClics));
+        loader.finished();
+    }
 
     function clickReponse( idReponse, idQuestion )
     {
@@ -111,6 +135,13 @@
         {
             //Affiche celle sur laquelle la réponse pointe
             $('#expression-du-besoin').find('#expBesoin-' + reponsesCourante['idQuestion']).show();
+
+            var arrayClics = $.parseJSON($("#order-clic").val());
+            arrayClics.unshift(idQuestion);
+            //Mise à jour de l'input hidden
+            $("#order-clic").val(JSON.stringify(arrayClics));
+            $('#question-precedente').show();
+
             loader.finished();
         }
         else
@@ -128,7 +159,8 @@
                 success : function( data ){
                     if( data.success )
                     {
-                        parent.location = $("#url-recherche").val();                    }
+                        parent.location = $("#url-recherche").val();                    
+                    }
                     else
                     {
                         apprise('Une erreur est survenue lors du chargement du calcul de votre recherche, merci de réessayer.');
