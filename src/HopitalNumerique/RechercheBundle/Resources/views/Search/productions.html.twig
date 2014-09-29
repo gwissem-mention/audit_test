@@ -28,7 +28,12 @@
             {% else %}
                 <a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
             {% endif %}
-                {{objet['titre']}}{% if objet['objet'] is not null %}<small class="violet"> - Extrait d'une production</small>{% endif %}
+            {% if objetsOrder[objet['id']]['parent'] is defined and objetsOrder[objet['id']]['parent'] is not null  and objet['objet'] is not null %}
+                {{objetsOrder[objet['id']]['parent'].getTitre()}}<br />
+                <i class="fa fa-share"></i><small class="violet"> {{objetsOrder[objet['id']]['prefixe']}} {{objet['titre']}}</small>
+            {% else %}
+                {{objet['titre']}}
+            {% endif %}
             </a>
         </h4>
     </div>
