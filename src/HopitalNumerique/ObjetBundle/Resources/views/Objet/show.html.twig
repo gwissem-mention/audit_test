@@ -75,6 +75,13 @@
                             </p>
                         {% endif %}
                         
+
+                        {% if objet.dateParution %}
+                            <p>
+                                <strong>Date de parution : </strong>
+                                {{ objet.dateParution|date('d/m/Y') }}
+                            </p>
+                        {% endif %}
                         <p>
                             <strong>Date de création de l'objet : </strong>
                             {{ objet.dateCreation|date('d/m/Y') }}

@@ -123,6 +123,13 @@ class Objet
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="obj_date_debut_parution", type="datetime", nullable=true, options = {"comment" = "Date de parution de l objet"})
+     */
+    private $dateParution;
+    
+    /**
+     * @var \DateTime
+     *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_date_debut_publication", type="datetime", nullable=true, options = {"comment" = "Date de début de la publication de l objet"})
      */
@@ -1413,5 +1420,245 @@ class Objet
 
         if ( $fileEdit = $this->getAbsolutePath( self::FICHIER_EDIT ) && file_exists( $this->getAbsolutePath( self::FICHIER_EDIT ) ) )
             unlink($fileEdit);
+    }
+
+    /**
+     * Set dateParution
+     *
+     * @param \DateTime $dateParution
+     * @return Objet
+     */
+    public function setDateParution($dateParution)
+    {
+        $this->dateParution = $dateParution;
+
+        return $this;
+    }
+
+    /**
+     * Get dateParution
+     *
+     * @return \DateTime 
+     */
+    public function getDateParution()
+    {
+        return $this->dateParution;
+    }
+
+    /**
+     * Set isInfraDoc
+     *
+     * @param boolean $isInfraDoc
+     * @return Objet
+     */
+    public function setIsInfraDoc($isInfraDoc)
+    {
+        $this->isInfraDoc = $isInfraDoc;
+
+        return $this;
+    }
+
+    /**
+     * Get isInfraDoc
+     *
+     * @return boolean 
+     */
+    public function getIsInfraDoc()
+    {
+        return $this->isInfraDoc;
+    }
+
+    /**
+     * Set isArticle
+     *
+     * @param boolean $isArticle
+     * @return Objet
+     */
+    public function setIsArticle($isArticle)
+    {
+        $this->isArticle = $isArticle;
+
+        return $this;
+    }
+
+    /**
+     * Get isArticle
+     *
+     * @return boolean 
+     */
+    public function getIsArticle()
+    {
+        return $this->isArticle;
+    }
+
+    /**
+     * Add references
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\RefObjet $references
+     * @return Objet
+     */
+    public function addReference(\HopitalNumerique\ObjetBundle\Entity\RefObjet $references)
+    {
+        $this->references[] = $references;
+
+        return $this;
+    }
+
+    /**
+     * Remove references
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\RefObjet $references
+     */
+    public function removeReference(\HopitalNumerique\ObjetBundle\Entity\RefObjet $references)
+    {
+        $this->references->removeElement($references);
+    }
+
+    /**
+     * Add consultations
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Consultation $consultations
+     * @return Objet
+     */
+    public function addConsultation(\HopitalNumerique\ObjetBundle\Entity\Consultation $consultations)
+    {
+        $this->consultations[] = $consultations;
+
+        return $this;
+    }
+
+    /**
+     * Remove consultations
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Consultation $consultations
+     */
+    public function removeConsultation(\HopitalNumerique\ObjetBundle\Entity\Consultation $consultations)
+    {
+        $this->consultations->removeElement($consultations);
+    }
+
+    /**
+     * Add listeCommentaires
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Commentaire $listeCommentaires
+     * @return Objet
+     */
+    public function addListeCommentaire(\HopitalNumerique\ObjetBundle\Entity\Commentaire $listeCommentaires)
+    {
+        $this->listeCommentaires[] = $listeCommentaires;
+
+        return $this;
+    }
+
+    /**
+     * Remove listeCommentaires
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Commentaire $listeCommentaires
+     */
+    public function removeListeCommentaire(\HopitalNumerique\ObjetBundle\Entity\Commentaire $listeCommentaires)
+    {
+        $this->listeCommentaires->removeElement($listeCommentaires);
+    }
+
+    /**
+     * Add listeNotes
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Note $listeNotes
+     * @return Objet
+     */
+    public function addListeNote(\HopitalNumerique\ObjetBundle\Entity\Note $listeNotes)
+    {
+        $this->listeNotes[] = $listeNotes;
+
+        return $this;
+    }
+
+    /**
+     * Remove listeNotes
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Note $listeNotes
+     */
+    public function removeListeNote(\HopitalNumerique\ObjetBundle\Entity\Note $listeNotes)
+    {
+        $this->listeNotes->removeElement($listeNotes);
+    }
+
+    /**
+     * Add contenus
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenus
+     * @return Objet
+     */
+    public function addContenus(\HopitalNumerique\ObjetBundle\Entity\Contenu $contenus)
+    {
+        $this->contenus[] = $contenus;
+
+        return $this;
+    }
+
+    /**
+     * Remove contenus
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenus
+     */
+    public function removeContenus(\HopitalNumerique\ObjetBundle\Entity\Contenu $contenus)
+    {
+        $this->contenus->removeElement($contenus);
+    }
+
+    /**
+     * Add modules
+     *
+     * @param \HopitalNumerique\ModuleBundle\Entity\Module $modules
+     * @return Objet
+     */
+    public function addModule(\HopitalNumerique\ModuleBundle\Entity\Module $modules)
+    {
+        $this->modules[] = $modules;
+
+        return $this;
+    }
+
+    /**
+     * Remove modules
+     *
+     * @param \HopitalNumerique\ModuleBundle\Entity\Module $modules
+     */
+    public function removeModule(\HopitalNumerique\ModuleBundle\Entity\Module $modules)
+    {
+        $this->modules->removeElement($modules);
+    }
+
+    /**
+     * Get modules
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getModules()
+    {
+        return $this->modules;
+    }
+
+    /**
+     * Add maitriseUsers
+     *
+     * @param \HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser $maitriseUsers
+     * @return Objet
+     */
+    public function addMaitriseUser(\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser $maitriseUsers)
+    {
+        $this->maitriseUsers[] = $maitriseUsers;
+
+        return $this;
+    }
+
+    /**
+     * Remove maitriseUsers
+     *
+     * @param \HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser $maitriseUsers
+     */
+    public function removeMaitriseUser(\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser $maitriseUsers)
+    {
+        $this->maitriseUsers->removeElement($maitriseUsers);
     }
 }
