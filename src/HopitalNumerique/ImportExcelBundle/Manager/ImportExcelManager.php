@@ -72,7 +72,7 @@ class ImportExcelManager extends BaseManager
                 'noteOptimale' => trim($sheetChapitre->getCellByColumnAndRow(5, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(5, $i)->getValue(),
                 'noteMinimale' => trim($sheetChapitre->getCellByColumnAndRow(6, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(6, $i)->getValue(),
                 'introduction' => trim($sheetChapitre->getCellByColumnAndRow(2, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(2, $i)->getValue(),
-                'synthese'     => trim($sheetChapitre->getCellByColumnAndRow(6, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(6, $i)->getValue(),
+                'synthese'     => trim($sheetChapitre->getCellByColumnAndRow(7, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(7, $i)->getValue(),
                 'description'  => trim($sheetChapitre->getCellByColumnAndRow(4, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(4, $i)->getValue()
             );
         }
