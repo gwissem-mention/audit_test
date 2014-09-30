@@ -5,6 +5,7 @@ namespace HopitalNumerique\UserBundle\Manager;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Event\UserEvent as UserEventFos;
 use HopitalNumerique\UserBundle\Manager\UserEvent;
 
 class LoginManager implements EventSubscriberInterface
@@ -36,13 +37,13 @@ class LoginManager implements EventSubscriberInterface
     /**
      * [onSecurityImplicitLogin description]
      *
-     * @param  UserEvent $event [description]
+     * @param  FOS\UserBundle\Event\UserEvent $event [description]
      *
      * @return [type]
      */
-    public function onSecurityImplicitLogin(UserEvent $event)
+    public function onSecurityImplicitLogin( UserEventFos $event)
     {
-        $user = $event->getAuthenticationToken()->getUser();
+        $user = $event->getUser();
 
         if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
             // user has just logged in
