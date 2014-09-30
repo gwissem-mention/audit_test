@@ -1,6 +1,6 @@
 <div id="pointsdurs" class="col-md-12">
     {% set count = 0 %}
-    {% for objet in objets if (objet['categ'] == "point-dur" and objet['primary']) %}
+    {% for objet in objets if (objet['categ'] == "point-dur" and (objet['primary'] >= 1) ) %}
         {% set count = count + 1 %}
     {% endfor %}
     <h4>Points Durs ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h4>

@@ -275,13 +275,13 @@
                 <div class="col-md-6">
                     <div id="points-durs" class="top" >
                         <h3>Points durs</h3>
-                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucun point dur trouvé -', 'point-dur') }}
+                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucun point dur trouvé -', 'point-dur', objetsOrder) }}
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div id="production" class="top" >
                         <h3>Productions</h3>
-                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucune production trouvée -', 'production') }}
+                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucune production trouvée -', 'production', objetsOrder) }}
                     </div>
                 </div>
             </div>
@@ -290,13 +290,13 @@
                 <div class="col-md-6">
                     <div id="ressources" class="bottom background-rose" >
                         <h3>Ressources externes</h3>
-                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucune ressource externe trouvée -', 'ressource') }}
+                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucune ressource externe trouvée -', 'ressource', objetsOrder) }}
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div id="forum" class="bottom background-violet" >
                         <h3>Forum</h3>
-                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucun fil de discussion du forum trouvé -', 'forum') }}
+                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucun fil de discussion du forum trouvé -', 'forum', objetsOrder) }}
                     </div>
                 </div>
             </div>
@@ -356,7 +356,7 @@
     </li>
 {% endmacro %}
 
-{% macro buildCarousel(objet, objets, contenu, emptyMessage, key) %}
+{% macro buildCarousel(objet, objets, contenu, emptyMessage, key, objetsOrder) %}
     <div id="{{key}}-slides" class="results carousel slide" data-ride="carousel" >
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
@@ -386,7 +386,12 @@
                                 {% else %}
                                     <a href="{{path('hopital_numerique_publication_publication_objet', {'id':item['id'],'alias':item['alias']})}}" >
                                 {% endif %}
-                                    {{item['titre']}}{% if item['objet'] is not null %}<small> - Extrait d'une production</small>{% endif %}
+                                    {% if objetsOrder[item['id']]['parent'] is defined and objetsOrder[item['id']]['parent'] is not null  and item['objet'] is not null %}
+                                        {{objetsOrder[item['id']]['parent'].getTitre()}}<br />
+                                        <i class="fa fa-share"></i><small class="violet"> {{objetsOrder[item['id']]['prefixe']}} {{item['titre']}}</small>
+                                    {% else %}
+                                        {{item['titre']}}
+                                    {% endif %}
                                 </a>
                             </h4>
 
