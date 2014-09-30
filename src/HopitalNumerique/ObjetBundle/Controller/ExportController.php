@@ -35,6 +35,7 @@ class ExportController extends Controller
                             'commentaires'         => 'Commentaires autorisé ?',
                             'notes'                => 'Notes autorisé ?',
                             'dateCreation'         => 'Date de création de la publication',
+                            'dateParution'         => 'Date de parution de la publication',
                             'dateDebutPublication' => 'Date de début de la publication',
                             'dateFinPublication'   => 'Date de fin de la publication',
                             'dateModification'     => 'Date de modification de la publication',

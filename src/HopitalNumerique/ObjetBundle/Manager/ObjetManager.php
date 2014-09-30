@@ -102,6 +102,7 @@ class ObjetManager extends BaseManager
 
             //quelques Dates
             $row['dateCreation']         = !is_null($objet->getDateCreation())         ? $objet->getDateCreation()->format('d/m/Y')         : '';
+            $row['dateParution']         = !is_null($objet->getDateParution())         ? $objet->getDateParution()->format('d/m/Y')         : '';
             $row['dateDebutPublication'] = !is_null($objet->getDateDebutPublication()) ? $objet->getDateDebutPublication()->format('d/m/Y') : '';
             $row['dateFinPublication']   = !is_null($objet->getDateFinPublication())   ? $objet->getDateFinPublication()->format('d/m/Y')   : '';
             $row['dateModification']     = !is_null($objet->getDateModification())     ? $objet->getDateModification()->format('d/m/Y')     : '';
@@ -157,7 +158,7 @@ class ObjetManager extends BaseManager
                         $rowInfradoc = array();
 
                         $rowInfradoc['id'] = $rowInfradoc['titre'] = $rowInfradoc['alias'] = $rowInfradoc['synthese'] = $rowInfradoc['resume'] = $rowInfradoc['commentaires'] = $rowInfradoc['notes'] = $rowInfradoc['type'] = $rowInfradoc['nbVue'] = $rowInfradoc['etat'] = '';
-                        $rowInfradoc['dateCreation'] = $rowInfradoc['dateDebutPublication'] = $rowInfradoc['dateFinPublication'] = $rowInfradoc['dateModification'] = $rowInfradoc['roles'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
+                        $rowInfradoc['dateCreation'] = $rowInfradoc['dateParution'] = $rowInfradoc['dateDebutPublication'] = $rowInfradoc['dateFinPublication'] = $rowInfradoc['dateModification'] = $rowInfradoc['roles'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
                         $rowInfradoc['fichier1'] = $rowInfradoc['fichier2'] = $rowInfradoc['fichierEdit'] = $rowInfradoc['vignette'] = $rowInfradoc['note'] = $rowInfradoc['objets'] = $rowInfradoc['noteMoyenne'] = $rowInfradoc['nombreNote'] = $row['nombreUserMaitrise'] = '';
 
                         //Infra doc values

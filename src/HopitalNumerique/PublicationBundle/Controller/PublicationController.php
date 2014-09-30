@@ -37,7 +37,6 @@ class PublicationController extends Controller
         //Récupération de la note pour l'objet de l'utilisateur courant
         $note = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('user' => $user, 'objet' => $objet));
 
-
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
