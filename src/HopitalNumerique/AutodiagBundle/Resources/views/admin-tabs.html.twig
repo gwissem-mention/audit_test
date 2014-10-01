@@ -14,11 +14,11 @@
     {% if outil.id %}
         {% if route == 'hopitalnumerique_import_index' or route == 'hopitalnumerique_import_read_save' %}
             <li class="active">
-                <a href="#">Import Excel</a>
+                <a href="#">Import/Export  Excel</a>
             </li>
         {% else %}
             <li>
-                <a href="{{path('hopitalnumerique_import_index',{'id':outil.id})}}">Import Excel</a>
+                <a href="{{path('hopitalnumerique_import_index',{'id':outil.id})}}">Import/Export Excel</a>
             </li>
         {% endif %}  
 

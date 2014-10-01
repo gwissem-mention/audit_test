@@ -1,8 +1,8 @@
-<form id="fancy_description" novalidate="novalidate" class="form-horizontal toValidate" action="" method="post" name="fancy_description">
+<form id="fancy_description" novalidate="novalidate" class="form-horizontal toValidate" action="{{path('hopital_numerique_expbesoin_descriptionSave', {'id':expBesoin.id})}}" method="post" name="fancy_description">
     <div class="form-group">
         <div class="col-sm-12">
             <label class="control-label" for="description_fancy">
-                Déscription présente dans la Pop-In dans le front office.
+                Déscription présente dans la Pop-In du le front office.
             </label>
         </div>
         <div class="col-sm-12">
@@ -11,5 +11,55 @@
     </div>
     <div class="clearfix"></div>
 </form>
+
 <div onclick="descriptionQuestion( {{expBesoin.id}}, '{{path('hopital_numerique_expbesoin_descriptionSave', {'id':expBesoin.id})}}' );" class="pull-right btn btn-success"><i class="fa fa-check"></i></div>
 <div class="clearfix"></div>
+
+<script type="text/javascript">
+    
+
+    tinymce.PluginManager.load('table', '/bundles/nodevotools/js/tinymce/plugins/table/plugin.min.js');
+        tinymce.PluginManager.load('code', '/bundles/nodevotools/js/tinymce/plugins/code/plugin.min.js');
+        tinymce.PluginManager.load('pagebreak', '/bundles/nodevotools/js/tinymce/plugins/pagebreak/plugin.min.js');
+        tinymce.PluginManager.load('importcss', '/bundles/nodevotools/js/tinymce/plugins/importcss/plugin.min.js');
+        tinymce.PluginManager.load('image', '/bundles/nodevotools/js/tinymce/plugins/image/plugin.min.js');
+        tinymce.PluginManager.load('link', '/bundles/nodevotools/js/tinymce/plugins/link/plugin.min.js');
+        tinymce.PluginManager.load('media', '/bundles/nodevotools/js/tinymce/plugins/media/plugin.min.js');
+        tinymce.PluginManager.load('textcolor', '/bundles/nodevotools/js/plugins/text-color/plugin.min.js');
+        tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.min.js');
+        NodevoGestionnaireMediaBundle_MoxieManager.initTinyMce();
+        
+        tinyMCE.init({
+            entity_encoding : "raw",
+            selector        : "textarea",
+            theme           : "modern",
+            theme_url       : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
+            skin_url        : '/bundles/nodevotools/js/tinymce/skins/lightgray',
+            plugins         : 'moxiemanager image table code textcolor pagebreak importcss link publication',
+            height          : 210,
+            menubar         : false,
+            content_css     : '/bundles/nodevotools/css/wysiwyg.css',
+            toolbar1        : "code | undo redo cut copy paste | pagebreak | link | publication | insertfile image ",
+            toolbar2        : "styleselect | bold italic underline strikethrough subscript superscript blockquote | forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table ",
+            style_formats: [
+                {title: 'Titres', items: [
+                    {title: 'Titre 2', block: 'h2'},
+                    {title: 'Titre 3', block: 'h3'},
+                    {title: 'Titre 4', block: 'h4'},
+                    {title: 'Titre 5', block: 'h5'},
+                    {title: 'Titre 6', block: 'h6'}
+                ]},
+                {title: 'Blocs', items: [
+                    {title: 'Paragraphe', block: 'p'}
+                ]},
+                {title: 'Tableaux', items: [
+                    {title: 'Tableau simple', selector: 'table', classes: 'table table-striped table-bordered table-hover'}
+                ]}
+            ],
+            importcss_append: true,
+            importcss_groups: [
+                {title: 'Styles personnalisés'}
+            ],
+            relative_urls:false
+        });
+</script>
