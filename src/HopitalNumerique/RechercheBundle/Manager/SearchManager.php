@@ -51,7 +51,8 @@ class SearchManager extends BaseManager
         $filsForumToIntersect = array();
 
         //get objets from each Categ
-        for ( $i = 1; $i <= $nbCateg; $i++ ) {
+        for ( $i = 1; $i <= $nbCateg; $i++ ) 
+        {
             //si on a filtré sur la catégorie
             if( isset($references['categ'.$i]) ) {
                 //on récupères tous les objets, on les formate et on les ajoute à nos catégories
@@ -61,9 +62,20 @@ class SearchManager extends BaseManager
                     foreach( $results as $one) {
                         $objet = $this->formateObjet( $one, $role );
                         if( !is_null($objet) && $objet['categ'] != '' )
-                            $tmp[ $objet['id'] ] = $objet;
+                        {
+                            //Dans le cas où on est déjà sur une ref d'un objet qui existe déjà, on ajout les primary
+                            if(array_key_exists($objet['id'], $tmp))
+                            {
+                                $primary                        = $tmp[ $objet['id'] ]['primary'];
+                                $tmp[ $objet['id'] ]            = $objet;
+                                $tmp[ $objet['id'] ]['primary'] = $tmp[ $objet['id'] ]['primary'] + $primary;
+                            }
+                            else
+                            {
+                                $tmp[ $objet['id'] ] = $objet;
+                            }
+                        }
                     }
-
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
                     $objetsToIntersect[] = $tmp;
                 }else
@@ -77,8 +89,18 @@ class SearchManager extends BaseManager
                         $contenu = $this->formateContenu( $one, $role );
                         if( !is_null($contenu) && $contenu['categ'] != '' )
                         {
-                            $tmp[ $contenu['id'] ] = $contenu;
-                            $tmp[ $contenu['id'] ]['primary'] += intval($contenu['primary'] ? 1 : 0);
+                            //Dans le cas où on est déjà sur une ref d'un contenu qui existe déjà, on ajout les primary
+                            if(array_key_exists($contenu['id'], $tmp))
+                            {
+                                $primary                          = $tmp[ $contenu['id'] ]['primary'];
+                                $tmp[ $contenu['id'] ]            = $contenu;
+                                $tmp[ $contenu['id'] ]['primary'] = $tmp[ $contenu['id'] ]['primary'] + $primary;
+                            }
+                            else
+                            {
+                                $tmp[ $contenu['id'] ] = $contenu;
+                                $tmp[ $contenu['id'] ]['primary'] = intval($contenu['primary'] ? 1 : 0);
+                            }
                         }
                     }
 
@@ -95,7 +117,20 @@ class SearchManager extends BaseManager
                     foreach( $results as $one) {
                         $topic = $this->formateTopic( $one, $role );
                         if( !is_null($topic) && $topic['categ'] != '' )
-                            $tmp[ $topic['id'] ] = $topic;
+                        {
+                            //Dans le cas où on est déjà sur une ref d'un topic qui existe déjà, on ajout les primary
+                            if(array_key_exists($topic['id'], $tmp))
+                            {
+                                $primary                        = $tmp[ $topic['id'] ]['primary'];
+                                $tmp[ $topic['id'] ]            = $topic;
+                                $tmp[ $topic['id'] ]['primary'] = $tmp[ $topic['id'] ]['primary'] + $primary;
+                            }
+                            else
+                            {
+                                $tmp[ $topic['id'] ] = $topic;
+                                $tmp[ $topic['id'] ]['primary'] = intval($topic['primary'] ? 1 : 0);
+                            }
+                        }
                     }
 
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
@@ -302,17 +337,87 @@ class SearchManager extends BaseManager
         $contenus  = array();
         $filsForum = array();
 
+        //**************************
+        //******** OBJET ***********
+        //**************************
+        
+        //Calcul de la somme des primary avant l'intersect
+        $compteurPrimaryObjet = array();
+        foreach ($objetsToIntersect as $categ) 
+        {
+            foreach ($categ as $idObjet => $objet) 
+            {
+                if(array_key_exists($idObjet, $compteurPrimaryObjet))
+                    $compteurPrimaryObjet[$idObjet] += $objet['primary'];
+                else
+                    $compteurPrimaryObjet[$idObjet] = $objet['primary'];
+            }
+        }
+
         //Si on a filtré sur plusieurs catégories, on récupère uniquement les objets commun à chaque catégorie (filtre ET)
         if( isset($objetsToIntersect[0]) )
             $objets = (count($objetsToIntersect) > 1) ? call_user_func_array('array_intersect_key',$objetsToIntersect) : $objetsToIntersect[0];
+
+        //Set le primary total pour chaque objet
+        foreach ($objets as $key => $objet) 
+        {
+            if(array_key_exists($key, $compteurPrimaryObjet))
+                $objets[$key]['primary'] = $compteurPrimaryObjet[$key];
+        }
+
+        //**************************
+        //******** CONTENU *********
+        //**************************
         
+        //Calcul de la somme des primary avant l'intersect
+        $compteurPrimaryContenu = array();
+        foreach ($contenusToIntersect as $categ) 
+        {
+            foreach ($categ as $idContenu => $contenu) 
+            {
+                if(array_key_exists($idContenu, $compteurPrimaryContenu))
+                    $compteurPrimaryContenu[$idContenu] += $contenu['primary'];
+                else
+                    $compteurPrimaryContenu[$idContenu] = $contenu['primary'];
+            }
+        }
         //Si on a filtré sur plusieurs catégories, on récupère uniquement les contenus commun à chaque catégorie (filtre ET)
         if( isset($contenusToIntersect[0]) )
             $contenus = (count($contenusToIntersect) > 1) ? call_user_func_array('array_intersect_key',$contenusToIntersect) : $contenusToIntersect[0];
 
+        //Set le primary total pour chaque contenu
+        foreach ($contenus as $key => $contenu) 
+        {
+            if(array_key_exists($key, $compteurPrimaryContenu))
+                $contenus[$key]['primary'] = $compteurPrimaryContenu[$key];
+        }
+
+        //**************************
+        //******** FORUM ***********
+        //**************************
+        
+        //Calcul de la somme des primary avant l'intersect
+        $compteurPrimaryFilForum = array();
+        foreach ($filsForumToIntersect as $categ) 
+        {
+            foreach ($categ as $idFilForum => $filForum) 
+            {
+                if(array_key_exists($idFilForum, $compteurPrimaryFilForum))
+                    $compteurPrimaryFilForum[$idFilForum] += $filForum['primary'];
+                else
+                    $compteurPrimaryFilForum[$idFilForum] = $filForum['primary'];
+            }
+        }
         //Si on a filtré sur plusieurs catégories, on récupère uniquement les fils du forum commun à chaque catégorie (filtre ET)
         if( isset($filsForumToIntersect[0]) )
             $filsForum = (count($filsForumToIntersect) > 1) ? call_user_func_array('array_intersect_key',$filsForumToIntersect) : $filsForumToIntersect[0];
+        
+        //Set le primary total pour chaque topic
+        foreach ($filsForum as $key => $filForum) 
+        {
+            if(array_key_exists($key, $compteurPrimaryFilForum))
+                $filsForum[$key]['primary'] = $compteurPrimaryFilForum[$key];
+        }
 
         $fusion = array_merge( $objets, $contenus, $filsForum );
 
@@ -344,7 +449,7 @@ class SearchManager extends BaseManager
     {
         //Références
         $item            = array();
-        $item['primary'] = $one->getPrimary();
+        $item['primary'] = array_key_exists('primary', $item) ? ( $one->getPrimary() ? $item['primary']++ : $item['primary']) : ($one->getPrimary() ? 1 : 0) ;
 
         //contenu
         $contenu = $one->getContenu();
@@ -397,7 +502,7 @@ class SearchManager extends BaseManager
     {
         //Références
         $item            = array();
-        $item['primary'] = $one->getPrimary() ? 1 : 0;
+        $item['primary'] = array_key_exists('primary', $item) ? ( $one->getPrimary() ? $item['primary']++ : $item['primary']) : ($one->getPrimary() ? 1 : 0) ;
 
         //objet
         $objet = $one->getObjet();
@@ -468,7 +573,7 @@ class SearchManager extends BaseManager
     {
         //Références
         $item            = array();
-        $item['primary'] = $one->getPrimary();
+        $item['primary'] = array_key_exists('primary', $item) ? ( $one->getPrimary() ? $item['primary']++ : $item['primary']) : ($one->getPrimary() ? 1 : 0) ;
 
         //topic
         $topic = $one->getTopic();

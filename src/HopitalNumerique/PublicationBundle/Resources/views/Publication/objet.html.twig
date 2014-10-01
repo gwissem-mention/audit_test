@@ -381,6 +381,8 @@
                                     {% endif %}
                                 {% endif %}
 
+                                {{dump(item['primary'])}}
+
                                 {% if item['objet'] is not null %}
                                     <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':item['objet'],'alias':item['aliasO'],'idc':item['id'],'aliasc':item['aliasC']})}}" >
                                 {% else %}
