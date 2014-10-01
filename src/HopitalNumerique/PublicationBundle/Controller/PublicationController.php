@@ -337,7 +337,7 @@ class PublicationController extends Controller
         $newObjets = array();
         foreach($objets as $objet) {
             if( in_array($objet['id'], $ids) )
-                $newObjets[] = $objet;
+                $newObjets[$objet['id']] = $objet;
         }
 
         return $this->get('hopitalnumerique_recherche.manager.search')->formatForPublication( $newObjets, $publication );

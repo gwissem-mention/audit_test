@@ -68,9 +68,9 @@
             <div class="col-md-12">
                 <h1 class="violet"><a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a></h1>
                 {% if breadCrumbsArray is defined and breadCrumbsArray is not null %}
-                    <div class="violet" style="margin-top: -15px;margin-bottom:5px;font-size:12px;padding-top:5px;">
+                    <div class="titre-infradoc violet" style="margin-top: -15px;margin-bottom:5px;font-size:16px;padding-top:5px;">
                         {% for breadcrumb in breadCrumbsArray %}
-                            <a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="font-size:15px;color:#672F9E">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;" > > </span> {% endif %}
+                            <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="font-size:22px;color:#672F9E">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;" > > </span> {% endif %}
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -387,9 +387,15 @@
                                     <a href="{{path('hopital_numerique_publication_publication_objet', {'id':item['id'],'alias':item['alias']})}}" >
                                 {% endif %}
                                     {% if objetsOrder[item['id']]['parent'] is defined and objetsOrder[item['id']]['parent'] is not null  and item['objet'] is not null %}
+                                        <style type="text/css">
+                                            #autresResultats .top .results p{height: 70px;}
+                                        </style>
                                         {{objetsOrder[item['id']]['parent'].getTitre()}}<br />
-                                        <i class="fa fa-share"></i><small class="violet"> {{objetsOrder[item['id']]['prefixe']}} {{item['titre']}}</small>
+                                        <i class="fa fa-share fa-flip-vertical"></i><span style="font-size:14px;" class="violet"> {{objetsOrder[item['id']]['prefixe']}} {{item['titre']}}</span>
                                     {% else %}
+                                        <style type="text/css">
+                                            #autresResultats .top .results p{height: 85px;}
+                                        </style>
                                         {{item['titre']}}
                                     {% endif %}
                                 </a>
