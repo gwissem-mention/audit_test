@@ -15,7 +15,7 @@
                 <span class="label label-danger">Nouveau</span>
             {% endif %}
 
-            {% if objet['primary'] == 1 %}
+            {% if objet['primary'] >= 1 %}
                 <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-1-prod.png')}}" alt="Niveau 1" title="Contenus les plus pertinents" />
             {% elseif objet['countRef'] <= 200 %}
                 <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-2-prod.png')}}" alt="Niveau 2" title="Contenus pertinents" />

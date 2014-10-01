@@ -37,10 +37,27 @@ class PublicationController extends Controller
         //Récupération de la note pour l'objet de l'utilisateur courant
         $note = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('user' => $user, 'objet' => $objet));
 
+        $objetsOrder = array();
+        foreach ($this->getObjetsFromRecherche( $objet ) as $key => $objetTemp) 
+        {
+            $objetsOrder[$objetTemp["id"]] = $objetTemp;
+        }
+
+        foreach ($objetsOrder as $key => $objetCurrent) 
+        {
+            if (!is_null($objetCurrent['objet'])) 
+            {
+                $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
+                $objetsOrder[$key]['prefixe'] = $libContenu;
+                $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+            }
+        }
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
             'objets'       => $this->getObjetsFromRecherche( $objet ),
+            'objetsOrder'  => $objetsOrder,
             'note'         => $note,
             'types'        => $types,
             'contenus'     => $contenus,
@@ -108,10 +125,27 @@ class PublicationController extends Controller
             );
         }
 
+        $objetsOrder = array();
+        foreach ($this->getObjetsFromRecherche( $objet ) as $key => $objetTemp) 
+        {
+            $objetsOrder[$objetTemp["id"]] = $objetTemp;
+        }
+
+        foreach ($objetsOrder as $key => $objetCurrent) 
+        {
+            if (!is_null($objetCurrent['objet'])) 
+            {
+                $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
+                $objetsOrder[$key]['prefixe'] = $libContenu;
+                $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+            }
+        }
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'            => $objet,
             'objets'           => $this->getObjetsFromRecherche( $contenu ),
+            'objetsOrder'      => $objetsOrder,
             'note'             => $note,
             'contenus'         => $contenus,
             'types'            => $types,

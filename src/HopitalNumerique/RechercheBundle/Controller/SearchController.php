@@ -123,7 +123,6 @@ class SearchController extends Controller
                         if(in_array(trim($type), $categPointDurArray))
                         {
                             $isInArray = true;
-                            $objetsOrder[$objet["id"]] = $objet;
                             break;
                         }
                     }
@@ -136,20 +135,25 @@ class SearchController extends Controller
                }
 
             }
-
-            foreach ($objetsOrder as $key => $objetCurrent) 
-            {
-                if (!is_null($objetCurrent['objet'])) 
-                {
-                    $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
-                    $objetsOrder[$key]['prefixe'] = $libContenu;
-                    $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
-                }
-            }
         }
         else
         {
             $categPointDurIdsArray = array();
+        }
+
+        foreach ($objets as $key => $objet) 
+        {
+            $objetsOrder[$objet["id"]] = $objet;
+        }
+
+        foreach ($objetsOrder as $key => $objetCurrent) 
+        {
+            if (!is_null($objetCurrent['objet'])) 
+            {
+                $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
+                $objetsOrder[$key]['prefixe'] = $libContenu;
+                $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+            }
         }
 
         //on prépare la session

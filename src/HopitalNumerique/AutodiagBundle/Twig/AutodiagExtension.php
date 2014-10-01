@@ -96,7 +96,7 @@ class AutodiagExtension extends \Twig_Extension
         $html = '<ul>';
         foreach ($objets as $objet)
         {
-            if($objet['primary'] == 1)
+            if($objet['primary'] >= 1)
             {
                 $href = !is_null($objet['objet']) ? $objet['objet'] . '-' . $objet['primary'] . '-' . $objet['aliasO'] . '/' . $objet['id'] . '-' . $objet['aliasC'] : $objet['id'] . '-' . $objet['alias'];
                 $html .= '<li><a href="/publication/'.$href.'" >' . ($pdf ? '/publication/' . $href . ' - ' : '' ) . $objet['titre'] . '</a></li>';
