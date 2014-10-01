@@ -55,7 +55,7 @@ class ExpBesoinController extends Controller
     {
         //Calcul de l'ordre
         $id          = $request->request->get('id');
-        $description = $request->request->get('form');
+        $description = $request->request->get('description');
 
         $expBesoin  = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findOneBy(array('id' => $id));
 

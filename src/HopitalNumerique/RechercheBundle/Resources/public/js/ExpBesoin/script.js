@@ -101,7 +101,7 @@ function descriptionQuestion( id, url)
             url  : url,
             data : {
                 id : id,
-                form : $("#text-fancy form #description_fancy").val()
+                description : tinyMCE.get('description_fancy').getContent()
             },
             type     : 'POST',
             success  : function( data ){

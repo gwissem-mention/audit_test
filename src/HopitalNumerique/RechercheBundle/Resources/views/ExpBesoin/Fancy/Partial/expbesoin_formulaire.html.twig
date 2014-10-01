@@ -6,12 +6,12 @@
             <div class="titre">recherche aidée</div>
         </div>
         <div class="description">
-            <p>
+            <p class="en-tete">
                 Je décris mon besoin, Mon Hôpital Numérique trouve la solution !
             </p>
-            <p class="description_perso">
-                {{expBesoin.description}}
-            </p>
+            <div class="description_perso">
+                {{expBesoin.description|raw}}
+            </div>
         </div>
     </div>
     {# Bloc de la liste des étapes #}
