@@ -46,6 +46,106 @@ class ImportExcelController extends Controller
     }
 
     /**
+     * Download l'export excel.
+     * 
+     * @param Outil $outil [description]
+     *
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function downloadExportAction(Outil $outil)
+    {
+        $options = array(
+            'serve_filename' => 'Gabarit_autodiag.xlsx',
+            'absolute_path'  => false,
+            'inline'         => false,
+        );
+    
+        if( file_exists( __ROOT_DIRECTORY__ . '/files/autodiag/Gabarit_autodiag.xlsx') )
+        {
+            //Récupèration du fichier excel
+            $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject(__ROOT_DIRECTORY__ . '/files/autodiag/Gabarit_autodiag.xlsx');
+        
+            //Récupèration de la feuille Catégorie
+            $sheetCategorie = $phpExcelObject->getSheetByName('categorie');
+
+            //Récupèration de la feuille Catégorie
+            $sheetChapitres = $phpExcelObject->getSheetByName('chapitres');
+
+            //Récupèration de la feuille Catégorie
+            $sheetQuestions = $phpExcelObject->getSheetByName('questions');
+
+            //Nettoyage des données sur l'autodiag courant
+            $categories = $this->get('hopital_numerique_import_excel.manager.categorie')->findBy(array('outil' => $outil));
+            $chapitres  = $this->get('hopital_numerique_import_excel.manager.chapitre')->findBy(array('outil' => $outil));
+
+            $arrayCategorie = array();
+
+            $nbLigne = 2;
+            foreach ($categories as $categorie) 
+            {
+                $sheetCategorie->setCellValueByColumnAndRow(0, $nbLigne, $categorie->getTitle());
+                $sheetCategorie->setCellValueByColumnAndRow(1, $nbLigne, $categorie->getNote());
+
+                $nbLigne++;
+            }
+
+            $nbLigne = 2;
+            $nbLigneQuestion = 2;
+            foreach ($chapitres as $chapitre) 
+            {
+                $sheetChapitres->setCellValueByColumnAndRow(0, $nbLigne, $chapitre->getCode());
+                $sheetChapitres->setCellValueByColumnAndRow(1, $nbLigne, (!is_null($chapitre->getParent())) ? $chapitre->getParent()->getCode() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(2, $nbLigne, (!is_null($chapitre->getIntro())) ? $chapitre->getIntro() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(3, $nbLigne, (!is_null($chapitre->getTitle())) ? $chapitre->getTitle() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(4, $nbLigne, (!is_null($chapitre->getDesc())) ? $chapitre->getDesc() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(5, $nbLigne, (!is_null($chapitre->getNoteOptimale())) ? $chapitre->getNoteOptimale() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(6, $nbLigne, (!is_null($chapitre->getNoteMinimale())) ? $chapitre->getNoteMinimale() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(7, $nbLigne, (!is_null($chapitre->getSynthese())) ? $chapitre->getSynthese() : '' );
+
+                $nbLigne++;
+
+                foreach ($chapitre->getQuestions() as $question)
+                {
+                    $sheetQuestions->setCellValueByColumnAndRow(0, $nbLigneQuestion, $question->getChapitre()->getCode());
+                    $sheetQuestions->setCellValueByColumnAndRow(1, $nbLigneQuestion, $question->getCode());
+                    $sheetQuestions->setCellValueByColumnAndRow(2, $nbLigneQuestion, (!is_null($question->getIntro())) ? $question->getIntro() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(3, $nbLigneQuestion, (!is_null($question->getTexte())) ? $question->getTexte() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(4, $nbLigneQuestion, (!is_null($question->getType())) ? $question->getType()->getLibelle() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(5, $nbLigneQuestion, (!is_null($question->getOptions())) ? $question->getOptions() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(6, $nbLigneQuestion, ( !is_null( $question->getNoteMinimale() ) ) ? $question->getNoteMinimale() : ( (!is_null( $question->getSeuil() ) ) ? $question->getSeuil() : '' ) );
+                    $sheetQuestions->setCellValueByColumnAndRow(7, $nbLigneQuestion, (!is_null($question->getSynthese())) ? $question->getSynthese() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(8, $nbLigneQuestion, (!is_null($question->getColored())) ? ($question->getColored() ? '1' : '0' ) : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(9, $nbLigneQuestion, (!is_null($question->getInfoBulle())) ? $question->getInfoBulle() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(10, $nbLigneQuestion, (!is_null($question->getCategorie())) ? $question->getCategorie()->getTitle() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(11, $nbLigneQuestion, (!is_null($question->getPonderation())) ? $question->getPonderation() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(12, $nbLigneQuestion, (!is_null($question->getOrder())) ? $question->getOrder() : '' );
+
+                    $nbLigneQuestion++;
+                }
+            }
+
+            $writer   = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+            $response = $this->get('phpexcel')->createStreamedResponse($writer);
+
+            // adding headers
+            $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+            $response->headers->set('Content-Disposition', 'attachment;filename=stream-file.xls');
+            $response->headers->set('Pragma', 'public');
+            $response->headers->set('Cache-Control', 'maxage=1');
+
+            return $response;
+        }
+        else
+        {
+            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
+            $this->get('session')->getFlashBag()->add( ('danger') , 'Le document n\'existe plus sur le serveur.' );
+    
+            return $this->redirect( $this->generateUrl('hopitalnumerique_import_index') );
+        }
+    }
+
+    /**
      * Lecture et insert en base d'un fichier
      *
      * @param Outil $outil [description]

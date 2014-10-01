@@ -11,3 +11,9 @@ hopitalnumerique_import_download_gabarit:
     defaults: { _controller: "HopitalNumeriqueImportExcelBundle:ImportExcel:downloadGabarit"}
     requirements:
         _method: GET
+
+hopitalnumerique_import_download_export:
+    pattern:  /admin/outil/export/download/{id}
+    defaults: { _controller: "HopitalNumeriqueImportExcelBundle:ImportExcel:downloadExport"}
+    requirements:
+        _method: GET

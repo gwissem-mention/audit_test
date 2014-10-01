@@ -26,7 +26,7 @@
 {% endblock %}
 
 {% block h1Title %}
-    Editer un outil d'autodiagnostic : Importer les données
+    Editer un outil d'autodiagnostic : Importer et exporter les données
 {% endblock %}
 
 {% block toolbarButton %}
@@ -48,7 +48,7 @@
                         <a class="btn btn-link btn-xs" title="Télécharger le gabarit de l'import des autodiags" href="{{path('hopitalnumerique_import_download_gabarit')}}">Téléchargement du gabarit de l'import des autodiags<i style="margin-left:5px" class="fa fa-cloud-download"></i></a>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="padding-bottom: 10px;border-bottom: solid 1px #EDEEF0">
                     <form action="{{ path("hopitalnumerique_import_read_save", {'id' : outil.id }) }}" class="form-horizontal toValidate" method="post" enctype="multipart/form-data" novalidate="novalidate">
                         <div class="background-violet"></div>
                         <div class="form-group">
@@ -60,7 +60,13 @@
                         <div class="clearfix"></div>
                         
                         <div onclick="if($('form').validationEngine('validate')){ $('form').submit(); }" class="btn btn-success pull-right" title="Mettre à jour">Mettre à jour</div>
+                        <div class="clearfix"></div>
                     </form>
+                </div>
+                <div class="row">
+                    <div class="download-export col-md-1 col-md-offset-4">
+                        <a class="btn btn-default" title="Télécharger l'export Excel de l'autodiag" href="{{path('hopitalnumerique_import_download_export', {'id': outil.id}) }}">Télécharger l'export Excel de l'autodiag<i style="margin-left:5px" class="fa fa-cloud-download"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
