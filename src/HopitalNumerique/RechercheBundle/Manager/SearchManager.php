@@ -76,7 +76,10 @@ class SearchManager extends BaseManager
                     foreach( $results as $one) {
                         $contenu = $this->formateContenu( $one, $role );
                         if( !is_null($contenu) && $contenu['categ'] != '' )
+                        {
                             $tmp[ $contenu['id'] ] = $contenu;
+                            $tmp[ $contenu['id'] ]['primary'] += intval($contenu['primary'] ? 1 : 0);
+                        }
                     }
 
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
@@ -394,7 +397,7 @@ class SearchManager extends BaseManager
     {
         //Références
         $item            = array();
-        $item['primary'] = $one->getPrimary();
+        $item['primary'] = $one->getPrimary() ? 1 : 0;
 
         //objet
         $objet = $one->getObjet();
