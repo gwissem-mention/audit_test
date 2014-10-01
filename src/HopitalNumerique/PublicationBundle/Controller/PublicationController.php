@@ -126,7 +126,7 @@ class PublicationController extends Controller
         }
 
         $objetsOrder = array();
-        foreach ($this->getObjetsFromRecherche( $objet ) as $key => $objetTemp) 
+        foreach ($this->getObjetsFromRecherche( $contenu ) as $key => $objetTemp) 
         {
             $objetsOrder[$objetTemp["id"]] = $objetTemp;
         }

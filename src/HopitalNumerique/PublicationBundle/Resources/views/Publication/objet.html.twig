@@ -70,7 +70,7 @@
                 {% if breadCrumbsArray is defined and breadCrumbsArray is not null %}
                     <div class="violet" style="margin-top: -15px;margin-bottom:5px;font-size:12px;padding-top:5px;">
                         {% for breadcrumb in breadCrumbsArray %}
-                            <a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="font-size:15px;color:#672F9E">{{breadcrumb.label|truncate(40, true, '...')}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;" > > </span> {% endif %}
+                            <a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="font-size:15px;color:#672F9E">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;" > > </span> {% endif %}
                         {% endfor %}
                     </div>
                 {% endif %}
