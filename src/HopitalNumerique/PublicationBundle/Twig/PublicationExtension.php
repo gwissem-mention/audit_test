@@ -35,6 +35,7 @@ class PublicationExtension extends \Twig_Extension
     {
         if(!empty($string)){
             $string = str_replace('œ', 'oe', $string);
+            $string = str_replace("’", "'", $string);
             $tempo = utf8_decode($string);
             $string = '';
             foreach (str_split($tempo) as $obj)
