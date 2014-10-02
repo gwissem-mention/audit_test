@@ -64,6 +64,13 @@ class Question
     /**
      * @var string
      *
+     * @ORM\Column(name="que_lien", type="text", options = {"comment" = "Lien de la question"}, nullable=true)
+     */
+    private $lien;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="que_intro", type="text", options = {"comment" = "Intro de la question"}, nullable=true)
      */
     private $intro;
@@ -526,5 +533,51 @@ class Question
         $this->references = $references;
     
         return $this;
+    }
+
+    /**
+     * Set lien
+     *
+     * @param string $lien
+     * @return Question
+     */
+    public function setLien($lien)
+    {
+        $this->lien = $lien;
+
+        return $this;
+    }
+
+    /**
+     * Get lien
+     *
+     * @return string 
+     */
+    public function getLien()
+    {
+        return $this->lien;
+    }
+
+    /**
+     * Add references
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\RefQuestion $references
+     * @return Question
+     */
+    public function addReference(\HopitalNumerique\AutodiagBundle\Entity\RefQuestion $references)
+    {
+        $this->references[] = $references;
+
+        return $this;
+    }
+
+    /**
+     * Remove references
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\RefQuestion $references
+     */
+    public function removeReference(\HopitalNumerique\AutodiagBundle\Entity\RefQuestion $references)
+    {
+        $this->references->removeElement($references);
     }
 }

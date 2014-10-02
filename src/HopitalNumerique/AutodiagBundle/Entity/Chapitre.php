@@ -67,6 +67,13 @@ class Chapitre
     private $code;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="cha_lien", type="text", options = {"comment" = "Lien du chapitre"}, nullable=true)
+     */
+    private $lien;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="cha_note_optimale", type="smallint", nullable=true, options = {"comment" = "Note optimale du chapitre"})
@@ -492,5 +499,107 @@ class Chapitre
     public function getNomAffichage()
     {
         return ($this->code != null ? $this->code.'. ' : '').$this->title;
+    }
+
+    /**
+     * Set lien
+     *
+     * @param string $lien
+     * @return Chapitre
+     */
+    public function setLien($lien)
+    {
+        $this->lien = $lien;
+
+        return $this;
+    }
+
+    /**
+     * Get lien
+     *
+     * @return string 
+     */
+    public function getLien()
+    {
+        return $this->lien;
+    }
+
+    /**
+     * Add questions
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Question $questions
+     * @return Chapitre
+     */
+    public function addQuestion(\HopitalNumerique\AutodiagBundle\Entity\Question $questions)
+    {
+        $this->questions[] = $questions;
+
+        return $this;
+    }
+
+    /**
+     * Remove questions
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Question $questions
+     */
+    public function removeQuestion(\HopitalNumerique\AutodiagBundle\Entity\Question $questions)
+    {
+        $this->questions->removeElement($questions);
+    }
+
+    /**
+     * Add references
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\RefChapitre $references
+     * @return Chapitre
+     */
+    public function addReference(\HopitalNumerique\AutodiagBundle\Entity\RefChapitre $references)
+    {
+        $this->references[] = $references;
+
+        return $this;
+    }
+
+    /**
+     * Remove references
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\RefChapitre $references
+     */
+    public function removeReference(\HopitalNumerique\AutodiagBundle\Entity\RefChapitre $references)
+    {
+        $this->references->removeElement($references);
+    }
+
+    /**
+     * Add processChapitres
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\ProcessChapitre $processChapitres
+     * @return Chapitre
+     */
+    public function addProcessChapitre(\HopitalNumerique\AutodiagBundle\Entity\ProcessChapitre $processChapitres)
+    {
+        $this->processChapitres[] = $processChapitres;
+
+        return $this;
+    }
+
+    /**
+     * Remove processChapitres
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\ProcessChapitre $processChapitres
+     */
+    public function removeProcessChapitre(\HopitalNumerique\AutodiagBundle\Entity\ProcessChapitre $processChapitres)
+    {
+        $this->processChapitres->removeElement($processChapitres);
+    }
+
+    /**
+     * Get processChapitres
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProcessChapitres()
+    {
+        return $this->processChapitres;
     }
 }

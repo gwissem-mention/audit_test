@@ -56,6 +56,10 @@
 .dd3-actions .dd3-edit:hover { background: #1DA4C5; }
 .dd3-actions .dd3-edit:before{ content: '\f044'; }
 
+.dd3-actions .dd3-url { background: #2bbce0;}
+.dd3-actions .dd3-url:hover { background: #1DA4C5; }
+.dd3-actions .dd3-url:before{ content: '\f045'; }
+
 .dd3-actions .dd3-trash { background: #cd1919; }
 .dd3-actions .dd3-trash:hover { background: #df1b1b; }
 .dd3-actions .dd3-trash:before { content: '\f014'; }
