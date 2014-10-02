@@ -81,6 +81,7 @@ class ResultatManager extends BaseManager
             $chapitre->noteOpt  = $one->getNoteOptimale();
             $chapitre->intro    = $one->getIntro();
             $chapitre->desc     = $one->getDesc();
+            $chapitre->lien     = $one->getLien();
             $chapitre->order    = $one->getOrder();
             $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
@@ -546,6 +547,7 @@ class ResultatManager extends BaseManager
             {
                 //on ajoute seulement les questions valides pour les résultats
                 $one = $questionsReponses[ $question->getId() ];
+
                 $one->question = $one->code != '' ? $one->code . '. ' . $one->question : $one->question;
 
                 if( $one->initialValue !== '' ){
@@ -608,6 +610,7 @@ class ResultatManager extends BaseManager
             $rep->synthese      = $question->getSynthese();
             $rep->ponderation   = $question->getPonderation();
             $rep->order         = $question->getOrder();
+            $rep->lien          = $question->getLien();
             $rep->type          = $question->getType()->getId();
             $rep->colored       = $question->getColored();
             $rep->options       = explode( '<br />', nl2br( $question->getOptions() ) );

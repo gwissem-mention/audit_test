@@ -81,6 +81,32 @@ class QuestionController extends Controller
     }
 
     /**
+     * Edit le lien d'une question.
+     */
+    public function editLienAction( Question $question )
+    {
+        $texte = $this->get('request')->request->get('texte');
+        $question->setLien($texte);
+        
+        //delete
+        $this->get('hopitalnumerique_autodiag.manager.question')->save( $question );
+
+        return new Response('{"success":true}', 200);
+    }
+
+    /**
+     * Recupère le lien d'une question.
+     */
+    public function getLienAction( $id )
+    {
+        $question = $this->get('hopitalnumerique_autodiag.manager.question')->findOneBy( array('id' => $id) );
+        $lien = is_null($question->getLien()) ? '' : $question->getLien();
+
+        return new Response('{"success":true, "lien":"'. $lien .'"}', 200);
+    }
+
+
+    /**
      * Sauvegarde AJAX de la question
      */
     public function saveAction($id, Request $request)

@@ -337,10 +337,16 @@
                                 <td></td>
                             {% endif %}
                             <td class="forAffichage">
-                                {% if chapitre.noteMin and chapitre.noteChapitre <= chapitre.noteMin %}
-                                    {% set publications = chapitre.id|getPublicationsForChapitre(pdf) %}
-                                    {% if publications %}
-                                        {{publications|raw}}
+                                {% if chapitre.lien is not null and chapitre.lien is not empty %}
+                                    {# Affichage du lien défini en back office #}
+                                    <a href="{{chapitre.lien}}" target="_blank">{{chapitre.lien}}</a>
+                                {% else %}
+                                    {# Affichage des liens de publications #}
+                                    {% if chapitre.noteMin and chapitre.noteChapitre <= chapitre.noteMin %}
+                                        {% set publications = chapitre.id|getPublicationsForChapitre(pdf) %}
+                                        {% if publications %}
+                                            {{publications|raw}}
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
                             </td>
@@ -378,10 +384,16 @@
                                     <td></td>
                                 {% endif %}
                                 <td class="forAffichage">
-                                    {% set publications = question.id|getPublicationsForQuestion(pdf) %}
-                                    {% if publications %}
-                                        {{publications|raw}}
-                                        {% set doTheChapterHavePublications = true %}
+                                    {% if question.lien is not null and question.lien is not empty %}
+                                        {# Affichage du lien défini en back office #}
+                                        <a href="{{question.lien}}" target="_blank">{{question.lien}}</a>
+                                    {% else %}
+                                        {# Affichage des liens de publications #}
+                                        {% set publications = question.id|getPublicationsForQuestion(pdf) %}
+                                        {% if publications %}
+                                            {{publications|raw}}
+                                            {% set doTheChapterHavePublications = true %}
+                                        {% endif %}
                                     {% endif %}
                                 </td>
                                 <td class="forPrint"></td>
@@ -391,7 +403,6 @@
                         {# Sous Chapitres #}
                         {% if chapitre.childs|length > 0 %}
                             {% for child in chapitre.childs %}
-        
                                 <tr>
                                     <td></td>
                                     <td>{{child.title}}</td>
@@ -403,10 +414,16 @@
                                         <td></td>
                                     {% endif %}
                                     <td class="forAffichage">
-                                        {% if child.noteMin and child.noteChapitre <= child.noteMin %}
-                                            {% set publications = child.id|getPublicationsForChapitre(pdf) %}
-                                            {% if publications %}
-                                                {{publications|raw}}
+                                        {% if child.lien is not null and child.lien is not empty %}
+                                            {# Affichage du lien défini en back office #}
+                                            <a href="{{child.lien}}" target="_blank">{{child.lien}}</a>
+                                        {% else %}
+                                            {# Affichage des liens de publications #}
+                                            {% if child.noteMin and child.noteChapitre <= child.noteMin %}
+                                                {% set publications = child.id|getPublicationsForChapitre(pdf) %}
+                                                {% if publications %}
+                                                    {{publications|raw}}
+                                                {% endif %}
                                             {% endif %}
                                         {% endif %}
                                     </td>
@@ -444,10 +461,16 @@
                                             <td></td>
                                         {% endif %}
                                         <td class="forAffichage">
-                                            {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}
-                                            {% if publications %}
-                                                {{publications|raw}}
-                                                {% set doTheChapterHavePublications = true %}
+                                            {% if questionChild.lien is not null and questionChild.lien is not empty %}
+                                                {# Affichage du lien défini en back office #}
+                                                <a href="{{questionChild.lien}}" target="_blank">{{questionChild.lien}}</a>
+                                            {% else %}
+                                                {# Affichage des liens de publications #}
+                                                {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}
+                                                {% if publications %}
+                                                    {{publications|raw}}
+                                                    {% set doTheChapterHavePublications = true %}
+                                                {% endif %}
                                             {% endif %}
                                         </td>
                                         <td class="forPrint"></td>

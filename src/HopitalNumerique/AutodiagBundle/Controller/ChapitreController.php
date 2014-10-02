@@ -88,6 +88,32 @@ class ChapitreController extends Controller
     }
 
     /**
+     * Edition du lien d'un chapitre.
+     *
+     */
+    public function editLienAction( Chapitre $chapitre )
+    {
+        $texte = $this->get('request')->request->get('texte');
+        $chapitre->setLien($texte);
+        
+        //Sauvegarde
+        $this->get('hopitalnumerique_autodiag.manager.chapitre')->save( $chapitre );
+
+        return new Response('{"success":true}', 200);
+    }
+
+    /**
+     * Recupère le lien d'un chapitre.
+     */
+    public function getLienAction( $id )
+    {
+        $chapitre = $this->get('hopitalnumerique_autodiag.manager.chapitre')->findOneBy( array('id' => $id) );
+        $lien = is_null($chapitre->getLien()) ? '' : $chapitre->getLien();
+
+        return new Response('{"success":true, "lien":"'. $lien .'"}', 200);
+    }
+
+    /**
      * Suppresion d'un chapitre.
      *
      * METHOD = POST|DELETE

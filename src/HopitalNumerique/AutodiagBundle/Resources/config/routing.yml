@@ -82,6 +82,20 @@ hopitalnumerique_autodiag_chapitre_reorder:
     requirements: 
         id : \d+
 
+hopitalnumerique_autodiag_chapitre_get_lien:
+    pattern:  /admin/outil/chapitre/get/lien/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:getLien", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST
+
+hopitalnumerique_autodiag_chapitre_editer_lien:
+    pattern:  /admin/outil/chapitre/edit/lien/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:editLien", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST
+
 hopitalnumerique_autodiag_chapitre_delete:
     pattern:  /admin/outil/chapitre/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Chapitre:delete", _format: json }
@@ -120,6 +134,19 @@ hopitalnumerique_autodiag_question_delete:
     requirements: 
         id: \d+
         _method: POST|DELETE
+
+hopitalnumerique_autodiag_question_editer_lien:
+    pattern:  /admin/outil/question/edit/lien/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Question:editLien", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+hopitalnumerique_autodiag_question_get_lien:
+    pattern:  /admin/outil/question/get/lien/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Question:getLien", _format: json }
+    requirements: 
+        id: \d+
 
 hopitalnumerique_autodiag_question_edit:
     pattern:  /admin/outil/question/edit/{id}
