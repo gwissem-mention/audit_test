@@ -73,7 +73,12 @@ class PublicationExtension extends \Twig_Extension
                     case 'PUBLICATION':
                         //cas Objet
                         $objet  = $this->getManagerObjet()->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
+                        if($matches[5][$key] == 1)
+                            $target = 'target="_blank"';
+                        elseif ($matches[5][$key] == 2)
+                            $target = 'target="_parent"';
+                        else
+                            $target = "";
                         if($objet){
                             $label = $matches[3][$key] ? $matches[3][$key] : $this->toascii($objet->getTitre());
                             $replacement = '<a href="/publication/' . $matches[2][$key] . '-' . $objet->getAlias() . '" '.$target.'>' . $label . '</a>';
@@ -88,7 +93,12 @@ class PublicationExtension extends \Twig_Extension
                     case 'INFRADOC':
                         //cas contenu
                         $contenu = $this->getManagerContenu()->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        $target  = $matches[5][$key] == 1 ? 'target="_blank"' : "";
+                        if($matches[5][$key] == 1)
+                            $target = 'target="_blank"';
+                        elseif ($matches[5][$key] == 2)
+                            $target = 'target="_parent"';
+                        else
+                            $target = "";
                         if( $contenu ){
                             $objet       = $contenu->getObjet();
                             $label       = $matches[3][$key] ? $matches[3][$key] : $this->toascii($contenu->getTitre());
@@ -103,7 +113,12 @@ class PublicationExtension extends \Twig_Extension
                     case 'ARTICLE':
                         //cas Objet
                         $objet  = $this->getManagerObjet()->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
+                        if($matches[5][$key] == 1)
+                            $target = 'target="_blank"';
+                        elseif ($matches[5][$key] == 2)
+                            $target = 'target="_parent"';
+                        else
+                            $target = "";
                         if($objet){
                             $label = $matches[3][$key] ? $matches[3][$key] : $this->toascii($objet->getTitre());
                             $replacement = '<a href="/publication/article/'.$matches[2][$key].'-' . $objet->getAlias() . '" '.$target.'>' . $label . '</a>';
@@ -118,7 +133,12 @@ class PublicationExtension extends \Twig_Extension
                     case 'AUTODIAG':
                         //cas Outil
                         $outil  = $this->getManagerOutil()->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
+                        if($matches[5][$key] == 1)
+                            $target = 'target="_blank"';
+                        elseif ($matches[5][$key] == 2)
+                            $target = 'target="_parent"';
+                        else
+                            $target = "";
                         if($outil)
                             $replacement = '<a href="/autodiagnostic/outil/'. $outil->getId() . '-' . $outil->getAlias() .'" '.$target.'>' . $matches[3][$key] . '</a>';
                         else
@@ -131,7 +151,13 @@ class PublicationExtension extends \Twig_Extension
                     case 'QUESTIONNAIRE':
                         //cas Questionnaire
                         $questionnaire  = $this->getManagerQuestionnaire()->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        $target = $matches[5][$key] == 1 ? 'target="_blank"' : "";
+                        if($matches[5][$key] == 1)
+                            $target = 'target="_blank"';
+                        elseif ($matches[5][$key] == 2)
+                            $target = 'target="_parent"';
+                        else
+                            $target = "";
+
                         if($questionnaire)
                         {
                             $label       = $matches[3][$key] ? $matches[3][$key] : $this->toascii($questionnaire->getNom());

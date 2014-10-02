@@ -45,7 +45,7 @@ class PublicationController extends Controller
 
         foreach ($objetsOrder as $key => $objetCurrent) 
         {
-            if (!is_null($objetCurrent['objet'])) 
+            if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet'])) 
             {
                 $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
                 $objetsOrder[$key]['prefixe'] = $libContenu;
