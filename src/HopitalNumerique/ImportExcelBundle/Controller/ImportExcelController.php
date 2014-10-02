@@ -125,12 +125,12 @@ class ImportExcelController extends Controller
                 }
             }
 
-            $writer   = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+            $writer   = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
             $response = $this->get('phpexcel')->createStreamedResponse($writer);
 
             // adding headers
             $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
-            $response->headers->set('Content-Disposition', 'attachment;filename=stream-file.xls');
+            $response->headers->set('Content-Disposition', 'attachment;filename=Export-Autodiag-'. $outil->getId() .'.xls');
             $response->headers->set('Pragma', 'public');
             $response->headers->set('Cache-Control', 'maxage=1');
 
