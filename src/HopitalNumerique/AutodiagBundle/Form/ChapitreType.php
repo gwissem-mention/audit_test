@@ -56,6 +56,11 @@ class ChapitreType extends AbstractType
                 'label_attr' => array('class' => 'col-md-12'),
                 'attr'       => array('rows' => 3)
             ))
+            ->add('lien', 'text', array(
+                'required'   => false, 
+                'label'      => 'Lien',
+                'label_attr' => array('class' => 'col-md-1 control-label'),
+            ))
             ->add('desc', 'textarea', array(
                 'required'   => false, 
                 'label'      => 'Texte après le nom du chapitre',

@@ -18,7 +18,6 @@
                 </div>
                 <div class="dd3-actions">
                     <div onclick="deleteQuestion( {{question.id}}, '{{path('hopitalnumerique_autodiag_question_delete', {'id':question.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-                    <div onclick="editerLien( {{question.id}}, '{{path('hopitalnumerique_autodiag_question_editer_lien', {'id':question.id})}}', '{{path('hopitalnumerique_autodiag_question_get_lien', {'id':question.id})}}' );" class="pull-right dd3-url"><i class="fa fa-share"></i></div>
                     <a href="{{path('hopitalnumerique_autodiag_reference_question', {'id':question.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
                 </div>
             </li>
