@@ -61,6 +61,11 @@ class QuestionType extends AbstractType
                 'required' => false, 
                 'label'    => 'Introduction'
             ))
+            ->add('lien', 'text', array( 
+                'required' => false, 
+                'label'    => 'Lien',
+                'label_attr' => array('class' => 'col-md-2 control-label'),
+            ))
             ->add('ponderation', 'text', array(
                 'required'   => true, 
                 'label'      => 'Pondération de la question',

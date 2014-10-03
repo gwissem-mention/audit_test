@@ -45,7 +45,7 @@ function initFancyBox()
             'padding'   : 0,
             'autoSize'  : false,
             'width'     : '80%',
-            'height'    : '630px',
+            'height'    : '650px',
             'scrolling' : 'no',
             'modal'     : true
         });
@@ -164,47 +164,6 @@ function saveChapitre( url )
     });
 }
 
-//Editer le lien des chapitres/questions en fonction de l'id et url demandée
-function editerLien( id, url, urlRecupLien )
-{
-    apprise('Lien', {'input' : true, 'textOk' : 'Enregistrer', 'textCancel' : 'Effacer'}, function(texte) {
-        loaderQuestion = $('#questions').nodevoLoader().start();
-        loaderChapitre = $('#chapitres').nodevoLoader().start();
-        $.ajax({
-            url      : url,
-            data     : {
-                id    : id,
-                texte : texte ? texte : ''
-            },
-            type     : 'POST',
-            dataType : 'json',
-            success  : function( data ){
-                if( data.success ){
-                    loaderQuestion.finished();
-                    loaderChapitre.finished();
-                }
-            },
-            error:  function( data ){
-                alert('error');
-            }
-        });
-        
-    });
-
-    $.ajax({
-        url      : urlRecupLien,
-        type     : 'POST',
-        dataType : 'json',
-        success  : function( data ){
-            if( data.success ){
-                $(".appriseInner .aTextbox").val(data.lien);
-            }
-        },
-        error:  function( data ){
-            alert('error');
-        }
-    });
-}
 //Supprime le contenu en cours de visualisation
 function deleteQuestion( id, url )
 {
