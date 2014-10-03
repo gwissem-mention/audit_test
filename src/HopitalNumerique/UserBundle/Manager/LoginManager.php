@@ -45,10 +45,10 @@ class LoginManager implements EventSubscriberInterface
     {
         $user = $event->getUser();
 
-        if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+        //if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
             // user has just logged in
             $user->addNbVisites();
-        }
+        //}
     }
 
     /**
@@ -62,9 +62,9 @@ class LoginManager implements EventSubscriberInterface
     {
         $user = $event->getAuthenticationToken()->getUser();
 
-        if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+        //if ($this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
             // user has just logged in
             $user->addNbVisites();
-        }
+        //}
     }
 }
