@@ -2,8 +2,9 @@
     <table id="item-requete-table" class="table table-hover" style="margin:0 auto; border-collapse:collapse;">
         <thead>
             <tr class="grid-row-titles">
-                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="70%" height="25px"><strong>Réponse</strong></th>
-                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="30%" height="25px"><strong>Nombre de clic</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="40%" height="25px"><strong>Question</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="35%" height="25px"><strong>Réponse</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" width="25%" height="25px"><strong>Nombre de clic</strong></th>
                
             </tr>
         </thead>
@@ -11,12 +12,22 @@
             {% for statClic in statClics %}
                 <tr>
                     <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                        <strong>{{statClic['libelle']}}</strong> ( {{statClic['questionLibelle']}} )
+                        <strong>{{statClic['libelle']}}</strong>
                     </td>
-                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                        {{statClic['nbClic']}}
-                    </td>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;"></td>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;"></td>
                 </tr>
+                {% for statClicDetail in statClic["statClic"] %}
+                    <tr>
+                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;"></td>
+                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                            <strong>{{statClicDetail['reponseLibelle']}}</strong>
+                        </td>
+                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                            {{statClicDetail['nbClic']}}
+                        </td>
+                    </tr>
+                {% endfor %}
             {% endfor %}  
         </tbody>
     </table>

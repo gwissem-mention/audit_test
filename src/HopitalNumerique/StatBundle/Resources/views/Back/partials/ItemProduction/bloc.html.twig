@@ -23,23 +23,6 @@
                                 </div>
                             </div>
                             <div class="row">
-                                {# Select du choix du modèle de référencement #}
-                                <div class="col-md-12">
-                                    <label class="control-label required" for="categorieProductionItemProduction">
-                                        Choix de la catégorie de productions
-                                        <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
-                                    </label>
-                                    <div class="blocCategorieProduction">
-                                        <select name="categorieProductionItemProductionSelect" id="categorieProductionItemProduction" class="form-control validate[required]" data-prompt-position="bottomLeft">
-                                            <option value=""> - </option>
-                                            {% for categorieProduction in categoriesProduction %}
-                                                <option value="{{categorieProduction.id}}" >{{categorieProduction.libelle}}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
                                 {# Select du choix de contexte #}
                                 <div class="col-md-12">
                                     <label class="control-label required" for="categorieContexteItemProduction">

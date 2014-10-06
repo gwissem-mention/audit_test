@@ -20,7 +20,7 @@ class StatClicRepository extends EntityRepository
     public function getNbNoteByReponse( $dateDebut, $dateFin )
     {
         $qb = $this->_em->createQueryBuilder()
-                         ->select('count(clic) as nbClic, reponse.id, reponse.libelle, question.libelle as questionLibelle')
+                         ->select('count(clic) as nbClic, reponse.id, reponse.libelle as reponseLibelle, question.libelle as questionLibelle, question.order as questionOrder')
                          ->from('\HopitalNumerique\RechercheBundle\Entity\StatClic', 'clic')
                          ->leftJoin('clic.reponse', 'reponse')
                          ->leftJoin('reponse.question', 'question');

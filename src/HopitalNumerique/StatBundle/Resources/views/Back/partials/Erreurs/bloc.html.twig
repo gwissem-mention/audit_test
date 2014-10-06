@@ -27,7 +27,8 @@
                             {# Boutton de génération du tableau #}
                             <div class="col-md-12 button-generation">
                                 <div id="generation-tableau-erreurs-curl" onclick="generationErreursCurl( '{{path('hopital_numerique_stat_erreurs_curl_generate_tableau')}}' );" class="finish btn btn-success pull-right" title="Générer le tableau" ><i class="fa fa-bar-chart-o"></i></div>
-                                <div id="check-url-erreurs-curl" onclick="checkAllUrl();" class="finish btn btn-primary pull-right" title="Vérifier les url" ><i class="fa fa-play"></i></div>
+                                <div id="check-url-erreurs-curl-with-base" onclick="checkAllUrl(false);" class="finish btn btn-info pull-right" title="Vérifier les url déjà vérifiées par le CRON" ><i class="fa fa-play"></i></div>
+                                <div id="check-url-erreurs-curl" onclick="checkAllUrl(true);" class="finish btn btn-primary pull-right" title="Relancer la vérification des urls" ><i class="fa fa-step-forward"></i></div>
                             </div>
                         </div>
                         <div class="clearfix"></div>
