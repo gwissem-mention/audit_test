@@ -27,6 +27,7 @@ class StatClicManager extends BaseManager
             {
                 $results[$statClic["questionOrder"]] = array(
                     'libelle'  => $statClic["questionLibelle"],
+                    'questionId'  => $statClic["questionId"],
                     'statClic' => array()
                 );
             }

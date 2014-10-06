@@ -12,7 +12,7 @@
             {% for statClic in statClics %}
                 <tr>
                     <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                        <strong>{{statClic['libelle']}}</strong>
+                        <strong>{{statClic['questionId']}} - {{statClic['libelle']}}</strong>
                     </td>
                     <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;"></td>
                     <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;"></td>
@@ -21,7 +21,7 @@
                     <tr>
                         <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;"></td>
                         <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                            <strong>{{statClicDetail['reponseLibelle']}}</strong>
+                            <strong>{{statClicDetail['id']}} - {{statClicDetail['reponseLibelle']}}</strong>
                         </td>
                         <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
                             {{statClicDetail['nbClic']}}
