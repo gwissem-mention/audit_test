@@ -241,7 +241,7 @@ class ErreursController extends Controller
     {
         //Récupération des urls complètes
         // The Regular Expression filter
-        $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+        $reg_exUrl = "/\b(([\w-]+:\/\/?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/)))/";
 
         // Check if there is a url in the text
         if(preg_match($reg_exUrl, $texte, $url)) 

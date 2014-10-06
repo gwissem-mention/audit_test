@@ -62,6 +62,7 @@ class ChapitreController extends Controller
         $tool  = new Chaine( $titre );
         $chapitre->setTitle( $titre );
         $chapitre->setAlias( $tool->minifie() );
+        $chapitre->setCode( 0 );
 
         //save
         $this->get('hopitalnumerique_autodiag.manager.chapitre')->save( $chapitre );
