@@ -73,6 +73,7 @@
         #resultats #chapitres .synthese{font-style: italic; font-size: 12px}
         #resultats #chapitres .question{font-weight: bold; margin-bottom: 0}
         #resultats #chapitres .sous-chapitre .question{padding-left:40px;}
+        #resultats #chapitres #table-analyse td, #table-analyse th {font-size: 11px;}
 
     /* Graphiques */
         #resultats #graphiques .panel .panel-heading{padding:7px 15px; height: 35px}

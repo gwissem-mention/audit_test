@@ -1,6 +1,9 @@
 {% import _self as mySelf %}
 
 <div id="resultats">
+<style type="text/css">
+.downloadAsImage{cursor: pointer;}
+</style>
     <div class="col-md-12">
         <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download"></i></a>
 
@@ -145,6 +148,7 @@
                 {% set chart = graphiques['radar'] %}
                 <h3>{{chart.title|capitalize}}</h3>
                 <div class="row">
+                    <div class="downloadAsImage btn btn-default" onclick="testImage(hopitalnumerique_autodiag_front_resultatImage);" ><i class="fa fa-download fa-spin"></i></div>
                     <div id="radarChart"></div>
                     <input type="hidden" id="datas-radar" value="{{chart.datas|json_encode()}}">
                     <div class="col-md-12">
@@ -295,28 +299,17 @@
                 <span>Compte tenu de vos réponses, l'Anap vous propose l'analyse suivante (l'ordre d'affichage correspond à l'ordre de priorité de traitement, le plus important en premier) :</span>
             </p>
 
-            <style type="text/css">
-                #chapitres #table-analyse td, #table-analyse th {font-size: 11px;}
-            </style>
-            <script type="text/javascript">
-                $(window).load(function() {
-                    $('#chapitres #table-analyse thead tr th.forPrint').css('display', 'none');
-                    $('#chapitres #table-analyse tbody tr td.forPrint').css('display', 'none');
-                });
-            </script>
-
             {# Affichage des publications sous forme de tableau : GME 24/09/14 #}
             <table class="table table-striped" id="table-analyse">
                 <!-- En-tête du tableau -->
                 <thead>
                     <tr>
-                       <th>Chapitre</th>
-                       <th>Sous-chapitre</th>
+                       <th>Chap.</th>
+                       <th>S-chap.</th>
                        <th>Question</th>
                        <th>Réponse</th>
                        <th>Synthèse</th>
                        <th class="forAffichage">Production</th>
-                       <th class="forPrint" style="width:100px;">Commentaire</th>
                     </tr>
                 </thead>
                 
@@ -327,7 +320,7 @@
                     {% for chapitre in chapitres %}
                         {% set doTheChapterHavePublications = false %}
                         <tr>
-                            <td>{{chapitre.title}}</td>
+                            <td>{{chapitre.code}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -349,7 +342,6 @@
                                     {% endif %}
                                 {% endif %}
                             </td>
-                            <td class="forPrint"></td>
                         </tr>
                         
                         {# Questions du chapitre #}
@@ -394,7 +386,6 @@
                                         {% set doTheChapterHavePublications = true %}
                                     {% endif %}
                                 </td>
-                                <td class="forPrint"></td>
                             </tr>
                         {% endfor %}
 
@@ -403,7 +394,7 @@
                             {% for child in chapitre.childs %}
                                 <tr>
                                     <td></td>
-                                    <td>{{child.title}}</td>
+                                    <td>{{child.code}}</td>
                                     <td></td>
                                     <td></td>
                                     {% if child.synthese %}
@@ -424,7 +415,6 @@
                                             {% endif %}
                                         {% endif %}
                                     </td>
-                                    <td class="forPrint"></td>
                                 </tr>
 
                                 {# Question du sous chapitre #}
@@ -469,18 +459,23 @@
                                                 {% set doTheChapterHavePublications = true %}
                                             {% endif %}
                                         </td>
-                                        <td class="forPrint"></td>
                                     </tr>
                                 {% else %}
                                     <tr>
                                         <td></td>
                                         <td></td>
-                                        <td colspan="5">Compte tenu de vos réponses, l' ANAP n'a pas de recommendation pour vous.</td>
+                                        <td colspan="4">Compte tenu de vos réponses, l' ANAP n'a pas de recommendation pour vous.</td>
                                     </tr>
                                 
                                 {% endfor %}
 
                             {% endfor %}
+                        {% elseif chapitre.questions|length == 0 %}
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td colspan="4">Compte tenu de vos réponses, l' ANAP n'a pas de recommendation pour vous.</td>
+                            </tr>
                         {% endif %}
 
                         {% if not doTheChapterHavePublications %}
