@@ -48,7 +48,7 @@ hopital_numerique_stat_erreurs_curl_generate_tableau:
     defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:generateTableau}
 #---CRON
 hopital_numerique_stat_erreurs_cron:
-    pattern:  /admin/statistiques/show/erreurs/cron/{id}
+    pattern:  /cron-quotidien/erreurs-url/{id}
     defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:cron}
 
 #-Stats clic
