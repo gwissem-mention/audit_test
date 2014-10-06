@@ -1,9 +1,21 @@
 parameters:
     hopitalnumerique_stat.manager.statrecherche.class: HopitalNumerique\StatBundle\Manager\StatRechercheManager
+    hopitalnumerique_stat.manager.errorurl.class: HopitalNumerique\StatBundle\Manager\ErrorUrlManager
+    #CronLogger
+    hopitalnumerique_stat.logger.cronlogger.class: HopitalNumerique\StatBundle\DependencyInjection\Logger\CronLogger
 
 services:
     hopitalnumerique_stat.manager.statrecherche:
         class: %hopitalnumerique_stat.manager.statrecherche.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_reference.manager.reference"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    #Cronlogger
+    hopitalnumerique_stat.logger.cronlogger:
+        class: "%hopitalnumerique_stat.logger.cronlogger.class%"
+        arguments: ["@logger", "@session"]
+    hopitalnumerique_stat.manager.errorurl:
+        class: %hopitalnumerique_stat.manager.errorurl.class%
+        arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

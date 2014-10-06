@@ -95,10 +95,8 @@ class ItemRequeteController extends Controller
     public function indexProductionAction( )
     {
         $categsContexte       = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => 222), array('order' => 'ASC'));
-        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('libelle' => 'ASC'));
 
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/ItemProduction/bloc.html.twig', array(
-            'categoriesProduction' => $categoriesProduction,
             'categsContexte'      => $categsContexte
         ));
     }
@@ -117,11 +115,10 @@ class ItemRequeteController extends Controller
         $dateDebut    = $request->request->get('datedebut-itemProduction');
         $dateFin      = $request->request->get('dateFin-itemProduction');
 
-        $categorieProductionId = intval($request->request->get('categorieProductionItemProductionSelect'));
         $contexteId            = intval($request->request->get('categorieContexteItemProductionSelect'));
         $isRequeteSaved        = ($request->request->get('isRequetSaved-itemProduction') === 'true' );
 
-        $res = $this->generationTableauProduction($dateDebut , $dateFin, $categorieProductionId, $contexteId, $isRequeteSaved);
+        $res = $this->generationTableauProduction($dateDebut , $dateFin, $contexteId, $isRequeteSaved);
         
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/ItemProduction/tableau.html.twig', array(
             'entetes'   => $res['entetes'],
@@ -143,11 +140,10 @@ class ItemRequeteController extends Controller
         $dateDebut    = $request->request->get('datedebut-itemProduction');
         $dateFin      = $request->request->get('dateFin-itemProduction');
 
-        $categorieProductionId = intval($request->request->get('categorieProductionItemProductionSelect'));
         $contexteId           = intval($request->request->get('categorieContexteItemProductionSelect'));
         $isRequeteSaved       = ($request->request->get('isRequetSaved-itemProduction') === 'true' );
 
-        $res = $this->generationTableauProduction($dateDebut , $dateFin, $categorieProductionId, $contexteId, $isRequeteSaved);
+        $res = $this->generationTableauProduction($dateDebut , $dateFin, $contexteId, $isRequeteSaved);
 
         //Colonnes communes
         $colonnes = array(
@@ -224,7 +220,7 @@ class ItemRequeteController extends Controller
      *
      * @return array
      */
-    private function generationTableauProduction($dateDebut , $dateFin, $categorieId, $contexteId, $isRequeteSaved)
+    private function generationTableauProduction($dateDebut , $dateFin, $contexteId, $isRequeteSaved)
     {
         //Récupération des dates sous forme DateTime
         $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
@@ -233,8 +229,12 @@ class ItemRequeteController extends Controller
         $lignes            = array();
         
         $entetes   = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => $contexteId));
-        $categorie = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $categorieId));
-        $lignes[$categorie->getLibelle()] = $categorie;
+        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('libelle' => 'ASC'));
+
+        foreach ($categoriesProduction as $categ) 
+        {
+            $lignes[$categ->getLibelle()] = $categ;
+        }
 
         $resultats = array();
 

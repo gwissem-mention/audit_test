@@ -20,11 +20,23 @@ class StatClicManager extends BaseManager
     {
         $statClics = $this->getRepository()->getNbNoteByReponse( $dateDebut, $dateFin )->getQuery()->getResult();
 
+        $results = array();
         foreach ($statClics as $key => $statClic) 
         {
-            $statClics[$key]["nbClic"] = intval($statClic["nbClic"]);
+            if(!array_key_exists($statClic["questionOrder"], $results))
+            {
+                $results[$statClic["questionOrder"]] = array(
+                    'libelle'  => $statClic["questionLibelle"],
+                    'statClic' => array()
+                );
+            }
+
+            $statClic["nbClic"] = intval($statClic["nbClic"]);
+            $results[$statClic["questionOrder"]]['statClic'][] = $statClic;
         }
 
-        return $statClics;
+        sort($results);
+
+        return $results;
     }
 }

@@ -5,6 +5,7 @@ $(document).ready(function() {
         //bind de Validation Engine
         $('form.toValidate').validationEngine();
         $("#check-url-erreurs-curl").hide();
+        $("#check-url-erreurs-curl-with-base").hide();
 
         //---Point dur
 
@@ -314,22 +315,24 @@ $(document).ready(function() {
                     loaderButton.finished();
                     loaderTableau.finished();
                     $("#check-url-erreurs-curl").show();
+                    $("#check-url-erreurs-curl-with-base").show();
                 }
             });
         }
     }
-    
-    
-    function checkAllUrl()
+
+    function checkAllUrl( withBase )
     {
         $("#item-erreurs-curl .url-check").each(function(){
 
             var item = $(this);
 
+            var url = withBase ? $('#curl-url').val() : $('#curl-url-with-base').val();
+
             var loaderItemCourant = item.nodevoLoader().start();
 
             $.ajax({
-                url  : $('#curl-url').val(),
+                url  : url,
                 data : {
                     url : $(this).data('url')
                 },
