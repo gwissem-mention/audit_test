@@ -237,7 +237,7 @@
                             <ol>
                                 {% for session in blocSessions['next'] %}
                                     {% set sessionTitre =  session.dateSession|date('d/m/y') ~ ' - ' ~  session.inscriptions|length ~ ' inscrit(s)' ~ ' - ' ~ session.module.titre %}
-                                    <li><a href="{{path('hopitalnumerique_module_module_session_show', {'id':session.id})}}" title="{{sessionTitre}}">{{ (sessionTitre)|truncate(48) }}</a></li>
+                                    <li><a href="{{path('hopitalnumerique_module_module_session_show', {'id':session.id})}}" title="{{sessionTitre}}">{{ (sessionTitre)|truncate(40) }}</a></li>
                                 {% else %}
                                     <li>- Aucune session à venir -</li>
                                 {% endfor %}
