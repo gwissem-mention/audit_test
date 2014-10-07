@@ -77,8 +77,20 @@
                 <div class="col-md-4">Demandeur</div>
                 <div class="col-md-8">
                     {{ interventionDemande.referent.appellation }}
-                    {% if interventionDemande.referent.etablissementRattachementSante is not null %}<br>{{ interventionDemande.referent.etablissementRattachementSante.appellation }}{% endif %}
-                    {% if interventionDemande.referent.region is not null %}<br>{{ interventionDemande.referent.region.libelle }}{% endif %}
+                    {% if interventionDemande.referent.etablissementRattachementSante is not null %}
+                        <br>
+                        {{ interventionDemande.referent.etablissementRattachementSante.appellation }}
+                    {% endif %}
+                    {% if interventionDemande.referent.region is not null %}
+                        <br>{{ interventionDemande.referent.region.libelle }}
+                    {% endif %}
+                    {% if interventionDemande.referent.getTelephoneDirect is not null %}
+                        <br>{{ interventionDemande.referent.getTelephoneDirect }}
+                    {% endif %}
+                    {% if interventionDemande.referent.getTelephonePortable is not null %}
+                        <br>{{ interventionDemande.referent.getTelephonePortable }}
+                    {% endif %}
+                    <br>{{ interventionDemande.referent.getEmail }}
                 </div>
             </div>
             {% if app.user.hasRoleCmsi or (app.user.hasRoleAmbassadeur and interventionDemande.interventionEtatEstAcceptationCmsi) %}

@@ -28,8 +28,4 @@ HopitalNumeriqueInterventionBundle_InterventionEvaluationFormulaireCreation.init
  */
 HopitalNumeriqueInterventionBundle_InterventionEvaluationFormulaireCreation.initChamps = function()
 {
-    var interventionDateChamp = $('input.question-type-date');
-    var aujourdhui = new Date();
-    
-    $(interventionDateChamp).val(aujourdhui.toISOString().slice(0, 10));
 };
