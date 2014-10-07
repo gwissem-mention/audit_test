@@ -54,6 +54,13 @@ class UserType extends AbstractType
                 'attr'       => array('class' => $this->_constraints['username']['class'] )
             ));
 
+        $builder->add('pseudonymeForum', 'text', array(
+                'max_length' => $this->_constraints['pseudonymeForum']['maxlength'],
+                'required'   => true, 
+                'label'      => 'Identifiant du forum',
+                'attr'       => array('class' => $this->_constraints['pseudonymeForum']['class'] )
+            ));
+
         $builder
             ->add('nom', 'text', array(
                 'max_length' => $this->_constraints['nom']['maxlength'],

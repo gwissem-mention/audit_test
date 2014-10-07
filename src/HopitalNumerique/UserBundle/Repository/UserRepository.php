@@ -20,10 +20,11 @@ class UserRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user.id, 
                         user.dateInscription, 
-                        user.username, 
+                        user.username,
+                        user.pseudonymeForum,
                         user.email, 
                         user.nom, 
-                        user.prenom, 
+                        user.prenom,
                         refRegion.libelle as region, 
                         user.roles,
                         refEtat.libelle as etat, 

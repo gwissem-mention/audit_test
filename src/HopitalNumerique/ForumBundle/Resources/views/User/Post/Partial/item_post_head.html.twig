@@ -4,7 +4,12 @@
             <h4 class="panel-title">
                 {%- if post.getCreatedBy -%}
                     {{- 'post.posted-by' |trans({}, ForumBundle.translation ) |raw -}}
-                    {{- post.getCreatedBy.getNomPrenom() }} {% if post.getCreatedBy.getEtablissementRattachementSante() is not null %}({{post.getCreatedBy.getEtablissementRattachementSante().nom}}){% else %}{% if post.getCreatedBy.getAutreStructureRattachementSante|trim != '' %}({{post.getCreatedBy.getAutreStructureRattachementSante}}){% endif %}{% endif %}
+                    {% if post.getCreatedBy.getPseudonymeForum() is defined and post.getCreatedBy.getPseudonymeForum() is not null %}
+                        {{- post.getCreatedBy.getPseudonymeForum() }} 
+                    {% else %}
+                        {{- post.getCreatedBy.getNomPrenom() }} 
+                    {% endif %}
+                    {% if post.getCreatedBy.getEtablissementRattachementSante() is not null %}({{post.getCreatedBy.getEtablissementRattachementSante().nom}}){% else %}{% if post.getCreatedBy.getAutreStructureRattachementSante|trim != '' %}({{post.getCreatedBy.getAutreStructureRattachementSante}}){% endif %}{% endif %}
 
                      &#183; 
 
