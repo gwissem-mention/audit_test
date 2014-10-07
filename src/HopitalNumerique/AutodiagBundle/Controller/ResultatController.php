@@ -34,4 +34,138 @@ class ResultatController extends Controller
             'chapitres' => $chapitres
         ));
     }
+    
+    /**
+     * Export CSV des chapitres/question en fonction du résultat
+     *
+     * @return view
+     */
+    public function exportChapitresCSVAction( Resultat $resultat )
+    {
+        $chapitres = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+
+        $colonnes = array();
+        $datas    = array();
+
+        $colonnes = array(
+            'Chapitre',
+            'Sous chapitre',
+            'Question',
+            'Réponse',
+            'Synthèse',
+            'Commentaire',
+            'Acteurs',
+            'Échances',
+            'État d\'avancement'
+        );
+
+        foreach ($chapitres as $chapitre) 
+        {
+            $row = array();
+
+            $row[0] = $chapitre->code;
+            $row[1] = '';
+            $row[2] = '';
+            $row[3] = '';
+            $row[4] = $chapitre->synthese;
+            $row[5] = '';
+            $row[6] = '';
+            $row[7] = '';
+            $row[8] = '';
+
+            $datas[] = $row;
+
+            foreach ($chapitre->questions as $question) 
+            {
+                $row = array();
+
+                $row[0] = $chapitre->code;
+                $row[1] = '';
+                $row[2] = $question->question;
+                $row[3] = '';
+                //Set de la réponse
+                if($question->initialValue == -1)
+                {
+                    $row[3] = 'Non concerné';
+                }
+                else
+                {
+                    foreach ($question->options as $option) 
+                    {
+                        $tab = explode(';', $option);
+                        if($tab[0] == $question->initialValue)
+                        {
+                            $row[3] .= $tab[1];
+                        }
+                    }
+                }
+                $row[4] = $question->synthese;
+                $row[5] = '';
+                $row[6] = '';
+                $row[7] = '';
+                $row[8] = '';
+
+                $datas[] = $row;
+            }
+
+            //Si il y a des sous chapitres
+            if(count($chapitre->childs) > 0)
+            {
+                //Pour chaque sous chapitre du chapitre courant
+                foreach ($chapitre->childs as $chapitreChild) 
+                {
+                    $row = array();
+
+                    $row[0] = $chapitre->code;
+                    $row[1] = $chapitreChild->code;
+                    $row[2] = '';
+                    $row[3] = '';
+                    $row[4] = $chapitreChild->synthese;
+                    $row[5] = '';
+                    $row[6] = '';
+                    $row[7] = '';
+                    $row[8] = '';
+
+                    $datas[] = $row;
+
+                    foreach ($chapitreChild->questions as $question) 
+                    {
+                        $row = array();
+
+                        $row[0] = $chapitre->code;
+                        $row[1] = $chapitreChild->code;
+                        $row[2] = $question->question;
+                        $row[3] = '';
+                        //Set de la réponse
+                        if($question->initialValue == -1)
+                        {
+                            $row[3] = 'Non concerné';
+                        }
+                        else
+                        {
+                            foreach ($question->options as $option) 
+                            {
+                                $tab = explode(';', $option);
+                                if($tab[0] == $question->initialValue)
+                                {
+                                    $row[3] .= $tab[1];
+                                }
+                            }
+                        }
+                        $row[4] = $question->synthese;
+                        $row[5] = '';
+                        $row[6] = '';
+                        $row[7] = '';
+                        $row[8] = '';
+
+                        $datas[] = $row;
+                    }
+                }
+            }
+        }
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-liste-participant-session.csv', $kernelCharset );
+    }
 }
