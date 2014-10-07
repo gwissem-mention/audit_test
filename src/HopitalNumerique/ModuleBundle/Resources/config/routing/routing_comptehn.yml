@@ -9,6 +9,12 @@ hopitalnumerique_module_inscription_attestation_front:
     requirements:
         id: \d+
 
+hopitalnumerique_module_inscription_export_liste_front:
+    pattern:  /module-thematiques/{id}/export-liste-participant
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/InscriptionFront:exportListeParticipant, id: 1}
+    requirements:
+        id: \d+
+
 hopitalnumerique_module_session_evaluation_front:
     pattern:  /module-thematiques/session/{id}/evaluations
     defaults: { _controller: HopitalNumeriqueModuleBundle:Front/SessionFront:evaluation, id: 1}
