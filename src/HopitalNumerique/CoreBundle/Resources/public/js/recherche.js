@@ -1,17 +1,18 @@
 function rechercheAideEtBesoin()            
 {
     var url = $('#fancy-recherche-url').val();
-
+    
     $.fancybox.open({
         'padding'   : 0,
         'autoSize'  : false,
-        'width'     : '50%',
-        'height'    : '360px',
+        'width'     : '80%',
         'scrolling' : 'no',
-        'modal'     : true,
-        'type'      : 'ajax',
+        'showCloseButton' : true,
+        'height' : '360px',
+        'type'      : 'iframe',
         'href'      : url
     });
+
 }
 
 $(function() {
