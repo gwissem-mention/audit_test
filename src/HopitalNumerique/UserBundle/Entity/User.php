@@ -184,6 +184,22 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $username;
+
+    /**
+     * @var string
+     * @Assert\NotBlank(message="Le pseudonyme ne peut pas être vide.")
+     * @Assert\Regex(pattern= "/[0-9a-zA-Z]/")
+     * @Assert\Length(
+     *      min = "1",
+     *      max = "50",
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le pseudonyme.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le pseudonyme."
+     * )
+     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]],custom[onlyLetterNumber]")
+     * @ORM\Column(name="usr_pseudonyme_forum", type="string", length=14, nullable=true, options = {"comment" = "Téléphone portable de l utilisateur"})
+     * @Gedmo\Versioned
+     */
+    protected $pseudonymeForum;
     
     /**
      * @var string
@@ -541,14 +557,15 @@ class User extends BaseUser
     {
         parent::__construct();
         
-        $this->objets    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->username  = '';
-        $this->enabled   = 1;
-        $this->civilite  = array();
-        $this->lock      = false;
-        $this->archiver  = false;
-        $this->domaines  = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->nbVisites = 0;
+        $this->objets     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->username   = '';
+        $this->pseudonymeForum = '';
+        $this->enabled    = 1;
+        $this->civilite   = array();
+        $this->lock       = false;
+        $this->archiver   = false;
+        $this->domaines   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->nbVisites  = 0;
     }
 
     public function __toString()
@@ -607,6 +624,26 @@ class User extends BaseUser
     public function getLastLoginString()
     {
         return $this->lastLogin ? $this->lastLogin->format('d/m/Y') : '';
+    }
+    
+    /**
+     * Get pseudonymeForum
+     *
+     * @return string $pseudonymeForum
+     */
+    public function getPseudonymeForum()
+    {
+        return $this->pseudonymeForum;
+    }
+    
+    /**
+     * Set pseudonymeForum
+     *
+     * @param string $pseudonymeForum
+     */
+    public function setPseudonymeForum($pseudonymeForum)
+    {
+        $this->pseudonymeForum = $pseudonymeForum;
     }
     
     /**

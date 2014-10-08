@@ -111,4 +111,51 @@ class InscriptionFrontController extends Controller
             )
         );
     }
+
+    /**
+     * Compte HN : Télécharge la liste des participants de la session de l'inscription
+     *
+     * @return view
+     */
+    public function exportListeParticipantAction(Inscription $inscription)
+    {
+        $colonnes = array();
+        $datas    = array();
+
+        $session = $inscription->getSession();
+
+        $colonnes = array(
+            'Nom',
+            'Prénom',
+            'Région',
+            'Établissement',
+            'Fonction',
+            'Téléphone direct',
+            'Téléphone portable',
+            'Mail'
+        );
+
+        //Pour chaque session, on parcourt les inscriptions pour les lister
+        foreach ($session->getInscriptions() as $inscription) 
+        {
+            $row = array();
+
+            $user = $inscription->getUser();
+
+            $row[0] = $user->getNom();
+            $row[1] = $user->getPrenom();
+            $row[2] = $user->getRegion()->getLibelle();
+            $row[3] = $user->getEtablissementRattachementSante() ? $user->getEtablissementRattachementSante()->getNom() : $user->getAutreStructureRattachementSante();
+            $row[4] = $user->getFonctionStructure();
+            $row[5] = $user->getTelephoneDirect();
+            $row[6] = $user->getTelephonePortable();
+            $row[7] = $user->getEmail();
+
+            $datas[] = $row;
+        }
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-liste-participant-session.csv', $kernelCharset );
+    }
 }

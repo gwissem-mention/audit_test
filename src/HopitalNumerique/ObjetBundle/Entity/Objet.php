@@ -1244,6 +1244,23 @@ class Objet
     }
 
     /**
+     * Get a contenu by id ou null si pas trouvé
+     *
+     * @param int $id
+     * @return Contenu|null $contenu
+     */
+    public function getContenuById($id)
+    {
+        foreach ($this->contenus as $contenu) 
+        {
+            if($contenu->getId() === $id)
+                return $contenu;
+        }
+
+        return null;
+    }
+
+    /**
      * [getAbsolutePath description]
      *
      * @param  [type] $type [description]

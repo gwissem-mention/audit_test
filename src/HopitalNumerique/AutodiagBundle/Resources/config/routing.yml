@@ -203,6 +203,12 @@ hopitalnumerique_autodiag_resultat_detail:
     pattern:  /admin/outil/resultat/{id}/detail
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:detail" }
     requirements: 
+        id : \d+ 
+
+hopitalnumerique_autodiag_resultat_export_chapitres_CSV:
+    pattern:  /admin/outil/resultat/{id}/export-chapitres-CSV
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:exportChapitresCSV" }
+    requirements: 
         id : \d+        
 
 #Front

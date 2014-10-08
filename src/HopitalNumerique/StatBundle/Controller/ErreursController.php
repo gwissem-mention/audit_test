@@ -223,7 +223,7 @@ class ErreursController extends Controller
 
         foreach ($objet->getContenus() as $key => $contenu) 
         {
-            $urls = $this->recuperationLien($contenu->getContenu(), $objet->getId(), $urls);
+            $urls = $this->recuperationLien($contenu->getContenu(), $objet->getId(), $urls, true, $contenu->getId());
         }
         return $urls;
     }
@@ -231,24 +231,40 @@ class ErreursController extends Controller
     /**
      * Récupération des liens internes des articles/objet/contenu..
      *
-     * @param string $texte   Texte à vérifier
-     * @param int    $idObjet Identifiant de l'objet courant, pour savoir d'où vient l'url
-     * @param array  $urls    Tableau contenant les urls déjà trouvée
+     * @param string    $texte      Texte à vérifier
+     * @param int       $idObjet    Identifiant de l'objet courant, pour savoir d'où vient l'url
+     * @param array     $urls       Tableau contenant les urls déjà trouvée
+     * @param boolean   $isContenu  Est un lien venant d'un contenu
+     * @param int       $idContenu  Identifiant du contenu
      *
      * @return array Tableau contenant les urls déjà trouvée
      */
-    private function recuperationLien($texte, $idObjet, $urls)
+    private function recuperationLien($texte, $idObjet, $urls, $isContenu = false , $idContenu = 0)
     {
         //Récupération des urls complètes
         // The Regular Expression filter
         $reg_exUrl = "/\b(([\w-]+:\/\/?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/)))/";
 
         // Check if there is a url in the text
-        if(preg_match($reg_exUrl, $texte, $url)) 
-        {   
-            if(!array_key_exists($idObjet, $urls['URL']))
-                $urls['URL'][$idObjet] = array();
-            $urls['URL'][$idObjet][] = trim($url[0], '"');
+        preg_match_all($reg_exUrl, $texte, $matchesURLTemp);
+        if(count($matchesURLTemp[0]) > 0 )
+        {
+            $matchesURL = $matchesURLTemp[0];
+            foreach ($matchesURL as $matcheURL) 
+            {
+
+                if(!array_key_exists($idObjet, $urls['URL']))
+                {
+                    $urls['URL'][$idObjet] = array(
+                        'objet'    => array(), 
+                        $idContenu => array()
+                    );
+                }
+                if($isContenu)
+                    $urls['URL'][$idObjet][$idContenu][] = trim($matcheURL, '"');
+                else    
+                    $urls['URL'][$idObjet]['objet'][] = trim($matcheURL, '"');
+            }
         }
 
         //Remplacement des liens internes
@@ -269,8 +285,17 @@ class ErreursController extends Controller
                         if($objet)
                         {
                             if(!array_key_exists($idObjet, $urls['PUBLICATION']))
-                                $urls['PUBLICATION'][$idObjet] = array();
-                            $urls['PUBLICATION'][$idObjet][$objet->getId()] = $this->getRequest()->getUriForPath('/publication/' . $matches[2][$key] . '-' . $objet->getAlias());
+                            {
+                                //Tableau 
+                                $urls['PUBLICATION'][$idObjet] = array(
+                                    'objet'   => array(), 
+                                    $idContenu => array()
+                                );
+                            }
+                            if($isContenu)
+                                $urls['PUBLICATION'][$idObjet][$idContenu][$objet->getId()] = $this->getRequest()->getUriForPath('/publication/' . $matches[2][$key] . '-' . $objet->getAlias());
+                            else
+                                $urls['PUBLICATION'][$idObjet]['objet'][$objet->getId()] = $this->getRequest()->getUriForPath('/publication/' . $matches[2][$key] . '-' . $objet->getAlias());    
                         }
                         break;
                     case 'INFRADOC':
@@ -279,9 +304,17 @@ class ErreursController extends Controller
                         if( $contenu )
                         {
                             if(!array_key_exists($idObjet, $urls['INFRADOC']))
-                                $urls['INFRADOC'][$idObjet] = array();
+                            {
+                                $urls['INFRADOC'][$idObjet] = array(
+                                    'objet'   => array(), 
+                                    $idContenu => array()
+                                );
+                            }
                             $objet  = $contenu->getObjet();
-                            $urls['INFRADOC'][$idObjet][$contenu->getId()] = $this->getRequest()->getUriForPath('/publication/'. $objet->getId().'-' . $objet->getAlias() . '/'.$matches[2][$key].'-'.$contenu->getAlias());
+                            if($isContenu)
+                                $urls['INFRADOC'][$idObjet][$idContenu][$contenu->getId()] = $this->getRequest()->getUriForPath('/publication/'. $objet->getId().'-' . $objet->getAlias() . '/'.$matches[2][$key].'-'.$contenu->getAlias());
+                            else
+                                $urls['INFRADOC'][$idObjet]['objet'][$contenu->getId()] = $this->getRequest()->getUriForPath('/publication/'. $objet->getId().'-' . $objet->getAlias() . '/'.$matches[2][$key].'-'.$contenu->getAlias());
                         }
                         break;
                     case 'ARTICLE':
@@ -290,8 +323,16 @@ class ErreursController extends Controller
                         if($objet)
                         {
                             if(!array_key_exists($idObjet, $urls['ARTICLE']))
-                                $urls['ARTICLE'][$idObjet] = array();
-                            $urls['ARTICLE'][$idObjet][$objet->getId()] = $this->getRequest()->getUriForPath('/publication/article/'.$matches[2][$key].'-' . $objet->getAlias());
+                            {
+                                $urls['ARTICLE'][$idObjet] = array(
+                                    'objet'   => array(), 
+                                    $idContenu => array()
+                                );
+                            }
+                            if($isContenu)
+                                $urls['ARTICLE'][$idObjet][$idContenu][$objet->getId()] = $this->getRequest()->getUriForPath('/publication/article/'.$matches[2][$key].'-' . $objet->getAlias());
+                            else
+                                $urls['ARTICLE'][$idObjet]['objet'][$objet->getId()] = $this->getRequest()->getUriForPath('/publication/article/'.$matches[2][$key].'-' . $objet->getAlias());
                         }
                         break;
                     case 'AUTODIAG':
@@ -300,8 +341,16 @@ class ErreursController extends Controller
                         if($outil)
                         {
                             if(!array_key_exists($idObjet, $urls['AUTODIAG']))
-                                $urls['AUTODIAG'][$idObjet] = array();
-                            $urls['AUTODIAG'][$idObjet][$outil->getId()] = $this->getRequest()->getUriForPath('/autodiagnostic/outil/'.$outil->getId() . '-' . $outil->getAlias());
+                            {
+                                $urls['AUTODIAG'][$idObjet] = array(
+                                    'objet'   => array(), 
+                                    $idContenu => array()
+                                );
+                            }
+                            if($isContenu)
+                                $urls['AUTODIAG'][$idObjet][$idContenu][$outil->getId()] = $this->getRequest()->getUriForPath('/autodiagnostic/outil/'.$outil->getId() . '-' . $outil->getAlias());
+                            else
+                                $urls['AUTODIAG'][$idObjet]['objet'][$outil->getId()] = $this->getRequest()->getUriForPath('/autodiagnostic/outil/'.$outil->getId() . '-' . $outil->getAlias());
                         } 
                         break;
                     case 'QUESTIONNAIRE':
@@ -310,8 +359,16 @@ class ErreursController extends Controller
                         if($questionnaire)
                         {
                             if(!array_key_exists($idObjet, $urls['QUESTIONNAIRE']))
-                                $urls['QUESTIONNAIRE'][$idObjet] = array();
-                            $urls['QUESTIONNAIRE'][$idObjet][$questionnaire->getId()] = $this->getRequest()->getUriForPath('/questionnaire/edit/'. $questionnaire->getId());
+                            {
+                                $urls['QUESTIONNAIRE'][$idObjet] = array(
+                                    'objet'   => array(), 
+                                    $idContenu => array()
+                                );
+                            }
+                            if($isContenu)
+                                $urls['QUESTIONNAIRE'][$idObjet][$idContenu][$questionnaire->getId()] = $this->getRequest()->getUriForPath('/questionnaire/edit/'. $questionnaire->getId());
+                            else
+                                $urls['QUESTIONNAIRE'][$idObjet]['objet'][$questionnaire->getId()] = $this->getRequest()->getUriForPath('/questionnaire/edit/'. $questionnaire->getId());
                         }
                         break;
                 }

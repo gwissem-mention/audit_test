@@ -41,7 +41,11 @@
                         {%- if topic.getFirstPost -%}
 
                             {{- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -}}
-                            {{- topic.getFirstPost.getCreatedBy.getNomPrenom() -}}
+                            {% if topic.getFirstPost.getCreatedBy.getPseudonymeForum() is defined and topic.getFirstPost.getCreatedBy.getPseudonymeForum() is not null %}
+                                {{- topic.getFirstPost.getCreatedBy.getPseudonymeForum() -}}
+                            {% else %}
+                                {{- topic.getFirstPost.getCreatedBy.getNomPrenom() -}}
+                            {% endif %}
 
                             &nbsp;&#183;
                             <a href="{{- path('ccdn_forum_user_topic_show', {'forumName': topic.board.category.forumName, 'topicId': topic.getId }) -}}">
@@ -65,7 +69,11 @@
                         {%- if topic.getLastPost -%}
 
                             {{- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -}}
-                            {{- topic.getLastPost.getCreatedBy.getNomPrenom() -}}
+                            {% if topic.getLastPost.getCreatedBy.getPseudonymeForum() is defined and topic.getLastPost.getCreatedBy.getPseudonymeForum() is not null %}
+                                {{- topic.getLastPost.getCreatedBy.getPseudonymeForum() -}}
+                            {% else %}
+                                {{- topic.getLastPost.getCreatedBy.getNomPrenom() -}}
+                            {% endif %}
 
                             <br>
 

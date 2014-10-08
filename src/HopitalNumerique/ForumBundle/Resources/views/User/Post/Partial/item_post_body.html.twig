@@ -7,7 +7,11 @@
                     <i class="glyphicon glyphicon-pencil" style="margin: 0 5px 0 0;"></i>
 
                     {{- 'post.edited-by' |trans({}, ForumBundle.translation ) |raw -}}
-                    {{- post.getEditedBy.getNomPrenom() -}}
+                    {% if post.getEditedBy.getPseudonymeForum() is defined and post.getEditedBy.getPseudonymeForum() is not null %}
+                        {{- post.getEditedBy.getPseudonymeForum() -}}
+                    {% else %}
+                        {{- post.getEditedBy.getNomPrenom() -}}
+                    {% endif %}
 
                     &nbsp;&#183;
 
@@ -25,7 +29,11 @@
                 <i class="glyphicon glyphicon-trash"></i>
 
                 {{- 'post.deleted-by' |trans({}, ForumBundle.translation ) |raw -}}
-                {{- post.getDeletedBy.getNomPrenom() -}}
+                {% if post.getDeletedBy.getPseudonymeForum() is defined and post.getDeletedBy.getPseudonymeForum() is not null %}
+                    {{- post.getDeletedBy.getPseudonymeForum() -}}
+                {% else %}
+                    {{- post.getDeletedBy.getNomPrenom() -}}
+                {% endif %}
 
                 &nbsp;&#183;
 
