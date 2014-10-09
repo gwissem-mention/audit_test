@@ -23,6 +23,8 @@ class QuestionnaireGrid extends Grid implements GridInterface
         $this->setButtonSize( 43 );
         
         $this->setNoDataMessage('Aucun questionnaire à afficher.');
+        $this->showIDColumn( true );
+        $this->setFilterIdColumn( true );
     }
 
     /**

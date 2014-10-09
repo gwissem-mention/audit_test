@@ -138,20 +138,24 @@ class InscriptionFrontController extends Controller
         //Pour chaque session, on parcourt les inscriptions pour les lister
         foreach ($session->getInscriptions() as $inscription) 
         {
-            $row = array();
+            //On prend uniquement les "a participé"
+            if($inscription->getEtatParticipation()->getId() === 411)
+            {
+                $row = array();
 
-            $user = $inscription->getUser();
+                $user = $inscription->getUser();
 
-            $row[0] = $user->getNom();
-            $row[1] = $user->getPrenom();
-            $row[2] = $user->getRegion()->getLibelle();
-            $row[3] = $user->getEtablissementRattachementSante() ? $user->getEtablissementRattachementSante()->getNom() : $user->getAutreStructureRattachementSante();
-            $row[4] = $user->getFonctionStructure();
-            $row[5] = $user->getTelephoneDirect();
-            $row[6] = $user->getTelephonePortable();
-            $row[7] = $user->getEmail();
+                $row[0] = $user->getNom();
+                $row[1] = $user->getPrenom();
+                $row[2] = $user->getRegion()->getLibelle();
+                $row[3] = $user->getEtablissementRattachementSante() ? $user->getEtablissementRattachementSante()->getNom() : $user->getAutreStructureRattachementSante();
+                $row[4] = $user->getFonctionStructure();
+                $row[5] = $user->getTelephoneDirect();
+                $row[6] = $user->getTelephonePortable();
+                $row[7] = $user->getEmail();
 
-            $datas[] = $row;
+                $datas[] = $row;   
+            }
         }
 
         $kernelCharset = $this->container->getParameter('kernel.charset');

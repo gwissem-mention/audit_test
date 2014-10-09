@@ -148,7 +148,6 @@
                 {% set chart = graphiques['radar'] %}
                 <h3>{{chart.title|capitalize}}</h3>
                 <div class="row">
-                    <div class="downloadAsImage btn btn-default" onclick="testImage(hopitalnumerique_autodiag_front_resultatImage);" ><i class="fa fa-download fa-spin"></i></div>
                     <div id="radarChart"></div>
                     <input type="hidden" id="datas-radar" value="{{chart.datas|json_encode()}}">
                     <div class="col-md-12">
