@@ -22,34 +22,37 @@ class ErreursController extends Controller
                 //Chaque catégorie des url (Publication, Infradoc, Article ...)
                 foreach ($categsUrl as $urls) 
                 {
-                    //Parcourt du tableau des url des categs
-                    foreach ($urls as $url) 
+                    foreach ($urls as $keyObjetOrContenu => $objetOrContenu) 
                     {
-                        //Set du booléan pour l'entité
-                        $isOk = true;
-
-                        $handle = curl_init($url);
-                        curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
-
-                        /* Get the HTML or whatever is linked in $url. */
-                        $response = curl_exec($handle);
-
-                        /* Check for not 200 */
-                        $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-                        if($httpCode >= 400 || $httpCode === 0) 
+                        //Parcourt du tableau des url des categs
+                        foreach ($objetOrContenu as $url) 
                         {
-                            $isOk = false;
+                            //Set du booléan pour l'entité
+                            $isOk = true;
+
+                            $handle = curl_init($url);
+                            curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+
+                            /* Get the HTML or whatever is linked in $url. */
+                            $response = curl_exec($handle);
+
+                            /* Check for not 200 */
+                            $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+                            if($httpCode >= 400 || $httpCode === 0) 
+                            {
+                                $isOk = false;
+                            }
+
+                            $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Url ' . $url . ($isOk ? ' valide' : ' non valide.'));
+
+                            curl_close($handle);
+
+                            //Recherche si une entité existe déjà pour cette url
+                            $errorUrl = $this->get('hopitalnumerique_stat.manager.errorurl')->existeErrorByUrl($url);
+                            $errorUrl->setOk($isOk);
+
+                            $this->get('hopitalnumerique_stat.manager.errorurl')->save($errorUrl);
                         }
-
-                        $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Url ' . $url . ($isOk ? ' valide' : ' non valide.'));
-
-                        curl_close($handle);
-
-                        //Recherche si une entité existe déjà pour cette url
-                        $errorUrl = $this->get('hopitalnumerique_stat.manager.errorurl')->existeErrorByUrl($url);
-                        $errorUrl->setOk($isOk);
-
-                        $this->get('hopitalnumerique_stat.manager.errorurl')->save($errorUrl);
                     }
                 }
             }
