@@ -51,6 +51,7 @@ class ExportController extends Controller
                             'fichier2'             => 'Fichier 2',
                             'fichierEdit'          => 'Fichier Editable',
                             'vignette'             => 'Vignette',
+                            'idParent'             => 'Id de la publication parente',
                             'idC'                  => 'ID infra-doc',
                             'titreC'               => 'Titre infra-doc',
                             'aliasC'               => 'Alias infra-doc',
