@@ -157,21 +157,6 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" style="margin-bottom:0">
-                                    {{ form_label(form.fileEdit) }}
-                                    <div class="col-md-9">
-                                        {% if objet.getAbsolutePath(3) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
-                                        <div class="inputUpload" style="display:{{visibility}}">
-                                            {{ form_widget(form.fileEdit) }}    
-                                        </div>
-
-                                        {% if objet.getAbsolutePath(3) is not null %}
-                                            <a class="uploadedFile pull-left" href="/{{objet.getWebPath(3)}}" target="_blank">{{objet.pathEdit}}</a>
-                                            <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" data-path="hopitalnumerique_objet_objet_pathEdit" ><i class="fa fa-trash-o"></i></div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -353,6 +338,38 @@
                         </div>
 
                         {% if objet.id %}
+                            <div class="tab-pane" id="administrateurs">
+                                <a href="{{path('hopitalnumerique_objet_objet_addLink', {'id':objet.id})}}" class="addProd fancy fancybox.ajax btn btn-default pull-right" title="Ajouter une production liée"><i class="fa fa-plus"></i></a>
+
+                                {# Liste des prod maitrisées #}
+                                <fieldset>
+                                    <legend>Administrateurs</legend>
+
+                                    
+                                    {% form_theme form 'HopitalNumeriqueObjetBundle::formObjet.html.twig' %}
+                                    
+                                    {{ form_start(form) }}
+                                        {{ form_javascript(form) }}
+
+                                        <div class="form-group" style="margin-bottom:0">
+                                            {{ form_label(form.fileEdit) }}
+                                            <div class="col-md-9">
+                                                {% if objet.getAbsolutePath(3) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
+                                                <div class="inputUpload" style="display:{{visibility}}">
+                                                    {{ form_widget(form.fileEdit) }}    
+                                                </div>
+
+                                                {% if objet.getAbsolutePath(3) is not null %}
+                                                    <a class="uploadedFile pull-left" href="/{{objet.getWebPath(3)}}" target="_blank">{{objet.pathEdit}}</a>
+                                                    <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" data-path="hopitalnumerique_objet_objet_pathEdit" ><i class="fa fa-trash-o"></i></div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                    {{ form_end(form)}}
+                                </fieldset>
+                            </div>
+
                             <div class="tab-pane {% if infra %}active{% endif %}" id="infra">
                                 <div class="btn btn-primary addContenu" title="Ajouter un contenu"><i class="fa fa-plus"></i></div>
                                 <a class="btn btn-success reloadContenu" title="Recharger le sommaire" href="{{path('hopitalnumerique_objet_objet_edit',{'id':objet.id,'infra':1})}}" ><i class="fa fa-refresh"></i></a>
