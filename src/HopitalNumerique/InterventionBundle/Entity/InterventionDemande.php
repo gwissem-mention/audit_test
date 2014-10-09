@@ -298,6 +298,38 @@ class InterventionDemande
      */
     protected $facture;
 
+    //Ajout GME:
+    /**
+     * @var string
+     * 
+     * @Assert\NotBlank(message="L'adresse éléctronique ne peut pas être vide.")
+     * @Assert\Regex(pattern= "/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]{2,}[.][a-zA-Z]{2,3}$/")
+     * @Assert\Length(
+     *      min = "1",
+     *      max = "50",
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom de compte.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom de compte."
+     * )
+     * @Nodevo\Javascript(class="validate[required,custom[email]]")
+     * @ORM\Column(name="interv_email", type="string", length=50, nullable=true, options = {"comment" = "Adresse électronique"})
+     */
+    protected $email;
+    
+    /**
+     * @var string
+     * 
+     * @Assert\Length(
+     *      min = "14",
+     *      max = "14",
+     *      minMessage="Le numéro de téléphone direct doit être composé de {{ limit }} caractères.",
+     *      maxMessage="Le numéro de téléphone direct doit être composé de {{ limit }} caractères."
+     * )
+     * @Nodevo\Javascript(class="validate[minSize[14],maxSize[14]],custom[phone]", mask="99 99 99 99 99")
+     * @ORM\Column(name="interv_direct", type="string", length=14, nullable=true, options = {"comment" = "Téléphone de l utilisateur"})
+     */
+    protected $telephone;
+
+
     /**
      * Constructor
      */
@@ -1158,5 +1190,97 @@ class InterventionDemande
     {
         $this->objetsAutres = $objetsAutres;
         return $this;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return InterventionDemande
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set telephone
+     *
+     * @param string $telephone
+     * @return InterventionDemande
+     */
+    public function setTelephone($telephone)
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    /**
+     * Get telephone
+     *
+     * @return string 
+     */
+    public function getTelephone()
+    {
+        return $this->telephone;
+    }
+
+    /**
+     * Add interventionRegroupementsDemandesPrincipales
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesPrincipales
+     * @return InterventionDemande
+     */
+    public function addInterventionRegroupementsDemandesPrincipale(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesPrincipales)
+    {
+        $this->interventionRegroupementsDemandesPrincipales[] = $interventionRegroupementsDemandesPrincipales;
+
+        return $this;
+    }
+
+    /**
+     * Remove interventionRegroupementsDemandesPrincipales
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesPrincipales
+     */
+    public function removeInterventionRegroupementsDemandesPrincipale(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesPrincipales)
+    {
+        $this->interventionRegroupementsDemandesPrincipales->removeElement($interventionRegroupementsDemandesPrincipales);
+    }
+
+    /**
+     * Add interventionRegroupementsDemandesRegroupees
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesRegroupees
+     * @return InterventionDemande
+     */
+    public function addInterventionRegroupementsDemandesRegroupee(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesRegroupees)
+    {
+        $this->interventionRegroupementsDemandesRegroupees[] = $interventionRegroupementsDemandesRegroupees;
+
+        return $this;
+    }
+
+    /**
+     * Remove interventionRegroupementsDemandesRegroupees
+     *
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesRegroupees
+     */
+    public function removeInterventionRegroupementsDemandesRegroupee(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesRegroupees)
+    {
+        $this->interventionRegroupementsDemandesRegroupees->removeElement($interventionRegroupementsDemandesRegroupees);
     }
 }

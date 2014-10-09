@@ -103,6 +103,18 @@ abstract class InterventionDemandeType extends AbstractType
                 'attr'     => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_region'),
                 'data'     => $this->utilisateurConnecte->getRegion()
             ))
+            ->add('email', 'text', array(
+                'label'    => 'Adresse mail',
+                'required' => true,
+                'attr'     => array('class' => $this->_constraints['email']['class'] ),
+                'data'     => $this->utilisateurConnecte->getEmail()
+            ))
+            ->add('telephone', 'text', array(
+                'label'    => 'Téléphone',
+                'required' => true,
+                'attr'     => array('class' => $this->_constraints['telephone']['class'] ),
+                'data'     => $this->utilisateurConnecte->getTelephoneDirect()
+            ))
             ->add('etablissements', 'entity', array(
                 'choices'  => $this->formEtablissementManager->getEtablissementsChoices(),
                 'class'    => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
