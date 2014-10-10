@@ -126,22 +126,107 @@
             
             <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">
             <input type="hidden" id="notesAutorisees" style="display: none;" value="{{objet.notes}}">
-            {% if objet.notes %}
-                {# Ajout la moyenne de l'objet #}
-                <div class="col-md-12">
-                    <div id="bloc-notation-moyenne-objet">
-                        <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
-                        <div class="bloc-star pull-left">
-                            <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+
+            {# Affichage particulier pour le point-dur #}
+            {% if types == "Point dur" %}
+                <div class="row">
+                    <div class="col-md-6">
+                        {% if objet.notes %}
+                            {# Ajout la moyenne de l'objet #}
+                            <div class="col-md-12">
+                                <div id="bloc-notation-moyenne-objet">
+                                    <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
+                                    <div class="bloc-star pull-left">
+                                        <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                                    </div>
+                                    <div class="pull-left" id="info-note-moyenne"></div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="col-md-12" id="publication-resume">
+                            {{objet.resume|parsePublication(objet.glossaires)|raw}}
                         </div>
-                        <div class="pull-left" id="info-note-moyenne"></div>
+
+                        <style type="text/css">
+                            .wrapper a{font-family: 'Open Sans', sans-serif }
+                        </style>
+
+                        <div id="bloc-notation-objet" class="col-md-10 pull-right">
+                            <div class="wrapper">
+                                <input type="hidden" id="note-sauvegarde-url" value="{{path('hopital_numerique_publication_note_add' ) }}">
+                                <input type="hidden" id="note-delete-url" value="{{path('hopital_numerique_publication_note_delete' ) }}">
+                                <input type="hidden" id="note-valeur" style="display: none;" value="0">
+                                <div class="pull-left" style="line-height:19px;font-size: 13px;">Cette réponse vous paraît-elle utile ?</div>
+                                <div class="rateit pull-left" id="note-etoile" data-rateit-step="1" data-rateit-value="{% if note is not null %}{{note.note}}{% else %}0{% endif %}" data-rateit-max="5"></div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" />
+                        </div>
                         <div class="clearfix"></div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12" id="productionsPointDur" >
+                            <h2 class="noCollapse">Productions associées</h2>
+                            <div class="wrapper-results">
+                                <div class="background-rose"></div>
+                                <div class="results">
+                                    {% for one in productions %}
+                                        <div class="row" >
+                                            <div class="col-md-10">
+                                                <h5>{{one.type}}</h5>
+                                            </div>
+                                            <div class="col-md-2">
+                                                {% if one.synthese is not null %}
+                                                    <a class="synthese fancybox.iframe" href="{{path('hopital_numerique_publication_synthese',{'id':one.id})}}">synthèse</a>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <h4>
+                                                    {% if one.updated %}
+                                                        <span class="label label-success">MaJ</span>
+                                                    {% elseif one.new %}
+                                                        <span class="label label-danger">Nouveau</span>
+                                                    {% endif %}
+
+                                                    {% if one.objet %}
+                                                        <a href="{{path('hopital_numerique_publication_publication_objet', {'id':one.id, 'alias': one.alias})}}">{{one.titre}}</a>
+                                                    {% else %}
+                                                        <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':one.id, 'alias': one.alias, 'idc':one.idc, 'aliasc': one.aliasc})}}">{{one.titre}}</a>
+                                                    {% endif %}
+                                                </h4>
+                                            </div>
+                                            
+                                            <div class="col-md-12">
+                                                <p>{{ one.resume|parsePublication|raw }}</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                {% if objet.notes %}
+                    {# Ajout la moyenne de l'objet #}
+                    <div class="col-md-12">
+                        <div id="bloc-notation-moyenne-objet">
+                            <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
+                            <div class="bloc-star pull-left">
+                                <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                            </div>
+                            <div class="pull-left" id="info-note-moyenne"></div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="col-md-12" id="publication-resume">
+                    {{objet.resume|parsePublication(objet.glossaires)|raw}}
                 </div>
             {% endif %}
-            <div class="col-md-12" id="publication-resume">
-                {{objet.resume|parsePublication(objet.glossaires)|raw}}
-            </div>
         {% endif %}
 
         {# Téléchargement fichier + synthèse #}
@@ -167,7 +252,7 @@
             </div>
         {% endif %}
 
-        {% if app.user and objet.notes %}
+        {% if (app.user and objet.notes) and types != "Point dur" %}
 
             <style type="text/css">
                 .wrapper a{font-family: 'Open Sans', sans-serif }
@@ -205,9 +290,9 @@
                 </div>
             </div>
         {% endif %}
-        
+
         {# Productions fortement liées #}
-        {% if productions|length > 0 %}
+        {% if productions|length > 0 and types != "Point dur" %}
             <div class="col-md-12" id="productions" >
                 <h2 class="open">Productions associées</h2>
                 <div class="wrapper-results">
