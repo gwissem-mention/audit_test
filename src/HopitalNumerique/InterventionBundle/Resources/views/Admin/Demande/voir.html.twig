@@ -69,8 +69,19 @@
                         <div class="col-md-4"><strong>Demandeur</strong></div>
                         <div class="col-md-8">
                             {{ interventionDemande.referent.appellation }}
-                            {% if interventionDemande.referent.etablissementRattachementSante is not null %}<br>{{ interventionDemande.referent.etablissementRattachementSante.appellation }}{% endif %}
-                            {% if interventionDemande.referent.region is not null %}<br>{{ interventionDemande.referent.region.libelle }}{% endif %}
+                            {% if interventionDemande.referent.etablissementRattachementSante is not null %}
+                                <br>
+                                {{ interventionDemande.referent.etablissementRattachementSante.appellation }}
+                            {% endif %}
+                            {% if interventionDemande.referent.region is not null %}
+                                <br>{{ interventionDemande.referent.region.libelle }}
+                            {% endif %}
+                            {% if interventionDemande.telephone is not null %}
+                                <br>{{ interventionDemande.telephone }}
+                            {% endif %}
+                            {% if interventionDemande.email is not null %}
+                                <br>{{ interventionDemande.email }}
+                            {% endif %}
                         </div>
                     </div></div>
                     <div class="form-group"><div class="row">

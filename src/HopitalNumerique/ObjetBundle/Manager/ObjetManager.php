@@ -142,7 +142,7 @@ class ObjetManager extends BaseManager
             $row['noteMoyenne'] /= $row['nombreUserMaitrise'] != 0 ? $row['nombreUserMaitrise'] : 1;
 
             //set empty values for objet (infra doc)
-            $row['idC'] = $row['titreC'] = $row['aliasC'] = $row['orderC'] = $row['contenuC'] = $row['dateCreationC'] = $row['dateModificationC'] = $row['nbVueC'] = $row['noteC']= $row['noteMoyenneC']= $row['nombreNoteC'] = '';
+            $row['idParent'] = $row['idC'] = $row['titreC'] = $row['aliasC'] = $row['orderC'] = $row['contenuC'] = $row['dateCreationC'] = $row['dateModificationC'] = $row['nbVueC'] = $row['noteC']= $row['noteMoyenneC']= $row['nombreNoteC'] = '';
 
             //Récupération + Calcul note moyenne
             $row['noteMoyenne'] = number_format($this->_noteManager->getMoyenneNoteByObjet($objet->getId(), false),2);
@@ -157,11 +157,12 @@ class ObjetManager extends BaseManager
                     foreach($contenus as $contenu) {                        
                         $rowInfradoc = array();
 
-                        $rowInfradoc['id'] = $rowInfradoc['titre'] = $rowInfradoc['alias'] = $rowInfradoc['synthese'] = $rowInfradoc['resume'] = $rowInfradoc['commentaires'] = $rowInfradoc['notes'] = $rowInfradoc['type'] = $rowInfradoc['nbVue'] = $rowInfradoc['etat'] = '';
+                        $rowInfradoc['id'] = $rowInfradoc['idParent'] = $rowInfradoc['titre'] = $rowInfradoc['alias'] = $rowInfradoc['synthese'] = $rowInfradoc['resume'] = $rowInfradoc['commentaires'] = $rowInfradoc['notes'] = $rowInfradoc['type'] = $rowInfradoc['nbVue'] = $rowInfradoc['etat'] = '';
                         $rowInfradoc['dateCreation'] = $rowInfradoc['dateParution'] = $rowInfradoc['dateDebutPublication'] = $rowInfradoc['dateFinPublication'] = $rowInfradoc['dateModification'] = $rowInfradoc['roles'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
                         $rowInfradoc['fichier1'] = $rowInfradoc['fichier2'] = $rowInfradoc['fichierEdit'] = $rowInfradoc['vignette'] = $rowInfradoc['note'] = $rowInfradoc['objets'] = $rowInfradoc['noteMoyenne'] = $rowInfradoc['nombreNote'] = $row['nombreUserMaitrise'] = '';
 
                         //Infra doc values
+                        $rowInfradoc['idParent']          = $objet->getId();
                         $rowInfradoc['idC']               = $contenu->getId();
                         $rowInfradoc['titreC']            = $contenu->getTitre();
                         $rowInfradoc['aliasC']            = $contenu->getAlias();
