@@ -84,15 +84,15 @@
                     {% if interventionDemande.referent.region is not null %}
                         <br>{{ interventionDemande.referent.region.libelle }}
                     {% endif %}
-                    {% if interventionDemande.referent.getTelephoneDirect is not null %}
-                        <br>{{ interventionDemande.referent.getTelephoneDirect }}
+                    {% if interventionDemande.telephone is not null %}
+                        <br>{{ interventionDemande.telephone }}
                     {% endif %}
-                    {% if interventionDemande.referent.getTelephonePortable is not null %}
-                        <br>{{ interventionDemande.referent.getTelephonePortable }}
+                    {% if interventionDemande.email is not null %}
+                        <br>{{ interventionDemande.email }}
                     {% endif %}
-                    <br>{{ interventionDemande.referent.getEmail }}
                 </div>
             </div>
+
             {% if app.user.hasRoleCmsi or (app.user.hasRoleAmbassadeur and interventionDemande.interventionEtatEstAcceptationCmsi) %}
                 <div class="row">
                     <div class="col-md-4">Ambassadeur</div>
@@ -117,6 +117,7 @@
                     </div>
                 </div>
             {% endif %}
+
             <div class="row">
                 <div class="col-md-4">CMSI</div>
                 <div class="col-md-8">
@@ -126,6 +127,7 @@
                     {% endif %}
                 </div>
             </div>
+            
             {% if interventionDemande.directeur is not null %}
                 <div class="row">
                     <div class="col-md-4">Directeur</div>

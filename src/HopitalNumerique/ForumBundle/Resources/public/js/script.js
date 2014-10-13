@@ -58,6 +58,23 @@ function manageCollapse(element, way)
     $(element).find('i').toggleClass('fa-arrow-down fa-arrow-right');
 }
 
+function transfertPost( url ){
+    var loader     = $('#transfertDuTopic').nodevoLoader().start();
+
+    $.ajax({
+        url  : url,
+        data : {
+            boardId : $("#transfert-topic").val()
+        },
+        type     : 'POST',
+        dataType : 'json',
+        success  : function( data ){
+           loader.finished();
+           window.location.reload();
+        }
+    });
+}
+
 //Sauvegarde les références du topic et du contenu
 function saveReferences( topic, idContenu )
 {

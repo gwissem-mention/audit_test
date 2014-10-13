@@ -11,7 +11,11 @@
                     <h3 class="panel-title">
                         {%- if post.getCreatedBy -%}
                             {{- 'post.posted-by' |trans({}, ForumBundle.translation ) |raw -}}
-                            {{- post.getCreatedBy.username -}}
+                            {% if post.getCreatedBy.getPseudonymeForum() is defined and post.getCreatedBy.getPseudonymeForum() is not null %}
+                                {{- post.getCreatedBy.getPseudonymeForum() -}}
+                            {% else %}
+                                {{- post.getCreatedBy.getNomPrenom() -}}
+                            {% endif %}
 
                             &nbsp;&#183;&nbsp;
 

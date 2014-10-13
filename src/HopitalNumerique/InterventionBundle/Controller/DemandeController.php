@@ -23,10 +23,8 @@ class DemandeController extends Controller
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $id La demande d'intervention à visionner
      * @return \Symfony\Component\HttpFoundation\Response La vue de la visualisation d'une demande d'intervention
      */
-    public function voirAction(InterventionDemande $id)
-    {
-        $interventionDemande = $id;
-        
+    public function voirAction(InterventionDemande $interventionDemande)
+    {   
         if (!$this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->peutVoir($interventionDemande))
         {
             $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à visualiser cette demande.');
@@ -35,6 +33,7 @@ class DemandeController extends Controller
 
         $this->container->get('hopitalnumerique_intervention.service.demande.etat_type_derniere_demande')->setDerniereDemandeOuverte($interventionDemande);
         
+
         return $this->render(
             'HopitalNumeriqueInterventionBundle:Demande:voir.html.twig',
             $this->getVueParametresVoir($interventionDemande)
@@ -51,8 +50,9 @@ class DemandeController extends Controller
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         $interventionDemandeEstRegroupee = $this->get('hopitalnumerique_intervention.manager.intervention_regroupement')->estInterventionDemandeRegroupee($interventionDemande);
         
+
         $vueParametres = array(
-                'interventionDemande'                 => $interventionDemande,
+                'interventionDemande'                => $interventionDemande,
                 'interventionDemandeEstRegroupee'     => $interventionDemandeEstRegroupee,
                 'InterventionEtat'                    => new InterventionEtat(),
                 'etablissementsRattachesNonRegroupes' => $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesNonRegroupes($interventionDemande),
@@ -87,6 +87,7 @@ class DemandeController extends Controller
     {
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
         
+
         if ($utilisateurConnecte->hasRoleCmsi())
         {
             $derniereDemandeEstEtatTypeDemandeTraiteeCmsi = $this->container->get('hopitalnumerique_intervention.service.demande.etat_type_derniere_demande')->derniereDemandeEstEtatTypeDemandeTraiteeCmsi();
@@ -127,7 +128,7 @@ class DemandeController extends Controller
      */
     public function cronAction($id)
     {
-        if ($id == 'FHFURJYIHOLPMFKVIDUESQGEUDRCTUFT')
+        if ($id == 'FHFURJYIHOLPMFKVIDUESQGEUDRCTUFT' )
         {
             $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->majInterventionEtatsDesInterventionDemandes();
             $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceInterventionDemandes();
@@ -145,7 +146,7 @@ class DemandeController extends Controller
      */
     public function cronQuotidienAction($id)
     {
-        if ($id == 'FLFTRJYPVGLPMMVGIDUEOFCEUDCVBUPA')
+        if ($id == 'FLFTRJYPVGLPMMVGIDUEOFCEUDCVBUPA' )
         {
             $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->relanceSimple();
             return new Response($this->container->get('hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs')->getHtml().'<p>Fin du traitement : OK.</p>');

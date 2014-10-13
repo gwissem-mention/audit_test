@@ -22,6 +22,10 @@ ccdn_forum_user_topic_reply_process:
     pattern: /{topicId}/reply/process
     defaults: { _controller: CCDNForumForumBundle:UserTopic:replyProcess, _locale: fr, forumName: Public }
 
+hopitalnumerique_forum_post_move:
+    pattern: /{topicId}/move
+    defaults: { _controller: CCDNForumForumBundle:UserTopic:deplacerTopic, _locale: fr, forumName: Public }
+
 #Reference
 hopitalnumerique_forum_reference_topic:
     pattern:  /reference/topic/{id}

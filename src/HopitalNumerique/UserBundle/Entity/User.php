@@ -187,7 +187,6 @@ class User extends BaseUser
 
     /**
      * @var string
-     * @Assert\NotBlank(message="Le pseudonyme ne peut pas être vide.")
      * @Assert\Regex(pattern= "/[0-9a-zA-Z]/")
      * @Assert\Length(
      *      min = "1",
@@ -195,7 +194,7 @@ class User extends BaseUser
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le pseudonyme.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le pseudonyme."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]],custom[onlyLetterNumber]")
+     * @Nodevo\Javascript(class="validate[minSize[1],maxSize[50]],custom[onlyLetterNumber]")
      * @ORM\Column(name="usr_pseudonyme_forum", type="string", length=14, nullable=true, options = {"comment" = "Téléphone portable de l utilisateur"})
      * @Gedmo\Versioned
      */
