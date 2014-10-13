@@ -77,6 +77,7 @@
                         {% if objet.id and not objet.isArticle() %}
                             <li class="{% if infra %}active{% endif %}"><a href="#infra" data-toggle="tab">Infra-documentaire</a></li>
                             <li><a href="#productions" data-toggle="tab">Productions liées</a></li>
+                            <li><a href="#administrateurs" data-toggle="tab">Administrateurs</a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -341,7 +342,6 @@
                             <div class="tab-pane" id="administrateurs">
                                 <a href="{{path('hopitalnumerique_objet_objet_addLink', {'id':objet.id})}}" class="addProd fancy fancybox.ajax btn btn-default pull-right" title="Ajouter une production liée"><i class="fa fa-plus"></i></a>
 
-                                {# Liste des prod maitrisées #}
                                 <fieldset>
                                     <legend>Administrateurs</legend>
 

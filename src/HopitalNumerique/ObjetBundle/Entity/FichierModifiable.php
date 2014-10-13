@@ -19,29 +19,28 @@ class FichierModifiable
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ofm_referentAnap", type="string", length=255)
      */
-    private $referentAnap;
+    protected $referentAnap;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ofm_referentAnap", type="string", length=255)
      */
-    private $sourceDocument;
+    protected $sourceDocument;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ofm_commentaires", type="text")
      */
-    private $commentaires;
-
+    protected $commentaires;
 
     /**
      * Get id
