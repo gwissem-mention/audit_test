@@ -187,7 +187,6 @@ class User extends BaseUser
 
     /**
      * @var string
-     * @Assert\NotBlank(message="Le pseudonyme ne peut pas être vide.")
      * @Assert\Regex(pattern= "/[0-9a-zA-Z]/")
      * @Assert\Length(
      *      min = "1",
