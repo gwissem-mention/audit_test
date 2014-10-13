@@ -39,7 +39,7 @@ class UserGrid extends Grid implements GridInterface
         
         $this->addColonne( new Column\DateColumn('dateInscription', 'Date d\'inscription') );        
         $this->addColonne( new Column\TextColumn('username', 'Identifiant (login)') );        
-        $this->addColonne( new Column\TextColumn('pseudonymeForum', 'Identifiant du forum') );        
+        $this->addColonne( new Column\TextColumn('pseudonymeForum', 'Pseudonyme pour le forum') );        
         $this->addColonne( new Column\NumberColumn('nbVisites', 'Visites') );
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('prenom', 'Prénom') );
