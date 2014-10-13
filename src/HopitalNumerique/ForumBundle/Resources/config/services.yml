@@ -2,6 +2,7 @@ parameters:
     hopitalnumerique_forum.manager.subscription.class : HopitalNumerique\ForumBundle\Manager\SubscriptionManager
     hopitalnumerique_forum.manager.post.class         : HopitalNumerique\ForumBundle\Manager\PostManager
     hopitalnumerique_forum.manager.topic.class        : HopitalNumerique\ForumBundle\Manager\TopicManager
+    hopitalnumerique_forum.manager.board.class        : HopitalNumerique\ForumBundle\Manager\BoardManager
     hopitalnumerique_forum.manager.reftopic.class     : HopitalNumerique\ForumBundle\Manager\RefTopicManager
     #BBCode
     hopitalnumerique_forum.component.bb_code.tag_integrator.class: HopitalNumerique\ForumBundle\Component\BBCode\TagIntegrator
@@ -24,6 +25,12 @@ parameters:
 
 services:
     #Manager
+    #--Board
+    hopitalnumerique_forum.manager.board:
+        class: %hopitalnumerique_forum.manager.board.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
     #--Topic
     hopitalnumerique_forum.manager.topic:
         class: %hopitalnumerique_forum.manager.topic.class%
