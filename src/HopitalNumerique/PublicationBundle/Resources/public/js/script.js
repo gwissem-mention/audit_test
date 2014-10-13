@@ -30,6 +30,8 @@ $(document).ready(function() {
         $('#autresResultats .row').slideToggle();
     });
 
+    $('#productionsPointDur h2').click(function(){});
+
     $('#productions h2').click(function(){
         $(this).toggleClass('open closed');
         $('#productions .row').slideToggle();

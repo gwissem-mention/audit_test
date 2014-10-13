@@ -30,6 +30,6 @@
         {% endif %}
     </div>
     <div class="col-md-12">
-        <p>{{ objet['resume'] }}</p>
+        <p>{{ objet['resume']|parsePublication|raw }}</p>
     </div>
 </div>
