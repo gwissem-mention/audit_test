@@ -107,13 +107,13 @@ abstract class InterventionDemandeType extends AbstractType
                 'label'    => 'Adresse mail',
                 'required' => true,
                 'attr'     => array('class' => $this->_constraints['email']['class'] ),
-                'data'     => $this->utilisateurConnecte->getEmail()
+                'data'     => is_null($options["interventionDemande"]->getEmail()) ? $this->utilisateurConnecte->getEmail() : $options["interventionDemande"]->getEmail()
             ))
             ->add('telephone', 'text', array(
                 'label'    => 'Téléphone',
                 'required' => true,
                 'attr'     => array('class' => $this->_constraints['telephone']['class'] ),
-                'data'     => $this->utilisateurConnecte->getTelephoneDirect()
+                'data'     => is_null($options["interventionDemande"]->getTelephone()) ? $this->utilisateurConnecte->getTelephoneDirect() :$options["interventionDemande"]->getTelephone()
             ))
             ->add('etablissements', 'entity', array(
                 'choices'  => $this->formEtablissementManager->getEtablissementsChoices(),
