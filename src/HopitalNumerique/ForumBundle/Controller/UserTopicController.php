@@ -2,6 +2,8 @@
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserTopicController as UserTopicControllerCCDN;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -36,6 +38,16 @@ class UserTopicController extends UserTopicControllerCCDN
             $subscription = null;
         }
 
+        //Récupération de l'ensemble des boards pour le déplacement des posts
+        $boards = array();
+        foreach ($forum->getCategories() as $tempCategory) 
+        {
+            foreach ($tempCategory->getBoards() as $tempBoard) 
+            {
+                $boards[] = $tempBoard;
+            }
+        }
+
         //get ponderations
         $refsPonderees = $this->container->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
         $note          = $this->container->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $topic->getReferences(), $refsPonderees );
@@ -43,10 +55,15 @@ class UserTopicController extends UserTopicControllerCCDN
         $subscriberCount = $this->getSubscriptionModel()->countSubscriptionsForTopicById($topicId);
         $this->getTopicModel()->incrementViewCounter($topic);
         $response = $this->renderResponse('CCDNForumForumBundle:User:Topic/show.html.', array(
-            'crumbs'    => $this->getCrumbs()->addUserTopicShow($forum, $topic), 'forum' => $forum, 'topic' => $topic,
-            'forumName' => $forumName,
-            'pager'     => $postsPager, 'subscription' => $subscription, 'subscription_count' => $subscriberCount,
-            'note'      => $note
+            'crumbs'             => $this->getCrumbs()->addUserTopicShow($forum, $topic), 
+            'forum'              => $forum, 
+            'topic'              => $topic,
+            'forumName'          => $forumName,
+            'pager'              => $postsPager, 
+            'subscription'       => $subscription, 
+            'subscription_count' => $subscriberCount,
+            'note'               => $note,
+            'boards'             => $boards
         ));
 
         return $response;
@@ -84,5 +101,27 @@ class UserTopicController extends UserTopicControllerCCDN
         //-->
         
         return parent::replyAction($forumName, $topicId);
+    }
+
+    /**
+     * Permet de déplacer un post vers un autre topic
+     *
+     * @param Request $request [description]
+     * @param int     $postId [description]
+     *
+     * @return Response
+     */
+    public function deplacerTopicAction(Request $request, $topicId)
+    {
+        $topic              = $this->getTopicModel()->findOneTopicByIdWithBoardAndCategory($topicId, true);
+        $boardDestinationId = $request->request->get('boardId');
+        $boardDestination   = $this->getBoardModel()->findOneBoardById($boardDestinationId);
+
+        $topic->setBoard($boardDestination);
+        $this->container->get('hopitalnumerique_forum.manager.topic')->save( $topic );
+
+        //return $this->container->redirect( $this->generateUrl('ccdn_forum_user_topic_show', array( 'topicId' => $topic->getId() ) ) );
+
+        return new Response('{"success":true}', 200);
     }
 }

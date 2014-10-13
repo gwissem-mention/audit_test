@@ -407,7 +407,7 @@ class UserController extends Controller
                             'nom'                                => 'Nom', 
                             'prenom'                             => 'Prénom', 
                             'username'                           => 'Identifiant (login)', 
-                            'pseudonymeForum'                    => 'Identifiant du forum', 
+                            'pseudonymeForum'                    => 'Pseudonyme pour le forum', 
                             'email'                              => 'Adresse e-mail',
                             'etat.libelle'                       => 'Etat',
                             'region.libelle'                     => 'Région',
