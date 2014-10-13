@@ -124,12 +124,15 @@ class UserTopicController extends UserTopicControllerCCDN
         $stats = $this->getTopicModel()->getTopicAndPostCountForBoardById($boardDestination->getId());
         // set the board topic / post count
         $boardDestination->setCachedTopicCount($stats['topicCount']);
+        $boardDestination->setCachedPostCount($stats['postCount']);
+
         $this->container->get('hopitalnumerique_forum.manager.board')->save( $boardDestination );
 
         //Mise à jour du Board d'origine
         $stats = $this->getTopicModel()->getTopicAndPostCountForBoardById($boardOrigine->getId());
         // set the board topic / post count
         $boardOrigine->setCachedTopicCount($stats['topicCount']);
+        $boardOrigine->setCachedPostCount($stats['topicCount']);
         $this->container->get('hopitalnumerique_forum.manager.board')->save( $boardOrigine );
 
         return new Response('{"success":true}', 200);
