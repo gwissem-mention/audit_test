@@ -130,6 +130,30 @@
                 {% endif %}
             </div>
         </div>
+        <div class="col-md-12">
+
+            <div class="row" style="margin-top:15px;margin-bottom:15px;">
+                
+                <div class="col-md-2">
+                    <label for="transfert-topic" class="control-label">Transférer vers :</label>
+                </div>
+                <div class="col-md-8">
+                    <select name="transfert-topic" id="transfert-topic" class="form-control">
+                        {% for boardTemp in boards %}
+                            {% if boardTemp.id != topic.board.id %}
+                                <option value="{{boardTemp.id}}">{{boardTemp.name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <div onclick='transfertPost("{{path('hopitalnumerique_forum_post_move', {'topicId' : topic.id})}}")' class="btn btn-success btn-block" title="">Transfert</div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
     </header>
 
 {%- endspaceless -%}
