@@ -59,6 +59,8 @@ function manageCollapse(element, way)
 }
 
 function transfertPost( url ){
+    var loader     = $('#transfertDuTopic').nodevoLoader().start();
+
     $.ajax({
         url  : url,
         data : {
@@ -67,6 +69,7 @@ function transfertPost( url ){
         type     : 'POST',
         dataType : 'json',
         success  : function( data ){
+           loader.finished();
            window.location.reload();
         }
     });
