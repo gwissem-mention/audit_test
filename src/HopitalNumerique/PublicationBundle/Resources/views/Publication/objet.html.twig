@@ -174,7 +174,7 @@
                                     {% for one in productions %}
                                         <div class="row" >
                                             <div class="col-md-10">
-                                                <h5>{{one.type}}</h5>
+                                                <h5 style="font-size:13px">{{one.type}}</h5>
                                             </div>
                                             <div class="col-md-2">
                                                 {% if one.synthese is not null %}
@@ -183,11 +183,11 @@
                                             </div>
 
                                             <div class="col-md-12">
-                                                <h4>
+                                                <h4 style="font-size:14px">
                                                     {% if one.updated %}
-                                                        <span class="label label-success">MaJ</span>
+                                                        <span class="label label-success" style="line-height: 1.1;vertical-align: top;">MaJ</span>
                                                     {% elseif one.new %}
-                                                        <span class="label label-danger">Nouveau</span>
+                                                        <span class="label label-danger" style="line-height: 1.1;vertical-align: top;">Nouveau</span>
                                                     {% endif %}
 
                                                     {% if one.objet %}
