@@ -204,6 +204,8 @@
                                         <td class="text-center">Score</td>
                                         {% for datas in categorie['chapitres'] %}
                                             {% if not datas['nc'] %}
+                                                {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
+-                                               {% set maxCateg = maxCateg + datas['max'] %}
                                                 {% if datas['max'] != 0 %}
                                                     {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
                                                 {% else %}
