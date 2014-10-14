@@ -37,7 +37,7 @@ class FichierModifiableController extends Controller
             {
                 $fichierModifiable->setObjet($objet);
                 $this->get('hopitalnumerique_objet.manager.fichiermodifiable')->save($fichierModifiable);
-                $this->get('session')->getFlashBag()->add( 'success', 'Fichier modifié/ajouté.' );
+                $this->get('session')->getFlashBag()->add( 'success', 'Informations enregistrées.' );
             }
             else
             {

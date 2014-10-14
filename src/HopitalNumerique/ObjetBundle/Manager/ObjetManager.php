@@ -152,7 +152,7 @@ class ObjetManager extends BaseManager
             //Fichier modifiable
             $row['referentAnap']   = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getReferentAnap();
             $row['sourceDocument'] = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getSourceDocument();
-            $row['commentaires']   = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getCommentaires();
+            $row['commentairesFichier']   = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getCommentaires();
             $row['pathEdit']       = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getPathEdit();
 
             $row['module'] = "";
@@ -173,7 +173,7 @@ class ObjetManager extends BaseManager
                         $rowInfradoc['id'] = $rowInfradoc['idParent'] = $rowInfradoc['titre'] = $rowInfradoc['alias'] = $rowInfradoc['synthese'] = $rowInfradoc['resume'] = $rowInfradoc['commentaires'] = $rowInfradoc['notes'] = $rowInfradoc['type'] = $rowInfradoc['nbVue'] = $rowInfradoc['etat'] = '';
                         $rowInfradoc['dateCreation'] = $rowInfradoc['dateParution'] = $rowInfradoc['dateDebutPublication'] = $rowInfradoc['dateFinPublication'] = $rowInfradoc['dateModification'] = $rowInfradoc['roles'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
                         $rowInfradoc['fichier1'] = $rowInfradoc['fichier2'] = $rowInfradoc['vignette'] = $rowInfradoc['note'] = $rowInfradoc['objets'] = $rowInfradoc['noteMoyenne'] = $rowInfradoc['nombreNote'] = $row['nombreUserMaitrise'] = '';
-                        $rowInfradoc['referentAnap'] = $rowInfradoc['sourceDocument'] = $rowInfradoc['commentaires'] =  $rowInfradoc['pathEdit'] =  $rowInfradoc['module'] = '';
+                        $rowInfradoc['referentAnap'] = $rowInfradoc['sourceDocument'] = $rowInfradoc['commentairesFichier'] =  $rowInfradoc['pathEdit'] =  $rowInfradoc['module'] = '';
 
                         //Infra doc values
                         $rowInfradoc['idParent']          = $objet->getId();

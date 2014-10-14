@@ -54,7 +54,7 @@ class ExportController extends Controller
                             'vignette'             => 'Vignette',
                             'referentAnap'         => 'Référent ANAP',
                             'sourceDocument'       => 'Source du document',
-                            'commentaires'         => 'Commentaires',
+                            'commentairesFichier'  => 'Commentaires',
                             'pathEdit'             => 'Fichier d\'administration',
                             'module'               => 'Module(s) de formation lié(s)',
                             'idParent'             => 'Id de la publication parente',
