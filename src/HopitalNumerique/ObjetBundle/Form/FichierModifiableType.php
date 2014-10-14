@@ -8,16 +8,39 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FichierModifiableType extends AbstractType
 {
-        /**
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('referentAnap')
-            ->add('sourceDocument')
-            ->add('commentaires')
+
+            ->add('referentAnap', 'text', array(
+                'max_length' => 255,
+                'required'   => false, 
+                'label'      => 'Réferent Anap',
+                'attr'       => array('class' => 'validate[minsize[1],maxsize[255]]' )
+            ))
+
+            ->add('sourceDocument', 'text', array(
+                'max_length' => 255,
+                'required'   => false, 
+                'label'      => 'Source du document',
+                'attr'       => array('class' => 'validate[minsize[1],maxsize[255]]' )
+            ))
+
+            ->add('commentaires', 'textarea', array(
+                'required'   => false, 
+                'label'      => 'Commentaire',
+                'attr'       => array('rows' => 3)
+            ))
+
+            ->add('fileEdit', 'file', array(
+                'required' => false, 
+                'label'    => 'Fichier Editable'
+            ))
+            ->add('pathEdit', 'hidden')
         ;
     }
     
@@ -36,6 +59,6 @@ class FichierModifiableType extends AbstractType
      */
     public function getName()
     {
-        return 'hopitalnumerique_objetbundle_fichiermodifiable';
+        return 'hopitalnumerique_objet_fichiermodifiable';
     }
 }
