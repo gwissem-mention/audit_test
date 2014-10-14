@@ -89,6 +89,8 @@ class ObjetManager extends BaseManager
             $row['id']           = $objet->getId();
             $row['titre']        = $objet->getTitre();
             $row['alias']        = $objet->getAlias();
+            $row['synthese']     = substr(html_entity_decode($objet->getSynthese()),0 , 40);
+            $row['resume']       = substr(html_entity_decode($objet->getResume()),0 , 40);
             $row['commentaires'] = $objet->getCommentaires() ? 'Oui' : 'Non';
             $row['notes']        = $objet->getNotes()        ? 'Oui' : 'Non';
             $row['type']         = $objet->isArticle()       ? 'Article' : 'Objet';
@@ -96,7 +98,6 @@ class ObjetManager extends BaseManager
             $row['etat']         = $objet->getEtat() ? $objet->getEtat()->getLibelle() : '';
             $row['fichier1']     = $objet->getPath();
             $row['fichier2']     = $objet->getPath2();
-            $row['fichierEdit']  = $objet->getPathEdit();
             $row['vignette']     = $objet->getVignette();
             $row['note']         = number_format($this->getNoteReferencement($objet->getReferences(), $refsPonderees), 0);
 
@@ -148,6 +149,18 @@ class ObjetManager extends BaseManager
             $row['noteMoyenne'] = number_format($this->_noteManager->getMoyenneNoteByObjet($objet->getId(), false),2);
             $row['nombreNote']  = $this->_noteManager->countNbNoteByObjet($objet->getId(), false);
 
+            //Fichier modifiable
+            $row['referentAnap']   = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getReferentAnap();
+            $row['sourceDocument'] = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getSourceDocument();
+            $row['commentaires']   = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getCommentaires();
+            $row['pathEdit']       = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getPathEdit();
+
+            $row['module'] = "";
+            foreach ($objet->getModules() as $module) 
+            {
+                $row['module'] .= $module->getId() . ' - ' . $module->getTitre() . ';';
+            }
+
             //add Object To Results
             $results[] = $row;
 
@@ -159,7 +172,8 @@ class ObjetManager extends BaseManager
 
                         $rowInfradoc['id'] = $rowInfradoc['idParent'] = $rowInfradoc['titre'] = $rowInfradoc['alias'] = $rowInfradoc['synthese'] = $rowInfradoc['resume'] = $rowInfradoc['commentaires'] = $rowInfradoc['notes'] = $rowInfradoc['type'] = $rowInfradoc['nbVue'] = $rowInfradoc['etat'] = '';
                         $rowInfradoc['dateCreation'] = $rowInfradoc['dateParution'] = $rowInfradoc['dateDebutPublication'] = $rowInfradoc['dateFinPublication'] = $rowInfradoc['dateModification'] = $rowInfradoc['roles'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
-                        $rowInfradoc['fichier1'] = $rowInfradoc['fichier2'] = $rowInfradoc['fichierEdit'] = $rowInfradoc['vignette'] = $rowInfradoc['note'] = $rowInfradoc['objets'] = $rowInfradoc['noteMoyenne'] = $rowInfradoc['nombreNote'] = $row['nombreUserMaitrise'] = '';
+                        $rowInfradoc['fichier1'] = $rowInfradoc['fichier2'] = $rowInfradoc['vignette'] = $rowInfradoc['note'] = $rowInfradoc['objets'] = $rowInfradoc['noteMoyenne'] = $rowInfradoc['nombreNote'] = $row['nombreUserMaitrise'] = '';
+                        $rowInfradoc['referentAnap'] = $rowInfradoc['sourceDocument'] = $rowInfradoc['commentaires'] =  $rowInfradoc['pathEdit'] =  $rowInfradoc['module'] = '';
 
                         //Infra doc values
                         $rowInfradoc['idParent']          = $objet->getId();
