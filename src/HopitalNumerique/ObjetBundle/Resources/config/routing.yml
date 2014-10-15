@@ -170,3 +170,10 @@ hopitalnumerique_objet_admin_commentaire_delete:
     requirements: 
         id: \d+
         _method: POST|DELETE
+
+#Temporaire
+hopitalnumerique_objet_administration_fichierModifiable:
+    pattern:  /objet/administration/{id}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:FichierModifiable:index" }
+    requirements: 
+        _method: GET|POST

@@ -220,14 +220,6 @@ class Objet
     protected $nbVue;
 
     /**
-     * @var string
-     *
-     * @Gedmo\Versioned
-     * @ORM\Column(name="obj_path_edit", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier éditable"})
-     */
-    private $pathEdit;
-
-    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="obj_locked_by", referencedColumnName="usr_id")
      */
@@ -322,11 +314,12 @@ class Objet
     public $file2;
 
     /**
-     * @Assert\File(
-     *     maxSize = "10M"
-     * )
+     * @var integer
+     *
+     * @ORM\OneToOne(targetEntity="FichierModifiable", inversedBy="objet")
+     * @ORM\JoinColumn(name="ofm_id", referencedColumnName="ofm_id")
      */
-    public $fileEdit;
+    protected $fichierModifiable;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -505,32 +498,6 @@ class Objet
     public function getPath2()
     {
         return $this->path2;
-    }
-
-    /**
-     * Set pathEdit
-     *
-     * @param string $pathEdit
-     * @return Objet
-     */
-    public function setPathEdit($pathEdit)
-    {
-        if( is_null($pathEdit) && file_exists($this->getAbsolutePath( self::FICHIER_EDIT )) )
-            unlink($this->getAbsolutePath( self::FICHIER_EDIT ));
-
-        $this->pathEdit = $pathEdit;
-
-        return $this;
-    }
-
-    /**
-     * Get pathEdit
-     *
-     * @return string 
-     */
-    public function getPathEdit()
-    {
-        return $this->pathEdit;
     }
 
     /**
@@ -1281,11 +1248,6 @@ class Objet
                 if( !is_null($this->path2) )
                     $result = $this->path2;
                 break;
-
-            case self::FICHIER_EDIT:
-                if( !is_null($this->pathEdit) )
-                    $result = $this->pathEdit;
-                break;
         }
 
         if( is_null($result) )
@@ -1315,11 +1277,6 @@ class Objet
                 if( !is_null($this->path2) )
                     $result = $this->path2;
                 break;
-
-            case self::FICHIER_EDIT:
-                if( !is_null($this->pathEdit) )
-                    $result = $this->pathEdit;
-                break;
         }
         if( is_null($result) )
             return null;
@@ -1341,10 +1298,6 @@ class Objet
 
             case self::FICHIER_2:
                 $result = $this->path2;
-                break;
-
-            case self::FICHIER_EDIT:
-                $result = $this->pathEdit;
                 break;
         }
 
@@ -1386,14 +1339,6 @@ class Objet
 
             $this->path2 = $this->file2->getClientOriginalName();
         }
-
-        if (null !== $this->fileEdit){
-            //delete Old File
-            if ( file_exists($this->getAbsolutePath( self::FICHIER_EDIT )) )
-                unlink($this->getAbsolutePath( self::FICHIER_EDIT ));
-
-            $this->pathEdit = $this->fileEdit->getClientOriginalName();
-        }
     }
 
     /**
@@ -1402,7 +1347,7 @@ class Objet
      */
     public function upload()
     {
-        if ( null === $this->file && null === $this->file2 && null === $this->fileEdit )
+        if ( null === $this->file && null === $this->file2 )
             return;
         
         // s'il y a une erreur lors du déplacement du fichier, une exception
@@ -1418,11 +1363,6 @@ class Objet
             $this->file2->move($this->getUploadRootDir(), $this->path2);
             unset($this->file2);
         }
-
-        if ( null !== $this->fileEdit ){
-            $this->fileEdit->move($this->getUploadRootDir(), $this->pathEdit);
-            unset($this->fileEdit);
-        }
     }
 
     /**
@@ -1435,9 +1375,6 @@ class Objet
 
         if ( $file2 = $this->getAbsolutePath( self::FICHIER_2 ) && file_exists( $this->getAbsolutePath( self::FICHIER_2 ) ) )
             unlink($file2);
-
-        if ( $fileEdit = $this->getAbsolutePath( self::FICHIER_EDIT ) && file_exists( $this->getAbsolutePath( self::FICHIER_EDIT ) ) )
-            unlink($fileEdit);
     }
 
     /**
@@ -1678,5 +1615,28 @@ class Objet
     public function removeMaitriseUser(\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser $maitriseUsers)
     {
         $this->maitriseUsers->removeElement($maitriseUsers);
+    }
+
+    /**
+     * Set fichierModifiable
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\FichierModifiable $fichierModifiable
+     * @return Objet
+     */
+    public function setFichierModifiable(\HopitalNumerique\ObjetBundle\Entity\FichierModifiable $fichierModifiable = null)
+    {
+        $this->fichierModifiable = $fichierModifiable;
+
+        return $this;
+    }
+
+    /**
+     * Get fichierModifiable
+     *
+     * @return \HopitalNumerique\ObjetBundle\Entity\FichierModifiable 
+     */
+    public function getFichierModifiable()
+    {
+        return $this->fichierModifiable;
     }
 }

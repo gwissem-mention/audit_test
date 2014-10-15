@@ -54,6 +54,9 @@
 
 {% block toolbarButton %}
     {% if objet.id %}
+        {%- if is_granted('ROLE_SUPER_ADMIN') -%}
+            <a class="btn btn-primary" href="{{ path('hopitalnumerique_objet_administration_fichierModifiable', {'id': objet.id}) }}" title="Page d'administration" style="margin-right:30px"><i class="fa fa-cogs"></i></a>
+        {%- endif -%}
         <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_cancel', { 'id': objet.id }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
         <a class="btn btn-default" href="{{ path('hopital_numerique_publication_publication_objet', { 'id': objet.id }) }}" target="_blank" title="Prévisualiser"><i class="fa fa-eye"></i></a>
     {% else %}
@@ -152,31 +155,6 @@
                                         <div class="col-md-12">
                                             <div class="help-block">
                                                 {{ form_errors(form.file2) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group" style="margin-bottom:0">
-                                    {{ form_label(form.fileEdit) }}
-                                    <div class="col-md-9">
-                                        {% if objet.getAbsolutePath(3) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
-                                        <div class="inputUpload" style="display:{{visibility}}">
-                                            {{ form_widget(form.fileEdit) }}    
-                                        </div>
-
-                                        {% if objet.getAbsolutePath(3) is not null %}
-                                            <a class="uploadedFile pull-left" href="/{{objet.getWebPath(3)}}" target="_blank">{{objet.pathEdit}}</a>
-                                            <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" data-path="hopitalnumerique_objet_objet_pathEdit" ><i class="fa fa-trash-o"></i></div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="help-block">
-                                                {{ form_errors(form.fileEdit) }}
                                             </div>
                                         </div>
                                     </div>

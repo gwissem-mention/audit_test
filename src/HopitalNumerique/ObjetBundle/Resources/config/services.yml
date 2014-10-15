@@ -11,6 +11,8 @@ parameters:
     hopitalnumerique_objet.grid.commentaire.class: HopitalNumerique\ObjetBundle\Grid\CommentaireGrid
     hopitalnumerique_objet.form.commentaire.class: HopitalNumerique\ObjetBundle\Form\CommentaireType
     hopitalnumerique_objet.manager.note.class: HopitalNumerique\ObjetBundle\Manager\NoteManager
+    hopitalnumerique_objet.manager.fichiermodifiable.class: HopitalNumerique\ObjetBundle\Manager\FichierModifiableManager
+    hopitalnumerique_objet.form.fichiermodifiable.class: HopitalNumerique\ObjetBundle\Form\FichierModifiableType
 
 services:
     #managers
@@ -44,6 +46,12 @@ services:
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
+    hopitalnumerique_objet.manager.fichiermodifiable:
+        class: %hopitalnumerique_objet.manager.fichiermodifiable.class%
+        arguments: ["@doctrine.orm.entity_manager","@security.context"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
     #forms
     hopitalnumerique_objet.form.objet:
         class: %hopitalnumerique_objet.form.objet.class%
@@ -56,6 +64,12 @@ services:
         arguments: ["@hopitalnumerique_objet.manager.contenu", "@validator"]
         tags:
             - { name: form.type, alias: hopitalnumerique_objet_contenu }
+
+    hopitalnumerique_objet.form.fichiermodifiable:
+        class: %hopitalnumerique_objet.form.fichiermodifiable.class%
+        arguments: ["@hopitalnumerique_objet.manager.fichiermodifiable", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_objet_fichiermodifiable }
 
     #grids
     hopitalnumerique_objet.grid.objet:

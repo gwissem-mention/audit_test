@@ -100,11 +100,6 @@ class ObjetType extends AbstractType
                 'label'    => 'Fichier 2'
             ))
             ->add('path2', 'hidden')
-            ->add('fileEdit', 'file', array(
-                'required' => false, 
-                'label'    => 'Fichier Editable'
-            ))
-            ->add('pathEdit', 'hidden')
             ->add('vignette', 'text', array(
                 'required' => false,
                 'label'    => 'Vignette',
