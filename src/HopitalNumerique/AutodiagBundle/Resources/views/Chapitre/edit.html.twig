@@ -61,7 +61,21 @@
 
         <div class="clearfix"></div>
 
-        <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.descriptionLien) }}
+                <div class="col-md-10">
+                    {{ form_widget(form.descriptionLien) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.descriptionLien) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
             <div class="form-group">
                 {{ form_label(form.lien) }}
                 <div class="col-md-11">

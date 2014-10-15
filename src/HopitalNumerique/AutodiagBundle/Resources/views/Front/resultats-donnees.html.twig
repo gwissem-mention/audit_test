@@ -339,7 +339,7 @@
                             <td class="forAffichage">
                                 {% if chapitre.lien is not null and chapitre.lien is not empty %}
                                     {# Affichage du lien défini en back office #}
-                                    <ul><li><a href="{{chapitre.lien}}" target="_blank">{{chapitre.lien}}</a></li></ul>
+                                    <ul><li><a href="{{chapitre.lien}}" target="_blank">{{chapitre.descriptionLien}}</a></li></ul>
                                 {% endif %}
                                 {# Affichage des liens de publications #}
                                 {% if chapitre.noteMin and chapitre.noteChapitre <= chapitre.noteMin %}
@@ -384,7 +384,7 @@
                                 <td class="forAffichage">
                                     {% if question.lien is not null and question.lien is not empty %}
                                         {# Affichage du lien défini en back office #}
-                                        <ul><li><a href="{{question.lien}}" target="_blank">{{question.lien}}</a></li></ul>
+                                        <ul><li><a href="{{question.lien}}" target="_blank">{{question.descriptionLien}}</a></li></ul>
                                     {% endif %}
                                     {# Affichage des liens de publications #}
                                     {% set publications = question.id|getPublicationsForQuestion(pdf) %}
@@ -412,7 +412,7 @@
                                     <td class="forAffichage">
                                         {% if child.lien is not null and child.lien is not empty %}
                                             {# Affichage du lien défini en back office #}
-                                            <ul><li><a href="{{child.lien}}" target="_blank">{{child.lien}}</a></li></ul>
+                                            <ul><li><a href="{{child.lien}}" target="_blank">{{child.descriptionLien}}</a></li></ul>
                                         {% endif %}
                                         {# Affichage des liens de publications #}
                                         {% if child.noteMin and child.noteChapitre <= child.noteMin %}
@@ -457,7 +457,7 @@
                                         <td class="forAffichage">
                                             {% if questionChild.lien is not null and questionChild.lien is not empty %}
                                                 {# Affichage du lien défini en back office #}
-                                                <ul><li><a href="{{questionChild.lien}}" target="_blank">{{questionChild.lien}}</a></li></ul>
+                                                <ul><li><a href="{{questionChild.lien}}" target="_blank">{{questionChild.descriptionLien}}</a></li></ul>
                                             {% endif %}
                                             {# Affichage des liens de publications #}
                                             {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}

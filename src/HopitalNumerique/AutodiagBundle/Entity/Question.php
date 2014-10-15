@@ -71,6 +71,13 @@ class Question
     /**
      * @var string
      *
+     * @ORM\Column(name="que_description_lien", type="text", options = {"comment" = "Description du lien de la question"}, nullable=true)
+     */
+    private $descriptionLien;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="que_intro", type="text", options = {"comment" = "Intro de la question"}, nullable=true)
      */
     private $intro;
@@ -579,5 +586,28 @@ class Question
     public function removeReference(\HopitalNumerique\AutodiagBundle\Entity\RefQuestion $references)
     {
         $this->references->removeElement($references);
+    }
+
+    /**
+     * Set descriptionLien
+     *
+     * @param string $descriptionLien
+     * @return Question
+     */
+    public function setDescriptionLien($descriptionLien)
+    {
+        $this->descriptionLien = $descriptionLien;
+
+        return $this;
+    }
+
+    /**
+     * Get descriptionLien
+     *
+     * @return string 
+     */
+    public function getDescriptionLien()
+    {
+        return $this->descriptionLien;
     }
 }
