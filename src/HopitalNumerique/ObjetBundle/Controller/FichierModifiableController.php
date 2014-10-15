@@ -48,7 +48,7 @@ class FichierModifiableController extends Controller
             return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_objet_objet_edit', array('id' => $objet->getId() ) ) : $this->generateUrl('hopitalnumerique_objet_administration_fichierModifiable', array( 'id' => $objet->getId() ) ) ) );
         }
 
-        return $this->render( 'HopitalNumeriqueObjetBundle:fichierModifiable:edit.html.twig' , array(
+        return $this->render( 'HopitalNumeriqueObjetBundle:FichierModifiable:edit.html.twig' , array(
             'formFichier'       => $form->createView(),
             'objet'             => $objet,
             'fichierModifiable' => $fichierModifiable
