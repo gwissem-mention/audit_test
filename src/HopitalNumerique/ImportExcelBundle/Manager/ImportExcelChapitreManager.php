@@ -53,6 +53,8 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
             $chapitre->setSynthese($chapitreDonnees['synthese']);
             $chapitre->setIntro($chapitreDonnees['introduction']);
             $chapitre->setDesc($chapitreDonnees['description']);
+            $chapitre->setLien($chapitreDonnees['lien']);
+            $chapitre->setDescriptionLien($chapitreDonnees['descriptionLien']);
             $chapitre->setOrder($key + 1);
 
             if(trim($chapitreDonnees['codeParent']) !== '' )

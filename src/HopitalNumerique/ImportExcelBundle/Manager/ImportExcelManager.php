@@ -66,14 +66,16 @@ class ImportExcelManager extends BaseManager
                 break;
 
             $arrayChapitres[] = array(
-                'code'         => trim($sheetChapitre->getCellByColumnAndRow(0, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(0, $i)->getValue(),
-                'codeParent'   => trim($sheetChapitre->getCellByColumnAndRow(1, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(1, $i)->getValue(),
-                'libelle'      => trim($sheetChapitre->getCellByColumnAndRow(3, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(3, $i)->getValue(),
-                'noteOptimale' => trim($sheetChapitre->getCellByColumnAndRow(5, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(5, $i)->getValue(),
-                'noteMinimale' => trim($sheetChapitre->getCellByColumnAndRow(6, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(6, $i)->getValue(),
-                'introduction' => trim($sheetChapitre->getCellByColumnAndRow(2, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(2, $i)->getValue(),
-                'synthese'     => trim($sheetChapitre->getCellByColumnAndRow(7, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(7, $i)->getValue(),
-                'description'  => trim($sheetChapitre->getCellByColumnAndRow(4, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(4, $i)->getValue()
+                'code'            => trim($sheetChapitre->getCellByColumnAndRow(0, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(0, $i)->getValue(),
+                'codeParent'      => trim($sheetChapitre->getCellByColumnAndRow(1, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(1, $i)->getValue(),
+                'libelle'         => trim($sheetChapitre->getCellByColumnAndRow(3, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(3, $i)->getValue(),
+                'noteOptimale'    => trim($sheetChapitre->getCellByColumnAndRow(5, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(5, $i)->getValue(),
+                'noteMinimale'    => trim($sheetChapitre->getCellByColumnAndRow(6, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(6, $i)->getValue(),
+                'introduction'    => trim($sheetChapitre->getCellByColumnAndRow(2, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(2, $i)->getValue(),
+                'synthese'        => trim($sheetChapitre->getCellByColumnAndRow(7, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(7, $i)->getValue(),
+                'description'     => trim($sheetChapitre->getCellByColumnAndRow(4, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(4, $i)->getValue(),
+                'lien'            => trim($sheetChapitre->getCellByColumnAndRow(8, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(8, $i)->getValue(),
+                'descriptionLien' => trim($sheetChapitre->getCellByColumnAndRow(9, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(9, $i)->getValue()
             );
         }
 
@@ -99,19 +101,21 @@ class ImportExcelManager extends BaseManager
                 break;
 
             $arrayQuestions[] = array(
-                'numChapitre'  => $sheetQuestion->getCellByColumnAndRow(0, $i)->getValue(),
-                'numQuestion'  => trim($sheetQuestion->getCellByColumnAndRow(1, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(1, $i)->getValue(),
-                'intro'        => trim($sheetQuestion->getCellByColumnAndRow(2, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(2, $i)->getValue(),
-                'texte'        => $sheetQuestion->getCellByColumnAndRow(3, $i)->getValue(),
-                'type'         => $sheetQuestion->getCellByColumnAndRow(4, $i)->getValue(),
-                'options'      => trim($sheetQuestion->getCellByColumnAndRow(5, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(5, $i)->getValue(),
-                'noteMinimale' => trim($sheetQuestion->getCellByColumnAndRow(6, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(6, $i)->getValue(),
-                'synthese'     => trim($sheetQuestion->getCellByColumnAndRow(7, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(7, $i)->getValue(),
-                'colored'      => $sheetQuestion->getCellByColumnAndRow(8, $i)->getValue(),
-                'infobulle'    => trim($sheetQuestion->getCellByColumnAndRow(9, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(9, $i)->getValue(),
-                'categorie'    => $sheetQuestion->getCellByColumnAndRow(10, $i)->getValue(),
-                'ponderation'  => trim($sheetQuestion->getCellByColumnAndRow(11, $i)->getValue()) === '' ? 1 : $sheetQuestion->getCellByColumnAndRow(11, $i)->getValue(),
-                'order'        => trim($sheetQuestion->getCellByColumnAndRow(12, $i)->getValue()) === '' ? $i : $sheetQuestion->getCellByColumnAndRow(12, $i)->getValue()
+                'numChapitre'     => $sheetQuestion->getCellByColumnAndRow(0, $i)->getValue(),
+                'numQuestion'     => trim($sheetQuestion->getCellByColumnAndRow(1, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(1, $i)->getValue(),
+                'intro'           => trim($sheetQuestion->getCellByColumnAndRow(2, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(2, $i)->getValue(),
+                'texte'           => $sheetQuestion->getCellByColumnAndRow(3, $i)->getValue(),
+                'type'            => $sheetQuestion->getCellByColumnAndRow(4, $i)->getValue(),
+                'options'         => trim($sheetQuestion->getCellByColumnAndRow(5, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(5, $i)->getValue(),
+                'noteMinimale'    => trim($sheetQuestion->getCellByColumnAndRow(6, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(6, $i)->getValue(),
+                'synthese'        => trim($sheetQuestion->getCellByColumnAndRow(7, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(7, $i)->getValue(),
+                'colored'         => $sheetQuestion->getCellByColumnAndRow(8, $i)->getValue(),
+                'infobulle'       => trim($sheetQuestion->getCellByColumnAndRow(9, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(9, $i)->getValue(),
+                'categorie'       => $sheetQuestion->getCellByColumnAndRow(10, $i)->getValue(),
+                'ponderation'     => trim($sheetQuestion->getCellByColumnAndRow(11, $i)->getValue()) === '' ? 1 : $sheetQuestion->getCellByColumnAndRow(11, $i)->getValue(),
+                'order'           => trim($sheetQuestion->getCellByColumnAndRow(12, $i)->getValue()) === '' ? $i : $sheetQuestion->getCellByColumnAndRow(12, $i)->getValue(),
+                'lien'            => trim($sheetQuestion->getCellByColumnAndRow(13, $i)->getValue()) === '' ? $i : $sheetQuestion->getCellByColumnAndRow(13, $i)->getValue(),
+                'descriptionLien' => trim($sheetQuestion->getCellByColumnAndRow(14, $i)->getValue()) === '' ? $i : $sheetQuestion->getCellByColumnAndRow(14, $i)->getValue()
             );
         }
 
