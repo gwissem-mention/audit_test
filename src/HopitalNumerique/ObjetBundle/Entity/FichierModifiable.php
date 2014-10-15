@@ -63,11 +63,23 @@ class FichierModifiable
     protected $objet;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="ofm_date_lastmodif", type="datetime", options = {"comment" = "Date de dernière modification de l objet"})
+     */
+    protected $dateLastModif;
+
+    /**
      * @Assert\File(
      *     maxSize = "10M"
      * )
      */
     public $fileEdit;
+
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTime();
+    }
 
     /**
      * Get id
@@ -307,5 +319,28 @@ class FichierModifiable
     {
         if ( $fileEdit = $this->getAbsolutePath() && file_exists( $this->getAbsolutePath() ) )
             unlink($fileEdit);
+    }
+
+    /**
+     * Set dateLastModif
+     *
+     * @param \DateTime $dateLastModif
+     * @return FichierModifiable
+     */
+    public function setDateLastModif($dateLastModif)
+    {
+        $this->dateLastModif = $dateLastModif;
+
+        return $this;
+    }
+
+    /**
+     * Get dateLastModif
+     *
+     * @return \DateTime 
+     */
+    public function getDateLastModif()
+    {
+        return $this->dateLastModif;
     }
 }
