@@ -22,5 +22,3 @@ hopitalnumerique_report_archiver:
 hopitalnumerique_report_homepage:
     pattern:  /signalement/{url}
     defaults: { _controller: "HopitalNumeriqueReportBundle:Report:signaler"}
-
-
