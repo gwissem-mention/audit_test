@@ -81,7 +81,8 @@ class ReportController extends Controller
         //Récupération de l'entité passée en paramètre
         $report = $this->get('hopital_numerique_report.manager.report')->createEmpty();
 
-        $url = base64_decode($url);
+        //$url = base64_decode($url);
+        $url = base64_decode(str_replace(array('-', '_'), array('+', '/'), $url));
         //Récupération de l'url
         $report->setUrl($url);
         $report->setUser($user);

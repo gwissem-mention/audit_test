@@ -29,14 +29,14 @@ class FichierModifiable
     /**
      * @var string
      *
-     * @ORM\Column(name="ofm_referentAnap", type="string", length=255, nullable=true)
+     * @ORM\Column(name="ofm_referent_anap", type="string", length=255, nullable=true)
      */
     protected $referentAnap;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ofm_sourceDocument", type="string", length=255, nullable=true)
+     * @ORM\Column(name="ofm_source_document", type="string", length=255, nullable=true)
      */
     protected $sourceDocument;
 
@@ -50,7 +50,7 @@ class FichierModifiable
     /**
      * @var string
      *
-     * @ORM\Column(name="ofm__path_edit", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier éditable"})
+     * @ORM\Column(name="ofm_path_edit", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier éditable"})
      */
     private $pathEdit;
 
@@ -65,7 +65,7 @@ class FichierModifiable
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="ofm_date_lastmodif", type="datetime", options = {"comment" = "Date de dernière modification de l objet"})
+     * @ORM\Column(name="ofm_date_last_modif", type="datetime", options = {"comment" = "Date de dernière modification de l objet"})
      */
     protected $dateLastModif;
 

@@ -36,7 +36,8 @@ class ToolsExtension extends \Twig_Extension
     }
     public function base64Nodevo( $string )
     {
-        return base64_encode($string);
+        return str_replace(array('+', '/'), array('-', '_'), base64_encode($string));
+        //return base64_encode($string);
     }
 
     /**
