@@ -1,28 +1,5 @@
 {%- spaceless -%}
 
-    {%- if post.isDeleted == false or is_granted('ROLE_ADMINISTRATEUR_1') -%}
-        {%- if post.getEditedDate -%}
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="glyphicon glyphicon-pencil" style="margin: 0 5px 0 0;"></i>
-
-                    {{- 'post.edited-by' |trans({}, ForumBundle.translation ) |raw -}}
-                    {% if post.getEditedBy.getPseudonymeForum() is defined and post.getEditedBy.getPseudonymeForum() is not null %}
-                        {{- post.getEditedBy.getPseudonymeForum() -}}
-                    {% else %}
-                        {{- post.getEditedBy.getNomPrenom() -}}
-                    {% endif %}
-
-                    &nbsp;&#183;
-
-                    <abbr class="timestamper" title="{{- post.getEditedDate |date('Y-m-d H:i:s T Z', 'Europe/London') -}}">
-                        {{- post.getEditedDate |date(ccdn_forum_forum.item_post.edited_datetime_format) -}}
-                    </abbr>
-                </div>
-            </div>
-        {%- endif -%}
-    {%- endif -%}
-
     {%- if post.isDeleted == true -%}
         <div class="panel panel-default">
             <div class="panel-heading">
