@@ -73,18 +73,19 @@ class ResultatManager extends BaseManager
             $chapitre = new \StdClass;
             
             //build chapitre values
-            $chapitre->id       = $one->getId();
-            $chapitre->synthese = $one->getSynthese();
-            $chapitre->title    = $one->getCode() != '' ? $one->getCode() . '. ' . $one->getTitle() : $one->getTitle();
-            $chapitre->code     = $one->getCode();
-            $chapitre->childs   = array();
-            $chapitre->noteMin  = $one->getNoteMinimale();
-            $chapitre->noteOpt  = $one->getNoteOptimale();
-            $chapitre->intro    = $one->getIntro();
-            $chapitre->desc     = $one->getDesc();
-            $chapitre->lien     = $one->getLien();
-            $chapitre->order    = $one->getOrder();
-            $chapitre->parent   = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
+            $chapitre->id              = $one->getId();
+            $chapitre->synthese        = $one->getSynthese();
+            $chapitre->title           = $one->getCode() != '' ? $one->getCode() . '. ' . $one->getTitle() : $one->getTitle();
+            $chapitre->code            = $one->getCode();
+            $chapitre->childs          = array();
+            $chapitre->noteMin         = $one->getNoteMinimale();
+            $chapitre->noteOpt         = $one->getNoteOptimale();
+            $chapitre->intro           = $one->getIntro();
+            $chapitre->desc            = $one->getDesc();
+            $chapitre->lien            = $one->getLien();
+            $chapitre->descriptionLien = $one->getDescriptionLien();
+            $chapitre->order           = $one->getOrder();
+            $chapitre->parent          = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
             //handle questions/reponses
             $chapitre = $this->buildQuestions( $one->getQuestions(), $chapitre, $questionsReponses, $questionsReponsesBack );
@@ -602,19 +603,20 @@ class ResultatManager extends BaseManager
             $rep->remarque      = $reponse->getRemarque();
 
             //questions values
-            $rep->id            = $question->getId();
-            $rep->question      = $question->getTexte();
-            $rep->code          = $question->getCode();
-            $rep->intro         = $question->getIntro();
-            $rep->ordreResultat = $question->getOrdreResultat();
-            $rep->noteMinimale  = $question->getNoteMinimale();
-            $rep->synthese      = $question->getSynthese();
-            $rep->ponderation   = $question->getPonderation();
-            $rep->order         = $question->getOrder();
-            $rep->lien          = $question->getLien();
-            $rep->type          = $question->getType()->getId();
-            $rep->colored       = $question->getColored();
-            $rep->options       = explode( '<br />', nl2br( $question->getOptions() ) );
+            $rep->id              = $question->getId();
+            $rep->question        = $question->getTexte();
+            $rep->code            = $question->getCode();
+            $rep->intro           = $question->getIntro();
+            $rep->ordreResultat   = $question->getOrdreResultat();
+            $rep->noteMinimale    = $question->getNoteMinimale();
+            $rep->synthese        = $question->getSynthese();
+            $rep->ponderation     = $question->getPonderation();
+            $rep->order           = $question->getOrder();
+            $rep->lien            = $question->getLien();
+            $rep->descriptionLien = $question->getDescriptionLien();
+            $rep->type            = $question->getType()->getId();
+            $rep->colored         = $question->getColored();
+            $rep->options         = explode( '<br />', nl2br( $question->getOptions() ) );
 
             //Si != Texte, on calcul la réponse Max
             if( $rep->type != 417 ){

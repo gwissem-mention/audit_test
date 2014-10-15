@@ -74,6 +74,13 @@ class Chapitre
     private $lien;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="cha_description_lien", type="text", options = {"comment" = "Description du lien du chapitre"}, nullable=true)
+     */
+    private $descriptionLien;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="cha_note_optimale", type="smallint", nullable=true, options = {"comment" = "Note optimale du chapitre"})
@@ -601,5 +608,28 @@ class Chapitre
     public function getProcessChapitres()
     {
         return $this->processChapitres;
+    }
+
+    /**
+     * Set descriptionLien
+     *
+     * @param string $descriptionLien
+     * @return Chapitre
+     */
+    public function setDescriptionLien($descriptionLien)
+    {
+        $this->descriptionLien = $descriptionLien;
+
+        return $this;
+    }
+
+    /**
+     * Get descriptionLien
+     *
+     * @return string 
+     */
+    public function getDescriptionLien()
+    {
+        return $this->descriptionLien;
     }
 }

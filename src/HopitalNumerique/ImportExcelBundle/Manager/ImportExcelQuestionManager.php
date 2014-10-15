@@ -72,6 +72,8 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
 
             $question->setPonderation($questionDonnees['ponderation']);
             $question->setOrder($questionDonnees['order']);
+            $question->setLien($questionDonnees['lien']);
+            $question->setDescriptionLien($questionDonnees['descriptionLien']);
 
             $this->save( $question );
         }
