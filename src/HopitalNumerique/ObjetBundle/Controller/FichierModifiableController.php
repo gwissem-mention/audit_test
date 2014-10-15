@@ -36,6 +36,7 @@ class FichierModifiableController extends Controller
             if ($form->isValid())
             {
                 $fichierModifiable->setObjet($objet);
+                $fichierModifiable->setDateLastModif( new \DateTime());
                 $this->get('hopitalnumerique_objet.manager.fichiermodifiable')->save($fichierModifiable);
                 $this->get('session')->getFlashBag()->add( 'success', 'Informations enregistrées.' );
             }

@@ -4,8 +4,9 @@ $(document).ready(function() {
         $('.uploadedFile, .deleteUploadedFile ').hide();
         $('.uploadedFile').html('');
         $('.inputUpload').show();
-        $('#hopitalnumerique_module_session_path').val('');
-        $('#hopitalnumerique_module_session_file').val('');
+        $('#hopitalnumerique_objet_fichiermodifiable_pathEdit').val('');
+        $('#hopitalnumerique_objet_fichiermodifiable_fileEdit').val('');
     });
+    
     $('form.toValidate').validationEngine();
 });
