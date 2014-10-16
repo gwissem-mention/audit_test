@@ -59,9 +59,11 @@ class LinkController extends Controller
     {
         $objets = $pointDur->getObjets();
 
-        $linkName = ($obj == 1 ? 'PUBLICATION' : 'INFRADOC') . ':' . $id;
-        foreach($objets as $key => $objet){
-            if( $objet == $linkName )
+        //$linkName = ($obj == 1 ? 'PUBLICATION' : 'INFRADOC') . ':' . $id;
+        $linkName = ($obj == 1 ? array('PUBLICATION' . ':' . $id , 'ARTICLE' . ':' . $id) : array('INFRADOC' . ':' . $id) ) ;
+        foreach($objets as $key => $objet)
+        {
+            if(in_array($objet, $linkName))
                 unset($objets[$key]);
         }
         $pointDur->setObjets( $objets );
