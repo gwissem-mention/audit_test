@@ -17,7 +17,7 @@
                     {% for key,enteteTableau in entetesTableau %}  
                         <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
                             {% if etape.id in notesMoyenneParEtape|keys and key in notesMoyenneParEtape[etape.id]|keys %}
-                                {{notesMoyenneParEtape[etape.id][key]['value']}} (sur {{notesMoyenneParEtape[etape.id][key]['nbNote']}} note(s))
+                                {{notesMoyenneParEtape[etape.id][key]['value']}} (sur {{notesMoyenneParEtape[etape.id][key]['nbNote']}} note(s) pour {{notesMoyenneParEtape[etape.id][key]['nbUser']}} utilisateur(s)
                             {% endif %}
                         </td>
                     {% endfor %}

@@ -175,7 +175,7 @@ class MaitriseUserManager extends BaseManager
                 if(array_key_exists($etape->getId(), $donneesTab["notesMoyenneParEtape"])
                     && array_key_exists($key, $donneesTab["notesMoyenneParEtape"][$etape->getId()]))
                 {
-                    $row[$key] = $donneesTab["notesMoyenneParEtape"][$etape->getId()][$key]['value'] . '(' . $donneesTab["notesMoyenneParEtape"][$etape->getId()][$key]['nbNote'] . ')';
+                    $row[$key] = $donneesTab["notesMoyenneParEtape"][$etape->getId()][$key]['value'] . ' (NbNote : ' . $donneesTab["notesMoyenneParEtape"][$etape->getId()][$key]['nbNote'] . ', NbUser : ' . $donneesTab["notesMoyenneParEtape"][$etape->getId()][$key]['nbUser'] .')'  ;
                 }
             }
             //add row To Results
@@ -226,7 +226,8 @@ class MaitriseUserManager extends BaseManager
             $filtre                               = $etape['filtreId'] == NULL ? 'NC' : $etape['filtreId'];
             $moyennes[$etape['etapeId']][$filtre] = array(
                 'value'   => intval($etape['moyenne'], 0),
-                'nbNote' => intval($etape['nbNote'], 0)
+                'nbNote'  => intval($etape['nbNote'], 0),
+                'nbUser'  => intval($etape['nbUser'], 0)
             );
         }
 
