@@ -8,6 +8,7 @@ $(function() {
         min_cols               : 2,
         serialize_params       : function($w, wgd) { return { col: wgd.col, row: wgd.row, id: $w.data('id') } },
         draggable              : {
+            handle: 'i',
             stop : function(event, ui){ 
                 $.ajax({
                     url  : $('#account-reorder-url').val(),
