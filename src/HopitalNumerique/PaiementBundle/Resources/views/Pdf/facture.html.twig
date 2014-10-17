@@ -125,7 +125,7 @@
         {% for formation in facture.formations %}
             <tr>
                 <td style="border:1px solid black;" >{{formation.session.module.titre}}</td>
-                <td style="border:1px solid black;" >date : {{formation.dateInscription|date('d/m/Y')}}</td>
+                <td style="border:1px solid black;" >date : {{formation.session.dateSession|date('d/m/Y')}}</td>
                 <td style="border:0 !important" ></td>
                 <td align="center" style="border:1px solid black;" >{{ formation.total - formation.supplement }}€</td>
                 <td align="center" style="border:1px solid black;" >{{formation.supplement}}€</td>
