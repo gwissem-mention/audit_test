@@ -18,6 +18,12 @@ class QuestionnaireGestionType extends AbstractType
                     'class'     => 'validate[required]'
                 )
             ));
+
+        $builder
+            ->add('lien', 'text', array(
+                'required'   => false,
+                'label'      => 'Lien de redirection'
+            ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

@@ -598,11 +598,15 @@ class QuestionnaireController extends Controller
                             break;
                     }
                 }
-                
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Formulaire enregistré.' );
-                                
                 //Mise à jour/création des réponses
                 $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );
+
+                if(!is_null($questionnaire->getLien()) && trim($questionnaire->getLien() !== ""))
+                {
+                    return $this->redirect($questionnaire->getLien());
+                }
+                
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Formulaire enregistré.' );
     
                 //Sauvegarde / Sauvegarde + quitte
                 $do = $request->request->get('do');

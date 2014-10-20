@@ -367,11 +367,22 @@ class MailManager extends BaseManager
         $toSend = array();
         foreach ($inscriptions as $key => $inscription) 
         {
-            $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+            $mailTemp = $this->generationMail($inscription->getUser(), $mail, array(
                             'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
                             'module'    => $inscription->getSession()->getModule()->getTitre(),
                             'texteMail' => $inscription->getSession()->getTextMailRappel()
             ));
+
+            if(!is_null($inscription->getSession()->getAbsolutePath()) && trim($inscription->getSession()->getAbsolutePath()) !== "")
+            {
+                $mailTemp->attach(\Swift_Attachment::fromPath($inscription->getSession()->getAbsolutePath()), "application/octet-stream");
+            }
+            elseif(!is_null($inscription->getSession()->getModule()->getAbsolutePath()) && trim($inscription->getSession()->getModule()->getAbsolutePath()) !== "")
+            {
+                $mailTemp->attach(\Swift_Attachment::fromPath($inscription->getSession()->getModule()->getAbsolutePath()), "application/octet-stream");
+            }
+
+            $toSend[] = $mailTemp;
         }
     
         return $toSend;
