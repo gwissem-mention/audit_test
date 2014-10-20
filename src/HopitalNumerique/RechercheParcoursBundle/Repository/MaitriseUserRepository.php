@@ -64,7 +64,10 @@ class MaitriseUserRepository extends EntityRepository
                             ->andWhere('notes.nonConcerne = :nonConcerne')
                             ->setParameter('nonConcerne', false)
                             ->leftJoin('notes.rechercheParcoursDetails', 'etape')
-                            ->leftJoin('notes.user', 'user');
+                            ->leftJoin('notes.user', 'user')
+                            //Ne pas prendre en compte les admins (méthode moche)
+                            ->andWhere('user.roles != :adminId')
+                            ->setParameter('adminId', 'a:1:{i:0;s:21:"ROLE_ADMINISTRATEUR_1";}');
 
                     if("profil" === $profilType)
                     {

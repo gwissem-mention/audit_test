@@ -31,7 +31,7 @@ class CronController extends Controller
                 {
                     if($session->getDateSession() == $oneWeek)
                     {
-                        //récupérations des inscriptions acceptées
+                        //récupérations des inscriptions acceptées≤
                         $inscriptions = $session->getInscriptionsAccepte();
 
                         //Envoyer mail de refus de l'inscription

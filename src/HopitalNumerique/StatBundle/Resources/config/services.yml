@@ -7,7 +7,7 @@ parameters:
 services:
     hopitalnumerique_stat.manager.statrecherche:
         class: %hopitalnumerique_stat.manager.statrecherche.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_reference.manager.reference"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_reference.manager.reference", "@security.context"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
     #Cronlogger

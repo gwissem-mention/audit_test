@@ -186,6 +186,11 @@ class User extends BaseUser
     protected $username;
 
     /**
+     * @var array
+     */
+    protected $roles;
+
+    /**
      * @var string
      * @Assert\Regex(pattern= "/[0-9a-zA-Z]/")
      * @Assert\Length(
