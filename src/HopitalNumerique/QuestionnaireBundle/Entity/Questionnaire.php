@@ -37,6 +37,13 @@ class Questionnaire
     private $lock;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="qst_lien", type="string", length=255, options = {"comment" = "Lien de redirection après validation du questionnaire"})
+     */
+    protected $lien;
+
+    /**
      * @ORM\OneToMany(targetEntity="Question", mappedBy="questionnaire", cascade={"persist", "remove" })
      * @ORM\OrderBy({"ordre" = "ASC"})
      */
@@ -153,5 +160,61 @@ class Questionnaire
     public function getQuestions()
     {
         return $this->questions;
+    }
+
+    /**
+     * Add refusCandidature
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\RefusCandidature $refusCandidature
+     * @return Questionnaire
+     */
+    public function addRefusCandidature(\HopitalNumerique\UserBundle\Entity\RefusCandidature $refusCandidature)
+    {
+        $this->refusCandidature[] = $refusCandidature;
+
+        return $this;
+    }
+
+    /**
+     * Remove refusCandidature
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\RefusCandidature $refusCandidature
+     */
+    public function removeRefusCandidature(\HopitalNumerique\UserBundle\Entity\RefusCandidature $refusCandidature)
+    {
+        $this->refusCandidature->removeElement($refusCandidature);
+    }
+
+    /**
+     * Get refusCandidature
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRefusCandidature()
+    {
+        return $this->refusCandidature;
+    }
+
+    /**
+     * Set lien
+     *
+     * @param string $lien
+     * @return Questionnaire
+     */
+    public function setLien($lien)
+    {
+        $this->lien = $lien;
+
+        return $this;
+    }
+
+    /**
+     * Get lien
+     *
+     * @return string 
+     */
+    public function getLien()
+    {
+        return $this->lien;
     }
 }
