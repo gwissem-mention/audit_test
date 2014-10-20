@@ -374,9 +374,13 @@ class MailManager extends BaseManager
             ));
 
             if(!is_null($inscription->getSession()->getAbsolutePath()) && trim($inscription->getSession()->getAbsolutePath()) !== "")
+            {
                 $mailTemp->attach(\Swift_Attachment::fromPath($inscription->getSession()->getAbsolutePath()), "application/octet-stream");
+            }
             elseif(!is_null($inscription->getSession()->getModule()->getAbsolutePath()) && trim($inscription->getSession()->getModule()->getAbsolutePath()) !== "")
+            {
                 $mailTemp->attach(\Swift_Attachment::fromPath($inscription->getSession()->getModule()->getAbsolutePath()), "application/octet-stream");
+            }
 
             $toSend[] = $mailTemp;
         }
