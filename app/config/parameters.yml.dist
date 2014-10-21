@@ -30,7 +30,6 @@ parameters:
 
     #HopitalNumerique_Questionnaire
     confighn_hopitalnumerique_questionnaire_mailReponse:
-        qsomazzi@nodevo.com: Quentin
         gmelchilsen@nodevo.com: 'Gaëtan M.'
         tdauriac@nodevo.com: 'Thomas D.'
     confighn_hopitalnumerique_questionnaire_mailExpertReponses:
@@ -38,7 +37,6 @@ parameters:
     
     #HopitalNumerique_Contact
     confighn_hopitalnumerique_contact:
-        qsomazzi@nodevo.com: Quentin S.
         gmelchilsen@nodevo.com: Gaëtan M.
         tdauriac@nodevo.com: Thomas D.
 

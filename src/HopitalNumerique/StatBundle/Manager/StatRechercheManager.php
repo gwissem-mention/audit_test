@@ -11,15 +11,18 @@ class StatRechercheManager extends BaseManager
 {
     protected $_managerReference;
     protected $_class = 'HopitalNumerique\StatBundle\Entity\StatRecherche';
+    protected $_securityContext;
 
     /**
      * @param EntityManager    $em               [description]
      * @param ManagerReference $managerReference [description]
+     * @param SecurityContext $securityContext Security Context
      */
-    public function __construct($em, $managerReference)
+    public function __construct($em, $managerReference, $securityContext)
     {
         parent::__construct($em);
         $this->_managerReference = $managerReference;
+        $this->_securityContext = $securityContext;
     }
 
     /**
@@ -110,6 +113,11 @@ class StatRechercheManager extends BaseManager
      */
     public function sauvegardeRequete(array $tableauIdRef, $user, $categ, $nbResultats, $isRequete)
     {
+        if(!is_null($user) && $this->_securityContext->isGranted('ROLE_ADMINISTRATEUR_1'))
+        {
+            return;
+        }
+
         $referencesJSON = json_encode($tableauIdRef);
 
         //Récupération des références correspondant à la requête
