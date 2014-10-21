@@ -4,10 +4,14 @@
             <h4 class="panel-title">
                 {%- if post.getCreatedBy -%}
                     {{- 'post.posted-by' |trans({}, ForumBundle.translation ) |raw -}}
-                    {% if post.getCreatedBy.getPseudonymeForum() is defined and post.getCreatedBy.getPseudonymeForum() is not null %}
-                        {{- post.getCreatedBy.getPseudonymeForum() }} 
+                    {% if forum.id == 4 %}
+                        <i>Anonyme</i>
                     {% else %}
-                        {{- post.getCreatedBy.getNomPrenom() }} 
+                        {% if post.getCreatedBy.getPseudonymeForum() is defined and post.getCreatedBy.getPseudonymeForum() is not null %}
+                            {{- post.getCreatedBy.getPseudonymeForum() }} 
+                        {% else %}
+                            {{- post.getCreatedBy.getNomPrenom() }} 
+                        {% endif %}
                     {% endif %}
                     {% if post.getCreatedBy.getEtablissementRattachementSante() is not null %}({{post.getCreatedBy.getEtablissementRattachementSante().nom}}){% else %}{% if post.getCreatedBy.getAutreStructureRattachementSante|trim != '' %}({{post.getCreatedBy.getAutreStructureRattachementSante}}){% endif %}{% endif %}
 
