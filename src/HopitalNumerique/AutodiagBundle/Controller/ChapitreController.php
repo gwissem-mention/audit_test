@@ -163,6 +163,13 @@ class ChapitreController extends Controller
             $tool = new Chaine( ( $chapitre->getAlias() == '' ? $chapitre->getTitle() : $chapitre->getAlias() ) );
             $chapitre->setAlias( $tool->minifie() );
 
+            //Récupère tout les chapitres enfants de ce chapitre
+            $chapitreChildren = $this->get('hopitalnumerique_autodiag.manager.chapitre')->findBy(array('parent' => $chapitre->getId()));
+            foreach ($chapitreChildren as $chapitreChild) 
+            {
+                $chapitreChild->setAffichageRestitution($chapitre->getAffichageRestitution());
+            }
+
             //save
             $this->getDoctrine()->getManager()->flush();
             

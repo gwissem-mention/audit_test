@@ -40,6 +40,11 @@ class FrontController extends Controller
         
         //build chapitres
         foreach($chapitres as $chapitre){
+            //Si on ne doit pas afficher le chapitre, on ne le prend pas en compte
+            if(!$chapitre->getAffichageRestitution())
+            {
+                continue;
+            }
             if( is_null($chapitre->getParent()) ){
                 $parents[ $chapitre->getId() ]['parent'] = $chapitre;
                 $parents[ $chapitre->getId() ]['childs'] = array();
@@ -165,25 +170,28 @@ class FrontController extends Controller
 
         //Save Réponses
         $reponses = array();
-        foreach($chapitres as $chapitre => $questions) {
-            foreach($questions as $id => $value) {
-                //get entity Question
-                $question = $this->get('hopitalnumerique_autodiag.manager.question')->findOneBy( array('id' => $id ) );
+        if(count($chapitres) > 0)
+        {
+            foreach($chapitres as $chapitre => $questions) {
+                foreach($questions as $id => $value) {
+                    //get entity Question
+                    $question = $this->get('hopitalnumerique_autodiag.manager.question')->findOneBy( array('id' => $id ) );
 
-                //build remarque
-                $remarque = ( isset($remarques[$chapitre]) && isset($remarques[$chapitre][$id]) ) ? $remarques[$chapitre][$id] : '';
+                    //build remarque
+                    $remarque = ( isset($remarques[$chapitre]) && isset($remarques[$chapitre][$id]) ) ? $remarques[$chapitre][$id] : '';
 
-                //create entity Reponse
-                $reponse = $this->get('hopitalnumerique_autodiag.manager.reponse')->createEmpty();
-                $reponse->setQuestion( $question );
-                $reponse->setResultat( $resultat );
-                $reponse->setRemarque( $remarque );
-                $reponse->setValue( trim($value) );
+                    //create entity Reponse
+                    $reponse = $this->get('hopitalnumerique_autodiag.manager.reponse')->createEmpty();
+                    $reponse->setQuestion( $question );
+                    $reponse->setResultat( $resultat );
+                    $reponse->setRemarque( $remarque );
+                    $reponse->setValue( trim($value) );
 
-                $reponses[] = $reponse;
+                    $reponses[] = $reponse;
+                }
             }
+            $this->get('hopitalnumerique_autodiag.manager.reponse')->save( $reponses );
         }
-        $this->get('hopitalnumerique_autodiag.manager.reponse')->save( $reponses );
 
         // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
         $this->get('session')->getFlashBag()->add( 'success', 'Autodiagnostic ' . ($action == 'valid' ? 'validé.':'enregistré.') );

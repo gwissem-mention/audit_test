@@ -21,6 +21,10 @@ class CategorieType extends AbstractType
                 'required'   => false, 
                 'label'      => 'Note optimal'
             ))
+            ->add('affichageRestitution', 'checkbox', array(
+                'required'   => false, 
+                'label'      => 'Afficher lors de la réstitution ?'
+            ))
         ;
     }
 

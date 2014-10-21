@@ -168,11 +168,19 @@ class Chapitre
     private $nombreQuestionsRepondues;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cha_affichage_restitution", type="boolean", options = {"comment" = "Afficher lors de la restitution de l outil ?"})
+     */
+    private $affichageRestitution;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->affichageRestitution = true;
     }
 
     /**
@@ -631,5 +639,28 @@ class Chapitre
     public function getDescriptionLien()
     {
         return $this->descriptionLien;
+    }
+
+    /**
+     * Set affichageRestitution
+     *
+     * @param boolean $affichageRestitution
+     * @return Chapitre
+     */
+    public function setAffichageRestitution($affichageRestitution)
+    {
+        $this->affichageRestitution = $affichageRestitution;
+
+        return $this;
+    }
+
+    /**
+     * Get affichageRestitution
+     *
+     * @return boolean 
+     */
+    public function getAffichageRestitution()
+    {
+        return $this->affichageRestitution;
     }
 }

@@ -37,10 +37,14 @@
 
             {%- if topic.getFirstPost -%}
                 {{- 'post.posted-by' | trans({}, ForumBundle.translation ) |raw -}}
-                {% if topic.getFirstPost.getCreatedBy.getPseudonymeForum() is defined and topic.getFirstPost.getCreatedBy.getPseudonymeForum() is not null %}
-                    {{- topic.getFirstPost.getCreatedBy.getPseudonymeForum() -}}
+                {% if forum.id == 4 %}
+                    <i>Anonyme</i>
                 {% else %}
-                    {{- topic.getFirstPost.getCreatedBy.getNomPrenom() -}}
+                    {% if topic.getFirstPost.getCreatedBy.getPseudonymeForum() is defined and topic.getFirstPost.getCreatedBy.getPseudonymeForum() is not null %}
+                        {{- topic.getFirstPost.getCreatedBy.getPseudonymeForum() -}}
+                    {% else %}
+                        {{- topic.getFirstPost.getCreatedBy.getNomPrenom() -}}
+                    {% endif %}
                 {% endif %}
 
                 &nbsp;&#183;

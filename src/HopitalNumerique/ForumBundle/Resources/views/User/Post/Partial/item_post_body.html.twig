@@ -6,10 +6,14 @@
                 <i class="glyphicon glyphicon-trash"></i>
 
                 {{- 'post.deleted-by' |trans({}, ForumBundle.translation ) |raw -}}
-                {% if post.getDeletedBy.getPseudonymeForum() is defined and post.getDeletedBy.getPseudonymeForum() is not null %}
-                    {{- post.getDeletedBy.getPseudonymeForum() -}}
+                {% if forum.id == 4 %}
+                    <i>Anonyme</i>
                 {% else %}
-                    {{- post.getDeletedBy.getNomPrenom() -}}
+                    {% if post.getDeletedBy.getPseudonymeForum() is defined and post.getDeletedBy.getPseudonymeForum() is not null %}
+                        {{- post.getDeletedBy.getPseudonymeForum() -}}
+                    {% else %}
+                        {{- post.getDeletedBy.getNomPrenom() -}}
+                    {% endif %}
                 {% endif %}
 
                 &nbsp;&#183;

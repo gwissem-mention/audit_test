@@ -11,10 +11,14 @@
                     <h3 class="panel-title">
                         {%- if post.getCreatedBy -%}
                             {{- 'post.posted-by' |trans({}, ForumBundle.translation ) |raw -}}
-                            {% if post.getCreatedBy.getPseudonymeForum() is defined and post.getCreatedBy.getPseudonymeForum() is not null %}
-                                {{- post.getCreatedBy.getPseudonymeForum() -}}
+                            {% if forum.id == 4 %}
+                                <i>Anonyme</i>
                             {% else %}
-                                {{- post.getCreatedBy.getNomPrenom() -}}
+                                {% if post.getCreatedBy.getPseudonymeForum() is defined and post.getCreatedBy.getPseudonymeForum() is not null %}
+                                    {{- post.getCreatedBy.getPseudonymeForum() -}}
+                                {% else %}
+                                    {{- post.getCreatedBy.getNomPrenom() -}}
+                                {% endif %}
                             {% endif %}
 
                             &nbsp;&#183;&nbsp;

@@ -7,10 +7,14 @@
                     <i class="glyphicon glyphicon-trash"></i>
 
                     {{- 'topic.deleted-by' | trans({}, ForumBundle.translation ) |raw -}}
-                    {% if topic.getDeletedBy.getPseudonymeForum() %}
-                        {{- topic.getDeletedBy.getPseudonymeForum() -}}
+                    {% if forum.id == 4 %}
+                        <i>Anonyme</i>
                     {% else %}
-                        {{- topic.getDeletedBy.getNomPrenom() -}}
+                        {% if topic.getDeletedBy.getPseudonymeForum() %}
+                            {{- topic.getDeletedBy.getPseudonymeForum() -}}
+                        {% else %}
+                            {{- topic.getDeletedBy.getNomPrenom() -}}
+                        {% endif %}
                     {% endif %}
 
                     &nbsp;&#183;
