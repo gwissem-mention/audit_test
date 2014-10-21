@@ -29,13 +29,13 @@ class ChapitreType extends AbstractType
                 'max_length' => $this->_constraints['code']['maxlength'],
                 'required'   => true, 
                 'label'      => 'Code',
-                'label_attr' => array('class' => 'col-md-3 control-label'),
+                'label_attr' => array('class' => 'col-md-9 control-label'),
                 'attr'       => array('class' => $this->_constraints['code']['class'] )
             ))
             ->add('noteOptimale', 'text', array(
                 'required'   => false, 
                 'label'      => 'Note optimale',
-                'label_attr' => array('class' => 'col-md-3 control-label', 'style' => 'padding-left:0'),
+                'label_attr' => array('class' => 'col-md-9 control-label', 'style' => 'padding-left:0'),
                 'attr'       => array('class' => $this->_constraints['noteOptimale']['class'] )
             ))
             ->add('noteMinimale', 'text', array(
@@ -48,13 +48,13 @@ class ChapitreType extends AbstractType
                 'required'   => false, 
                 'label'      => 'Phrase de synthèse',
                 'label_attr' => array('class' => 'col-md-12'),
-                'attr'       => array('rows' => 4)
+                'attr'       => array('rows' => 2)
             ))
             ->add('intro', 'textarea', array(
                 'required'   => false, 
                 'label'      => 'Texte avant le nom du chapitre',
                 'label_attr' => array('class' => 'col-md-12'),
-                'attr'       => array('rows' => 3)
+                'attr'       => array('rows' => 2)
             ))
             ->add('lien', 'text', array(
                 'required'   => false, 
@@ -70,7 +70,14 @@ class ChapitreType extends AbstractType
                 'required'   => false, 
                 'label'      => 'Texte après le nom du chapitre',
                 'label_attr' => array('class' => 'col-md-12'),
-                'attr'       => array('rows' => 3)
+                'attr'       => array('rows' => 2)
+            ))
+            ->add('affichageRestitution', 'checkbox', array(
+                'required'   => false,
+                //Désactivé si le chapitre a un parent, et prend la valeur du parent
+                'disabled'   => !is_null($options['data']->getParent()),
+                'label'      => 'Afficher lors de la réstitution ?',
+                'label_attr' => array('class' => 'col-md-9 control-label'),
             ))
         ;
     }

@@ -47,11 +47,19 @@ class Categorie
     private $questions;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cat_affichage_restitution", type="boolean", options = {"comment" = "Afficher lors de la restitution de l outil ?"})
+     */
+    private $affichageRestitution;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
-        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questions            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->affichageRestitution = true;
     }
 
     /**
@@ -139,5 +147,51 @@ class Categorie
     public function getQuestions()
     {
         return $this->questions;
+    }
+
+    /**
+     * Set affichageRestitution
+     *
+     * @param boolean $affichageRestitution
+     * @return Categorie
+     */
+    public function setAffichageRestitution($affichageRestitution)
+    {
+        $this->affichageRestitution = $affichageRestitution;
+
+        return $this;
+    }
+
+    /**
+     * Get affichageRestitution
+     *
+     * @return boolean 
+     */
+    public function getAffichageRestitution()
+    {
+        return $this->affichageRestitution;
+    }
+
+    /**
+     * Add questions
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Question $questions
+     * @return Categorie
+     */
+    public function addQuestion(\HopitalNumerique\AutodiagBundle\Entity\Question $questions)
+    {
+        $this->questions[] = $questions;
+
+        return $this;
+    }
+
+    /**
+     * Remove questions
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Question $questions
+     */
+    public function removeQuestion(\HopitalNumerique\AutodiagBundle\Entity\Question $questions)
+    {
+        $this->questions->removeElement($questions);
     }
 }
