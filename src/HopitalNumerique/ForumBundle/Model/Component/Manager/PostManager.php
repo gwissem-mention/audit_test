@@ -41,12 +41,22 @@ class PostManager extends CCDNPostManager
      */
     public function softDelete(Post $post, UserInterface $user)
     {
+        //Récupération du topic du post à supprimer
         $topic = $post->getTopic();
-
+        //Suppression du post
         $this->_postManager->delete($post);
         
         if(count($topic->getPosts()) == 0)
+        {
             $this->_topicManager->delete($topic);
+        }
+        else
+        {
+            //Récupération du dernier post après suppression (dans le cas où le post supprimé était le dernier du topic)
+            $lastPostFromTopic = $this->_postManager->findOneBy(array('topic' => $topic->getId()), array('createdDate' => 'DESC') );
+            $topic->setLastPost($lastPostFromTopic);
+            $this->_topicManager->save($topic);
+        }
 
         return $this;
     }

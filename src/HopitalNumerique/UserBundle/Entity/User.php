@@ -1476,6 +1476,11 @@ class User extends BaseUser
         return $this;
     }
 
+    public function isGranted($role)
+    {
+        return in_array($role, $this->getRoles());
+    }
+
     // ----------------------------------------
     // --- Gestion de l'upload des fichiers ---
     // ----------------------------------------

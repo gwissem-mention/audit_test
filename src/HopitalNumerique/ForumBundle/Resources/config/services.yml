@@ -46,7 +46,7 @@ services:
     #--Post
     hopitalnumerique_forum.manager.post:
         class: %hopitalnumerique_forum.manager.post.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_forum.manager.topic", "@hopitalnumerique_forum.manager.board"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
     #--Subscription
