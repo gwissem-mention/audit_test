@@ -44,6 +44,11 @@ class CronController extends Controller
             foreach ($posts as $post) 
             {
                 $topicTemp    = $post->getTopic();
+                //Dans le cas où le topic a déjà été supprimé
+                if(is_null($topicTemp))
+                {
+                    continue;
+                }
                 $topicsTemp[$topicTemp->getId()] = $topicTemp;
                 $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Post ' . $post->getId() . ' supprimé.');
             }
