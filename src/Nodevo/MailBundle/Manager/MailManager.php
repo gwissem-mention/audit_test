@@ -203,14 +203,21 @@ class MailManager extends BaseManager
      * Envoi un mail de validation de candidature ambassadeur
      *
      * @param User $user Utilisateur qui recevras l'email
+     * @param User $CMSI CMSI qui recevras l'email en copie
      *
      * @return Swift_Message
      */
-    public function sendValidationCandidatureAmbassadeurMail( $user )
+    public function sendValidationCandidatureAmbassadeurMail( $user, $CMSI = null )
     {
         $mail = $this->findOneById(12);
     
-        return $this->generationMail($user, $mail);
+        $mailValidation = $this->generationMail($user, $mail);
+
+        if(!is_null($CMSI))
+        {
+            $mailValidation->setCc(array($CMSI->getEmail() => $CMSI->getNomPrenom()));
+        }
+        return $mailValidation;
     }
     
     /**
@@ -233,14 +240,21 @@ class MailManager extends BaseManager
      *
      * @param User  $user    Utilisateur qui recevras l'email
      * @param array $options Variables à remplacer dans le template : 'nomDansLeTemplate' => valeurDeRemplacement
+     * @param User $CMSI CMSI qui recevras l'email en copie
      *
      * @return Swift_Message
      */
-    public function sendRefusCandidatureAmbassadeurMail( $user, $options )
+    public function sendRefusCandidatureAmbassadeurMail( $user, $options, $CMSI = null )
     {
         $mail = $this->findOneById(14);
     
-        return $this->generationMail($user, $mail, $options);
+        $mailRefus = $this->generationMail($user, $mail, $options);
+        
+        if(!is_null($CMSI))
+        {
+            $mailRefus->setCc(array($CMSI->getEmail() => $CMSI->getNomPrenom()));
+        }
+        return $mailRefus;
     }
     
     /**

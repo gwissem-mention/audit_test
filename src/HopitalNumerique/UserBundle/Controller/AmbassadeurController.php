@@ -220,8 +220,9 @@ class AmbassadeurController extends Controller
         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_AMBASSADEUR_7'));
         $user->setRoles( array( $role ) );
 
+        $CMSI = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');
         //Envoie du mail de validation de la candidature
-        $mail = $this->get('nodevo_mail.manager.mail')->sendValidationCandidatureAmbassadeurMail($user);
+        $mail = $this->get('nodevo_mail.manager.mail')->sendValidationCandidatureAmbassadeurMail($user, $CMSI);
         $this->get('mailer')->send($mail);
         
         //Mise à jour / création de l'utilisateur
@@ -262,7 +263,8 @@ class AmbassadeurController extends Controller
         $this->get('hopitalnumerique_user.manager.refus_candidature')->save($refusCandidature);
         
         //Envoie du mail de validation de la candidature
-        $mail = $this->get('nodevo_mail.manager.mail')->sendRefusCandidatureAmbassadeurMail($user, array('message' => $texteRefus));
+        $CMSI = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');
+        $mail = $this->get('nodevo_mail.manager.mail')->sendRefusCandidatureAmbassadeurMail($user, array('message' => $texteRefus), $CMSI);
         $this->get('mailer')->send($mail);
         
         $this->get('session')->getFlashBag()->add( 'success' ,  'La candidature au poste '. $questionnaire->getNomMinifie() .' a été refusé.' );
