@@ -37,8 +37,23 @@ class PostManager extends BaseManager
             //Récupération du board du post à supprimer
             $board = $topic->getBoard();
             $isLastPostBoard = is_null($board->getLastPost()) ? false : $board->getLastPost()->getId() === $post->getId();
-            //Suppression du post
-            parent::delete($post);
+
+            //Vérification si le post courant est le premier post du topic, si c'est le cas il faut supprimer tout les autres posts liés au topic
+            if(is_null($topic->getFirstPost()))
+            {
+                $postsADelete = $topic->getPosts();
+
+                foreach ($postsADelete as $postADelete) 
+                {
+                    //Suppression du post
+                    parent::delete($postADelete);
+                }
+            }
+            else
+            {
+                //Suppression du post
+                parent::delete($post);
+            }
             
             //Récupération du dernier post après suppression (dans le cas où le post supprimé était le dernier du topic)
             if(count($topic->getPosts()) != 0 && $isLastPostTopic)
