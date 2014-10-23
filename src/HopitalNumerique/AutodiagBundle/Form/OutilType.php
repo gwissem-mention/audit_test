@@ -101,6 +101,10 @@ class OutilType extends AbstractType
                 'label'    => 'Afficher la restitution sous forme de table ?',
                 'required' => false
             ))
+            ->add('centPourcentReponseObligatoire', 'checkbox', array(
+                'label'    => 'Activer l\'affichage des résultats uniquement si toutes les questions sont renseignées',
+                'required' => false
+            ))
             ->add('statut', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'      => 'libelle',

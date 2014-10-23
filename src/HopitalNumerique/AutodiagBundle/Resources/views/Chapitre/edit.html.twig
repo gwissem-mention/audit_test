@@ -181,26 +181,6 @@
     <style type="text/css">
         .panel-body{overflow: scroll;overflow-x: hidden;height: 450px;}
     </style>
-<script type="text/javascript">
-    //sauvegarde le chapitre
-    function saveChapitre( url )
-    {
-        tinymce.triggerSave();
-
-        $.ajax({
-            url      : url,
-            data     :  $('#fancybox form').serialize(),
-            type     : 'POST',
-            dataType : 'json',
-            success  : function( data ){
-                if( data.success ){
-                    $.fancybox.close(true);
-                    window.location.reload();
-                }
-            }
-        });
-    }
-</script>
 {% endblock %}
 
 {% block popinActions %}

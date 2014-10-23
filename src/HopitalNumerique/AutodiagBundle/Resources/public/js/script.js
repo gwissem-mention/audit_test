@@ -150,12 +150,11 @@ function deleteChapitre( id, url )
 //sauvegarde le chapitre
 function saveChapitre( url )
 {
+    tinymce.triggerSave();
+
     $.ajax({
         url      : url,
-        data     : {
-            form : $('#fancybox form').serialize(),
-            contenu : tinyMCE.get('hopitalnumerique_objet_contenu_contenu').getContent()
-        },
+        data     :  $('#fancybox form').serialize(),
         type     : 'POST',
         dataType : 'json',
         success  : function( data ){

@@ -176,18 +176,26 @@ class Outil
     protected $process;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="out_100pourcent_reponse_obligatoire", type="boolean", options = {"comment" = "Forcer acces au reponses uniquement si toutes les reponses sont renseignees"})
+     */
+    private $centPourcentReponseObligatoire;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
-        $this->dateCreation = new \DateTime();
-        $this->columnChart  = false;
-        $this->radarChart   = false;
-        $this->tableChart   = false;
-        $this->chapitres    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->categories   = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->process   = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->processChapitres   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dateCreation                   = new \DateTime();
+        $this->columnChart                    = false;
+        $this->radarChart                     = false;
+        $this->tableChart                     = false;
+        $this->centPourcentReponseObligatoire = false;
+        $this->chapitres                      = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->categories                     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->process                        = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->processChapitres               = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -451,6 +459,29 @@ class Outil
     public function getRadarChartAxe()
     {
         return $this->radarChartAxe;
+    }
+
+    /**
+     * Set centPourcentReponseObligatoire
+     *
+     * @param boolean $centPourcentReponseObligatoire
+     * @return Outil
+     */
+    public function setCentPourcentReponseObligatoire($centPourcentReponseObligatoire)
+    {
+        $this->centPourcentReponseObligatoire = $centPourcentReponseObligatoire;
+
+        return $this;
+    }
+
+    /**
+     * Get centPourcentReponseObligatoire
+     *
+     * @return boolean 
+     */
+    public function isCentPourcentReponseObligatoire()
+    {
+        return $this->centPourcentReponseObligatoire;
     }
 
     /**
