@@ -317,6 +317,10 @@
                 {% if chapitre.synthese and not affichageSynthese %}
                     {% set affichageSynthese = true %}
                 {% endif %}
+                {#  Lien  #}
+                {% if not affichageProduction %}
+                    {% set affichageProduction = chapitre.lien is not null %}
+                {% endif %}
                 {#  Publications #}
                 {% if not affichageProduction %}
                     {% set affichageProduction = chapitre.id|getPublicationsForChapitre(pdf) %}
@@ -328,7 +332,11 @@
                     {% if question.synthese %}
                         {% set affichageSynthese = true %}
                     {% endif %}
-                    {# Affichage des liens de publications #}
+                    {#  Lien  #}
+                    {% if not affichageProduction %}
+                        {% set affichageProduction = question.lien is not null %}
+                    {% endif %}
+                    {# Publications #}
                     {% if not affichageProduction %}
                         {% set affichageProduction = question.id|getPublicationsForQuestion(pdf) %}
                     {% endif %}
@@ -343,6 +351,10 @@
                         {% if child.synthese and not affichageSynthese %}
                             {% set affichageSynthese = true %}
                         {% endif %}
+                        {#  Lien  #}
+                        {% if not affichageProduction %}
+                            {% set affichageProduction = child.lien is not null %}
+                        {% endif %}
                         {#  Publications #}
                         {% if not affichageProduction %}
                             {% set affichageProduction = child.id|getPublicationsForChapitre(pdf) %}
@@ -354,7 +366,11 @@
                             {% if questionChild.synthese %}
                                 {% set affichageSynthese = true %}
                             {% endif %}
-                            {# Affichage des liens de publications #}
+                            {#  Lien  #}
+                            {% if not affichageProduction %}
+                                {% set affichageProduction = questionChild.lien is not null %}
+                            {% endif %}
+                            {# Publications #}
                             {% if not affichageProduction %}
                                 {% set affichageProduction = questionChild.id|getPublicationsForQuestion(pdf) %}
                             {% endif %}
