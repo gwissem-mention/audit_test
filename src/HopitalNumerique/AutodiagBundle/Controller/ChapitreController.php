@@ -159,6 +159,7 @@ class ChapitreController extends Controller
         $form = $this->createForm( 'hopitalnumerique_autodiag_chapitre', $chapitre);
 
         if ( $form->handleRequest($request)->isValid() ) {
+
             //handle Alias
             $tool = new Chaine( ( $chapitre->getAlias() == '' ? $chapitre->getTitle() : $chapitre->getAlias() ) );
             $chapitre->setAlias( $tool->minifie() );

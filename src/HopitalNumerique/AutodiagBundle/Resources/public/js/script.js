@@ -152,7 +152,10 @@ function saveChapitre( url )
 {
     $.ajax({
         url      : url,
-        data     : $('#fancybox form').serialize(),
+        data     : {
+            form : $('#fancybox form').serialize(),
+            contenu : tinyMCE.get('hopitalnumerique_objet_contenu_contenu').getContent()
+        },
         type     : 'POST',
         dataType : 'json',
         success  : function( data ){
