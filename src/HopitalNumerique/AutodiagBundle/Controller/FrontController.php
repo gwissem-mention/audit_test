@@ -39,12 +39,9 @@ class FrontController extends Controller
         $enfants        = array();
         
         //build chapitres
-        foreach($chapitres as $chapitre){
+        foreach($chapitres as $chapitre)
+        {
             //Si on ne doit pas afficher le chapitre, on ne le prend pas en compte
-            if(!$chapitre->getAffichageRestitution())
-            {
-                continue;
-            }
             if( is_null($chapitre->getParent()) ){
                 $parents[ $chapitre->getId() ]['parent'] = $chapitre;
                 $parents[ $chapitre->getId() ]['childs'] = array();
@@ -53,14 +50,16 @@ class FrontController extends Controller
         }
 
         //reformate les chapitres
-        foreach($enfants as $enfant) {
+        foreach($enfants as $enfant) 
+        {
             $parentId = $enfant->getParent()->getId();
             $parents[ $parentId ]['childs'][$enfant->getOrder()] = $enfant;
         }
 
         //reorder parents
         $chapitresOrdered = array();
-        foreach($parents as $one){
+        foreach($parents as $one)
+        {
             $tmp = $one['parent'];
 
             //sort childs
@@ -74,7 +73,8 @@ class FrontController extends Controller
         $user     = $this->get('security.context')->getToken()->getUser();
         $reponses = false;
         $remarque = false;
-        if( $user != 'anon.' ) {
+        if( $user != 'anon.' ) 
+        {
             $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
             
             //get Resultat for last one note valided
@@ -82,12 +82,16 @@ class FrontController extends Controller
             
             //if the previous one is valided, we get the results to pre-load values
             if( !$resultat )
+            {
                 $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->getLastResultatValided( $outil, $user );
+            }
 
-            if( $resultat ){
+            if( $resultat )
+            {
                 $remarque = $resultat->getRemarque();
                 $datas = $resultat->getReponses();
-                foreach($datas as $one){
+                foreach($datas as $one)
+                {
                     $reponses[ $one->getQuestion()->getId() ]['value'] = $one->getValue();
                     $reponses[ $one->getQuestion()->getId() ]['remarque'] = $one->getRemarque();
                 }
@@ -124,7 +128,8 @@ class FrontController extends Controller
 
         //create Resultat entity
         $resultat = false;
-        if( $user ) {
+        if( $user ) 
+        {
             $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
             
             //get Resultat for last one note valided
@@ -132,10 +137,13 @@ class FrontController extends Controller
         }
         
         //create for the first time
-        if( !$resultat ) {
+        if( !$resultat ) 
+        {
             $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->createEmpty();
             $resultat->setOutil( $outil );
-        }else{
+        }
+        else
+        {
             //empty old reponses
             $oldReponses = $this->get('hopitalnumerique_autodiag.manager.reponse')->findBy( array('resultat' => $resultat) );
             $this->get('hopitalnumerique_autodiag.manager.reponse')->delete( $oldReponses );
@@ -146,15 +154,20 @@ class FrontController extends Controller
         $resultat->setRemarque( $remarque );
 
         //cas ou l'user à validé le questionnaire
-        if( $action == 'valid'){
+        if( $action == 'valid')
+        {
             $resultat->setName( $nameResultat );
             $resultat->setDateValidation( new \DateTime() );
             $resultat->setStatut( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 419) ) );
-        }else
+        }
+        else
+        {
             $resultat->setStatut( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 418) ) );
+        }
 
         //Delete le PDF s'il existe : Permet de le mettre à jour lors de l'affichage des résultats
-        if( !is_null($resultat->getPdf()) ){
+        if( !is_null($resultat->getPdf()) )
+        {
             $pdfName = $resultat->getPdf();
             $resultat->setPdf( null );
 

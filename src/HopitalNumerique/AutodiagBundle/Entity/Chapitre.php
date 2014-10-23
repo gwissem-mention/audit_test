@@ -170,17 +170,33 @@ class Chapitre
     /**
      * @var boolean
      *
-     * @ORM\Column(name="cha_affichage_restitution", type="boolean", options = {"comment" = "Afficher lors de la restitution de l outil ?"})
+     * @ORM\Column(name="cha_affichage_restitution_barre", type="boolean", options = {"comment" = "Afficher le graphique des barres lors de la restitution de l outil ?"})
      */
-    private $affichageRestitution;
+    private $affichageRestitutionBarre;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cha_affichage_restitution_radar", type="boolean", options = {"comment" = "Afficher le graphique radar lors de la restitution de l outil ?"})
+     */
+    private $affichageRestitutionRadar;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cha_affichage_restitution_tableau", type="boolean", options = {"comment" = "Afficher le graphique en tableau lors de la restitution de l outil ?"})
+     */
+    private $affichageRestitutionTableau;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
-        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->affichageRestitution = true;
+        $this->questions                   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->affichageRestitutionBarre   = true;
+        $this->affichageRestitutionRadar   = true;
+        $this->affichageRestitutionTableau = true;
     }
 
     /**
@@ -642,25 +658,71 @@ class Chapitre
     }
 
     /**
-     * Set affichageRestitution
+     * Set affichageRestitutionBarre
      *
-     * @param boolean $affichageRestitution
+     * @param boolean $affichageRestitutionBarre
      * @return Chapitre
      */
-    public function setAffichageRestitution($affichageRestitution)
+    public function setAffichageRestitutionBarre($affichageRestitutionBarre)
     {
-        $this->affichageRestitution = $affichageRestitution;
+        $this->affichageRestitutionBarre = $affichageRestitutionBarre;
 
         return $this;
     }
 
     /**
-     * Get affichageRestitution
+     * Get affichageRestitutionBarre
      *
      * @return boolean 
      */
-    public function getAffichageRestitution()
+    public function getAffichageRestitutionBarre()
     {
-        return $this->affichageRestitution;
+        return $this->affichageRestitutionBarre;
+    }
+
+    /**
+     * Set affichageRestitutionRadar
+     *
+     * @param boolean $affichageRestitutionRadar
+     * @return Chapitre
+     */
+    public function setAffichageRestitutionRadar($affichageRestitutionRadar)
+    {
+        $this->affichageRestitutionRadar = $affichageRestitutionRadar;
+
+        return $this;
+    }
+
+    /**
+     * Get affichageRestitutionRadar
+     *
+     * @return boolean 
+     */
+    public function getAffichageRestitutionRadar()
+    {
+        return $this->affichageRestitutionRadar;
+    }
+
+    /**
+     * Set affichageRestitutionTableau
+     *
+     * @param boolean $affichageRestitutionTableau
+     * @return Chapitre
+     */
+    public function setAffichageRestitutionTableau($affichageRestitutionTableau)
+    {
+        $this->affichageRestitutionTableau = $affichageRestitutionTableau;
+
+        return $this;
+    }
+
+    /**
+     * Get affichageRestitutionTableau
+     *
+     * @return boolean 
+     */
+    public function getAffichageRestitutionTableau()
+    {
+        return $this->affichageRestitutionTableau;
     }
 }

@@ -61,9 +61,6 @@ class ResultatController extends Controller
 
         foreach ($chapitres as $chapitre) 
         {
-            //Ne prend pas en compte les chapitres à ne pas restituer
-            if(!$chapitre->getAffichageRestitution())
-                continue;
             $row = array();
 
             $row[0] = $chapitre->code;

@@ -8,7 +8,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 {{ form_label(form.title) }}
-                <div class="col-md-11">
+                <div class="col-md-10">
                     {{ form_widget(form.title) }}
                 </div>
                 <div class="col-md-12 col-md-offset-1">
@@ -19,7 +19,7 @@
             </div>
         </div>
         
-        <div class="col-md-3" >
+        <div class="col-md-4" >
             <div class="form-group" >
                 {{ form_label(form.code) }}
                 <div class="col-md-3">
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3" >
+        <div class="col-md-4" >
             <div class="form-group" style="{% if chapitre.parent is not null %}display:none{% endif %}">
                 {{ form_label(form.noteOptimale) }}
                 <div class="col-md-3">
@@ -45,7 +45,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3" >
+        <div class="col-md-4" >
             <div class="form-group">
                 {{ form_label(form.noteMinimale) }}
                 <div class="col-md-3">
@@ -58,26 +58,52 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3" >
+        <div class="col-md-6" >
             <div class="form-group">
-                {{ form_label(form.affichageRestitution) }}
+                {{ form_label(form.affichageRestitutionBarre) }}
                 <div class="col-md-3">
-                    {{ form_widget(form.affichageRestitution) }}
+                    {{ form_widget(form.affichageRestitutionBarre) }}
                 </div>
                 <div class="col-md-12">
                     <div class="help-block">
-                        {{ form_errors(form.affichageRestitution) }}
+                        {{ form_errors(form.affichageRestitutionBarre) }}
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-6" >
+            <div class="form-group">
+                {{ form_label(form.affichageRestitutionRadar) }}
+                <div class="col-md-3">
+                    {{ form_widget(form.affichageRestitutionRadar) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.affichageRestitutionRadar) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {#<div class="col-md-4" >
+            <div class="form-group">
+                {{ form_label(form.affichageRestitutionTableau) }}
+                <div class="col-md-3">
+                    {{ form_widget(form.affichageRestitutionTableau) }}
+                </div>
+                <div class="col-md-12">
+                    <div class="help-block">
+                        {{ form_errors(form.affichageRestitutionTableau) }}
+                    </div>
+                </div>
+            </div>
+        </div>#}
 
         <div class="clearfix"></div>
 
         <div class="col-md-6">
             <div class="form-group">
                 {{ form_label(form.descriptionLien) }}
-                <div class="col-md-10">
+                <div class="col-md-8">
                     {{ form_widget(form.descriptionLien) }}
                 </div>
                 <div class="col-md-12">
@@ -108,7 +134,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 {{ form_label(form.synthese) }}
-                <div class="col-md-12">
+                <div class="col-md-10">
                     {{ form_widget(form.synthese) }}
                 </div>
                 <div class="col-md-12">
@@ -124,7 +150,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 {{ form_label(form.intro) }}
-                <div class="col-md-12">
+                <div class="col-md-10">
                     {{ form_widget(form.intro) }}
                 </div>
                 <div class="col-md-12">
@@ -140,7 +166,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 {{ form_label(form.desc) }}
-                <div class="col-md-12">
+                <div class="col-md-10">
                     {{ form_widget(form.desc) }}
                 </div>
                 <div class="col-md-12">
