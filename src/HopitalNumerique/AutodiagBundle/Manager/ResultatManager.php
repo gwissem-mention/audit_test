@@ -73,20 +73,22 @@ class ResultatManager extends BaseManager
             $chapitre = new \StdClass;
             
             //build chapitre values
-            $chapitre->id                   = $one->getId();
-            $chapitre->synthese             = $one->getSynthese();
-            $chapitre->title                = $one->getCode() != '' ? $one->getCode() . '. ' . $one->getTitle() : $one->getTitle();
-            $chapitre->code                 = $one->getCode();
-            $chapitre->childs               = array();
-            $chapitre->noteMin              = $one->getNoteMinimale();
-            $chapitre->noteOpt              = $one->getNoteOptimale();
-            $chapitre->intro                = $one->getIntro();
-            $chapitre->desc                 = $one->getDesc();
-            $chapitre->lien                 = $one->getLien();
-            $chapitre->descriptionLien      = $one->getDescriptionLien();
-            $chapitre->order                = $one->getOrder();
-            $chapitre->affichageRestitution = $one->getAffichageRestitution();
-            $chapitre->parent               = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
+            $chapitre->id                          = $one->getId();
+            $chapitre->synthese                    = $one->getSynthese();
+            $chapitre->title                       = $one->getCode() != '' ? $one->getCode() . '. ' . $one->getTitle() : $one->getTitle();
+            $chapitre->code                        = $one->getCode();
+            $chapitre->childs                      = array();
+            $chapitre->noteMin                     = $one->getNoteMinimale();
+            $chapitre->noteOpt                     = $one->getNoteOptimale();
+            $chapitre->intro                       = $one->getIntro();
+            $chapitre->desc                        = $one->getDesc();
+            $chapitre->lien                        = $one->getLien();
+            $chapitre->descriptionLien             = $one->getDescriptionLien();
+            $chapitre->order                       = $one->getOrder();
+            $chapitre->affichageRestitutionBarre   = $one->getAffichageRestitutionBarre();
+            $chapitre->affichageRestitutionRadar   = $one->getAffichageRestitutionRadar();
+            $chapitre->affichageRestitutionTableau = $one->getAffichageRestitutionTableau();
+            $chapitre->parent                      = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
             //handle questions/reponses
             $chapitre = $this->buildQuestions( $one->getQuestions(), $chapitre, $questionsReponses, $questionsReponsesBack );
@@ -135,15 +137,6 @@ class ResultatManager extends BaseManager
     {
         $results = array();
 
-        $chapitresFormated = array();
-        foreach ($chapitres as $chapitre)
-        {
-            if($chapitre->affichageRestitution)
-            {
-                $chapitresFormated[] = $chapitre;
-            }
-        }
-
         //récupère les données pour les graphiques
         $outil = $resultat->getOutil();
 
@@ -151,22 +144,33 @@ class ResultatManager extends BaseManager
         $questionsReponses = $this->buildQuestionsReponses( $resultat->getReponses() );
         $questionsReponses = $questionsReponses['front'];
 
-        //get Datas for Each axes : Chapitres / Catégories
-        $datasAxeChapitre   = $this->buildDatasAxeChapitre( $chapitresFormated );
         $categoriesTemp = $outil->getCategories();
-        $categories     = array();
-        foreach ($categoriesTemp as $categorie) 
-        {
-            if($categorie->getAffichageRestitution())
-            {
-                $categories[] = $categorie;
-            }
-        }
-        $datasAxeCategories = $this->buildDatasAxeCategories( $categories , $questionsReponses );
 
         //cas first chart
         if ( $outil->isColumnChart() )
         {
+            $chapitresFormated = array();
+            foreach ($chapitres as $chapitre)
+            {
+                if($chapitre->affichageRestitutionBarre)
+                {
+                    $chapitresFormated[] = $chapitre;
+                }
+            }
+
+            //get Datas for Each axes : Chapitres / Catégories
+            $datasAxeChapitre   = $this->buildDatasAxeChapitre( $chapitresFormated );
+
+            $categories     = array();
+            foreach ($categoriesTemp as $categorie) 
+            {
+                if($categorie->getAffichageRestitutionBarre())
+                {
+                    $categories[] = $categorie;
+                }
+            }
+            $datasAxeCategories = $this->buildDatasAxeCategories( $categories , $questionsReponses );
+
             $chart         = new \StdClass;
             $chart->title  = $outil->getColumnChartLabel();
             $chart->panels = ($outil->getColumnChartAxe() == 1) ? $datasAxeChapitre : $datasAxeCategories;
@@ -177,6 +181,28 @@ class ResultatManager extends BaseManager
         //cas Spider Web
         if ( $outil->isRadarChart() )
         {
+            $chapitresFormated = array();
+            foreach ($chapitres as $chapitre)
+            {
+                if($chapitre->affichageRestitutionRadar)
+                {
+                    $chapitresFormated[] = $chapitre;
+                }
+            }
+
+            //get Datas for Each axes : Chapitres / Catégories
+            $datasAxeChapitre   = $this->buildDatasAxeChapitre( $chapitresFormated );
+            
+            $categories     = array();
+            foreach ($categoriesTemp as $categorie) 
+            {
+                if($categorie->getAffichageRestitutionRadar())
+                {
+                    $categories[] = $categorie;
+                }
+            }
+            $datasAxeCategories = $this->buildDatasAxeCategories( $categories , $questionsReponses );
+
             $chart        = new \StdClass;
             $chart->title = $outil->getRadarChartLabel();
             $chart->datas = ($outil->getRadarChartAxe() == 1) ? $datasAxeChapitre : $datasAxeCategories;
@@ -187,6 +213,24 @@ class ResultatManager extends BaseManager
         //cas Table
         if ( $outil->isTableChart() )
         {
+            $chapitresFormated = array();
+            foreach ($chapitres as $chapitre)
+            {
+                if($chapitre->affichageRestitutionTableau)
+                {
+                    $chapitresFormated[] = $chapitre;
+                }
+            }
+            
+            $categories     = array();
+            foreach ($categoriesTemp as $categorie) 
+            {
+                if($categorie->getAffichageRestitutionTableau())
+                {
+                    $categories[] = $categorie;
+                }
+            }
+
             $chart        = new \StdClass;
             $chart->title = 'Mes résultats détaillés';
             $chart->datas = $this->buildDatasTable( $categories , $chapitresFormated, $questionsReponses );
@@ -318,15 +362,13 @@ class ResultatManager extends BaseManager
             $results->categories[ $categorieId ]['chapitres'] = array();
 
             foreach($chapitresOrdered as $chapitre)
-                $results->categories[ $categorieId ]['chapitres'][$chapitre->id] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true, 'affichageRestitution' => false );
+                $results->categories[ $categorieId ]['chapitres'][$chapitre->id] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true, 'affichageRestitutionBarre' => false, 'affichageRestitutionRadar' => false, 'affichageRestitutionTableau' => false );
             
 
             //get questions by catégorie
             $questions = $categorie->getQuestions();
             foreach($questions as $question)
             {
-                if(!$question->getChapitre()->getAffichageRestitution())
-                    continue;
                 //check If Question != texte
                 if( $question->getType()->getId() != 417 ) {
                     //get parent chapitre ID
@@ -334,9 +376,9 @@ class ResultatManager extends BaseManager
 
                     //Add Chapitre if not exist
                     if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitre] )  )
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true, 'affichageRestitution' => false   );
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true, 'affichageRestitutionTableau' => false  );
                     if ( !isset($totalChapitres[ $chapitre ]) )
-                        $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true, 'affichageRestitution' => false );
+                        $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true, 'affichageRestitutionTableau' => false );
 
                     //check If Question is concernée
                     if( isset($questionsReponses[ $question->getId() ]) ){
@@ -347,20 +389,22 @@ class ResultatManager extends BaseManager
                             $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbRep']++;
 
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbQue']++;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints']             += ($one->tableValue * $one->ponderation);
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']                  += ($one->max * $one->ponderation);
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['pond']                 += $one->ponderation;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nc']                   = false;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints']                    += ($one->tableValue * $one->ponderation);
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']                         += ($one->max * $one->ponderation);
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['pond']                        += $one->ponderation;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nc']                          = false;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['affichageRestitutionTableau'] = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getAffichageRestitutionTableau() : $question->getChapitre()->getParent()->getAffichageRestitutionTableau();
 
                         //update Total
                         if( $one->tableValue != '' )
                             $totalChapitres[ $chapitre ]['nbRep']++;
                         
                         $totalChapitres[ $chapitre ]['nbQue']++;
-                        $totalChapitres[ $chapitre ]['nbPoints']             += ($one->tableValue * $one->ponderation);
-                        $totalChapitres[ $chapitre ]['max']                  += ($one->max * $one->ponderation);
-                        $totalChapitres[ $chapitre ]['pond']                 += $one->ponderation;
-                        $totalChapitres[ $chapitre ]['nc']                   = false;
+                        $totalChapitres[ $chapitre ]['nbPoints']                    += ($one->tableValue * $one->ponderation);
+                        $totalChapitres[ $chapitre ]['max']                         += ($one->max * $one->ponderation);
+                        $totalChapitres[ $chapitre ]['pond']                        += $one->ponderation;
+                        $totalChapitres[ $chapitre ]['nc']                          = false;
+                        $totalChapitres[ $chapitre ]['affichageRestitutionTableau'] = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getAffichageRestitutionTableau() : $question->getChapitre()->getParent()->getAffichageRestitutionTableau();
                     }
                 }
             }

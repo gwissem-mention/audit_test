@@ -22,7 +22,7 @@ class ChapitreType extends AbstractType
                 'max_length' => $this->_constraints['title']['maxlength'],
                 'required'   => true, 
                 'label'      => 'Titre',
-                'label_attr' => array('class' => 'col-md-1 control-label'),
+                'label_attr' => array('class' => 'col-md-2'),
                 'attr'       => array('class' => $this->_constraints['title']['class'] )
             ))
             ->add('code', 'text', array(
@@ -47,13 +47,13 @@ class ChapitreType extends AbstractType
             ->add('synthese', 'textarea', array(
                 'required'   => false, 
                 'label'      => 'Phrase de synthèse',
-                'label_attr' => array('class' => 'col-md-12'),
+                'label_attr' => array('class' => 'col-md-2'),
                 'attr'       => array('rows' => 2)
             ))
             ->add('intro', 'textarea', array(
                 'required'   => false, 
                 'label'      => 'Texte avant le nom du chapitre',
-                'label_attr' => array('class' => 'col-md-12'),
+                'label_attr' => array('class' => 'col-md-2'),
                 'attr'       => array('rows' => 2)
             ))
             ->add('lien', 'text', array(
@@ -64,21 +64,35 @@ class ChapitreType extends AbstractType
             ->add('descriptionLien', 'text', array(
                 'required'   => false, 
                 'label'      => 'Description lien',
-                'label_attr' => array('class' => 'col-md-2 control-label'),
+                'label_attr' => array('class' => 'col-md-4'),
             ))
             ->add('desc', 'textarea', array(
                 'required'   => false, 
                 'label'      => 'Texte après le nom du chapitre',
-                'label_attr' => array('class' => 'col-md-12'),
+                'label_attr' => array('class' => 'col-md-2'),
                 'attr'       => array('rows' => 2)
             ))
-            ->add('affichageRestitution', 'checkbox', array(
+            ->add('affichageRestitutionBarre', 'checkbox', array(
                 'required'   => false,
                 //Désactivé si le chapitre a un parent, et prend la valeur du parent
                 'disabled'   => !is_null($options['data']->getParent()),
-                'label'      => 'Afficher lors de la réstitution ?',
+                'label'      => 'Afficher dans le graphique barre ?',
                 'label_attr' => array('class' => 'col-md-9 control-label'),
             ))
+            ->add('affichageRestitutionRadar', 'checkbox', array(
+                'required'   => false,
+                //Désactivé si le chapitre a un parent, et prend la valeur du parent
+                'disabled'   => !is_null($options['data']->getParent()),
+                'label'      => 'Afficher dans le radar ?',
+                'label_attr' => array('class' => 'col-md-9 control-label'),
+            ))
+            // ->add('affichageRestitutionTableau', 'checkbox', array(
+            //     'required'   => false,
+            //     //Désactivé si le chapitre a un parent, et prend la valeur du parent
+            //     'disabled'   => !is_null($options['data']->getParent()),
+            //     'label'      => 'Afficher dans le tableau ?',
+            //     'label_attr' => array('class' => 'col-md-9 control-label'),
+            // ))
         ;
     }
 

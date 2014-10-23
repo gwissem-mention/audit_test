@@ -21,10 +21,18 @@ class CategorieType extends AbstractType
                 'required'   => false, 
                 'label'      => 'Note optimal'
             ))
-            ->add('affichageRestitution', 'checkbox', array(
+            ->add('affichageRestitutionBarre', 'checkbox', array(
                 'required'   => false, 
-                'label'      => 'Afficher lors de la réstitution ?'
+                'label'      => 'Afficher dans le graphique barre ?'
             ))
+            ->add('affichageRestitutionRadar', 'checkbox', array(
+                'required'   => false, 
+                'label'      => 'Afficher dans le radar ?'
+            ))
+            // ->add('affichageRestitutionTableau', 'checkbox', array(
+            //     'required'   => false, 
+            //     'label'      => 'Afficher dans le tableau ?'
+            // ))
         ;
     }
 

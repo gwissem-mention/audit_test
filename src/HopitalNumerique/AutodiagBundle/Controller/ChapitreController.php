@@ -167,7 +167,9 @@ class ChapitreController extends Controller
             $chapitreChildren = $this->get('hopitalnumerique_autodiag.manager.chapitre')->findBy(array('parent' => $chapitre->getId()));
             foreach ($chapitreChildren as $chapitreChild) 
             {
-                $chapitreChild->setAffichageRestitution($chapitre->getAffichageRestitution());
+                $chapitreChild->setAffichageRestitutionBarre($chapitre->getAffichageRestitutionBarre());
+                $chapitreChild->setAffichageRestitutionRadar($chapitre->getAffichageRestitutionRadar());
+                $chapitreChild->setAffichageRestitutionTableau($chapitre->getAffichageRestitutionTableau());
             }
 
             //save
