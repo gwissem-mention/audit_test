@@ -452,23 +452,20 @@
                                     {% if affichageSynthese %}
                                         <td>
                                             {# Affichage de la synthese #}
-                                            {% set publications = question.id|getPublicationsForQuestion(pdf) %}
-                                            {% if publications %}
-                                                {% if question.synthese %}
-                                                    {{question.synthese|nl2br}}</td>
-                                                {% endif %}
+                                            {% if question.synthese %}
+                                                {{question.synthese|nl2br}}</td>
                                             {% endif %}
                                         </td>
                                     {% endif %}
                                     {% if affichageProduction %}
                                         <td class="forAffichage">
+                                            {% if question.lien is not null and question.lien is not empty %}
+                                                {# Affichage du lien défini en back office #}
+                                                <ul><li><a href="{{question.lien}}" target="_blank">{{question.descriptionLien}}</a></li></ul>
+                                            {% endif %}
                                             {# Affichage des liens de publications #}
                                             {% set publications = question.id|getPublicationsForQuestion(pdf) %}
                                             {% if publications %}
-                                                {% if question.lien is not null and question.lien is not empty %}
-                                                    {# Affichage du lien défini en back office #}
-                                                    <ul><li><a href="{{question.lien}}" target="_blank">{{question.descriptionLien}}</a></li></ul>
-                                                {% endif %}
                                                 {{publications|raw}}
                                                 {% set doTheChapterHavePublications = true %}
                                             {% endif %}
@@ -538,23 +535,20 @@
                                             </td>
                                             {% if affichageSynthese %}
                                                 <td>
-                                                    {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}
-                                                    {% if publications %}
-                                                        {% if questionChild.synthese %}
-                                                            {{questionChild.synthese|nl2br}}
-                                                        {% endif %}
+                                                    {% if questionChild.synthese %}
+                                                        {{questionChild.synthese|nl2br}}
                                                     {% endif %}
                                                 </td>
                                             {% endif %}
                                             {% if affichageProduction %}
                                                 <td class="forAffichage">
+                                                    {% if questionChild.lien is not null and questionChild.lien is not empty %}
+                                                        {# Affichage du lien défini en back office #}
+                                                        <ul><li><a href="{{questionChild.lien}}" target="_blank">{{questionChild.descriptionLien}}</a></li></ul>
+                                                    {% endif %}
                                                     {# Affichage des liens de publications #}
                                                     {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}
                                                     {% if publications %}
-                                                        {% if questionChild.lien is not null and questionChild.lien is not empty %}
-                                                            {# Affichage du lien défini en back office #}
-                                                            <ul><li><a href="{{questionChild.lien}}" target="_blank">{{questionChild.descriptionLien}}</a></li></ul>
-                                                        {% endif %}
                                                         {{publications|raw}}
                                                         {% set doTheChapterHavePublications = true %}
                                                     {% endif %}
