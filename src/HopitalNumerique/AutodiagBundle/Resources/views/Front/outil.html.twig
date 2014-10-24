@@ -28,6 +28,7 @@
 
 {% block body %}
     <div id="autodiag">
+        <input type="hidden" name="outil" id="outil-reponses-obligatoire" value="{{outil.centPourcentReponseObligatoire}}" />
         <div class="col-md-3 col-sm-12 blockLeft">
             <p class="titre">Les chapitres</p>
             <div id="chapitres"></div>
@@ -84,7 +85,7 @@
                             <div onclick="chapterNonConcerne(this);" class="chapitreNonConcerne btn btn-default btn-sm pull-right" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></div>
                             <h2 class="prev">{{parent.intro}}</h2>
                             <h2>{% if parent.code != '' %}{{parent.code ~ '. '}}{% endif %}{{parent.title}}</h2>
-                            <p class="text-muted level1">{{parent.desc}}</p>
+                            <p class="level1">{{parent.desc|raw}}</p>
 
                             <hr>
 
@@ -104,7 +105,7 @@
                                     {% for child in chapitre['childs'] %}
                                         <h3 class="prev">{{child.intro}}</h3>
                                         <h3>{% if child.code != '' %}{{child.code ~ '. '}}{% endif %}{{child.title}} - <span onclick="chapterNonConcerne(this, true);" class="chapitreNonConcerne" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></span></h3>
-                                        <p class="text-muted level2">{{child.desc}}</p>
+                                        <p class="text-muted level2">{{child.desc|raw}}</p>
 
                                         <hr>
                                         

@@ -70,7 +70,7 @@ class ChapitreType extends AbstractType
                 'required'   => false, 
                 'label'      => 'Texte après le nom du chapitre',
                 'label_attr' => array('class' => 'col-md-2'),
-                'attr'       => array('rows' => 2)
+                'attr'       => array('rows' => 2, 'class' => 'tinyMce')
             ))
             ->add('affichageRestitutionBarre', 'checkbox', array(
                 'required'   => false,

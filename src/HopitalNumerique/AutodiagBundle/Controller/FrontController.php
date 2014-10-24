@@ -245,6 +245,11 @@ class FrontController extends Controller
         if( !$user || $back === 0 )
             $back = false;
 
+        if($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() !== 100)
+        {
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
+        }
+
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
             'resultat'          => $resultat,
             'chapitres'         => $chapitres,

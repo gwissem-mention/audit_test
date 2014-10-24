@@ -150,9 +150,11 @@ function deleteChapitre( id, url )
 //sauvegarde le chapitre
 function saveChapitre( url )
 {
+    tinymce.triggerSave();
+
     $.ajax({
         url      : url,
-        data     : $('#fancybox form').serialize(),
+        data     :  $('#fancybox form').serialize(),
         type     : 'POST',
         dataType : 'json',
         success  : function( data ){
