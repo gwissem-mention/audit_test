@@ -325,6 +325,10 @@
                     {#  Publications #}
                     {% if not affichageProduction %}
                         {% set affichageProduction = chapitre.id|getPublicationsForChapitre(pdf) %}
+                        {% if chapitre.lien is not null and chapitre.lien is not empty %}
+                            {% set affichageProduction = true %}
+                        {% endif %}
+                        {% set affichageProduction = false %}
                     {% endif %}
 
                     {# Questions du chapitre #}
@@ -336,6 +340,9 @@
                         {# Publications #}
                         {% if not affichageProduction %}
                             {% set affichageProduction = question.id|getPublicationsForQuestion(pdf) %}
+                            {% if question.lien is not null and question.lien is not empty %}
+                                {% set affichageProduction = true %}
+                            {% endif %}
                         {% endif %}
 
                     {% endfor %}
@@ -351,6 +358,9 @@
                             {#  Publications #}
                             {% if not affichageProduction %}
                                 {% set affichageProduction = child.id|getPublicationsForChapitre(pdf) %}
+                                {% if child.lien is not null and child.lien is not empty %}
+                                    {% set affichageProduction = true %}
+                                {% endif %}
                             {% endif %}
 
                             {# Questions du chapitre #}
@@ -362,6 +372,9 @@
                                 {# Publications #}
                                 {% if not affichageProduction %}
                                     {% set affichageProduction = questionChild.id|getPublicationsForQuestion(pdf) %}
+                                    {% if questionChild.lien is not null and questionChild.lien is not empty %}
+                                        {% set affichageProduction = true %}
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                         {% endfor %}
