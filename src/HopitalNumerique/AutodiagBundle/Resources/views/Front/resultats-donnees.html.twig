@@ -619,7 +619,7 @@
                             <div class="chapitre-{{chapitre.id}}">
                                 <h3 class="prev">{{chapitre.intro}}</h3>
                                 <h3 class="violet">{{chapitre.title}}</h3>
-                                <p class="text-muted level1">{{chapitre.desc}}</p>
+                                <p class="text-muted level1">{{chapitre.desc|raw}}</p>
                                 
                                 <hr>
         
@@ -633,7 +633,7 @@
                                             {% if child.nbQuestionsRemplies > 0 %}
                                                 <h4 class="prev">{{child.intro}}</h4>
                                                 <h4 class="violet">{{child.title}}</h4>
-                                                <p class="text-muted level1">{{child.desc}}</p>
+                                                <p class="text-muted level1">{{child.desc|raw}}</p>
                                                 
                                                 {{ mySelf.buildQuestionReponse(child.questionsBack) }}
                                             {% endif %}
