@@ -279,6 +279,16 @@ class FrontController extends Controller
     }
 
     /**
+     * Fancy des instructions concernant un outil sur la page du questionnaire
+     */
+    public function instructionsAction( Outil $outil)
+    {       
+        return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:Fancybox\fancybox.html.twig' , array(
+            'outil' => $outil
+        ));
+    }
+
+    /**
      * Retourne le PDF du résultat
      *
      * @param  Resultat $resultat L'entitée résultat

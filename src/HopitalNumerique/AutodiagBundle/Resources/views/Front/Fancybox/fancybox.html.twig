@@ -1,0 +1,15 @@
+<div class="panel" style="margin:0" >
+    <div class="panel-heading">
+        <h4 class="violet" style="margin-bottom:0" >Insctructions de l'outil {{outil.title}}</h4>
+    </div>
+
+    <div class="panel-body" style="padding-top:10px" >
+        <div class="col-md-12 fancybox-popin">
+            {% if outil.instruction %} 
+                {{outil.instruction|raw}}
+            {% else %}
+                - Aucune instruction n'est fournie pour cet autodiagnostic -
+            {% endif %}
+        </div>
+    </div>
+</div>

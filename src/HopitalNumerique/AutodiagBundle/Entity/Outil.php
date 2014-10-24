@@ -197,6 +197,13 @@ class Outil
     private $masquerReponse;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="out_instructions", type="text", nullable=true, options = {"comment" = "Instructions fournies pour cet outil"})
+     */
+    private $instruction;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -383,6 +390,29 @@ class Outil
     public function isProcessChart()
     {
         return $this->processChart;
+    }
+    
+    /**
+     * Set instruction
+     *
+     * @param string $instruction
+     * @return Outil
+     */
+    public function setInstruction($instruction)
+    {
+        $this->instruction = $instruction;
+    
+        return $this;
+    }
+    
+    /**
+     * Get instruction
+     *
+     * @return string
+     */
+    public function getInstruction()
+    {
+        return $this->instruction;
     }
     
     /**
