@@ -222,6 +222,12 @@ hopitalnumerique_autodiag_front_outil:
     requirements:
         outil: \d+
 
+hopitalnumerique_autodiag_front_outil_sans_gabarit:
+    pattern:  /autodiagnostic-no-gabarit/outil/{outil}-{alias}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:outil", alias: " ", sansGabarit: true }
+    requirements:
+        outil: \d+
+
 hopitalnumerique_autodiag_front_save:
     pattern:  /autodiagnostic/{id}/save
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:save" }
@@ -231,6 +237,12 @@ hopitalnumerique_autodiag_front_save:
 hopitalnumerique_autodiag_front_resultat:
     pattern:  /autodiagnostic/resultat/{id}/{back}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:resultat", back: 0 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_front_resultat_sans_gabarit:
+    pattern:  /autodiagnostic-no-gabarit/resultat/{id}/{back}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:resultat", back: 0, sansGabarit: true }
     requirements:
         id: \d+
 

@@ -10,7 +10,11 @@
         {% if back is defined and back %}
             <a href="{{path('hopitalnumerique_autodiag_front_comptehn')}}" class="print btn btn-success pull-left" title="Retour à mon compte"><i class="fa fa-reply"></i></a>
         {% else %}
-            <a href="{{path('hopitalnumerique_autodiag_front_outil', { 'alias':resultat.outil.alias, 'outil':resultat.outil.id })}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
+            {% if sansGabarit %}
+                <a href="{{path('hopitalnumerique_autodiag_front_outil_sans_gabarit', { 'alias':resultat.outil.alias, 'outil':resultat.outil.id, 'sansGabarit':sansGabarit })}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
+            {% else %}
+                <a href="{{path('hopitalnumerique_autodiag_front_outil', { 'alias':resultat.outil.alias, 'outil':resultat.outil.id })}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
+            {% endif %}
         {% endif %}
 
         {% if pdf %}

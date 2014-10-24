@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+{% extends sansGabarit ? "HopitalNumeriqueCoreBundle::layout_sans_gabarit.html.twig" : "HopitalNumeriqueCoreBundle::layout.html.twig" %}
 
 {# Référencement #}
 {% block title %}{{parent()}} - Autodiagnostic{% endblock %}
@@ -127,6 +127,7 @@
                     <input type="hidden" name="action" id="action" value="" />
                     <input type="hidden" name="remplissage" id="remplissage" value="0" />
                     <input type="hidden" name="name-resultat" id="name-resultat" value="" />
+                    <input type="hidden" name="sansGabarit" id="sansGabarit" value="{{sansGabarit}}" />
                 </form>
 
                 <div class="saveBtns">

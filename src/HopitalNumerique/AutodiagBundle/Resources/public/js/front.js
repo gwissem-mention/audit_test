@@ -137,7 +137,8 @@ function saveQuestionnaire( type, userConnected )
 {
     $('#action').val( type );
 
-    if( type == 'valid' && userConnected ){
+    if( type == 'valid' && userConnected )
+    {
         if( ($("#outil-reponses-obligatoire").val() == true) && (100 != $('#autodiag .progress-bar').attr('aria-valuenow')) )
         {
             apprise('Vous ne pouvez pas valider votre autodiagnostic tant que toutes les questions ne sont pas remplies.');

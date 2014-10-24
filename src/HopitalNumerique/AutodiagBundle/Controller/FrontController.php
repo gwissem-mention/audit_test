@@ -31,7 +31,7 @@ class FrontController extends Controller
      *
      * @param Outil $outil L'entitée Outil
      */
-    public function outilAction( Outil $outil )
+    public function outilAction( Outil $outil, $sansGabarit = false )
     {
         //init some vars
         $chapitres      = $outil->getChapitres();
@@ -99,10 +99,11 @@ class FrontController extends Controller
         }
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
-            'outil'     => $outil,
-            'chapitres' => $chapitresOrdered,
-            'reponses'  => $reponses,
-            'remarque'  => $remarque
+            'outil'       => $outil,
+            'chapitres'   => $chapitresOrdered,
+            'reponses'    => $reponses,
+            'remarque'    => $remarque,
+            'sansGabarit' => $sansGabarit
         ));
     }
 
@@ -121,6 +122,7 @@ class FrontController extends Controller
         $remplissage  = $request->request->get('remplissage');
         $nameResultat = $request->request->get('name-resultat');
         $remarque     = $request->request->get('remarque');
+        $sansGabarit  = $request->request->get('sansGabarit');
 
         //try to get the connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -209,7 +211,10 @@ class FrontController extends Controller
         // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
         $this->get('session')->getFlashBag()->add( 'success', 'Autodiagnostic ' . ($action == 'valid' ? 'validé.':'enregistré.') );
 
-        return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array( 'id' => $resultat->getId() ) ) );
+        if($sansGabarit)
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat_sans_gabarit', array( 'id' => $resultat->getId(), 'sansGabarit' => true ) ) );
+        else
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array( 'id' => $resultat->getId() ) ) );
     }
 
     /**
@@ -217,7 +222,7 @@ class FrontController extends Controller
      *
      * @param  Resultat $resultat L'entitée résultat
      */
-    public function resultatAction( Resultat $resultat, $back, Request $request )
+    public function resultatAction( Resultat $resultat, $back, Request $request, $sansGabarit = false  )
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $user = $user != 'anon.' ? $user : false;
@@ -251,11 +256,12 @@ class FrontController extends Controller
         }
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
-            'resultat'          => $resultat,
-            'chapitres'         => $chapitres,
-            'graphiques'        => $graphiques,
-            'back'              => $back,
-            'processusDonnees'  => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
+            'resultat'         => $resultat,
+            'chapitres'        => $chapitres,
+            'graphiques'       => $graphiques,
+            'back'             => $back,
+            'sansGabarit'      => $sansGabarit,
+            'processusDonnees' => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
     }
 
