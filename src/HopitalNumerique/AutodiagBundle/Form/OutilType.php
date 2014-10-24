@@ -105,6 +105,14 @@ class OutilType extends AbstractType
                 'label'    => 'Activer l\'affichage des résultats uniquement si toutes les questions sont renseignées',
                 'required' => false
             ))
+            ->add('masquerAnalyse', 'checkbox', array(
+                'label'    => 'Masquer l\'onglet analyse en front',
+                'required' => false
+            ))
+            ->add('masquerReponse', 'checkbox', array(
+                'label'    => 'Masquer l\'onglet réponses en front',
+                'required' => false
+            ))
             ->add('statut', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'      => 'libelle',

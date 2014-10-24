@@ -183,6 +183,20 @@ class Outil
     private $centPourcentReponseObligatoire;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="out_masquer_analyse", type="boolean", options = {"comment" = "Masquer l onglet Analyse"})
+     */
+    private $masquerAnalyse;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="out_masquer_reponse", type="boolean", options = {"comment" = "Masquer l onglet Reponses"})
+     */
+    private $masquerReponse;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -192,6 +206,8 @@ class Outil
         $this->radarChart                     = false;
         $this->tableChart                     = false;
         $this->centPourcentReponseObligatoire = false;
+        $this->masquerAnalyse                 = false;
+        $this->masquerReponse                 = false;
         $this->chapitres                      = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories                     = new \Doctrine\Common\Collections\ArrayCollection();
         $this->process                        = new \Doctrine\Common\Collections\ArrayCollection();
@@ -505,6 +521,52 @@ class Outil
     public function isTableChart()
     {
         return $this->tableChart;
+    }
+
+    /**
+     * Set masquerAnalyse
+     *
+     * @param boolean $masquerAnalyse
+     * @return Outil
+     */
+    public function setMasquerAnalyse($masquerAnalyse)
+    {
+        $this->masquerAnalyse = $masquerAnalyse;
+
+        return $this;
+    }
+
+    /**
+     * Get masquerAnalyse
+     *
+     * @return boolean 
+     */
+    public function isMasquerAnalyse()
+    {
+        return $this->masquerAnalyse;
+    }
+
+    /**
+     * Set masquerReponse
+     *
+     * @param boolean $masquerReponse
+     * @return Outil
+     */
+    public function setMasquerReponse($masquerReponse)
+    {
+        $this->masquerReponse = $masquerReponse;
+
+        return $this;
+    }
+
+    /**
+     * Get masquerReponse
+     *
+     * @return boolean 
+     */
+    public function isMasquerReponse()
+    {
+        return $this->masquerReponse;
     }
 
     /**

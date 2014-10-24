@@ -297,194 +297,161 @@
         
         <div class="page-break"></div>
 
-        <h2 class="violet closed" data-toggle="chapitres" >Résultats de l'outil - Analyse</h2>
+        {% if not resultat.outil.masquerAnalyse %}
+            <h2 class="violet closed" data-toggle="chapitres" >Résultats de l'outil - Analyse</h2>
 
-        <div id="chapitres" style="display:none">
-            <p class="text-justify">
-                <span>Compte tenu de vos réponses, l'Anap vous propose l'analyse suivante :</span>
-            </p>
+            <div id="chapitres" style="display:none">
+                <p class="text-justify">
+                    <span>Compte tenu de vos réponses, l'Anap vous propose l'analyse suivante :</span>
+                </p>
 
-            <a class="btn btn-link btn-sm" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_CSV',{'id':resultat.id})}}">Télécharger l'export CSV de votre analyse.<i class="fa fa-cloud"></i></a>
+                <a class="btn btn-link btn-sm" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_CSV',{'id':resultat.id})}}">Télécharger l'export CSV de votre analyse.<i class="fa fa-cloud"></i></a>
 
-            {# Cherche si on doit afficher les colonnes Synthèse et Production #}
-            {% set affichageSynthese = false %}
-            {% set affichageProduction = false %}
+                {# Cherche si on doit afficher les colonnes Synthèse et Production #}
+                {% set affichageSynthese = false %}
+                {% set affichageProduction = false %}
 
-            {# Chapitres #}
-            {% for chapitre in chapitres %}
-                
-                {#  Synthese #}
-                {% if chapitre.synthese and not affichageSynthese %}
-                    {% set affichageSynthese = true %}
-                {% endif %}
-                {#  Publications #}
-                {% if not affichageProduction %}
-                    {% set affichageProduction = chapitre.id|getPublicationsForChapitre(pdf) %}
-                {% endif %}
-
-                {# Questions du chapitre #}
-                {% for question in chapitre.questions %}
+                {# Chapitres #}
+                {% for chapitre in chapitres %}
                     
-                    {% if question.synthese %}
+                    {#  Synthese #}
+                    {% if chapitre.synthese and not affichageSynthese %}
                         {% set affichageSynthese = true %}
                     {% endif %}
-                    {# Publications #}
+                    {#  Publications #}
                     {% if not affichageProduction %}
-                        {% set affichageProduction = question.id|getPublicationsForQuestion(pdf) %}
+                        {% set affichageProduction = chapitre.id|getPublicationsForChapitre(pdf) %}
+                    {% endif %}
+
+                    {# Questions du chapitre #}
+                    {% for question in chapitre.questions %}
+                        
+                        {% if question.synthese %}
+                            {% set affichageSynthese = true %}
+                        {% endif %}
+                        {# Publications #}
+                        {% if not affichageProduction %}
+                            {% set affichageProduction = question.id|getPublicationsForQuestion(pdf) %}
+                        {% endif %}
+
+                    {% endfor %}
+
+                    {# Sous Chapitres #}
+                    {% if chapitre.childs|length > 0 %}
+                        {% for child in chapitre.childs %}
+                                
+                            {#  Synthese #}
+                            {% if child.synthese and not affichageSynthese %}
+                                {% set affichageSynthese = true %}
+                            {% endif %}
+                            {#  Publications #}
+                            {% if not affichageProduction %}
+                                {% set affichageProduction = child.id|getPublicationsForChapitre(pdf) %}
+                            {% endif %}
+
+                            {# Questions du chapitre #}
+                            {% for questionChild in child.questions %}
+                                
+                                {% if questionChild.synthese %}
+                                    {% set affichageSynthese = true %}
+                                {% endif %}
+                                {# Publications #}
+                                {% if not affichageProduction %}
+                                    {% set affichageProduction = questionChild.id|getPublicationsForQuestion(pdf) %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
                     {% endif %}
 
                 {% endfor %}
 
-                {# Sous Chapitres #}
-                {% if chapitre.childs|length > 0 %}
-                    {% for child in chapitre.childs %}
-                            
-                        {#  Synthese #}
-                        {% if child.synthese and not affichageSynthese %}
-                            {% set affichageSynthese = true %}
-                        {% endif %}
-                        {#  Publications #}
-                        {% if not affichageProduction %}
-                            {% set affichageProduction = child.id|getPublicationsForChapitre(pdf) %}
-                        {% endif %}
-
-                        {# Questions du chapitre #}
-                        {% for questionChild in child.questions %}
-                            
-                            {% if questionChild.synthese %}
-                                {% set affichageSynthese = true %}
-                            {% endif %}
-                            {# Publications #}
-                            {% if not affichageProduction %}
-                                {% set affichageProduction = questionChild.id|getPublicationsForQuestion(pdf) %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                {% endif %}
-
-            {% endfor %}
-
-            {# Affichage des publications sous forme de tableau : GME 24/09/14 #}
-            <table class="table table-striped" id="table-analyse">
-                <!-- En-tête du tableau -->
-                <thead>
-                    <tr>
-                        <th>Chap.</th>
-                        <th>S.Chap.</th>
-                        <th>Question</th>
-                        <th>Réponse</th>
-                        {% if affichageSynthese %}
-                           <th>Synthèse</th>
-                        {% endif %}
-                        {% if affichageProduction %}
-                            <th class="forAffichage">Production</th>
-                        {% endif %}
-                    </tr>
-                </thead>
-                
-                <!-- Corps du tableau -->
-                <tbody>
-                    {# Chapitres #}
-                    {% set chaptersToHide = [] %}
-                    {% for chapitre in chapitres %}
-                        {% set doTheChapterHavePublications = false %}
+                {# Affichage des publications sous forme de tableau : GME 24/09/14 #}
+                <table class="table table-striped" id="table-analyse">
+                    <!-- En-tête du tableau -->
+                    <thead>
                         <tr>
-                            <td>{{chapitre.code}}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <th>Chap.</th>
+                            <th>S.Chap.</th>
+                            <th>Question</th>
+                            <th>Réponse</th>
                             {% if affichageSynthese %}
-                                <td>
-                                    {% if chapitre.noteMin and chapitre.noteChapitre <= chapitre.noteMin %}
-                                        {% if chapitre.synthese %}
-                                            {{chapitre.synthese|nl2br}}
-                                        {% endif %}
-                                    {% endif %}
-                                </td>
+                               <th>Synthèse</th>
                             {% endif %}
                             {% if affichageProduction %}
-                                <td class="forAffichage">
-                                    {% if chapitre.noteMin and chapitre.noteChapitre <= chapitre.noteMin %}
-                                        {# Affichage des liens de publications #}
-                                        {% if chapitre.lien is not null and chapitre.lien is not empty %}
-                                            {# Affichage du lien défini en back office #}
-                                            <ul><li><a href="{{chapitre.lien}}" target="_blank">{{chapitre.descriptionLien}}</a></li></ul>
-                                        {% endif %}
-                                        {% set publications = chapitre.id|getPublicationsForChapitre(pdf) %}
-                                        {% if publications %}
-                                            {{publications|raw}}
-                                        {% endif %}
-                                    {% endif %}
-                                </td>
+                                <th class="forAffichage">Production</th>
                             {% endif %}
                         </tr>
-                        
-                        {# Questions du chapitre #}
-                        {% for question in chapitre.questions %}
+                    </thead>
+                    
+                    <!-- Corps du tableau -->
+                    <tbody>
+                        {# Chapitres #}
+                        {% set chaptersToHide = [] %}
+                        {% for chapitre in chapitres %}
+                            {% set doTheChapterHavePublications = false %}
                             <tr>
+                                <td>{{chapitre.code}}</td>
                                 <td></td>
                                 <td></td>
-                                <td>{{question.question}}</td>
-                                <td {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
-                                        {% if question.min == question.initialValue %}
-                                            style="color:#c82f5b"
-                                        {% elseif question.max == question.initialValue %}
-                                            style="color:#e88824"
-                                        {% else %}
-                                            style="color:#e88824"
-                                        {% endif %}{% endif %}>
-                                    {% if question.initialValue == -1 %}
-                                        Non concerné
-                                    {% else %}
-                                        {% for option in question.options %}
-                                            {% set tab = option|split(';') %}
-                                            {% if tab[0] == question.initialValue %}
-                                                {{tab[1]|trim}}
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                </td>
+                                <td></td>
                                 {% if affichageSynthese %}
                                     <td>
-                                        {# Affichage de la synthese #}
-                                        {% set publications = question.id|getPublicationsForQuestion(pdf) %}
-                                        {% if publications %}
-                                            {% if question.synthese %}
-                                                {{question.synthese|nl2br}}</td>
+                                        {% if chapitre.noteMin and chapitre.noteChapitre <= chapitre.noteMin %}
+                                            {% if chapitre.synthese %}
+                                                {{chapitre.synthese|nl2br}}
                                             {% endif %}
                                         {% endif %}
                                     </td>
                                 {% endif %}
                                 {% if affichageProduction %}
                                     <td class="forAffichage">
-                                        {# Affichage des liens de publications #}
-                                        {% set publications = question.id|getPublicationsForQuestion(pdf) %}
-                                        {% if publications %}
-                                            {% if question.lien is not null and question.lien is not empty %}
+                                        {% if chapitre.noteMin and chapitre.noteChapitre <= chapitre.noteMin %}
+                                            {# Affichage des liens de publications #}
+                                            {% if chapitre.lien is not null and chapitre.lien is not empty %}
                                                 {# Affichage du lien défini en back office #}
-                                                <ul><li><a href="{{question.lien}}" target="_blank">{{question.descriptionLien}}</a></li></ul>
+                                                <ul><li><a href="{{chapitre.lien}}" target="_blank">{{chapitre.descriptionLien}}</a></li></ul>
                                             {% endif %}
-                                            {{publications|raw}}
-                                            {% set doTheChapterHavePublications = true %}
+                                            {% set publications = chapitre.id|getPublicationsForChapitre(pdf) %}
+                                            {% if publications %}
+                                                {{publications|raw}}
+                                            {% endif %}
                                         {% endif %}
                                     </td>
                                 {% endif %}
                             </tr>
-                        {% endfor %}
-
-                        {# Sous Chapitres #}
-                        {% if chapitre.childs|length > 0 %}
-                            {% for child in chapitre.childs %}
+                            
+                            {# Questions du chapitre #}
+                            {% for question in chapitre.questions %}
                                 <tr>
                                     <td></td>
-                                    <td>{{child.code}}</td>
                                     <td></td>
-                                    <td></td>
+                                    <td>{{question.question}}</td>
+                                    <td {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
+                                            {% if question.min == question.initialValue %}
+                                                style="color:#c82f5b"
+                                            {% elseif question.max == question.initialValue %}
+                                                style="color:#e88824"
+                                            {% else %}
+                                                style="color:#e88824"
+                                            {% endif %}{% endif %}>
+                                        {% if question.initialValue == -1 %}
+                                            Non concerné
+                                        {% else %}
+                                            {% for option in question.options %}
+                                                {% set tab = option|split(';') %}
+                                                {% if tab[0] == question.initialValue %}
+                                                    {{tab[1]|trim}}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </td>
                                     {% if affichageSynthese %}
                                         <td>
-                                            {% if child.noteMin and child.noteChapitre <= child.noteMin %}
-                                                {% if child.synthese %}
-                                                    {{child.synthese|nl2br}}
+                                            {# Affichage de la synthese #}
+                                            {% set publications = question.id|getPublicationsForQuestion(pdf) %}
+                                            {% if publications %}
+                                                {% if question.synthese %}
+                                                    {{question.synthese|nl2br}}</td>
                                                 {% endif %}
                                             {% endif %}
                                         </td>
@@ -492,51 +459,33 @@
                                     {% if affichageProduction %}
                                         <td class="forAffichage">
                                             {# Affichage des liens de publications #}
-                                            {% if child.noteMin and child.noteChapitre <= child.noteMin %}
-                                                {% if child.lien is not null and child.lien is not empty %}
+                                            {% set publications = question.id|getPublicationsForQuestion(pdf) %}
+                                            {% if publications %}
+                                                {% if question.lien is not null and question.lien is not empty %}
                                                     {# Affichage du lien défini en back office #}
-                                                    <ul><li><a href="{{child.lien}}" target="_blank">{{child.descriptionLien}}</a></li></ul>
+                                                    <ul><li><a href="{{question.lien}}" target="_blank">{{question.descriptionLien}}</a></li></ul>
                                                 {% endif %}
-                                                {% set publications = child.id|getPublicationsForChapitre(pdf) %}
-                                                {% if publications %}
-                                                    {{publications|raw}}
-                                                {% endif %}
+                                                {{publications|raw}}
+                                                {% set doTheChapterHavePublications = true %}
                                             {% endif %}
                                         </td>
                                     {% endif %}
                                 </tr>
+                            {% endfor %}
 
-                                {# Question du sous chapitre #}
-                                {% for questionChild in child.questions %}
+                            {# Sous Chapitres #}
+                            {% if chapitre.childs|length > 0 %}
+                                {% for child in chapitre.childs %}
                                     <tr>
                                         <td></td>
+                                        <td>{{child.code}}</td>
                                         <td></td>
-                                        <td>{{questionChild.question}}</td>
-                                        <td {% if questionChild.colored and questionChild.initialValue != -1 and questionChild.initialValue != '' %}
-                                                {% if questionChild.min == questionChild.initialValue %}
-                                                    style="color:#c82f5b"
-                                                {% elseif questionChild.max == questionChild.initialValue %}
-                                                    style="color:#e88824"
-                                                {% else %}
-                                                    style="color:#e88824"
-                                                {% endif %}{% endif %}>
-                                            {% if questionChild.initialValue == -1 %}
-                                                Non concerné
-                                            {% else %}
-                                                {% for option in questionChild.options %}
-                                                    {% set tab = option|split(';') %}
-                                                    {% if tab[0] == questionChild.initialValue %}
-                                                        {{tab[1]|trim}}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% endif %}
-                                        </td>
+                                        <td></td>
                                         {% if affichageSynthese %}
                                             <td>
-                                                {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}
-                                                {% if publications %}
-                                                    {% if questionChild.synthese %}
-                                                        {{questionChild.synthese|nl2br}}
+                                                {% if child.noteMin and child.noteChapitre <= child.noteMin %}
+                                                    {% if child.synthese %}
+                                                        {{child.synthese|nl2br}}
                                                     {% endif %}
                                                 {% endif %}
                                             </td>
@@ -544,106 +493,161 @@
                                         {% if affichageProduction %}
                                             <td class="forAffichage">
                                                 {# Affichage des liens de publications #}
-                                                {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}
-                                                {% if publications %}
-                                                    {% if questionChild.lien is not null and questionChild.lien is not empty %}
+                                                {% if child.noteMin and child.noteChapitre <= child.noteMin %}
+                                                    {% if child.lien is not null and child.lien is not empty %}
                                                         {# Affichage du lien défini en back office #}
-                                                        <ul><li><a href="{{questionChild.lien}}" target="_blank">{{questionChild.descriptionLien}}</a></li></ul>
+                                                        <ul><li><a href="{{child.lien}}" target="_blank">{{child.descriptionLien}}</a></li></ul>
                                                     {% endif %}
-                                                    {{publications|raw}}
-                                                    {% set doTheChapterHavePublications = true %}
+                                                    {% set publications = child.id|getPublicationsForChapitre(pdf) %}
+                                                    {% if publications %}
+                                                        {{publications|raw}}
+                                                    {% endif %}
                                                 {% endif %}
                                             </td>
                                         {% endif %}
                                     </tr>
-                                {% else %}
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        {% if affichageSynthese and affichageProduction %}
-                                            <td colspan="4">Aucune recommandation spécifique.</td>
-                                        {% elseif affichageSynthese or affichageProduction %}
-                                            <td colspan="3">Aucune recommandation spécifique.</td>
-                                        {% else %}
-                                            <td colspan="2">Aucune recommandation spécifique.</td>
-                                        {% endif %}
-                                    </tr>
-                                
-                                {% endfor %}
 
-                            {% endfor %}
-                        {% elseif chapitre.questions|length == 0 %}
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                {% if affichageSynthese and affichageProduction %}
-                                    <td colspan="4">Aucune recommandation spécifique.</td>
-                                {% elseif affichageSynthese or affichageProduction %}
-                                    <td colspan="3">Aucune recommandation spécifique.</td>
-                                {% else %}
-                                    <td colspan="2">Aucune recommandation spécifique.</td>
-                                {% endif %}
-                            </tr>
-                        {% endif %}
-
-                        {% if not doTheChapterHavePublications %}
-                            {% set chaptersToHide = chaptersToHide|merge([chapitre.id]) %}
-                        {% endif %}
-
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            <p class="text-center {% if chapitres|length > 0 %}hide{% endif %}" >
-                - Aucune recommandation de l'ANAP nécessaire -
-                <input type="hidden" id="chaptersToHide" value="{{chaptersToHide|json_encode}}" />
-            </p>
-        </div>
-        
-        {% if pdf or true %}
-            <div class="page-break"></div>
-
-            <h2 class="violet closed" data-toggle="reponses" >Résultats de l'outil - Vos réponses</h2>
-
-            <div id="reponses" {% if not pdf %} style="display:none" {% endif %} >
-            
-                <p>Vos réponses apparaissent en gras parmi les réponses possibles à chaque question.</p>
-            
-                {% if resultat.remarque is defined %}
-                    <p class="text-muted"><em>{{ resultat.remarque|raw|nl2br }}</em></p>
-                {% endif %}
-            
-                {% for chapitre in chapitres %}
-                    {% if chapitre.nbQuestionsRemplies > 0 %}
-                        <div class="chapitre-{{chapitre.id}}">
-                            <h3 class="prev">{{chapitre.intro}}</h3>
-                            <h3 class="violet">{{chapitre.title}}</h3>
-                            <p class="text-muted level1">{{chapitre.desc}}</p>
-                            
-                            <hr>
-    
-                            {% if chapitre.questionsBack|length > 0 %}
-                                {{ mySelf.buildQuestionReponse(chapitre.questionsBack) }}
-                            {% endif %}
-                            
-                            {% if chapitre.childs|length > 0 %}
-                                <div class="row sous-chapitre col-md-12">
-                                    {% for child in chapitre.childs %}
-                                        {% if child.nbQuestionsRemplies > 0 %}
-                                            <h4 class="prev">{{child.intro}}</h4>
-                                            <h4 class="violet">{{child.title}}</h4>
-                                            <p class="text-muted level1">{{child.desc}}</p>
-                                            
-                                            {{ mySelf.buildQuestionReponse(child.questionsBack) }}
-                                        {% endif %}
+                                    {# Question du sous chapitre #}
+                                    {% for questionChild in child.questions %}
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{questionChild.question}}</td>
+                                            <td {% if questionChild.colored and questionChild.initialValue != -1 and questionChild.initialValue != '' %}
+                                                    {% if questionChild.min == questionChild.initialValue %}
+                                                        style="color:#c82f5b"
+                                                    {% elseif questionChild.max == questionChild.initialValue %}
+                                                        style="color:#e88824"
+                                                    {% else %}
+                                                        style="color:#e88824"
+                                                    {% endif %}{% endif %}>
+                                                {% if questionChild.initialValue == -1 %}
+                                                    Non concerné
+                                                {% else %}
+                                                    {% for option in questionChild.options %}
+                                                        {% set tab = option|split(';') %}
+                                                        {% if tab[0] == questionChild.initialValue %}
+                                                            {{tab[1]|trim}}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </td>
+                                            {% if affichageSynthese %}
+                                                <td>
+                                                    {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}
+                                                    {% if publications %}
+                                                        {% if questionChild.synthese %}
+                                                            {{questionChild.synthese|nl2br}}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </td>
+                                            {% endif %}
+                                            {% if affichageProduction %}
+                                                <td class="forAffichage">
+                                                    {# Affichage des liens de publications #}
+                                                    {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}
+                                                    {% if publications %}
+                                                        {% if questionChild.lien is not null and questionChild.lien is not empty %}
+                                                            {# Affichage du lien défini en back office #}
+                                                            <ul><li><a href="{{questionChild.lien}}" target="_blank">{{questionChild.descriptionLien}}</a></li></ul>
+                                                        {% endif %}
+                                                        {{publications|raw}}
+                                                        {% set doTheChapterHavePublications = true %}
+                                                    {% endif %}
+                                                </td>
+                                            {% endif %}
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            {% if affichageSynthese and affichageProduction %}
+                                                <td colspan="4">Aucune recommandation spécifique.</td>
+                                            {% elseif affichageSynthese or affichageProduction %}
+                                                <td colspan="3">Aucune recommandation spécifique.</td>
+                                            {% else %}
+                                                <td colspan="2">Aucune recommandation spécifique.</td>
+                                            {% endif %}
+                                        </tr>
+                                    
                                     {% endfor %}
-                                </div>
+
+                                {% endfor %}
+                            {% elseif chapitre.questions|length == 0 %}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    {% if affichageSynthese and affichageProduction %}
+                                        <td colspan="4">Aucune recommandation spécifique.</td>
+                                    {% elseif affichageSynthese or affichageProduction %}
+                                        <td colspan="3">Aucune recommandation spécifique.</td>
+                                    {% else %}
+                                        <td colspan="2">Aucune recommandation spécifique.</td>
+                                    {% endif %}
+                                </tr>
                             {% endif %}
-                        </div>
-                        <div class="clearfix"></div>
-                    {% endif %}
-                {% endfor %}
+
+                            {% if not doTheChapterHavePublications %}
+                                {% set chaptersToHide = chaptersToHide|merge([chapitre.id]) %}
+                            {% endif %}
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <p class="text-center {% if chapitres|length > 0 %}hide{% endif %}" >
+                    - Aucune recommandation de l'ANAP nécessaire -
+                    <input type="hidden" id="chaptersToHide" value="{{chaptersToHide|json_encode}}" />
+                </p>
             </div>
+        {% endif %}
+        
+        {% if not resultat.outil.masquerReponse %}
+            {% if pdf or true %}
+                <div class="page-break"></div>
+
+                <h2 class="violet closed" data-toggle="reponses" >Résultats de l'outil - Vos réponses</h2>
+
+                <div id="reponses" {% if not pdf %} style="display:none" {% endif %} >
+                
+                    <p>Vos réponses apparaissent en gras parmi les réponses possibles à chaque question.</p>
+                
+                    {% if resultat.remarque is defined %}
+                        <p class="text-muted"><em>{{ resultat.remarque|raw|nl2br }}</em></p>
+                    {% endif %}
+                
+                    {% for chapitre in chapitres %}
+                        {% if chapitre.nbQuestionsRemplies > 0 %}
+                            <div class="chapitre-{{chapitre.id}}">
+                                <h3 class="prev">{{chapitre.intro}}</h3>
+                                <h3 class="violet">{{chapitre.title}}</h3>
+                                <p class="text-muted level1">{{chapitre.desc}}</p>
+                                
+                                <hr>
+        
+                                {% if chapitre.questionsBack|length > 0 %}
+                                    {{ mySelf.buildQuestionReponse(chapitre.questionsBack) }}
+                                {% endif %}
+                                
+                                {% if chapitre.childs|length > 0 %}
+                                    <div class="row sous-chapitre col-md-12">
+                                        {% for child in chapitre.childs %}
+                                            {% if child.nbQuestionsRemplies > 0 %}
+                                                <h4 class="prev">{{child.intro}}</h4>
+                                                <h4 class="violet">{{child.title}}</h4>
+                                                <p class="text-muted level1">{{child.desc}}</p>
+                                                
+                                                {{ mySelf.buildQuestionReponse(child.questionsBack) }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="clearfix"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
         {% endif %}
     </div>
 </div>
