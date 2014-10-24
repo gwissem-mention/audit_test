@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="{% block metadesc %}Mon Hôpital Numérique{% endblock %}">
+        <meta name="keywords" content="{% block metakeywords %}{% endblock %}">
+        <meta name="author" content="NODEVO">
+
+        <title>{% block title %}Mon Hôpital Numérique{% endblock %}</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        {% block stylesheets %}
+            {% stylesheets output="compiled/hopitalnumerique-core.css" filter="cssrewrite, ?yui_css" 
+                "@bootstrap_css"
+                "@fancybox_css"
+                'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
+                'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+                'bundles/hopitalnumeriquecore/css/layout.css'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {% javascripts output="compiled/hopitalnumerique-core.js" 
+                "@jquery_js" 
+                "@jquery_ui_js"
+                "@bootstrap_js"
+                "@enquire_js"
+                "@fancybox_js"  
+                "@json_js"
+                'bundles/hopitalnumeriquecore/js/script.js'
+                'bundles/hopitalnumeriquecore/js/recherche.js'
+                'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+            %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% endblock %}
+
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-49829801-1', 'monhopitalnumerique.fr');
+            ga('send', 'pageview');
+        </script>
+    </head>
+
+    <body>
+        <div class="row" id="body">
+            <div class="col-md-12" id="content">
+                
+                {{ block('flashBags') }}
+                {% block block_du_body %}
+                    {% block prebody %}{% endblock prebody %}
+                    <div class="clearfix"></div>
+                    {% block body %}{% endblock body %}
+                    <div class="clearfix"></div>
+                {% endblock %}
+
+            </div>
+        </div>
+    </body>
+</html>
+
+{% block flashBags %}
+    {% for type, messages in app.session.flashBag.all %}
+        {% for message in messages %}
+            <div class="alert alert-block nalert-{{type}}" onclick="$(this).slideUp();">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

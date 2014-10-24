@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="{% block metadesc %}Mon Hôpital Numérique{% endblock %}">
+        <meta name="keywords" content="{% block metakeywords %}{% endblock %}">
+        <meta name="author" content="NODEVO">
+
+        <title>Mon Hôpital Numérique - Instructions</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        {% block stylesheets %}
+            {% stylesheets output="compiled/hopitalnumerique-autodiag-front-fancy.css" filter="cssrewrite, ?yui_css" 
+                "@bootstrap_css"
+                "@fancybox_css"
+                'bundles/hopitalnumeriquecore/css/layout.css'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {% javascripts output="compiled/hopitalnumerique-autodiag-front-fancy.js" 
+                "@jquery_js" 
+                "@jquery_ui_js"
+                "@bootstrap_js"
+                "@fancybox_js" 
+            %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% endblock %}
+
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-49829801-1', 'monhopitalnumerique.fr');
+            ga('send', 'pageview');
+        </script>
+    </head>
+
+    <body>
+
+        <div class="panel" style="margin:0; height: 360px; overflow: scroll; overflow-x: none;" >
+            <div class="panel-heading">
+                <h4 class="violet" style="margin-bottom:0" >Insctructions de l'outil {{outil.title}}</h4>
+            </div>
+
+            <div class="panel-body" style="padding-top:10px" >
+                <div class="col-md-12 fancybox-popin">
+                    {% if outil.instruction %} 
+                        {{outil.instruction|raw}}
+                    {% else %}
+                        - Aucune instruction n'est fournie pour cet autodiagnostic -
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

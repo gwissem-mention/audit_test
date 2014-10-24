@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+{% extends sansGabarit ? "HopitalNumeriqueCoreBundle::layout_sans_gabarit.html.twig" : "HopitalNumeriqueCoreBundle::layout.html.twig" %}
 
 {# Référencement #}
 {% block title %}{{parent()}} - Autodiagnostic{% endblock %}
@@ -41,7 +41,11 @@
                     <span class="text-muted pull-right" >100%</span>
                 </p>
             </div>
+
             <div class="clearfix"></div>
+            {% if outil.instruction %}
+                <a class="btn btn-primary fancybox.iframe col-md-12" id="instructions" href="{{path('hopitalnumerique_autodiag_front_instructions', {'id':outil.id})}}" title="Instructions"><i style="margin-right:10px" class="fa fa-list-alt"></i>Instructions</a>
+            {% endif %}
         </div>
         <div class="col-md-9 col-sm-12" >
             <h1>{{outil.title}}</h1>
@@ -127,12 +131,13 @@
                     <input type="hidden" name="action" id="action" value="" />
                     <input type="hidden" name="remplissage" id="remplissage" value="0" />
                     <input type="hidden" name="name-resultat" id="name-resultat" value="" />
+                    <input type="hidden" name="sansGabarit" id="sansGabarit" value="{{sansGabarit}}" />
                 </form>
 
                 <div class="saveBtns">
-                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success btn-sm" ><i class="fa fa-bar-chart-o"></i> Résultats</div>
+                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success btn-sm" ><i style="margin-right:5px" class="fa fa-bar-chart-o"></i> Résultats</div>
                     {% if app.user %}
-                        <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary btn-sm save" ><i class="fa fa-save"></i> Enregistrer</div>
+                        <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary btn-sm save" ><i style="margin-right:5px" class="fa fa-save"></i> Enregistrer</div>
                     {% endif %}
                 </div>
             </div>

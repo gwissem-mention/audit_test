@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+{% extends sansGabarit ? "HopitalNumeriqueCoreBundle::layout_sans_gabarit.html.twig" : "HopitalNumeriqueCoreBundle::layout.html.twig" %}
 
 {# Référencement #}
 {% block title %}{{parent()}} - Autodiagnostic - Résultats{% endblock %}
@@ -27,5 +27,5 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'HopitalNumeriqueAutodiagBundle:Front:resultats-donnees.html.twig' with {'resultat':resultat, 'pdf':false, 'back':back} %}
+    {% include 'HopitalNumeriqueAutodiagBundle:Front:resultats-donnees.html.twig' with {'resultat':resultat, 'sansGabarit':sansGabarit, 'pdf':false, 'back':back} %}
 {% endblock %}

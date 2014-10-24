@@ -43,6 +43,38 @@ $(document).ready(function() {
 
     //initialisation de la couleur en fonction des réponses
     prepareColoredQuestions();
+
+    $(function() {
+        $('#instructions').fancybox({
+            'padding'   : 0,
+            'autoSize'  : false,
+            'width'     : '80%',
+            'scrolling' : 'no',
+            'showCloseButton' : true,
+            'height' : '360px'
+        });
+    });
+    //fancybox daffichage de la synthese
+    enquire.register("screen and (max-width: 991px)", {
+        match : function() {
+            $(function() {
+                $(document).unbind('click.fb-start');
+            });
+        },
+        unmatch : function() {
+            $(function() {
+                $('#test').fancybox({
+                    'padding'   : 0,
+                    'autoSize'  : false,
+                    'width'     : '80%',
+                    'scrolling' : 'no',
+                    'height' : '360px',
+                    'showCloseButton' : true,
+                });
+                
+            });
+        }
+    });
 });
 
 /**
@@ -137,7 +169,8 @@ function saveQuestionnaire( type, userConnected )
 {
     $('#action').val( type );
 
-    if( type == 'valid' && userConnected ){
+    if( type == 'valid' && userConnected )
+    {
         if( ($("#outil-reponses-obligatoire").val() == true) && (100 != $('#autodiag .progress-bar').attr('aria-valuenow')) )
         {
             apprise('Vous ne pouvez pas valider votre autodiagnostic tant que toutes les questions ne sont pas remplies.');
