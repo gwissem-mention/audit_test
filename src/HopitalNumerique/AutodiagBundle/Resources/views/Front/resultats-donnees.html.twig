@@ -23,6 +23,12 @@
 
         <h1 class="text-center">{{resultat.outil.title}}</h1>
 
+        <div id="commentaire-restitution">
+            <p>
+                {{resultat.outil.commentaireRestitution|raw}}
+            </p>
+        </div>
+
         <div class="clearfix"></div>
 
         {% if resultat.synthese %}

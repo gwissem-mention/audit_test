@@ -204,6 +204,13 @@ class Outil
     private $instruction;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="out_commentaire_restitution", type="text", nullable=true, options = {"comment" = "Commentaire affiché lors de la restitution pour cet outil"})
+     */
+    private $commentaireRestitution;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -413,6 +420,29 @@ class Outil
     public function getInstruction()
     {
         return $this->instruction;
+    }
+    
+    /**
+     * Set commentaireRestitution
+     *
+     * @param string $commentaireRestitution
+     * @return Outil
+     */
+    public function setCommentaireRestitution($commentaireRestitution)
+    {
+        $this->commentaireRestitution = $commentaireRestitution;
+    
+        return $this;
+    }
+    
+    /**
+     * Get commentaireRestitution
+     *
+     * @return string
+     */
+    public function getCommentaireRestitution()
+    {
+        return $this->commentaireRestitution;
     }
     
     /**

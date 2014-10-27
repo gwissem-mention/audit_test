@@ -77,6 +77,7 @@
                 {{ form_start(form) }}
                     {{ form_row(form.title) }}
                     {{ form_row(form.alias) }}
+                    {{ form_row(form.commentaireRestitution) }}
                     {{ form_row(form.columnChart) }}
                     <div class="columnChart" {% if not outil.columnChart %}style="display:none"{% endif %}>
                         {{ form_row(form.columnChartLabel) }}

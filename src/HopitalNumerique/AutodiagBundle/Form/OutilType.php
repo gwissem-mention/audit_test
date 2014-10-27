@@ -118,6 +118,11 @@ class OutilType extends AbstractType
                 'label'      => 'Instructions',
                 'attr'       => array('rows' => 2, 'class' => 'tinyMce')
             ))
+            ->add('commentaireRestitution', 'textarea', array(
+                'required'   => false, 
+                'label'      => 'Commentaire affiché lors de la réstitution',
+                'attr'       => array('rows' => 2, 'class' => 'tinyMce')
+            ))
             ->add('statut', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'      => 'libelle',
