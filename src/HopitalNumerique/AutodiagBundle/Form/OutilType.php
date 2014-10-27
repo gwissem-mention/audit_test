@@ -113,9 +113,18 @@ class OutilType extends AbstractType
                 'label'    => 'Masquer l\'onglet réponses en front',
                 'required' => false
             ))
+            ->add('planActionPriorise', 'checkbox', array(
+                'label'    => 'Plan d\'action priorisé',
+                'required' => false
+            ))
             ->add('instruction', 'textarea', array(
                 'required'   => false, 
                 'label'      => 'Instructions',
+                'attr'       => array('rows' => 2, 'class' => 'tinyMce')
+            ))
+            ->add('commentaireRestitution', 'textarea', array(
+                'required'   => false, 
+                'label'      => 'Commentaire affiché lors de la réstitution',
                 'attr'       => array('rows' => 2, 'class' => 'tinyMce')
             ))
             ->add('statut', 'entity', array(

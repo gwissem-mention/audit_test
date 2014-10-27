@@ -76,6 +76,7 @@
         #resultats #chapitres #table-analyse td, #table-analyse th {font-size: 11px;}
 
     /* Graphiques */
+        #resultats #graphiques h3 {margin-top: 0px;}
         #resultats #graphiques .panel .panel-heading{padding:7px 15px; height: 35px}
         #resultats #graphiques .panel .panel-heading h3.panel-title{margin-bottom: 0; font-size: 14px; float: left; font-weight: bold}
         #resultats #graphiques .panel .panel-heading .options{float:right;}

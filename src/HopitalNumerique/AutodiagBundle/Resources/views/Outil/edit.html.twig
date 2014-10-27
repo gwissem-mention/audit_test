@@ -77,6 +77,7 @@
                 {{ form_start(form) }}
                     {{ form_row(form.title) }}
                     {{ form_row(form.alias) }}
+                    {{ form_row(form.commentaireRestitution) }}
                     {{ form_row(form.columnChart) }}
                     <div class="columnChart" {% if not outil.columnChart %}style="display:none"{% endif %}>
                         {{ form_row(form.columnChartLabel) }}
@@ -115,6 +116,7 @@
                     {{ form_row(form.centPourcentReponseObligatoire) }}
                     {{ form_row(form.masquerAnalyse) }}
                     {{ form_row(form.masquerReponse) }}
+                    {{ form_row(form.planActionPriorise) }}
                     {{ form_row(form.instruction) }}
                     {{ form_row(form.statut) }}
                 {{ form_end(form) }}

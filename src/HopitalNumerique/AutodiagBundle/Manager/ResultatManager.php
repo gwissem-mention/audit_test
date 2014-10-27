@@ -108,6 +108,24 @@ class ResultatManager extends BaseManager
             $parent->nbQuestionsRemplies += $enfant->nbQuestionsRemplies;
         }
 
+        //Trier par note
+        if($resultat->getOutil()->isPlanActionPriorise())
+        {
+            uasort($parents, array($this,"triParNote"));
+            foreach ($parents as $key => $parent) 
+            {
+                foreach ($parent->questions as $question) 
+                {
+                    uasort($question, array($this,"triParNoteQuestion"));
+                }
+                uasort($parent->childs, array($this,"triParNote"));
+                foreach ($parent->childs as $child) 
+                {
+                    uasort($child->questions, array($this,"triParNoteQuestion"));
+                }
+            }
+        }
+
         return $parents;
     }
 
@@ -287,8 +305,44 @@ class ResultatManager extends BaseManager
 
 
 
-
-
+    /**
+     * Trie par note une stdClass
+     *
+     * @param [type] $a [description]
+     * @param [type] $b [description]
+     *
+     * @return [type]
+     */
+    public function triParNote($a, $b)
+    {
+        if($a->noteChapitre < $b->noteChapitre)
+            return -1;
+        if($a->noteChapitre > $b->noteChapitre)
+            return 1;
+        if($a->order > $b->order)
+            return 1;
+        else
+            return -1;
+    }
+    /**
+     * Trie par note une stdClass
+     *
+     * @param [type] $a [description]
+     * @param [type] $b [description]
+     *
+     * @return [type]
+     */
+    public function triParNoteQuestion($a, $b)
+    {
+        if($a->value < $b->value)
+            return -1;
+        if($a->value > $b->value)
+            return 1;
+        if($a->order > $b->order)
+            return 1;
+        else
+            return -1;
+    }
 
     /**
      * Ordonne les chapitres parents (by order) puis ses enfants (by order)
