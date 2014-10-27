@@ -124,6 +124,13 @@ class Outil
      * )
      */
     private $processChart;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="out_plan_action_priorise", type="boolean", options = {"comment" = "Definir un plan d action priorise pour cet outil ?"})
+     */
+    private $planActionPriorise;
     
     /**
      * @var string Libellé du résultat par processus
@@ -558,6 +565,29 @@ class Outil
     public function isCentPourcentReponseObligatoire()
     {
         return $this->centPourcentReponseObligatoire;
+    }
+
+    /**
+     * Set planActionPriorise
+     *
+     * @param boolean $planActionPriorise
+     * @return Outil
+     */
+    public function setPlanActionPriorise($planActionPriorise)
+    {
+        $this->planActionPriorise = $planActionPriorise;
+
+        return $this;
+    }
+
+    /**
+     * Get planActionPriorise
+     *
+     * @return boolean 
+     */
+    public function isPlanActionPriorise()
+    {
+        return $this->planActionPriorise;
     }
 
     /**
