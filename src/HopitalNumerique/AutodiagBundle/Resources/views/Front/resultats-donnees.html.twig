@@ -413,7 +413,7 @@
                         {% for chapitre in chapitres %}
                             {% set doTheChapterHavePublications = false %}
                             <tr>
-                                <td>{{chapitre.code}} - {{chapitre.noteChapitre}}</td>
+                                <td>{{chapitre.code}}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -448,7 +448,7 @@
                                 <tr>
                                     <td></td>
                                     <td></td>
-                                    <td>{{question.question}} - {{question.value}}</td>
+                                    <td>{{question.question}}</td>
                                     <td {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
                                             {% if question.min == question.initialValue %}
                                                 style="color:#c82f5b"
@@ -498,7 +498,7 @@
                                 {% for child in chapitre.childs %}
                                     <tr>
                                         <td></td>
-                                        <td>{{child.code}} - {{child.noteChapitre}}</td>
+                                        <td>{{child.code}}</td>
                                         <td></td>
                                         <td></td>
                                         {% if affichageSynthese %}
@@ -532,7 +532,7 @@
                                         <tr>
                                             <td></td>
                                             <td></td>
-                                            <td>{{questionChild.question}} - {{questionChild.value}}</td>
+                                            <td>{{questionChild.question}}</td>
                                             <td {% if questionChild.colored and questionChild.initialValue != -1 and questionChild.initialValue != '' %}
                                                     {% if questionChild.min == questionChild.initialValue %}
                                                         style="color:#c82f5b"
