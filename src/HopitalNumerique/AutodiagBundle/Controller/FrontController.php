@@ -240,6 +240,57 @@ class FrontController extends Controller
         $chapitres  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
         $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
 
+        //Dans le cas où nous nous trouvons dans une synthese, il faut récupérer le min et max
+        if($resultat->getSynthese())
+        {
+            foreach ($resultat->getResultats() as $resultatSynthese) 
+            {
+                $chapitresSynthese = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynthese );
+                $graphTemp = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultatSynthese, $chapitresSynthese );
+
+                //Radar
+                foreach ($graphiques["radar"]->datas as $keyDataGraphique => &$dataGraphique) 
+                {
+                    //Récupération de la valeur du graph courant
+                    $graphTempValue = $graphTemp["radar"]->datas[$keyDataGraphique]->value;
+
+                    if(is_null($dataGraphique->min))
+                    {
+                        $dataGraphique->min = $graphTempValue;
+                        $dataGraphique->max = $graphTempValue;
+                    }
+                    elseif($dataGraphique->min > $graphTempValue)
+                    {
+                        $dataGraphique->min = $graphTempValue;
+                    }
+                    elseif($dataGraphique->max < $graphTempValue)
+                    {
+                        $dataGraphique->max = $graphTempValue;
+                    }
+                }
+                //Barre
+                foreach ($graphiques["barre"]->panels as $keyDataGraphique => &$dataGraphique) 
+                {
+                    //Récupération de la valeur du graph courant
+                    $graphTempValue = $graphTemp["barre"]->panels[$keyDataGraphique]->value;
+
+                    if(is_null($dataGraphique->min))
+                    {
+                        $dataGraphique->min = $graphTempValue;
+                        $dataGraphique->max = $graphTempValue;
+                    }
+                    elseif($dataGraphique->min > $graphTempValue)
+                    {
+                        $dataGraphique->min = $graphTempValue;
+                    }
+                    elseif($dataGraphique->max < $graphTempValue)
+                    {
+                        $dataGraphique->max = $graphTempValue;
+                    }
+                }
+            }
+        }
+
         //PDF généré
         if( is_null($resultat->getPdf()) ){
             $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request );

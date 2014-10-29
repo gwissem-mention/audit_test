@@ -488,6 +488,8 @@ class ResultatManager extends BaseManager
             $data->value = $this->calculMoyenneCategorie( $categorie, $questionsReponses );
             $data->taux  = $this->calculTauxCategorie( $categorie, $questionsReponses );
             $data->opti  = $categorie->getNote();
+            $data->min   = null;
+            $data->max   = null;
 
             $datas[] = $data;
         }
@@ -520,6 +522,8 @@ class ResultatManager extends BaseManager
             $data->value = $this->calculMoyenneChapitre( $chapitre );
             $data->taux  = $this->calculTauxChapitre( $chapitre );
             $data->opti  = $chapitre->noteOpt;
+            $data->min   = null;
+            $data->max   = null;
 
             $datas[] = $data;
         }

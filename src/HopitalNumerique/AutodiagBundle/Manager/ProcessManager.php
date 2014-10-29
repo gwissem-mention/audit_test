@@ -52,14 +52,66 @@ class ProcessManager extends BaseManager
      */
     public function getDonneesRestitutionParProcessus(Resultat $resultat)
     {
+        $donneesProcessSynthese = array();
+
+        //Dans le cas d'une synthese, on récupère le min et max
+        if($resultat->getSynthese())
+        {
+            foreach ($resultat->getResultats() as $resultatSynthese) 
+            {
+                $processes = $resultat->getOutil()->getProcess();
+                $processesChapitresEnfants = $this->getChapitresEnfantsByProcesses($resultatSynthese->getOutil()->getProcess()->toArray());
+                $this->chapitreManager->setResultatsMoyennes($resultatSynthese, $processesChapitresEnfants);
+        
+                // Processes
+                foreach ($processes as $keyProcess => $process)
+                {
+                    //<-- Chapitres
+                    foreach ($process->getChapitres() as $keyChapitre => $chapitre)
+                    {
+                        //<-- On récupère les chapitres enfants depuis l'ensemble des chapitres enfants des processus (pour n'avoir qu'une seule requête)
+                        $chapitresEnfants = array();
+                        foreach ($processesChapitresEnfants as $chapitreEnfant)
+                            if ($chapitreEnfant->getParent()->getId() == $chapitre->getId())
+                                $chapitresEnfants[] = $chapitreEnfant;
+                        //-->
+                    
+                        // Chapitres enfants
+                        foreach ($chapitresEnfants as $chapitreEnfant)
+                        {
+                            if(array_key_exists($chapitreEnfant->getId(), $donneesProcessSynthese))
+                            {
+                                if($donneesProcessSynthese[$chapitreEnfant->getId()]['min'] > ceil($chapitreEnfant->getResultatsMoyenne()))
+                                {
+                                    $donneesProcessSynthese[$chapitreEnfant->getId()]['min'] = ceil($chapitreEnfant->getResultatsMoyenne());
+                                }
+                                if($donneesProcessSynthese[$chapitreEnfant->getId()]['max'] < ceil($chapitreEnfant->getResultatsMoyenne()))
+                                {
+                                    $donneesProcessSynthese[$chapitreEnfant->getId()]['max'] = ceil($chapitreEnfant->getResultatsMoyenne());
+                                }
+                            }
+                            else
+                            {
+                                $donneesProcessSynthese[$chapitreEnfant->getId()] = array
+                                (
+                                    'min' => ceil($chapitreEnfant->getResultatsMoyenne()),
+                                    'max' => ceil($chapitreEnfant->getResultatsMoyenne())
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $donneesProcess = array();
         $processesChapitresEnfants = $this->getChapitresEnfantsByProcesses($resultat->getOutil()->getProcess()->toArray());
         $this->chapitreManager->setResultatsMoyennes($resultat, $processesChapitresEnfants);
 
-        $donneesProcess = array();
         $processes = $resultat->getOutil()->getProcess();
-        
+    
         // Processes
-        foreach ($processes as $process)
+        foreach ($processes as $processId => $process)
         {
             $donneesProcessChapitres = array();
             
@@ -78,12 +130,30 @@ class ProcessManager extends BaseManager
                 // Chapitres enfants
                 foreach ($chapitresEnfants as $chapitreEnfant)
                 {
-                    $donneesProcessChapitresEnfants[] = array
+                    //donneesProcessSynthese
+                    
+                    $chapitreEnfantArray = array
                     (
                         'titre' => $chapitreEnfant->getTitle(),
                         'moyenne' => ceil($chapitreEnfant->getResultatsMoyenne()),
-                        'nombreQuestionsRepondues' => $chapitreEnfant->getNombreQuestionsRepondues()
+                        'nombreQuestionsRepondues' => $chapitreEnfant->getNombreQuestionsRepondues(),
+                        'min' => null,
+                        'max' => null
                     );
+
+                    if(array_key_exists($chapitreEnfant->getId(), $donneesProcessSynthese))
+                    {
+                        if(array_key_exists('min', $donneesProcessSynthese[$chapitreEnfant->getId()]))
+                        {
+                            $chapitreEnfantArray['min'] = $donneesProcessSynthese[$chapitreEnfant->getId()]['min'];
+                        }
+                        if(array_key_exists('max', $donneesProcessSynthese[$chapitreEnfant->getId()]))
+                        {
+                            $chapitreEnfantArray['max'] = $donneesProcessSynthese[$chapitreEnfant->getId()]['max'];
+                        }
+                    }
+
+                    $donneesProcessChapitresEnfants[] = $chapitreEnfantArray;
                 }
                 //-->
             
