@@ -108,6 +108,27 @@ class ResultatManager extends BaseManager
             $parent->nbQuestionsRemplies += $enfant->nbQuestionsRemplies;
         }
 
+        //Calcul de la notre des chapitres parents
+        foreach ($parents as $parent) 
+        {
+            $scoreTemp = 0;
+            $compteur  = 0;
+            //Parcourt les sous chapitres
+            foreach ($parent->childs as $chapChild) 
+            {
+                $scoreChildTemp = 0;
+                $compteurChild  = 0;
+                foreach ($chapChild->questionsForCharts as $question) 
+                {
+                    if($question->tableValue == -1)
+                        continue;
+                    $scoreTemp += ($question->max != 0 ) ? $question->tableValue * $question->ponderation * 100 / $question->max : 0;
+                    $compteur++;
+                }
+            }
+            $parent->noteChapitre = ($compteur != 0 ) ? round($scoreTemp / $compteur, 0) : 0;
+        }
+
         //Trier par note
         if($resultat->getOutil()->isPlanActionPriorise())
         {
@@ -315,9 +336,9 @@ class ResultatManager extends BaseManager
      */
     public function triParNote($a, $b)
     {
-        if($a->noteChapitre > $b->noteChapitre)
-            return -1;
         if($a->noteChapitre < $b->noteChapitre)
+            return -1;
+        if($a->noteChapitre > $b->noteChapitre)
             return 1;
         if($a->order > $b->order)
             return 1;
