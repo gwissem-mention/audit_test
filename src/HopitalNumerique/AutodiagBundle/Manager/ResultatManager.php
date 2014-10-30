@@ -274,6 +274,8 @@ class ResultatManager extends BaseManager
             $chart->title = 'Mes résultats détaillés';
             $chart->datas = $this->buildDatasTable( $categories , $chapitresFormated, $questionsReponses );
 
+            uasort($chart->datas->totauxChapitres, array($this,"triParOrderGraphTable"));
+
             $results['table'] = $chart;
         }
 
@@ -363,6 +365,21 @@ class ResultatManager extends BaseManager
             return 1;
         else
             return -1;
+    }
+    /**
+     * Trie pour le graph tableau
+     *
+     * @param [type] $a [description]
+     * @param [type] $b [description]
+     *
+     * @return [type]
+     */
+    public function triParOrderGraphTable($a, $b)
+    {
+        if($a['order'] < $b['order'])
+            return -1;
+        if($a['order'] > $b['order'])
+            return 1;
     }
 
     /**
@@ -479,6 +496,7 @@ class ResultatManager extends BaseManager
                         $totalChapitres[ $chapitre ]['max']                         += ($one->max * $one->ponderation);
                         $totalChapitres[ $chapitre ]['pond']                        += $one->ponderation;
                         $totalChapitres[ $chapitre ]['nc']                          = false;
+                        $totalChapitres[ $chapitre ]['order']                       = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getOrder() : $question->getChapitre()->getParent()->getOrder();
                         $totalChapitres[ $chapitre ]['affichageRestitutionTableau'] = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getAffichageRestitutionTableau() : $question->getChapitre()->getParent()->getAffichageRestitutionTableau();
                     }
                 }

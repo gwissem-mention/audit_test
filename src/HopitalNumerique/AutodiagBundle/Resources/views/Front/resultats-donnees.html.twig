@@ -665,7 +665,7 @@ $(document).ready(function() {
                                 <hr>
         
                                 {% if chapitre.questionsBack|length > 0 %}
-                                    {{ mySelf.buildQuestionReponse(chapitre.questionsBack) }}
+                                    {{ mySelf.buildQuestionReponse(chapitre.questionsBack, resultat) }}
                                 {% endif %}
                                 
                                 {% if chapitre.childs|length > 0 %}
@@ -676,7 +676,7 @@ $(document).ready(function() {
                                                 <h4 class="violet">{{child.title}}</h4>
                                                 <p class="text-muted level1">{{child.desc|raw}}</p>
                                                 
-                                                {{ mySelf.buildQuestionReponse(child.questionsBack) }}
+                                                {{ mySelf.buildQuestionReponse(child.questionsBack, resultat) }}
                                             {% endif %}
                                         {% endfor %}
                                     </div>
@@ -691,7 +691,7 @@ $(document).ready(function() {
     </div>
 </div>
 
-{% macro buildQuestionReponse(questions) %}
+{% macro buildQuestionReponse(questions, resultat) %}
     {% for question in questions %}
         {% if question.initialValue != '' and question.initialValue != -1 %}
             <div class="clearfix">
