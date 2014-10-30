@@ -315,9 +315,9 @@ class ResultatManager extends BaseManager
      */
     public function triParNote($a, $b)
     {
-        if($a->noteChapitre < $b->noteChapitre)
-            return -1;
         if($a->noteChapitre > $b->noteChapitre)
+            return -1;
+        if($a->noteChapitre < $b->noteChapitre)
             return 1;
         if($a->order > $b->order)
             return 1;

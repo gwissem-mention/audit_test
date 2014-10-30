@@ -12,7 +12,6 @@ class SearchController extends Controller
     public function indexAction( $id = null )
     {
         $elements                  = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
-        $categoriesProduction      = array();
         $categoriesProductionActif = "";
         $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('libelle' => 'ASC'));
 
