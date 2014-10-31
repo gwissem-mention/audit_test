@@ -1,7 +1,4 @@
 {% import _self as mySelf %}
-
-<style type="text/css">.note-0{display: none;}</style>
-
 <div id="resultats">
     <div class="col-md-12">
         <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download"></i></a>
@@ -109,19 +106,19 @@
                                                 {% endif %}
                                             {% endif %}
 
-                                            {% if panel.min is not null %}
-                                                {% set min = panel.min|number_format(0) ~ '%' %}
-                                                <div class="cursor cursor-min" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{min}}" title="<span>Score minimum : {{min}}</span>" ></div>
-                                                {% if pdf %}
-                                                    <div class="cursor cursor-value" style="left:{{min}}">{{min}}</div>
-                                                {% endif %}
-                                            {% endif %}
-
                                             {% if panel.max is not null %}
                                                 {% set max = panel.max|number_format(0) ~ '%' %}
                                                 <div class="cursor cursor-max" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{max}}" title="<span>Score maximum : {{max}}</span>" ></div>
                                                 {% if pdf %}
                                                     <div class="cursor cursor-value" style="left:{{max}}">{{max}}</div>
+                                                {% endif %}
+                                            {% endif %}
+
+                                            {% if panel.min is not null %}
+                                                {% set min = panel.min|number_format(0) ~ '%' %}
+                                                <div class="cursor cursor-min" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{min}}" title="<span>Score minimum : {{min}}</span>" ></div>
+                                                {% if pdf %}
+                                                    <div class="cursor cursor-value" style="left:{{min}}">{{min}}</div>
                                                 {% endif %}
                                             {% endif %}
                                         </div>

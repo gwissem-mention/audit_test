@@ -85,20 +85,6 @@ $(document).ready(function() {
             color : '#d9edf7',
             data  : values,
             pointPlacement: 'on'
-        },
-        //Valeur optimate
-        {
-            dataLabels: {
-                enabled: true,
-                format: '<b>{point.y:,.0f}%</b>',
-                softConnector: true,
-                align: 'left'
-            },
-            name  : 'Valeur optimale préconisée par l\'ANAP',
-            data  : optimale,
-            color : '#6f3596',
-            type  : 'line',
-            pointPlacement: 'on'
         }]
         ;
 
@@ -134,6 +120,20 @@ $(document).ready(function() {
             pointPlacement: 'on'
         });
     }
+
+    seriesRadar.push({
+        dataLabels: {
+            enabled: true,
+            format: '<b>{point.y:,.0f}%</b>',
+            softConnector: true,
+            align: 'left'
+        },
+        name  : 'Valeur optimale préconisée par l\'ANAP',
+        data  : optimale,
+        color : '#6f3596',
+        type  : 'line',
+        pointPlacement: 'on'
+    });
 
     /* Créer le Spider Chart */
     if( categories.length > 0 ) {
