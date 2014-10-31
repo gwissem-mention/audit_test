@@ -65,6 +65,13 @@ class RemboursementManager extends BaseManager
             $row->type     = 'Module : ' . $formation->getSession()->getModule()->getTitre();
             $row->discr    = 'formation';
             $row->total    = $prix['formations'][$formation->getUser()->getRegion()->getId()];
+
+            //TODO : sortir le 140
+            //Ajout de 140€ si la durée de la session est supérieur à 1jour
+            if( $formation->getSession()->getDuree()->getId() > 401 )
+            {
+                $row->total += 140;
+            }
             
             $results[] = $row;
         }        
