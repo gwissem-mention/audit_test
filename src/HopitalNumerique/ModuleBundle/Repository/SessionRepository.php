@@ -120,16 +120,18 @@ class SessionRepository extends EntityRepository
     public function getNextSessions()
     {
         $today    = new \DateTime();
-        $in15days = new \DateTime();
-        $in15days->add(new \DateInterval('P15D'));
+        //$in15days = new \DateTime();
+        //$in15days->add(new \DateInterval('P15D'));
 
         return $this->_em->createQueryBuilder()
                         ->select('ses')
                         ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
-                        ->andWhere('ses.dateSession > :today', 'ses.dateSession < :in15days')
+                        //->andWhere('ses.dateSession > :today', 'ses.dateSession < :in15days')
+                        ->andWhere('ses.dateSession > :today', 'ses.etat = :idActif')
                         ->setParameter('today', $today, \Doctrine\DBAL\Types\Type::DATETIME)
-                        ->setParameter('in15days', $in15days, \Doctrine\DBAL\Types\Type::DATETIME)
+                        ->setParameter('idActif', 403)
+                        //->setParameter('in15days', $in15days, \Doctrine\DBAL\Types\Type::DATETIME)
                         ->setMaxResults(5)
-                        ->orderBy('ses.dateSession', 'DESC');
+                        ->orderBy('ses.dateSession', 'ASC');
     }
 }
