@@ -655,7 +655,7 @@ $(document).ready(function() {
                         <p class="text-muted"><em>{{ resultat.remarque|raw|nl2br }}</em></p>
                     {% endif %}
                 
-                    {% for chapitre in chapitres %}
+                    {% for idChapitre, chapitre in chapitres %}
                         {% if chapitre.nbQuestionsRemplies > 0 %}
                             <div class="chapitre-{{chapitre.id}}">
                                 <h3 class="prev">{{chapitre.intro}}</h3>
@@ -665,7 +665,7 @@ $(document).ready(function() {
                                 <hr>
         
                                 {% if chapitre.questionsBack|length > 0 %}
-                                    {{ mySelf.buildQuestionReponse(chapitre.questionsBack, resultat) }}
+                                    {{ mySelf.buildQuestionReponse(chapitre.questionsBack, resultat, idChapitre, 0) }}
                                 {% endif %}
                                 
                                 {% if chapitre.childs|length > 0 %}
@@ -676,7 +676,7 @@ $(document).ready(function() {
                                                 <h4 class="violet">{{child.title}}</h4>
                                                 <p class="text-muted level1">{{child.desc|raw}}</p>
                                                 
-                                                {{ mySelf.buildQuestionReponse(child.questionsBack, resultat) }}
+                                                {{ mySelf.buildQuestionReponse(child.questionsBack, resultat, idChapitre, child.id) }}
                                             {% endif %}
                                         {% endfor %}
                                     </div>
@@ -691,7 +691,7 @@ $(document).ready(function() {
     </div>
 </div>
 
-{% macro buildQuestionReponse(questions, resultat) %}
+{% macro buildQuestionReponse(questions, resultat, idChapitre, idChild) %}
     {% for question in questions %}
         {% if question.initialValue != '' and question.initialValue != -1 %}
             <div class="clearfix">
@@ -705,20 +705,38 @@ $(document).ready(function() {
                 <div>
                     {% set options = question.options %}
                     <p class="pull-left">
-                        {% if question.initialValue != -1 %}
+                        {% if question.initialValue != -1 or resultat.synthese %}
                             <span>Non concerné</span><br />
                         {% else %}
                             <span><b>Non concerné</b></span><br />
                         {% endif %}
-                        
-                        {% for option in options %}
-                            {% set tab = option|split(';') %}
-                            {% if tab[0] == question.initialValue %}
-                                <span><b>{{tab[1]|trim}}</b></span> &nbsp; <em class="text-muted">{{question.remarque}}</em><br />
-                            {% else %}
-                                <span>{{tab[1]|trim}}</span><br />
-                            {% endif %}
-                        {% endfor %}
+
+                        {% if resultat.synthese %}
+                            {% for resultatSynth in resultat.resultats %}
+                                {% for chapitreSynth in resultatSynth.chapitres %}
+                                    {% if chapitreSynth.id == idChapitre %}
+                                    {% else %}
+                                    {% endif %}
+                                    {% for option in options %}
+                                        {% set tab = option|split(';') %}
+                                        {% if tab[0] == question.initialValue %}
+                                            <span><b>{{tab[1]|trim}}</b></span> &nbsp; <em class="text-muted">{{question.remarque}}</em><br />
+                                        {% else %}
+                                            <span>{{tab[1]|trim}}</span><br />
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% else %}
+                            {% for option in options %}
+                                {% set tab = option|split(';') %}
+                                {% if tab[0] == question.initialValue %}
+                                    <span><b>{{tab[1]|trim}}</b></span> &nbsp; <em class="text-muted">{{question.remarque}}</em><br />
+                                {% else %}
+                                    <span>{{tab[1]|trim}}</span><br />
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     </p>
                     {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
                         <div class="icon pull-right">
