@@ -170,7 +170,7 @@
                     <option value="-1" {% if reponse['value'] == -1 %}selected="selected"{% endif %} >Non concerné</option>
                     {% for option in options %}
                         {% set datas = option|split(';', 2) %}
-                        <option value="{{datas[0]}}" {% if reponse['value'] == datas[0] %}selected="selected"{% endif %} >{{ datas[1]|capitalize|raw }}</option>
+                        <option value="{{datas[0]|trim}}" {% if reponse['value'] == datas[0] %}selected="selected"{% endif %} >{{ datas[1]|capitalize|raw }}</option>
                     {% endfor %}
                 </select>
             {# RADIO #}
@@ -181,7 +181,7 @@
                     <div class="radio block"><label><input type="radio" value="-1" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] != '' and reponse['value'] == -1 %}{% set isChecked = true %}checked="checked"{% endif %} />Non concerné</label></div>
                     {% for option in options %}
                         {% set datas = option|split(';', 2) %}
-                        <div class="radio block"><label><input type="radio" value="{{datas[0]}}" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] == datas[0] %}{% set isChecked = true %}checked="checked"{% endif %} />{{ datas[1]|capitalize|raw }}</label></div>
+                        <div class="radio block"><label><input type="radio" value="{{datas[0]|trim}}" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] == datas[0] %}{% set isChecked = true %}checked="checked"{% endif %} />{{ datas[1]|capitalize|raw }}</label></div>
                     {% endfor %}
                     <div class="hide">
                         <div class="radio block"><input type="radio" value="" class="hiddenRadio" name="{{questionName}}" id="{{questionId}}" {% if isChecked == false %}checked="checked"{% endif %} /></div>
