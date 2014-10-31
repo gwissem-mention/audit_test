@@ -237,7 +237,27 @@ class FrontController extends Controller
         }
 
         //récupère les chapitres et les formate pour l'affichage des liens des publications
-        $chapitres  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+        $chapitres            = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+        $chapitresForReponse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+
+        //Trier par note
+        if($resultat->getOutil()->isPlanActionPriorise())
+        {
+            uasort($chapitres, array($this,"triParNote"));
+            foreach ($chapitres as $key => $chapitre) 
+            {
+                foreach ($chapitre->questions as $question) 
+                {
+                    uasort($question, array($this,"triParNoteQuestion"));
+                }
+                uasort($chapitre->childs, array($this,"triParNote"));
+                foreach ($chapitre->childs as $child) 
+                {
+                    uasort($child->questions, array($this,"triParNoteQuestion"));
+                }
+            }
+        }
+
         $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
 
         //Dans le cas où nous nous trouvons dans une synthese, il faut récupérer le min et max
@@ -301,11 +321,6 @@ class FrontController extends Controller
         if( !$user || $back === 0 )
             $back = false;
 
-        if($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() !== 100)
-        {
-            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
-        }
-
         $questionReponseSynthese = array();
         if($resultat->getSynthese())
         {
@@ -356,9 +371,15 @@ class FrontController extends Controller
             }
         }
 
+        if($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() !== 100)
+        {
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
+        }
+
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
             'resultat'                => $resultat,
             'chapitres'               => $chapitres,
+            'chapitresForReponse'     => $chapitresForReponse,
             'questionReponseSynthese' => $questionReponseSynthese,
             'graphiques'              => $graphiques,
             'back'                    => $back,
@@ -474,7 +495,59 @@ class FrontController extends Controller
 
 
 
-
+    /**
+     * Trie par note une stdClass
+     *
+     * @param [type] $a [description]
+     * @param [type] $b [description]
+     *
+     * @return [type]
+     */
+    public function triParNote($a, $b)
+    {
+        if($a->noteChapitre < $b->noteChapitre)
+            return -1;
+        if($a->noteChapitre > $b->noteChapitre)
+            return 1;
+        if($a->order > $b->order)
+            return 1;
+        else
+            return -1;
+    }
+    /**
+     * Trie par note une stdClass
+     *
+     * @param [type] $a [description]
+     * @param [type] $b [description]
+     *
+     * @return [type]
+     */
+    public function triParNoteQuestion($a, $b)
+    {
+        if($a->value < $b->value)
+            return -1;
+        if($a->value > $b->value)
+            return 1;
+        if($a->order > $b->order)
+            return 1;
+        else
+            return -1;
+    }
+    /**
+     * Trie pour le graph tableau
+     *
+     * @param [type] $a [description]
+     * @param [type] $b [description]
+     *
+     * @return [type]
+     */
+    public function triParOrderGraphTable($a, $b)
+    {
+        if($a['order'] < $b['order'])
+            return -1;
+        if($a['order'] > $b['order'])
+            return 1;
+    }
 
     /**
      * Prépare le tableau de réponse, effectue les calculs de moyenne et ajoute les réponses

@@ -129,24 +129,6 @@ class ResultatManager extends BaseManager
             $parent->noteChapitre = ($compteur != 0 ) ? round($scoreTemp / $compteur, 0) : 0;
         }
 
-        //Trier par note
-        if($resultat->getOutil()->isPlanActionPriorise())
-        {
-            uasort($parents, array($this,"triParNote"));
-            foreach ($parents as $key => $parent) 
-            {
-                foreach ($parent->questions as $question) 
-                {
-                    uasort($question, array($this,"triParNoteQuestion"));
-                }
-                uasort($parent->childs, array($this,"triParNote"));
-                foreach ($parent->childs as $child) 
-                {
-                    uasort($child->questions, array($this,"triParNoteQuestion"));
-                }
-            }
-        }
-
         return $parents;
     }
 

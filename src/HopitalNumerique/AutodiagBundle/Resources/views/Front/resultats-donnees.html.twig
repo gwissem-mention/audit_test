@@ -655,7 +655,7 @@ $(document).ready(function() {
                         <p class="text-muted"><em>{{ resultat.remarque|raw|nl2br }}</em></p>
                     {% endif %}
                 
-                    {% for idChapitre, chapitre in chapitres %}
+                    {% for idChapitre, chapitre in chapitresForReponse %}
                         {% if chapitre.nbQuestionsRemplies > 0 %}
                             <div class="chapitre-{{chapitre.id}}">
                                 <h3 class="prev">{{chapitre.intro}}</h3>
