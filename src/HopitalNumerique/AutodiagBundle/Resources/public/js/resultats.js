@@ -42,18 +42,21 @@ $(document).ready(function() {
     var taux         = [];
     var optimale     = [];
     var nonConcernes = [];
+    var min          = [];
+    var max          = [];
     $(datas).each(function(index, element ){
         if( element.value != 'NC' || element.taux != 0 ){
             title = '<b>' + element.title + '</b> (Taux de remplissage: ' + element.taux + '%)';
             categories.push( title );
             values.push( element.value );
             optimale.push( element.opti );
+            min.push( element.min );
+            max.push( element.max );
 
             taux[ title ] = element.taux;
         }else
             nonConcernes.push( element.title );
     });
-
     //Gestion des chapitres non concernes
     if( nonConcernes.length > 0 ){
         var html = '<b>Les chapitres suivants n\'ont pas été diagnostiqués :</b> <ul>';
@@ -64,6 +67,72 @@ $(document).ready(function() {
 
         html += '</ul>';
         $('#chaptersNonConcernes').html(html);
+    }
+
+    var seriesRadar = [
+        //Score
+        {
+            dataLabels: {
+                enabled: true,
+                formatter: function() {
+                    var tau = taux[this.point.category];
+                    return ( tau == 0 && this.point.series.name == "Score" ) ? '' : '<b>' + number_format(this.point.y, 0) + '%</b>'
+                },
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Score',
+            color : '#d9edf7',
+            data  : values,
+            pointPlacement: 'on'
+        },
+        //Valeur optimate
+        {
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.y:,.0f}%</b>',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Valeur optimale préconisée par l\'ANAP',
+            data  : optimale,
+            color : '#6f3596',
+            type  : 'line',
+            pointPlacement: 'on'
+        }]
+        ;
+
+    if(!jQuery.isEmptyObject(min) && min[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.y:,.0f}%</b>',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Valeur minimale de la synthèse',
+            data  : min,
+            color : '#00AEFF',
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+    if(!jQuery.isEmptyObject(max) && max[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.y:,.0f}%</b>',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Valeur maximale de la synthèse',
+            data  : max,
+            color : '#0471A3',
+            type  : 'line',
+            pointPlacement: 'on'
+        });
     }
 
     /* Créer le Spider Chart */
@@ -119,35 +188,7 @@ $(document).ready(function() {
                     return s;
                 }
             },
-            series : [
-                {
-                    dataLabels: {
-                        enabled: true,
-                        formatter: function() {
-                            var tau = taux[this.point.category];
-                            return ( tau == 0 && this.point.series.name == "Score" ) ? '' : '<b>' + number_format(this.point.y, 0) + '%</b>'
-                        },
-                        softConnector: true,
-                        align: 'left'
-                    },
-                    name  : 'Score',
-                    color : '#d9edf7',
-                    data  : values,
-                    pointPlacement: 'on'
-                }, {
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.y:,.0f}%</b>',
-                        softConnector: true,
-                        align: 'left'
-                    },
-                    name  : 'Valeur optimale préconisée par l\'ANAP',
-                    data  : optimale,
-                    color : '#6f3596',
-                    type  : 'line',
-                    pointPlacement: 'on'
-                }
-            ]
+            series : seriesRadar
         });
     }
 

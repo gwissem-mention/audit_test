@@ -1,9 +1,12 @@
 {% import _self as mySelf %}
 
+<script type="text/javascript">
+$(document).ready(function() {
+
+});
+</script>
+
 <div id="resultats">
-<style type="text/css">
-.downloadAsImage{cursor: pointer;}
-</style>
     <div class="col-md-12">
         <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download"></i></a>
 
@@ -109,6 +112,22 @@
                                                     <div class="cursor-value" style="left:{{value}}">{{value}}</div>
                                                 {% endif %}
                                             {% endif %}
+
+                                            {% if panel.min is not null %}
+                                                {% set min = panel.min|number_format(0) ~ '%' %}
+                                                <div class="cursor cursor-min" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{min}}" title="<span>Score minimum : {{min}}</span>" ></div>
+                                                {% if pdf %}
+                                                    <div class="cursor cursor-value" style="left:{{min}}">{{min}}</div>
+                                                {% endif %}
+                                            {% endif %}
+
+                                            {% if panel.max is not null %}
+                                                {% set max = panel.max|number_format(0) ~ '%' %}
+                                                <div class="cursor cursor-max" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{max}}" title="<span>Score maximum : {{max}}</span>" ></div>
+                                                {% if pdf %}
+                                                    <div class="cursor cursor-value" style="left:{{max}}">{{max}}</div>
+                                                {% endif %}
+                                            {% endif %}
                                         </div>
                                     {% else %}
                                         <p class="text-center">- Le chapitre n'a pas été diagnostiqué -</p>
@@ -138,7 +157,10 @@
                                             <h4 class="text-center">{{ chapitre.titre }}</h4>
                                             <div class="chapitres">
                                                 {% for chapitreEnfant in chapitre.enfants %}
-                                                    <div class="resultat{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} {% if chapitreEnfant.moyenne > 66 %} resultat_fort{% elseif chapitreEnfant.moyenne > 33 %}resultat_moyen{% else %}resultat_faible{% endif %}{% endif %}"{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} title="Score : {{ chapitreEnfant.moyenne }}%"{% endif %}>{{ chapitreEnfant.titre }}</div>
+                                                    <div class="resultat{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} {% if chapitreEnfant.moyenne > 66 %} resultat_fort{% elseif chapitreEnfant.moyenne > 33 %}resultat_moyen{% else %}resultat_faible{% endif %}{% endif %}"{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} 
+                                                    title="Score : {{ chapitreEnfant.moyenne }}% {% if resultat.synthese %}<br />Valeur minimale : {{chapitreEnfant.min}}%<br />Valeur maximale : {{chapitreEnfant.max}}%{% endif %}"{% endif %}>
+                                                        {{ chapitreEnfant.titre }}
+                                                    </div>
                                                 {% endfor %}
                                             </div>
                                         </div>
@@ -633,7 +655,7 @@
                         <p class="text-muted"><em>{{ resultat.remarque|raw|nl2br }}</em></p>
                     {% endif %}
                 
-                    {% for chapitre in chapitres %}
+                    {% for idChapitre, chapitre in chapitres %}
                         {% if chapitre.nbQuestionsRemplies > 0 %}
                             <div class="chapitre-{{chapitre.id}}">
                                 <h3 class="prev">{{chapitre.intro}}</h3>
@@ -643,7 +665,7 @@
                                 <hr>
         
                                 {% if chapitre.questionsBack|length > 0 %}
-                                    {{ mySelf.buildQuestionReponse(chapitre.questionsBack) }}
+                                    {{ mySelf.buildQuestionReponse(chapitre.questionsBack, resultat, questionReponseSynthese) }}
                                 {% endif %}
                                 
                                 {% if chapitre.childs|length > 0 %}
@@ -654,7 +676,7 @@
                                                 <h4 class="violet">{{child.title}}</h4>
                                                 <p class="text-muted level1">{{child.desc|raw}}</p>
                                                 
-                                                {{ mySelf.buildQuestionReponse(child.questionsBack) }}
+                                                {{ mySelf.buildQuestionReponse(child.questionsBack, resultat, questionReponseSynthese) }}
                                             {% endif %}
                                         {% endfor %}
                                     </div>
@@ -669,7 +691,7 @@
     </div>
 </div>
 
-{% macro buildQuestionReponse(questions) %}
+{% macro buildQuestionReponse(questions, resultat, questionReponseSynthese) %}
     {% for question in questions %}
         {% if question.initialValue != '' and question.initialValue != -1 %}
             <div class="clearfix">
@@ -683,20 +705,27 @@
                 <div>
                     {% set options = question.options %}
                     <p class="pull-left">
-                        {% if question.initialValue != -1 %}
-                            <span>Non concerné</span><br />
+                        {% if question.initialValue != -1 or resultat.synthese %}
+                            <span>Non concerné</span> {% if questionReponseSynthese[question.id][-1] is defined and questionReponseSynthese[question.id][-1] is not null and questionReponseSynthese[question.id][-1] != 0 %}<span class="text-muted"><i>Répondu {{questionReponseSynthese[question.id][-1]}} fois </i></span>{% endif %}<br />
                         {% else %}
                             <span><b>Non concerné</b></span><br />
                         {% endif %}
-                        
-                        {% for option in options %}
-                            {% set tab = option|split(';') %}
-                            {% if tab[0] == question.initialValue %}
-                                <span><b>{{tab[1]|trim}}</b></span> &nbsp; <em class="text-muted">{{question.remarque}}</em><br />
-                            {% else %}
-                                <span>{{tab[1]|trim}}</span><br />
-                            {% endif %}
-                        {% endfor %}
+
+                        {% if resultat.synthese %}
+                            {% for option in options %}
+                                {% set tab = option|split(';') %}
+                                <span>{{tab[1]|trim}}</span> {% if questionReponseSynthese[question.id][tab[0]|trim] is defined and questionReponseSynthese[question.id][tab[0]|trim] is not null and questionReponseSynthese[question.id][tab[0]|trim] != 0 %}<span class="text-muted"><i>Répondu {{questionReponseSynthese[question.id][tab[0]|trim]}} fois </i></span>{% endif %}<br />
+                            {% endfor %}
+                        {% else %}
+                            {% for option in options %}
+                                {% set tab = option|split(';') %}
+                                {% if tab[0]|trim == question.initialValue %}
+                                    <span><b>{{tab[1]|trim}}</b></span> &nbsp; <em class="text-muted">{{question.remarque}}</em><br />
+                                {% else %}
+                                    <span>{{tab[1]|trim}}</span><br />
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     </p>
                     {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
                         <div class="icon pull-right">

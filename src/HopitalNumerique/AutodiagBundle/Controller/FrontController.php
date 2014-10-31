@@ -240,6 +240,57 @@ class FrontController extends Controller
         $chapitres  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
         $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
 
+        //Dans le cas où nous nous trouvons dans une synthese, il faut récupérer le min et max
+        if($resultat->getSynthese())
+        {
+            foreach ($resultat->getResultats() as $resultatSynthese) 
+            {
+                $chapitresSynthese = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynthese );
+                $graphTemp = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultatSynthese, $chapitresSynthese );
+
+                //Radar
+                foreach ($graphiques["radar"]->datas as $keyDataGraphique => &$dataGraphique) 
+                {
+                    //Récupération de la valeur du graph courant
+                    $graphTempValue = $graphTemp["radar"]->datas[$keyDataGraphique]->value;
+
+                    if(is_null($dataGraphique->min))
+                    {
+                        $dataGraphique->min = $graphTempValue;
+                        $dataGraphique->max = $graphTempValue;
+                    }
+                    elseif($dataGraphique->min > $graphTempValue)
+                    {
+                        $dataGraphique->min = $graphTempValue;
+                    }
+                    elseif($dataGraphique->max < $graphTempValue)
+                    {
+                        $dataGraphique->max = $graphTempValue;
+                    }
+                }
+                //Barre
+                foreach ($graphiques["barre"]->panels as $keyDataGraphique => &$dataGraphique) 
+                {
+                    //Récupération de la valeur du graph courant
+                    $graphTempValue = $graphTemp["barre"]->panels[$keyDataGraphique]->value;
+
+                    if(is_null($dataGraphique->min))
+                    {
+                        $dataGraphique->min = $graphTempValue;
+                        $dataGraphique->max = $graphTempValue;
+                    }
+                    elseif($dataGraphique->min > $graphTempValue)
+                    {
+                        $dataGraphique->min = $graphTempValue;
+                    }
+                    elseif($dataGraphique->max < $graphTempValue)
+                    {
+                        $dataGraphique->max = $graphTempValue;
+                    }
+                }
+            }
+        }
+
         //PDF généré
         if( is_null($resultat->getPdf()) ){
             $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request );
@@ -255,13 +306,64 @@ class FrontController extends Controller
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
         }
 
+        $questionReponseSynthese = array();
+        if($resultat->getSynthese())
+        {
+            $chapitresSynthese = array();
+            //Récupérations de l'ensemble des chapitres de tout les outils de la synthese
+            foreach ($resultat->getResultats() as $resultatSynth) 
+            {
+                $chapitresSynthese[$resultatSynth->getId()]  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynth );
+            }
+            //Récupérations des réponses aux questions
+            foreach ($chapitresSynthese as $resultatId => $chapitresSynthese) 
+            {
+                foreach ($chapitresSynthese as $idChapitreSynth => $chapitreSynthese) 
+                {
+                    foreach ($chapitreSynthese->questionsBack as $idQuestionChapSynth => $questionSynthese) 
+                    {
+                        //Init du tableau
+                        if(!array_key_exists($questionSynthese->id, $questionReponseSynthese))
+                        {
+                            $questionReponseSynthese[$questionSynthese->id] = array();
+                        }
+                        //Init du tableau
+                        if(!array_key_exists($questionSynthese->initialValue, $questionReponseSynthese[$questionSynthese->id]))
+                        {
+                            $questionReponseSynthese[$questionSynthese->id][$questionSynthese->initialValue] = 0;
+                        }
+                        $questionReponseSynthese[$questionSynthese->id][$questionSynthese->initialValue]++;
+                    }
+
+                    foreach ($chapitreSynthese->childs as $chapitreChildSynthese) 
+                    {
+                        foreach ($chapitreChildSynthese->questionsBack as $idQuestionChapChildSynth => $questionChildSynthese) 
+                        {
+                            //Init du tableau
+                            if(!array_key_exists($questionChildSynthese->id, $questionReponseSynthese))
+                            {
+                                $questionReponseSynthese[$questionChildSynthese->id] = array();
+                            }
+                            //Init du tableau
+                            if(!array_key_exists($questionChildSynthese->initialValue, $questionReponseSynthese[$questionChildSynthese->id]))
+                            {
+                                $questionReponseSynthese[$questionChildSynthese->id][$questionChildSynthese->initialValue] = 0;
+                            }
+                            $questionReponseSynthese[$questionChildSynthese->id][$questionChildSynthese->initialValue]++;
+                        }
+                    }
+                }  
+            }
+        }
+
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
-            'resultat'         => $resultat,
-            'chapitres'        => $chapitres,
-            'graphiques'       => $graphiques,
-            'back'             => $back,
-            'sansGabarit'      => $sansGabarit,
-            'processusDonnees' => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
+            'resultat'                => $resultat,
+            'chapitres'               => $chapitres,
+            'questionReponseSynthese' => $questionReponseSynthese,
+            'graphiques'              => $graphiques,
+            'back'                    => $back,
+            'sansGabarit'             => $sansGabarit,
+            'processusDonnees'        => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
     }
 

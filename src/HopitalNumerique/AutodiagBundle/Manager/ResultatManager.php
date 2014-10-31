@@ -108,6 +108,27 @@ class ResultatManager extends BaseManager
             $parent->nbQuestionsRemplies += $enfant->nbQuestionsRemplies;
         }
 
+        //Calcul de la notre des chapitres parents
+        foreach ($parents as $parent) 
+        {
+            $scoreTemp = 0;
+            $compteur  = 0;
+            //Parcourt les sous chapitres
+            foreach ($parent->childs as $chapChild) 
+            {
+                $scoreChildTemp = 0;
+                $compteurChild  = 0;
+                foreach ($chapChild->questionsForCharts as $question) 
+                {
+                    if($question->tableValue == -1)
+                        continue;
+                    $scoreTemp += ($question->max != 0 ) ? $question->tableValue * $question->ponderation * 100 / $question->max : 0;
+                    $compteur++;
+                }
+            }
+            $parent->noteChapitre = ($compteur != 0 ) ? round($scoreTemp / $compteur, 0) : 0;
+        }
+
         //Trier par note
         if($resultat->getOutil()->isPlanActionPriorise())
         {
@@ -253,6 +274,8 @@ class ResultatManager extends BaseManager
             $chart->title = 'Mes résultats détaillés';
             $chart->datas = $this->buildDatasTable( $categories , $chapitresFormated, $questionsReponses );
 
+            uasort($chart->datas->totauxChapitres, array($this,"triParOrderGraphTable"));
+
             $results['table'] = $chart;
         }
 
@@ -342,6 +365,21 @@ class ResultatManager extends BaseManager
             return 1;
         else
             return -1;
+    }
+    /**
+     * Trie pour le graph tableau
+     *
+     * @param [type] $a [description]
+     * @param [type] $b [description]
+     *
+     * @return [type]
+     */
+    public function triParOrderGraphTable($a, $b)
+    {
+        if($a['order'] < $b['order'])
+            return -1;
+        if($a['order'] > $b['order'])
+            return 1;
     }
 
     /**
@@ -458,6 +496,7 @@ class ResultatManager extends BaseManager
                         $totalChapitres[ $chapitre ]['max']                         += ($one->max * $one->ponderation);
                         $totalChapitres[ $chapitre ]['pond']                        += $one->ponderation;
                         $totalChapitres[ $chapitre ]['nc']                          = false;
+                        $totalChapitres[ $chapitre ]['order']                       = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getOrder() : $question->getChapitre()->getParent()->getOrder();
                         $totalChapitres[ $chapitre ]['affichageRestitutionTableau'] = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getAffichageRestitutionTableau() : $question->getChapitre()->getParent()->getAffichageRestitutionTableau();
                     }
                 }
@@ -488,6 +527,8 @@ class ResultatManager extends BaseManager
             $data->value = $this->calculMoyenneCategorie( $categorie, $questionsReponses );
             $data->taux  = $this->calculTauxCategorie( $categorie, $questionsReponses );
             $data->opti  = $categorie->getNote();
+            $data->min   = null;
+            $data->max   = null;
 
             $datas[] = $data;
         }
@@ -520,6 +561,8 @@ class ResultatManager extends BaseManager
             $data->value = $this->calculMoyenneChapitre( $chapitre );
             $data->taux  = $this->calculTauxChapitre( $chapitre );
             $data->opti  = $chapitre->noteOpt;
+            $data->min   = null;
+            $data->max   = null;
 
             $datas[] = $data;
         }
