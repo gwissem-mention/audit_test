@@ -1,10 +1,6 @@
 {% import _self as mySelf %}
 
-<script type="text/javascript">
-$(document).ready(function() {
-
-});
-</script>
+<style type="text/css">.note-0{display: none;}</style>
 
 <div id="resultats">
     <div class="col-md-12">
@@ -654,37 +650,39 @@ $(document).ready(function() {
                     {% if resultat.remarque is defined %}
                         <p class="text-muted"><em>{{ resultat.remarque|raw|nl2br }}</em></p>
                     {% endif %}
-                
-                    {% for idChapitre, chapitre in chapitresForReponse %}
-                        {% if chapitre.nbQuestionsRemplies > 0 %}
-                            <div class="chapitre-{{chapitre.id}}">
-                                <h3 class="prev">{{chapitre.intro}}</h3>
-                                <h3 class="violet">{{chapitre.title}}</h3>
-                                <p class="text-muted level1">{{chapitre.desc|raw}}</p>
-                                
-                                <hr>
-        
-                                {% if chapitre.questionsBack|length > 0 %}
-                                    {{ mySelf.buildQuestionReponse(chapitre.questionsBack, resultat, questionReponseSynthese) }}
-                                {% endif %}
-                                
-                                {% if chapitre.childs|length > 0 %}
-                                    <div class="row sous-chapitre col-md-12">
-                                        {% for child in chapitre.childs %}
-                                            {% if child.nbQuestionsRemplies > 0 %}
-                                                <h4 class="prev">{{child.intro}}</h4>
-                                                <h4 class="violet">{{child.title}}</h4>
-                                                <p class="text-muted level1">{{child.desc|raw}}</p>
-                                                
-                                                {{ mySelf.buildQuestionReponse(child.questionsBack, resultat, questionReponseSynthese) }}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="clearfix"></div>
-                        {% endif %}
-                    {% endfor %}
+                    
+                    {% if chapitresForReponse is defined %}
+                        {% for idChapitre, chapitre in chapitresForReponse %}
+                            {% if chapitre.nbQuestionsRemplies > 0 %}
+                                <div class="chapitre-{{chapitre.id}}">
+                                    <h3 class="prev">{{chapitre.intro}}</h3>
+                                    <h3 class="violet">{{chapitre.title}}</h3>
+                                    <p class="text-muted level1">{{chapitre.desc|raw}}</p>
+                                    
+                                    <hr>
+            
+                                    {% if chapitre.questionsBack|length > 0 %}
+                                        {{ mySelf.buildQuestionReponse(chapitre.questionsBack, resultat, questionReponseSynthese) }}
+                                    {% endif %}
+                                    
+                                    {% if chapitre.childs|length > 0 %}
+                                        <div class="row sous-chapitre col-md-12">
+                                            {% for child in chapitre.childs %}
+                                                {% if child.nbQuestionsRemplies > 0 %}
+                                                    <h4 class="prev">{{child.intro}}</h4>
+                                                    <h4 class="violet">{{child.title}}</h4>
+                                                    <p class="text-muted level1">{{child.desc|raw}}</p>
+                                                    
+                                                    {{ mySelf.buildQuestionReponse(child.questionsBack, resultat, questionReponseSynthese) }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="clearfix"></div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
             {% endif %}
         {% endif %}
