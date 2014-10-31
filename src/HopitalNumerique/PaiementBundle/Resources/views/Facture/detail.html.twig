@@ -29,7 +29,7 @@
                     </div>
                     <div class="col-md-6">
                         <p>Région : {{facture.user.region.libelle}}</p>
-                        <p>Établissement : {{facture.user.etablissementRattachementSante.nom}}</p>
+                        <p>Établissement : {% if facture.user.getEtablissementRattachementSante() is not null %}({{facture.user.getEtablissementRattachementSante().nom}}){% else %}{% if facture.user.getAutreStructureRattachementSante|trim != '' %}({{facture.user.getAutreStructureRattachementSante}}){% endif %}{% endif %}</p>
                     </div>
                 </div>
             </div>

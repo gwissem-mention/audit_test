@@ -1,11 +1,4 @@
 {% import _self as mySelf %}
-
-<script type="text/javascript">
-$(document).ready(function() {
-
-});
-</script>
-
 <div id="resultats">
     <div class="col-md-12">
         <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download"></i></a>
@@ -113,19 +106,19 @@ $(document).ready(function() {
                                                 {% endif %}
                                             {% endif %}
 
-                                            {% if panel.min is not null %}
-                                                {% set min = panel.min|number_format(0) ~ '%' %}
-                                                <div class="cursor cursor-min" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{min}}" title="<span>Score minimum : {{min}}</span>" ></div>
-                                                {% if pdf %}
-                                                    <div class="cursor cursor-value" style="left:{{min}}">{{min}}</div>
-                                                {% endif %}
-                                            {% endif %}
-
                                             {% if panel.max is not null %}
                                                 {% set max = panel.max|number_format(0) ~ '%' %}
                                                 <div class="cursor cursor-max" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{max}}" title="<span>Score maximum : {{max}}</span>" ></div>
                                                 {% if pdf %}
                                                     <div class="cursor cursor-value" style="left:{{max}}">{{max}}</div>
+                                                {% endif %}
+                                            {% endif %}
+
+                                            {% if panel.min is not null %}
+                                                {% set min = panel.min|number_format(0) ~ '%' %}
+                                                <div class="cursor cursor-min" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{min}}" title="<span>Score minimum : {{min}}</span>" ></div>
+                                                {% if pdf %}
+                                                    <div class="cursor cursor-value" style="left:{{min}}">{{min}}</div>
                                                 {% endif %}
                                             {% endif %}
                                         </div>
@@ -654,37 +647,39 @@ $(document).ready(function() {
                     {% if resultat.remarque is defined %}
                         <p class="text-muted"><em>{{ resultat.remarque|raw|nl2br }}</em></p>
                     {% endif %}
-                
-                    {% for idChapitre, chapitre in chapitres %}
-                        {% if chapitre.nbQuestionsRemplies > 0 %}
-                            <div class="chapitre-{{chapitre.id}}">
-                                <h3 class="prev">{{chapitre.intro}}</h3>
-                                <h3 class="violet">{{chapitre.title}}</h3>
-                                <p class="text-muted level1">{{chapitre.desc|raw}}</p>
-                                
-                                <hr>
-        
-                                {% if chapitre.questionsBack|length > 0 %}
-                                    {{ mySelf.buildQuestionReponse(chapitre.questionsBack, resultat, questionReponseSynthese) }}
-                                {% endif %}
-                                
-                                {% if chapitre.childs|length > 0 %}
-                                    <div class="row sous-chapitre col-md-12">
-                                        {% for child in chapitre.childs %}
-                                            {% if child.nbQuestionsRemplies > 0 %}
-                                                <h4 class="prev">{{child.intro}}</h4>
-                                                <h4 class="violet">{{child.title}}</h4>
-                                                <p class="text-muted level1">{{child.desc|raw}}</p>
-                                                
-                                                {{ mySelf.buildQuestionReponse(child.questionsBack, resultat, questionReponseSynthese) }}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="clearfix"></div>
-                        {% endif %}
-                    {% endfor %}
+                    
+                    {% if chapitresForReponse is defined %}
+                        {% for idChapitre, chapitre in chapitresForReponse %}
+                            {% if chapitre.nbQuestionsRemplies > 0 %}
+                                <div class="chapitre-{{chapitre.id}}">
+                                    <h3 class="prev">{{chapitre.intro}}</h3>
+                                    <h3 class="violet">{{chapitre.title}}</h3>
+                                    <p class="text-muted level1">{{chapitre.desc|raw}}</p>
+                                    
+                                    <hr>
+            
+                                    {% if chapitre.questionsBack|length > 0 %}
+                                        {{ mySelf.buildQuestionReponse(chapitre.questionsBack, resultat, questionReponseSynthese) }}
+                                    {% endif %}
+                                    
+                                    {% if chapitre.childs|length > 0 %}
+                                        <div class="row sous-chapitre col-md-12">
+                                            {% for child in chapitre.childs %}
+                                                {% if child.nbQuestionsRemplies > 0 %}
+                                                    <h4 class="prev">{{child.intro}}</h4>
+                                                    <h4 class="violet">{{child.title}}</h4>
+                                                    <p class="text-muted level1">{{child.desc|raw}}</p>
+                                                    
+                                                    {{ mySelf.buildQuestionReponse(child.questionsBack, resultat, questionReponseSynthese) }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="clearfix"></div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
             {% endif %}
         {% endif %}

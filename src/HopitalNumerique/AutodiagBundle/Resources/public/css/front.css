@@ -89,7 +89,7 @@
         #resultats #graphiques .panel .progress .progress-bar-success{background:#dff0d8 !important; }
         #resultats #graphiques .panel .cursor{ width:0; height:0; border:10px solid transparent; border-bottom:20px solid #333333; position: absolute; bottom: 0; margin-left:-11px;}
         #resultats #graphiques .panel .cursor-min{ border-bottom:10px solid #00AEFF;}
-        #resultats #graphiques .panel .cursor-max{ border-bottom:10px solid #0471A3;}
+        #resultats #graphiques .panel .cursor-max{ border-bottom:15px solid #0471A3;}
         #resultats #graphiques .panel .cursor-value{ position: absolute; bottom: -14px; margin-left:-9px; font-size: 10px}
         #resultats #graphiques .panel h3.toPrint{display: none}
         #resultats #graphiques #radarChart{min-width: 400px; max-width: 100%; margin: 0 auto}
