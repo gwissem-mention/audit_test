@@ -706,7 +706,7 @@ $(document).ready(function() {
                     {% set options = question.options %}
                     <p class="pull-left">
                         {% if question.initialValue != -1 or resultat.synthese %}
-                            <span>Non concerné</span><br />
+                            <span>Non concerné</span> {% if questionReponseSynthese[question.id][-1] is defined and questionReponseSynthese[question.id][-1] is not null and questionReponseSynthese[question.id][-1] != 0 %}<span class="text-muted"><i>Répondu {{questionReponseSynthese[question.id][-1]}} fois </i></span>{% endif %}<br />
                         {% else %}
                             <span><b>Non concerné</b></span><br />
                         {% endif %}
