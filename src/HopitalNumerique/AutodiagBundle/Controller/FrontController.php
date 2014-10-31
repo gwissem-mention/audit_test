@@ -306,13 +306,64 @@ class FrontController extends Controller
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
         }
 
+        $questionReponseSynthese = array();
+        if($resultat->getSynthese())
+        {
+            $chapitresSynthese = array();
+            //Récupérations de l'ensemble des chapitres de tout les outils de la synthese
+            foreach ($resultat->getResultats() as $resultatSynth) 
+            {
+                $chapitresSynthese[$resultatSynth->getId()]  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynth );
+            }
+            //Récupérations des réponses aux questions
+            foreach ($chapitresSynthese as $resultatId => $chapitresSynthese) 
+            {
+                foreach ($chapitresSynthese as $idChapitreSynth => $chapitreSynthese) 
+                {
+                    foreach ($chapitreSynthese->questionsBack as $idQuestionChapSynth => $questionSynthese) 
+                    {
+                        //Init du tableau
+                        if(!array_key_exists($questionSynthese->id, $questionReponseSynthese))
+                        {
+                            $questionReponseSynthese[$questionSynthese->id] = array();
+                        }
+                        //Init du tableau
+                        if(!array_key_exists($questionSynthese->initialValue, $questionReponseSynthese[$questionSynthese->id]))
+                        {
+                            $questionReponseSynthese[$questionSynthese->id][$questionSynthese->initialValue] = 0;
+                        }
+                        $questionReponseSynthese[$questionSynthese->id][$questionSynthese->initialValue]++;
+                    }
+
+                    foreach ($chapitreSynthese->childs as $chapitreChildSynthese) 
+                    {
+                        foreach ($chapitreChildSynthese->questionsBack as $idQuestionChapChildSynth => $questionChildSynthese) 
+                        {
+                            //Init du tableau
+                            if(!array_key_exists($questionChildSynthese->id, $questionReponseSynthese))
+                            {
+                                $questionReponseSynthese[$questionChildSynthese->id] = array();
+                            }
+                            //Init du tableau
+                            if(!array_key_exists($questionChildSynthese->initialValue, $questionReponseSynthese[$questionChildSynthese->id]))
+                            {
+                                $questionReponseSynthese[$questionChildSynthese->id][$questionChildSynthese->initialValue] = 0;
+                            }
+                            $questionReponseSynthese[$questionChildSynthese->id][$questionChildSynthese->initialValue]++;
+                        }
+                    }
+                }  
+            }
+        }
+
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
-            'resultat'         => $resultat,
-            'chapitres'        => $chapitres,
-            'graphiques'       => $graphiques,
-            'back'             => $back,
-            'sansGabarit'      => $sansGabarit,
-            'processusDonnees' => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
+            'resultat'                => $resultat,
+            'chapitres'               => $chapitres,
+            'questionReponseSynthese' => $questionReponseSynthese,
+            'graphiques'              => $graphiques,
+            'back'                    => $back,
+            'sansGabarit'             => $sansGabarit,
+            'processusDonnees'        => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
     }
 

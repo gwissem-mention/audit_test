@@ -665,7 +665,7 @@ $(document).ready(function() {
                                 <hr>
         
                                 {% if chapitre.questionsBack|length > 0 %}
-                                    {{ mySelf.buildQuestionReponse(chapitre.questionsBack, resultat, idChapitre, 0) }}
+                                    {{ mySelf.buildQuestionReponse(chapitre.questionsBack, resultat, questionReponseSynthese) }}
                                 {% endif %}
                                 
                                 {% if chapitre.childs|length > 0 %}
@@ -676,7 +676,7 @@ $(document).ready(function() {
                                                 <h4 class="violet">{{child.title}}</h4>
                                                 <p class="text-muted level1">{{child.desc|raw}}</p>
                                                 
-                                                {{ mySelf.buildQuestionReponse(child.questionsBack, resultat, idChapitre, child.id) }}
+                                                {{ mySelf.buildQuestionReponse(child.questionsBack, resultat, questionReponseSynthese) }}
                                             {% endif %}
                                         {% endfor %}
                                     </div>
@@ -691,7 +691,7 @@ $(document).ready(function() {
     </div>
 </div>
 
-{% macro buildQuestionReponse(questions, resultat, idChapitre, idChild) %}
+{% macro buildQuestionReponse(questions, resultat, questionReponseSynthese) %}
     {% for question in questions %}
         {% if question.initialValue != '' and question.initialValue != -1 %}
             <div class="clearfix">
@@ -712,25 +712,14 @@ $(document).ready(function() {
                         {% endif %}
 
                         {% if resultat.synthese %}
-                            {% for resultatSynth in resultat.resultats %}
-                                {% for chapitreSynth in resultatSynth.chapitres %}
-                                    {% if chapitreSynth.id == idChapitre %}
-                                    {% else %}
-                                    {% endif %}
-                                    {% for option in options %}
-                                        {% set tab = option|split(';') %}
-                                        {% if tab[0] == question.initialValue %}
-                                            <span><b>{{tab[1]|trim}}</b></span> &nbsp; <em class="text-muted">{{question.remarque}}</em><br />
-                                        {% else %}
-                                            <span>{{tab[1]|trim}}</span><br />
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endfor %}
+                            {% for option in options %}
+                                {% set tab = option|split(';') %}
+                                <span>{{tab[1]|trim}}</span> {% if questionReponseSynthese[question.id][tab[0]|trim] is defined and questionReponseSynthese[question.id][tab[0]|trim] is not null and questionReponseSynthese[question.id][tab[0]|trim] != 0 %}<span class="text-muted"><i>Répondu {{questionReponseSynthese[question.id][tab[0]|trim]}} fois </i></span>{% endif %}<br />
                             {% endfor %}
                         {% else %}
                             {% for option in options %}
                                 {% set tab = option|split(';') %}
-                                {% if tab[0] == question.initialValue %}
+                                {% if tab[0]|trim == question.initialValue %}
                                     <span><b>{{tab[1]|trim}}</b></span> &nbsp; <em class="text-muted">{{question.remarque}}</em><br />
                                 {% else %}
                                     <span>{{tab[1]|trim}}</span><br />
