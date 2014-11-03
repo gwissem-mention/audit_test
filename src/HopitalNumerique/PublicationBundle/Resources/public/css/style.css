@@ -25,6 +25,18 @@
     #sommaire .content > ul > li > p
         {color: #6f3596; font-weight: bold; }
 
+/* Productions */
+    #productionsPointDur{ margin-top: 30px; }
+    #productionsPointDur h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal }
+    #productionsPointDur .wrapper-results{ padding:20px 0; position: relative;}
+    #productionsPointDur .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+    #productionsPointDur .wrapper-results .results h4{clear: both; margin-top: 0}
+    #productionsPointDur .wrapper-results .results h4 a{color:#070005; font-size: 18px; font-weight: bold}
+    #productionsPointDur .wrapper-results .results h5{color:#b71c8b; font-size: 13px; font-weight: normal; text-transform: uppercase; margin-bottom: 5px}
+    #productionsPointDur .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top:10px; display: block; height: 18px; text-align: right}
+    #productionsPointDur .wrapper-results .results p{font-size: 13px; color:#070707; }
+    #productionsPointDur .wrapper-results .results .fa-refresh{ color:#3da20b; }
+
 /* Bloc publication*/
     #publication a abbr{color:#E0822A;}
     #publication img{ margin: 5px 10px 0 5px; }

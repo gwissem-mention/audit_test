@@ -53,6 +53,14 @@ class PublicationController extends Controller
             }
         }
 
+        //Ajout des objets liés au prods
+        foreach ($productions as $production) 
+        {
+            $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $production->idc)));
+            $objetsOrder[$production->id]['prefixe'] = $libContenu;
+            $objetsOrder[$production->id]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $production->id));
+        }
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
@@ -271,14 +279,17 @@ class PublicationController extends Controller
                 $production->alias = $objet->getAlias();
 
                 //Cas Objet
-                if( $contenu === false ) {
+                if( $contenu === false ) 
+                {
                     //formate datas
                     $production->titre    = $objet->getTitre();
                     $production->created  = $objet->getDateCreation();
                     $production->objet    = true;
                     $resume               = explode('<!-- pagebreak -->', $objet->getResume() );
                     $production->synthese = $objet->getSynthese();
-                }else{
+                }
+                else
+                {
                     //formate datas
                     $production->idc      = $contenu->getId();
                     $production->aliasc   = $contenu->getAlias();
