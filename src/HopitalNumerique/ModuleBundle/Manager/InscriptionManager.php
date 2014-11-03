@@ -163,7 +163,8 @@ class InscriptionManager extends BaseManager
      */
     public function toogleEtatEvaluation( $inscriptions, $ref )
     {
-        foreach($inscriptions as $inscription) {
+        foreach($inscriptions as $inscription) 
+        {
             $inscription->setEtatEvaluation( $ref );
             $this->_em->persist( $inscription );
         }
