@@ -7,7 +7,7 @@
     #autodiag .options{display: inline;float: right;position: relative;top: 0px;right: 0; margin-bottom: 10px;}
     #autodiag .options .btn{width: 45px}
     #autodiag #remarque{width: 100%; margin: 20px 0;}
-    #autodiag #instructions{ margin: 20px 0 0 0;}
+    #autodiag #instructions{ margin: 5px 0 20px 0;}
 
 /* Colonne left */
     #autodiag p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
