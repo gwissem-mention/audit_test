@@ -1,7 +1,7 @@
 {% import _self as mySelf %}
 <div id="resultats">
     <div class="col-md-12">
-        <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download"></i></a>
+        <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download" style="margin-right:5px"></i>Télécharger</a>
 
         {% if back is defined and back %}
             <a href="{{path('hopitalnumerique_autodiag_front_comptehn')}}" class="print btn btn-success pull-left" title="Retour à mon compte"><i class="fa fa-reply"></i></a>
