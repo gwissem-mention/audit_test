@@ -1,0 +1,20 @@
+/* Pop-in de synthèse*/
+#instructions-ajax{ margin:0; background-color:#ffffff; padding-top:20px }
+#instructions-ajax #logoAnap{ margin:20px auto; width:130px; display:block }
+#instructions-ajax .content{ min-height:480px; padding:0 15px 15px 15px; margin:20px }
+#instructions-ajax .btn{ margin-right:10px }
+#instructions-ajax .copyright{ margin-top:20px }
+#instructions-ajax ul{ list-style-position: inside; }
+
+/* Copie de publication */
+#instructions-ajax h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px}
+#instructions-ajax h2{font-size: 18px; color: #6f3596; font-weight: bold;}
+#instructions-ajax h3{font-size: 16px; color: #6f3596; margin-left: 20px;font-weight: bold;}
+#instructions-ajax h4{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 50px; font-weight: bold;}
+#instructions-ajax h5{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;}
+#instructions-ajax h6{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
+#instructions-ajax a abbr{color:#E0822A;}
+
+.fancybox-overlay .fancybox-skin a.fancybox-close {
+    background-position: 0 0;
+}
