@@ -85,7 +85,8 @@
                                 </div>
 
                                 <div class="panel-body">
-                                    <h3 class="toPrint">{{panel.title}}</h3>
+                                    <h3 class="toPrint">{{panel.title}}</h3> 
+                                    {% if pdf %}<span class="text-muted taux-remplissage"> (Taux de remplissage : {{tauxChapitre}}%)</span>{% endif %}
                                     {% if panel.value|checkNC %}
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-danger" style="width: 33.3%">
