@@ -44,14 +44,34 @@ $(document).ready(function() {
     //initialisation de la couleur en fonction des réponses
     prepareColoredQuestions();
 
+    //Instructions
+    // enquire.register("screen and (max-width: 991px)", {
+    //     match : function() {
+    //         $(function() {
+    //             $(document).unbind('click.fb-start');
+    //             $('a.instructions').attr('target','_blank');
+    //         });
+    //     },
+    //     unmatch : function() {
+    //         $(function() {
+    //             $('#instructions').fancybox({
+    //                 'padding'   : 0,
+    //                 'autoSize'  : false,
+    //                 'width'     : '80%',
+    //                 'showCloseButton' : true,
+    //             });
+                
+    //         });
+    //     }
+    // });
     $(function() {
         $('#instructions').fancybox({
             'padding'   : 0,
             'autoSize'  : false,
             'width'     : '80%',
             'scrolling' : 'no',
-            'showCloseButton' : true,
-            'height' : '360px'
+            'height'    : 'auto',
+            'showCloseButton' : true
         });
     });
     //fancybox daffichage de la synthese

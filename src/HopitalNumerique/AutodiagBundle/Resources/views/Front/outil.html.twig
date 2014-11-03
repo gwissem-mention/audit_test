@@ -30,7 +30,10 @@
     <div id="autodiag">
         <input type="hidden" name="outil" id="outil-reponses-obligatoire" value="{{outil.centPourcentReponseObligatoire}}" />
         <div class="col-md-3 col-sm-12 blockLeft">
-            <p class="titre">Les chapitres</p>
+            {% if outil.instruction %}
+                <a class="btn btn-primary fancybox.iframe col-md-12" id="instructions" href="{{path('hopitalnumerique_autodiag_front_instructions', {'id':outil.id})}}" title="Instructions"><i style="margin-right:10px" class="fa fa-list-alt"></i>Instructions</a>
+            {% endif %}
+            <p class="titre">Sommaire</p>
             <div id="chapitres"></div>
             <div class="avancement-global">
                 <div class="progress progress-striped">
@@ -41,11 +44,7 @@
                     <span class="text-muted pull-right" >100%</span>
                 </p>
             </div>
-
             <div class="clearfix"></div>
-            {% if outil.instruction %}
-                <a class="btn btn-primary fancybox.iframe col-md-12" id="instructions" href="{{path('hopitalnumerique_autodiag_front_instructions', {'id':outil.id})}}" title="Instructions"><i style="margin-right:10px" class="fa fa-list-alt"></i>Instructions</a>
-            {% endif %}
         </div>
         <div class="col-md-9 col-sm-12" >
             <h1>{{outil.title}}</h1>

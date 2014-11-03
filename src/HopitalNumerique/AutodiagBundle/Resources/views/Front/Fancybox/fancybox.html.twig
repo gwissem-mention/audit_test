@@ -17,6 +17,7 @@
                 "@bootstrap_css"
                 "@fancybox_css"
                 'bundles/hopitalnumeriquecore/css/layout.css'
+                'bundles/hopitalnumeriqueautodiag/css/fancybox.css'
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
@@ -44,21 +45,28 @@
     </head>
 
     <body>
+        <div id="instructions-ajax" >
+            <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" />
 
-        <div class="panel" style="margin:0; height: 360px; overflow: scroll; overflow-x: none;" >
-            <div class="panel-heading">
-                <h4 class="violet" style="margin-bottom:0" >Insctructions de l'outil {{outil.title}}</h4>
-            </div>
+            <h1 class="violet text-center" >{{outil.title}}</h1>
+            <h2 class="violet text-center" >Insctructions</h2>
 
-            <div class="panel-body" style="padding-top:10px" >
+            <div class="content">
                 <div class="col-md-12 fancybox-popin">
                     {% if outil.instruction %} 
                         {{outil.instruction|raw}}
+                        <p class="copyright text-muted text-center">
+                            © ANAP - Mon Hôpital Numérique<br />
+                            Ces contenus extraits de la plateforme de l'Anap <a href="www.monhopitalnumerique.fr">www.MonHopitalNumerique.fr</a> sont diffusés gratuitement. <br />
+                            Toutefois, leur utilisation ou citation est soumise à l'inscription de la mention suivante : "© ANAP - Mon Hôpital Numérique"
+                        </p>
                     {% else %}
                         - Aucune instruction n'est fournie pour cet autodiagnostic -
                     {% endif %}
                 </div>
             </div>
+
+            <div class="clearfix"></div>
         </div>
     </body>
 </html>
