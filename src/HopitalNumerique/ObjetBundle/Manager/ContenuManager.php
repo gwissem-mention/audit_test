@@ -312,6 +312,11 @@ class ContenuManager extends BaseManager
      */
     private function getPrefixRecursif( $contenu, $prefix )
     {
+        if(is_null($contenu))
+        {
+            return $prefix;
+        }
+        
         $prefix = $contenu->getOrder() . '.' . $prefix;
 
         if( !is_null($contenu->getParent()) )
