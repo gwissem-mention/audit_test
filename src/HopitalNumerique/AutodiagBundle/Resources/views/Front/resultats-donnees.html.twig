@@ -338,7 +338,7 @@
                 {% set affichageProduction = false %}
 
                 {# Chapitres #}
-                {% for chapitre in chapitres %}
+                {% for chapitre in chapitresForAnalyse %}
                     
                     {#  Synthese #}
                     {% if chapitre.synthese and not affichageSynthese %}
@@ -426,7 +426,7 @@
                     <tbody>
                         {# Chapitres #}
                         {% set chaptersToHide = [] %}
-                        {% for chapitre in chapitres %}
+                        {% for chapitre in chapitresForAnalyse %}
                             {% set doTheChapterHavePublications = false %}
                             <tr>
                                 <td class="note-{{chapitre.noteChapitre}}">{{chapitre.code}}</td>
