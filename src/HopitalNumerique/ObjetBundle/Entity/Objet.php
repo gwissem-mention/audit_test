@@ -121,10 +121,10 @@ class Objet
     private $dateCreation;
 
     /**
-     * @var \DateTime
+     * @var \String
      *
      * @Gedmo\Versioned
-     * @ORM\Column(name="obj_date_debut_parution", type="datetime", nullable=true, options = {"comment" = "Date de parution de l objet"})
+     * @ORM\Column(name="obj_date_debut_parution", type="string", length=255, nullable=true, options = {"comment" = "Date de parution de l objet"})
      */
     private $dateParution;
     
@@ -1380,7 +1380,7 @@ class Objet
     /**
      * Set dateParution
      *
-     * @param \DateTime $dateParution
+     * @param String $dateParution
      * @return Objet
      */
     public function setDateParution($dateParution)
@@ -1393,7 +1393,7 @@ class Objet
     /**
      * Get dateParution
      *
-     * @return \DateTime 
+     * @return \String 
      */
     public function getDateParution()
     {

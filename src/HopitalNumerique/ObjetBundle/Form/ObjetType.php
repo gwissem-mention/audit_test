@@ -150,10 +150,9 @@ class ObjetType extends AbstractType
                     'class' => 'col-md-7 control-label'
                 )
             ))
-            ->add('dateParution', 'genemu_jquerydate', array(
+            ->add('dateParution', 'text', array(
                 'required'   => false, 
                 'label'      => 'Début de parution',
-                'widget'     => 'single_text',
                 'label_attr' => array(
                     'class' => 'col-md-7 control-label'
                 )
