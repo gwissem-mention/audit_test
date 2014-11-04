@@ -256,6 +256,38 @@ class InscriptionMassController extends Controller
                 break;
             case 'evaluation':
                 $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation( $inscriptions, $ref );
+                if($ref->getId() == "29")
+                {
+                    foreach ($inscriptions as $inscription) 
+                    {
+                        $roleUser = $this->get('nodevo_role.manager.role')->getUserRole($inscription->getUser());
+                        //Mise à jour de la production du module dans la liste des productions maitrisées : uniquement pour les ambassadeurs
+                        if('ROLE_AMBASSADEUR_7' === $roleUser)
+                        {
+                            //Récupération des formations
+                            $formations = $inscription->getSession()->getModule()->getProductions();
+                            
+                            //Pour chaque production on ajout l'utilisateur à la liste des ambassadeurs qui la maitrise
+                            foreach($formations as $formation)
+                            {
+                                //Récupération des ambassadeurs pour vérifier si l'utilisateur actuel ne maitrise pas déjà cette formation
+                                $ambassadeursFormation = $formation->getAmbassadeurs();
+                                $ambassadeurIds = array();
+
+                                foreach ($ambassadeursFormation as $ambassadeur)
+                                {
+                                    $ambassadeurIds[] = $ambassadeur->getId();
+                                }
+
+                                if(!in_array($inscription->getUser()->getId(), $ambassadeurIds))
+                                {
+                                    $formation->addAmbassadeur( $inscription->getUser() );
+                                    $this->get('hopitalnumerique_objet.manager.objet')->save( $formation );
+                                }
+                            }
+                        }
+                    }
+                }
                 //inform user connected
                 $this->get('session')->getFlashBag()->add('info', 'Evaluation(s) modifiée(s) avec succès.' );
                 break;
