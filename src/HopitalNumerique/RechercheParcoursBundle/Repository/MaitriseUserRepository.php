@@ -90,4 +90,21 @@ class MaitriseUserRepository extends EntityRepository
 
         return $qb;
     }
+
+    public function getAllNotesNotAdmin()
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('notes')
+            ->from('\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser', 'notes')
+            ->leftJoin('notes.rechercheParcoursDetails', 'etape')
+            ->leftJoin('notes.user', 'user')
+            //Ne pas prendre en compte les admins (méthode moche)
+            ->andWhere('user.roles != :adminId')
+            ->setParameter('adminId', 'a:1:{i:0;s:21:"ROLE_ADMINISTRATEUR_1";}');    
+        
+        $qb->orderBy('etape.order');
+
+        return $qb;
+    }
 }

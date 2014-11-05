@@ -33,7 +33,8 @@ class MaitriseUserManager extends BaseManager
 
     public function getAllNotesSortByObjet( $filtre, $dateDebut, $dateFin )
     {
-        $notes     = $this->findAll();
+        $notes = $this->getRepository()->getAllNotesNotAdmin()->getQuery()->getResult();
+        //$notes     = $this->findAll();
         $notesTemp = array();
 
         //Trie de l'ensemble des notes par points dur
