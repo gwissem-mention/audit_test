@@ -364,6 +364,8 @@ class ResultatManager extends BaseManager
      */
     public function triParOrderGraphTable($a, $b)
     {
+        if(!array_key_exists('order', $a) || !array_key_exists('order', $b))
+            return 0;
         if($a['order'] < $b['order'])
             return -1;
         if($a['order'] > $b['order'])

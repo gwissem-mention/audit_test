@@ -615,6 +615,7 @@ class FrontController extends Controller
             $nbVal = 0;
             $val   = 0;
             $exist = false;
+            $isNC  = true;
 
             //calc moyenne
             foreach($reponses as $reponse) {
@@ -623,9 +624,16 @@ class FrontController extends Controller
                     $nbVal++;
                     $exist = true;
                 }
+
+                if($reponse->getValue() != -1)
+                {
+                    $isNC = false;
+                }
             }
             if ($exist)
             	$val = $nbVal != 0 ? ( $val / $nbVal ) : -1;
+            elseif($isNC)
+                $val = -1;
             else
                 $val = '';
 
