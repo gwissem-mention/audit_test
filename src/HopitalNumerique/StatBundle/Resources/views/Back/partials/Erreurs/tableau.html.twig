@@ -36,7 +36,7 @@
                                     {% endif %}
                                 </td>
                                 <td style="border:1px solid #e3e3e3;font-size:11px;">
-                                    <a target="_blank" href="{{url}}">{{url}}</a>
+                                    <a target="_blank" href="{{url}}">{{url|truncate(30)}}</a>
                                 </td>
                                 <td id="check-url-{{keyUrl}}-{{keyObjetUrl}}" class="url-check" style="border:1px solid #e3e3e3;text-align:center;" data-url="{{url}}">
                                 </td>
