@@ -25,7 +25,7 @@
                         {% for url in objetOrContenu %}
                             <tr>
                                 <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
-                                    <a target="_blank" href="{{path('hopitalnumerique_objet_objet_edit', {'id': keyObjetUrl})}}">{{keyObjetUrl}}</a>
+                                    <a target="_blank" href="{{path('hopitalnumerique_objet_objet_edit', {'id': keyObjetUrl})}}">{{keyObjetUrl|truncate(30)}}</a>
                                 </td>
                                 <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
                                     {{objets[keyObjetUrl].getTitre()}}
