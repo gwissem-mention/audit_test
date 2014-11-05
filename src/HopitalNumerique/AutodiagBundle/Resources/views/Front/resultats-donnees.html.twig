@@ -68,9 +68,9 @@
 
                                             {% if tauxChapitre == 0 %}
                                                 <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-4.png')}}" alt="Taux Remplissage" title="Taux de remplissage : {{tauxChapitre}}%" />
-                                            {% elseif tauxChapitre <= 33 %}
+                                            {% elseif tauxChapitre <= 50 %}
                                                 <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-3.png')}}" alt="Taux Remplissage" title="Taux de remplissage : {{tauxChapitre}}%" />
-                                            {% elseif tauxChapitre <= 66 %}
+                                            {% elseif tauxChapitre <= 99 %}
                                                 <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-2.png')}}" alt="Taux Remplissage" title="Taux de remplissage : {{tauxChapitre}}%" />
                                             {% else %}
                                                 <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-1.png')}}" alt="Taux Remplissage" title="Taux de remplissage : {{tauxChapitre}}%" />
@@ -107,7 +107,7 @@
                                                 {% endif %}
                                             {% endif %}
 
-                                            {% if panel.max is not null %}
+                                            {% if panel.max is not null and tauxChapitre != 0 %}
                                                 {% set max = panel.max|number_format(0) ~ '%' %}
                                                 <div class="cursor cursor-max" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{max}}" title="<span>Score maximum : {{max}}</span>" ></div>
                                                 {% if pdf %}
@@ -115,7 +115,7 @@
                                                 {% endif %}
                                             {% endif %}
 
-                                            {% if panel.min is not null %}
+                                            {% if panel.min is not null and tauxChapitre != 0 %}
                                                 {% set min = panel.min|number_format(0) ~ '%' %}
                                                 <div class="cursor cursor-min" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{min}}" title="<span>Score minimum : {{min}}</span>" ></div>
                                                 {% if pdf %}
@@ -338,7 +338,7 @@
                 {% set affichageProduction = false %}
 
                 {# Chapitres #}
-                {% for chapitre in chapitres %}
+                {% for chapitre in chapitresForAnalyse %}
                     
                     {#  Synthese #}
                     {% if chapitre.synthese and not affichageSynthese %}
@@ -426,7 +426,7 @@
                     <tbody>
                         {# Chapitres #}
                         {% set chaptersToHide = [] %}
-                        {% for chapitre in chapitres %}
+                        {% for chapitre in chapitresForAnalyse %}
                             {% set doTheChapterHavePublications = false %}
                             <tr>
                                 <td class="note-{{chapitre.noteChapitre}}">{{chapitre.code}}</td>

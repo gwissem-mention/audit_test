@@ -100,10 +100,10 @@ class ObjetManager extends BaseManager
             $row['fichier2']     = $objet->getPath2();
             $row['vignette']     = $objet->getVignette();
             $row['note']         = number_format($this->getNoteReferencement($objet->getReferences(), $refsPonderees), 0);
+            $row['dateParution'] = $objet->getDateParution();
 
             //quelques Dates
             $row['dateCreation']         = !is_null($objet->getDateCreation())         ? $objet->getDateCreation()->format('d/m/Y')         : '';
-            $row['dateParution']         = !is_null($objet->getDateParution())         ? $objet->getDateParution()->format('d/m/Y')         : '';
             $row['dateDebutPublication'] = !is_null($objet->getDateDebutPublication()) ? $objet->getDateDebutPublication()->format('d/m/Y') : '';
             $row['dateFinPublication']   = !is_null($objet->getDateFinPublication())   ? $objet->getDateFinPublication()->format('d/m/Y')   : '';
             $row['dateModification']     = !is_null($objet->getDateModification())     ? $objet->getDateModification()->format('d/m/Y')     : '';

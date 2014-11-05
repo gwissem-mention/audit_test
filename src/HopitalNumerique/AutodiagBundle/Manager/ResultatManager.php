@@ -101,7 +101,8 @@ class ResultatManager extends BaseManager
         }
 
         //reformate les chapitres FRONT
-        foreach($enfants as $enfant){
+        foreach($enfants as $enfant)
+        {
             $parent = $parents[ $enfant->parent ];
             $parent->childs[] = $enfant;
             // RLE : On compte les réponses des enfants également
@@ -113,16 +114,21 @@ class ResultatManager extends BaseManager
         {
             $scoreTemp = 0;
             $compteur  = 0;
+            foreach ($parent->questionsForCharts as $question) 
+            {
+                if($question->tableValue == -1)
+                        continue;
+                $scoreTemp += ($question->max != 0 ) ? $question->tableValue * $question->ponderation * 100 / $question->max : 0;
+                $compteur++;
+            }
             //Parcourt les sous chapitres
             foreach ($parent->childs as $chapChild) 
             {
-                $scoreChildTemp = 0;
-                $compteurChild  = 0;
-                foreach ($chapChild->questionsForCharts as $question) 
+                foreach ($chapChild->questionsForCharts as $questionChild) 
                 {
-                    if($question->tableValue == -1)
+                    if($questionChild->tableValue == -1)
                         continue;
-                    $scoreTemp += ($question->max != 0 ) ? $question->tableValue * $question->ponderation * 100 / $question->max : 0;
+                    $scoreTemp += ($questionChild->max != 0 ) ? $questionChild->tableValue * $questionChild->ponderation * 100 / $questionChild->max : 0;
                     $compteur++;
                 }
             }
