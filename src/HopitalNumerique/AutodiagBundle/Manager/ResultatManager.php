@@ -118,7 +118,7 @@ class ResultatManager extends BaseManager
             {
                 if($question->tableValue == -1)
                         continue;
-                $scoreTemp += ($question->max != 0 ) ? $question->tableValue * $question->ponderation * 100 / $question->max : 0;
+                $scoreTemp += ($question->max != 0 ) ? $question->initialValue * $question->ponderation * 100 / $question->max : 0;
                 $compteur++;
             }
             //Parcourt les sous chapitres
@@ -128,7 +128,7 @@ class ResultatManager extends BaseManager
                 {
                     if($questionChild->tableValue == -1)
                         continue;
-                    $scoreTemp += ($questionChild->max != 0 ) ? $questionChild->tableValue * $questionChild->ponderation * 100 / $questionChild->max : 0;
+                    $scoreTemp += ($questionChild->max != 0 ) ? $questionChild->initialValue * $questionChild->ponderation * 100 / $questionChild->max : 0;
                     $compteur++;
                 }
             }
@@ -469,7 +469,7 @@ class ResultatManager extends BaseManager
                             $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbRep']++;
 
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbQue']++;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints']                    += ($one->tableValue * $one->ponderation);
+                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints']                    += ($one->initialValue * $one->ponderation);
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']                         += ($one->max * $one->ponderation);
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['pond']                        += $one->ponderation;
                         $results->categories[ $categorieId ]['chapitres'][$chapitre]['nc']                          = false;
@@ -480,7 +480,7 @@ class ResultatManager extends BaseManager
                             $totalChapitres[ $chapitre ]['nbRep']++;
                         
                         $totalChapitres[ $chapitre ]['nbQue']++;
-                        $totalChapitres[ $chapitre ]['nbPoints']                    += ($one->tableValue * $one->ponderation);
+                        $totalChapitres[ $chapitre ]['nbPoints']                    += ($one->initialValue * $one->ponderation);
                         $totalChapitres[ $chapitre ]['max']                         += ($one->max * $one->ponderation);
                         $totalChapitres[ $chapitre ]['pond']                        += $one->ponderation;
                         $totalChapitres[ $chapitre ]['nc']                          = false;
@@ -652,8 +652,9 @@ class ResultatManager extends BaseManager
         $chapitreConcerne  = false;
 
         $questions = $chapitre->questionsForCharts;
+
         foreach($questions as $question){
-            $sommeValues       += ($question->value * $question->ponderation);
+            $sommeValues       += ($question->initialValue * $question->ponderation);
             $sommePonderations += $question->ponderation;
 
             $chapitreConcerne = true;
@@ -663,11 +664,11 @@ class ResultatManager extends BaseManager
         foreach( $childs as $child ){
             $questions = $child->questionsForCharts;
             foreach($questions as $question){
-                $sommeValues       += ($question->value * $question->ponderation);
+                $sommeValues       += ($question->initialValue * $question->ponderation);
                 $sommePonderations += $question->ponderation;
 
                 $chapitreConcerne = true;
-            }   
+            }
         }        
 
         if( $chapitreConcerne === false )
