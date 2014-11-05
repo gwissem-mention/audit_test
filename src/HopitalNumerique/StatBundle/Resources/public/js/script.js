@@ -351,6 +351,14 @@ $(document).ready(function() {
         });
     }
 
+    function exportCSVErreursUrl()
+    {
+        if ( $('#form-erreurs-curl').validationEngine('validate') ) 
+        {
+            $('#form-erreurs-curl').submit();
+        }
+    }
+
     function exportCSVItemProduction()
     {
         if ( $('#form-item-production').validationEngine('validate') ) 
