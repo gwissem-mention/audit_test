@@ -8,14 +8,14 @@ use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
- * Manager de l'entitÃ© Resultat.
+ * Manager de l'entité Resultat.
  */
 class ResultatManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Resultat';
 
     /**
-     * Override : RÃ©cupÃ¨re les donnÃ©es pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau
      *
      * @return array
      */
@@ -48,9 +48,9 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Formatte les rÃ©sultats
+     * Formatte les résultats
      *
-     * @param Resultat $resultat L'objet RÃ©sultat
+     * @param Resultat $resultat L'objet Résultat
      *
      * @return array
      */
@@ -105,7 +105,7 @@ class ResultatManager extends BaseManager
         {
             $parent = $parents[ $enfant->parent ];
             $parent->childs[] = $enfant;
-            // RLE : On compte les rÃ©ponses des enfants Ã©galement
+            // RLE : On compte les réponses des enfants également
             $parent->nbQuestionsRemplies += $enfant->nbQuestionsRemplies;
         }
 
@@ -139,10 +139,10 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * RÃ©cupÃ¨re le dernier rÃ©sultat validÃ©
+     * Récupère le dernier résultat validé
      *
      * @param Outil  $outil L'outil
-     * @param User   $user  L'utilisateur connectÃ©
+     * @param User   $user  L'utilisateur connecté
      *
      * @return Resultat
      */
@@ -152,10 +152,10 @@ class ResultatManager extends BaseManager
     }
     
     /**
-     * Construit le tableau de graphiques pour la gÃ©nÃ©ration en FRONT
-     * Axe : 1 = Chapitres // 2 = CatÃ©gories
+     * Construit le tableau de graphiques pour la génération en FRONT
+     * Axe : 1 = Chapitres // 2 = Catégories
      * 
-     * @param Resultat $resultat  L'entitÃ©e rÃ©sultat
+     * @param Resultat $resultat  L'entitée résultat
      * @param array    $chapitres Liste des chapitres
      *
      * @return array
@@ -164,10 +164,10 @@ class ResultatManager extends BaseManager
     {
         $results = array();
 
-        //rÃ©cupÃ¨re les donnÃ©es pour les graphiques
+        //récupère les données pour les graphiques
         $outil = $resultat->getOutil();
 
-        //rÃ©cupÃ¨re le gros tableau de questions / rÃ©ponses
+        //récupère le gros tableau de questions / réponses
         $questionsReponses = $this->buildQuestionsReponses( $resultat->getReponses() );
         $questionsReponses = $questionsReponses['front'];
 
@@ -185,7 +185,7 @@ class ResultatManager extends BaseManager
                 }
             }
 
-            //get Datas for Each axes : Chapitres / CatÃ©gories
+            //get Datas for Each axes : Chapitres / Catégories
             $datasAxeChapitre   = $this->buildDatasAxeChapitre( $chapitresFormated );
 
             $categories     = array();
@@ -217,7 +217,7 @@ class ResultatManager extends BaseManager
                 }
             }
 
-            //get Datas for Each axes : Chapitres / CatÃ©gories
+            //get Datas for Each axes : Chapitres / Catégories
             $datasAxeChapitre   = $this->buildDatasAxeChapitre( $chapitresFormated );
             
             $categories     = array();
@@ -259,7 +259,7 @@ class ResultatManager extends BaseManager
             }
 
             $chart        = new \StdClass;
-            $chart->title = 'Mes rÃ©sultats dÃ©taillÃ©s';
+            $chart->title = 'Mes résultats détaillés';
             $chart->datas = $this->buildDatasTable( $categories , $chapitresFormated, $questionsReponses );
 
             uasort($chart->datas->totauxChapitres, array($this,"triParOrderGraphTable"));
@@ -271,12 +271,12 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Construit l'entitÃ©e SynthÃ¨se
+     * Construit l'entitée Synthèse
      *
-     * @param  User      $user   L'utilisateur connectÃ©
-     * @param  Outil     $outil  L'outil/l'autodiag concernÃ©
-     * @param  Reference $statut Le statut 'validÃ©' de la synthÃ¨se
-     * @param  string    $nom    Nom de la synthÃ¨se
+     * @param  User      $user   L'utilisateur connecté
+     * @param  Outil     $outil  L'outil/l'autodiag concerné
+     * @param  Reference $statut Le statut 'validé' de la synthèse
+     * @param  string    $nom    Nom de la synthèse
      *
      * @return Resultat
      */
@@ -407,11 +407,11 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Construit le tableau de donnÃ©es pour le rendu graphique Table
+     * Construit le tableau de données pour le rendu graphique Table
      *
-     * @param array $categories        Liste des entitÃ©s catÃ©gorie
+     * @param array $categories        Liste des entités catégorie
      * @param array $chapitres         Liste des chapitres parents
-     * @param array $questionsReponses Tableau de questions/rÃ©ponses
+     * @param array $questionsReponses Tableau de questions/réponses
      *
      * @return StdClass
      */
@@ -431,7 +431,7 @@ class ResultatManager extends BaseManager
         foreach($chapitresOrdered as $chapitre)
             $results->chapitres[$chapitre->id] = $chapitre->title;
         
-        //build catÃ©gories
+        //build catégories
         $results->categories = array();
         $totalChapitres      = array();
 
@@ -445,7 +445,7 @@ class ResultatManager extends BaseManager
                 $results->categories[ $categorieId ]['chapitres'][$chapitre->id] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true, 'affichageRestitutionBarre' => false, 'affichageRestitutionRadar' => false, 'affichageRestitutionTableau' => false );
             
 
-            //get questions by catÃ©gorie
+            //get questions by catégorie
             $questions = $categorie->getQuestions();
             foreach($questions as $question)
             {
@@ -460,7 +460,7 @@ class ResultatManager extends BaseManager
                     if ( !isset($totalChapitres[ $chapitre ]) )
                         $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nc' => true, 'affichageRestitutionTableau' => false );
 
-                    //check If Question is concernÃ©e
+                    //check If Question is concernée
                     if( isset($questionsReponses[ $question->getId() ]) ){
                         $one   = $questionsReponses[ $question->getId() ];
 
@@ -498,10 +498,10 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Retourne le tableau de donnÃ©es lors de l'axe Categorie
+     * Retourne le tableau de données lors de l'axe Categorie
      *
-     * @param array $categories        Liste des catÃ©gories
-     * @param array $questionsReponses Le tableau de questions/rÃ©ponses
+     * @param array $categories        Liste des catégories
+     * @param array $questionsReponses Le tableau de questions/réponses
      *
      * @return array
      */
@@ -525,7 +525,7 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Retourne le tableau de donnÃ©es lors de l'axe Chapitre
+     * Retourne le tableau de données lors de l'axe Chapitre
      *
      * @param array $chapitres Les chapitres
      *
@@ -559,10 +559,10 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Calcul de taux de remplissage de la catÃ©gorie
+     * Calcul de taux de remplissage de la catégorie
      *
-     * @param Categorie $categorie         L'entitÃ©e CatÃ©gorie
-     * @param array     $questionsReponses Tableaux de questions/rÃ©ponses
+     * @param Categorie $categorie         L'entitée Catégorie
+     * @param array     $questionsReponses Tableaux de questions/réponses
      *
      * @return double
      */
@@ -611,9 +611,9 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Calcul la moyenne pondÃ©rÃ©e
+     * Calcul la moyenne pondérée
      *
-     * @param Categorie $categorie         L'entitÃ©e categorie
+     * @param Categorie $categorie         L'entitée categorie
      * @param array     $questionsReponses Tableau de questions/reponses
      *
      * @return double
@@ -639,7 +639,7 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Calcul la moyenne pondÃ©rÃ©e
+     * Calcul la moyenne pondérée
      *
      * @param StdClass $chapitre Le chapitre
      *
@@ -681,7 +681,7 @@ class ResultatManager extends BaseManager
      *
      * @param array    $questions         Liste des questions
      * @param StdClass $chapitre          L'objet chapitre
-     * @param array    $questionsReponses Liste des questionsrÃ©ponses
+     * @param array    $questionsReponses Liste des questionsréponses
      *
      * @return array
      */
@@ -697,7 +697,7 @@ class ResultatManager extends BaseManager
         {
             if( isset($questionsReponses[ $question->getId() ]) )
             {
-                //on ajoute seulement les questions valides pour les rÃ©sultats
+                //on ajoute seulement les questions valides pour les résultats
                 $one = $questionsReponses[ $question->getId() ];
 
                 $one->question = $one->code != '' ? $one->code . '. ' . $one->question : $one->question;
@@ -711,7 +711,7 @@ class ResultatManager extends BaseManager
                     $nbQuestionsRemplies++;
                 }
 
-                //on ajoute TOUTES les questions aux chapitre pour les calculs liÃ©s aux graphiques (pondÃ©ration)
+                //on ajoute TOUTES les questions aux chapitre pour les calculs liés aux graphiques (pondération)
                 $forCharts[] = $one;
 
                 $nbQuestions++;
@@ -732,9 +732,9 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Construit un tableau PHP de questions / rÃ©ponses Ã  partir des rÃ©ponses d'un utilisateur
+     * Construit un tableau PHP de questions / réponses à partir des réponses d'un utilisateur
      *
-     * @param array $reponses Les entitÃ©es rÃ©ponses
+     * @param array $reponses Les entitées réponses
      *
      * @return array
      */
@@ -768,7 +768,7 @@ class ResultatManager extends BaseManager
             $rep->colored         = $question->getColored();
             $rep->options         = explode( '<br />', nl2br( $question->getOptions() ) );
 
-            //Si != Texte, on calcul la rÃ©ponse Max
+            //Si != Texte, on calcul la réponse Max
             if( $rep->type != 417 ){
                 $tab = $this->calculMinAndMaxOption( $question );
                 $rep->max = $tab['max'];
@@ -784,11 +784,11 @@ class ResultatManager extends BaseManager
 
             $rep->initialValue = $reponse->getValue();
 
-            //pour le front, on ajoute QUE les rÃ©ponses valides (! non concernÃ©s)
+            //pour le front, on ajoute QUE les réponses valides (! non concernés)
             if( $reponse->getValue() != -1 )
                 $results[ $reponse->getQuestion()->getId() ] = $rep;
 
-            //On ajoute TOUTE les questions pour le back (mÃªme les non concernÃ©s)
+            //On ajoute TOUTE les questions pour le back (même les non concernés)
             $resultsForBack[ $reponse->getQuestion()->getId() ] = $rep;
         }
 
@@ -798,7 +798,7 @@ class ResultatManager extends BaseManager
     /**
      * Calcul la valeur maximum de la question
      *
-     * @param Question $question L'entitÃ© Question
+     * @param Question $question L'entité Question
      *
      * @return integer
      */
