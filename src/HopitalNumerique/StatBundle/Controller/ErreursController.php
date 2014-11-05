@@ -102,6 +102,41 @@ class ErreursController extends Controller
     }
 
     /**
+     * Génération du tableau à exporter
+     *
+     * @param  Symfony\Component\HttpFoundation\Request  $request
+     * 
+     * @return View
+     */
+    public function exportCSVAction( Request $request )
+    {
+        //Récupération de la requete
+        $dateDebut    = $request->request->get('datedebut-erreursCurl');
+        $dateFin      = $request->request->get('dateFin-erreursCurl');
+
+        //Récupération des dates sous forme DateTime
+        $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
+        $dateFinDateTime   = $dateFin   === "" ? null : new \DateTime($dateFin);
+
+        $resultat = $this->getAllUrlObjets($dateDebutDateTime, $dateFinDateTime);
+
+        //Colonnes communes
+        $colonnes = array(
+            'type'       => 'Type du lien',
+            'idObjet'    => 'Id de la publication',
+            'titreObjet' => 'Titre de la publication',
+            'infradoc'   => 'Infradoc ?',
+            'url'        => 'Url',
+            'valide'     => 'Valide',
+        );
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+        $datas         = $this->get('hopitalnumerique_stat.manager.errorurl')->getDatasForExport( $resultat );
+
+        return $this->get('hopitalnumerique_stat.manager.errorurl')->exportCsv( $colonnes, $datas, 'export-erreurs-url.csv', $kernelCharset );
+    }
+
+    /**
     * Génération du tableau à exporter
     *
     * @param  Symfony\Component\HttpFoundation\Request  $request

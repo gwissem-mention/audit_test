@@ -39,6 +39,11 @@ hopital_numerique_stat_requete_fantome_generate_tableau:
 hopital_numerique_stat_erreurs_curl:
     pattern: /admin/statistiques/show/erreurs
     defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:curl}
+
+hopital_numerique_stat_erreurs_export_csv:
+    pattern: /admin/statistiques/show/erreurs/exportCSV
+    defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:exportCSV}
+
 hopital_numerique_stat_erreurs_curl_with_base:
     pattern: /admin/statistiques/show/erreursWithBase
     defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:curlWithBase}
