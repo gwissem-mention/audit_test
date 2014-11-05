@@ -1,10 +1,10 @@
 {% import _self as mySelf %}
 <div id="resultats">
     <div class="col-md-12">
-        <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download" style="margin-right:5px"></i>Télécharger</a>
+        <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="TÃ©lacharger les rÃ©sultats en PDF"><i class="fa fa-download" style="margin-right:5px"></i>TÃ©lÃ©charger</a>
 
         {% if back is defined and back %}
-            <a href="{{path('hopitalnumerique_autodiag_front_comptehn')}}" class="print btn btn-success pull-left" title="Retour à mon compte"><i class="fa fa-reply"></i></a>
+            <a href="{{path('hopitalnumerique_autodiag_front_comptehn')}}" class="print btn btn-success pull-left" title="Retour Ã  mon compte"><i class="fa fa-reply"></i></a>
         {% else %}
             {% if sansGabarit %}
                 <a href="{{path('hopitalnumerique_autodiag_front_outil_sans_gabarit', { 'alias':resultat.outil.alias, 'outil':resultat.outil.id, 'sansGabarit':sansGabarit })}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
@@ -29,10 +29,10 @@
 
         {% if resultat.synthese %}
             <div class="autodiags">
-                <h2 class="violet open" data-toggle="results" >Synthèse - {{resultat.name}}</h2>
+                <h2 class="violet open" data-toggle="results" >SynthÃ¨se - {{resultat.name}}</h2>
                 
                 <div id="results">
-                    <p>Autodiagnostics concernés par cette synthèse :</p>
+                    <p>Autodiagnostics concernÃ©s par cette synthÃ¨se :</p>
                     <ul>
                         {% for result in resultat.resultats %}
                             <li><a href="{{path('hopitalnumerique_autodiag_front_resultat', {'id':result.id, 'back':1})}}" target="_blank">{{result.name}}</a></li>
@@ -44,7 +44,7 @@
             <div class="page-break"></div>
         {% endif %}
 
-        <h2 class="violet open" data-toggle="graphiques" >Résultats de l'outil - Graphiques</h2>
+        <h2 class="violet open" data-toggle="graphiques" >RÃ©sultats de l'outil - Graphiques</h2>
 
         <div id="graphiques">
             {# Affichage du graphique barre #}
@@ -124,7 +124,7 @@
                                             {% endif %}
                                         </div>
                                     {% else %}
-                                        <p class="text-center">- Le chapitre n'a pas été diagnostiqué -</p>
+                                        <p class="text-center">- Le chapitre n'a pas Ã©tÃ© diagnostiquÃ© -</p>
                                     {% endif %}
                                 </div>
                             </div>
@@ -208,7 +208,7 @@
 
                                     <tr>
                                         <td class="active text-center vertical-align categorie-{{id}}" rowspan="2"><b>{{categorie.title|capitalize}}</b></td>
-                                        <td class="text-center">Nombre de réponses</td>
+                                        <td class="text-center">Nombre de rÃ©ponses</td>
                                         {% for datas in categorie['chapitres'] %}
                                             {% if not datas['nc'] %}
                                                 <td class="text-center">
@@ -218,7 +218,7 @@
                                                 {% set nbQueCateg = nbQueCateg + datas['nbQue'] %}
                                             {% else %}
                                                 <td class="text-center vertical-align">
-                                                    - Non diagnostiqué -
+                                                    - Non diagnostiquÃ© -
                                                 </td>
                                             {% endif %}
                                         {% endfor %}
@@ -232,9 +232,8 @@
                                             {% if not datas['nc'] %}
                                                 {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
                                                 {% set maxCateg = maxCateg + datas['max'] %}
-                                                {% set pondCateg = pondCateg + datas['pond'] %}
                                                 {% if datas['max'] != 0 %}
-                                                    {% set note = (datas['nbPoints']) / datas['pond'] %}
+                                                    {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
                                                 {% else %}
                                                     {% set note = 0 %}
                                                 {% endif %}
@@ -247,8 +246,8 @@
                                                 </td>
                                             {% endif %}
                                         {% endfor %}
-                                        {% if pondCateg != 0 %}
-                                            {% set note = nbPointsCateg / pondCateg %}
+                                        {% if maxCateg != 0 %}
+                                            {% set note = (nbPointsCateg * 100) / maxCateg %}
                                         {% else %}
                                             {% set note = 0 %}
                                         {% endif %}
@@ -261,7 +260,7 @@
                                 {% if chart.datas.categories|length > 1 %}
                                     <tr>
                                         <td class="text-center title-total vertical-align" rowspan="2"><b>Total</b></td>
-                                        <td class="text-center">Nombre de réponses</td>
+                                        <td class="text-center">Nombre de rÃ©ponses</td>
                                         {% set nbRepTotal = 0 %}
                                         {% set nbQueTotal = 0 %}
                                         {% for datas in chart.datas.totauxChapitres %}
@@ -273,7 +272,7 @@
                                                 {% set nbQueTotal = nbQueTotal + datas['nbQue'] %}
                                             {% else %}
                                                 <td class="text-center vertical-align">
-                                                    - Non diagnostiqué -
+                                                    - Non diagnostiquÃ© -
                                                 </td>
                                             {% endif %}
                                         {% endfor %}
@@ -287,25 +286,10 @@
                                         {% set maxTotal = 0 %}
                                         {% for idChapitre,datas in chart.datas.totauxChapitres %}
                                             {% if not datas['nc'] %}
-                                                {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
-                                                {% set maxCateg = maxCateg + datas['max'] %}
-                                                {% set pondCateg = pondCateg + datas['pond'] %}
-                                                {% if datas['max'] != 0 %}
-                                                    {% set note = (datas['nbPoints']) / datas['pond'] %}
-                                                {% else %}
-                                                    {% set note = 0 %}
-                                                {% endif %}
-
                                                 {% set nbPointsTotal = nbPointsTotal + datas['nbPoints'] %}
                                                 {% set maxTotal = maxTotal + datas['max'] %}
-                                                {% set pondTotal = pondTotal + datas['pond'] %}
                                                 {% if datas['max'] != 0 %}
                                                     {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
-                                                {% else %}
-                                                    {% set note = 0 %}
-                                                {% endif %}
-                                                {% if datas['pond'] != 0 %}
-                                                    {% set note = datas['nbPoints'] / datas['pond'] %}
                                                 {% else %}
                                                     {% set note = 0 %}
                                                 {% endif %}
@@ -318,8 +302,8 @@
                                                 </td>
                                             {% endif %}
                                         {% endfor %}
-                                        {% if pondTotal != 0 %}
-                                            {% set note = nbPointsTotal / pondTotal %}
+                                        {% if maxTotal != 0 %}
+                                            {% set note = (nbPointsTotal * 100) / maxTotal %}
                                         {% else %}
                                             {% set note = 0 %}
                                         {% endif %}
@@ -340,16 +324,16 @@
         <div class="page-break"></div>
 
         {% if not resultat.outil.masquerAnalyse %}
-            <h2 class="violet closed" data-toggle="chapitres" >Résultats de l'outil - Analyse</h2>
+            <h2 class="violet closed" data-toggle="chapitres" >RÃ©sultats de l'outil - Analyse</h2>
 
             <div id="chapitres" style="display:none">
                 <p class="text-justify">
-                    <span>Compte tenu de vos réponses, l'Anap vous propose l'analyse suivante :</span>
+                    <span>Compte tenu de vos rÃ©ponses, l'Anap vous propose l'analyse suivante :</span>
                 </p>
 
-                <a class="btn btn-link btn-sm" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_CSV',{'id':resultat.id})}}">Télécharger l'export CSV de votre analyse.<i class="fa fa-cloud"></i></a>
+                <a class="btn btn-link btn-sm" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_CSV',{'id':resultat.id})}}">TÃ©lÃ©charger l'export CSV de votre analyse.<i class="fa fa-cloud"></i></a>
 
-                {# Cherche si on doit afficher les colonnes Synthèse et Production #}
+                {# Cherche si on doit afficher les colonnes SynthÃ¨se et Production #}
                 {% set affichageSynthese = false %}
                 {% set affichageProduction = false %}
 
@@ -422,15 +406,15 @@
 
                 {# Affichage des publications sous forme de tableau : GME 24/09/14 #}
                 <table class="table table-striped" id="table-analyse">
-                    <!-- En-tête du tableau -->
+                    <!-- En-tÃªte du tableau -->
                     <thead>
                         <tr>
                             <th>Chap.</th>
                             <th>S.Chap.</th>
                             <th>Question</th>
-                            <th>Réponse</th>
+                            <th>RÃ©ponse</th>
                             {% if affichageSynthese %}
-                               <th>Synthèse</th>
+                               <th>SynthÃ¨se</th>
                             {% endif %}
                             {% if affichageProduction %}
                                 <th class="forAffichage">Production</th>
@@ -463,7 +447,7 @@
                                         {% if chapitre.noteMin and chapitre.noteChapitre <= chapitre.noteMin %}
                                             {# Affichage des liens de publications #}
                                             {% if chapitre.lien is not null and chapitre.lien is not empty %}
-                                                {# Affichage du lien défini en back office #}
+                                                {# Affichage du lien dÃ©fini en back office #}
                                                 <ul><li><a href="{{chapitre.lien}}" target="_blank">{{chapitre.descriptionLien}}</a></li></ul>
                                             {% endif %}
                                             {% set publications = chapitre.id|getPublicationsForChapitre(pdf) %}
@@ -490,7 +474,7 @@
                                                 style="color:#e88824"
                                             {% endif %}{% endif %}>
                                         {% if question.initialValue == -1 %}
-                                            Non concerné
+                                            Non concernÃ©
                                         {% else %}
                                             {% for option in question.options %}
                                                 {% set tab = option|split(';') %}
@@ -511,7 +495,7 @@
                                     {% if affichageProduction %}
                                         <td class="forAffichage">
                                             {% if question.lien is not null and question.lien is not empty %}
-                                                {# Affichage du lien défini en back office #}
+                                                {# Affichage du lien dÃ©fini en back office #}
                                                 <ul><li><a href="{{question.lien}}" target="_blank">{{question.descriptionLien}}</a></li></ul>
                                             {% endif %}
                                             {# Affichage des liens de publications #}
@@ -547,7 +531,7 @@
                                                 {# Affichage des liens de publications #}
                                                 {% if child.noteMin and child.noteChapitre <= child.noteMin %}
                                                     {% if child.lien is not null and child.lien is not empty %}
-                                                        {# Affichage du lien défini en back office #}
+                                                        {# Affichage du lien dÃ©fini en back office #}
                                                         <ul><li><a href="{{child.lien}}" target="_blank">{{child.descriptionLien}}</a></li></ul>
                                                     {% endif %}
                                                     {% set publications = child.id|getPublicationsForChapitre(pdf) %}
@@ -574,7 +558,7 @@
                                                         style="color:#e88824"
                                                     {% endif %}{% endif %}>
                                                 {% if questionChild.initialValue == -1 %}
-                                                    Non concerné
+                                                    Non concernÃ©
                                                 {% else %}
                                                     {% for option in questionChild.options %}
                                                         {% set tab = option|split(';') %}
@@ -594,7 +578,7 @@
                                             {% if affichageProduction %}
                                                 <td class="forAffichage">
                                                     {% if questionChild.lien is not null and questionChild.lien is not empty %}
-                                                        {# Affichage du lien défini en back office #}
+                                                        {# Affichage du lien dÃ©fini en back office #}
                                                         <ul><li><a href="{{questionChild.lien}}" target="_blank">{{questionChild.descriptionLien}}</a></li></ul>
                                                     {% endif %}
                                                     {# Affichage des liens de publications #}
@@ -611,11 +595,11 @@
                                             <td></td>
                                             <td></td>
                                             {% if affichageSynthese and affichageProduction %}
-                                                <td colspan="4">Aucune recommandation spécifique.</td>
+                                                <td colspan="4">Aucune recommandation spÃ©cifique.</td>
                                             {% elseif affichageSynthese or affichageProduction %}
-                                                <td colspan="3">Aucune recommandation spécifique.</td>
+                                                <td colspan="3">Aucune recommandation spÃ©cifique.</td>
                                             {% else %}
-                                                <td colspan="2">Aucune recommandation spécifique.</td>
+                                                <td colspan="2">Aucune recommandation spÃ©cifique.</td>
                                             {% endif %}
                                         </tr>
                                     
@@ -627,11 +611,11 @@
                                     <td></td>
                                     <td></td>
                                     {% if affichageSynthese and affichageProduction %}
-                                        <td colspan="4">Aucune recommandation spécifique.</td>
+                                        <td colspan="4">Aucune recommandation spÃ©cifique.</td>
                                     {% elseif affichageSynthese or affichageProduction %}
-                                        <td colspan="3">Aucune recommandation spécifique.</td>
+                                        <td colspan="3">Aucune recommandation spÃ©cifique.</td>
                                     {% else %}
-                                        <td colspan="2">Aucune recommandation spécifique.</td>
+                                        <td colspan="2">Aucune recommandation spÃ©cifique.</td>
                                     {% endif %}
                                 </tr>
                             {% endif %}
@@ -645,7 +629,7 @@
                 </table>
 
                 <p class="text-center {% if chapitres|length > 0 %}hide{% endif %}" >
-                    - Aucune recommandation de l'ANAP nécessaire -
+                    - Aucune recommandation de l'ANAP nÃ©cessaire -
                     <input type="hidden" id="chaptersToHide" value="{{chaptersToHide|json_encode}}" />
                 </p>
             </div>
@@ -655,11 +639,11 @@
             {% if pdf or true %}
                 <div class="page-break"></div>
 
-                <h2 class="violet closed" data-toggle="reponses" >Résultats de l'outil - Vos réponses</h2>
+                <h2 class="violet closed" data-toggle="reponses" >RÃ©sultats de l'outil - Vos rÃ©ponses</h2>
 
                 <div id="reponses" {% if not pdf %} style="display:none" {% endif %} >
                 
-                    <p>Vos réponses apparaissent en gras parmi les réponses possibles à chaque question.</p>
+                    <p>Vos rÃ©ponses apparaissent en gras parmi les rÃ©ponses possibles Ã  chaque question.</p>
                 
                     {% if resultat.remarque is defined %}
                         <p class="text-muted"><em>{{ resultat.remarque|raw|nl2br }}</em></p>
@@ -718,15 +702,15 @@
                     {% set options = question.options %}
                     <p class="pull-left">
                         {% if question.initialValue != -1 or resultat.synthese %}
-                            <span>Non concerné</span> {% if questionReponseSynthese[question.id][-1] is defined and questionReponseSynthese[question.id][-1] is not null and questionReponseSynthese[question.id][-1] != 0 %}<span class="text-muted"><i>Répondu {{questionReponseSynthese[question.id][-1]}} fois </i></span>{% endif %}<br />
+                            <span>Non concernÃ©</span> {% if questionReponseSynthese[question.id][-1] is defined and questionReponseSynthese[question.id][-1] is not null and questionReponseSynthese[question.id][-1] != 0 %}<span class="text-muted"><i>RÃ©pondu {{questionReponseSynthese[question.id][-1]}} fois </i></span>{% endif %}<br />
                         {% else %}
-                            <span><b>Non concerné</b></span><br />
+                            <span><b>Non concernÃ©</b></span><br />
                         {% endif %}
 
                         {% if resultat.synthese %}
                             {% for option in options %}
                                 {% set tab = option|split(';') %}
-                                <span>{{tab[1]|trim}}</span> {% if questionReponseSynthese[question.id][tab[0]|trim] is defined and questionReponseSynthese[question.id][tab[0]|trim] is not null and questionReponseSynthese[question.id][tab[0]|trim] != 0 %}<span class="text-muted"><i>Répondu {{questionReponseSynthese[question.id][tab[0]|trim]}} fois </i></span>{% endif %}<br />
+                                <span>{{tab[1]|trim}}</span> {% if questionReponseSynthese[question.id][tab[0]|trim] is defined and questionReponseSynthese[question.id][tab[0]|trim] is not null and questionReponseSynthese[question.id][tab[0]|trim] != 0 %}<span class="text-muted"><i>RÃ©pondu {{questionReponseSynthese[question.id][tab[0]|trim]}} fois </i></span>{% endif %}<br />
                             {% endfor %}
                         {% else %}
                             {% for option in options %}
