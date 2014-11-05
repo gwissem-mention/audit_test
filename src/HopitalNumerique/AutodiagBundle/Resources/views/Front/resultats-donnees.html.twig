@@ -232,8 +232,9 @@
                                             {% if not datas['nc'] %}
                                                 {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
                                                 {% set maxCateg = maxCateg + datas['max'] %}
+                                                {% set pondCateg = pondCateg + datas['pond'] %}
                                                 {% if datas['max'] != 0 %}
-                                                    {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
+                                                    {% set note = (datas['nbPoints']) / datas['pond'] %}
                                                 {% else %}
                                                     {% set note = 0 %}
                                                 {% endif %}
@@ -246,8 +247,8 @@
                                                 </td>
                                             {% endif %}
                                         {% endfor %}
-                                        {% if maxCateg != 0 %}
-                                            {% set note = (nbPointsCateg * 100) / maxCateg %}
+                                        {% if pondCateg != 0 %}
+                                            {% set note = nbPointsCateg / pondCateg %}
                                         {% else %}
                                             {% set note = 0 %}
                                         {% endif %}
@@ -286,10 +287,25 @@
                                         {% set maxTotal = 0 %}
                                         {% for idChapitre,datas in chart.datas.totauxChapitres %}
                                             {% if not datas['nc'] %}
+                                                {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
+                                                {% set maxCateg = maxCateg + datas['max'] %}
+                                                {% set pondCateg = pondCateg + datas['pond'] %}
+                                                {% if datas['max'] != 0 %}
+                                                    {% set note = (datas['nbPoints']) / datas['pond'] %}
+                                                {% else %}
+                                                    {% set note = 0 %}
+                                                {% endif %}
+
                                                 {% set nbPointsTotal = nbPointsTotal + datas['nbPoints'] %}
                                                 {% set maxTotal = maxTotal + datas['max'] %}
+                                                {% set pondTotal = pondTotal + datas['pond'] %}
                                                 {% if datas['max'] != 0 %}
                                                     {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
+                                                {% else %}
+                                                    {% set note = 0 %}
+                                                {% endif %}
+                                                {% if datas['pond'] != 0 %}
+                                                    {% set note = datas['nbPoints'] / datas['pond'] %}
                                                 {% else %}
                                                     {% set note = 0 %}
                                                 {% endif %}
@@ -302,8 +318,8 @@
                                                 </td>
                                             {% endif %}
                                         {% endfor %}
-                                        {% if maxTotal != 0 %}
-                                            {% set note = (nbPointsTotal * 100) / maxTotal %}
+                                        {% if pondTotal != 0 %}
+                                            {% set note = nbPointsTotal / pondTotal %}
                                         {% else %}
                                             {% set note = 0 %}
                                         {% endif %}
