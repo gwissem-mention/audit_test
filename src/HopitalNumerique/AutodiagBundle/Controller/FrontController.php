@@ -238,7 +238,8 @@ class FrontController extends Controller
 
         //récupère les chapitres et les formate pour l'affichage des liens des publications
         $chapitres            = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
-        $chapitresForReponse  = $chapitres;
+        $chapitresForReponse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+        $chapitresForAnalyse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );        
 
         //Trier par note
         if($resultat->getOutil()->isPlanActionPriorise())
@@ -254,8 +255,20 @@ class FrontController extends Controller
                 }
             }
         }
+        if($resultat->getOutil()->isPlanActionPriorise())
+        {
+            uasort($chapitresForAnalyse, array($this,"triParNote"));
+            foreach ($chapitresForAnalyse as $key => $chapitre) 
+            {
+                uasort($chapitre->questions, array($this,"triParNoteQuestion"));
+                uasort($chapitre->childs, array($this,"triParNote"));
+                foreach ($chapitre->childs as $child) 
+                {
+                    uasort($child->questions, array($this,"triParNoteQuestion"));
+                }
+            }
+        }
         //--Analyse
-        $chapitresForAnalyse = $chapitres;
 
         //Nettoyage des éléments dont il n'y aucun élément
         foreach ($chapitresForAnalyse as $key => $chapitre)
@@ -341,13 +354,6 @@ class FrontController extends Controller
             }
         }
 
-        //PDF généré
-        if( is_null($resultat->getPdf()) ){
-            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request );
-            $resultat->setPdf( $pdf );
-            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
-        }
-
         if( !$user || $back === 0 )
             $back = false;
 
@@ -404,6 +410,19 @@ class FrontController extends Controller
         if($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() !== 100)
         {
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
+        }
+
+        $options = array(
+            'chapitresForAnalyse'     => $chapitresForAnalyse,
+            'chapitresForReponse'     => $chapitresForReponse,
+            'questionReponseSynthese' => $questionReponseSynthese,
+        );
+
+        //PDF généré
+        if( is_null($resultat->getPdf()) ){
+            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $options );
+            $resultat->setPdf( $pdf );
+            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
         }
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
@@ -660,15 +679,18 @@ class FrontController extends Controller
      *
      * @return string PDF name
      */
-    private function generatePdf( $chapitres, $graphiques, $resultat, $request )
+    private function generatePdf( $chapitres, $graphiques, $resultat, $request , $options)
     {
         $filename = $resultat->getId() . $resultat->getOutil()->getId() . time() . '.pdf';
 
         $html = $this->renderView( 'HopitalNumeriqueAutodiagBundle:Front:pdf.html.twig' , array(
-            'resultat'   => $resultat,
-            'chapitres'  => $chapitres,
-            'graphiques' => $graphiques,
-            'processusDonnees'  => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
+            'resultat'                => $resultat,
+            'chapitres'               => $chapitres,
+            'chapitresForAnalyse'     => $options["chapitresForAnalyse"],
+            'chapitresForReponse'     => $options["chapitresForReponse"],
+            'questionReponseSynthese' => $options["questionReponseSynthese"],
+            'graphiques'              => $graphiques,
+            'processusDonnees'        => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
 
         $options = array(

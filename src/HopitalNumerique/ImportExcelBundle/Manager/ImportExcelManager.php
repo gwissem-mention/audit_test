@@ -33,7 +33,10 @@ class ImportExcelManager extends BaseManager
         { 
             //Si pour la ligne courante le libellé n'est pas rempli alors on s'arrête dans la lecture
             if( trim($sheetCategorie->getCellByColumnAndRow(0, $i)) == '' )
+            {
+                die('Erreur de format dans le fichier !');
                 break;
+            }
 
             $libelle = $sheetCategorie->getCellByColumnAndRow(0, $i)->getValue();
             $note    = $sheetCategorie->getCellByColumnAndRow(1, $i)->getValue();
@@ -63,7 +66,10 @@ class ImportExcelManager extends BaseManager
         { 
             //Si pour la ligne courante le libellé ou le conde ne sont pas remplis alors on s'arrête dans la lecture
             if( trim($sheetChapitre->getCellByColumnAndRow(3, $i)) == '' || trim($sheetChapitre->getCellByColumnAndRow(0, $i)->getValue()) === "" )
+            {
+                die('Erreur de format dans le fichier !');
                 break;
+            }
 
             $arrayChapitres[] = array(
                 'code'            => trim($sheetChapitre->getCellByColumnAndRow(0, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(0, $i)->getValue(),
@@ -98,7 +104,10 @@ class ImportExcelManager extends BaseManager
         { 
             //Si pour la ligne courante le libellé ou le code ne sont pas remplis alors on s'arrête dans la lecture
             if( trim($sheetQuestion->getCellByColumnAndRow(3, $i)) == '' || trim($sheetQuestion->getCellByColumnAndRow(1, $i)->getValue()) === '')
+            {
+                die('Erreur de format dans le fichier !');
                 break;
+            }
 
             $arrayQuestions[] = array(
                 'numChapitre'     => $sheetQuestion->getCellByColumnAndRow(0, $i)->getValue(),

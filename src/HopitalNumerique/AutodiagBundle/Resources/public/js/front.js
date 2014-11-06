@@ -95,6 +95,16 @@ $(document).ready(function() {
             });
         }
     });
+
+    //Chargement de l'ancre si il y en a une
+    if($.trim( window.location.hash.substring(1) ) != '')
+    {
+       var hashtag = parseInt(window.location.hash.substring(1));
+       hashtag--;
+
+       $("#wizard-head-" + hashtag).click();
+    }
+
 });
 
 /**
