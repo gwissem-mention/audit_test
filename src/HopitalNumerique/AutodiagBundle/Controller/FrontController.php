@@ -238,7 +238,8 @@ class FrontController extends Controller
 
         //récupère les chapitres et les formate pour l'affichage des liens des publications
         $chapitres            = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
-        $chapitresForReponse  = $chapitres;
+        $chapitresForReponse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+        $chapitresForAnalyse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );        
 
         //Trier par note
         if($resultat->getOutil()->isPlanActionPriorise())
@@ -254,8 +255,20 @@ class FrontController extends Controller
                 }
             }
         }
+        if($resultat->getOutil()->isPlanActionPriorise())
+        {
+            uasort($chapitresForAnalyse, array($this,"triParNote"));
+            foreach ($chapitresForAnalyse as $key => $chapitre) 
+            {
+                uasort($chapitre->questions, array($this,"triParNoteQuestion"));
+                uasort($chapitre->childs, array($this,"triParNote"));
+                foreach ($chapitre->childs as $child) 
+                {
+                    uasort($child->questions, array($this,"triParNoteQuestion"));
+                }
+            }
+        }
         //--Analyse
-        $chapitresForAnalyse = $chapitres;
 
         //Nettoyage des éléments dont il n'y aucun élément
         foreach ($chapitresForAnalyse as $key => $chapitre)
