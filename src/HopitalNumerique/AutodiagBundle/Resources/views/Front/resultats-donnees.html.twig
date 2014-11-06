@@ -233,8 +233,8 @@
                                                 {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
                                                 {% set maxCateg = maxCateg + datas['max'] %}
                                                 {% if datas['max'] != 0 %}
-                                                    {#% set note = (datas['nbPoints'] * 100) / datas['max'] %#}
-                                                    {% set note = datas['nbPointsPourc'] / datas['maxPourc'] %}
+                                                    {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
+                                                    {#% set note = datas['nbPointsPourc'] / datas['maxPourc'] %#}
                                                 {% else %}
                                                     {% set note = 0 %}
                                                 {% endif %}
@@ -290,8 +290,8 @@
                                                 {% set nbPointsTotal = nbPointsTotal + datas['nbPoints'] %}
                                                 {% set maxTotal = maxTotal + datas['max'] %}
                                                 {% if datas['max'] != 0 %}
-                                                    {#% set note = (datas['nbPoints'] * 100) / datas['max'] %#}
-                                                    {% set note = datas['nbPointsPourc'] / datas['maxPourc'] %}
+                                                    {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
+                                                    {#% set note = datas['nbPointsPourc'] / datas['maxPourc'] %#}
                                                 {% else %}
                                                     {% set note = 0 %}
                                                 {% endif %}
