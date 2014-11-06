@@ -222,12 +222,6 @@ hopitalnumerique_autodiag_front_outil:
     requirements:
         outil: \d+
 
-# hopitalnumerique_autodiag_front_outil_hashtag:
-#     pattern:  /autodiagnostic/outil/{outil}-{alias}#{hashtag}
-#     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:outil", alias: " " }
-#     requirements:
-#         outil: \d+
-
 hopitalnumerique_autodiag_front_outil_sans_gabarit:
     pattern:  /autodiagnostic-no-layout/outil/{outil}-{alias}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:outil", alias: " ", sansGabarit: true }
