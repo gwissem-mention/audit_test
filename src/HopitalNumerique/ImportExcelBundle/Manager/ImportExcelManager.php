@@ -34,7 +34,7 @@ class ImportExcelManager extends BaseManager
             //Si pour la ligne courante le libellé n'est pas rempli alors on s'arrête dans la lecture
             if( trim($sheetCategorie->getCellByColumnAndRow(0, $i)) == '' )
             {
-                throw new \Exception('Erreur de format dans le fichier !');
+                die('Erreur de format dans le fichier !');
                 break;
             }
 
@@ -67,7 +67,7 @@ class ImportExcelManager extends BaseManager
             //Si pour la ligne courante le libellé ou le conde ne sont pas remplis alors on s'arrête dans la lecture
             if( trim($sheetChapitre->getCellByColumnAndRow(3, $i)) == '' || trim($sheetChapitre->getCellByColumnAndRow(0, $i)->getValue()) === "" )
             {
-                throw new \Exception('Erreur de format dans le fichier !');
+                die('Erreur de format dans le fichier !');
                 break;
             }
 
@@ -105,7 +105,7 @@ class ImportExcelManager extends BaseManager
             //Si pour la ligne courante le libellé ou le code ne sont pas remplis alors on s'arrête dans la lecture
             if( trim($sheetQuestion->getCellByColumnAndRow(3, $i)) == '' || trim($sheetQuestion->getCellByColumnAndRow(1, $i)->getValue()) === '')
             {
-                throw new \Exception('Erreur de format dans le fichier !');
+                die('Erreur de format dans le fichier !');
                 break;
             }
 
