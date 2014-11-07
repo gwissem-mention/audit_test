@@ -77,50 +77,107 @@
             <div class="panel-body">
                 {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
                 {{ form_start(form) }}
-                    {{ form_row(form.title) }}
-                    {{ form_row(form.alias) }}
-                    {{ form_row(form.commentaireRestitution) }}
-                    {{ form_row(form.columnChart) }}
-                    <div class="columnChart" {% if not outil.columnChart %}style="display:none"{% endif %}>
-                        {{ form_row(form.columnChartLabel) }}
-                        {{ form_row(form.columnChartAxe) }}
-                    </div>
+
                     
-                    {{ form_row(form.processChart) }}
-                    <div class="processChart" {% if not outil.processChart %}style="display:none"{% endif %}>
-                       {{ form_row(form.processChartLabel) }}
-                       <div class="form-group">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-6">
-                                <div class="well outil_process_conteneur">
-                                    <div class="pull-right">
-                                        <div class="btn-toolbar">
-                                            <a class="btn btn-success" id="outil_process_ajout"><span class="glyphicon glyphicon-plus"></span></a>
-                                        </div>
-                                    </div>
-                                    <h3>Éléments de restitution pas processus</h3>
-                                    <div class="dd" id="outil_process_conteneur">
-                                        <ol class="dd-list" id="outil_process" data-prototype="{{ form_widget(form.process.vars.prototype)|e }}"></ol>
-                                        <!-- On n'affiche pas les formulaires par défaut des process {{ form_row(form.process) }} -->
-                                    </div>
-                                </div>
+                    <div class="row">
+                        <div class="panel panel-default gray">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#general" class="collapsed" id="general_collapse">
+                                <div class="panel-heading"><h4>Général</h4></div>
+                            </a>
+                            <div id="general" class="collapse" style="height: 0px;">
+                                {{ form_row(form.title) }}
+                                {{ form_row(form.alias) }}
+                                {{ form_row(form.statut) }}
+                                {{ form_row(form.instruction) }}
+                                {{ form_row(form.commentaireRestitution) }}
                             </div>
-                            <div class="col-md-3"></div>
                         </div>
                     </div>
 
-                    {{ form_row(form.radarChart) }}
-                    <div class="radarChart" {% if not outil.radarChart %}style="display:none"{% endif %}>
-                        {{ form_row(form.radarChartLabel) }}
-                        {{ form_row(form.radarChartAxe) }}
+                    <div class="row">
+                        <div class="panel panel-default gray">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#resultat_graphique" class="collapsed" id="resultat_graphique_collapse">
+                                <div class="panel-heading"><h4>Résultats graphiques</h4></div>
+                            </a>
+                            <div id="resultat_graphique" class="collapse" style="height: 0px;">
+
+                                <div class="panel-heading"><h5>Réstitution en barres</h5></div>
+                                {{ form_row(form.columnChart) }}
+                                <div class="columnChart" {% if not outil.columnChart %}style="display:none"{% endif %}>
+                                    {{ form_row(form.columnChartLabel) }}
+                                    {{ form_row(form.columnChartAxe) }}
+                                </div>
+                                {# Comm #}
+
+                                <div class="panel-heading"><h5>Processus</h5></div>
+                                {{ form_row(form.processChart) }}
+                                <div class="processChart" {% if not outil.processChart %}style="display:none"{% endif %}>
+                                   {{ form_row(form.processChartLabel) }}
+                                   <div class="form-group">
+                                        <div class="col-md-3"></div>
+                                        <div class="col-md-6">
+                                            <div class="well outil_process_conteneur">
+                                                <div class="pull-right">
+                                                    <div class="btn-toolbar">
+                                                        <a class="btn btn-success" id="outil_process_ajout"><span class="glyphicon glyphicon-plus"></span></a>
+                                                    </div>
+                                                </div>
+                                                <h3>Éléments de restitution pas processus</h3>
+                                                <div class="dd" id="outil_process_conteneur">
+                                                    <ol class="dd-list" id="outil_process" data-prototype="{{ form_widget(form.process.vars.prototype)|e }}"></ol>
+                                                    <!-- On n'affiche pas les formulaires par défaut des process {{ form_row(form.process) }} -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3"></div>
+                                    </div>
+                                </div>
+                                {# Comm #}
+
+                                <div class="panel-heading"><h5>Radar</h5></div>
+                                {{ form_row(form.radarChart) }}
+                                <div class="radarChart" {% if not outil.radarChart %}style="display:none"{% endif %}>
+                                    {{ form_row(form.radarChartLabel) }}
+                                    {{ form_row(form.radarChartAxe) }}
+                                </div>
+                                {# Comm #}
+
+                                <div class="panel-heading"><h5>Tableau</h5></div>
+                                {{ form_row(form.tableChart) }}
+
+                            </div>
+                        </div>
                     </div>
-                    {{ form_row(form.tableChart) }}
-                    {{ form_row(form.centPourcentReponseObligatoire) }}
-                    {{ form_row(form.masquerAnalyse) }}
-                    {{ form_row(form.masquerReponse) }}
-                    {{ form_row(form.planActionPriorise) }}
-                    {{ form_row(form.instruction) }}
-                    {{ form_row(form.statut) }}
+
+                    <div class="row">
+                        <div class="panel panel-default gray">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#analyse_resultats" class="collapsed" id="analyse_resultats_collapse">
+                                <div class="panel-heading"><h4>Analyse des résultats</h4></div>
+                            </a>
+                            <div id="reponses" class="collapse" style="height: 0px;">
+
+                                {{ form_row(form.masquerAnalyse) }}
+                                {# Comm #}
+                                <div class="panel-heading"><h5>Plan d'action</h5></div>
+                                {{ form_row(form.planActionPriorise) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="panel panel-default gray">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#reponses" class="collapsed" id="reponses_collapse">
+                                <div class="panel-heading"><h4>Réponses</h4></div>
+                            </a>
+                            <div id="analyse_resultats" class="collapse" style="height: 0px;">
+
+                                {{ form_row(form.centPourcentReponseObligatoire) }}
+                                {{ form_row(form.masquerReponse) }}
+                                {# Comm #}
+                            </div>
+                        </div>
+                    </div>
+
                 {{ form_end(form) }}
             </div>
         </div>
