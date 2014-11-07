@@ -394,7 +394,7 @@ class FrontController extends Controller
             }
         }
 
-        if($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() !== 100)
+        if($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() != 100)
         {
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
         }

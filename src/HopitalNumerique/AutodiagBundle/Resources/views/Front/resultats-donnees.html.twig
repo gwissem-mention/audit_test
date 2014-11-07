@@ -230,11 +230,12 @@
                                         <td class="text-center">Score</td>
                                         {% for datas in categorie['chapitres'] %}
                                             {% if not datas['nc'] %}
-                                                {% set nbPointsCateg = nbPointsCateg + datas['nbPoints'] %}
-                                                {% set maxCateg = maxCateg + datas['max'] %}
+                                                {% set nbPointsCateg = nbPointsCateg + datas['nbPointsPourc'] %}
+                                                {% set maxCateg = maxCateg + datas['maxPourc'] %}
+                                                
                                                 {% if datas['max'] != 0 %}
-                                                    {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
-                                                    {#% set note = datas['nbPointsPourc'] / datas['maxPourc'] %#}
+                                                    {#% set note = (datas['nbPoints'] * 100) / datas['max'] %#}
+                                                    {% set note = (datas['nbPointsPourc'] * 100) /  datas['maxPourc'] %}
                                                 {% else %}
                                                     {% set note = 0 %}
                                                 {% endif %}
@@ -287,11 +288,11 @@
                                         {% set maxTotal = 0 %}
                                         {% for idChapitre,datas in chart.datas.totauxChapitres %}
                                             {% if not datas['nc'] %}
-                                                {% set nbPointsTotal = nbPointsTotal + datas['nbPoints'] %}
-                                                {% set maxTotal = maxTotal + datas['max'] %}
+                                                {% set nbPointsTotal = nbPointsTotal + datas['nbPointsPourc'] %}
+                                                {% set maxTotal = maxTotal + datas['maxPourc'] %}
                                                 {% if datas['max'] != 0 %}
-                                                    {% set note = (datas['nbPoints'] * 100) / datas['max'] %}
-                                                    {#% set note = datas['nbPointsPourc'] / datas['maxPourc'] %#}
+                                                    {#% set note = (datas['nbPoints'] * 100) / datas['max'] %#}
+                                                    {% set note = (datas['nbPointsPourc'] * 100) /  datas['maxPourc'] %}
                                                 {% else %}
                                                     {% set note = 0 %}
                                                 {% endif %}
