@@ -218,6 +218,41 @@ class Outil
     private $commentaireRestitution;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="out_commentaire_grah_barre", type="text", nullable=true, options = {"comment" = "Commentaire affiché lors de la restitution pour cet outil dans la partie graphique barre"})
+     */
+    private $commentaireGraphBarre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="out_commentaire_grah_processus", type="text", nullable=true, options = {"comment" = "Commentaire affiché lors de la restitution pour cet outil dans la partie graphique processus"})
+     */
+    private $commentaireGraphPrecessus;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="out_commentaire_grah_radar", type="text", nullable=true, options = {"comment" = "Commentaire affiché lors de la restitution pour cet outil dans la partie graphique radar"})
+     */
+    private $commentaireGraphRadar;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="out_commentaire_analyse_resultat", type="text", nullable=true, options = {"comment" = "Commentaire affiché lors de la restitution pour cet outil dans la partie analyse résultat"})
+     */
+    private $commentaireAnalyseResultat;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="out_commentaire_reponses", type="text", nullable=true, options = {"comment" = "Commentaire affiché lors de la restitution pour cet outil dans la partie reponses"})
+     */
+    private $commentaireReponses;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -450,6 +485,121 @@ class Outil
     public function getCommentaireRestitution()
     {
         return $this->commentaireRestitution;
+    }
+    
+    /**
+     * Set commentaireGraphBarre
+     *
+     * @param string $commentaireGraphBarre
+     * @return Outil
+     */
+    public function setCommentaireGraphBarre($commentaireGraphBarre)
+    {
+        $this->commentaireGraphBarre = $commentaireGraphBarre;
+    
+        return $this;
+    }
+    
+    /**
+     * Get commentaireGraphBarre
+     *
+     * @return string
+     */
+    public function getCommentaireGraphBarre()
+    {
+        return $this->commentaireGraphBarre;
+    }
+    
+    /**
+     * Set commentaireGraphPrecessus
+     *
+     * @param string $commentaireGraphPrecessus
+     * @return Outil
+     */
+    public function setCommentaireGraphPrecessus($commentaireGraphPrecessus)
+    {
+        $this->commentaireGraphPrecessus = $commentaireGraphPrecessus;
+    
+        return $this;
+    }
+    
+    /**
+     * Get commentaireGraphPrecessus
+     *
+     * @return string
+     */
+    public function getCommentaireGraphPrecessus()
+    {
+        return $this->commentaireGraphPrecessus;
+    }
+    
+    /**
+     * Set commentaireGraphRadar
+     *
+     * @param string $commentaireGraphRadar
+     * @return Outil
+     */
+    public function setCommentaireGraphRadar($commentaireGraphRadar)
+    {
+        $this->commentaireGraphRadar = $commentaireGraphRadar;
+    
+        return $this;
+    }
+    
+    /**
+     * Get commentaireGraphRadar
+     *
+     * @return string
+     */
+    public function getCommentaireGraphRadar()
+    {
+        return $this->commentaireGraphRadar;
+    }
+    
+    /**
+     * Set commentaireAnalyseResultat
+     *
+     * @param string $commentaireAnalyseResultat
+     * @return Outil
+     */
+    public function setCommentaireAnalyseResultat($commentaireAnalyseResultat)
+    {
+        $this->commentaireAnalyseResultat = $commentaireAnalyseResultat;
+    
+        return $this;
+    }
+    
+    /**
+     * Get commentaireAnalyseResultat
+     *
+     * @return string
+     */
+    public function getCommentaireAnalyseResultat()
+    {
+        return $this->commentaireAnalyseResultat;
+    }
+    
+    /**
+     * Set commentaireReponses
+     *
+     * @param string $commentaireReponses
+     * @return Outil
+     */
+    public function setCommentaireReponses($commentaireReponses)
+    {
+        $this->commentaireReponses = $commentaireReponses;
+    
+        return $this;
+    }
+    
+    /**
+     * Get commentaireReponses
+     *
+     * @return string
+     */
+    public function getCommentaireReponses()
+    {
+        return $this->commentaireReponses;
     }
     
     /**

@@ -107,7 +107,7 @@
                                     {{ form_row(form.columnChartLabel) }}
                                     {{ form_row(form.columnChartAxe) }}
                                 </div>
-                                {# Comm #}
+                                {{ form_row(form.commentaireGraphBarre) }}
 
                                 <div class="panel-heading"><h5>Processus</h5></div>
                                 {{ form_row(form.processChart) }}
@@ -132,7 +132,7 @@
                                         <div class="col-md-3"></div>
                                     </div>
                                 </div>
-                                {# Comm #}
+                                {{ form_row(form.commentaireGraphPrecessus) }}
 
                                 <div class="panel-heading"><h5>Radar</h5></div>
                                 {{ form_row(form.radarChart) }}
@@ -140,7 +140,7 @@
                                     {{ form_row(form.radarChartLabel) }}
                                     {{ form_row(form.radarChartAxe) }}
                                 </div>
-                                {# Comm #}
+                                {{ form_row(form.commentaireGraphRadar) }}
 
                                 <div class="panel-heading"><h5>Tableau</h5></div>
                                 {{ form_row(form.tableChart) }}
@@ -154,10 +154,10 @@
                             <a data-toggle="collapse" data-parent="#accordion" href="#analyse_resultats" class="collapsed" id="analyse_resultats_collapse">
                                 <div class="panel-heading"><h4>Analyse des résultats</h4></div>
                             </a>
-                            <div id="reponses" class="collapse" style="height: 0px;">
+                            <div id="analyse_resultats" class="collapse" style="height: 0px;">
 
                                 {{ form_row(form.masquerAnalyse) }}
-                                {# Comm #}
+                                {{ form_row(form.commentaireAnalyseResultat) }}
                                 <div class="panel-heading"><h5>Plan d'action</h5></div>
                                 {{ form_row(form.planActionPriorise) }}
                             </div>
@@ -169,11 +169,11 @@
                             <a data-toggle="collapse" data-parent="#accordion" href="#reponses" class="collapsed" id="reponses_collapse">
                                 <div class="panel-heading"><h4>Réponses</h4></div>
                             </a>
-                            <div id="analyse_resultats" class="collapse" style="height: 0px;">
+                            <div id="reponses" class="collapse" style="height: 0px;">
 
                                 {{ form_row(form.centPourcentReponseObligatoire) }}
                                 {{ form_row(form.masquerReponse) }}
-                                {# Comm #}
+                                {{ form_row(form.commentaireReponses) }}
                             </div>
                         </div>
                     </div>

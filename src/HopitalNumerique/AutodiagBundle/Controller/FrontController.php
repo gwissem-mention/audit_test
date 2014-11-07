@@ -211,10 +211,21 @@ class FrontController extends Controller
         // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
         $this->get('session')->getFlashBag()->add( 'success', 'Autodiagnostic ' . ($action == 'valid' ? 'validé.':'enregistré.') );
 
-        if($sansGabarit)
-            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat_sans_gabarit', array( 'id' => $resultat->getId(), 'sansGabarit' => true ) ) );
+
+        if( $action == 'valid' || !$outil->isCentPourcentReponseObligatoire())
+        {
+            if($sansGabarit)
+                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat_sans_gabarit', array( 'id' => $resultat->getId(), 'sansGabarit' => true ) ) );
+            else
+                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array( 'id' => $resultat->getId() ) ) );
+        }
         else
-            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array( 'id' => $resultat->getId() ) ) );
+        {
+            if($sansGabarit)
+                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_sans_gabarit', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
+            else
+                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
+        }
     }
 
     /**
