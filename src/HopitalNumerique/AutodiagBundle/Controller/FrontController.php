@@ -394,11 +394,6 @@ class FrontController extends Controller
             }
         }
 
-        if($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() != 100)
-        {
-            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
-        }
-
         $options = array(
             'chapitresForAnalyse'     => $chapitresForAnalyse,
             'chapitresForReponse'     => $chapitresForReponse,
@@ -410,6 +405,11 @@ class FrontController extends Controller
             $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $options );
             $resultat->setPdf( $pdf );
             $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
+        }
+
+        if($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() != 100)
+        {
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
         }
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
