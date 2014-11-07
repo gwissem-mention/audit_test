@@ -51,6 +51,9 @@
             {% if graphiques['barre'] is defined %}
                 {% set chart = graphiques['barre'] %}
                 <h3>{{chart.title|capitalize}}</h3>
+                <p>
+                    {{resultat.outil.commentaireGraphBarre|raw}}
+                </p>
                 <div class="row" id="graphiques-barres" >
                     {% for panel in chart.panels %}
                         {% set tauxChapitre = panel.taux|number_format(0) %}
@@ -138,6 +141,9 @@
             {% if processusDonnees is defined and processusDonnees|length > 0 %}
                 <div id="process_bloc">
                     <h3>{{ resultat.outil.processChartLabel }}</h3>
+                    <p>
+                        {{resultat.outil.commentaireGraphPrecessus|raw}}
+                    </p>
                     {% for process in processusDonnees %}
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -173,6 +179,9 @@
             {% if graphiques['radar'] is defined %}
                 {% set chart = graphiques['radar'] %}
                 <h3>{{chart.title|capitalize}}</h3>
+                <p>
+                    {{resultat.outil.commentaireGraphRadar|raw}}
+                </p>
                 <div class="row">
                     <div id="radarChart"></div>
                     <input type="hidden" id="datas-radar" value="{{chart.datas|json_encode()}}">
@@ -330,6 +339,9 @@
             <h2 class="violet closed" data-toggle="chapitres" >Résultats de l'outil - Analyse</h2>
 
             <div id="chapitres" style="display:none">
+                <p>
+                    {{resultat.outil.commentaireAnalyseResultat|raw}}
+                </p>
                 <p class="text-justify">
                     <span>Compte tenu de vos réponses, l'Anap vous propose l'analyse suivante :</span>
                 </p>
@@ -646,6 +658,10 @@
 
                 <div id="reponses" {% if not pdf %} style="display:none" {% endif %} >
                 
+                    <p>
+                        {{resultat.outil.commentaireReponses|raw}}
+                    </p>
+                    
                     <p>Vos réponses apparaissent en gras parmi les réponses possibles à chaque question.</p>
                 
                     {% if resultat.remarque is defined %}
