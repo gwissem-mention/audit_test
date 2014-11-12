@@ -224,6 +224,9 @@ class ImportExcelController extends Controller
         $chapitres  = $this->get('hopital_numerique_import_excel.manager.chapitre')->findBy(array('outil' => $outil));
         $this->get('hopital_numerique_import_excel.manager.chapitre')->delete($chapitres);
 
+        $resultats  = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy(array('outil' => $outil));
+        $this->get('hopitalnumerique_autodiag.manager.resultat')->delete($resultats);
+
         //Récupération et ajouts des données importées
         //Méthode de Thomas : Si erreur générée c'est que le fichier n'est pas valide
         try 
