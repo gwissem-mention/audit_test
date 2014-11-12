@@ -320,7 +320,7 @@ class FrontController extends Controller
             foreach ($resultat->getResultats() as $resultatSynthese) 
             {
                 $chapitresSynthese = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynthese );
-                $graphTemp = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultatSynthese, $chapitresSynthese );
+                $graphTemp = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultatSynthese, $chapitresSynthese );                
 
                 //Radar
                 foreach ($graphiques["radar"]->datas as $keyDataGraphique => &$dataGraphique) 
@@ -332,6 +332,10 @@ class FrontController extends Controller
                     {
                         $dataGraphique->min = $graphTempValue;
                         $dataGraphique->max = $graphTempValue;
+                    }
+                    elseif($graphTempValue == "NC")
+                    {
+                        $dataGraphique->min = $dataGraphique->max;
                     }
                     elseif($dataGraphique->min > $graphTempValue)
                     {
@@ -352,6 +356,10 @@ class FrontController extends Controller
                     {
                         $dataGraphique->min = $graphTempValue;
                         $dataGraphique->max = $graphTempValue;
+                    }
+                    elseif($graphTempValue == "NC")
+                    {
+                        $dataGraphique->min = $dataGraphique->max;
                     }
                     elseif($dataGraphique->min > $graphTempValue)
                     {
