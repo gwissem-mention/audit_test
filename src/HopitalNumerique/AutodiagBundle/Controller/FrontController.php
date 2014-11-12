@@ -330,12 +330,18 @@ class FrontController extends Controller
 
                     if(is_null($dataGraphique->min))
                     {
-                        $dataGraphique->min = $graphTempValue;
-                        $dataGraphique->max = $graphTempValue;
+                        if($graphTempValue != "NC")
+                        {
+                            $dataGraphique->min = $graphTempValue;
+                            $dataGraphique->max = $graphTempValue;
+                        }
                     }
                     elseif($graphTempValue == "NC")
                     {
-                        $dataGraphique->min = $dataGraphique->max;
+                        if($dataGraphique->max != "NC" )
+                        {
+                            $dataGraphique->min = $dataGraphique->max;
+                        }
                     }
                     elseif($dataGraphique->min > $graphTempValue)
                     {
@@ -354,12 +360,18 @@ class FrontController extends Controller
 
                     if(is_null($dataGraphique->min))
                     {
-                        $dataGraphique->min = $graphTempValue;
-                        $dataGraphique->max = $graphTempValue;
+                        if($graphTempValue != "NC")
+                        {
+                            $dataGraphique->min = $graphTempValue;
+                            $dataGraphique->max = $graphTempValue;
+                        }
                     }
                     elseif($graphTempValue == "NC")
                     {
-                        $dataGraphique->min = $dataGraphique->max;
+                        if($dataGraphique->max != "NC" )
+                        {
+                            $dataGraphique->min = $dataGraphique->max;
+                        }
                     }
                     elseif($dataGraphique->min > $graphTempValue)
                     {
