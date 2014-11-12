@@ -43,6 +43,51 @@ class ResultatController extends Controller
     public function exportChapitresCSVAction( Resultat $resultat )
     {
         $chapitres = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+        //Trier par note
+        if($resultat->getOutil()->isPlanActionPriorise())
+        {
+            uasort($chapitres, array($this,"triParNote"));
+            foreach ($chapitres as $key => $chapitre) 
+            {
+                uasort($chapitre->questions, array($this,"triParNoteQuestion"));
+                uasort($chapitre->childs, array($this,"triParNote"));
+                foreach ($chapitre->childs as $child) 
+                {
+                    uasort($child->questions, array($this,"triParNoteQuestion"));
+                }
+            }
+        }
+
+        //Nettoyage des éléments dont il n'y aucun élément
+        foreach ($chapitres as $key => $chapitre)
+        {
+            //Vide le chapitre courant si il a ni de question ni de sous chapitre
+            if(empty($chapitre->questions) && empty($chapitre->childs))
+            {
+                unset($chapitres[$key]);
+            }
+            //Sinon on cherche parmis les sous chapitres
+            elseif(!empty($chapitre->childs))
+            {
+                $hideChapitre = false;
+                foreach ($chapitre->childs as $keyChild => $child) 
+                {
+                    if(empty($child->questions))
+                    {
+                        unset($chapitre->childs[$keyChild]);
+                        if(empty($chapitre->childs))
+                        {
+                            $hideChapitre = true;
+                        }
+                    }
+                }
+
+                if($hideChapitre)
+                {
+                    unset($chapitres[$key]);
+                }
+            }
+        }
 
         $colonnes = array();
         $datas    = array();
@@ -167,5 +212,55 @@ class ResultatController extends Controller
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
         return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-analyse-resultats.csv', $kernelCharset );
+    }
+
+
+
+
+
+
+
+
+
+
+    
+
+    /*
+     * Trie par note une stdClass
+     *
+     * @param [type] $a [description]
+     * @param [type] $b [description]
+     *
+     * @return [type]
+     */
+    private function triParNote($a, $b)
+    {
+        if($a->noteChapitre < $b->noteChapitre)
+            return -1;
+        if($a->noteChapitre > $b->noteChapitre)
+            return 1;
+        if($a->order > $b->order)
+            return 1;
+        else
+            return -1;
+    }
+    /**
+     * Trie par note une stdClass
+     *
+     * @param [type] $a [description]
+     * @param [type] $b [description]
+     *
+     * @return [type]
+     */
+    private function triParNoteQuestion($a, $b)
+    {
+        if($a->value < $b->value)
+            return -1;
+        if($a->value > $b->value)
+            return 1;
+        if($a->order > $b->order)
+            return 1;
+        else
+            return -1;
     }
 }

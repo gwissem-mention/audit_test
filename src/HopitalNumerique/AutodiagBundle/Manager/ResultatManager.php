@@ -690,7 +690,7 @@ class ResultatManager extends BaseManager
         if( $chapitreConcerne === false )
             return 'NC';
 
-        return $sommePonderations != 0 ? ($sommeValues / $sommeMaxPourc * 100) : 0;
+        return $sommeMaxPourc != 0 ? ($sommeValues / $sommeMaxPourc * 100) : 0;
     }
 
     /**
