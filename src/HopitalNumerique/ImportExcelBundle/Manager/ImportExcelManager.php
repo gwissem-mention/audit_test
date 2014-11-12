@@ -123,8 +123,8 @@ class ImportExcelManager extends BaseManager
                 'categorie'       => $sheetQuestion->getCellByColumnAndRow(10, $i)->getValue(),
                 'ponderation'     => trim($sheetQuestion->getCellByColumnAndRow(11, $i)->getValue()) === '' ? 1 : $sheetQuestion->getCellByColumnAndRow(11, $i)->getValue(),
                 'order'           => trim($sheetQuestion->getCellByColumnAndRow(12, $i)->getValue()) === '' ? $i : $sheetQuestion->getCellByColumnAndRow(12, $i)->getValue(),
-                'lien'            => trim($sheetQuestion->getCellByColumnAndRow(13, $i)->getValue()) === '' ? $i : $sheetQuestion->getCellByColumnAndRow(13, $i)->getValue(),
-                'descriptionLien' => trim($sheetQuestion->getCellByColumnAndRow(14, $i)->getValue()) === '' ? $i : $sheetQuestion->getCellByColumnAndRow(14, $i)->getValue()
+                'lien'            => trim($sheetQuestion->getCellByColumnAndRow(13, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(13, $i)->getValue(),
+                'descriptionLien' => trim($sheetQuestion->getCellByColumnAndRow(14, $i)->getValue()) === '' ? NULL : $sheetQuestion->getCellByColumnAndRow(14, $i)->getValue()
             );
         }
 

@@ -166,7 +166,7 @@ class Outil
     private $categories;
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\Resultat", mappedBy="outil", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\Resultat", mappedBy="outil", cascade={"remove"})
      */
     protected $resultats;
     
