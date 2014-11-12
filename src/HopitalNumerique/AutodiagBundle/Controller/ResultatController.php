@@ -214,6 +214,17 @@ class ResultatController extends Controller
         return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-analyse-resultats.csv', $kernelCharset );
     }
 
+
+
+
+
+
+
+
+
+
+    
+
     /*
      * Trie par note une stdClass
      *
