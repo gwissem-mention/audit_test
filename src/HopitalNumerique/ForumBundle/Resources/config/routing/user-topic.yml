@@ -6,6 +6,10 @@ ccdn_forum_user_topic_show:
     pattern: /{topicId}
     defaults: { _controller: HopitalNumeriqueForumBundle:UserTopic:show, _locale: fr, forumName: Public }
 
+hopitalnumerique_forum_charte_utilisation_download_pdf:
+    pattern:  /download/Charte_Utilisation_Forum
+    defaults: { _controller: "HopitalNumeriqueForumBundle:UserTopic:pdfCharteUtilisation",  _locale: fr, forumName: Public }
+
 ccdn_forum_user_topic_create:
     pattern: /create/for-board/{boardId}
     defaults: { _controller: CCDNForumForumBundle:UserTopic:create, _locale: fr, forumName: Public }

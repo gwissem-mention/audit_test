@@ -137,4 +137,19 @@ class UserTopicController extends UserTopicControllerCCDN
 
         return new Response('{"success":true}', 200);
     }
+
+    /**
+     * Retourne le PDF de la charte d'utilisation
+     */
+    public function pdfCharteUtilisationAction( Request $request )
+    {
+        $fileName = __ROOT_DIRECTORY__ . '/web/medias/Forum/charte_utilisation_forum.pdf';
+        $options  = array(
+            'serve_filename' => 'charte_utilisation_forum.pdf',
+            'absolute_path'  => false,
+            'inline'         => false,
+        );
+
+        return $this->container->get('igorw_file_serve.response_factory')->create( $fileName , 'application/pdf', $options);
+    }
 }

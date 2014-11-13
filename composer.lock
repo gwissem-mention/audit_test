@@ -1595,30 +1595,32 @@
         },
         {
             "name": "knplabs/knp-snappy",
-            "version": "0.2.0",
+            "version": "0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/snappy.git",
-                "reference": "4bc7af878a003a2c1ef3c4d8b08851537cb07486"
+                "reference": "e5d1e7486d9344a6cc5c3194daad7a5141b92e6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/snappy/zipball/4bc7af878a003a2c1ef3c4d8b08851537cb07486",
-                "reference": "4bc7af878a003a2c1ef3c4d8b08851537cb07486",
+                "url": "https://api.github.com/repos/KnpLabs/snappy/zipball/e5d1e7486d9344a6cc5c3194daad7a5141b92e6e",
+                "reference": "e5d1e7486d9344a6cc5c3194daad7a5141b92e6e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
+            "require-dev": {
+                "symfony/process": "~2.1"
+            },
             "suggest": {
-                "google/wkhtmltopdf-amd64": "Provide wkhtmltopdf-amd64 binary, use version `0.11.0-RC1` as dependency",
-                "google/wkhtmltopdf-i386": "Provide wkhtmltopdf-i386 binary, use version `0.11.0-RC1` as dependency",
-                "symfony/process": "Process Component of Symfony2."
+                "h4cc/wkhtmltopdf-amd64": "Provide wkhtmltopdf-amd64 binary, use version `0.12.0` as dependency",
+                "h4cc/wkhtmltopdf-i386": "Provide wkhtmltopdf-i386 binary, use version `0.12.0` as dependency"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.1.x-dev"
+                    "dev-master": "0.2.x-dev"
                 }
             },
             "autoload": {
@@ -1650,7 +1652,7 @@
                 "thumbnail",
                 "wkhtmltopdf"
             ],
-            "time": "2014-03-20 15:05:12"
+            "time": "2014-10-14 16:54:20"
         },
         {
             "name": "knplabs/knp-snappy-bundle",
@@ -2209,17 +2211,17 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v3.0.2",
+            "version": "v3.0.3",
             "target-dir": "Sensio/Bundle/FrameworkExtraBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "9b22aaee517e80aad3238ea0328458b6f964066f"
+                "reference": "b829a8097a41ccbd7d35683b1750043b23d682f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/9b22aaee517e80aad3238ea0328458b6f964066f",
-                "reference": "9b22aaee517e80aad3238ea0328458b6f964066f",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/b829a8097a41ccbd7d35683b1750043b23d682f5",
+                "reference": "b829a8097a41ccbd7d35683b1750043b23d682f5",
                 "shasum": ""
             },
             "require": {
@@ -2260,7 +2262,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2014-09-02 07:11:30"
+            "time": "2014-11-10 14:50:31"
         },
         {
             "name": "sensio/generator-bundle",
@@ -2765,25 +2767,31 @@
         },
         {
             "name": "twig/extensions",
-            "version": "v1.1.0",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fabpot/Twig-extensions.git",
-                "reference": "c0ab818595338dd5569369bfce2552d02cec5d50"
+                "url": "https://github.com/twigphp/Twig-extensions.git",
+                "reference": "8cf4b9fe04077bd54fc73f4fde83347040c3b8cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig-extensions/zipball/c0ab818595338dd5569369bfce2552d02cec5d50",
-                "reference": "c0ab818595338dd5569369bfce2552d02cec5d50",
+                "url": "https://api.github.com/repos/twigphp/Twig-extensions/zipball/8cf4b9fe04077bd54fc73f4fde83347040c3b8cd",
+                "reference": "8cf4b9fe04077bd54fc73f4fde83347040c3b8cd",
                 "shasum": ""
             },
             "require": {
                 "twig/twig": "~1.12"
             },
+            "require-dev": {
+                "symfony/translation": "~2.3"
+            },
+            "suggest": {
+                "symfony/translation": "Allow the time_diff output to be translated"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
@@ -2798,18 +2806,16 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org",
-                    "role": "Lead Developer"
+                    "email": "fabien@symfony.com"
                 }
             ],
             "description": "Common additional features for Twig that do not directly belong in core",
-            "homepage": "https://github.com/fabpot/Twig-extensions",
+            "homepage": "http://twig.sensiolabs.org/doc/extensions/index.html",
             "keywords": [
                 "i18n",
                 "text"
             ],
-            "time": "2014-07-05 10:01:35"
+            "time": "2014-10-30 14:30:03"
         },
         {
             "name": "twig/twig",

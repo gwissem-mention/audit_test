@@ -1,9 +1,13 @@
 {%- spaceless -%}
-	<ol class="breadcrumb">
-		{%- for key, crumb in crumbs.getTrail -%}
-			<li>
-				<a href="{{- crumb.url -}}" title="{{- crumb.label -}}">{{- crumb.label |raw|truncate(40,true,'...') -}}</a>
-			</li>
-		{%- endfor -%}
-	</ol>
+    <div class="blocBreadcrumb">
+    	<ol class="breadcrumb pull-left">
+    		{%- for key, crumb in crumbs.getTrail -%}
+    			<li>
+    				<a href="{{- crumb.url -}}" title="{{- crumb.label -}}">{{- crumb.label |raw|truncate(40,true,'...') -}}</a>
+    			</li>
+    		{%- endfor -%}
+    	</ol>
+        <a class="charte text-muted pull-right" title="Liste des participants" target="_blank" href="{{path('hopitalnumerique_forum_charte_utilisation_download_pdf')}}">Charte d'utilisation du forum.</a>
+        <div class="clearfix"></div>
+    </div>
 {%- endspaceless -%}
