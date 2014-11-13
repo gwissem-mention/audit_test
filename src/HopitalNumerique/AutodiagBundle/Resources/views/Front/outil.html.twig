@@ -99,7 +99,7 @@
                                     {% else %}
                                         {% set reponse = {'value': null} %}
                                     {% endif %}
-                                    {{ mySelf.buildQuestion(question, reponse, formName) }}
+                                    {{ mySelf.buildQuestion(question, reponse, formName, outil) }}
                                 {% endfor %}
                             {% endif %}
                             
@@ -119,7 +119,7 @@
                                                 {% else %}
                                                     {% set reponse = {'value' : null} %}
                                                 {% endif %}
-                                                {{ mySelf.buildQuestion(question, reponse, formName) }}
+                                                {{ mySelf.buildQuestion(question, reponse, formName, outil) }}
                                             {% endfor %}
                                         </div>
                                     {% endfor %}
@@ -145,7 +145,7 @@
     </div>
 {% endblock %}
 
-{% macro buildQuestion(question, reponse, formName) %}
+{% macro buildQuestion(question, reponse, formName, outil) %}
     {# Build vars to make it cleaner #}
     {% set questionName = formName ~ '[' ~ question.chapitre.id ~ ']' ~ '[' ~ question.id ~ ']' %}
     {% set questionId   = formName ~ '_' ~ question.chapitre.id ~ '_' ~ question.id %}
@@ -166,7 +166,7 @@
 
                 <select name="{{questionName}}" id="{{questionId}}" class="form-control {% if question.colored %}colored{% endif %}" >
                     <option value=""> - </option>
-                    <option value="-1" {% if reponse['value'] == -1 %}selected="selected"{% endif %} >Non concerné</option>
+                    {% if outil.ajouterNonConcerne %}<option value="-1" {% if reponse['value'] == -1 %}selected="selected"{% endif %} >Non concerné</option>{% endif %}
                     {% for option in options %}
                         {% set datas = option|split(';', 2) %}
                         <option value="{{datas[0]|trim}}" {% if reponse['value'] == datas[0] %}selected="selected"{% endif %} >{{ datas[1]|capitalize|raw }}</option>
@@ -177,7 +177,7 @@
                 {% set options = question.options|nl2br|split('<br />') %}
                 <div class="radios {% if question.colored %}colored{% endif %}">
                     {% set isChecked = false %}
-                    <div class="radio block"><label><input type="radio" value="-1" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] != '' and reponse['value'] == -1 %}{% set isChecked = true %}checked="checked"{% endif %} />Non concerné</label></div>
+                    {% if outil.ajouterNonConcerne %}<div class="radio block"><label><input type="radio" value="-1" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] != '' and reponse['value'] == -1 %}{% set isChecked = true %}checked="checked"{% endif %} />Non concerné</label></div>{% endif %}
                     {% for option in options %}
                         {% set datas = option|split(';', 2) %}
                         <div class="radio block"><label><input type="radio" value="{{datas[0]|trim}}" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] == datas[0] %}{% set isChecked = true %}checked="checked"{% endif %} />{{ datas[1]|capitalize|raw }}</label></div>
