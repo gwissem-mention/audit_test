@@ -1,6 +1,18 @@
-*{width: 100% !important; border:none;background-color :#fff; font-family :Serif;font-size :12pt;}
+*{width: 100% !important; border:none;background-color :#fff; font-family :'Open Sans', sans-serif;font-size :12pt;}
 @page{ margin: 1 cm .5cm; size: portrait; }
-#header, #footer, #menu, #sommaire, .col-md-4, .print {display: none}
+#header, #footer, #menu, #sommaire, #commentaires, #autresResultats, .col-md-4, .print {display: none}
 img{ width:auto !important }
+
+#publication p{font-size: 12px;}
 #publication .btn { display:none !important; }
-#articles p.titre, #articles #sous-menu, #articles .actus{display: none}
+#publication .titre-infradoc {display: none;}
+#publication .titre-infradoc-pdf {display: inline;}
+#publication .titre-infradoc-pdf {font-size: 13px;display: inline;}
+#publication .titre-infradoc-pdf a{font-size: 13px;display: inline;}
+#publication .titre-infradoc-pdf i{display: inline;}
+#publication #info-note-moyenne {display: none;}
+
+#articles p.titre, #articles #sous-menu, #articles .actus{display: none;}
+a[href]:after {content: "";}
+.glosstool {display: none;}
+#bloc-notation-objet{display: none;}

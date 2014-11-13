@@ -204,6 +204,13 @@ class Outil
     private $masquerReponse;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="out_ajouter_non_concerne", type="boolean", options = {"comment" = "Masquer l onglet Analyse"})
+     */
+    private $ajouterNonConcerne;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="out_instructions", type="text", nullable=true, options = {"comment" = "Instructions fournies pour cet outil"})
