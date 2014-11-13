@@ -34,6 +34,15 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    <script type="text/javascript">
+    function printPreView(reportCategory,reportType,transactionType,searchOption,customerRokaID,utilityCompany,fromDate,toDate,telcoName,bank){
+
+var request = "selectedMenu="+reportCategory+"&loginStatus=success&criteria="+searchOption+"&customer="+customerRokaID+"&from="+fromDate+"&to="+toDate+"&nspTypes="+utilityCompany+"&trxTypes="+transactionType+"&options="+reportType+"&telcoTypes="+telcoName+"&bankTypes="+bank+"&printable=yes";
+
+
+window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,resizable=1,scrollbars=1,width=600,height=700");
+}
+</script>
 {% endblock %}
 
 {% block body %}
@@ -68,9 +77,14 @@
             <div class="col-md-12">
                 <h1 class="violet"><a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a></h1>
                 {% if breadCrumbsArray is defined and breadCrumbsArray is not null %}
-                    <div class="titre-infradoc violet" style="margin-top: -15px;margin-bottom:5px;font-size:16px;padding-top:5px;">
+                    <div class="titre-infradoc violet" style="margin-top: -15px;margin-bottom:5px;padding-top:5px;">
                         {% for breadcrumb in breadCrumbsArray %}
-                            <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;height:13px"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="font-size:22px;color:#672F9E">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;" > > </span> {% endif %}
+                            <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;height:13px"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="color:#672F9E">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;" > > </span> {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="titre-infradoc-pdf violet" style="margin-top: -15px;margin-bottom:5px;padding-top:5px;">
+                        {% for breadcrumb in breadCrumbsArray %}
+                            <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;height:13px;"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="color:#672F9E;">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;" > > </span> {% endif %}
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -147,10 +161,6 @@
                         <div class="col-md-12" id="publication-resume">
                             {{objet.resume|parsePublication(objet.glossaires)|raw}}
                         </div>
-
-                        <style type="text/css">
-                            .wrapper a{font-family: 'Open Sans', sans-serif }
-                        </style>
 
                         <div id="bloc-notation-objet" class="col-md-10 pull-right">
                             <div class="wrapper">
@@ -256,10 +266,6 @@
         {% endif %}
 
         {% if (app.user and objet.notes) and types != "Point dur" %}
-
-            <style type="text/css">
-                .wrapper a{font-family: 'Open Sans', sans-serif }
-            </style>
 
             <div id="bloc-notation-objet" class="col-md-5">
                 <div class="wrapper">

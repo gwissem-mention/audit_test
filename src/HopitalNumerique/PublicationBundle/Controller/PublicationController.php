@@ -56,7 +56,13 @@ class PublicationController extends Controller
         //Ajout des objets liés au prods
         foreach ($productions as $production) 
         {
-            $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $production->idc)));
+            $libContenu = "";
+
+            if(!is_null($production->idc))
+            {
+                $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $production->idc)));
+            }
+
             $objetsOrder[$production->id]['prefixe'] = $libContenu;
             $objetsOrder[$production->id]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $production->id));
         }
@@ -141,7 +147,7 @@ class PublicationController extends Controller
 
         foreach ($objetsOrder as $key => $objetCurrent) 
         {
-            if (!is_null($objetCurrent['objet'])) 
+            if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet']) ) 
             {
                 $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
                 $objetsOrder[$key]['prefixe'] = $libContenu;
@@ -287,6 +293,7 @@ class PublicationController extends Controller
                     $production->objet    = true;
                     $resume               = explode('<!-- pagebreak -->', $objet->getResume() );
                     $production->synthese = $objet->getSynthese();
+                    $production->idc      = null;
                 }
                 else
                 {

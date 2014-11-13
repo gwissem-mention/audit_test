@@ -33,7 +33,7 @@
 
     {{- knp_pagination_render(pager) -}}
 
-    <section class="row clearfix">
+    <section class="clearfix">
         {%- for key, post in pager.getItems() -%}
             {%- include "CCDNForumForumBundle:User:Post/Partial/item_post.html.twig" -%}
         {%- endfor -%}

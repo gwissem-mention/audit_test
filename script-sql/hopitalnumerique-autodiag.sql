@@ -1,0 +1,1 @@
+UPDATE hn_outil SET out_ajouter_non_concerne= true;

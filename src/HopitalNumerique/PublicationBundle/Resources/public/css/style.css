@@ -44,16 +44,19 @@
     #publication ul li{list-style-position: inside;}
     #publication{margin-top: 20px; position: relative}
     #publication .print{margin-left:5px;}
-    #publication h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px}
-    #publication h2{font-size: 20px; color: #6f3596}
-    #publication h3{font-size: 16px;}
-    #publication h4{font-size: 13px; font-weight: normal; margin:13px 0 0 0;}
+    #publication h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px; font-family: 'Open Sans', sans-serif;}
+    #publication h2{font-size: 20px; color: #6f3596; font-family: 'Open Sans', sans-serif;}
+    #publication h3{font-size: 16px; font-family: 'Open Sans', sans-serif;}
+    #publication h4{font-size: 13px; font-weight: normal; margin:13px 0 0 0; font-family: 'Open Sans', sans-serif;}
     #publication h4.objetTitre{font-weight: bold}
     #publication .objetLink{font-size: 16px}
+    #publication .wrapper a{font-family: 'Open Sans', sans-serif }
     #publication .col-md-4 div.wrapper{border:1px solid #e2e2e2; padding:10px 20px 0;margin-top:10px;}
     #publication .col-md-4 div.wrapper a.downloadLink{color:#070707; font-size: 13px; font-weight: normal; margin-bottom: 10px}
     #publication .col-md-4 div.wrapper a.synthese{background: url('../img/synthese-violet.png') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 96px; font-weight: normal; margin-bottom: 10px}
     #publication .col-md-4 div.wrapper .fa-download{margin:3px 0 0 7px;}
+    #publication .titre-infradoc a{font-size: 22px;}
+    #publication .titre-infradoc-pdf {display: none;}
 
     /* Bloc résumé */
     #publication #publication-resume h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px;}

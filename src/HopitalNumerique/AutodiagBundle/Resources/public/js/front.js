@@ -149,6 +149,7 @@ function calcAvancement()
 {
     totalQuestions         = 0;
     totalQuestionsAnswered = 0;
+    couleurAvancement      = "text-muted";
 
     $('#wizard fieldset').each(function(){
         //get some values
@@ -178,8 +179,24 @@ function calcAvancement()
 
         avancement = nbQuestions > 0 ? number_format((nbQuestionsAnswered * 100) / nbQuestions, 0) : 0;
 
+        //0%
+        if(avancement == 0)
+        {
+            couleurAvancement = "text-muted";
+        }
+        //50-99%
+        else if (avancement >= 50)
+        {
+            couleurAvancement = "text-warning";
+        }
+        //1-49%
+        else
+        {
+            couleurAvancement = "text-danger";
+        }
+
         //update liste
-        avancement = avancement < 100 ? '<span class="text-muted">'+avancement+'%</span>' : '<span class="text-success"><i class="fa fa-check"></i></span>';
+        avancement = avancement < 100 ? '<span class="'+ couleurAvancement +'">'+avancement+'%</span>' : '<span class="text-success"><i class="fa fa-check"></i></span>';
         $('#wizard-header li#wizard-head-'+step+' div span').remove();
         $('#wizard-header li#wizard-head-'+step+' div').prepend( avancement );
 
@@ -192,6 +209,18 @@ function calcAvancement()
     $('#autodiag .progress-bar').html(avancementTotal + '%');
     $('#autodiag .progress-bar').attr('aria-valuenow', avancementTotal);
     $('#autodiag #remplissage').val( avancementTotal );
+    if(avancementTotal == 100 )
+    {
+        $('#autodiag .progress-bar').attr('class', 'progress-bar progress-bar-success');
+    }
+    else if(avancementTotal >= 50)
+    {
+        $('#autodiag .progress-bar').attr('class', 'progress-bar progress-bar-warning');
+    }
+    else
+    {
+        $('#autodiag .progress-bar').attr('class', 'progress-bar progress-bar-danger');
+    }
 }
 
 //enregistre ou valide le questionnaire
