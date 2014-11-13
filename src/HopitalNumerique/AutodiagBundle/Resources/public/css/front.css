@@ -17,7 +17,7 @@
         #autodiag #chapitres ul li{border-top:1px solid #f0f0f0; background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
         #autodiag #chapitres ul li div{padding:5px 0; cursor:pointer;}
         #autodiag #chapitres ul li div p{margin:0;  color:#777777; font-size: 14px; width: 90%; }
-        #autodiag #chapitres ul li div .text-muted, #autodiag #chapitres ul li div .text-success{font-size:10px;float: right}
+        #autodiag #chapitres ul li div .text-muted, #autodiag #chapitres ul li div .text-success, #autodiag #chapitres ul li div .text-warning, #autodiag #chapitres ul li div .text-danger{font-size:10px;float: right}
         #autodiag #chapitres ul li.stepy-active div,#autodiag #chapitres ul li:hover div{color:#6f3596;}
         #autodiag .avancement-global span{font-size:10px;}
         .progress-bar[aria-valuenow="0"] { min-width: 30px; color: #777; background-color: transparent; background-image: none; -webkit-box-shadow: none; box-shadow: none; }
