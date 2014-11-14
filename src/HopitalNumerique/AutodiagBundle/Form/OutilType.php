@@ -128,32 +128,32 @@ class OutilType extends AbstractType
             ))
             ->add('commentaireRestitution', 'textarea', array(
                 'required'   => false, 
-                'label'      => 'Commentaire affiché lors de la réstitution',
+                'label'      => 'Commentaire affiché lors de la restitution',
                 'attr'       => array('rows' => 2, 'class' => 'tinyMce')
             ))
             ->add('commentaireGraphBarre', 'textarea', array(
                 'required'   => false, 
-                'label'      => 'Commentaire affiché lors de la réstitution',
+                'label'      => 'Commentaire affiché lors de la restitution',
                 'attr'       => array('rows' => 2, 'class' => 'tinyMce')
             ))
             ->add('commentaireGraphPrecessus', 'textarea', array(
                 'required'   => false, 
-                'label'      => 'Commentaire affiché lors de la réstitution',
+                'label'      => 'Commentaire affiché lors de la restitution',
                 'attr'       => array('rows' => 2, 'class' => 'tinyMce')
             ))
             ->add('commentaireGraphRadar', 'textarea', array(
                 'required'   => false, 
-                'label'      => 'Commentaire affiché lors de la réstitution',
+                'label'      => 'Commentaire affiché lors de la restitution',
                 'attr'       => array('rows' => 2, 'class' => 'tinyMce')
             ))
             ->add('commentaireAnalyseResultat', 'textarea', array(
                 'required'   => false, 
-                'label'      => 'Commentaire affiché lors de la réstitution',
+                'label'      => 'Commentaire affiché lors de la restitution',
                 'attr'       => array('rows' => 2, 'class' => 'tinyMce')
             ))
             ->add('commentaireReponses', 'textarea', array(
                 'required'   => false, 
-                'label'      => 'Commentaire affiché lors de la réstitution',
+                'label'      => 'Commentaire affiché lors de la restitution',
                 'attr'       => array('rows' => 2, 'class' => 'tinyMce')
             ))
             ->add('statut', 'entity', array(
