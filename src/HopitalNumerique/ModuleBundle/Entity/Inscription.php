@@ -106,7 +106,7 @@ class Inscription
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\PaiementBundle\Entity\Facture", cascade={"persist"}, inversedBy="formations")
-     * @ORM\JoinColumn(name="fac_id", referencedColumnName="fac_id", nullable=true)
+     * @ORM\JoinColumn(name="fac_id", referencedColumnName="fac_id", nullable=true, onDelete="SET NULL")
      */
     protected $facture;
 
