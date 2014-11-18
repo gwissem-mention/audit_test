@@ -209,7 +209,7 @@ class FrontController extends Controller
         }
 
         // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
-        $this->get('session')->getFlashBag()->add( 'success', 'Autodiagnostic ' . ($action == 'valid' ? 'validé.':'enregistré.') );
+        $this->get('session')->getFlashBag()->add( 'success', 'Vos réponses ont bien été sauvegardées.' );
 
 
         if( $action == 'valid' || !$outil->isCentPourcentReponseObligatoire())
