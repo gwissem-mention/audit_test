@@ -161,7 +161,7 @@
                 {% set options = question.options|nl2br|split('<br />') %}
 
                 <select name="{{questionName}}" id="{{questionId}}" class="form-control {% if question.colored %}colored{% endif %}" >
-                    <option value=""> - </option>
+                    <option value=""></option>
                     {% if outil.ajouterNonConcerne %}<option value="-1" {% if reponse['value'] == -1 %}selected="selected"{% endif %} >Non concerné</option>{% endif %}
                     {% for option in options %}
                         {% set datas = option|split(';', 2) %}
