@@ -118,36 +118,59 @@ $(document).ready(function() {
         });
     }
 
-    $("#categ_production_select").change(function(){
+    //vvv Chargement du bloc Requete de recherche en fonction de la Recherche textuelle et de la Recherche par type de production vvv
 
-        $("#categ_production_select_vals").val($(this).val());
-        updateResultats( true );
+    var loaderSelecteur = $('#recherche .dropdown-menu').nodevoLoader().start();
+    
+    //AJAX call for results
+    $.ajax({
+        url  : $('#resultats-type-production').val(),
+        data : {
+            categPointDur: $("#categ_production_select").val()
+        },
+        type    : 'POST',
+        success : function( data ){
+            $('#arbo-type-prod').html( data );
+            loaderSelecteur.finished();
+        }
     });
+    //Recherche textuelle
+    $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
+    
+    $("#categ_production_select").change(function(){
+        $("#categ_production_select_vals").val($(this).val());
 
-    $("#categ_production_select_vals").change(function(){
-        alert('lol');
         //Mise à jour du cradre "Requete de recherche"
-        
-        var loader = $('#recherche .requete').nodevoLoader().start();
+        var loader          = $('#recherche .requete').nodevoLoader().start();
+        var loaderSelecteur = $('#recherche .dropdown-menu').nodevoLoader().start();
     
         //AJAX call for results
         $.ajax({
             url  : $('#resultats-type-production').val(),
             data : {
-                categPointDur: $("#categ_production_select_vals").val()
+                categPointDur: $(this).val()
             },
             type    : 'POST',
             success : function( data ){
                 $('#arbo-type-prod').html( data );
 
                 loader.finished();
+                loaderSelecteur.finished();
             }
         });
-    }); 
 
-    $("#recherche_textuelle").change(function(){
         updateResultats( true );
     });
+
+    $("#recherche_textuelle").change(function(){
+
+        //Mise à jour du cradre "Requete de recherche"
+        $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
+
+        updateResultats( true );
+    });
+
+    //^^^ Chargement du bloc Requete de recherche en fonction de la Recherche textuelle et de la Recherche par type de production ^^^
 });
 
 //fancybox daffichage de la synthese

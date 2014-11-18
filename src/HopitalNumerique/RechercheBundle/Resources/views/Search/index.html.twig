@@ -62,67 +62,6 @@
             <input type="hidden" id="categ_production_select_vals_chargement" value="{{categoriesProductionActifJSON}}" />
         </div>
 
-<script type="text/javascript">
-
-$(document).ready(function() {
-
-    var loaderSelecteur = $('#recherche .dropdown-menu').nodevoLoader().start();
-    
-    //AJAX call for results
-    $.ajax({
-        url  : $('#resultats-type-production').val(),
-        data : {
-            categPointDur: $("#categ_production_select").val()
-        },
-        type    : 'POST',
-        success : function( data ){
-            $('#arbo-type-prod').html( data );
-            loaderSelecteur.finished();
-        }
-    });
-    //Recherche textuelle
-    $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
-    
-    $("#categ_production_select").change(function(){
-        $("#categ_production_select_vals").val($(this).val());
-
-        //Mise à jour du cradre "Requete de recherche"
-        var loader          = $('#recherche .requete').nodevoLoader().start();
-        var loaderSelecteur = $('#recherche .dropdown-menu').nodevoLoader().start();
-    
-        //AJAX call for results
-        $.ajax({
-            url  : $('#resultats-type-production').val(),
-            data : {
-                categPointDur: $(this).val()
-            },
-            type    : 'POST',
-            success : function( data ){
-                $('#arbo-type-prod').html( data );
-
-                loader.finished();
-                loaderSelecteur.finished();
-            }
-        });
-
-        updateResultats( true );
-    });
-
-    $("#recherche_textuelle").change(function(){
-
-        //Mise à jour du cradre "Requete de recherche"
-        $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
-
-        updateResultats( true );
-    });
-});
-</script>
-
-<style type="text/css">
-    #recherche #arbo-type-prod { padding: 0;}
-    #recherche #arbo-recherche-textuelle { padding: 0;}
-</style>
-
         <div class="col-md-8">
             <div class="requete">
                 <h2 class="violet {% if refs != '[]' %}ropen{% endif %}">Requête de recherche</h2>
@@ -153,13 +92,13 @@ $(document).ready(function() {
                         {{ mySelf.buildTree(elements, 0, 'hide') }}
                     </ol>
 
-                    <hr>
+                    <hr />
 
                     <span><strong>Ma recherche textuelle</strong></span><br />
                     <span id="arbo-recherche-textuelle">
                     </span>
 
-                    <hr>
+                    <hr />
 
                     <ol id="arbo-type-prod">
                     </ol>

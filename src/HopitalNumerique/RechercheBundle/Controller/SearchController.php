@@ -3,6 +3,7 @@
 namespace HopitalNumerique\RechercheBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DomCrawler\Crawler;
 
 class SearchController extends Controller
 {
@@ -207,6 +208,77 @@ class SearchController extends Controller
         $request              = $this->get('request');
         $categPointDur        = $request->request->get('categPointDur');
         $categoriesProduction = array();
+
+
+
+
+        $url = "http://fifi.mind7.fr:13010/search-api/search?q=FACTEURS%20CLES%20DE%20SUCCES";
+        // $url = "http://www.monhopitalnumerique.fr/";
+        
+        $xml = simplexml_load_file($url);
+
+        echo '<pre>';
+        foreach($xml->hits->hit as $hit)
+        {
+            echo "url:".$hit->d;
+        }
+        die('diediedie');
+
+
+
+        //--- file get content ---
+        echo '<pre>';
+        if (($response_xml_data = file_get_contents($url))===false)
+        {
+            echo "Error fetching XML\n";
+        } 
+        else 
+        {
+           libxml_use_internal_errors(true);
+           $data = simplexml_load_string($response_xml_data);
+           if (!$data) 
+           {
+               echo "Error loading XML\n";
+               foreach(libxml_get_errors() as $error) 
+               {
+                   echo "\t", $error->message;
+               }
+           } 
+           else
+           {
+              var_dump($data);
+           }
+        }
+        die('diedie');
+
+        //--- CURL ---
+        $handle = curl_init($url);
+        curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+
+        /* Get the HTML or whatever is linked in $url. */
+        $response = curl_exec($handle);
+
+        /* Check for not 200 */
+        $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+        if($httpCode >= 400 || $httpCode === 0) 
+        {
+            $isOk = false;
+        }
+
+        curl_close($handle);
+
+        echo '<pre>';
+        var_dump($response);
+        die();
+
+        die('test appel exalead');
+
+
+
+
+
+
+
 
         if(is_array($categPointDur))
         {

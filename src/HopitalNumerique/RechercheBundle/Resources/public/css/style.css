@@ -13,7 +13,7 @@
 
 /* Destination */
     #recherche .requete #dest{position: relative;}
-    #recherche .requete #dest ol.arbo-requete{padding:0; margin-top:15px;}
+    #recherche .requete #dest ol.arbo-requete{padding:0;}
     #recherche .requete #dest ol.arbo-requete ol{padding-left: 30px}
     #recherche .requete #dest ol.arbo-requete li.level0 span{ text-transform: uppercase; color: #703695; font-size: 16px; font-weight: bold }
     #recherche .requete #dest ol.arbo-requete li.level0 ol li.level1 span{ text-transform: none; color: #000000; font-size: 12px; font-weight: bold }
@@ -25,7 +25,7 @@
     #recherche .requete #dest .btn{margin-top:5px;}
     #recherche .requete #dest .requeteNom{margin-top: 5px; font-style: italic;}
 
-    #recherche .requete #dest #arbo-type-prod li span{color: #000000;font-size: 12px;font-weight: bold;text-transform: none;}
+    #recherche .requete #dest #arbo-type-prod li span{color: #000000;font-size: 12px;text-transform: none;}
 
 /* Orgine */
     /* Parents */
@@ -65,6 +65,8 @@
 
     /* Zone de recherche textuelle */
     #recherche #recherche_textuelle_group{margin-bottom: 10px;}
+    #recherche #arbo-type-prod { padding: 0;}
+    #recherche #arbo-recherche-textuelle { padding: 0;}
 
 /* Résultats */
     #recherche #resultats{ margin-top: 20px; }
