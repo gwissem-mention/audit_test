@@ -31,13 +31,15 @@ class SearchController extends Controller
             if( !is_null($session->get('requete-refs')) )
             {
                 $categoriesProductionActif = ( !is_null( $session->get('requete-refs-categProd') ) ) ? $session->get('requete-refs-categProd') : '';
-                $requete = null;
-                $refs    = $session->get('requete-refs');
+                $rechercheTextuelle        = ( !is_null( $session->get('requete-refs-recherche-textuelle') ) ) ? $session->get('requete-refs-recherche-textuelle') : '';
+                $requete                   = null;
+                $refs                      = $session->get('requete-refs');
             //sinon on charge la requete par défaut
             }else{
-                $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'isDefault' => true ) );
-                $refs    = $requete ? json_encode($requete->getRefs()) : '[]';
+                $requete                   = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'isDefault' => true ) );
+                $refs                      = $requete ? json_encode($requete->getRefs()) : '[]';
                 $categoriesProductionActif = $requete ? $requete->getCategPointDur() : '';
+                $rechercheTextuelle        = $requete ? $requete->getRechercheTextuelle() : '';
 
                 //set requete id in session
                 if( $requete )
@@ -48,8 +50,9 @@ class SearchController extends Controller
             $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'id' => $id ) );
 
             if( $requete ) {
-                $refs = json_encode($requete->getRefs());
+                $refs                      = json_encode($requete->getRefs());
                 $categoriesProductionActif = is_null($requete->getCategPointDur()) ? '' : $requete->getCategPointDur();
+                $rechercheTextuelle        = is_null($requete->getRechercheTextuelle()) ? '' : $requete->getRechercheTextuelle();
 
                 //update request
                 $requete->setNew( false );
@@ -73,6 +76,7 @@ class SearchController extends Controller
             'elements'                      => $elements['CATEGORIES_RECHERCHE'],
             'requete'                       => $requete,
             'refs'                          => $refs,
+            'rechercheTextuelle'            => $rechercheTextuelle,
             'categoriesProduction'          => $categoriesProduction,
             'categoriesProductionActif'     => $categoriesProductionActif,
             'categoriesProductionActifJSON' => json_encode(explode(',', $categoriesProductionActif))
@@ -98,6 +102,9 @@ class SearchController extends Controller
         //GME 19/09/2014 : Ajout du filtre des categ point dur (liste à choix multiples)
         $categPointDur = $request->request->get('categPointDur');
         $objetsOrder   = array();
+
+        //GME 17/11/2014 : Ajout de la zone textuelle
+        $rechercheTextuelle = $request->request->get('rechercheTextuelle');
 
         //Filtre uniquement si pas vide
         if(!empty($categPointDur))
@@ -160,6 +167,7 @@ class SearchController extends Controller
         $isRequete = (!is_null($session->get('requete-id')));
         $session->set('requete-refs', json_encode($references) );
         $session->set('requete-refs-categProd', $categPointDur );
+        $session->set('requete-refs-recherche-textuelle', $rechercheTextuelle );
 
         //clean requete ID
         $cleanSession = $request->request->get('cleanSession');
@@ -186,6 +194,31 @@ class SearchController extends Controller
             'objetsOrder'         => $objetsOrder,
             'showMorePointsDurs'  => $showMorePointsDurs,
             'showMoreProductions' => $showMoreProductions
+        ));
+    }
+
+    /**
+     * Création de la vue "Type de production"
+     *
+     * @return [type]
+     */
+    public function getTypeProductionAction()
+    {
+        $request              = $this->get('request');
+        $categPointDur        = $request->request->get('categPointDur');
+        $categoriesProduction = array();
+
+        if(is_array($categPointDur))
+        {
+            foreach ($categPointDur as $idCateg)
+            {
+                $categ = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $idCateg));
+                $categoriesProduction[$categ->getId()] = $categ;
+            }
+        }
+
+        return $this->render('HopitalNumeriqueRechercheBundle:Search:getTypeProduction.html.twig', array(
+            'categoriesSelected' => $categoriesProduction,
         ));
     }
 }

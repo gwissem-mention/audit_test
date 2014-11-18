@@ -123,6 +123,31 @@ $(document).ready(function() {
         $("#categ_production_select_vals").val($(this).val());
         updateResultats( true );
     });
+
+    $("#categ_production_select_vals").change(function(){
+        alert('lol');
+        //Mise à jour du cradre "Requete de recherche"
+        
+        var loader = $('#recherche .requete').nodevoLoader().start();
+    
+        //AJAX call for results
+        $.ajax({
+            url  : $('#resultats-type-production').val(),
+            data : {
+                categPointDur: $("#categ_production_select_vals").val()
+            },
+            type    : 'POST',
+            success : function( data ){
+                $('#arbo-type-prod').html( data );
+
+                loader.finished();
+            }
+        });
+    }); 
+
+    $("#recherche_textuelle").change(function(){
+        updateResultats( true );
+    });
 });
 
 //fancybox daffichage de la synthese
@@ -308,7 +333,8 @@ function updateResultats( cleanSession )
         data : {
             references   : getReferences(),
             cleanSession : cleanSession,
-            categPointDur: $("#categ_production_select_vals").val()
+            categPointDur: $("#categ_production_select_vals").val(),
+            rechercheTextuelle : $("#recherche_textuelle").val()
         },
         type    : 'POST',
         success : function( data ){
@@ -449,10 +475,11 @@ function handleRequeteSave( r, id )
     $.ajax({
         url  : $('#requete-save-url').val(),
         data : {
-            nom           : r,
-            id            : id,
-            references    : getReferences(),
-            categPointDur : $("#categ_production_select_vals").val(),
+            nom                : r,
+            id                 : id,
+            references         : getReferences(),
+            categPointDur      : $("#categ_production_select_vals").val(),
+            rechercheTextuelle : $("#recherche_textuelle").val(),
         },
         type     : 'POST',
         dataType : 'json',
@@ -503,6 +530,8 @@ function cleanRequest()
             $("#categ_production_select").multiselect('deselect', 180);
             $("#categ_production_select").multiselect('deselect', 181);
             $("#categ_production_select").multiselect('deselect', 182);
+            
+            $("#recherche_textuelle").val('');
         }
     });
 }

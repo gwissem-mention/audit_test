@@ -30,10 +30,11 @@ class RequeteController extends Controller
      */
     public function saveAction()
     {
-        $id               = $this->get('request')->request->get('id');
-        $nom              = $this->get('request')->request->get('nom');
-        $references       = $this->get('request')->request->get('references');
-        $categPointDur    = $this->get('request')->request->get('categPointDur');
+        $id                 = $this->get('request')->request->get('id');
+        $nom                = $this->get('request')->request->get('nom');
+        $references         = $this->get('request')->request->get('references');
+        $categPointDur      = $this->get('request')->request->get('categPointDur');
+        $rechercheTextuelle = $this->get('request')->request->get('rechercheTextuelle');
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -54,6 +55,7 @@ class RequeteController extends Controller
 
         //Categ de la multi select
         $requete->setCategPointDur( $categPointDur );
+        $requete->setRechercheTextuelle( $rechercheTextuelle );
 
         //s'il n'existe pas encore de requête pour cet utilisateur, on met celle la en requête par défaut
         $tmp = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user ) );

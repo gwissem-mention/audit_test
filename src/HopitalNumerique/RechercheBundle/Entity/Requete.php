@@ -85,6 +85,13 @@ class Requete
     private $categPointDur;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="req_recherche_textuelle", type="string", length=256)
+     */
+    private $rechercheTextuelle;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
      */
@@ -416,5 +423,28 @@ class Requete
     public function getCategPointDur()
     {
         return $this->categPointDur;
+    }
+
+    /**
+     * Set rechercheTextuelle
+     *
+     * @param string $rechercheTextuelle
+     * @return Requete
+     */
+    public function setRechercheTextuelle($rechercheTextuelle)
+    {
+        $this->rechercheTextuelle = $rechercheTextuelle;
+
+        return $this;
+    }
+
+    /**
+     * Get rechercheTextuelle
+     *
+     * @return string 
+     */
+    public function getRechercheTextuelle()
+    {
+        return $this->rechercheTextuelle;
     }
 }

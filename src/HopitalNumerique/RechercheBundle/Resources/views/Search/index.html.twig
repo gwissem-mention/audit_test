@@ -45,6 +45,13 @@
                 <div class="btn btn-block background-violet text-left" id="smallMesRequetes" onclick="$('#mesrequetes').click();"><i class="fa fa-list"></i> Mes requêtes</div>
             {% endif %}
 
+            <div id="recherche_textuelle_group" class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control col-md-12" placeholder="Recherche ..." value="{{rechercheTextuelle}}" />
+              <span class="input-group-btn">
+                <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+              </span>
+            </div>
 
             <select multiple="multiple" class="form-control" placeholder="Sélectionnez un filtre pour un point dur" name="categ_production_select" id="categ_production_select" style="height:200px;">
                 {% for categorieProduction in categoriesProduction %}
@@ -55,10 +62,66 @@
             <input type="hidden" id="categ_production_select_vals_chargement" value="{{categoriesProductionActifJSON}}" />
         </div>
 
-        <style type="text/css">
-            #recherche button.multiselect {text-align: left;}
-            #recherche button.multiselect .caret{text-align: right;}
-        </style>
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+    var loaderSelecteur = $('#recherche .dropdown-menu').nodevoLoader().start();
+    
+    //AJAX call for results
+    $.ajax({
+        url  : $('#resultats-type-production').val(),
+        data : {
+            categPointDur: $("#categ_production_select").val()
+        },
+        type    : 'POST',
+        success : function( data ){
+            $('#arbo-type-prod').html( data );
+            loaderSelecteur.finished();
+        }
+    });
+    //Recherche textuelle
+    $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
+    
+    $("#categ_production_select").change(function(){
+        $("#categ_production_select_vals").val($(this).val());
+
+        //Mise à jour du cradre "Requete de recherche"
+        var loader          = $('#recherche .requete').nodevoLoader().start();
+        var loaderSelecteur = $('#recherche .dropdown-menu').nodevoLoader().start();
+    
+        //AJAX call for results
+        $.ajax({
+            url  : $('#resultats-type-production').val(),
+            data : {
+                categPointDur: $(this).val()
+            },
+            type    : 'POST',
+            success : function( data ){
+                $('#arbo-type-prod').html( data );
+
+                loader.finished();
+                loaderSelecteur.finished();
+            }
+        });
+
+        updateResultats( true );
+    });
+
+    $("#recherche_textuelle").change(function(){
+
+        //Mise à jour du cradre "Requete de recherche"
+        $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
+
+        updateResultats( true );
+    });
+});
+</script>
+
+<style type="text/css">
+    #recherche #arbo-type-prod { padding: 0;}
+    #recherche #arbo-recherche-textuelle { padding: 0;}
+</style>
 
         <div class="col-md-8">
             <div class="requete">
@@ -85,8 +148,20 @@
                         <div class="btn btn-xs btn-danger" onclick="cleanRequest();" >Réinitialiser ma requête</div>
                     <hr />
 
+                    <span><strong>Mes critères de recherche</strong></span>
                     <ol class="arbo-requete">
                         {{ mySelf.buildTree(elements, 0, 'hide') }}
+                    </ol>
+
+                    <hr>
+
+                    <span><strong>Ma recherche textuelle</strong></span><br />
+                    <span id="arbo-recherche-textuelle">
+                    </span>
+
+                    <hr>
+
+                    <ol id="arbo-type-prod">
                     </ol>
                 </div>    
             </div>
@@ -96,6 +171,7 @@
 
         <input type="hidden" id="search-homepage-url" value="{{path('hopital_numerique_recherche_homepage_requete')}}" />
         <input type="hidden" id="resultats-url" value="{{path('hopital_numerique_recherche_getresults')}}" />
+        <input type="hidden" id="resultats-type-production" value="{{path('hopital_numerique_recherche_gettypeproduction')}}" />
         <input type="hidden" id="requete-save-url" value="{{path('hopital_numerique_requete_save')}}" />
         <input type="hidden" id="requete-refs" value="{{refs}}" />
 
