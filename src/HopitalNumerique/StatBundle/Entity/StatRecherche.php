@@ -71,7 +71,7 @@ class StatRecherche
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", nullable=true)
+     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
      */
     protected $user;
 
