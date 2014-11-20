@@ -16,9 +16,9 @@
             {% endif %}
 
             {% if objet['objet'] is not null %}
-                <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >
+                <a target="_blank" href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >
             {% else %}
-                <a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
+                <a target="_blank" href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
             {% endif %}
                 {{objet['titre']}}{% if objet['objet'] is not null %}<small class="violet"> - Extrait d'une production</small>{% endif %}
             </a>
