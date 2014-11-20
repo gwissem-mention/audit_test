@@ -120,7 +120,7 @@ class Session
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="usr_formateur", referencedColumnName="usr_id", nullable=true)
+     * @ORM\JoinColumn(name="usr_formateur", referencedColumnName="usr_id", nullable=true, onDelete="SET NULL")
      * 
      * @GRID\Column(field="formateur.nom")
      */

@@ -103,8 +103,8 @@ class Resultat
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\Resultat")
      * @ORM\JoinTable(name="hn_outil_synthese",
-     *      joinColumns={ @ORM\JoinColumn(name="syn_id", referencedColumnName="res_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="res_id", referencedColumnName="res_id")}
+     *      joinColumns={ @ORM\JoinColumn(name="syn_id", referencedColumnName="res_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="res_id", referencedColumnName="res_id", onDelete="CASCADE")}
      * )
      */
     protected $resultats;

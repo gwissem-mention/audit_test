@@ -39,7 +39,7 @@ class Inscription
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="usr_participant", referencedColumnName="usr_id", nullable=true)
+     * @ORM\JoinColumn(name="usr_participant", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
      * @ORM\OrderBy({"nom" = "ASC", "prenom" = "ASC"})
      *
      * @GRID\Column(field="user.nom")
@@ -106,7 +106,7 @@ class Inscription
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\PaiementBundle\Entity\Facture", cascade={"persist"}, inversedBy="formations")
-     * @ORM\JoinColumn(name="fac_id", referencedColumnName="fac_id", nullable=true)
+     * @ORM\JoinColumn(name="fac_id", referencedColumnName="fac_id", nullable=true, onDelete="SET NULL")
      */
     protected $facture;
 

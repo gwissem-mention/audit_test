@@ -49,6 +49,7 @@ HopitalNumerique\ForumBundle\Entity\Post:
             joinColumn:
                 name: fk_created_by_user_id
                 referencedColumnName: usr_id
+                onDelete: CASCADE
         editedBy:
             targetEntity: HopitalNumerique\UserBundle\Entity\User
             cascade: []
@@ -56,6 +57,7 @@ HopitalNumerique\ForumBundle\Entity\Post:
             joinColumn:
                 name: fk_edited_by_user_id
                 referencedColumnName: usr_id
+                onDelete: CASCADE
         deletedBy:
             targetEntity: HopitalNumerique\UserBundle\Entity\User
             cascade: []
@@ -63,6 +65,7 @@ HopitalNumerique\ForumBundle\Entity\Post:
             joinColumn:
                 name: fk_deleted_by_user_id
                 referencedColumnName: usr_id
+                onDelete: CASCADE
         unlockedBy:
             targetEntity: HopitalNumerique\UserBundle\Entity\User
             cascade: []
@@ -70,6 +73,7 @@ HopitalNumerique\ForumBundle\Entity\Post:
             joinColumn:
                 name: fk_unlocked_by_user_id
                 referencedColumnName: usr_id
+                onDelete: CASCADE
 #        attachment:
 #            targetEntity: CCDNComponent\AttachmentBundle\Entity\Attachment
 #            cascade: ["persist"]

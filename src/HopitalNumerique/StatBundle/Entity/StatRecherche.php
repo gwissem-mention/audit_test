@@ -54,7 +54,7 @@ class StatRecherche
      * 
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_statistiques_recherche_requete",
-     *      joinColumns={ @ORM\JoinColumn(name="stat_id", referencedColumnName="stat_id")},
+     *      joinColumns={ @ORM\JoinColumn(name="stat_id", referencedColumnName="stat_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
      * )
      */
@@ -71,7 +71,7 @@ class StatRecherche
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", nullable=true)
+     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
      */
     protected $user;
 
