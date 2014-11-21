@@ -9,14 +9,15 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class SearchManager extends BaseManager
 {
-    private $_production        = 175;
-    private $_ressource         = 183;
-    private $_pointDur          = 184;
-    private $_refObjetManager   = null;
-    private $_refContenuManager = null;
-    private $_refsPonderees     = null;
-    private $_refTopicManager   = null;
-    private $_ccdnAuthorizer    = null;
+    private $_production            = 175;
+    private $_ressource             = 183;
+    private $_pointDur              = 184;
+    private $_refObjetManager       = null;
+    private $_refContenuManager     = null;
+    private $_refsPonderees         = null;
+    private $_refTopicManager       = null;
+    private $_ccdnAuthorizer        = null;
+    private $_urlRechercheTextuelle = "";
     
     /**
      * Override du contrct d'un manager normal : ce manager n'est lié à aucune entitée
@@ -25,12 +26,24 @@ class SearchManager extends BaseManager
      * @param RefContenuManager $refContenuManager Entitée RefContenuManager
      * @param RefTopicManager   $refTopicManager   Entitée RefTopicManager
      */
-    public function __construct( $refObjetManager, $refContenuManager, $refTopicManager, $ccdnAuthorizer )
+    public function __construct( $refObjetManager, $refContenuManager, $refTopicManager, $ccdnAuthorizer, $options = array() )
     {
         $this->_refObjetManager   = $refObjetManager;
         $this->_refContenuManager = $refContenuManager;
         $this->_refTopicManager   = $refTopicManager;
         $this->_ccdnAuthorizer    = $ccdnAuthorizer;
+
+        $this->_urlRechercheTextuelle = isset($options['urlRechercheTextuelle']) ? $options['urlRechercheTextuelle'] : '';
+    }
+
+    /**
+     * Permet de récuperer les options du parameter.yml
+     *
+     * @return [type]
+     */
+    public function getUrlRechercheTextuelle()
+    {
+        return $this->_urlRechercheTextuelle;
     }
     
     /**

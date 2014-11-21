@@ -3,7 +3,6 @@
 namespace HopitalNumerique\RechercheBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\DomCrawler\Crawler;
 
 class SearchController extends Controller
 {
@@ -105,7 +104,8 @@ class SearchController extends Controller
         $objetsOrder   = array();
 
         //GME 17/11/2014 : Ajout de la zone textuelle
-        $rechercheTextuelle = $request->request->get('rechercheTextuelle');
+        $rechercheTextuelle                 = $request->request->get('rechercheTextuelle');
+        $resultatsTrouveeRechercheTextuelle = true;
 
         //Filtre uniquement si pas vide
         if(!empty($categPointDur))
@@ -148,6 +148,59 @@ class SearchController extends Controller
             $categPointDurIdsArray = array();
         }
 
+        //GME 21/11/2014 : Exalead
+        if(trim($rechercheTextuelle) !== "")
+        {
+            $objetIds              = array();
+            $contenuIds            = array();
+            $optionsSearch         = $this->get('hopitalnumerique_recherche.manager.search')->getUrlRechercheTextuelle();
+            // $urlRechercheTextuelle = "http://fifi.mind7.fr:13010/search-api/search?q=FACTEURS%20CLES%20DE%20SUCCES";
+            $urlRechercheTextuelle = $optionsSearch . urlencode($rechercheTextuelle);
+
+            //Vérification si le lien n'est pas/plus accessible
+            $handle = curl_init($urlRechercheTextuelle);
+            curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+
+            /* Get the HTML or whatever is linked in $urlRechercheTextuelle. */
+            $response = curl_exec($handle);
+
+            /* Check for not 200 */
+            $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+            //Lien correct
+            if($httpCode < 400 && $httpCode != 0)
+            {
+                $xml = simplexml_load_file($urlRechercheTextuelle);
+
+                //Vérfication si des résultats sont remontés
+                if(!is_null($xml->hits->Hit))
+                {
+                    foreach($xml->hits->Hit as $hit)
+                    {
+                        $hitUrl      = (string)$hit->attributes()->url;
+                        $hitUrlArray = explode("=", $hitUrl);
+
+                        if($hitUrlArray[0] == 'obj_id')
+                        {
+                            $objetIds[] = intval(substr($hitUrlArray[1], 0 , -1));
+                        }
+                        elseif($hitUrlArray[0] == 'con_id')
+                        {
+                            $contenuIds[] = intval(substr($hitUrlArray[1], 0 , -1));
+                        }
+                    }
+                }
+                else
+                {
+                    $resultatsTrouveeRechercheTextuelle = false;
+                }
+            }
+            //Lien mort
+            else
+            {
+                $this->get('session')->getFlashBag()->add( 'danger', 'Un problème est survenu lors de votre recherche textuelle, merci de contacter un administrateur.' );
+            } 
+        }
+
         foreach ($objets as $key => $objet) 
         {
             $objetsOrder[$objet["id"]] = $objet;
@@ -157,10 +210,54 @@ class SearchController extends Controller
         {
             if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet'])) 
             {
-                $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
-                $objetsOrder[$key]['prefixe'] = $libContenu;
-                $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+                //Dans le cas où une recherche textuelle est donnée
+                if(trim($rechercheTextuelle) !== "")
+                {
+                    if(in_array($objetCurrent['id'], $objetIds))
+                    {
+                        $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
+                        $objetsOrder[$key]['prefixe'] = $libContenu;
+                        $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+                    }
+                }
+                else
+                {
+                    $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
+                    $objetsOrder[$key]['prefixe'] = $libContenu;
+                    $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+                }
             }
+        }
+
+        $objetsRechercheTextuelle = array();
+
+        //Dans le cas où une recherche textuelle est donnée
+        if(trim($rechercheTextuelle) !== "")
+        {
+            //Parcourt les objets 
+            foreach ($objets as $objet) 
+            {
+                //Contenu
+                if(array_key_exists('objet', $objet) && !is_null($objet["objet"]))
+                {
+                    if(in_array($objet['id'], $contenuIds))
+                    {
+                        $objetsRechercheTextuelle[] = $objet;
+                    }
+                }
+                //Objet
+                else
+                {
+                    if(in_array($objet['id'], $objetIds))
+                    {
+                        $objetsRechercheTextuelle[] = $objet;
+                    }
+                }
+            }
+        }
+        else
+        {
+            $objetsRechercheTextuelle = $objets;
         }
 
         //on prépare la session
@@ -187,11 +284,11 @@ class SearchController extends Controller
         {
             $categPointDur = is_null($categPointDur) ? '' : $categPointDur;
             $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
-            $this->get('hopitalnumerique_stat.manager.statrecherche')->sauvegardeRequete($references, $user, $categPointDur, count($objets), $isRequete);
+            $this->get('hopitalnumerique_stat.manager.statrecherche')->sauvegardeRequete($references, $user, $categPointDur, count($objetsRechercheTextuelle), $isRequete);
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(
-            'objets'              => $objets,
+            'objets'              => $objetsRechercheTextuelle,
             'objetsOrder'         => $objetsOrder,
             'showMorePointsDurs'  => $showMorePointsDurs,
             'showMoreProductions' => $showMoreProductions
@@ -208,77 +305,6 @@ class SearchController extends Controller
         $request              = $this->get('request');
         $categPointDur        = $request->request->get('categPointDur');
         $categoriesProduction = array();
-
-
-
-
-        $url = "http://fifi.mind7.fr:13010/search-api/search?q=FACTEURS%20CLES%20DE%20SUCCES";
-        // $url = "http://www.monhopitalnumerique.fr/";
-        
-        $xml = simplexml_load_file($url);
-
-        echo '<pre>';
-        foreach($xml->hits->hit as $hit)
-        {
-            echo "url:".$hit->d;
-        }
-        die('diediedie');
-
-
-
-        //--- file get content ---
-        echo '<pre>';
-        if (($response_xml_data = file_get_contents($url))===false)
-        {
-            echo "Error fetching XML\n";
-        } 
-        else 
-        {
-           libxml_use_internal_errors(true);
-           $data = simplexml_load_string($response_xml_data);
-           if (!$data) 
-           {
-               echo "Error loading XML\n";
-               foreach(libxml_get_errors() as $error) 
-               {
-                   echo "\t", $error->message;
-               }
-           } 
-           else
-           {
-              var_dump($data);
-           }
-        }
-        die('diedie');
-
-        //--- CURL ---
-        $handle = curl_init($url);
-        curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
-
-        /* Get the HTML or whatever is linked in $url. */
-        $response = curl_exec($handle);
-
-        /* Check for not 200 */
-        $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-        if($httpCode >= 400 || $httpCode === 0) 
-        {
-            $isOk = false;
-        }
-
-        curl_close($handle);
-
-        echo '<pre>';
-        var_dump($response);
-        die();
-
-        die('test appel exalead');
-
-
-
-
-
-
-
 
         if(is_array($categPointDur))
         {
