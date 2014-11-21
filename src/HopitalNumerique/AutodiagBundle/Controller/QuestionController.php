@@ -130,6 +130,18 @@ class QuestionController extends Controller
         $form = $this->createForm( 'hopitalnumerique_autodiag_question', $question);
 
         if ( $form->handleRequest($request)->isValid() ) {
+
+            //Parse les options de réponses : Force un point si jamais il y a une virgule dans la value
+            $options = explode("\n", $question->getOptions());
+            foreach ($options as &$option) 
+            {
+                $values = explode(";", $option);
+                $values[0] = str_replace(",", ".", $values[0]);
+                $option = implode(";", $values);
+            }
+            $question->setOptions(implode("\n", $options));
+
+            //Sauvegarde
             $this->get('hopitalnumerique_autodiag.manager.question')->saveQuestion( $question );
 
             //get ponderations

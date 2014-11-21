@@ -221,7 +221,7 @@ class Objet
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="obj_locked_by", referencedColumnName="usr_id")
+     * @ORM\JoinColumn(name="obj_locked_by", referencedColumnName="usr_id", onDelete="SET NULL")
      */
     protected $lockedBy;
 
