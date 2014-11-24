@@ -33,5 +33,8 @@ img{ width:auto !important }
 #reponses h4{margin-bottom: 20px; font-size: 18px;}
 #reponses .icon{ margin: 0 0 0 30px; }
 #reponses .icon img{width: 100%}
+#reponses p, #reponses p span, #reponses p span b{font-size: 11px;}
+#reponses h3{ margin-top: 0px; margin-bottom: 0px;}
+#reponses h4{ margin-top: 0px; margin-bottom: 0px;}
 
 .copyright{width:94%; margin-top:80px;}
