@@ -280,6 +280,10 @@ class DefaultController extends Controller
         $blocUser['conventions'] = $this->get('hopitalnumerique_user.manager.contractualisation')->getContractualisationsARenouveler();
 
         foreach ($users as $user) {
+            //Ne pas prendre en compte les utilisateurs inactifs
+            if($user->getEtat()->getId() !== 3)
+                continue;
+
             if( $user->getNbVisites() > 0 )
                 $blocUser['actif']++;
 
