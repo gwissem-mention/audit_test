@@ -20,6 +20,7 @@
     {% endstylesheets %}
     
     <link rel="stylesheet" href="{{ asset('bundles/hopitalnumeriquepublication/css/style-print.css') }}" type="text/css" media="print" />
+    <style type="text/css">#publication a[href]:after {content: none !important; font-size: 12px; display: none;}</style>
 {% endblock %}
 
 {% block javascripts %}
