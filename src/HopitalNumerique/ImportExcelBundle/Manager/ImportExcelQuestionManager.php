@@ -56,7 +56,16 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
                 $question->setType($type);
             }
 
-            $question->setOptions($questionDonnees['options']);
+            //Parse les options de réponses : Force un point si jamais il y a une virgule dans la value
+            $options = explode("\n", $questionDonnees['options']);
+            foreach ($options as &$option) 
+            {
+                $values = explode(";", $option);
+                $values[0] = str_replace(",", ".", $values[0]);
+                $option = implode(";", $values);
+            }
+            $question->setOptions(implode("\n", $options));
+            
             $question->setNoteMinimale($questionDonnees['noteMinimale']);
             $question->setSeuil($questionDonnees['noteMinimale']);
             $question->setSynthese($questionDonnees['synthese']);
