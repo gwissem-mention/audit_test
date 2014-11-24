@@ -4,6 +4,10 @@
 img{ width:auto !important }
 
 #publication p,#publication a,#publication a .glosstool,#publication ul li, #publication strong{font-size: 12px;}
+#publication h1 .glosstool,#publication h1 a{font-size: 24px;}
+#publication h2 .glosstool,#publication h2 a{font-size: 20px;}
+#publication h3 .glosstool,#publication h3 a{font-size: 16px;}
+#publication h4 .glosstool,#publication h4 a{font-size: 13px;}
 #publication .btn { display:none !important; }
 #publication .titre-infradoc {display: none;}
 #publication .titre-infradoc-pdf {display: inline;}
