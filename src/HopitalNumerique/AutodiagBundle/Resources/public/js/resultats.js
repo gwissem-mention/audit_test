@@ -164,7 +164,7 @@ $(document).ready(function() {
                 gridLineInterpolation : 'polygon',
                 lineWidth             : 0,
                 min                   : 0,
-                max                   : 110,
+                max                   : 100,
                 tickInterval          : 10,
                 gridLineDashStyle     : 'Dash',
                 labels                : {
