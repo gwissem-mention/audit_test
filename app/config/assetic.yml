@@ -95,7 +95,7 @@ assetic:
             filters : [ ?yui_js ]
         bootstrap_multiselect_js:
             inputs:
-                - "%kernel.root_dir%/Resources/components/bootstrap-multiselect/js/bootstrap-multiselect.js"
+                - "%kernel.root_dir%/Resources/components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"
             filters : [ ?yui_js ]
         nestable_js:
             inputs:
@@ -181,5 +181,5 @@ assetic:
             filters: [ cssembed, ?yui_css ]
         bootstrap_multiselect_css:
             inputs:
-                - "%kernel.root_dir%/Resources/components/bootstrap-multiselect/css/bootstrap-multiselect.css"
+                - "%kernel.root_dir%/Resources/components/bootstrap-multiselect/dist/css/bootstrap-multiselect.css"
             filters: [ cssembed, ?yui_css ]
