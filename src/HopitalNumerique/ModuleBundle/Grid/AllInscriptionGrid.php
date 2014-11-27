@@ -65,6 +65,7 @@ class AllInscriptionGrid extends BaseInscriptionGrid
         $etatInscriptionColumn = new Column\TextColumn('etatInscription', 'Etat de l\'inscription');
         $etatInscriptionColumn->setFilterType('select');
         $etatInscriptionColumn->setOperatorsVisible( false );
+        $etatInscriptionColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $etatInscriptionColumn );
 
         $nbInscritsColumn = new Column\TextColumn('nbInscrits', 'Nombres d\'inscrits pour sa session');

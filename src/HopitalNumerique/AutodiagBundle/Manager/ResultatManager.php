@@ -437,7 +437,8 @@ class ResultatManager extends BaseManager
         $results->categories = array();
         $totalChapitres      = array();
 
-        foreach($categories as $categorie){
+        foreach($categories as $categorie)
+        {
             $categorieId = $categorie->getId();
 
             $results->categories[ $categorieId ]['title']     = $categorie->getTitle();
