@@ -3,7 +3,11 @@
 #header, #footer, #menu, #sommaire, #commentaires, #autresResultats, .col-md-4, .print {display: none}
 img{ width:auto !important }
 
-#publication p{font-size: 12px;}
+#publication p,#publication a,#publication a .glosstool,#publication ul li, #publication strong{font-size: 12px;}
+#publication h1 .glosstool,#publication h1 a{font-size: 24px;}
+#publication h2 .glosstool,#publication h2 a{font-size: 20px;}
+#publication h3 .glosstool,#publication h3 a{font-size: 16px;}
+#publication h4 .glosstool,#publication h4 a{font-size: 13px;}
 #publication .btn { display:none !important; }
 #publication .titre-infradoc {display: none;}
 #publication .titre-infradoc-pdf {display: inline;}
@@ -11,8 +15,9 @@ img{ width:auto !important }
 #publication .titre-infradoc-pdf a{font-size: 13px;display: inline;}
 #publication .titre-infradoc-pdf i{display: inline;}
 #publication #info-note-moyenne {display: none;}
+#publication a[href]:after {content: none !important;}
+#publication a acronym{color:#E0822A;}
+#publication .tooltip {display: none;}
 
 #articles p.titre, #articles #sous-menu, #articles .actus{display: none;}
-a[href]:after {content: "";}
-.glosstool {display: none;}
 #bloc-notation-objet{display: none;}

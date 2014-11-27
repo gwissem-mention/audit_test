@@ -51,11 +51,17 @@ class DefaultController extends Controller
         $blocSessions['next'] = $this->get('hopitalnumerique_module.manager.session')->getNextSessions();
         $inscriptions         = $this->get('hopitalnumerique_module.manager.inscription')->findAll();
         foreach( $inscriptions as $inscription){
-            if( $inscription->getEtatInscription()->getId() == 406)
-                $blocSessions['inscriptions']++;
+            if($inscription->getSession()->getModule()->getStatut()->getId() == 3)
+            {
+                if($inscription->getSession()->getEtat()->getId() == 403)
+                {
+                    if( $inscription->getEtatInscription()->getId() == 406)
+                        $blocSessions['inscriptions']++;
 
-            if( $inscription->getEtatParticipation() && $inscription->getEtatParticipation()->getId() == 411 && $inscription->getUser()->hasRoleAmbassadeur() && $inscription->getSession()->getModule()->getId() == 6 )
-                $blocUser['ambassadeursMAPF']++;
+                    if( $inscription->getEtatParticipation() && $inscription->getEtatParticipation()->getId() == 411 && $inscription->getUser()->hasRoleAmbassadeur() && $inscription->getSession()->getModule()->getId() == 6 )
+                        $blocUser['ambassadeursMAPF']++;
+                }
+            }
         }
 
         //Bloc Paiements
@@ -280,6 +286,10 @@ class DefaultController extends Controller
         $blocUser['conventions'] = $this->get('hopitalnumerique_user.manager.contractualisation')->getContractualisationsARenouveler();
 
         foreach ($users as $user) {
+            //Ne pas prendre en compte les utilisateurs inactifs
+            if($user->getEtat()->getId() !== 3)
+                continue;
+
             if( $user->getNbVisites() > 0 )
                 $blocUser['actif']++;
 

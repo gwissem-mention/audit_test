@@ -33,8 +33,5 @@
     "qtip2": "2.2.0",
     "gridster": "0.5.2",
     "bootstrap-multiselect": "~0.9"
-  },
-  "resolutions": {
-    "jquery": "1.11.0"
   }
 }

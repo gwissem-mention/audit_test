@@ -91,6 +91,8 @@ class UserGrid extends Grid implements GridInterface
         $etatColonne->setFilterType('select');
         $etatColonne->setSelectFrom('source');
         $etatColonne->setOperatorsVisible( false );
+        $etatColonne->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
+
         $this->addColonne( $etatColonne );
 
         $this->addColonne( new Column\BlankColumn('lock') );

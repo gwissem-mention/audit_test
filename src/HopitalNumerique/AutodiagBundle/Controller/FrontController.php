@@ -725,7 +725,7 @@ class FrontController extends Controller
         ));
 
         $options = array(
-            'orientation'      => 'landscape',
+            // 'orientation'      => 'landscape',
             'encoding'         => 'UTF-8',
             'javascript-delay' => 500,
             'margin-top'       => '10',

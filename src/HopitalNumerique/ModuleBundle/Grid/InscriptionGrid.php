@@ -61,18 +61,21 @@ class InscriptionGrid extends BaseInscriptionGrid
         $etatInscriptionColumn->setSize( 170 );
         $etatInscriptionColumn->setFilterType('select');
         $etatInscriptionColumn->setOperatorsVisible( false );
+        $etatInscriptionColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $etatInscriptionColumn );
 
         $etatParticipationColumn = new Column\TextColumn('etatParticipation', 'Etat de la participation');
         $etatParticipationColumn->setSize( 170 );
         $etatParticipationColumn->setFilterType('select');
         $etatParticipationColumn->setOperatorsVisible( false );
+        $etatParticipationColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $etatParticipationColumn );
         
         $etatEvaluationColumn = new Column\TextColumn('etatEvaluation', 'Etat de l\'évaluation');
         $etatEvaluationColumn->setSize( 170 );
         $etatEvaluationColumn->setFilterType('select');
         $etatEvaluationColumn->setOperatorsVisible( false );
+        $etatEvaluationColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $etatEvaluationColumn );
 
         $userIdColumn = new Column\TextColumn('userId', 'userId');

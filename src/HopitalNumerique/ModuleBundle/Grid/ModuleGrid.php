@@ -46,6 +46,7 @@ class ModuleGrid extends Grid implements GridInterface
         $statutColumn->setFilterType('select');
         $statutColumn->setSelectFrom('source');
         $statutColumn->setOperatorsVisible( false );
+        $statutColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne($statutColumn);
     }
 
