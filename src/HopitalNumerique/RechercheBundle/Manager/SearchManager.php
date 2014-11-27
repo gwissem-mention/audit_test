@@ -67,10 +67,12 @@ class SearchManager extends BaseManager
         for ( $i = 1; $i <= $nbCateg; $i++ ) 
         {
             //si on a filtré sur la catégorie
-            if( isset($references['categ'.$i]) ) {
+            if( isset($references['categ'.$i]) )
+            {
                 //on récupères tous les objets, on les formate et on les ajoute à nos catégories
                 $results = $this->_refObjetManager->getObjetsForRecherche( $references['categ'.$i] );
-                if( $results ){
+                if( $results )
+                {
                     $tmp = array();
                     foreach( $results as $one) {
                         $objet = $this->formateObjet( $one, $role );
@@ -91,8 +93,11 @@ class SearchManager extends BaseManager
                     }
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
                     $objetsToIntersect[] = $tmp;
-                }else
+                }
+                else
+                {
                     $objetsToIntersect[] = array();
+                }
 
                 //on récupères tous les contenus (infradoc), on les formate et on les ajoute à nos catégories
                 $results = $this->_refContenuManager->getContenusForRecherche( $references['categ'.$i] );
@@ -121,7 +126,9 @@ class SearchManager extends BaseManager
                     $contenusToIntersect[] = $tmp;
                 }
                 else
+                {
                     $contenusToIntersect[] = array();
+                }
 
                 //on récupères tous les objets, on les formate et on les ajoute à nos catégories
                 $results = $this->_refTopicManager->getTopicForRecherche( $references['categ'.$i] );                
@@ -148,8 +155,11 @@ class SearchManager extends BaseManager
 
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
                     $filsForumToIntersect[] = $tmp;
-                }else
+                }
+                else
+                {
                     $filsForumToIntersect[] = array();
+                }
             }
         }
 

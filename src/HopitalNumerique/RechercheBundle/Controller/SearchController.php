@@ -103,9 +103,10 @@ class SearchController extends Controller
         $categPointDur = $request->request->get('categPointDur');
         $objetsOrder   = array();
 
-        //GME 17/11/2014 : Ajout de la zone textuelle
+        //vvv GME 17/11/2014 : Ajout de la zone textuelle
         $rechercheTextuelle                 = $request->request->get('rechercheTextuelle');
         $resultatsTrouveeRechercheTextuelle = true;
+        //^^^
 
         //Filtre uniquement si pas vide
         if(!empty($categPointDur))
@@ -148,29 +149,24 @@ class SearchController extends Controller
             $categPointDurIdsArray = array();
         }
 
-        //GME 21/11/2014 : Exalead
+        //vvv GME 21/11/2014 : Exalead
         if(trim($rechercheTextuelle) !== "")
         {
             $objetIds              = array();
             $contenuIds            = array();
             $optionsSearch         = $this->get('hopitalnumerique_recherche.manager.search')->getUrlRechercheTextuelle();
-            // $urlRechercheTextuelle = "http://fifi.mind7.fr:13010/search-api/search?q=FACTEURS%20CLES%20DE%20SUCCES";
+            //$urlRechercheTextuelle = "http://fifi.mind7.fr:13010/search-api/search?q=FACTEURS%20CLES%20DE%20SUCCES";
             $urlRechercheTextuelle = $optionsSearch . urlencode($rechercheTextuelle);
 
-            //Vérification si le lien n'est pas/plus accessible
-            $handle = curl_init($urlRechercheTextuelle);
-            curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+            $xml = simplexml_load_file($urlRechercheTextuelle);
 
-            /* Get the HTML or whatever is linked in $urlRechercheTextuelle. */
-            $response = curl_exec($handle);
-
-            /* Check for not 200 */
-            $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-            //Lien correct
-            if($httpCode < 400 && $httpCode != 0)
+            //Lien mort
+            if($xml === FALSE)
             {
-                $xml = simplexml_load_file($urlRechercheTextuelle);
-
+                $this->get('session')->getFlashBag()->add( 'danger', 'Un problème est survenu lors de votre recherche textuelle, merci de contacter un administrateur.' );
+            }
+            else
+            {
                 //Vérfication si des résultats sont remontés
                 if(!is_null($xml->hits->Hit))
                 {
@@ -194,12 +190,10 @@ class SearchController extends Controller
                     $resultatsTrouveeRechercheTextuelle = false;
                 }
             }
-            //Lien mort
-            else
-            {
-                $this->get('session')->getFlashBag()->add( 'danger', 'Un problème est survenu lors de votre recherche textuelle, merci de contacter un administrateur.' );
-            } 
         }
+        //^^^
+        
+        
 
         foreach ($objets as $key => $objet) 
         {

@@ -134,6 +134,17 @@ $(document).ready(function() {
             loaderSelecteur.finished();
         }
     });
+
+    //On enlève le placeholder
+    if($("#recherche_textuelle").val() != '')
+    {
+        $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+        $(".placeholder").hide();
+        showPlaceholder = false;
+        $("#dest").removeClass('hide');
+        $(".requete h2").addClass('ropen');
+    }
+
     //Recherche textuelle
     $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
     
@@ -164,6 +175,23 @@ $(document).ready(function() {
 
     $("#recherche_textuelle").change(function(){
 
+        if($("#recherche_textuelle").val() != '')
+        {
+            $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+            $(".placeholder").hide();
+            showPlaceholder = false;
+            $("#dest").removeClass('hide');
+            $(".requete h2").addClass('ropen');
+        }
+        else
+        {
+            $(".placeholder-aucunCritere").remove();
+            $(".arbo-requete").find('li').addClass('hide');
+            $(".placeholder").show();
+            showPlaceholder = true;
+            $("#dest").addClass('hide');
+            $(".requete h2").removeClass('ropen rclose');
+        }
         //Mise à jour du cradre "Requete de recherche"
         $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
 
