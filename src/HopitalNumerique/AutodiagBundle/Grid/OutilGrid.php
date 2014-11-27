@@ -54,6 +54,7 @@ class OutilGrid extends Grid implements GridInterface
         $statutColonne->setFilterType('select');
         $statutColonne->setSelectFrom('source');
         $statutColonne->setOperatorsVisible( false );
+        $statutColonne->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $statutColonne );
     }
 

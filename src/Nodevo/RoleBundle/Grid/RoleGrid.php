@@ -34,6 +34,7 @@ class RoleGrid extends Grid implements GridInterface
 
         $etatColonne = new Column\AssocColumn('etat.libelle', 'Etat');
         $etatColonne->setSize( 70 );
+        $etatColonne->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $etatColonne );
 
         /* Colonnes inactives */

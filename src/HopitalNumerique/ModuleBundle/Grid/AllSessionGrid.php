@@ -72,6 +72,7 @@ class AllSessionGrid extends Grid implements GridInterface
         $etatColumn->setSize( 60 );
         $etatColumn->setFilterType('select');
         $etatColumn->setOperatorsVisible( false );
+        $etatColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $etatColumn );
     }
 
