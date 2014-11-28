@@ -192,6 +192,7 @@ $(document).ready(function() {
         {
             if($(".placeholder-aucunCritere").length)
             {
+                $('#resultats').html('');
                 $(".arbo-requete").find('li').addClass('hide');
                 $(".placeholder").show();
                 showPlaceholder = true;
