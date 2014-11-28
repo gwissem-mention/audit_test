@@ -364,7 +364,9 @@ function handleParentsDestination( item )
             //on check de manière récursive
             handleParentsDestination( $(item).parent().parent() );
         //si l'élément n'est pas de type LI, on est allé trop haut, on réaffiche le placeholder
-        }else{
+        }
+        else
+        {
             if($("#recherche_textuelle").val() == '')
             {
                 $(".arbo-requete").find('li').addClass('hide');
@@ -414,13 +416,19 @@ function updateResultats( cleanSession )
         success : function( data ){
             $('#resultats').html( data );
 
-            if( $('#dest li:not(.hide)').length == 0){
+            if( $('#dest li:not(.hide)').length == 0 && $("#recherche_textuelle").val() == '')
+            {
                 $('.requete h2').html( 'Requête de recherche' );
                 $('#resultats').html('');
-            }else if( $('#nbResults').val() == 1 || $('#nbResults').val() == 0 ){
+            }
+            else if( $('#nbResults').val() == 1 || $('#nbResults').val() == 0 )
+            {
                 $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultat)' );
-            }else
+            }
+            else
+            {
                 $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
+            }
 
             loader.finished();
         }

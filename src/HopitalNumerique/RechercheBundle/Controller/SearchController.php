@@ -190,6 +190,15 @@ class SearchController extends Controller
                     $resultatsTrouveeRechercheTextuelle = false;
                 }
             }
+
+            //Cas où l'on a juste de la recherche textuelle et pas de recherche par critère
+            if(empty($objets))
+            {
+                $objetsRecherche   = $this->get('hopitalnumerique_objet.manager.objet')->findBy(array('id' => $objetIds));
+                $contenusRecherche = $this->get('hopitalnumerique_objet.manager.contenu')->findBy(array('id' => $contenuIds));
+
+                $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRechercheTextuelle( $objetsRecherche, $contenusRecherche, $role );
+            }
         }
         //^^^^^
 
@@ -220,10 +229,6 @@ class SearchController extends Controller
                 }
             }
         }
-
-        echo '<pre>';
-        var_dump($objets);
-        die();
 
         $objetsRechercheTextuelle = array();
 
