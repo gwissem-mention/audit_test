@@ -1,5 +1,7 @@
 var DELAY = 200, clicks = 0, timer = null, showPlaceholder = true;
 
+var ajaxRequeteResultat;
+
 $(document).ready(function() {
     //Gestion de l'ajout de critères dans la requete
     $('#origin li span').on("click", function(e){
@@ -404,8 +406,13 @@ function updateResultats( cleanSession )
 {
     var loader = $('#resultats').nodevoLoader().start();
 
+    if(ajaxRequeteResultat != null )
+    {
+        ajaxRequeteResultat.abort();
+    }
+
     //AJAX call for results
-    $.ajax({
+    ajaxRequeteResultat = $.ajax({
         url  : $('#resultats-url').val(),
         data : {
             references   : getReferences(),
