@@ -103,10 +103,10 @@ class SearchController extends Controller
         $categPointDur = $request->request->get('categPointDur');
         $objetsOrder   = array();
 
-        //vvv GME 17/11/2014 : Ajout de la zone textuelle
+        //vvvvv GME 17/11/2014 : Ajout de la zone textuelle
         $rechercheTextuelle                 = $request->request->get('rechercheTextuelle');
         $resultatsTrouveeRechercheTextuelle = true;
-        //^^^
+        //^^^^^
 
         //Filtre uniquement si pas vide
         if(!empty($categPointDur))
@@ -149,7 +149,7 @@ class SearchController extends Controller
             $categPointDurIdsArray = array();
         }
 
-        //vvv GME 21/11/2014 : Exalead
+        //vvvvv GME 21/11/2014 : Exalead
         if(trim($rechercheTextuelle) !== "")
         {
             $objetIds              = array();
@@ -191,9 +191,7 @@ class SearchController extends Controller
                 }
             }
         }
-        //^^^
-        
-        
+        //^^^^^
 
         foreach ($objets as $key => $objet) 
         {
@@ -223,11 +221,21 @@ class SearchController extends Controller
             }
         }
 
+        echo '<pre>';
+        var_dump($objets);
+        die();
+
         $objetsRechercheTextuelle = array();
 
         //Dans le cas où une recherche textuelle est donnée
         if(trim($rechercheTextuelle) !== "")
         {
+            //Dans le cas où il n'y a pas de filtre de critère de recherche
+            if(is_null($references))
+            {
+
+            }
+
             //Parcourt les objets 
             foreach ($objets as $objet) 
             {

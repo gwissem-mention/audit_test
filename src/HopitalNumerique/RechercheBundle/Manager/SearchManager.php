@@ -74,7 +74,8 @@ class SearchManager extends BaseManager
                 if( $results )
                 {
                     $tmp = array();
-                    foreach( $results as $one) {
+                    foreach( $results as $one) 
+                    {
                         $objet = $this->formateObjet( $one, $role );
                         if( !is_null($objet) && $objet['categ'] != '' )
                         {

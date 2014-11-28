@@ -119,7 +119,6 @@ $(document).ready(function() {
     }
 
     //vvv Chargement du bloc Requete de recherche en fonction de la Recherche textuelle et de la Recherche par type de production vvv
-
     var loaderSelecteur = $('#recherche .dropdown-menu').nodevoLoader().start();
     
     //AJAX call for results
@@ -138,7 +137,14 @@ $(document).ready(function() {
     //On enlève le placeholder
     if($("#recherche_textuelle").val() != '')
     {
-        $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+        if($('.arbo-requete li').length == 0 )
+        {
+            $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+        }
+        else
+        {
+            $(".placeholder-aucunCritere").remove();
+        }
         $(".placeholder").hide();
         showPlaceholder = false;
         $("#dest").removeClass('hide');
@@ -177,7 +183,6 @@ $(document).ready(function() {
 
         if($("#recherche_textuelle").val() != '')
         {
-            $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
             $(".placeholder").hide();
             showPlaceholder = false;
             $("#dest").removeClass('hide');
@@ -185,13 +190,22 @@ $(document).ready(function() {
         }
         else
         {
+            if($(".placeholder-aucunCritere").length)
+            {
+                $(".arbo-requete").find('li').addClass('hide');
+                $(".placeholder").show();
+                showPlaceholder = true;
+                $("#dest").addClass('hide');
+                $(".requete h2").removeClass('ropen rclose');
+            }
             $(".placeholder-aucunCritere").remove();
-            $(".arbo-requete").find('li').addClass('hide');
-            $(".placeholder").show();
-            showPlaceholder = true;
-            $("#dest").addClass('hide');
-            $(".requete h2").removeClass('ropen rclose');
         }
+
+        if($(".arbo-requete").find('li:not(.hide)').length == 0 && !$("#dest").hasClass('hide'))
+        {
+            $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+        }
+
         //Mise à jour du cradre "Requete de recherche"
         $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
 
@@ -263,6 +277,8 @@ function selectElement( item )
 
         //si c'est un parent, on show ces enfants (NON recursif)
         $('#dest .element-' + $(item).data('id') + ' li.hide').removeClass('hide');
+
+        $(".placeholder-aucunCritere").remove();
 
     }else
         return false;
@@ -349,11 +365,18 @@ function handleParentsDestination( item )
             handleParentsDestination( $(item).parent().parent() );
         //si l'élément n'est pas de type LI, on est allé trop haut, on réaffiche le placeholder
         }else{
-            $(".arbo-requete").find('li').addClass('hide');
-            $(".placeholder").show();
-            showPlaceholder = true;
-            $("#dest").addClass('hide');
-            $(".requete h2").removeClass('ropen rclose');
+            if($("#recherche_textuelle").val() == '')
+            {
+                $(".arbo-requete").find('li').addClass('hide');
+                $(".placeholder").show();
+                showPlaceholder = true;
+                $("#dest").addClass('hide');
+                $(".requete h2").removeClass('ropen rclose');
+            }
+            else
+            {
+                $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+            }
         }
     }
 }
@@ -377,7 +400,7 @@ function showItemOriginRecursive( item )
 function updateResultats( cleanSession )
 {
     var loader = $('#resultats').nodevoLoader().start();
-    
+
     //AJAX call for results
     $.ajax({
         url  : $('#resultats-url').val(),
