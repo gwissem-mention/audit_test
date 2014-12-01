@@ -67,7 +67,7 @@
                         <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">{{panel.title}}</h3>
+                                    <h3 class="panel-title" title="{{panel.title}}">{{panel.title|truncate(30,'...')}}</h3>
                                     <div class="options">
                                         {% if panel.value|checkNC %}
                                             {% if tauxChapitre == 0 %}
