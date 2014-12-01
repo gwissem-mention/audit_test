@@ -97,17 +97,15 @@
     </div>
 {% endblock %}
 
-
-
 {% macro buildTree(chapitre) %}
     <li class="dd-item dd3-item" data-id="{{chapitre.id}}" id="chapitre-{{chapitre.id}}" >
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
-            <a href="javascript:selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')">{% if chapitre.code != '' %}{{chapitre.code ~ '. '}}{% endif %}{{chapitre.title}}</a>
+            <a href="javascript:selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')" title="{{chapitre.title}}">{% if chapitre.code != '' %}{{chapitre.code ~ '. '}}{% endif %}{{chapitre.title|truncate(50, '...')}}</a>
             <p class="text-muted pull-right">
                 {% if chapitre.noteOptimale %}Note optimal : {{chapitre.noteOptimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
-                {% if chapitre.noteMinimale %}Note minimale de déclenchement : {{chapitre.noteMinimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
-                Note référencement : <span>{{chapitre.note|default('0')}}</span> / 400
+                {% if chapitre.noteMinimale %}Note mini. de déclenchement : {{chapitre.noteMinimale}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
+                Note réf. : <span>{{chapitre.note|default('0')}}</span> / 400
             </p>
         </div>
         <div class="dd3-actions">

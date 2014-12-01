@@ -7,12 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Chapitre
  *
  * @ORM\Table(name="hn_outil_chapitre")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\ChapitreRepository")
+ * @UniqueEntity(fields={"outil","code"}, message="Ce code existe déjà pour cet autodiagnostic.")
  */
 class Chapitre
 {
