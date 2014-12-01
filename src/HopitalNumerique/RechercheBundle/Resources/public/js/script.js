@@ -609,6 +609,8 @@ function cleanRequest()
 {
     apprise('Confirmer la réinitialisation de la requête ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
         if( r ){
+            $("#recherche_textuelle").val('');
+
             $('.arbo-requete li').each( function(){
                 removeElement( $(this) );
             });
@@ -631,8 +633,6 @@ function cleanRequest()
             $("#categ_production_select").multiselect('deselect', 180);
             $("#categ_production_select").multiselect('deselect', 181);
             $("#categ_production_select").multiselect('deselect', 182);
-            
-            $("#recherche_textuelle").val('');
         }
     });
 }
