@@ -139,9 +139,12 @@ $(document).ready(function() {
     //On enlève le placeholder
     if($("#recherche_textuelle").val() != '')
     {
-        if($('.arbo-requete li').length == 0 )
+        if( $(".arbo-requete").find('li:not(.hide)').length == 0 )
         {
-            $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+            if($(".placeholder-aucunCritere").length == 0)
+            {
+                $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+            }
         }
         else
         {
@@ -151,6 +154,8 @@ $(document).ready(function() {
         showPlaceholder = false;
         $("#dest").removeClass('hide');
         $(".requete h2").addClass('ropen');
+
+        updateResultats( true );
     }
 
     //Recherche textuelle
@@ -206,7 +211,10 @@ $(document).ready(function() {
 
         if($(".arbo-requete").find('li:not(.hide)').length == 0 && !$("#dest").hasClass('hide'))
         {
-            $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+            if($(".placeholder-aucunCritere").length == 0)
+            {
+                $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+            }
         }
 
         //Mise à jour du cradre "Requete de recherche"
@@ -380,7 +388,10 @@ function handleParentsDestination( item )
             }
             else
             {
-                $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+                if( $(".placeholder-aucunCritere").length == 0 )
+                {
+                    $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+                }
             }
         }
     }

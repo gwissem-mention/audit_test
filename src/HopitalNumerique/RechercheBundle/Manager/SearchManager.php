@@ -62,6 +62,12 @@ class SearchManager extends BaseManager
         //Parcourt les objets pour les ajouter (si la date de publication est renseignée et respectée) formaté au tableau des résults en vérifiant l'accès
         foreach ($objetsRecherche as $objet) 
         {
+            //Objet actif
+            if($objet->getEtat()->getId() !== 3)
+            {
+                continue;
+            }
+
             if( !is_null($objet->getDateDebutPublication()) )
             {
                 $today = new \DateTime();
@@ -81,6 +87,36 @@ class SearchManager extends BaseManager
                 {
                     continue;
                 }
+            }
+
+            //Gestion des catégories
+            if($objet->isArticle())
+            {
+                continue;
+            }
+
+            $bonneCategorie = true;
+            $types          = $objet->getTypes();
+            if($objet->isArticle())
+            {
+                foreach ($types as $type)
+                {
+                    if($type->getId() === 175)
+                    {
+                        $bonneCategorie = false;
+                        break;
+                    }
+                    if($type->getCode() !== "CATEGORIE_OBJET")
+                    {
+                        $bonneCategorie = false;
+                        break;
+                    }
+                }
+            }
+
+            if(!$bonneCategorie)
+            {
+                continue;
             }
 
             //Formatage de l'objet courant

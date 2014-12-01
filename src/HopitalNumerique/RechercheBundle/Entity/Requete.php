@@ -73,7 +73,7 @@ class Requete
     /**
      * @var array
      *
-     * @ORM\Column(name="req_refs", type="json_array")
+     * @ORM\Column(name="req_refs", type="json_array", nullable=true)
      */
     private $refs;
 

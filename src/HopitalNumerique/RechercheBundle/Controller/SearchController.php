@@ -140,8 +140,7 @@ class SearchController extends Controller
                         //Supprime l'élément du tableau
                         unset($objets[$key]);
                     }
-               }
-
+                }
             }
         }
         else
@@ -236,10 +235,10 @@ class SearchController extends Controller
         if(trim($rechercheTextuelle) !== "")
         {
             //Dans le cas où il n'y a pas de filtre de critère de recherche
-            if(is_null($references))
-            {
+            // if(is_null($references))
+            // {
 
-            }
+            // }
 
             //Parcourt les objets 
             foreach ($objets as $objet) 
