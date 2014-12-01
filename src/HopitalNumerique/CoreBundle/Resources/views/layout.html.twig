@@ -109,7 +109,7 @@
                 {{ block('flashBags') }}
                 {% if error is defined and error %}
                     <div class="alert nalert-warning" onclick="$(this).slideUp();" >
-                        {{ error|trans({}, 'FOSUserBundle') }}
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
                     </div>
                 {% endif %}
                 {% if invalid_username is defined %}
