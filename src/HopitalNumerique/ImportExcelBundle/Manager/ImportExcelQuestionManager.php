@@ -43,7 +43,16 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
             if(trim($questionDonnees['numChapitre']) !== "")
             {
                 $chapitre = $this->_importExcelChapitreManager->findOneBy(array('code' => $questionDonnees['numChapitre'], 'outil' => $outil));
-                $question->setChapitre($chapitre);
+                if(!is_null($chapitre))
+                {
+                    $question->setChapitre($chapitre);
+                }
+                else
+                {
+                    //Dans le cas où cette question ne correspond à aucun chapitre on stop les questions
+                    die('La question ' . $questionDonnees['numQuestion'] . ' ne correspond à aucun chapitre, merci de le corriger avant de réimporter.');
+                    break;
+                }
             }
             $question->setCode($questionDonnees['numQuestion']);
             $question->setIntro($questionDonnees['intro']);
