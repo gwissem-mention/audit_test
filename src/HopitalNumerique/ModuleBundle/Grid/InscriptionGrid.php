@@ -52,6 +52,7 @@ class InscriptionGrid extends BaseInscriptionGrid
         $roleColumn->setFilterType('select');
         $roleColumn->setSelectFrom('values');
         $roleColumn->setOperatorsVisible( false );
+        $roleColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $roleColumn->setValues( $roles );
         $this->addColonne( $roleColumn );
         
