@@ -22,8 +22,19 @@ class ImportExcelCategorieManager extends CategManagerAutodiag
     {
         foreach ($arrayCategories as $categorieDonnees) 
         {
+            $categorie = null;
+
+            //Si il y a un id on vérifie qu'il correspond à un champ en base pour de l'édition, sinon l'ajoute
+            if(!is_null($categorieDonnees['id']))
+            {
+                $categorie = $this->findOneBy( array('id' => $categorieDonnees['id']) );
+            }
+
             //Création d'une nouvelle catégorie
-            $categorie = $this->createEmpty();
+            if(is_null($categorie))
+            {
+                $categorie = $this->createEmpty();
+            }
 
             $categorie->setTitle($categorieDonnees['libelle']);
             $categorie->setNote($categorieDonnees['note']);

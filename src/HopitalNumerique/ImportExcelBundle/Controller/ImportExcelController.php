@@ -69,23 +69,34 @@ class ImportExcelController extends Controller
             //Récupèration de la feuille Catégorie
             $sheetCategorie = $phpExcelObject->getSheetByName('categorie');
 
-            //Récupèration de la feuille Catégorie
+            //Récupèration de la feuille Chapitre
             $sheetChapitres = $phpExcelObject->getSheetByName('chapitres');
 
-            //Récupèration de la feuille Catégorie
+            //Récupèration de la feuille Question
             $sheetQuestions = $phpExcelObject->getSheetByName('questions');
+
+            //Récupèration de la feuille Résultat
+            $sheetResultats = $phpExcelObject->getSheetByName('resultats');
+
+            //Récupèration de la feuille Réponse
+            $sheetReponses  = $phpExcelObject->getSheetByName('reponses');
+
+            //Récupèration de la feuille Synthese
+            $sheetSynthese  = $phpExcelObject->getSheetByName('syntheses');
 
             //Nettoyage des données sur l'autodiag courant
             $categories = $this->get('hopital_numerique_import_excel.manager.categorie')->findBy(array('outil' => $outil));
             $chapitres  = $this->get('hopital_numerique_import_excel.manager.chapitre')->findBy(array('outil' => $outil));
+            $resultats  = $this->get('hopital_numerique_import_excel.manager.resultat')->findBy(array('outil' => $outil));
 
             $arrayCategorie = array();
 
             $nbLigne = 2;
             foreach ($categories as $categorie) 
             {
-                $sheetCategorie->setCellValueByColumnAndRow(0, $nbLigne, $categorie->getTitle());
-                $sheetCategorie->setCellValueByColumnAndRow(1, $nbLigne, $categorie->getNote());
+                $sheetCategorie->setCellValueByColumnAndRow(0, $nbLigne, $categorie->getId());
+                $sheetCategorie->setCellValueByColumnAndRow(1, $nbLigne, $categorie->getTitle());
+                $sheetCategorie->setCellValueByColumnAndRow(2, $nbLigne, $categorie->getNote());
 
                 $nbLigne++;
             }
@@ -94,38 +105,82 @@ class ImportExcelController extends Controller
             $nbLigneQuestion = 2;
             foreach ($chapitres as $chapitre) 
             {
-                $sheetChapitres->setCellValueByColumnAndRow(0, $nbLigne, $chapitre->getCode());
-                $sheetChapitres->setCellValueByColumnAndRow(1, $nbLigne, (!is_null($chapitre->getParent())) ? $chapitre->getParent()->getCode() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(2, $nbLigne, (!is_null($chapitre->getIntro())) ? $chapitre->getIntro() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(3, $nbLigne, (!is_null($chapitre->getTitle())) ? $chapitre->getTitle() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(4, $nbLigne, (!is_null($chapitre->getDesc())) ? $chapitre->getDesc() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(5, $nbLigne, (!is_null($chapitre->getNoteOptimale())) ? $chapitre->getNoteOptimale() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(6, $nbLigne, (!is_null($chapitre->getNoteMinimale())) ? $chapitre->getNoteMinimale() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(7, $nbLigne, (!is_null($chapitre->getSynthese())) ? $chapitre->getSynthese() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(8, $nbLigne, (!is_null($chapitre->getLien())) ? $chapitre->getLien() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(9, $nbLigne, (!is_null($chapitre->getDescriptionLien())) ? $chapitre->getDescriptionLien() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(0, $nbLigne, $chapitre->getId());
+                $sheetChapitres->setCellValueByColumnAndRow(1, $nbLigne, $chapitre->getCode());
+                $sheetChapitres->setCellValueByColumnAndRow(2, $nbLigne, (!is_null($chapitre->getParent())) ? $chapitre->getParent()->getCode() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(3, $nbLigne, (!is_null($chapitre->getIntro())) ? $chapitre->getIntro() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(4, $nbLigne, (!is_null($chapitre->getTitle())) ? $chapitre->getTitle() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(5, $nbLigne, (!is_null($chapitre->getDesc())) ? $chapitre->getDesc() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(6, $nbLigne, (!is_null($chapitre->getNoteOptimale())) ? $chapitre->getNoteOptimale() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(7, $nbLigne, (!is_null($chapitre->getNoteMinimale())) ? $chapitre->getNoteMinimale() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(8, $nbLigne, (!is_null($chapitre->getSynthese())) ? $chapitre->getSynthese() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(9, $nbLigne, (!is_null($chapitre->getLien())) ? $chapitre->getLien() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(10, $nbLigne, (!is_null($chapitre->getDescriptionLien())) ? $chapitre->getDescriptionLien() : '' );
 
                 $nbLigne++;
 
                 foreach ($chapitre->getQuestions() as $question)
                 {
-                    $sheetQuestions->setCellValueByColumnAndRow(0, $nbLigneQuestion, $question->getChapitre()->getCode());
-                    $sheetQuestions->setCellValueByColumnAndRow(1, $nbLigneQuestion, $question->getCode());
-                    $sheetQuestions->setCellValueByColumnAndRow(2, $nbLigneQuestion, (!is_null($question->getIntro())) ? $question->getIntro() : '' );
-                    $sheetQuestions->setCellValueByColumnAndRow(3, $nbLigneQuestion, (!is_null($question->getTexte())) ? $question->getTexte() : '' );
-                    $sheetQuestions->setCellValueByColumnAndRow(4, $nbLigneQuestion, (!is_null($question->getType())) ? $question->getType()->getLibelle() : '' );
-                    $sheetQuestions->setCellValueByColumnAndRow(5, $nbLigneQuestion, (!is_null($question->getOptions())) ? $question->getOptions() : '' );
-                    $sheetQuestions->setCellValueByColumnAndRow(6, $nbLigneQuestion, ( !is_null( $question->getNoteMinimale() ) ) ? $question->getNoteMinimale() : ( (!is_null( $question->getSeuil() ) ) ? $question->getSeuil() : '' ) );
-                    $sheetQuestions->setCellValueByColumnAndRow(7, $nbLigneQuestion, (!is_null($question->getSynthese())) ? $question->getSynthese() : '' );
-                    $sheetQuestions->setCellValueByColumnAndRow(8, $nbLigneQuestion, (!is_null($question->getColored())) ? ($question->getColored() ? '1' : '0' ) : '' );
-                    $sheetQuestions->setCellValueByColumnAndRow(9, $nbLigneQuestion, (!is_null($question->getInfoBulle())) ? $question->getInfoBulle() : '' );
-                    $sheetQuestions->setCellValueByColumnAndRow(10, $nbLigneQuestion, (!is_null($question->getCategorie())) ? $question->getCategorie()->getTitle() : '' );
-                    $sheetQuestions->setCellValueByColumnAndRow(11, $nbLigneQuestion, (!is_null($question->getPonderation())) ? $question->getPonderation() : '' );
-                    $sheetQuestions->setCellValueByColumnAndRow(12, $nbLigneQuestion, (!is_null($question->getOrder())) ? $question->getOrder() : '' );
-                    $sheetQuestions->setCellValueByColumnAndRow(13, $nbLigneQuestion, (!is_null($question->getLien())) ? $question->getLien() : '' );
-                    $sheetQuestions->setCellValueByColumnAndRow(14, $nbLigneQuestion, (!is_null($question->getDescriptionLien())) ? $question->getDescriptionLien() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(0, $nbLigneQuestion, $question->getId());
+                    $sheetQuestions->setCellValueByColumnAndRow(1, $nbLigneQuestion, $question->getChapitre()->getCode());
+                    $sheetQuestions->setCellValueByColumnAndRow(2, $nbLigneQuestion, $question->getCode());
+                    $sheetQuestions->setCellValueByColumnAndRow(3, $nbLigneQuestion, (!is_null($question->getIntro())) ? $question->getIntro() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(4, $nbLigneQuestion, (!is_null($question->getTexte())) ? $question->getTexte() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(5, $nbLigneQuestion, (!is_null($question->getType())) ? $question->getType()->getLibelle() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(6, $nbLigneQuestion, (!is_null($question->getOptions())) ? $question->getOptions() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(7, $nbLigneQuestion, ( !is_null( $question->getNoteMinimale() ) ) ? $question->getNoteMinimale() : ( (!is_null( $question->getSeuil() ) ) ? $question->getSeuil() : '' ) );
+                    $sheetQuestions->setCellValueByColumnAndRow(8, $nbLigneQuestion, (!is_null($question->getSynthese())) ? $question->getSynthese() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(9, $nbLigneQuestion, (!is_null($question->getColored())) ? ($question->getColored() ? '1' : '0' ) : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(10, $nbLigneQuestion, (!is_null($question->getInfoBulle())) ? $question->getInfoBulle() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(11, $nbLigneQuestion, (!is_null($question->getCategorie())) ? $question->getCategorie()->getTitle() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(12, $nbLigneQuestion, (!is_null($question->getPonderation())) ? $question->getPonderation() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(13, $nbLigneQuestion, (!is_null($question->getOrder())) ? $question->getOrder() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(14, $nbLigneQuestion, (!is_null($question->getLien())) ? $question->getLien() : '' );
+                    $sheetQuestions->setCellValueByColumnAndRow(15, $nbLigneQuestion, (!is_null($question->getDescriptionLien())) ? $question->getDescriptionLien() : '' );
 
                     $nbLigneQuestion++;
+                }
+            }
+
+            $nbLigne = 2;
+            $nbLigneReponse = 2;
+            $nbLigneSynth   = 2;
+            foreach ($resultats as $resultat)
+            {
+                $sheetResultats->setCellValueByColumnAndRow(0, $nbLigne, $resultat->getId());
+                $sheetResultats->setCellValueByColumnAndRow(1, $nbLigne, $resultat->getName());
+                $sheetResultats->setCellValueByColumnAndRow(2, $nbLigne, (is_null($resultat->getDateLastSave())) ? '' : $resultat->getDateLastSave()->format('d/m/Y'));
+                $sheetResultats->setCellValueByColumnAndRow(3, $nbLigne, (is_null($resultat->getDateCreation())) ? '' : $resultat->getDateCreation()->format('d/m/Y'));
+                $sheetResultats->setCellValueByColumnAndRow(4, $nbLigne, (is_null($resultat->getDateValidation())) ? '' : $resultat->getDateValidation()->format('d/m/Y'));
+                $sheetResultats->setCellValueByColumnAndRow(5, $nbLigne, $resultat->getTauxRemplissage());
+                $sheetResultats->setCellValueByColumnAndRow(6, $nbLigne, $resultat->getPdf());
+                $sheetResultats->setCellValueByColumnAndRow(7, $nbLigne, $resultat->getRemarque());
+                $sheetResultats->setCellValueByColumnAndRow(8, $nbLigne, (is_null($resultat->getStatut())) ? '' : $resultat->getStatut()->getId());
+                $sheetResultats->setCellValueByColumnAndRow(9, $nbLigne, (is_null($resultat->getOutil())) ? '' : $resultat->getOutil()->getId());
+                $sheetResultats->setCellValueByColumnAndRow(10, $nbLigne, (is_null($resultat->getUser())) ? '' : $resultat->getUser()->getId());
+                $sheetResultats->setCellValueByColumnAndRow(11, $nbLigne, $resultat->getSynthese() ? 'Oui' : 'Non');
+
+                $nbLigne++;
+
+                $reponses = $this->get('hopital_numerique_import_excel.manager.reponse')->findBy(array('resultat' => $resultat->getId()));
+
+                foreach ($reponses as $reponse)
+                {
+                    $sheetReponses->setCellValueByColumnAndRow(0, $nbLigneReponse, $reponse->getId());
+                    $sheetReponses->setCellValueByColumnAndRow(1, $nbLigneReponse, $reponse->getValue());
+                    $sheetReponses->setCellValueByColumnAndRow(2, $nbLigneReponse, $reponse->getRemarque());
+                    $sheetReponses->setCellValueByColumnAndRow(3, (is_null($reponse->getResultat())) ? '' : $nbLigneReponse, $reponse->getResultat()->getId());
+                    $sheetReponses->setCellValueByColumnAndRow(4, (is_null($reponse->getQuestion())) ? '' : $nbLigneReponse, $reponse->getQuestion()->getId());
+
+                    $nbLigneReponse++;
+                }
+
+                foreach ($resultat->getResultats() as $resultSynth) 
+                {
+                    $sheetSynthese->setCellValueByColumnAndRow(0, $nbLigneSynth, $resultat->getId() );
+                    $sheetSynthese->setCellValueByColumnAndRow(1, $nbLigneSynth, $resultSynth->getId() );
+
+                    $nbLigneSynth++;
                 }
             }
 
@@ -199,7 +254,7 @@ class ImportExcelController extends Controller
             return $this->redirect( $this->generateUrl('hopitalnumerique_import_index', array('id' => $outil->getId())) );
         }
 
-        //Récupèration de la feuille Catégorie
+        //Récupèration de la feuille Chapitre
         $sheetChapitres = $phpExcelObject->getSheetByName('chapitres');
 
         if(is_null($sheetCategorie))
@@ -208,7 +263,7 @@ class ImportExcelController extends Controller
             return $this->redirect( $this->generateUrl('hopitalnumerique_import_index', array('id' => $outil->getId())) );
         }
 
-        //Récupèration de la feuille Catégorie
+        //Récupèration de la feuille Question
         $sheetQuestions = $phpExcelObject->getSheetByName('questions');
 
         if(is_null($sheetQuestions))
@@ -216,6 +271,15 @@ class ImportExcelController extends Controller
             $this->get('session')->getFlashBag()->add( 'danger', 'Fichier non conforme, veuillez ne pas renomer la feuille "questions".' );
             return $this->redirect( $this->generateUrl('hopitalnumerique_import_index', array('id' => $outil->getId())) );
         }
+
+        //Récupèration de la feuille Resultat
+        $sheetResultats = $phpExcelObject->getSheetByName('resultats');
+
+        //Récupèration de la feuille Réponses
+        $sheetReponses  = $phpExcelObject->getSheetByName('reponses');
+
+        //Récupèration de la feuille Synthese
+        $sheetSynthese  = $phpExcelObject->getSheetByName('syntheses');
 
         //Nettoyage des données sur l'autodiag courant
         $categories = $this->get('hopital_numerique_import_excel.manager.categorie')->findBy(array('outil' => $outil));
@@ -240,10 +304,26 @@ class ImportExcelController extends Controller
             $this->get('hopital_numerique_import_excel.manager.chapitre')->saveChapitreImported($arrayChapitres, $outil);
 
             // ~~~ Questions
-            $arrayQuestions = $this->get('hopital_numerique_import_excel.manager.importexcel')->getQuestionsImported($sheetQuestions);
-            $this->get('hopital_numerique_import_excel.manager.question')->saveQuestionImported($arrayQuestions, $outil);
+            $arrayQuestions   = $this->get('hopital_numerique_import_excel.manager.importexcel')->getQuestionsImported($sheetQuestions);
+            $arrayIdQuestions = $this->get('hopital_numerique_import_excel.manager.question')->saveQuestionImported($arrayQuestions, $outil);
+
+            // ~~~ Resultats
+            if(!is_null($sheetResultats))
+            {
+                $arrayResultats   = $this->get('hopital_numerique_import_excel.manager.importexcel')->getResultatImported($sheetResultats);
+                $arraySyntheses   = $this->get('hopital_numerique_import_excel.manager.importexcel')->getSyntheseImported($sheetSynthese);
+                $arrayIdResultats = $this->get('hopital_numerique_import_excel.manager.resultat')->saveResultatImported($arrayResultats, $arraySyntheses, $outil);
+
+                // ~~~ Reponses
+                if(!is_null($sheetReponses))
+                {
+                    $arrayReponses  = $this->get('hopital_numerique_import_excel.manager.importexcel')->getReponsesImported($sheetReponses);
+                    $this->get('hopital_numerique_import_excel.manager.reponse')->saveReponseImported($arrayReponses, $outil, $arrayIdResultats, $arrayIdQuestions);
+                }
+            }
             
-        } catch (Exception $e) 
+        }
+        catch (Exception $e) 
         {
             $this->get('session')->getFlashBag()->add( 'danger', 'Fichier non conforme, un ou plusieurs champ obligatoire n\'est ou ne sont pas renseigné(s).' );
             return $this->redirect( $this->generateUrl('hopitalnumerique_import_index', array('id' => $outil->getId())) );
