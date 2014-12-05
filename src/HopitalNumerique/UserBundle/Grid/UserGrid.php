@@ -50,6 +50,7 @@ class UserGrid extends Grid implements GridInterface
         $regionColumn->setFilterType('select');
         $regionColumn->setSelectFrom('source');
         $regionColumn->setOperatorsVisible( false );
+        $regionColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $regionColumn );
 
         $roleColumn = new Column\ArrayColumn('roles', 'Groupe associé');

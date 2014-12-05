@@ -58,6 +58,7 @@ class AllInscriptionGrid extends BaseInscriptionGrid
         $roleColumn->setSelectFrom('values');
         $roleColumn->setOperatorsVisible( false );
         $roleColumn->setValues( $roles );
+        $roleColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $roleColumn );
         
         $this->addColonne( new Column\TextColumn('commentaire', 'Commentaire') );

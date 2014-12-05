@@ -38,8 +38,18 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
     {
         foreach ($arrayChapitres as $key => $chapitreDonnees) 
         {
-            //Création d'une nouvelle catégorie
-            $chapitre = $this->createEmpty();
+            $chapitre = null;
+
+            //Si il y a un id on vérifie qu'il correspond à un champ en base pour de l'édition, sinon l'ajoute
+            if(!is_null($chapitreDonnees['id']))
+            {
+                $chapitre = $this->findOneBy(array('id' => $chapitreDonnees['id']));
+            }
+            if(is_null($chapitre))
+            {
+                //Création d'une nouvelle catégorie
+                $chapitre = $this->createEmpty();
+            }
 
             $tool  = new Chaine( $chapitreDonnees['libelle'] );
             $chapitre->setAlias( $tool->minifie() );

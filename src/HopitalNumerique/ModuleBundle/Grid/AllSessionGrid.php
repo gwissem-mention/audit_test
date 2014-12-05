@@ -66,6 +66,7 @@ class AllSessionGrid extends Grid implements GridInterface
         $archiverColumn->setSize( 70 );
         $archiverColumn->setFilterType('select');
         $archiverColumn->setOperatorsVisible( false );
+        $archiverColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $archiverColumn );
         
         $etatColumn = new Column\TextColumn('etat', 'Etat');
