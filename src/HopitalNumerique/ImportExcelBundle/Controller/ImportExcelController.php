@@ -149,9 +149,9 @@ class ImportExcelController extends Controller
             {
                 $sheetResultats->setCellValueByColumnAndRow(0, $nbLigne, $resultat->getId());
                 $sheetResultats->setCellValueByColumnAndRow(1, $nbLigne, $resultat->getName());
-                $sheetResultats->setCellValueByColumnAndRow(2, $nbLigne, (is_null($resultat->getDateLastSave())) ? '' : $resultat->getDateLastSave()->format('d/m/Y'));
-                $sheetResultats->setCellValueByColumnAndRow(3, $nbLigne, (is_null($resultat->getDateCreation())) ? '' : $resultat->getDateCreation()->format('d/m/Y'));
-                $sheetResultats->setCellValueByColumnAndRow(4, $nbLigne, (is_null($resultat->getDateValidation())) ? '' : $resultat->getDateValidation()->format('d/m/Y'));
+                $sheetResultats->setCellValueByColumnAndRow(2, $nbLigne, (is_null($resultat->getDateLastSave())) ? '' : $resultat->getDateLastSave()->format('Y-m-d'));
+                $sheetResultats->setCellValueByColumnAndRow(3, $nbLigne, (is_null($resultat->getDateCreation())) ? '' : $resultat->getDateCreation()->format('Y-m-d'));
+                $sheetResultats->setCellValueByColumnAndRow(4, $nbLigne, (is_null($resultat->getDateValidation())) ? '' : $resultat->getDateValidation()->format('Y-m-d'));
                 $sheetResultats->setCellValueByColumnAndRow(5, $nbLigne, $resultat->getTauxRemplissage());
                 $sheetResultats->setCellValueByColumnAndRow(6, $nbLigne, $resultat->getPdf());
                 $sheetResultats->setCellValueByColumnAndRow(7, $nbLigne, $resultat->getRemarque());
