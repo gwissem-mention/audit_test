@@ -213,6 +213,10 @@ class ImportExcelController extends Controller
      */
     public function readAndSaveAction(Request $request, Outil $outil)
     {
+        //Gros import, fait sauter les limites de tailles/temps
+        ini_set("memory_limit","512M");
+        ini_set('max_execution_time', 0);
+
         $aujourdhui = new \DateTime();
         $aujourdhui = $aujourdhui->format('d_m_Y-H_m_s');
         $directory = __ROOT_DIRECTORY__ . '/web/medias/Autodiag';

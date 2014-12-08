@@ -51,7 +51,11 @@ class ImportExcelResultatManager extends ResultatManagerAutodiag
             $resultat->setOutil($outil);
             if(!is_null($resultatDonnees['user']))
             {
-                $resultat->setUser($this->_userManager->findOneBy(array('id' => intval($resultatDonnees['user']) )));
+                $user = $this->_userManager->findOneBy(array('id' => intval($resultatDonnees['user']) ));
+                if(!is_null($user))
+                {
+                    $resultat->setUser( $user );
+                }
             }
             $resultat->setSynthese($resultatDonnees['synthese']);
 

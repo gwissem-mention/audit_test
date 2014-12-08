@@ -36,6 +36,9 @@ class ImportExcelReponsesManager extends ReponseManagerAutodiag
      */
     public function saveReponseImported( $arrayReponse, $outil, $arrayIdResultats, $arrayIdQuestions )
     {
+
+        $reponses = array();
+
         foreach ($arrayReponse as $key => $reponseDonnees) 
         {
             //Création d'une nouvelle catégorie
@@ -52,7 +55,9 @@ class ImportExcelReponsesManager extends ReponseManagerAutodiag
                 $reponse->setQuestion($this->_questionManager->findOneBy(array('id' => $arrayIdQuestions[intval($reponseDonnees['question'])] )));
             }
 
-            $this->save( $reponse );
+            $reponses[] = $reponse;
         }
+
+        $this->save( $reponses );
     }
 }
