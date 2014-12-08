@@ -132,6 +132,17 @@ class Resultat
     {
         return $this->id;
     }
+    
+    /**
+     * Set id
+     *
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * Get name

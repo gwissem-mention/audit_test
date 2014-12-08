@@ -34,6 +34,8 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
      */
     public function saveQuestionImported( $arrayQuestions, $outil )
     {
+        $arrayIdsQuestions = array();
+
         foreach ($arrayQuestions as $questionDonnees) 
         {
             //Création d'une nouvelle catégorie
@@ -43,7 +45,16 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
             if(trim($questionDonnees['numChapitre']) !== "")
             {
                 $chapitre = $this->_importExcelChapitreManager->findOneBy(array('code' => $questionDonnees['numChapitre'], 'outil' => $outil));
-                $question->setChapitre($chapitre);
+                if(!is_null($chapitre))
+                {
+                    $question->setChapitre($chapitre);
+                }
+                else
+                {
+                    //Dans le cas où cette question ne correspond à aucun chapitre on stop les questions
+                    die('La question ' . $questionDonnees['numQuestion'] . ' ne correspond à aucun chapitre, veuillez le corriger.');
+                    break;
+                }
             }
             $question->setCode($questionDonnees['numQuestion']);
             $question->setIntro($questionDonnees['intro']);
@@ -85,6 +96,10 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
             $question->setDescriptionLien($questionDonnees['descriptionLien']);
 
             $this->save( $question );
+
+            $arrayIdsQuestions[$questionDonnees['id']] = $question->getId();
         }
+
+        return $arrayIdsQuestions;
     }
 }

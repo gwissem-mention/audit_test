@@ -14,16 +14,16 @@
         {% endif %}
 
         {% if pdf %}
-            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="Logo anap" class="pull-left" />
+            <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="Logo anap" />
         {% endif %}
 
         <h1 class="text-center">{{resultat.outil.title}}</h1>
         {% if pdf %}<br />{% endif %}
         {% if resultat.name or resultat.dateLastSave %}
-            <h2 class="text-center">
-                {% if resultat.name %}{{resultat.name }}{% endif %}{% if pdf %}<br />{% endif %}
+            <h3 class="text-center">
+                {% if resultat.name %}{% if resultat.synthese %}Synthèse : {% endif %}{{resultat.name }}{% endif %}{% if pdf %}<br />{% endif %}
                 {% if resultat.dateLastSave %}<small class="pull-right text-muted">le {{resultat.dateLastSave|date('d/m/Y')}}</small>{% endif %}
-            </h2>
+            </h3>
         {% endif %}
 
         <div id="commentaire-restitution">
@@ -67,7 +67,7 @@
                         <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">{{panel.title}}</h3>
+                                    <h3 class="panel-title" title="{{panel.title}}">{{panel.title|truncate(30,'...')}}</h3>
                                     <div class="options">
                                         {% if panel.value|checkNC %}
                                             {% if tauxChapitre == 0 %}
@@ -336,7 +336,6 @@
                     </div>
                 </div>
             {% endif %}
-
             <div class="clearfix"></div>
         </div>
         

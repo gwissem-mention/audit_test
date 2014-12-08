@@ -26,16 +26,24 @@ class LogoutHandler implements LogoutSuccessHandlerInterface
      */
     public function onLogoutSuccess(Request $request) 
     {
+        $user = null;
+
         //On récupère l'utilisateur qui est connecté
-        $user = $this->_securityContext->getToken()->getUser();
+        if(!is_null($this->_securityContext->getToken()))
+        {
+            $user = $this->_securityContext->getToken()->getUser();
+        }
 
         //do remove locked stuff
-        $objets = $this->_objetManager->findBy( array('lockedBy'=>$user) );
-        foreach($objets as $objet){
-            $objet->setLock( 0 );
-            $objet->setLockedBy( null );
+        if(!is_null($user))
+        {
+            $objets = $this->_objetManager->findBy( array('lockedBy'=>$user) );
+            foreach($objets as $objet){
+                $objet->setLock( 0 );
+                $objet->setLockedBy( null );
 
-            $this->_objetManager->save($objet);
+                $this->_objetManager->save($objet);
+            }
         }
 
         return new RedirectResponse( $request->headers->get('referer') );

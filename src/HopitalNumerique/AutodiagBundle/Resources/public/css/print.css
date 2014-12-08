@@ -7,7 +7,7 @@ body{background-color :#fff;}
 img{ width:auto !important }
 
 #resultats{width:100%;}
-#resultats h1{float:right; margin-top:0; font-size: 22px}
+#resultats h1{text-align: center; margin-top:20px; font-size: 22px;}
 #resultats #graphiques{width: 100%}
 #resultats #graphiques, #chapitres, #results {display: block !important}
 #resultats #graphiques #radarChart{width: 650px; height: 535px; margin: auto!important}
@@ -38,3 +38,5 @@ img{ width:auto !important }
 #reponses h4{ margin-top: 0px; margin-bottom: 0px;}
 
 .copyright{width:94%; margin-top:80px;}
+
+#logoAnap{margin-bottom: 10px;}

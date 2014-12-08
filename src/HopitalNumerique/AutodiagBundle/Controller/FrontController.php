@@ -192,6 +192,11 @@ class FrontController extends Controller
                     //get entity Question
                     $question = $this->get('hopitalnumerique_autodiag.manager.question')->findOneBy( array('id' => $id ) );
 
+                    if(is_null($question))
+                    {
+                        continue;
+                    }
+
                     //build remarque
                     $remarque = ( isset($remarques[$chapitre]) && isset($remarques[$chapitre][$id]) ) ? $remarques[$chapitre][$id] : '';
 

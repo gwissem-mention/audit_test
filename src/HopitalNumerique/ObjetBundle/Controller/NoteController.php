@@ -73,6 +73,8 @@ class NoteController extends Controller
      */
     public function calculNoteMoyenneAction(Request $request)
     {
+        $nombreNotes = 0;
+        $noteMoyenne = 0;
         //récupération de l'objet du commentaire passé en param de la requete
         $isContenu = $request->request->get('isContenu') === "1";
 
@@ -87,9 +89,12 @@ class NoteController extends Controller
         {
             $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $idObjet));
         }
-        $noteMoyenne = $this->get('hopitalnumerique_objet.manager.note')->getMoyenneNoteByObjet($objet->getId(), $isContenu);
+        if(!is_null($objet))
+        {
+            $noteMoyenne = $this->get('hopitalnumerique_objet.manager.note')->getMoyenneNoteByObjet($objet->getId(), $isContenu);
 
-        $nombreNotes = $this->get('hopitalnumerique_objet.manager.note')->countNbNoteByObjet($objet->getId(), $isContenu);
+            $nombreNotes = $this->get('hopitalnumerique_objet.manager.note')->countNbNoteByObjet($objet->getId(), $isContenu);   
+        }
 
         return new Response('{"success":true, "nbNote" : "'.$nombreNotes.'", "noteMoyenne" : "'. $noteMoyenne .'"}', 200);
     }
