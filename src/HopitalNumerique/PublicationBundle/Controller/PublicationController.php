@@ -13,7 +13,11 @@ class PublicationController extends Controller
     public function objetAction(Objet $objet)
     {
         //objet visualisation
-        $objet->setNbVue( ($objet->getNbVue() + 1) );
+        if(!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1'))
+        {
+            $objet->setNbVue( ($objet->getNbVue() + 1) );
+            $this->get('hopitalnumerique_objet.manager.objet')->save($objet);
+        }
 
         //Si l'user connecté à le rôle requis pour voir l'objet
         if( $this->checkAuthorization( $objet ) === false ){
@@ -103,8 +107,12 @@ class PublicationController extends Controller
         $suivant        = $this->get('hopitalnumerique_objet.manager.contenu')->getSuivant( $contenusNonVidesTries, $contenu );
         $suivantOrder   = $this->get('hopitalnumerique_objet.manager.contenu')->getFullOrder($suivant);
 
-        //add visualisation
-        $contenu->setNbVue( ($contenu->getNbVue() + 1) );
+        //objet visualisation
+        if(!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1'))
+        {
+            $contenu->setNbVue( ($contenu->getNbVue() + 1) );
+            $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
+        }
 
         //Types objet
         $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
