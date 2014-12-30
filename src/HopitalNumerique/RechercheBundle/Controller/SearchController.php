@@ -31,13 +31,15 @@ class SearchController extends Controller
             if( !is_null($session->get('requete-refs')) )
             {
                 $categoriesProductionActif = ( !is_null( $session->get('requete-refs-categProd') ) ) ? $session->get('requete-refs-categProd') : '';
-                $requete = null;
-                $refs    = $session->get('requete-refs');
+                $rechercheTextuelle        = ( !is_null( $session->get('requete-refs-recherche-textuelle') ) ) ? $session->get('requete-refs-recherche-textuelle') : '';
+                $requete                   = null;
+                $refs                      = $session->get('requete-refs');
             //sinon on charge la requete par défaut
             }else{
-                $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'isDefault' => true ) );
-                $refs    = $requete ? json_encode($requete->getRefs()) : '[]';
+                $requete                   = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'isDefault' => true ) );
+                $refs                      = $requete ? json_encode($requete->getRefs()) : '[]';
                 $categoriesProductionActif = $requete ? $requete->getCategPointDur() : '';
+                $rechercheTextuelle        = $requete ? $requete->getRechercheTextuelle() : '';
 
                 //set requete id in session
                 if( $requete )
@@ -48,8 +50,9 @@ class SearchController extends Controller
             $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'id' => $id ) );
 
             if( $requete ) {
-                $refs = json_encode($requete->getRefs());
+                $refs                      = json_encode($requete->getRefs());
                 $categoriesProductionActif = is_null($requete->getCategPointDur()) ? '' : $requete->getCategPointDur();
+                $rechercheTextuelle        = is_null($requete->getRechercheTextuelle()) ? '' : $requete->getRechercheTextuelle();
 
                 //update request
                 $requete->setNew( false );
@@ -73,6 +76,7 @@ class SearchController extends Controller
             'elements'                      => $elements['CATEGORIES_RECHERCHE'],
             'requete'                       => $requete,
             'refs'                          => $refs,
+            'rechercheTextuelle'            => $rechercheTextuelle,
             'categoriesProduction'          => $categoriesProduction,
             'categoriesProductionActif'     => $categoriesProductionActif,
             'categoriesProductionActifJSON' => json_encode(explode(',', $categoriesProductionActif))
@@ -98,6 +102,11 @@ class SearchController extends Controller
         //GME 19/09/2014 : Ajout du filtre des categ point dur (liste à choix multiples)
         $categPointDur = $request->request->get('categPointDur');
         $objetsOrder   = array();
+
+        //vvvvv GME 17/11/2014 : Ajout de la zone textuelle
+        $rechercheTextuelle                 = $request->request->get('rechercheTextuelle');
+        $resultatsTrouveeRechercheTextuelle = true;
+        //^^^^^
 
         //Filtre uniquement si pas vide
         if(!empty($categPointDur))
@@ -131,14 +140,66 @@ class SearchController extends Controller
                         //Supprime l'élément du tableau
                         unset($objets[$key]);
                     }
-               }
-
+                }
             }
         }
         else
         {
             $categPointDurIdsArray = array();
         }
+
+        //vvvvv GME 21/11/2014 : Exalead
+        if(trim($rechercheTextuelle) !== "")
+        {
+            $objetIds              = array();
+            $contenuIds            = array();
+            $optionsSearch         = $this->get('hopitalnumerique_recherche.manager.search')->getUrlRechercheTextuelle();
+            //$urlRechercheTextuelle = "http://fifi.mind7.fr:13010/search-api/search?q=FACTEURS%20CLES%20DE%20SUCCES";
+            $urlRechercheTextuelle = $optionsSearch . urlencode($rechercheTextuelle);
+
+            $xml = simplexml_load_file($urlRechercheTextuelle);
+
+            //Lien mort
+            if($xml === FALSE)
+            {
+                $this->get('session')->getFlashBag()->add( 'danger', 'Un problème est survenu lors de votre recherche textuelle, merci de contacter un administrateur.' );
+            }
+            else
+            {
+                //Vérfication si des résultats sont remontés
+                if(!is_null($xml->hits->Hit))
+                {
+                    foreach($xml->hits->Hit as $hit)
+                    {
+                        $hitUrl      = (string)$hit->attributes()->url;
+                        $hitUrlArray = explode("=", $hitUrl);
+
+                        if($hitUrlArray[0] == 'obj_id')
+                        {
+                            $objetIds[] = intval(substr($hitUrlArray[1], 0 , -1));
+                        }
+                        elseif($hitUrlArray[0] == 'con_id')
+                        {
+                            $contenuIds[] = intval(substr($hitUrlArray[1], 0 , -1));
+                        }
+                    }
+                }
+                else
+                {
+                    $resultatsTrouveeRechercheTextuelle = false;
+                }
+            }
+
+            //Cas où l'on a juste de la recherche textuelle et pas de recherche par critère
+            if(empty($objets))
+            {
+                $objetsRecherche   = $this->get('hopitalnumerique_objet.manager.objet')->findBy(array('id' => $objetIds));
+                $contenusRecherche = $this->get('hopitalnumerique_objet.manager.contenu')->findBy(array('id' => $contenuIds));
+
+                $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRechercheTextuelle( $objetsRecherche, $contenusRecherche, $role );
+            }
+        }
+        //^^^^^
 
         foreach ($objets as $key => $objet) 
         {
@@ -149,10 +210,60 @@ class SearchController extends Controller
         {
             if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet'])) 
             {
-                $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
-                $objetsOrder[$key]['prefixe'] = $libContenu;
-                $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+                //Dans le cas où une recherche textuelle est donnée
+                if(trim($rechercheTextuelle) !== "")
+                {
+                    if(in_array($objetCurrent['id'], $objetIds))
+                    {
+                        $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
+                        $objetsOrder[$key]['prefixe'] = $libContenu;
+                        $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+                    }
+                }
+                else
+                {
+                    $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
+                    $objetsOrder[$key]['prefixe'] = $libContenu;
+                    $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+                }
             }
+        }
+
+        $objetsRechercheTextuelle = array();
+
+        //Dans le cas où une recherche textuelle est donnée
+        if(trim($rechercheTextuelle) !== "")
+        {
+            //Dans le cas où il n'y a pas de filtre de critère de recherche
+            // if(is_null($references))
+            // {
+
+            // }
+
+            //Parcourt les objets 
+            foreach ($objets as $objet) 
+            {
+                //Contenu
+                if(array_key_exists('objet', $objet) && !is_null($objet["objet"]))
+                {
+                    if(in_array($objet['id'], $contenuIds))
+                    {
+                        $objetsRechercheTextuelle[] = $objet;
+                    }
+                }
+                //Objet
+                else
+                {
+                    if(in_array($objet['id'], $objetIds))
+                    {
+                        $objetsRechercheTextuelle[] = $objet;
+                    }
+                }
+            }
+        }
+        else
+        {
+            $objetsRechercheTextuelle = $objets;
         }
 
         //on prépare la session
@@ -160,6 +271,7 @@ class SearchController extends Controller
         $isRequete = (!is_null($session->get('requete-id')));
         $session->set('requete-refs', json_encode($references) );
         $session->set('requete-refs-categProd', $categPointDur );
+        $session->set('requete-refs-recherche-textuelle', $rechercheTextuelle );
 
         //clean requete ID
         $cleanSession = $request->request->get('cleanSession');
@@ -178,14 +290,39 @@ class SearchController extends Controller
         {
             $categPointDur = is_null($categPointDur) ? '' : $categPointDur;
             $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
-            $this->get('hopitalnumerique_stat.manager.statrecherche')->sauvegardeRequete($references, $user, $categPointDur, count($objets), $isRequete);
+            $this->get('hopitalnumerique_stat.manager.statrecherche')->sauvegardeRequete($references, $user, $categPointDur, count($objetsRechercheTextuelle), $isRequete);
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Search:getResults.html.twig', array(
-            'objets'              => $objets,
+            'objets'              => $objetsRechercheTextuelle,
             'objetsOrder'         => $objetsOrder,
             'showMorePointsDurs'  => $showMorePointsDurs,
             'showMoreProductions' => $showMoreProductions
+        ));
+    }
+
+    /**
+     * Création de la vue "Type de production"
+     *
+     * @return [type]
+     */
+    public function getTypeProductionAction()
+    {
+        $request              = $this->get('request');
+        $categPointDur        = $request->request->get('categPointDur');
+        $categoriesProduction = array();
+
+        if(is_array($categPointDur))
+        {
+            foreach ($categPointDur as $idCateg)
+            {
+                $categ = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $idCateg));
+                $categoriesProduction[$categ->getId()] = $categ;
+            }
+        }
+
+        return $this->render('HopitalNumeriqueRechercheBundle:Search:getTypeProduction.html.twig', array(
+            'categoriesSelected' => $categoriesProduction,
         ));
     }
 }

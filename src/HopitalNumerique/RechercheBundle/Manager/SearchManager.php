@@ -9,14 +9,15 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class SearchManager extends BaseManager
 {
-    private $_production        = 175;
-    private $_ressource         = 183;
-    private $_pointDur          = 184;
-    private $_refObjetManager   = null;
-    private $_refContenuManager = null;
-    private $_refsPonderees     = null;
-    private $_refTopicManager   = null;
-    private $_ccdnAuthorizer    = null;
+    private $_production            = 175;
+    private $_ressource             = 183;
+    private $_pointDur              = 184;
+    private $_refObjetManager       = null;
+    private $_refContenuManager     = null;
+    private $_refsPonderees         = null;
+    private $_refTopicManager       = null;
+    private $_ccdnAuthorizer        = null;
+    private $_urlRechercheTextuelle = "";
     
     /**
      * Override du contrct d'un manager normal : ce manager n'est lié à aucune entitée
@@ -25,12 +26,214 @@ class SearchManager extends BaseManager
      * @param RefContenuManager $refContenuManager Entitée RefContenuManager
      * @param RefTopicManager   $refTopicManager   Entitée RefTopicManager
      */
-    public function __construct( $refObjetManager, $refContenuManager, $refTopicManager, $ccdnAuthorizer )
+    public function __construct( $refObjetManager, $refContenuManager, $refTopicManager, $ccdnAuthorizer, $options = array() )
     {
         $this->_refObjetManager   = $refObjetManager;
         $this->_refContenuManager = $refContenuManager;
         $this->_refTopicManager   = $refTopicManager;
         $this->_ccdnAuthorizer    = $ccdnAuthorizer;
+
+        $this->_urlRechercheTextuelle = isset($options['urlRechercheTextuelle']) ? $options['urlRechercheTextuelle'] : '';
+    }
+
+    /**
+     * Permet de récuperer les options du parameter.yml
+     *
+     * @return [type]
+     */
+    public function getUrlRechercheTextuelle()
+    {
+        return $this->_urlRechercheTextuelle;
+    }
+
+    /**
+     * Récupération des objets formatés pour la recherche textuelle uniquement
+     *
+     * @param Array(Objet)   $objetsRecherche   Tableau des objets retournés par l'exalead
+     * @param Array(Contenu) $contenusRecherche Tableau des contenus retournés par l'exalead
+     * @param String         $role              Nom du role de l'utilsateur accedant à la requête pour la vérif d'autorisation d'accès aux différents objets
+     *
+     * @return Array(array()) Retourne un tableau des objets formatés en tableaux pour l'affichage de la recherche
+     */
+    public function getObjetsForRechercheTextuelle( $objetsRecherche , $contenusRecherche, $role)
+    {
+        $results = array();
+
+        //Parcourt les objets pour les ajouter (si la date de publication est renseignée et respectée) formaté au tableau des résults en vérifiant l'accès
+        foreach ($objetsRecherche as $objet) 
+        {
+            //Objet actif
+            if($objet->getEtat()->getId() !== 3)
+            {
+                continue;
+            }
+
+            if( !is_null($objet->getDateDebutPublication()) )
+            {
+                $today = new \DateTime();
+
+                //L'objet n'est pas encore publié on ne le prend pas en compte
+                if($today < $objet->getDateDebutPublication())
+                {
+                    continue;
+                }
+            }
+            if( !is_null($objet->getDateFinPublication()) )
+            {
+                $today = new \DateTime();
+
+                //L'objet n'est plus publié on ne le prend pas en compte
+                if($today > $objet->getDateFinPublication())
+                {
+                    continue;
+                }
+            }
+
+            //Gestion des catégories
+            if($objet->isArticle())
+            {
+                continue;
+            }
+
+            $bonneCategorie = true;
+            $types          = $objet->getTypes();
+            if($objet->isArticle())
+            {
+                foreach ($types as $type)
+                {
+                    if($type->getId() === 175)
+                    {
+                        $bonneCategorie = false;
+                        break;
+                    }
+                    if($type->getCode() !== "CATEGORIE_OBJET")
+                    {
+                        $bonneCategorie = false;
+                        break;
+                    }
+                }
+            }
+
+            if(!$bonneCategorie)
+            {
+                continue;
+            }
+
+            //Formatage de l'objet courant
+            if( !is_null($role) ) 
+            {
+                $notAllowed = false;
+                //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
+                $roles = $objet->getRoles();
+                foreach($roles as $restrictedRole)
+                {
+                    //on "break" en retournant null, l'objet n'est pas ajouté
+                    if( $restrictedRole->getRole() == $role)
+                    {
+                        $notAllowed = true;
+                        break;
+                    }
+                }
+                //L'utilisateur n'a pas le droit de voir l'objet, on ne le prend pas en compte
+                if($notAllowed)
+                {
+                    continue;
+                }    
+            }
+
+            $item = array();
+
+            $item['primary']  = 0;
+            
+            $item['id']       = $objet->getId();
+            $item['titre']    = $objet->getTitre();
+            $item['countRef'] = $this->getNoteReferencement($objet->getReferences());
+            $item['objet']    = null;
+            $item['alias']    = $objet->getAlias();
+            $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
+
+            //clean resume (pagebreak)
+            $tab = explode('<!-- pagebreak -->', $objet->getResume() );
+            $item['resume'] = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+            
+            //get Categ and Type
+            $tmp = $this->getTypeAndCateg( $objet );
+            $item['type']  = $tmp['type'];
+            $item['categ'] = $tmp['categ'];
+            
+            //status (new/updated/datecreation)
+            $item['new']      = false;
+            $item['updated']  = false;
+            $item['created']  = $objet->getDateCreation();
+            $item['modified'] = $objet->getDateModification();
+
+            $results[] = $item;
+        }
+
+        //Parcourt les contenus pour les ajouter (si la date de publication de l'objet lié est renseignée et respectée) formaté au tableau des résults en vérifiant l'accès
+        foreach ($contenusRecherche as $contenu) 
+        {
+            $objet = $contenu->getObjet();
+
+            if( !is_null($objet->getDateDebutPublication()) )
+            {
+                $today = new \DateTime();
+
+                if($today < $objet->getDateDebutPublication())
+                {
+                    continue;
+                }
+            }
+            if( !is_null($objet->getDateFinPublication()) )
+            {
+                $today = new \DateTime();
+
+                if($today > $objet->getDateFinPublication())
+                {
+                    continue;
+                }
+            }
+
+            //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
+            $roles = $objet->getRoles();
+            foreach($roles as $restrictedRole){
+                //on "break" en retournant null, l'objet n'est pas ajouté
+                if( $restrictedRole->getRole() == $role)
+                    return null;
+            }
+
+            $item = array();
+
+            $item['primary']  = 0;
+
+            $item['id']       = $contenu->getId();
+            $item['titre']    = $contenu->getTitre();
+            $item['countRef'] = $this->getNoteReferencement($contenu->getReferences());
+            $item['objet']    = $objet->getId();
+            $item['aliasO']   = $objet->getAlias();
+            $item['aliasC']   = $contenu->getAlias();
+            $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
+
+            //clean resume (pagebreak)
+            $tab = explode('<!-- pagebreak -->', $contenu->getContenu());
+            $item['resume'] = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+            $item['type']   = array();
+
+            //get Categ and Type
+            $tmp = $this->getTypeAndCateg( $objet );
+            $item['type']  = $tmp['type'];
+            $item['categ'] = $tmp['categ'];
+
+            //status (new/updated/datecreation)
+            $item['new']      = false;
+            $item['updated']  = false;
+            $item['created']  = $contenu->getDateCreation();
+            $item['modified'] = $contenu->getDateModification();
+
+            $results[] = $item;
+        }
+
+        return $results;
     }
     
     /**
@@ -54,12 +257,15 @@ class SearchManager extends BaseManager
         for ( $i = 1; $i <= $nbCateg; $i++ ) 
         {
             //si on a filtré sur la catégorie
-            if( isset($references['categ'.$i]) ) {
+            if( isset($references['categ'.$i]) )
+            {
                 //on récupères tous les objets, on les formate et on les ajoute à nos catégories
                 $results = $this->_refObjetManager->getObjetsForRecherche( $references['categ'.$i] );
-                if( $results ){
+                if( $results )
+                {
                     $tmp = array();
-                    foreach( $results as $one) {
+                    foreach( $results as $one) 
+                    {
                         $objet = $this->formateObjet( $one, $role );
                         if( !is_null($objet) && $objet['categ'] != '' )
                         {
@@ -78,8 +284,11 @@ class SearchManager extends BaseManager
                     }
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
                     $objetsToIntersect[] = $tmp;
-                }else
+                }
+                else
+                {
                     $objetsToIntersect[] = array();
+                }
 
                 //on récupères tous les contenus (infradoc), on les formate et on les ajoute à nos catégories
                 $results = $this->_refContenuManager->getContenusForRecherche( $references['categ'.$i] );
@@ -108,7 +317,9 @@ class SearchManager extends BaseManager
                     $contenusToIntersect[] = $tmp;
                 }
                 else
+                {
                     $contenusToIntersect[] = array();
+                }
 
                 //on récupères tous les objets, on les formate et on les ajoute à nos catégories
                 $results = $this->_refTopicManager->getTopicForRecherche( $references['categ'.$i] );                
@@ -135,8 +346,11 @@ class SearchManager extends BaseManager
 
                     //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
                     $filsForumToIntersect[] = $tmp;
-                }else
+                }
+                else
+                {
                     $filsForumToIntersect[] = array();
+                }
             }
         }
 

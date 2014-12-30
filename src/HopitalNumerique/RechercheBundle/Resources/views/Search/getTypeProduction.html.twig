@@ -1,0 +1,10 @@
+<span><strong>Mes filtres de type de production</strong></span><br />
+<small>
+{% for categorieSelected in categoriesSelected %}
+    <li>
+        <span>{{categorieSelected.libelle}}</span>
+    </li>
+{% else %}
+    <span class="text-muted">Aucun filtre de type de production.</span>
+{% endfor %}
+</small>
