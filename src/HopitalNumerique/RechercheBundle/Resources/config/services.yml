@@ -1,4 +1,6 @@
 parameters:
+    #Permet d'avoir une valeur par défaut et/ou d'etre surchargé par le config.yml de app/config
+    hopital_numerique_recherche.options:
     hopitalnumerique_recherche.manager.search.class               : HopitalNumerique\RechercheBundle\Manager\SearchManager
     hopitalnumerique_recherche.manager.requete.class              : HopitalNumerique\RechercheBundle\Manager\RequeteManager
     hopitalnumerique_recherche.manager.statClic.class             : HopitalNumerique\RechercheBundle\Manager\StatClicManager
@@ -10,7 +12,7 @@ parameters:
 services:
     hopitalnumerique_recherche.manager.search:
         class: %hopitalnumerique_recherche.manager.search.class%
-        arguments: ["@hopitalnumerique_objet.manager.refobjet", "@hopitalnumerique_objet.manager.refcontenu", "@hopitalnumerique_forum.manager.reftopic", "@ccdn_forum_forum.component.security.authorizer"]
+        arguments: ["@hopitalnumerique_objet.manager.refobjet", "@hopitalnumerique_objet.manager.refcontenu", "@hopitalnumerique_forum.manager.reftopic", "@ccdn_forum_forum.component.security.authorizer", "%hopital_numerique_recherche.options%"]
 
     hopitalnumerique_recherche.manager.requete:
         class: %hopitalnumerique_recherche.manager.requete.class%

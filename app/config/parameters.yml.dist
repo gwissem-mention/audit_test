@@ -44,5 +44,8 @@ parameters:
     confighn_hopitalnumerique_report:
         gmelchilsen@nodevo.com: Gaëtan
 
+    #HopitalNumerique_Recherche : Url exalead
+    confighn_hopitalnumerique_recherche: "http://fifi.mind7.fr:13010/search-api/search?q="
+
     #Extensions autorisées dans le gestionnaire de media
     nodevo_gestionnaire_media.moxie_manager.extensions_autorisees: jpg,jpeg,png,gif,html,htm,txt,docx,doc,zip,pdf,xls,xlsx,ppt,pptx

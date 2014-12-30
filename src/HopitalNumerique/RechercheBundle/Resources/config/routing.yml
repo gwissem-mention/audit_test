@@ -13,6 +13,10 @@ hopital_numerique_recherche_getresults:
     pattern:  /recherche-par-referencement/get-results
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:getResults }
 
+hopital_numerique_recherche_gettypeproduction:
+    pattern:  /recherche-par-referencement/get-type-production
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:getTypeProduction }
+
 #Requêtes de recherche
 hopital_numerique_requete_detail:
     pattern:  /requetes/detail/{id}
