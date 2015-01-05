@@ -172,6 +172,10 @@ hopital_numerique_report:
     options:
         mailsReport: %confighn_hopitalnumerique_report%
 
+hopital_numerique_recherche:
+    options:
+        urlRechercheTextuelle: %confighn_hopitalnumerique_recherche%
+
 #html to Pdf
 knp_snappy:
     pdf:

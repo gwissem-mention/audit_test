@@ -1,5 +1,7 @@
 var DELAY = 200, clicks = 0, timer = null, showPlaceholder = true;
 
+var ajaxRequeteResultat;
+
 $(document).ready(function() {
     //Gestion de l'ajout de critères dans la requete
     $('#origin li span').on("click", function(e){
@@ -118,11 +120,110 @@ $(document).ready(function() {
         });
     }
 
-    $("#categ_production_select").change(function(){
+    //vvv Chargement du bloc Requete de recherche en fonction de la Recherche textuelle et de la Recherche par type de production vvv
+    var loaderSelecteur = $('#recherche .dropdown-menu').nodevoLoader().start();
+    
+    //AJAX call for results
+    $.ajax({
+        url  : $('#resultats-type-production').val(),
+        data : {
+            categPointDur: $("#categ_production_select").val()
+        },
+        type    : 'POST',
+        success : function( data ){
+            $('#arbo-type-prod').html( data );
+            loaderSelecteur.finished();
+        }
+    });
 
+    //On enlève le placeholder
+    if($("#recherche_textuelle").val() != '')
+    {
+        if( $(".arbo-requete").find('li:not(.hide)').length == 0 )
+        {
+            if($(".placeholder-aucunCritere").length == 0)
+            {
+                $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+            }
+        }
+        else
+        {
+            $(".placeholder-aucunCritere").remove();
+        }
+        $(".placeholder").hide();
+        showPlaceholder = false;
+        $("#dest").removeClass('hide');
+        $(".requete h2").addClass('ropen');
+
+        updateResultats( true );
+    }
+
+    //Recherche textuelle
+    $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
+    
+    $("#categ_production_select").change(function(){
         $("#categ_production_select_vals").val($(this).val());
+
+        //Mise à jour du cradre "Requete de recherche"
+        var loader          = $('#recherche .requete').nodevoLoader().start();
+        var loaderSelecteur = $('#recherche .dropdown-menu').nodevoLoader().start();
+    
+        //AJAX call for results
+        $.ajax({
+            url  : $('#resultats-type-production').val(),
+            data : {
+                categPointDur: $(this).val()
+            },
+            type    : 'POST',
+            success : function( data ){
+                $('#arbo-type-prod').html( data );
+
+                loader.finished();
+                loaderSelecteur.finished();
+            }
+        });
+
         updateResultats( true );
     });
+
+    $("#recherche_textuelle").change(function(){
+
+        if($("#recherche_textuelle").val() != '')
+        {
+            $(".placeholder").hide();
+            showPlaceholder = false;
+            $("#dest").removeClass('hide');
+            $(".requete h2").addClass('ropen');
+        }
+        else
+        {
+            if($(".placeholder-aucunCritere").length)
+            {
+                $('#resultats').html('');
+                $(".arbo-requete").find('li').addClass('hide');
+                $(".placeholder").show();
+                showPlaceholder = true;
+                $("#dest").addClass('hide');
+                $(".requete h2").removeClass('ropen rclose');
+            }
+            $(".placeholder-aucunCritere").remove();
+        }
+
+        if($(".arbo-requete").find('li:not(.hide)').length == 0 && !$("#dest").hasClass('hide'))
+        {
+            if($(".placeholder-aucunCritere").length == 0)
+            {
+                $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+            }
+        }
+
+        //Mise à jour du cradre "Requete de recherche"
+        $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
+
+        updateResultats( true );
+    });
+
+    //^^^ Chargement du bloc Requete de recherche en fonction de la Recherche textuelle et de la Recherche par type de production ^^^
 });
 
 //fancybox daffichage de la synthese
@@ -187,6 +288,8 @@ function selectElement( item )
 
         //si c'est un parent, on show ces enfants (NON recursif)
         $('#dest .element-' + $(item).data('id') + ' li.hide').removeClass('hide');
+
+        $(".placeholder-aucunCritere").remove();
 
     }else
         return false;
@@ -272,12 +375,24 @@ function handleParentsDestination( item )
             //on check de manière récursive
             handleParentsDestination( $(item).parent().parent() );
         //si l'élément n'est pas de type LI, on est allé trop haut, on réaffiche le placeholder
-        }else{
-            $(".arbo-requete").find('li').addClass('hide');
-            $(".placeholder").show();
-            showPlaceholder = true;
-            $("#dest").addClass('hide');
-            $(".requete h2").removeClass('ropen rclose');
+        }
+        else
+        {
+            if($("#recherche_textuelle").val() == '')
+            {
+                $(".arbo-requete").find('li').addClass('hide');
+                $(".placeholder").show();
+                showPlaceholder = true;
+                $("#dest").addClass('hide');
+                $(".requete h2").removeClass('ropen rclose');
+            }
+            else
+            {
+                if( $(".placeholder-aucunCritere").length == 0 )
+                {
+                    $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+                }
+            }
         }
     }
 }
@@ -301,26 +416,38 @@ function showItemOriginRecursive( item )
 function updateResultats( cleanSession )
 {
     var loader = $('#resultats').nodevoLoader().start();
-    
+
+    if(ajaxRequeteResultat != null )
+    {
+        ajaxRequeteResultat.abort();
+    }
+
     //AJAX call for results
-    $.ajax({
+    ajaxRequeteResultat = $.ajax({
         url  : $('#resultats-url').val(),
         data : {
             references   : getReferences(),
             cleanSession : cleanSession,
-            categPointDur: $("#categ_production_select_vals").val()
+            categPointDur: $("#categ_production_select_vals").val(),
+            rechercheTextuelle : $("#recherche_textuelle").val()
         },
         type    : 'POST',
         success : function( data ){
             $('#resultats').html( data );
 
-            if( $('#dest li:not(.hide)').length == 0){
+            if( $('#dest li:not(.hide)').length == 0 && $("#recherche_textuelle").val() == '')
+            {
                 $('.requete h2').html( 'Requête de recherche' );
                 $('#resultats').html('');
-            }else if( $('#nbResults').val() == 1 || $('#nbResults').val() == 0 ){
+            }
+            else if( $('#nbResults').val() == 1 || $('#nbResults').val() == 0 )
+            {
                 $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultat)' );
-            }else
+            }
+            else
+            {
                 $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
+            }
 
             loader.finished();
         }
@@ -449,10 +576,11 @@ function handleRequeteSave( r, id )
     $.ajax({
         url  : $('#requete-save-url').val(),
         data : {
-            nom           : r,
-            id            : id,
-            references    : getReferences(),
-            categPointDur : $("#categ_production_select_vals").val(),
+            nom                : r,
+            id                 : id,
+            references         : getReferences(),
+            categPointDur      : $("#categ_production_select_vals").val(),
+            rechercheTextuelle : $("#recherche_textuelle").val(),
         },
         type     : 'POST',
         dataType : 'json',
@@ -481,6 +609,8 @@ function cleanRequest()
 {
     apprise('Confirmer la réinitialisation de la requête ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
         if( r ){
+            $("#recherche_textuelle").val('');
+
             $('.arbo-requete li').each( function(){
                 removeElement( $(this) );
             });

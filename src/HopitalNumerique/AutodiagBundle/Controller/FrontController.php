@@ -7,6 +7,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Resultat;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
  * Front controller.
@@ -456,7 +457,7 @@ class FrontController extends Controller
             $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
         }
 
-        if($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() != 100)
+        if(!$resultat->getSynthese() && ($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() != 100))
         {
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
         }
@@ -729,6 +730,9 @@ class FrontController extends Controller
             'processusDonnees'        => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
 
+        $toolTitle = new Chaine($resultat->getOutil()->getTitle());
+        $toolName  = new Chaine($resultat->getName());
+
         $options = array(
             // 'orientation'      => 'landscape',
             'encoding'         => 'UTF-8',
@@ -739,6 +743,8 @@ class FrontController extends Controller
             'margin-left'      => '15',
             'header-spacing'   => '2',
             'header-right'     => 'Page [page]/[toPage]',
+            'header-font-size' => '10',
+            'header-left'      => $toolTitle->supprimeAccents() . ' - ' . (trim($toolName->supprimeAccents()) != "" ? ($toolName->supprimeAccents() . ' - ') : '') . $resultat->getDateLastSave()->format('d/m/Y') ,
             'footer-spacing'   => '10',
             'footer-html'      => '<p style="font-size:10px;text-align:center;color:#999">
                                      &copy; ANAP - Mon H&ocirc;pital Num&eacute;rique<br/>

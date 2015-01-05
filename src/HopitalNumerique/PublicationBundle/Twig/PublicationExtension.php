@@ -224,9 +224,9 @@ class PublicationExtension extends \Twig_Extension
                     {
 
                         $html  = '¬<a target="_blank" href="/glossaire#¬'. $tool->minifie() .'¬" style="text-decoration:none"><acronym class="glosstool" data-html="true" title="¬';
-                        $html .= ($data['intitule'] ? $data['intitule'] : substr($match, 1, -1) );
+                        $html .= ($data['intitule'] ? $this->toascii($data['intitule']) : $this->toascii(substr($match, 1, -1)) );
                         $html .= (!empty($description)) ? ' : <br>' . $description  : '';
-                        $html .= '¬" >¬' . substr($match, 1, -1) . '</acronym></a>';
+                        $html .= '¬" >¬' . $this->toascii(substr($match, 1, -1)) . '</acronym></a>';
 
                         $html    = substr($match, 0, 1) . $html . substr($match, -1);
                         $content = str_replace($match, $html, $content);
