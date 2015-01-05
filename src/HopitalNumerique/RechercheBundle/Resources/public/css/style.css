@@ -61,11 +61,11 @@
     /* Liste déroulante */
     .multiselect-container.dropdown-menu{width: 100%; z-index: 110;}
     .multiselect-container.dropdown-menu .loader .loaderBackground{z-index:120;}
-    #recherche button.multiselect {margin-top : 10px; margin-bottom : 10px; text-align: left;}
+    #recherche button.multiselect {margin-top : 10px; text-align: left;}
     #recherche button.multiselect .caret{text-align: right;}
 
     /* Zone de recherche textuelle */
-    #recherche #recherche_textuelle_group{margin-bottom: 10px;}
+    #recherche #recherche_textuelle_group{margin-bottom: 10px;margin-top : 10px;}
     #recherche #arbo-type-prod { padding: 0;}
     #recherche #arbo-recherche-textuelle { padding: 0;}
 

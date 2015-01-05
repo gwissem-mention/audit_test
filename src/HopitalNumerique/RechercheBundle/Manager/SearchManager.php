@@ -18,6 +18,7 @@ class SearchManager extends BaseManager
     private $_refTopicManager       = null;
     private $_ccdnAuthorizer        = null;
     private $_urlRechercheTextuelle = "";
+    private $_activationExalead     = false;
     
     /**
      * Override du contrct d'un manager normal : ce manager n'est lié à aucune entitée
@@ -34,6 +35,7 @@ class SearchManager extends BaseManager
         $this->_ccdnAuthorizer    = $ccdnAuthorizer;
 
         $this->_urlRechercheTextuelle = isset($options['urlRechercheTextuelle']) ? $options['urlRechercheTextuelle'] : '';
+        $this->_activationExalead = isset($options['activationExalead']) ? $options['activationExalead'] : '';
     }
 
     /**
@@ -44,6 +46,16 @@ class SearchManager extends BaseManager
     public function getUrlRechercheTextuelle()
     {
         return $this->_urlRechercheTextuelle;
+    }
+
+    /**
+     * Permet de récuperer les options du parameter.yml
+     *
+     * @return boolean
+     */
+    public function getActivationExalead()
+    {
+        return $this->_activationExalead;
     }
 
     /**

@@ -174,7 +174,8 @@ hopital_numerique_report:
 
 hopital_numerique_recherche:
     options:
-        urlRechercheTextuelle: %confighn_hopitalnumerique_recherche%
+        urlRechercheTextuelle : %confighn_hopitalnumerique_recherche%
+        activationExalead     : %confighn_hopitalnumerique_exalead%
 
 #html to Pdf
 knp_snappy:
