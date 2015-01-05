@@ -104,7 +104,7 @@
                 <input type="hidden" id="categ_production_select_vals_chargement" value="{{categoriesProductionActifJSON}}" />
 
                 <div {% if not activationExalead %}style="display:none"{% endif %}>
-                    <div id="recherche_textuelle_group" class="input-group">
+                    <div id="recherche_textuelle_group" class="input-group" style="z-index:0">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                         <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control col-md-12" placeholder="Recherche..." value="{{rechercheTextuelle}}" />
                       <span class="input-group-btn">
