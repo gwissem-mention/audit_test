@@ -33,6 +33,7 @@ $(document).ready(function() {
             //placeholder management
             if( success && showPlaceholder){
                 $(".placeholder").hide();
+                $("#bloc_filtres").show();
                 showPlaceholder = false;
                 $("#dest").removeClass('hide');
                 $(".requete h2").addClass('ropen');
@@ -58,6 +59,7 @@ $(document).ready(function() {
         //placeholder management
         if( success && showPlaceholder){
             $(".placeholder").hide();
+            $("#bloc_filtres").show();
             showPlaceholder = false;
             $("#dest").removeClass('hide');
             $(".requete h2").addClass('ropen');
@@ -151,6 +153,7 @@ $(document).ready(function() {
             $(".placeholder-aucunCritere").remove();
         }
         $(".placeholder").hide();
+        $("#bloc_filtres").show();
         showPlaceholder = false;
         $("#dest").removeClass('hide');
         $(".requete h2").addClass('ropen');
@@ -191,6 +194,7 @@ $(document).ready(function() {
         if($("#recherche_textuelle").val() != '')
         {
             $(".placeholder").hide();
+            $("#bloc_filtres").show();
             showPlaceholder = false;
             $("#dest").removeClass('hide');
             $(".requete h2").addClass('ropen');
@@ -202,6 +206,7 @@ $(document).ready(function() {
                 $('#resultats').html('');
                 $(".arbo-requete").find('li').addClass('hide');
                 $(".placeholder").show();
+                $("#bloc_filtres").hide();
                 showPlaceholder = true;
                 $("#dest").addClass('hide');
                 $(".requete h2").removeClass('ropen rclose');
@@ -222,8 +227,6 @@ $(document).ready(function() {
 
         updateResultats( true );
     });
-
-    //^^^ Chargement du bloc Requete de recherche en fonction de la Recherche textuelle et de la Recherche par type de production ^^^
 });
 
 //fancybox daffichage de la synthese
@@ -382,6 +385,7 @@ function handleParentsDestination( item )
             {
                 $(".arbo-requete").find('li').addClass('hide');
                 $(".placeholder").show();
+                $("#bloc_filtres").hide();
                 showPlaceholder = true;
                 $("#dest").addClass('hide');
                 $(".requete h2").removeClass('ropen rclose');
@@ -450,6 +454,13 @@ function updateResultats( cleanSession )
             }
 
             loader.finished();
+
+            if($("#recherche_textuelle").val() != "")
+            {
+                $("#resultats p, #resultats h5, #resultats a").each(function(){
+                    $(this).highlight($("#recherche_textuelle").val());
+                });
+            }
         }
     });
 }
@@ -636,3 +647,20 @@ function cleanRequest()
         }
     });
 }
+
+// Création d'un mini plugin pour surligner des éléments
+(function($) {
+ 
+    function highlight($el, word) {
+        var text = $el.html();
+        text = text.replace(new RegExp(word,'g'), '<span class="hl">'+word+'</span>');
+        $el.html(text);
+    }
+     
+    $.fn.highlight = function(word) {
+        return this.each(function() {
+            highlight($(this), word);
+        });
+    };
+     
+}(jQuery));
