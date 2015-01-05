@@ -3,6 +3,8 @@ var DELAY = 200, clicks = 0, timer = null, showPlaceholder = true;
 var ajaxRequeteResultat;
 
 $(document).ready(function() {
+    $("#bloc_filtres").hide();
+    
     //Gestion de l'ajout de critères dans la requete
     $('#origin li span').on("click", function(e){
         clicks++; //count clicks
@@ -630,6 +632,7 @@ function cleanRequest()
 
             $('.requeteNom').html('');
             $('.requeteNom').data('id', '');
+            $("#bloc_filtres").hide();
 
             updateResultats( true );
 
