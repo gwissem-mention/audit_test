@@ -206,7 +206,6 @@ $(document).ready(function() {
                 $('#resultats').html('');
                 $(".arbo-requete").find('li').addClass('hide');
                 $(".placeholder").show();
-                $("#bloc_filtres").hide();
                 showPlaceholder = true;
                 $("#dest").addClass('hide');
                 $(".requete h2").removeClass('ropen rclose');
