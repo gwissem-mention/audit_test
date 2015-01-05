@@ -2,10 +2,13 @@ $(document).ready(function() {
     reverse_table(document.getElementById('tableau_resultats'));
     
     //cache les chapitres inutiles
-    chaptersToHide = jQuery.parseJSON($('#chaptersToHide').val());
-    $.each(chaptersToHide, function(index, value) {
-        $('#chapitres .chapitre-' + value).hide();
-    });
+    if($('#chaptersToHide').length != 0)
+    {
+        chaptersToHide = jQuery.parseJSON($('#chaptersToHide').val());
+        $.each(chaptersToHide, function(index, value) {
+            $('#chapitres .chapitre-' + value).hide();
+        });
+     }
 
     //si on a cacher TOUS les chapitres, on affiche le message empty
     allHidden = true;
