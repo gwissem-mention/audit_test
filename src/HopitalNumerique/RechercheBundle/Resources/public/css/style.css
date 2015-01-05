@@ -60,7 +60,7 @@
 
     /* Liste déroulante */
     .multiselect-container.dropdown-menu{width: 100%;}
-    #recherche button.multiselect {text-align: left;}
+    #recherche button.multiselect {margin-top : 10px; margin-bottom : 10px; text-align: left;}
     #recherche button.multiselect .caret{text-align: right;}
 
     /* Zone de recherche textuelle */
@@ -72,6 +72,7 @@
     #recherche #resultats{ margin-top: 20px; }
     #recherche #resultats span.label{ font-size:9px; line-height: 2; vertical-align: top }
     #recherche #resultats .niveau{ margin-bottom: 4px }
+    #recherche #resultats .hl{ background-color: #E2810C }
     
     /* Points Dur*/
         #resultats #pointsdurs{padding:0;}
