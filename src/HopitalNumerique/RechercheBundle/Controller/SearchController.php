@@ -71,12 +71,14 @@ class SearchController extends Controller
             $refs = '[]';
 
         $session->set('requete-refs', $refs );
+        $activationExalead = $this->get('hopitalnumerique_recherche.manager.search')->getActivationExalead();
 
         return $this->render('HopitalNumeriqueRechercheBundle:Search:index.html.twig', array(
             'elements'                      => $elements['CATEGORIES_RECHERCHE'],
             'requete'                       => $requete,
             'refs'                          => $refs,
             'rechercheTextuelle'            => $rechercheTextuelle,
+            'activationExalead'             => $activationExalead,
             'categoriesProduction'          => $categoriesProduction,
             'categoriesProductionActif'     => $categoriesProductionActif,
             'categoriesProductionActifJSON' => json_encode(explode(',', $categoriesProductionActif))
