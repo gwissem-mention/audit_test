@@ -105,7 +105,7 @@
                     </div>
                 </div>
 
-                <select multiple="multiple" class="form-control" placeholder="Sélectionnez un filtre pour un point dur" name="categ_production_select" id="categ_production_select" style="height:200px;">
+                <select multiple="multiple" class="form-control" placeholder="" name="categ_production_select" id="categ_production_select" style="height:200px;">
                     {% for categorieProduction in categoriesProduction %}
                         <option value="{{categorieProduction.id}}" >{{categorieProduction.libelle}}</option>
                     {% endfor %}
