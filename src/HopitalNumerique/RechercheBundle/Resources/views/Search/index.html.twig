@@ -95,6 +95,16 @@
 
             <div id="bloc_filtres">
 
+                <div {% if not activationExalead %}style="display:none"{% endif %}>
+                    <div id="recherche_textuelle_group" class="input-group" style="z-index:0">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control col-md-12" placeholder="Filtrer les résultats..." value="{{rechercheTextuelle}}" />
+                      <span class="input-group-btn">
+                        <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                      </span>
+                    </div>
+                </div>
+
                 <select multiple="multiple" class="form-control" placeholder="Sélectionnez un filtre pour un point dur" name="categ_production_select" id="categ_production_select" style="height:200px;">
                     {% for categorieProduction in categoriesProduction %}
                         <option value="{{categorieProduction.id}}" >{{categorieProduction.libelle}}</option>
@@ -102,16 +112,6 @@
                 </select>
                 <input type="hidden" id="categ_production_select_vals" value="{{categoriesProductionActif}}" />
                 <input type="hidden" id="categ_production_select_vals_chargement" value="{{categoriesProductionActifJSON}}" />
-
-                <div {% if not activationExalead %}style="display:none"{% endif %}>
-                    <div id="recherche_textuelle_group" class="input-group" style="z-index:0">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                        <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control col-md-12" placeholder="Recherche..." value="{{rechercheTextuelle}}" />
-                      <span class="input-group-btn">
-                        <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
-                      </span>
-                    </div>
-                </div>
 
             </div>
             
