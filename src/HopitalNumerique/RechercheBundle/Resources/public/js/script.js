@@ -684,7 +684,7 @@ function isEmpty( el ){
  
     function highlight($el, word) {
         var text = $el.html();
-        text = text.replace(new RegExp(word,'g'), '<span class="hl">'+word+'</span>');
+        text = text.replace(new RegExp(word,'i','g'), '<span class="hl">'+word+'</span>');
         $el.html(text);
     }
      
