@@ -3,8 +3,7 @@ var DELAY = 200, clicks = 0, timer = null, showPlaceholder = true;
 var ajaxRequeteResultat;
 
 $(document).ready(function() {
-    $("#bloc_filtres").hide();
-    
+
     //Gestion de l'ajout de critères dans la requete
     $('#origin li span').on("click", function(e){
         clicks++; //count clicks
@@ -228,6 +227,11 @@ $(document).ready(function() {
 
         updateResultats( true );
     });
+
+    if (isEmpty($('#resultats')))
+    {
+        $("#bloc_filtres").hide();
+    }
 });
 
 //fancybox daffichage de la synthese
@@ -634,21 +638,46 @@ function cleanRequest()
             $('.requeteNom').data('id', '');
             $("#bloc_filtres").hide();
 
-            updateResultats( true );
+            $('#categ_production_select option').each(function() {
+                $("#categ_production_select").multiselect('deselect', $(this).val());
+            })
+            $('#example-reset').multiselect('refresh');
+
+            $('#resultats')
+
+            var loader = $('#resultats').nodevoLoader().start();
+
+            if(ajaxRequeteResultat != null )
+            {
+                ajaxRequeteResultat.abort();
+            }
+
+            //AJAX call for results
+            ajaxRequeteResultat = $.ajax({
+                url  : $('#resultats-url').val(),
+                data : {
+                    references         : getReferences(),
+                    cleanSession       : true,
+                    categPointDur      : $("#categ_production_select_vals").val(),
+                    rechercheTextuelle : $("#recherche_textuelle").val()
+                },
+                type    : 'POST',
+                success : function( data ){
+                    $('.requete h2').html( 'Requête de recherche' );
+                    $('#resultats').html('');
+
+                    loader.finished();
+                }
+            });
 
             history.pushState({ path: this.path }, '', $('#search-homepage-url').val() );
-
-            $("#categ_production_select").multiselect('deselect', 183);
-            $("#categ_production_select").multiselect('deselect', 176);
-            $("#categ_production_select").multiselect('deselect', 177);
-            $("#categ_production_select").multiselect('deselect', 178);
-            $("#categ_production_select").multiselect('deselect', 179);
-            $("#categ_production_select").multiselect('deselect', 180);
-            $("#categ_production_select").multiselect('deselect', 181);
-            $("#categ_production_select").multiselect('deselect', 182);
         }
     });
 }
+
+function isEmpty( el ){
+      return !$.trim(el.html())
+  }
 
 // Création d'un mini plugin pour surligner des éléments
 (function($) {
