@@ -107,7 +107,7 @@ $(document).ready(function() {
     });
     
     $('#categ_production_select').multiselect({
-        nonSelectedText: 'Filtrer un type de production ',
+        nonSelectedText: 'Filtrer par type de production ',
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
         buttonWidth: '100%',
@@ -146,6 +146,7 @@ $(document).ready(function() {
         {
             if($(".placeholder-aucunCritere").length == 0)
             {
+                $('#recherche_textuelle').val('');
                 $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
             }
         }
