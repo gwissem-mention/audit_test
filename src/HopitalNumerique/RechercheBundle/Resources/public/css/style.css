@@ -27,7 +27,7 @@
 
     #recherche .requete #dest #arbo-type-prod li span{color: #000000;font-size: 12px;text-transform: none;}
 
-    #recherche .requete hr { margin-top : 10px; margin-bottom: 10px;}
+    #recherche .requete hr { margin-top : 10px; margin-bottom: 10px;border-bottom: 1px solid #d5d5d5;}
 
 /* Orgine */
     /* Parents */
