@@ -1,6 +1,7 @@
 var DELAY = 200, clicks = 0, timer = null, showPlaceholder = true;
 
 var ajaxRequeteResultat;
+var hasResultat =false;
 
 $(document).ready(function() {
 
@@ -228,10 +229,7 @@ $(document).ready(function() {
         updateResultats( true );
     });
 
-    if (isEmpty($('#resultats')))
-    {
-        $("#bloc_filtres").hide();
-    }
+    affichagePlaceholder();
 });
 
 //fancybox daffichage de la synthese
@@ -444,6 +442,8 @@ function updateResultats( cleanSession )
         success : function( data ){
             $('#resultats').html( data );
 
+            hasResultat = isEmpty($('#resultats')) ? false : true;
+
             if( $('#dest li:not(.hide)').length == 0 && $("#recherche_textuelle").val() == '')
             {
                 $('.requete h2').html( 'Requête de recherche' );
@@ -463,7 +463,8 @@ function updateResultats( cleanSession )
             if($("#recherche_textuelle").val() != "")
             {
                 $("#resultats p, #resultats h5, #resultats a").each(function(){
-                    $(this).highlight($("#recherche_textuelle").val());
+                    $(this).highlight( $("#recherche_textuelle").val() );
+                    //$(this).highlight($("#recherche_textuelle").val(), { wordsOnly: true }, { caseSensitive: false });
                 });
             }
         }
@@ -636,7 +637,6 @@ function cleanRequest()
 
             $('.requeteNom').html('');
             $('.requeteNom').data('id', '');
-            $("#bloc_filtres").hide();
 
             $('#categ_production_select option').each(function() {
                 $("#categ_production_select").multiselect('deselect', $(this).val());
@@ -666,6 +666,10 @@ function cleanRequest()
                     $('.requete h2').html( 'Requête de recherche' );
                     $('#resultats').html('');
 
+                    hasResultat = false;
+
+                    affichagePlaceholder();
+
                     loader.finished();
                 }
             });
@@ -675,23 +679,112 @@ function cleanRequest()
     });
 }
 
+/**
+ * Fonction permettant de gerer l'affichage du bloc placeholder
+ *
+ * @return Void
+ */
+function affichagePlaceholder()
+{
+
+    //Dans le cas où il n'y a pas de résultat
+    if(hasResultat)
+    {
+        $(".placeholder").hide();
+        $("#bloc_filtres").show();
+        showPlaceholder = false;
+        $("#dest").removeClass('hide');
+        $(".requete h2").addClass('ropen');
+    }
+    else if(isEmpty($('#resultats')))
+    {
+        $(".arbo-requete").find('li').addClass('hide');
+        $(".placeholder").show();
+        $("#bloc_filtres").hide();
+        showPlaceholder = true;
+        $("#dest").addClass('hide');
+        $(".requete h2").removeClass('ropen rclose');
+    }
+
+    placeholderExalead();
+}
+
+function placeholderExalead()
+{
+    if(hasResultat)
+    {
+        $("#recherche_textuelle").attr('placeholder', 'Filtrer les résultats par mots clés');
+    }
+    else
+    {
+        $("#recherche_textuelle").attr('placeholder', 'Ou rechercher des résultats par mot-clés');
+    }
+}
+
 function isEmpty( el ){
       return !$.trim(el.html())
   }
 
-// Création d'un mini plugin pour surligner des éléments
-(function($) {
- 
-    function highlight($el, word) {
-        var text = $el.html();
-        text = text.replace(new RegExp(word,'i','g'), '<span class="hl">'+word+'</span>');
-        $el.html(text);
+
+//Plugin de highlight
+
+jQuery.fn.highlight = function(pat) {
+ function innerHighlight(node, pat) {
+
+  pat =  pat.replace('*', '');
+
+  var skip = 0;
+  if (node.nodeType == 3) {
+   var pos = node.data.toUpperCase().indexOf(pat);
+   if (pos >= 0) {
+    var spannode = document.createElement('span');
+    spannode.className = 'highlight';
+    var middlebit = node.splitText(pos);
+    var endbit = middlebit.splitText(pat.length);
+    var middleclone = middlebit.cloneNode(true);
+    spannode.appendChild(middleclone);
+    middlebit.parentNode.replaceChild(spannode, middlebit);
+    skip = 1;
+   }
+  }
+  else if (node.nodeType == 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
+   for (var i = 0; i < node.childNodes.length; ++i) {
+    i += innerHighlight(node.childNodes[i], pat);
+   }
+  }
+  return skip;
+ }
+ return this.each(function() {
+  innerHighlight(this, pat.toUpperCase());
+ });
+};
+
+jQuery.fn.removeHighlight = function() {
+ function newNormalize(node) {
+    for (var i = 0, children = node.childNodes, nodeCount = children.length; i < nodeCount; i++) {
+        var child = children[i];
+        if (child.nodeType == 1) {
+            newNormalize(child);
+            continue;
+        }
+        if (child.nodeType != 3) { continue; }
+        var next = child.nextSibling;
+        if (next == null || next.nodeType != 3) { continue; }
+        var combined_text = child.nodeValue + next.nodeValue;
+        new_node = node.ownerDocument.createTextNode(combined_text);
+        node.insertBefore(new_node, child);
+        node.removeChild(child);
+        node.removeChild(next);
+        i--;
+        nodeCount--;
     }
-     
-    $.fn.highlight = function(word) {
-        return this.each(function() {
-            highlight($(this), word);
-        });
-    };
-     
-}(jQuery));
+ }
+
+ return this.find("span.highlight").each(function() {
+    var thisParent = this.parentNode;
+    thisParent.replaceChild(this.firstChild, this);
+    newNormalize(thisParent);
+ }).end();
+};
+
+//Plugin pour enlever les accents

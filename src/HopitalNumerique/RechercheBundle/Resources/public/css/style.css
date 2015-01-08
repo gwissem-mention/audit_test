@@ -27,6 +27,8 @@
 
     #recherche .requete #dest #arbo-type-prod li span{color: #000000;font-size: 12px;text-transform: none;}
 
+    #recherche .requete hr { margin-top : 10px; margin-bottom: 10px;}
+
 /* Orgine */
     /* Parents */
     #recherche #origin ol{padding : 0;}
@@ -61,7 +63,7 @@
     /* Liste déroulante */
     .multiselect-container.dropdown-menu{width: 100%; z-index: 110;}
     .multiselect-container.dropdown-menu .loader .loaderBackground{z-index:120;}
-    #recherche button.multiselect {margin-top : 10px; text-align: left;}
+    #recherche button.multiselect {text-align: left;}
     #recherche button.multiselect .caret{text-align: right;}
 
     /* Zone de recherche textuelle */
@@ -141,4 +143,19 @@
     #resultats #ressources .results .carousel-inner{width:92%;}
 
     #mesrequetes.open{width: 100%; max-width: 100%}
+}
+
+.highlight {
+    background-color: #fff34d;
+    -moz-border-radius: 5px; /* FF1+ */
+    -webkit-border-radius: 5px; /* Saf3-4 */
+    border-radius: 5px; /* Opera 10.5, IE 9, Saf5, Chrome */
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); /* FF3.5+ */
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); /* Saf3.0+, Chrome */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); /* Opera 10.5+, IE 9.0 */
+}
+
+.highlight {
+    padding:1px 4px;
+    margin:0 -4px;
 }
