@@ -4,6 +4,7 @@ var ajaxRequeteResultat;
 var hasResultat =false;
 
 $(document).ready(function() {
+    $("#bloc_filtres").hide();
 
     //Gestion de l'ajout de critères dans la requete
     $('#origin li span').on("click", function(e){
@@ -84,13 +85,42 @@ $(document).ready(function() {
         $.removeCookie('showMoreProductions', { path: '/' });
             
         updateResultats( false );
+
+        if( $(".arbo-requete").find('li:not(.hide)').length == 0 
+            && ($("#recherche_textuelle").val() == '') ) 
+        {
+            if(ajaxRequeteResultat != null )
+            {
+                ajaxRequeteResultat.abort();
+            }
+
+            //AJAX call for results
+            ajaxRequeteResultat = $.ajax({
+                url  : $('#resultats-url').val(),
+                data : {
+                    references         : getReferences(),
+                    cleanSession       : true,
+                    categPointDur      : $("#categ_production_select_vals").val(),
+                    rechercheTextuelle : $("#recherche_textuelle").val()
+                },
+                type    : 'POST',
+                success : function( data ){
+                    $('.requete h2').html( 'Requête de recherche' );
+                    $('#resultats').html('');
+
+                    hasResultat = false;
+
+                    affichagePlaceholder();
+                }
+            });
+        }
     });
 
     //toggle des paramètres de la requete
     $('.requete h2').on('click', function(){
         if( $(this).hasClass('ropen') || $(this).hasClass('rclose') ) {
             $(this).toggleClass('ropen rclose');
-            $('#dest').slideToggle({duration: 200});
+            $('#blocRequeteRecherche').slideToggle({duration: 200});
         }
     });
 
@@ -228,6 +258,35 @@ $(document).ready(function() {
         $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
 
         updateResultats( true );
+
+        if( $(".arbo-requete").find('li:not(.hide)').length == 0 
+            && ($("#recherche_textuelle").val() == '') ) 
+        {
+            if(ajaxRequeteResultat != null )
+            {
+                ajaxRequeteResultat.abort();
+            }
+            
+            //AJAX call for results
+            ajaxRequeteResultat = $.ajax({
+                url  : $('#resultats-url').val(),
+                data : {
+                    references         : getReferences(),
+                    cleanSession       : true,
+                    categPointDur      : $("#categ_production_select_vals").val(),
+                    rechercheTextuelle : $("#recherche_textuelle").val()
+                },
+                type    : 'POST',
+                success : function( data ){
+                    $('.requete h2').html( 'Requête de recherche' );
+                    $('#resultats').html('');
+
+                    hasResultat = false;
+
+                    affichagePlaceholder();
+                }
+            });
+        }
     });
 
     affichagePlaceholder();
@@ -393,6 +452,8 @@ function handleParentsDestination( item )
                 showPlaceholder = true;
                 $("#dest").addClass('hide');
                 $(".requete h2").removeClass('ropen rclose');
+
+                placeholderExalead();
             }
             else
             {
@@ -468,6 +529,8 @@ function updateResultats( cleanSession )
                     //$(this).highlight($("#recherche_textuelle").val(), { wordsOnly: true }, { caseSensitive: false });
                 });
             }
+
+            placeholderExalead();
         }
     });
 }
@@ -687,7 +750,10 @@ function cleanRequest()
  */
 function affichagePlaceholder()
 {
+    // alert('hasResultat : ' + hasResultat);
+    // alert('hasResultat : ' + isEmpty($('#resultats')));
 
+    //Cas où on supprime tout les critères de recherche et vide le texte, le hasResultat est encore à true avant le raffraichissement
     //Dans le cas où il n'y a pas de résultat
     if(hasResultat)
     {
@@ -705,6 +771,10 @@ function affichagePlaceholder()
         showPlaceholder = true;
         $("#dest").addClass('hide');
         $(".requete h2").removeClass('ropen rclose');
+    }
+    else
+    {
+        $("#bloc_filtres").show();
     }
 
     placeholderExalead();
@@ -787,4 +857,3 @@ jQuery.fn.removeHighlight = function() {
     newNormalize(thisParent);
  }).end();
 };
-
