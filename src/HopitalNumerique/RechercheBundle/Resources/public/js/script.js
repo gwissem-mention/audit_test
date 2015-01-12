@@ -93,38 +93,7 @@ $(document).ready(function() {
             
         updateResultats( false );
 
-        if( $(".arbo-requete").find('li:not(.hide)').length == 0 
-            && ($("#recherche_textuelle").val() == '') ) 
-        {
-            var loader = $('#resultats').nodevoLoader().start();
-            
-            if(ajaxRequeteResultat != null )
-            {
-                ajaxRequeteResultat.abort();
-            }
-
-            //AJAX call for results
-            ajaxRequeteResultat = $.ajax({
-                url  : $('#resultats-url').val(),
-                data : {
-                    references         : getReferences(),
-                    cleanSession       : true,
-                    categPointDur      : $("#categ_production_select_vals").val(),
-                    rechercheTextuelle : $("#recherche_textuelle").val()
-                },
-                type    : 'POST',
-                success : function( data ){
-                    $('.requete h2').html( 'Requête de recherche' );
-                    $('#resultats').html('');
-
-                    hasResultat = false;
-
-                    affichagePlaceholder();
-                    
-                    loader.finished();
-                }
-            });
-        }
+        resetRequete();
     });
 
     
@@ -276,43 +245,7 @@ $(document).ready(function() {
 
         updateResultats( true );
 
-        if( $(".arbo-requete").find('li:not(.hide)').length == 0 
-            && ($("#recherche_textuelle").val() == '') ) 
-        {
-            $('#categ_production_select option').each(function() {
-                $("#categ_production_select").multiselect('deselect', $(this).val());
-            })
-            $('#example-reset').multiselect('refresh');
-
-            var loader = $('#resultats').nodevoLoader().start();
-
-            if(ajaxRequeteResultat != null )
-            {
-                ajaxRequeteResultat.abort();
-            }
-            
-            //AJAX call for results
-            ajaxRequeteResultat = $.ajax({
-                url  : $('#resultats-url').val(),
-                data : {
-                    references         : getReferences(),
-                    cleanSession       : true,
-                    categPointDur      : $("#categ_production_select_vals").val(),
-                    rechercheTextuelle : $("#recherche_textuelle").val()
-                },
-                type    : 'POST',
-                success : function( data ){
-                    $('.requete h2').html( 'Requête de recherche' );
-                    $('#resultats').html('');
-
-                    hasResultat = false;
-
-                    affichagePlaceholder();
-
-                    loader.finished();
-                }
-            });
-        }
+        resetRequete();
     });
 
     
@@ -355,6 +288,7 @@ function handleRequestForRecherche()
     });
 
     updateResultats( false );
+    resetRequete();
 }
 
 /**
@@ -482,10 +416,7 @@ function handleParentsDestination( item )
 
                 placeholderExalead();
 
-                $('#categ_production_select option').each(function() {
-                    $("#categ_production_select").multiselect('deselect', $(this).val());
-                })
-                $('#example-reset').multiselect('refresh');
+                resetRequete();
             }
             else
             {
@@ -773,6 +704,47 @@ function cleanRequest()
             history.pushState({ path: this.path }, '', $('#search-homepage-url').val() );
         }
     });
+}
+
+function resetRequete()
+{
+    if( $(".arbo-requete").find('li:not(.hide)').length == 0 
+        && ($("#recherche_textuelle").val() == '') ) 
+    {
+        var loader = $('#resultats').nodevoLoader().start();
+        
+        if(ajaxRequeteResultat != null )
+        {
+            ajaxRequeteResultat.abort();
+        } 
+
+        $('#categ_production_select option').each(function() {
+            $("#categ_production_select").multiselect('deselect', $(this).val());
+        })
+        $('#example-reset').multiselect('refresh');  
+
+        //AJAX call for results
+        ajaxRequeteResultat = $.ajax({
+            url  : $('#resultats-url').val(),
+            data : {
+                references         : getReferences(),
+                cleanSession       : true,
+                categPointDur      : $("#categ_production_select_vals").val(),
+                rechercheTextuelle : $("#recherche_textuelle").val()
+            },
+            type    : 'POST',
+            success : function( data ){
+                $('.requete h2').html( 'Requête de recherche' );
+                $('#resultats').html('');
+
+                hasResultat = false;
+
+                affichagePlaceholder();
+                
+                loader.finished();
+            }
+        });
+    }
 }
 
 /**
