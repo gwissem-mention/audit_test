@@ -669,6 +669,8 @@ function cleanRequest()
                 $("#categ_production_select").multiselect('deselect', $(this).val());
             })
             $('#example-reset').multiselect('refresh');
+            $('#categ_production_select_vals').val('');
+            $('#categ_production_select_vals_chargement').val('');
 
             $('#resultats')
 
@@ -721,7 +723,9 @@ function resetRequete()
         $('#categ_production_select option').each(function() {
             $("#categ_production_select").multiselect('deselect', $(this).val());
         })
-        $('#example-reset').multiselect('refresh');  
+        $('#example-reset').multiselect('refresh');
+        $('#categ_production_select_vals').val('');
+        $('#categ_production_select_vals_chargement').val('');
 
         //AJAX call for results
         ajaxRequeteResultat = $.ajax({
