@@ -108,7 +108,7 @@
         #resultats #ressources .results h4 a{color: #ffffff; font-size: 12px; }
         #resultats #ressources .results p{color: #ffffff; font-size: 12px; font-weight: normal; height: 65px; overflow-y:auto;}
         #resultats #ressources .results p.noresult{margin-top:29px;}
-        #resultats #ressources .results .carousel-indicators{bottom: 0}
+        #resultats #ressources .results .carousel-indicators{bottom: 0; display:none;}
         #resultats #ressources .results .carousel-inner{margin-left:25px;width:244px;}
         #resultats #ressources .results .carousel-control{width:1%;}
         #resultats #ressources .results .carousel-control span{font-size:18px; margin-left: 0}
@@ -124,7 +124,7 @@
         #resultats #forum .results h4 a{color: #ffffff; font-size: 12px; }
         #resultats #forum .results p{color: #ffffff; font-size: 12px; font-weight: normal;height: 85px; overflow-y:auto;}
         #resultats #forum .results p.noresult{margin-top:29px;}
-        #resultats #forum .results .carousel-indicators{bottom: 0}
+        #resultats #forum .results .carousel-indicators{bottom: 0; display:none;}
         #resultats #forum .results .carousel-inner{padding:0 25px 25px 25px}
         #resultats #forum .results .carousel-control{width:1%;}
         #resultats #forum .results .carousel-control span{font-size:18px; margin-left: 0}

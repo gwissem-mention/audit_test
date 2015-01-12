@@ -111,10 +111,8 @@
 
                                             {% if tauxChapitre != 0 %}
                                                 {% set value = panel.value|number_format(0) ~ '%' %}
-                                                <div class="cursor" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{value}}" title="<span>Score : {{value}}</span>" ></div>
-                                                {% if pdf %}
-                                                    <div class="cursor-value" style="left:{{value}}">{{value}}</div>
-                                                {% endif %}
+                                                <div class="cursor" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{value}}" title="" ></div>
+                                                <div class="cursor-value" style="left:{{value}}">{{value}}</div>
                                             {% endif %}
 
                                             {% if panel.max is not null and tauxChapitre != 0 %}
