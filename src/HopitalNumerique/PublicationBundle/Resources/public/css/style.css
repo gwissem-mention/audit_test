@@ -159,7 +159,7 @@
     #autresResultats .separator{height: 20px}
 
     /* Caroussel common */
-    #autresResultats .carousel-indicators{bottom: 0; width: 95%; left:0; margin: 0 15px 10px}
+    #autresResultats .carousel-indicators{bottom: 0; width: 95%; left:0; margin: 0 15px 10px; display: none;}
     #autresResultats .carousel-indicators li{background-color:#d2d1d1; }
     #autresResultats .carousel-indicators .active{background-color:#703695 }
     #autresResultats .carousel-inner{margin-left:25px;width:90%;}
