@@ -59,7 +59,7 @@ class RemboursementManager extends BaseManager
 
             //build objet
             $row->id       = $formation->getId();
-            $row->date     = $formation->getDateInscription();
+            $row->date     = $formation->getSession()->getDateSession();
             $row->referent = '-';
             $row->etab     = '-';
             $row->type     = 'Module : ' . $formation->getSession()->getModule()->getTitre();
