@@ -32,8 +32,42 @@
     {% endjavascripts %}
     <script type="text/javascript">
         {% if refs == '[]' %} hasResultat = true;{% else %} hasResultat = false;{% endif %};
-    </script>
 
+        $(document).ready(function() {
+            if( $(".arbo-requete").find('li:not(.hide)').length == 0 
+                && ($("#recherche_textuelle").val() == '') ) 
+            {
+                var loader = $('#resultats').nodevoLoader().start();
+                
+                if(ajaxRequeteResultat != null )
+                {
+                    ajaxRequeteResultat.abort();
+                }   
+
+                //AJAX call for results
+                ajaxRequeteResultat = $.ajax({
+                    url  : $('#resultats-url').val(),
+                    data : {
+                        references         : getReferences(),
+                        cleanSession       : true,
+                        categPointDur      : $("#categ_production_select_vals").val(),
+                        rechercheTextuelle : $("#recherche_textuelle").val()
+                    },
+                    type    : 'POST',
+                    success : function( data ){
+                        $('.requete h2').html( 'Requête de recherche' );
+                        $('#resultats').html('');
+
+                        hasResultat = false;
+
+                        affichagePlaceholder();
+                        
+                        loader.finished();
+                    }
+                });
+            }
+        });
+    </script>
 {% endblock %}
 
 {% block body %}
