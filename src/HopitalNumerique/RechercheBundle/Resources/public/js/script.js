@@ -49,7 +49,6 @@ $(document).ready(function() {
             
             if( !$(this).parent().hasClass('level0') )
             {
-                alert('update 1');
                 updateResultats( false );
             }
 
@@ -79,7 +78,6 @@ $(document).ready(function() {
         
         if( !$(this).parent().hasClass('level0') )
         {
-            alert('update 2');
             updateResultats( false );
         }
     });
@@ -93,7 +91,6 @@ $(document).ready(function() {
         $.removeCookie('showMorePointsDurs', { path: '/' });
         $.removeCookie('showMoreProductions', { path: '/' });
             
-                alert('update 3');
         updateResultats( false );
 
         if( $(".arbo-requete").find('li:not(.hide)').length == 0 
@@ -209,7 +206,6 @@ $(document).ready(function() {
         $("#dest").removeClass('hide');
         $(".requete h2").addClass('ropen');
 
-                alert('update 4');
         updateResultats( true );
     }
 
@@ -239,7 +235,6 @@ $(document).ready(function() {
             }
         });
 
-                alert('update 5');
         updateResultats( true );
     });
 
@@ -279,7 +274,6 @@ $(document).ready(function() {
         //Mise à jour du cradre "Requete de recherche"
         $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
 
-                alert('update 6');
         updateResultats( true );
 
         if( $(".arbo-requete").find('li:not(.hide)').length == 0 
@@ -522,7 +516,6 @@ function showItemOriginRecursive( item )
  */
 function updateResultats( cleanSession )
 {
-    alert('In update');
     var loader = $('#resultats').nodevoLoader().start();
 
     if(ajaxRequeteResultat != null )
@@ -693,7 +686,6 @@ function saveRequest( user )
  */
 function handleRequeteSave( r, id )
 {
-    alert('handleRequeteSave');
     $.ajax({
         url  : $('#requete-save-url').val(),
         data : {
