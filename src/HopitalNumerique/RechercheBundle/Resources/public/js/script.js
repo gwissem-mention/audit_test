@@ -89,6 +89,8 @@ $(document).ready(function() {
         if( $(".arbo-requete").find('li:not(.hide)').length == 0 
             && ($("#recherche_textuelle").val() == '') ) 
         {
+            var loader = $('#resultats').nodevoLoader().start();
+            
             if(ajaxRequeteResultat != null )
             {
                 ajaxRequeteResultat.abort();
@@ -111,6 +113,8 @@ $(document).ready(function() {
                     hasResultat = false;
 
                     affichagePlaceholder();
+                    
+                    loader.finished();
                 }
             });
         }
@@ -262,6 +266,13 @@ $(document).ready(function() {
         if( $(".arbo-requete").find('li:not(.hide)').length == 0 
             && ($("#recherche_textuelle").val() == '') ) 
         {
+            $('#categ_production_select option').each(function() {
+                $("#categ_production_select").multiselect('deselect', $(this).val());
+            })
+            $('#example-reset').multiselect('refresh');
+
+            var loader = $('#resultats').nodevoLoader().start();
+
             if(ajaxRequeteResultat != null )
             {
                 ajaxRequeteResultat.abort();
@@ -284,6 +295,8 @@ $(document).ready(function() {
                     hasResultat = false;
 
                     affichagePlaceholder();
+
+                    loader.finished();
                 }
             });
         }

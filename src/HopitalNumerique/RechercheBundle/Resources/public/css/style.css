@@ -154,8 +154,6 @@
     -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); /* Saf3.0+, Chrome */
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); /* Opera 10.5+, IE 9.0 */
 }
-
-.highlight {
-    padding:1px 4px;
-    margin:0 -4px;
-}
+.highlight {padding:1px 1px;margin:0 0px;}
+#ressources .highlight {color:#070707;}
+#forum .highlight {color:#070707;}
