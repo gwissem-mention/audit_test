@@ -747,9 +747,9 @@ class FrontController extends Controller
             'header-left'      => $toolTitle->supprimeAccents() . ' - ' . (trim($toolName->supprimeAccents()) != "" ? ($toolName->supprimeAccents() . ' - ') : '') . $resultat->getDateLastSave()->format('d/m/Y') ,
             'footer-spacing'   => '10',
             'footer-html'      => '<p style="font-size:10px;text-align:center;color:#999">
-                                     &copy; ANAP - Mon H&ocirc;pital Num&eacute;rique<br/>
-                                     Ces contenus extraits de la plateforme de l\'Anap www.MonHopitalNumerique.fr sont diffus&eacute;s gratuitement.<br/>
-                                     Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP - Mon H&ocirc;pital Num&eacute;rique"'
+                                     &copy; ANAP<br/>
+                                     Ces contenus extraits de l\'Anap sont diffus&eacute;s gratuitement.<br/>
+                                     Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP"'
         );
 
         $html = str_replace('/publication', $request->getSchemeAndHttpHost() . '/publication', $html);
