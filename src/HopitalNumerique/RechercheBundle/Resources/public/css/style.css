@@ -67,6 +67,7 @@
     #recherche button.multiselect .caret{text-align: right;}
 
     /* Zone de recherche textuelle */
+    #recherche #recherche_textuelle { z-index: 1}
     #recherche #recherche_textuelle_group{margin-bottom: 10px;margin-top : 10px;}
     #recherche #arbo-type-prod { padding: 0;}
     #recherche #arbo-recherche-textuelle { padding: 0;}
