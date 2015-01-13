@@ -109,47 +109,7 @@ class SearchController extends Controller
         $rechercheTextuelle                 = $request->request->get('rechercheTextuelle');
         $resultatsTrouveeRechercheTextuelle = true;
         //^^^^^
-
-        //Filtre uniquement si pas vide
-        if(!empty($categPointDur))
-        { 
-            $categPointDurIdsArray = explode(',', $categPointDur);
-            $categPointDurArray    = array();
-
-            foreach ($categPointDurIdsArray as $categPointDurId) 
-            {
-                $categPointDurArray[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $categPointDurId))->getLibelle();
-            }
-
-            foreach ($objets as $key => $objet) 
-            {
-               if($objet["categ"] === "production")
-               {
-                    //Récupèration de tout les types de l'objet
-                    $types = explode('♦', $objet["type"]);
-                    $isInArray = false;
-                    foreach ($types as $type) 
-                    {
-                        if(in_array(trim($type), $categPointDurArray))
-                        {
-                            $isInArray = true;
-                            break;
-                        }
-                    }
-
-                    if(!$isInArray)
-                    {
-                        //Supprime l'élément du tableau
-                        unset($objets[$key]);
-                    }
-                }
-            }
-        }
-        else
-        {
-            $categPointDurIdsArray = array();
-        }
-
+        
         //vvvvv GME 21/11/2014 : Exalead
         if(trim($rechercheTextuelle) !== "")
         {
@@ -202,6 +162,46 @@ class SearchController extends Controller
             }
         }
         //^^^^^
+
+        //Filtre uniquement si pas vide
+        if(!empty($categPointDur))
+        { 
+            $categPointDurIdsArray = explode(',', $categPointDur);
+            $categPointDurArray    = array();
+
+            foreach ($categPointDurIdsArray as $categPointDurId) 
+            {
+                $categPointDurArray[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $categPointDurId))->getLibelle();
+            }
+
+            foreach ($objets as $key => $objet) 
+            {
+               if($objet["categ"] === "production")
+               {
+                    //Récupèration de tout les types de l'objet
+                    $types = explode('♦', $objet["type"]);
+                    $isInArray = false;
+                    foreach ($types as $type) 
+                    {
+                        if(in_array(trim($type), $categPointDurArray))
+                        {
+                            $isInArray = true;
+                            break;
+                        }
+                    }
+
+                    if(!$isInArray)
+                    {
+                        //Supprime l'élément du tableau
+                        unset($objets[$key]);
+                    }
+                }
+            }
+        }
+        else
+        {
+            $categPointDurIdsArray = array();
+        }
 
         foreach ($objets as $key => $objet) 
         {

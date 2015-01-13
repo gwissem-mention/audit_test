@@ -30,6 +30,13 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    <script type="text/javascript">
+        {% if refs == '[]' %} hasResultat = true;{% else %} hasResultat = false;{% endif %};
+
+        $(document).ready(function() {
+            resetRequete();
+        });
+    </script>
 {% endblock %}
 
 {% block body %}
@@ -50,69 +57,76 @@
         <div class="col-md-8">
             <div class="requete">
                 <h2 class="violet {% if refs != '[]' %}ropen{% endif %}">Requête de recherche</h2>
+                <div id="blocRequeteRecherche">
     
-                <div class="placeholder" {% if refs != '[]' %}style="display:none"{% endif %}>
-                    <p class="text-muted">Ici seront placés les critères de recherche que vous aurez choisis dans le référentiel à gauche. Pour voir le détail d'un critère, cliquer sur le texte ou le chevron. Pour choisir un critère, cliquer sur le signe + ou double cliquer sur le texte.</p>
-                    <p class="text-muted">Les résultats correspondant aux critères sont répartis en 4 catégories : les points durs (les questions communes aux établissements de santé), les productions ANAP, les productions externes à l'ANAP, et les fils de discussion au forum.</p>
-                    <p class="text-muted">Vous pouvez sauvegarder vos critères de recherche dans votre espace personnel.</p>
-                </div>
-
-                <div id="dest" {% if refs == '[]' %}class="hide"{% endif %} >
-                    <div class="requeteNom pull-right text-muted" {% if requete %}data-id="{{requete.id}}"{% else %}style="display:none" data-id=""{% endif %} >
-                        {% if requete %}{{requete.nom}}{% endif %}
+                    <div class="placeholder" {% if refs != '[]' %}style="display:none"{% endif %}>
+                        <p class="text-muted">Ici seront placés les critères de recherche que vous aurez choisis dans le référentiel à gauche. Pour voir le détail d'un critère, cliquer sur le texte ou le chevron. Pour choisir un critère, cliquer sur le signe + ou double cliquer sur le texte.</p>
+                        <p class="text-muted">Les résultats correspondant aux critères sont répartis en 4 catégories : les points durs (les questions communes aux établissements de santé), les productions ANAP, les productions externes à l'ANAP, et les fils de discussion au forum.</p>
                     </div>
 
-                    {% if refs != '[]' %}
-                        <script type="text/javascript">showPlaceholder = false;</script>
-                    {% endif %}
+                    <div id="dest" {% if refs == '[]' %}class="hide"{% endif %} >
+                        <div class="requeteNom pull-right text-muted" {% if requete %}data-id="{{requete.id}}"{% else %}style="display:none" data-id=""{% endif %} >
+                            {% if requete %}{{requete.nom}}{% endif %}
+                        </div>
 
-                    {% if not app.user or app.user|checkAuthorization( path('hopital_numerique_requete_homepage') ) %}
-                        <div class="btn btn-xs btn-success" onclick="saveRequest( '{{ app.user }}' );" >Enregistrer ma requête</div>
-                    {% endif %}
-                        <div class="btn btn-xs btn-danger" onclick="cleanRequest();" >Réinitialiser ma requête</div>
-                    <hr />
+                        {% if refs != '[]' %}
+                            <script type="text/javascript">showPlaceholder = false;</script>
+                        {% endif %}
 
-                    <span><strong>Mes critères de recherche</strong></span>
-                    <ol class="arbo-requete">
-                        {{ mySelf.buildTree(elements, 0, 'hide') }}
-                    </ol>
-
-                    {# GME 05/01/15 : Les résultats du filtre ET la recherche textuelle doivent être cachés #}
-                    <div class="hide">
-
-                    <hr />
-
-                    <span><strong>Ma recherche textuelle</strong></span><br />
-                    <span id="arbo-recherche-textuelle">
-                    </span>
+                        {% if not app.user or app.user|checkAuthorization( path('hopital_numerique_requete_homepage') ) %}
+                            <div class="btn btn-xs btn-success" onclick="saveRequest( '{{ app.user }}' );" >Enregistrer ma requête</div>
+                        {% endif %}
+                            <div class="btn btn-xs btn-danger" onclick="cleanRequest();" >Réinitialiser ma requête</div>
                         <hr />
 
-                        <ol id="arbo-type-prod">
+                        <span><strong>Mes critères de recherche</strong></span>
+                        <ol class="arbo-requete">
+                            {{ mySelf.buildTree(elements, 0, 'hide') }}
                         </ol>
-                    </div>    
-                </div>    
-            </div>
 
-            <div id="bloc_filtres">
+                        {# GME 05/01/15 : Les résultats du filtre ET la recherche textuelle doivent être cachés #}
+                        <div class="hide">
 
-                <div {% if not activationExalead %}style="display:none"{% endif %}>
-                    <div id="recherche_textuelle_group" class="input-group" style="z-index:0">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                        <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control col-md-12" placeholder="Filtrer les résultats..." value="{{rechercheTextuelle}}" />
-                      <span class="input-group-btn">
-                        <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
-                      </span>
+                        <hr />
+
+                        <span><strong>Ma recherche textuelle</strong></span><br />
+                        <span id="arbo-recherche-textuelle">
+                        </span>
+                            <hr />
+
+                            <ol id="arbo-type-prod">
+                            </ol>
+                        </div>    
+                    </div> 
+
+                    <hr />
+
+                    <div {% if not activationExalead %}style="display:none"{% endif %}>
+                        <div id="recherche_textuelle_group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control col-md-12" value="{{rechercheTextuelle}}" />
+                                  <span class="input-group-btn">
+                                    <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                                  </span>
+                                <input type="hidden" id="recherche_textuelle_minifie" value="{{categoriesProductionActif}}" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="bloc_filtres">
+                    
+                        <hr />
+
+                        <select multiple="multiple" class="form-control" placeholder="Sélectionnez un filtre pour un point dur" name="categ_production_select" id="categ_production_select" style="height:200px;">
+                            {% for categorieProduction in categoriesProduction %}
+                                <option value="{{categorieProduction.id}}" >{{categorieProduction.libelle}}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" id="categ_production_select_vals" value="{{categoriesProductionActif}}" />
+                        <input type="hidden" id="categ_production_select_vals_chargement" value="{{categoriesProductionActifJSON}}" />
                     </div>
                 </div>
-
-                <select multiple="multiple" class="form-control" placeholder="" name="categ_production_select" id="categ_production_select" style="height:200px;">
-                    {% for categorieProduction in categoriesProduction %}
-                        <option value="{{categorieProduction.id}}" >{{categorieProduction.libelle}}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" id="categ_production_select_vals" value="{{categoriesProductionActif}}" />
-                <input type="hidden" id="categ_production_select_vals_chargement" value="{{categoriesProductionActifJSON}}" />
-
             </div>
             
             <div id="resultats"></div>

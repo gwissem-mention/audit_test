@@ -1,8 +1,11 @@
 var DELAY = 200, clicks = 0, timer = null, showPlaceholder = true;
 
 var ajaxRequeteResultat;
+var hasResultat =false;
 
 $(document).ready(function() {
+    var hasResultat =false;
+    $("#bloc_filtres").hide();
 
     //Gestion de l'ajout de critères dans la requete
     $('#origin li span').on("click", function(e){
@@ -45,7 +48,9 @@ $(document).ready(function() {
             $.removeCookie('showMoreProductions', { path: '/' });
             
             if( !$(this).parent().hasClass('level0') )
+            {
                 updateResultats( false );
+            }
 
             clicks = 0; //after action performed, reset counter
         }
@@ -54,6 +59,7 @@ $(document).ready(function() {
         e.preventDefault(); //cancel system double-click event
     });
 
+    
     //Gestion du simple click sur le petit +
     $('#origin li i.fa-plus-circle').on("click", function(e){
         success = selectElement( $(this).parent() ); //add element to DEST
@@ -71,9 +77,12 @@ $(document).ready(function() {
         $.removeCookie('showMoreProductions', { path: '/' });
         
         if( !$(this).parent().hasClass('level0') )
+        {
             updateResultats( false );
+        }
     });
 
+    
     //Gestion de la suppression de critères dans la requete
     $('.arbo-requete span').on("click", function(e){
         removeElement( $(this).parent() ); //remove element from DEST
@@ -83,22 +92,27 @@ $(document).ready(function() {
         $.removeCookie('showMoreProductions', { path: '/' });
             
         updateResultats( false );
+
+        resetRequete();
     });
 
+    
     //toggle des paramètres de la requete
     $('.requete h2').on('click', function(){
         if( $(this).hasClass('ropen') || $(this).hasClass('rclose') ) {
             $(this).toggleClass('ropen rclose');
-            $('#dest').slideToggle({duration: 200});
+            $('#blocRequeteRecherche').slideToggle({duration: 200});
         }
     });
 
+    
     //init : open first categ
     $('#origin li.level0:first').addClass('active').find('ol:first').slideDown();
 
     if( $('#requete-refs').val() != '[]')
         handleRequestForRecherche();
 
+    
     $('a.synthese').fancybox({
         'padding'   : 0,
         'autoSize'  : false,
@@ -139,6 +153,7 @@ $(document).ready(function() {
         }
     });
 
+    
     //On enlève le placeholder
     if($("#recherche_textuelle").val() != '')
     {
@@ -163,6 +178,7 @@ $(document).ready(function() {
         updateResultats( true );
     }
 
+    
     //Recherche textuelle
     $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
     
@@ -191,6 +207,7 @@ $(document).ready(function() {
         updateResultats( true );
     });
 
+    
     $("#recherche_textuelle").change(function(){
 
         if($("#recherche_textuelle").val() != '')
@@ -227,12 +244,12 @@ $(document).ready(function() {
         $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
 
         updateResultats( true );
+
+        resetRequete();
     });
 
-    if (isEmpty($('#resultats')))
-    {
-        $("#bloc_filtres").hide();
-    }
+    
+    affichagePlaceholder();
 });
 
 //fancybox daffichage de la synthese
@@ -271,6 +288,7 @@ function handleRequestForRecherche()
     });
 
     updateResultats( false );
+    resetRequete();
 }
 
 /**
@@ -395,6 +413,10 @@ function handleParentsDestination( item )
                 showPlaceholder = true;
                 $("#dest").addClass('hide');
                 $(".requete h2").removeClass('ropen rclose');
+
+                placeholderExalead();
+
+                resetRequete();
             }
             else
             {
@@ -445,6 +467,8 @@ function updateResultats( cleanSession )
         success : function( data ){
             $('#resultats').html( data );
 
+            hasResultat = isEmpty($('#resultats')) ? false : true;
+
             if( $('#dest li:not(.hide)').length == 0 && $("#recherche_textuelle").val() == '')
             {
                 $('.requete h2').html( 'Requête de recherche' );
@@ -464,9 +488,12 @@ function updateResultats( cleanSession )
             if($("#recherche_textuelle").val() != "")
             {
                 $("#resultats p, #resultats h5, #resultats a").each(function(){
-                    $(this).highlight($("#recherche_textuelle").val());
+                    $(this).highlight( $("#recherche_textuelle").val() );
+                    //$(this).highlight($("#recherche_textuelle").val(), { wordsOnly: true }, { caseSensitive: false });
                 });
             }
+
+            placeholderExalead();
         }
     });
 }
@@ -637,12 +664,13 @@ function cleanRequest()
 
             $('.requeteNom').html('');
             $('.requeteNom').data('id', '');
-            $("#bloc_filtres").hide();
 
             $('#categ_production_select option').each(function() {
                 $("#categ_production_select").multiselect('deselect', $(this).val());
             })
             $('#example-reset').multiselect('refresh');
+            $('#categ_production_select_vals').val('');
+            $('#categ_production_select_vals_chargement').val('');
 
             $('#resultats')
 
@@ -667,6 +695,10 @@ function cleanRequest()
                     $('.requete h2').html( 'Requête de recherche' );
                     $('#resultats').html('');
 
+                    hasResultat = false;
+
+                    affichagePlaceholder();
+
                     loader.finished();
                 }
             });
@@ -676,23 +708,157 @@ function cleanRequest()
     });
 }
 
+function resetRequete()
+{
+    if( $(".arbo-requete").find('li:not(.hide)').length == 0 
+        && ($("#recherche_textuelle").val() == '') ) 
+    {
+        var loader = $('#resultats').nodevoLoader().start();
+        
+        if(ajaxRequeteResultat != null )
+        {
+            ajaxRequeteResultat.abort();
+        } 
+
+        $('#categ_production_select option').each(function() {
+            $("#categ_production_select").multiselect('deselect', $(this).val());
+        })
+        $('#example-reset').multiselect('refresh');
+        $('#categ_production_select_vals').val('');
+        $('#categ_production_select_vals_chargement').val('');
+
+        //AJAX call for results
+        ajaxRequeteResultat = $.ajax({
+            url  : $('#resultats-url').val(),
+            data : {
+                references         : getReferences(),
+                cleanSession       : true,
+                categPointDur      : $("#categ_production_select_vals").val(),
+                rechercheTextuelle : $("#recherche_textuelle").val()
+            },
+            type    : 'POST',
+            success : function( data ){
+                $('.requete h2').html( 'Requête de recherche' );
+                $('#resultats').html('');
+
+                hasResultat = false;
+
+                affichagePlaceholder();
+                
+                loader.finished();
+            }
+        });
+    }
+}
+
+/**
+ * Fonction permettant de gerer l'affichage du bloc placeholder
+ *
+ * @return Void
+ */
+function affichagePlaceholder()
+{
+    //Cas où on supprime tout les critères de recherche et vide le texte, le hasResultat est encore à true avant le raffraichissement
+    //Dans le cas où il n'y a pas de résultat
+    if(hasResultat)
+    {
+        $(".placeholder").hide();
+        $("#bloc_filtres").show();
+        showPlaceholder = false;
+        $("#dest").removeClass('hide');
+        $(".requete h2").addClass('ropen');
+    }
+    else if(isEmpty($('#resultats')))
+    {
+        $(".arbo-requete").find('li').addClass('hide');
+        $(".placeholder").show();
+        $("#bloc_filtres").hide();
+        showPlaceholder = true;
+        $("#dest").addClass('hide');
+        $(".requete h2").removeClass('ropen rclose');
+    }
+    else
+    {
+        $("#bloc_filtres").show();
+    }
+
+    placeholderExalead();
+}
+
+function placeholderExalead()
+{
+    if(hasResultat)
+    {
+        $("#recherche_textuelle").attr('placeholder', 'Filtrer les résultats par mots clés');
+    }
+    else
+    {
+        $("#recherche_textuelle").attr('placeholder', 'Ou rechercher des résultats par mot-clés');
+    }
+}
+
 function isEmpty( el ){
       return !$.trim(el.html())
   }
 
-// Création d'un mini plugin pour surligner des éléments
-(function($) {
- 
-    function highlight($el, word) {
-        var text = $el.html();
-        text = text.replace(new RegExp(word,'i','g'), '<span class="hl">'+word+'</span>');
-        $el.html(text);
+
+//Plugin de highlight
+
+jQuery.fn.highlight = function(pat) {
+ function innerHighlight(node, pat) {
+
+  pat =  pat.replace('*', '');
+
+  var skip = 0;
+  if (node.nodeType == 3) {
+   var pos = node.data.toUpperCase().indexOf(pat);
+   if (pos >= 0) {
+    var spannode = document.createElement('span');
+    spannode.className = 'highlight';
+    var middlebit = node.splitText(pos);
+    var endbit = middlebit.splitText(pat.length);
+    var middleclone = middlebit.cloneNode(true);
+    spannode.appendChild(middleclone);
+    middlebit.parentNode.replaceChild(spannode, middlebit);
+    skip = 1;
+   }
+  }
+  else if (node.nodeType == 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
+   for (var i = 0; i < node.childNodes.length; ++i) {
+    i += innerHighlight(node.childNodes[i], pat);
+   }
+  }
+  return skip;
+ }
+ return this.each(function() {
+  innerHighlight(this, pat.toUpperCase());
+ });
+};
+
+jQuery.fn.removeHighlight = function() {
+ function newNormalize(node) {
+    for (var i = 0, children = node.childNodes, nodeCount = children.length; i < nodeCount; i++) {
+        var child = children[i];
+        if (child.nodeType == 1) {
+            newNormalize(child);
+            continue;
+        }
+        if (child.nodeType != 3) { continue; }
+        var next = child.nextSibling;
+        if (next == null || next.nodeType != 3) { continue; }
+        var combined_text = child.nodeValue + next.nodeValue;
+        new_node = node.ownerDocument.createTextNode(combined_text);
+        node.insertBefore(new_node, child);
+        node.removeChild(child);
+        node.removeChild(next);
+        i--;
+        nodeCount--;
     }
-     
-    $.fn.highlight = function(word) {
-        return this.each(function() {
-            highlight($(this), word);
-        });
-    };
-     
-}(jQuery));
+ }
+
+ return this.find("span.highlight").each(function() {
+    var thisParent = this.parentNode;
+    thisParent.replaceChild(this.firstChild, this);
+    newNormalize(thisParent);
+ }).end();
+};

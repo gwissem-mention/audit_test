@@ -27,6 +27,8 @@
 
     #recherche .requete #dest #arbo-type-prod li span{color: #000000;font-size: 12px;text-transform: none;}
 
+    #recherche .requete hr { margin-top : 10px; margin-bottom: 10px;border-bottom: 1px solid #d5d5d5;}
+
 /* Orgine */
     /* Parents */
     #recherche #origin ol{padding : 0;}
@@ -61,10 +63,11 @@
     /* Liste déroulante */
     .multiselect-container.dropdown-menu{width: 100%; z-index: 110;}
     .multiselect-container.dropdown-menu .loader .loaderBackground{z-index:120;}
-    #recherche button.multiselect {margin-top : 10px; text-align: left;}
+    #recherche button.multiselect {text-align: left;}
     #recherche button.multiselect .caret{text-align: right;}
 
     /* Zone de recherche textuelle */
+    #recherche #recherche_textuelle { z-index: 1}
     #recherche #recherche_textuelle_group{margin-bottom: 10px;margin-top : 10px;}
     #recherche #arbo-type-prod { padding: 0;}
     #recherche #arbo-recherche-textuelle { padding: 0;}
@@ -106,7 +109,7 @@
         #resultats #ressources .results h4 a{color: #ffffff; font-size: 12px; }
         #resultats #ressources .results p{color: #ffffff; font-size: 12px; font-weight: normal; height: 65px; overflow-y:auto;}
         #resultats #ressources .results p.noresult{margin-top:29px;}
-        #resultats #ressources .results .carousel-indicators{bottom: 0}
+        #resultats #ressources .results .carousel-indicators{bottom: 0; display:none;}
         #resultats #ressources .results .carousel-inner{margin-left:25px;width:244px;}
         #resultats #ressources .results .carousel-control{width:1%;}
         #resultats #ressources .results .carousel-control span{font-size:18px; margin-left: 0}
@@ -122,7 +125,7 @@
         #resultats #forum .results h4 a{color: #ffffff; font-size: 12px; }
         #resultats #forum .results p{color: #ffffff; font-size: 12px; font-weight: normal;height: 85px; overflow-y:auto;}
         #resultats #forum .results p.noresult{margin-top:29px;}
-        #resultats #forum .results .carousel-indicators{bottom: 0}
+        #resultats #forum .results .carousel-indicators{bottom: 0; display:none;}
         #resultats #forum .results .carousel-inner{padding:0 25px 25px 25px}
         #resultats #forum .results .carousel-control{width:1%;}
         #resultats #forum .results .carousel-control span{font-size:18px; margin-left: 0}
@@ -142,3 +145,16 @@
 
     #mesrequetes.open{width: 100%; max-width: 100%}
 }
+
+.highlight {
+    background-color: #fff34d;
+    -moz-border-radius: 5px; /* FF1+ */
+    -webkit-border-radius: 5px; /* Saf3-4 */
+    border-radius: 5px; /* Opera 10.5, IE 9, Saf5, Chrome */
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); /* FF3.5+ */
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); /* Saf3.0+, Chrome */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7); /* Opera 10.5+, IE 9.0 */
+}
+.highlight {padding:1px 1px;margin:0 0px;}
+#ressources .highlight {color:#070707;}
+#forum .highlight {color:#070707;}

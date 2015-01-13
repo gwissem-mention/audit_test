@@ -101,4 +101,35 @@ class CategorieController extends Controller
 
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_categorie', array('id'=>$idOutil)).'"}', 200);
     }
+
+    /**
+     * Suppression de masse des categories
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        echo '<pre>';
+        \Doctrine\Common\Util\Debug::dump($primaryKeys);
+        \Doctrine\Common\Util\Debug::dump($allPrimaryKeys);
+        die();
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_autodiag.grid.categorie')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['idCat'];
+            }
+        }
+        $categories = $this->get('hopitalnumerique_autodiag.manager.categorie')->findBy( array('id' => $primaryKeys) );
+        $idOutil = $categories[0]->getId();
+        $this->get('hopitalnumerique_autodiag.manager.categorie')->delete( $categories );
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_categorie', array('id'=>$idOutil)).'"}', 200);
+    }
 }

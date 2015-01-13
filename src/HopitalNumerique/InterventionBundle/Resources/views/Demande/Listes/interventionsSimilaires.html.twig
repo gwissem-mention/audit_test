@@ -12,7 +12,7 @@
                 <br>{{ interventionSimilaire.referent.etablissementRattachementSante.nom }}{% if interventionSimilaire.referent.region is defined %}, {{ interventionSimilaire.referent.region.libelle }}{% endif %}
                 {% endif %}
             </td>
-            <td>{{ interventionSimilaire.dateCreation|date('m/d/Y') }}</td>
+            <td>{{ interventionSimilaire.dateCreation|date('d/m/Y') }}</td>
             <td>
                 <div class="btn-group">
                     <a target="_blank" class="btn btn-info btn-sm" href="{{ path('hopital_numerique_intervention_demande_voir', { id:interventionSimilaire.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
