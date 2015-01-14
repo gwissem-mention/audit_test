@@ -196,4 +196,45 @@ class InscriptionManager extends BaseManager
     {
         return $this->getRepository()->getInscriptionsForUser( $user )->getQuery()->getResult();
     }
+    
+    /**
+     * Créer un tableau formaté pour l'export CSV
+     * 
+     * @param type $modules liste des modules
+     * @param type $users   liste des utilisateurs
+     * 
+     * @return type
+     */
+    public function buildForExport($modules, $users, $primaryKeys){
+        
+        $colonnes = array(
+            "nom"    => "Nom",
+            "prenom" => "Prénom"
+        );
+        foreach($modules as $module){
+            $colonnes["module" . $module->getId()] = $module->getTitre();
+        }
+        
+        $inscriptions = $this->getRepository()->getInscriptionsByUser( $primaryKeys )->getQuery()->getResult();
+        $donnees = array();
+        foreach($inscriptions as $inscription){
+            $donnees[ $inscription['userId'] ][ $inscription['moduleId'] ] = date_format($inscription['date'], 'd/m/Y');
+        }
+        
+        $datas = array();
+        foreach($users as $user){
+            $row = array();
+            
+            $row['nom']    = $user->getNom();
+            $row['prenom'] = $user->getPrenom();
+            foreach($modules as $module){
+                $row["module" . $module->getId()] = isset($donnees[ $user->getId() ][ $module->getId() ]) 
+                        ? $donnees[ $user->getId() ][ $module->getId() ] : "";
+            }
+            
+            $datas[] = $row;
+        }
+        
+        return array('colonnes' => $colonnes, 'datas' => $datas );
+    }
 }
