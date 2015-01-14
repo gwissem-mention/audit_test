@@ -1,6 +1,7 @@
 help:
 	@echo "Please use \'make <target>' where <target> is one of"
-	@echo "  install           to make a Composer install"
+	@echo "  install           to make a Composer/bower install"
+	@echo "  update            to make a Composer/bower update"
 	@echo "  clean             to remove and warmup cache"
 	@echo "  cldroit           to remove and warmup cache with sudo"
 	@echo "  install-prod      to publish the website on production"
@@ -10,6 +11,13 @@ help:
 install:
 	composer install
 	bower install
+	php app/console c:cl
+	php app/console a:d
+	php app/console assets:install --symlink --relative
+
+update:
+	composer update
+	bower update
 	php app/console c:cl
 	php app/console a:d
 	php app/console assets:install --symlink --relative
