@@ -125,6 +125,7 @@ class UserGrid extends Grid implements GridInterface
 
         $this->addMassAction( new Action\ActionMass('Activer','HopitalNumeriqueUserBundle:User:activerMass') );
         $this->addMassAction( new Action\ActionMass('Désactiver','HopitalNumeriqueUserBundle:User:desactiverMass') );
-		$this->addMassAction( new Action\ActionMass('Envoyer un mail','HopitalNumeriqueUserBundle:User:envoyerMailMass') );
+        $this->addMassAction( new Action\ActionMass('Envoyer un mail','HopitalNumeriqueUserBundle:User:envoyerMailMass') );
+        $this->addMassAction( new Action\ActionMass('Ambassadeurs - Sessions','HopitalNumeriqueUserBundle:User:sessionsMass') );
     }
 }
