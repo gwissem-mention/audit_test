@@ -122,10 +122,11 @@ class UserGrid extends Grid implements GridInterface
         $this->addMassAction( new Action\ActionMass('Export CSV - Candidatures ambassadeur', 'HopitalNumeriqueUserBundle:User:exportCsvAmbassadeurs') );
         $this->addMassAction( new Action\ActionMass('Export CSV - Productions maitrisées', 'HopitalNumeriqueUserBundle:User:exportCsvProductions') );
         $this->addMassAction( new Action\ActionMass('Export CSV - Domaines fonctionnels maitrisés', 'HopitalNumeriqueUserBundle:User:exportCsvDomaines') );
+        $this->addMassAction( new Action\ActionMass('Export CSV - Sessions Ambassadeurs','HopitalNumeriqueUserBundle:User:sessionsMass') );
 
         $this->addMassAction( new Action\ActionMass('Activer','HopitalNumeriqueUserBundle:User:activerMass') );
         $this->addMassAction( new Action\ActionMass('Désactiver','HopitalNumeriqueUserBundle:User:desactiverMass') );
         $this->addMassAction( new Action\ActionMass('Envoyer un mail','HopitalNumeriqueUserBundle:User:envoyerMailMass') );
-        $this->addMassAction( new Action\ActionMass('Ambassadeurs - Sessions','HopitalNumeriqueUserBundle:User:sessionsMass') );
+        
     }
 }
