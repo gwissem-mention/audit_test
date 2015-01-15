@@ -12,22 +12,22 @@ install:
 	composer install
 	bower install
 	php app/console c:cl
-	php app/console a:d
 	php app/console assets:install --symlink --relative
+	php app/console a:d
 
 update:
 	composer update
 	bower update
 	php app/console c:cl
-	php app/console a:d
 	php app/console assets:install --symlink --relative
+	php app/console a:d
 
 clean:
 	rm -rf app/cache/*
 	rm -rf app/logs/*
 	php app/console cache:clear
-	php app/console a:d
 	php app/console assets:install --symlink --relative
+	php app/console a:d
 
 cldroit:
 	rm -rf app/cache/*;
@@ -35,15 +35,15 @@ cldroit:
 	php app/console cache:clear;
 	sudo chmod -R 777 app/cache;
 	sudo chmod -R 777 app/logs;
-	php app/console a:d;
 	php app/console assets:install --symlink --relative;
+	php app/console a:d;
 
 install-prod:
 	rm -rf app/cache/*
 	rm -rf app/logs/*
 	php app/console cache:clear --env=prod
-	php app/console a:d --env=prod
 	php app/console assets:install --symlink --relative --env=prod
+	php app/console a:d --env=prod
 
 #Cas particulier pour maj facilement la preprod/prod HN
 maj-prod:
