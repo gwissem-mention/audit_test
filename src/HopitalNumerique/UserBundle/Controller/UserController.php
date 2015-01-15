@@ -438,6 +438,31 @@ class UserController extends Controller
     }
 
     /**
+     * Export CSV des ambassadeurs et leurs inscriptions aux sessions
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function sessionsMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data){
+                $primaryKeys[] = $data['id'];
+            }
+        }
+        $users   = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        $modules = $this->get('hopitalnumerique_module.manager.module')->findAll();
+        $results = $this->get('hopitalnumerique_module.manager.inscription')->buildForExport( $modules, $users, $primaryKeys);
+        
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $results['colonnes'], $results['datas'], 'ambassadeurs_sessions.csv', $kernelCharset );
+    }
+
+    /**
      * Envoyer un mail aux utilisateurs
      *
      * @param array $primaryKeys    ID des lignes sélectionnées

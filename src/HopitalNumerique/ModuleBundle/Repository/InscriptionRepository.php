@@ -112,4 +112,25 @@ class InscriptionRepository extends EntityRepository
                          ->andWhere('insc.user = :user', 'refEtatInscription.id != 409')
                          ->setParameter('user', $user);
     }
+    
+    /*
+     * Retourne la date de la première inscription de chaques utilisateurs pour chaque module
+     */
+    public function getInscriptionsByUser( $usersId ){
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('user.id as userId,
+                     insc.dateInscription as date,
+                     session.id as sessionId,
+                     module.id as moduleId')
+            ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
+            ->leftJoin('insc.user','user')
+            ->leftJoin('insc.session','session')
+            ->leftJoin('session.module','module')
+            ->where( 'user.id IN (:users)' )
+            ->setParameter('users', $usersId )
+            ->orderBy('insc.dateInscription')
+            ->groupBy('user.id, module.id');
+        
+        return $qb;
+    }
 }
