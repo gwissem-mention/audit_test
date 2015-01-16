@@ -20,7 +20,7 @@
             {% else %}
                 <a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
             {% endif %}
-                {{objet['titre']|truncate(400)}}{% if objet['objet'] is not null %}<small class="violet"> - Extrait d'une production</small>{% endif %}
+                {{objet['titre']}}{% if objet['objet'] is not null %}<small class="violet"> - Extrait d'une production</small>{% endif %}
             </a>
         </h4>
     </div> 
@@ -30,6 +30,6 @@
         {% endif %}
     </div>
     <div class="col-md-12">
-        <p>{{ objet['resume']|parsePublication|raw }}</p>
+        <p>{{ objet['resume']|parsePublication|raw|truncate(400) }}</p> <span class="rose">[...]</span></p>
     </div>
 </div>

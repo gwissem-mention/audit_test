@@ -32,12 +32,12 @@
                 {{objetsOrder[objet['id']]['parent'].getTitre()}}<br />
                 <i style="font-size:15px;" class="fa fa-share fa-flip-vertical"></i><span class="gris" style="font-size:16px;"> {{objetsOrder[objet['id']]['prefixe']}} {{objet['titre']}}</span>
             {% else %}
-                {{objet['titre']|truncate(400)}}
+                {{objet['titre']}}
             {% endif %}
             </a>
         </h4>
     </div>
     <div class="col-md-12">
-        <p>{{ objet['resume']|trim }} <span class="rose">[...]</span></p>
+        <p>{{ objet['resume']|trim|truncate(400) }} <span class="rose">[...]</span></p>
     </div>
 </div>
