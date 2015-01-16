@@ -87,8 +87,10 @@ class InscriptionRepository extends EntityRepository
                          ->leftJoin('insc.etatRemboursement', 'refRemboursement')
                          ->leftJoin('insc.etatEvaluation', 'refEvaluation')
                          ->leftJoin('insc.etatParticipation', 'refParticipation')
+                         ->leftJoin('insc.session', 'session')
                          ->andWhere('refParticipation.id = 411','insc.facture IS NULL')
-                         ->andWhere('refEvaluation.id = 29');
+                         ->andWhere('refEvaluation.id = 29')
+                         ->orderBy('session.dateSession');
 
         if( !is_null($user) ) {
             $qb->andWhere('insc.user = :user')

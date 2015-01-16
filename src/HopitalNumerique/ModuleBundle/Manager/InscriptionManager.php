@@ -186,6 +186,33 @@ class InscriptionManager extends BaseManager
     }
 
     /**
+     * Retourne un boolean pour dire si les inscriptions sont ok
+     *
+     * @param User $user L'utilisateur concerné
+     *
+     * @return array
+     */
+    public function allInscriptionsIsOk( $user )
+    {
+        //Requete
+        $inscriptions = $this->findBy(array('user' => $user, 'etatParticipation' => 411));
+
+        //Parcours des résultats
+        foreach ($inscriptions as $inscription) 
+        {
+            //Il faut que TOUTES les inscriptions de l'utilisateur soient "A participé" et "Évaluée" 
+            if($inscription->getEtatParticipation()->getId() !== 411
+                || $inscription->getEtatEvaluation()->getId() !== 29)
+            {
+                //Inscriptions non conforme
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Retourne la liste des inscriptions de l'utilisateur
      *
      * @param User $user L'utilisateur concerné
