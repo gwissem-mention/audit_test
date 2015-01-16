@@ -3,7 +3,7 @@ help:
 	@echo "  install           to make a Composer/bower install"
 	@echo "  update            to make a Composer/bower update"
 	@echo "  clean             to remove and warmup cache + assets + assetic"
-	@echo "  cldroit           to remove and warmup cache with sudo"
+	@echo "  cldroit           to remove and warmup cache + assets + assetic with sudo"
 	@echo "  cache-prod        to remove and warmup cache only on prod"
 	@echo "  install-prod      to publish the website on production"
 	@echo "  maj-prod          to pull, remove and warmup cache, publish the website on prod and update the schema of database"

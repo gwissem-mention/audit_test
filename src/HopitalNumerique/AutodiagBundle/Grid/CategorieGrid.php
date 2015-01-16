@@ -13,13 +13,13 @@ use Nodevo\GridBundle\Grid\Action;
 class CategorieGrid extends Grid implements GridInterface
 {
     /**
-     * Définie la config spécifique au grid Categorie.
+     * DÃ©finie la config spÃ©cifique au grid Categorie.
      */
     public function setConfig()
     {
         $this->setSource( 'hopitalnumerique_autodiag.manager.categorie' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
-        $this->setNoDataMessage('Aucune categorie à afficher.');
+        $this->setNoDataMessage('Aucune categorie Ã  afficher.');
     }
 
     /**
@@ -51,10 +51,10 @@ class CategorieGrid extends Grid implements GridInterface
         $editButton->setRouteParameters( array('id', 'idCat') );
         $this->addActionButton( $editButton );
         
-        // $deleteButton = new Action\DeleteButton( 'hopitalnumerique_autodiag_categorie_delete' );
-        // $deleteButton->setRouteParameters( array('idCat') );
-        // $deleteButton->setRouteParametersMapping( array( 'idCat' => 'id') );
-        // $this->addActionButton( $deleteButton );
+        $deleteButton = new Action\DeleteButton( 'hopitalnumerique_autodiag_categorie_delete' );
+        $deleteButton->setRouteParameters( array('idCat') );
+        $deleteButton->setRouteParametersMapping( array( 'idCat' => 'id') );
+        $this->addActionButton( $deleteButton );
     }
 
     /**
@@ -62,6 +62,6 @@ class CategorieGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueAutodiagBundle:Categorie:deleteMass') );
+
     }
 }
