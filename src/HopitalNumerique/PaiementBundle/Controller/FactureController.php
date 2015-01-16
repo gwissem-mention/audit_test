@@ -57,11 +57,13 @@ class FactureController extends Controller
 
         if( $user->getRole() != 'ROLE_ADMINISTRATEUR_1') {
             $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForTotal( $user );
-            $formations    = array();
+            $formations    = $this->get('hopitalnumerique_module.manager.inscription')->getForFactures( $user );
             $datas         = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
             
             foreach($datas as $data)
+            {
                 $total += $data->total;    
+            }
         }
 
         return $this->render('HopitalNumeriquePaiementBundle:Facture:total.html.twig', array(
