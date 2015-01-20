@@ -110,6 +110,9 @@ class SearchController extends Controller
         $resultatsTrouveeRechercheTextuelle = true;
         //^^^^^
         
+        // YRO 20/01/2015 : cacher l'icone de pertinence
+        $onlyText = false;
+        
         //vvvvv GME 21/11/2014 : Exalead
         if(trim($rechercheTextuelle) !== "")
         {
@@ -159,6 +162,9 @@ class SearchController extends Controller
                 $contenusRecherche = $this->get('hopitalnumerique_objet.manager.contenu')->findBy(array('id' => $contenuIds));
 
                 $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRechercheTextuelle( $objetsRecherche, $contenusRecherche, $role );
+                
+                // YRO 20/01/2015 : cacher l'icone de pertinence
+                $onlyText = true;
             }
         }
         //^^^^^
@@ -202,11 +208,12 @@ class SearchController extends Controller
         {
             $categPointDurIdsArray = array();
         }
-
+        
         foreach ($objets as $key => $objet) 
         {
             $objetsOrder[$objet["id"]] = $objet;
         }
+        
 
         foreach ($objetsOrder as $key => $objetCurrent) 
         {
@@ -299,7 +306,8 @@ class SearchController extends Controller
             'objets'              => $objetsRechercheTextuelle,
             'objetsOrder'         => $objetsOrder,
             'showMorePointsDurs'  => $showMorePointsDurs,
-            'showMoreProductions' => $showMoreProductions
+            'showMoreProductions' => $showMoreProductions,
+            'onlyText'            => $onlyText // YRO 20/01/2015 : cacher l'icone de pertinence
         ));
     }
 
