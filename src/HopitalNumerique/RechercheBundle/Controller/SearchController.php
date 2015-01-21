@@ -209,9 +209,11 @@ class SearchController extends Controller
             $categPointDurIdsArray = array();
         }
         
-        foreach ($objets as $key => $objet) 
-        {
-            $objetsOrder[$objet["id"]] = $objet;
+        if( !$onlyText ){
+            foreach ($objets as $key => $objet) 
+            {
+                $objetsOrder[$objet["id"]] = $objet;
+            }
         }
         
 
@@ -268,6 +270,22 @@ class SearchController extends Controller
                         $objetsRechercheTextuelle[] = $objet;
                     }
                 }
+            }
+            
+            if( $onlyText ){
+                $objetsRechercheTextuelleOrder = array();
+                for($i = 0; $i < count($contenuIds); $i++)
+                {
+                    foreach($objetsRechercheTextuelle as $objet)
+                    {
+                        if($contenuIds[$i] == $objet['id'])
+                        {
+                            $objetsRechercheTextuelleOrder[] = $objet;
+                            break;
+                        }
+                    }
+                }
+                $objetsRechercheTextuelle = $objetsRechercheTextuelleOrder;
             }
         }
         else
