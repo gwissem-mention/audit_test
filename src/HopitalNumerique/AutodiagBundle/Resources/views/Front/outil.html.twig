@@ -165,7 +165,7 @@
                     {% if outil.ajouterNonConcerne %}<option value="-1" {% if reponse['value'] == -1 %}selected="selected"{% endif %} >Non concerné</option>{% endif %}
                     {% for option in options %}
                         {% set datas = option|split(';', 2) %}
-                        <option value="{{datas[0]|trim}}" {% if reponse['value'] == datas[0] %}selected="selected"{% endif %} >{{ datas[1]|capitalize|raw }}</option>
+                        <option value="{{datas[0]|trim}}" {% if reponse['value'] == datas[0] %}selected="selected"{% endif %} >{{ datas[1]|raw }}</option>
                     {% endfor %}
                 </select>
             {# RADIO #}

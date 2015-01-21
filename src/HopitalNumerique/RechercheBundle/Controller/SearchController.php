@@ -13,7 +13,7 @@ class SearchController extends Controller
     {
         $elements                  = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
         $categoriesProductionActif = "";
-        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('libelle' => 'ASC'));
+        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('order' => 'ASC'));
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -110,11 +110,15 @@ class SearchController extends Controller
         $resultatsTrouveeRechercheTextuelle = true;
         //^^^^^
         
+        // YRO 20/01/2015 : cacher l'icone de pertinence
+        $onlyText = false;
+        
         //vvvvv GME 21/11/2014 : Exalead
         if(trim($rechercheTextuelle) !== "")
         {
             $objetIds              = array();
             $contenuIds            = array();
+            $allIds                = array();
             $optionsSearch         = $this->get('hopitalnumerique_recherche.manager.search')->getUrlRechercheTextuelle();
             //$urlRechercheTextuelle = "http://fifi.mind7.fr:13010/search-api/search?q=FACTEURS%20CLES%20DE%20SUCCES";
             $urlRechercheTextuelle = $optionsSearch . urlencode($rechercheTextuelle);
@@ -138,11 +142,11 @@ class SearchController extends Controller
 
                         if($hitUrlArray[0] == 'obj_id')
                         {
-                            $objetIds[] = intval(substr($hitUrlArray[1], 0 , -1));
+                            $objetIds[] = $allIds[] = intval(substr($hitUrlArray[1], 0 , -1));
                         }
                         elseif($hitUrlArray[0] == 'con_id')
                         {
-                            $contenuIds[] = intval(substr($hitUrlArray[1], 0 , -1));
+                            $contenuIds[] = $allIds[] = intval(substr($hitUrlArray[1], 0 , -1));
                         }
                     }
                 }
@@ -159,6 +163,9 @@ class SearchController extends Controller
                 $contenusRecherche = $this->get('hopitalnumerique_objet.manager.contenu')->findBy(array('id' => $contenuIds));
 
                 $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRechercheTextuelle( $objetsRecherche, $contenusRecherche, $role );
+                
+                // YRO 20/01/2015 : cacher l'icone de pertinence
+                $onlyText = true;
             }
         }
         //^^^^^
@@ -202,11 +209,14 @@ class SearchController extends Controller
         {
             $categPointDurIdsArray = array();
         }
-
-        foreach ($objets as $key => $objet) 
-        {
-            $objetsOrder[$objet["id"]] = $objet;
+        
+        if( !$onlyText ){
+            foreach ($objets as $key => $objet) 
+            {
+                $objetsOrder[$objet["id"]] = $objet;
+            }
         }
+        
 
         foreach ($objetsOrder as $key => $objetCurrent) 
         {
@@ -262,6 +272,22 @@ class SearchController extends Controller
                     }
                 }
             }
+            
+            if( $onlyText ){
+                $objetsRechercheTextuelleOrder = array();
+                for($i = 0; $i < count($allIds); $i++)
+                {
+                    foreach($objetsRechercheTextuelle as $objet)
+                    {
+                        if($allIds[$i] == $objet['id'])
+                        {
+                            $objetsRechercheTextuelleOrder[] = $objet;
+                            break;
+                        }
+                    }
+                }
+                $objetsRechercheTextuelle = $objetsRechercheTextuelleOrder;
+            }
         }
         else
         {
@@ -299,7 +325,8 @@ class SearchController extends Controller
             'objets'              => $objetsRechercheTextuelle,
             'objetsOrder'         => $objetsOrder,
             'showMorePointsDurs'  => $showMorePointsDurs,
-            'showMoreProductions' => $showMoreProductions
+            'showMoreProductions' => $showMoreProductions,
+            'onlyText'            => $onlyText // YRO 20/01/2015 : cacher l'icone de pertinence
         ));
     }
 

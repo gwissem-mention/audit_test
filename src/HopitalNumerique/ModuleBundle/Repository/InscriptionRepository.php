@@ -87,8 +87,10 @@ class InscriptionRepository extends EntityRepository
                          ->leftJoin('insc.etatRemboursement', 'refRemboursement')
                          ->leftJoin('insc.etatEvaluation', 'refEvaluation')
                          ->leftJoin('insc.etatParticipation', 'refParticipation')
+                         ->leftJoin('insc.session', 'session')
                          ->andWhere('refParticipation.id = 411','insc.facture IS NULL')
-                         ->andWhere('refEvaluation.id = 29');
+                         ->andWhere('refEvaluation.id = 29')
+                         ->orderBy('session.dateSession');
 
         if( !is_null($user) ) {
             $qb->andWhere('insc.user = :user')
@@ -96,6 +98,23 @@ class InscriptionRepository extends EntityRepository
         }
 
         return $qb;
+    }
+
+    /**
+     * Retourne la liste des inscriptions d'une facture ordonnée par dateSession
+     *
+     * @return QueryBuilder
+     */
+    public function getInscriptionsForFactureOrdered( $facture )
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('insc')
+                         ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
+                         ->leftJoin('insc.session','session')
+                         ->leftJoin('insc.facture','facture')
+                         ->andWhere('facture.id = :factureId')
+                         ->setParameter('factureId', $facture)
+                         ->orderBy('session.dateSession', 'ASC');
     }
 
     /**
@@ -108,9 +127,11 @@ class InscriptionRepository extends EntityRepository
         return $this->_em->createQueryBuilder()
                          ->select('insc')
                          ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
+                         ->leftJoin('insc.session','session')
                          ->leftJoin('insc.etatInscription','refEtatInscription')
                          ->andWhere('insc.user = :user', 'refEtatInscription.id != 409')
-                         ->setParameter('user', $user);
+                         ->setParameter('user', $user)
+                         ->orderBy('session.dateSession', 'ASC');
     }
     
     /*

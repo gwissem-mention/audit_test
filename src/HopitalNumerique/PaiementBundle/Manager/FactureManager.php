@@ -67,12 +67,15 @@ class FactureManager extends BaseManager
 
         //handle formations
         if( $formations ){
-            foreach ($formations as $id => $prix) {
+            foreach ($formations as $id => $prixSupplement) {
+
+                list($prix, $hasSupplement) = explode("_", $prixSupplement);
+
                 $formation = $this->_formationManager->findOneBy( array('id' => $id) );
                 $formation->setFacture( $facture );
                 $formation->setEtatRemboursement( $statutRemboursement );
-                $formation->setTotal( $prix );
-                $formation->setSupplement( $supplement );
+                $formation->setTotal( $prix);
+                $formation->setSupplement( $hasSupplement == 'supp' ? $supplement : 0 );
                 
                 $facture->addFormation( $formation );
 

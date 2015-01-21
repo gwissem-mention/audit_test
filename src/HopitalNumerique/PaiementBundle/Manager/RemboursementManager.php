@@ -46,15 +46,17 @@ class RemboursementManager extends BaseManager
             //calcul total
             $ambassadeurRegion = $intervention->getAmbassadeur()->getRegion()->getId();
             $referentRegion    = $referent->getRegion()->getId();
-            $row->total        = $prix['interventions'][$ambassadeurRegion]['total'];
+            $row->total        = array('prix' => $prix['interventions'][$ambassadeurRegion]['total']);
             if( $ambassadeurRegion != $referentRegion )
-                $row->total = intval($row->total + $prix['interventions'][$referentRegion]['intervention']);
+                $row->total['prix'] = intval($row->total['prix'] + $prix['interventions'][$referentRegion]['intervention']);
             
             $results[] = $row;
         }
 
         //Manage fomartions (inscriptions to sessions)
+        $lastInscription = null;
         foreach ($formations as $formation) {
+
             $row = new \StdClass;
 
             //build objet
@@ -64,17 +66,38 @@ class RemboursementManager extends BaseManager
             $row->etab     = '-';
             $row->type     = 'Module : ' . $formation->getSession()->getModule()->getTitre();
             $row->discr    = 'formation';
-            $row->total    = $prix['formations'][$formation->getUser()->getRegion()->getId()];
+            $row->total    = array(
+                'prix'          => $prix['formations'][$formation->getUser()->getRegion()->getId()],
+                'hasSupplement' => true,
+            );
+
+            if(is_null($lastInscription))
+            {
+                $lastInscription = $formation;
+            }
+            else
+            {
+                //Test si la date de la session courante et celle de la session d'avant (s'il y en a une) sont consécutives.
+                if(intval($formation->getSession()->getDateSession()->diff($lastInscription->getSession()->getDateSession())->days) == 1
+                    // Ou si il y a un écart de 2 jours mais que la session précedente à durée plus d'une journée
+                    || (intval($formation->getSession()->getDateSession()->diff($lastInscription->getSession()->getDateSession())->days) == 2 
+                            && $lastInscription->getSession()->getDuree()->getId() > 401) )
+                {
+                    $row->total['prix']          = 140;
+                    $row->total['hasSupplement'] = false;
+                }
+                $lastInscription = $formation;
+            }
 
             //TODO : sortir le 140
-            //Ajout de 140€ si la durée de la session est supérieur à 1jour
+            //Ajout de 140€ si la durée de la session est supérieur à 1jour (max 2 jour en base)
             if( $formation->getSession()->getDuree()->getId() > 401 )
             {
-                $row->total += 140;
+                $row->total['prix'] += 140;
             }
             
             $results[] = $row;
-        }        
+        }
 
         return $results;
     }

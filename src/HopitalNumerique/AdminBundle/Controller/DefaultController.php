@@ -79,8 +79,11 @@ class DefaultController extends Controller
         $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForFactures();
         $formations    = $this->get('hopitalnumerique_module.manager.inscription')->getForFactures();
         $datas         = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
+
         foreach($datas as $data)
-            $blocPaiements['attente'] += $data->total;
+        {
+            $blocPaiements['attente'] += $data->total['prix'];
+        }
 
         //Contributions Forum Experts
         $date = new \DateTime();

@@ -38,7 +38,7 @@
             <table class="table paiements">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th class="hide"></th>
                         <th>Date</th>
                         <th>Référent Intervention</th>
                         <th>Établissement du référent</th>
@@ -50,22 +50,22 @@
                     {% set total = 0 %}
                     {% for data in datas %}
                         <tr>
-                            <td align="center"><input type="checkbox" class="checkbox" name="{{data.discr}}[{{data.id}}]" checked="checked" value="{{data.total}}" /></td>
+                            <td class="hide" align="center hide"><input type="checkbox" class="checkbox" name="{{data.discr}}[{{data.id}}]" checked="checked" value="{{data.total.prix}}_{% if data.total.hasSupplement %}supp{% else %}noSupp{% endif %}" /></td>
                             <td>{{data.date|date('d/m/Y')}}</td>
                             <td>{{data.referent}}</td>
                             <td>{{data.etab}}</td>
                             <td>{{data.type}}</td>
-                            <td>{{data.total}}€</td>
+                            <td>{{data.total.prix}}€</td>
                         </tr>
-                        {% set total = total + data.total %}
+                        {% set total = total + data.total.prix %}
                     {% else %}
                         <tr>
-                            <td colspan="6" align="center"> - Aucune intervention ou module disponible - </td>
+                            <td colspan="5" align="center"> - Aucune intervention ou module disponible - </td>
                         </tr>
                     {% endfor %}
                     {% if total != 0 %}
                         <tr class="footer" >
-                            <td colspan="5" align="right">Total Facture</td>
+                            <td colspan="4" align="right">Total Facture</td>
                             <td><span class="total">{{total}}</span>€</td>
                         </tr>
                     {% endif %}

@@ -32,6 +32,7 @@ class Inscription
      *
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="inscriptions")
      * @ORM\JoinColumn(name="ses_session", referencedColumnName="ses_id")
+     * @ORM\OrderBy({"dateSession" = "ASC"})
      */
     protected $session;
     

@@ -29,6 +29,7 @@ class FrontController extends Controller
         //get interventions + formations
         $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForFactures( $user );
         $formations    = $this->get('hopitalnumerique_module.manager.inscription')->getForFactures( $user );
+
         $datas         = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
 
         //get Factures
@@ -50,13 +51,20 @@ class FrontController extends Controller
         $interventions = $request->request->get('intervention');
         $formations    = $request->request->get('formation');
 
+        //On récupère l'user connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if(!$this->get('hopitalnumerique_module.manager.inscription')->allInscriptionsIsOk( $user ))
+        {
+            $this->get('session')->getFlashBag()->add( 'warning' , 'Merci d\'évaluer l\'ensemble de vos formations avant de générer votre facture.' );
+            return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_front') );
+        }
+
         if( is_null($interventions) && is_null($formations) ){
             $this->get('session')->getFlashBag()->add( 'warning' , 'Merci de sélectioner au moins 1 ligne' );
             return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_front') );
         }
 
-        //On récupère l'user connecté
-        $user          = $this->get('security.context')->getToken()->getUser();
         $remboursement = $this->get('hopitalnumerique_paiement.manager.remboursement')->findOneBy( array('region'=>$user->getRegion()) );
         $facture       = $this->get('hopitalnumerique_paiement.manager.facture')->createFacture($user, $interventions, $formations, $remboursement->getSupplement() );
 
