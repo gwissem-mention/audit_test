@@ -29,7 +29,7 @@ class FrontController extends Controller
         //get interventions + formations
         $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForFactures( $user );
         $formations    = $this->get('hopitalnumerique_module.manager.inscription')->getForFactures( $user );
-        
+
         $datas         = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
 
         //get Factures

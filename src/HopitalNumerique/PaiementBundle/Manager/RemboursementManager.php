@@ -66,7 +66,10 @@ class RemboursementManager extends BaseManager
             $row->etab     = '-';
             $row->type     = 'Module : ' . $formation->getSession()->getModule()->getTitre();
             $row->discr    = 'formation';
-            $row->total    = $prix['formations'][$formation->getUser()->getRegion()->getId()];
+            $row->total    = array(
+                'prix'          => $prix['formations'][$formation->getUser()->getRegion()->getId()],
+                'hasSupplement' => true,
+            );
 
             if(is_null($lastInscription))
             {
@@ -80,7 +83,8 @@ class RemboursementManager extends BaseManager
                     || (intval($formation->getSession()->getDateSession()->diff($lastInscription->getSession()->getDateSession())->days) == 2 
                             && $lastInscription->getSession()->getDuree()->getId() > 401) )
                 {
-                    $row->total = 140;
+                    $row->total['prix']          = 140;
+                    $row->total['hasSupplement'] = false;
                 }
                 $lastInscription = $formation;
             }
@@ -89,7 +93,7 @@ class RemboursementManager extends BaseManager
             //Ajout de 140€ si la durée de la session est supérieur à 1jour (max 2 jour en base)
             if( $formation->getSession()->getDuree()->getId() > 401 )
             {
-                $row->total += 140;
+                $row->total['prix'] += 140;
             }
             
             $results[] = $row;
