@@ -17,7 +17,7 @@ class CategorieRepository extends EntityRepository
     public function getDatasForGrid( $condition )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('cat.id as idCat, cat.title, cat.note, out.id as id')
+        $qb->select('cat.id, cat.title, cat.note, out.id as idOutil')
             ->from('HopitalNumeriqueAutodiagBundle:Categorie', 'cat')
             ->leftJoin('cat.outil','out')
             ->where('cat.'.$condition->field.' = '.$condition->value)
