@@ -82,7 +82,7 @@ class DefaultController extends Controller
 
         foreach($datas as $data)
         {
-            $blocPaiements['attente'] += $data->total;
+            $blocPaiements['attente'] += $data->total['prix'];
         }
 
         //Contributions Forum Experts
