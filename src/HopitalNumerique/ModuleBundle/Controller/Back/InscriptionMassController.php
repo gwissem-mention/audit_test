@@ -158,6 +158,38 @@ class InscriptionMassController extends Controller
             'list'   => $list
         ));
     }
+
+    /**
+     * Suppression de masse des inscriptions
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_module.manager.inscription')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }   
+
+        $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
+
+        $sessionId = array_values($inscriptions)[0]->getModule()->getId();
+
+        $url = strpos($this->getRequest()->headers->get('referer'), 'inscription/all') ? $this->generateUrl('hopitalnumerique_module_module_allinscription') : $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id'=>$sessionId));
+
+        $this->get('hopitalnumerique_module.manager.inscription')->delete( $inscriptions );
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+
+        return $this->redirect( $url );
+    }
     
 
 

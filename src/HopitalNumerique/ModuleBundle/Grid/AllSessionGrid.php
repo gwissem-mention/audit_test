@@ -92,7 +92,7 @@ class AllSessionGrid extends Grid implements GridInterface
         $this->addActionButton( $actionListeInscrits );
 
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_module_module_session_edit' ) );
-        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_delete' ) );
+        // $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_delete' ) );
 
     }
 
@@ -101,7 +101,6 @@ class AllSessionGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        
-        
+        $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueModuleBundle:Back/Session:deleteMass') );
     }
 }

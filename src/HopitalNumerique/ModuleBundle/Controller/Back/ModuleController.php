@@ -96,6 +96,34 @@ class ModuleController extends Controller
     }
 
     /**
+     * Suppression de masse des modules
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_module.manager.module')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }   
+
+        $modules = $this->get('hopitalnumerique_module.manager.module')->findBy( array('id' => $primaryKeys) );
+
+        $this->get('hopitalnumerique_module.manager.module')->delete( $modules );
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_module_module') );
+    }
+
+    /**
      * Download le fichier de session.
      *
      * @author Gaetan MELCHILSEN
