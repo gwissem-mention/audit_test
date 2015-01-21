@@ -119,7 +119,7 @@
                                 <th width="150px">Actions</th>
                             </thead>
                             <tbody>
-                                {% for formation in facture.formations %}
+                                {% for formation in formations %}
                                     <tr>
                                         <td>{{formation.session.module.titre}}</td>
                                         <td>{{formation.session.dateSession|date('d/m/Y')}}</td>

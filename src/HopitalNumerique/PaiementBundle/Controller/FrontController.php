@@ -56,7 +56,7 @@ class FrontController extends Controller
 
         if(!$this->get('hopitalnumerique_module.manager.inscription')->allInscriptionsIsOk( $user ))
         {
-            $this->get('session')->getFlashBag()->add( 'warning' , 'Merci d\' évaluer l\'ensemble de vos formations avant de générer votre facture.' );
+            $this->get('session')->getFlashBag()->add( 'warning' , 'Merci d\'évaluer l\'ensemble de vos formations avant de générer votre facture.' );
             return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_front') );
         }
 

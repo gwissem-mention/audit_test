@@ -101,6 +101,23 @@ class InscriptionRepository extends EntityRepository
     }
 
     /**
+     * Retourne la liste des inscriptions d'une facture ordonnée par dateSession
+     *
+     * @return QueryBuilder
+     */
+    public function getInscriptionsForFactureOrdered( $facture )
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('insc')
+                         ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
+                         ->leftJoin('insc.session','session')
+                         ->leftJoin('insc.facture','facture')
+                         ->andWhere('facture.id = :factureId')
+                         ->setParameter('factureId', $facture)
+                         ->orderBy('session.dateSession', 'ASC');
+    }
+
+    /**
      * Retourne la liste des inscriptions de l'utilisateur
      *
      * @return QueryBuilder
@@ -110,9 +127,11 @@ class InscriptionRepository extends EntityRepository
         return $this->_em->createQueryBuilder()
                          ->select('insc')
                          ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
+                         ->leftJoin('insc.session','session')
                          ->leftJoin('insc.etatInscription','refEtatInscription')
                          ->andWhere('insc.user = :user', 'refEtatInscription.id != 409')
-                         ->setParameter('user', $user);
+                         ->setParameter('user', $user)
+                         ->orderBy('session.dateSession', 'ASC');
     }
     
     /*

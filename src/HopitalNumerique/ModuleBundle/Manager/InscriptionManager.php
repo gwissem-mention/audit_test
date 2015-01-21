@@ -186,6 +186,18 @@ class InscriptionManager extends BaseManager
     }
 
     /**
+     * Retourne la liste des inscriptions pour une facture ordonnée par date de session
+     *
+     * @param Facture $facture Identifiant de la facture
+     *
+     * @return array
+     */
+    public function getInscriptionsForFactureOrdered( $facture = null )
+    {
+        return $this->getRepository()->getInscriptionsForFactureOrdered( $facture )->getQuery()->getResult();
+    }
+
+    /**
      * Retourne un boolean pour dire si les inscriptions sont ok
      *
      * @param User $user L'utilisateur concerné
