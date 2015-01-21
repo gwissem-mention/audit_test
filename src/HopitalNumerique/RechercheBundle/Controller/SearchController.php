@@ -13,7 +13,7 @@ class SearchController extends Controller
     {
         $elements                  = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
         $categoriesProductionActif = "";
-        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('libelle' => 'ASC'));
+        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('order' => 'ASC'));
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
