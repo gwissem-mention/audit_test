@@ -140,6 +140,34 @@ class ObjetController extends Controller
     }
 
     /**
+     * Suppression de masse des objets
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_objet.manager.objet')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }        
+
+        $objets = $this->get('hopitalnumerique_objet.manager.objet')->findBy( array('id' => $primaryKeys) );
+
+        $this->get('hopitalnumerique_objet.manager.objet')->delete( $objets );
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_objet_objet') );
+    }
+
+    /**
      * Vérifie l'unicité du nom du fichier
      *
      * @return Response

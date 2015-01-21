@@ -61,7 +61,7 @@ class CommentaireGrid extends Grid implements GridInterface
         });
         $this->addActionButton( $lockButton );
         //--------- GME 14/08 : Cadenas lock/unlock -------
-        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_objet_admin_commentaire_delete' ) );
+        // $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_objet_admin_commentaire_delete' ) );
 
     }
 
