@@ -13,7 +13,7 @@ class SearchController extends Controller
     {
         $elements                  = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
         $categoriesProductionActif = "";
-        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('libelle' => 'ASC'));
+        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('order' => 'ASC'));
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -118,6 +118,7 @@ class SearchController extends Controller
         {
             $objetIds              = array();
             $contenuIds            = array();
+            $allIds                = array();
             $optionsSearch         = $this->get('hopitalnumerique_recherche.manager.search')->getUrlRechercheTextuelle();
             //$urlRechercheTextuelle = "http://fifi.mind7.fr:13010/search-api/search?q=FACTEURS%20CLES%20DE%20SUCCES";
             $urlRechercheTextuelle = $optionsSearch . urlencode($rechercheTextuelle);
@@ -141,11 +142,11 @@ class SearchController extends Controller
 
                         if($hitUrlArray[0] == 'obj_id')
                         {
-                            $objetIds[] = intval(substr($hitUrlArray[1], 0 , -1));
+                            $objetIds[] = $allIds[] = intval(substr($hitUrlArray[1], 0 , -1));
                         }
                         elseif($hitUrlArray[0] == 'con_id')
                         {
-                            $contenuIds[] = intval(substr($hitUrlArray[1], 0 , -1));
+                            $contenuIds[] = $allIds[] = intval(substr($hitUrlArray[1], 0 , -1));
                         }
                     }
                 }
@@ -209,9 +210,11 @@ class SearchController extends Controller
             $categPointDurIdsArray = array();
         }
         
-        foreach ($objets as $key => $objet) 
-        {
-            $objetsOrder[$objet["id"]] = $objet;
+        if( !$onlyText ){
+            foreach ($objets as $key => $objet) 
+            {
+                $objetsOrder[$objet["id"]] = $objet;
+            }
         }
         
 
@@ -268,6 +271,22 @@ class SearchController extends Controller
                         $objetsRechercheTextuelle[] = $objet;
                     }
                 }
+            }
+            
+            if( $onlyText ){
+                $objetsRechercheTextuelleOrder = array();
+                for($i = 0; $i < count($allIds); $i++)
+                {
+                    foreach($objetsRechercheTextuelle as $objet)
+                    {
+                        if($allIds[$i] == $objet['id'])
+                        {
+                            $objetsRechercheTextuelleOrder[] = $objet;
+                            break;
+                        }
+                    }
+                }
+                $objetsRechercheTextuelle = $objetsRechercheTextuelleOrder;
             }
         }
         else
