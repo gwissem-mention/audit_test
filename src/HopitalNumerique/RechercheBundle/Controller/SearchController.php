@@ -210,34 +210,10 @@ class SearchController extends Controller
             $categPointDurIdsArray = array();
         }
         
-        if( !$onlyText ){
+        if( true){//!$onlyText ){
             foreach ($objets as $key => $objet) 
             {
                 $objetsOrder[$objet["id"]] = $objet;
-            }
-        }
-        
-
-        foreach ($objetsOrder as $key => $objetCurrent) 
-        {
-            if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet'])) 
-            {
-                //Dans le cas où une recherche textuelle est donnée
-                if(trim($rechercheTextuelle) !== "")
-                {
-                    if(in_array($objetCurrent['id'], $objetIds))
-                    {
-                        $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
-                        $objetsOrder[$key]['prefixe'] = $libContenu;
-                        $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
-                    }
-                }
-                else
-                {
-                    $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
-                    $objetsOrder[$key]['prefixe'] = $libContenu;
-                    $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
-                }
             }
         }
 
@@ -272,6 +248,8 @@ class SearchController extends Controller
                     }
                 }
             }
+
+            //$objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRechercheTextuelle( $objetsRecherche, $contenusRecherche, $role );
             
             if( $onlyText ){
                 $objetsRechercheTextuelleOrder = array();
@@ -292,6 +270,29 @@ class SearchController extends Controller
         else
         {
             $objetsRechercheTextuelle = $objets;
+        }
+
+        foreach ($objetsOrder as $key => $objetCurrent) 
+        {
+            if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet'])) 
+            {
+                //Dans le cas où une recherche textuelle est donnée
+                if(trim($rechercheTextuelle) !== "")
+                {
+                    if(in_array($objetCurrent['id'], $contenuIds))
+                    {
+                        $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
+                        $objetsOrder[$key]['prefixe'] = $libContenu;
+                        $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+                    }
+                }
+                else
+                {
+                    $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
+                    $objetsOrder[$key]['prefixe'] = $libContenu;
+                    $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+                }
+            }
         }
 
         //on prépare la session

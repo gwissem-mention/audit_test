@@ -547,6 +547,7 @@ class ObjetManager extends BaseManager
                 //resume
                 $tab = explode('<!-- pagebreak -->', $article->getResume());
                 $actu->resume = $tab[0];
+                $actu->hasPageBreak = strpos($article->getResume(),'<!-- pagebreak -->') !== false;
 
                 //types / catégories
                 $types            = $article->getTypes();
@@ -604,6 +605,7 @@ class ObjetManager extends BaseManager
         //resume
         $tab = explode('<!-- pagebreak -->', $article->getResume());
         $item->resume = $tab[0];
+        $item->hasPageBreak = strpos($article->getResume(),'<!-- pagebreak -->') !== false;
 
         return $item;
     }
