@@ -156,13 +156,20 @@ class ObjetController extends Controller
             {
                 $primaryKeys[] = $data['id'];
             }
-        }        
+        }      
 
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->findBy( array('id' => $primaryKeys) );
 
-        $this->get('hopitalnumerique_objet.manager.objet')->delete( $objets );
-
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        try
+        {
+            //Suppression de l'etablissement
+            $this->get('hopitalnumerique_objet.manager.objet')->delete( $objets );
+            $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        } 
+        catch (\Exception $e)
+        {
+            $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible, l\' objet est actuellement lié et ne peut pas être supprimé.');
+        }
 
         return $this->redirect( $this->generateUrl('hopitalnumerique_objet_objet') );
     }

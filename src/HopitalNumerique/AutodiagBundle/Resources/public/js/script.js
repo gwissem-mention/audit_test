@@ -275,16 +275,12 @@ function saveQuestion( url )
             data    : $('#fancybox form').serialize(),
             type    : 'POST',
             success : function( data ){
-                if(data.success)
-                {
-                    $('#questions .results').html( data );
-                    $.fancybox.close(true);
-                }
-                else
-                {
-                    apprise('Une erreur est survenue, vérifiez si le code est bien unique.');
-                }
-            }
+                $('#questions .results').html( data );
+                $.fancybox.close(true);
+            },
+            error : function( data ){
+                apprise('Une erreur est survenue, vérifiez si le code est bien unique.');
+            } 
         });
     }
     return false;
