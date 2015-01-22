@@ -102,9 +102,17 @@ class EtablissementController extends Controller
 
         $etablissements = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( array('id' => $primaryKeys) );
 
-        $this->get('hopitalnumerique_etablissement.manager.etablissement')->delete( $etablissements );
-
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        //Tentative de suppression si l'établissement n'est lié nul part
+        try
+        {
+            //Suppression de l'etablissement
+            $this->get('hopitalnumerique_etablissement.manager.etablissement')->delete( $etablissements );
+            $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        } 
+        catch (\Exception $e)
+        {
+            $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible, la référence est actuellement liée et ne peut pas être supprimée.');
+        }
 
         return $this->redirect( $this->generateUrl('hopitalnumerique_etablissement') );
     }

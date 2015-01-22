@@ -1007,6 +1007,19 @@ class Objet
     }
 
     /**
+     * Remove ambassadeurs
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur
+     */
+    public function removeAmbassadeurs($ambassadeurs)
+    {
+        foreach ($ambassadeurs as $ambassadeur)
+        {
+            $this->ambassadeurs->removeElement($ambassadeur);
+        }
+    }
+
+    /**
      * Set ambassadeurs
      *
      * @param \Doctrine\Common\Collections\Collection $ambassadeurs

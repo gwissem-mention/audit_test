@@ -43,7 +43,7 @@ class FaqGrid extends Grid
     {
         $this->addActionButton( new Action\ShowButton( 'nodevo_faq_faq_show' ) );
         $this->addActionButton( new Action\EditButton( 'nodevo_faq_faq_edit' ) );
-        $this->addActionButton( new Action\DeleteButton( 'nodevo_faq_faq_delete' ) );
+        // $this->addActionButton( new Action\DeleteButton( 'nodevo_faq_faq_delete' ) );
     }
 
     /**
@@ -51,6 +51,6 @@ class FaqGrid extends Grid
      */
     public function setMassActions()
     {
-        
+        $this->addMassAction( new Action\DeleteMass('NodevoFaqBundle:Faq:deleteMass') );
     }
 }

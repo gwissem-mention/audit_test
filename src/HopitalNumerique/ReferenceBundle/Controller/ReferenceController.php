@@ -135,8 +135,6 @@ class ReferenceController extends Controller
 
         $this->get('hopitalnumerique_reference.manager.reference')->delete( $references );
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
-
         return $this->redirect( $this->generateUrl('hopitalnumerique_reference_reference') );
     }
 

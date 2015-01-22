@@ -180,7 +180,7 @@ class InscriptionMassController extends Controller
 
         $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
 
-        $sessionId = array_values($inscriptions)[0]->getModule()->getId();
+        $sessionId = array_values($inscriptions)[0]->getSession()->getModule()->getId();
 
         $url = strpos($this->getRequest()->headers->get('referer'), 'inscription/all') ? $this->generateUrl('hopitalnumerique_module_module_allinscription') : $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id'=>$sessionId));
 

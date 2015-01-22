@@ -60,6 +60,19 @@ class EtablissementManager extends BaseManager
         return $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
     }
 
+    // public function delete( $etablissements )
+    // {
+    //     try 
+    //     {
+    //         parent::delete($etablissements);
+    //         $this->_session->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+    //     }
+    //     catch (\Exception $e)
+    //     {
+    //         $this->_session->getFlashBag()->add('danger', 'Cet établissement semble être lié à un ou plusieurs utilisateur(s). Vous ne pouvez pas le supprimer.' );
+    //     }
+    // }
+
 
 
 

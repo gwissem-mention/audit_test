@@ -76,6 +76,34 @@ class FaqController extends Controller
         return new Response('{"success":true, "url" : "'.$this->generateUrl('nodevo_faq_faq').'"}', 200);
     }
 
+    /**
+     * Suppression de masse des faq
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('nodevo_faq.grid.faq')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }        
+
+        $faqs = $this->get('nodevo_faq.manager.faq')->findBy( array('id' => $primaryKeys) );
+        
+        //Suppression de l'etablissement
+        $this->get('nodevo_faq.manager.faq')->delete( $faqs );
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+
+        return $this->redirect( $this->generateUrl('nodevo_faq_faq') );
+    }
+
 
 
 
