@@ -41,9 +41,9 @@
     </div>
     <div class="col-md-12">
         {% if objet['hasPageBreak']%}
-            <p>{{ objet['resume']|trim }}</p></p>
+            <p>{{ objet['resume']|trim }}</p>
         {% else %}
-            <p>{{ objet['resume']|trim|truncate(400) }}</p><span class="rose">[...]</span></p>
+            <p>{{ objet['resume']|trim|truncate(400) }}</p>
         {% endif %}
     </div>
 </div>
