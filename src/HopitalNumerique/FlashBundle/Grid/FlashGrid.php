@@ -40,7 +40,7 @@ class FlashGrid extends Grid implements GridInterface
     public function setActionsButtons()
     {
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_flash_flash_edit' ) );
-        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_flash_flash_delete' ) );
+        // $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_flash_flash_delete' ) );
     }
 
     /**
@@ -48,6 +48,6 @@ class FlashGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        
+        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueFlashBundle:Flash:deleteMass') );
     }
 }

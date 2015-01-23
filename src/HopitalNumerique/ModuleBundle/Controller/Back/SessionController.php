@@ -128,6 +128,38 @@ class SessionController extends Controller
     }
 
     /**
+     * Suppression de masse des glossaires
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_module.manager.session')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }   
+
+        $sessions = $this->get('hopitalnumerique_module.manager.session')->findBy( array('id' => $primaryKeys) );
+
+        $moduleId = array_values($sessions)[0]->getModule()->getId();
+
+        $url = strpos($this->getRequest()->headers->get('referer'), 'session/all') ? $this->generateUrl('hopitalnumerique_module_module_allsession') : $this->generateUrl('hopitalnumerique_module_module_session', array('id'=>$moduleId));
+
+        $this->get('hopitalnumerique_module.manager.session')->delete( $sessions );
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+
+        return $this->redirect( $url );
+    }
+
+    /**
      * Download le fichier de session.
      * 
      * @author Gaetan MELCHILSEN

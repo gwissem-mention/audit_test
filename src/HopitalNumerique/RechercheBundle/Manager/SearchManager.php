@@ -165,8 +165,9 @@ class SearchManager extends BaseManager
             $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
 
             //clean resume (pagebreak)
-            $tab = explode('<!-- pagebreak -->', $objet->getResume() );
-            $item['resume'] = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+            $tab                  = explode('<!-- pagebreak -->', $objet->getResume() );
+            $item['resume']       = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+            $item['hasPageBreak'] = strpos($objet->getResume(),'<!-- pagebreak -->') !== false;
             
             //get Categ and Type
             $tmp = $this->getTypeAndCateg( $objet );
@@ -179,7 +180,7 @@ class SearchManager extends BaseManager
             $item['created']  = $objet->getDateCreation();
             $item['modified'] = $objet->getDateModification();
 
-            $results[] = $item;
+            $results[$objet->getId()] = $item;
         }
 
         //Parcourt les contenus pour les ajouter (si la date de publication de l'objet lié est renseignée et respectée) formaté au tableau des résults en vérifiant l'accès
@@ -229,6 +230,7 @@ class SearchManager extends BaseManager
             //clean resume (pagebreak)
             $tab = explode('<!-- pagebreak -->', $contenu->getContenu());
             $item['resume'] = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+            $item['hasPageBreak'] = strpos($contenu->getContenu(),'<!-- pagebreak -->') !== false;
             $item['type']   = array();
 
             //get Categ and Type
@@ -242,7 +244,7 @@ class SearchManager extends BaseManager
             $item['created']  = $contenu->getDateCreation();
             $item['modified'] = $contenu->getDateModification();
 
-            $results[] = $item;
+            $results[$objet->getId() . '.' . $contenu->getId()] = $item;
         }
 
         return $results;
@@ -384,6 +386,7 @@ class SearchManager extends BaseManager
         //description
         $tab          = explode('<!-- pagebreak -->', $desc);
         $meta['desc'] = html_entity_decode(strip_tags($tab[0]));
+        $meta['hasPageBreak'] = strpos($desc,'<!-- pagebreak -->') !== false;
 
         //keywords
         $meta['keywords'] = array();
@@ -698,9 +701,10 @@ class SearchManager extends BaseManager
         $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
 
         //clean resume (pagebreak)
-        $tab = explode('<!-- pagebreak -->', $contenu->getContenu());
-        $item['resume'] = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
-        $item['type']   = array();
+        $tab                  = explode('<!-- pagebreak -->', $contenu->getContenu());
+        $item['resume']       = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+        $item['hasPageBreak'] = strpos($contenu->getContenu(),'<!-- pagebreak -->') !== false;
+        $item['type']         = array();
 
         //get Categ and Type
         $tmp = $this->getTypeAndCateg( $objet );
@@ -751,8 +755,9 @@ class SearchManager extends BaseManager
         $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
 
         //clean resume (pagebreak)
-        $tab = explode('<!-- pagebreak -->', $objet->getResume() );
-        $item['resume'] = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+        $tab                  = explode('<!-- pagebreak -->', $objet->getResume() );
+        $item['resume']       = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
+        $item['hasPageBreak'] = strpos($objet->getResume(),'<!-- pagebreak -->') !== false;
         
         //get Categ and Type
         $tmp = $this->getTypeAndCateg( $objet );

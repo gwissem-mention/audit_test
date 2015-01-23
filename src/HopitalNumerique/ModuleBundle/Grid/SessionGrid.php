@@ -106,7 +106,7 @@ class SessionGrid extends Grid implements GridInterface
         $this->addActionButton( $lockButton );
         //--------- GME 16/06 : Cadenas lock/unlock -------
 
-        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_delete' ) );
+        //$this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_delete' ) );
 
     }
 
@@ -115,7 +115,6 @@ class SessionGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        
-        
+        $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueModuleBundle:Back/Session:deleteMass') );
     }
 }

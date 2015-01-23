@@ -36,10 +36,10 @@ class CategorieGrid extends Grid implements GridInterface
         $this->addColonne( $noteColumn );
 
         //Colonnes invisible
-        $idCatColumn = new Column\TextColumn('idCat', 'ID to hide');
-        $idCatColumn->setFilterable( false );
-        $idCatColumn->setVisible( false );
-        $this->addColonne( $idCatColumn );
+        $idOutilColumn = new Column\TextColumn('idOutil', 'ID to hide');
+        $idOutilColumn->setFilterable( false );
+        $idOutilColumn->setVisible( false );
+        $this->addColonne( $idOutilColumn );
     }
 
     /**
@@ -48,13 +48,13 @@ class CategorieGrid extends Grid implements GridInterface
     public function setActionsButtons()
     {
         $editButton = new Action\EditButton( 'hopitalnumerique_autodiag_categorie_edit' );
-        $editButton->setRouteParameters( array('id', 'idCat') );
+        $editButton->setRouteParameters( array('idOutil', 'id') );
         $this->addActionButton( $editButton );
         
-        $deleteButton = new Action\DeleteButton( 'hopitalnumerique_autodiag_categorie_delete' );
-        $deleteButton->setRouteParameters( array('idCat') );
-        $deleteButton->setRouteParametersMapping( array( 'idCat' => 'id') );
-        $this->addActionButton( $deleteButton );
+        // $deleteButton = new Action\DeleteButton( 'hopitalnumerique_autodiag_categorie_delete' );
+        // $deleteButton->setRouteParameters( array('idCat') );
+        // $deleteButton->setRouteParametersMapping( array( 'idCat' => 'id') );
+        // $this->addActionButton( $deleteButton );
     }
 
     /**
@@ -62,6 +62,6 @@ class CategorieGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-
+        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueAutodiagBundle:Categorie:deleteMass') );
     }
 }

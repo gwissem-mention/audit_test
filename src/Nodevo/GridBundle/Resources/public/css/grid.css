@@ -6,6 +6,7 @@
 .grid-search form .form-group{min-height: 54px}
 .grid_footer .total{float: left; margin: 10px; height: 34px; padding-top: 6px;}
 .grid_header .total{margin:10px 10px 10px 0;}
+.grid_header .mass-actions{margin:0 0 10px 0;}
 
 /*****************************************************/
 /************          Colonnes           ************/

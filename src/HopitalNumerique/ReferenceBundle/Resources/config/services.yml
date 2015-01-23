@@ -6,7 +6,7 @@ parameters:
 services:
     hopitalnumerique_reference.manager.reference:
         class: "%hopitalnumerique_reference.manager.reference.class%"
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@session"]
         calls:
            - [ setCache, [ "@liip_doctrine_cache.ns.main" ] ]
 

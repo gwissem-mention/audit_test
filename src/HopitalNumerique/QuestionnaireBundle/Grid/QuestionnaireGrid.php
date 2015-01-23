@@ -59,7 +59,7 @@ class QuestionnaireGrid extends Grid implements GridInterface
         ));
         $this->addActionButton( $viderReponsesButton );
         
-        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_questionnaire_delete_questionnaire' ) );
+        // $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_questionnaire_delete_questionnaire' ) );
     }
 
     /**
@@ -67,5 +67,6 @@ class QuestionnaireGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
+        $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:deleteMass') );
     }
 }

@@ -52,7 +52,7 @@ class BaseInscriptionGrid extends Grid implements GridInterface
         $actionFicheEvaluation->setRouteParametersMapping(array('userId' => 'user', 'sessionId' => 'session'));
         $actionFicheEvaluation->setRouteParameters(array('userId', 'sessionId'));
         $this->addActionButton( $actionFicheEvaluation );
-        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_inscription_delete' ) );
+        //$this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_inscription_delete' ) );
     }
 
     /**
@@ -76,5 +76,7 @@ class BaseInscriptionGrid extends Grid implements GridInterface
         /* Exports */
         $this->addMassAction( new Action\ActionMass('Export CSV - Inscriptions', 'HopitalNumeriqueModuleBundle:Back/ExportMass:exportCsv') );
         $this->addMassAction( new Action\ActionMass('Envoyer un mail'          , 'HopitalNumeriqueModuleBundle:Back/InscriptionMass:envoyerMailMass') );
+
+        $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueModuleBundle:Back/InscriptionMass:deleteMass') );
     }
 }

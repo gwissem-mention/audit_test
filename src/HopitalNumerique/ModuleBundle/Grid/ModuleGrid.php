@@ -65,7 +65,7 @@ class ModuleGrid extends Grid implements GridInterface
         $ajoutSession->setAttributes( array('class'=>'btn btn-warning fa fa-plus','title' => 'Ajouter une session') );
         $this->addActionButton( $ajoutSession );
         
-        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_delete' ) );
+        // $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_delete' ) );
     }
 
     /**
@@ -73,6 +73,6 @@ class ModuleGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        
+        $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueModuleBundle:Back/Module:deleteMass') );
     }
 }

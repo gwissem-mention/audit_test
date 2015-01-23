@@ -82,6 +82,42 @@ class EtablissementController extends Controller
     }
 
     /**
+     * Suppression de masse des categories
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_autodiag.grid.categorie')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['idCat'];
+            }
+        }        
+
+        $etablissements = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( array('id' => $primaryKeys) );
+
+        //Tentative de suppression si l'établissement n'est lié nul part
+        try
+        {
+            //Suppression de l'etablissement
+            $this->get('hopitalnumerique_etablissement.manager.etablissement')->delete( $etablissements );
+            $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        } 
+        catch (\Exception $e)
+        {
+            $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible, la référence est actuellement liée et ne peut pas être supprimée.');
+        }
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_etablissement') );
+    }
+
+    /**
      * Génère la liste des département en fonction de l'id de la région
      */
     public function departementsAction()

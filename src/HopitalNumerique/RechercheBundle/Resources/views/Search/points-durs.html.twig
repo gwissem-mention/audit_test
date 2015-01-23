@@ -32,6 +32,11 @@
         {% endif %}
     </div>
     <div class="col-md-12">
-        <p>{{ objet['resume']|parsePublication|raw|truncate(400) }}</p> <span class="rose">[...]</span></p>
+        {% if objet['hasPageBreak']%}
+            <p>{{ objet['resume']|parsePublication|raw }}</p><span class="rose">[...]</span></p>
+        {% else %}
+            <p>{{ objet['resume']|parsePublication|raw|truncate(400) }}</p><span class="rose">[...]</span></p>
+        {% endif %}
     </div>
+
 </div>

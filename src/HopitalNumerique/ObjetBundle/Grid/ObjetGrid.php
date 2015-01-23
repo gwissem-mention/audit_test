@@ -77,7 +77,7 @@ class ObjetGrid extends Grid implements GridInterface
         $this->addActionButton( $referencesButton );
 
         //Delete
-        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_objet_objet_delete' ) );
+        // $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_objet_objet_delete' ) );
 
         //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
         $unlockButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_objet_objet_cancel');
@@ -95,5 +95,6 @@ class ObjetGrid extends Grid implements GridInterface
     public function setMassActions()
     {
         $this->addMassAction( new Action\ActionMass('Export CSV', 'HopitalNumeriqueObjetBundle:Export:exportCsv') );
+        $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueObjetBundle:Objet:deleteMass') );
     }
 }

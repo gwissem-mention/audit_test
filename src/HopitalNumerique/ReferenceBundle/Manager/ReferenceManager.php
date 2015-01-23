@@ -5,7 +5,10 @@ namespace HopitalNumerique\ReferenceBundle\Manager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManager;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Manager de l'entité Reference.
@@ -14,6 +17,21 @@ class ReferenceManager extends BaseManager
 {
     protected $_class       = 'HopitalNumerique\ReferenceBundle\Entity\Reference';
     private $_tabReferences = array();
+    private $_session;
+
+    /**
+     * Constructeur du manager gérant les références
+     *
+     * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
+     * @param \HopitalNumerique\AutodiagBundle\Manager\ResultatManager $resultatManager Le manager de l'entité Resultat
+     * @return void
+     */
+    public function __construct(EntityManager $entityManager, Session $session)
+    {
+        parent::__construct($entityManager);
+
+        $this->_session = $session;
+    }
 
     /**
      * Formate et retourne l'arborescence des références
@@ -262,6 +280,20 @@ class ReferenceManager extends BaseManager
         }
 
         return $results;
+    }
+
+
+    public function delete( $references )
+    {
+        try 
+        {
+            parent::delete($references);
+            $this->_session->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        }
+        catch (\Exception $e)
+        {
+            $this->_session->getFlashBag()->add('danger', 'Cette référence semble avoir une ou plusieurs liaison(s). Vous ne pouvez pas la supprimer.' );
+        }
     }
 
 

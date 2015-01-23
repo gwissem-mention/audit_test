@@ -45,7 +45,7 @@ class GlossaireGrid extends Grid implements GridInterface
     {
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_glossaire_glossaire_show' ) );
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_glossaire_glossaire_edit' ) );
-        $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_glossaire_glossaire_delete' ) );
+        //$this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_glossaire_glossaire_delete' ) );
     }
 
     /**
@@ -54,5 +54,6 @@ class GlossaireGrid extends Grid implements GridInterface
     public function setMassActions()
     {
         $this->addMassAction( new Action\ActionMass('Export CSV', 'HopitalNumeriqueGlossaireBundle:Glossaire:exportCsv') );
+        $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueGlossaireBundle:Glossaire:deleteMass') );
     }
 }
