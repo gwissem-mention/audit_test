@@ -39,7 +39,7 @@ class Questionnaire
     /**
      * @var string
      *
-     * @ORM\Column(name="qst_lien", type="string", length=255, options = {"comment" = "Lien de redirection après validation du questionnaire"})
+     * @ORM\Column(name="qst_lien", type="string", length=255, nullable=true, options = {"comment" = "Lien de redirection après validation du questionnaire"})
      */
     protected $lien;
 
