@@ -5,6 +5,7 @@ var hasResultat =false;
 
 $(document).ready(function() {
     var hasResultat =false;
+    $('#bloc_exalead').removeClass('col-md-6').removeClass('col-xs-12');
     $("#bloc_filtres").hide();
 
     //Gestion de l'ajout de critères dans la requete
@@ -37,6 +38,7 @@ $(document).ready(function() {
             //placeholder management
             if( success && showPlaceholder){
                 $(".placeholder").hide();
+                $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
                 $("#bloc_filtres").show();
                 showPlaceholder = false;
                 $("#dest").removeClass('hide');
@@ -66,6 +68,7 @@ $(document).ready(function() {
         //placeholder management
         if( success && showPlaceholder){
             $(".placeholder").hide();
+            $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
             $("#bloc_filtres").show();
             showPlaceholder = false;
             $("#dest").removeClass('hide');
@@ -170,6 +173,7 @@ $(document).ready(function() {
             $(".placeholder-aucunCritere").remove();
         }
         $(".placeholder").hide();
+        $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
         $("#bloc_filtres").show();
         showPlaceholder = false;
         $("#dest").removeClass('hide');
@@ -213,6 +217,7 @@ $(document).ready(function() {
         if($("#recherche_textuelle").val() != '')
         {
             $(".placeholder").hide();
+            $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
             $("#bloc_filtres").show();
             showPlaceholder = false;
             $("#dest").removeClass('hide');
@@ -409,6 +414,7 @@ function handleParentsDestination( item )
             {
                 $(".arbo-requete").find('li').addClass('hide');
                 $(".placeholder").show();
+                $('#bloc_exalead').removeClass('col-md-6').removeClass('col-xs-12');
                 $("#bloc_filtres").hide();
                 showPlaceholder = true;
                 $("#dest").addClass('hide');
@@ -763,6 +769,7 @@ function affichagePlaceholder()
     if(hasResultat)
     {
         $(".placeholder").hide();
+        $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
         $("#bloc_filtres").show();
         showPlaceholder = false;
         $("#dest").removeClass('hide');
@@ -772,6 +779,7 @@ function affichagePlaceholder()
     {
         $(".arbo-requete").find('li').addClass('hide');
         $(".placeholder").show();
+        $('#bloc_exalead').removeClass('col-md-6').removeClass('col-xs-12');
         $("#bloc_filtres").hide();
         showPlaceholder = true;
         $("#dest").addClass('hide');
@@ -779,6 +787,7 @@ function affichagePlaceholder()
     }
     else
     {
+        $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
         $("#bloc_filtres").show();
     }
 

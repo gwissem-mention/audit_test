@@ -101,22 +101,20 @@
 
                     <hr />
 
-                    <div {% if not activationExalead %}style="display:none"{% endif %}>
+                    <div id="bloc_exalead" {% if not activationExalead %}style="display:none"{% endif %}>
                         <div id="recherche_textuelle_group">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
                                 <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control col-md-12" value="{{rechercheTextuelle}}" />
-                                  <span class="input-group-btn">
+                                <span class="input-group-btn">
                                     <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
-                                  </span>
+                                </span>
                                 <input type="hidden" id="recherche_textuelle_minifie" value="{{categoriesProductionActif}}" />
                             </div>
                         </div>
                     </div>
 
-                    <div id="bloc_filtres">
-                    
-                        <hr />
+                    <div id="bloc_filtres" class="col-md-6 col-xs-12">
 
                         <select multiple="multiple" class="form-control" placeholder="Sélectionnez un filtre pour un point dur" name="categ_production_select" id="categ_production_select" style="height:200px;">
                             {% for categorieProduction in categoriesProduction %}
@@ -126,6 +124,7 @@
                         <input type="hidden" id="categ_production_select_vals" value="{{categoriesProductionActif}}" />
                         <input type="hidden" id="categ_production_select_vals_chargement" value="{{categoriesProductionActifJSON}}" />
                     </div>
+                    <div style="clear:both;"></div>
                 </div>
             </div>
             
