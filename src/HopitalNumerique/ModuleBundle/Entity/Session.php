@@ -628,6 +628,7 @@ class Session
                 $inscriptionsAcceptees[$inscription->getUser()->getNom() . " " . $inscription->getUser()->getPrenom()] = $inscription;
             }
         }
+        ksort($inscriptionsAcceptees);
         
         return $inscriptionsAcceptees;
     }
