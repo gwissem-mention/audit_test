@@ -525,7 +525,7 @@ function updateResultats( cleanSession )
                     }
                 });
                 
-                $("#resultats p, #resultats h5, #resultats a").highlight( rechercheStrict );
+                $("#resultats p, #resultats h5, #resultats a").highlight( rechercheStrict, { wordsOnly: true } );
             }
 
             placeholderExalead();
