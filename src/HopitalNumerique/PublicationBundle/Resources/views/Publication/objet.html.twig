@@ -122,14 +122,6 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
             <div class="col-md-12" id="publication-resume">
                 {{contenu.contenu|parsePublication(contenu.glossaires)|raw}}
             </div>
-            <div class="col-md-12">
-                {% if contenu.objet.dateParution %}
-                    Date de parution : {{contenu.objet.dateParution}}<br/>
-                {% endif %}
-                {% if contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument %}
-                    Source du document : {{contenu.objet.fichierModifiable.sourceDocument}}
-                {% endif %}
-            </div>
         {# Cas Objet #}
         {% else %}
             <div class="col-md-12">
@@ -169,14 +161,6 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                         {% endif %}
                         <div class="col-md-12" id="publication-resume">
                             {{objet.resume|parsePublication(objet.glossaires)|raw}}
-                        </div>
-                        <div class="col-md-12">
-                            {% if objet.dateParution %}
-                                Date de parution : {{objet.dateParution}}<br/>
-                            {% endif %}
-                            {% if objet.fichierModifiable.sourceDocument %}
-                                Source du document : {{objet.fichierModifiable.sourceDocument}}
-                            {% endif %}
                         </div>
 
                         <div id="bloc-notation-objet" class="col-md-10 pull-right">
@@ -255,14 +239,6 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                 {% endif %}
                 <div class="col-md-12" id="publication-resume">
                     {{objet.resume|parsePublication(objet.glossaires)|raw}}
-                </div>
-                <div class="col-md-12">
-                    {% if objet.dateParution %}
-                        Date de parution : {{objet.dateParution}}<br/>
-                    {% endif %}
-                    {% if objet.fichierModifiable and objet.fichierModifiable.sourceDocument %}
-                        Source du document : {{objet.fichierModifiable.sourceDocument}}
-                    {% endif %}
                 </div>
             {% endif %}
         {% endif %}
@@ -369,7 +345,29 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                 </div>
             </div>
         {% endif %}
-        
+        {% if contenu is defined %}
+            {% if contenu.objet.dateParution or ( contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument ) %}
+            <div class="col-md-12" id="date-source">
+            {% if contenu.objet.dateParution %}
+                Date de parution : {{contenu.objet.dateParution}}<br/>
+            {% endif %}
+            {% if contenu.objet.fichierModifiable and contenu.objet.fichierModifiable.sourceDocument %}
+                Source du document : {{contenu.objet.fichierModifiable.sourceDocument}}
+            {% endif %}
+            </div>
+            {% endif %}
+        {% else %}
+            {% if objet.dateParution or ( objet.fichierModifiable and objet.fichierModifiable.sourceDocument ) %}
+            <div class="col-md-12" id="date-source">
+            {% if objet.dateParution %}
+                Date de parution : {{objet.dateParution}}<br/>
+            {% endif %}
+            {% if objet.fichierModifiable and objet.fichierModifiable.sourceDocument %}
+                Source du document : {{objet.fichierModifiable.sourceDocument}}
+            {% endif %}
+            </div>
+            {% endif %}
+        {% endif %}
         {# Gestion des commantaires #}
         {% if objet.commentaires %}
             {# Cas Contenu #}
