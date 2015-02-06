@@ -142,12 +142,15 @@ class InscriptionRepository extends EntityRepository
         $qb->select('user.id as userId,
                      insc.dateInscription as date,
                      session.id as sessionId,
-                     module.id as moduleId')
+                     module.id as moduleId'
+            )
             ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
             ->leftJoin('insc.user','user')
             ->leftJoin('insc.session','session')
             ->leftJoin('session.module','module')
+            ->leftJoin('insc.etatParticipation','etat')
             ->where( 'user.id IN (:users)' )
+            ->andWhere( 'etat.id = 411' )
             ->setParameter('users', $usersId )
             ->orderBy('insc.dateInscription')
             ->groupBy('user.id, module.id');
