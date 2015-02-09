@@ -34,9 +34,10 @@ class FactureGrid extends Grid implements GridInterface
         $this->addColonne( new Column\AssocColumn('user.region.libelle', 'Région') );
         $this->addColonne( new Column\AssocColumn('user.etablissementRattachementSante.nom', 'Établissement') );
         $this->addColonne( new Column\TextColumn('total', 'Total') );
+        $this->addColonne( new Column\TextColumn('id', 'Numéro de facture') );
         
-        $payedColumn = new Column\BooleanColumn('payee', 'Facture Payée ?');
-        $payedColumn->setSize( 120 );
+        $payedColumn = new Column\BooleanColumn('payee', 'Payé');
+        $payedColumn->setSize( 60 );
         $this->addColonne( $payedColumn );
 
         /* Colonnes invisibles */

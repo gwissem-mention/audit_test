@@ -5,6 +5,7 @@ var hasResultat =false;
 
 $(document).ready(function() {
     var hasResultat =false;
+    $('#bloc_exalead').removeClass('col-md-6').removeClass('col-xs-12');
     $("#bloc_filtres").hide();
 
     //Gestion de l'ajout de critères dans la requete
@@ -37,6 +38,7 @@ $(document).ready(function() {
             //placeholder management
             if( success && showPlaceholder){
                 $(".placeholder").hide();
+                $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
                 $("#bloc_filtres").show();
                 showPlaceholder = false;
                 $("#dest").removeClass('hide');
@@ -66,6 +68,7 @@ $(document).ready(function() {
         //placeholder management
         if( success && showPlaceholder){
             $(".placeholder").hide();
+            $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
             $("#bloc_filtres").show();
             showPlaceholder = false;
             $("#dest").removeClass('hide');
@@ -170,6 +173,7 @@ $(document).ready(function() {
             $(".placeholder-aucunCritere").remove();
         }
         $(".placeholder").hide();
+        $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
         $("#bloc_filtres").show();
         showPlaceholder = false;
         $("#dest").removeClass('hide');
@@ -213,6 +217,7 @@ $(document).ready(function() {
         if($("#recherche_textuelle").val() != '')
         {
             $(".placeholder").hide();
+            $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
             $("#bloc_filtres").show();
             showPlaceholder = false;
             $("#dest").removeClass('hide');
@@ -409,6 +414,7 @@ function handleParentsDestination( item )
             {
                 $(".arbo-requete").find('li').addClass('hide');
                 $(".placeholder").show();
+                $('#bloc_exalead').removeClass('col-md-6').removeClass('col-xs-12');
                 $("#bloc_filtres").hide();
                 showPlaceholder = true;
                 $("#dest").addClass('hide');
@@ -485,12 +491,41 @@ function updateResultats( cleanSession )
 
             loader.finished();
 
-            if($("#recherche_textuelle").val() != "")
+            var search = $("#recherche_textuelle").val();
+            if(search != "")
             {
-                $("#resultats p, #resultats h5, #resultats a").each(function(){
-                    $(this).highlight( $("#recherche_textuelle").val() );
-                    //$(this).highlight($("#recherche_textuelle").val(), { wordsOnly: true }, { caseSensitive: false });
+                var recherche = new Array();
+                var rechercheStrict = new Array();
+                var strict = search.split('"');
+                $.each( strict, function(key, value){
+                    if( key % 2 != 0 && value != "" ){ 
+                        rechercheStrict.push(value);
+                    } else if( value != "" ){
+                        recherche.push(value);
+                    }
                 });
+                $.each( recherche, function(cle, val){
+                    var tab = val.split(" ");
+                    $.each( tab, function(key, value){
+                        if( value != "" ){ 
+                            rechercheStrict.push(value);
+                        }
+                    });
+                });
+
+
+                $.each(rechercheStrict, function(key, value){
+                    var replace1 = value.replace("’", "'");
+                    if( rechercheStrict.indexOf(replace1) < 0 ){
+                        rechercheStrict.push(replace1);
+                    }
+                    var replace2 = value.replace("'", "’");
+                    if( rechercheStrict.indexOf(replace2) < 0 ){
+                        rechercheStrict.push(replace2);
+                    }
+                });
+                
+                $("#resultats p, #resultats h5, #resultats a").highlight( rechercheStrict, { wordsOnly: true } );
             }
 
             placeholderExalead();
@@ -763,6 +798,7 @@ function affichagePlaceholder()
     if(hasResultat)
     {
         $(".placeholder").hide();
+        $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
         $("#bloc_filtres").show();
         showPlaceholder = false;
         $("#dest").removeClass('hide');
@@ -772,6 +808,7 @@ function affichagePlaceholder()
     {
         $(".arbo-requete").find('li').addClass('hide');
         $(".placeholder").show();
+        $('#bloc_exalead').removeClass('col-md-6').removeClass('col-xs-12');
         $("#bloc_filtres").hide();
         showPlaceholder = true;
         $("#dest").addClass('hide');
@@ -779,6 +816,7 @@ function affichagePlaceholder()
     }
     else
     {
+        $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
         $("#bloc_filtres").show();
     }
 
@@ -804,61 +842,65 @@ function isEmpty( el ){
 
 //Plugin de highlight
 
-jQuery.fn.highlight = function(pat) {
- function innerHighlight(node, pat) {
+jQuery.extend({
+    highlight: function (node, re, nodeName, className) {
+        if (node.nodeType === 3) {
+            var match = node.data.match(re);
+            if (match) {
+                var highlight = document.createElement(nodeName || 'span');
+                highlight.className = className || 'highlight';
+                var wordNode = node.splitText(match.index);
+                wordNode.splitText(match[0].length);
+                var wordClone = wordNode.cloneNode(true);
+                highlight.appendChild(wordClone);
+                wordNode.parentNode.replaceChild(highlight, wordNode);
+                return 1; //skip added node in parent
+            }
+        } else if ((node.nodeType === 1 && node.childNodes) && // only element nodes that have children
+                !/(script|style)/i.test(node.tagName) && // ignore script and style nodes
+                !(node.tagName === nodeName.toUpperCase() && node.className === className)) { // skip if already highlighted
+            for (var i = 0; i < node.childNodes.length; i++) {
+                i += jQuery.highlight(node.childNodes[i], re, nodeName, className);
+            }
+        }
+        return 0;
+    }
+});
 
-  pat =  pat.replace('*', '');
+jQuery.fn.unhighlight = function (options) {
+    var settings = { className: 'highlight', element: 'span' };
+    jQuery.extend(settings, options);
 
-  var skip = 0;
-  if (node.nodeType == 3) {
-   var pos = node.data.toUpperCase().indexOf(pat);
-   if (pos >= 0) {
-    var spannode = document.createElement('span');
-    spannode.className = 'highlight';
-    var middlebit = node.splitText(pos);
-    var endbit = middlebit.splitText(pat.length);
-    var middleclone = middlebit.cloneNode(true);
-    spannode.appendChild(middleclone);
-    middlebit.parentNode.replaceChild(spannode, middlebit);
-    skip = 1;
-   }
-  }
-  else if (node.nodeType == 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
-   for (var i = 0; i < node.childNodes.length; ++i) {
-    i += innerHighlight(node.childNodes[i], pat);
-   }
-  }
-  return skip;
- }
- return this.each(function() {
-  innerHighlight(this, pat.toUpperCase());
- });
+    return this.find(settings.element + "." + settings.className).each(function () {
+        var parent = this.parentNode;
+        parent.replaceChild(this.firstChild, this);
+        parent.normalize();
+    }).end();
 };
 
-jQuery.fn.removeHighlight = function() {
- function newNormalize(node) {
-    for (var i = 0, children = node.childNodes, nodeCount = children.length; i < nodeCount; i++) {
-        var child = children[i];
-        if (child.nodeType == 1) {
-            newNormalize(child);
-            continue;
-        }
-        if (child.nodeType != 3) { continue; }
-        var next = child.nextSibling;
-        if (next == null || next.nodeType != 3) { continue; }
-        var combined_text = child.nodeValue + next.nodeValue;
-        new_node = node.ownerDocument.createTextNode(combined_text);
-        node.insertBefore(new_node, child);
-        node.removeChild(child);
-        node.removeChild(next);
-        i--;
-        nodeCount--;
+jQuery.fn.highlight = function (words, options) {
+    var settings = { className: 'highlight', element: 'span', caseSensitive: false, wordsOnly: false };
+    jQuery.extend(settings, options);
+    
+    if (words.constructor === String) {
+        words = [words];
     }
- }
+    words = jQuery.grep(words, function(word, i){
+      return word != '';
+    });
+    words = jQuery.map(words, function(word, i) {
+      return word.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    });
+    if (words.length == 0) { return this; };
 
- return this.find("span.highlight").each(function() {
-    var thisParent = this.parentNode;
-    thisParent.replaceChild(this.firstChild, this);
-    newNormalize(thisParent);
- }).end();
+    var flag = settings.caseSensitive ? "" : "i";
+    var pattern = "(" + words.join("|") + ")";
+    if (settings.wordsOnly) {
+        pattern = "\\b" + pattern + "\\b";
+    }
+    var re = new RegExp(pattern, flag);
+    
+    return this.each(function () {
+        jQuery.highlight(this, re, settings.element, settings.className);
+    });
 };

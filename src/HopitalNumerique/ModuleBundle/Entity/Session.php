@@ -625,10 +625,11 @@ class Session
             $etatInscription = $inscription->getEtatInscription();
             if(407 === $etatInscription->getId())
             {
-                $inscriptionsAcceptees[] = $inscription;
+                $inscriptionsAcceptees[$inscription->getUser()->getNom() . " " . $inscription->getUser()->getPrenom()] = $inscription;
             }
         }
-
+        ksort($inscriptionsAcceptees);
+        
         return $inscriptionsAcceptees;
     }
 

@@ -68,9 +68,20 @@
 
     /* Zone de recherche textuelle */
     #recherche #recherche_textuelle { z-index: 1}
-    #recherche #recherche_textuelle_group{margin-bottom: 10px;margin-top : 10px;}
+    #recherche #recherche_textuelle_group{margin-top : 10px;}
+    #recherche #recherche_textuelle_group .btn.btn-success{-moz-border-radius: 0px 4px 4px 0px;-webkit-border-radius: 0px 4px 4px 0px;border-radius: 0px 4px 4px 0px;}
     #recherche #arbo-type-prod { padding: 0;}
     #recherche #arbo-recherche-textuelle { padding: 0;}
+    #recherche #bloc_filtres{padding-right:0px}
+    #recherche #bloc_exalead.col-md-6{padding-left:0px;}
+    #recherche #bloc_exalead.col-xs-12{padding-left:0px;padding-right:0px;}
+    #recherche #bloc_exalead.col-md-6 #recherche_textuelle_group{margin-top:0px;}
+    
+    @media screen and (max-width: 991px) {
+        #recherche #bloc_filtres{padding-left:0px;}
+        #recherche #bloc_filtres{margin-top:10px;}
+    }
+    
 
 /* Résultats */
     #recherche #resultats{ margin-top: 20px; }

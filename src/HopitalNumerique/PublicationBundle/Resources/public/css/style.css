@@ -78,6 +78,9 @@
     #publication #productions .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top:10px; display: block; height: 18px; text-align: right}
     #publication #productions .wrapper-results .results p{font-size: 13px; color:#070707; }
     #publication #productions .wrapper-results .results .fa-refresh{ color:#3da20b; }
+    
+    /* Bloc Date de parution - source du document */
+    #publication #date-source{font-weight:bold;font-size:12px;margin-top:20px;}
 
 /* Liste ambassadeurs */
     #ambassadeurs{position: fixed; right:0; top:0; height: 100%; max-width: 33%}

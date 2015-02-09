@@ -55,11 +55,15 @@ class DefaultController extends Controller
             {
                 if($inscription->getSession()->getEtat()->getId() == 403)
                 {
-                    if( $inscription->getEtatInscription()->getId() == 406)
+                    if( $inscription->getEtatInscription()->getId() == 406){
                         $blocSessions['inscriptions']++;
+                    }
 
-                    if( $inscription->getEtatParticipation() && $inscription->getEtatParticipation()->getId() == 411 && $inscription->getUser()->hasRoleAmbassadeur() && $inscription->getSession()->getModule()->getId() == 6 )
+                    if( $inscription->getEtatParticipation() && $inscription->getEtatParticipation()->getId() == 411 
+                        && $inscription->getUser()->hasRoleAmbassadeur() && $inscription->getSession()->getModule()->getId() == 6 
+                    ){
                         $blocUser['ambassadeursMAPF']++;
+                    }
                 }
             }
         }
