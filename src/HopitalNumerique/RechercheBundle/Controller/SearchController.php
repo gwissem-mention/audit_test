@@ -113,6 +113,9 @@ class SearchController extends Controller
         // YRO 20/01/2015 : cacher l'icone de pertinence
         $onlyText = false;
         
+        // YRO 10/02/2015 : les occurences réellement trouvées dans les contenus
+        $patternFounded = array();
+        
         //vvvvv GME 21/11/2014 : Exalead
         if(trim($rechercheTextuelle) !== "")
         {
@@ -122,7 +125,7 @@ class SearchController extends Controller
             $optionsSearch         = $this->get('hopitalnumerique_recherche.manager.search')->getUrlRechercheTextuelle();
             //$urlRechercheTextuelle = "http://fifi.mind7.fr:13010/search-api/search?q=FACTEURS%20CLES%20DE%20SUCCES";
             $urlRechercheTextuelle = $optionsSearch . urlencode($rechercheTextuelle);
-
+            
             $xml = simplexml_load_file($urlRechercheTextuelle);
 
             //Lien mort
@@ -139,6 +142,19 @@ class SearchController extends Controller
                     {
                         $hitUrl      = (string)$hit->attributes()->url;
                         $hitUrlArray = explode("=", $hitUrl);
+                        
+                        // YRO 10/02/2015 : les occurences réellement trouvées dans les contenus
+                        foreach($hit->metas->Meta as $Meta){
+                            if( $Meta->attributes()->name == "text" || $Meta->attributes()->name == "title" ){
+                                foreach( $Meta->MetaText as $MetaText ){
+                                    foreach( $MetaText->TextSeg as $key => $TextSeg ){
+                                        if( $TextSeg->attributes()->highlighted == "true" ){
+                                            $patternFounded[] = (string)$TextSeg;
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
                         if($hitUrlArray[0] == 'obj_id')
                         {
@@ -327,7 +343,8 @@ class SearchController extends Controller
             'objetsOrder'         => $objetsOrder,
             'showMorePointsDurs'  => $showMorePointsDurs,
             'showMoreProductions' => $showMoreProductions,
-            'onlyText'            => $onlyText // YRO 20/01/2015 : cacher l'icone de pertinence
+            'onlyText'            => $onlyText, // YRO 20/01/2015 : cacher l'icone de pertinence
+            'patternFounded'      => json_encode($patternFounded) // YRO 10/02/2015 : les occurences réellement trouvées dans les contenus
         ));
     }
 
