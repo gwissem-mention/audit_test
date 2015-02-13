@@ -707,4 +707,24 @@ class InterventionDemandeRepository extends EntityRepository
 
         return $requete->getQuery()->getResult();
     }
+    
+    /**
+     * Retourne TRUE si le champ "Etat actuel" a été modifié
+     * 
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention l'intervention en question
+     * @return boolean TRUE si le champ "Etat actuel" a été modifié
+     */
+    public function isEtatActuelUpdated(InterventionDemande $intervention)
+    {
+        $requete = $this->_em->createQueryBuilder();
+        $requete->select('interventionDemande')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
+            ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
+            ->where('interventionDemande.id = :id')
+                ->setParameter('id', $intervention->getId())
+            ->andWhere('interventionEtat.id = :etat')
+                ->setParameter('etat', $intervention->getInterventionEtat()->getId())
+        ;
+        return $requete->getQuery()->getOneOrNullResult() ? FALSE : TRUE;
+    }
 }

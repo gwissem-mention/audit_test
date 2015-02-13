@@ -648,4 +648,15 @@ class InterventionDemandeManager extends BaseManager
             $this->changeEvaluationEtat($interventionRegroupement->getInterventionDemandeRegroupee(), $interventionEvaluationEtat);
     }
     
+    /**
+     * Retourne TRUE si le champ "Etat actuel" a été modifié
+     * 
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention l'intervention en question
+     * @return boolean TRUE si le champ "Etat actuel" a été modifié
+     */
+    public function isEtatActuelUpdated(InterventionDemande $intervention)
+    {
+        return $this->_repository->isEtatActuelUpdated($intervention);
+    }
+    
 }

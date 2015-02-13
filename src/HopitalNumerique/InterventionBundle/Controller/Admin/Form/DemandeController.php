@@ -130,6 +130,11 @@ class DemandeController extends Controller
     
             if ($interventionDemandeFormulaire->isValid())
             {
+                // YRO 09/02/2015 : si le champ "etat actuel" a été modifié, on envoi les mails conséquents
+                if( $this->get('hopitalnumerique_intervention.manager.interventiondemande')->isEtatActuelUpdated($this->interventionDemande) )
+                {
+                    $this->gereEnvoiMailChangementEtat($this->interventionDemande);
+                }
                 $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
                 $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été modifiée.');
                 return true;
@@ -157,5 +162,61 @@ class DemandeController extends Controller
         ));
     
         return new Response($reponseJson);
+    }
+    
+    /**
+     * Gère l'envoi des mails conséquents au changement d'état de la demande d'intervention
+     *
+     * @todo Envoyer les mails
+     * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention l'intervention en question
+     * @return void
+     */
+    private function gereEnvoiMailChangementEtat(InterventionDemande $interventionDemande)
+    {
+        $etatId = $interventionDemande->getInterventionEtat()->getId();
+        if( $etatId == InterventionEtat::getInterventionEtatDemandeInitialeId() )
+        {
+            
+        }
+        else if( $etatId == InterventionEtat::getInterventionEtatAttenteCmsiId() )
+        {
+            
+        }
+        else if( $etatId == InterventionEtat::getInterventionEtatRefusCmsiId() )
+        {
+            
+        }
+        else if( $etatId == InterventionEtat::getInterventionEtatAcceptationCmsiId() )
+        {
+            
+        }
+        else if( $etatId == InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id() )
+        {
+            
+        }
+        else if( $etatId == InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id() )
+        {
+            
+        }
+        else if( $etatId == InterventionEtat::getInterventionEtatRefusAmbassadeurId() )
+        {
+            
+        }
+        else if( $etatId == InterventionEtat::getInterventionEtatAcceptationAmbassadeurId() )
+        {
+            
+        }
+        else if( $etatId == InterventionEtat::getInterventionEtatTermineId() )
+        {
+            
+        }
+        else if( $etatId == InterventionEtat::getInterventionEtatClotureId() )
+        {
+            
+        }
+        else if( $etatId == InterventionEtat::getInterventionEtatAnnulationEtablissementId() )
+        {
+            
+        }
     }
 }
