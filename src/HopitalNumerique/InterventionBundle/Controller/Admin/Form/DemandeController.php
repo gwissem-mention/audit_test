@@ -9,6 +9,7 @@ namespace HopitalNumerique\InterventionBundle\Controller\Admin\Form;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 
 /**
  * Contrôleur des formulaires de demandes d'intervention dans l'administration.
@@ -174,49 +175,42 @@ class DemandeController extends Controller
     private function gereEnvoiMailChangementEtat(InterventionDemande $interventionDemande)
     {
         $etatId = $interventionDemande->getInterventionEtat()->getId();
-        if( $etatId == InterventionEtat::getInterventionEtatDemandeInitialeId() )
+
+        if( $etatId == InterventionEtat::getInterventionEtatRefusCmsiId() )
         {
-            
-        }
-        else if( $etatId == InterventionEtat::getInterventionEtatAttenteCmsiId() )
-        {
-            
-        }
-        else if( $etatId == InterventionEtat::getInterventionEtatRefusCmsiId() )
-        {
-            
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielEstRefuseCmsi
+            (
+                $interventionDemande->getReferent(),
+                $this->generateUrl('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true)
+            );
         }
         else if( $etatId == InterventionEtat::getInterventionEtatAcceptationCmsiId() )
         {
-            
-        }
-        else if( $etatId == InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id() )
-        {
-            
-        }
-        else if( $etatId == InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id() )
-        {
-            
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielDemandeAcceptationAmbassadeur
+            (
+                $interventionDemande->getAmbassadeur(),
+                $this->generateUrl('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true)
+            );
         }
         else if( $etatId == InterventionEtat::getInterventionEtatRefusAmbassadeurId() )
         {
-            
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielEstRefuseAmbassadeur
+            (
+                $interventionDemande->getReferent(),
+                $this->generateUrl('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true)
+            );
         }
         else if( $etatId == InterventionEtat::getInterventionEtatAcceptationAmbassadeurId() )
         {
-            
-        }
-        else if( $etatId == InterventionEtat::getInterventionEtatTermineId() )
-        {
-            
-        }
-        else if( $etatId == InterventionEtat::getInterventionEtatClotureId() )
-        {
-            
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielEstAccepteAmbassadeur
+            (
+                $interventionDemande->getReferent(),
+                $this->generateUrl('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true)
+            );
         }
         else if( $etatId == InterventionEtat::getInterventionEtatAnnulationEtablissementId() )
         {
-            
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielEstAnnuleEtablissement($interventionDemande);
         }
     }
 }
