@@ -91,4 +91,14 @@ class InterventionInitiateur
     {
         return self::$INTERVENTION_INITIATEUR_ANAP;
     }
+
+    /**
+     * toString.
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->type;
+    }
 }

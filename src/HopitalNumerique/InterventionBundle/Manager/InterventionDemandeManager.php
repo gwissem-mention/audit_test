@@ -659,4 +659,94 @@ class InterventionDemandeManager extends BaseManager
         return $this->_repository->isEtatActuelUpdated($intervention);
     }
     
+    /**
+     * Retourne toutes les demandes pour l'export.
+     * 
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Demandes
+     */
+    public function findAllForExport()
+    {
+        return $this->getRepository()->findAllForExport();
+    }
+    
+    /**
+     * Retourne les demandes pour l'export.
+     * 
+     * @param string $charset Encodage du CSV
+     * @return array Données pour l'export
+     */
+    public function getAllExportCsv($charset)
+    {
+        $exportTitres = array
+        (
+            'Référent',
+            'Ambassadeur',
+            'CMSI',
+            'Directeur',
+            'Initiateur',
+            'Type d\'intervention',
+            'État de l\'intervention',
+            'État de l\'évaluation',
+            'État du remboursement',
+            'Date de création',
+            'Date de choix du CMSI',
+            'Date de choix de l\'ambassadeur',
+            'Date de dernière relance du CMSI',
+            'Date de dernière relance de l\'ambassadeur',
+            'Autres établissements',
+            'Description',
+            'Description de la difficulté',
+            'Champ libre',
+            'Informations de RDV',
+            'Commentaire CMSI',
+            'Message de refus',
+            'Facture',
+            'Total',
+            'Autres objets',
+            'E-mail',
+            'Téléphone'
+        );
+        
+        $interventionDemandesExport = array();
+        foreach ($this->findAllForExport() as $interventionDemande)
+        {
+            $interventionDemandesExport[] = array
+            (
+                (null === $interventionDemande->getReferent() ? '' : $interventionDemande->getReferent()->getAppellation()),
+                (null === $interventionDemande->getAmbassadeur() ? '' : $interventionDemande->getAmbassadeur()->getAppellation()),
+                (null === $interventionDemande->getCmsi() ? '' : $interventionDemande->getCmsi()->getAppellation()),
+                (null === $interventionDemande->getDirecteur() ? '' : $interventionDemande->getDirecteur()->getAppellation()),
+                (null === $interventionDemande->getInterventionInitiateur() ? '' : $interventionDemande->getInterventionInitiateur()->__toString()),
+                $interventionDemande->getInterventionType()->getLibelle(),
+                (null === $interventionDemande->getInterventionEtat() ? '' : $interventionDemande->getInterventionEtat()->getLibelle()),
+                (null === $interventionDemande->getEvaluationEtat() ? '' : $interventionDemande->getEvaluationEtat()->getLibelle()),
+                (null === $interventionDemande->getRemboursementEtat() ? '' : $interventionDemande->getRemboursementEtat()->getLibelle()),
+                $interventionDemande->getDateCreation()->format('d/m/Y'),
+                (null === $interventionDemande->getCmsiDateChoix() ? '' : $interventionDemande->getCmsiDateChoix()->format('d/m/Y')),
+                (null === $interventionDemande->getAmbassadeurDateChoix() ? '' : $interventionDemande->getAmbassadeurDateChoix()->format('d/m/Y')),
+                (null === $interventionDemande->getCmsiDateDerniereRelance() ? '' : $interventionDemande->getCmsiDateDerniereRelance()->format('d/m/Y')),
+                (null === $interventionDemande->getAmbassadeurDateDerniereRelance() ? '' : $interventionDemande->getAmbassadeurDateDerniereRelance()->format('d/m/Y')),
+                $interventionDemande->getAutresEtablissements(),
+                $interventionDemande->getDescription(),
+                $interventionDemande->getDifficulteDescription(),
+                $interventionDemande->getChampLibre(),
+                $interventionDemande->getRdvInformations(),
+                $interventionDemande->getCmsiCommentaire(),
+                $interventionDemande->getRefusMessage(),
+                (null === $interventionDemande->getFacture() ? '' : $interventionDemande->getFacture()->__toString()),
+                $interventionDemande->getTotal(),
+                $interventionDemande->getObjetsAutres(),
+                $interventionDemande->getEmail(),
+                $interventionDemande->getTelephone()
+            );
+        }
+        
+        return $this->exportCsv
+        (
+            $exportTitres,
+            $interventionDemandesExport,
+            'export-demandes-intervention.csv',
+            $charset
+        );
+    }
 }

@@ -727,4 +727,39 @@ class InterventionDemandeRepository extends EntityRepository
         ;
         return $requete->getQuery()->getOneOrNullResult() ? FALSE : TRUE;
     }
+
+    /**
+     * Retourne toutes les demandes pour l'export.
+     *
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Demandes
+     */
+    public function findAllForExport()
+    {
+        $requete = $this->createQueryBuilder('demande');
+        
+        $requete
+            ->leftJoin('demande.referent', 'referent')
+            ->addSelect('referent')
+            ->leftJoin('demande.ambassadeur', 'ambassadeur')
+            ->addSelect('ambassadeur')
+            ->leftJoin('demande.cmsi', 'cmsi')
+            ->addSelect('cmsi')
+            ->leftJoin('demande.directeur', 'directeur')
+            ->addSelect('directeur')
+            ->leftJoin('demande.interventionInitiateur', 'initiateur')
+            ->addSelect('initiateur')
+            ->leftJoin('demande.interventionType', 'interventionType')
+            ->addSelect('interventionType')
+            ->leftJoin('demande.interventionEtat', 'interventionEtat')
+            ->addSelect('interventionEtat')
+            ->leftJoin('demande.evaluationEtat', 'evaluationEtat')
+            ->addSelect('evaluationEtat')
+            ->leftJoin('demande.remboursementEtat', 'remboursementEtat')
+            ->addSelect('remboursementEtat')
+            ->leftJoin('demande.facture', 'facture')
+            ->addSelect('facture')
+        ;
+        
+        return $requete->getQuery()->getResult();
+    }
 }
