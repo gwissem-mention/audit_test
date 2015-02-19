@@ -1,5 +1,4 @@
 <?php
-
 namespace HopitalNumerique\ForumBundle\Entity;
 
 use CCDNForum\ForumBundle\Entity\Board as BaseBoard;

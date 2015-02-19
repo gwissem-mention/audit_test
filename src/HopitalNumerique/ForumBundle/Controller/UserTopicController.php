@@ -120,19 +120,34 @@ class UserTopicController extends UserTopicControllerCCDN
         $topic->setBoard($boardDestination);
         $this->container->get('hopitalnumerique_forum.manager.topic')->save( $topic );
 
+
+        //<-- Màj des derniers POST
+        $boardDestinationDernierTopic = $this->getTopicModel()->findLastTopicForBoardByIdWithLastPost($boardDestination->getId());
+        if (null !== $boardDestinationDernierTopic)
+        {
+            $boardDestinationDernierTopicDernierPost = $this->getPostModel()->getLastPostForTopicById($boardDestinationDernierTopic->getId());
+            $boardDestination->setLastPost($boardDestinationDernierTopicDernierPost);
+        }
+        $boardOrigineDernierTopic = $this->getTopicModel()->findLastTopicForBoardByIdWithLastPost($boardOrigine->getId());
+        if (null !== $boardOrigineDernierTopic)
+        {
+            $boardOrigineDernierTopicDernierPost = $this->getPostModel()->getLastPostForTopicById($boardOrigineDernierTopic->getId());
+            $boardOrigine->setLastPost($boardOrigineDernierTopicDernierPost);
+        }
+        //-->
+
         //Mise à jour du Board de destination
         $stats = $this->getTopicModel()->getTopicAndPostCountForBoardById($boardDestination->getId());
         // set the board topic / post count
         $boardDestination->setCachedTopicCount($stats['topicCount']);
         $boardDestination->setCachedPostCount($stats['postCount']);
-
         $this->container->get('hopitalnumerique_forum.manager.board')->save( $boardDestination );
 
         //Mise à jour du Board d'origine
         $stats = $this->getTopicModel()->getTopicAndPostCountForBoardById($boardOrigine->getId());
         // set the board topic / post count
         $boardOrigine->setCachedTopicCount($stats['topicCount']);
-        $boardOrigine->setCachedPostCount($stats['topicCount']);
+        $boardOrigine->setCachedPostCount($stats['postCount']);
         $this->container->get('hopitalnumerique_forum.manager.board')->save( $boardOrigine );
 
         return new Response('{"success":true}', 200);
