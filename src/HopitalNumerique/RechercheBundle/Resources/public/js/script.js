@@ -491,41 +491,11 @@ function updateResultats( cleanSession )
 
             loader.finished();
 
-            var search = $("#recherche_textuelle").val();
+            var search = $("#patternFounded").val();
             if(search != "")
             {
-                var recherche = new Array();
-                var rechercheStrict = new Array();
-                var strict = search.split('"');
-                $.each( strict, function(key, value){
-                    if( key % 2 != 0 && value != "" ){ 
-                        rechercheStrict.push(value);
-                    } else if( value != "" ){
-                        recherche.push(value);
-                    }
-                });
-                $.each( recherche, function(cle, val){
-                    var tab = val.split(" ");
-                    $.each( tab, function(key, value){
-                        if( value != "" ){ 
-                            rechercheStrict.push(value);
-                        }
-                    });
-                });
-
-
-                $.each(rechercheStrict, function(key, value){
-                    var replace1 = value.replace("’", "'");
-                    if( rechercheStrict.indexOf(replace1) < 0 ){
-                        rechercheStrict.push(replace1);
-                    }
-                    var replace2 = value.replace("'", "’");
-                    if( rechercheStrict.indexOf(replace2) < 0 ){
-                        rechercheStrict.push(replace2);
-                    }
-                });
-                
-                $("#resultats p, #resultats h5, #resultats a").highlight( rechercheStrict, { wordsOnly: true } );
+                search = JSON.parse(search);
+                $("#resultats p, #resultats h5, #resultats a").highlight( search, { wordsOnly: true } );
             }
 
             placeholderExalead();
@@ -896,7 +866,7 @@ jQuery.fn.highlight = function (words, options) {
     var flag = settings.caseSensitive ? "" : "i";
     var pattern = "(" + words.join("|") + ")";
     if (settings.wordsOnly) {
-        pattern = "\\b" + pattern + "\\b";
+        pattern = "\\ " + pattern + "\\ ";
     }
     var re = new RegExp(pattern, flag);
     

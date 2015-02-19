@@ -321,4 +321,14 @@ class Facture
     {
         return $this->formations;
     }
+
+    /**
+     * toString.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
 }
