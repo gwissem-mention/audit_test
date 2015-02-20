@@ -678,4 +678,14 @@ class Module
         if (file_exists($file) )
             unlink($file);
     }
+
+    /**
+     * toString.
+     * 
+     * @return string Titre
+     */
+    public function __toString()
+    {
+        return $this->titre;
+    }
 }

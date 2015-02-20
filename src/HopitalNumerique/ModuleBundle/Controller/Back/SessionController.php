@@ -158,6 +158,27 @@ class SessionController extends Controller
 
         return $this->redirect( $url );
     }
+    
+    /**
+     * Export CSV des évaluations.
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param boolean $allPrimaryKeys 
+     *
+     * @return Redirect
+     */
+    public function exportEvaluationsMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_module.manager.session')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }
+    
+        return $this->get('hopitalnumerique_module.manager.session')->getExportEvaluationsCsv($primaryKeys, $this->container->getParameter('kernel.charset'));
+    }
 
     /**
      * Download le fichier de session.

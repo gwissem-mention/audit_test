@@ -3,6 +3,9 @@
 namespace HopitalNumerique\ModuleBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use Doctrine\ORM\EntityManager;
+use HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
 /**
  * Manager de l'entité Session.
@@ -13,6 +16,31 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class SessionManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\ModuleBundle\Entity\Session';
+    
+    /**
+     * @var \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager ReponseManager
+     */
+    private $reponseManager;
+    
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
+     */
+    private $referenceManager;
+    
+    /**
+     * Constructeur du manager de Session.
+     * 
+     * @param \Doctrine\ORM\EntityManager $em EntityManager
+     * @param \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager $reponseManager ReponseManager
+     * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager $referenceManager ReferenceManager
+     */
+    public function __construct(EntityManager $em, ReponseManager $reponseManager, ReferenceManager $referenceManager)
+    {
+        parent::__construct($em);
+        
+        $this->reponseManager = $reponseManager;
+        $this->referenceManager = $referenceManager;
+    }
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
@@ -160,5 +188,112 @@ class SessionManager extends BaseManager
         $after  = $this->getRepository()->getSessionsForFormateur( $user, 'afterToday', 2 )->getQuery()->getResult();
 
         return array('before' => $before, 'after' => $after);
+    }
+
+    /**
+     * Retourne les évaluations pour l'export.
+     *
+     * @param integer[] $sessionIds Les IDs des sessions à exporter
+     * @param string $charset Encodage du CSV
+     * @return array Données pour l'export
+     */
+    public function getExportEvaluationsCsv(array $sessionIds, $charset)
+    {
+        $sessions = $this->findBy(array('id' => $sessionIds));
+        
+        
+        $colonnes = array
+        (
+            'Nom du module',
+            'Date de session',
+            'Participant - ID',
+            'Participant - Nom'
+        );
+        $datas    = array();
+        
+        foreach ($sessions as $session)
+        {
+            $inscriptions = $session->getInscriptionsAccepte();
+            foreach($inscriptions as $inscription)
+            {
+                $hasReponses = false;
+                $user     = $inscription->getUser();
+                $reponses = $this->reponseManager->reponsesByQuestionnaireByUser( 4, $user->getId() , true, $session->getId() );
+                $row      = array();
+            
+                foreach($reponses as $reponse)
+                {
+                    $question   = $reponse->getQuestion();
+                    $idQuestion = $question->getId();
+            
+                    //ajoute la question si non présente dans les colonnes
+                    if( !isset($colonnes[$idQuestion]) )
+                        $colonnes[$idQuestion] = $question->getLibelle();
+            
+                    //handle la réponse
+                    switch($question->getTypeQuestion()->getLibelle())
+                    {
+                        case 'checkbox':
+                            $row[$idQuestion] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );
+                            break;
+                        case 'entityradio':
+                            $question = $reponse->getQuestion();
+            
+                            $referenceReponse = $this->referenceManager->findOneBy( array( 'id' => $reponse->getReponse()) );
+            
+                            if(!is_null($referenceReponse))
+                            {
+                                $row[$idQuestion] = $referenceReponse->getLibelle();
+                            }
+                            else
+                            {
+                                $row[$idQuestion] = 'Non renseigné';
+                            }
+                            break;
+                        default:
+                            $row[$idQuestion] = $reponse->getReponse();
+                            break;
+                    }
+            
+                    $hasReponses = true;
+                }
+            
+                if(!$hasReponses)
+                    continue;
+            
+                ksort($row);
+            
+                $tab = array_merge
+                (
+                    array
+                    (
+                        $session->getModule()->__toString(),
+                        (null !== $session->getDateSession() ? $session->getDateSession()->format('d/m/y') : ''),
+                        (null !== $inscription->getUser() ? $inscription->getUser()->getId() : ''),
+                        (null !== $inscription->getUser() ? $inscription->getUser()->getAppellation() : '')
+                    ),
+                    $row
+                );
+                $datas[] = $tab;
+            }
+        }
+        
+        if(empty($datas))
+        {
+            $colonnes = array(0 => "Aucune donnée");
+            $datas[] = array(0 => "");
+        }
+        
+        ksort($colonnes);
+
+        
+    
+        return $this->exportCsv
+        (
+            array_values($colonnes),
+            $datas,
+            'export-session-evaluations.csv',
+            $charset
+        );
     }
 }

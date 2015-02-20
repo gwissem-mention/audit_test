@@ -101,6 +101,7 @@ class AllSessionGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
+        $this->addMassAction( new Action\ActionMass('Exporter les évaluations', 'HopitalNumeriqueModuleBundle:Back/Session:exportEvaluationsMass') );
         $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueModuleBundle:Back/Session:deleteMass') );
     }
 }
