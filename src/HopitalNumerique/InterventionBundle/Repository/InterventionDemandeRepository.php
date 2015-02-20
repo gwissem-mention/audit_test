@@ -731,13 +731,21 @@ class InterventionDemandeRepository extends EntityRepository
     /**
      * Retourne toutes les demandes pour l'export.
      *
+     * @param integer[] $allPrimaryKeys Les IDs des demandes à exporter
      * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Demandes
      */
-    public function findAllForExport()
+    public function findForExport(array $allPrimaryKeys)
     {
+        if (count($allPrimaryKeys) == 0)
+            return array();
+        
         $requete = $this->createQueryBuilder('demande');
         
         $requete
+            ->where($requete->expr()->in(
+                'demande.id',
+                $allPrimaryKeys
+            ))
             ->leftJoin('demande.referent', 'referent')
             ->addSelect('referent')
             ->leftJoin('demande.ambassadeur', 'ambassadeur')
@@ -758,6 +766,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->addSelect('remboursementEtat')
             ->leftJoin('demande.facture', 'facture')
             ->addSelect('facture')
+            ->orderBy('demande.dateCreation', 'DESC')
         ;
         
         return $requete->getQuery()->getResult();

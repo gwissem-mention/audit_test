@@ -130,7 +130,7 @@ class DemandesGrid extends DemandesAbstractGrid
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Exporter toutes les demandes','HopitalNumeriqueInterventionBundle:Admin/Demande:exportMass') );
+        $this->addMassAction( new Action\ActionMass('Exporter','HopitalNumeriqueInterventionBundle:Admin/Demande:exportMass') );
         
         $utilisateurConnecte = $this->_container->get('security.context')->getToken()->getUser();
         

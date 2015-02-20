@@ -662,20 +662,22 @@ class InterventionDemandeManager extends BaseManager
     /**
      * Retourne toutes les demandes pour l'export.
      * 
+     * @param integer[] $allPrimaryKeys Les IDs des demandes à exporter
      * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Demandes
      */
-    public function findAllForExport()
+    public function findForExport($allPrimaryKeys)
     {
-        return $this->getRepository()->findAllForExport();
+        return $this->getRepository()->findForExport($allPrimaryKeys);
     }
     
     /**
      * Retourne les demandes pour l'export.
      * 
+     * @param integer[] $allPrimaryKeys Les IDs des demandes à exporter
      * @param string $charset Encodage du CSV
      * @return array Données pour l'export
      */
-    public function getAllExportCsv($charset)
+    public function getExportCsv(array $allPrimaryKeys, $charset)
     {
         $exportTitres = array
         (
@@ -708,7 +710,7 @@ class InterventionDemandeManager extends BaseManager
         );
         
         $interventionDemandesExport = array();
-        foreach ($this->findAllForExport() as $interventionDemande)
+        foreach ($this->findForExport($allPrimaryKeys) as $interventionDemande)
         {
             $interventionDemandesExport[] = array
             (
