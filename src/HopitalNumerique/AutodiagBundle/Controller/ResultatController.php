@@ -97,28 +97,29 @@ class ResultatController extends Controller
             'Sous chapitre',
             'Question',
             'Réponse',
-            'Synthèse',
-            'Commentaire',
-            'Acteurs',
+            'Action à mener',
+            'Pilotes',
             'Échances',
-            'État d\'avancement'
+            'État d\'avancement',
+            'Indicateur',
+            'Commentaire'
         );
 
         foreach ($chapitres as $chapitre) 
         {
-            $row = array();
-
-            $row[0] = $chapitre->code;
-            $row[1] = '';
-            $row[2] = '';
-            $row[3] = '';
-            $row[4] = $chapitre->synthese;
-            $row[5] = '';
-            $row[6] = '';
-            $row[7] = '';
-            $row[8] = '';
-
-            $datas[] = $row;
+            $datas[] = array
+            (
+                $chapitre->code,
+                '',
+                '',
+                '',
+                $chapitre->synthese,
+                '',
+                '',
+                '',
+                '',
+                ''
+            );
 
             foreach ($chapitre->questions as $question) 
             {
@@ -149,6 +150,7 @@ class ResultatController extends Controller
                 $row[6] = '';
                 $row[7] = '';
                 $row[8] = '';
+                $row[9] = '';
 
                 $datas[] = $row;
             }
@@ -159,19 +161,19 @@ class ResultatController extends Controller
                 //Pour chaque sous chapitre du chapitre courant
                 foreach ($chapitre->childs as $chapitreChild) 
                 {
-                    $row = array();
-
-                    $row[0] = $chapitre->code;
-                    $row[1] = $chapitreChild->code;
-                    $row[2] = '';
-                    $row[3] = '';
-                    $row[4] = $chapitreChild->synthese;
-                    $row[5] = '';
-                    $row[6] = '';
-                    $row[7] = '';
-                    $row[8] = '';
-
-                    $datas[] = $row;
+                    $datas[] = array
+                    (
+                        $chapitre->code,
+                        $chapitreChild->code,
+                        '',
+                        '',
+                        $chapitreChild->synthese,
+                        '',
+                        '',
+                        '',
+                        '',
+                        ''
+                    );
 
                     foreach ($chapitreChild->questions as $question) 
                     {
@@ -202,6 +204,7 @@ class ResultatController extends Controller
                         $row[6] = '';
                         $row[7] = '';
                         $row[8] = '';
+                        $row[9] = '';
 
                         $datas[] = $row;
                     }

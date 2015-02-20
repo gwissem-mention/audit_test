@@ -310,6 +310,19 @@ class QuestionnaireType extends AbstractType
             	        'data' => $objetIdsSelectionnees
             	    ));
             	    break;
+            	case 'textarea':
+            	    $attr['rows'] = 9;
+            	    
+            	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
+        	            'required'   => $question->getObligatoire(),
+        	            'label'      => $question->getLibelle(),
+        	            'mapped'     => false,
+        	            'read_only'  => $this->_readOnly,
+        	            'disabled'   => $this->_readOnly,
+        	            'attr'       => is_null($question->getVerifJS()) ? $attr : array('rows' => '9', 'class' => $question->getVerifJS() ),
+        	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
+            	    ));
+            	    break;
             	default:
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
         	            'required'   => $question->getObligatoire(),
