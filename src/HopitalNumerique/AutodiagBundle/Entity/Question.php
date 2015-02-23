@@ -14,7 +14,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table(name="hn_outil_question")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\QuestionRepository")
- * @UniqueEntity(fields={"chapitre","code"}, message="Ce code existe déjà pour ce chapitre.")
  */
 class Question
 {
