@@ -88,6 +88,7 @@ class ResultatManager extends BaseManager
             $chapitre->affichageRestitutionBarre   = $one->getAffichageRestitutionBarre();
             $chapitre->affichageRestitutionRadar   = $one->getAffichageRestitutionRadar();
             $chapitre->affichageRestitutionTableau = $one->getAffichageRestitutionTableau();
+            $chapitre->centPourcentReponseObligatoire = $one->getOutil()->isCentPourcentReponseObligatoire();
             $chapitre->parent                      = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
 
             //handle questions/reponses
@@ -529,6 +530,7 @@ class ResultatManager extends BaseManager
             $data->opti  = $categorie->getNote();
             $data->min   = null;
             $data->max   = null;
+            $data->centPourcentReponseObligatoire = $categorie->getOutil()->isCentPourcentReponseObligatoire();
 
             $datas[] = $data;
         }
@@ -563,6 +565,7 @@ class ResultatManager extends BaseManager
             $data->opti  = $chapitre->noteOpt;
             $data->min   = null;
             $data->max   = null;
+            $data->centPourcentReponseObligatoire = $chapitre->centPourcentReponseObligatoire;
 
             $datas[] = $data;
         }
