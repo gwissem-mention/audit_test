@@ -103,7 +103,7 @@ class FrontController extends Controller
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
             'outil'       => $outil,
-            'resultatEnCours'    => $resultatEnCours,
+            'resultatEnCours' => $resultatEnCours,
             'chapitres'   => $chapitresOrdered,
             'reponses'    => $reponses,
             'remarque'    => $remarque,

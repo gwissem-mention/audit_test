@@ -298,19 +298,23 @@ function chapterNonConcerne( that, sousChapitre )
     else
         that = $(that).parent();
 
-    //empty select
-    $(that).find('.form-control').each(function(){
-        if( $(this).is('select') )
-            $(this).val( -1 );
-            $(this).change();
+    $(that).find('.form-control').each(function()
+    {
+        var options = $(this).find('option');
+        for (i = 0; i < options.size(); i++)
+        {
+            if ('non concerné' == $(options[i]).text().trim().toLowerCase())
+            {
+                $(options[i]).prop('selected', true);
+            }
+        }
+        $(this).change();
     });
 
-    //empty radios
-    $(that).find('.radio').each(function(){
-        if( $(this).find('input').val() != -1 )
-            $(this).find('input').prop('checked', '');
-        else
-            $(this).find('input').prop('checked', 'checked');
+    $(that).find('.radio').each(function()
+    {
+        if('non concerné' == $(this).find('label').text().trim().toLowerCase())
+            $(this).find('input').prop('checked', true);
     });
 
     calcAvancement();

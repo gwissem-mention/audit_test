@@ -612,4 +612,23 @@ class Question
     {
         return $this->descriptionLien;
     }
+
+    /**
+     * Retourne si la question a une réponse possible "Non concerné".
+     *
+     * @return boolean VRAI ssi une réponse possible est "Non concerné"
+     */
+    public function hasOptionNonConcerne()
+    {
+        foreach (explode("\n", $this->options) as $option)
+        {
+            $optionExplode = explode(';', $option);
+            $optionTexte = $optionExplode[1];
+            
+            if ('non concerné' == strtolower(trim($optionTexte)))
+                return true;
+        }
+        
+        return false;
+    }
 }

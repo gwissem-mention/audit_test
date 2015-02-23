@@ -727,4 +727,20 @@ class Chapitre
     {
         return $this->affichageRestitutionTableau;
     }
+
+    /**
+     * Retourne si le chapitre a au moins une question donc une réponse possible est "Non concerné".
+     * 
+     * @return boolean VRAI ssi une réponse est "Non concerné"
+     */
+    public function hasQuestionOptionNonConcerne()
+    {
+        foreach ($this->questions as $question)
+        {
+            if ($question->hasOptionNonConcerne())
+                return true;
+        }
+        
+        return false;
+    }
 }
