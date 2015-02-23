@@ -43,19 +43,20 @@
             <div class="clearfix"></div>
         </div>
         <div class="col-md-9 col-sm-12" >
-            <h1>{{outil.title}}</h1>
 
             <div class="options">
                 <div class="btn-toolbar">
-                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success" title="Résultats" ><i class="fa fa-bar-chart-o"></i></div>
+                    <button onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-success"><i class="fa fa-bar-chart-o"></i> Enregistrer et accéder aux résultats</button>
                     {% if app.user %}
-                        <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary save" title="Enregistrer"><i class="fa fa-save"></i></div>
+                        <button onclick="saveQuestionnaire('save', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-primary save"><i class="fa fa-save"></i> Enregistrer</button>
                     {% endif %}
                     {% if reponses %}
-                        <div onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger" title="Vider le questionnaire"><i class="fa fa-trash-o"></i></div>
+                        <button onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger" title="Vider le questionnaire"><i class="fa fa-trash-o"></i></button>
                     {% endif %}
                 </div>
             </div>
+            
+            <h1>{{outil.title}}</h1>
 
             {% if reponses %}
                 <div class="clearfix"></div>
@@ -130,9 +131,9 @@
                 </form>
 
                 <div class="saveBtns">
-                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success btn-sm" ><i style="margin-right:5px" class="fa fa-bar-chart-o"></i> Résultats</div>
+                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %} );" class="finish btn btn-success btn-sm" ><i style="margin-right:5px" class="fa fa-bar-chart-o"></i> Résultats</div>
                     {% if app.user %}
-                        <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary btn-sm save" ><i style="margin-right:5px" class="fa fa-save"></i> Enregistrer</div>
+                        <div onclick="saveQuestionnaire('save', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-primary btn-sm save" ><i style="margin-right:5px" class="fa fa-save"></i> Enregistrer</div>
                     {% endif %}
                 </div>
             </div>
