@@ -52,7 +52,7 @@
                     {% endif %}
                     <button id="valid_button" onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-success"><i class="fa fa-check"></i> Valider mon autodiagnostic</button>
                     {% if reponses %}
-                        <button onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger"><i class="fa fa-trash-o"></i> Vider les réponses</button>
+                        <button onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger"><i class="fa fa-trash-o"></i> Vider toutes les réponses</button>
                     {% endif %}
                 </div>
             </div>
