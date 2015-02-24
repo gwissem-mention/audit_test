@@ -117,7 +117,7 @@ class QuestionController extends Controller
             $chapitre = $this->get('hopitalnumerique_autodiag.manager.chapitre')->findOneBy( array('id' => intval($datas['chapitre']) ) );
 
             if( !$chapitre )
-                return new Response('<h3>Une erreur est survenue, merci de réessayé</h3>', 200);
+                return new Response('<h3>Une erreur est survenue, merci de réessayer</h3>', 200);
 
             $question = $this->get('hopitalnumerique_autodiag.manager.question')->createEmpty();
             $question->setChapitre( $chapitre );
@@ -156,7 +156,7 @@ class QuestionController extends Controller
             ));
         }
 
-        return new Response('<h3>Une erreur est survenue, merci de réessayé</h3>', 200);
+        return new Response('<h3>Une erreur est survenue, merci de réessayer</h3>', 200);
     }
 
     /**

@@ -14,7 +14,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table(name="hn_outil_question")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\QuestionRepository")
- * @UniqueEntity(fields={"chapitre","code"}, message="Ce code existe déjà pour ce chapitre.")
  */
 class Question
 {
@@ -611,5 +610,24 @@ class Question
     public function getDescriptionLien()
     {
         return $this->descriptionLien;
+    }
+
+    /**
+     * Retourne si la question a une réponse possible "Non concerné".
+     *
+     * @return boolean VRAI ssi une réponse possible est "Non concerné"
+     */
+    public function hasOptionNonConcerne()
+    {
+        foreach (explode("\n", $this->options) as $option)
+        {
+            $optionExplode = explode(';', $option);
+            $optionTexte = $optionExplode[1];
+            
+            if ('non concerné' == strtolower(trim($optionTexte)))
+                return true;
+        }
+        
+        return false;
     }
 }

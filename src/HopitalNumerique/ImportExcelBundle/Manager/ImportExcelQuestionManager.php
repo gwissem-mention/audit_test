@@ -32,7 +32,7 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
      *
      * @return void
      */
-    public function saveQuestionImported( $arrayQuestions, $outil )
+    public function saveQuestionImported( $arrayQuestions, $outil, $arrayIdChapitres )
     {
         $arrayIdsQuestions = array();
 
@@ -44,7 +44,8 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
             //Récupération du chapitre
             if(trim($questionDonnees['numChapitre']) !== "")
             {
-                $chapitre = $this->_importExcelChapitreManager->findOneBy(array('code' => $questionDonnees['numChapitre'], 'outil' => $outil));
+                $chapitre = $this->_importExcelChapitreManager->findOneBy(array('id' => $arrayIdChapitres[intval($questionDonnees['idChapitre'])], 'outil' => $outil));
+
                 if(!is_null($chapitre))
                 {
                     $question->setChapitre($chapitre);

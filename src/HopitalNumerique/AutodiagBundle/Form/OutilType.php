@@ -113,10 +113,6 @@ class OutilType extends AbstractType
                 'label'    => 'Masquer l\'onglet réponses en front',
                 'required' => false
             ))
-            ->add('ajouterNonConcerne', 'checkbox', array(
-                'label'    => 'Ajouter systématiquement l\'option non concerné',
-                'required' => false
-            ))
             ->add('planActionPriorise', 'checkbox', array(
                 'label'    => 'Plan d\'action priorisé',
                 'required' => false

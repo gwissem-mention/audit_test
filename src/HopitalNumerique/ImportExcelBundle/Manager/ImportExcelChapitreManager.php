@@ -36,6 +36,8 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
      */
     public function saveChapitreImported( $arrayChapitres, $outil )
     {
+        $arrayIdsChapitres = array();
+        
         foreach ($arrayChapitres as $key => $chapitreDonnees) 
         {
             $chapitre = null;
@@ -76,6 +78,10 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
             $chapitre->setOutil($outil);
 
             $this->save( $chapitre );
+            
+            $arrayIdsChapitres[('' != $chapitreDonnees['id'] ? $chapitreDonnees['id'] : $chapitre->getId())] = $chapitre->getId();
         }
+        
+        return $arrayIdsChapitres;
     }
 }

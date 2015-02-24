@@ -224,30 +224,36 @@ function calcAvancement()
 }
 
 //enregistre ou valide le questionnaire
-function saveQuestionnaire( type, userConnected )
+function saveQuestionnaire( type, userConnected, resultatEnCours )
 {
     $('#action').val( type );
 
-    if( type == 'valid' && userConnected )
+    if ( type == 'valid' || type == 'save' )
     {
-        if( ($("#outil-reponses-obligatoire").val() == true) && (100 != $('#autodiag .progress-bar').attr('aria-valuenow')) )
+        if ( type == 'valid' && ($("#outil-reponses-obligatoire").val() == true) && (100 != $('#autodiag .progress-bar').attr('aria-valuenow')) )
         {
-            apprise('Vous ne pouvez pas valider votre autodiagnostic tant que toutes les questions ne sont pas remplies.');
+            if (userConnected)
+                apprise('Vous ne pouvez pas valider votre autodiagnostic tant que toutes les questions ne sont pas remplies.');
+            else apprise('Veuillez renseigner toutes les réponses pour visualiser les résultats. Identifiez-vous pour enregistrer vos réponses.');
         }
-        else
+        else if ( (type == 'save' || (type == 'valid' && !resultatEnCours)) && userConnected )
         {
-            apprise('La validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci. <br />Si vous souhaitez poursuivre, merci de remplir un nom pour cette occurence.', {'input':true,'textOk':'Valider','textCancel':'Annuler'}, function(r) {
-                if(r) { 
-                    $('#name-resultat').val( r );
-                    $('#wizard').submit();
-                }else
-                    apprise('Merci de saisir un nom valide.');
-            });
+            apprise
+            (
+                'La validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci. <br />Si vous souhaitez poursuivre, merci de remplir un nom pour cette occurence.',
+                {'input':true,'textOk':'Valider','textCancel':'Annuler'},
+                function(r) {
+                    if(r) { 
+                        $('#name-resultat').val( r );
+                        $('#wizard').submit();
+                    }else
+                        apprise('Merci de saisir un nom valide.');
+                }
+            );
         }
-    }else
-    {
-        $('#wizard').submit();
+        else $('#wizard').submit();
     }
+    else $('#wizard').submit();
 }
 
 //Vide le questionnaire
@@ -292,19 +298,23 @@ function chapterNonConcerne( that, sousChapitre )
     else
         that = $(that).parent();
 
-    //empty select
-    $(that).find('.form-control').each(function(){
-        if( $(this).is('select') )
-            $(this).val( -1 );
-            $(this).change();
+    $(that).find('.form-control').each(function()
+    {
+        var options = $(this).find('option');
+        for (i = 0; i < options.size(); i++)
+        {
+            if ('non concerné' == $(options[i]).text().trim().toLowerCase())
+            {
+                $(options[i]).prop('selected', true);
+            }
+        }
+        $(this).change();
     });
 
-    //empty radios
-    $(that).find('.radio').each(function(){
-        if( $(this).find('input').val() != -1 )
-            $(this).find('input').prop('checked', '');
-        else
-            $(this).find('input').prop('checked', 'checked');
+    $(that).find('.radio').each(function()
+    {
+        if('non concerné' == $(this).find('label').text().trim().toLowerCase())
+            $(this).find('input').prop('checked', true);
     });
 
     calcAvancement();

@@ -47,9 +47,11 @@ $(document).ready(function() {
     var nonConcernes = [];
     var min          = [];
     var max          = [];
+
     $(datas).each(function(index, element ){
-        if( element.value != 'NC' || element.taux != 0 ){
-            title = '<b>' + element.title + '</b> (Taux de remplissage: ' + element.taux + '%)';
+        if( element.value != 'NC' || element.taux != 0 )
+        {
+            title = '<b>' + element.title + '</b>' + (element.centPourcentReponseObligatoire ? '' : ' (Taux de remplissage: ' + element.taux + '%)');
             categories.push( title );
             values.push( element.value );
             optimale.push( element.opti );
@@ -57,8 +59,11 @@ $(document).ready(function() {
             max.push( element.max );
 
             taux[ title ] = element.taux;
-        }else
+        }
+        else
+        {
             nonConcernes.push( element.title );
+        }
     });
     //Gestion des chapitres non concernes
     if( nonConcernes.length > 0 ){
