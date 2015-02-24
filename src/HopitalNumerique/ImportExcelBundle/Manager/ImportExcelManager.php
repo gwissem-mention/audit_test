@@ -66,8 +66,8 @@ class ImportExcelManager extends BaseManager
 
         for ($i=2; $i <= $sheetChapitre->getHighestRow(); $i++) 
         { 
-            //Si pour la ligne courante le libellé ou le conde ne sont pas remplis alors on s'arrête dans la lecture
-            if( trim($sheetChapitre->getCellByColumnAndRow(4, $i)) == '' || trim($sheetChapitre->getCellByColumnAndRow(1, $i)->getValue()) === "" )
+            //Si pour la ligne courante le libellé ou l'ID ne sont pas remplis alors on s'arrête dans la lecture
+            if( trim($sheetChapitre->getCellByColumnAndRow(5, $i)) == '' || trim($sheetChapitre->getCellByColumnAndRow(1, $i)->getValue()) === "" )
             {
                 die('Erreur de format dans le fichier : chapitre !');
                 break;
@@ -76,15 +76,16 @@ class ImportExcelManager extends BaseManager
             $arrayChapitres[] = array(
                 'id'              => trim($sheetChapitre->getCellByColumnAndRow(0, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(0, $i)->getValue(),
                 'code'            => trim($sheetChapitre->getCellByColumnAndRow(1, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(1, $i)->getValue(),
+                'idParent'        => trim($sheetChapitre->getCellByColumnAndRow(2, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(2, $i)->getValue(),
                 'codeParent'      => trim($sheetChapitre->getCellByColumnAndRow(3, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(3, $i)->getValue(),
-                'libelle'         => trim($sheetChapitre->getCellByColumnAndRow(4, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(4, $i)->getValue(),
-                'noteOptimale'    => trim($sheetChapitre->getCellByColumnAndRow(6, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(6, $i)->getValue(),
-                'noteMinimale'    => trim($sheetChapitre->getCellByColumnAndRow(7, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(7, $i)->getValue(),
-                'introduction'    => trim($sheetChapitre->getCellByColumnAndRow(3, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(3, $i)->getValue(),
-                'synthese'        => trim($sheetChapitre->getCellByColumnAndRow(8, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(8, $i)->getValue(),
-                'description'     => trim($sheetChapitre->getCellByColumnAndRow(5, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(5, $i)->getValue(),
-                'lien'            => trim($sheetChapitre->getCellByColumnAndRow(9, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(9, $i)->getValue(),
-                'descriptionLien' => trim($sheetChapitre->getCellByColumnAndRow(10, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(10, $i)->getValue()
+                'introduction'    => trim($sheetChapitre->getCellByColumnAndRow(4, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(4, $i)->getValue(),
+                'libelle'         => trim($sheetChapitre->getCellByColumnAndRow(5, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(5, $i)->getValue(),
+                'description'     => trim($sheetChapitre->getCellByColumnAndRow(6, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(6, $i)->getValue(),
+                'noteOptimale'    => trim($sheetChapitre->getCellByColumnAndRow(7, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(7, $i)->getValue(),
+                'noteMinimale'    => trim($sheetChapitre->getCellByColumnAndRow(8, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(8, $i)->getValue(),
+                'synthese'        => trim($sheetChapitre->getCellByColumnAndRow(9, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(9, $i)->getValue(),
+                'lien'            => trim($sheetChapitre->getCellByColumnAndRow(10, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(10, $i)->getValue(),
+                'descriptionLien' => trim($sheetChapitre->getCellByColumnAndRow(11, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(11, $i)->getValue()
             );
         }
         return $arrayChapitres;
