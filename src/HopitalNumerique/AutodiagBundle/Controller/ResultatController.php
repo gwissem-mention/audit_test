@@ -107,20 +107,6 @@ class ResultatController extends Controller
 
         foreach ($chapitres as $chapitre) 
         {
-            $datas[] = array
-            (
-                $chapitre->code,
-                '',
-                '',
-                '',
-                $chapitre->synthese,
-                '',
-                '',
-                '',
-                '',
-                ''
-            );
-
             foreach ($chapitre->questions as $question) 
             {
                 $row = array();
@@ -161,20 +147,6 @@ class ResultatController extends Controller
                 //Pour chaque sous chapitre du chapitre courant
                 foreach ($chapitre->childs as $chapitreChild) 
                 {
-                    $datas[] = array
-                    (
-                        $chapitre->code,
-                        $chapitreChild->code,
-                        '',
-                        '',
-                        $chapitreChild->synthese,
-                        '',
-                        '',
-                        '',
-                        '',
-                        ''
-                    );
-
                     foreach ($chapitreChild->questions as $question) 
                     {
                         $row = array();
