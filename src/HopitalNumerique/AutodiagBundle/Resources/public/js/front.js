@@ -221,27 +221,35 @@ function calcAvancement()
     {
         $('#autodiag .progress-bar').attr('class', 'progress-bar progress-bar-danger');
     }
+    
+    // Désactive les boutons qui affichent le résultat si le questionnaire n'est pas terminé
+    $('#acces_resultats_button, #valid_button').prop('disabled', !peutAfficherResultats());
 }
 
-//enregistre ou valide le questionnaire
+/**
+ * enregistre ou valide le questionnaire
+ * 
+ * @param string type Type de traitement parmi valid, save et acces_resultats
+ * @param boolean userConnected Utilisateur est connecté ou pas
+ * @param boolean resultatEnCours Si le résultat actuel est enregistré et non validé (sinon un nouveau enregistrement doit se faire)
+ */
 function saveQuestionnaire( type, userConnected, resultatEnCours )
 {
     $('#action').val( type );
-
-    if ( type == 'valid' || type == 'save' )
+    if (type == 'valid' || type == 'save' || type == 'acces_resultats')
     {
-        if ( type == 'valid' && ($("#outil-reponses-obligatoire").val() == true) && (100 != $('#autodiag .progress-bar').attr('aria-valuenow')) )
+        if ( (type == 'valid' || type == 'acces_resultats') && !peutAfficherResultats())
         {
             if (userConnected)
                 apprise('Vous ne pouvez pas valider votre autodiagnostic tant que toutes les questions ne sont pas remplies.');
             else apprise('Veuillez renseigner toutes les réponses pour visualiser les résultats. Identifiez-vous pour enregistrer vos réponses.');
         }
-        else if ( (type == 'save' || (type == 'valid' && !resultatEnCours)) && userConnected )
+        else if (!resultatEnCours && userConnected)
         {
             apprise
             (
-                'La validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci. <br />Si vous souhaitez poursuivre, merci de remplir un nom pour cette occurence.',
-                {'input':true,'textOk':'Valider','textCancel':'Annuler'},
+                'L\'enregistrement ou la validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci. <br />Si vous souhaitez poursuivre, merci de remplir un nom pour cette occurence.',
+                { 'input':true,'textOk':'Valider','textCancel':'Annuler' },
                 function(r) {
                     if(r) { 
                         $('#name-resultat').val( r );
@@ -254,6 +262,16 @@ function saveQuestionnaire( type, userConnected, resultatEnCours )
         else $('#wizard').submit();
     }
     else $('#wizard').submit();
+}
+
+/**
+ * Retour si les résultats peuvent être affichés ou s'il faut encore répondre aux questions.
+ * 
+ * @return boolean
+ */
+function peutAfficherResultats()
+{
+    return ( ($("#outil-reponses-obligatoire").val() != true) || (100 == $('#autodiag .progress-bar').attr('aria-valuenow')) );
 }
 
 //Vide le questionnaire
