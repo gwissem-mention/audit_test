@@ -214,6 +214,7 @@ $(document).ready(function() {
     
     $("#recherche_textuelle").change(function(){
 
+        $('.recherche_textuelle_avancee').css({ display:'none' });
         if($("#recherche_textuelle").val() != '')
         {
             $(".placeholder").hide();
@@ -874,3 +875,18 @@ jQuery.fn.highlight = function (words, options) {
         jQuery.highlight(this, re, settings.element, settings.className);
     });
 };
+
+function toggleRechercheAvancee()
+{
+    $('.recherche_textuelle_avancee').slideToggle(200);
+}
+function rechercheAvancee(chaineRechercheAvancee)
+{
+    var texteRecherche = $('#recherche_textuelle').val();
+
+    if (texteRecherche.length > 0)
+        texteRecherche += ' ';
+    texteRecherche += chaineRechercheAvancee;
+
+    $('#recherche_textuelle').val(texteRecherche);
+}
