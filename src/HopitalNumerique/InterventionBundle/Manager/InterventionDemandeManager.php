@@ -15,6 +15,10 @@ use HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation;
+use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
+use HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager;
+use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 
 /**
  * Manager pour les demandes d'intervention.
@@ -47,6 +51,18 @@ class InterventionDemandeManager extends BaseManager
      * @var \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager Le manager de l'entité InterventionCourriel
      */
     private $interventionCourrielManager;
+    /**
+     * @var \HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager
+     */
+    private $questionnaireManager;
+    /**
+     * @var \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager
+     */
+    private $reponseManager;
+    /**
+     * @var \HopitalNumerique\ObjetBundle\Manager\ObjetManager
+     */
+    private $objetManager;
 
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User L'utilisateur connecté
@@ -65,7 +81,7 @@ class InterventionDemandeManager extends BaseManager
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager $interventionCourrielManager Le manager de l'entité InterventionCourriel
      * @return void
      */
-    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, InterventionEtatManager $interventionEtatManager, InterventionEvaluationEtatManager $interventionEvaluationEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager)
+    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, InterventionEtatManager $interventionEtatManager, InterventionEvaluationEtatManager $interventionEvaluationEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager, QuestionnaireManager $questionnaireManager, ReponseManager $reponseManager, ObjetManager $objetManager)
     {
         parent::__construct($entityManager);
         $this->securityContext                   = $securityContext;
@@ -74,6 +90,9 @@ class InterventionDemandeManager extends BaseManager
         $this->interventionEvaluationEtatManager = $interventionEvaluationEtatManager;
         $this->interventionRegroupementManager   = $interventionRegroupementManager;
         $this->interventionCourrielManager       = $interventionCourrielManager;
+        $this->questionnaireManager = $questionnaireManager;
+        $this->reponseManager = $reponseManager;
+        $this->objetManager = $objetManager;
         
         $this->utilisateurConnecte = $this->securityContext->getToken()->getUser();
     }
@@ -679,6 +698,8 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getExportCsv(array $allPrimaryKeys, $charset)
     {
+        $questionnaire = $this->questionnaireManager->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
+        
         $exportTitres = array
         (
             'Initiateur',
@@ -717,6 +738,9 @@ class InterventionDemandeManager extends BaseManager
             'Date de dernière relance de l\'ambassadeur'
         );
         
+        foreach ($questionnaire->getQuestions() as $question)
+            $exportTitres[] = $question->getLibelle();
+        
         $interventionDemandesExport = array();
         foreach ($this->findForExport($allPrimaryKeys) as $interventionDemande)
         {
@@ -724,7 +748,7 @@ class InterventionDemandeManager extends BaseManager
             foreach ($interventionDemande->getObjets() as $objet)
                 $prods[] = $objet->getTitre();
 
-            $interventionDemandesExport[] = array
+            $interventionDemandeExport = array
             (
                 (null === $interventionDemande->getInterventionInitiateur() ? '' : $interventionDemande->getInterventionInitiateur()->__toString()),
                 (null === $interventionDemande->getReferent() ? '' : $interventionDemande->getReferent()->getAppellation()),
@@ -761,6 +785,43 @@ class InterventionDemandeManager extends BaseManager
                 (null === $interventionDemande->getCmsiDateDerniereRelance() ? '' : $interventionDemande->getCmsiDateDerniereRelance()->format('d/m/Y')),
                 (null === $interventionDemande->getAmbassadeurDateDerniereRelance() ? '' : $interventionDemande->getAmbassadeurDateDerniereRelance()->format('d/m/Y'))
             );
+            
+            $reponses = $this->reponseManager->findBy(array('question' => $questionnaire->getQuestions()->toArray(), 'paramId' => $interventionDemande->getId()));
+            foreach ($questionnaire->getQuestions() as $question)
+            {
+                $reponseExiste = false;
+                foreach ($reponses as $reponse)
+                {
+                    if ($reponse->getQuestion()->getId() == $question->getId())
+                    {
+                        if ($reponse->getQuestion()->getId() == 26) // Autres productions
+                        {
+                            $objetTitres = '';
+                            $objetIds = explode(',', trim($reponse->getReponse()));
+
+                            if (count($objetIds) > 0)
+                            {
+                                $objets = $this->objetManager->findBy(array('id' => $objetIds));
+                                $objetsTitresTab = array();
+                                foreach ($objets as $objet)
+                                    $objetsTitresTab[] = $objet->getTitre();
+                                $objetTitres = implode("\n", $objetsTitresTab);
+                            }
+
+                            $interventionDemandeExport[] = $objetTitres;
+                        }
+                        elseif (null !== $reponse->getReference())
+                            $interventionDemandeExport[] = $reponse->getReference()->getLibelle();
+                        else $interventionDemandeExport[] = $reponse->getReponse();
+                        $reponseExiste = true;
+                        break;
+                    }
+                }
+                if (false === $reponseExiste)
+                    $interventionDemandeExport[] = '';
+            }
+
+            $interventionDemandesExport[] = $interventionDemandeExport;
         }
         
         return $this->exportCsv
