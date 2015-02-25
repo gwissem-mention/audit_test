@@ -108,9 +108,9 @@
                                     {% for child in chapitre['childs'] %}
                                         <h3 class="prev">{{child.intro}}</h3>
                                         <h3>
-                                            {% if child.code != '' %}{{child.code ~ '. '}}{% endif %}{{child.title}} - 
+                                            {% if child.code != '' %}{{child.code ~ '. '}}{% endif %}{{child.title}}
                                             {% if (child.hasQuestionOptionNonConcerne) %}
-                                                <span onclick="chapterNonConcerne(this, true);" class="chapitreNonConcerne" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></span>
+                                                - <span onclick="chapterNonConcerne(this, true);" class="chapitreNonConcerne" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></span>
                                             {% endif %}
                                         </h3>
                                         <p class="text-muted level2">{{child.desc|raw}}</p>
