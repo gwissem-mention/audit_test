@@ -223,7 +223,7 @@ function calcAvancement()
     }
     
     // Désactive les boutons qui affichent le résultat si le questionnaire n'est pas terminé
-    $('#acces_resultats_button, #valid_button').prop('disabled', !peutAfficherResultats());
+    $('.acces_resultats_button, .valid_button').prop('disabled', !peutAfficherResultats());
 }
 
 /**
