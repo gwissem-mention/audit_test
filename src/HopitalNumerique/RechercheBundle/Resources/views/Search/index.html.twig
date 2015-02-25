@@ -117,21 +117,21 @@
                                 <a class="close" onclick="toggleRechercheAvancee();">Fermer</i></a>
                                 <div class="title">Que cherchez vous ?</div>
                                 <ul>
-                                    <li><a onclick="rechercheAvancee('&quot;Entrez votre formulation ici&quot;');">Formulation exacte</a></li>
-                                    <li><a onclick="rechercheAvancee('-Entrez le terme ici');">Termes exclus</a></li>
-                                    <li><a onclick="rechercheAvancee('OPT (Entrez le terme ici)');">Termes optionnels</a></li>
-                                    <li><a onclick="rechercheAvancee('NEAR Entrez le terme ici');">Recherche de proximité</a></li>
+                                    <li><a onclick="rechercheAvancee('&quot;Entrez votre formulation ici&quot;', 1, -1);">Formulation exacte</a></li>
+                                    <li><a onclick="rechercheAvancee('-Entrez le terme ici', 1, 0);">Termes exclus</a></li>
+                                    <li><a onclick="rechercheAvancee('OPT (Entrez le terme ici)', 5, -1);">Termes optionnels</a></li>
+                                    <li><a onclick="rechercheAvancee('NEAR Entrez le terme ici', 5, 0);">Recherche de proximité</a></li>
                                 </ul>
                                 
                                 <div class="title">Avez-vous besoin de la recherche approximative ?</div>
                                 <ul>
-                                    <li><a onclick="rechercheAvancee('Entrez le terme ici*');">Termes commençant par</a></li>
+                                    <li><a onclick="rechercheAvancee('Entrez le terme ici*', 0, -1);">Termes commençant par</a></li>
                                 </ul>
                                 
                                 <div class="title">Où voulez-vous chercher ?</div>
                                 <ul>
-                                    <li><a onclick="rechercheAvancee('title:(Entrez le terme ici)');">Recherche par titre</a></li>
-                                    <li><a onclick="rechercheAvancee('text:(Entrez le terme ici)');">Recherche de document</a></li>
+                                    <li><a onclick="rechercheAvancee('title:(Entrez le terme ici)', 7, -1);">Recherche par titre</a></li>
+                                    <li><a onclick="rechercheAvancee('text:(Entrez le terme ici)', 6, -1);">Recherche de document</a></li>
                                 </ul>
 
                             </div>
