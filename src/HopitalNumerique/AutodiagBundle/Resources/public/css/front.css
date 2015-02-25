@@ -37,8 +37,8 @@
     #autodiag .content .badge-primary{background-color:#6f3596; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
     #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer; margin-top: 7px}
     #autodiag .content .radio{float: left; margin-right: 30px;}
-    #autodiag .content .saveBtns{margin: 20px auto; width: 410px }
-    #autodiag .content .saveBtns .btn{ width: 200px; text-align: center}
+    #autodiag .content .saveBtns{ float:right;margin: 20px auto;x }
+    #autodiag .content .saveBtns .btn{ text-align: center}
     #autodiag .content .sous-chapitre label{padding-left:40px;}
     #autodiag .content .sous-chapitre .radio label{padding-left:5px;}
     #autodiag .content .radios{ border: 1px solid #CCCCCC; padding: 0 0 10px 10px; }
