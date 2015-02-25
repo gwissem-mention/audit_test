@@ -61,25 +61,29 @@
     #recherche #origin li.level0 ol li.level1 ol li.level2 ol li.level3 span{font-style:italic; color:#070707; }
 
     /* Liste déroulante */
-    .multiselect-container.dropdown-menu{width: 100%; z-index: 110;}
+    .multiselect-container.dropdown-menu{ font-size:13px;width: 100%; z-index: 110;}
     .multiselect-container.dropdown-menu .loader .loaderBackground{z-index:120;}
+    .multiselect-container.dropdown-menu input[type=checkbox] { margin-bottom:10px;margin-top:0px; }
     #recherche button.multiselect {text-align: left;}
-    #recherche button.multiselect .caret{text-align: right;}
+    #recherche button.multiselect .caret { position:absolute;right:10px;top:15px; }
 
     /* Zone de recherche textuelle */
     #recherche #recherche_textuelle { z-index: 1}
-    #recherche #recherche_textuelle_group{margin-top : 10px;}
-    #recherche #recherche_textuelle_group .btn.btn-success{-moz-border-radius: 0px 4px 4px 0px;-webkit-border-radius: 0px 4px 4px 0px;border-radius: 0px 4px 4px 0px;}
+    #recherche #recherche_textuelle_group{ margin-top: 10px;position:relative; }
+    #recherche #recherche_textuelle_group .btn.btn-success{ border-radius: 0px;}
+    #recherche #recherche_textuelle_group .btn.btn-primary{ border-radius: 0px 4px 4px 0px;}
     #recherche #arbo-type-prod { padding: 0;}
     #recherche #arbo-recherche-textuelle { padding: 0;}
-    #recherche #bloc_filtres{padding-right:0px}
-    #recherche #bloc_exalead.col-md-6{padding-left:0px;}
-    #recherche #bloc_exalead.col-xs-12{padding-left:0px;padding-right:0px;}
-    #recherche #bloc_exalead.col-md-6 #recherche_textuelle_group{margin-top:0px;}
+    #recherche #bloc_filtres{ margin-top:10px;padding-right:0px}
+    
+	.recherche_textuelle_avancee { background-color:#f4f4f4;border-color:#ccc;border-style:solid;border-width:1px;display:none;left:0px;position:absolute;top:33px;width:100%;z-index:1000; }
+	    .recherche_textuelle_avancee .close { float:right;font-size:15px;padding:10px; }
+	    .recherche_textuelle_avancee .title { color:#6f3596;font-weight:bold;padding:10px; }
+	    .recherche_textuelle_avancee ul { list-style-type:none; }
+	        .recherche_textuelle_avancee ul a { cursor:pointer; }
     
     @media screen and (max-width: 991px) {
         #recherche #bloc_filtres{padding-left:0px;}
-        #recherche #bloc_filtres{margin-top:10px;}
     }
     
 

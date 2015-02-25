@@ -148,8 +148,11 @@ class SearchController extends Controller
                             if( $Meta->attributes()->name == "text" || $Meta->attributes()->name == "title" ){
                                 foreach( $Meta->MetaText as $MetaText ){
                                     foreach( $MetaText->TextSeg as $key => $TextSeg ){
-                                        if( $TextSeg->attributes()->highlighted == "true" ){
-                                            $patternFounded[] = (string)$TextSeg;
+                                        if( $TextSeg->attributes()->highlighted == "true" )
+                                        {
+                                            $texteTrouve = (string) $TextSeg;
+                                            if (!in_array($texteTrouve, $patternFounded))
+                                                $patternFounded[] = $texteTrouve;
                                         }
                                     }
                                 }

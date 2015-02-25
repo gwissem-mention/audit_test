@@ -34,7 +34,7 @@ class ImportExcelController extends Controller
     
         if( file_exists( __ROOT_DIRECTORY__ . '/files/autodiag/Gabarit_autodiag.xlsx') )
         {
-            return $this->get('igorw_file_serve.response_factory')->create( __ROOT_DIRECTORY__ . '/files/autodiag/Gabarit_autodiag.xlsx', 'application/pdf', $options);
+            return $this->get('igorw_file_serve.response_factory')->create( __ROOT_DIRECTORY__ . '/files/autodiag/Gabarit_autodiag.xlsx', 'application/vnd.ms-excel', $options);
         }
         else
         {
@@ -55,12 +55,6 @@ class ImportExcelController extends Controller
      */
     public function downloadExportAction(Outil $outil)
     {
-        $options = array(
-            'serve_filename' => 'Gabarit_autodiag.xlsx',
-            'absolute_path'  => false,
-            'inline'         => false,
-        );
-    
         if( file_exists( __ROOT_DIRECTORY__ . '/files/autodiag/Gabarit_autodiag.xlsx') )
         {
             //Récupèration du fichier excel
@@ -89,8 +83,6 @@ class ImportExcelController extends Controller
             $chapitres  = $this->get('hopital_numerique_import_excel.manager.chapitre')->findBy(array('outil' => $outil));
             $resultats  = $this->get('hopital_numerique_import_excel.manager.resultat')->findBy(array('outil' => $outil));
 
-            $arrayCategorie = array();
-
             $nbLigne = 2;
             foreach ($categories as $categorie) 
             {
@@ -107,15 +99,16 @@ class ImportExcelController extends Controller
             {
                 $sheetChapitres->setCellValueByColumnAndRow(0, $nbLigne, $chapitre->getId());
                 $sheetChapitres->setCellValueByColumnAndRow(1, $nbLigne, $chapitre->getCode());
-                $sheetChapitres->setCellValueByColumnAndRow(2, $nbLigne, (!is_null($chapitre->getParent())) ? $chapitre->getParent()->getCode() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(3, $nbLigne, (!is_null($chapitre->getIntro())) ? $chapitre->getIntro() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(4, $nbLigne, (!is_null($chapitre->getTitle())) ? $chapitre->getTitle() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(5, $nbLigne, (!is_null($chapitre->getDesc())) ? $chapitre->getDesc() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(6, $nbLigne, (!is_null($chapitre->getNoteOptimale())) ? $chapitre->getNoteOptimale() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(7, $nbLigne, (!is_null($chapitre->getNoteMinimale())) ? $chapitre->getNoteMinimale() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(8, $nbLigne, (!is_null($chapitre->getSynthese())) ? $chapitre->getSynthese() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(9, $nbLigne, (!is_null($chapitre->getLien())) ? $chapitre->getLien() : '' );
-                $sheetChapitres->setCellValueByColumnAndRow(10, $nbLigne, (!is_null($chapitre->getDescriptionLien())) ? $chapitre->getDescriptionLien() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(2, $nbLigne, (!is_null($chapitre->getParent())) ? $chapitre->getParent()->getId() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(3, $nbLigne, (!is_null($chapitre->getParent())) ? $chapitre->getParent()->getCode() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(4, $nbLigne, (!is_null($chapitre->getIntro())) ? $chapitre->getIntro() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(5, $nbLigne, (!is_null($chapitre->getTitle())) ? $chapitre->getTitle() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(6, $nbLigne, (!is_null($chapitre->getDesc())) ? $chapitre->getDesc() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(7, $nbLigne, (!is_null($chapitre->getNoteOptimale())) ? $chapitre->getNoteOptimale() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(8, $nbLigne, (!is_null($chapitre->getNoteMinimale())) ? $chapitre->getNoteMinimale() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(9, $nbLigne, (!is_null($chapitre->getSynthese())) ? $chapitre->getSynthese() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(10, $nbLigne, (!is_null($chapitre->getLien())) ? $chapitre->getLien() : '' );
+                $sheetChapitres->setCellValueByColumnAndRow(11, $nbLigne, (!is_null($chapitre->getDescriptionLien())) ? $chapitre->getDescriptionLien() : '' );
 
                 $nbLigne++;
 
@@ -256,7 +249,7 @@ class ImportExcelController extends Controller
 
         if(is_null($sheetCategorie))
         {
-            $this->get('session')->getFlashBag()->add( 'danger', 'Fichier non conforme, veuillez ne pas renomer la feuille "categorie".' );
+            $this->get('session')->getFlashBag()->add( 'danger', 'Fichier non conforme, veuillez ne pas renommer la feuille "categorie".' );
             return $this->redirect( $this->generateUrl('hopitalnumerique_import_index', array('id' => $outil->getId())) );
         }
 
@@ -265,7 +258,7 @@ class ImportExcelController extends Controller
 
         if(is_null($sheetCategorie))
         {
-            $this->get('session')->getFlashBag()->add( 'danger', 'Fichier non conforme, veuillez ne pas renomer la feuille "chapitres".' );
+            $this->get('session')->getFlashBag()->add( 'danger', 'Fichier non conforme, veuillez ne pas renommer la feuille "chapitres".' );
             return $this->redirect( $this->generateUrl('hopitalnumerique_import_index', array('id' => $outil->getId())) );
         }
 
@@ -274,7 +267,7 @@ class ImportExcelController extends Controller
 
         if(is_null($sheetQuestions))
         {
-            $this->get('session')->getFlashBag()->add( 'danger', 'Fichier non conforme, veuillez ne pas renomer la feuille "questions".' );
+            $this->get('session')->getFlashBag()->add( 'danger', 'Fichier non conforme, veuillez ne pas renommer la feuille "questions".' );
             return $this->redirect( $this->generateUrl('hopitalnumerique_import_index', array('id' => $outil->getId())) );
         }
 

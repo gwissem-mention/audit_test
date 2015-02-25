@@ -108,13 +108,37 @@
                                 <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control col-md-12" value="{{rechercheTextuelle}}" />
                                 <span class="input-group-btn">
                                     <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                                    <button class="btn btn-primary" type="button" title="Recherche avancée" onclick="toggleRechercheAvancee();"><i class="fa fa-cog"></i></button>
                                 </span>
                                 <input type="hidden" id="recherche_textuelle_minifie" value="{{categoriesProductionActif}}" />
+                            </div>
+                            
+                            <div class="recherche_textuelle_avancee">
+                                <a class="close" onclick="toggleRechercheAvancee();">Fermer</i></a>
+                                <div class="title">Que cherchez vous ?</div>
+                                <ul>
+                                    <li><a onclick="rechercheAvancee('&quot;Entrez votre formulation ici&quot;');">Formulation exacte</a></li>
+                                    <li><a onclick="rechercheAvancee('-Entrez le terme ici');">Termes exclus</a></li>
+                                    <li><a onclick="rechercheAvancee('OPT (Entrez le terme ici)');">Termes optionnels</a></li>
+                                    <li><a onclick="rechercheAvancee('NEAR Entrez le terme ici');">Recherche de proximité</a></li>
+                                </ul>
+                                
+                                <div class="title">Avez-vous besoin de la recherche approximative ?</div>
+                                <ul>
+                                    <li><a onclick="rechercheAvancee('Entrez le terme ici*');">Termes commençant par</a></li>
+                                </ul>
+                                
+                                <div class="title">Où voulez-vous chercher ?</div>
+                                <ul>
+                                    <li><a onclick="rechercheAvancee('title:(Entrez le terme ici)');">Recherche par titre</a></li>
+                                    <li><a onclick="rechercheAvancee('text:(Entrez le terme ici)');">Recherche de document</a></li>
+                                </ul>
+
                             </div>
                         </div>
                     </div>
 
-                    <div id="bloc_filtres" class="col-md-6 col-xs-12">
+                    <div id="bloc_filtres">
 
                         <select multiple="multiple" class="form-control" placeholder="Sélectionnez un filtre pour un point dur" name="categ_production_select" id="categ_production_select" style="height:200px;">
                             {% for categorieProduction in categoriesProduction %}
@@ -124,7 +148,6 @@
                         <input type="hidden" id="categ_production_select_vals" value="{{categoriesProductionActif}}" />
                         <input type="hidden" id="categ_production_select_vals_chargement" value="{{categoriesProductionActifJSON}}" />
                     </div>
-                    <div style="clear:both;"></div>
                 </div>
             </div>
             

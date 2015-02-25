@@ -565,7 +565,7 @@ class ResultatManager extends BaseManager
             $data->opti  = $chapitre->noteOpt;
             $data->min   = null;
             $data->max   = null;
-            $data->centPourcentReponseObligatoire = $chapitre->centPourcentReponseObligatoire;
+            $data->centPourcentReponseObligatoire = (isset($chapitre->centPourcentReponseObligatoire) ? $chapitre->centPourcentReponseObligatoire : false);
 
             $datas[] = $data;
         }

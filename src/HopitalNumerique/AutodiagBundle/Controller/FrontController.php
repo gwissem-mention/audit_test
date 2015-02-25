@@ -222,7 +222,7 @@ class FrontController extends Controller
         $this->get('session')->getFlashBag()->add( 'success', 'Vos réponses ont bien été sauvegardées.' );
 
 
-        if( $action == 'valid' || !$outil->isCentPourcentReponseObligatoire())
+        if( ($action == 'valid' || $action == 'acces_resultats') || !$outil->isCentPourcentReponseObligatoire())
         {
             if($sansGabarit)
                 return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat_sans_gabarit', array( 'id' => $resultat->getId(), 'sansGabarit' => true ) ) );

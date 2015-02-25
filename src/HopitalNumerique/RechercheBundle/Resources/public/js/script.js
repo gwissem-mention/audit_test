@@ -5,7 +5,6 @@ var hasResultat =false;
 
 $(document).ready(function() {
     var hasResultat =false;
-    $('#bloc_exalead').removeClass('col-md-6').removeClass('col-xs-12');
     $("#bloc_filtres").hide();
 
     //Gestion de l'ajout de critères dans la requete
@@ -38,7 +37,6 @@ $(document).ready(function() {
             //placeholder management
             if( success && showPlaceholder){
                 $(".placeholder").hide();
-                $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
                 $("#bloc_filtres").show();
                 showPlaceholder = false;
                 $("#dest").removeClass('hide');
@@ -68,7 +66,6 @@ $(document).ready(function() {
         //placeholder management
         if( success && showPlaceholder){
             $(".placeholder").hide();
-            $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
             $("#bloc_filtres").show();
             showPlaceholder = false;
             $("#dest").removeClass('hide');
@@ -173,7 +170,6 @@ $(document).ready(function() {
             $(".placeholder-aucunCritere").remove();
         }
         $(".placeholder").hide();
-        $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
         $("#bloc_filtres").show();
         showPlaceholder = false;
         $("#dest").removeClass('hide');
@@ -214,10 +210,10 @@ $(document).ready(function() {
     
     $("#recherche_textuelle").change(function(){
 
+        $('.recherche_textuelle_avancee').css({ display:'none' });
         if($("#recherche_textuelle").val() != '')
         {
             $(".placeholder").hide();
-            $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
             $("#bloc_filtres").show();
             showPlaceholder = false;
             $("#dest").removeClass('hide');
@@ -414,7 +410,6 @@ function handleParentsDestination( item )
             {
                 $(".arbo-requete").find('li').addClass('hide');
                 $(".placeholder").show();
-                $('#bloc_exalead').removeClass('col-md-6').removeClass('col-xs-12');
                 $("#bloc_filtres").hide();
                 showPlaceholder = true;
                 $("#dest").addClass('hide');
@@ -495,7 +490,7 @@ function updateResultats( cleanSession )
             if(search != "")
             {
                 search = JSON.parse(search);
-                $("#resultats p, #resultats h5, #resultats a").highlight( search, { wordsOnly: true } );
+                $("#resultats p, #resultats h4, #resultats h5, #resultats a").highlight( search, { wordsOnly: false } );
             }
 
             placeholderExalead();
@@ -768,7 +763,6 @@ function affichagePlaceholder()
     if(hasResultat)
     {
         $(".placeholder").hide();
-        $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
         $("#bloc_filtres").show();
         showPlaceholder = false;
         $("#dest").removeClass('hide');
@@ -778,7 +772,6 @@ function affichagePlaceholder()
     {
         $(".arbo-requete").find('li').addClass('hide');
         $(".placeholder").show();
-        $('#bloc_exalead').removeClass('col-md-6').removeClass('col-xs-12');
         $("#bloc_filtres").hide();
         showPlaceholder = true;
         $("#dest").addClass('hide');
@@ -786,7 +779,6 @@ function affichagePlaceholder()
     }
     else
     {
-        $('#bloc_exalead').addClass('col-md-6').addClass('col-xs-12');
         $("#bloc_filtres").show();
     }
 
@@ -874,3 +866,18 @@ jQuery.fn.highlight = function (words, options) {
         jQuery.highlight(this, re, settings.element, settings.className);
     });
 };
+
+function toggleRechercheAvancee()
+{
+    $('.recherche_textuelle_avancee').slideToggle(200);
+}
+function rechercheAvancee(chaineRechercheAvancee)
+{
+    var texteRecherche = $('#recherche_textuelle').val();
+
+    if (texteRecherche.length > 0)
+        texteRecherche += ' ';
+    texteRecherche += chaineRechercheAvancee;
+
+    $('#recherche_textuelle').val(texteRecherche);
+}

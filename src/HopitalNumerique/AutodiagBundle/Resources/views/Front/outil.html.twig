@@ -46,12 +46,13 @@
 
             <div class="options">
                 <div class="btn-toolbar">
-                    <button onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-success"><i class="fa fa-bar-chart-o"></i> Enregistrer et accéder aux résultats</button>
                     {% if app.user %}
                         <button onclick="saveQuestionnaire('save', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-primary save"><i class="fa fa-save"></i> Enregistrer</button>
+                        <button id="acces_resultats_button" onclick="saveQuestionnaire('acces_resultats', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-primary save"><i class="fa fa-bar-chart-o"></i> Accéder aux résultats</button>
                     {% endif %}
+                    <button id="valid_button" onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-success"><i class="fa fa-check"></i> Valider mon autodiagnostic</button>
                     {% if reponses %}
-                        <button onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger" title="Vider le questionnaire"><i class="fa fa-trash-o"></i></button>
+                        <button onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger"><i class="fa fa-trash-o"></i> Vider toutes les réponses</button>
                     {% endif %}
                 </div>
             </div>
