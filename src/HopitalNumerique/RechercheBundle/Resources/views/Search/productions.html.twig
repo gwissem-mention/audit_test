@@ -30,9 +30,10 @@
             {% else %}
                 <a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet['id'],'alias':objet['alias']})}}" >
             {% endif %}
-            {% if objetsOrder[objet['id']]['parent'] is defined and objetsOrder[objet['id']]['parent'] is not null  and objet['objet'] is not null %}
-                {{objetsOrder[objet['id']]['parent'].getTitre()}}<br />
-                <i style="font-size:15px;" class="fa fa-share fa-flip-vertical"></i><span class="gris" style="font-size:16px;"> {{objetsOrder[objet['id']]['prefixe']}} {{objet['titre']}}</span>
+            {% set objetIdInfradoc = - objet['id'] %}
+            {% if objetsOrder[objetIdInfradoc]['parent'] is defined and objetsOrder[objetIdInfradoc]['parent'] is not null  and objet['objet'] is not null %}
+                {{objetsOrder[objetIdInfradoc]['parent'].getTitre()}}<br />
+                <i style="font-size:15px;" class="fa fa-share fa-flip-vertical"></i><span class="gris" style="font-size:16px;"> {{objetsOrder[objetIdInfradoc]['prefixe']}} {{objet['titre']}}</span>
             {% else %}
                 {{objet['titre']}}
             {% endif %}

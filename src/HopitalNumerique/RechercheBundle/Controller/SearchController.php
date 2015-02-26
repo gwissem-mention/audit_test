@@ -232,7 +232,14 @@ class SearchController extends Controller
         if( true){//!$onlyText ){
             foreach ($objets as $key => $objet) 
             {
-                $objetsOrder[$objet["id"]] = $objet;
+                if(array_key_exists('objet', $objet) && !is_null($objet["objet"]))
+                {
+                    $objetsOrder['-' . $objet["id"]] = $objet;
+                }
+                else
+                {
+                    $objetsOrder[$objet["id"]] = $objet;
+                }
             }
         }
 
@@ -293,6 +300,7 @@ class SearchController extends Controller
 
         foreach ($objetsOrder as $key => $objetCurrent) 
         {
+            //Tout les cas ci-dessous sont en infrad
             if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet'])) 
             {
                 //Dans le cas où une recherche textuelle est donnée
