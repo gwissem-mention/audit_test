@@ -37,8 +37,8 @@
     #autodiag .content .badge-primary{background-color:#6f3596; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
     #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer; margin-top: 7px}
     #autodiag .content .radio{float: left; margin-right: 30px;}
-    #autodiag .content .saveBtns{margin: 20px auto; width: 410px }
-    #autodiag .content .saveBtns .btn{ width: 200px; text-align: center}
+    #autodiag .content .saveBtns{ float:right;margin: 20px auto;x }
+    #autodiag .content .saveBtns .btn{ text-align: center}
     #autodiag .content .sous-chapitre label{padding-left:40px;}
     #autodiag .content .sous-chapitre .radio label{padding-left:5px;}
     #autodiag .content .radios{ border: 1px solid #CCCCCC; padding: 0 0 10px 10px; }
@@ -87,10 +87,10 @@
         #resultats #graphiques .panel .progress .progress-bar-warning{background:#fcf8e3 !important; }
         #resultats #graphiques .panel .progress .progress-bar-success{background:#dff0d8 !important; }
         #resultats #graphiques .panel .taux-remplissage{ font-size: 10px;}
-        #resultats #graphiques .panel .cursor{ width:0; height:0; border:10px solid transparent; border-bottom:20px solid #333333; position: absolute; bottom: 0; margin-left:-11px;}
-        #resultats #graphiques .panel .cursor-min{ border-bottom:10px solid #00AEFF;}
-        #resultats #graphiques .panel .cursor-max{ border-bottom:15px solid #0471A3;}
-        #resultats #graphiques .panel .cursor-value{ position: absolute; bottom: -14px; margin-left:-9px; font-size: 10px}
+        #resultats #graphiques .panel .cursor{ width:0; height:0; border:8px solid transparent; border-bottom:16px solid #888; position: absolute; bottom: 0; margin-left:-11px;}
+        #resultats #graphiques .panel .cursor-min{ border-bottom:8px solid #a00;}
+        #resultats #graphiques .panel .cursor-max{ border-bottom:12px solid #080;}
+        #resultats #graphiques .panel .cursor-value{ position: absolute; bottom: -14px; margin-left:-11px; font-size: 10px}
         #resultats #graphiques .panel h3.toPrint{display: none}
         #resultats #graphiques #radarChart{min-width: 400px; max-width: 100%; margin: 0 auto}
         #resultats #graphiques #chaptersNonConcernes{margin-top:15px}

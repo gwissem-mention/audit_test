@@ -101,13 +101,15 @@ $(document).ready(function() {
         seriesRadar.push({
             dataLabels: {
                 enabled: true,
-                format: '<b>{point.y:,.0f}%</b>',
+                //format: '<b>{point.y:,.0f}%</b>',
+                format: ' ',
                 softConnector: true,
                 align: 'left'
             },
             name  : 'Valeur minimale de la synthèse',
+            marker: { symbol:'circle' },
             data  : min,
-            color : '#00AEFF',
+            color : '#aa0000',
             type  : 'line',
             pointPlacement: 'on'
         });
@@ -117,13 +119,15 @@ $(document).ready(function() {
         seriesRadar.push({
             dataLabels: {
                 enabled: true,
-                format: '<b>{point.y:,.0f}%</b>',
+                //format: '<b>{point.y:,.0f}%</b>',
+                format: ' ',
                 softConnector: true,
                 align: 'left'
             },
             name  : 'Valeur maximale de la synthèse',
+            marker: { symbol:'circle' },
             data  : max,
-            color : '#0471A3',
+            color : '#00aa00',
             type  : 'line',
             pointPlacement: 'on'
         });

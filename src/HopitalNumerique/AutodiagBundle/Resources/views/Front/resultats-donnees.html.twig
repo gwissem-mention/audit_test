@@ -163,7 +163,7 @@
                                             <div class="chapitres">
                                                 {% for chapitreEnfant in chapitre.enfants %}
                                                     <div class="resultat{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} {% if chapitreEnfant.moyenne > 66 %} resultat_fort{% elseif chapitreEnfant.moyenne > 33 %}resultat_moyen{% else %}resultat_faible{% endif %}{% endif %}"{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} 
-                                                    title="Score : {{ chapitreEnfant.moyenne }}% {% if resultat.synthese %}<br />Valeur minimale : {{chapitreEnfant.min}}%<br />Valeur maximale : {{chapitreEnfant.max}}%{% endif %}"{% endif %}>
+                                                    title="Score : {{ chapitreEnfant.moyenne }}% {% if resultat.synthese %}{# <br />Valeur minimale : {{chapitreEnfant.min}}%<br />Valeur maximale : {{chapitreEnfant.max}}% #}{% endif %}"{% endif %}>
                                                         {{ chapitreEnfant.titre }}
                                                     </div>
                                                 {% endfor %}

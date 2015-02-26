@@ -871,13 +871,27 @@ function toggleRechercheAvancee()
 {
     $('.recherche_textuelle_avancee').slideToggle(200);
 }
-function rechercheAvancee(chaineRechercheAvancee)
+
+/**
+ * 
+ * @param string chaineRechercheAvancee Chaîne à ajouter dans le champ
+ * @param integer texteSelectionDebut Position où commencer à sélectionner le texte
+ * @param integer texteSelectionFin Position où terminer à sélectionner le texte (à partir de la fin donc -1 si juste avant le dernier caractère)
+ */
+function rechercheAvancee(chaineRechercheAvancee, texteSelectionDebut, texteSelectionFin)
 {
+    var positionInitiale = $('#recherche_textuelle').val().length;
     var texteRecherche = $('#recherche_textuelle').val();
 
     if (texteRecherche.length > 0)
+    {
         texteRecherche += ' ';
+        positionInitiale++;
+    }
     texteRecherche += chaineRechercheAvancee;
 
     $('#recherche_textuelle').val(texteRecherche);
+    
+    document.getElementById('recherche_textuelle').focus();
+    document.getElementById('recherche_textuelle').setSelectionRange(positionInitiale + texteSelectionDebut, positionInitiale + chaineRechercheAvancee.length + texteSelectionFin);
 }
