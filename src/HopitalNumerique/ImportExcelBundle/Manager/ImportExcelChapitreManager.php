@@ -36,6 +36,8 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
      */
     public function saveChapitreImported( $arrayChapitres, $outil )
     {
+        $arrayIdsChapitres = array();
+        
         foreach ($arrayChapitres as $key => $chapitreDonnees) 
         {
             $chapitre = null;
@@ -67,7 +69,12 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
             $chapitre->setDescriptionLien($chapitreDonnees['descriptionLien']);
             $chapitre->setOrder($key + 1);
 
-            if(trim($chapitreDonnees['codeParent']) !== '' )
+            if (trim($chapitreDonnees['idParent']) !== '' && isset($arrayIdsChapitres[$chapitreDonnees['idParent']]))
+            {
+                $chapitreParent = $this->findOneBy(array('id' => $arrayIdsChapitres[$chapitreDonnees['idParent']], 'outil' => $outil));
+                $chapitre->setParent($chapitreParent);
+            }
+            elseif (trim($chapitreDonnees['codeParent']) !== '' )
             {
                 $chapitreParent = $this->findOneBy(array('code' => $chapitreDonnees['codeParent'], 'outil' => $outil));
                 $chapitre->setParent($chapitreParent);
@@ -76,6 +83,10 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
             $chapitre->setOutil($outil);
 
             $this->save( $chapitre );
+            
+            $arrayIdsChapitres[('' != $chapitreDonnees['id'] ? $chapitreDonnees['id'] : $chapitre->getId())] = $chapitre->getId();
         }
+        
+        return $arrayIdsChapitres;
     }
 }

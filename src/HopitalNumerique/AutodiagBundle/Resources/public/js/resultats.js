@@ -47,9 +47,11 @@ $(document).ready(function() {
     var nonConcernes = [];
     var min          = [];
     var max          = [];
+
     $(datas).each(function(index, element ){
-        if( element.value != 'NC' || element.taux != 0 ){
-            title = '<b>' + element.title + '</b> (Taux de remplissage: ' + element.taux + '%)';
+        if( element.value != 'NC' || element.taux != 0 )
+        {
+            title = '<b>' + element.title + '</b>' + (element.centPourcentReponseObligatoire ? '' : ' (Taux de remplissage: ' + element.taux + '%)');
             categories.push( title );
             values.push( element.value );
             optimale.push( element.opti );
@@ -57,8 +59,11 @@ $(document).ready(function() {
             max.push( element.max );
 
             taux[ title ] = element.taux;
-        }else
+        }
+        else
+        {
             nonConcernes.push( element.title );
+        }
     });
     //Gestion des chapitres non concernes
     if( nonConcernes.length > 0 ){
@@ -96,13 +101,15 @@ $(document).ready(function() {
         seriesRadar.push({
             dataLabels: {
                 enabled: true,
-                format: '<b>{point.y:,.0f}%</b>',
+                //format: '<b>{point.y:,.0f}%</b>',
+                format: ' ',
                 softConnector: true,
                 align: 'left'
             },
             name  : 'Valeur minimale de la synthèse',
+            marker: { symbol:'circle' },
             data  : min,
-            color : '#00AEFF',
+            color : '#aa0000',
             type  : 'line',
             pointPlacement: 'on'
         });
@@ -112,13 +119,15 @@ $(document).ready(function() {
         seriesRadar.push({
             dataLabels: {
                 enabled: true,
-                format: '<b>{point.y:,.0f}%</b>',
+                //format: '<b>{point.y:,.0f}%</b>',
+                format: ' ',
                 softConnector: true,
                 align: 'left'
             },
             name  : 'Valeur maximale de la synthèse',
+            marker: { symbol:'circle' },
             data  : max,
-            color : '#0471A3',
+            color : '#00aa00',
             type  : 'line',
             pointPlacement: 'on'
         });

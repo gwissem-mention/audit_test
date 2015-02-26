@@ -43,19 +43,21 @@
             <div class="clearfix"></div>
         </div>
         <div class="col-md-9 col-sm-12" >
-            <h1>{{outil.title}}</h1>
 
             <div class="options">
                 <div class="btn-toolbar">
-                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success" title="Résultats" ><i class="fa fa-bar-chart-o"></i></div>
                     {% if app.user %}
-                        <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary save" title="Enregistrer"><i class="fa fa-save"></i></div>
+                        <button onclick="saveQuestionnaire('save', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-primary save"><i class="fa fa-save"></i> Enregistrer</button>
+                        <button onclick="saveQuestionnaire('acces_resultats', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="acces_resultats_button finish btn btn-primary save"><i class="fa fa-bar-chart-o"></i> Accéder aux résultats</button>
                     {% endif %}
+                    <button onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="valid_button finish btn btn-success"><i class="fa fa-check"></i> Valider mon autodiagnostic</button>
                     {% if reponses %}
-                        <div onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger" title="Vider le questionnaire"><i class="fa fa-trash-o"></i></div>
+                        <button onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger"><i class="fa fa-trash-o"></i> Vider toutes les réponses</button>
                     {% endif %}
                 </div>
             </div>
+            
+            <h1>{{outil.title}}</h1>
 
             {% if reponses %}
                 <div class="clearfix"></div>
@@ -81,7 +83,9 @@
                             {% if reponses %}
                                 <div onclick="emptyChapter(this);" class="emptyChapter btn btn-default btn-sm pull-right" title="Vider le chapitre"><i class="fa fa-trash-o"></i></div>
                             {% endif %}
-                            <div onclick="chapterNonConcerne(this);" class="chapitreNonConcerne btn btn-default btn-sm pull-right" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></div>
+                            {% if (parent.hasQuestionOptionNonConcerne) %}
+                                <div onclick="chapterNonConcerne(this);" class="chapitreNonConcerne btn btn-default btn-sm pull-right" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></div>
+                            {% endif %}
                             <h2 class="prev">{{parent.intro}}</h2>
                             <h2>{% if parent.code != '' %}{{parent.code ~ '. '}}{% endif %}{{parent.title}}</h2>
                             <p class="level1">{{parent.desc|raw}}</p>
@@ -103,7 +107,12 @@
                                 <div class="sous-chapitre">
                                     {% for child in chapitre['childs'] %}
                                         <h3 class="prev">{{child.intro}}</h3>
-                                        <h3>{% if child.code != '' %}{{child.code ~ '. '}}{% endif %}{{child.title}} - <span onclick="chapterNonConcerne(this, true);" class="chapitreNonConcerne" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></span></h3>
+                                        <h3>
+                                            {% if child.code != '' %}{{child.code ~ '. '}}{% endif %}{{child.title}}
+                                            {% if (child.hasQuestionOptionNonConcerne) %}
+                                                - <span onclick="chapterNonConcerne(this, true);" class="chapitreNonConcerne" title="Mettre le chapitre en non concerné"><i class="fa fa-ban"></i></span>
+                                            {% endif %}
+                                        </h3>
                                         <p class="text-muted level2">{{child.desc|raw}}</p>
 
                                         <hr>
@@ -130,10 +139,11 @@
                 </form>
 
                 <div class="saveBtns">
-                    <div onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %} );" class="finish btn btn-success btn-sm" ><i style="margin-right:5px" class="fa fa-bar-chart-o"></i> Résultats</div>
                     {% if app.user %}
-                        <div onclick="saveQuestionnaire('save');" class="finish btn btn-primary btn-sm save" ><i style="margin-right:5px" class="fa fa-save"></i> Enregistrer</div>
+                        <button onclick="saveQuestionnaire('save', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-primary save"><i class="fa fa-save"></i> Enregistrer</button>
+                        <button onclick="saveQuestionnaire('acces_resultats', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="acces_resultats_button finish btn btn-primary save"><i class="fa fa-bar-chart-o"></i> Accéder aux résultats</button>
                     {% endif %}
+                    <button onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="valid_button finish btn btn-success"><i class="fa fa-check"></i> Valider mon autodiagnostic</button>
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -162,7 +172,6 @@
 
                 <select name="{{questionName}}" id="{{questionId}}" class="form-control {% if question.colored %}colored{% endif %}" >
                     <option value=""></option>
-                    {% if outil.ajouterNonConcerne %}<option value="-1" {% if reponse['value'] == -1 %}selected="selected"{% endif %} >Non concerné</option>{% endif %}
                     {% for option in options %}
                         {% set datas = option|split(';', 2) %}
                         <option value="{{datas[0]|trim}}" {% if reponse['value'] == datas[0] %}selected="selected"{% endif %} >{{ datas[1]|raw }}</option>
@@ -173,7 +182,6 @@
                 {% set options = question.options|nl2br|split('<br />') %}
                 <div class="radios {% if question.colored %}colored{% endif %}">
                     {% set isChecked = false %}
-                    {% if outil.ajouterNonConcerne %}<div class="radio block"><label><input type="radio" value="-1" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] != '' and reponse['value'] == -1 %}{% set isChecked = true %}checked="checked"{% endif %} />Non concerné</label></div>{% endif %}
                     {% for option in options %}
                         {% set datas = option|split(';', 2) %}
                         <div class="radio block"><label><input type="radio" value="{{datas[0]|trim}}" name="{{questionName}}" id="{{questionId}}" {% if reponse['value'] == datas[0] %}{% set isChecked = true %}checked="checked"{% endif %} />{{ datas[1]|capitalize|raw }}</label></div>

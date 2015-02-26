@@ -74,6 +74,7 @@ class FrontController extends Controller
         $user     = $this->get('security.context')->getToken()->getUser();
         $reponses = false;
         $remarque = false;
+        $resultatEnCours = false;
         if( $user != 'anon.' ) 
         {
             $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
@@ -86,6 +87,7 @@ class FrontController extends Controller
             {
                 $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->getLastResultatValided( $outil, $user );
             }
+            else $resultatEnCours = true;
 
             if( $resultat )
             {
@@ -101,6 +103,7 @@ class FrontController extends Controller
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
             'outil'       => $outil,
+            'resultatEnCours' => $resultatEnCours,
             'chapitres'   => $chapitresOrdered,
             'reponses'    => $reponses,
             'remarque'    => $remarque,
@@ -124,7 +127,7 @@ class FrontController extends Controller
         $nameResultat = $request->request->get('name-resultat');
         $remarque     = $request->request->get('remarque');
         $sansGabarit  = $request->request->get('sansGabarit');
-
+        
         //try to get the connected user
         $user = $this->get('security.context')->getToken()->getUser();
         $user = $user != 'anon.' ? $user : false;
@@ -155,11 +158,12 @@ class FrontController extends Controller
         $resultat->setTauxRemplissage( $remplissage );
         $resultat->setDateLastSave( new \DateTime() );
         $resultat->setRemarque( $remarque );
+        if ('' != $nameResultat)
+            $resultat->setName( $nameResultat );
 
         //cas ou l'user à validé le questionnaire
         if( $action == 'valid')
         {
-            $resultat->setName( $nameResultat );
             $resultat->setDateValidation( new \DateTime() );
             $resultat->setStatut( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 419) ) );
         }
@@ -218,7 +222,7 @@ class FrontController extends Controller
         $this->get('session')->getFlashBag()->add( 'success', 'Vos réponses ont bien été sauvegardées.' );
 
 
-        if( $action == 'valid' || !$outil->isCentPourcentReponseObligatoire())
+        if( ($action == 'valid' || $action == 'acces_resultats') || !$outil->isCentPourcentReponseObligatoire())
         {
             if($sansGabarit)
                 return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat_sans_gabarit', array( 'id' => $resultat->getId(), 'sansGabarit' => true ) ) );

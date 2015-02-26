@@ -14,7 +14,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table(name="hn_outil_chapitre")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\ChapitreRepository")
- * @UniqueEntity(fields={"outil","code"}, message="Ce code existe déjà pour cet autodiagnostic.")
  */
 class Chapitre
 {
@@ -726,5 +725,21 @@ class Chapitre
     public function getAffichageRestitutionTableau()
     {
         return $this->affichageRestitutionTableau;
+    }
+
+    /**
+     * Retourne si le chapitre a au moins une question donc une réponse possible est "Non concerné".
+     * 
+     * @return boolean VRAI ssi une réponse est "Non concerné"
+     */
+    public function hasQuestionOptionNonConcerne()
+    {
+        foreach ($this->questions as $question)
+        {
+            if ($question->hasOptionNonConcerne())
+                return true;
+        }
+        
+        return false;
     }
 }

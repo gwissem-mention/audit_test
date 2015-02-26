@@ -38,6 +38,13 @@
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
+            {% if app.debug %}
+                {% javascripts output="compiled/nodevo-debogage.js"
+                    'bundles/nodevotools/js/Debogage.js'
+                %}
+                    <script type="text/javascript" src="{{ asset_url }}"></script>
+                {% endjavascripts %}
+            {% endif %}
         {% endblock %}
 
         <script>

@@ -1,5 +1,4 @@
 <?php
-
 namespace HopitalNumerique\ForumBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;

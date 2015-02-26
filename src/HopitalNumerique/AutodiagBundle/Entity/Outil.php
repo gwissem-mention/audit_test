@@ -204,13 +204,6 @@ class Outil
     private $masquerReponse;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="out_ajouter_non_concerne", type="boolean", options = {"comment" = "Ajout non concerne"})
-     */
-    private $ajouterNonConcerne;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="out_instructions", type="text", nullable=true, options = {"comment" = "Instructions fournies pour cet outil"})
@@ -271,7 +264,6 @@ class Outil
         $this->centPourcentReponseObligatoire = false;
         $this->masquerAnalyse                 = false;
         $this->masquerReponse                 = false;
-        $this->ajouterNonConcerne             = true;
         $this->chapitres                      = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories                     = new \Doctrine\Common\Collections\ArrayCollection();
         $this->process                        = new \Doctrine\Common\Collections\ArrayCollection();
@@ -815,29 +807,6 @@ class Outil
     public function isMasquerReponse()
     {
         return $this->masquerReponse;
-    }
-
-    /**
-     * Set ajouterNonConcerne
-     *
-     * @param boolean $ajouterNonConcerne
-     * @return Outil
-     */
-    public function setAjouterNonConcerne($ajouterNonConcerne)
-    {
-        $this->ajouterNonConcerne = $ajouterNonConcerne;
-
-        return $this;
-    }
-
-    /**
-     * Get ajouterNonConcerne
-     *
-     * @return boolean 
-     */
-    public function isAjouterNonConcerne()
-    {
-        return $this->ajouterNonConcerne;
     }
 
     /**

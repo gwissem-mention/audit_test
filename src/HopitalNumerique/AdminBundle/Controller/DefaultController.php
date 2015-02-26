@@ -230,7 +230,7 @@ class DefaultController extends Controller
                 //Build Top 5
                 $blocObjets['top5-points-dur'][] = $publication;
 
-                //Bottom 5
+                //Bottom 5 - On affiche ceux qui ont plus d'un mois
                 if( $publication['dateCreation']->add( $interval ) <= $today )
                     $blocObjets['bottom5-points-dur'][] = $publication;
             //Productions

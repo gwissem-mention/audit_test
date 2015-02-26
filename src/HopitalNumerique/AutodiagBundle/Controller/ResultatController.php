@@ -97,29 +97,16 @@ class ResultatController extends Controller
             'Sous chapitre',
             'Question',
             'Réponse',
-            'Synthèse',
-            'Commentaire',
-            'Acteurs',
-            'Échances',
-            'État d\'avancement'
+            'Action à mener',
+            'Pilote',
+            'Échéance',
+            'État d\'avancement',
+            'Indicateur',
+            'Commentaire'
         );
 
         foreach ($chapitres as $chapitre) 
         {
-            $row = array();
-
-            $row[0] = $chapitre->code;
-            $row[1] = '';
-            $row[2] = '';
-            $row[3] = '';
-            $row[4] = $chapitre->synthese;
-            $row[5] = '';
-            $row[6] = '';
-            $row[7] = '';
-            $row[8] = '';
-
-            $datas[] = $row;
-
             foreach ($chapitre->questions as $question) 
             {
                 $row = array();
@@ -149,6 +136,7 @@ class ResultatController extends Controller
                 $row[6] = '';
                 $row[7] = '';
                 $row[8] = '';
+                $row[9] = '';
 
                 $datas[] = $row;
             }
@@ -159,20 +147,6 @@ class ResultatController extends Controller
                 //Pour chaque sous chapitre du chapitre courant
                 foreach ($chapitre->childs as $chapitreChild) 
                 {
-                    $row = array();
-
-                    $row[0] = $chapitre->code;
-                    $row[1] = $chapitreChild->code;
-                    $row[2] = '';
-                    $row[3] = '';
-                    $row[4] = $chapitreChild->synthese;
-                    $row[5] = '';
-                    $row[6] = '';
-                    $row[7] = '';
-                    $row[8] = '';
-
-                    $datas[] = $row;
-
                     foreach ($chapitreChild->questions as $question) 
                     {
                         $row = array();
@@ -202,6 +176,7 @@ class ResultatController extends Controller
                         $row[6] = '';
                         $row[7] = '';
                         $row[8] = '';
+                        $row[9] = '';
 
                         $datas[] = $row;
                     }

@@ -21,6 +21,8 @@ class DemandesGrid extends DemandesAbstractGrid
     {
         parent::setConfig();
         $this->setFunctionName('getGridDonneesAdminDemandes');
+        // Pour éviter que le second bouton passe au-dessous du premier
+        $this->setButtonSize(43);
         
         $this->ignoreColonnes(array('interventionInitiateurId', 'nombreDemandesRegroupees', 'nombreDemandesPrincipales', 'ambassadeurRegionLibelle', 'referentEtablissementNom', 'referentEtablissementFiness', 'referentRegionLibelle', 'cmsiDateChoixLibelle', 'ambassadeurDateChoixLibelle'));
     }
@@ -121,7 +123,6 @@ class DemandesGrid extends DemandesAbstractGrid
     {
         $this->addActionButton(new Action\EditButton('hopital_numerique_intervention_admin_demande_edit'));
         $this->addActionButton(new Action\ShowButton('hopital_numerique_intervention_admin_demande_voir'));
-        $this->addActionButton(new Action\DeleteButton('hopital_numerique_intervention_admin_demande_delete'));
     }
 
     /**
@@ -129,6 +130,8 @@ class DemandesGrid extends DemandesAbstractGrid
      */
     public function setMassActions()
     {
+        $this->addMassAction( new Action\ActionMass('Exporter','HopitalNumeriqueInterventionBundle:Admin/Demande:exportMass') );
+        
         $utilisateurConnecte = $this->_container->get('security.context')->getToken()->getUser();
         
         if ($this->_container->get('nodevo_acl.manager.acl')->checkAuthorization($this->_container->get('router')->generate('hopital_numerique_intervention_admin_demande_delete', array('id' => 0)), $utilisateurConnecte) != -1)

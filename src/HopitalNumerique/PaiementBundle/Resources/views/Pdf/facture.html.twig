@@ -124,7 +124,12 @@
 
         {% for formation in facture.formations %}
             <tr>
-                <td style="border:1px solid black;" >{{formation.session.module.titre}}</td>
+                <td style="border:1px solid black;" >
+                    {{formation.session.module.titre}}
+                    {% if formation.session.duree is defined %}
+                        ({{ formation.session.duree.libelle }})
+                    {% endif %}
+                </td>
                 <td style="border:1px solid black;" >date : {{formation.session.dateSession|date('d/m/y')}}</td>
                 <td style="border:0 !important" ></td>
                 <td align="center" style="border:1px solid black;" >{{ formation.total - formation.supplement }}€</td>

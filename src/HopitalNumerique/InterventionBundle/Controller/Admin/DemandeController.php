@@ -78,4 +78,23 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         
         return $this->redirect( $this->generateUrl('hopital_numerique_intervention_admin_liste'));
     }
+    
+    /**
+     * Export de masse des demandes d'intervention.
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param boolean $allPrimaryKeys 
+     *
+     * @return Redirect
+     */
+    public function exportMassAction($primaryKeys, $allPrimaryKeys)
+    {
+        if ($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findAll();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data->getId();
+        }
+        
+        return $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getExportCsv($primaryKeys, $this->container->getParameter('kernel.charset'));
+    }
 }

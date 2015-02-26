@@ -15,6 +15,10 @@ use HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation;
+use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
+use HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager;
+use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 
 /**
  * Manager pour les demandes d'intervention.
@@ -47,6 +51,18 @@ class InterventionDemandeManager extends BaseManager
      * @var \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager Le manager de l'entité InterventionCourriel
      */
     private $interventionCourrielManager;
+    /**
+     * @var \HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager
+     */
+    private $questionnaireManager;
+    /**
+     * @var \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager
+     */
+    private $reponseManager;
+    /**
+     * @var \HopitalNumerique\ObjetBundle\Manager\ObjetManager
+     */
+    private $objetManager;
 
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User L'utilisateur connecté
@@ -65,7 +81,7 @@ class InterventionDemandeManager extends BaseManager
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager $interventionCourrielManager Le manager de l'entité InterventionCourriel
      * @return void
      */
-    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, InterventionEtatManager $interventionEtatManager, InterventionEvaluationEtatManager $interventionEvaluationEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager)
+    public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, InterventionEtatManager $interventionEtatManager, InterventionEvaluationEtatManager $interventionEvaluationEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager, QuestionnaireManager $questionnaireManager, ReponseManager $reponseManager, ObjetManager $objetManager)
     {
         parent::__construct($entityManager);
         $this->securityContext                   = $securityContext;
@@ -74,6 +90,9 @@ class InterventionDemandeManager extends BaseManager
         $this->interventionEvaluationEtatManager = $interventionEvaluationEtatManager;
         $this->interventionRegroupementManager   = $interventionRegroupementManager;
         $this->interventionCourrielManager       = $interventionCourrielManager;
+        $this->questionnaireManager = $questionnaireManager;
+        $this->reponseManager = $reponseManager;
+        $this->objetManager = $objetManager;
         
         $this->utilisateurConnecte = $this->securityContext->getToken()->getUser();
     }
@@ -659,4 +678,158 @@ class InterventionDemandeManager extends BaseManager
         return $this->_repository->isEtatActuelUpdated($intervention);
     }
     
+    /**
+     * Retourne toutes les demandes pour l'export.
+     * 
+     * @param integer[] $allPrimaryKeys Les IDs des demandes à exporter
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Demandes
+     */
+    public function findForExport($allPrimaryKeys)
+    {
+        return $this->getRepository()->findForExport($allPrimaryKeys);
+    }
+    
+    /**
+     * Retourne les demandes pour l'export.
+     * 
+     * @param integer[] $allPrimaryKeys Les IDs des demandes à exporter
+     * @param string $charset Encodage du CSV
+     * @return array Données pour l'export
+     */
+    public function getExportCsv(array $allPrimaryKeys, $charset)
+    {
+        $questionnaire = $this->questionnaireManager->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
+        
+        $exportTitres = array
+        (
+            'Initiateur',
+            'Demandeur',
+            'Directeur',
+            'Nom ES',
+            'FINESS ES',
+            'Région ES',
+            'E-mail',
+            'Téléphone',
+            'Date demande',
+            'Type d\'intervention',
+            'État de l\'intervention',
+            'CMSI',
+            'Mail CMSI',
+            'Tél CMSI',
+            'Date de choix du CMSI',
+            'Ambassadeur',
+            'Région ambassadeur',
+            'Mail ambassadeur',
+            'Tél ambassadeur',
+            'Date de choix de l\'ambassadeur',
+            'Autres établissements',
+            'Prods',
+            'Autres objets',
+            'Description du projet',
+            'Description de la difficulté',
+            'Champ libre',
+            'Informations de RDV',
+            'Commentaire CMSI',
+            'État de l\'évaluation',
+            'État du remboursement',
+            'Facture',
+            'Message de refus',
+            'Date de dernière relance du CMSI',
+            'Date de dernière relance de l\'ambassadeur'
+        );
+        
+        foreach ($questionnaire->getQuestions() as $question)
+            $exportTitres[] = $question->getLibelle();
+        
+        $interventionDemandesExport = array();
+        foreach ($this->findForExport($allPrimaryKeys) as $interventionDemande)
+        {
+            $prods = array();
+            foreach ($interventionDemande->getObjets() as $objet)
+                $prods[] = $objet->getTitre();
+
+            $interventionDemandeExport = array
+            (
+                (null === $interventionDemande->getInterventionInitiateur() ? '' : $interventionDemande->getInterventionInitiateur()->__toString()),
+                (null === $interventionDemande->getReferent() ? '' : $interventionDemande->getReferent()->getAppellation()),
+                (null === $interventionDemande->getDirecteur() ? '' : $interventionDemande->getDirecteur()->getAppellation()),
+                (null !== $interventionDemande->getReferent() && null !== $interventionDemande->getReferent()->getEtablissementRattachementSante() ? $interventionDemande->getReferent()->getEtablissementRattachementSante()->getNom() : ''),
+                (null !== $interventionDemande->getReferent() && null !== $interventionDemande->getReferent()->getEtablissementRattachementSante() ? $interventionDemande->getReferent()->getEtablissementRattachementSante()->getFiness() : ''),
+                (null !== $interventionDemande->getReferent() && null !== $interventionDemande->getReferent()->getEtablissementRattachementSante() && null !== $interventionDemande->getReferent()->getEtablissementRattachementSante()->getRegion() ? $interventionDemande->getReferent()->getEtablissementRattachementSante()->getRegion()->getLibelle() : ''),
+                $interventionDemande->getEmail(),
+                $interventionDemande->getTelephone(),
+                $interventionDemande->getDateCreation()->format('d/m/Y'),
+                $interventionDemande->getInterventionType()->getLibelle(),
+                (null === $interventionDemande->getInterventionEtat() ? '' : $interventionDemande->getInterventionEtat()->getLibelle()),
+                (null === $interventionDemande->getCmsi() ? '' : $interventionDemande->getCmsi()->getAppellation()),
+                (null === $interventionDemande->getCmsi() ? '' : $interventionDemande->getCmsi()->getEmail()),
+                (null === $interventionDemande->getCmsi() ? '' : $interventionDemande->getCmsi()->getTelephoneDirect()),
+                (null === $interventionDemande->getCmsiDateChoix() ? '' : $interventionDemande->getCmsiDateChoix()->format('d/m/Y')),
+                (null === $interventionDemande->getAmbassadeur() ? '' : $interventionDemande->getAmbassadeur()->getAppellation()),
+                (null !== $interventionDemande->getAmbassadeur() && null !== $interventionDemande->getAmbassadeur()->getRegion() ? $interventionDemande->getAmbassadeur()->getRegion()->getLibelle() : ''),
+                (null === $interventionDemande->getAmbassadeur() ? '' : $interventionDemande->getAmbassadeur()->getEmail()),
+                (null === $interventionDemande->getAmbassadeur() ? '' : $interventionDemande->getAmbassadeur()->getTelephoneDirect()),
+                (null === $interventionDemande->getAmbassadeurDateChoix() ? '' : $interventionDemande->getAmbassadeurDateChoix()->format('d/m/Y')),
+                $interventionDemande->getAutresEtablissements(),
+                implode("\n", $prods),
+                $interventionDemande->getObjetsAutres(),
+                $interventionDemande->getDescription(),
+                $interventionDemande->getDifficulteDescription(),
+                $interventionDemande->getChampLibre(),
+                $interventionDemande->getRdvInformations(),
+                $interventionDemande->getCmsiCommentaire(),
+                (null === $interventionDemande->getEvaluationEtat() ? '' : $interventionDemande->getEvaluationEtat()->getLibelle()),
+                (null === $interventionDemande->getRemboursementEtat() ? '' : $interventionDemande->getRemboursementEtat()->getLibelle()),
+                (null === $interventionDemande->getFacture() ? '' : $interventionDemande->getFacture()->__toString()),
+                $interventionDemande->getRefusMessage(),
+                (null === $interventionDemande->getCmsiDateDerniereRelance() ? '' : $interventionDemande->getCmsiDateDerniereRelance()->format('d/m/Y')),
+                (null === $interventionDemande->getAmbassadeurDateDerniereRelance() ? '' : $interventionDemande->getAmbassadeurDateDerniereRelance()->format('d/m/Y'))
+            );
+            
+            $reponses = $this->reponseManager->findBy(array('question' => $questionnaire->getQuestions()->toArray(), 'paramId' => $interventionDemande->getId()));
+            foreach ($questionnaire->getQuestions() as $question)
+            {
+                $reponseExiste = false;
+                foreach ($reponses as $reponse)
+                {
+                    if ($reponse->getQuestion()->getId() == $question->getId())
+                    {
+                        if ($reponse->getQuestion()->getId() == 26) // Autres productions
+                        {
+                            $objetTitres = '';
+                            $objetIds = explode(',', trim($reponse->getReponse()));
+
+                            if (count($objetIds) > 0)
+                            {
+                                $objets = $this->objetManager->findBy(array('id' => $objetIds));
+                                $objetsTitresTab = array();
+                                foreach ($objets as $objet)
+                                    $objetsTitresTab[] = $objet->getTitre();
+                                $objetTitres = implode("\n", $objetsTitresTab);
+                            }
+
+                            $interventionDemandeExport[] = $objetTitres;
+                        }
+                        elseif (null !== $reponse->getReference())
+                            $interventionDemandeExport[] = $reponse->getReference()->getLibelle();
+                        else $interventionDemandeExport[] = $reponse->getReponse();
+                        $reponseExiste = true;
+                        break;
+                    }
+                }
+                if (false === $reponseExiste)
+                    $interventionDemandeExport[] = '';
+            }
+
+            $interventionDemandesExport[] = $interventionDemandeExport;
+        }
+        
+        return $this->exportCsv
+        (
+            $exportTitres,
+            $interventionDemandesExport,
+            'export-demandes-intervention.csv',
+            $charset
+        );
+    }
 }

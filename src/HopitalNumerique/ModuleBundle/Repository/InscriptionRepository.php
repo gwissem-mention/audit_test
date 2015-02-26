@@ -134,13 +134,13 @@ class InscriptionRepository extends EntityRepository
                          ->orderBy('session.dateSession', 'ASC');
     }
     
-    /*
-     * Retourne la date de la première inscription de chaques utilisateurs pour chaque module
+    /**
+     * Retourne la date de début de session de la première inscription de chaque utilisateur pour chaque module.
      */
     public function getInscriptionsByUser( $usersId ){
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user.id as userId,
-                     insc.dateInscription as date,
+                     session.dateSession as date,
                      session.id as sessionId,
                      module.id as moduleId'
             )

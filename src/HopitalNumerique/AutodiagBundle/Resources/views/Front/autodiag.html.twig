@@ -28,6 +28,7 @@
         <table class="table autodiagTable">
             <thead>
                 <tr>
+                    <th>Nom</th>
                     <th>Titre</th>
                     <th>Date début remplissage</th>
                     <th>Date dernier enregistrement</th>
@@ -38,6 +39,7 @@
             <tbody>
                 {% for resultat in resultats if resultat.dateValidation is null and not resultat.synthese %}
                     <tr>
+                        <td>{{resultat.name}}</td>
                         <td>{{resultat.outil.title}}</td>
                         <td>{{resultat.dateCreation|date('d/m/Y')}}</td>
                         <td>{{resultat.dateLastSave|date('d/m/Y')}}</td>
@@ -51,7 +53,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="5" align="center"> - Aucun formulaire d'autodiagnostic en cours - </td>
+                        <td colspan="6" align="center"> - Aucun formulaire d'autodiagnostic en cours - </td>
                     </tr>
                 {% endfor %}
             </tbody>

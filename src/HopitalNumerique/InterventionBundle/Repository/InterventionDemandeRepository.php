@@ -727,4 +727,48 @@ class InterventionDemandeRepository extends EntityRepository
         ;
         return $requete->getQuery()->getOneOrNullResult() ? FALSE : TRUE;
     }
+
+    /**
+     * Retourne toutes les demandes pour l'export.
+     *
+     * @param integer[] $allPrimaryKeys Les IDs des demandes à exporter
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Demandes
+     */
+    public function findForExport(array $allPrimaryKeys)
+    {
+        if (count($allPrimaryKeys) == 0)
+            return array();
+        
+        $requete = $this->createQueryBuilder('demande');
+        
+        $requete
+            ->where($requete->expr()->in(
+                'demande.id',
+                $allPrimaryKeys
+            ))
+            ->leftJoin('demande.referent', 'referent')
+            ->addSelect('referent')
+            ->leftJoin('demande.ambassadeur', 'ambassadeur')
+            ->addSelect('ambassadeur')
+            ->leftJoin('demande.cmsi', 'cmsi')
+            ->addSelect('cmsi')
+            ->leftJoin('demande.directeur', 'directeur')
+            ->addSelect('directeur')
+            ->leftJoin('demande.interventionInitiateur', 'initiateur')
+            ->addSelect('initiateur')
+            ->leftJoin('demande.interventionType', 'interventionType')
+            ->addSelect('interventionType')
+            ->leftJoin('demande.interventionEtat', 'interventionEtat')
+            ->addSelect('interventionEtat')
+            ->leftJoin('demande.evaluationEtat', 'evaluationEtat')
+            ->addSelect('evaluationEtat')
+            ->leftJoin('demande.remboursementEtat', 'remboursementEtat')
+            ->addSelect('remboursementEtat')
+            ->leftJoin('demande.facture', 'facture')
+            ->addSelect('facture')
+            ->orderBy('demande.dateCreation', 'DESC')
+        ;
+        
+        return $requete->getQuery()->getResult();
+    }
 }
