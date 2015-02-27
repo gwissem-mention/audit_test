@@ -555,6 +555,11 @@ class User extends BaseUser
     protected $interventionDemandesDirecteur;
 
     /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\Outil", mappedBy="dernierImportUser", cascade={"persist", "remove" })
+     */
+    protected $autodiagsImportes;
+
+    /**
      * Constructor
      */
     public function __construct()

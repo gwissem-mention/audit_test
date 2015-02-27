@@ -210,6 +210,11 @@ class ImportExcelController extends Controller
         //Gros import, fait sauter les limites de tailles/temps
         ini_set("memory_limit","512M");
         ini_set('max_execution_time', 0);
+        
+        $outil->setDernierImportUser($this->getUser());
+        $outil->setDernierImportDate(new \DateTime());
+        $this->container->get('hopitalnumerique_autodiag.manager.outil')->save($outil);
+        
 
         $aujourdhui = new \DateTime();
         $aujourdhui = $aujourdhui->format('d_m_Y-H_m_s');
