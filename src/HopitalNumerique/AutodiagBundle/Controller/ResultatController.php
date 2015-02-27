@@ -40,11 +40,11 @@ class ResultatController extends Controller
      *
      * @return view
      */
-    public function exportChapitresCSVAction( Resultat $resultat )
+    public function exportChapitresCSVAction( Resultat $resultat, $priorise )
     {
         $chapitres = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
         //Trier par note
-        if($resultat->getOutil()->isPlanActionPriorise())
+        if($priorise == 1 && $resultat->getOutil()->isPlanActionPriorise())
         {
             uasort($chapitres, array($this,"triParNote"));
             foreach ($chapitres as $key => $chapitre) 

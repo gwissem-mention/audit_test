@@ -350,8 +350,11 @@
                     <span>Compte tenu de vos réponses, l'Anap vous propose l'analyse suivante :</span>
                 </p>
 
-                <a class="btn btn-link btn-sm" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_CSV',{'id':resultat.id})}}">Télécharger l'export CSV de votre analyse.<i class="fa fa-cloud"></i></a>
-
+                <a class="btn btn-primary btn-sm" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_CSV',{'id':resultat.id, 'priorise':0})}}"><i class="fa fa-download" style="margin-right:5px;"></i>Plan d'actions</a>
+                {% if resultat.outil.planActionPriorise %}
+                <a class="btn btn-primary btn-sm" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_CSV',{'id':resultat.id, 'priorise':1})}}"><i class="fa fa-download" style="margin-right:5px;"></i>Plan d'actions priorisé</a>
+                {% endif %}
+                
                 {# Cherche si on doit afficher les colonnes Synthèse et Production #}
                 {% set affichageSynthese = false %}
                 {% set affichageProduction = false %}

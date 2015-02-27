@@ -206,10 +206,11 @@ hopitalnumerique_autodiag_resultat_detail:
         id : \d+ 
 
 hopitalnumerique_autodiag_resultat_export_chapitres_CSV:
-    pattern:  /admin/outil/resultat/{id}/export-chapitres-CSV
+    pattern:  /admin/outil/resultat/{id}/export-chapitres-CSV/{priorise}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:exportChapitresCSV" }
     requirements: 
-        id : \d+        
+        id : \d+  
+        priorise : \d+  
 
 #Front
 hopitalnumerique_autodiag_front_outil_index:
