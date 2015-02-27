@@ -124,14 +124,18 @@ class SessionRepository extends EntityRepository
         //$in15days->add(new \DateInterval('P15D'));
 
         return $this->_em->createQueryBuilder()
-                        ->select('ses')
+                        ->select('ses.id, ses.dateSession, count(ins) as inscriptions, mod.titre')
                         ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
+                        ->leftJoin('ses.inscriptions', 'ins', 'WITH', 'ins.etatInscription = :etatInscription')
+                        ->leftJoin('ses.module', 'mod')
                         //->andWhere('ses.dateSession > :today', 'ses.dateSession < :in15days')
                         ->andWhere('ses.dateSession > :today', 'ses.etat = :idActif')
                         ->setParameter('today', $today, \Doctrine\DBAL\Types\Type::DATETIME)
                         ->setParameter('idActif', 403)
+                        ->setParameter('etatInscription', 407)
                         //->setParameter('in15days', $in15days, \Doctrine\DBAL\Types\Type::DATETIME)
                         ->setMaxResults(5)
+                        ->groupBy('ses.id')
                         ->orderBy('ses.dateSession', 'ASC');
     }
 }

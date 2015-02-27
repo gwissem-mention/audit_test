@@ -98,8 +98,8 @@ class ResultatController extends Controller
             'Question',
             'Réponse',
             'Action à mener',
-            'Pilotes',
-            'Échances',
+            'Pilote',
+            'Échéance',
             'État d\'avancement',
             'Indicateur',
             'Commentaire'
