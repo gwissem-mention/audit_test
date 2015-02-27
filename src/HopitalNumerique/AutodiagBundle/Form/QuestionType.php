@@ -117,9 +117,11 @@ class QuestionType extends AbstractType
                 'required' => false, 
                 'label'    => 'Phrase de synthese'
             ))
-            ->add('colored', 'checkbox', array(
-                'required'   => false,
-                'label'      => 'Colorer la réponse'
+            ->add('colored', 'choice', array(
+                'choices'     => array( 0 => 'Non', 1 => 'Oui', -1 => 'Oui, inversé'),
+                'required'    => false,
+                'empty_value' => false,
+                'label'       => 'Colorer la réponse'
             ))
             ->add('chapitre', 'hidden', array(
                 'mapped' => false,
