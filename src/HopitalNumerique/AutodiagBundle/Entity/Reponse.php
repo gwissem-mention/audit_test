@@ -31,7 +31,7 @@ class Reponse
     /**
      * @var string
      *
-     * @ORM\Column(name="rep_remarque", type="string", length=512)
+     * @ORM\Column(name="rep_remarque", type="text")
      */
     private $remarque;
 
