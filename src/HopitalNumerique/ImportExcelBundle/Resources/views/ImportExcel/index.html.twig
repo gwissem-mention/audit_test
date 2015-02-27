@@ -44,6 +44,7 @@
 
             <div class="panel-body">
                 <div class="row">
+
                     <div class="download-zone col-md-1 col-md-offset-4">
                         <a class="btn btn-link btn-xs" title="Télécharger le gabarit de l'import des autodiags" href="{{path('hopitalnumerique_import_download_gabarit')}}">Téléchargement du gabarit de l'import des autodiags<i style="margin-left:5px" class="fa fa-cloud-download"></i></a>
                     </div>
@@ -66,6 +67,13 @@
                         <div onclick="if($('form').validationEngine('validate')){ $('form').submit(); }" class="btn btn-success pull-right" title="Mettre à jour">Mettre à jour</div>
                         <div class="clearfix"></div>
                     </form>
+
+                    {% if outil.dernierImportDate is not null %}
+                        <div class="col-md-offset-4 col-md-12">
+                            Dernier import par {{ outil.dernierImportUser.appellation }} le {{ outil.dernierImportDate|date('d/m/Y à H:i') }}.
+                        </div>
+                        <div class="clearfix"></div>
+                    {% endif %}
                 </div>
                 <div class="row">
                     <div class="download-export col-md-4 col-md-offset-4">
