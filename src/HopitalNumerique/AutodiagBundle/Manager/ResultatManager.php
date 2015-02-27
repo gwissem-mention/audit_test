@@ -421,6 +421,7 @@ class ResultatManager extends BaseManager
     private function buildDatasTable( $categories, $chapitres, $questionsReponses )
     {
         $results = new \StdClass;
+        $totalChapitres      = array();
 
         //reorder chapitres
         $chapitresOrdered = array();
@@ -436,7 +437,6 @@ class ResultatManager extends BaseManager
         
         //build catégories
         $results->categories = array();
-        $totalChapitres      = array();
 
         foreach($categories as $categorie)
         {
@@ -448,8 +448,24 @@ class ResultatManager extends BaseManager
             foreach($chapitresOrdered as $chapitre)
             {
                 $results->categories[ $categorieId ]['chapitres'][$chapitre->id] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nbPointsPourc' => 0, 'maxPourc' => 0, 'nc' => true, 'affichageRestitutionBarre' => false, 'affichageRestitutionRadar' => false, 'affichageRestitutionTableau' => false );
+                if (!isset($totalChapitres[intval($chapitre->id)]) )
+                {
+                    $totalChapitres[intval($chapitre->id)] = array
+                    (
+                        'nbRep' => 0,
+                        'nbQue' => 0,
+                        'nbPoints' => 0,
+                        'max' => 0,
+                        'pond' => 0,
+                        'nbPointsPourc' => 0,
+                        'maxPourc' => 0,
+                        'nc' => true,
+                        'order' => $chapitre->order,
+                        'affichageRestitutionTableau' => $chapitre->affichageRestitutionTableau
+                        
+                    );
+                }
             }
-            
 
             //get questions by catégorie
             $questions = $categorie->getQuestions();
@@ -461,10 +477,8 @@ class ResultatManager extends BaseManager
                     $chapitre = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getId() : $question->getChapitre()->getParent()->getId();
 
                     //Add Chapitre if not exist
-                    if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitre] )  )
+                    if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitre] ) )
                         $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nbPointsPourc' => 0, 'maxPourc' => 0, 'nc' => true, 'affichageRestitutionTableau' => false  );
-                    if ( !isset($totalChapitres[ $chapitre ]) )
-                        $totalChapitres[ $chapitre ] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nbPointsPourc' => 0, 'maxPourc' => 0, 'nc' => true, 'affichageRestitutionTableau' => false );
 
                     //check If Question is concernée
                     if( isset($questionsReponses[ $question->getId() ]) ){
@@ -487,7 +501,9 @@ class ResultatManager extends BaseManager
                         //update Total
                         //Total utilisé dans la colonne total (il n'est pas recalculé par rapport au détail mais via ce tableau)
                         if( $one->tableValue != '' )
+                        {
                             $totalChapitres[ $chapitre ]['nbRep']++;
+                        }
                         
                         $totalChapitres[ $chapitre ]['nbQue']++;
                         $totalChapitres[ $chapitre ]['nbPoints']                    += ($one->tableValue * $one->ponderation);
