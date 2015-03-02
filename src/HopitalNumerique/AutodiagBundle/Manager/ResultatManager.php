@@ -1,5 +1,4 @@
 <?php
-
 namespace HopitalNumerique\AutodiagBundle\Manager;
 
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
@@ -263,7 +262,7 @@ class ResultatManager extends BaseManager
             $chart->title = 'Mes résultats détaillés';
             $chart->datas = $this->buildDatasTable( $categories , $chapitresFormated, $questionsReponses );
 
-            uasort($chart->datas->totauxChapitres, array($this,"triParOrderGraphTable"));
+            uasort($chart->datas->totauxChapitres, array($this, 'triParOrderGraphTable'));
 
             $results['table'] = $chart;
         }
@@ -299,15 +298,6 @@ class ResultatManager extends BaseManager
 
         return $synthese;
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -365,11 +355,11 @@ class ResultatManager extends BaseManager
      */
     public function triParOrderGraphTable($a, $b)
     {
-        if(!array_key_exists('order', $a) || !array_key_exists('order', $b))
+        if (!array_key_exists('order', $a) || !array_key_exists('order', $b))
             return 0;
-        if($a['order'] < $b['order'])
+        if ($a['order'] < $b['order'])
             return -1;
-        if($a['order'] > $b['order'])
+        if ($a['order'] > $b['order'])
             return 1;
     }
 
@@ -433,7 +423,11 @@ class ResultatManager extends BaseManager
         //build chapitres
         $results->chapitres = array();
         foreach($chapitresOrdered as $chapitre)
+        {
             $results->chapitres[$chapitre->id] = $chapitre->title;
+            foreach ($chapitre->childs as $chapitreEnfant)
+                $results->chapitres[$chapitreEnfant->id] = $chapitreEnfant->title;
+        }
         
         //build catégories
         $results->categories = array();
@@ -445,7 +439,7 @@ class ResultatManager extends BaseManager
             $results->categories[ $categorieId ]['title']     = $categorie->getTitle();
             $results->categories[ $categorieId ]['chapitres'] = array();
 
-            foreach($chapitresOrdered as $chapitre)
+            foreach ($chapitresOrdered as $chapitre)
             {
                 $results->categories[ $categorieId ]['chapitres'][$chapitre->id] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nbPointsPourc' => 0, 'maxPourc' => 0, 'nc' => true, 'affichageRestitutionBarre' => false, 'affichageRestitutionRadar' => false, 'affichageRestitutionTableau' => false );
                 if (!isset($totalChapitres[intval($chapitre->id)]) )
@@ -462,8 +456,28 @@ class ResultatManager extends BaseManager
                         'nc' => true,
                         'order' => $chapitre->order,
                         'affichageRestitutionTableau' => $chapitre->affichageRestitutionTableau
-                        
                     );
+                }
+                    
+                foreach ($chapitre->childs as $chapitreEnfant)
+                {
+                    $results->categories[ $categorieId ]['chapitres'][$chapitreEnfant->id] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nbPointsPourc' => 0, 'maxPourc' => 0, 'nc' => true, 'affichageRestitutionBarre' => false, 'affichageRestitutionRadar' => false, 'affichageRestitutionTableau' => false );
+                    if (!isset($totalChapitres[intval($chapitreEnfant->id)]))
+                    {
+                        $totalChapitres[intval($chapitreEnfant->id)] = array
+                        (
+                            'nbRep' => 0,
+                            'nbQue' => 0,
+                            'nbPoints' => 0,
+                            'max' => 0,
+                            'pond' => 0,
+                            'nbPointsPourc' => 0,
+                            'maxPourc' => 0,
+                            'nc' => true,
+                            'order' => $chapitreEnfant->order,
+                            'affichageRestitutionTableau' => $chapitreEnfant->affichageRestitutionTableau
+                        );
+                    }
                 }
             }
 
@@ -472,54 +486,90 @@ class ResultatManager extends BaseManager
             foreach($questions as $question)
             {
                 //check If Question != texte
-                if( $question->getType()->getId() != 417 ) {
+                if( $question->getType()->getId() != 417 )
+                {
                     //get parent chapitre ID
-                    $chapitre = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getId() : $question->getChapitre()->getParent()->getId();
+                    $chapitreParentId = null;
+                    $chapitreId = $question->getChapitre()->getId();
+                    if (null !== $question->getChapitre()->getParent())
+                        $chapitreParentId = $question->getChapitre()->getParent()->getId();
 
                     //Add Chapitre if not exist
-                    if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitre] ) )
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nbPointsPourc' => 0, 'maxPourc' => 0, 'nc' => true, 'affichageRestitutionTableau' => false  );
+                    if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitreId] ) )
+                        $results->categories[ $categorieId ]['chapitres'][$chapitreId] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nbPointsPourc' => 0, 'maxPourc' => 0, 'nc' => true, 'affichageRestitutionTableau' => false  );
 
                     //check If Question is concernée
-                    if( isset($questionsReponses[ $question->getId() ]) ){
+                    if( isset($questionsReponses[ $question->getId() ]) )
+                    {
                         $one   = $questionsReponses[ $question->getId() ];
 
                         //update Chapitre
                         //Détails utilisé individuellement dans les colonnes
                         if( $one->tableValue != '' )
-                            $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbRep']++;
+                        {
+                            $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nbRep']++;
+                            if (null !== $chapitreParentId)
+                                $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['nbRep']++;
+                        }
 
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbQue']++;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPoints']                    += ($one->tableValue * $one->ponderation);
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['max']                         += ($one->max * $one->ponderation);
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['pond']                        += $one->ponderation;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nbPointsPourc']               += (($one->tableValue * $one->ponderation) / ($one->max * $one->ponderation)) * 100 * $one->ponderation;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['maxPourc']                    += $one->ponderation * 100;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['nc']                          = false;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitre]['affichageRestitutionTableau'] = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getAffichageRestitutionTableau() : $question->getChapitre()->getParent()->getAffichageRestitutionTableau();
+                        $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nbQue']++;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nbPoints']                    += ($one->tableValue * $one->ponderation);
+                        $results->categories[ $categorieId ]['chapitres'][$chapitreId]['max']                         += ($one->max * $one->ponderation);
+                        $results->categories[ $categorieId ]['chapitres'][$chapitreId]['pond']                        += $one->ponderation;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nbPointsPourc']               += (($one->tableValue * $one->ponderation) / ($one->max * $one->ponderation)) * 100 * $one->ponderation;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitreId]['maxPourc']                    += $one->ponderation * 100;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nc']                          = false;
+                        $results->categories[ $categorieId ]['chapitres'][$chapitreId]['affichageRestitutionTableau'] = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getAffichageRestitutionTableau() : $question->getChapitre()->getParent()->getAffichageRestitutionTableau();
+                        
+                        if (null !== $chapitreParentId)
+                        {
+                            $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['nbQue']++;
+                            $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['nbPoints']                    += ($one->tableValue * $one->ponderation);
+                            $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['max']                         += ($one->max * $one->ponderation);
+                            $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['pond']                        += $one->ponderation;
+                            $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['nbPointsPourc']               += (($one->tableValue * $one->ponderation) / ($one->max * $one->ponderation)) * 100 * $one->ponderation;
+                            $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['maxPourc']                    += $one->ponderation * 100;
+                            $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['nc']                          = false;
+                            $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['affichageRestitutionTableau'] = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getAffichageRestitutionTableau() : $question->getChapitre()->getParent()->getAffichageRestitutionTableau();
+                        }
 
                         //update Total
                         //Total utilisé dans la colonne total (il n'est pas recalculé par rapport au détail mais via ce tableau)
                         if( $one->tableValue != '' )
                         {
-                            $totalChapitres[ $chapitre ]['nbRep']++;
+                            $totalChapitres[ $chapitreId ]['nbRep']++;
+                            if (null !== $chapitreParentId)
+                                $totalChapitres[$chapitreParentId]['nbRep']++;
                         }
                         
-                        $totalChapitres[ $chapitre ]['nbQue']++;
-                        $totalChapitres[ $chapitre ]['nbPoints']                    += ($one->tableValue * $one->ponderation);
-                        $totalChapitres[ $chapitre ]['max']                         += ($one->max * $one->ponderation);
-                        $totalChapitres[ $chapitre ]['pond']                        += $one->ponderation;
+                        $totalChapitres[ $chapitreId ]['nbQue']++;
+                        $totalChapitres[ $chapitreId ]['nbPoints']                    += ($one->tableValue * $one->ponderation);
+                        $totalChapitres[ $chapitreId ]['max']                         += ($one->max * $one->ponderation);
+                        $totalChapitres[ $chapitreId ]['pond']                        += $one->ponderation;
                         //Ajout du nombre de point en pourcentage pour éviter les problèmes d'arrondies
-                        $totalChapitres[ $chapitre ]['nbPointsPourc']               += (($one->tableValue * $one->ponderation) / ($one->max * $one->ponderation)) * 100 * $one->ponderation;
-                        $totalChapitres[ $chapitre ]['maxPourc']                    += $one->ponderation * 100;
-                        $totalChapitres[ $chapitre ]['nc']                          = false;
-                        $totalChapitres[ $chapitre ]['order']                       = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getOrder() : $question->getChapitre()->getParent()->getOrder();
-                        $totalChapitres[ $chapitre ]['affichageRestitutionTableau'] = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getAffichageRestitutionTableau() : $question->getChapitre()->getParent()->getAffichageRestitutionTableau();
+                        $totalChapitres[ $chapitreId ]['nbPointsPourc']               += (($one->tableValue * $one->ponderation) / ($one->max * $one->ponderation)) * 100 * $one->ponderation;
+                        $totalChapitres[ $chapitreId ]['maxPourc']                    += $one->ponderation * 100;
+                        $totalChapitres[ $chapitreId ]['nc']                          = false;
+                        $totalChapitres[ $chapitreId ]['order']                       = $question->getChapitre()->getOrder();
+                        $totalChapitres[ $chapitreId ]['affichageRestitutionTableau'] = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getAffichageRestitutionTableau() : $question->getChapitre()->getParent()->getAffichageRestitutionTableau();
+
+                        if (null !== $chapitreParentId)
+                        {
+                            $totalChapitres[ $chapitreParentId ]['nbQue']++;
+                            $totalChapitres[ $chapitreParentId ]['nbPoints']                    += ($one->tableValue * $one->ponderation);
+                            $totalChapitres[ $chapitreParentId ]['max']                         += ($one->max * $one->ponderation);
+                            $totalChapitres[ $chapitreParentId ]['pond']                        += $one->ponderation;
+                            $totalChapitres[ $chapitreParentId ]['nbPointsPourc']               += (($one->tableValue * $one->ponderation) / ($one->max * $one->ponderation)) * 100 * $one->ponderation;
+                            $totalChapitres[ $chapitreParentId ]['maxPourc']                    += $one->ponderation * 100;
+                            $totalChapitres[ $chapitreParentId ]['nc']                          = false;
+                            $totalChapitres[ $chapitreParentId ]['order']                       = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getOrder() : $question->getChapitre()->getParent()->getOrder();
+                            $totalChapitres[ $chapitreParentId ]['affichageRestitutionTableau'] = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getAffichageRestitutionTableau() : $question->getChapitre()->getParent()->getAffichageRestitutionTableau();
+                        }
                     }
                 }
             }
         }
-        
+
         //build Total chapitre
         $results->totauxChapitres = $totalChapitres;
 
