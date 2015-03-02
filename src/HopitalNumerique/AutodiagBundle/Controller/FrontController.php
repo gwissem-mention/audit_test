@@ -43,11 +43,15 @@ class FrontController extends Controller
         foreach($chapitres as $chapitre)
         {
             //Si on ne doit pas afficher le chapitre, on ne le prend pas en compte
-            if( is_null($chapitre->getParent()) ){
+            if( is_null($chapitre->getParent()) )
+            {
                 $parents[ $chapitre->getId() ]['parent'] = $chapitre;
                 $parents[ $chapitre->getId() ]['childs'] = array();
-            }else
+            }
+            else
+            {
                 $enfants[] = $chapitre;
+            }
         }
 
         //reformate les chapitres
@@ -87,7 +91,10 @@ class FrontController extends Controller
             {
                 $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->getLastResultatValided( $outil, $user );
             }
-            else $resultatEnCours = true;
+            else
+            {
+                $resultatEnCours = true;
+            }
 
             if( $resultat )
             {
@@ -127,6 +134,7 @@ class FrontController extends Controller
         $nameResultat = $request->request->get('name-resultat');
         $remarque     = $request->request->get('remarque');
         $sansGabarit  = $request->request->get('sansGabarit');
+        $newOne       = $request->request->get('newOne');
         
         //try to get the connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -134,7 +142,7 @@ class FrontController extends Controller
 
         //create Resultat entity
         $resultat = false;
-        if( $user ) 
+        if( $user && !$newOne ) 
         {
             $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
             

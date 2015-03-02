@@ -241,27 +241,71 @@ function saveQuestionnaire( type, userConnected, resultatEnCours )
         if ( (type == 'valid' || type == 'acces_resultats') && !peutAfficherResultats())
         {
             if (userConnected)
+            {
                 apprise('Vous ne pouvez pas valider votre autodiagnostic tant que toutes les questions ne sont pas remplies.');
-            else apprise('Veuillez renseigner toutes les réponses pour visualiser les résultats. Identifiez-vous pour enregistrer vos réponses.');
+            }
+            else
+            {
+                apprise('Veuillez renseigner toutes les réponses pour visualiser les résultats. Identifiez-vous pour enregistrer vos réponses.');
+            }
         }
         else if (!resultatEnCours && userConnected)
         {
-            apprise
-            (
-                'L\'enregistrement ou la validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci. <br />Si vous souhaitez poursuivre, merci de remplir un nom pour cette occurence.',
-                { 'input':true,'textOk':'Valider','textCancel':'Annuler' },
-                function(r) {
-                    if(r) { 
-                        $('#name-resultat').val( r );
+            var name = prompt('L\'enregistrement ou la validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci. Si vous souhaitez poursuivre, merci de remplir un nom pour cette occurence.');
+            if( name != null )
+            {
+                if( name == "")
+                {
+                    apprise('Merci de saisir un nom valide.');
+                } 
+                else 
+                {
+                    $('#name-resultat').val( name );
+                    $('#wizard').submit();
+                }
+            }
+        }
+        else if(resultatEnCours && userConnected)
+        {
+            apprise(
+                'Voulez-vous mettre à jour votre autodiagnostic ou en créer un nouveau ?', {
+                    'confirm'   : true, 
+                    'textOk'    : 'Mettre à jour',
+                    'textCancel': 'Créer un nouveau' 
+                }, function(r) {
+                    if(r) 
+                    {
                         $('#wizard').submit();
-                    }else
-                        apprise('Merci de saisir un nom valide.');
+                    } 
+                    else
+                    {
+                        var name = prompt('L\'enregistrement ou la validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci. Si vous souhaitez poursuivre, merci de remplir un nom pour cette occurence.');
+                        if( name != null )
+                        {
+                            if( name == "")
+                            {
+                                apprise('Merci de saisir un nom valide.');
+                            } 
+                            else 
+                            {
+                                $('#name-resultat').val( name );
+                                $('#newOne').val( 1 );
+                                $('#wizard').submit();
+                            }
+                        }
+                    }
                 }
             );
         }
-        else $('#wizard').submit();
+        else
+        {
+            $('#wizard').submit();
+        }
     }
-    else $('#wizard').submit();
+    else
+    {
+        $('#wizard').submit();
+    }
 }
 
 /**
