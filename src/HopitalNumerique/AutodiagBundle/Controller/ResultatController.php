@@ -89,24 +89,26 @@ class ResultatController extends Controller
             }
         }
 
-        $colonnes = array();
-        $datas    = array();
+        $datas = $in = $alsoIn = array();
 
         $colonnes = array(
             'Chapitre',
             'Sous chapitre',
             'Question',
             'Réponse',
-            'Action à mener',
-            'Pilote',
-            'Échéance',
-            'État d\'avancement',
-            'Indicateur',
-            'Commentaire'
+            'Synthèse',
+            'Commentaire',
+            'Acteurs',
+            'Échéances',
+            'État d\'avancement'
         );
 
         foreach ($chapitres as $chapitre) 
         {
+            if( !in_array($chapitre->code, $in) ){
+                $datas[] = array($chapitre->code, "", "", "", "", "", "", "", "");
+                $in[] = $chapitre->code;
+            }
             foreach ($chapitre->questions as $question) 
             {
                 $row = array();
@@ -136,7 +138,6 @@ class ResultatController extends Controller
                 $row[6] = '';
                 $row[7] = '';
                 $row[8] = '';
-                $row[9] = '';
 
                 $datas[] = $row;
             }
@@ -147,6 +148,10 @@ class ResultatController extends Controller
                 //Pour chaque sous chapitre du chapitre courant
                 foreach ($chapitre->childs as $chapitreChild) 
                 {
+                    if( !in_array($chapitreChild->code, $alsoIn) ){
+                        $datas[] = array($chapitre->code, $chapitreChild->code, "", "", "", "", "", "", "");
+                        $alsoIn[] = $chapitreChild->code;
+                    }
                     foreach ($chapitreChild->questions as $question) 
                     {
                         $row = array();
@@ -245,23 +250,7 @@ class ResultatController extends Controller
                 }
             }
 
-            $colonnes = array();
-            $datas    = array();
-
-            $colonnes = array(
-                'Chapitre',
-                'Sous chapitre',
-                'Question',
-                'Réponse',
-                'Action à mener',
-                'Pilote',
-                'Échéance',
-                'État d\'avancement',
-                'Indicateur',
-                'Commentaire'
-            );
-
-            $in = $alsoIn = array();
+            $datas = $in = $alsoIn = array();
             foreach ($chapitres as $chapitre) 
             {
                 if( !in_array($chapitre->code, $in) ){
@@ -376,7 +365,6 @@ class ResultatController extends Controller
             $sheet->getStyle("A4:I" . --$nbLigne)->applyFromArray($styleArray);
             $sheet->getStyle("A4:I" . $nbLigne)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT); 
             
-            $sheet->getColumnDimension('A')->setAutoSize(true);
             $sheet->getColumnDimension('B')->setAutoSize(true);
             $sheet->getColumnDimension('C')->setAutoSize(true);
             $sheet->getColumnDimension('D')->setAutoSize(true);
