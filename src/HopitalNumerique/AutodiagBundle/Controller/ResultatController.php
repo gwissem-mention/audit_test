@@ -98,14 +98,15 @@ class ResultatController extends Controller
             'Réponse',
             'Synthèse',
             'Commentaire',
-            'Acteurs',
-            'Échéances',
+            'Acteur',
+            'Échéance',
             'État d\'avancement'
         );
 
         foreach ($chapitres as $chapitre) 
         {
-            if( !in_array($chapitre->code, $in) ){
+            if( !in_array($chapitre->code, $in) )
+            {
                 $datas[] = array($chapitre->code, "", "", "", "", "", "", "", "");
                 $in[] = $chapitre->code;
             }
@@ -148,7 +149,8 @@ class ResultatController extends Controller
                 //Pour chaque sous chapitre du chapitre courant
                 foreach ($chapitre->childs as $chapitreChild) 
                 {
-                    if( !in_array($chapitreChild->code, $alsoIn) ){
+                    if( !in_array($chapitreChild->code, $alsoIn) )
+                    {
                         $datas[] = array($chapitre->code, $chapitreChild->code, "", "", "", "", "", "", "");
                         $alsoIn[] = $chapitreChild->code;
                     }
@@ -253,7 +255,8 @@ class ResultatController extends Controller
             $datas = $in = $alsoIn = array();
             foreach ($chapitres as $chapitre) 
             {
-                if( !in_array($chapitre->code, $in) ){
+                if( !in_array($chapitre->code, $in) )
+                {
                     $datas[] = array($chapitre->code);
                     $in[] = $chapitre->code;
                 }
@@ -297,7 +300,8 @@ class ResultatController extends Controller
                     //Pour chaque sous chapitre du chapitre courant
                     foreach ($chapitre->childs as $chapitreChild) 
                     {
-                        if( !in_array($chapitreChild->code, $alsoIn) ){
+                        if( !in_array($chapitreChild->code, $alsoIn) )
+                        {
                             $datas[] = array($chapitre->code, $chapitreChild->code);
                             $alsoIn[] = $chapitreChild->code;
                         }
@@ -356,8 +360,10 @@ class ResultatController extends Controller
             $sheet->setCellValueByColumnAndRow(0, 2, "Plan d'actions exporté le " . date('d/m/Y') . " à " . date('H:i') . " par " . $user->getAppellation());
             
             $nbLigne = 4;
-            foreach($datas as $data){
-                for( $i = 0; $i < count($data); $i++ ){
+            foreach($datas as $data)
+            {
+                for( $i = 0; $i < count($data); $i++ )
+                {
                     $sheet->setCellValueByColumnAndRow($i, $nbLigne, $data[$i]);
                 }
                 $nbLigne++;
@@ -409,14 +415,25 @@ class ResultatController extends Controller
     private function triParNote($a, $b)
     {
         if($a->noteChapitre < $b->noteChapitre)
+        {
             return -1;
+        }
+        
         if($a->noteChapitre > $b->noteChapitre)
+        {
             return 1;
+        }
+        
         if($a->order > $b->order)
+        {
             return 1;
+        }
         else
+        {
             return -1;
+        }
     }
+    
     /**
      * Trie par note une stdClass
      *
@@ -428,12 +445,22 @@ class ResultatController extends Controller
     private function triParNoteQuestion($a, $b)
     {
         if($a->value < $b->value)
+        {
             return -1;
+        }
+        
         if($a->value > $b->value)
+        {
             return 1;
+        }
+        
         if($a->order > $b->order)
+        {
             return 1;
+        }
         else
+        {
             return -1;
+        }
     }
 }
