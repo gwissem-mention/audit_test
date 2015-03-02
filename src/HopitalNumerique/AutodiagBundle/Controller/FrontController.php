@@ -260,8 +260,8 @@ class FrontController extends Controller
         //récupère les chapitres et les formate pour l'affichage des liens des publications
         $chapitres            = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
         $chapitresForReponse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
-        $chapitresForAnalyse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );        
-
+        $chapitresForAnalyse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+        
         //Trier par note
         if($resultat->getOutil()->isPlanActionPriorise())
         {
@@ -456,9 +456,9 @@ class FrontController extends Controller
 
         //PDF généré
         if( is_null($resultat->getPdf()) ){
-            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $options );
-            $resultat->setPdf( $pdf );
-            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
+//            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $options );
+//            $resultat->setPdf( $pdf );
+//            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
         }
 
         if(!$resultat->getSynthese() && ($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() != 100))

@@ -582,7 +582,7 @@
                                             <td></td>
                                             <td>{{questionChild.question}}</td>
                                             <td class="note-{{questionChild.initialValue}}" {% if questionChild.colored and questionChild.initialValue != -1 and questionChild.initialValue != '' %}
-                                                    {% if question.colored == "1" %}
+                                                    {% if questionChild.colored == "1" %}
                                                         {% if questionChild.min == questionChild.initialValue %}
                                                             style="color:#c82f5b"
                                                         {% elseif questionChild.max == questionChild.initialValue %}
