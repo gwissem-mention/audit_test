@@ -461,7 +461,8 @@ class ResultatManager extends BaseManager
                         'maxPourc' => 0,
                         'nc' => true,
                         'order' => $chapitre->order,
-                        'affichageRestitutionTableau' => $chapitre->affichageRestitutionTableau
+                        'affichageRestitutionTableau' => $chapitre->affichageRestitutionTableau,
+                        'isParent' => true
                     );
                 }
                     
@@ -481,7 +482,8 @@ class ResultatManager extends BaseManager
                             'maxPourc' => 0,
                             'nc' => true,
                             'order' => $chapitreEnfant->order,
-                            'affichageRestitutionTableau' => $chapitreEnfant->affichageRestitutionTableau
+                            'affichageRestitutionTableau' => $chapitreEnfant->affichageRestitutionTableau,
+                            'isParent' => false
                         );
                     }
                 }
@@ -502,7 +504,7 @@ class ResultatManager extends BaseManager
 
                     //Add Chapitre if not exist
                     if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitreId] ) )
-                        $results->categories[ $categorieId ]['chapitres'][$chapitreId] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nbPointsPourc' => 0, 'maxPourc' => 0, 'nc' => true, 'affichageRestitutionTableau' => false  );
+                        $results->categories[ $categorieId ]['chapitres'][$chapitreId] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nbPointsPourc' => 0, 'maxPourc' => 0, 'nc' => true, 'affichageRestitutionTableau' => false );
 
                     //check If Question is concernée
                     if( isset($questionsReponses[ $question->getId() ]) )
