@@ -488,12 +488,22 @@
                                     <td></td>
                                     <td>{{question.question}}</td>
                                     <td class="note-{{question.initialValue}}" {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
-                                            {% if question.min == question.initialValue %}
-                                                style="color:#c82f5b"
-                                            {% elseif question.max == question.initialValue %}
-                                                style="color:#e88824"
+                                            {% if question.colored == "1" %}
+                                                {% if question.min == question.initialValue %}
+                                                    style="color:#c82f5b"
+                                                {% elseif question.max == question.initialValue %}
+                                                    style="color:#e88824"
+                                                {% else %}
+                                                    style="color:#e88824"
+                                                {% endif %}
                                             {% else %}
-                                                style="color:#e88824"
+                                                {% if question.min == question.initialValue %}
+                                                    style="color:#e88824"
+                                                {% elseif question.max == question.initialValue %}
+                                                    style="color:#c82f5b"
+                                                {% else %}
+                                                    style="color:#e88824"
+                                                {% endif %}
                                             {% endif %}{% endif %}>
                                         {% if question.initialValue == -1 %}
                                             Non concerné
@@ -572,12 +582,22 @@
                                             <td></td>
                                             <td>{{questionChild.question}}</td>
                                             <td class="note-{{questionChild.initialValue}}" {% if questionChild.colored and questionChild.initialValue != -1 and questionChild.initialValue != '' %}
-                                                    {% if questionChild.min == questionChild.initialValue %}
-                                                        style="color:#c82f5b"
-                                                    {% elseif questionChild.max == questionChild.initialValue %}
-                                                        style="color:#e88824"
+                                                    {% if questionChild.colored == "1" %}
+                                                        {% if questionChild.min == questionChild.initialValue %}
+                                                            style="color:#c82f5b"
+                                                        {% elseif questionChild.max == questionChild.initialValue %}
+                                                            style="color:#e88824"
+                                                        {% else %}
+                                                            style="color:#e88824"
+                                                        {% endif %}
                                                     {% else %}
-                                                        style="color:#e88824"
+                                                        {% if questionChild.min == questionChild.initialValue %}
+                                                            style="color:#e88824"
+                                                        {% elseif questionChild.max == questionChild.initialValue %}
+                                                            style="color:#c82f5b"
+                                                        {% else %}
+                                                            style="color:#e88824"
+                                                        {% endif %}
                                                     {% endif %}{% endif %}>
                                                 {% if questionChild.initialValue == -1 %}
                                                     Non concerné
@@ -751,12 +771,22 @@
                     </p>
                     {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
                         <div class="icon pull-right">
-                            {% if question.min == question.initialValue %}
-                                <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bad.jpg')}}" class="pull-right" alt="bad" />
-                            {% elseif question.max == question.initialValue %}
-                                <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/good.jpg')}}" class="pull-right" alt="good" />
+                            {% if question.colored == "1" %}
+                                {% if question.min == question.initialValue %}
+                                    <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bad.jpg')}}" class="pull-right" alt="bad" />
+                                {% elseif question.max == question.initialValue %}
+                                    <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/good.jpg')}}" class="pull-right" alt="good" />
+                                {% else %}
+                                    <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bof.jpg')}}" class="pull-right" alt="bof" />
+                                {% endif %}
                             {% else %}
-                                <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bof.jpg')}}" class="pull-right" alt="bof" />
+                                {% if question.min == question.initialValue %}
+                                    <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/good.jpg')}}" class="pull-right" alt="bad" />
+                                {% elseif question.max == question.initialValue %}
+                                    <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bad.jpg')}}" class="pull-right" alt="good" />
+                                {% else %}
+                                    <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriqueautodiag/img/bof.jpg')}}" class="pull-right" alt="bof" />
+                                {% endif %}
                             {% endif %}
                         </div>
                     {% endif %}

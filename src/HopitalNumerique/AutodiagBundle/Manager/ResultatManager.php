@@ -35,7 +35,7 @@ class ResultatManager extends BaseManager
             {
                 $datas['user']          = $user->getPrenomNom();
                 $datas['etablissement'] = $user->getEtablissementRattachementSante() ? $user->getEtablissementRattachementSante()->getNom() : $user->getAutreStructureRattachementSante();
-            }else{
+            } else {
                 $datas['user']          = '';
                 $datas['etablissement'] = '';
             }
@@ -92,12 +92,14 @@ class ResultatManager extends BaseManager
 
             //handle questions/reponses
             $chapitre = $this->buildQuestions( $one->getQuestions(), $chapitre, $questionsReponses, $questionsReponsesBack );
-
+            
             //handle parents / enfants
             if( is_null($one->getParent()) )
+            {
                 $parents[ $one->getId() ] = $chapitre;
-            else
+            } else {
                 $enfants[] = $chapitre;
+            }
         }
 
         //reformate les chapitres FRONT
@@ -117,7 +119,9 @@ class ResultatManager extends BaseManager
             foreach ($parent->questionsForCharts as $question) 
             {
                 if($question->tableValue == -1)
-                        continue;
+                {
+                    continue;
+                }
                 $scoreTemp += ($question->max != 0 ) ? $question->tableValue * $question->ponderation * 100 / $question->max : 0;
                 $compteur++;
             }
@@ -127,14 +131,16 @@ class ResultatManager extends BaseManager
                 foreach ($chapChild->questionsForCharts as $questionChild) 
                 {
                     if($questionChild->tableValue == -1)
+                    {
                         continue;
+                    }
                     $scoreTemp += ($questionChild->max != 0 ) ? $questionChild->tableValue * $questionChild->ponderation * 100 / $questionChild->max : 0;
                     $compteur++;
                 }
             }
             $parent->noteChapitre = ($compteur != 0 ) ? round($scoreTemp / $compteur, 0) : 0;
         }
-
+        
         return $parents;
     }
 
@@ -789,8 +795,11 @@ class ResultatManager extends BaseManager
 
                 $one->question = $one->code != '' ? $one->code . '. ' . $one->question : $one->question;
 
-                if( $one->initialValue !== '' ){
-                    if( $one->noteMinimale !== '' && $one->initialValue <= $one->noteMinimale ){
+                if( $one->initialValue !== '' )
+                {
+                    if( $one->noteMinimale !== '' && ( ( $one->colored == 1 && $one->initialValue <= $one->noteMinimale )
+                        || ( $one->colored == -1 && $one->initialValue >= $one->noteMinimale ) )
+                    ) {
                         $results[]     = $one;
                         $noteChapitre += $one->value;
                     }
@@ -805,7 +814,9 @@ class ResultatManager extends BaseManager
             }
 
             if( isset($questionsReponsesBack[ $question->getId() ]) )
+            {
                 $forBack[] = $questionsReponsesBack[ $question->getId() ];
+            }
         }
 
         $chapitre->questions           = $results;

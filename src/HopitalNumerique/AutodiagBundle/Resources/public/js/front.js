@@ -372,11 +372,19 @@ function changeColorQuestions( values, icon, myVal )
     icon.removeClass('fa-smile-o fa-meh-o fa-frown-o fa-2x');
 
     var myVal = myVal != undefined ? myVal : values.val;
-
+    
     if( myVal != '' && myVal == values.minVal ){
-        icon.addClass('fa-frown-o fa-2x');
+        if( icon.hasClass('colored-inverse') ){
+            icon.addClass('fa-smile-o fa-2x');
+        } else {
+            icon.addClass('fa-frown-o fa-2x');
+        }
     }else if( myVal != '' && myVal == values.maxVal ){
-        icon.addClass('fa-smile-o fa-2x');
+        if( icon.hasClass('colored-inverse') ){
+            icon.addClass('fa-frown-o fa-2x');
+        } else {
+            icon.addClass('fa-smile-o fa-2x');
+        }
     }else{
         myVal = parseInt(myVal);
         if( !isNaN(myVal) && myVal != -1)

@@ -81,7 +81,8 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
             $question->setNoteMinimale($questionDonnees['noteMinimale']);
             $question->setSeuil($questionDonnees['noteMinimale']);
             $question->setSynthese($questionDonnees['synthese']);
-            $question->setColored($questionDonnees['colored'] == '1');
+            $colored = $questionDonnees['colored'] == '1' ? 1 : ( $questionDonnees['colored'] == '0' ? 0 : -1 );
+            $question->setColored($colored);
             $question->setInfoBulle($questionDonnees['infobulle']);
 
             //Récupération de la catégorie
