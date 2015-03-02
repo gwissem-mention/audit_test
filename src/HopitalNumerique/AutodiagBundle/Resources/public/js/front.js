@@ -265,7 +265,7 @@ function saveQuestionnaire( type, userConnected, resultatEnCours )
                 }
             }
         }
-        else if(resultatEnCours && userConnected)
+        else if(type == 'save' && resultatEnCours && userConnected)
         {
             apprise(
                 'Voulez-vous mettre à jour votre autodiagnostic ou en créer un nouveau ?', {
