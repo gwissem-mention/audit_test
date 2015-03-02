@@ -98,7 +98,9 @@ class ResultatManager extends BaseManager
             if( is_null($one->getParent()) )
             {
                 $parents[ $one->getId() ] = $chapitre;
-            } else {
+            }
+            else
+            {
                 $enfants[] = $chapitre;
             }
         }
