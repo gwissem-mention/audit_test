@@ -7,10 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\AutodiagBundle\Entity\Outil; 
 use Symfony\Component\HttpFoundation\Request;
 
-
 class ImportExcelController extends Controller
 {
-
     public function indexAction(Outil $outil)
     {
         return $this->render( 'HopitalNumeriqueImportExcelBundle:ImportExcel:index.html.twig' , array(
@@ -177,6 +175,10 @@ class ImportExcelController extends Controller
                     $nbLigneSynth++;
                 }
             }
+            
+            $phpExcelObject = $this->fillSheetsProcessForExport($phpExcelObject, $outil);
+            
+            
 
             $writer   = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
             $response = $this->get('phpexcel')->createStreamedResponse($writer);
@@ -196,6 +198,39 @@ class ImportExcelController extends Controller
     
             return $this->redirect( $this->generateUrl('hopitalnumerique_import_index') );
         }
+    }
+    
+    /**
+     * Remplit l'onglet Process d'un fichier Excel.
+     * 
+     * @param \PHPExcel $phpExcel Fichier Excel
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Outil $outil Autodiag
+     * @return \PHPExcel Fichier Excel
+     */
+    private function fillSheetsProcessForExport(\PHPExcel $phpExcel, Outil $outil)
+    {
+        $sheetProcess = $phpExcel->getSheetByName('process');
+        $sheetProcessChapitre = $phpExcel->getSheetByName('process_chapitre');
+        
+        $numeroLigneProcess = 2;
+        $numeroLigneProcessChapitre = 2;
+        foreach ($outil->getProcess() as $outilProcess)
+        {
+            $sheetProcess->setCellValueByColumnAndRow(0, $numeroLigneProcess, $outilProcess->getId());
+            $sheetProcess->setCellValueByColumnAndRow(1, $numeroLigneProcess, $outilProcess->getLibelle());
+            $sheetProcess->setCellValueByColumnAndRow(2, $numeroLigneProcess, $outilProcess->getOrder());
+            $numeroLigneProcess++;
+            
+            foreach ($outilProcess->getProcessChapitres() as $processChapitre)
+            {
+                $sheetProcessChapitre->setCellValueByColumnAndRow(0, $numeroLigneProcessChapitre, $outilProcess->getId());
+                $sheetProcessChapitre->setCellValueByColumnAndRow(1, $numeroLigneProcessChapitre, $processChapitre->getChapitre()->getId());
+                $sheetProcessChapitre->setCellValueByColumnAndRow(2, $numeroLigneProcessChapitre, $processChapitre->getOrder());
+                $numeroLigneProcessChapitre++;
+            }
+        }
+
+        return $phpExcel;
     }
 
     /**
