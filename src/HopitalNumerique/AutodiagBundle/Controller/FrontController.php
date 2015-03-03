@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nodevo\ToolsBundle\Tools\Chaine;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Front controller.
@@ -26,13 +27,19 @@ class FrontController extends Controller
             'objets' => $objets
         ));
     }
+    
+    public function outilResultatAction( Outil $outil, $sansGabarit = false, Resultat $resultat )
+    {
+        return $this->outilAction($outil, $sansGabarit, $resultat);
+    }
 
     /**
      * Affiche le Front vu chapitre
      *
      * @param Outil $outil L'entitée Outil
+     * @ParamConverter("resultat", options = { "mapping": { "resultat": "id" } } )
      */
-    public function outilAction( Outil $outil, $sansGabarit = false )
+    public function outilAction( Outil $outil, $sansGabarit = false, Resultat $resultat = null )
     {
         //init some vars
         $chapitres      = $outil->getChapitres();
@@ -43,11 +50,15 @@ class FrontController extends Controller
         foreach($chapitres as $chapitre)
         {
             //Si on ne doit pas afficher le chapitre, on ne le prend pas en compte
-            if( is_null($chapitre->getParent()) ){
+            if( is_null($chapitre->getParent()) )
+            {
                 $parents[ $chapitre->getId() ]['parent'] = $chapitre;
                 $parents[ $chapitre->getId() ]['childs'] = array();
-            }else
+            }
+            else
+            {
                 $enfants[] = $chapitre;
+            }
         }
 
         //reformate les chapitres
@@ -76,21 +87,10 @@ class FrontController extends Controller
         $remarque = false;
         $resultatEnCours = false;
         if( $user != 'anon.' ) 
-        {
-            $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
-            
-            //get Resultat for last one note valided
-            $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
-            
-            //if the previous one is valided, we get the results to pre-load values
-            if( !$resultat )
-            {
-                $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->getLastResultatValided( $outil, $user );
-            }
-            else $resultatEnCours = true;
-
+        {   
             if( $resultat )
             {
+                $resultatEnCours = true;
                 $remarque = $resultat->getRemarque();
                 $datas = $resultat->getReponses();
                 foreach($datas as $one)
@@ -102,12 +102,13 @@ class FrontController extends Controller
         }
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
-            'outil'       => $outil,
+            'outil'           => $outil,
             'resultatEnCours' => $resultatEnCours,
-            'chapitres'   => $chapitresOrdered,
-            'reponses'    => $reponses,
-            'remarque'    => $remarque,
-            'sansGabarit' => $sansGabarit
+            'chapitres'       => $chapitresOrdered,
+            'reponses'        => $reponses,
+            'remarque'        => $remarque,
+            'sansGabarit'     => $sansGabarit,
+            'resultat'        => $resultat
         ));
     }
 
@@ -127,19 +128,32 @@ class FrontController extends Controller
         $nameResultat = $request->request->get('name-resultat');
         $remarque     = $request->request->get('remarque');
         $sansGabarit  = $request->request->get('sansGabarit');
+        $newOne       = $request->request->get('newOne');
+        $resultat     = $request->request->get('resultat');
         
         //try to get the connected user
         $user = $this->get('security.context')->getToken()->getUser();
         $user = $user != 'anon.' ? $user : false;
 
         //create Resultat entity
-        $resultat = false;
-        if( $user ) 
+        if( !is_null($resultat) && !$newOne )
         {
-            $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
-            
-            //get Resultat for last one note valided
-            $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
+            $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array(
+                'id'    => $resultat, 
+                'outil' => $outil, 
+                'user'  => $user 
+            ) );
+        }
+        else 
+        {   
+            $resultat = false;
+            if( $user && !$newOne ) 
+            {
+                $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
+
+                //get Resultat for last one note valided
+                $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
+            }
         }
         
         //create for the first time
@@ -396,7 +410,9 @@ class FrontController extends Controller
         }
 
         if( !$user || $back === 0 )
+        {
             $back = false;
+        }
 
         $questionReponseSynthese = array();
         if($resultat->getSynthese())

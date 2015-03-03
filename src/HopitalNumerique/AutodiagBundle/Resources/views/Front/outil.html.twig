@@ -50,10 +50,10 @@
                         <button onclick="saveQuestionnaire('save', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-primary save"><i class="fa fa-save"></i> Enregistrer</button>
                         <button onclick="saveQuestionnaire('acces_resultats', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="acces_resultats_button finish btn btn-primary save"><i class="fa fa-bar-chart-o"></i> Accéder aux résultats</button>
                     {% endif %}
-                    <button onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="valid_button finish btn btn-success"><i class="fa fa-check"></i> Valider mon autodiagnostic</button>
                     {% if reponses %}
                         <button onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger"><i class="fa fa-trash-o"></i> Vider toutes les réponses</button>
                     {% endif %}
+                    <a onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="valid_button finish btn btn-link"><i class="fa fa-check"></i> Valider les données et voir les résultats</a>
                 </div>
             </div>
             
@@ -136,6 +136,10 @@
                     <input type="hidden" name="remplissage" id="remplissage" value="0" />
                     <input type="hidden" name="name-resultat" id="name-resultat" value="" />
                     <input type="hidden" name="sansGabarit" id="sansGabarit" value="{{sansGabarit}}" />
+                    <input type="hidden" name="newOne" id="newOne" value="0" />
+                    {% if resultat.id is defined %}
+                    <input type="hidden" name="resultat" id="resultat" value="{{resultat.id}}" />
+                    {% endif %}
                 </form>
 
                 <div class="saveBtns">
@@ -143,7 +147,7 @@
                         <button onclick="saveQuestionnaire('save', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-primary save"><i class="fa fa-save"></i> Enregistrer</button>
                         <button onclick="saveQuestionnaire('acces_resultats', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="acces_resultats_button finish btn btn-primary save"><i class="fa fa-bar-chart-o"></i> Accéder aux résultats</button>
                     {% endif %}
-                    <button onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="valid_button finish btn btn-success"><i class="fa fa-check"></i> Valider mon autodiagnostic</button>
+                    <a onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="valid_button finish btn btn-link"><i class="fa fa-check"></i> Valider les données et voir les résultats</a>
                 </div>
             </div>
             <div class="clearfix"></div>
