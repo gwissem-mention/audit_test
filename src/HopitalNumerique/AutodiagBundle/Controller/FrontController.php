@@ -37,6 +37,7 @@ class FrontController extends Controller
      * Affiche le Front vu chapitre
      *
      * @param Outil $outil L'entitée Outil
+     * @ParamConverter("resultat", options = { "mapping": { "resultat": "id" } } )
      */
     public function outilAction( Outil $outil, $sansGabarit = false, Resultat $resultat = null )
     {
@@ -86,31 +87,10 @@ class FrontController extends Controller
         $remarque = false;
         $resultatEnCours = false;
         if( $user != 'anon.' ) 
-        {
-            $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
-            
-            if( is_null($resultat) )
-            {
-                //get Resultat for last one note valided
-                $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
-
-                //if the previous one is valided, we get the results to pre-load values
-                if( !$resultat )
-                {
-                    $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->getLastResultatValided( $outil, $user );
-                }
-                else
-                {
-                    $resultatEnCours = true;
-                }
-            }
-            else
-            {
-                $resultatEnCours = true;
-            }
-
+        {   
             if( $resultat )
             {
+                $resultatEnCours = true;
                 $remarque = $resultat->getRemarque();
                 $datas = $resultat->getReponses();
                 foreach($datas as $one)
