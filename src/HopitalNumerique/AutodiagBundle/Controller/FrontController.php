@@ -136,7 +136,7 @@ class FrontController extends Controller
         $user = $user != 'anon.' ? $user : false;
 
         //create Resultat entity
-        if( !is_null($resultat) )
+        if( !is_null($resultat) && !$newOne )
         {
             $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array(
                 'id'    => $resultat, 
