@@ -199,7 +199,7 @@ class ImportExcelController extends Controller
             return $this->redirect( $this->generateUrl('hopitalnumerique_import_index') );
         }
     }
-    
+
     /**
      * Remplit l'onglet Process d'un fichier Excel.
      * 
@@ -330,6 +330,8 @@ class ImportExcelController extends Controller
         $resultats  = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy(array('outil' => $outil));
         $this->get('hopitalnumerique_autodiag.manager.resultat')->delete($resultats);
 
+        $this->get('hopitalnumerique_autodiag.manager.process')->delete($this->get('hopitalnumerique_autodiag.manager.process')->findBy(array('outil' => $outil)));
+
         //Récupération et ajouts des données importées
         //Méthode de Thomas : Si erreur générée c'est que le fichier n'est pas valide
         try 
@@ -361,17 +363,17 @@ class ImportExcelController extends Controller
                 }
             }
             
+            $this->container->get('hopital_numerique_import_excel.manager.process')->importSheetsProcess($phpExcelObject, $outil, $arrayIdChapitres);
         }
-        catch (Exception $e) 
+        catch (\Exception $e)
         {
             $this->get('session')->getFlashBag()->add( 'danger', 'Fichier non conforme, un ou plusieurs champ obligatoire n\'est ou ne sont pas renseigné(s).' );
             return $this->redirect( $this->generateUrl('hopitalnumerique_import_index', array('id' => $outil->getId())) );
         }
 
-        
         // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
         $this->get('session')->getFlashBag()->add( 'info', 'Fichier importé avec succès.' );
-        
+
         return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_outil') );
     }
 }
