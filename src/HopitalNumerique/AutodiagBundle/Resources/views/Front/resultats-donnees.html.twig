@@ -211,7 +211,7 @@
                                 {% for id, chapitre in chart.datas.chapitres %}
                                     <th class="active text-center chapitre-{{id}}"{% if not chart.datas.totauxChapitres[id].isParent %} style="font-weight:normal;"{% endif %}>{{chapitre|capitalize}}</th>
                                 {% endfor %}
-                                <th class="active text-center title-total">Total</th>
+                                {% if resultat.outil.tableChartAfficheTotal %}<th class="active text-center title-total">Total</th>{% endif %}
                             </thead>
                             <tbody>
                                 {% for id,categorie in chart.datas.categories %}
@@ -236,9 +236,11 @@
                                                 </td>
                                             {% endif %}
                                         {% endfor %}
-                                        <td class="text-center">
-                                            {{nbRepCateg}} / {{nbQueCateg}}
-                                        </td>
+                                        {% if resultat.outil.tableChartAfficheTotal %}
+                                            <td class="text-center">
+                                                {{nbRepCateg}} / {{nbQueCateg}}
+                                            </td>
+                                        {% endif %}
                                     </tr>
                                     <tr>
                                         <td class="text-center">Score</td>
@@ -262,18 +264,20 @@
                                                 </td>
                                             {% endif %}
                                         {% endfor %}
-                                        {% if maxCateg != 0 %}
-                                            {% set note = (nbPointsCateg * 100) / maxCateg %}
-                                        {% else %}
-                                            {% set note = 0 %}
+                                        {% if resultat.outil.tableChartAfficheTotal %}
+                                            {% if maxCateg != 0 %}
+                                                {% set note = (nbPointsCateg * 100) / maxCateg %}
+                                            {% else %}
+                                                {% set note = 0 %}
+                                            {% endif %}
+                                            <td data-categorie="{{id}}" class="total-categorie text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
+                                                {{ note|number_format(0) }}%
+                                            </td>
                                         {% endif %}
-                                        <td data-categorie="{{id}}" class="total-categorie text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
-                                            {{ note|number_format(0) }}%
-                                        </td>
                                     </tr>
                                 {% endfor %}
 
-                                {% if chart.datas.categories|length > 1 %}
+                                {% if chart.datas.categories|length > 1 and resultat.outil.tableChartAfficheTotal %}
                                     <tr>
                                         <td class="text-center title-total vertical-align" rowspan="2"><b>Total</b></td>
                                         <td class="text-center">Nombre de réponses</td>

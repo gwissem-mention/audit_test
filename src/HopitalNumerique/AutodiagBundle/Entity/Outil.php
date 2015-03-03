@@ -109,6 +109,13 @@ class Outil
      * @ORM\Column(name="out_table_chart", type="boolean", options = {"comment" = "Afficher la restitution de l outil sous forme de table ?"})
      */
     private $tableChart;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="out_table_chart_affiche_total", type="boolean", options = {"comment" = "Afficher ou pas le total dans le tableau"})
+     */
+    private $tableChartAfficheTotal;
 
     /**
      * @var boolean Afficher la restitution par processus ?
@@ -774,6 +781,29 @@ class Outil
     public function isTableChart()
     {
         return $this->tableChart;
+    }
+
+    /**
+     * Set tableChartAfficheTotal
+     *
+     * @param boolean $tableChartAfficheTotal
+     * @return Outil
+     */
+    public function setTableChartAfficheTotal($tableChartAfficheTotal)
+    {
+        $this->tableChartAfficheTotal = $tableChartAfficheTotal;
+    
+        return $this;
+    }
+    
+    /**
+     * Get tableChartAfficheTotal
+     *
+     * @return boolean
+     */
+    public function isTableChartAfficheTotal()
+    {
+        return $this->tableChartAfficheTotal;
     }
 
     /**
