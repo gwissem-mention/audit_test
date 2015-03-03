@@ -212,8 +212,22 @@ hopitalnumerique_autodiag_resultat_export_chapitres_CSV:
         id : \d+
         priorise : \d+
 
+hopitalnumerique_autodiag_resultat_export_chapitres_CSV_front:
+    pattern:  /outil/resultat/{id}/export-chapitres-CSV/{priorise}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:exportChapitresCSV" }
+    requirements: 
+        id : \d+
+        priorise : \d+
+
 hopitalnumerique_autodiag_resultat_export_chapitres_Excel:
     pattern:  /admin/outil/resultat/{id}/export-chapitres-Excel/{priorise}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:exportChapitresExcel" }
+    requirements: 
+        id : \d+
+        priorise : \d+
+
+hopitalnumerique_autodiag_resultat_export_chapitres_Excel_front:
+    pattern:  /outil/resultat/{id}/export-chapitres-Excel/{priorise}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:exportChapitresExcel" }
     requirements: 
         id : \d+

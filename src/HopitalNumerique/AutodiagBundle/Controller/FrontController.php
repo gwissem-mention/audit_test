@@ -430,7 +430,9 @@ class FrontController extends Controller
         }
 
         if( !$user || $back === 0 )
+        {
             $back = false;
+        }
 
         $questionReponseSynthese = array();
         if($resultat->getSynthese())
