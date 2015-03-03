@@ -251,7 +251,7 @@ function saveQuestionnaire( type, userConnected, resultatEnCours )
         }
         else if (!resultatEnCours && userConnected)
         {
-            var name = prompt('L\'enregistrement ou la validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci. Si vous souhaitez poursuivre, merci de remplir un nom pour cette occurence.');
+            var name = prompt('Entrez un nom pour enregistrer votre autodiagnostic.');
             if( name != null )
             {
                 if( name == "")
@@ -279,7 +279,7 @@ function saveQuestionnaire( type, userConnected, resultatEnCours )
                     } 
                     else
                     {
-                        var name = prompt('L\'enregistrement ou la validation de l\'autodiagnostic entraine une historisation de vos résultats et une ré-initialisation de celui-ci. Si vous souhaitez poursuivre, merci de remplir un nom pour cette occurence.');
+                        var name = prompt('Entrez un nom pour enregistrer votre autodiagnostic.');
                         if( name != null )
                         {
                             if( name == "")

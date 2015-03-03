@@ -9,7 +9,7 @@
             {% if sansGabarit %}
                 <a href="{{path('hopitalnumerique_autodiag_front_outil_sans_gabarit', { 'alias':resultat.outil.alias, 'outil':resultat.outil.id, 'sansGabarit':sansGabarit })}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
             {% else %}
-                <a href="{{path('hopitalnumerique_autodiag_front_outil', { 'alias':resultat.outil.alias, 'outil':resultat.outil.id })}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
+                <a href="{{path('hopitalnumerique_autodiag_front_outil_resultat', { 'alias':resultat.outil.alias, 'outil':resultat.outil.id, 'resultat':resultat.id })}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
             {% endif %}
         {% endif %}
 

@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nodevo\ToolsBundle\Tools\Chaine;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Front controller.
@@ -26,13 +27,18 @@ class FrontController extends Controller
             'objets' => $objets
         ));
     }
+    
+    public function outilResultatAction( Outil $outil, $sansGabarit = false, Resultat $resultat )
+    {
+        return $this->outilAction($outil, $sansGabarit, $resultat);
+    }
 
     /**
      * Affiche le Front vu chapitre
      *
      * @param Outil $outil L'entitée Outil
      */
-    public function outilAction( Outil $outil, $sansGabarit = false )
+    public function outilAction( Outil $outil, $sansGabarit = false, Resultat $resultat = null )
     {
         //init some vars
         $chapitres      = $outil->getChapitres();
@@ -83,13 +89,20 @@ class FrontController extends Controller
         {
             $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
             
-            //get Resultat for last one note valided
-            $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
-            
-            //if the previous one is valided, we get the results to pre-load values
-            if( !$resultat )
+            if( is_null($resultat) )
             {
-                $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->getLastResultatValided( $outil, $user );
+                //get Resultat for last one note valided
+                $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
+
+                //if the previous one is valided, we get the results to pre-load values
+                if( !$resultat )
+                {
+                    $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->getLastResultatValided( $outil, $user );
+                }
+                else
+                {
+                    $resultatEnCours = true;
+                }
             }
             else
             {
@@ -109,12 +122,13 @@ class FrontController extends Controller
         }
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
-            'outil'       => $outil,
+            'outil'           => $outil,
             'resultatEnCours' => $resultatEnCours,
-            'chapitres'   => $chapitresOrdered,
-            'reponses'    => $reponses,
-            'remarque'    => $remarque,
-            'sansGabarit' => $sansGabarit
+            'chapitres'       => $chapitresOrdered,
+            'reponses'        => $reponses,
+            'remarque'        => $remarque,
+            'sansGabarit'     => $sansGabarit,
+            'resultat'        => $resultat
         ));
     }
 
@@ -135,19 +149,31 @@ class FrontController extends Controller
         $remarque     = $request->request->get('remarque');
         $sansGabarit  = $request->request->get('sansGabarit');
         $newOne       = $request->request->get('newOne');
+        $resultat     = $request->request->get('resultat');
         
         //try to get the connected user
         $user = $this->get('security.context')->getToken()->getUser();
         $user = $user != 'anon.' ? $user : false;
 
         //create Resultat entity
-        $resultat = false;
-        if( $user && !$newOne ) 
+        if( !is_null($resultat) )
         {
-            $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
-            
-            //get Resultat for last one note valided
-            $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
+            $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array(
+                'id'    => $resultat, 
+                'outil' => $outil, 
+                'user'  => $user 
+            ) );
+        }
+        else 
+        {   
+            $resultat = false;
+            if( $user && !$newOne ) 
+            {
+                $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
+
+                //get Resultat for last one note valided
+                $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
+            }
         }
         
         //create for the first time
