@@ -142,3 +142,5 @@
 
 #chapitres a.btn{margin-top:5px;}
 #table-analyse{margin-top:15px;}
+table.tableau-question-reponse{width:100%;}
+table.tableau-question-reponse td{border:solid #000 1px;padding:5px;}

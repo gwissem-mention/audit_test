@@ -414,7 +414,7 @@ class FrontController extends Controller
             $back = false;
         }
 
-        $questionReponseSynthese = array();
+        $questionReponseSynthese = $questionReponseSyntheseTableau = $resultatsName = array();
         if($resultat->getSynthese())
         {
             $chapitresSynthese = array();
@@ -422,10 +422,12 @@ class FrontController extends Controller
             foreach ($resultat->getResultats() as $resultatSynth) 
             {
                 $chapitresSynthese[$resultatSynth->getId()]  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynth );
+                $resultatsName[ $resultatSynth->getId() ] = $resultatSynth->getName();
             }
             //Récupérations des réponses aux questions
             foreach ($chapitresSynthese as $resultatId => $chapitresSynthese) 
             {
+                $questionReponseSyntheseTableau[$resultatId] = array();
                 foreach ($chapitresSynthese as $idChapitreSynth => $chapitreSynthese) 
                 {
                     foreach ($chapitreSynthese->questionsBack as $idQuestionChapSynth => $questionSynthese) 
@@ -441,6 +443,7 @@ class FrontController extends Controller
                             $questionReponseSynthese[$questionSynthese->id][$questionSynthese->initialValue] = 0;
                         }
                         $questionReponseSynthese[$questionSynthese->id][$questionSynthese->initialValue]++;
+                        $questionReponseSyntheseTableau[$resultatId][$questionSynthese->id] = $questionSynthese->initialValue;
                     }
 
                     foreach ($chapitreSynthese->childs as $chapitreChildSynthese) 
@@ -458,6 +461,7 @@ class FrontController extends Controller
                                 $questionReponseSynthese[$questionChildSynthese->id][$questionChildSynthese->initialValue] = 0;
                             }
                             $questionReponseSynthese[$questionChildSynthese->id][$questionChildSynthese->initialValue]++;
+                            $questionReponseSyntheseTableau[$resultatId][$questionChildSynthese->id] = $questionChildSynthese->initialValue;
                         }
                     }
                 }  
@@ -489,6 +493,8 @@ class FrontController extends Controller
             'chapitresForAnalyse'     => $chapitresForAnalyse,
             'chapitresForReponse'     => $chapitresForReponse,
             'questionReponseSynthese' => $questionReponseSynthese,
+            'questionReponseSyntheseTableau' => $questionReponseSyntheseTableau,
+            'resultatsName'           => $resultatsName,
             'graphiques'              => $graphiques,
             'back'                    => $back,
             'sansGabarit'             => $sansGabarit,

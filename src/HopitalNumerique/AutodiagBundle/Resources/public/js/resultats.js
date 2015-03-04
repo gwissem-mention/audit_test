@@ -26,8 +26,8 @@ $(document).ready(function() {
         $(this).toggleClass('open closed');
     });
 
-    /* Cursor Tooltip*/
-    $('.cursor, .resultat').qtip({
+    /* Cursor Tooltip and min-max tooltip*/
+    $('.cursor, .resultat, span.minimum, span.maximum, .titre-autodiag').qtip({
         style : 'qtip-bootstrap'
     });
 
