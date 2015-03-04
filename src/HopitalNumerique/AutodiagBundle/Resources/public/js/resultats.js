@@ -84,12 +84,12 @@ $(document).ready(function() {
                 enabled: true,
                 formatter: function() {
                     var tau = taux[this.point.category];
-                    return ( tau == 0 && this.point.series.name == "Score" ) ? '' : '<b>' + number_format(this.point.y, 0) + '%</b>'
+                    return ( tau == 0 && this.point.series.name == "Valeur moyenne" ) ? '' : '<b>' + number_format(this.point.y, 0) + '%</b>'
                 },
                 softConnector: true,
                 align: 'left'
             },
-            name  : 'Score',
+            name  : 'Valeur moyenne',
             color : '#d9edf7',
             data  : values,
             pointPlacement: 'on'
@@ -193,7 +193,7 @@ $(document).ready(function() {
                     var tau = taux[this.x]
 
                     $.each(this.points, function(i, point) {
-                        val = ( tau == 0 && point.series.name == "Score" ) ? 'NC' : number_format(point.y, 0) + '%';
+                        val = ( tau == 0 && point.series.name == "Valeur moyenne" ) ? 'NC' : number_format(point.y, 0) + '%';
                         s += '<br/><span style="color:#333333; font-size:10px">'+ point.series.name + ': '+ val + '</span>';
                     });
                     

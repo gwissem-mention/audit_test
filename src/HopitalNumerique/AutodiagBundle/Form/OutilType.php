@@ -99,7 +99,13 @@ class OutilType extends AbstractType
             ))
             ->add('tableChart', 'checkbox', array(
                 'label'    => 'Afficher la restitution sous forme de table ?',
-                'required' => false
+                'required' => false,
+                'attr'     => array('onclick' => "toggle('tableChart');")
+            ))
+            ->add('tableChartAfficheTotal', 'checkbox', array(
+                'label'    => 'Afficher le total ?',
+                'required' => false,
+                'attr'       => array('class' => '')
             ))
             ->add('centPourcentReponseObligatoire', 'checkbox', array(
                 'label'    => 'Activer l\'affichage des résultats uniquement si toutes les questions sont renseignées',

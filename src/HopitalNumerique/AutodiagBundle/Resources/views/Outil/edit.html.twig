@@ -145,6 +145,9 @@
 
                                 <div class="panel-heading"><h5>Tableau</h5></div>
                                 {{ form_row(form.tableChart) }}
+                                <div class="tableChart"{% if not outil.tableChart %} style="display:none"{% endif %}>
+                                    {{ form_row(form.tableChartAfficheTotal) }}
+                                </div>
 
                             </div>
                         </div>
