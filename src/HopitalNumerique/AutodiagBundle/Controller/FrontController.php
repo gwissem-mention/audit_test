@@ -30,6 +30,10 @@ class FrontController extends Controller
     
     public function outilResultatAction( Outil $outil, $sansGabarit = false, Resultat $resultat )
     {
+        if( $resultat->getStatut()->getId() == 419 )
+        {
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_comptehn' ) );
+        }
         return $this->outilAction($outil, $sansGabarit, $resultat);
     }
 
@@ -261,6 +265,12 @@ class FrontController extends Controller
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $user = $user != 'anon.' ? $user : false;
+        
+        // si l'autodiagnostic est validé, on ne peut plus revenir à la page d'édition
+        if( $resultat->getStatut()->getId() == 419 )
+        {
+            $back = 1;
+        }
 
         //restriction de l'accès aux résultats lorsque l'user est connecté
         if( 
@@ -344,7 +354,7 @@ class FrontController extends Controller
             foreach ($resultat->getResultats() as $resultatSynthese)
             {
                 $chapitresSynthese = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynthese );
-                $graphTemp = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultatSynthese, $chapitresSynthese );                
+                $graphTemp = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultatSynthese, $chapitresSynthese );
 
                 //Radar
                 foreach ($graphiques["radar"]->datas as $keyDataGraphique => &$dataGraphique) 
@@ -414,7 +424,7 @@ class FrontController extends Controller
             $back = false;
         }
 
-        $questionReponseSynthese = array();
+        $questionReponseSynthese = $questionReponseSyntheseTableau = $resultatsName = array();
         if($resultat->getSynthese())
         {
             $chapitresSynthese = array();
@@ -422,10 +432,12 @@ class FrontController extends Controller
             foreach ($resultat->getResultats() as $resultatSynth) 
             {
                 $chapitresSynthese[$resultatSynth->getId()]  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynth );
+                $resultatsName[ $resultatSynth->getId() ] = $resultatSynth->getName();
             }
             //Récupérations des réponses aux questions
             foreach ($chapitresSynthese as $resultatId => $chapitresSynthese) 
             {
+                $questionReponseSyntheseTableau[$resultatId] = array();
                 foreach ($chapitresSynthese as $idChapitreSynth => $chapitreSynthese) 
                 {
                     foreach ($chapitreSynthese->questionsBack as $idQuestionChapSynth => $questionSynthese) 
@@ -441,6 +453,7 @@ class FrontController extends Controller
                             $questionReponseSynthese[$questionSynthese->id][$questionSynthese->initialValue] = 0;
                         }
                         $questionReponseSynthese[$questionSynthese->id][$questionSynthese->initialValue]++;
+                        $questionReponseSyntheseTableau[$resultatId][$questionSynthese->id] = $questionSynthese->initialValue;
                     }
 
                     foreach ($chapitreSynthese->childs as $chapitreChildSynthese) 
@@ -458,6 +471,7 @@ class FrontController extends Controller
                                 $questionReponseSynthese[$questionChildSynthese->id][$questionChildSynthese->initialValue] = 0;
                             }
                             $questionReponseSynthese[$questionChildSynthese->id][$questionChildSynthese->initialValue]++;
+                            $questionReponseSyntheseTableau[$resultatId][$questionChildSynthese->id] = $questionChildSynthese->initialValue;
                         }
                     }
                 }  
@@ -481,13 +495,15 @@ class FrontController extends Controller
         {
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
         }
-
+        
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
             'resultat'                => $resultat,
             'chapitres'               => $chapitres,
             'chapitresForAnalyse'     => $chapitresForAnalyse,
             'chapitresForReponse'     => $chapitresForReponse,
             'questionReponseSynthese' => $questionReponseSynthese,
+            'questionReponseSyntheseTableau' => $questionReponseSyntheseTableau,
+            'resultatsName'           => $resultatsName,
             'graphiques'              => $graphiques,
             'back'                    => $back,
             'sansGabarit'             => $sansGabarit,

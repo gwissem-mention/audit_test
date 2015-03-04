@@ -209,7 +209,7 @@ class ResultatManager extends BaseManager
             $chart         = new \StdClass;
             $chart->title  = $outil->getColumnChartLabel();
             $chart->panels = ($outil->getColumnChartAxe() == 1) ? $datasAxeChapitre : $datasAxeCategories;
-
+            
             $results['barre'] = $chart;
         }
 
@@ -274,7 +274,7 @@ class ResultatManager extends BaseManager
 
             $results['table'] = $chart;
         }
-
+        
         return $results;
     }
 
@@ -423,7 +423,8 @@ class ResultatManager extends BaseManager
 
         //reorder chapitres
         $chapitresOrdered = array();
-        foreach($chapitres as $one){
+        foreach($chapitres as $one)
+        {
             $chapitresOrdered[ $one->order ] = $one;
         }
         ksort($chapitresOrdered);
@@ -434,7 +435,9 @@ class ResultatManager extends BaseManager
         {
             $results->chapitres[$chapitre->id] = $chapitre->title;
             foreach ($chapitre->childs as $chapitreEnfant)
+            {
                 $results->chapitres[$chapitreEnfant->id] = $chapitreEnfant->title;
+            }
         }
         
         //build catégories
@@ -502,12 +505,16 @@ class ResultatManager extends BaseManager
                     $chapitreParentId = null;
                     $chapitreId = $question->getChapitre()->getId();
                     if (null !== $question->getChapitre()->getParent())
+                    {
                         $chapitreParentId = $question->getChapitre()->getParent()->getId();
+                    }
 
                     //Add Chapitre if not exist
                     if ( !isset( $results->categories[ $categorieId ]['chapitres'][$chapitreId] ) )
+                    {
                         $results->categories[ $categorieId ]['chapitres'][$chapitreId] = array( 'nbRep' => 0, 'nbQue' => 0, 'nbPoints' => 0, 'max' => 0, 'pond' => 0, 'nbPointsPourc' => 0, 'maxPourc' => 0, 'nc' => true, 'affichageRestitutionTableau' => false );
-
+                    }
+                    
                     //check If Question is concernée
                     if( isset($questionsReponses[ $question->getId() ]) )
                     {
@@ -519,7 +526,9 @@ class ResultatManager extends BaseManager
                         {
                             $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nbRep']++;
                             if (null !== $chapitreParentId)
+                            {
                                 $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['nbRep']++;
+                            }
                         }
 
                         $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nbQue']++;
@@ -549,7 +558,9 @@ class ResultatManager extends BaseManager
                         {
                             $totalChapitres[ $chapitreId ]['nbRep']++;
                             if (null !== $chapitreParentId)
+                            {
                                 $totalChapitres[$chapitreParentId]['nbRep']++;
+                            }
                         }
                         
                         $totalChapitres[ $chapitreId ]['nbQue']++;
@@ -582,7 +593,24 @@ class ResultatManager extends BaseManager
 
         //build Total chapitre
         $results->totauxChapitres = $totalChapitres;
-
+        
+        foreach( $results->categories as $cle => $categorie )
+        {
+            foreach($categorie['chapitres'] as $key => $chapitre)
+            {
+                if( isset($chapitre['values']) && !empty($chapitre['values']) )
+                {
+                    $results->categories[$cle]['chapitres'][$key]['minimum'] = min($chapitre['values']);
+                    $results->categories[$cle]['chapitres'][$key]['maximum'] = max($chapitre['values']);
+                }
+                else
+                {
+                    $results->categories[$cle]['chapitres'][$key]['minimum'] = "";
+                    $results->categories[$cle]['chapitres'][$key]['maximum'] = "";
+                }
+            }
+        }
+        
         return $results;
     }
 
@@ -861,7 +889,8 @@ class ResultatManager extends BaseManager
         $results        = array();
         $resultsForBack = array();
 
-        foreach($reponses as $reponse) {
+        foreach($reponses as $reponse)
+        {
             
             $rep = new \StdClass;
 
