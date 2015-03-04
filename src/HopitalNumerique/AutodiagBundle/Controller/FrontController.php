@@ -339,9 +339,9 @@ class FrontController extends Controller
         $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
 
         //Dans le cas où nous nous trouvons dans une synthese, il faut récupérer le min et max
-        if($resultat->getSynthese())
+        if ($resultat->getSynthese())
         {
-            foreach ($resultat->getResultats() as $resultatSynthese) 
+            foreach ($resultat->getResultats() as $resultatSynthese)
             {
                 $chapitresSynthese = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynthese );
                 $graphTemp = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultatSynthese, $chapitresSynthese );                
@@ -409,7 +409,7 @@ class FrontController extends Controller
             }
         }
 
-        if( !$user || $back === 0 )
+        if ( !$user || $back === 0 )
         {
             $back = false;
         }
@@ -694,8 +694,10 @@ class FrontController extends Controller
             $isNC  = true;
 
             //calc moyenne
-            foreach($reponses as $reponse) {
-                if ( $reponse->getValue() != -1 && $reponse->getValue() != ''){
+            foreach($reponses as $reponse)
+            {
+                if ( $reponse->getValue() != -1 && $reponse->getValue() != '' )
+                {
                     $val += $reponse->getValue() != '' ? $reponse->getValue() : 0;
                     $nbVal++;
                     $exist = true;

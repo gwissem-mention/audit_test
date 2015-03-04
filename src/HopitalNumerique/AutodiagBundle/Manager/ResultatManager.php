@@ -738,6 +738,19 @@ class ResultatManager extends BaseManager
      */
     public function calculMoyenneChapitre( $chapitre )
     {
+        /*
+        La requête qu'il fallait faire :
+        SELECT question.que_id, SUM(reponse.rep_value), SUM(question.que_ponderation)
+        FROM `hn_outil_reponse` AS reponse
+        INNER JOIN hn_outil_question AS question ON reponse.que_id = question.que_id
+        INNER JOIN hn_outil_chapitre AS chapitre ON question.cha_id = chapitre.cha_id
+        	AND chapitre.cha_id IN (1255, 1270, 1271, 1272)
+            --AND chapitre.out_id = 4
+        WHERE reponse.res_id IN (426, 427, 429, 430, 431, 432,433, 436, 441, 442)
+        	AND reponse.rep_value != '' AND rep_value != '-1'
+        --GROUP BY question.que_id
+        */
+
         $sommeValues       = 0;
         $sommePonderations = 0;
         $sommeValuesPourc  = 0;
@@ -745,23 +758,26 @@ class ResultatManager extends BaseManager
         $chapitreConcerne  = false;
 
         $questions = $chapitre->questionsForCharts;
-        foreach($questions as $question){
+        foreach($questions as $question)
+        {
             $sommeValues       += ($question->value * $question->ponderation);
             $sommePonderations += $question->ponderation;
 
-            $sommeMaxPourc     += $question->ponderation * 100;
+            $sommeMaxPourc     += $question->ponderation;
 
             $chapitreConcerne = true;
         }
 
         $childs = $chapitre->childs;
-        foreach( $childs as $child ){
+        foreach( $childs as $child )
+        {
             $questions = $child->questionsForCharts;
-            foreach($questions as $question){
+            foreach($questions as $question)
+            {
                 $sommeValues       += ($question->value * $question->ponderation);
                 $sommePonderations += $question->ponderation;
 
-                $sommeMaxPourc     += $question->ponderation * 100;
+                $sommeMaxPourc     += $question->ponderation;
 
                 $chapitreConcerne = true;
             }   
@@ -770,7 +786,7 @@ class ResultatManager extends BaseManager
         if( $chapitreConcerne === false )
             return 'NC';
 
-        return $sommeMaxPourc != 0 ? ($sommeValues / $sommeMaxPourc * 100) : 0;
+        return $sommeMaxPourc != 0 ? ($sommeValues / $sommeMaxPourc) : 0;
     }
 
     /**
@@ -871,14 +887,17 @@ class ResultatManager extends BaseManager
             $rep->options         = explode( '<br />', nl2br( $question->getOptions() ) );
 
             //Si != Texte, on calcul la réponse Max
-            if( $rep->type != 417 ){
+            if ( $rep->type != 417 )
+            {
                 $tab = $this->calculMinAndMaxOption( $question );
                 $rep->max = $tab['max'];
                 $rep->min = $tab['min'];
 
                 //on rapporte la valeur de note question sur 100
                 $rep->value = $rep->max != 0 ? ($reponse->getValue() * 100) / $rep->max : 0;
-            }else{
+            }
+            else
+            {
                 $rep->value = $reponse->getValue();
                 $rep->max   = 0;
                 $rep->min   = 0;
@@ -888,7 +907,9 @@ class ResultatManager extends BaseManager
 
             //pour le front, on ajoute QUE les réponses valides (! non concernés)
             if( $reponse->getValue() != -1 )
+            {
                 $results[ $reponse->getQuestion()->getId() ] = $rep;
+            }
 
             //On ajoute TOUTE les questions pour le back (même les non concernés)
             $resultsForBack[ $reponse->getQuestion()->getId() ] = $rep;
