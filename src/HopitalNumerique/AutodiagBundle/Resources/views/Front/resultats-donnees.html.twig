@@ -258,7 +258,13 @@
                                                     {% set note = 0 %}
                                                 {% endif %}
                                                 <td class="text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
-                                                    <span class="initialism minimum" title="<span>Score minimum</span>">{{ datas['minimum']|number_format(0) }}%</span> - {{ note|number_format(0) }}% - <span class="initialism maximum" title="<span>Score maximum</span>">{{ datas['maximum']|number_format(0) }}%</span>
+                                                    {% if resultat.synthese %}
+                                                    <span class="initialism minimum" title="<span>Score minimum</span>">{{ datas['minimum']|number_format(0) }}%</span> - 
+                                                    {% endif %}
+                                                    {{ note|number_format(0) }}%
+                                                    {% if resultat.synthese %}
+                                                    - <span class="initialism maximum" title="<span>Score maximum</span>">{{ datas['maximum']|number_format(0) }}%</span>
+                                                {% endif %}
                                                 </td>
                                             {% else %}
                                                 <td class="text-center vertical-align" >
@@ -746,18 +752,16 @@
 {% macro buildQuestionReponse(questions, resultat, questionReponseSynthesetableau, resultatsName) %}
                 <div class="clearfix">
                     <table class="tableau-question-reponse">
+                        {% if resultat.synthese %}
                         <thead>
                             <tr>
                                 <td></td>
-                        {% if resultat.synthese %}
                             {% for id,res in questionReponseSynthesetableau %}
                                 <td class="text-center"><span class="titre-autodiag" title="<span>{{resultatsName[id]}}</span>"><i class="fa fa-question-circle" style="margin-right:5px"></i></span></td>
                             {% endfor %}
-                        {% else %}
-                                <td></td>
-                        {% endif %}
                             </tr>
                         </thead>
+                        {% endif %}
                         <tbody>
     {% for question in questions %}
         {% if question.initialValue != '' and question.initialValue != -1 %}
