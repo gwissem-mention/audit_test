@@ -261,6 +261,12 @@ class FrontController extends Controller
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $user = $user != 'anon.' ? $user : false;
+        
+        // si l'autodiagnostic est validé, on ne peut plus revenir à la page d'édition
+        if( $resultat->getStatut()->getId() == 419 )
+        {
+            $back = 1;
+        }
 
         //restriction de l'accès aux résultats lorsque l'user est connecté
         if( 
@@ -408,7 +414,7 @@ class FrontController extends Controller
                 }
             }
         }
-
+        
         if( !$user || $back === 0 )
         {
             $back = false;
@@ -485,7 +491,7 @@ class FrontController extends Controller
         {
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
         }
-
+        
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
             'resultat'                => $resultat,
             'chapitres'               => $chapitres,
