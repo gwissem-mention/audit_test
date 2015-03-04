@@ -30,6 +30,10 @@ class FrontController extends Controller
     
     public function outilResultatAction( Outil $outil, $sansGabarit = false, Resultat $resultat )
     {
+        if( $resultat->getStatut()->getId() == 419 )
+        {
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_comptehn' ) );
+        }
         return $this->outilAction($outil, $sansGabarit, $resultat);
     }
 
