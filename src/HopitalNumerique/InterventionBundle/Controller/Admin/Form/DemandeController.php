@@ -178,11 +178,7 @@ class DemandeController extends Controller
 
         if( $etatId == InterventionEtat::getInterventionEtatRefusCmsiId() )
         {
-            $this->container->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielEstRefuseCmsi
-            (
-                $interventionDemande->getReferent(),
-                $this->generateUrl('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true)
-            );
+            $this->container->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielEstRefuseCmsi($interventionDemande);
         }
         else if( $etatId == InterventionEtat::getInterventionEtatAcceptationCmsiId() )
         {
