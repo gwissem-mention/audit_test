@@ -594,23 +594,6 @@ class ResultatManager extends BaseManager
         //build Total chapitre
         $results->totauxChapitres = $totalChapitres;
         
-        foreach( $results->categories as $cle => $categorie )
-        {
-            foreach($categorie['chapitres'] as $key => $chapitre)
-            {
-                if( isset($chapitre['values']) && !empty($chapitre['values']) )
-                {
-                    $results->categories[$cle]['chapitres'][$key]['minimum'] = min($chapitre['values']);
-                    $results->categories[$cle]['chapitres'][$key]['maximum'] = max($chapitre['values']);
-                }
-                else
-                {
-                    $results->categories[$cle]['chapitres'][$key]['minimum'] = "";
-                    $results->categories[$cle]['chapitres'][$key]['maximum'] = "";
-                }
-            }
-        }
-        
         return $results;
     }
 

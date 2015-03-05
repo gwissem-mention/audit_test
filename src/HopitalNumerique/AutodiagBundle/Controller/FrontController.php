@@ -177,7 +177,9 @@ class FrontController extends Controller
         $resultat->setDateLastSave( new \DateTime() );
         $resultat->setRemarque( $remarque );
         if ('' != $nameResultat)
+        {
             $resultat->setName( $nameResultat );
+        }
 
         //cas ou l'user à validé le questionnaire
         if( $action == 'valid')
@@ -197,12 +199,16 @@ class FrontController extends Controller
             $resultat->setPdf( null );
 
             if( file_exists(__ROOT_DIRECTORY__ . '/files/autodiag/' . $pdfName) )
+            {
                 unlink(__ROOT_DIRECTORY__ . '/files/autodiag/' . $pdfName);
+            }
         }
 
         //cas user connecté
         if( $user )
+        {
             $resultat->setUser( $user );
+        }
 
         $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
 
@@ -210,8 +216,10 @@ class FrontController extends Controller
         $reponses = array();
         if(count($chapitres) > 0)
         {
-            foreach($chapitres as $chapitre => $questions) {
-                foreach($questions as $id => $value) {
+            foreach($chapitres as $chapitre => $questions)
+            {
+                foreach($questions as $id => $value)
+                {
                     //get entity Question
                     $question = $this->get('hopitalnumerique_autodiag.manager.question')->findOneBy( array('id' => $id ) );
 
@@ -243,16 +251,24 @@ class FrontController extends Controller
         if( ($action == 'valid' || $action == 'acces_resultats') || !$outil->isCentPourcentReponseObligatoire())
         {
             if($sansGabarit)
+            {
                 return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat_sans_gabarit', array( 'id' => $resultat->getId(), 'sansGabarit' => true ) ) );
+            }
             else
+            {
                 return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array( 'id' => $resultat->getId() ) ) );
+            }
         }
         else
         {
             if($sansGabarit)
+            {
                 return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_sans_gabarit', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
+            }
             else
+            {
                 return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
+            }
         }
     }
 
@@ -414,6 +430,31 @@ class FrontController extends Controller
                     elseif($dataGraphique->max < $graphTempValue)
                     {
                         $dataGraphique->max = $graphTempValue;
+                    }
+                }
+                // table
+                foreach ($graphiques["table"]->datas->categories as $keyDataGraphique => &$dataGraphique) 
+                {
+                    foreach($dataGraphique['chapitres'] as $id => $chapitre)
+                    {
+                        //Récupération de la valeur du graph courant
+                        $graphTempValue = $graphTemp["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id];
+                        if( $graphTempValue['maxPourc'] != 0 )
+                        {
+                            $value = ( $graphTempValue['nbPointsPourc'] * 100 ) / $graphTempValue['maxPourc'];
+
+                            if( !isset($graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum']) 
+                                || $value < $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum'] 
+                            ) {
+                                $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum'] = $value;
+                            }
+
+                            if( !isset($graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum']) 
+                                || $value > $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum'] 
+                            ) {
+                                $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum'] = $value;
+                            }
+                        }
                     }
                 }
             }
