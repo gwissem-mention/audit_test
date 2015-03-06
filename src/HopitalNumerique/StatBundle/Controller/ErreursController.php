@@ -202,9 +202,13 @@ class ErreursController extends Controller
         else
         {
             if($errorUrl->getOk())
+            {
                 return new Response('{"success":true}', 200);
+            }
             else
+            {
                 return new Response('{"success":false}', 200);
+            }
         }
     }
 

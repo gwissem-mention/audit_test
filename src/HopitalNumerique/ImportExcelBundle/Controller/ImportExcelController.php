@@ -7,10 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\AutodiagBundle\Entity\Outil; 
 use Symfony\Component\HttpFoundation\Request;
 
-
 class ImportExcelController extends Controller
 {
-
     public function indexAction(Outil $outil)
     {
         return $this->render( 'HopitalNumeriqueImportExcelBundle:ImportExcel:index.html.twig' , array(
@@ -177,6 +175,10 @@ class ImportExcelController extends Controller
                     $nbLigneSynth++;
                 }
             }
+            
+            $phpExcelObject = $this->fillSheetsProcessForExport($phpExcelObject, $outil);
+            
+            
 
             $writer   = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
             $response = $this->get('phpexcel')->createStreamedResponse($writer);
@@ -199,6 +201,39 @@ class ImportExcelController extends Controller
     }
 
     /**
+     * Remplit l'onglet Process d'un fichier Excel.
+     * 
+     * @param \PHPExcel $phpExcel Fichier Excel
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Outil $outil Autodiag
+     * @return \PHPExcel Fichier Excel
+     */
+    private function fillSheetsProcessForExport(\PHPExcel $phpExcel, Outil $outil)
+    {
+        $sheetProcess = $phpExcel->getSheetByName('process');
+        $sheetProcessChapitre = $phpExcel->getSheetByName('process_chapitre');
+        
+        $numeroLigneProcess = 2;
+        $numeroLigneProcessChapitre = 2;
+        foreach ($outil->getProcess() as $outilProcess)
+        {
+            $sheetProcess->setCellValueByColumnAndRow(0, $numeroLigneProcess, $outilProcess->getId());
+            $sheetProcess->setCellValueByColumnAndRow(1, $numeroLigneProcess, $outilProcess->getLibelle());
+            $sheetProcess->setCellValueByColumnAndRow(2, $numeroLigneProcess, $outilProcess->getOrder());
+            $numeroLigneProcess++;
+            
+            foreach ($outilProcess->getProcessChapitres() as $processChapitre)
+            {
+                $sheetProcessChapitre->setCellValueByColumnAndRow(0, $numeroLigneProcessChapitre, $outilProcess->getId());
+                $sheetProcessChapitre->setCellValueByColumnAndRow(1, $numeroLigneProcessChapitre, $processChapitre->getChapitre()->getId());
+                $sheetProcessChapitre->setCellValueByColumnAndRow(2, $numeroLigneProcessChapitre, $processChapitre->getOrder());
+                $numeroLigneProcessChapitre++;
+            }
+        }
+
+        return $phpExcel;
+    }
+
+    /**
      * Lecture et insert en base d'un fichier
      *
      * @param Outil $outil [description]
@@ -210,6 +245,11 @@ class ImportExcelController extends Controller
         //Gros import, fait sauter les limites de tailles/temps
         ini_set("memory_limit","512M");
         ini_set('max_execution_time', 0);
+        
+        $outil->setDernierImportUser($this->getUser());
+        $outil->setDernierImportDate(new \DateTime());
+        $this->container->get('hopitalnumerique_autodiag.manager.outil')->save($outil);
+        
 
         $aujourdhui = new \DateTime();
         $aujourdhui = $aujourdhui->format('d_m_Y-H_m_s');
@@ -290,6 +330,8 @@ class ImportExcelController extends Controller
         $resultats  = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy(array('outil' => $outil));
         $this->get('hopitalnumerique_autodiag.manager.resultat')->delete($resultats);
 
+        $this->get('hopitalnumerique_autodiag.manager.process')->delete($this->get('hopitalnumerique_autodiag.manager.process')->findBy(array('outil' => $outil)));
+
         //Récupération et ajouts des données importées
         //Méthode de Thomas : Si erreur générée c'est que le fichier n'est pas valide
         try 
@@ -321,17 +363,17 @@ class ImportExcelController extends Controller
                 }
             }
             
+            $this->container->get('hopital_numerique_import_excel.manager.process')->importSheetsProcess($phpExcelObject, $outil, $arrayIdChapitres);
         }
-        catch (Exception $e) 
+        catch (\Exception $e)
         {
             $this->get('session')->getFlashBag()->add( 'danger', 'Fichier non conforme, un ou plusieurs champ obligatoire n\'est ou ne sont pas renseigné(s).' );
             return $this->redirect( $this->generateUrl('hopitalnumerique_import_index', array('id' => $outil->getId())) );
         }
 
-        
         // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
         $this->get('session')->getFlashBag()->add( 'info', 'Fichier importé avec succès.' );
-        
+
         return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_outil') );
     }
 }

@@ -206,10 +206,32 @@ hopitalnumerique_autodiag_resultat_detail:
         id : \d+ 
 
 hopitalnumerique_autodiag_resultat_export_chapitres_CSV:
-    pattern:  /admin/outil/resultat/{id}/export-chapitres-CSV
+    pattern:  /admin/outil/resultat/{id}/export-chapitres-CSV/{priorise}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:exportChapitresCSV" }
     requirements: 
-        id : \d+        
+        id : \d+
+        priorise : \d+
+
+hopitalnumerique_autodiag_resultat_export_chapitres_CSV_front:
+    pattern:  /outil/resultat/{id}/export-chapitres-CSV/{priorise}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:exportChapitresCSV" }
+    requirements: 
+        id : \d+
+        priorise : \d+
+
+hopitalnumerique_autodiag_resultat_export_chapitres_Excel:
+    pattern:  /admin/outil/resultat/{id}/export-chapitres-Excel/{priorise}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:exportChapitresExcel" }
+    requirements: 
+        id : \d+
+        priorise : \d+
+
+hopitalnumerique_autodiag_resultat_export_chapitres_Excel_front:
+    pattern:  /outil/resultat/{id}/export-chapitres-Excel/{priorise}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:exportChapitresExcel" }
+    requirements: 
+        id : \d+
+        priorise : \d+
 
 #Front
 hopitalnumerique_autodiag_front_outil_index:
@@ -227,6 +249,20 @@ hopitalnumerique_autodiag_front_outil_sans_gabarit:
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:outil", alias: " ", sansGabarit: true }
     requirements:
         outil: \d+
+
+hopitalnumerique_autodiag_front_outil_resultat:
+    pattern:  /autodiagnostic/outil/resultat/{outil}-{resultat}-{alias}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:outilResultat", alias: " " }
+    requirements:
+        outil: \d+
+        resultat: \d+
+
+hopitalnumerique_autodiag_front_outil_resultat_sans_gabarit:
+    pattern:  /autodiagnostic-no-layout/outil/resultat/{outil}-{resultat}-{alias}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:outilResultat", alias: " ", sansGabarit: true }
+    requirements:
+        outil: \d+
+        resultat: \d+
 
 hopitalnumerique_autodiag_front_save:
     pattern:  /autodiagnostic/{id}/save

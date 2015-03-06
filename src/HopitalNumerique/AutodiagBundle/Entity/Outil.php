@@ -109,6 +109,13 @@ class Outil
      * @ORM\Column(name="out_table_chart", type="boolean", options = {"comment" = "Afficher la restitution de l outil sous forme de table ?"})
      */
     private $tableChart;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="out_table_chart_affiche_total", type="boolean", options = {"comment" = "Afficher ou pas le total dans le tableau"})
+     */
+    private $tableChartAfficheTotal;
 
     /**
      * @var boolean Afficher la restitution par processus ?
@@ -251,6 +258,19 @@ class Outil
      * @ORM\Column(name="out_commentaire_reponses", type="text", nullable=true, options = {"comment" = "Commentaire affiché lors de la restitution pour cet outil dans la partie reponses"})
      */
     private $commentaireReponses;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="out_dernier_import_date", type="datetime", nullable=true, options = {"comment" = "Date du dernier import"})
+     */
+    private $dernierImportDate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="autodiagsImportes", cascade={"persist"})
+     * @ORM\JoinColumn(name="out_dernier_import_usr_id", referencedColumnName="usr_id")
+     */
+    private $dernierImportUser;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -764,6 +784,29 @@ class Outil
     }
 
     /**
+     * Set tableChartAfficheTotal
+     *
+     * @param boolean $tableChartAfficheTotal
+     * @return Outil
+     */
+    public function setTableChartAfficheTotal($tableChartAfficheTotal)
+    {
+        $this->tableChartAfficheTotal = $tableChartAfficheTotal;
+    
+        return $this;
+    }
+    
+    /**
+     * Get tableChartAfficheTotal
+     *
+     * @return boolean
+     */
+    public function isTableChartAfficheTotal()
+    {
+        return $this->tableChartAfficheTotal;
+    }
+
+    /**
      * Set masquerAnalyse
      *
      * @param boolean $masquerAnalyse
@@ -892,5 +935,223 @@ class Outil
             $unProcess->setOutil($this);
         $this->process = $process;
         return $this;
+    }
+
+    /**
+     * Get columnChart
+     *
+     * @return boolean 
+     */
+    public function getColumnChart()
+    {
+        return $this->columnChart;
+    }
+
+    /**
+     * Get radarChart
+     *
+     * @return boolean 
+     */
+    public function getRadarChart()
+    {
+        return $this->radarChart;
+    }
+
+    /**
+     * Get tableChart
+     *
+     * @return boolean 
+     */
+    public function getTableChart()
+    {
+        return $this->tableChart;
+    }
+
+    /**
+     * Get processChart
+     *
+     * @return boolean 
+     */
+    public function getProcessChart()
+    {
+        return $this->processChart;
+    }
+
+    /**
+     * Get planActionPriorise
+     *
+     * @return boolean 
+     */
+    public function getPlanActionPriorise()
+    {
+        return $this->planActionPriorise;
+    }
+
+    /**
+     * Get centPourcentReponseObligatoire
+     *
+     * @return boolean 
+     */
+    public function getCentPourcentReponseObligatoire()
+    {
+        return $this->centPourcentReponseObligatoire;
+    }
+
+    /**
+     * Get masquerAnalyse
+     *
+     * @return boolean 
+     */
+    public function getMasquerAnalyse()
+    {
+        return $this->masquerAnalyse;
+    }
+
+    /**
+     * Get masquerReponse
+     *
+     * @return boolean 
+     */
+    public function getMasquerReponse()
+    {
+        return $this->masquerReponse;
+    }
+
+    /**
+     * Set dernierImportDate
+     *
+     * @param \DateTime $dernierImportDate
+     * @return Outil
+     */
+    public function setDernierImportDate($dernierImportDate)
+    {
+        $this->dernierImportDate = $dernierImportDate;
+
+        return $this;
+    }
+
+    /**
+     * Get dernierImportDate
+     *
+     * @return \DateTime 
+     */
+    public function getDernierImportDate()
+    {
+        return $this->dernierImportDate;
+    }
+
+    /**
+     * Add chapitres
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Chapitre $chapitres
+     * @return Outil
+     */
+    public function addChapitre(\HopitalNumerique\AutodiagBundle\Entity\Chapitre $chapitres)
+    {
+        $this->chapitres[] = $chapitres;
+
+        return $this;
+    }
+
+    /**
+     * Remove chapitres
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Chapitre $chapitres
+     */
+    public function removeChapitre(\HopitalNumerique\AutodiagBundle\Entity\Chapitre $chapitres)
+    {
+        $this->chapitres->removeElement($chapitres);
+    }
+
+    /**
+     * Add categories
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Categorie $categories
+     * @return Outil
+     */
+    public function addCategory(\HopitalNumerique\AutodiagBundle\Entity\Categorie $categories)
+    {
+        $this->categories[] = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Categorie $categories
+     */
+    public function removeCategory(\HopitalNumerique\AutodiagBundle\Entity\Categorie $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
+
+    /**
+     * Add resultats
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Resultat $resultats
+     * @return Outil
+     */
+    public function addResultat(\HopitalNumerique\AutodiagBundle\Entity\Resultat $resultats)
+    {
+        $this->resultats[] = $resultats;
+
+        return $this;
+    }
+
+    /**
+     * Remove resultats
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Resultat $resultats
+     */
+    public function removeResultat(\HopitalNumerique\AutodiagBundle\Entity\Resultat $resultats)
+    {
+        $this->resultats->removeElement($resultats);
+    }
+
+    /**
+     * Add process
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Process $process
+     * @return Outil
+     */
+    public function addProcess(\HopitalNumerique\AutodiagBundle\Entity\Process $process)
+    {
+        $this->process[] = $process;
+
+        return $this;
+    }
+
+    /**
+     * Remove process
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Process $process
+     */
+    public function removeProcess(\HopitalNumerique\AutodiagBundle\Entity\Process $process)
+    {
+        $this->process->removeElement($process);
+    }
+
+    /**
+     * Set dernierImportUser
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $dernierImportUser
+     * @return Outil
+     */
+    public function setDernierImportUser(\HopitalNumerique\UserBundle\Entity\User $dernierImportUser = null)
+    {
+        $this->dernierImportUser = $dernierImportUser;
+
+        return $this;
+    }
+
+    /**
+     * Get dernierImportUser
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User 
+     */
+    public function getDernierImportUser()
+    {
+        return $this->dernierImportUser;
     }
 }

@@ -137,9 +137,9 @@ class Question
     private $order;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="que_colored", type="boolean", options = {"comment" = "Colorer la question ?"})
+     * @ORM\Column(name="que_colored", type="integer", options = {"comment" = "Colorer la question ?"})
      */
     private $colored;
 

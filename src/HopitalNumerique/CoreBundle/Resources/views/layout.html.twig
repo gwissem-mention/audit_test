@@ -22,6 +22,15 @@
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
+            
+            
+            {% stylesheets output="compiled/hopitalnumerique-core-ie8.css" filter="cssrewrite, ?yui_css"
+                'bundles/hopitalnumeriquecore/css/ie8.css'
+            %}
+            <!--[if IE 8]>
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            <![endif]-->
+            {% endstylesheets %}
         {% endblock %}
 
         {% block javascripts %}

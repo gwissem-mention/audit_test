@@ -20,7 +20,7 @@ class ProcessManager extends BaseManager
     /**
      * @var \HopitalNumerique\AutodiagBundle\Manager\ChapitreManager Le manager de l'entité Chapitre
      */
-    private $chapitreManager;
+    protected $chapitreManager;
     /**
      * @var \HopitalNumerique\AutodiagBundle\Manager\ResultatManager Le manager de l'entité Resultat
      */

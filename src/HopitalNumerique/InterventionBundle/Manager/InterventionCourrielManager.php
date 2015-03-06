@@ -122,11 +122,13 @@ class InterventionCourrielManager
      * @param string $interventionDemandeUrl Le chemin vers l'URL de la demande d'intervention
      * @return void
      */
-    public function envoiCourrielEstRefuseCmsi(User $referentEtablissement, $interventionDemandeUrl)
+    public function envoiCourrielEstRefuseCmsi(InterventionDemande $interventionDemande)
     {
+        $interventionDemandeUrl = $this->router->generate('hopital_numerique_intervention_demande_voir', array('id' => $interventionDemande->getId()), true);
+
         $courriel = $this->mailManager->findOneById(InterventionCourriel::getInterventionCourrielEstRefuseeCmsiId());
 
-        $this->envoiCourriel($courriel, $referentEtablissement, array('l' => $interventionDemandeUrl));
+        $this->envoiCourriel($courriel, $interventionDemande->getReferent(), array('l' => $interventionDemandeUrl, 'm' => $interventionDemande->getCmsiCommentaire()));
     }
     /**
      * Envoi le courriel d'invitation du référent à évaluaer une intervention.

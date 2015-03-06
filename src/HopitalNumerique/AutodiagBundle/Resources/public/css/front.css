@@ -139,3 +139,8 @@
     #autodiag .content div.remarques-toggle{margin:7px 5px 0 0}
     #autodiag .content .icon {margin:5px 0 0 20px}
 }
+
+#chapitres a.btn{margin-top:5px;}
+#table-analyse{margin-top:15px;}
+table.tableau-question-reponse{width:100%;}
+table.tableau-question-reponse td{border:solid #000 1px;padding:5px;}

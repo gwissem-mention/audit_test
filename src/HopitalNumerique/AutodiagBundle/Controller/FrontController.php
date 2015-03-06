@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nodevo\ToolsBundle\Tools\Chaine;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Front controller.
@@ -26,13 +27,23 @@ class FrontController extends Controller
             'objets' => $objets
         ));
     }
+    
+    public function outilResultatAction( Outil $outil, $sansGabarit = false, Resultat $resultat )
+    {
+        if( $resultat->getStatut()->getId() == 419 )
+        {
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_comptehn' ) );
+        }
+        return $this->outilAction($outil, $sansGabarit, $resultat);
+    }
 
     /**
      * Affiche le Front vu chapitre
      *
      * @param Outil $outil L'entitée Outil
+     * @ParamConverter("resultat", options = { "mapping": { "resultat": "id" } } )
      */
-    public function outilAction( Outil $outil, $sansGabarit = false )
+    public function outilAction( Outil $outil, $sansGabarit = false, Resultat $resultat = null )
     {
         //init some vars
         $chapitres      = $outil->getChapitres();
@@ -43,11 +54,15 @@ class FrontController extends Controller
         foreach($chapitres as $chapitre)
         {
             //Si on ne doit pas afficher le chapitre, on ne le prend pas en compte
-            if( is_null($chapitre->getParent()) ){
+            if( is_null($chapitre->getParent()) )
+            {
                 $parents[ $chapitre->getId() ]['parent'] = $chapitre;
                 $parents[ $chapitre->getId() ]['childs'] = array();
-            }else
+            }
+            else
+            {
                 $enfants[] = $chapitre;
+            }
         }
 
         //reformate les chapitres
@@ -76,21 +91,10 @@ class FrontController extends Controller
         $remarque = false;
         $resultatEnCours = false;
         if( $user != 'anon.' ) 
-        {
-            $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
-            
-            //get Resultat for last one note valided
-            $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
-            
-            //if the previous one is valided, we get the results to pre-load values
-            if( !$resultat )
-            {
-                $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->getLastResultatValided( $outil, $user );
-            }
-            else $resultatEnCours = true;
-
+        {   
             if( $resultat )
             {
+                $resultatEnCours = true;
                 $remarque = $resultat->getRemarque();
                 $datas = $resultat->getReponses();
                 foreach($datas as $one)
@@ -102,12 +106,13 @@ class FrontController extends Controller
         }
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
-            'outil'       => $outil,
+            'outil'           => $outil,
             'resultatEnCours' => $resultatEnCours,
-            'chapitres'   => $chapitresOrdered,
-            'reponses'    => $reponses,
-            'remarque'    => $remarque,
-            'sansGabarit' => $sansGabarit
+            'chapitres'       => $chapitresOrdered,
+            'reponses'        => $reponses,
+            'remarque'        => $remarque,
+            'sansGabarit'     => $sansGabarit,
+            'resultat'        => $resultat
         ));
     }
 
@@ -127,19 +132,32 @@ class FrontController extends Controller
         $nameResultat = $request->request->get('name-resultat');
         $remarque     = $request->request->get('remarque');
         $sansGabarit  = $request->request->get('sansGabarit');
+        $newOne       = $request->request->get('newOne');
+        $resultat     = $request->request->get('resultat');
         
         //try to get the connected user
         $user = $this->get('security.context')->getToken()->getUser();
         $user = $user != 'anon.' ? $user : false;
 
         //create Resultat entity
-        $resultat = false;
-        if( $user ) 
+        if( !is_null($resultat) && !$newOne )
         {
-            $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
-            
-            //get Resultat for last one note valided
-            $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
+            $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array(
+                'id'    => $resultat, 
+                'outil' => $outil, 
+                'user'  => $user 
+            ) );
+        }
+        else 
+        {   
+            $resultat = false;
+            if( $user && !$newOne ) 
+            {
+                $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
+
+                //get Resultat for last one note valided
+                $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
+            }
         }
         
         //create for the first time
@@ -159,7 +177,9 @@ class FrontController extends Controller
         $resultat->setDateLastSave( new \DateTime() );
         $resultat->setRemarque( $remarque );
         if ('' != $nameResultat)
+        {
             $resultat->setName( $nameResultat );
+        }
 
         //cas ou l'user à validé le questionnaire
         if( $action == 'valid')
@@ -179,12 +199,16 @@ class FrontController extends Controller
             $resultat->setPdf( null );
 
             if( file_exists(__ROOT_DIRECTORY__ . '/files/autodiag/' . $pdfName) )
+            {
                 unlink(__ROOT_DIRECTORY__ . '/files/autodiag/' . $pdfName);
+            }
         }
 
         //cas user connecté
         if( $user )
+        {
             $resultat->setUser( $user );
+        }
 
         $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
 
@@ -192,8 +216,10 @@ class FrontController extends Controller
         $reponses = array();
         if(count($chapitres) > 0)
         {
-            foreach($chapitres as $chapitre => $questions) {
-                foreach($questions as $id => $value) {
+            foreach($chapitres as $chapitre => $questions)
+            {
+                foreach($questions as $id => $value)
+                {
                     //get entity Question
                     $question = $this->get('hopitalnumerique_autodiag.manager.question')->findOneBy( array('id' => $id ) );
 
@@ -224,17 +250,40 @@ class FrontController extends Controller
 
         if( ($action == 'valid' || $action == 'acces_resultats') || !$outil->isCentPourcentReponseObligatoire())
         {
-            if($sansGabarit)
-                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat_sans_gabarit', array( 'id' => $resultat->getId(), 'sansGabarit' => true ) ) );
+            // si on clique sur "Enregistrer", on reste sur la page "outil"
+            if( $action == "save" )
+            {
+                if($sansGabarit)
+                {
+                    return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_resultat_sans_gabarit', array( 'outil' => $outil->getId(), 'resultat' => $resultat->getId(), 'sansGabarit' => true ) ) );
+                }
+                else
+                {
+                    return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_resultat', array( 'outil' => $outil->getId(), 'resultat' => $resultat->getId(), 'alias' => $outil->getAlias()  ) ) );
+                }
+            }
             else
-                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array( 'id' => $resultat->getId() ) ) );
+            {
+                if($sansGabarit)
+                {
+                    return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat_sans_gabarit', array( 'id' => $resultat->getId(), 'sansGabarit' => true ) ) );
+                }
+                else
+                {
+                    return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array( 'id' => $resultat->getId() ) ) );
+                }
+            }
         }
         else
         {
             if($sansGabarit)
+            {
                 return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_sans_gabarit', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
+            }
             else
+            {
                 return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
+            }
         }
     }
 
@@ -247,6 +296,12 @@ class FrontController extends Controller
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $user = $user != 'anon.' ? $user : false;
+        
+        // si l'autodiagnostic est validé, on ne peut plus revenir à la page d'édition
+        if( $resultat->getStatut()->getId() == 419 )
+        {
+            $back = 1;
+        }
 
         //restriction de l'accès aux résultats lorsque l'user est connecté
         if( 
@@ -260,8 +315,8 @@ class FrontController extends Controller
         //récupère les chapitres et les formate pour l'affichage des liens des publications
         $chapitres            = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
         $chapitresForReponse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
-        $chapitresForAnalyse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );        
-
+        $chapitresForAnalyse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+        
         //Trier par note
         if($resultat->getOutil()->isPlanActionPriorise())
         {
@@ -325,12 +380,12 @@ class FrontController extends Controller
         $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
 
         //Dans le cas où nous nous trouvons dans une synthese, il faut récupérer le min et max
-        if($resultat->getSynthese())
+        if ($resultat->getSynthese())
         {
-            foreach ($resultat->getResultats() as $resultatSynthese) 
+            foreach ($resultat->getResultats() as $resultatSynthese)
             {
                 $chapitresSynthese = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynthese );
-                $graphTemp = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultatSynthese, $chapitresSynthese );                
+                $graphTemp = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultatSynthese, $chapitresSynthese );
 
                 //Radar
                 foreach ($graphiques["radar"]->datas as $keyDataGraphique => &$dataGraphique) 
@@ -367,7 +422,6 @@ class FrontController extends Controller
                 {
                     //Récupération de la valeur du graph courant
                     $graphTempValue = $graphTemp["barre"]->panels[$keyDataGraphique]->value;
-
                     if(is_null($dataGraphique->min))
                     {
                         if($graphTempValue != "NC")
@@ -376,14 +430,14 @@ class FrontController extends Controller
                             $dataGraphique->max = $graphTempValue;
                         }
                     }
-                    elseif($graphTempValue == "NC")
+                    elseif($graphTempValue === "NC")
                     {
                         if($dataGraphique->max != "NC" )
                         {
                             $dataGraphique->min = $dataGraphique->max;
                         }
                     }
-                    elseif($dataGraphique->min > $graphTempValue)
+                    elseif( $dataGraphique->min > $graphTempValue )
                     {
                         $dataGraphique->min = $graphTempValue;
                     }
@@ -392,13 +446,40 @@ class FrontController extends Controller
                         $dataGraphique->max = $graphTempValue;
                     }
                 }
+                // table
+                foreach ($graphiques["table"]->datas->categories as $keyDataGraphique => &$dataGraphique) 
+                {
+                    foreach($dataGraphique['chapitres'] as $id => $chapitre)
+                    {
+                        //Récupération de la valeur du graph courant
+                        $graphTempValue = $graphTemp["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id];
+                        if( $graphTempValue['maxPourc'] != 0 )
+                        {
+                            $value = ( $graphTempValue['nbPointsPourc'] * 100 ) / $graphTempValue['maxPourc'];
+
+                            if( !isset($graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum']) 
+                                || $value < $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum'] 
+                            ) {
+                                $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum'] = $value;
+                            }
+
+                            if( !isset($graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum']) 
+                                || $value > $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum'] 
+                            ) {
+                                $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum'] = $value;
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        if( !$user || $back === 0 )
+        if ( !$user || $back === 0 )
+        {
             $back = false;
+        }
 
-        $questionReponseSynthese = array();
+        $questionReponseSynthese = $questionReponseSyntheseTableau = $resultatsName = array();
         if($resultat->getSynthese())
         {
             $chapitresSynthese = array();
@@ -406,10 +487,12 @@ class FrontController extends Controller
             foreach ($resultat->getResultats() as $resultatSynth) 
             {
                 $chapitresSynthese[$resultatSynth->getId()]  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynth );
+                $resultatsName[ $resultatSynth->getId() ] = $resultatSynth->getName();
             }
             //Récupérations des réponses aux questions
             foreach ($chapitresSynthese as $resultatId => $chapitresSynthese) 
             {
+                $questionReponseSyntheseTableau[$resultatId] = array();
                 foreach ($chapitresSynthese as $idChapitreSynth => $chapitreSynthese) 
                 {
                     foreach ($chapitreSynthese->questionsBack as $idQuestionChapSynth => $questionSynthese) 
@@ -425,6 +508,7 @@ class FrontController extends Controller
                             $questionReponseSynthese[$questionSynthese->id][$questionSynthese->initialValue] = 0;
                         }
                         $questionReponseSynthese[$questionSynthese->id][$questionSynthese->initialValue]++;
+                        $questionReponseSyntheseTableau[$resultatId][$questionSynthese->id] = $questionSynthese->initialValue;
                     }
 
                     foreach ($chapitreSynthese->childs as $chapitreChildSynthese) 
@@ -442,6 +526,7 @@ class FrontController extends Controller
                                 $questionReponseSynthese[$questionChildSynthese->id][$questionChildSynthese->initialValue] = 0;
                             }
                             $questionReponseSynthese[$questionChildSynthese->id][$questionChildSynthese->initialValue]++;
+                            $questionReponseSyntheseTableau[$resultatId][$questionChildSynthese->id] = $questionChildSynthese->initialValue;
                         }
                     }
                 }  
@@ -456,22 +541,24 @@ class FrontController extends Controller
 
         //PDF généré
         if( is_null($resultat->getPdf()) ){
-            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $options );
-            $resultat->setPdf( $pdf );
-            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
+//            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $options );
+//            $resultat->setPdf( $pdf );
+//            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
         }
 
         if(!$resultat->getSynthese() && ($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() != 100))
         {
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
         }
-
+        
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
             'resultat'                => $resultat,
             'chapitres'               => $chapitres,
             'chapitresForAnalyse'     => $chapitresForAnalyse,
             'chapitresForReponse'     => $chapitresForReponse,
             'questionReponseSynthese' => $questionReponseSynthese,
+            'questionReponseSyntheseTableau' => $questionReponseSyntheseTableau,
+            'resultatsName'           => $resultatsName,
             'graphiques'              => $graphiques,
             'back'                    => $back,
             'sansGabarit'             => $sansGabarit,
@@ -678,8 +765,10 @@ class FrontController extends Controller
             $isNC  = true;
 
             //calc moyenne
-            foreach($reponses as $reponse) {
-                if ( $reponse->getValue() != -1 && $reponse->getValue() != ''){
+            foreach($reponses as $reponse)
+            {
+                if ( $reponse->getValue() != -1 && $reponse->getValue() != '' )
+                {
                     $val += $reponse->getValue() != '' ? $reponse->getValue() : 0;
                     $nbVal++;
                     $exist = true;
