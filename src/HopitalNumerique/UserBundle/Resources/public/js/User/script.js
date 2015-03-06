@@ -1,6 +1,14 @@
 var loader;
 
 $(document).ready(function() { 
+    $('#nodevo_user_user_telephoneDirect, #nodevo_user_user_telephonePortable').focus(function(){
+        if( $(this).value() === "" ){
+            $(this).value("");
+        } else {
+            $(this).select();
+        }
+    });
+    
     loader = $('#form_edit_user').nodevoLoader();
     var idEntreprise = 0;
     var idDepartement = 0;
