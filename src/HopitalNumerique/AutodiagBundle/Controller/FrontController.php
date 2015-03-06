@@ -247,16 +247,30 @@ class FrontController extends Controller
         // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
         $this->get('session')->getFlashBag()->add( 'success', 'Vos réponses ont bien été sauvegardées.' );
 
-        
+
         if( ($action == 'valid' || $action == 'acces_resultats') || !$outil->isCentPourcentReponseObligatoire())
         {
-            if($sansGabarit)
+            if( $action == "save" )
             {
-                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_resultat_sans_gabarit', array( 'outil' => $outil->getId(), 'resultat' => $resultat->getId(), 'sansGabarit' => true ) ) );
+                if($sansGabarit)
+                {
+                    return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_resultat_sans_gabarit', array( 'outil' => $outil->getId(), 'resultat' => $resultat->getId(), 'sansGabarit' => true ) ) );
+                }
+                else
+                {
+                    return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_resultat', array( 'outil' => $outil->getId(), 'resultat' => $resultat->getId(), 'alias' => $outil->getAlias()  ) ) );
+                }
             }
             else
             {
-                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_resultat', array( 'outil' => $outil->getId(), 'resultat' => $resultat->getId(), 'alias' => $outil->getAlias()  ) ) );
+                if($sansGabarit)
+                {
+                    return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat_sans_gabarit', array( 'id' => $resultat->getId(), 'sansGabarit' => true ) ) );
+                }
+                else
+                {
+                    return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array( 'id' => $resultat->getId() ) ) );
+                }
             }
         }
         else
