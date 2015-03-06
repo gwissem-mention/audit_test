@@ -250,6 +250,7 @@ class FrontController extends Controller
 
         if( ($action == 'valid' || $action == 'acces_resultats') || !$outil->isCentPourcentReponseObligatoire())
         {
+            // si on clique sur "Enregistrer", on reste sur la page "outil"
             if( $action == "save" )
             {
                 if($sansGabarit)
