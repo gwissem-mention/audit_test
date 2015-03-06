@@ -407,7 +407,6 @@ class FrontController extends Controller
                 {
                     //Récupération de la valeur du graph courant
                     $graphTempValue = $graphTemp["barre"]->panels[$keyDataGraphique]->value;
-
                     if(is_null($dataGraphique->min))
                     {
                         if($graphTempValue != "NC")
@@ -416,14 +415,14 @@ class FrontController extends Controller
                             $dataGraphique->max = $graphTempValue;
                         }
                     }
-                    elseif($graphTempValue == "NC")
+                    elseif($graphTempValue === "NC")
                     {
                         if($dataGraphique->max != "NC" )
                         {
                             $dataGraphique->min = $dataGraphique->max;
                         }
                     }
-                    elseif($dataGraphique->min > $graphTempValue)
+                    elseif( $dataGraphique->min > $graphTempValue )
                     {
                         $dataGraphique->min = $graphTempValue;
                     }

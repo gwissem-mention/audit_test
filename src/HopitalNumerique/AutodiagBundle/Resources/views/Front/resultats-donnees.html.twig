@@ -71,7 +71,7 @@
                                     <div class="options">
                                         {% if panel.value|checkNC %}
                                             {% if tauxChapitre == 0 %}
-                                                Score : NC
+                                                Score : 0
                                             {% else %}
                                                 Score : {{panel.value|number_format(0)}}%
                                             {% endif %}
@@ -109,11 +109,9 @@
                                                 Fort
                                             </div>
 
-                                            {% if tauxChapitre != 0 %}
-                                                {% set value = panel.value|number_format(0) ~ '%' %}
-                                                <div class="cursor" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{value}}" title="" ></div>
-                                                <div class="cursor-value" style="left:{{value}}">{{value}}</div>
-                                            {% endif %}
+                                            {% set value = panel.value|number_format(0) ~ '%' %}
+                                            <div class="cursor" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{value}}" title="" ></div>
+                                            <div class="cursor-value" style="left:{{value}}">{{value}}</div>
 
                                             {% if panel.max is not null and tauxChapitre != 0 %}
                                                 {% set max = panel.max|number_format(0) ~ '%' %}
