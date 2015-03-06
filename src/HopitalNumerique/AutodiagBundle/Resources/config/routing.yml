@@ -257,6 +257,13 @@ hopitalnumerique_autodiag_front_outil_resultat:
         outil: \d+
         resultat: \d+
 
+hopitalnumerique_autodiag_front_outil_resultat_sans_gabarit:
+    pattern:  /autodiagnostic-no-layout/outil/resultat/{outil}-{resultat}-{alias}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:outilResultat", alias: " ", sansGabarit: true }
+    requirements:
+        outil: \d+
+        resultat: \d+
+
 hopitalnumerique_autodiag_front_save:
     pattern:  /autodiagnostic/{id}/save
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:save" }
