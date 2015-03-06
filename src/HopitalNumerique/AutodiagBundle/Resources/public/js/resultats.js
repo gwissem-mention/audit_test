@@ -90,7 +90,8 @@ $(document).ready(function() {
                 align: 'left'
             },
             name  : 'Valeur moyenne',
-            color : '#d9edf7',
+            color : '#6f3596',
+            type  : 'line',
             data  : values,
             pointPlacement: 'on'
         }]
