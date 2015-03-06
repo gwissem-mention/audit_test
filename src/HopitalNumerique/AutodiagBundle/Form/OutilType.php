@@ -97,6 +97,40 @@ class OutilType extends AbstractType
                 'label'       => 'Axes du graphique radar',
                 'attr'        => array('class' => $outil->isRadarChart() ? 'validate[required]' : '' )
             ))
+            ->add('radarChartAfficheBenchmark', 'checkbox', array(
+                'required'    => false,
+                'label'       => 'Afficher le benchmark ?',
+                'attr'        => array('class' => '', 'onclick' => "$('.radarChart_afficheBenchmark').slideToggle();")
+            ))
+            ->add('radarChartBenchmarkAfficheDecile2', 'checkbox', array(
+                'required'    => false,
+                'label'       => 'Afficher le deuxième décile ?',
+                'attr'        => array('class' => '', 'onclick' => "$('.radarChart_benchmarkDecile2').slideToggle();")
+            ))
+            ->add('radarChartBenchmarkCouleurDecile2', 'choice', array(
+                'required'    => false,
+                'label'       => 'Couleur du deuxième décile ?',
+                'choices'     => array('vert' => 'Vert', 'rouge' => 'Rouge'),
+                'empty_value' => false,
+                'attr'        => array('class' => '')
+            ))
+            ->add('radarChartBenchmarkAfficheMoyenne', 'checkbox', array(
+                'required'    => false,
+                'label'       => 'Afficher la moyenne ?',
+                'attr'        => array('class' => '')
+            ))
+            ->add('radarChartBenchmarkAfficheDecile8', 'checkbox', array(
+                'required'    => false,
+                'label'       => 'Afficher le huitième décile ?',
+                'attr'        => array('class' => '', 'onclick' => "$('.radarChart_benchmarkDecile8').slideToggle();")
+            ))
+            ->add('radarChartBenchmarkCouleurDecile8', 'choice', array(
+                'required'    => false,
+                'label'       => 'Couleur du huitième décile ?',
+                'choices'     => array('vert' => 'Vert', 'rouge' => 'Rouge'),
+                'empty_value' => false,
+                'attr'        => array('class' => '')
+            ))
             ->add('tableChart', 'checkbox', array(
                 'label'    => 'Afficher la restitution sous forme de table ?',
                 'required' => false,

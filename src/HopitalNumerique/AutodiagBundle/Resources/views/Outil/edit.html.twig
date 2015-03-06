@@ -142,6 +142,18 @@
                                     {{ form_row(form.radarChartAxe) }}
                                 </div>
                                 {{ form_row(form.commentaireGraphRadar) }}
+                                {{ form_row(form.radarChartAfficheBenchmark) }}
+                                <div class="radarChart_afficheBenchmark" {% if not outil.radarChartAfficheBenchmark %}style="display:none"{% endif %}>
+                                    {{ form_row(form.radarChartBenchmarkAfficheDecile2) }}
+                                    <div class="radarChart_benchmarkDecile2" {% if not outil.radarChartBenchmarkAfficheDecile2 %}style="display:none"{% endif %}>
+                                        {{ form_row(form.radarChartBenchmarkCouleurDecile2) }}
+                                    </div>
+                                    {{ form_row(form.radarChartBenchmarkAfficheMoyenne) }}
+                                    {{ form_row(form.radarChartBenchmarkAfficheDecile8) }}
+                                    <div class="radarChart_benchmarkDecile8" {% if not outil.radarChartBenchmarkAfficheDecile8 %}style="display:none"{% endif %}>
+                                        {{ form_row(form.radarChartBenchmarkCouleurDecile8) }}
+                                    </div>
+                                </div>
 
                                 <div class="panel-heading"><h5>Tableau</h5></div>
                                 {{ form_row(form.tableChart) }}

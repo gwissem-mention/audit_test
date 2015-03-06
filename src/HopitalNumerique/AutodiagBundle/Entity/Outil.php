@@ -102,6 +102,48 @@ class Outil
      * @ORM\Column(name="out_radar_chart_axe", type="smallint", nullable=true, options = {"comment" = "Axes du graphique radar"})
      */
     private $radarChartAxe;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="out_radar_chart_affiche_benchmark", nullable=false, type="boolean", options = {"comment" = "Afficher le benchmark dans le radar ?", "default" = false})
+     */
+    private $radarChartAfficheBenchmark;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="out_radar_chart_benchmark_affiche_decile_2", nullable=false, type="boolean", options = {"comment" = "Afficher le 2ème décile dans le radar ?", "default" = false})
+     */
+    private $radarChartBenchmarkAfficheDecile2;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="out_radar_chart_benchmark_couleur_decile_2", type="string", length=8, options = {"comment" = "Couleur du 2ème décile dans le radar ?"})
+     */
+    private $radarChartBenchmarkCouleurDecile2;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="out_radar_chart_benchmark_affiche_moyenne", nullable=false, type="boolean", options = {"comment" = "Afficher la moyenne dans le radar ?", "default" = false})
+     */
+    private $radarChartBenchmarkAfficheMoyenne;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="out_radar_chart_benchmark_affiche_decile_8", nullable=false, type="boolean", options = {"comment" = "Afficher le 8ème décile dans le radar ?", "default" = false})
+     */
+    private $radarChartBenchmarkAfficheDecile8;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="out_radar_chart_benchmark_couleur_decile_8", type="string", length=8, options = {"comment" = "Couleur du 8ème décile dans le radar ?"})
+     */
+    private $radarChartBenchmarkCouleurDecile8;
 
     /**
      * @var boolean
@@ -1153,5 +1195,153 @@ class Outil
     public function getDernierImportUser()
     {
         return $this->dernierImportUser;
+    }
+
+    /**
+     * Set radarChartAfficheBenchmark
+     *
+     * @param boolean $radarChartAfficheBenchmark
+     * @return Outil
+     */
+    public function setRadarChartAfficheBenchmark($radarChartAfficheBenchmark)
+    {
+        $this->radarChartAfficheBenchmark = $radarChartAfficheBenchmark;
+
+        return $this;
+    }
+
+    /**
+     * Get radarChartAfficheBenchmark
+     *
+     * @return boolean 
+     */
+    public function isRadarChartAfficheBenchmark()
+    {
+        return $this->radarChartAfficheBenchmark;
+    }
+
+    /**
+     * Set radarChartBenchmarkAfficheDecile2
+     *
+     * @param boolean $radarChartBenchmarkAfficheDecile2
+     * @return Outil
+     */
+    public function setRadarChartBenchmarkAfficheDecile2($radarChartBenchmarkAfficheDecile2)
+    {
+        $this->radarChartBenchmarkAfficheDecile2 = $radarChartBenchmarkAfficheDecile2;
+
+        return $this;
+    }
+
+    /**
+     * Get radarChartBenchmarkAfficheDecile2
+     *
+     * @return boolean 
+     */
+    public function isRadarChartBenchmarkAfficheDecile2()
+    {
+        return $this->radarChartBenchmarkAfficheDecile2;
+    }
+
+    /**
+     * Set radarChartBenchmarkCouleurDecile2
+     *
+     * @param string $radarChartBenchmarkCouleurDecile2
+     * @return Outil
+     */
+    public function setRadarChartBenchmarkCouleurDecile2($radarChartBenchmarkCouleurDecile2)
+    {
+        $this->radarChartBenchmarkCouleurDecile2 = $radarChartBenchmarkCouleurDecile2;
+
+        return $this;
+    }
+
+    /**
+     * Get radarChartBenchmarkCouleurDecile2
+     *
+     * @return string 
+     */
+    public function getRadarChartBenchmarkCouleurDecile2()
+    {
+        return $this->radarChartBenchmarkCouleurDecile2;
+    }
+
+    /**
+     * Set radarChartBenchmarkAfficheMoyenne
+     *
+     * @param boolean $radarChartBenchmarkAfficheMoyenne
+     * @return Outil
+     */
+    public function setRadarChartBenchmarkAfficheMoyenne($radarChartBenchmarkAfficheMoyenne)
+    {
+        $this->radarChartBenchmarkAfficheMoyenne = $radarChartBenchmarkAfficheMoyenne;
+
+        return $this;
+    }
+
+    /**
+     * Get radarChartBenchmarkAfficheMoyenne
+     *
+     * @return boolean 
+     */
+    public function isRadarChartBenchmarkAfficheMoyenne()
+    {
+        return $this->radarChartBenchmarkAfficheMoyenne;
+    }
+
+    /**
+     * Set radarChartBenchmarkAfficheDecile8
+     *
+     * @param boolean $radarChartBenchmarkAfficheDecile8
+     * @return Outil
+     */
+    public function setRadarChartBenchmarkAfficheDecile8($radarChartBenchmarkAfficheDecile8)
+    {
+        $this->radarChartBenchmarkAfficheDecile8 = $radarChartBenchmarkAfficheDecile8;
+
+        return $this;
+    }
+
+    /**
+     * Get radarChartBenchmarkAfficheDecile8
+     *
+     * @return boolean 
+     */
+    public function isRadarChartBenchmarkAfficheDecile8()
+    {
+        return $this->radarChartBenchmarkAfficheDecile8;
+    }
+
+    /**
+     * Set radarChartBenchmarkCouleurDecile8
+     *
+     * @param string $radarChartBenchmarkCouleurDecile8
+     * @return Outil
+     */
+    public function setRadarChartBenchmarkCouleurDecile8($radarChartBenchmarkCouleurDecile8)
+    {
+        $this->radarChartBenchmarkCouleurDecile8 = $radarChartBenchmarkCouleurDecile8;
+
+        return $this;
+    }
+
+    /**
+     * Get radarChartBenchmarkCouleurDecile8
+     *
+     * @return string 
+     */
+    public function getRadarChartBenchmarkCouleurDecile8()
+    {
+        return $this->radarChartBenchmarkCouleurDecile8;
+    }
+
+    /**
+     * Get tableChartAfficheTotal
+     *
+     * @return boolean 
+     */
+    public function getTableChartAfficheTotal()
+    {
+        return $this->tableChartAfficheTotal;
     }
 }
