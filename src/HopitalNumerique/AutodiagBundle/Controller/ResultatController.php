@@ -107,7 +107,7 @@ class ResultatController extends Controller
         {
             if( !in_array($chapitre->code, $in) )
             {
-                $datas[] = array($chapitre->code, "", "", "", "", "", "", "", "");
+//                $datas[] = array($chapitre->code, "", "", "", "", "", "", "", "");
                 $in[] = $chapitre->code;
             }
             foreach ($chapitre->questions as $question) 
@@ -154,7 +154,7 @@ class ResultatController extends Controller
                 {
                     if( !in_array($chapitreChild->code, $alsoIn) )
                     {
-                        $datas[] = array($chapitre->code, $chapitreChild->code, "", "", "", "", "", "", "");
+//                        $datas[] = array($chapitre->code, $chapitreChild->code, "", "", "", "", "", "", "");
                         $alsoIn[] = $chapitreChild->code;
                     }
                     foreach ($chapitreChild->questions as $question) 
@@ -263,7 +263,7 @@ class ResultatController extends Controller
             {
                 if( !in_array($chapitre->code, $in) )
                 {
-                    $datas[] = array($chapitre->code);
+//                    $datas[] = array($chapitre->code);
                     $in[] = $chapitre->code;
                 }
                 foreach ($chapitre->questions as $question) 
@@ -311,7 +311,7 @@ class ResultatController extends Controller
                     {
                         if( !in_array($chapitreChild->code, $alsoIn) )
                         {
-                            $datas[] = array($chapitre->code, $chapitreChild->code);
+//                            $datas[] = array($chapitre->code, $chapitreChild->code);
                             $alsoIn[] = $chapitreChild->code;
                         }
                         foreach ($chapitreChild->questions as $question) 
