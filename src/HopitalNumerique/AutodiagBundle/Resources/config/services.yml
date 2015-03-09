@@ -108,7 +108,7 @@ services:
     #Resultat
     hopitalnumerique_autodiag.manager.resultat:
         class: %hopitalnumerique_autodiag.manager.resultat.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.outil"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 

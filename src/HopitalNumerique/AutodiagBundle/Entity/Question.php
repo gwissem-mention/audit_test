@@ -167,6 +167,11 @@ class Question
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\RefQuestion", mappedBy="question", cascade={"persist"})
      */
     protected $references;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="question", cascade={"persist"})
+     */
+    protected $reponses;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)

@@ -47,7 +47,10 @@ $(document).ready(function() {
     var nonConcernes = [];
     var min          = [];
     var max          = [];
-
+    var moyennes     = [];
+    var deciles2     = [];
+    var deciles8     = [];
+    
     $(datas).each(function(index, element ){
         if( element.value != 'NC' || element.taux != 0 )
         {
@@ -57,6 +60,13 @@ $(document).ready(function() {
             optimale.push( element.opti );
             min.push( element.min );
             max.push( element.max );
+            
+            if (element.moyennePourcentage != undefined)
+                moyennes.push(element.moyennePourcentage);
+            if (element.decile2Pourcentage != undefined)
+                deciles2.push(element.decile2Pourcentage);
+            if (element.decile8Pourcentage != undefined)
+                deciles8.push(element.decile8Pourcentage);
 
             taux[ title ] = element.taux;
         }
@@ -65,8 +75,10 @@ $(document).ready(function() {
             nonConcernes.push( element.title );
         }
     });
+
     //Gestion des chapitres non concernes
-    if( nonConcernes.length > 0 ){
+    if ( nonConcernes.length > 0 )
+    {
         var html = '<b>Les éléments suivants n\'ont pas été diagnostiqués :</b> <ul>';
 
         $(nonConcernes).each(function(index, element ){
@@ -129,6 +141,57 @@ $(document).ready(function() {
             marker: { symbol:'circle' },
             data  : max,
             color : '#00aa00',
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+    if(!jQuery.isEmptyObject(moyennes) && moyennes[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Moyenne de tout l\'autodiag',
+            marker: { symbol:'circle' },
+            data  : moyennes,
+            color : '#777777',
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+    if(!jQuery.isEmptyObject(deciles2) && deciles2[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Deuxième décile',
+            marker: { symbol:'circle' },
+            data  : deciles2,
+            color : radarChartBenchmarkCouleurDecile2,
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+    if(!jQuery.isEmptyObject(deciles8) && deciles8[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Huitième décile',
+            marker: { symbol:'circle' },
+            data  : deciles8,
+            color : radarChartBenchmarkCouleurDecile8,
             type  : 'line',
             pointPlacement: 'on'
         });

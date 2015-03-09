@@ -347,7 +347,7 @@ class FrontController extends Controller
         }
 
         $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
-
+        
         //Dans le cas où nous nous trouvons dans une synthese, il faut récupérer le min et max
         if ($resultat->getSynthese())
         {
@@ -496,6 +496,8 @@ class FrontController extends Controller
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
         }
         
+        
+        
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
             'resultat'                => $resultat,
             'chapitres'               => $chapitres,
@@ -507,6 +509,8 @@ class FrontController extends Controller
             'graphiques'              => $graphiques,
             'back'                    => $back,
             'sansGabarit'             => $sansGabarit,
+            'radarChartBenchmarkCouleurDecile2' => ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile2() == 'vert' ? '#aaffaa' : '#ffaaaa'),
+            'radarChartBenchmarkCouleurDecile8' => ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile8() == 'vert' ? '#aaffaa' : '#ffaaaa'),
             'processusDonnees'        => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
     }

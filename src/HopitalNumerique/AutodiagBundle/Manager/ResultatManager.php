@@ -12,6 +12,21 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class ResultatManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Resultat';
+    
+    /**
+     * @var \HopitalNumerique\AutodiagBundle\Manager\OutilManager OutilManager
+     */
+    private $outilManager;
+    
+    /** (non-PHPdoc)
+     * @see \Nodevo\ToolsBundle\Manager\Manager::__construct()
+     */
+    public function __construct($em, OutilManager $outilManager)
+    {
+        parent::__construct($em);
+        
+        $this->outilManager = $outilManager;
+    }
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
@@ -241,6 +256,45 @@ class ResultatManager extends BaseManager
             $chart        = new \StdClass;
             $chart->title = $outil->getRadarChartLabel();
             $chart->datas = ($outil->getRadarChartAxe() == 1) ? $datasAxeChapitre : $datasAxeCategories;
+            
+            
+            
+            if ($outil->isRadarChartAfficheBenchmark())
+            {
+                if ($outil->getRadarChartAxe() == 1) // Chapitre
+                {
+                    $chapitresRemplisCaracteristiques = $this->outilManager->getCaracteristiquesChapitresRemplis($outil);
+
+                    foreach ($chart->datas as $radarData)
+                    {
+                        $chapitreId = $radarData->id;
+
+                        if ($outil->isRadarChartBenchmarkAfficheMoyenne())
+                            $radarData->moyennePourcentage = (isset($chapitresRemplisCaracteristiques[$chapitreId]) ? $chapitresRemplisCaracteristiques[$chapitreId]['moyennePourcentage'] : '0');
+                        if ($outil->isRadarChartBenchmarkAfficheDecile2())
+                            $radarData->decile2Pourcentage = (isset($chapitresRemplisCaracteristiques[$chapitreId]) ? $chapitresRemplisCaracteristiques[$chapitreId]['decile2Pourcentage'] : '0');
+                        if ($outil->isRadarChartBenchmarkAfficheDecile8())
+                            $radarData->decile8Pourcentage = (isset($chapitresRemplisCaracteristiques[$chapitreId]) ? $chapitresRemplisCaracteristiques[$chapitreId]['decile8Pourcentage'] : '0');
+                    }
+                }
+                else
+                {
+                    $categoriesRempliesCaracteristiques = $this->outilManager->getCaracteristiquesCategoriesRemplies($outil);
+
+                    foreach ($chart->datas as $radarData)
+                    {
+                        $chapitreId = $radarData->id;
+
+                        if ($outil->isRadarChartBenchmarkAfficheMoyenne())
+                            $radarData->moyennePourcentage = (isset($categoriesRempliesCaracteristiques[$chapitreId]) ? $categoriesRempliesCaracteristiques[$chapitreId]['moyennePourcentage'] : '0');
+                        if ($outil->isRadarChartBenchmarkAfficheDecile2())
+                            $radarData->decile2Pourcentage = (isset($categoriesRempliesCaracteristiques[$chapitreId]) ? $categoriesRempliesCaracteristiques[$chapitreId]['decile2Pourcentage'] : '0');
+                        if ($outil->isRadarChartBenchmarkAfficheDecile8())
+                            $radarData->decile8Pourcentage = (isset($categoriesRempliesCaracteristiques[$chapitreId]) ? $categoriesRempliesCaracteristiques[$chapitreId]['decile8Pourcentage'] : '0');
+                    }
+                }
+                
+            }
 
             $results['radar'] = $chart;
         }
@@ -628,6 +682,7 @@ class ResultatManager extends BaseManager
         foreach( $categories as $categorie )
         {
             $data        = new \StdClass;
+            $data->id = $categorie->getId();
             $data->title = $categorie->getTitle();
             $data->value = $this->calculMoyenneCategorie( $categorie, $questionsReponses );
             $data->taux  = $this->calculTauxCategorie( $categorie, $questionsReponses );
@@ -663,6 +718,7 @@ class ResultatManager extends BaseManager
         foreach($chapitresOrdered as $chapitre)
         {
             $data        = new \StdClass;
+            $data->id = $chapitre->id;
             $data->title = $chapitre->title;
             $data->value = $this->calculMoyenneChapitre( $chapitre );
             $data->taux  = $this->calculTauxChapitre( $chapitre );
