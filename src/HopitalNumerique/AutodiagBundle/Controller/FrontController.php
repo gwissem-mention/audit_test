@@ -541,9 +541,9 @@ class FrontController extends Controller
 
         //PDF généré
         if( is_null($resultat->getPdf()) ){
-//            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $options );
-//            $resultat->setPdf( $pdf );
-//            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
+            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $options );
+            $resultat->setPdf( $pdf );
+            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
         }
 
         if(!$resultat->getSynthese() && ($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() != 100))

@@ -108,10 +108,14 @@
                                             <div class="progress-bar progress-bar-success" style="width: 33.3%">
                                                 Fort
                                             </div>
-
+                                            
                                             {% set value = panel.value|number_format(0) ~ '%' %}
+                                            {% set val = value %}
+                                            {% if panel.value == 0 %}
+                                            {% set val = 0 %}
+                                            {% endif %}
                                             <div class="cursor" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{value}}" title="" ></div>
-                                            <div class="cursor-value" style="left:{{value}}">{{value}}</div>
+                                            <div class="cursor-value" style="left:{{value}}">{{val}}</div>
 
                                             {% if panel.max is not null and tauxChapitre != 0 %}
                                                 {% set max = panel.max|number_format(0) ~ '%' %}
@@ -207,7 +211,7 @@
                                     <div class="reverse" onclick="reverse_table(document.getElementById('tableau_resultats'));" ><i class="fa fa-refresh"></i></div>
                                 </th>
                                 {% for id, chapitre in chart.datas.chapitres %}
-                                    <th class="active text-center chapitre-{{id}}"{% if not chart.datas.totauxChapitres[id].isParent %} style="font-weight:normal;"{% endif %}>{{chapitre|capitalize}}</th>
+                                    <th class="active text-left chapitre-{{id}}"{% if not chart.datas.totauxChapitres[id].isParent %} style="font-weight:normal;"{% endif %}>{{chapitre}}</th>
                                 {% endfor %}
                                 {% if resultat.outil.tableChartAfficheTotal %}<th class="active text-center title-total">Total</th>{% endif %}
                             </thead>

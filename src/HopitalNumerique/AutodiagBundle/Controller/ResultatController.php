@@ -90,7 +90,7 @@ class ResultatController extends Controller
         }
 
         $datas = $in = $alsoIn = array();
-
+        
         $colonnes = array(
             'Chapitre',
             'Sous chapitre',
@@ -119,18 +119,21 @@ class ResultatController extends Controller
                 $row[2] = $question->question;
                 $row[3] = '';
                 //Set de la réponse
-                if($question->initialValue == -1)
+                if( !$resultat->getSynthese() )
                 {
-                    $row[3] = 'Non concerné';
-                }
-                else
-                {
-                    foreach ($question->options as $option) 
+                    if($question->initialValue == -1)
                     {
-                        $tab = explode(';', $option);
-                        if($tab[0] == $question->initialValue)
+                        $row[3] = 'Non concerné';
+                    }
+                    else
+                    {
+                        foreach ($question->options as $option) 
                         {
-                            $row[3] .= $tab[1];
+                            $tab = explode(';', $option);
+                            if($tab[0] == $question->initialValue)
+                            {
+                                $row[3] .= $tab[1];
+                            }
                         }
                     }
                 }
@@ -163,18 +166,21 @@ class ResultatController extends Controller
                         $row[2] = $question->question;
                         $row[3] = '';
                         //Set de la réponse
-                        if($question->initialValue == -1)
+                        if( !$resultat->getSynthese() )
                         {
-                            $row[3] = 'Non concerné';
-                        }
-                        else
-                        {
-                            foreach ($question->options as $option) 
+                            if($question->initialValue == -1)
                             {
-                                $tab = explode(';', $option);
-                                if($tab[0] == $question->initialValue)
+                                $row[3] = 'Non concerné';
+                            }
+                            else
+                            {
+                                foreach ($question->options as $option) 
                                 {
-                                    $row[3] .= $tab[1];
+                                    $tab = explode(';', $option);
+                                    if($tab[0] == $question->initialValue)
+                                    {
+                                        $row[3] .= $tab[1];
+                                    }
                                 }
                             }
                         }
@@ -269,18 +275,21 @@ class ResultatController extends Controller
                     $row[2] = $question->question;
                     $row[3] = '';
                     //Set de la réponse
-                    if($question->initialValue == -1)
+                    if( !$resultat->getSynthese() )
                     {
-                        $row[3] = 'Non concerné';
-                    }
-                    else
-                    {
-                        foreach ($question->options as $option) 
+                        if($question->initialValue == -1)
                         {
-                            $tab = explode(';', $option);
-                            if($tab[0] == $question->initialValue)
+                            $row[3] = 'Non concerné';
+                        }
+                        else
+                        {
+                            foreach ($question->options as $option) 
                             {
-                                $row[3] .= $tab[1];
+                                $tab = explode(';', $option);
+                                if($tab[0] == $question->initialValue)
+                                {
+                                    $row[3] .= $tab[1];
+                                }
                             }
                         }
                     }
@@ -314,18 +323,21 @@ class ResultatController extends Controller
                             $row[2] = $question->question;
                             $row[3] = '';
                             //Set de la réponse
-                            if($question->initialValue == -1)
+                            if( !$resultat->getSynthese() )
                             {
-                                $row[3] = 'Non concerné';
-                            }
-                            else
-                            {
-                                foreach ($question->options as $option) 
+                                if($question->initialValue == -1)
                                 {
-                                    $tab = explode(';', $option);
-                                    if($tab[0] == $question->initialValue)
+                                    $row[3] = 'Non concerné';
+                                }
+                                else
+                                {
+                                    foreach ($question->options as $option) 
                                     {
-                                        $row[3] .= $tab[1];
+                                        $tab = explode(';', $option);
+                                        if($tab[0] == $question->initialValue)
+                                        {
+                                            $row[3] .= $tab[1];
+                                        }
                                     }
                                 }
                             }
