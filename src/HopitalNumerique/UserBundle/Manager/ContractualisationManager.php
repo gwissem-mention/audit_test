@@ -20,4 +20,14 @@ class ContractualisationManager extends BaseManager
     {
         return $this->getRepository()->getContractualisationsARenouveler()->getQuery()->getSingleScalarResult();
     }
+
+    /**
+     * Override : Récupère les contractualisations pour un utilisateur donné
+     *
+     * @return array
+     */
+    public function getContractualisationForGrid( $condition = null )
+    {
+        return $this->getRepository()->getContractualisationForGrid( $condition )->getQuery()->getResult();
+    }
 }

@@ -17,7 +17,9 @@ class ContractualisationGrid extends Grid implements GridInterface
      */
     public function setConfig()
     {
-        $this->setSource( 'HopitalNumeriqueUserBundle:Contractualisation' );
+        $this->setSource( 'hopitalnumerique_user.manager.contractualisation' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setFunctionName('getContractualisationForGrid');
         $this->setNoDataMessage('Aucun fichier de contractualisation à afficher.');
         $this->setButtonSize(43);
     }
@@ -29,17 +31,17 @@ class ContractualisationGrid extends Grid implements GridInterface
     {
         //field, titre, isSortable, size
         $this->addColonne( new Column\TextColumn('nomDocument', 'Nom document') );
-        
-        $colonneDate = new Column\DateColumn('dateRenouvellement', 'Date renouvellement');
-        $colonneDate->setSize(170);
-        $this->addColonne( $colonneDate );     
-
-        $typeDocumentColonne = new Column\AssocColumn('typeDocument.libelle', 'Type de document');
-        $this->addColonne( $typeDocumentColonne );
 
         $archiverColonne = new Column\BooleanColumn('archiver', 'Document archivé');
         $archiverColonne->setSize(150);
         $this->addColonne( $archiverColonne );
+        
+        $colonneDate = new Column\DateColumn('dateRenouvellement', 'Date renouvellement', 'd/m/Y H:i:s');
+        $colonneDate->setSize(170);
+        $this->addColonne( $colonneDate );     
+
+        $typeDocumentColonne = new Column\TextColumn('libelle', 'Type de document');
+        $this->addColonne( $typeDocumentColonne );
 
         /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('path') );

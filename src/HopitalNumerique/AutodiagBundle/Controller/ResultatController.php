@@ -90,55 +90,75 @@ class ResultatController extends Controller
         }
 
         $datas = $in = $alsoIn = array();
-
-        $colonnes = array(
-            'Chapitre',
-            'Sous chapitre',
-            'Question',
-            'Réponse',
-            'Synthèse',
-            'Commentaire',
-            'Acteur',
-            'Échéance',
-            'État d\'avancement'
-        );
+        
+        if( !$resultat->getSynthese() )
+        {
+            $colonnes = array(
+                'Chapitre',
+                'Sous chapitre',
+                'Question',
+                'Réponse',
+                'Synthèse',
+                'Commentaire',
+                'Acteur',
+                'Échéance',
+                'État d\'avancement'
+            );
+        }
+        else
+        {
+            $colonnes = array(
+                'Chapitre',
+                'Sous chapitre',
+                'Question',
+                'Synthèse',
+                'Commentaire',
+                'Acteur',
+                'Échéance',
+                'État d\'avancement'
+            );
+        }
 
         foreach ($chapitres as $chapitre) 
         {
             if( !in_array($chapitre->code, $in) )
             {
-                $datas[] = array($chapitre->code, "", "", "", "", "", "", "", "");
+//                $datas[] = array($chapitre->code, "", "", "", "", "", "", "", "");
                 $in[] = $chapitre->code;
             }
             foreach ($chapitre->questions as $question) 
             {
                 $row = array();
-
-                $row[0] = $chapitre->code;
-                $row[1] = '';
-                $row[2] = $question->question;
-                $row[3] = '';
+                $i = 0;
+                $row[$i++] = $chapitre->code;
+                $row[$i++] = '';
+                $row[$i++] = $question->question;
                 //Set de la réponse
-                if($question->initialValue == -1)
+                if( !$resultat->getSynthese() )
                 {
-                    $row[3] = 'Non concerné';
-                }
-                else
-                {
-                    foreach ($question->options as $option) 
+                    $row[$i] = '';
+                    if($question->initialValue == -1)
                     {
-                        $tab = explode(';', $option);
-                        if($tab[0] == $question->initialValue)
+                        $row[$i] = 'Non concerné';
+                    }
+                    else
+                    {
+                        foreach ($question->options as $option) 
                         {
-                            $row[3] .= $tab[1];
+                            $tab = explode(';', $option);
+                            if($tab[0] == $question->initialValue)
+                            {
+                                $row[$i] .= $tab[1];
+                            }
                         }
                     }
+                    $i++;
                 }
-                $row[4] = $question->synthese;
-                $row[5] = '';
-                $row[6] = '';
-                $row[7] = '';
-                $row[8] = '';
+                $row[$i++] = $question->synthese;
+                $row[$i++] = '';
+                $row[$i++] = '';
+                $row[$i++] = '';
+                $row[$i++] = '';
 
                 $datas[] = $row;
             }
@@ -151,39 +171,43 @@ class ResultatController extends Controller
                 {
                     if( !in_array($chapitreChild->code, $alsoIn) )
                     {
-                        $datas[] = array($chapitre->code, $chapitreChild->code, "", "", "", "", "", "", "");
+//                        $datas[] = array($chapitre->code, $chapitreChild->code, "", "", "", "", "", "", "");
                         $alsoIn[] = $chapitreChild->code;
                     }
                     foreach ($chapitreChild->questions as $question) 
                     {
                         $row = array();
-
-                        $row[0] = $chapitre->code;
-                        $row[1] = $chapitreChild->code;
-                        $row[2] = $question->question;
-                        $row[3] = '';
+                        $i = 0;
+                        $row[$i++] = $chapitre->code;
+                        $row[$i++] = $chapitreChild->code;
+                        $row[$i++] = $question->question;
                         //Set de la réponse
-                        if($question->initialValue == -1)
+                        if( !$resultat->getSynthese() )
                         {
-                            $row[3] = 'Non concerné';
-                        }
-                        else
-                        {
-                            foreach ($question->options as $option) 
+                            $row[$i] = '';
+                            if($question->initialValue == -1)
                             {
-                                $tab = explode(';', $option);
-                                if($tab[0] == $question->initialValue)
+                                $row[$i] = 'Non concerné';
+                            }
+                            else
+                            {
+                                foreach ($question->options as $option) 
                                 {
-                                    $row[3] .= $tab[1];
+                                    $tab = explode(';', $option);
+                                    if($tab[0] == $question->initialValue)
+                                    {
+                                        $row[$i] .= $tab[1];
+                                    }
                                 }
                             }
+                            $i++;
                         }
-                        $row[4] = $question->synthese;
-                        $row[5] = '';
-                        $row[6] = '';
-                        $row[7] = '';
-                        $row[8] = '';
-                        $row[9] = '';
+                        $row[$i++] = $question->synthese;
+                        $row[$i++] = '';
+                        $row[$i++] = '';
+                        $row[$i++] = '';
+                        $row[$i++] = '';
+                        $row[$i++] = '';
 
                         $datas[] = $row;
                     }
@@ -257,39 +281,43 @@ class ResultatController extends Controller
             {
                 if( !in_array($chapitre->code, $in) )
                 {
-                    $datas[] = array($chapitre->code);
+//                    $datas[] = array($chapitre->code);
                     $in[] = $chapitre->code;
                 }
                 foreach ($chapitre->questions as $question) 
                 {
                     $row = array();
-
-                    $row[0] = $chapitre->code;
-                    $row[1] = '';
-                    $row[2] = $question->question;
-                    $row[3] = '';
+                    $i = 0;
+                    $row[$i++] = $chapitre->code;
+                    $row[$i++] = '';
+                    $row[$i++] = $question->question;
                     //Set de la réponse
-                    if($question->initialValue == -1)
+                    if( !$resultat->getSynthese() )
                     {
-                        $row[3] = 'Non concerné';
-                    }
-                    else
-                    {
-                        foreach ($question->options as $option) 
+                        $row[$i] = '';
+                        if($question->initialValue == -1)
                         {
-                            $tab = explode(';', $option);
-                            if($tab[0] == $question->initialValue)
+                            $row[$i] = 'Non concerné';
+                        }
+                        else
+                        {
+                            foreach ($question->options as $option) 
                             {
-                                $row[3] .= $tab[1];
+                                $tab = explode(';', $option);
+                                if($tab[0] == $question->initialValue)
+                                {
+                                    $row[$i] .= $tab[1];
+                                }
                             }
                         }
+                        $i++;
                     }
-                    $row[4] = $question->synthese;
-                    $row[5] = '';
-                    $row[6] = '';
-                    $row[7] = '';
-                    $row[8] = '';
-                    $row[9] = '';
+                    $row[$i++] = $question->synthese;
+                    $row[$i++] = '';
+                    $row[$i++] = '';
+                    $row[$i++] = '';
+                    $row[$i++] = '';
+                    $row[$i++] = '';
 
                     $datas[] = $row;
                 }
@@ -302,39 +330,43 @@ class ResultatController extends Controller
                     {
                         if( !in_array($chapitreChild->code, $alsoIn) )
                         {
-                            $datas[] = array($chapitre->code, $chapitreChild->code);
+//                            $datas[] = array($chapitre->code, $chapitreChild->code);
                             $alsoIn[] = $chapitreChild->code;
                         }
                         foreach ($chapitreChild->questions as $question) 
                         {
                             $row = array();
-
-                            $row[0] = $chapitre->code;
-                            $row[1] = $chapitreChild->code;
-                            $row[2] = $question->question;
-                            $row[3] = '';
+                            $i = 0;
+                            $row[$i++] = $chapitre->code;
+                            $row[$i++] = $chapitreChild->code;
+                            $row[$i++] = $question->question;
                             //Set de la réponse
-                            if($question->initialValue == -1)
+                            if( !$resultat->getSynthese() )
                             {
-                                $row[3] = 'Non concerné';
-                            }
-                            else
-                            {
-                                foreach ($question->options as $option) 
+                                $row[$i] = '';
+                                if($question->initialValue == -1)
                                 {
-                                    $tab = explode(';', $option);
-                                    if($tab[0] == $question->initialValue)
+                                    $row[$i] = 'Non concerné';
+                                }
+                                else
+                                {
+                                    foreach ($question->options as $option) 
                                     {
-                                        $row[3] .= $tab[1];
+                                        $tab = explode(';', $option);
+                                        if($tab[0] == $question->initialValue)
+                                        {
+                                            $row[$i] .= $tab[1];
+                                        }
                                     }
                                 }
+                                $i++;
                             }
-                            $row[4] = $question->synthese;
-                            $row[5] = '';
-                            $row[6] = '';
-                            $row[7] = '';
-                            $row[8] = '';
-                            $row[9] = '';
+                            $row[$i++] = $question->synthese;
+                            $row[$i++] = '';
+                            $row[$i++] = '';
+                            $row[$i++] = '';
+                            $row[$i++] = '';
+                            $row[$i++] = '';
 
                             $datas[] = $row;
                         }
@@ -345,7 +377,16 @@ class ResultatController extends Controller
             $user = $this->get('security.context')->getToken()->getUser();
 
             //Récupèration du fichier excel
-            $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject(__ROOT_DIRECTORY__ . '/files/autodiag/autodiag.xls');
+            if( !$resultat->getSynthese() )
+            {
+                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject(__ROOT_DIRECTORY__ . '/files/autodiag/autodiag.xls');
+                $lettreMax = "I";
+            }
+            else
+            {
+                $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject(__ROOT_DIRECTORY__ . '/files/autodiag/autodiag_synthese.xls');
+                $lettreMax = "H";
+            }
             $sheet = $phpExcelObject->getSheetByName('export_plan_actions_autodiag');
             
             $styleArray = array(
@@ -368,8 +409,8 @@ class ResultatController extends Controller
                 }
                 $nbLigne++;
             }
-            $sheet->getStyle("A4:I" . --$nbLigne)->applyFromArray($styleArray);
-            $sheet->getStyle("A4:I" . $nbLigne)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT); 
+            $sheet->getStyle("A4:" . $lettreMax . --$nbLigne)->applyFromArray($styleArray);
+            $sheet->getStyle("A4:" . $lettreMax . $nbLigne)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT); 
             
             $sheet->getColumnDimension('B')->setAutoSize(true);
             $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -378,7 +419,10 @@ class ResultatController extends Controller
             $sheet->getColumnDimension('F')->setAutoSize(true);
             $sheet->getColumnDimension('G')->setAutoSize(true);
             $sheet->getColumnDimension('H')->setAutoSize(true);
-            $sheet->getColumnDimension('I')->setAutoSize(true);
+            if( !$resultat->getSynthese() )
+            {
+                $sheet->getColumnDimension('I')->setAutoSize(true);
+            }
             
             $writer   = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel2007');
             $response = $this->get('phpexcel')->createStreamedResponse($writer);

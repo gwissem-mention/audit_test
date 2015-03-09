@@ -29,4 +29,33 @@ class ContractualisationRepository extends EntityRepository
         
         return $qb;
     }
+    
+    /**
+     * Récupère les contractualisations pour un utilisateur donné
+     *
+     * @return qb
+     */
+    public function getContractualisationForGrid( $condition = null )
+    {        
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('contract.id,
+            contract.nomDocument,
+            contract.dateRenouvellement,
+            contract.archiver,
+            contract.path,
+            typeDocument.libelle
+            ')
+            ->from('HopitalNumeriqueUserBundle:Contractualisation', 'contract')
+            ->innerJoin('contract.user', 'user')
+            ->innerJoin('contract.typeDocument', 'typeDocument')
+            ->addOrderBy('user.username');
+        
+        if( $condition )
+        {
+            $qb->where('user.id = :id')
+                    ->setParameter('id', $condition->value);
+        }
+        
+        return $qb;
+    }
 }

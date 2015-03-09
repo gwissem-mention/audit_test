@@ -75,7 +75,7 @@
                                     <div class="options">
                                         {% if panel.value|checkNC %}
                                             {% if tauxChapitre == 0 %}
-                                                Score : NC
+                                                Score : 0
                                             {% else %}
                                                 Score : {{panel.value|number_format(0)}}%
                                             {% endif %}
@@ -112,12 +112,14 @@
                                             <div class="progress-bar progress-bar-success" style="width: 33.3%">
                                                 Fort
                                             </div>
-
-                                            {% if tauxChapitre != 0 %}
-                                                {% set value = panel.value|number_format(0) ~ '%' %}
-                                                <div class="cursor" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{value}}" title="" ></div>
-                                                <div class="cursor-value" style="left:{{value}}">{{value}}</div>
+                                            
+                                            {% set value = panel.value|number_format(0) ~ '%' %}
+                                            {% set val = value %}
+                                            {% if panel.value == 0 %}
+                                            {% set val = 0 %}
                                             {% endif %}
+                                            <div class="cursor" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{value}}" title="" ></div>
+                                            <div class="cursor-value" style="left:{{value}}">{{val}}</div>
 
                                             {% if panel.max is not null and tauxChapitre != 0 %}
                                                 {% set max = panel.max|number_format(0) ~ '%' %}
@@ -213,7 +215,7 @@
                                     <div class="reverse" onclick="reverse_table(document.getElementById('tableau_resultats'));" ><i class="fa fa-refresh"></i></div>
                                 </th>
                                 {% for id, chapitre in chart.datas.chapitres %}
-                                    <th class="active text-center chapitre-{{id}}"{% if not chart.datas.totauxChapitres[id].isParent %} style="font-weight:normal;"{% endif %}>{{chapitre|capitalize}}</th>
+                                    <th class="active text-left chapitre-{{id}}"{% if not chart.datas.totauxChapitres[id].isParent %} style="font-weight:normal;"{% endif %}>{{chapitre}}</th>
                                 {% endfor %}
                                 {% if resultat.outil.tableChartAfficheTotal %}<th class="active text-center title-total">Total</th>{% endif %}
                             </thead>
@@ -227,29 +229,60 @@
                                     {% set maximum = 0 %}
 
                                     <tr>
-                                        <td class="active text-center vertical-align categorie-{{id}}" rowspan="2"><b>{{categorie.title|capitalize}}</b></td>
+                                        {% if not resultat.outil.centPourcentReponseObligatoire  %}
+                                            {% set rowspan = 2 %}
+                                        {% else %}
+                                            {% set rowspan = 1 %}
+                                        {% endif %}
+                                        {% if resultat.synthese %}
+                                            {% set rowspan = rowspan + 2 %}
+                                        {% endif %}
+                                        <td class="active text-center vertical-align categorie-{{id}}" rowspan="{{rowspan}}"><b>{{categorie.title|capitalize}}</b></td>
+                                        {% if not resultat.outil.centPourcentReponseObligatoire %}
                                         <td class="text-center">Nombre de réponses</td>
+                                        {% endif %}
                                         {% for datas in categorie['chapitres'] %}
                                             {% if not datas['nc'] %}
-                                                <td class="text-center">
+                                                {% if not resultat.outil.centPourcentReponseObligatoire %}
+                                                <td class="text-center vertical-align">
                                                     {{datas['nbRep']}} / {{datas['nbQue']}}
                                                 </td>
+                                                {% endif %}
                                                 {% set nbRepCateg = nbRepCateg + datas['nbRep'] %}
                                                 {% set nbQueCateg = nbQueCateg + datas['nbQue'] %}
                                             {% else %}
+                                                {% if not resultat.outil.centPourcentReponseObligatoire %}
                                                 <td class="text-center vertical-align">
-                                                    - Non diagnostiqué -
+                                                    -&nbsp;Non&nbsp;diagnostiqué&nbsp;-
                                                 </td>
+                                                {% endif %}
                                             {% endif %}
                                         {% endfor %}
                                         {% if resultat.outil.tableChartAfficheTotal %}
-                                            <td class="text-center">
+                                            {% if not resultat.outil.centPourcentReponseObligatoire %}
+                                            <td class="text-center vertical-align">
                                                 {{nbRepCateg}} / {{nbQueCateg}}
                                             </td>
+                                            {% endif %}
                                         {% endif %}
                                     </tr>
                                     <tr>
-                                        <td class="text-center">Score</td>
+                                        <td class="text-center vertical-align" rowspan="{% if resultat.synthese %}3{% else %}1{% endif %}">Score</td>
+                                    {% if resultat.synthese %}
+                                    {% for datas in categorie['chapitres'] %}
+                                        {% if not datas['nc'] %}
+                                        <td class="text-center vertical-align">
+                                            <span class="initialism minimum" title="<span>Score minimum</span>">{{ datas['minimum']|number_format(0) }}%</span>
+                                        </td>
+                                        {% else %}
+                                            <td class="text-center vertical-align" >
+                                                NC
+                                            </td>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tr>
+                                    <tr>
+                                    {% endif %}
                                         {% for datas in categorie['chapitres'] %}
                                             {% if not datas['nc'] %}
                                                 {% set nbPointsCateg = nbPointsCateg + datas['nbPointsPourc'] %}
@@ -262,13 +295,7 @@
                                                     {% set note = 0 %}
                                                 {% endif %}
                                                 <td class="text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
-                                                    {% if resultat.synthese %}
-                                                    <span class="initialism minimum" title="<span>Score minimum</span>">{{ datas['minimum']|number_format(0) }}%</span> - 
-                                                    {% endif %}
-                                                    {{ note|number_format(0) }}%
-                                                    {% if resultat.synthese %}
-                                                    - <span class="initialism maximum" title="<span>Score maximum</span>">{{ datas['maximum']|number_format(0) }}%</span>
-                                                {% endif %}
+                                                    <strong>{{ note|number_format(0) }}%</strong>
                                                 </td>
                                             {% else %}
                                                 <td class="text-center vertical-align" >
@@ -286,31 +313,54 @@
                                                 {{ note|number_format(0) }}%
                                             </td>
                                         {% endif %}
+                                    {% if resultat.synthese %}
+                                    </tr>
+                                    <tr>
+                                    {% for datas in categorie['chapitres'] %}
+                                        {% if not datas['nc'] %}
+                                        <td class="text-center vertical-align">
+                                            <span class="initialism minimum" title="<span>Score maximum</span>">{{ datas['maximum']|number_format(0) }}%</span>
+                                        </td>
+                                        {% else %}
+                                            <td class="text-center vertical-align" >
+                                                NC
+                                            </td>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
                                     </tr>
                                 {% endfor %}
 
                                 {% if chart.datas.categories|length > 1 and resultat.outil.tableChartAfficheTotal %}
                                     <tr>
                                         <td class="text-center title-total vertical-align" rowspan="2"><b>Total</b></td>
+                                        {% if not resultat.outil.centPourcentReponseObligatoire %}
                                         <td class="text-center">Nombre de réponses</td>
+                                        {% endif %}
                                         {% set nbRepTotal = 0 %}
                                         {% set nbQueTotal = 0 %}
                                         {% for datas in chart.datas.totauxChapitres %}
                                             {% if not datas['nc'] %}
+                                                {% if not resultat.outil.centPourcentReponseObligatoire %}
                                                 <td class="text-center">
                                                     {{datas['nbRep']}} / {{datas['nbQue']}}
                                                 </td>
+                                                {% endif %}
                                                 {% set nbRepTotal = nbRepTotal + datas['nbRep'] %}
                                                 {% set nbQueTotal = nbQueTotal + datas['nbQue'] %}
                                             {% else %}
+                                                {% if not resultat.outil.centPourcentReponseObligatoire %}
                                                 <td class="text-center vertical-align">
-                                                    - Non diagnostiqué -
+                                                    -&nbsp;Non&nbsp;diagnostiqué&nbsp;-
                                                 </td>
+                                                {% endif %}
                                             {% endif %}
                                         {% endfor %}
+                                        {% if not resultat.outil.centPourcentReponseObligatoire %}
                                         <td class="text-center">
                                             {{nbRepTotal}} / {{nbQueTotal}}
                                         </td>
+                                        {% endif %}
                                     </tr>
                                     <tr>
                                         <td class="text-center">Score</td>
@@ -454,7 +504,9 @@
                             <th>Chap.</th>
                             <th>S.Chap.</th>
                             <th>Question</th>
+                            {% if not resultat.synthese %}
                             <th>Réponse</th>
+                            {% endif %}
                             {% if affichageSynthese %}
                                <th>Synthèse</th>
                             {% endif %}
@@ -507,6 +559,7 @@
                                     <td></td>
                                     <td></td>
                                     <td>{{question.question}}</td>
+                                    {% if not resultat.synthese %}
                                     <td class="note-{{question.initialValue}}" {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
                                             {% if question.colored == "1" %}
                                                 {% if question.min == question.initialValue %}
@@ -536,6 +589,7 @@
                                             {% endfor %}
                                         {% endif %}
                                     </td>
+                                    {% endif %}
                                     {% if affichageSynthese %}
                                         <td>
                                             {# Affichage de la synthese #}
@@ -601,6 +655,7 @@
                                             <td></td>
                                             <td></td>
                                             <td>{{questionChild.question}}</td>
+                                            {% if not resultat.synthese %}
                                             <td class="note-{{questionChild.initialValue}}" {% if questionChild.colored and questionChild.initialValue != -1 and questionChild.initialValue != '' %}
                                                     {% if questionChild.colored == "1" %}
                                                         {% if questionChild.min == questionChild.initialValue %}
@@ -630,6 +685,7 @@
                                                     {% endfor %}
                                                 {% endif %}
                                             </td>
+                                            {% endif %}
                                             {% if affichageSynthese %}
                                                 <td>
                                                     {% if questionChild.synthese %}
