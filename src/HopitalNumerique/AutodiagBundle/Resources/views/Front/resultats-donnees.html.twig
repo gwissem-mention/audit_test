@@ -500,7 +500,9 @@
                             <th>Chap.</th>
                             <th>S.Chap.</th>
                             <th>Question</th>
+                            {% if not resultat.synthese %}
                             <th>Réponse</th>
+                            {% endif %}
                             {% if affichageSynthese %}
                                <th>Synthèse</th>
                             {% endif %}
@@ -553,6 +555,7 @@
                                     <td></td>
                                     <td></td>
                                     <td>{{question.question}}</td>
+                                    {% if not resultat.synthese %}
                                     <td class="note-{{question.initialValue}}" {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
                                             {% if question.colored == "1" %}
                                                 {% if question.min == question.initialValue %}
@@ -582,6 +585,7 @@
                                             {% endfor %}
                                         {% endif %}
                                     </td>
+                                    {% endif %}
                                     {% if affichageSynthese %}
                                         <td>
                                             {# Affichage de la synthese #}
@@ -647,6 +651,7 @@
                                             <td></td>
                                             <td></td>
                                             <td>{{questionChild.question}}</td>
+                                            {% if not resultat.synthese %}
                                             <td class="note-{{questionChild.initialValue}}" {% if questionChild.colored and questionChild.initialValue != -1 and questionChild.initialValue != '' %}
                                                     {% if questionChild.colored == "1" %}
                                                         {% if questionChild.min == questionChild.initialValue %}
@@ -676,6 +681,7 @@
                                                     {% endfor %}
                                                 {% endif %}
                                             </td>
+                                            {% endif %}
                                             {% if affichageSynthese %}
                                                 <td>
                                                     {% if questionChild.synthese %}
