@@ -140,6 +140,11 @@ class AdminType extends InterventionDemandeType
                 'required' => false,
                 'read_only' => false
             ))
+            ->add('refusMessage', 'textarea', array(
+                'label' => 'Motif de refus CMSI / Ambassadeur',
+                'required' => false,
+                'read_only' => false
+            ))
         ;
     }
 
