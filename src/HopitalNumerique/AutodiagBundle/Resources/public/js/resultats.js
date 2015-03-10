@@ -50,6 +50,7 @@ $(document).ready(function() {
     var moyennes     = [];
     var deciles2     = [];
     var deciles8     = [];
+    var centPourCent = [];
     
     $(datas).each(function(index, element ){
         if( element.value != 'NC' || element.taux != 0 )
@@ -66,7 +67,10 @@ $(document).ready(function() {
             if (element.decile2Pourcentage != undefined)
                 deciles2.push(element.decile2Pourcentage);
             if (element.decile8Pourcentage != undefined)
+            {
                 deciles8.push(element.decile8Pourcentage);
+                centPourCent.push(100);
+            }
 
             taux[ title ] = element.taux;
         }
@@ -89,26 +93,124 @@ $(document).ready(function() {
         $('#chaptersNonConcernes').html(html);
     }
 
-    var seriesRadar = [
-        //Score
-        {
+    var seriesRadar = [];
+
+    if(!jQuery.isEmptyObject(deciles8) && deciles8[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: false,
+                softConnector: true,
+                align: 'left',
+                formatter:function() { return ''; }
+            },
+            name  : 'hideLabel',
+            showInLegend: false,
+            marker:
+            {
+                enabled:false,
+                radius:0,
+                states: { hover: { enabled:false } }
+            },
+            data  : centPourCent,
+            color : radarChartBenchmarkCouleurDecile8,
+            fillOpacity:0.07,
+            lineWidth:0,
+            type  : 'area',
+            pointPlacement: 'on'
+        });
+        seriesRadar.push({
             dataLabels: {
                 enabled: true,
-                formatter: function() {
-                    var tau = taux[this.point.category];
-                    return ( tau == 0 && this.point.series.name == "Valeur moyenne" ) ? '' : '<b>' + number_format(this.point.y, 0) + '%</b>'
-                },
+                format: ' ',
                 softConnector: true,
                 align: 'left'
             },
-            name  : 'Valeur moyenne',
-            color : '#6f3596',
+            name  : 'Huitième décile',
+            marker: { enabled:false, radius:0 },
+            data  : deciles8,
+            color : radarChartBenchmarkCouleurDecile8,
+            lineWidth:1,
             type  : 'line',
-            data  : values,
             pointPlacement: 'on'
-        }]
-        ;
-
+        });
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'hideLabel',
+            showInLegend: false,
+            marker:
+            {
+                enabled:false,
+                radius:0,
+                states: { hover: { enabled:false } }
+            },
+            data  : deciles8,
+            color : '#ffffff',
+            fillOpacity:0.6,
+            lineWidth:0,
+            type  : 'area',
+            pointPlacement: 'on'
+        });
+    }
+    if(!jQuery.isEmptyObject(deciles2) && deciles2[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'hideLabel',
+            showInLegend: false,
+            marker: { enabled:false, radius:0 },
+            data  : deciles2,
+            color : radarChartBenchmarkCouleurDecile2,
+            fillOpacity:0.06,
+            lineWidth:0,
+            type  : 'area',
+            pointPlacement: 'on'
+        });
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Deuxième décile',
+            marker: { enabled:false, radius:0 },
+            data  : deciles2,
+            color : radarChartBenchmarkCouleurDecile2,
+            lineWidth:1,
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+    if(!jQuery.isEmptyObject(moyennes) && moyennes[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Moyenne de tout l\'autodiag',
+            marker: { enabled:false, radius:0 },
+            data  : moyennes,
+            color : '#777777',
+            lineWidth:1,
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+    
     if(!jQuery.isEmptyObject(min) && min[0] != null )
     {
         seriesRadar.push({
@@ -145,57 +247,6 @@ $(document).ready(function() {
             pointPlacement: 'on'
         });
     }
-    if(!jQuery.isEmptyObject(moyennes) && moyennes[0] != null )
-    {
-        seriesRadar.push({
-            dataLabels: {
-                enabled: true,
-                format: ' ',
-                softConnector: true,
-                align: 'left'
-            },
-            name  : 'Moyenne de tout l\'autodiag',
-            marker: { symbol:'circle' },
-            data  : moyennes,
-            color : '#777777',
-            type  : 'line',
-            pointPlacement: 'on'
-        });
-    }
-    if(!jQuery.isEmptyObject(deciles2) && deciles2[0] != null )
-    {
-        seriesRadar.push({
-            dataLabels: {
-                enabled: true,
-                format: ' ',
-                softConnector: true,
-                align: 'left'
-            },
-            name  : 'Deuxième décile',
-            marker: { symbol:'circle' },
-            data  : deciles2,
-            color : radarChartBenchmarkCouleurDecile2,
-            type  : 'line',
-            pointPlacement: 'on'
-        });
-    }
-    if(!jQuery.isEmptyObject(deciles8) && deciles8[0] != null )
-    {
-        seriesRadar.push({
-            dataLabels: {
-                enabled: true,
-                format: ' ',
-                softConnector: true,
-                align: 'left'
-            },
-            name  : 'Huitième décile',
-            marker: { symbol:'circle' },
-            data  : deciles8,
-            color : radarChartBenchmarkCouleurDecile8,
-            type  : 'line',
-            pointPlacement: 'on'
-        });
-    }
 
     seriesRadar.push({
         dataLabels: {
@@ -208,6 +259,23 @@ $(document).ready(function() {
         data  : optimale,
         color : '#6f3596',
         type  : 'line',
+        pointPlacement: 'on'
+    });
+    
+    seriesRadar.push({
+        dataLabels: {
+            enabled: true,
+            formatter: function() {
+                var tau = taux[this.point.category];
+                return ( tau == 0 && this.point.series.name == "Valeur moyenne" ) ? '' : '<b>' + number_format(this.point.y, 0) + '%</b>'
+            },
+            softConnector: true,
+            align: 'left'
+        },
+        name  : 'Valeur moyenne',
+        color : '#6f3596',
+        type  : 'line',
+        data  : values,
         pointPlacement: 'on'
     });
 
@@ -234,7 +302,8 @@ $(document).ready(function() {
                 lineWidth         : 0
             },
             legend:{
-                padding : 20
+                padding : 20,
+                reversed: true
             },
             yAxis : {
                 gridLineInterpolation : 'polygon',
@@ -253,15 +322,18 @@ $(document).ready(function() {
             tooltip : {
                 shared      : true,
                 formatter: function() {
-                    var s   = this.x;
+                    var s   = '';
                     var tau = taux[this.x]
 
                     $.each(this.points, function(i, point) {
-                        val = ( tau == 0 && point.series.name == "Valeur moyenne" ) ? 'NC' : number_format(point.y, 0) + '%';
-                        s += '<br/><span style="color:#333333; font-size:10px">'+ point.series.name + ': '+ val + '</span>';
+                        if ('hideLabel' != point.series.name)
+                        {
+                            val = ( tau == 0 && point.series.name == "Valeur moyenne" ) ? 'NC' : number_format(point.y, 0) + '%';
+                            s = '<br/><span style="color:#333333; font-size:10px">'+ point.series.name + ': '+ val + '</span>' + s;
+                        }
                     });
                     
-                    return s;
+                    return this.x + s;
                 }
             },
             series : seriesRadar

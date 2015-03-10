@@ -532,11 +532,18 @@ class FrontController extends Controller
                 }  
             }
         }
+        
+        $radarChartBenchmarkCouleurDecile2 = ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile2() == 'vert' ? '#76e57e' : '#ff7a7a');
+        $radarChartBenchmarkCouleurDecile8 = ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile8() == 'vert' ? '#76e57e' : '#ff7a7a');
 
         $options = array(
             'chapitresForAnalyse'     => $chapitresForAnalyse,
             'chapitresForReponse'     => $chapitresForReponse,
+            'resultatsName' => $resultatsName,
             'questionReponseSynthese' => $questionReponseSynthese,
+            'questionReponseSyntheseTableau' => $questionReponseSyntheseTableau,
+            'radarChartBenchmarkCouleurDecile2' => $radarChartBenchmarkCouleurDecile2,
+            'radarChartBenchmarkCouleurDecile8' => $radarChartBenchmarkCouleurDecile8
         );
 
         //PDF généré
@@ -552,7 +559,6 @@ class FrontController extends Controller
         }
         
         
-        
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
             'resultat'                => $resultat,
             'chapitres'               => $chapitres,
@@ -564,8 +570,8 @@ class FrontController extends Controller
             'graphiques'              => $graphiques,
             'back'                    => $back,
             'sansGabarit'             => $sansGabarit,
-            'radarChartBenchmarkCouleurDecile2' => ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile2() == 'vert' ? '#aaffaa' : '#ffaaaa'),
-            'radarChartBenchmarkCouleurDecile8' => ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile8() == 'vert' ? '#aaffaa' : '#ffaaaa'),
+            'radarChartBenchmarkCouleurDecile2' => $radarChartBenchmarkCouleurDecile2,
+            'radarChartBenchmarkCouleurDecile8' => $radarChartBenchmarkCouleurDecile8,
             'processusDonnees'        => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
     }
@@ -816,14 +822,18 @@ class FrontController extends Controller
     private function generatePdf( $chapitres, $graphiques, $resultat, $request , $options)
     {
         $filename = $resultat->getId() . $resultat->getOutil()->getId() . time() . '.pdf';
-
+        
         $html = $this->renderView( 'HopitalNumeriqueAutodiagBundle:Front:pdf.html.twig' , array(
             'resultat'                => $resultat,
             'chapitres'               => $chapitres,
             'chapitresForAnalyse'     => $options["chapitresForAnalyse"],
             'chapitresForReponse'     => $options["chapitresForReponse"],
             'questionReponseSynthese' => $options["questionReponseSynthese"],
+            'questionReponseSyntheseTableau' => $options["questionReponseSyntheseTableau"],
+            'resultatsName'           => $options["resultatsName"],
             'graphiques'              => $graphiques,
+            'radarChartBenchmarkCouleurDecile2' => $options["radarChartBenchmarkCouleurDecile2"],
+            'radarChartBenchmarkCouleurDecile8' => $options["radarChartBenchmarkCouleurDecile8"],
             'processusDonnees'        => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
 

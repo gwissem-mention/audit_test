@@ -1,8 +1,4 @@
 {% import _self as mySelf %}
-<script type="text/javascript">
-    var radarChartBenchmarkCouleurDecile2 = '{{ radarChartBenchmarkCouleurDecile2 }}';
-    var radarChartBenchmarkCouleurDecile8 = '{{ radarChartBenchmarkCouleurDecile8 }}';
-</script>
 <div id="resultats">
     <div class="col-md-12">
         <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download" style="margin-right:5px"></i>Télécharger</a>
@@ -416,13 +412,15 @@
                     <span>Compte tenu de vos réponses, l'Anap vous propose l'analyse suivante :</span>
                 </p>
 
-                <a class="btn btn-primary btn-sm col-sd-6" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_CSV_front',{'id':resultat.id, 'priorise':0})}}"><i class="fa fa-download" style="margin-right:5px;"></i>Plan d'actions (CSV)</a>
-                {% if resultat.outil.planActionPriorise %}
-                <a class="btn btn-primary btn-sm col-sd-6" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_CSV_front',{'id':resultat.id, 'priorise':1})}}"><i class="fa fa-download" style="margin-right:5px;"></i>Plan d'actions priorisé (CSV)</a>
-                {% endif %}
-                <a class="btn btn-success btn-sm col-sd-6" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_Excel_front',{'id':resultat.id, 'priorise':0})}}"><i class="fa fa-download" style="margin-right:5px;"></i>Plan d'actions (Excel)</a>
-                {% if resultat.outil.planActionPriorise %}
-                <a class="btn btn-success btn-sm col-sd-6" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_Excel_front',{'id':resultat.id, 'priorise':1})}}"><i class="fa fa-download" style="margin-right:5px;"></i>Plan d'actions priorisé (Excel)</a>
+                {% if not pdf %}
+                    <a class="btn btn-primary btn-sm col-sd-6" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_CSV_front',{'id':resultat.id, 'priorise':0})}}"><i class="fa fa-download" style="margin-right:5px;"></i>Plan d'actions (CSV)</a>
+                    {% if resultat.outil.planActionPriorise %}
+                    <a class="btn btn-primary btn-sm col-sd-6" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_CSV_front',{'id':resultat.id, 'priorise':1})}}"><i class="fa fa-download" style="margin-right:5px;"></i>Plan d'actions priorisé (CSV)</a>
+                    {% endif %}
+                    <a class="btn btn-success btn-sm col-sd-6" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_Excel_front',{'id':resultat.id, 'priorise':0})}}"><i class="fa fa-download" style="margin-right:5px;"></i>Plan d'actions (Excel)</a>
+                    {% if resultat.outil.planActionPriorise %}
+                    <a class="btn btn-success btn-sm col-sd-6" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_Excel_front',{'id':resultat.id, 'priorise':1})}}"><i class="fa fa-download" style="margin-right:5px;"></i>Plan d'actions priorisé (Excel)</a>
+                    {% endif %}
                 {% endif %}
                 
                 {# Cherche si on doit afficher les colonnes Synthèse et Production #}
