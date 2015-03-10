@@ -26,7 +26,7 @@ class OutilRepository extends EntityRepository
             ->leftJoin('outilChapitre.enfants', 'outilChapitreEnfant')
             ->innerJoin('outilChapitre.outil', 'outil', 'WITH', 'outil = :outil')
             ->setParameter('outil', $outil)
-            ->innerJoin('outil.resultats', 'outilResultat', 'WITH', 'outilResultat.user IS NOT NULL')
+            ->innerJoin('outil.resultats', 'outilResultat', 'WITH', 'outilResultat.user IS NOT NULL AND outilResultat.dateValidation IS NOT NULL')
             ->innerJoin('HopitalNumeriqueAutodiagBundle:Question', 'outilQuestion', 'WITH', '(outilChapitre = outilQuestion.chapitre OR outilChapitreEnfant = outilQuestion.chapitre)')
             ->leftJoin('outilQuestion.reponses', 'outilReponse', 'WITH', 'outilReponse.resultat = outilResultat')
             ->groupBy('outilResultat.id, outilChapitre.id')
@@ -49,7 +49,7 @@ class OutilRepository extends EntityRepository
             ->from('HopitalNumeriqueAutodiagBundle:Categorie', 'outilCategorie')
             ->innerJoin('outilCategorie.outil', 'outil', 'WITH', 'outil = :outil')
             ->setParameter('outil', $outil)
-            ->innerJoin('outil.resultats', 'outilResultat', 'WITH', 'outilResultat.user IS NOT NULL')
+            ->innerJoin('outil.resultats', 'outilResultat', 'WITH', 'outilResultat.user IS NOT NULL AND outilResultat.dateValidation IS NOT NULL')
             ->innerJoin('outilCategorie.questions', 'outilQuestion')
             ->leftJoin('outilQuestion.reponses', 'outilReponse', 'WITH', 'outilReponse.resultat = outilResultat')
             ->groupBy('outilResultat.id, outilCategorie.id')
@@ -76,7 +76,7 @@ class OutilRepository extends EntityRepository
             ->innerJoin('outilChapitre.outil', 'outil', 'WITH', 'outil = :outil')
             ->setParameter('outil', $outil)
             // Ne concerne que les questionnaires des personnes connectées
-            ->innerJoin('outil.resultats', 'outilResultat', 'WITH', 'outilResultat.user IS NOT NULL')
+            ->innerJoin('outil.resultats', 'outilResultat', 'WITH', 'outilResultat.user IS NOT NULL AND outilResultat.dateValidation IS NOT NULL')
             ->innerJoin('HopitalNumeriqueAutodiagBundle:Question', 'outilQuestion', 'WITH', '(outilChapitre = outilQuestion.chapitre OR outilChapitreEnfant = outilQuestion.chapitre)')
             // Si réponse vide, on considère que le questionnaire n'est pas rempli à 100%
             ->leftJoin('outilQuestion.reponses', 'outilReponse', 'WITH', 'outilReponse.resultat = outilResultat AND outilReponse.value = :vide')
@@ -103,7 +103,7 @@ class OutilRepository extends EntityRepository
             ->innerJoin('outilCategorie.outil', 'outil', 'WITH', 'outil = :outil')
             ->setParameter('outil', $outil)
             // Ne concerne que les questionnaires des personnes connectées
-            ->innerJoin('outil.resultats', 'outilResultat', 'WITH', 'outilResultat.user IS NOT NULL')
+            ->innerJoin('outil.resultats', 'outilResultat', 'WITH', 'outilResultat.user IS NOT NULL AND outilResultat.dateValidation IS NOT NULL')
             ->innerJoin('outilCategorie.questions', 'outilQuestion')
             // Si réponse vide, on considère que le questionnaire n'est pas rempli à 100%
             ->leftJoin('outilQuestion.reponses', 'outilReponse', 'WITH', 'outilReponse.resultat = outilResultat AND outilReponse.value = :vide')
