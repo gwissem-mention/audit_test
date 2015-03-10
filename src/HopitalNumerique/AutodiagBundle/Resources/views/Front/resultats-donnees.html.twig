@@ -225,6 +225,7 @@
                                     {% set maximum = 0 %}
 
                                     <tr>
+                                        {% set rowspan = 1 %}
                                         {% if not resultat.outil.centPourcentReponseObligatoire  %}
                                             {% set rowspan = 2 %}
                                         {% else %}
@@ -241,7 +242,7 @@
                                             {% if not datas['nc'] %}
                                                 {% if not resultat.outil.centPourcentReponseObligatoire %}
                                                 <td class="text-center vertical-align">
-                                                    {{datas['nbRep']}} / {{datas['nbQue']}}
+                                                    {{datas['nbRep']}}&nbsp;/&nbsp;{{datas['nbQue']}}
                                                 </td>
                                                 {% endif %}
                                                 {% set nbRepCateg = nbRepCateg + datas['nbRep'] %}
@@ -257,12 +258,10 @@
                                         {% if resultat.outil.tableChartAfficheTotal %}
                                             {% if not resultat.outil.centPourcentReponseObligatoire %}
                                             <td class="text-center vertical-align">
-                                                {{nbRepCateg}} / {{nbQueCateg}}
+                                                {{nbRepCateg}}&nbsp;/&nbsp;{{nbQueCateg}}
                                             </td>
                                             {% endif %}
                                         {% endif %}
-                                    </tr>
-                                    <tr>
                                         <td class="text-center vertical-align" rowspan="{% if resultat.synthese %}3{% else %}1{% endif %}">Score</td>
                                     {% if resultat.synthese %}
                                     {% for datas in categorie['chapitres'] %}
@@ -276,6 +275,9 @@
                                             </td>
                                         {% endif %}
                                     {% endfor %}
+                                    {% if resultat.outil.tableChartAfficheTotal %}
+                                        <td class="text-center vertical-align">-</td>
+                                    {% endif %}
                                     </tr>
                                     <tr>
                                     {% endif %}
@@ -306,7 +308,7 @@
                                                 {% set note = 0 %}
                                             {% endif %}
                                             <td data-categorie="{{id}}" class="total-categorie text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
-                                                {{ note|number_format(0) }}%
+                                                <strong>{{ note|number_format(0) }}%</strong>
                                             </td>
                                         {% endif %}
                                     {% if resultat.synthese %}
@@ -323,13 +325,24 @@
                                             </td>
                                         {% endif %}
                                     {% endfor %}
+                                    {% if resultat.outil.tableChartAfficheTotal %}
+                                        <td class="text-center vertical-align">-</td>
+                                    {% endif %}
                                     {% endif %}
                                     </tr>
                                 {% endfor %}
 
                                 {% if chart.datas.categories|length > 1 and resultat.outil.tableChartAfficheTotal %}
                                     <tr>
-                                        <td class="text-center title-total vertical-align" rowspan="2"><b>Total</b></td>
+                                        {% if not resultat.outil.centPourcentReponseObligatoire  %}
+                                            {% set rowspan = 2 %}
+                                        {% else %}
+                                            {% set rowspan = 1 %}
+                                        {% endif %}
+                                        {% if resultat.synthese %}
+                                            {% set rowspan = rowspan + 2 %}
+                                        {% endif %}
+                                        <td class="text-center title-total vertical-align" rowspan="{{rowspan}}"><b>Total</b></td>
                                         {% if not resultat.outil.centPourcentReponseObligatoire %}
                                         <td class="text-center">Nombre de réponses</td>
                                         {% endif %}
@@ -338,8 +351,8 @@
                                         {% for datas in chart.datas.totauxChapitres %}
                                             {% if not datas['nc'] %}
                                                 {% if not resultat.outil.centPourcentReponseObligatoire %}
-                                                <td class="text-center">
-                                                    {{datas['nbRep']}} / {{datas['nbQue']}}
+                                                <td class="text-center vertical-align">
+                                                    {{datas['nbRep']}}&nbsp;/&nbsp;{{datas['nbQue']}}
                                                 </td>
                                                 {% endif %}
                                                 {% set nbRepTotal = nbRepTotal + datas['nbRep'] %}
@@ -353,13 +366,11 @@
                                             {% endif %}
                                         {% endfor %}
                                         {% if not resultat.outil.centPourcentReponseObligatoire %}
-                                        <td class="text-center">
-                                            {{nbRepTotal}} / {{nbQueTotal}}
+                                        <td class="text-center vertical-align">
+                                            {{nbRepTotal}}&nbsp;/&nbsp;{{nbQueTotal}}
                                         </td>
                                         {% endif %}
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">Score</td>
+                                        <td class="text-center vertical-align">Score</td>
                                         {% set nbPointsTotal = 0 %}
                                         {% set maxTotal = 0 %}
                                         {% for idChapitre,datas in chart.datas.totauxChapitres %}
@@ -373,7 +384,7 @@
                                                     {% set note = 0 %}
                                                 {% endif %}
                                                 <td data-chapitre="{{idChapitre}}" class="total-chapitre text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
-                                                    {{ note|number_format(0) }}%
+                                                    <strong>{{ note|number_format(0) }}%</strong>
                                                 </td>
                                             {% else %}
                                                 <td class="text-center vertical-align">
@@ -387,7 +398,7 @@
                                             {% set note = 0 %}
                                         {% endif %}
                                         <td class="last-note text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
-                                            {{ note|number_format(0) }}%
+                                            <strong>{{ note|number_format(0) }}%</strong>
                                         </td>
                                     </tr>
                                 {% endif %}
