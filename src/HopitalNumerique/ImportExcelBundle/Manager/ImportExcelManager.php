@@ -85,7 +85,9 @@ class ImportExcelManager extends BaseManager
                 'noteMinimale'    => trim($sheetChapitre->getCellByColumnAndRow(8, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(8, $i)->getValue(),
                 'synthese'        => trim($sheetChapitre->getCellByColumnAndRow(9, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(9, $i)->getValue(),
                 'lien'            => trim($sheetChapitre->getCellByColumnAndRow(10, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(10, $i)->getValue(),
-                'descriptionLien' => trim($sheetChapitre->getCellByColumnAndRow(11, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(11, $i)->getValue()
+                'descriptionLien' => trim($sheetChapitre->getCellByColumnAndRow(11, $i)->getValue()) === "" ? NULL : $sheetChapitre->getCellByColumnAndRow(11, $i)->getValue(),
+                'affichageRestitutionBarre' => trim($sheetChapitre->getCellByColumnAndRow(12, $i)->getValue()) === "" ? null : $sheetChapitre->getCellByColumnAndRow(12, $i)->getValue() == '1',
+                'affichageRestitutionRadar' => trim($sheetChapitre->getCellByColumnAndRow(13, $i)->getValue()) === "" ? null : $sheetChapitre->getCellByColumnAndRow(13, $i)->getValue() == '1'
             );
         }
         return $arrayChapitres;
