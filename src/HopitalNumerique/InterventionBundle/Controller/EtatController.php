@@ -27,13 +27,13 @@ class EtatController extends Controller
     {
     	if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
     	{
-	        $messageJustificationChangementEtat = ($this->get('request')->request->get('message') != '' ? $this->get('request')->request->get('message') : null);
-	
-	        if ($this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $interventionEtat, $messageJustificationChangementEtat))
-	        {
-	            $this->get('session')->getFlashBag()->add('success', 'L\'état de la demande d\'intervention a été modifié.');
-	            return new Response(1);
-	        }
+            $messageJustificationChangementEtat = ($this->get('request')->query->get('message') != '' ? $this->get('request')->query->get('message') : null);
+            
+            if ($this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $interventionEtat, $messageJustificationChangementEtat))
+            {
+                $this->get('session')->getFlashBag()->add('success', 'L\'état de la demande d\'intervention a été modifié.');
+                return new Response(1);
+            }
     	}
     	return new Response(0);
     }
