@@ -93,7 +93,7 @@ class ImportExcelController extends Controller
 
             $nbLigne = 2;
             $nbLigneQuestion = 2;
-            foreach ($chapitres as $chapitre) 
+            foreach ($chapitres as $chapitre)
             {
                 $sheetChapitres->setCellValueByColumnAndRow(0, $nbLigne, $chapitre->getId());
                 $sheetChapitres->setCellValueByColumnAndRow(1, $nbLigne, $chapitre->getCode());

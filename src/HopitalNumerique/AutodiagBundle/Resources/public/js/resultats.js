@@ -97,7 +97,7 @@ $(document).ready(function() {
 
     if(!jQuery.isEmptyObject(deciles8) && deciles8[0] != null )
     {
-        seriesRadar.push({
+        /*seriesRadar.push({
             dataLabels: {
                 enabled: false,
                 softConnector: true,
@@ -118,7 +118,7 @@ $(document).ready(function() {
             lineWidth:0,
             type  : 'area',
             pointPlacement: 'on'
-        });
+        });*/
         seriesRadar.push({
             dataLabels: {
                 enabled: true,
@@ -134,7 +134,7 @@ $(document).ready(function() {
             type  : 'line',
             pointPlacement: 'on'
         });
-        seriesRadar.push({
+        /*seriesRadar.push({
             dataLabels: {
                 enabled: true,
                 format: ' ',
@@ -155,11 +155,11 @@ $(document).ready(function() {
             lineWidth:0,
             type  : 'area',
             pointPlacement: 'on'
-        });
+        });*/
     }
     if(!jQuery.isEmptyObject(deciles2) && deciles2[0] != null )
     {
-        seriesRadar.push({
+        /*seriesRadar.push({
             dataLabels: {
                 enabled: true,
                 format: ' ',
@@ -175,7 +175,7 @@ $(document).ready(function() {
             lineWidth:0,
             type  : 'area',
             pointPlacement: 'on'
-        });
+        });*/
         seriesRadar.push({
             dataLabels: {
                 enabled: true,
