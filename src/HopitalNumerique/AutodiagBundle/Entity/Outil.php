@@ -313,6 +313,12 @@ class Outil
      * @ORM\JoinColumn(name="out_dernier_import_usr_id", referencedColumnName="usr_id")
      */
     private $dernierImportUser;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire", inversedBy="outils")
+     * @ORM\JoinColumn(name="qst_id", referencedColumnName="qst_id", nullable=true)
+     */
+    private $questionnairePrealable;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -1343,5 +1349,28 @@ class Outil
     public function getTableChartAfficheTotal()
     {
         return $this->tableChartAfficheTotal;
+    }
+
+    /**
+     * Set questionnairePrealable
+     *
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnairePrealable
+     * @return Outil
+     */
+    public function setQuestionnairePrealable(\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnairePrealable = null)
+    {
+        $this->questionnairePrealable = $questionnairePrealable;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnairePrealable
+     *
+     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire 
+     */
+    public function getQuestionnairePrealable()
+    {
+        return $this->questionnairePrealable;
     }
 }

@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\AutodiagBundle\Manager\ProcessManager;
 use HopitalNumerique\AutodiagBundle\Manager\ChapitreManager;
+use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 
 class OutilType extends AbstractType
 {
@@ -15,14 +16,16 @@ class OutilType extends AbstractType
     private $validator;
     private $processManager;
     private $chapitreManager;
+    private $questionnaireManager;
 
-    public function __construct($manager, $validator, ProcessManager $processManager, ChapitreManager $chapitreManager)
+    public function __construct($manager, $validator, ProcessManager $processManager, ChapitreManager $chapitreManager, QuestionnaireManager $questionnaireManager)
     {
         $this->validator = $validator;
         $this->_constraints = $manager->getConstraints( $validator );
         
         $this->processManager = $processManager;
         $this->chapitreManager = $chapitreManager;
+        $this->questionnaireManager = $questionnaireManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -43,6 +46,14 @@ class OutilType extends AbstractType
                 'required'   => false, 
                 'label'      => 'Alias',
                 'attr'       => array('class' => $this->_constraints['alias']['class'] )
+            ))
+            ->add('questionnairePrealable', 'entity', array(
+                'label'    => 'Questionnaire préalable',
+                'required' => false,
+                'class'         => 'HopitalNumeriqueQuestionnaireBundle:Questionnaire',
+                'property'      => 'nom',
+                'choices' => $this->questionnaireManager->findBy(array('lock' => false), array('nom' => 'ASC')),
+                'empty_value' => ' - Aucun questionnaire - '
             ))
             ->add('columnChart', 'checkbox', array(
                 'label'    => 'Afficher la restitution en graphique barres ?',

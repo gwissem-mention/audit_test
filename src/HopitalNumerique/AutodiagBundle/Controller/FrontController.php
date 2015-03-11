@@ -45,6 +45,26 @@ class FrontController extends Controller
      */
     public function outilAction( Outil $outil, $sansGabarit = false, Resultat $resultat = null )
     {
+        $questionnairePrealableEstRepondu = true;
+        if (null !== $outil->getQuestionnairePrealable())
+        {
+            if (null === $this->getUser())
+            {
+                $this->get('session')->getFlashBag()->add('danger', 'Autodiagnostic destiné uniquement aux utilisateurs connectés.');
+                return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+            }
+            
+            $questionnairePrealableEstRepondu = false;
+            foreach ($this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionsReponses($outil->getQuestionnairePrealable()->getId(), $this->getUser()->getId()) as $question)
+            {
+                if (count($question->getReponses()) > 0)
+                {
+                    $questionnairePrealableEstRepondu = true;
+                    break;
+                }
+            }
+        }
+        
         //init some vars
         $chapitres      = $outil->getChapitres();
         $parents        = array();
@@ -112,7 +132,8 @@ class FrontController extends Controller
             'reponses'        => $reponses,
             'remarque'        => $remarque,
             'sansGabarit'     => $sansGabarit,
-            'resultat'        => $resultat
+            'resultat'        => $resultat,
+            'questionnairePrealableEstRepondu' => $questionnairePrealableEstRepondu
         ));
     }
 

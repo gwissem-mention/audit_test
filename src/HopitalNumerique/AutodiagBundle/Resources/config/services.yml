@@ -45,7 +45,7 @@ services:
 
     hopitalnumerique_autodiag.form.outil:
         class: %hopitalnumerique_autodiag.form.outil.class%
-        arguments: ["@hopitalnumerique_autodiag.manager.outil", "@validator", "@hopitalnumerique_autodiag.manager.process", "@hopitalnumerique_autodiag.manager.chapitre"]
+        arguments: ["@hopitalnumerique_autodiag.manager.outil", "@validator", "@hopitalnumerique_autodiag.manager.process", "@hopitalnumerique_autodiag.manager.chapitre", "@hopitalnumerique_questionnaire.manager.questionnaire"]
         tags:
             - { name: form.type, alias: hopitalnumerique_autodiag_outil }
 
