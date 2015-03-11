@@ -85,7 +85,10 @@ class DemandeController extends Controller
                 
                 return true;
             }
-            else $this->get('session')->getFlashBag()->add('danger', 'Le formulaire n\'est pas valide.');
+            else 
+            {
+                $this->get('session')->getFlashBag()->add('danger', 'Le formulaire n\'est pas valide.');
+            }
         }
 
         return false;
@@ -140,7 +143,10 @@ class DemandeController extends Controller
                 $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été modifiée.');
                 return true;
             }
-            else $this->get('session')->getFlashBag()->add('danger', 'Le formulaire n\'est pas valide.');
+            else 
+            {
+                $this->get('session')->getFlashBag()->add('danger', 'Le formulaire n\'est pas valide.');
+            }
         }
         
         return false;

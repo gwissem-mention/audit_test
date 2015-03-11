@@ -45,6 +45,26 @@ class FrontController extends Controller
      */
     public function outilAction( Outil $outil, $sansGabarit = false, Resultat $resultat = null )
     {
+        $questionnairePrealableEstRepondu = true;
+        if (null !== $outil->getQuestionnairePrealable())
+        {
+            if (null === $this->getUser())
+            {
+                $this->get('session')->getFlashBag()->add('danger', 'Autodiagnostic destiné uniquement aux utilisateurs connectés.');
+                return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+            }
+            
+            $questionnairePrealableEstRepondu = false;
+            foreach ($this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionsReponses($outil->getQuestionnairePrealable()->getId(), $this->getUser()->getId()) as $question)
+            {
+                if (count($question->getReponses()) > 0)
+                {
+                    $questionnairePrealableEstRepondu = true;
+                    break;
+                }
+            }
+        }
+        
         //init some vars
         $chapitres      = $outil->getChapitres();
         $parents        = array();
@@ -112,7 +132,8 @@ class FrontController extends Controller
             'reponses'        => $reponses,
             'remarque'        => $remarque,
             'sansGabarit'     => $sansGabarit,
-            'resultat'        => $resultat
+            'resultat'        => $resultat,
+            'questionnairePrealableEstRepondu' => $questionnairePrealableEstRepondu
         ));
     }
 
@@ -378,7 +399,7 @@ class FrontController extends Controller
         }
 
         $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
-
+        
         //Dans le cas où nous nous trouvons dans une synthese, il faut récupérer le min et max
         if ($resultat->getSynthese())
         {
@@ -532,24 +553,32 @@ class FrontController extends Controller
                 }  
             }
         }
+        
+        $radarChartBenchmarkCouleurDecile2 = ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile2() == 'vert' ? '#76e57e' : '#ff7a7a');
+        $radarChartBenchmarkCouleurDecile8 = ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile8() == 'vert' ? '#76e57e' : '#ff7a7a');
 
         $options = array(
             'chapitresForAnalyse'     => $chapitresForAnalyse,
             'chapitresForReponse'     => $chapitresForReponse,
+            'resultatsName' => $resultatsName,
             'questionReponseSynthese' => $questionReponseSynthese,
+            'questionReponseSyntheseTableau' => $questionReponseSyntheseTableau,
+            'radarChartBenchmarkCouleurDecile2' => $radarChartBenchmarkCouleurDecile2,
+            'radarChartBenchmarkCouleurDecile8' => $radarChartBenchmarkCouleurDecile8
         );
 
         //PDF généré
         if( is_null($resultat->getPdf()) ){
-//            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $options );
-//            $resultat->setPdf( $pdf );
-//            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
+            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $options );
+            $resultat->setPdf( $pdf );
+            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
         }
 
         if(!$resultat->getSynthese() && ($resultat->getOutil()->isCentPourcentReponseObligatoire() && $resultat->getTauxRemplissage() != 100))
         {
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $resultat->getOutil()->getId(), 'alias' => $resultat->getOutil()->getAlias() ) ) );
         }
+        
         
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
             'resultat'                => $resultat,
@@ -562,6 +591,8 @@ class FrontController extends Controller
             'graphiques'              => $graphiques,
             'back'                    => $back,
             'sansGabarit'             => $sansGabarit,
+            'radarChartBenchmarkCouleurDecile2' => $radarChartBenchmarkCouleurDecile2,
+            'radarChartBenchmarkCouleurDecile8' => $radarChartBenchmarkCouleurDecile8,
             'processusDonnees'        => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
     }
@@ -812,14 +843,18 @@ class FrontController extends Controller
     private function generatePdf( $chapitres, $graphiques, $resultat, $request , $options)
     {
         $filename = $resultat->getId() . $resultat->getOutil()->getId() . time() . '.pdf';
-
+        
         $html = $this->renderView( 'HopitalNumeriqueAutodiagBundle:Front:pdf.html.twig' , array(
             'resultat'                => $resultat,
             'chapitres'               => $chapitres,
             'chapitresForAnalyse'     => $options["chapitresForAnalyse"],
             'chapitresForReponse'     => $options["chapitresForReponse"],
             'questionReponseSynthese' => $options["questionReponseSynthese"],
+            'questionReponseSyntheseTableau' => $options["questionReponseSyntheseTableau"],
+            'resultatsName'           => $options["resultatsName"],
             'graphiques'              => $graphiques,
+            'radarChartBenchmarkCouleurDecile2' => $options["radarChartBenchmarkCouleurDecile2"],
+            'radarChartBenchmarkCouleurDecile8' => $options["radarChartBenchmarkCouleurDecile8"],
             'processusDonnees'        => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
 

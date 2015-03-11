@@ -98,4 +98,194 @@ class OutilManager extends BaseManager
         //save
         $this->_em->flush();
     }
+
+    /**
+     * 
+     * @param Outil $outil
+     */
+    public function getCaracteristiquesChapitresRemplis(Outil $outil)
+    {
+        $resultatIdsRemplisByChapitreParentIds = $this->getResultatsRemplisIdsGroupedByChapitreParentRempliId($outil);
+        $caracteristiquesChapitresRemplis = array();
+
+        foreach ($resultatIdsRemplisByChapitreParentIds as $chapitreParentId => $resultatIds)
+        {
+            $caracteristiquesChapitresRemplis[$chapitreParentId] = $this->getCaracteristiquesChapitre($chapitreParentId, $resultatIds);
+        }
+
+        return $caracteristiquesChapitresRemplis;
+    }
+    
+    /**
+     *
+     * @param Outil $outil
+     */
+    public function getCaracteristiquesCategoriesRemplies(Outil $outil)
+    {
+        $resultatIdsRemplisByCategorieIds = $this->getResultatsRemplisIdsGroupedByCategorieRemplieId($outil);
+        $caracteristiquesCategoriesRemplies = array();
+    
+        foreach ($resultatIdsRemplisByCategorieIds as $categorieId => $resultatIds)
+        {
+            $caracteristiquesCategoriesRemplies[$categorieId] = $this->getCaracteristiquesCategorie($categorieId, $resultatIds);
+        }
+    
+        return $caracteristiquesCategoriesRemplies;
+    }
+    
+    /**
+     * Retourne les caractéristiques d'un chapitre
+     *
+     * @param integer $chapitreParentId ID du chapitre
+     * @param array<integer> $resultatIds Ids des résultarts
+     */
+    private function getCaracteristiquesChapitre($chapitreParentId, array $resultatIds)
+    {
+        $moyennesChapitreByResultat = $this->getRepository()->getMoyennesChapitreForEachResultat($chapitreParentId, $resultatIds);
+        
+        $chapitreCaracteristiques = array
+        (
+            'moyenne' => 0,
+            'decile2' => 0,
+            'decile8' => 0,
+            'moyennePourcentage' => 0,
+            'decile2Pourcentage' => 0,
+            'decile8Pourcentage' => 0
+        );
+        
+        foreach ($moyennesChapitreByResultat as $moyenneChapitreByResultat)
+        {
+            $chapitreCaracteristiques['moyenne'] += $moyenneChapitreByResultat['moyenne'];
+        }
+        $chapitreCaracteristiques['moyenne'] = $chapitreCaracteristiques['moyenne'] / count($moyennesChapitreByResultat);
+        $chapitreCaracteristiques['decile2'] = $moyennesChapitreByResultat[ceil(count($moyennesChapitreByResultat) * 0.2) - 1]['moyenne'];
+        $chapitreCaracteristiques['decile8'] = $moyennesChapitreByResultat[ceil(count($moyennesChapitreByResultat) * 0.8) - 1]['moyenne'];
+        
+        $chapitreCaracteristiques['moyennePourcentage'] = intval($chapitreCaracteristiques['moyenne'] * 100);
+        $chapitreCaracteristiques['decile2Pourcentage'] = intval($chapitreCaracteristiques['decile2'] * 100);
+        $chapitreCaracteristiques['decile8Pourcentage'] = intval($chapitreCaracteristiques['decile8'] * 100);
+
+        return $chapitreCaracteristiques;
+    }
+    
+    /**
+     * Retourne les caractéristiques d'une catégorie
+     *
+     * @param integer $categorieId ID de la catégorie
+     * @param array<integer> $resultatIds Ids des résultarts
+     */
+    private function getCaracteristiquesCategorie($categorieId, array $resultatIds)
+    {
+        $moyennesCategorieByResultat = $this->getRepository()->getMoyennesCategorieForEachResultat($categorieId, $resultatIds);
+        
+        $categorieCaracteristiques = array
+        (
+            'moyenne' => 0,
+            'decile2' => 0,
+            'decile8' => 0,
+            'moyennePourcentage' => 0,
+            'decile2Pourcentage' => 0,
+            'decile8Pourcentage' => 0
+        );
+        
+        foreach ($moyennesCategorieByResultat as $moyenneCategorieByResultat)
+        {
+            $categorieCaracteristiques['moyenne'] += $moyenneCategorieByResultat['moyenne'];
+        }
+        $categorieCaracteristiques['moyenne'] = $categorieCaracteristiques['moyenne'] / count($moyennesCategorieByResultat);
+        $categorieCaracteristiques['decile2'] = $moyennesCategorieByResultat[ceil(count($moyennesCategorieByResultat) * 0.2) - 1]['moyenne'];
+        $categorieCaracteristiques['decile8'] = $moyennesCategorieByResultat[ceil(count($moyennesCategorieByResultat) * 0.8) - 1]['moyenne'];
+        
+        $categorieCaracteristiques['moyennePourcentage'] = intval($categorieCaracteristiques['moyenne'] * 100);
+        $categorieCaracteristiques['decile2Pourcentage'] = intval($categorieCaracteristiques['decile2'] * 100);
+        $categorieCaracteristiques['decile8Pourcentage'] = intval($categorieCaracteristiques['decile8'] * 100);
+
+        return $categorieCaracteristiques;
+    }
+    
+    /**
+     * Retourne la liste des IDs de OutilResultat regroupés par IDs de OutilChapitre dont le chapitre pour chaque résultat a été rempli à 100%.
+     */
+    private function getResultatsRemplisIdsGroupedByChapitreParentRempliId(Outil $outil)
+    {
+        $chapitreIdsAndResultatIds = $this->getRepository()->getChapitreParentIdsAndResultatIds($outil);
+        $chapitreIdsAndResultatIdsNonRemplis = $this->getRepository()->getChapitresParentsNonRemplisIdsAndResultatsNonRemplisIds($outil);
+
+        $resultatIdsRemplisByChapitreIds = array();
+        
+        // On initialise $resultatIdsRemplisByChapitreIds avec tous les chapitres (remplis à 100% ou pas)
+        foreach ($chapitreIdsAndResultatIds as $chapitreIdAndResultatId)
+        {
+            $resultatId = $chapitreIdAndResultatId['resultatId'];
+            $chapitreId = $chapitreIdAndResultatId['chapitreId'];
+            
+            if (!isset($resultatIdsRemplisByChapitreIds[$chapitreId]))
+                $resultatIdsRemplisByChapitreIds[$chapitreId] = array();
+            
+            $resultatIdsRemplisByChapitreIds[$chapitreId][] = $resultatId;
+        }
+        
+        // On enlève dans $resultatIdsRemplisByChapitreIds les chapitres/résultats non remplis à 100
+        foreach ($chapitreIdsAndResultatIdsNonRemplis as $chapitreIdAndResultatIdNonRempli)
+        {
+            $resultatId = $chapitreIdAndResultatIdNonRempli['resultatId'];
+            $chapitreId = $chapitreIdAndResultatIdNonRempli['chapitreId'];
+            
+            foreach ($resultatIdsRemplisByChapitreIds[$chapitreId] as $i => $resultatIdRempli)
+            {
+                if ($resultatId == $resultatIdRempli)
+                {
+                    unset($resultatIdsRemplisByChapitreIds[$chapitreId][$i]);
+                    if (count($resultatIdsRemplisByChapitreIds[$chapitreId]) == 0)
+                        unset($resultatIdsRemplisByChapitreIds[$chapitreId]);
+                    break;
+                }
+            }
+        }
+        
+        return $resultatIdsRemplisByChapitreIds;
+    }
+    
+    /**
+     * Retourne la liste des IDs de OutilResultat regroupés par IDs de OutilChapitre dont le chapitre pour chaque résultat a été rempli à 100%.
+     */
+    private function getResultatsRemplisIdsGroupedByCategorieRemplieId(Outil $outil)
+    {
+        $categorieIdsAndResultatIds = $this->getRepository()->getCategoriesIdsAndResultatIds($outil);
+        $categorieIdsAndResultatIdsNonRemplis = $this->getRepository()->getCategoriesNonRempliesIdsAndResultatsNonRemplisIds($outil);
+    
+        $resultatIdsRemplisByCategorieId = array();
+    
+        // On initialise $resultatIdsRemplisByChapitreIds avec tous les chapitres (remplis à 100% ou pas)
+        foreach ($categorieIdsAndResultatIds as $categorieIdAndResultatId)
+        {
+            $resultatId = $categorieIdAndResultatId['resultatId'];
+            $categorieId = $categorieIdAndResultatId['categorieId'];
+    
+            if (!isset($resultatIdsRemplisByCategorieId[$categorieId]))
+                $resultatIdsRemplisByCategorieId[$categorieId] = array();
+    
+            $resultatIdsRemplisByCategorieId[$categorieId][] = $resultatId;
+        }
+    
+        // On enlève dans $resultatIdsRemplisByChapitreIds les chapitres/résultats non remplis à 100
+        foreach ($categorieIdsAndResultatIdsNonRemplis as $chapitreIdAndResultatIdNonRempli)
+        {
+            $resultatId = $chapitreIdAndResultatIdNonRempli['resultatId'];
+            $categorieId = $chapitreIdAndResultatIdNonRempli['categorieId'];
+    
+            foreach ($resultatIdsRemplisByCategorieId[$categorieId] as $i => $resultatIdRempli)
+            {
+                if ($resultatId == $resultatIdRempli)
+                {
+                    unset($resultatIdsRemplisByCategorieId[$categorieId][$i]);
+                    if (count($resultatIdsRemplisByCategorieId[$categorieId]) == 0)
+                        unset($resultatIdsRemplisByCategorieId[$categorieId]);
+                    break;
+                }
+            }
+        }
+    
+        return $resultatIdsRemplisByCategorieId;
+    }
 }
