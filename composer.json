@@ -20,6 +20,10 @@
         {
             "type": "git",
             "url": "ssh://git@bitbucket.org:22/nodevo/web_symfony_bdl_moxiemanager.git"
+        },
+        {
+            "type": "git",
+            "url": "ssh://git@bitbucket.org:22/nodevo/web_symfony_bdl_cookies.git"
         }
     ],
     "require": {
@@ -50,6 +54,7 @@
         "beberlei/DoctrineExtensions"                  : "v0.1",
         "codeconsortium/ccdn-forum-bundle"             : "dev-master",
         "nodevo/gestionnaire-media"                    : "v1.3",
+        "nodevo/gestion-cookie-bundle"                 : "1.0",
         "stof/doctrine-extensions-bundle"              : "~1.1@dev",
         "codeconsortium/ccdn-component-bb-code"        : "dev-master",
         "codeconsortium/ccdn-component-bb-code-bundle" : "dev-master",
