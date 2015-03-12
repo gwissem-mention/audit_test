@@ -18,6 +18,7 @@
 .buildpath
 .project
 .settings
+/nbproject/
 
 #Windows
 .thumbs

@@ -150,10 +150,6 @@ h3{font-size: 20px}
     input.checkbox {width:16px; height:16px;}
     input.radio    {width:16px; height:16px;}
 
-/* style du bandeau  */
-#bandeau-cookie{background:#672F9F !important;color:#FFF !important;}
-#bandeau-cookie a{color:#FFF !important;}
-
 /*!
  *  Font Awesome 4.0.3 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
