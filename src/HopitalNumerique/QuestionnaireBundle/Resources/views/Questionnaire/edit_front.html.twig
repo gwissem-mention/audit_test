@@ -15,7 +15,7 @@
 {% endblock %}
 
 <div id="form_questionnaire_front">
-    {% set informationsManquantes = user|informationsManquantes(questionnaire.nom) %}
+    {% set informationsManquantes = user|informationsManquantes(questionnaire.id) %}
 
     {% if not informationsManquantes.ok %}
         <div class="informations_manquantes col-md-12">
