@@ -262,7 +262,11 @@
                                             </td>
                                             {% endif %}
                                         {% endif %}
-                                        <td class="text-center vertical-align" rowspan="{% if resultat.synthese %}3{% else %}1{% endif %}">Score</td>
+                                        {% if resultat.synthese %}
+                                        <td class="text-center vertical-align" rowspan="1">Min</td>
+                                        {% else %}
+                                        <td class="text-center vertical-align" rowspan="1">Score</td>
+                                        {% endif %}
                                     {% if resultat.synthese %}
                                     {% for datas in categorie['chapitres'] %}
                                         {% if not datas['nc'] %}
@@ -280,6 +284,7 @@
                                     {% endif %}
                                     </tr>
                                     <tr>
+                                        <td class="text-center vertical-align" rowspan="1">Moyenne</td>
                                     {% endif %}
                                         {% for datas in categorie['chapitres'] %}
                                             {% if not datas['nc'] %}
@@ -314,6 +319,7 @@
                                     {% if resultat.synthese %}
                                     </tr>
                                     <tr>
+                                        <td class="text-center vertical-align" rowspan="1">Max</td>
                                     {% for datas in categorie['chapitres'] %}
                                         {% if not datas['nc'] %}
                                         <td class="text-center vertical-align">
