@@ -425,9 +425,6 @@
                 <p>
                     {{resultat.outil.commentaireAnalyseResultat|raw}}
                 </p>
-                <p class="text-justify">
-                    <span>Compte tenu de vos réponses, l'Anap vous propose l'analyse suivante :</span>
-                </p>
 
                 {% if not pdf %}
                     <a class="btn btn-primary btn-sm col-sd-6" title="Liste des participants" href="{{path('hopitalnumerique_autodiag_resultat_export_chapitres_CSV_front',{'id':resultat.id, 'priorise':0})}}"><i class="fa fa-download" style="margin-right:5px;"></i>Plan d'actions (CSV)</a>
