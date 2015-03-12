@@ -95,10 +95,16 @@ class QuestionnaireController extends Controller
      */
     public function deleteQuestionnaireAction( $id )
     {
-        $module = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array( 'id' => $id) );
+        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array( 'id' => $id) );
 
+        if (count($questionnaire->getOutils()) > 0)
+        {
+            $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible car le questionnaire est utilisé par un ou plusieurs autodiags.');
+            return new Response('{"success":false, "url" : "'.$this->generateUrl('hopitalnumerique_questionnaire_index').'"}', 200);
+        }
+        
         //Suppression de l'entitée
-        $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->delete( $module );
+        $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->delete( $questionnaire );
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
 
@@ -116,7 +122,8 @@ class QuestionnaireController extends Controller
     public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
     {
         //get all selected Users
-        if($allPrimaryKeys == 1){
+        if($allPrimaryKeys == 1)
+        {
             $rawDatas = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getRawData();
             foreach($rawDatas as $data)
             {
@@ -126,6 +133,15 @@ class QuestionnaireController extends Controller
 
         $questionnaires = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findBy( array('id' => $primaryKeys) );
 
+        foreach ($questionnaires as $questionnaire)
+        {
+            if (count($questionnaire->getOutils()) > 0)
+            {
+                $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible car le questionnaire "'.$questionnaire->getNom().'" est utilisé par un ou plusieurs autodiags.');
+                return $this->redirect( $this->generateUrl('hopitalnumerique_questionnaire_index') );
+            }
+        }
+        
         $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->delete( $questionnaires );
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );

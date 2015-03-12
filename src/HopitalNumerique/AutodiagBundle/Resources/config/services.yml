@@ -45,7 +45,7 @@ services:
 
     hopitalnumerique_autodiag.form.outil:
         class: %hopitalnumerique_autodiag.form.outil.class%
-        arguments: ["@hopitalnumerique_autodiag.manager.outil", "@validator", "@hopitalnumerique_autodiag.manager.process", "@hopitalnumerique_autodiag.manager.chapitre"]
+        arguments: ["@hopitalnumerique_autodiag.manager.outil", "@validator", "@hopitalnumerique_autodiag.manager.process", "@hopitalnumerique_autodiag.manager.chapitre", "@hopitalnumerique_questionnaire.manager.questionnaire"]
         tags:
             - { name: form.type, alias: hopitalnumerique_autodiag_outil }
 
@@ -108,7 +108,7 @@ services:
     #Resultat
     hopitalnumerique_autodiag.manager.resultat:
         class: %hopitalnumerique_autodiag.manager.resultat.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.outil"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 

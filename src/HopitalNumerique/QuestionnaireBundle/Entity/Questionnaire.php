@@ -55,6 +55,11 @@ class Questionnaire
     protected $refusCandidature;
     
     /**
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Outil", mappedBy="questionnairePrealable")
+     */
+    private $outils;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -216,5 +221,38 @@ class Questionnaire
     public function getLien()
     {
         return $this->lien;
+    }
+
+    /**
+     * Add outil
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Outil $outils
+     * @return Questionnaire
+     */
+    public function addOutil(\HopitalNumerique\AutodiagBundle\Entity\Outil $outils)
+    {
+        $this->outils[] = $outils;
+
+        return $this;
+    }
+
+    /**
+     * Remove outil
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Outil $outils
+     */
+    public function removeOutil(\HopitalNumerique\AutodiagBundle\Entity\Outil $outils)
+    {
+        $this->outils->removeElement($outils);
+    }
+
+    /**
+     * Get outils
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOutils()
+    {
+        return $this->outils;
     }
 }

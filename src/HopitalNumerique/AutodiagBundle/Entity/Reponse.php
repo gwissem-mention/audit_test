@@ -42,7 +42,7 @@ class Reponse
     protected $resultat;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Question", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Question", cascade={"persist"}, inversedBy="reponses")
      * @ORM\JoinColumn(name="que_id", referencedColumnName="que_id", onDelete="CASCADE")
      */
     protected $question;

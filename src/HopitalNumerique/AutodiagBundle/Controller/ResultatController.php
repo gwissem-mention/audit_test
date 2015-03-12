@@ -27,11 +27,18 @@ class ResultatController extends Controller
      */
     public function detailAction( Resultat $resultat )
     {
+        $questionnairePrealableQuestions = array();
+        if (null !== $resultat->getOutil()->getQuestionnairePrealable())
+        {
+            $questionnairePrealableQuestions = $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionsReponses($resultat->getOutil()->getQuestionnairePrealable()->getId(), $this->getUser()->getId());
+        }
+        
         $chapitres = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Resultat:detail.html.twig' , array(
             'resultat'  => $resultat,
-            'chapitres' => $chapitres
+            'chapitres' => $chapitres,
+            'questionnairePrealableQuestions' => $questionnairePrealableQuestions
         ));
     }
     

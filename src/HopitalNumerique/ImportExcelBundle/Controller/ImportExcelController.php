@@ -93,7 +93,7 @@ class ImportExcelController extends Controller
 
             $nbLigne = 2;
             $nbLigneQuestion = 2;
-            foreach ($chapitres as $chapitre) 
+            foreach ($chapitres as $chapitre)
             {
                 $sheetChapitres->setCellValueByColumnAndRow(0, $nbLigne, $chapitre->getId());
                 $sheetChapitres->setCellValueByColumnAndRow(1, $nbLigne, $chapitre->getCode());
@@ -107,7 +107,8 @@ class ImportExcelController extends Controller
                 $sheetChapitres->setCellValueByColumnAndRow(9, $nbLigne, (!is_null($chapitre->getSynthese())) ? $chapitre->getSynthese() : '' );
                 $sheetChapitres->setCellValueByColumnAndRow(10, $nbLigne, (!is_null($chapitre->getLien())) ? $chapitre->getLien() : '' );
                 $sheetChapitres->setCellValueByColumnAndRow(11, $nbLigne, (!is_null($chapitre->getDescriptionLien())) ? $chapitre->getDescriptionLien() : '' );
-
+                $sheetChapitres->setCellValueByColumnAndRow(12, $nbLigne, (false === $chapitre->getAffichageRestitutionBarre() ? '0' : '1'));
+                $sheetChapitres->setCellValueByColumnAndRow(13, $nbLigne, (false === $chapitre->getAffichageRestitutionRadar() ? '0' : '1'));
                 $nbLigne++;
 
                 foreach ($chapitre->getQuestions() as $question)
@@ -296,7 +297,7 @@ class ImportExcelController extends Controller
         //Récupèration de la feuille Chapitre
         $sheetChapitres = $phpExcelObject->getSheetByName('chapitres');
 
-        if(is_null($sheetCategorie))
+        if(is_null($sheetChapitres))
         {
             $this->get('session')->getFlashBag()->add( 'danger', 'Fichier non conforme, veuillez ne pas renommer la feuille "chapitres".' );
             return $this->redirect( $this->generateUrl('hopitalnumerique_import_index', array('id' => $outil->getId())) );

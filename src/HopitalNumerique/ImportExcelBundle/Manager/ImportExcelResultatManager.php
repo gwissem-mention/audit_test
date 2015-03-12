@@ -7,6 +7,7 @@ use Nodevo\ToolsBundle\Tools\Chaine;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\AutodiagBundle\Manager\OutilManager;
 
 /**
  * Manager de l'entité Categorie.
@@ -17,9 +18,9 @@ class ImportExcelResultatManager extends ResultatManagerAutodiag
     protected $_referenceManager;
     protected $_userManager;
 
-    public function __construct($entityManager, ReferenceManager $referenceManager, UserManager $userManager )
+    public function __construct($entityManager, OutilManager $outilManager, ReferenceManager $referenceManager, UserManager $userManager )
     {
-        parent::__construct($entityManager);
+        parent::__construct($entityManager, $outilManager);
         $this->_referenceManager = $referenceManager;
         $this->_userManager      = $userManager;
     }

@@ -132,10 +132,15 @@ class Chapitre
     protected $outil;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chapitre", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chapitre", inversedBy="enfants", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="cha_id", onDelete="CASCADE", nullable=true)
      */
     protected $parent;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Chapitre", mappedBy="parent")
+     */
+    protected $enfants;
 
     /**
      * @ORM\OneToMany(targetEntity="Question", mappedBy="chapitre")

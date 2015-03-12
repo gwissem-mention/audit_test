@@ -36,6 +36,35 @@
 
                 <div id="resultat-detail" class="content">
                     {% import _self as mySelf %}
+                    
+                    {% if (resultat.outil.questionnairePrealable is not null) %}
+                        <h2>Questionnaire préalable</h2>
+                        {% for question in questionnairePrealableQuestions %}
+                            {% if question.reponses|length > 0 %}
+                                {% set reponse = question.reponses[0] %}
+    
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p class="text-right">{{ question.libelle }}</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p class="pull-left">
+                                            {% if reponse.reponse is not empty %}
+                                                {{ reponse.reponse }}
+                                            {% elseif reponse.reference is not null %}
+                                                {{ reponse.reference.libelle }}
+                                            {% elseif reponse.referenceMulitple|length > 0 %}
+                                                {% for reference in reponse.referenceMulitple %}
+                                                    <div>{{ reference.libelle }}</div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    
                     <p>{{resultat.remarque}}</p>
                     {% for chapitre in chapitres %}
                         <div class="chapitre-{{chapitre.id}}">
