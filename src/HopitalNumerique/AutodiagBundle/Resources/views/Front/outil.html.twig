@@ -36,7 +36,7 @@
             <p class="titre">Sommaire</p>
             <div id="chapitres">
                 {% if outil.questionnairePrealable is not null and app.user %}
-                    <ul><li><div><a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', { 'id':outil.questionnairePrealable.id }) }}"><strong>Questionnaire préalable</strong></a></div></li></ul>
+                    <ul><li><div><a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', { 'id':outil.questionnairePrealable.id }) }}" onclick="return autodiagAfficheQuestionnaire('{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', { 'id':outil.questionnairePrealable.id }) }}');"><strong>Questionnaire préalable</strong></a></div></li></ul>
                 {% endif %}
             </div>
             <div class="avancement-global">
@@ -57,7 +57,6 @@
                     {% if reponses %}
                         <button onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger"><i class="fa fa-trash-o"></i> Vider toutes les réponses</button>
                     {% endif %}
-                    <a onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="valid_button finish btn btn-link"><i class="fa fa-check"></i> Valider les données et voir les résultats</a>
                 </div>
             </div>
             
@@ -152,7 +151,6 @@
                         <button onclick="saveQuestionnaire('save', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-primary save"><i class="fa fa-save"></i> Enregistrer</button>
                         <button onclick="saveQuestionnaire('acces_resultats', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="acces_resultats_button finish btn btn-primary save"><i class="fa fa-bar-chart-o"></i> Accéder aux résultats</button>
                     {% endif %}
-                    <a onclick="saveQuestionnaire('valid', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="valid_button finish btn btn-link"><i class="fa fa-check"></i> Valider les données et voir les résultats</a>
                 </div>
             </div>
             <div class="clearfix"></div>

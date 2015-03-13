@@ -288,6 +288,18 @@ hopitalnumerique_autodiag_front_resultat_pdf:
     requirements:
         id: \d+
 
+hopitalnumerique_autodiag_front_resultat_validate:
+    pattern:  /autodiagnostic/resultat/validate/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:validate" }
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_front_resultat_reactivate:
+    pattern:  /autodiagnostic/resultat/reactivate/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:reactivate" }
+    requirements:
+        id: \d+
+
 hopitalnumerique_autodiag_front_comptehn:
     pattern:  /compte-hn/autodiagnostic
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:autodiag" }

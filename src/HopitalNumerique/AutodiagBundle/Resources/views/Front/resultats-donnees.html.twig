@@ -1,8 +1,12 @@
 {% import _self as mySelf %}
 <div id="resultats">
     <div class="col-md-12">
-        <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download" style="margin-right:5px"></i>Télécharger</a>
-
+        <div class="btn-toolbar">
+            <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download" style="margin-right:5px"></i>Télécharger</a>
+            {% if app.user and resultat.statut.id == 418 %}
+            <a  href="{{path('hopitalnumerique_autodiag_front_resultat_validate', {'id':resultat.id})}}" class="valid_button print btn btn-default pull-right"><i class="fa fa-check" style="margin-right:5px"></i>Conserver cette réponse dans mon historique</a>
+            {% endif %}
+        
         {% if back is defined and back %}
             <a href="{{path('hopitalnumerique_autodiag_front_comptehn')}}" class="print btn btn-success pull-left" title="Retour à mon compte"><i class="fa fa-reply"></i></a>
         {% else %}
@@ -12,6 +16,7 @@
                 <a href="{{path('hopitalnumerique_autodiag_front_outil_resultat', { 'alias':resultat.outil.alias, 'outil':resultat.outil.id, 'resultat':resultat.id })}}" class="print btn btn-success pull-left" title="Retour au questionnaire"><i class="fa fa-reply"></i></a>
             {% endif %}
         {% endif %}
+        </div>
 
         {% if pdf %}
             <img src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="Logo anap" />
