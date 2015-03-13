@@ -248,19 +248,27 @@ $(document).ready(function() {
         });
     }
 
-    seriesRadar.push({
-        dataLabels: {
-            enabled: true,
-            format: '<b>{point.y:,.0f}%</b>',
-            softConnector: true,
-            align: 'left'
-        },
-        name  : 'Valeur optimale préconisée par l\'ANAP',
-        data  : optimale,
-        color : '#6f3596',
-        type  : 'line',
-        pointPlacement: 'on'
+    var opti = false;
+    $.each(optimale, function(key, elem){
+        if( elem != null ){
+            opti = true;
+        }
     });
+    if( opti ){
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.y:,.0f}%</b>',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Valeur optimale préconisée par l\'ANAP',
+            data  : optimale,
+            color : '#6f3596',
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
     
     seriesRadar.push({
         dataLabels: {
