@@ -49,6 +49,7 @@ class CategorieGrid extends Grid implements GridInterface
     {
         $editButton = new Action\EditButton( 'hopitalnumerique_autodiag_categorie_edit' );
         $editButton->setRouteParameters( array('idOutil', 'id') );
+//        $editButton->setRouteParametersMapping( array( 'id' => 'idCat') );
         $this->addActionButton( $editButton );
         
         // $deleteButton = new Action\DeleteButton( 'hopitalnumerique_autodiag_categorie_delete' );

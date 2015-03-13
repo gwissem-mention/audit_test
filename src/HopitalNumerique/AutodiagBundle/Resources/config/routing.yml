@@ -47,8 +47,8 @@ hopitalnumerique_autodiag_categorie_edit:
     pattern:  /admin/outil/{idOutil}/categorie/edit/{id}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Categorie:edit" }
     requirements:
+        idOutil: \d+
         id: \d+
-        idCat: \d+
 
 hopitalnumerique_autodiag_categorie_delete:
     pattern:  /admin/outil/categorie/delete/{id}.{_format}

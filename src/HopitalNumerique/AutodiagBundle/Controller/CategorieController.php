@@ -56,10 +56,10 @@ class CategorieController extends Controller
      *
      * @param integer $id Id de Categorie.
      */
-    public function editAction( $id, $idCat, Request $request )
+    public function editAction( $idOutil, $id, Request $request )
     {
         //Récupération de l'entité passée en paramètre
-        $categorie = $this->get('hopitalnumerique_autodiag.manager.categorie')->findOneBy( array('id' => $idCat) );
+        $categorie = $this->get('hopitalnumerique_autodiag.manager.categorie')->findOneBy( array('id' => $id) );
 
         $form = $this->createForm( 'hopitalnumerique_autodiag_categorie', $categorie);
 
