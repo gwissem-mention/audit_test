@@ -488,7 +488,15 @@ class ResultatManager extends BaseManager
         foreach($chapitresOrdered as $chapitre)
         {
             $results->chapitres[$chapitre->id] = $chapitre->title;
+            
+            $enfants = array();
             foreach ($chapitre->childs as $chapitreEnfant)
+            {
+                $enfants[$chapitreEnfant->order] = $chapitreEnfant;
+            }
+            ksort($enfants);
+            
+            foreach ($enfants as $chapitreEnfant)
             {
                 $results->chapitres[$chapitreEnfant->id] = $chapitreEnfant->title;
             }
