@@ -36,7 +36,7 @@
             <p class="titre">Sommaire</p>
             <div id="chapitres">
                 {% if outil.questionnairePrealable is not null and app.user %}
-                    <ul><li><div><a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', { 'id':outil.questionnairePrealable.id }) }}"><strong>Questionnaire préalable</strong></a></div></li></ul>
+                    <ul><li><div><a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', { 'id':outil.questionnairePrealable.id }) }}" onclick="return autodiagAfficheQuestionnaire('{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', { 'id':outil.questionnairePrealable.id }) }}');"><strong>Questionnaire préalable</strong></a></div></li></ul>
                 {% endif %}
             </div>
             <div class="avancement-global">

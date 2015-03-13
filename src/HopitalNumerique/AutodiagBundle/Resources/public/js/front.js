@@ -465,3 +465,21 @@ function getMinAndMaxValue( elements )
 
     return values;
 }
+
+function autodiagAfficheQuestionnaire(questionnaireUrl)
+{
+    apprise(
+        'Attention, les données non enregistrées du questionnaire seront perdues. Voulez-vous continuer ?', {
+            'confirm'   : true, 
+            'textOk'    : 'Oui',
+            'textCancel': 'Non' 
+        }, function(r) {
+            if(r) 
+            {
+                window.location = questionnaireUrl;
+            }
+        }
+    );
+    
+    return false;
+}
