@@ -3,19 +3,22 @@ namespace HopitalNumerique\UserBundle\Twig;
 
 use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 
 class UserExtension extends \Twig_Extension
 {
     private $_refManager;
     private $_etabManager;
+    private $questionnaireManager;
 
     /**
      * Construit l'extension Twig
      */
-    public function __construct( ReferenceManager $refManager, EtablissementManager $etabManager )
+    public function __construct( ReferenceManager $refManager, EtablissementManager $etabManager, QuestionnaireManager $questionnaireManager )
     {
         $this->_refManager  = $refManager;
         $this->_etabManager = $etabManager;
+        $this->questionnaireManager = $questionnaireManager;
     }
 
     /**
@@ -39,16 +42,22 @@ class UserExtension extends \Twig_Extension
      *
      * @return boolean
      */
-    public function informationsManquantes( $user, $questionnaireLibelle = '' )
+    public function informationsManquantes( $user, $questionnaireId = null)
     {
+        $questionnaire = null;
+        if (null !== $questionnaireId)
+            $questionnaire = $this->questionnaireManager->findOneById($questionnaireId);
+
         $resultat = array('ok' => array());
         
         //Pour chacun des éléments ci-dessous, si sa valeur correspondante est nulle alors on créé un tableau contenant le label à afficher
         $resultat['telephoneDirect']       = (is_null($user->getTelephoneDirect())) ? array('label' => 'Téléphone direct') : array();
         $resultat['region']                = (is_null($user->getRegion())) ? array('label' => 'Région') : array();
         $resultat['departement']           = (is_null($user->getDepartement())) ? array('label' => 'Département') : array();
+        
+            
         //Obligatoire uniquement pour l'ambassadeur
-        if('Expert' !== $questionnaireLibelle)
+        if (null === $questionnaire || $questionnaire->getNom() !== 'Expert')
         {
             //Si 'etablissement de rattachement' n'est pas renseigné on vérifie le 'autre structure' 
             $resultat['rattachementSante']     = (is_null($user->getEtablissementRattachementSante())) ? (is_null($user->getAutreStructureRattachementSante()) ? array('label' => 'Etablissement de rattachement / Nom de votre établissement si non disponible dans la liste précédente') : array()) : array();
@@ -56,16 +65,21 @@ class UserExtension extends \Twig_Extension
             $resultat['profilEtablissement']   = (is_null($user->getProfilEtablissementSante())) ? array('label' => 'Profil') : array();
         }
         
-        //Si l'un des éléments ci-dessus est manquant
-        foreach ($resultat as $res)
+        if (null !== $questionnaire && !$questionnaire->getLock())
+            $resultat['ok'] = true;
+        else
         {
-            //Si au moins l'un des tableaux n'est pas vide alors il y a au moins un élément manquant
-            if(!empty($res))
+            //Si l'un des éléments ci-dessus est manquant
+            foreach ($resultat as $res)
             {
-                $resultat['ok'] = false;
-                break; 
+                //Si au moins l'un des tableaux n'est pas vide alors il y a au moins un élément manquant
+                if(!empty($res))
+                {
+                    $resultat['ok'] = false;
+                    break; 
+                }
+                $resultat['ok'] = true; 
             }
-            $resultat['ok'] = true; 
         }
 
         return $resultat;
