@@ -871,7 +871,7 @@
                                 {% set hasvalue = false %}
                                 {% for option in options %}
                                 {% set tab = option|split(';') %}
-                                    {% if tab[0] == res[question.id] %}
+                                    {% if res[question.id] is defined and tab[0] == res[question.id] %}
                                     {% set hasvalue = true %}
                                     <span style="{{color}}">{{tab[1]|trim}}</span><br />
                                     {% endif %}
