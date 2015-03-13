@@ -543,7 +543,9 @@
                                 <td class="note-{{chapitre.noteChapitre}}">{{chapitre.code}}</td>
                                 <td></td>
                                 <td></td>
+                                {% if not resultat.synthese %}
                                 <td></td>
+                                {% endif %}
                                 {% if affichageSynthese %}
                                     <td>
                                         {% if chapitre.noteMin and chapitre.noteChapitre <= chapitre.noteMin %}
@@ -639,7 +641,9 @@
                                         <td></td>
                                         <td class="note-{{child.noteChapitre}}">{{child.code}}</td>
                                         <td></td>
+                                        {% if not resultat.synthese %}
                                         <td></td>
+                                        {% endif %}
                                         {% if affichageSynthese %}
                                             <td>
                                                 {% if child.noteMin and child.noteChapitre <= child.noteMin %}
@@ -867,7 +871,7 @@
                                 {% set hasvalue = false %}
                                 {% for option in options %}
                                 {% set tab = option|split(';') %}
-                                    {% if tab[0] == res[question.id] %}
+                                    {% if res[question.id] is defined and tab[0] == res[question.id] %}
                                     {% set hasvalue = true %}
                                     <span style="{{color}}">{{tab[1]|trim}}</span><br />
                                     {% endif %}
