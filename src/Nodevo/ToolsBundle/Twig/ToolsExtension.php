@@ -15,7 +15,8 @@ class ToolsExtension extends \Twig_Extension
         return array(
             'minifieMoi'   => new \Twig_Filter_Method($this, 'minifie'),
             'base64Nodevo' => new \Twig_Filter_Method($this, 'base64Nodevo'),
-            'tinyUrl'      => new \Twig_Filter_Method($this, 'tinyUrl')
+            'tinyUrl'      => new \Twig_Filter_Method($this, 'tinyUrl'),
+            'bitly'        => new \Twig_Filter_Method($this, 'bitly')
         );
     }
 
@@ -44,6 +45,16 @@ class ToolsExtension extends \Twig_Extension
     public function tinyUrl($url) 
     {
         return file_get_contents("http://tinyurl.com/api-create.php?url=".$url);
+    }
+
+    public function bitly($long_url)
+    {
+        $bitly_login = 'nodevo';
+        $bitly_apikey = 'R_56d2df057dc448dd99f4af11763b34dd';
+
+        $bitly_response = json_decode(file_get_contents("http://api.bit.ly/v3/shorten?login={$bitly_login}&apiKey={$bitly_apikey}&longUrl={$long_url}&format=json"));
+
+        return $bitly_response->data->url;
     }
 
     /**
