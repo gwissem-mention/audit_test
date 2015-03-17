@@ -7,6 +7,8 @@
 .btnBack{position: absolute; top: -10px; right:40px;}
 .tooltip hr{margin:5px;}
 .reseaux-sociaux{margin-bottom: 12px;}
+.reseaux-sociaux .tweet{margin-right: 10px;}
+.reseaux-sociaux .scoopt-it{margin-right: 10px;}
 
 /* Sommaire */
     #sommaire{ position: fixed; left:0; top:0; height: 100%; max-width: 33% }
