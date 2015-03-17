@@ -53,3 +53,6 @@ parameters:
 
     #Activation des réseaux sociaux
     activateRsxSociaux : false
+
+    #Lien cookie
+    cookieLink: '/publication/divers/426-politique-relative-aux-cookies'
