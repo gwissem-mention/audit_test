@@ -6,6 +6,9 @@
 .btnprint{position: absolute; top: -10px; right:0;}
 .btnBack{position: absolute; top: -10px; right:40px;}
 .tooltip hr{margin:5px;}
+.reseaux-sociaux{margin-bottom: 12px;}
+.reseaux-sociaux .tweet{margin-right: 10px;}
+.reseaux-sociaux .scoopt-it{margin-right: 10px;}
 
 /* Sommaire */
     #sommaire{ position: fixed; left:0; top:0; height: 100%; max-width: 33% }
@@ -105,6 +108,7 @@
         #articles h5{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;} 
         #articles h6{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
 
+        #articles h4.categorie {margin-left:0;}
     /* Colonne left */
         #articles p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
         /* Sous-menu */
