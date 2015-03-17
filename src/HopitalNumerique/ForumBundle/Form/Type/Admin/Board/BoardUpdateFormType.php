@@ -108,6 +108,12 @@ class BoardUpdateFormType extends AbstractType
                     )
                 )
             )
+            ->add('piecesJointesAutorisees', 'checkbox',
+                array(
+                    'label' => 'Autoriser le chargement d\'une pièce jointe ?',
+                    'required' => false
+                )
+            )
             ->add('readAuthorisedRoles', 'choice',
                 array(
                     'required'           => false,

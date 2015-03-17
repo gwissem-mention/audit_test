@@ -86,6 +86,13 @@ class UserTopicController extends UserTopicControllerCCDN
         return parent::createAction($forumName, $boardId);
     }
     
+    public function createProcessAction($forumName, $boardId)
+    {
+        $this->container->get('hopitalnumerique_forum.service.piece_jointe')->verifyPieceJointe();
+    
+        return parent::createProcessAction($forumName, $boardId);
+    }
+    
     /**
      *
      * @access public
@@ -101,6 +108,13 @@ class UserTopicController extends UserTopicControllerCCDN
         //-->
         
         return parent::replyAction($forumName, $topicId);
+    }
+
+    public function replyProcessAction($forumName, $topicId)
+    {
+        $this->container->get('hopitalnumerique_forum.service.piece_jointe')->verifyPieceJointe();
+
+        return parent::replyProcessAction($forumName, $topicId);
     }
 
     /**
