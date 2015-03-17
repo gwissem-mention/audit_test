@@ -105,6 +105,7 @@
         #articles h5{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;} 
         #articles h6{color: #6f3596;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
 
+        #articles h4.categorie {margin-left:0;}
     /* Colonne left */
         #articles p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
         /* Sous-menu */
@@ -123,6 +124,7 @@
         #articles .actus ul li:hover a{color:#6f3596;}
 
         #articles .dateModif{color: #a2a2a2;font-size: 12px;font-style : italic; margin-bottom: 20px;border-bottom: 1px solid #d5d5d5;}
+        #articles .reseaux-sociaux{margin-bottom: 12px;}
 
 /* Productions fortement liées */
     #productions h2{display: block; margin:0 0 5px 0;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}

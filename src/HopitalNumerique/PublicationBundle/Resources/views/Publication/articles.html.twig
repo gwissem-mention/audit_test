@@ -58,7 +58,7 @@
         <div class="col-md-{% if parent is null %}12{% else %}9{% endif %}">
             {% if types != 'Article' %}
                 <div class="col-md-12">
-                    <h4 class="gris" >{{types}}</h4>
+                    <h4 class="categorie gris" >{{types}}</h4>
                 </div>
             {% endif %}
             <div class="col-md-12">
@@ -71,7 +71,26 @@
             </div>
 
             <div class="col-md-12">
-                {{objet.resume|parsePublication(objet.glossaires)|raw}}
+                {% if ActivateRsxSociaux %}
+                    <div class="reseaux-sociaux row col-md-12">
+                        <div class="tweet pull-left">
+                            {% set currentPath = app.request.getUri %}
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-url="{{currentPath|tinyUrl}}" data-text="{{objet.titre}}" data-hashtags="HNUM" data-via="anap_sante">Tweet</a>
+                            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                        </div>
+                        <div class="scoopt-it pull-left">
+                            <a href="http://www.scoop.it" class="scoopit-button" scit-position="horizontal" {#scit-url="{{currentPath|tinyUrl}}"#} >Scoop.it</a>
+                            <script type="text/javascript" src="http://www.scoop.it/button/scit.js"></script>
+                        </div>
+                        <div class="linkedin pull-left">
+                            <script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: fr_FR</script>
+                            <script type="IN/Share" data-counter="right"></script>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="row col-md-12">
+                    {{objet.resume|parsePublication(objet.glossaires)|raw}}
+                </div>
             </div>
             <div class="clearfix"></div>
         </div>

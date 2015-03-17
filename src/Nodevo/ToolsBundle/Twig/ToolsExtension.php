@@ -14,7 +14,8 @@ class ToolsExtension extends \Twig_Extension
     {
         return array(
             'minifieMoi'   => new \Twig_Filter_Method($this, 'minifie'),
-            'base64Nodevo' => new \Twig_Filter_Method($this, 'base64Nodevo')
+            'base64Nodevo' => new \Twig_Filter_Method($this, 'base64Nodevo'),
+            'tinyUrl'      => new \Twig_Filter_Method($this, 'tinyUrl')
         );
     }
 
@@ -38,6 +39,11 @@ class ToolsExtension extends \Twig_Extension
     {
         return str_replace(array('+', '/'), array('-', '_'), base64_encode($string));
         //return base64_encode($string);
+    }
+
+    public function tinyUrl($url) 
+    {
+        return file_get_contents("http://tinyurl.com/api-create.php?url=".$url);
     }
 
     /**
