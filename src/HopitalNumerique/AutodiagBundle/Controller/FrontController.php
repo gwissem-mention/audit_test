@@ -182,7 +182,7 @@ class FrontController extends Controller
         }
 
         //cas ou l'user à validé le questionnaire
-        if( $action == 'valid')
+        if( $action == 'valid' )
         {
             $resultat->setDateValidation( new \DateTime() );
             $resultat->setStatut( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 419) ) );
@@ -378,7 +378,6 @@ class FrontController extends Controller
         }
 
         $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
-        
         //Dans le cas où nous nous trouvons dans une synthese, il faut récupérer le min et max
         if ($resultat->getSynthese())
         {
@@ -626,6 +625,38 @@ class FrontController extends Controller
         );
 
         return $this->get('igorw_file_serve.response_factory')->create( $fileName , 'application/pdf', $options);
+    }
+
+    /**
+     * Valide un résultat
+     *
+     * @param  Resultat $resultat L'entitée résultat
+     */
+    public function validateAction( Resultat $resultat, Request $request )
+    {
+        $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneById( 419 );
+        $resultat->setStatut($reference);
+        $resultat->setDateValidation( new \DateTime() );
+        $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
+        
+        $this->get('session')->getFlashBag()->add( 'success', 'Votre autodiagnostic a bien été ajouté à votre historique.' );
+        return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array('id' => $resultat->getId())) );
+    }
+
+    /**
+     * Reactive un résultat
+     *
+     * @param  Resultat $resultat L'entitée résultat
+     */
+    public function reactivateAction( Resultat $resultat, Request $request )
+    {
+        $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneById( 418 );
+        $resultat->setStatut($reference);
+        $resultat->setDateValidation(null);
+        $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
+        
+        $this->get('session')->getFlashBag()->add( 'success', 'Votre autodiagnostic a bien été réactivé.' );
+        return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_comptehn') );
     }
 
     /**

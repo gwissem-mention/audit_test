@@ -42,7 +42,8 @@ twig:
     globals:
         ForumBundle:
             translation: HopitalNumeriqueForumBundle
-        CookieLink: '/publication/divers/426-politique-relative-aux-cookies'
+        CookieLink: %cookieLink%
+        ActivateRsxSociaux: %activateRsxSociaux%
     form:
         resources:
             - 'HopitalNumeriqueForumBundle:Formulaire/Theme:theme.vertical.html.twig'
