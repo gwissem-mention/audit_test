@@ -6,6 +6,8 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use \Nodevo\ToolsBundle\Tools\Chaine;
 
+use Symfony\Component\HttpFoundation\Session\Session;
+
 /**
  * Manager de l'entité Objet.
  */
@@ -16,18 +18,25 @@ class ObjetManager extends BaseManager
     protected $_noteManager;
 
     /**
+     * @var \Symfony\Component\HttpFoundation\Session\Session Session
+     */
+    private $_session;
+
+    /**
      * Construct 
      *
      * @param EntityManager  $em              Entity Mangager de doctrine
      * @param ContenuManager $contenuManager  ContenuManager
      * @param NoteManager    $noteManager     NoteManager
+     * @param \Symfony\Component\HttpFoundation\Session\Session $session       Le service session de Symfony
      */
-    public function __construct( EntityManager $em, ContenuManager $contenuManager, NoteManager $noteManager )
+    public function __construct( EntityManager $em, ContenuManager $contenuManager, NoteManager $noteManager, Session $session)
     {
         parent::__construct($em);
 
         $this->_contenuManager = $contenuManager;
         $this->_noteManager    = $noteManager;
+        $this->_session = $session;
     }
 
     /**
@@ -398,6 +407,11 @@ class ObjetManager extends BaseManager
     public function checkAccessToObjet($role, $objet)
     {
         //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
+        if(is_null($objet))
+        {
+            $this->_session->getFlashBag()->add('danger', 'Vous tentez de rejoindre une page qui n\'existe plus.' );
+            return false;
+        }
         $roles = $objet->getRoles();
         foreach($roles as $restrictedRole){
             //on "break" en retournant null, l'objet n'est pas ajouté
