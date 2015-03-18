@@ -118,4 +118,15 @@ class Post extends BasePost
         $this->pieceJointeFile->move(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeDir(), $this->pieceJointe);
         $this->setPieceJointeFile(null);
     }
+    
+    /**
+     * Supprime la PJ.
+     */
+    public function deletePieceJointe()
+    {
+        if (null !== $this->pieceJointe && file_exists(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeUrl()))
+            unlink(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeUrl());
+        
+        $this->pieceJointe = null;
+    }
 }
