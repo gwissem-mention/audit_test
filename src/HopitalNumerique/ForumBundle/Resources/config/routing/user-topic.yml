@@ -16,7 +16,7 @@ ccdn_forum_user_topic_create:
 
 ccdn_forum_user_topic_create_process:
     pattern: /create/for-board/{boardId}/process
-    defaults: { _controller: CCDNForumForumBundle:UserTopic:createProcess, _locale: fr, forumName: Public }
+    defaults: { _controller: HopitalNumeriqueForumBundle:UserTopic:createProcess, _locale: fr, forumName: Public }
 
 ccdn_forum_user_topic_reply:
     pattern: /{topicId}/reply
@@ -24,7 +24,7 @@ ccdn_forum_user_topic_reply:
 
 ccdn_forum_user_topic_reply_process:
     pattern: /{topicId}/reply/process
-    defaults: { _controller: CCDNForumForumBundle:UserTopic:replyProcess, _locale: fr, forumName: Public }
+    defaults: { _controller: HopitalNumeriqueForumBundle:UserTopic:replyProcess, _locale: fr, forumName: Public }
 
 hopitalnumerique_forum_post_move:
     pattern: /{topicId}/move

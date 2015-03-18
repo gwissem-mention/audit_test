@@ -66,6 +66,17 @@ class PostUpdateFormType extends AbstractType
                 )
             )
         ;
+        if ($builder->getData()->getTopic()->getBoard()->isPiecesJointesAutorisees())
+        {
+            $builder
+                ->add('pieceJointeFile', 'file',
+                    array(
+                        'required'           => false,
+                        'label'              => 'Pièce jointe :'
+                    )
+                )
+            ;
+        }
     }
 
     /**
