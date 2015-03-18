@@ -9,6 +9,10 @@ hopital_numerique_recherche_homepage_requete:
     requirements: 
         id: \d+
 
+hopital_numerique_recherche_homepage_requete_generator:
+    pattern:  /recherche-par-referencement/requete-generator/{refs}/{q}/{type}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:generateManuallyRequete, refs:'', q:'', type:''}
+
 hopital_numerique_recherche_getresults:
     pattern:  /recherche-par-referencement/get-results
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:getResults }
