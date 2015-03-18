@@ -107,8 +107,8 @@ class Post extends BasePost
      */
     public function uploadPieceJointe()
     {
-        if (null !== $this->pieceJointe && file_exists($this->getPieceJointeUrl()))
-            unlink($this->getPieceJointeUrl());
+        if (null !== $this->pieceJointe && file_exists(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeUrl()))
+            unlink(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeUrl());
         
         $aujourdhui = new \DateTime();
         
