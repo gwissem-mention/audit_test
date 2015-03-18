@@ -281,6 +281,14 @@ $(document).ready(function() {
         }
     }
 
+    function exportCSVForum()
+    {
+        if ( $('#form-stat-forum').validationEngine('validate') ) 
+        {
+            $('#form-stat-forum').submit();
+        }
+    }
+
     function generationItemRequete(url)
     {
         if ( $('#form-item-requete').validationEngine('validate') ) 

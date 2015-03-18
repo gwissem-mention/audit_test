@@ -21,6 +21,10 @@ hopital_numerique_stat_item_requete_export_csv:
     pattern: /admin/statistiques/show/itemRequete/exportCSV
     defaults: { _controller: HopitalNumeriqueStatBundle:ItemRequete:exportCSV}
 
+hopital_numerique_stat_forum_export_csv:
+    pattern: /admin/statistiques/show/forum/exportCSV
+    defaults: { _controller: HopitalNumeriqueStatBundle:Forum:exportCSV}
+
 #-Item requete - Productions
 hopital_numerique_stat_item_production_generate_tableau:
     pattern: /admin/statistiques/show/itemProduction/generate

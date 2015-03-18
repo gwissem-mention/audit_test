@@ -1,5 +1,6 @@
 <div class="table table-responsive">
-    {% for forum in stats %}
+    {% for id, forum in stats %}
+        {{ forumNames[ id ] }}
     <table id="item-requete-table" class="table table-hover" style="margin:0 auto; border-collapse:collapse;">
         <thead>
             <tr class="grid-row-titles">
@@ -33,7 +34,7 @@
                         <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
                             <strong>{{topics['name']}}</strong>
                         </td>
-                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;"></td>
+                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;background-color:#edeef0;"></td>
                         <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
                             {{topics['nbPosts']}}
                         </td>

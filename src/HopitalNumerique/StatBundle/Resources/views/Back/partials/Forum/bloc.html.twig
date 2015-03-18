@@ -11,7 +11,7 @@
                     
                     {# Points durs #}
                     <div id="stat-clic-filtres">
-                        <form id ="form-stat-forum">
+                        <form id="form-stat-forum" action="{{path('hopital_numerique_stat_forum_export_csv')}}" method="POST">
                             <div class="row">
                                 {# Date de début #}
                                 <div class="col-md-6">
@@ -28,6 +28,7 @@
                         <div class="row">
                             {# Boutton de génération du tableau #}
                             <div class="col-md-12 button-generation">
+                                <div id="export-csv-forum" onclick="exportCSVForum();" class="finish btn btn-primary pull-right" title="Export CSV" ><i class="fa fa-download"></i></div>
                                 <div id="generation-tableau-stat-forum" onclick="generationStatForum( '{{path('hopital_numerique_stat_stat_forum_generate_tableau')}}' );" class="finish btn btn-success pull-right" title="Générer le tableau" ><i class="fa fa-bar-chart-o"></i></div>
                             </div>
                         </div>
