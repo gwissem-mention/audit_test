@@ -50,7 +50,7 @@
                     {% set total = 0 %}
                     {% for data in datas %}
                         <tr>
-                            <td class="hide" align="center hide"><input type="checkbox" class="checkbox" name="{{data.discr}}[{{data.id}}]" checked="checked" value="{{data.total.prix}}_{% if data.total.hasSupplement is defined and data.total.hasSupplement is not null and data.total.hasSupplement %}supp{% else %}noSupp{% endif %}" /></td>
+                            <td class="hide" align="center hide"><input type="checkbox" class="checkbox" name="{{data.discr}}[{{data.id}}]" checked="checked" value="{{data.total.prix}}{% if data.total.hasSupplement is defined and data.total.hasSupplement is not null and data.total.hasSupplement %}_supp{% elseif data.total.hasSupplement is defined and data.total.hasSupplement is not null and not data.total.hasSupplement %}_noSupp{% endif %}" /></td>
                             <td>{{data.date|date('d/m/Y')}}</td>
                             <td>{{data.referent}}</td>
                             <td>{{data.etab}}</td>
