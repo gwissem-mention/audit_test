@@ -187,7 +187,32 @@ $(document).ready(function() {
                 $( "#datepicker-datedebut-itemProduction" ).datepicker( "option", "maxDate", selectedDate );
             }
         });
-        $( "#datepicker-datefin-itemProduction" ).datepicker( "option", "showAnim", "fadeIn" );
+
+        //---stats des forum
+
+        //Date début
+        $( "#datepicker-datedebut-forum" ).datepicker({
+            defaultDate: "now",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd-mm-yy",
+            onClose: function( selectedDate ) {
+                $( "#datepicker-datefin-forum" ).datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        $( "#datepicker-datedebut-forum" ).datepicker( "option", "showAnim", "fadeIn" );
+
+        //Date de fin
+        $( "#datepicker-datefin-forum" ).datepicker({
+            defaultDate: "+1d",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd-mm-yy",
+            onClose: function( selectedDate ) {
+                $( "#datepicker-datedebut-forum" ).datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+        $( "#datepicker-datefin-forum" ).datepicker( "option", "showAnim", "fadeIn" );
     });
 
     function exportCSVPointDur()
@@ -402,6 +427,27 @@ $(document).ready(function() {
                 success : function( data ){
                     //Ajout de la réponse
                     $('#stat-clic-tableau').html( data );
+                    loaderButton.finished();
+                    loaderTableau.finished();
+                }
+            });
+        }
+    }
+
+    function generationStatForum(url)
+    {
+        if ( $('#form-stat-forum').validationEngine('validate') ) 
+        {
+            var loaderButton  = $('#generation-tableau-stat-forum').nodevoLoader().start();
+            var loaderTableau = $('#stat-forum-tableau').nodevoLoader().start();
+
+            $.ajax({
+                url     : url,
+                data    :  $('#form-stat-forum').serialize(),
+                type    : 'POST',
+                success : function( data ){
+                    //Ajout de la réponse
+                    $('#stat-forum-tableau').html( data );
                     loaderButton.finished();
                     loaderTableau.finished();
                 }

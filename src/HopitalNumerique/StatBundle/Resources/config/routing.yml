@@ -61,6 +61,11 @@ hopital_numerique_stat_stat_clic_generate_tableau:
     pattern: /admin/statistiques/show/statClic/generate
     defaults: { _controller: HopitalNumeriqueStatBundle:StatClic:generateTableau}
 
+#-Stats forum
+hopital_numerique_stat_stat_forum_generate_tableau:
+    pattern: /admin/statistiques/show/forum/generate
+    defaults: { _controller: HopitalNumeriqueStatBundle:Forum:generateTableau}
+
 #-Recherche Parcours
 hopital_numerique_stat_recherche_parcours_generate_tableau:
     pattern: /admin/statistiques/show/rechercheParcours/generate

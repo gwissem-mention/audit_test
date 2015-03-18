@@ -1,0 +1,50 @@
+<div class="table table-responsive">
+    {% for forum in stats %}
+    <table id="item-requete-table" class="table table-hover" style="margin:0 auto; border-collapse:collapse;">
+        <thead>
+            <tr class="grid-row-titles">
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>Boards</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>Fils</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>Nombre de fils</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>Nombre de posts</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>Nombre de vues total</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for boards in forum %}
+                <tr>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                        <strong>{{boards['name']}}</strong>
+                    </td>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;"></td>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                        {{ boards['topics']|length }}
+                    </td>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                        {{ boards['nbTopics'] }}
+                    </td>
+                    <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                        {{ boards['nbVuesTotal'] }}
+                    </td>
+                </tr>
+                {% for topics in boards['topics'] %}
+                    <tr>
+                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;"></td>
+                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                            <strong>{{topics['name']}}</strong>
+                        </td>
+                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;"></td>
+                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                            {{topics['nbPosts']}}
+                        </td>
+                        <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                            {{topics['nbVues']}}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}  
+        </tbody>
+    </table>
+    <br/>
+    {% endfor %}  
+</div>
