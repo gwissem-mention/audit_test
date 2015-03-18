@@ -65,21 +65,24 @@ class FactureManager extends BaseManager
             }
         }
 
-        //handle formations
-        if( $formations ){
-            foreach ($formations as $id => $prixSupplement) {
+        if(!is_null($supplement))
+        {
+            //handle formations
+            if( $formations ){
+                foreach ($formations as $id => $prixSupplement) {
 
-                list($prix, $hasSupplement) = explode("_", $prixSupplement);
+                    list($prix, $hasSupplement) = explode("_", $prixSupplement);
 
-                $formation = $this->_formationManager->findOneBy( array('id' => $id) );
-                $formation->setFacture( $facture );
-                $formation->setEtatRemboursement( $statutRemboursement );
-                $formation->setTotal( $prix);
-                $formation->setSupplement( $hasSupplement == 'supp' ? $supplement : 0 );
-                
-                $facture->addFormation( $formation );
+                    $formation = $this->_formationManager->findOneBy( array('id' => $id) );
+                    $formation->setFacture( $facture );
+                    $formation->setEtatRemboursement( $statutRemboursement );
+                    $formation->setTotal( $prix);
+                    $formation->setSupplement( $hasSupplement == 'supp' ? $supplement : 0 );
+                    
+                    $facture->addFormation( $formation );
 
-                $total += $prix;
+                    $total += $prix;
+                }
             }
         }
 

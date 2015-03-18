@@ -31,7 +31,7 @@ class Remboursement
     /**
      * @var integer
      *
-     * @ORM\Column(name="rem_supplement", type="integer", options = {"comment" = "Supplément formation du remboursement"})
+     * @ORM\Column(name="rem_supplement", type="integer", nullable = true, options = {"comment" = "Supplément formation du remboursement"})
      */
     private $supplement;
 

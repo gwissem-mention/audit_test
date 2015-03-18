@@ -41,7 +41,7 @@ class ConfigController extends Controller
         foreach($remboursements as $id => $remboursement) {
             $entity = $this->get('hopitalnumerique_paiement.manager.remboursement')->findOneBy( array( 'id' => $id ) );
             $entity->setIntervention( intval($remboursement['intervention']) );
-            $entity->setSupplement( intval($remboursement['supplement']) );
+            $entity->setSupplement( trim($remboursement['supplement']) === "" ? NULL : intval($remboursement['supplement']) );
             $entity->setRepas( intval($remboursement['repas']) );
             $entity->setGestion( intval($remboursement['gestion']) );
 
