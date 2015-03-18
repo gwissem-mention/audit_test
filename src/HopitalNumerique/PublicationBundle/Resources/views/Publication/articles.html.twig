@@ -75,7 +75,7 @@
                     <div class="reseaux-sociaux row col-md-12">
                         <div class="tweet pull-left">
                             {% set currentPath = app.request.getUri %}
-                            <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{{currentPath|bitly}}" data-text="{{objet.titre}}" data-hashtags="HNUM" data-via="anap_sante">Tweet</a>
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{{currentPath|bitly}}" data-text="{{objet.titre}}" data-hashtags="HNUM" >Tweet</a>
                             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                         </div>
                         <div class="scoopt-it pull-left">

@@ -27,7 +27,7 @@ services:
     hopitalnumerique_forum.service.piece_jointe:
         class: HopitalNumerique\ForumBundle\DependencyInjection\PieceJointe
         scope: "request"
-        arguments: ["@request", "@session", "%nodevo_gestionnaire_media.moxie_manager.extensions_autorisees%"]
+        arguments: ["@request", "@session", "@hopitalnumerique_forum.manager.post", "%nodevo_gestionnaire_media.moxie_manager.extensions_autorisees%"]
     #Manager
     #--Board
     hopitalnumerique_forum.manager.board:

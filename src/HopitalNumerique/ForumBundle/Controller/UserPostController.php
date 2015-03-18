@@ -8,7 +8,8 @@ class UserPostController extends UserPostControllerBase
 {
     public function editProcessAction($forumName, $postId)
     {
-        $this->container->get('hopitalnumerique_forum.service.piece_jointe')->verifyPieceJointe();
+        $post = $this->getPostModel()->findOnePostByIdWithTopicAndBoard($postId, true);
+        $this->container->get('hopitalnumerique_forum.service.piece_jointe')->verifyPieceJointe($post);
         
         return parent::editProcessAction($forumName, $postId);
     }

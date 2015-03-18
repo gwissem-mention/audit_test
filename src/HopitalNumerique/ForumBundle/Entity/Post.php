@@ -107,8 +107,8 @@ class Post extends BasePost
      */
     public function uploadPieceJointe()
     {
-        if (null !== $this->pieceJointe && file_exists($this->getPieceJointeUrl()))
-            unlink($this->getPieceJointeUrl());
+        if (null !== $this->pieceJointe && file_exists(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeUrl()))
+            unlink(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeUrl());
         
         $aujourdhui = new \DateTime();
         
@@ -117,5 +117,16 @@ class Post extends BasePost
         $this->pieceJointe = substr($nomSansExtension, 0, 100).'_'.$aujourdhui->getTimestamp().'.'.$extension;
         $this->pieceJointeFile->move(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeDir(), $this->pieceJointe);
         $this->setPieceJointeFile(null);
+    }
+    
+    /**
+     * Supprime la PJ.
+     */
+    public function deletePieceJointe()
+    {
+        if (null !== $this->pieceJointe && file_exists(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeUrl()))
+            unlink(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeUrl());
+        
+        $this->pieceJointe = null;
     }
 }

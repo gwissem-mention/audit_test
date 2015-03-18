@@ -75,6 +75,13 @@ class PostUpdateFormType extends AbstractType
                         'label'              => 'Pièce jointe :'
                     )
                 )
+                ->add('pieceJointeSuppression', (null !== $builder->getData()->getPieceJointe() ? 'checkbox' : 'hidden'),
+                    array(
+                        'required' => false,
+                        'mapped' => false,
+                        'label' => 'Supprimer la pièce jointe actuelle ?'
+                    )
+                )
             ;
         }
     }
