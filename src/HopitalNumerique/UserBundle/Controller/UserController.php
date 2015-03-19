@@ -613,7 +613,9 @@ class UserController extends Controller
         if($allPrimaryKeys == 1){
             $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
             foreach($rawDatas as $data)
+            {
                 $primaryKeys[] = $data['id'];
+            }
         }
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
         
@@ -630,29 +632,43 @@ class UserController extends Controller
             $row['id']   = $user->getId();
             $row['user'] = $user->getPrenomNom();
 
-            $domaines  = $user->getDomaines();
+            $connaissances  = $user->getConnaissancesAmbassadeurs();
             $nbDomaine = 0;
-            foreach($domaines as $domaine){
-                $row['domaine'.$nbDomaine] = $domaine->getLibelle();
-                $nbDomaine++;
+            foreach($connaissances as $connaissance)
+            {
+                if(!is_null($connaissance->getConnaissance()))
+                {
+                    $row['domaine'.$nbDomaine]                = $connaissance->getDomaine()->getLibelle();
+                    $row['domaine'.$nbDomaine.'connaissance'] = $connaissance->getConnaissance()->getLibelle();
+                    $nbDomaine++;
+                }
             }
             
             //update nbDomaineMax
             if( $nbDomaine > $nbDomaineMax)
+            {
                 $nbDomaineMax = $nbDomaine;
+            }
 
             $datas[] = $row;
         }
 
         //add colonnes
         for($i = 0; $i <= $nbDomaineMax; $i++)
+        {
             $colonnes['domaine'.$i] = '';
+            $colonnes['domaine'.$i.'connaissance'] = '';
+        }
 
         //add empty values
-        foreach($datas as &$data){
-            foreach ($colonnes as $key => $val) {
+        foreach($datas as &$data)
+        {
+            foreach ($colonnes as $key => $val)
+            {
                 if( !isset($data[$key]) )
+                {
                     $data[$key] = '';
+                }
             }
         }
 
