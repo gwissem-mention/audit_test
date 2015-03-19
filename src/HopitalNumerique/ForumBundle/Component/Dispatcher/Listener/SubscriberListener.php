@@ -35,6 +35,12 @@ class SubscriberListener extends CCDNSubscriberListener
         $this->mailer            = $mailer;
     }
 
+    public function onTopicCreateComplete(UserTopicEvent $event)
+    {
+        parent::onTopicCreateComplete($event);
+        $this->onTopicReplyComplete($event);
+    }
+    
     /**
      *
      * @access public
