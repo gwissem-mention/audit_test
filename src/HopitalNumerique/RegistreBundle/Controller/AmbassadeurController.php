@@ -173,7 +173,7 @@ class AmbassadeurController extends Controller
         $ambassadeur = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => $id));
         
         return $this->render('HopitalNumeriqueRegistreBundle:Ambassadeur:domaines.html.twig', array(
-                'domaines' => $ambassadeur->getDomaines()
+                'connaissances' => $ambassadeur->getConnaissancesAmbassadeurs()
         ));
     }
 }

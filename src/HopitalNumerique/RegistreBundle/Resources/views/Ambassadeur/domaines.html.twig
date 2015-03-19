@@ -1,18 +1,30 @@
 <div class="panel" style="margin:0" >
     <div class="panel-heading">
-        <h4 class="violet" style="margin-bottom:0" >Domaines fonctionnels</h4>
+        <h4 class="violet" style="margin-bottom:0" >Connaissances métiers</h4>
     </div>
 
     <div class="panel-body" style="padding-top:0" >
         <div class="col-md-12 fancybox-popin">            
-            {% if domaines is not null and domaines is not empty %}
-                <ul style="padding-left:10px">
-	                {% for domaine in domaines %}
-                        <li>{{domaine.libelle}}</li>
+            {% if connaissances is not null and connaissances is not empty %}
+                <ul style="padding-left:10px;list-style: none;">
+	                {% for connaissance in connaissances %}
+                        {% if connaissance.connaissance is not null %}
+                            <li>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span class="pull-left" title="{{connaissance.connaissance.libelle}}">{% for i in 1..connaissance.connaissance.order %}<i class="fa fa-star"></i>{% endfor %}</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                         - {{connaissance.domaine.libelle}}
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                        {% endif %}
 	                {% endfor %}
                 </ul>
             {% else %}
-	            - Aucun domaine fonctionnel -
+	            - Aucune connaissance métier -
             {% endif %}   
         </div>
     </div>
