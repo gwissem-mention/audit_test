@@ -72,7 +72,8 @@ class SubscriptionRepository extends CCDNSubscriptionRepository
     {
         $params = array(
             ':topicId' => $topic->getId(),
-            ':boardId' => $topic->getBoard()->getId()
+            ':boardId' => $topic->getBoard()->getId(),
+            ':isSubscribed' => true
         );
         
         $qb = $this->createSelectQuery(array('s', 'b2', 't', 'b', 'c', 'f', 'fp', 'fp_author', 'lp', 'lp_author', 't_closedBy', 't_deletedBy', 't_stickiedBy'));
@@ -103,6 +104,7 @@ class SubscriptionRepository extends CCDNSubscriptionRepository
                     )
                 )
             )
+            ->andWhere('s.isSubscribed = :isSubscribed')
             ->groupBy('s.ownedBy')
             ->setParameters($params)
         ;
