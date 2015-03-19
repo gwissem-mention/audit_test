@@ -86,6 +86,69 @@ class SearchController extends Controller
     }
 
     /**
+     * Génération manuelle d'une requete de recherche en fonction d'un tableau d'id de reference passé en param, d'une recherche textuelle et de type(s)
+     *
+     * @param string $refs Liste des références à explode
+     * @param [type] $q    Recherche textuelle
+     * @param [type] $type Liste des références à explode
+     *
+     * @return [type]
+     */
+    public function generateManuallyRequeteAction($refs = null, $q = null, $type = null)
+    {
+        $referenceIds = explode(',', $refs);
+        $references = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('id' => $referenceIds));
+
+        //Création du tableau pour la session de recherche
+        $resultats = array(
+            'categ1' => array(),
+            'categ2' => array(),
+            'categ3' => array(),
+            'categ4' => array()
+        );
+
+        //Parcourt les références de la réponse, puis les tris pour l'affichage de la recherche
+        foreach ($references as $reference) 
+        {
+            //Récupère la référence courante
+            $referenceTemp = $reference;
+
+            //Récupère le premier parent
+            while(!is_null($referenceTemp->getParent())
+                    && $referenceTemp->getParent()->getId() != null)
+            {
+                $referenceTemp = $referenceTemp->getParent();
+            }
+
+            //Trie la référence dans la bonne catégorie
+            switch ($referenceTemp->getId()) 
+            {
+                case 220:
+                    $resultats['categ1'][] = $reference->getId();
+                    break;
+                case 221:
+                    $resultats['categ2'][] = $reference->getId();
+                    break;
+                case 223:
+                    $resultats['categ3'][] = $reference->getId();
+                    break;
+                case 222:
+                    $resultats['categ4'][] = $reference->getId();
+                    break;
+            }
+        }
+
+        //on prépare la session
+        $session = $this->getRequest()->getSession();
+        $session->set('requete-id', null);
+        $session->set('requete-refs', $refs == "null" ? json_encode(array()) : json_encode($resultats) );
+        $session->set('requete-refs-categProd', $type == "null" ? '' : $type );
+        $session->set('requete-refs-recherche-textuelle', $q == "null" ? '' : $q);
+
+        return $this->redirect( $this->generateUrl('hopital_numerique_recherche_homepage') );
+    }
+
+    /**
      * Retourne les résultats de la recherche
      */
     public function getResultsAction()

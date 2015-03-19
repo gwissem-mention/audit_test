@@ -43,6 +43,13 @@
             {%- if is_granted('ROLE_USER') and post.id and (is_granted('ROLE_ADMINISTRATEUR_1') or not post.isDeleted) -%}
                  
                 <div class="dropdown btn-group text-left">
+                    
+                    {% if post.pieceJointe is not null %}
+                        <a class="btn btn-xs btn-icon-only" href="{{ path('ccdn_forum_user_post_download', { forumName:forumName, post:post.id }) }}">
+                            <i class="glyphicon glyphicon-paperclip"></i> &nbsp; Pièce jointe
+                        </a>
+                    {% endif %}
+                    
                     <a class="dropdown-toggle btn btn-xs btn-icon-only" data-toggle="dropdown" href="#">
                         <i class="glyphicon glyphicon-cog"></i>
                     </a>

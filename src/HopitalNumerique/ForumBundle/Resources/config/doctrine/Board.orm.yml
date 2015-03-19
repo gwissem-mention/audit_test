@@ -31,6 +31,12 @@ HopitalNumerique\ForumBundle\Entity\Board:
             type: array
             column: topic_reply_authorised_roles
             nullable: true
+        piecesJointesAutorisees:
+            type: boolean
+            column: pieces_jointes_autorisees
+            nullable: false
+            options:
+                default: false
     oneToMany:
         topics:
             targetEntity: HopitalNumerique\ForumBundle\Entity\Topic

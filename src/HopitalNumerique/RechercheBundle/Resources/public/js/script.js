@@ -161,7 +161,7 @@ $(document).ready(function() {
         {
             if($(".placeholder-aucunCritere").length == 0)
             {
-                $('#recherche_textuelle').val('');
+                /*$('#recherche_textuelle').val('');*/
                 $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
             }
         }
@@ -486,7 +486,7 @@ function updateResultats( cleanSession )
 
             loader.finished();
 
-            var search = $("#patternFounded").val();
+            var search = $("#patternFounded").val() == undefined ? '[]' : $("#patternFounded").val();
             if(search != "")
             {
                 search = JSON.parse(search);
@@ -751,6 +751,49 @@ function resetRequete()
     }
 }
 
+function resetRequeteOnLoad()
+{
+    if( $(".arbo-requete").find('li:not(.hide)').length == 0 
+        && ($("#recherche_textuelle").val() == '') ) 
+    {
+        var loader = $('#resultats').nodevoLoader().start();
+        
+        if(ajaxRequeteResultat != null )
+        {
+            ajaxRequeteResultat.abort();
+        } 
+
+        $('#categ_production_select option').each(function() {
+            $("#categ_production_select").multiselect('deselect', $(this).val());
+        })
+        $('#example-reset').multiselect('refresh');
+        $('#categ_production_select_vals').val('');
+        $('#categ_production_select_vals_chargement').val('');
+
+        //AJAX call for results
+        ajaxRequeteResultat = $.ajax({
+            url  : $('#resultats-url').val(),
+            data : {
+                references         : getReferences(),
+                cleanSession       : true,
+                categPointDur      : $("#categ_production_select_vals").val(),
+                rechercheTextuelle : $("#recherche_textuelle").val()
+            },
+            type    : 'POST',
+            success : function( data ){
+                $('.requete h2').html( 'Requête de recherche' );
+                $('#resultats').html('');
+
+                hasResultat = false;
+
+                affichagePlaceholder();
+                
+                loader.finished();
+            }
+        });
+    }
+}
+
 /**
  * Fonction permettant de gerer l'affichage du bloc placeholder
  *
@@ -797,9 +840,40 @@ function placeholderExalead()
     }
 }
 
-function isEmpty( el ){
-      return !$.trim(el.html())
-  }
+
+function toggleRechercheAvancee()
+{
+    $('.recherche_textuelle_avancee').slideToggle(200);
+}
+
+/**
+ * 
+ * @param string chaineRechercheAvancee Chaîne à ajouter dans le champ
+ * @param integer texteSelectionDebut Position où commencer à sélectionner le texte
+ * @param integer texteSelectionFin Position où terminer à sélectionner le texte (à partir de la fin donc -1 si juste avant le dernier caractère)
+ */
+function rechercheAvancee(chaineRechercheAvancee, texteSelectionDebut, texteSelectionFin)
+{
+    var positionInitiale = $('#recherche_textuelle').val().length;
+    var texteRecherche = $('#recherche_textuelle').val();
+
+    if (texteRecherche.length > 0)
+    {
+        texteRecherche += ' ';
+        positionInitiale++;
+    }
+    texteRecherche += chaineRechercheAvancee;
+
+    $('#recherche_textuelle').val(texteRecherche);
+    
+    document.getElementById('recherche_textuelle').focus();
+    document.getElementById('recherche_textuelle').setSelectionRange(positionInitiale + texteSelectionDebut, positionInitiale + chaineRechercheAvancee.length + texteSelectionFin);
+}
+
+function isEmpty( el )
+{
+    return !$.trim(el.html())
+}
 
 
 //Plugin de highlight
@@ -867,31 +941,3 @@ jQuery.fn.highlight = function (words, options) {
     });
 };
 
-function toggleRechercheAvancee()
-{
-    $('.recherche_textuelle_avancee').slideToggle(200);
-}
-
-/**
- * 
- * @param string chaineRechercheAvancee Chaîne à ajouter dans le champ
- * @param integer texteSelectionDebut Position où commencer à sélectionner le texte
- * @param integer texteSelectionFin Position où terminer à sélectionner le texte (à partir de la fin donc -1 si juste avant le dernier caractère)
- */
-function rechercheAvancee(chaineRechercheAvancee, texteSelectionDebut, texteSelectionFin)
-{
-    var positionInitiale = $('#recherche_textuelle').val().length;
-    var texteRecherche = $('#recherche_textuelle').val();
-
-    if (texteRecherche.length > 0)
-    {
-        texteRecherche += ' ';
-        positionInitiale++;
-    }
-    texteRecherche += chaineRechercheAvancee;
-
-    $('#recherche_textuelle').val(texteRecherche);
-    
-    document.getElementById('recherche_textuelle').focus();
-    document.getElementById('recherche_textuelle').setSelectionRange(positionInitiale + texteSelectionDebut, positionInitiale + chaineRechercheAvancee.length + texteSelectionFin);
-}

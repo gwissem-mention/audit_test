@@ -173,6 +173,86 @@ class StatRechercheManager extends BaseManager
 
         return $results;
     }
+    
+    /**
+     * Fonction qui retourne les différentes statistiques pour les différents forum
+     * 
+     * @return QueryBuilder
+     */
+    public function getStatsForum($dateDebut, $dateFin)
+    {   
+        $stats = $this->getRepository()->getStatsForum( $dateDebut, $dateFin )->getQuery()->getResult();
+
+        $results = array();
+        foreach ($stats as $stat) 
+        {
+            if( !array_key_exists($stat["forumId"], $results) )
+            {
+                $results[ $stat["forumId"] ] = array(
+                    $stat["boardId"] => array(
+                        "topics" => $stat['topicId'] == null ? array() : array(
+                            $stat["topicId"] => array(
+                                "nbVues" => $stat['nbVues'],
+                                "nbPosts" => 0,
+                                "name" => $stat['topicName']
+                            )
+                        ),
+                        "nbTopics" => 0,
+                        "name" => $stat['boardName']
+                    )
+                );
+            }
+            elseif( !array_key_exists($stat["boardId"], $results[ $stat["forumId"] ]) )
+            {
+                $results[ $stat["forumId"] ][ $stat["boardId"] ] = array(
+                    "topics" => $stat['topicId'] == null ? array() : array(
+                        $stat["topicId"] => array(
+                            "nbVues" => $stat['nbVues'],
+                            "nbPosts" => 0,
+                            "name" => $stat['topicName']
+                        )
+                    ),
+                    "nbTopics" => 0,
+                    "name" => $stat['boardName']
+                );
+            }
+            elseif( !array_key_exists($stat["topicId"], $results[ $stat["forumId"] ][ $stat["boardId"] ]['topics']) )
+            {
+                $results[ $stat["forumId"] ][ $stat["boardId"] ]['topics'][ $stat["topicId"] ] = array(
+                    "nbVues" => $stat['nbVues'],
+                    "nbPosts" => 0,
+                    "name" => $stat['topicName']
+                );
+            }
+            
+            if( $stat['topicId'] != null )
+            {
+                $results[ $stat["forumId"] ][ $stat["boardId"] ]["nbTopics"]++;
+                $results[ $stat["forumId"] ][ $stat["boardId"] ]["topics"][ $stat["topicId"] ]["nbPosts"]++;
+            }
+        }
+        
+        // tri + calcul de la somme des vues
+        foreach( $results as &$forum )
+        {
+            foreach($forum as &$board)
+            {   
+                if( !array_key_exists("nbVuesTotal", $board) )
+                {
+                    $board['nbVuesTotal'] = 0;
+                }
+                foreach( $board['topics'] as &$topic )
+                {
+                    $board['nbVuesTotal'] += $topic["nbVues"];
+                }
+                ksort($board);
+            }
+            ksort($forum);
+        }
+        ksort($results);
+
+        return $results;
+    }
 
     /**
      * Retourne un tableau d'entité référence en fonction du tableau d'id passés en param : très gourmant en nombre de requete => à OPTIMISER

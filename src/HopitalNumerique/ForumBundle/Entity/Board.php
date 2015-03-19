@@ -12,6 +12,11 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 class Board extends BaseBoard
 {
     /**
+     * @var boolean
+     */
+    private $piecesJointesAutorisees;
+    
+    /**
      * @param SecurityContextInterface $securityContext
      *
      * @return bool
@@ -93,5 +98,28 @@ class Board extends BaseBoard
         }
 
         return false;
+    }
+    
+    /**
+     * Set piecesJointesAutorisees
+     *
+     * @param boolean $piecesJointesAutorisees
+     * @return Board
+     */
+    public function setPiecesJointesAutorisees($piecesJointesAutorisees)
+    {
+        $this->piecesJointesAutorisees = $piecesJointesAutorisees;
+
+        return $this;
+    }
+
+    /**
+     * Get piecesJointesAutorisees
+     *
+     * @return boolean 
+     */
+    public function isPiecesJointesAutorisees()
+    {
+        return $this->piecesJointesAutorisees;
     }
 }

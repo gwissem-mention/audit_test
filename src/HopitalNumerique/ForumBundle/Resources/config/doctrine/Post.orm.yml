@@ -32,6 +32,11 @@ HopitalNumerique\ForumBundle\Entity\Post:
             type: datetime
             column: unlocked_until_date
             nullable: true
+        pieceJointe:
+            type: string
+            length: 128
+            column: piece_jointe
+            nullable: true
     manyToOne:
         topic:
             targetEntity: HopitalNumerique\ForumBundle\Entity\Topic
