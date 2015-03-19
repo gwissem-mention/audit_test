@@ -293,12 +293,18 @@ class AmbassadeurController extends Controller
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
 
         //récupération des domaines fonctionnels
-        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->getDomainesForUser($user);
+        $domaines    = $this->get('hopitalnumerique_reference.manager.reference')->getDomainesForUser($user);
+        $domainesIds = array_keys($domaines);
+
+        $connaissanceAmbassadeurs = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->getConnaissanceAmbassadersOrderedByDomaine( $user, $domainesIds);
+        $connaissanceReferentiels = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR'), array('order' => 'ASC'));
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:domaines-fonctionnels.html.twig', array(
-            'user'     => $user,
-            'options'  => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
-            'domaines' => $domaines
+            'user'                    => $user,
+            'options'                 => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
+            'domaines'                => $domaines,
+            'connaissanceAmbassadeurs' => $connaissanceAmbassadeurs,
+            'connaissanceReferentiels' => $connaissanceReferentiels
         ));
     }
 
@@ -311,15 +317,46 @@ class AmbassadeurController extends Controller
         $id       = $this->get('request')->request->get('id');
         $domaines = $this->get('request')->request->get('domaines');
 
+        //Problème avec les clés en JS : si on créé la clé 200, on va avoir un tableau de 201 entrée avec les entrées de 0 à 199 vides.
+        foreach ($domaines as $key => $value)
+        {
+            if($value === "")
+            {
+                unset($domaines[$key]);
+            }
+        }
+
         //bind ambassadeur
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
+
+        $domainesIds = array_keys($domaines);
         
         //bind objects
-        $refDomaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $domaines ) );
-        $user->setDomaines( $refDomaines );
-        $this->get('hopitalnumerique_user.manager.user')->save( $user );
-        
-        $this->get('session')->getFlashBag()->add( 'success' ,  'Les domaines fonctionnels de l\'utilisateur ont été mis à jour.' );
+        $refDomaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $domainesIds ) );
+
+        $connaissancesAmbassadeurs = array();
+        foreach ($refDomaines as $refDomaine) 
+        {
+            //Vérifie si l'utilisateur a déjà renseigné ce domaine
+            $connaissanceAmbassadeur = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->findOneBy(array('user' => $user, 'domaine' => $refDomaine));
+
+            if(is_null($connaissanceAmbassadeur))
+            {
+                $connaissanceAmbassadeur = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->createEmpty();
+                $connaissanceAmbassadeur->setUser($user);
+                $connaissanceAmbassadeur->setDomaine($refDomaine);
+            }
+
+            $connaissance = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => intval($domaines[$refDomaine->getId()]) ) );
+            $connaissanceAmbassadeur->setConnaissance($connaissance);
+
+            //Ajouter au tableau des connaissances à sauvegarder
+            $connaissancesAmbassadeurs[] = $connaissanceAmbassadeur;
+        }
+
+        $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->save($connaissancesAmbassadeurs);
+
+        $this->get('session')->getFlashBag()->add( 'success' ,  'Les connaissances métiers de l\'utilisateur ont été mis à jour.' );
 
         return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_user_ambassadeur_domainesFonctionnels', array('id' => $id)).'"}', 200);
     }

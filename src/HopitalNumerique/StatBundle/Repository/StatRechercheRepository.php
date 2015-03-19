@@ -78,4 +78,44 @@ class StatRechercheRepository extends EntityRepository
 
         return $qb;
     }
+    
+    /**
+     * Retourne la liste des stats fantomes en fonction des dates passées en param si non null
+     *
+     * @param DateTime or null $dateDebut DateTime de la date de début de la recherche si elle est renseignée, sinon null
+     * @param DateTime or null $dateFin   DateTime de la date de fin de la recherche si elle est renseignée, sinon null
+     *
+     * @return QueryBuilder
+     */
+    public function getStatsForum($dateDebut, $dateFin)
+    {
+        $qb = $this->_em->createQueryBuilder()
+                        ->select('forum.id as forumId, board.id as boardId, board.name as boardName, '
+                            . 'topic.id as topicId, topic.title as topicName, topic.cachedViewCount as nbVues')
+                        ->from('\HopitalNumerique\ForumBundle\Entity\Forum', 'forum')
+                        ->leftJoin('forum.categories', 'categ')
+                        ->leftJoin('categ.boards', 'board')
+                        ->leftJoin('board.topics', 'topic')
+                        ->leftJoin('topic.posts', 'post')
+        ;
+
+        if(!is_null($dateDebut))
+        {
+           $qb->andWhere('post.createdDate >= :dateDebut')
+              ->setParameter('dateDebut', $dateDebut );
+        }
+        
+        if(!is_null($dateFin))
+        {
+           $qb->andWhere('post.createdDate <= :dateFin')
+              ->setParameter('dateFin', $dateFin );
+        }
+
+        $qb->addOrderBy( 'forum.id', 'ASC')
+            ->addOrderBy( 'board.id', 'ASC')
+            ->addOrderBy( 'topic.id', 'ASC')
+        ;
+
+        return $qb;
+    }
 }

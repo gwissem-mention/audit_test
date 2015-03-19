@@ -55,7 +55,12 @@ class RemboursementManager extends BaseManager
 
         //Manage fomartions (inscriptions to sessions)
         $lastInscription = null;
-        foreach ($formations as $formation) {
+        foreach ($formations as $formation) 
+        {
+            if(is_null($prix['formations'][$formation->getUser()->getRegion()->getId()]))
+            {
+                continue;
+            }
 
             $row = new \StdClass;
 
@@ -116,7 +121,7 @@ class RemboursementManager extends BaseManager
 
             $prix['interventions'][ $remboursement->getRegion()->getId() ]['total']        = $total;
             $prix['interventions'][ $remboursement->getRegion()->getId() ]['intervention'] = $remboursement->getIntervention();
-            $prix['formations'][ $remboursement->getRegion()->getId() ]                    = intval($total + $remboursement->getSupplement());
+            $prix['formations'][ $remboursement->getRegion()->getId() ]                    = is_null($remboursement->getSupplement()) ? null : intval($total + $remboursement->getSupplement());
         }
 
         return $prix;
