@@ -1,5 +1,4 @@
 <?php
-
 namespace HopitalNumerique\ForumBundle\Model\Component\Manager;
 
 use CCDNForum\ForumBundle\Model\Component\Manager\SubscriptionManager as SubscriptionCCDNManager;

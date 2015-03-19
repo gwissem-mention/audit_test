@@ -4,6 +4,7 @@ namespace HopitalNumerique\ForumBundle\Model\FrontModel;
 use CCDNForum\ForumBundle\Model\FrontModel\SubscriptionModel as SubscriptionModelBase;
 use HopitalNumerique\ForumBundle\Entity\Board;
 use Symfony\Component\Security\Core\User\UserInterface;
+use HopitalNumerique\ForumBundle\Entity\Topic;
 
 class SubscriptionModel extends SubscriptionModelBase
 {
@@ -41,5 +42,15 @@ class SubscriptionModel extends SubscriptionModelBase
     public function unsubscribeBoard(Board $board, UserInterface $user)
     {
         return $this->getManager()->unsubscribeBoard($board, $user);
+    }
+
+    /**
+     * Retourne les Subscription à envoyer dès que l'on répond à un topic.
+     * 
+     * @param \HopitalNumerique\ForumBundle\Entity\Topic $topic
+     */
+    public function findAllSubscriptionsToSend(Topic $topic)
+    {
+        return $this->getRepository()->findAllSubscriptionsToSend($topic);
     }
 }
