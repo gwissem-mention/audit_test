@@ -1316,10 +1316,10 @@ class User extends BaseUser
     /**
      * Add ConnaissancesAmbassadeur
      *
-     * @param \HopitalNumerique\UserBundle\Entity\ConnaissancesAmbassadeur $contractualisations
+     * @param \HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $contractualisations
      * @return User
      */
-    public function addConnaissancesAmbassadeur(\HopitalNumerique\UserBundle\Entity\ConnaissancesAmbassadeur $connaissanceAmbassadeur)
+    public function addConnaissancesAmbassadeur(\HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $connaissanceAmbassadeur)
     {
         $this->connaissancesAmbassadeurs[] = $connaissanceAmbassadeur;
     
@@ -1329,9 +1329,9 @@ class User extends BaseUser
     /**
      * Remove ConnaissancesAmbassadeur
      *
-     * @param \HopitalNumerique\UserBundle\Entity\ConnaissancesAmbassadeur $connaissanceAmbassadeur
+     * @param \HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $connaissanceAmbassadeur
      */
-    public function removeConnaissancesAmbassadeur(\HopitalNumerique\UserBundle\Entity\ConnaissancesAmbassadeur $connaissanceAmbassadeur)
+    public function removeConnaissancesAmbassadeur(\HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $connaissanceAmbassadeur)
     {
         $this->connaissancesAmbassadeurs->removeElement($connaissanceAmbassadeur);
     }
