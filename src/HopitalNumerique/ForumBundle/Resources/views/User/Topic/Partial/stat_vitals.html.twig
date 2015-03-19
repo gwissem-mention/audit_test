@@ -16,16 +16,18 @@
                 {{- 'link.topic.reply' | trans({}, ForumBundle.translation ) -}}
             </a>
 
-            {%- if canSubscribeToTopic(topic, forum, (subscription is defined ? subscription : null)) -%}
-                <a class="btn btn-success pull-right" href="{{- path('ccdn_forum_user_subscription_subscribe', {'forumName': forumName, 'topicId': topic.getId }) -}}">
-                    {{- 'link.topic.subscribe' | trans({}, ForumBundle.translation ) -}}
-                </a>
-            {%- endif -%}
-
-            {%- if canUnsubscribeFromTopic(topic, forum, (subscription is defined ? subscription : null)) -%}
-                <a class="btn btn-success pull-right" href="{{- path('ccdn_forum_user_subscription_unsubscribe', {'forumName': forumName, 'topicId': topic.getId }) -}}">
-                    {{- 'link.topic.unsubscribe' | trans({}, ForumBundle.translation ) -}}
-                </a>
+            {% if isSubscriptionBoard is not defined or isSubscriptionBoard == false %}
+                {%- if canSubscribeToTopic(topic, forum, (subscription is defined ? subscription : null)) -%}
+                    <a class="btn btn-success pull-right" href="{{- path('ccdn_forum_user_subscription_subscribe', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                        {{- 'link.topic.subscribe' | trans({}, ForumBundle.translation ) -}}
+                    </a>
+                {%- endif -%}
+    
+                {%- if canUnsubscribeFromTopic(topic, forum, (subscription is defined ? subscription : null)) -%}
+                    <a class="btn btn-success pull-right" href="{{- path('ccdn_forum_user_subscription_unsubscribe', {'forumName': forumName, 'topicId': topic.getId }) -}}">
+                        {{- 'link.topic.unsubscribe' | trans({}, ForumBundle.translation ) -}}
+                    </a>
+                {%- endif -%}
             {%- endif -%}
 
 
