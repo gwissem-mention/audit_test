@@ -42,6 +42,10 @@ HopitalNumerique\ForumBundle\Entity\Board:
             targetEntity: HopitalNumerique\ForumBundle\Entity\Topic
             mappedBy: board
             cascade: ["remove"]
+        subscriptions:
+            targetEntity: HopitalNumerique\ForumBundle\Entity\Subscription
+            mappedBy: board
+            cascade: ["persist", "remove"]
     manyToOne:
         category:
             targetEntity: HopitalNumerique\ForumBundle\Entity\Category
