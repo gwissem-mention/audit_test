@@ -12,7 +12,10 @@
                             <li>
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <span class="pull-left" title="{{connaissance.connaissance.libelle}}">{% for i in 1..connaissance.connaissance.order %}<i class="fa fa-star"></i>{% endfor %}</span>
+                                        <span class="pull-right">
+                                            <abbr class="glosstool" title="" data-html="true" data-original-title="{{connaissance.connaissance.libelle}}">{% for i in 1..connaissance.connaissance.order %}<i class="fa fa-star violet"></i>{% endfor %}
+                                            </abbr>
+                                        </span>
                                     </div>
                                     <div class="col-md-10">
                                          - {{connaissance.domaine.libelle}}
@@ -29,3 +32,17 @@
         </div>
     </div>
 </div>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".glosstool").tooltip({
+            placement : 'right'
+        });
+    });
+</script>
+
+<style type="text/css">
+    abbr[title], abbr[data-original-title]{cursor: help; border-bottom: none;}
+    .tooltip{width: 400px;}
+</style>

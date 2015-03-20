@@ -115,6 +115,18 @@ class Note
     {
         return $this->note;
     }
+
+
+
+    /**
+     * Get note
+     *
+     * @return \HopitalNumerique\ObjetBundle\Entity\Objet 
+     */
+    public function getObjet()
+    {
+        return $this->objet;
+    }
     
     /**
      * Set objet
