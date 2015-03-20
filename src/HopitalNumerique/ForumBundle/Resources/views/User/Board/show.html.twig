@@ -18,12 +18,23 @@
 
     <div class="row clearfix">
         {# Nom du board #}
-        <div class="col-md-8">
+        <div class="col-md-12">
             <span class="lead" title="{{- board.name -}}">{{- board.name -}}</span>
         </div>
-
+        
         {# Bouton création topic #}
-        <div class="col-md-4">
+        <div class="btn-toolbar">
+            {%- if canSubscribeToBoard(board, forum, (subscription is defined ? subscription : null)) -%}
+                <a class="btn btn-success pull-right" href="{{- path('ccdn_forum_user_board_subscription_subscribe', {'forumName': forumName, 'board': board.id }) -}}">
+                    {{- 'link.topic.subscribe' | trans({}, ForumBundle.translation ) -}}
+                </a>
+            {%- endif -%}
+            {%- if canUnsubscribeFromBoard(board, forum, (subscription is defined ? subscription : null)) -%}
+                <a class="btn btn-success pull-right" href="{{- path('ccdn_forum_user_board_subscription_unsubscribe', {'forumName': forumName, 'board': board.id }) -}}">
+                    {{- 'link.topic.unsubscribe' | trans({}, ForumBundle.translation ) -}}
+                </a>
+            {%- endif -%}
+        
             <a class="btn btn-success pull-right" rel="nofollow" href="{{- path('ccdn_forum_user_topic_create', {'forumName': forumName, 'boardId': board.getId }) -}}">
                 {{- 'link.topic.create' | trans({}, ForumBundle.translation ) -}}
             </a>

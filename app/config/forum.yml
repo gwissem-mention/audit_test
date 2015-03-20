@@ -34,13 +34,6 @@ ccdn_forum_forum:
             class:                HopitalNumerique\ForumBundle\Entity\Subscription
         registry:
             class:                HopitalNumerique\ForumBundle\Entity\Registry
-    component:
-        helper:
-            role:
-                class:            HopitalNumerique\ForumBundle\Component\Helper\RoleHelper
-        security:
-            authorizer:
-                class:            HopitalNumerique\ForumBundle\Component\Security\Authorizer
     gateway:
         forum:
             class:                CCDNForum\ForumBundle\Model\Component\Gateway\ForumGateway
@@ -98,7 +91,7 @@ ccdn_forum_forum:
         post:
             class:                CCDNForum\ForumBundle\Model\FrontModel\PostModel
         subscription:
-            class:                CCDNForum\ForumBundle\Model\FrontModel\SubscriptionModel
+            class:                HopitalNumerique\ForumBundle\Model\FrontModel\SubscriptionModel
         registry:
             class:                CCDNForum\ForumBundle\Model\FrontModel\RegistryModel
     form:
@@ -186,6 +179,9 @@ ccdn_forum_forum:
         security:
             authorizer:
                 class:                HopitalNumerique\ForumBundle\Component\Security\Authorizer
+        twig_extension:
+            authorizer:
+                class:                HopitalNumerique\ForumBundle\Component\TwigExtension\AuthorizerExtension
     forum:
         admin:
             create:

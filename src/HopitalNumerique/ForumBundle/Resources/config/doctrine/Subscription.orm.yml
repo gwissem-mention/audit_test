@@ -23,6 +23,15 @@ HopitalNumerique\ForumBundle\Entity\Subscription:
                 name: fk_forum_id
                 referencedColumnName: id
                 onDelete: SET NULL
+        board:
+            targetEntity: HopitalNumerique\ForumBundle\Entity\Board
+            cascade: ["persist"]
+            inversedBy: subscriptions
+            nullable: true
+            joinColumn:
+                name: fk_board_id
+                referencedColumnName: id
+                onDelete: SET NULL
         topic:
             targetEntity: HopitalNumerique\ForumBundle\Entity\Topic
             cascade: ["persist"]
