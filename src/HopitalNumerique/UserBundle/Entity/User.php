@@ -341,6 +341,11 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="ConnaissanceAmbassadeur", mappedBy="user", cascade={"persist", "remove" })
      */
     protected $connaissancesAmbassadeurs;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="ConnaissanceAmbassadeurSI", mappedBy="user", cascade={"persist", "remove" })
+     */
+    protected $connaissancesAmbassadeursSI;
 
     // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
     
@@ -1288,6 +1293,16 @@ class User extends BaseUser
     public function getConnaissancesAmbassadeurs()
     {
         return $this->connaissancesAmbassadeurs;
+    }
+
+    /**
+     * Get connaissancesAmbassadeursSI
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConnaissancesAmbassadeursSI()
+    {
+        return $this->connaissancesAmbassadeursSI;
     }
 
     /**

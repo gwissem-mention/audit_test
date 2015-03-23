@@ -91,13 +91,13 @@
 
                                                 <div class="col-md-3">
                                                     {% if ambassadeur.getPath() is not null and ambassadeur.getPath() is not empty %}
-                                                        <img class="photo-silhouette" src="/{{ ambassadeur.getWebPath() }}" width="90px" height="130px">
+                                                        <img class="photo-silhouette" src="/{{ ambassadeur.getWebPath() }}" width="95px" height="145px">
                                                     {% elseif ambassadeur.civilite.id == 8 %}
                                                         {# Monsieur #}
-                                                        <img class="photo-silhouette" src="/medias/Utilisateurs/silhouette-homme.png" width="90px" height="130px">
+                                                        <img class="photo-silhouette" src="/medias/Utilisateurs/silhouette-homme.png" width="95px" height="145px">
                                                     {% else %}
                                                         {# Madame #}
-                                                        <img class="photo-silhouette" src="/medias/Utilisateurs/silhouette-femme.png" width="90px" height="130px">
+                                                        <img class="photo-silhouette" src="/medias/Utilisateurs/silhouette-femme.png" width="95px" height="145px">
                                                     {% endif %}
                                                 </div>
 
@@ -123,9 +123,13 @@
         					                                    {{ambassadeur.fonctionStructure}}
         					                                {% endif %}
         					                            </div>
-    					                            
-        					                            <div class="col-md-12">
+                                                    
+                                                        <div class="col-md-12">
                                                             <a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Connaissances métiers</a>
+                                                        </div>
+                                                
+                                                        <div class="col-md-12">
+                                                            <a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_connaissance_si',{'id':ambassadeur.id})}}">> Connaissances SI</a>
                                                         </div>
                                                         {% if ambassadeur.objets|length > 0 %}
         					                            <div class="col-md-12">

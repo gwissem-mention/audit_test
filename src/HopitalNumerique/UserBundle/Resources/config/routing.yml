@@ -240,7 +240,7 @@ hopitalnumerique_user_ambassadeur_saveobjet:
     defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:saveObjet, _format: json }
 
 hopitalnumerique_user_ambassadeur_domainesFonctionnels:
-    pattern:  /admin/user/ambassadeur/domaines-fonctionnels/{id}
+    pattern:  /admin/user/ambassadeur/connaissances-metiers/{id}
     defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:domainesFonctionnels", id: 1 }
     requirements:
         id: \d+
@@ -248,6 +248,16 @@ hopitalnumerique_user_ambassadeur_domainesFonctionnels:
 hopitalnumerique_user_ambassadeur_savedomaine:
     pattern: /admin/user/ambassadeur/saveDomaine
     defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:saveDomaine, _format: json }
+
+hopitalnumerique_user_ambassadeur_connaissancesSI:
+    pattern:  /admin/user/ambassadeur/connaissances-SI/{id}
+    defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:connaissancesSI", id: 1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_user_ambassadeur_saveConnaissancesSI:
+    pattern: /admin/user/ambassadeur/saveConnaissancesSI
+    defaults: { _controller: HopitalNumeriqueUserBundle:Ambassadeur:saveConnaissancesSI, _format: json }
 
 #Utilisateur
 hopital_numerique_user_resultats:

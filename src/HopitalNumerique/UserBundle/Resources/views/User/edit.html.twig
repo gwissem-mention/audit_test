@@ -72,6 +72,9 @@
                             <li>
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Connaissances métiers</a>
                             </li>
+                            <li>
+                                <a href="{{path('hopitalnumerique_user_ambassadeur_connaissancesSI', {'id':user.id})}}">Connaissances SI</a>
+                            </li>
                         {% endif %}
 
                         {% if user.id is not null %}

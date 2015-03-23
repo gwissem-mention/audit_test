@@ -215,14 +215,6 @@ class ReferenceManager extends BaseManager
             $domaines[ $result->getId() ] = $tmp;
         }
 
-        //on met en place ceux attribué à l'user
-        $userDomaines = $user->getDomaines();
-        foreach( $userDomaines as $one){
-            $tmp                       = $domaines[ $one->getId() ];
-            $tmp->selected             = true;
-            $domaines[ $one->getId() ] = $tmp;
-        }
-
         return $domaines;
     }
 

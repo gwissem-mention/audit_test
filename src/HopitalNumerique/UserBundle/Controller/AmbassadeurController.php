@@ -361,6 +361,120 @@ class AmbassadeurController extends Controller
         return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_user_ambassadeur_domainesFonctionnels', array('id' => $id)).'"}', 200);
     }
 
+
+
+    /**
+     * Page de gestion des domaines fonctionnels de l'user
+     *
+     * @param integer $id ID de l'user
+     *
+     * @return View
+     */
+    public function connaissancesSIAction( $id )
+    {
+        //Récupération de l'utilisateur passé en param
+        $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
+
+        //récupération des domaines fonctionnels
+        $domaines    = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'code' => 'DOCUMENT_CONTRACTUALISATION_TYPE') );
+        $domainesIds = array();
+        $affichageDomaines = array();
+
+        foreach ($domaines as $domaine) 
+        {
+            if(!is_null($domaine->getParent()))
+            {
+                if(!array_key_exists($domaine->getParent()->getId(), $affichageDomaines))
+                {
+                    $affichageDomaines[$domaine->getParent()->getId()] = array(
+                        'libelle' => $domaine->getParent()->getLibelle(),
+                        'fils'    => array()
+                    );    
+                }
+
+                $affichageDomaines[$domaine->getParent()->getId()]['fils'][] = $domaine;
+            }
+            else
+            {
+                if(!array_key_exists($domaine->getId(), $affichageDomaines))
+                {
+                    $affichageDomaines[$domaine->getId()] = array(
+                        'libelle' => '',
+                        'fils'    => array()
+                    );    
+                }
+                $affichageDomaines[$domaine->getId()]['fils'][] = $domaine;
+            }
+
+            $domainesIds[] = $domaine->getId();
+        }
+
+        $connaissanceAmbassadeurs = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->getConnaissanceAmbassadersSIOrderedByDomaine( $user, $domainesIds);
+        $connaissanceReferentiels = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR'), array('order' => 'ASC'));
+
+        return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:connaissancesSI.html.twig', array(
+            'user'                     => $user,
+            'options'                  => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
+            'domaines'                 => $domaines,
+            'affichageDomaines'        => $affichageDomaines,
+            'connaissanceAmbassadeurs' => $connaissanceAmbassadeurs,
+            'connaissanceReferentiels' => $connaissanceReferentiels
+        ));
+    }
+
+    /**
+     * Sauvegarde AJAX de la liaison domaine + ambassadeur
+     */
+    public function saveConnaissancesSIAction()
+    {
+        //get posted vars
+        $id       = $this->get('request')->request->get('id');
+        $domaines = $this->get('request')->request->get('domaines');
+
+        //Problème avec les clés en JS : si on créé la clé 200, on va avoir un tableau de 201 entrée avec les entrées de 0 à 199 vides.
+        foreach ($domaines as $key => $value)
+        {
+            if($value === "")
+            {
+                unset($domaines[$key]);
+            }
+        }
+
+        //bind ambassadeur
+        $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
+
+        $domainesIds = array_keys($domaines);
+        
+        //bind objects
+        $refDomaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $domainesIds ) );
+
+        $connaissancesAmbassadeurs = array();
+        foreach ($refDomaines as $refDomaine) 
+        {
+            //Vérifie si l'utilisateur a déjà renseigné ce domaine
+            $connaissanceAmbassadeur = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->findOneBy(array('user' => $user, 'domaine' => $refDomaine));
+
+            if(is_null($connaissanceAmbassadeur))
+            {
+                $connaissanceAmbassadeur = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->createEmpty();
+                $connaissanceAmbassadeur->setUser($user);
+                $connaissanceAmbassadeur->setDomaine($refDomaine);
+            }
+
+            $connaissance = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => intval($domaines[$refDomaine->getId()]) ) );
+            $connaissanceAmbassadeur->setConnaissance($connaissance);
+
+            //Ajouter au tableau des connaissances à sauvegarder
+            $connaissancesAmbassadeurs[] = $connaissanceAmbassadeur;
+        }
+
+        $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->save($connaissancesAmbassadeurs);
+
+        $this->get('session')->getFlashBag()->add( 'success' ,  'Les connaissances SI de l\'utilisateur ont été mis à jour.' );
+
+        return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_user_ambassadeur_connaissancesSI', array('id' => $id)).'"}', 200);
+    }
+
     /**
      * Liste des domaines de l'user : Fiche
      *
@@ -371,7 +485,7 @@ class AmbassadeurController extends Controller
         //bind ambassadeur
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $idUser) );
 
-        $domaines = count($user->getDomaines()) >= 1 ? $user->getDomaines() : false;
+        $domaines = count($user->getConnaissancesAmbassadeurs()) >= 1 ? $user->getConnaissancesAmbassadeurs() : false;
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:liste-domaines.html.twig', array(
             'domaines' => $domaines
