@@ -159,7 +159,7 @@ class Board extends BaseBoard
      * @param  Subscription $subscription
      * @return Board
      */
-    public function addSubscription($subscription)
+    public function addSubscription(Subscription $subscription)
     {
         $this->subscriptions->add($subscription);
     
@@ -171,11 +171,10 @@ class Board extends BaseBoard
      *
      * @return $this
      */
-    public function removeSubscription($subscription)
+    public function removeSubscription(Subscription $subscription)
     {
         $this->subscriptions->removeElement($subscription);
     
         return $this;
     }
-    
 }
