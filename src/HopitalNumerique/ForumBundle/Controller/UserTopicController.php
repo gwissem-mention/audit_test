@@ -4,6 +4,7 @@ namespace HopitalNumerique\ForumBundle\Controller;
 use CCDNForum\ForumBundle\Controller\UserTopicController as UserTopicControllerCCDN;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use HopitalNumerique\ForumBundle\Entity\Board;
 
 /**
  *
@@ -30,19 +31,20 @@ class UserTopicController extends UserTopicControllerCCDN
         $this->isAuthorised($this->getAuthorizer()->canShowTopic($topic, $forum));
         $postsPager = $this->getPostModel()->findAllPostsPaginatedByTopicId($topicId, $this->getQuery('page', 1), $this->getPageHelper()->getPostsPerPageOnTopics(), true);
 
-        if ($this->isGranted('ROLE_USER')) {
-            if ($subscription = $this->getSubscriptionModel()->findOneSubscriptionForTopicByIdAndUserById($topicId, $this->getUser()->getId())) {
+        $subscription = null;
+        if ($this->isGranted('ROLE_USER'))
+        {
+            if ($subscription = $this->getSubscriptionModel()->findOneSubscriptionForTopicByIdAndUserById($topicId, $this->getUser()->getId()))
+            {
                 $this->getSubscriptionModel()->markAsRead($subscription);
             }
-        } else {
-            $subscription = null;
         }
 
         //Récupération de l'ensemble des boards pour le déplacement des posts
         $boards = array();
-        foreach ($forum->getCategories() as $tempCategory) 
+        foreach ($forum->getCategories() as $tempCategory)
         {
-            foreach ($tempCategory->getBoards() as $tempBoard) 
+            foreach ($tempCategory->getBoards() as $tempBoard)
             {
                 $boards[] = $tempBoard;
             }
@@ -60,8 +62,9 @@ class UserTopicController extends UserTopicControllerCCDN
             'topic'              => $topic,
             'forumName'          => $forumName,
             'pager'              => $postsPager, 
-            'subscription'       => $subscription, 
+            'subscription'       => $subscription,
             'subscription_count' => $subscriberCount,
+            'isSubscriptionBoard' => $this->isSubscriptionBoard($topic->getBoard()),
             'note'               => $note,
             'boards'             => $boards
         ));
@@ -180,5 +183,18 @@ class UserTopicController extends UserTopicControllerCCDN
         );
 
         return $this->container->get('igorw_file_serve.response_factory')->create( $fileName , 'application/pdf', $options);
+    }
+
+    /**
+     * Retourne si l'utilisateur est abonné au Board.
+     */
+    public function isSubscriptionBoard(Board $board)
+    {
+        $subscription = $this->getSubscriptionModel()->findOneSubscriptionForBoardAndUser($board, $this->getUser());
+        
+        if (null === $subscription)
+            return false;
+        
+        return $subscription->isSubscribed();
     }
 }

@@ -3,9 +3,7 @@ namespace HopitalNumerique\ForumBundle\Component\Dispatcher\Listener;
 
 use CCDNForum\ForumBundle\Component\Dispatcher\Listener\SubscriberListener as CCDNSubscriberListener;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicEvent;
-
 use Symfony\Component\Security\Core\SecurityContext;
-
 use Nodevo\MailBundle\Manager\MailManager;
 
 class SubscriberListener extends CCDNSubscriberListener
@@ -37,6 +35,12 @@ class SubscriberListener extends CCDNSubscriberListener
         $this->mailer            = $mailer;
     }
 
+    public function onTopicCreateComplete(UserTopicEvent $event)
+    {
+        parent::onTopicCreateComplete($event);
+        $this->onTopicReplyComplete($event);
+    }
+    
     /**
      *
      * @access public
@@ -55,7 +59,7 @@ class SubscriberListener extends CCDNSubscriberListener
                     $this->subscriptionModel->subscribe($event->getTopic(), $user);
                 }
 
-                $subscriptions = $this->subscriptionModel->findAllSubscriptionsForTopicById($event->getTopic()->getId());
+                $subscriptions = $this->subscriptionModel->findAllSubscriptionsToSend($event->getTopic());
 
                 //Envoie des mails pour les followers
                 foreach ($subscriptions as $subscription) 

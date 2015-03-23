@@ -470,9 +470,9 @@ class MailManager extends BaseManager
     {
 
         //Création du lien dans le mail
-        $options['lienversmessage'] = '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'ccdn_forum_user_subscription_index', array(
+        $options['lienversmessage'] = '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'ccdn_forum_user_topic_show', array(
                                             'forumName' => $options['forum'],
-                                            'filter'    => 'unread' 
+                                            'topicId'    => $topicId
                                         ))) .'" target="_blank" >Nouveau message</a>';
 
         $mail = $this->findOneById(36);

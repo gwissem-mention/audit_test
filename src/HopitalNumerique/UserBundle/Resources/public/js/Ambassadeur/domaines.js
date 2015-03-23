@@ -1,10 +1,12 @@
 function saveDomaines()
 {
-    var domaines = [];
+    var domaines = new Array();
 
-    $('#domaines tbody tr input').each(function(){
-        if( $(this).prop('checked') )
-            domaines.push( $(this).data('id') )
+    $('#domaines tbody tr select').each(function(){
+        if( $(this).val() !== "" )
+        {
+            domaines[$(this).data('id')] = $(this).val();
+        }
     });
 
     $.ajax({

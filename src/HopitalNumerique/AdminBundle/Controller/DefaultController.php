@@ -199,6 +199,9 @@ class DefaultController extends Controller
             'points-durs'               => 0,
             'productions'               => 0,
             'publications-non-publiees' => 0,
+            'nb-notes'                  => 0,
+            'nb-commentaires'           => 0,
+            'pourcent-note-publication' => 0,
             'top5-points-dur'           => array(),
             'bottom5-points-dur'        => array(),
             'top5-productions'          => array(),
@@ -208,23 +211,34 @@ class DefaultController extends Controller
         //Bloc "Publication" + TOP + BOTTOM
         $datas        = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsForDashboard();
         $publications = array();
-        foreach( $datas as $one){
+        foreach( $datas as $one)
+        {
             if( !isset($publications[ $one['id'] ]))
+            {
                 $publications[ $one['id'] ] = $one;
+            }
 
             $publications[ $one['id'] ]['types'][] = $one['typeId'];
             if( !is_null($one['parentId']) )
+            {
                 $publications[ $one['id'] ]['types'][] = $one['parentId'];
+            }
         }
 
-        $interval = new \DateInterval('P1M');
-        $today    = new \DateTime('now');
-        foreach($publications as $publication) {
+        $interval     = new \DateInterval('P1M');
+        $today        = new \DateTime('now');
+        $notes        = $this->get('hopitalnumerique_objet.manager.note')->findAll();
+        $commentaires = $this->get('hopitalnumerique_objet.manager.commentaire')->findAll();
+        foreach($publications as $publication) 
+        {
             if( $publication['etat'] == 4 || (!is_null($publication['dateDebutPublication']) && $publication['dateDebutPublication'] > $today) || ( !is_null($publication['dateFinPublication']) && $publication['dateFinPublication'] < $today) )
+            {
                 $blocObjets['publications-non-publiees']++;
+            }
 
             //Points Durs
-            if( in_array('184', $publication['types']) ){
+            if( in_array('184', $publication['types']) )
+            {
                 $blocObjets['points-durs']++;
 
                 //Build Top 5
@@ -232,9 +246,13 @@ class DefaultController extends Controller
 
                 //Bottom 5 - On affiche ceux qui ont plus d'un mois
                 if( $publication['dateCreation']->add( $interval ) <= $today )
+                {
                     $blocObjets['bottom5-points-dur'][] = $publication;
+                }
             //Productions
-            }else if( in_array('175', $publication['types']) ){
+            }
+            elseif( in_array('175', $publication['types']) )
+            {
                 $blocObjets['productions']++;
 
                 //Build Top 5
@@ -242,14 +260,58 @@ class DefaultController extends Controller
 
                 //Bottom 5
                 if( $publication['dateCreation']->add( $interval ) <= $today )
+                {
                     $blocObjets['bottom5-productions'][] = $publication;
+                }
+            }
+        }
+        $publicationNoted          = array();
+        $publicationNotedHighValue = array();
+        foreach ($notes as $note) 
+        {
+            if(!is_null($note->getObjet()))
+            {
+                $publicationNotedHighValue[$note->getObjet()->getId()][] = $note->getNote();
+
+                if(!in_array($note->getObjet()->getId(), $publicationNoted))
+                {
+                    $publicationNoted[] = $note->getObjet()->getId();
+                }
             }
         }
 
-        $blocObjets['top5-points-dur']     = $this->get5('top', $blocObjets['top5-points-dur'] );
-        $blocObjets['bottom5-points-dur']  = $this->get5('bottom', $blocObjets['bottom5-points-dur'] );
-        $blocObjets['top5-productions']    = $this->get5('top', $blocObjets['top5-productions'] );
-        $blocObjets['bottom5-productions'] = $this->get5('bottom', $blocObjets['bottom5-productions'] );
+        //Calcul de la note moyenne des publication
+        foreach ($publicationNotedHighValue as $key => $arrayNote) 
+        {
+            $note = 0;
+            $nbNote = 0;
+            foreach ($arrayNote as $value) 
+            {
+                $nbNote++;
+                $note += $value;
+            }
+
+            $note = round(($note / $nbNote), 1);
+
+            if($note >= 3.5)
+            {
+                $publicationNotedHighValue[$key] = $note;
+            }
+            else
+            {
+                unset($publicationNotedHighValue[$key]);
+            }
+        }
+
+        $pourcentage = count($publicationNoted) == 0 ? 0 : (count($publicationNotedHighValue) / count($publicationNoted) );
+
+        $blocObjets['nb-notes']                  = count($notes);
+        $blocObjets['nb-commentaires']           = count($commentaires);
+        $blocObjets['pourcent-note-publication'] = round($pourcentage * 100, 0);
+        $blocObjets['top5-points-dur']           = $this->get5('top', $blocObjets['top5-points-dur'] );
+        $blocObjets['bottom5-points-dur']        = $this->get5('bottom', $blocObjets['bottom5-points-dur'] );
+        $blocObjets['top5-productions']          = $this->get5('top', $blocObjets['top5-productions'] );
+        $blocObjets['bottom5-productions']       = $this->get5('bottom', $blocObjets['bottom5-productions'] );
         
         return $blocObjets;
     }

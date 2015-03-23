@@ -3,6 +3,9 @@
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserSubscriptionController as CCDNUserSubscriptionController;
+use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
+use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicEvent;
+use HopitalNumerique\ForumBundle\Entity\Board;
 
 /**
  * UserSubscriptionController
@@ -101,5 +104,60 @@ class UserSubscriptionController extends CCDNUserSubscriptionController
             'pager' => $subscriptionPager,
             'posts_per_page' => $this->container->getParameter('ccdn_forum_forum.topic.user.show.posts_per_page')
         ));
+    }
+    
+    /**
+     *
+     * @access public
+     * @param  string           $forumName
+     * @param  \HopitalNumerique\ForumBundle\Entity\Board $board
+     * @return RedirectResponse
+     */
+    public function subscribeBoardAction($forumName, Board $board)
+    {
+        $this->isAuthorised('ROLE_USER');
+    
+        if ($forumName != '~') {
+            $this->isFound($forum = $this->getForumModel()->findOneForumByName($forumName));
+        } else {
+            $forum = null;
+        }
+    
+        $this->isAuthorised($this->getAuthorizer()->canSubscribeToBoard($board, $forum));
+        $this->getSubscriptionModel()->subscribeBoard($board, $this->getUser())->flush();
+        // Suppression du dispatch car seulement pour un topic
+
+        return $this->redirectResponse($this->path('ccdn_forum_user_board_show', array(
+            'forumName' => $forumName,
+            'boardId' => $board->getId()
+        )));
+    }
+    
+    /**
+     *
+     * @access public
+     * @param  string           $forumName
+     * @param  \HopitalNumerique\ForumBundle\Entity\Board $board
+     * @return RedirectResponse
+     */
+    public function unsubscribeBoardAction($forumName, Board $board)
+    {
+        $this->isAuthorised('ROLE_USER');
+    
+        if ($forumName != '~') {
+            $this->isFound($forum = $this->getForumModel()->findOneForumByName($forumName));
+        } else {
+            $forum = null;
+        }
+
+        $subscription = $this->getSubscriptionModel()->findOneSubscriptionForBoardAndUser($board, $this->getUser());
+        $this->isAuthorised($this->getAuthorizer()->canUnsubscribeFromBoard($board, $forum, $subscription));
+        $this->getSubscriptionModel()->unsubscribeBoard($board, $this->getUser())->flush();
+        // Suppression du dispatch car seulement pour un topic
+
+        return $this->redirectResponse($this->path('ccdn_forum_user_board_show', array(
+            'forumName' => $forumName,
+            'boardId' => $board->getId()
+        )));
     }
 }

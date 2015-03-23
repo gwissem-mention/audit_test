@@ -346,6 +346,11 @@ class User extends BaseUser
      */
     protected $domaines;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ConnaissanceAmbassadeur", mappedBy="user", cascade={"persist", "remove" })
+     */
+    protected $connaissancesAmbassadeurs;
+
     // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
     
     /**
@@ -1306,6 +1311,39 @@ class User extends BaseUser
     public function getDomaines()
     {
         return $this->domaines;
+    }
+
+    /**
+     * Add ConnaissancesAmbassadeur
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $contractualisations
+     * @return User
+     */
+    public function addConnaissancesAmbassadeur(\HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $connaissanceAmbassadeur)
+    {
+        $this->connaissancesAmbassadeurs[] = $connaissanceAmbassadeur;
+    
+        return $this;
+    }
+    
+    /**
+     * Remove ConnaissancesAmbassadeur
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $connaissanceAmbassadeur
+     */
+    public function removeConnaissancesAmbassadeur(\HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $connaissanceAmbassadeur)
+    {
+        $this->connaissancesAmbassadeurs->removeElement($connaissanceAmbassadeur);
+    }
+    
+    /**
+     * Get connaissanceAmbassadeur
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConnaissancesAmbassadeurs()
+    {
+        return $this->connaissancesAmbassadeurs;
     }
 
     /**

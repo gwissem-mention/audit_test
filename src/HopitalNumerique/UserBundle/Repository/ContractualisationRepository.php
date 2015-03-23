@@ -53,7 +53,7 @@ class ContractualisationRepository extends EntityRepository
         if( $condition )
         {
             $qb->where('user.id = :id')
-                    ->setParameter('id', $condition->value);
+                ->setParameter('id', $condition->value);
         }
         
         return $qb;

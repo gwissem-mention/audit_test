@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\ForumBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use CCDNForum\ForumBundle\Entity\Board as BaseBoard;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
@@ -15,6 +16,11 @@ class Board extends BaseBoard
      * @var boolean
      */
     private $piecesJointesAutorisees;
+    
+    /**
+     * @var ArrayCollection
+     */
+    private $subscriptions;
     
     /**
      * @param SecurityContextInterface $securityContext
@@ -121,5 +127,54 @@ class Board extends BaseBoard
     public function isPiecesJointesAutorisees()
     {
         return $this->piecesJointesAutorisees;
+    }
+
+
+    /**
+     * Get subscriptions
+     *
+     * @return ArrayCollection
+     */
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
+    }
+    
+    /**
+     * Set subscriptions
+     *
+     * @param  ArrayCollection $subscriptions
+     * @return Board
+     */
+    public function setSubscriptions(ArrayCollection $subscriptions = null)
+    {
+        $this->subscriptions = $subscriptions;
+    
+        return $this;
+    }
+    
+    /**
+     * Add topic
+     *
+     * @param  Subscription $subscription
+     * @return Board
+     */
+    public function addSubscription(Subscription $subscription)
+    {
+        $this->subscriptions->add($subscription);
+    
+        return $this;
+    }
+    
+    /**
+     * @param Subscription $subscription
+     *
+     * @return $this
+     */
+    public function removeSubscription(Subscription $subscription)
+    {
+        $this->subscriptions->removeElement($subscription);
+    
+        return $this;
     }
 }

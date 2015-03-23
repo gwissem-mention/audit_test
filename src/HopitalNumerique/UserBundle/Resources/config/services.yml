@@ -20,6 +20,7 @@ parameters:
     hopitalnumerique_user.manager.refus_candidature.class: HopitalNumerique\UserBundle\Manager\RefusCandidatureManager
     #Ambassadeurs
     hopitalnumerique_user.grid.objet.class: HopitalNumerique\UserBundle\Grid\ObjetGrid
+    hopitalnumerique_user.manager.connaissance_ambassadeur.class: HopitalNumerique\UserBundle\Manager\ConnaissanceAmbassadeurManager
     #Etablissements
     hopitalnumerique_user.grid.etablissement.class: HopitalNumerique\UserBundle\Grid\EtablissementGrid
     #Extensions twig
@@ -107,6 +108,12 @@ services:
     hopitalnumerique_user.grid.objet:
         class: %hopitalnumerique_user.grid.objet.class%
         arguments: ["@service_container"]
+    #--Manager
+    hopitalnumerique_user.manager.connaissance_ambassadeur:
+        class: %hopitalnumerique_user.manager.connaissance_ambassadeur.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
     #Etablissement
     #--Grid
