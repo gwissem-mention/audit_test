@@ -338,15 +338,6 @@ class User extends BaseUser
     protected $contactAutre;
     
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
-     * @ORM\JoinTable(name="core_user_domaines",
-     *      joinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
-     * )
-     */
-    protected $domaines;
-
-    /**
      * @ORM\OneToMany(targetEntity="ConnaissanceAmbassadeur", mappedBy="user", cascade={"persist", "remove" })
      */
     protected $connaissancesAmbassadeurs;
@@ -578,7 +569,6 @@ class User extends BaseUser
         $this->civilite   = array();
         $this->lock       = false;
         $this->archiver   = false;
-        $this->domaines   = new \Doctrine\Common\Collections\ArrayCollection();
         $this->nbVisites  = 0;
     }
 
@@ -1265,52 +1255,6 @@ class User extends BaseUser
     public function hasRoleExpert()
     {
         return $this->hasRole(Role::$ROLE_EXPERT_LABEL);
-    }
-
-    /**
-     * Add domaine
-     *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $domaine
-     * @return Objet
-     */
-    public function addDomaine(\HopitalNumerique\ReferenceBundle\Entity\Reference $domaine)
-    {
-        $this->domaines[] = $domaine;
-    
-        return $this;
-    }
-
-    /**
-     * Remove domaine
-     *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $domaine
-     */
-    public function removeDomaine(\HopitalNumerique\ReferenceBundle\Entity\Reference $domaine)
-    {
-        $this->domaines->removeElement($domaine);
-    }
-
-    /**
-     * Set domaines
-     *
-     * @param \Doctrine\Common\Collections\Collection $domaines
-     * @return Objet
-     */
-    public function setDomaines(array $domaines)
-    {        
-        $this->domaines = $domaines;
-    
-        return $this;
-    }
-
-    /**
-     * Get domaines
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getDomaines()
-    {
-        return $this->domaines;
     }
 
     /**
