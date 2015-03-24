@@ -11,14 +11,14 @@
                         {% if connaissance.connaissance is not null %}
                             <li>
                                 <div class="row">
-                                    <div class="col-md-2">
-                                        {#<span class="pull-right">
+                                    {#<div class="col-md-2">
+                                        <span class="pull-right">
                                             <abbr class="glosstool" title="" data-html="true" data-original-title="{{connaissance.connaissance.libelle}}">{% for i in 1..connaissance.connaissance.order %}<i class="fa fa-star violet"></i>{% endfor %}
                                             </abbr>
-                                        </span>#}
-                                    </div>
-                                    <div class="col-md-10">
-                                         - {{connaissance.domaine.libelle}}
+                                        </span>
+                                    </div>#}
+                                    <div class="col-md-12">
+                                        - {{connaissance.domaine.libelle}}
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>

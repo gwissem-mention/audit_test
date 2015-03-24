@@ -115,6 +115,21 @@ class SessionType extends AbstractType
                         ->orderBy('role.name', 'ASC');
                     }
             ))
+            ->add('connaissances', 'genemu_jqueryselect2_entity', array(
+                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property'      => 'libelle',
+                    'multiple'      => true,
+                    'required'      => false,
+                    'label'         => 'Connaissances concernées',
+                    'empty_value'   => ' - ',
+                    'attr'          => array('class' => 'connaissances'),
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('ref')
+                            ->where('ref.code = :etat')
+                            ->setParameter('etat', 'DEPARTEMENT')
+                            ->orderBy('ref.order', 'ASC');
+                    }
+            ))
             ->add('textMailRappel', 'textarea', array(
                     'required' => true,
                     'label'    => 'Texte du mail de rappel',

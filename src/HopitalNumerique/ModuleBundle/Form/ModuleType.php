@@ -44,6 +44,21 @@ class ModuleType extends AbstractType
                         return $er->getProductionsActive();
                     }
             ))
+            ->add('connaissances', 'genemu_jqueryselect2_entity', array(
+                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property'      => 'libelle',
+                    'multiple'      => true,
+                    'required'      => true,
+                    'label'         => 'Connaissances concernées',
+                    'empty_value'   => ' - ',
+                    'attr'          => array('class' => 'connaissances'),
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('ref')
+                            ->where('ref.code = :etat')
+                            ->setParameter('etat', 'DEPARTEMENT')
+                            ->orderBy('ref.order', 'ASC');
+                    }
+            ))
             ->add('duree', 'entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property'      => 'libelle',
