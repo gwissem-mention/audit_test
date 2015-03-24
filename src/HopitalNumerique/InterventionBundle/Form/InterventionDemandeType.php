@@ -150,7 +150,7 @@ abstract class InterventionDemandeType extends AbstractType
                 'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
                 'multiple' => true,
-                'required' => false
+                'required' => true
             ))
             ->add('connaissancesSI', 'genemu_jqueryselect2_entity', array(
                 'choices'  => $this->formInterventionDemandeManager->getConnaissancesSIChoices($this->interventionDemande->getAmbassadeur()),
@@ -158,7 +158,7 @@ abstract class InterventionDemandeType extends AbstractType
                 'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
                 'multiple' => true,
-                'required' => false,
+                'required' => true,
                 'group_by' => 'parentName'
             ))
             ->add('objetsAutres', 'textarea', array(
