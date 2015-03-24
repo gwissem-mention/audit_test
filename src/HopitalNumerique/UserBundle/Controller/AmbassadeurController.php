@@ -376,7 +376,7 @@ class AmbassadeurController extends Controller
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
 
         //récupération des domaines fonctionnels
-        $domaines    = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'code' => 'DEPARTEMENT') );
+        $domaines    = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'code' => 'CONNAISSANCES_AMBASSADEUR_SI') );
         $domainesIds = array();
         $affichageDomaines = array();
 

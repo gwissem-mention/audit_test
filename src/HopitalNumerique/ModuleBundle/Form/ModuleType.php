@@ -49,14 +49,17 @@ class ModuleType extends AbstractType
                     'property'      => 'libelle',
                     'multiple'      => true,
                     'required'      => true,
+                    'group_by'      => 'parentName',
                     'label'         => 'Connaissances concernées',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => 'connaissances'),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                             ->where('ref.code = :etat')
-                            ->setParameter('etat', 'DEPARTEMENT')
-                            ->orderBy('ref.order', 'ASC');
+                            ->setParameter('etat', 'CONNAISSANCES_AMBASSADEUR_SI')
+                            ->leftJoin('ref.parent', 'parent')
+                            ->orderBy('parent.libelle', 'ASC')
+                            ->addOrderBy('ref.order', 'ASC');
                     }
             ))
             ->add('duree', 'entity', array(
