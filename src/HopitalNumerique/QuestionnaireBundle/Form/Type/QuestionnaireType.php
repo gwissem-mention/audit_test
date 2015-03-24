@@ -278,7 +278,9 @@ class QuestionnaireType extends AbstractType
 
             	    $objetsOptions = array();
             	    foreach ($interventionDemande->getObjets() as $objet)
+                    {
             	        $objetsOptions[$objet->getId()] = $objet->getTitre();
+                    }
             	    
             	    $objetIdsSelectionnees = array();
             	    $reponses = $this->_managerReponse->reponsesByQuestionnaireByUser($questionnaire->getId(), $interventionDemande->getReferent()->getId(), true, $interventionDemande->getId());
@@ -294,7 +296,9 @@ class QuestionnaireType extends AbstractType
             	    else // Tout coché par défaut
             	    {
             	        foreach ($interventionDemande->getObjets() as $objet)
+                        {
             	            $objetIdsSelectionnees[] = $objet->getId();
+                        }
             	    }
             	    
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'choice', array(

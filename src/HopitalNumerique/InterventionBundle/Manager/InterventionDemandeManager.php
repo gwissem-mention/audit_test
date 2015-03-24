@@ -725,6 +725,8 @@ class InterventionDemandeManager extends BaseManager
             'Autres établissements',
             'Prods',
             'Autres objets',
+            'Connaisances métier',
+            'Connaissances SI',
             'Description du projet',
             'Description de la difficulté',
             'Champ libre',
@@ -739,14 +741,28 @@ class InterventionDemandeManager extends BaseManager
         );
         
         foreach ($questionnaire->getQuestions() as $question)
+        {
             $exportTitres[] = $question->getLibelle();
+        }
         
         $interventionDemandesExport = array();
         foreach ($this->findForExport($allPrimaryKeys) as $interventionDemande)
         {
-            $prods = array();
+            $prods           = array();
+            $connaissances   = array();
+            $connaissancesSI = array();
             foreach ($interventionDemande->getObjets() as $objet)
+            {
                 $prods[] = $objet->getTitre();
+            }
+            foreach ($interventionDemande->getConnaissances() as $connaissance)
+            {
+                $connaissances[] = $connaissance->getLibelle();
+            }
+            foreach ($interventionDemande->getConnaissancesSI() as $connaissanceSI)
+            {
+                $connaissancesSI[] = $connaissanceSI->getLibelle();
+            }
 
             $interventionDemandeExport = array
             (
@@ -773,6 +789,8 @@ class InterventionDemandeManager extends BaseManager
                 $interventionDemande->getAutresEtablissements(),
                 implode("\n", $prods),
                 $interventionDemande->getObjetsAutres(),
+                implode("\n | ", $connaissances),
+                implode("\n | ", $connaissancesSI),
                 $interventionDemande->getDescription(),
                 $interventionDemande->getDifficulteDescription(),
                 $interventionDemande->getChampLibre(),
@@ -804,21 +822,30 @@ class InterventionDemandeManager extends BaseManager
                                 $objets = $this->objetManager->findBy(array('id' => $objetIds));
                                 $objetsTitresTab = array();
                                 foreach ($objets as $objet)
+                                {
                                     $objetsTitresTab[] = $objet->getTitre();
+                                }
                                 $objetTitres = implode("\n", $objetsTitresTab);
                             }
 
                             $interventionDemandeExport[] = $objetTitres;
                         }
                         elseif (null !== $reponse->getReference())
+                        {
                             $interventionDemandeExport[] = $reponse->getReference()->getLibelle();
-                        else $interventionDemandeExport[] = $reponse->getReponse();
+                        }
+                        else 
+                        {
+                            $interventionDemandeExport[] = $reponse->getReponse();
+                        }
                         $reponseExiste = true;
                         break;
                     }
                 }
                 if (false === $reponseExiste)
+                {
                     $interventionDemandeExport[] = '';
+                }
             }
 
             $interventionDemandesExport[] = $interventionDemandeExport;

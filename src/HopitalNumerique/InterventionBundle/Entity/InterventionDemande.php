@@ -281,6 +281,37 @@ class InterventionDemande
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinTable(name="hn_intervention_connaissance_metier",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id", onDelete="CASCADE")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")
+     *   }
+     * )
+     */
+    private $connaissances;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinTable(name="hn_intervention_connaissance_si",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="interv_id", referencedColumnName="interv_id", onDelete="CASCADE")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")
+     *   }
+     * )
+     */
+    private $connaissancesSI;
+
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement", mappedBy="interventionDemandeRegroupee", cascade={"persist", "remove" })
      */
     private $interventionRegroupementsDemandesPrincipales;
@@ -1282,5 +1313,95 @@ class InterventionDemande
     public function removeInterventionRegroupementsDemandesRegroupee(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesRegroupees)
     {
         $this->interventionRegroupementsDemandesRegroupees->removeElement($interventionRegroupementsDemandesRegroupees);
+    }
+
+    /**
+     * Add connaissances
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     * @return InterventionDemande
+     */
+    public function addConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
+    {
+        $this->connaissances[] = $connaissances;
+
+        return $this;
+    }
+
+    /**
+     * Remove connaissances
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     */
+    public function removeConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
+    {
+        $this->connaissances->removeElement($connaissances);
+    }
+
+    /**
+     * Get connaissances
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getConnaissances()
+    {
+        return $this->connaissances;
+    }
+
+    /**
+     * Get connaissances
+     *
+     * @return this
+     */
+    public function setConnaissances($connaissances)
+    {
+        $this->connaissances = $connaissances;
+
+        return $this;
+    }
+
+    /**
+     * Add connaissancesSI
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesSI
+     * @return InterventionDemande
+     */
+    public function addConnaissancesSI(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesSI)
+    {
+        $this->connaissancesSI[] = $connaissancesSI;
+
+        return $this;
+    }
+
+    /**
+     * Remove connaissancesSI
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesSI
+     */
+    public function removeConnaissancesSI(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesSI)
+    {
+        $this->connaissancesSI->removeElement($connaissancesSI);
+    }
+
+    /**
+     * Get connaissancesSI
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getConnaissancesSI()
+    {
+        return $this->connaissancesSI;
+    }
+
+    /**
+     * Get connaissancesSI
+     *
+     * @return this
+     */
+    public function setConnaissancesSI($connaissancesSI)
+    {
+        $this->connaissancesSI = $connaissancesSI;
+
+        return $this;
     }
 }

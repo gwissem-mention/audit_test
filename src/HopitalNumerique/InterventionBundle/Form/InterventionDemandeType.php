@@ -144,6 +144,23 @@ abstract class InterventionDemandeType extends AbstractType
                 'required' => false,
                 'attr'     => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_objets')
             ))
+            ->add('connaissances', 'genemu_jqueryselect2_entity', array(
+                'choices'  => $this->formInterventionDemandeManager->getConnaissancesChoices($this->interventionDemande->getAmbassadeur()),
+                'label'    => 'Ma sollicitation porte sur la/les connaissances(s) métier(s) suivante(s)',
+                'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property' => 'libelle',
+                'multiple' => true,
+                'required' => false
+            ))
+            ->add('connaissancesSI', 'genemu_jqueryselect2_entity', array(
+                'choices'  => $this->formInterventionDemandeManager->getConnaissancesSIChoices($this->interventionDemande->getAmbassadeur()),
+                'label'    => 'Ma sollicitation porte sur la/les connaissance(s) SI suivante(s)',
+                'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property' => 'libelle',
+                'multiple' => true,
+                'required' => false,
+                'group_by' => 'parentName'
+            ))
             ->add('objetsAutres', 'textarea', array(
                 'label'    => 'Ma sollicitation porte sur une autre production / un autre thème',
                 'required' => false

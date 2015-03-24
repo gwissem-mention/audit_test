@@ -208,6 +208,24 @@
             </div>
             
             <div class="row">
+                <div class="col-md-4">Connaissances métiers</div>
+                <div class="col-md-8">
+                    {% for connaissance in interventionDemande.connaissances %}
+                        <div>{{ connaissance.libelle }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">Connaissances SI</div>
+                <div class="col-md-8">
+                    {% for connaissanceSI in interventionDemande.connaissancesSI %}
+                        <div>{{ connaissanceSI.libelle }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="row">
                 <div class="col-md-4">Date de choix du CMSI</div>
                 <div class="col-md-8">
                     {% if interventionDemande.cmsiDateChoix != null %}{{ interventionDemande.cmsiDateChoix|date('d/m/Y') }}{% endif %}
