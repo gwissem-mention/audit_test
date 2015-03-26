@@ -5,6 +5,7 @@ use CCDNForum\ForumBundle\Controller\UserTopicController as UserTopicControllerC
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\ForumBundle\Entity\Board;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  *
@@ -190,6 +191,9 @@ class UserTopicController extends UserTopicControllerCCDN
      */
     public function isSubscriptionBoard(Board $board)
     {
+        if (!($this->getUser() instanceof UserInterface))
+            return false;
+        
         $subscription = $this->getSubscriptionModel()->findOneSubscriptionForBoardAndUser($board, $this->getUser());
         
         if (null === $subscription)
