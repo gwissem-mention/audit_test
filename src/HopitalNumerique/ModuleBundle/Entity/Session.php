@@ -209,7 +209,7 @@ class Session
      */
     public function __construct()
     {
-        $this->archiver                 = true;
+        $this->archiver                 = false;
         $this->dateOuvertureInscription = new \DateTime();
         $this->connaissances            = new \Doctrine\Common\Collections\ArrayCollection();
     }
