@@ -88,7 +88,7 @@
                             {# puis des fils #}
                             {% for domaineFils in domaine %}
                                 <tr>
-                                    <td style="width:50%"><label for="domaine_{{domaineFils.id}}">{{domaineFils.libelle}}</label></td>
+                                    <td style="width:50%"><i class="fa fa-share fa-flip-vertical"></i> <label for="domaine_{{domaineFils.id}}">{{domaineFils.libelle}}</label></td>
                                     <td>
                                         <select class="form-control" data-id="{{domaineFils.id}}" id="domaineFils_{{domaineFils.id}}">
                                             <option {% if connaissanceAmbassadeurs[domaineFils.id] is not defined or connaissanceAmbassadeurs[domaineFils.id].connaissance is null %}selected="selected"{% endif %}>-</option>

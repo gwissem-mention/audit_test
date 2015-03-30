@@ -145,16 +145,22 @@ class EvaluationFrontController extends Controller
                     $connaissance = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->findOneBy(array('user' => $user, 'domaine' => $connaissanceSession));
                     
                     //Si il a deja cette connaissance, on ne le rajoute pas
-                    if(!is_null($connaissance))
+                    if(!is_null($connaissance->getConnaissance()))
                     {
                         continue;
                     }
+                    elseif(is_null($connaissance))
+                    {
+                        $connaissance = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->createEmpty();
 
-                    $connaissance = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->createEmpty();
-
-                    $connaissance->setUser($user);
-                    $connaissance->setConnaissance($this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR'), array('order' => 'ASC'))[1]);
-                    $connaissance->setDomaine( $connaissanceSession );
+                        $connaissance->setUser($user);
+                        $connaissance->setConnaissance($this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR'), array('order' => 'ASC'))[1]);
+                        $connaissance->setDomaine( $connaissanceSession );   
+                    }
+                    else
+                    {
+                        $connaissance->setConnaissance($this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR'), array('order' => 'ASC'))[1]);
+                    }
 
                     $connaissances[] = $connaissance;
                 }
