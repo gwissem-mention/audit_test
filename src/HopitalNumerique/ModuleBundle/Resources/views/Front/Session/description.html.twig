@@ -104,12 +104,15 @@
                     <div class="col-md-12" style="margin: 0 0 10px; padding-top: 10px;">
                         <strong>Connaissances(s) concernée(s) : </strong>
                         <ul>
-                            {% for connaissanceParent in connaissancesOrderedByParent %}
-                                <li>{{connaissancesOrderedByParent[0].parent.libelle}}<br />
+                            {% for connaissanceParent in session.getConnaissancesByParent() %}
+                                <li>{{ connaissanceParent[0].parent.libelle }}</li>
+                                <ul>
                                     {% for connaissance in connaissanceParent %}
-                                        > {{connaissance.libelle}}<br />
+                                        <li>
+                                            {{connaissance.libelle}}
+                                        </li>
                                     {% endfor %}
-                                </li>
+                                </ul>
                             {% endfor %}
                         </ul>
                     </div>
