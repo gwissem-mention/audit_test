@@ -1,0 +1,6 @@
+services:
+    genemu.form.jquery.type.date:
+        class: Nodevo\FormBundle\Form\JQuery\Type\DateType
+        arguments: ["%genemu.form.date.options%"]
+        tags:
+            - { name: form.type, alias: genemu_jquerydate }
