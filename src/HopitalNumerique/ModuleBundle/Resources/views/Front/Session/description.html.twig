@@ -99,6 +99,21 @@
                         </ul>
                     </div>
                 </li>
+                {# Connaissances concernées #}
+                <li>
+                    <div class="col-md-12" style="margin: 0 0 10px; padding-top: 10px;">
+                        <strong>Connaissances(s) concernée(s) : </strong>
+                        <ul>
+                            {% for connaissanceParent in connaissancesOrderedByParent %}
+                                <li>{{connaissancesOrderedByParent[0].parent.libelle}}<br />
+                                    {% for connaissance in connaissanceParent %}
+                                        > {{connaissance.libelle}}<br />
+                                    {% endfor %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>

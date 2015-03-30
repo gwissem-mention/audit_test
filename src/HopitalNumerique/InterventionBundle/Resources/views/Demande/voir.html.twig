@@ -210,18 +210,34 @@
             <div class="row">
                 <div class="col-md-4">Connaissances métiers</div>
                 <div class="col-md-8">
-                    {% for connaissance in interventionDemande.connaissances %}
-                        <div>{{ connaissance.libelle }}</div>
-                    {% endfor %}
+                    <ul>
+                        {% for connaissanceParent in interventionDemande.getConnaissancesByParent() %}
+                            <li>{{ connaissanceParent[0].parent.libelle }}
+                                <ul>
+                                    {% for connaissance in connaissanceParent %}
+                                        <li>{{connaissance.libelle}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
             
             <div class="row">
                 <div class="col-md-4">Connaissances SI</div>
                 <div class="col-md-8">
-                    {% for connaissanceSI in interventionDemande.connaissancesSI %}
-                        <div>{{ connaissanceSI.libelle }}</div>
-                    {% endfor %}
+                    <ul>
+                        {% for connaissanceParent in interventionDemande.getConnaissancesSIByParent() %}
+                            <li>{{ connaissanceParent[0].parent.libelle }}
+                                <ul>
+                                    {% for connaissance in connaissanceParent %}
+                                         <li>{{connaissance.libelle}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
             

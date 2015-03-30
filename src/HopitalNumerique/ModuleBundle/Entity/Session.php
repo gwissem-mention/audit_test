@@ -900,4 +900,22 @@ class Session
 
         return $this;
     }
+
+    public function getConnaissancesByParent()
+    {
+        $connaissances = $this->connaissances;
+        $connaissancesOrdered = array();
+
+        foreach ($connaissances as $connaissance)
+        {
+            if(!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrdered))
+            {
+                $connaissancesOrdered[$connaissance->getParent()->getId()] = array();
+            }
+
+            $connaissancesOrdered[$connaissance->getParent()->getId()][] = $connaissance;
+        }
+
+        return $connaissancesOrdered;
+    }
 }

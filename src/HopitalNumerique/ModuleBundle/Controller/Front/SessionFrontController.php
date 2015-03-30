@@ -15,8 +15,23 @@ class SessionFrontController extends Controller
      */
     public function descriptionAction( \HopitalNumerique\ModuleBundle\Entity\Session $session )
     {
+        $connaissances = $session->getConnaissances();
+        $connaissancesOrderedByParent = array();
+
+        foreach ($connaissances as $connaissance) 
+        {
+            if(!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrderedByParent))
+            {
+                $connaissancesOrderedByParent[$connaissance->getParent()->getId()] = array();
+            }
+
+            $connaissancesOrderedByParent[$connaissance->getParent()->getId()][] = $connaissance;
+        }
+
+
         return $this->render('HopitalNumeriqueModuleBundle:Front/Session:description.html.twig', array(
-                'session' => $session
+                'session'       => $session,
+                'connaissances' => $connaissancesOrderedByParent
         ));
     }
 
