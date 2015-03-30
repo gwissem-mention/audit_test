@@ -11,8 +11,19 @@
                         {% for domaine in domaines %}
                             <li>
                                 <div class="form-group">
-                                    <strong>{{domaine.domaine.libelle}}</strong> : {% if domaine.connaissance is not null %}{% for i in 1..domaine.connaissance.order %}<i class="fa fa-star violet"></i>{% endfor %} - {{domaine.connaissance.libelle}}{% else %}<i class="fa fa-ban"></i>{% endif %}
+                                    <strong>
+                                        {{domaine[0].domaine.parent.libelle}}
+                                    </strong>
                                 </div>
+                                <ul>
+                                    {% for domaineFils in domaine %}
+                                        <li>
+                                            <div class="form-group">
+                                                <strong>{{domaineFils.domaine.libelle}}</strong> : {% if domaineFils.connaissance is not null %}{% for i in 1..domaineFils.connaissance.order %}<i class="fa fa-star violet"></i>{% endfor %} - {{domaineFils.connaissance.libelle}}{% else %}<i class="fa fa-ban"></i>{% endif %}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
                             </li>
                         {% endfor %}
                     </ul>

@@ -294,15 +294,14 @@ class AmbassadeurController extends Controller
 
         //récupération des domaines fonctionnels
         $domaines    = $this->get('hopitalnumerique_reference.manager.reference')->getDomainesForUser($user);
-        $domainesIds = array_keys($domaines);
 
-        $connaissanceAmbassadeurs = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->getConnaissanceAmbassadersOrderedByDomaine( $user, $domainesIds);
+        $connaissanceAmbassadeurs = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->getConnaissanceAmbassadersOrderedByDomaine( $user, $domaines['ids']);
         $connaissanceReferentiels = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR'), array('order' => 'ASC'));
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:domaines-fonctionnels.html.twig', array(
             'user'                    => $user,
             'options'                 => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
-            'domaines'                => $domaines,
+            'domaines'                => $domaines['domaines'],
             'connaissanceAmbassadeurs' => $connaissanceAmbassadeurs,
             'connaissanceReferentiels' => $connaissanceReferentiels
         ));
@@ -486,9 +485,23 @@ class AmbassadeurController extends Controller
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $idUser) );
 
         $domaines = count($user->getConnaissancesAmbassadeurs()) >= 1 ? $user->getConnaissancesAmbassadeurs() : false;
+        $domainesWithParent = array();
+
+        if($domaines)
+        {
+            foreach ($domaines as $domaine) 
+            {
+                if(!array_key_exists($domaine->getDomaine()->getParent()->getId(), $domainesWithParent))
+                {
+                    $domainesWithParent[$domaine->getDomaine()->getParent()->getId()] = array();
+                }
+
+                $domainesWithParent[$domaine->getDomaine()->getParent()->getId()][] = $domaine;
+            }
+        }
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:liste-domaines.html.twig', array(
-            'domaines' => $domaines
+            'domaines' => $domainesWithParent
         ));
     }
 }

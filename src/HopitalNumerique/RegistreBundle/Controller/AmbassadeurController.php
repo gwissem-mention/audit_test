@@ -170,10 +170,41 @@ class AmbassadeurController extends Controller
      */
     public function domainesAction( $id )
     {        
-        $ambassadeur = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => $id));
+        $ambassadeur   = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => $id));
+        $connaissances = $ambassadeur->getConnaissancesAmbassadeurs();
+
+        $domainesWithParent = array();
+
+        foreach ($connaissances as $domaine) 
+        {
+            if(!array_key_exists($domaine->getDomaine()->getParent()->getId(), $domainesWithParent))
+            {
+                $domainesWithParent[$domaine->getDomaine()->getParent()->getId()] = array();
+            }
+
+            $domainesWithParent[$domaine->getDomaine()->getParent()->getId()][] = $domaine;
+        }
+
+        foreach ($domainesWithParent as $keyParent => $domaineParent) 
+        {
+            $maitriseUnElement = false;
+            foreach ($domaineParent as $connaissance)
+            {
+                if(!is_null($connaissance->getConnaissance()))
+                {
+                    $maitriseUnElement = true;
+                    break;
+                }
+            }
+
+            if(!$maitriseUnElement)
+            {
+                unset($domainesWithParent[$keyParent]);
+            }
+        }
         
         return $this->render('HopitalNumeriqueRegistreBundle:Ambassadeur:domaines.html.twig', array(
-                'connaissances' => $ambassadeur->getConnaissancesAmbassadeurs()
+                'connaissances' => $domainesWithParent
         ));
     }
     
