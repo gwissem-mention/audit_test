@@ -147,6 +147,20 @@ class Session
      * @GRID\Column(field="restrictionAcces.name")
      */
     protected $restrictionAcces;
+    
+    /**
+     * @var integer
+     * 
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinTable(name="hn_module_session_connaissances",
+     *      joinColumns={ @ORM\JoinColumn(name="ses_id", referencedColumnName="ses_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
+     * )
+     * @ORM\OrderBy({"order" = "ASC"})
+     * 
+     * @GRID\Column(field="connaissances.libelle")
+     */
+    protected $connaissances;
 
     /**
      * @Assert\File(
@@ -197,6 +211,7 @@ class Session
     {
         $this->archiver                 = false;
         $this->dateOuvertureInscription = new \DateTime();
+        $this->connaissances            = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -768,33 +783,139 @@ class Session
             //Durée
             $duree = $module->getDuree();
             if(!is_null($duree))
+            {
                 $this->setDuree($duree);
+            }
             //Horaires
             $horaire = $module->getHorairesType();
             if(!empty($horaire))
+            {
                 $this->setHoraires($horaire);
+            }
             //Lieu
             $lieu = $module->getLieu();
             if(!empty($lieu))
+            {
                 $this->setLieu($lieu);
+            }
             //Description
             $description = $module->getDescription();
             if(!empty($description))
+            {
                 $this->setDescription($description);
+            }
             //Nombre de places disponibles
             $nbPlaceDispo = $module->getNombrePlaceDisponible();
             if(!empty($nbPlaceDispo))
+            {
                 $this->setNombrePlaceDisponible($nbPlaceDispo);
+            }
             //Formateur
             $formateur = $module->getFormateur();
             if(!is_null($formateur))
+            {
                 $this->setFormateur($formateur);
+            }
+            //Connaissances
+            $connaissances = $module->getConnaissances();
+            if(!is_null($connaissances))
+            {
+                $this->setConnaissances($connaissances);
+            }
             //Texte mail defaut
             $textMailRappel = $module->getTextMailRappel();
             if(!empty($textMailRappel))
+            {
                 $this->setTextMailRappel($textMailRappel);
+            }
         }
         
         return $this;
+    }
+
+    /**
+     * Add restrictionAcces
+     *
+     * @param \Nodevo\RoleBundle\Entity\Role $restrictionAcces
+     * @return Session
+     */
+    public function addRestrictionAcce(\Nodevo\RoleBundle\Entity\Role $restrictionAcces)
+    {
+        $this->restrictionAcces[] = $restrictionAcces;
+
+        return $this;
+    }
+
+    /**
+     * Remove restrictionAcces
+     *
+     * @param \Nodevo\RoleBundle\Entity\Role $restrictionAcces
+     */
+    public function removeRestrictionAcce(\Nodevo\RoleBundle\Entity\Role $restrictionAcces)
+    {
+        $this->restrictionAcces->removeElement($restrictionAcces);
+    }
+
+    /**
+     * Add connaissances
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     * @return Session
+     */
+    public function addConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
+    {
+        $this->connaissances[] = $connaissances;
+
+        return $this;
+    }
+
+    /**
+     * Remove connaissances
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     */
+    public function removeConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
+    {
+        $this->connaissances->removeElement($connaissances);
+    }
+
+    /**
+     * Get connaissances
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getConnaissances()
+    {
+        return $this->connaissances;
+    }
+
+    /**
+     * Set connaissances
+     *
+     * @return Session 
+     */
+    public function setConnaissances($connaissances)
+    {
+        $this->connaissances = $connaissances;
+
+        return $this;
+    }
+
+    public function getConnaissancesByParent()
+    {
+        $connaissances = $this->connaissances;
+        $connaissancesOrdered = array();
+
+        foreach ($connaissances as $connaissance)
+        {
+            if(!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrdered))
+            {
+                $connaissancesOrdered[$connaissance->getParent()->getId()] = array();
+            }
+
+            $connaissancesOrdered[$connaissance->getParent()->getId()][] = $connaissance;
+        }
+
+        return $connaissancesOrdered;
     }
 }

@@ -21,6 +21,7 @@ parameters:
     #Ambassadeurs
     hopitalnumerique_user.grid.objet.class: HopitalNumerique\UserBundle\Grid\ObjetGrid
     hopitalnumerique_user.manager.connaissance_ambassadeur.class: HopitalNumerique\UserBundle\Manager\ConnaissanceAmbassadeurManager
+    hopitalnumerique_user.manager.connaissance_ambassadeur_si.class: HopitalNumerique\UserBundle\Manager\ConnaissanceAmbassadeurSIManager
     #Etablissements
     hopitalnumerique_user.grid.etablissement.class: HopitalNumerique\UserBundle\Grid\EtablissementGrid
     #Extensions twig
@@ -111,6 +112,12 @@ services:
     #--Manager
     hopitalnumerique_user.manager.connaissance_ambassadeur:
         class: %hopitalnumerique_user.manager.connaissance_ambassadeur.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+    #--Manager
+    hopitalnumerique_user.manager.connaissance_ambassadeur_si:
+        class: %hopitalnumerique_user.manager.connaissance_ambassadeur_si.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]

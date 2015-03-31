@@ -7,24 +7,29 @@
         <div class="col-md-12 fancybox-popin">            
             {% if connaissances is not null and connaissances is not empty %}
                 <ul style="padding-left:10px;list-style: none;">
-	                {% for connaissance in connaissances %}
-                        {% if connaissance.connaissance is not null %}
+	                {% for domaine in connaissances %}
                             <li>
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        {#<span class="pull-right">
-                                            <abbr class="glosstool" title="" data-html="true" data-original-title="{{connaissance.connaissance.libelle}}">{% for i in 1..connaissance.connaissance.order %}<i class="fa fa-star violet"></i>{% endfor %}
-                                            </abbr>
-                                        </span>#}
-                                    </div>
-                                    <div class="col-md-10">
-                                         - {{connaissance.domaine.libelle}}
-                                    </div>
+                                <div>
+                                    <strong>
+                                        {{domaine[0].domaine.parent.libelle}}
+                                    </strong>
                                 </div>
-                                <div class="clearfix"></div>
+                                <ul>
+                                    {% for domaineFils in domaine %}
+                                        {% if domaineFils.connaissance is not null %}
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                {# {% for i in 1..domaineFils.connaissance.order %}<i class="fa fa-star violet"></i>{% endfor %} - {{domaineFils.connaissance.libelle}}#}
+                                            </div>
+                                            <div class="col-md-11">
+                                                <span>- {{domaineFils.domaine.libelle}}</span>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
                             </li>
-                        {% endif %}
-	                {% endfor %}
+                    {% endfor %}
                 </ul>
             {% else %}
 	            - Aucune connaissance métier -

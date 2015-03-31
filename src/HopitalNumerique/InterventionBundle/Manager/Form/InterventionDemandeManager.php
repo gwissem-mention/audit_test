@@ -83,4 +83,56 @@ class InterventionDemandeManager
     {
         return is_null($ambassadeur) ? $this->objetManager->getObjetsByTypes( array(175, 176, 177, 178, 179, 180, 181, 182) ) : $this->objetManager->getObjetsByAmbassadeur($ambassadeur);
     }
+    /**
+     * Retourne la liste des objets pour les listes de formulaire.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur pour le filtre
+     * @return array Liste des objets pour les listes de formulaire
+     */
+    public function getConnaissancesChoices(User $ambassadeur = null)
+    {
+        if(is_null($ambassadeur))
+        {
+            return $this->referenceManager->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR'), array('order' => 'ASC'));
+        }
+        else
+        {
+            $connaissances = array();
+            foreach ($ambassadeur->getConnaissancesAmbassadeurs() as $connaissance) 
+            {
+                if(!is_null($connaissance->getConnaissance()))
+                {
+                    $connaissances[] = $connaissance->getDomaine();
+                }
+            }
+
+            return $connaissances;
+        }
+    }
+    /**
+     * Retourne la liste des objets pour les listes de formulaire.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur pour le filtre
+     * @return array Liste des objets pour les listes de formulaire
+     */
+    public function getConnaissancesSIChoices(User $ambassadeur = null)
+    {
+        if(is_null($ambassadeur))
+        {
+            return $this->referenceManager->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR_SI'), array('order' => 'ASC'));
+        }
+        else
+        {
+            $connaissancesSI = array();
+            foreach ($ambassadeur->getConnaissancesAmbassadeursSI() as $connaissanceSI) 
+            {
+                if(!is_null($connaissanceSI->getConnaissance()))
+                {
+                    $connaissancesSI[] = $connaissanceSI->getDomaine();
+                }
+            }
+
+            return $connaissancesSI;
+        }
+    }
 }

@@ -65,7 +65,7 @@ class FactureController extends Controller
             
             foreach($datas as $data)
             {
-                $total['prix'] += $data->total['prix'];    
+                $total += $data->total['prix'];    
             }
         }
 

@@ -80,6 +80,20 @@ class Module
     protected $productions;
     
     /**
+     * @var integer
+     * 
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinTable(name="hn_module_connaissances",
+     *      joinColumns={ @ORM\JoinColumn(name="mod_id", referencedColumnName="mod_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
+     * )
+     * @ORM\OrderBy({"order" = "ASC"})
+     * 
+     * @GRID\Column(field="connaissances.libelle")
+     */
+    protected $connaissances;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_duree", referencedColumnName="ref_id")
      *
@@ -200,8 +214,9 @@ class Module
      */
     public function __construct()
     {
-        $this->sessions    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->productions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sessions      = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->productions   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->connaissances = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -687,5 +702,56 @@ class Module
     public function __toString()
     {
         return $this->titre;
+    }
+
+    /**
+     * Add connaissances
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     * @return Module
+     */
+    public function addConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
+    {
+        $this->connaissances[] = $connaissances;
+
+        return $this;
+    }
+
+    /**
+     * Remove connaissances
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     */
+    public function removeConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
+    {
+        $this->connaissances->removeElement($connaissances);
+    }
+
+    /**
+     * Get connaissances
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getConnaissances()
+    {
+        return $this->connaissances;
+    }
+
+    public function getConnaissancesByParent()
+    {
+        $connaissances = $this->connaissances;
+        $connaissancesOrdered = array();
+
+        foreach ($connaissances as $connaissance)
+        {
+            if(!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrdered))
+            {
+                $connaissancesOrdered[$connaissance->getParent()->getId()] = array();
+            }
+
+            $connaissancesOrdered[$connaissance->getParent()->getId()][] = $connaissance;
+        }
+
+        return $connaissancesOrdered;
     }
 }

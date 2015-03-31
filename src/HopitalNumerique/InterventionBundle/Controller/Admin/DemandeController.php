@@ -92,7 +92,9 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         if ($allPrimaryKeys == 1){
             $rawDatas = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findAll();
             foreach($rawDatas as $data)
+            {
                 $primaryKeys[] = $data->getId();
+            }
         }
         
         return $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getExportCsv($primaryKeys, $this->container->getParameter('kernel.charset'));

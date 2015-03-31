@@ -17,3 +17,9 @@ hopital_numerique_registre_ambassadeur_domaines:
     defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:domaines }
     requirements:
         id: \d+
+
+hopital_numerique_registre_ambassadeur_connaissance_si:
+    pattern:  /registre-ambassadeurs/show/connaissance-si/{id}
+    defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:connaissanceSI }
+    requirements:
+        id: \d+

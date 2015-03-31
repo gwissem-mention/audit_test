@@ -117,6 +117,26 @@
                                 </ul>
                             </div>
                         </li>
+                        {# Connaissances concernées #}
+                        <li>
+                            <div class="col-md-12" style="margin: 0 0 10px; padding-top: 10px;">
+                                <strong>Connaissance(s) concernée(s) : </strong>
+                                <ul>
+                                    {% for connaissanceParent in session.getConnaissancesByParent() %}
+                                        <li>{{ connaissanceParent[0].parent.libelle }}</li>
+                                        <ul>
+                                            {% for connaissance in connaissanceParent %}
+                                                <li>
+                                                    {{connaissance.libelle}}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        - Aucune(s) connaissance(s) pour cette session -
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                 </div>
                 <div class="clearfix"></div>

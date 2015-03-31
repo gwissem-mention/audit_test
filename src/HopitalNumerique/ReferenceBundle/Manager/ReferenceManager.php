@@ -204,23 +204,26 @@ class ReferenceManager extends BaseManager
     {
         $results = $this->findBy( array( 'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS') );
 
-        // on formatte les domaines de manière à les sélectionner plus simplement
-        $domaines = array();
-        foreach($results as $result){
+        $domaines = array(
+            'ids'      => array(),
+            'domaines' => array()
+        );
+        foreach ($results as $result) 
+        {
+            if(!array_key_exists($result->getParent()->getId(), $domaines['domaines']))
+            {
+                $domaines['domaines'][$result->getParent()->getId()] = array();
+            }
+
             $tmp           = new \stdClass;
             $tmp->id       = $result->getId();
             $tmp->libelle  = $result->getLibelle();
+            $tmp->code     = $result->getCode();
+            $tmp->parent   = $result->getParent()->getLibelle();
             $tmp->selected = false;
 
-            $domaines[ $result->getId() ] = $tmp;
-        }
-
-        //on met en place ceux attribué à l'user
-        $userDomaines = $user->getDomaines();
-        foreach( $userDomaines as $one){
-            $tmp                       = $domaines[ $one->getId() ];
-            $tmp->selected             = true;
-            $domaines[ $one->getId() ] = $tmp;
+            $domaines['domaines'][$result->getParent()->getId()][] = $tmp;
+            $domaines['ids'][] = $result->getId();
         }
 
         return $domaines;
