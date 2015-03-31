@@ -51,7 +51,7 @@ $(document).ready(function() {
     var deciles2     = [];
     var deciles8     = [];
     var centPourCent = [];
-    
+
     $(datas).each(function(index, element ){
         if( element.value != 'NC' || element.taux != 0 )
         {
@@ -201,7 +201,7 @@ $(document).ready(function() {
                 softConnector: true,
                 align: 'left'
             },
-            name  : 'Moyenne de tout l\'autodiag',
+            name  : 'Moyenne du benchmark',
             marker: { enabled:false, radius:0 },
             data  : moyennes,
             color : '#777777',
@@ -275,12 +275,12 @@ $(document).ready(function() {
             enabled: true,
             formatter: function() {
                 var tau = taux[this.point.category];
-                return ( tau == 0 && this.point.series.name == "Valeur moyenne" ) ? '' : '<b>' + number_format(this.point.y, 0) + '%</b>'
+                return ( tau == 0 && this.point.series.name == (estSynthese ? 'Valeur moyenne de la synthèse' : 'Votre résultat') ) ? '' : '<b>' + number_format(this.point.y, 0) + '%</b>'
             },
             softConnector: true,
             align: 'left'
         },
-        name  : 'Valeur moyenne',
+        name  : (estSynthese ? 'Valeur moyenne de la synthèse' : 'Votre résultat'),
         color : '#6f3596',
         type  : 'line',
         data  : values,
@@ -336,7 +336,7 @@ $(document).ready(function() {
                     $.each(this.points, function(i, point) {
                         if ('hideLabel' != point.series.name)
                         {
-                            val = ( tau == 0 && point.series.name == "Valeur moyenne" ) ? 'NC' : number_format(point.y, 0) + '%';
+                            val = ( tau == 0 && point.series.name == (estSynthese ? 'Valeur moyenne de la synthèse' : 'Votre résultat') ) ? 'NC' : number_format(point.y, 0) + '%';
                             s = '<br/><span style="color:#333333; font-size:10px">'+ point.series.name + ': '+ val + '</span>' + s;
                         }
                     });
