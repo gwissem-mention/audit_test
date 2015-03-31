@@ -798,13 +798,13 @@ class UserController extends Controller
                     }
                     else 
                     {
-                        //Test etab user
-                        if( $role->getRole() == 'ROLE_ENREGISTRE_9' || $role->getRole() == 'ROLE_ES_8' ){
-                            if( !is_null($user->getEtablissementRattachementSante()) )
-                                $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ES_8'));
-                            else
-                                $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
-                        }
+                        // //Test etab user
+                        // if( $role->getRole() == 'ROLE_ENREGISTRE_9' || $role->getRole() == 'ROLE_ES_8' ){
+                        //     if( !is_null($user->getEtablissementRattachementSante()) )
+                        //         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ES_8'));
+                        //     else
+                        //         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
+                        // }
 
                         //--BO--
                         //set Role for User : not mapped field
