@@ -135,8 +135,10 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                             <script type="IN/Share"></script>
                         </div>
                     </div>
+                    <div class="clearfix"></div>
             {% else %}
                 </div>
+                <div class="clearfix"></div>
             {% endif %}
             <div class="col-md-12" id="publication-resume">
                 {{contenu.contenu|parsePublication(contenu.glossaires)|raw}}
@@ -195,8 +197,10 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                                     </div>
                                 </div>
                             </div>
+                            <div class="clearfix"></div>
                         {% else %}
                             </div>
+                            <div class="clearfix"></div>
                         {% endif %}
                         <div class="col-md-12" id="publication-resume">
                             {{objet.resume|parsePublication(objet.glossaires)|raw}}
@@ -293,8 +297,10 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                             </div>
                         </div>
                     </div>
+                    <div class="clearfix"></div>
                 {% else %}
                     </div>
+                    <div class="clearfix"></div>
                 {% endif %}
                 <div class="col-md-12" id="publication-resume">
                     {{objet.resume|parsePublication(objet.glossaires)|raw}}

@@ -170,10 +170,103 @@ class AmbassadeurController extends Controller
      */
     public function domainesAction( $id )
     {        
-        $ambassadeur = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => $id));
+        $ambassadeur   = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => $id));
+        $connaissances = $ambassadeur->getConnaissancesAmbassadeurs();
+
+        $domainesWithParent = array();
+
+        foreach ($connaissances as $domaine) 
+        {
+            if(!array_key_exists($domaine->getDomaine()->getParent()->getId(), $domainesWithParent))
+            {
+                $domainesWithParent[$domaine->getDomaine()->getParent()->getId()] = array();
+            }
+
+            $domainesWithParent[$domaine->getDomaine()->getParent()->getId()][] = $domaine;
+        }
+
+        foreach ($domainesWithParent as $keyParent => $domaineParent) 
+        {
+            $maitriseUnElement = false;
+            foreach ($domaineParent as $connaissance)
+            {
+                if(!is_null($connaissance->getConnaissance()))
+                {
+                    $maitriseUnElement = true;
+                    break;
+                }
+            }
+
+            if(!$maitriseUnElement)
+            {
+                unset($domainesWithParent[$keyParent]);
+            }
+        }
         
         return $this->render('HopitalNumeriqueRegistreBundle:Ambassadeur:domaines.html.twig', array(
-                'connaissances' => $ambassadeur->getConnaissancesAmbassadeurs()
+                'connaissances' => $domainesWithParent
+        ));
+    }
+    
+    /**
+     * Affiche la liste des connaissances SI maitrisés par l'ambasssadeur dans une popin
+     *
+     * @param integer $id ID de l'user
+     */
+    public function connaissanceSIAction( $id )
+    {        
+        $ambassadeur = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => $id));
+        $connaissances = $ambassadeur->getConnaissancesAmbassadeursSI();
+        $connaissancesOrderedForFront = array();
+
+        foreach ($connaissances as $connaissance)
+        {
+            if(!is_null($connaissance->getDomaine()->getParent()))
+            {
+                if(!array_key_exists($connaissance->getDomaine()->getParent()->getId(), $connaissancesOrderedForFront))
+                {
+                    $connaissancesOrderedForFront[$connaissance->getDomaine()->getParent()->getId()] = array(
+                        'libelle'  => $connaissance->getDomaine()->getParent()->getLibelle(),
+                        'fils'     => array(),
+                        'filsVide' => false
+                    );
+                }
+
+                $connaissancesOrderedForFront[$connaissance->getDomaine()->getParent()->getId()]['fils'][] = $connaissance;
+            }
+            else
+            {
+                if(!array_key_exists($connaissance->getDomaine()->getId(), $connaissancesOrderedForFront))
+                {
+                    $connaissancesOrderedForFront[$connaissance->getDomaine()->getId()] = array(
+                        'libelle'  => $connaissance->getDomaine()->getLibelle(),
+                        'fils'     => array(),
+                        'filsVide' => false
+                    );
+                }
+
+                $connaissancesOrderedForFront[$connaissance->getDomaine()->getId()]['fils'][] = $connaissance;
+            }
+        }
+
+        foreach ($connaissancesOrderedForFront as $keyDaddy => $connaissances) 
+        {
+            $filsVide = true;
+
+            foreach ($connaissances['fils'] as $connaissance)
+            {
+                if(!is_null($connaissance->getConnaissance()))
+                {
+                    $filsVide = false;
+                    break;
+                }
+            }
+
+            $connaissancesOrderedForFront[$keyDaddy]['filsVide'] = $filsVide;
+        }
+        
+        return $this->render('HopitalNumeriqueRegistreBundle:Ambassadeur:connaissancesSI.html.twig', array(
+                'connaissances' => $connaissancesOrderedForFront
         ));
     }
 }

@@ -208,6 +208,40 @@
             </div>
             
             <div class="row">
+                <div class="col-md-4">Connaissances métiers</div>
+                <div class="col-md-8">
+                    <ul>
+                        {% for connaissanceParent in interventionDemande.getConnaissancesByParent() %}
+                            <li>{{ connaissanceParent[0].parent.libelle }}
+                                <ul>
+                                    {% for connaissance in connaissanceParent %}
+                                        <li>{{connaissance.libelle}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">Connaissances SI</div>
+                <div class="col-md-8">
+                    <ul>
+                        {% for connaissanceParent in interventionDemande.getConnaissancesSIByParent() %}
+                            <li>{{ connaissanceParent[0].parent.libelle }}
+                                <ul>
+                                    {% for connaissance in connaissanceParent %}
+                                         <li>{{connaissance.libelle}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="row">
                 <div class="col-md-4">Date de choix du CMSI</div>
                 <div class="col-md-8">
                     {% if interventionDemande.cmsiDateChoix != null %}{{ interventionDemande.cmsiDateChoix|date('d/m/Y') }}{% endif %}

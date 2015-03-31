@@ -677,6 +677,82 @@ class UserController extends Controller
         return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $datas, 'export-domaines.csv', $kernelCharset );
     }
 
+    /**
+     * Export CSV de la liste des utilisateurs sélectionnés (domaines fonctionnels maitrises)
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     */
+    public function exportCsvConnaissancesSIAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }
+        $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
+        
+        //manages colonnes
+        $colonnes = array('id' => 'id_utilisateur', 'user' => 'Prénom et Nom de l\'utilisateur');
+
+        //prepare datas
+        $datas     = array();
+        $nbDomaineMax = 0;
+        foreach($users as $user)
+        {
+            //prepare row
+            $row         = array();
+            $row['id']   = $user->getId();
+            $row['user'] = $user->getPrenomNom();
+
+            $connaissances  = $user->getConnaissancesAmbassadeursSI();
+            $nbDomaine = 0;
+            foreach($connaissances as $connaissance)
+            {
+                if(!is_null($connaissance->getConnaissance()))
+                {
+                    $row['domaine'.$nbDomaine]                = $connaissance->getDomaine()->getLibelle();
+                    $row['domaine'.$nbDomaine.'connaissance'] = $connaissance->getConnaissance()->getLibelle();
+                    $nbDomaine++;
+                }
+            }
+            
+            //update nbDomaineMax
+            if( $nbDomaine > $nbDomaineMax)
+            {
+                $nbDomaineMax = $nbDomaine;
+            }
+
+            $datas[] = $row;
+        }
+
+        //add colonnes
+        for($i = 0; $i <= $nbDomaineMax; $i++)
+        {
+            $colonnes['domaine'.$i] = '';
+            $colonnes['domaine'.$i.'connaissance'] = '';
+        }
+
+        //add empty values
+        foreach($datas as &$data)
+        {
+            foreach ($colonnes as $key => $val)
+            {
+                if( !isset($data[$key]) )
+                {
+                    $data[$key] = '';
+                }
+            }
+        }
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $datas, 'export-domaines.csv', $kernelCharset );
+    }
+
 
 
 
@@ -798,13 +874,13 @@ class UserController extends Controller
                     }
                     else 
                     {
-                        //Test etab user
-                        if( $role->getRole() == 'ROLE_ENREGISTRE_9' || $role->getRole() == 'ROLE_ES_8' ){
-                            if( !is_null($user->getEtablissementRattachementSante()) )
-                                $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ES_8'));
-                            else
-                                $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
-                        }
+                        // //Test etab user
+                        // if( $role->getRole() == 'ROLE_ENREGISTRE_9' || $role->getRole() == 'ROLE_ES_8' ){
+                        //     if( !is_null($user->getEtablissementRattachementSante()) )
+                        //         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ES_8'));
+                        //     else
+                        //         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
+                        // }
 
                         //--BO--
                         //set Role for User : not mapped field

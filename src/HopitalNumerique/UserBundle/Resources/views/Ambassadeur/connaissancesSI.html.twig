@@ -47,10 +47,10 @@
                             <li>
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maîtrisées</a>
                             </li>
-                            <li class="active" >
+                            <li>
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Connaissances métiers</a>
                             </li>
-                            <li>
+                            <li class="active" >
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_connaissancesSI', {'id':user.id})}}">Connaissances SI</a>
                             </li>
                         {% endif %}
@@ -66,7 +66,7 @@
             <div class="panel-body" >
                 <div class="sous_options pull-right">
                     <div class="btn-toolbar">
-                        {% if app.user|checkAuthorization( path('hopitalnumerique_user_ambassadeur_savedomaine') ) %}
+                        {% if app.user|checkAuthorization( path('hopitalnumerique_user_ambassadeur_saveConnaissancesSI') ) %}
                             <div onclick="saveDomaines();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
                         {% endif %}
                     </div>
@@ -74,26 +74,25 @@
                 <table class="table" id="domaines" >
                     <thead>
                         <tr>
-                            <th>Connaissances métiers</th>
+                            <th>Connaissances SI</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {# Niveau parent #}
-                        {% for domaine in domaines %}
-                            {# Affichage du libellé parent #}
-                            <tr>
-                                <td colspan="2" style="font-weight:bold; background-color:#F7F8FA;">{{domaine[0].parent}}</td>
-                            </tr>
-                            {# puis des fils #}
-                            {% for domaineFils in domaine %}
+                        {% for domaineParent in affichageDomaines %}
+                            {% if domaineParent['libelle'] != '' %}
                                 <tr>
-                                    <td style="width:50%"><i class="fa fa-share fa-flip-vertical"></i> <label for="domaine_{{domaineFils.id}}">{{domaineFils.libelle}}</label></td>
+                                    <td colspan="2" style="font-weight:bold; background-color:#F7F8FA;">{{domaineParent['libelle']}}</td>
+                                </tr>
+                            {% endif %}
+                            {% for domaine in domaineParent['fils'] %}
+                                <tr>
+                                    <td style="width:50%">{% if domaineParent['libelle'] != '' %}<i class="fa fa-share fa-flip-vertical"></i> {% endif %}<label for="domaine_{{domaine.id}}">{{domaine.libelle}}</label></td>
                                     <td>
-                                        <select class="form-control" data-id="{{domaineFils.id}}" id="domaineFils_{{domaineFils.id}}">
-                                            <option {% if connaissanceAmbassadeurs[domaineFils.id] is not defined or connaissanceAmbassadeurs[domaineFils.id].connaissance is null %}selected="selected"{% endif %}>-</option>
+                                        <select class="form-control" data-id="{{domaine.id}}" id="domaine_{{domaine.id}}">
+                                            <option {% if connaissanceAmbassadeurs[domaine.id] is not defined or connaissanceAmbassadeurs[domaine.id].connaissance is null %}selected="selected"{% endif %}>-</option>
                                             {% for connaissanceReferentiel in connaissanceReferentiels %}
-                                                <option value="{{connaissanceReferentiel.id}}" {% if connaissanceAmbassadeurs[domaineFils.id] is defined and connaissanceAmbassadeurs[domaineFils.id].connaissance is not null and connaissanceAmbassadeurs[domaineFils.id].connaissance.id == connaissanceReferentiel.id %}selected="selected"{% endif %}>{{connaissanceReferentiel.libelle}}</option>
+                                                <option value="{{connaissanceReferentiel.id}}" {% if connaissanceAmbassadeurs[domaine.id] is defined and connaissanceAmbassadeurs[domaine.id].connaissance is not null and connaissanceAmbassadeurs[domaine.id].connaissance.id == connaissanceReferentiel.id %}selected="selected"{% endif %}>{{connaissanceReferentiel.libelle}}</option>
                                             {% endfor %}
                                         </select>
                                     </td>
@@ -105,7 +104,7 @@
             </div>           
         </div>
 
-        <input type="hidden" id="domaines-save-url" value="{{path('hopitalnumerique_user_ambassadeur_savedomaine')}}" />
+        <input type="hidden" id="domaines-save-url" value="{{path('hopitalnumerique_user_ambassadeur_saveConnaissancesSI')}}" />
         <input type="hidden" id="user_id" value="{{user.id}}" />
     </div>
 {% endblock %}

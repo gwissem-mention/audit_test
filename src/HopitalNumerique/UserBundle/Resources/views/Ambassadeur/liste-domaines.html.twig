@@ -1,7 +1,7 @@
 {% if domaines %}
     <div class="panel panel-default gray">
         <a data-toggle="collapse" data-parent="#accordion" href="#collapseDomaines" class="collapsed" id="domaines_collapse">
-            <div class="panel-heading"><h4>Domaines maîtrisés</h4></div>
+            <div class="panel-heading"><h4>Connaissances métiers</h4></div>
         </a>
         <div id="collapseDomaines" class="collapse" style="height: 0px;">
 
@@ -11,8 +11,19 @@
                         {% for domaine in domaines %}
                             <li>
                                 <div class="form-group">
-                                    {{domaine.libelle}}
+                                    <strong>
+                                        {{domaine[0].domaine.parent.libelle}}
+                                    </strong>
                                 </div>
+                                <ul>
+                                    {% for domaineFils in domaine %}
+                                        <li>
+                                            <div class="form-group">
+                                                <strong>{{domaineFils.domaine.libelle}}</strong> : {% if domaineFils.connaissance is not null %}{% for i in 1..domaineFils.connaissance.order %}<i class="fa fa-star violet"></i>{% endfor %} - {{domaineFils.connaissance.libelle}}{% else %}<i class="fa fa-ban"></i>{% endif %}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
                             </li>
                         {% endfor %}
                     </ul>

@@ -1,0 +1,56 @@
+<div class="panel" style="margin:0;min-width:250px;" >
+    <div class="panel-heading">
+        <h4 class="violet" style="margin-bottom:0" >Connaissances SI</h4>
+    </div>
+
+    <div class="panel-body" style="padding-top:0" >
+        <div class="col-md-12 fancybox-popin">            
+            {% if connaissances is not null and connaissances is not empty %}
+                <ul style="padding-left:10px;list-style: none;">
+                    {% for connaissanceParent in connaissances %}
+                        {% if not connaissanceParent['filsVide'] %}
+                            <li>
+                                <span style="font-weight:bold;">{{connaissanceParent['libelle']}}</span>
+                                
+                                {% for connaissance in connaissanceParent['fils'] %}
+                                    {% if connaissance.connaissance is not null %}
+                                        <li style="min-width:400px;">
+                                            <div class="row">
+                                                {#<div class="col-md-2">
+                                                    <span class="pull-right">
+                                                        <abbr class="glosstool" title="" data-html="true" data-original-title="{{connaissance.connaissance.libelle}}">{% for i in 1..connaissance.connaissance.order %}<i class="fa fa-star violet"></i>{% endfor %}
+                                                        </abbr>
+                                                    </span>
+                                                </div>#}
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-11">
+                                                     - {{connaissance.domaine.libelle}}
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                - Aucune connaissance SI -
+            {% endif %}   
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".glosstool").tooltip({
+            placement : 'right'
+        });
+    });
+</script>
+
+<style type="text/css">
+    abbr[title], abbr[data-original-title]{cursor: help; border-bottom: none;}
+    .tooltip{width: 400px;}
+</style>

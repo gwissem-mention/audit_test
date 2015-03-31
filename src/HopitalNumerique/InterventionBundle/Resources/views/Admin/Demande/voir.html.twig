@@ -184,6 +184,34 @@
                         </div>
                     </div></div>
                     <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Connaissances métiers</strong></div>
+                        <div class="col-md-8">
+                            <ul>
+                                {% for connaissanceParent in interventionDemande.getConnaissancesByParent() %}
+                                    <li>{{ connaissanceParent[0].parent.libelle }}<br />
+                                        {% for connaissance in connaissanceParent %}
+                                             > {{connaissance.libelle}}<br />
+                                        {% endfor %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
+                        <div class="col-md-4"><strong>Connaissances SI</strong></div>
+                        <div class="col-md-8">
+                            <ul>
+                                {% for connaissanceParent in interventionDemande.getConnaissancesSIByParent() %}
+                                    <li>{{ connaissanceParent[0].parent.libelle }}<br />
+                                        {% for connaissance in connaissanceParent %}
+                                             > {{connaissance.libelle}}<br />
+                                        {% endfor %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div></div>
+                    <div class="form-group"><div class="row">
                         <div class="col-md-4"><strong>Description succincte du projet</strong></div>
                         <div class="col-md-8">
                             {{ interventionDemande.description }}

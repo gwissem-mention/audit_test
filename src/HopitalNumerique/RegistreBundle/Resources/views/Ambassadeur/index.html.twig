@@ -123,15 +123,14 @@
         					                                    {{ambassadeur.fonctionStructure}}
         					                                {% endif %}
         					                            </div>
-    					                            
-        					                            <div class="col-md-12">
+                                                    
+                                                        <div class="col-md-12">
                                                             <a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Connaissances métiers</a>
                                                         </div>
-                                                        {% if ambassadeur.objets|length > 0 %}
-        					                            <div class="col-md-12">
-                                                            <a class="link violet fancybox.ajax outilsMaitrises" href="{{path('hopital_numerique_registre_ambassadeur_objets',{'id':ambassadeur.id})}}">> Voir tous les outils maîtrisés</a>
+                                                
+                                                        <div class="col-md-12">
+                                                            <a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_connaissance_si',{'id':ambassadeur.id})}}">> Connaissances SI</a>
                                                         </div>
-                                                        {% endif %}
         					
         					                            <div class="col-md-12 sol-button">
                                                             {% if app.user and not app.user|checkAuthorization( path('hopital_numerique_intervention_demande_nouveau',{'ambassadeur':ambassadeur.id}) ) %}
