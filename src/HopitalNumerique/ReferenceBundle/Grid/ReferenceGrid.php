@@ -22,6 +22,8 @@ class ReferenceGrid extends Grid implements GridInterface
         $this->setSource( 'hopitalnumerique_reference.manager.reference' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setAffichageRecursif( 'idParent', 'libelle' );
+        $this->showIDColumn( true );
+        $this->setFilterIdColumn( false );
     }
 
     /**
