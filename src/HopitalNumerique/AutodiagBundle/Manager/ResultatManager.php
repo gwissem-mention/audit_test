@@ -5,6 +5,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use HopitalNumerique\AutodiagBundle\Entity\Resultat;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Manager de l'entité Resultat.
@@ -993,6 +994,102 @@ class ResultatManager extends BaseManager
 
         return array( 'front' => $results, 'back' => $resultsForBack );
     }
+
+    public function exportCsvCustom( $resultat, $user, $colonnes, $datas, $filename, $kernelCharset )
+    {
+        // Array to csv (copy from APY\DataGridBundle\Grid\Export\DSVExport.php)
+        $outstream = fopen("php://temp", 'r+');
+
+        fputcsv($outstream, array('Autodiagnostic "' . $resultat->getOutil()->getTitle() . '" - "' . $resultat->getName() . '"'));
+        fputcsv($outstream, array("Plan d'actions exporté le " . date('d/m/Y') . " à " . date('H:i') . " par " . $user->getAppellation()));
+
+        //Ajout de la colonne d'en-têtes
+        $colonnesLines = array_values($colonnes);
+        fputcsv($outstream, $colonnesLines, ';', '"');
+
+        //creation du FlatArray pour la conversion en CSV
+        $keys      = array_keys($colonnes);
+        $flatArray = array();
+        foreach($datas as $data) {
+            $ligne = array();
+            foreach($keys as $key) {
+                //cas Tableau
+                if( is_array($data) ){
+                    $val     = $data[$key];
+                    $ligne[] = is_null($val) ? '' : $val;
+                //Cas Objet
+                }else{
+                    //colonne External 2 test
+                    if( strpos($key, '.') !== false) {
+                        //cas des foreign colonnes : on explode sur le ':' et on vérifie la présence d'une valeur
+                        $fcts = explode('.', $key);
+                        $fct1 = 'get'. ucfirst($fcts[0]);
+                        $tmp  = call_user_func(array($data, $fct1 ));
+                        //si il existe une valeur pour le 1er get, on tente de récupérer le second
+                        if( $tmp ) {
+                            $fct2    = 'get'. ucfirst($fcts[1]);
+                            $val     =  call_user_func(array($tmp, $fct2 ));
+                            $ligne[] = is_null($val) ? '' : $val;
+                        }else
+                            $ligne[] = '';
+                    //simple colonne
+                    }else{
+                        $fct     = 'get'.ucfirst($key);
+                        $val     = call_user_func(array($data,$fct));
+                        $ligne[] = is_null($val) ? '' : $val;
+                    }
+                }
+            }
+
+            $flatArray[] = $ligne;
+        }
+
+        //génération du CSV
+        foreach ($flatArray as $line)
+            fputcsv($outstream, $line, ';', '"');
+
+        //on replace le buffer au début pour refaire la lecture
+        rewind($outstream);
+
+        //génération du contenu
+        $content = '';
+        while (($buffer = fgets($outstream)) !== false)
+            $content .= $buffer;
+
+        fclose($outstream);
+
+        // Charset and Length
+        $charset = 'ISO-8859-1';
+        if ($charset != $kernelCharset && function_exists('mb_strlen')) {
+            $content  = mb_convert_encoding($content, $charset, $kernelCharset);
+            $filesize = mb_strlen($content, '8bit');
+        } else {
+            $filesize = strlen($content);
+            $charset  = $kernelCharset;
+        }
+
+        //build header
+        $headers = array(
+            'Content-Description'       => 'File Transfer',
+            'Content-Type'              => 'text/comma-separated-values',
+            'Content-Disposition'       => sprintf('attachment; filename="%s"', $filename),
+            'Content-Transfer-Encoding' => 'binary',
+            'Cache-Control'             => 'must-revalidate',
+            'Pragma'                    => 'public',
+            'Content-Length'            => $filesize
+        );
+
+        //return a Symfony Response
+        $response = new Response($content, 200, $headers);
+        $response->setCharset( $charset );
+        $response->expire();
+
+        return $response;
+    }
+
+
+
+
 
     /**
      * Calcul la valeur maximum de la question

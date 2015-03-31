@@ -68,6 +68,7 @@ class AppKernel extends Kernel
             new HopitalNumerique\ImportExcelBundle\HopitalNumeriqueImportExcelBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new Nodevo\CookieBundle\NodevoCookieBundle(),
+            new Nodevo\FormBundle\NodevoFormBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

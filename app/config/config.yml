@@ -34,6 +34,11 @@ services:
     logout_handler:
         class: HopitalNumerique\UserBundle\Handler\LogoutHandler
         arguments: ["@hopitalnumerique_objet.manager.objet", "@security.context"]
+    genemu.form.jquery.type.date:
+        class: Nodevo\FormBundle\Form\JQuery\Type\DateType
+        arguments: ["%genemu.form.date.options%"]
+        tags:
+            - { name: form.type, alias: genemu_jquerydate }
 
 # Twig Configuration
 twig:
