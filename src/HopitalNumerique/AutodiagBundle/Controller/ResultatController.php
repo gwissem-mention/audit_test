@@ -223,8 +223,9 @@ class ResultatController extends Controller
         }
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
+        $user = $this->get('security.context')->getToken()->getUser();
 
-        return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-analyse-resultats.csv', $kernelCharset );
+        return $this->get('hopitalnumerique_autodiag.manager.resultat')->exportCsvCustom( $resultat, $user, $colonnes, $datas, 'export-analyse-resultats.csv', $kernelCharset );
     }
     
     /**
