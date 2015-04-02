@@ -126,6 +126,7 @@ $(document).ready(function() {
                     name  : 'Score',
                     color : '#d9edf7',
                     data  : values,
+                    type  : 'area',
                     pointPlacement: 'on'
                 }, {
                     dataLabels: {
@@ -137,7 +138,7 @@ $(document).ready(function() {
                     name  : 'Valeur optimale préconisée par l\'ANAP',
                     data  : optimale,
                     color : '#6f3596',
-                    type  : 'line',
+                    type  : 'area',
                     pointPlacement: 'on'
                 }
             ]

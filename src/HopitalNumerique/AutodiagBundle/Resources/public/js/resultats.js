@@ -210,6 +210,42 @@ $(document).ready(function() {
             pointPlacement: 'on'
         });
     }
+    if(!jQuery.isEmptyObject(max) && max[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                //format: '<b>{point.y:,.0f}%</b>',
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Valeur maximale de la synthèse',
+            marker: { symbol:'circle' },
+            data  : max,
+            color : '#00aa00',
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                //format: '<b>{point.y:,.0f}%</b>',
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            showInLegend   : false, 
+            enableMouseTracking: false,
+            name  : 'Valeur maximale de la synthèse',
+            marker: { symbol: null },
+            data  : max,
+            color : '#777777',
+            fillOpacity : 0.2,
+            type  : 'area',
+            pointPlacement: 'off'
+        });
+    }
     
     if(!jQuery.isEmptyObject(min) && min[0] != null )
     {
@@ -228,9 +264,6 @@ $(document).ready(function() {
             type  : 'line',
             pointPlacement: 'on'
         });
-    }
-    if(!jQuery.isEmptyObject(max) && max[0] != null )
-    {
         seriesRadar.push({
             dataLabels: {
                 enabled: true,
@@ -239,12 +272,16 @@ $(document).ready(function() {
                 softConnector: true,
                 align: 'left'
             },
-            name  : 'Valeur maximale de la synthèse',
-            marker: { symbol:'circle' },
-            data  : max,
-            color : '#00aa00',
-            type  : 'line',
-            pointPlacement: 'on'
+            showInLegend   : false, 
+            enableMouseTracking: false,
+            name           : 'Valeur minimale de la synthèse',
+            marker         : { symbol: null },
+            data           : min,
+            color          : '#ffffff',
+            type           : 'area',
+            fillOpacity    : 0.65,
+            lineWidth      : 0,
+            pointPlacement : 'off'
         });
     }
 
