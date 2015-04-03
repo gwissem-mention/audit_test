@@ -241,7 +241,7 @@ $(document).ready(function() {
             marker: { symbol: null },
             data  : max,
             color : '#777777',
-            fillOpacity : 0.2,
+            fillOpacity : 0.1,
             type  : 'area',
             pointPlacement: 'off'
         });
