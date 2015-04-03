@@ -58,7 +58,7 @@ $(document).ready(function() {
             chart : {
                 polar     : true,
                 type      : 'area',
-                width     : 650,
+                width     : 750,
                 height    : 535,
                 animation : false
             },

@@ -95,7 +95,7 @@
         #resultats #graphiques .panel .cursor-max{ border-bottom:12px solid #080;}
         #resultats #graphiques .panel .cursor-value{ position: absolute; bottom: -14px; margin-left:-11px; font-size: 10px}
         #resultats #graphiques .panel h3.toPrint{display: none}
-        #resultats #graphiques #radarChart{min-width: 400px; max-width: 900px; margin: 0 auto}
+        #resultats #graphiques #radarChart{min-width: 400px; max-width: 800px; margin: 0 auto}
         #resultats #graphiques #chaptersNonConcernes{margin-top:15px}
         #resultats #graphiques .tableContainer{overflow: hidden; overflow-x:auto;}
         #resultats #graphiques .table .vertical-align{vertical-align: middle}
