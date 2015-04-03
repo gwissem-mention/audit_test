@@ -127,10 +127,9 @@ $(document).ready(function() {
                 align: 'left'
             },
             name  : 'Huitième décile',
-            marker: { enabled:false, radius:0 },
+            marker: { symbol:'circle' },
             data  : deciles8,
             color : radarChartBenchmarkCouleurDecile8,
-            lineWidth:1,
             type  : 'line',
             pointPlacement: 'on'
         });
@@ -187,7 +186,6 @@ $(document).ready(function() {
             marker: { symbol:'circle' },
             data  : deciles2,
             color : radarChartBenchmarkCouleurDecile2,
-            lineWidth:1,
             type  : 'line',
             pointPlacement: 'on'
         });
@@ -202,7 +200,7 @@ $(document).ready(function() {
                 align: 'left'
             },
             name  : 'Moyenne du benchmark',
-            marker: { enabled:false, radius:0 },
+            marker: { symbol:'circle' },
             data  : moyennes,
             color : '#777777',
             lineWidth:1,
@@ -227,24 +225,6 @@ $(document).ready(function() {
             type  : 'line',
             pointPlacement: 'on'
         });
-        seriesRadar.push({
-            dataLabels: {
-                enabled: true,
-                //format: '<b>{point.y:,.0f}%</b>',
-                format: ' ',
-                softConnector: true,
-                align: 'left'
-            },
-            showInLegend   : false, 
-            enableMouseTracking: false,
-            name  : 'Valeur maximale de la synthèse',
-            marker: { symbol: null },
-            data  : max,
-            color : '#777777',
-            fillOpacity : 0.1,
-            type  : 'area',
-            pointPlacement: 'off'
-        });
     }
     
     if(!jQuery.isEmptyObject(min) && min[0] != null )
@@ -263,25 +243,6 @@ $(document).ready(function() {
             color : '#aa0000',
             type  : 'line',
             pointPlacement: 'on'
-        });
-        seriesRadar.push({
-            dataLabels: {
-                enabled: true,
-                //format: '<b>{point.y:,.0f}%</b>',
-                format: ' ',
-                softConnector: true,
-                align: 'left'
-            },
-            showInLegend   : false, 
-            enableMouseTracking: false,
-            name           : 'Valeur minimale de la synthèse',
-            marker         : { symbol: null },
-            data           : min,
-            color          : '#ffffff',
-            type           : 'area',
-            fillOpacity    : 0.65,
-            lineWidth      : 0,
-            pointPlacement : 'off'
         });
     }
 
@@ -319,6 +280,7 @@ $(document).ready(function() {
         },
         name  : (estSynthese ? 'Valeur moyenne de la synthèse' : 'Votre résultat'),
         color : '#6f3596',
+        marker: { symbol:'circle' },
         type  : 'line',
         data  : values,
         pointPlacement: 'on'
