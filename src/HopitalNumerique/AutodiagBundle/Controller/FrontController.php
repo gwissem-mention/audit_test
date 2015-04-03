@@ -269,11 +269,11 @@ class FrontController extends Controller
                 }
                 else
                 {
-                    return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_resultat', array( 'outil' => $outil->getId(), 'resultat' => $resultat->getId(), 'alias' => $outil->getAlias()  ) ) );
+                    return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array( 'id' => $resultat->getId() ) ) );
                 }
             }
         }
-        elseif(!is_null($resultat))
+        elseif(!is_null($resultat) && $action != 'acces_resultats')
         {
             if($sansGabarit)
             {
@@ -295,6 +295,7 @@ class FrontController extends Controller
                 return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
             }
         }
+
     }
 
     /**
