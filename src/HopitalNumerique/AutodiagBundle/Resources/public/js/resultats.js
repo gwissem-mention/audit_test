@@ -184,7 +184,7 @@ $(document).ready(function() {
                 align: 'left'
             },
             name  : 'Deuxième décile',
-            marker: { enabled:false, radius:0 },
+            marker: { symbol:'circle' },
             data  : deciles2,
             color : radarChartBenchmarkCouleurDecile2,
             lineWidth:1,
