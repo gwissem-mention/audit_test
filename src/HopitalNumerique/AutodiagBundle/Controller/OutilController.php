@@ -267,24 +267,37 @@ class OutilController extends Controller
 
         $datas     = array();
         $emptyCols = array();
-        foreach($outils as $outil) {
-            $resultats   = $outil->getResultats();
-            $colId       = 0;
-            $remarques   = array();
-            $lastSaves   = array();
-            $validations = array();
+        foreach($outils as $outil) 
+        {
+            $resultats             = $outil->getResultats();
+            $colId                 = 0;
+            $remarques             = array();
+            $lastSaves             = array();
+            $validations           = array();
+            $associationColAndUser = array();
+            $colonnesValeurs       = array();
 
-            foreach($resultats as $resultat) {
+            foreach($resultats as $resultat) 
+            {
                 //add colonne ID
                 $user                   = !is_null($resultat->getUser()) ? $resultat->getUser()->getPrenomNom() : 'Guest';
+
+                if(!is_null($resultat->getUser()))
+                {
+                    $associationColAndUser['col'.$colId] = $resultat->getUser()->getId();
+                }
+
+                $colonnesValeurs[] = 'col'.$colId;
                 $colonnes['col'.$colId] = $user;
                 $emptyCols[]            = 'col'.$colId;
 
                 $reponses = $resultat->getReponses();
-                foreach($reponses as $reponse) {
+                foreach($reponses as $reponse)
+                {
                     $question = $reponse->getQuestion();
 
-                    if ( !isset($datas[$question->getId()]) ){
+                    if ( !isset($datas[$question->getId()])) 
+                    {
                         $row               = array();
                         $row['outil']      = $outil->getTitle();
                         $row['question']   = $question->getTexte();
@@ -302,6 +315,46 @@ class OutilController extends Controller
                 $validations['col'.$colId] = !is_null($resultat->getDateValidation()) ? $resultat->getDateValidation()->format('d/m/Y') : '';
 
                 $colId++;
+            }
+
+            if(!is_null($outil->getQuestionnairePrealable()))
+            {
+                $valeursQuestionnaires          = array();
+                $questions                      = $this->get('hopitalnumerique_questionnaire.manager.question')->findBy(array('questionnaire' => $outil->getQuestionnairePrealable()->getId()));
+                $reponsesQuestionnairePrealable = $this->get('hopitalnumerique_questionnaire.manager.reponse')->getReponsesForQuestionnaireOrderByUser($outil->getQuestionnairePrealable());
+
+                foreach ($questions as $question) 
+                {
+                    $row = array();
+                    $row['outil']     = $outil->getTitle();
+                    $row['chapitre0'] = $outil->getQuestionnairePrealable()->getNom();
+                    $row['question']  = $question->getLibelle();
+                    $row['chapitre1'] = '';
+
+                    foreach ($colonnesValeurs as $colonne)
+                    {
+                        if(array_key_exists($colonne, $associationColAndUser)
+                            && array_key_exists($associationColAndUser[$colonne], $reponsesQuestionnairePrealable))
+                        {
+                            $currentUserIdColonne = $associationColAndUser[$colonne];
+                            if(array_key_exists($question->getId(), $reponsesQuestionnairePrealable[$currentUserIdColonne]))
+                            {
+                                $row[$colonne] = $reponsesQuestionnairePrealable[$currentUserIdColonne][$question->getId()];
+                            }
+                            else
+                            {
+                                $row[$colonne] = '';
+                            }
+                        }
+                        else
+                        {
+                            $row[$colonne] = '';
+                        }
+                    }
+                    $valeursQuestionnaires[] = $row;
+                }
+
+                $datas = array_merge($valeursQuestionnaires, $datas);
             }
 
             $datas[] = $this->addLine( 'Date de dernière sauvegarde', $outil, $lastSaves );

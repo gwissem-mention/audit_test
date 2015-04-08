@@ -31,7 +31,7 @@
         <div id="questionnaire_form">  
             <h3>Questionnaire {{questionnaire.nom}}</h3>
                 
-            {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':app.user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}
+            {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':app.user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}</div>
 
             <div class="col-md-12 button_questionnaire">
                 <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit questionnaire_submit" value="VALIDER LE QUESTIONNAIRE" type="button"/>
@@ -39,7 +39,7 @@
             <div class="clearfix"></div>
         </div>
     
-       <div id ="footerDesc">
+       <div id="footerDesc">
             <p>
                 Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».
             </p>
@@ -48,5 +48,7 @@
             </p>
         </div>
         <div class="clearfix"></div>
+    </div>
+    </div>
     </div>
 {% endblock %}
