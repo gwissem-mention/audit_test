@@ -248,6 +248,12 @@ class OutilController extends Controller
      */
     public function exportMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        if(count($primaryKeys) > 1)
+        {
+            $this->get('session')->getFlashBag()->add('danger', 'Vous ne pouvez pas exporter plusieurs autodiagnostics en même temps.' );
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_outil') );
+        }
+
         if($allPrimaryKeys == 1){
             $rawDatas = $this->get('hopitalnumerique_autodiag.grid.outil')->getRawData();
             foreach($rawDatas as $data)
@@ -269,55 +275,27 @@ class OutilController extends Controller
         $emptyCols             = array();
         $associationColAndUser = array();
         $colonnesValeurs       = array();
-        
-        foreach($outils as $outil) 
+
+        foreach($outils as $outil)
         {
-            $resultats             = $outil->getResultats();
-            $colId                 = 0;
-            $remarques             = array();
-            $lastSaves             = array();
-            $validations           = array();
+            $colId     = 0;
+            $resultats = $outil->getResultats();
 
             foreach($resultats as $resultat) 
             {
-                //add colonne ID
-                $user                   = !is_null($resultat->getUser()) ? $resultat->getUser()->getPrenomNom() : 'Guest';
-
                 if(!is_null($resultat->getUser()))
                 {
                     $associationColAndUser['col'.$colId] = $resultat->getUser()->getId();
                 }
 
                 $colonnesValeurs[] = 'col'.$colId;
-                $colonnes['col'.$colId] = $user;
-                $emptyCols[]            = 'col'.$colId;
-
-                $reponses = $resultat->getReponses();
-                foreach($reponses as $reponse)
-                {
-                    $question = $reponse->getQuestion();
-
-                    if ( !isset($datas[$question->getId()])) 
-                    {
-                        $row               = array();
-                        $row['outil']      = $outil->getTitle();
-                        $row['question']   = $question->getTexte();
-                        $row['chapitre1']  = $question->getChapitre()->getTitle();
-                        $row['chapitre0']  = !is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getParent()->getTitle() : '';
-
-                        $datas[$question->getId()] = $row;
-                    }
-
-                    $datas[$question->getId()]['col'.$colId] = $reponse->getValue();
-                }
-
-                $remarques['col'.$colId]   = $resultat->getRemarque();
-                $lastSaves['col'.$colId]   = $resultat->getDateLastSave()->format('d/m/Y');
-                $validations['col'.$colId] = !is_null($resultat->getDateValidation()) ? $resultat->getDateValidation()->format('d/m/Y') : '';
 
                 $colId++;
-            }
+            }    
+        }
 
+        foreach($outils as $outil) 
+        {
             if(!is_null($outil->getQuestionnairePrealable()))
             {
                 $valeursQuestionnaires          = array();
@@ -354,6 +332,45 @@ class OutilController extends Controller
                     }
                     $datas[] = $row;
                 }
+            }
+
+            $resultats             = $outil->getResultats();
+            $colId                 = 0;
+            $remarques             = array();
+            $lastSaves             = array();
+            $validations           = array();
+
+            foreach($resultats as $resultat) 
+            {
+                //add colonne ID
+                $user                   = !is_null($resultat->getUser()) ? $resultat->getUser()->getPrenomNom() : 'Guest';
+                $colonnes['col'.$colId] = $user;
+                $emptyCols[]            = 'col'.$colId;
+
+                $reponses = $resultat->getReponses();
+                foreach($reponses as $reponse)
+                {
+                    $question = $reponse->getQuestion();
+
+                    if ( !isset($datas[$question->getId()])) 
+                    {
+                        $row               = array();
+                        $row['outil']      = $outil->getTitle();
+                        $row['question']   = $question->getTexte();
+                        $row['chapitre1']  = $question->getChapitre()->getTitle();
+                        $row['chapitre0']  = !is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getParent()->getTitle() : '';
+
+                        $datas[$question->getId()] = $row;
+                    }
+
+                    $datas[$question->getId()]['col'.$colId] = $reponse->getValue();
+                }
+
+                $remarques['col'.$colId]   = $resultat->getRemarque();
+                $lastSaves['col'.$colId]   = $resultat->getDateLastSave()->format('d/m/Y');
+                $validations['col'.$colId] = !is_null($resultat->getDateValidation()) ? $resultat->getDateValidation()->format('d/m/Y') : '';
+
+                $colId++;
             }
 
             $datas[] = $this->addLine( 'Date de dernière sauvegarde', $outil, $lastSaves );
