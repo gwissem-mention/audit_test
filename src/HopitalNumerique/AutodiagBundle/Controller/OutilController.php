@@ -265,8 +265,11 @@ class OutilController extends Controller
             'question'   => 'Question'
         );
 
-        $datas     = array();
-        $emptyCols = array();
+        $datas                 = array();
+        $emptyCols             = array();
+        $associationColAndUser = array();
+        $colonnesValeurs       = array();
+        
         foreach($outils as $outil) 
         {
             $resultats             = $outil->getResultats();
@@ -274,8 +277,6 @@ class OutilController extends Controller
             $remarques             = array();
             $lastSaves             = array();
             $validations           = array();
-            $associationColAndUser = array();
-            $colonnesValeurs       = array();
 
             foreach($resultats as $resultat) 
             {
@@ -351,10 +352,8 @@ class OutilController extends Controller
                             $row[$colonne] = '';
                         }
                     }
-                    $valeursQuestionnaires[] = $row;
+                    $datas[] = $row;
                 }
-
-                $datas = array_merge($valeursQuestionnaires, $datas);
             }
 
             $datas[] = $this->addLine( 'Date de dernière sauvegarde', $outil, $lastSaves );
