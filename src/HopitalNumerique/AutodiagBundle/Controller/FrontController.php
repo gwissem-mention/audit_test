@@ -692,6 +692,23 @@ class FrontController extends Controller
     }
 
     /**
+     * Supprime un partage de résultat
+     *
+     * @param  Resultat $resultat [description]
+     *
+     * @return [type]
+     */
+    public function deletePartageAction( Resultat $resultat )
+    {
+        $this->get('hopitalnumerique_autodiag.manager.resultat')->delete( $resultat->getResultatSharedFor() );
+
+        // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
+        $this->get('session')->getFlashBag()->add( 'success', 'Partage supprimé.');
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_comptehn').'"}', 200);
+    }
+
+    /**
      * Génère la synthèse d'un groupe de résultat
      *
      * @return empty

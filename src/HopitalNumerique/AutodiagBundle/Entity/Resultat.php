@@ -109,6 +109,29 @@ class Resultat
      */
     protected $resultats;
 
+    /*************************/
+    /***vvvvv PARTAGE vvvvv***/
+    /*************************/
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="out_date_partage", type="datetime", nullable=true, options = {"comment" = "Date de partage de l outil, partageur ou partage avec"})
+     */
+    private $datePartage;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Resultat", cascade={"persist"})
+     * @ORM\JoinColumn(name="res_id_shared_for", referencedColumnName="res_id",  onDelete="SET NULL", nullable=true)
+     */
+    protected $resultatSharedFor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Resultat", cascade={"persist"})
+     * @ORM\JoinColumn(name="res_id_shared_by", referencedColumnName="res_id",  onDelete="CASCADE", nullable=true)
+     */
+    protected $resultatSharedBy;
+
     /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
@@ -131,6 +154,17 @@ class Resultat
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Set id
+     *
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
     }
 
     /**
@@ -425,5 +459,97 @@ class Resultat
     public function getResultats()
     {
         return $this->resultats;
+    }
+
+    /**
+     * Set datePartage
+     *
+     * @param \DateTime $datePartage
+     * @return Resultat
+     */
+    public function setDatePartage($datePartage)
+    {
+        $this->datePartage = $datePartage;
+
+        return $this;
+    }
+
+    /**
+     * Get datePartage
+     *
+     * @return \DateTime 
+     */
+    public function getDatePartage()
+    {
+        return $this->datePartage;
+    }
+
+    /**
+     * Add reponses
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Reponse $reponses
+     * @return Resultat
+     */
+    public function addReponse(\HopitalNumerique\AutodiagBundle\Entity\Reponse $reponses)
+    {
+        $this->reponses[] = $reponses;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponses
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Reponse $reponses
+     */
+    public function removeReponse(\HopitalNumerique\AutodiagBundle\Entity\Reponse $reponses)
+    {
+        $this->reponses->removeElement($reponses);
+    }
+
+    /**
+     * Set resultatSharedBy
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Resultat $resultatSharedBy
+     * @return Resultat
+     */
+    public function setResultatSharedBy(\HopitalNumerique\AutodiagBundle\Entity\Resultat $resultatSharedBy = null)
+    {
+        $this->resultatSharedBy = $resultatSharedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get resultatSharedBy
+     *
+     * @return \HopitalNumerique\AutodiagBundle\Entity\Resultat 
+     */
+    public function getResultatSharedBy()
+    {
+        return $this->resultatSharedBy;
+    }
+
+    /**
+     * Set resultatSharedFor
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Resultat $resultatSharedFor
+     * @return Resultat
+     */
+    public function setResultatSharedFor(\HopitalNumerique\AutodiagBundle\Entity\Resultat $resultatSharedFor = null)
+    {
+        $this->resultatSharedFor = $resultatSharedFor;
+
+        return $this;
+    }
+
+    /**
+     * Get resultatSharedFor
+     *
+     * @return \HopitalNumerique\AutodiagBundle\Entity\Resultat 
+     */
+    public function getResultatSharedFor()
+    {
+        return $this->resultatSharedFor;
     }
 }

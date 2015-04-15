@@ -4,7 +4,10 @@ namespace HopitalNumerique\AutodiagBundle\Controller;
 
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use HopitalNumerique\AutodiagBundle\Entity\Resultat;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Resultat controller.
@@ -40,6 +43,75 @@ class ResultatController extends Controller
             'chapitres' => $chapitres,
             'questionnairePrealableQuestions' => $questionnairePrealableQuestions
         ));
+    }
+
+    /**
+     * POPIN : Partage de resultat
+     */
+    public function shareAction( Resultat $resultat )
+    {
+        return $this->render( 'HopitalNumeriqueAutodiagBundle:Resultat:Fancy/fancy_front.html.twig' , array(
+            'resultat' => $resultat
+        ));
+    }
+
+    /**
+     * Permet de duppliquer un résultat via la pop-in de shareAction
+     *
+     * @param Request $request [description]
+     *
+     * @return [type]
+     */
+    public function shareDuplicationAction( Request $request )
+    {
+        $resultats              = array();
+        $idUser                 = $request->request->get('user');
+        $idResultatAdDuppliquer = $request->request->get('resultat');
+
+        $user                = $this->get('security.context')->getToken()->getUser();
+        $userPartageAvec     = $this->get('hopitalnumerique_user.manager.user')->findOneById($idUser);
+        $resultatADuppliquer = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneById($idResultatAdDuppliquer);
+
+        if(is_null($resultatADuppliquer->getResultatSharedBy()) && is_null($resultatADuppliquer->getResultatSharedFor()))
+        {
+            //MAJ de la date de publication
+            $resultatADuppliquer->setDatePartage( new \DateTime());
+
+            //Duppliquation
+            $resultat = clone $resultatADuppliquer;
+            $resultat->setId(null);
+
+            //MAJ des identifiants partageur/partagé avec
+            $resultat->setResultatSharedBy($resultatADuppliquer);
+            $resultat->setUser($userPartageAvec);
+            $resultatADuppliquer->setResultatSharedFor($resultat);
+
+            $resultats[] = $resultat;
+            $resultats[] = $resultatADuppliquer;
+
+            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultats );
+
+            //Clone des réponses du résultat
+            $reponses = array();
+            foreach ($resultatADuppliquer->getReponses() as $reponseADuppliquer) 
+            {
+                $reponse = clone $reponseADuppliquer;
+                $reponse->setId(null);
+                $reponse->setResultat($resultat);
+
+                $reponses[] = $reponse;
+            }
+
+            $this->get('hopitalnumerique_autodiag.manager.reponse')->save( $reponses );
+
+            $success = true;
+        }
+        else
+        {
+            $success = false;
+        }
+
+        return new Response('{"success":'.($success ? 'true' : 'false').'}', 200);
     }
     
     /**
