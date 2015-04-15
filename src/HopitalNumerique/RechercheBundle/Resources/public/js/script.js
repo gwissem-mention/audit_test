@@ -6,6 +6,8 @@ var hasResultat =false;
 $(document).ready(function() {
     var hasResultat =false;
     $("#bloc_filtres").hide();
+    $("#bloc_exalead").removeClass();
+    $("#bloc_exalead").addClass('col-md-12');
 
     //Gestion de l'ajout de critères dans la requete
     $('#origin li span').on("click", function(e){
@@ -38,6 +40,8 @@ $(document).ready(function() {
             if( success && showPlaceholder){
                 $(".placeholder").hide();
                 $("#bloc_filtres").show();
+                $("#bloc_exalead").removeClass();
+                $("#bloc_exalead").addClass('col-md-6');
                 showPlaceholder = false;
                 $("#dest").removeClass('hide');
                 $(".requete h2").addClass('ropen');
@@ -67,6 +71,8 @@ $(document).ready(function() {
         if( success && showPlaceholder){
             $(".placeholder").hide();
             $("#bloc_filtres").show();
+            $("#bloc_exalead").removeClass();
+            $("#bloc_exalead").addClass('col-md-6');
             showPlaceholder = false;
             $("#dest").removeClass('hide');
             $(".requete h2").addClass('ropen');
@@ -171,6 +177,8 @@ $(document).ready(function() {
         }
         $(".placeholder").hide();
         $("#bloc_filtres").show();
+        $("#bloc_exalead").removeClass();
+        $("#bloc_exalead").addClass('col-md-6');
         showPlaceholder = false;
         $("#dest").removeClass('hide');
         $(".requete h2").addClass('ropen');
@@ -215,6 +223,8 @@ $(document).ready(function() {
         {
             $(".placeholder").hide();
             $("#bloc_filtres").show();
+            $("#bloc_exalead").removeClass();
+            $("#bloc_exalead").addClass('col-md-6');
             showPlaceholder = false;
             $("#dest").removeClass('hide');
             $(".requete h2").addClass('ropen');
@@ -411,6 +421,8 @@ function handleParentsDestination( item )
                 $(".arbo-requete").find('li').addClass('hide');
                 $(".placeholder").show();
                 $("#bloc_filtres").hide();
+                $("#bloc_exalead").removeClass();
+                $("#bloc_exalead").addClass('col-md-12');
                 showPlaceholder = true;
                 $("#dest").addClass('hide');
                 $(".requete h2").removeClass('ropen rclose');
@@ -807,6 +819,8 @@ function affichagePlaceholder()
     {
         $(".placeholder").hide();
         $("#bloc_filtres").show();
+        $("#bloc_exalead").removeClass();
+        $("#bloc_exalead").addClass('col-md-6');
         showPlaceholder = false;
         $("#dest").removeClass('hide');
         $(".requete h2").addClass('ropen');
@@ -816,6 +830,8 @@ function affichagePlaceholder()
         $(".arbo-requete").find('li').addClass('hide');
         $(".placeholder").show();
         $("#bloc_filtres").hide();
+        $("#bloc_exalead").removeClass();
+        $("#bloc_exalead").addClass('col-md-12');
         showPlaceholder = true;
         $("#dest").addClass('hide');
         $(".requete h2").removeClass('ropen rclose');
@@ -823,6 +839,8 @@ function affichagePlaceholder()
     else
     {
         $("#bloc_filtres").show();
+        $("#bloc_exalead").removeClass();
+        $("#bloc_exalead").addClass('col-md-6');
     }
 
     placeholderExalead();

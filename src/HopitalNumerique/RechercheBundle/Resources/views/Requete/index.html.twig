@@ -59,7 +59,7 @@
                 </p>
 
                 <div class="actions pull-right">
-                    <div class="fa fa-envelope btn-pas-mobile {% if requete.isUserNotified %}active{% else %}inactive{% endif %}" title="Notifications" onclick="showDetails('{{path('hopital_numerique_requete_mail',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-envelope btn-pas-mobile hide {% if requete.isUserNotified %}active{% else %}inactive{% endif %}" title="Notifications" onclick="showDetails('{{path('hopital_numerique_requete_mail',{'id':requete.id})}}')"></div>
                     <div class="fa fa-eye btn-pas-mobile" title="Voir le détail" onclick="showDetails('{{path('hopital_numerique_requete_detail',{'id':requete.id})}}')"></div>
                     <div class="fa fa-edit btn-pas-mobile" title="Editer" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
                     <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
