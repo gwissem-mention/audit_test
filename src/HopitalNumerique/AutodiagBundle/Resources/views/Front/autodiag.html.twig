@@ -86,9 +86,9 @@
                         <td>{{resultat.dateValidation|date('d/m/Y')}}</td>
                         <td style="text-align:center">
                             {% if resultat.resultatSharedBy is not null %}
-                                Partagé par {{resultat.resultatSharedBy.user.getAppellation()}} ({{ resultat.resultatSharedBy.user.getEtablissementRattachementSante().getNom() }}){% if resultat.datePartage is not null %} le {{resultat.datePartage|date('d/m/Y')}}{% endif %}
+                                Partagé par {{resultat.resultatSharedBy.user.getAppellation()}} {% if resultat.resultatSharedBy.user.getEtablissementRattachementSante() is not null %}({{ resultat.resultatSharedBy.user.getEtablissementRattachementSante().getNom() }}){% endif %}{% if resultat.datePartage is not null %} le {{resultat.datePartage|date('d/m/Y')}}{% endif %}
                             {% elseif resultat.resultatSharedFor %}
-                                Partagé avec {{resultat.resultatSharedFor.user.getAppellation()}} ({{ resultat.resultatSharedFor.user.getEtablissementRattachementSante().getNom() }}){% if resultat.datePartage is not null %} le {{resultat.datePartage|date('d/m/Y')}}{% endif %}
+                                Partagé avec {{resultat.resultatSharedFor.user.getAppellation()}} {% if resultat.resultatSharedFor.user.getEtablissementRattachementSante() is not null %}({{ resultat.resultatSharedFor.user.getEtablissementRattachementSante().getNom() }}){% endif %}{% if resultat.datePartage is not null %} le {{resultat.datePartage|date('d/m/Y')}}{% endif %}
                             {% endif %}
                         </td>
                         
