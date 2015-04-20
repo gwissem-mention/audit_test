@@ -618,12 +618,11 @@ class FrontController extends Controller
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $user = $user != 'anon.' ? $user : false;
-      //\Doctrine\Common\Util\Debug::dump(!$user && !is_null($resultat->getResultatSharedFor()) && $resultat->getResultatSharedFor()->getUser() != $user);die;
+
         //restriction de l'accès aux résultats lorsque l'user est connecté
-        if(
-            (($user && !is_null($resultat->getResultatSharedFor()) && $resultat->getResultatSharedFor()->getUser() != $user) &&
-            ( $user && !is_null($resultat->getUser()) && $resultat->getUser() != $user )) ||
-            (!$user && !is_null($resultat->getUser()) )
+        if( 
+            ( $user && !is_null($resultat->getUser()) && $resultat->getUser() != $user ) || 
+            (!$user && !is_null($resultat->getUser()) ) 
         ) {
             $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à ces résultats.');
             return $this->redirect( $this->generateUrl('hopital_numerique_homepage' ) );
