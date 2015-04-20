@@ -313,7 +313,7 @@ class FrontController extends Controller
         {
             $back = 1;
         }
-
+      //\Doctrine\Common\Util\Debug::dump($resultat);
         //restriction de l'accès aux résultats lorsque l'user est connecté
         if( 
             ( $user && !is_null($resultat->getUser()) && $resultat->getUser() != $user ) || 
