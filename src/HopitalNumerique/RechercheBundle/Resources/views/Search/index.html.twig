@@ -113,8 +113,8 @@
                                 <input type="hidden" id="recherche_textuelle_minifie" value="{{categoriesProductionActif}}" />
                             </div>
                             
-                            <div class="recherche_textuelle_avancee">
-                                <a class="close" onclick="toggleRechercheAvancee();">Fermer</i></a>
+                            <div class="recherche_textuelle_avancee" {% if app.request.query.get('type') == 'avancee' %}style="display:block"{% endif %}>
+                                <a class="close" onclick="toggleRechercheAvancee();"><i>Fermer</i></a>
                                 <div class="title">Que cherchez vous ?</div>
                                 <ul>
                                     <li><a onclick="rechercheAvancee('&quot;Entrez votre formulation ici&quot;', 1, -1);">Formulation exacte</a></li>

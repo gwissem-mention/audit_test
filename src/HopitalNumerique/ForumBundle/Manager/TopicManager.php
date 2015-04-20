@@ -2,14 +2,16 @@
 
 namespace HopitalNumerique\ForumBundle\Manager;
 
+use Doctrine\ORM\Query\Expr\Join;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use Symfony\Component\Validator\Constraints\Null;
 
 /**
  * Manager de l'entité Topic.
  */
 class TopicManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ForumBundle\Entity\Topic';
+    protected $_class = '\HopitalNumerique\ForumBundle\Entity\Topic';
 
     /**
      * Formatte les références sous forme d'un unique tableau
@@ -110,5 +112,17 @@ class TopicManager extends BaseManager
         } else {
             return false;
         }
+    }
+
+    /**
+     * Récupère les derniers topics commentés par type de forum
+     *
+     * @param $id int
+     * @param $limit int
+     *
+     * @return \HopitalNumerique\ForumBundle\Entity\Topic[] Liste des topics
+     */
+    public function getLastTopicsForum($id, $limit = null) {
+      return $this->getRepository()->getLastTopicsForum($id, $limit)->getQuery()->getResult();
     }
 }

@@ -218,6 +218,18 @@ class ObjetManager extends BaseManager
     {
         return $this->getRepository()->getObjetsByTypes( $types, $limit )->getQuery()->getResult();
     }
+
+    /**
+     * Retourne la liste des objets selon le/les types et trié par nombre de vu
+     *
+     * @param array $types Les types à filtrer
+     *
+     * @return array
+     */
+    public function getObjetsByNbVue( $types, $limit = 0 )
+    {
+      return $this->getRepository()->getObjetsByNbVue( $types, $limit )->getQuery()->getResult();
+    }
     
     /**
      * Retourne l'ensemble des productions actives

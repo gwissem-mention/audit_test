@@ -116,6 +116,40 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
+     * Retourne la liste des objets selon le/les types et trié par nombre de vues
+     *
+     * @param array $types Les types à filtrer
+     *
+     * @return QueryBuilder
+     */
+    public function getObjetsByNbVue( $types, $limit = 0 )
+    {
+      $qb = $this->_em->createQueryBuilder();
+      $qb->select('obj')
+         ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+         ->leftJoin('obj.types','refTypes')
+         ->where('refTypes.id IN (:types)','obj.etat = 3')
+         ->andWhere(
+           $qb->expr()->orx(
+             $qb->expr()->isNull('obj.dateDebutPublication'),
+             $qb->expr()->lte('obj.dateDebutPublication', ':today')
+           ),
+           $qb->expr()->orx(
+             $qb->expr()->isNull('obj.dateFinPublication'),
+             $qb->expr()->gte('obj.dateFinPublication', ':today')
+           )
+         )
+         ->setParameter('today', new \DateTime() )
+         ->orderBy('obj.nbVue', 'DESC')
+         ->setParameter('types', $types );
+
+      if( $limit !== 0 )
+        $qb->setMaxResults($limit);
+
+      return $qb;
+    }
+
+    /**
      * Retourne l'ensemble des productions actives
      */
     public function getProductionsActive()

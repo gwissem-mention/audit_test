@@ -463,4 +463,16 @@ class UserRepository extends EntityRepository
         
         return $qb;
     }
+
+    /**
+     * Récupère tous les utilisateurs (tous les rôles)
+     *
+     * @return QueryBuilder
+     */
+    public function getAllUsers() {
+      $qb = $this->_em->createQueryBuilder();
+      $qb->select('user')
+        ->from('HopitalNumeriqueUserBundle:User', 'user');
+      return $qb;
+    }
 }
