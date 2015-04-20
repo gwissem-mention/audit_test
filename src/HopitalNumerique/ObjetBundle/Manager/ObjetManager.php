@@ -170,6 +170,17 @@ class ObjetManager extends BaseManager
                 $row['module'] .= $module->getId() . ' - ' . $module->getTitre() . ';';
             }
 
+            // Récupération des commentaires de l'objet
+            $row['commentairesAssocies'] = "";
+            $commentaires_associes = array();
+            foreach ($objet->getListeCommentaires() as $com) {
+              $con = $com->getContenu();
+              if(empty($con)) {
+                $commentaires_associes[] = $com->getTexte();
+              }
+            }
+            $row['commentairesAssocies'] = implode('|',$commentaires_associes);
+
             //add Object To Results
             $results[] = $row;
 
@@ -196,6 +207,14 @@ class ObjetManager extends BaseManager
                         $rowInfradoc['noteC']             = number_format($this->getNoteReferencement($contenu->getReferences(), $refsPonderees), 0);
                         $rowInfradoc['noteMoyenneC']      = number_format($this->_noteManager->getMoyenneNoteByObjet($contenu->getId(), true),2);
                         $rowInfradoc['nombreNoteC']       = $this->_noteManager->countNbNoteByObjet($contenu->getId(), true);
+
+                        // Récupération des commentaires du contenu
+                        $rowInfradoc['commentairesAssocies'] = "";
+                        $commentaires_associes = array();
+                        foreach ($contenu->getListeCommentaires() as $com) {
+                          $commentaires_associes[] = $com->getTexte();
+                        }
+                        $rowInfradoc['commentairesAssocies'] = implode('|',$commentaires_associes);
 
                         //add Infra-doc To Results
                         $results[] = $rowInfradoc;

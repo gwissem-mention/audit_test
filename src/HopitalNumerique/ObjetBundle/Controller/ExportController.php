@@ -68,8 +68,8 @@ class ExportController extends Controller
                             'nbVueC'               => 'Nombre de visualisation de l\'infra-doc',
                             'noteMoyenneC'         => 'Note moyenne de l\'infra-doc',
                             'nombreNoteC'          => 'Nombre de notes de l\'infra-doc',
-                            'objets'               => 'Productions liées'
-
+                            'objets'               => 'Productions liées',
+                            'commentairesAssocies' => 'Commentaires'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
