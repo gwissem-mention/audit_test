@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="{% block metadesc %}Mon Hôpital Numérique{% endblock %}">
+        <meta name="keywords" content="{% block metakeywords %}{% endblock %}">
+        <meta name="author" content="NODEVO">
+
+        <title>Mon Hôpital Numérique - Partage de résultat</title>
+    </head>
+
+    <body>
+        <div class="panel panel-midnightblue" style="margin:0" >
+            <div class="panel-heading" style="height:5px"></div>
+            <div class="clearfix"></div>
+            <div id="panel-partage">
+                <div class="tableContent" id="partage-autodiag">
+                    <div class="content">
+                        <div class="col-md-12 title">
+                            <div class="col-md-12 violet title-autodiag" title="Titre de l'autodiagnostic">{{resultat.outil.title}}</div>
+                            <div class="col-md-12 rose title-resultat" title="Nom du résultat"><i class="fa fa-share fa-flip-vertical"></i>  {{resultat.name}}</div>
+                        </div>
+                        <div class="col-md-12 body">
+                            <div class="form-label">Partager ce résultat avec</div>
+                            <div class="input-group">
+                                <span class="input-group-addon" title="Entrez une adresse e-mail"><i class="fa fa-user"></i></span>
+                                <input id="recherche-user-email" type="text" class="form-control" placeholder="Exemple@anap.fr" aria-describedby="basic-addon1" />
+                                <span class="input-group-addon value-ok"><i class="fa fa-check"></i></span>
+                                <span class="input-group-addon value-search"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="input-group-addon no-value"><i class="fa fa-question-circle"></i></span>
+                                <span class="input-group-addon value-ko"><i class="fa fa-ban"></i></span>
+                            </div>
+                            <div class="gestion-label">
+                                <div class="no-user">
+                                    <span class="label label-danger">Aucun utilisateur trouvé.</span>
+                                </div>
+                                <div class="user-find">
+                                    <span class="label label-success">Utilisateur trouvé <i class="fa fa-check"></i></span>
+                                    <span class="label label-info search">Partage en cours <i class="fa fa-spin fa-spinner"></i> ...</span>
+                                    <span class="label label-success finish">Résultat partagé <i class="fa fa-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="toolbar">
+                                <div onclick="rechercheEtValidationPartage();" class="btn btn-success pull-right" title="Rechercher & Partager"><i class="fa fa-search"> </i>Rechercher & Partager</div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <input type="hidden" id="url-recherche-user-from-email" value="{{ path("hopital_numerique_user_get_user_from_email") }}" />
+                <input type="hidden" id="url-partage" value="{{ path("hopitalnumerique_autodiag_resultat_share_duplication") }}" />
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </body>
+    <style type="text/css">
+    #partage-autodiag {padding:15px;height: 273px;}
+    #partage-autodiag .content .title {padding:15px;background-color:#F4F4F4;font-size: 16px; font-weight: bold;}
+    #partage-autodiag .content .title .title-autodiag, #partage-autodiag .content .title .title-resultat{cursor: help;}
+    #partage-autodiag .content .title i{color:#1C1C1C;}
+    #partage-autodiag .content .body {padding:15px;background-color:#F4F4F4; margin-top: 10px}
+    #partage-autodiag .content .body .input-group .value-ok{color:#4BA24B;}
+    #partage-autodiag .content .body .input-group .value-ko{color:#C3302C;}
+    #partage-autodiag .content .body .input-group .value-search{color:#1C1C1C;}
+    #partage-autodiag .content .body .input-group .no-value{color:#1C1C1C;}
+    #partage-autodiag .content .body .gestion-label {text-align: center;margin-top: 10px;height: 20px;}
+    #partage-autodiag .content .body .toolbar{margin-top: 10px;}
+    #partage-autodiag .content .body .toolbar .btn i{margin-right: 5px;}
+    </style>
+</html>
+<script type="text/javascript">
+    var requestAjaxRecherche;
+
+    $(document).ready(function() {
+        $('.value-ok, .user-find, .user-find .finish').hide();
+        $('.value-search').hide();
+        $('.no-value').show();
+        $('.value-ko, .no-user').hide();
+    });
+
+    function rechercheEtValidationPartage()
+    {
+        if($('#recherche-user-email').val() != '')
+        {
+            var path   = $('#url-recherche-user-from-email').val();
+
+            $('.value-ok, .user-find').hide();
+            $('.value-search').show();
+            $('.no-value').hide();
+            $('.value-ko, .no-user').hide();
+
+            if(requestAjaxRecherche != null )
+            {
+                requestAjaxRecherche.abort();
+            }
+
+            requestAjaxRecherche = $.ajax({
+                url      : path,
+                data : {
+                    email : $('#recherche-user-email').val()
+                },
+                type     : 'post',
+                dataType : 'json',
+                success : function( data ){
+                    if(data.datas.user == 'ko')
+                    {
+                        $(".no-user span").html('Aucun utilisateur trouvé.');
+                        $('.value-ok, .user-find').hide();
+                        $('.value-search').hide();
+                        $('.no-value').hide();
+                        $('.value-ko, .no-user').show();
+                    }
+                    else if(data.datas.user == {{app.user.id}})
+                    {
+                        $(".no-user span").html('Inutile de partager ce résultat avec vous même.');
+                        $('.value-ok, .user-find').hide();
+                        $('.value-search').hide();
+                        $('.no-value').hide();
+                        $('.value-ko, .no-user').show();
+                    }
+                    else
+                    {
+                        $('.value-ok, .user-find').show();
+                        $('.value-search').hide();
+                        $('.no-value').hide();
+                        $('.value-ko, .no-user').hide();
+
+                        //Update le résultat + création d'un nouveau avec l'userId data.datas.user
+                        $.ajax({
+                            url      : $("#url-partage").val(),
+                            data : {
+                                user     : data.datas.user,
+                                resultat : {{resultat.id}}
+                            },
+                            type     : 'post',
+                            dataType : 'json',
+                            success : function( data ){
+                                $('.user-find .search').hide();
+                                $('.user-find .finish').show();
+                                $.fancybox.close();
+                                window.location.reload();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        else
+        {
+            $('.value-ok, .user-find').hide();
+            $('.value-search').hide();
+            $('.no-value').show();
+            $('.value-ko, .no-user').hide();
+        }
+    } 
+</script>

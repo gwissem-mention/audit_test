@@ -1373,4 +1373,44 @@ class Outil
     {
         return $this->questionnairePrealable;
     }
+
+    /**
+     * Get radarChartAfficheBenchmark
+     *
+     * @return boolean 
+     */
+    public function getRadarChartAfficheBenchmark()
+    {
+        return $this->radarChartAfficheBenchmark;
+    }
+
+    /**
+     * Get radarChartBenchmarkAfficheDecile2
+     *
+     * @return boolean 
+     */
+    public function getRadarChartBenchmarkAfficheDecile2()
+    {
+        return $this->radarChartBenchmarkAfficheDecile2;
+    }
+
+    /**
+     * Get radarChartBenchmarkAfficheMoyenne
+     *
+     * @return boolean 
+     */
+    public function getRadarChartBenchmarkAfficheMoyenne()
+    {
+        return $this->radarChartBenchmarkAfficheMoyenne;
+    }
+
+    /**
+     * Get radarChartBenchmarkAfficheDecile8
+     *
+     * @return boolean 
+     */
+    public function getRadarChartBenchmarkAfficheDecile8()
+    {
+        return $this->radarChartBenchmarkAfficheDecile8;
+    }
 }

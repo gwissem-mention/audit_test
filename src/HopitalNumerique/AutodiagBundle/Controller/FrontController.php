@@ -247,7 +247,6 @@ class FrontController extends Controller
         // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
         $this->get('session')->getFlashBag()->add( 'success', 'Vos réponses ont bien été sauvegardées.' );
 
-
         if( ($action == 'valid' || $action == 'acces_resultats') || !$outil->isCentPourcentReponseObligatoire())
         {
             // si on clique sur "Enregistrer", on reste sur la page "outil"
@@ -274,6 +273,17 @@ class FrontController extends Controller
                 }
             }
         }
+        elseif(!is_null($resultat) && $action != 'acces_resultats')
+        {
+            if($sansGabarit)
+            {
+                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat_sans_gabarit', array( 'id' => $resultat->getId(), 'sansGabarit' => true ) ) );
+            }
+            else
+            {
+                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_resultat', array( 'outil' => $outil->getId(), 'resultat' => $resultat->getId(), 'alias' => $outil->getAlias()  ) ) );
+            }   
+        }
         else
         {
             if($sansGabarit)
@@ -285,6 +295,7 @@ class FrontController extends Controller
                 return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
             }
         }
+
     }
 
     /**
@@ -676,6 +687,23 @@ class FrontController extends Controller
 
         // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
         $this->get('session')->getFlashBag()->add( 'success', 'Résultats supprimés.');
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_comptehn').'"}', 200);
+    }
+
+    /**
+     * Supprime un partage de résultat
+     *
+     * @param  Resultat $resultat [description]
+     *
+     * @return [type]
+     */
+    public function deletePartageAction( Resultat $resultat )
+    {
+        $this->get('hopitalnumerique_autodiag.manager.resultat')->delete( $resultat->getResultatSharedFor() );
+
+        // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
+        $this->get('session')->getFlashBag()->add( 'success', 'Partage supprimé.');
 
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_comptehn').'"}', 200);
     }

@@ -88,6 +88,23 @@ class ReponseRepository extends EntityRepository
     }
     
     /**
+     * Récupère les réponses du questionnaire passés en param
+     *
+     * @return array
+     */
+    public function getReponsesForQuestionnaireOrderByUser( $idQuestionnaire )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('reponse')
+            ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
+            ->leftJoin('reponse.question', 'question')
+            ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
+            ->setParameter('idQuestionnaire', $idQuestionnaire );
+    
+        return $qb->getQuery();
+    }
+    
+    /**
      * Récupère les réponses pour l'utilisateur en fonction des questionnaires passés en param
      * 
      * @param int $idExpert      Identifiant du questionnaire expert

@@ -64,6 +64,17 @@ class Reponse
     {
         return $this->id;
     }
+    
+    /**
+     * Set id
+     *
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * Set value

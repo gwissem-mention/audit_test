@@ -74,7 +74,7 @@
     #recherche #recherche_textuelle_group .btn.btn-primary{ border-radius: 0px 4px 4px 0px;}
     #recherche #arbo-type-prod { padding: 0;}
     #recherche #arbo-recherche-textuelle { padding: 0;}
-    #recherche #bloc_filtres{ margin-top:10px;padding-right:0px}
+    #recherche #bloc_filtres{ margin-top:10px;padding-left:0px; padding-right: 15px;}
     
 	.recherche_textuelle_avancee { background-color:#f4f4f4;border-color:#ccc;border-style:solid;border-width:1px;display:none;left:0px;position:absolute;top:33px;width:100%;z-index:1000; }
 	    .recherche_textuelle_avancee .close { float:right;font-size:15px;padding:10px; }

@@ -248,6 +248,12 @@ class OutilController extends Controller
      */
     public function exportMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        if(count($primaryKeys) > 1)
+        {
+            $this->get('session')->getFlashBag()->add('danger', 'Vous ne pouvez pas exporter plusieurs autodiagnostics en même temps.' );
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_outil') );
+        }
+
         if($allPrimaryKeys == 1){
             $rawDatas = $this->get('hopitalnumerique_autodiag.grid.outil')->getRawData();
             foreach($rawDatas as $data)
@@ -265,26 +271,89 @@ class OutilController extends Controller
             'question'   => 'Question'
         );
 
-        $datas     = array();
-        $emptyCols = array();
-        foreach($outils as $outil) {
-            $resultats   = $outil->getResultats();
-            $colId       = 0;
-            $remarques   = array();
-            $lastSaves   = array();
-            $validations = array();
+        $datas                 = array();
+        $emptyCols             = array();
+        $associationColAndUser = array();
+        $colonnesValeurs       = array();
 
-            foreach($resultats as $resultat) {
+        foreach($outils as $outil)
+        {
+            $colId     = 0;
+            $resultats = $outil->getResultats();
+
+            foreach($resultats as $resultat) 
+            {
+                if(!is_null($resultat->getUser()))
+                {
+                    $associationColAndUser['col'.$colId] = $resultat->getUser()->getId();
+                }
+
+                $colonnesValeurs[] = 'col'.$colId;
+
+                $colId++;
+            }    
+        }
+
+        foreach($outils as $outil) 
+        {
+            if(!is_null($outil->getQuestionnairePrealable()))
+            {
+                $valeursQuestionnaires          = array();
+                $questions                      = $this->get('hopitalnumerique_questionnaire.manager.question')->findBy(array('questionnaire' => $outil->getQuestionnairePrealable()->getId()));
+                $reponsesQuestionnairePrealable = $this->get('hopitalnumerique_questionnaire.manager.reponse')->getReponsesForQuestionnaireOrderByUser($outil->getQuestionnairePrealable());
+
+                foreach ($questions as $question) 
+                {
+                    $row = array();
+                    $row['outil']     = $outil->getTitle();
+                    $row['chapitre0'] = $outil->getQuestionnairePrealable()->getNom();
+                    $row['question']  = $question->getLibelle();
+                    $row['chapitre1'] = '';
+
+                    foreach ($colonnesValeurs as $colonne)
+                    {
+                        if(array_key_exists($colonne, $associationColAndUser)
+                            && array_key_exists($associationColAndUser[$colonne], $reponsesQuestionnairePrealable))
+                        {
+                            $currentUserIdColonne = $associationColAndUser[$colonne];
+                            if(array_key_exists($question->getId(), $reponsesQuestionnairePrealable[$currentUserIdColonne]))
+                            {
+                                $row[$colonne] = $reponsesQuestionnairePrealable[$currentUserIdColonne][$question->getId()];
+                            }
+                            else
+                            {
+                                $row[$colonne] = '';
+                            }
+                        }
+                        else
+                        {
+                            $row[$colonne] = '';
+                        }
+                    }
+                    $datas[] = $row;
+                }
+            }
+
+            $resultats             = $outil->getResultats();
+            $colId                 = 0;
+            $remarques             = array();
+            $lastSaves             = array();
+            $validations           = array();
+
+            foreach($resultats as $resultat) 
+            {
                 //add colonne ID
                 $user                   = !is_null($resultat->getUser()) ? $resultat->getUser()->getPrenomNom() : 'Guest';
                 $colonnes['col'.$colId] = $user;
                 $emptyCols[]            = 'col'.$colId;
 
                 $reponses = $resultat->getReponses();
-                foreach($reponses as $reponse) {
+                foreach($reponses as $reponse)
+                {
                     $question = $reponse->getQuestion();
 
-                    if ( !isset($datas[$question->getId()]) ){
+                    if ( !isset($datas[$question->getId()])) 
+                    {
                         $row               = array();
                         $row['outil']      = $outil->getTitle();
                         $row['question']   = $question->getTexte();

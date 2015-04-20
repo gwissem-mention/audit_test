@@ -127,10 +127,9 @@ $(document).ready(function() {
                 align: 'left'
             },
             name  : 'Huitième décile',
-            marker: { enabled:false, radius:0 },
+            marker: { symbol:'circle' },
             data  : deciles8,
             color : radarChartBenchmarkCouleurDecile8,
-            lineWidth:1,
             type  : 'line',
             pointPlacement: 'on'
         });
@@ -184,10 +183,9 @@ $(document).ready(function() {
                 align: 'left'
             },
             name  : 'Deuxième décile',
-            marker: { enabled:false, radius:0 },
+            marker: { symbol:'circle' },
             data  : deciles2,
             color : radarChartBenchmarkCouleurDecile2,
-            lineWidth:1,
             type  : 'line',
             pointPlacement: 'on'
         });
@@ -202,10 +200,28 @@ $(document).ready(function() {
                 align: 'left'
             },
             name  : 'Moyenne du benchmark',
-            marker: { enabled:false, radius:0 },
+            marker: { symbol:'circle' },
             data  : moyennes,
             color : '#777777',
             lineWidth:1,
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+    if(!jQuery.isEmptyObject(max) && max[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                //format: '<b>{point.y:,.0f}%</b>',
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Valeur maximale de la synthèse',
+            marker: { symbol:'circle' },
+            data  : max,
+            color : '#00aa00',
             type  : 'line',
             pointPlacement: 'on'
         });
@@ -225,24 +241,6 @@ $(document).ready(function() {
             marker: { symbol:'circle' },
             data  : min,
             color : '#aa0000',
-            type  : 'line',
-            pointPlacement: 'on'
-        });
-    }
-    if(!jQuery.isEmptyObject(max) && max[0] != null )
-    {
-        seriesRadar.push({
-            dataLabels: {
-                enabled: true,
-                //format: '<b>{point.y:,.0f}%</b>',
-                format: ' ',
-                softConnector: true,
-                align: 'left'
-            },
-            name  : 'Valeur maximale de la synthèse',
-            marker: { symbol:'circle' },
-            data  : max,
-            color : '#00aa00',
             type  : 'line',
             pointPlacement: 'on'
         });
@@ -282,6 +280,7 @@ $(document).ready(function() {
         },
         name  : (estSynthese ? 'Valeur moyenne de la synthèse' : 'Votre résultat'),
         color : '#6f3596',
+        marker: { symbol:'circle' },
         type  : 'line',
         data  : values,
         pointPlacement: 'on'

@@ -155,6 +155,22 @@ class UserController extends Controller
             'options'     => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user)
         ));
     }
+
+    public function getUserFromEmailAction(Request $request)
+    {
+        $email = $request->request->get('email');
+
+        $userRecherche = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('email' => $email));
+
+        $response = json_encode(array(
+            'success' => true, 
+            'datas' => array(
+                'user' => !is_null($userRecherche) ? $userRecherche->getId() : 'ko'
+            )
+        ));
+
+        return new Response($response, 200);
+    }
     
     //---- Back Office ------    
     /**

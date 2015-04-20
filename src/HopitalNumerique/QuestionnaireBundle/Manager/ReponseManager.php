@@ -43,6 +43,48 @@ class ReponseManager extends BaseManager
     {    
         return $this->getRepository()->reponsesByQuestionnaireByUserByFileQuestion( $idQuestionnaire , $idUser )->getResult();
     }
+
+    public function getReponsesForQuestionnaireOrderByUser($idQuestionnaire)
+    {
+        $reponses              = $this->getRepository()->getReponsesForQuestionnaireOrderByUser( $idQuestionnaire )->getResult();
+        $reponsesOrderedByUser = array();
+
+        foreach ($reponses as $reponse) 
+        {
+            if(!array_key_exists($reponse->getUser()->getId(), $reponsesOrderedByUser))
+            {
+                $reponsesOrderedByUser[$reponse->getUser()->getId()] = array();
+            } 
+
+            $valueReponse = "";
+
+            switch($reponse->getQuestion()->getTypeQuestion()->getLibelle())
+            {
+                case 'entityradio':
+                case 'entity':
+                    $valueReponse = (!is_null($reponse->getReference())) ? $reponse->getReference()->getLibelle() : '';
+                    break;
+                case 'checkbox':
+                    $valueReponse = ('1' == $reponse->getReponse()) ? 'Oui' : 'Non' ;
+                    break;
+                //Gestion très sale, à revoir au moment de la construction du tableau de réponses avec des niveaux d'enfants/parents etc.
+                case 'entitymultiple':
+                case 'entitycheckbox':
+                    //Affichage pour une possibilité de plusieurs réponses à cette question
+                    foreach ($reponse->getReferenceMulitple() as $key => $referenceMultiple) 
+                    {
+                        $valueReponse .= $referenceMultiple->getLibelle() . ' ';
+                    }
+                    break;
+                default:
+                    $valueReponse = $reponse->getReponse();
+                    break;
+            }
+            $reponsesOrderedByUser[$reponse->getUser()->getId()][$reponse->getQuestion()->getId()] = $valueReponse;
+        }
+
+        return $reponsesOrderedByUser;
+    }
     
     /**
      * Récupère les réponses pour l'utilisateur en fonction du questionnaire passés en param
