@@ -24,9 +24,10 @@
 
         <h1 class="text-center">{{resultat.outil.title}}</h1>
         {% if pdf %}<br />{% endif %}
+
         {% if resultat.name or resultat.dateLastSave %}
             <h3 class="text-center">
-                {% if resultat.name %}{% if resultat.synthese %}Synthèse : {% endif %}{{resultat.name }}{% endif %}{% if pdf %}<br />{% endif %}
+                {% if resultat.name %}{% if resultat.synthese %}Synthèse : {% endif %}{{resultat.name }} {% if resultat.resultatSharedBy is not null %} - partagé par{{resultat.resultatSharedBy.user.getAppellation()}} ({{ resultat.resultatSharedBy.user.getEtablissementRattachementSante().getNom() }}){% elseif resultat.resultatSharedFor %} - partagé avec {{resultat.resultatSharedFor.user.getAppellation()}} ({{ resultat.resultatSharedFor.user.getEtablissementRattachementSante().getNom() }}){% endif %}{% endif %}{% if pdf %}<br />{% endif %}
                 {% if resultat.dateLastSave %}<small class="pull-right text-muted">le {{resultat.dateLastSave|date('d/m/Y')}}</small>{% endif %}
             </h3>
         {% endif %}

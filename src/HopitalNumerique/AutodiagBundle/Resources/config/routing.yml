@@ -205,6 +205,18 @@ hopitalnumerique_autodiag_resultat_detail:
     requirements: 
         id : \d+ 
 
+hopitalnumerique_autodiag_resultat_share:
+    pattern:  /admin/outil/resultat/partage/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:share" }
+    requirements: 
+        id : \d+ 
+
+hopitalnumerique_autodiag_resultat_share_duplication:
+    pattern:  /admin/outil/resultat/partage/duplication
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:shareDuplication" }
+    requirements: 
+        id : \d+ 
+
 hopitalnumerique_autodiag_resultat_export_chapitres_CSV:
     pattern:  /admin/outil/resultat/{id}/export-chapitres-CSV/{priorise}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:exportChapitresCSV" }
@@ -307,6 +319,12 @@ hopitalnumerique_autodiag_front_comptehn:
 hopitalnumerique_autodiag_front_instructions:
     pattern:  /autodiagnostic/resultat/instructions/{id}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:instructions" }
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_front_comptehn_delete_partage:
+    pattern:  /compte-hn/autodiagnostic/{id}/delete-partage
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:deletePartage" }
     requirements:
         id: \d+
 

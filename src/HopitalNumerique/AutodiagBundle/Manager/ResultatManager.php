@@ -82,6 +82,10 @@ class ResultatManager extends BaseManager
 
         //preorder chapters
         $chapitres = $this->makeChaptersOrdered( $resultat->getOutil()->getChapitres() );
+        $syntheseResultatsFormates = array();
+        foreach ($resultat->getResultats() as $syntheseResultat)
+            $syntheseResultatsFormates[] = $this->formateResultat($syntheseResultat);
+        
 
         foreach($chapitres as $one)
         {
@@ -105,6 +109,19 @@ class ResultatManager extends BaseManager
             $chapitre->affichageRestitutionTableau = $one->getAffichageRestitutionTableau();
             $chapitre->centPourcentReponseObligatoire = $one->getOutil()->isCentPourcentReponseObligatoire();
             $chapitre->parent                      = !is_null($one->getParent()) ? $one->getParent()->getId() : null;
+            
+            $chapitre->syntheseChapitres = array();
+            foreach ($syntheseResultatsFormates as $syntheseResultatFormate)
+            {
+                foreach ($syntheseResultatFormate as $syntheseChapitreFormate)
+                {
+                    if ($syntheseChapitreFormate->id == $chapitre->id)
+                    {
+                        $chapitre->syntheseChapitres[] = $syntheseChapitreFormate;
+                        break;
+                    }
+                }
+            }
 
             //handle questions/reponses
             $chapitre = $this->buildQuestions( $one->getQuestions(), $chapitre, $questionsReponses, $questionsReponsesBack );
@@ -814,6 +831,30 @@ class ResultatManager extends BaseManager
      */
     public function calculMoyenneChapitre( $chapitre )
     {
+        //<-- Cas d'une synthèse
+        if (isset($chapitre->syntheseChapitres) && count($chapitre->syntheseChapitres) > 0)
+        {
+            $chapitreMoyennes = array();
+            foreach ($chapitre->syntheseChapitres as $syntheseChapitre)
+            {
+                $chapitreMoyenne = $this->getSommesCalculMoyenneChapitre($syntheseChapitre);
+                if (null !== $chapitreMoyenne && $chapitreMoyenne['sommeMaxPourc'] != 0)
+                    $chapitreMoyennes[] = $chapitreMoyenne;
+            }
+            
+            $sommeValues = 0;
+            $sommeMaxPourc = 0;
+            foreach ($chapitreMoyennes as $chapitreMoyenne)
+            {
+                $sommeValues += $chapitreMoyenne['sommeValues'];
+                $sommeMaxPourc += $chapitreMoyenne['sommeMaxPourc'];
+            }
+            if ($sommeMaxPourc == 0)
+                return 0;
+            return ($sommeValues / $sommeMaxPourc);
+        }
+        //-->
+        
         /*
         La requête qu'il fallait faire :
         SELECT question.que_id, SUM(reponse.rep_value), SUM(question.que_ponderation)
@@ -827,23 +868,33 @@ class ResultatManager extends BaseManager
         --GROUP BY question.que_id
         */
 
+        $sommesCalculMoyenneChapitre = $this->getSommesCalculMoyenneChapitre($chapitre);
+        
+        if (null === $sommesCalculMoyenneChapitre)
+            return 'NC';
+        
+        return $sommesCalculMoyenneChapitre['sommeMaxPourc'] != 0 ? ($sommesCalculMoyenneChapitre['sommeValues'] / $sommesCalculMoyenneChapitre['sommeMaxPourc']) : 0;
+    }
+    /**
+     * 
+     * @param \stdClass $chapitre
+     * @return array|NULL
+     */
+    private function getSommesCalculMoyenneChapitre($chapitre)
+    {
         $sommeValues       = 0;
-        $sommePonderations = 0;
-        $sommeValuesPourc  = 0;
         $sommeMaxPourc     = 0;
         $chapitreConcerne  = false;
-
+        
         $questions = $chapitre->questionsForCharts;
         foreach($questions as $question)
         {
             $sommeValues       += ($question->value * $question->ponderation);
-            $sommePonderations += $question->ponderation;
-
             $sommeMaxPourc     += $question->ponderation;
-
+        
             $chapitreConcerne = true;
         }
-
+        
         $childs = $chapitre->childs;
         foreach( $childs as $child )
         {
@@ -851,18 +902,16 @@ class ResultatManager extends BaseManager
             foreach($questions as $question)
             {
                 $sommeValues       += ($question->value * $question->ponderation);
-                $sommePonderations += $question->ponderation;
-
                 $sommeMaxPourc     += $question->ponderation;
-
+        
                 $chapitreConcerne = true;
-            }   
-        }        
-
+            }
+        }
+        
         if( $chapitreConcerne === false )
-            return 'NC';
-
-        return $sommeMaxPourc != 0 ? ($sommeValues / $sommeMaxPourc) : 0;
+            return null;
+        
+        return array('sommeValues' => $sommeValues, 'sommeMaxPourc' => $sommeMaxPourc);
     }
 
     /**

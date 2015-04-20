@@ -313,7 +313,7 @@ class FrontController extends Controller
         {
             $back = 1;
         }
-
+      //\Doctrine\Common\Util\Debug::dump($resultat);
         //restriction de l'accès aux résultats lorsque l'user est connecté
         if( 
             ( $user && !is_null($resultat->getUser()) && $resultat->getUser() != $user ) || 
@@ -687,6 +687,23 @@ class FrontController extends Controller
 
         // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
         $this->get('session')->getFlashBag()->add( 'success', 'Résultats supprimés.');
+
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_comptehn').'"}', 200);
+    }
+
+    /**
+     * Supprime un partage de résultat
+     *
+     * @param  Resultat $resultat [description]
+     *
+     * @return [type]
+     */
+    public function deletePartageAction( Resultat $resultat )
+    {
+        $this->get('hopitalnumerique_autodiag.manager.resultat')->delete( $resultat->getResultatSharedFor() );
+
+        // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
+        $this->get('session')->getFlashBag()->add( 'success', 'Partage supprimé.');
 
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_comptehn').'"}', 200);
     }
