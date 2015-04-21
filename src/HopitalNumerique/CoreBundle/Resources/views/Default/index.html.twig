@@ -87,12 +87,12 @@
             <a href="/" target="_blank">
                 <img src="{{asset('bundles/hopitalnumeriquecore/img/hn.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
             </a>
-            <div id="titre" class="pull-left col-md-3">
+            <div id="titre" class="pull-left">
                 <a href="{{path('hopital_numerique_homepage')}}" class="h1"><span class="violet">Mon</span> Hôpital <span class="gris">Numérique</span></a>
                 <div class="h2" class="gris">Accompagnement pour l’atteinte des cibles d’usage</div>
             </div>
 
-            <a href="http://www.anap.fr/" class="col-md-2" id="logoHn" target="_blank">
+            <a href="http://www.anap.fr/" class="" id="logoHn" target="_blank">
                 <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="HOPITAL NUMERIQUE" />
             </a>
 
@@ -121,7 +121,7 @@
                 {% endif %}
             </div>
 
-            <div id="bloc_exalead" class="col-md-3 pull-right">
+            <div id="bloc_exalead" class="pull-right">
                 <div id="recherche_textuelle_group">
                     <div class="col-md-12 no-padding">
                         <div class="input-group col-md-12 no-padding">
@@ -152,18 +152,6 @@
                 <div id="search-help" class="col-md-12">Height fixe</div>
             </div>
             <div class="col-md-3 no-padding" id="sidebar">
-                {% if publications %}
-                    <div id="block-last-publications">
-                        <h2><strong>Top 3</strong> des plus consultées</h2>
-                        <ul>
-                    {% for publication in publications %}
-                        <li>
-                            <a href="{{path('hopital_numerique_publication_publication_objet', {'id':publication.id,'alias':publication.alias})}}">{{ publication.titre }}</a>
-                        </li>
-                    {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
                 <div id="block-chiffres-cles">
                     <h2>Chiffres clés</h2>
                     <div class="col-md-4 center">
@@ -178,7 +166,21 @@
                         <span class="chiffre-cle">{{ nb_fils }}</span>
                         <p>Fils sur le forum</p>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
+
+                {% if publications %}
+                    <div id="block-last-publications">
+                        <h2><strong>Top 3</strong> des plus consultées</h2>
+                        <ul>
+                    {% for publication in publications %}
+                        <li>
+                            <a href="{{path('hopital_numerique_publication_publication_objet', {'id':publication.id,'alias':publication.alias})}}">{{ publication.titre }}</a>
+                        </li>
+                    {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
                 <div class="clearfix"></div>
                 {% if topics %}
                     <div id="block-fil-discussion">
@@ -192,6 +194,10 @@
                         </ul>
                     </div>
                 {% endif %}
+                <div class="clearfix"></div>
+                <div id="block-carte-france">
+
+                </div>
             </div>
         </div>
         <div class="col-md-12" id="menu-container">

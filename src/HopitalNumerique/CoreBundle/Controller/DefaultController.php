@@ -69,7 +69,7 @@ class DefaultController extends Controller
           $forumName = "Public";
         }
 
-        $topics = $this->get('hopitalnumerique_forum.manager.topic')->getLastTopicsForum($idForum,3);
+        $topics = $this->get('hopitalnumerique_forum.manager.topic')->getLastTopicsForum($idForum,6);
 
         return $this->render('HopitalNumeriqueCoreBundle:Default:index.html.twig', array(
             'article'      => $article,

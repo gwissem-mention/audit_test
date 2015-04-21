@@ -113,6 +113,27 @@ div.homepage  {
     margin-bottom: 0px;
 }
 
+@media (max-width: 1260px) {
+    #header #bloc_exalead {
+        clear: right;
+    }
+}
+
+@media (max-width: 770px) {
+    #header .loggedUser {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 610px) {
+    #header #logoHn {
+        margin-top: 20px;
+        clear: both;
+        display: block;
+        float: left;
+    }
+}
+
 /* SIDEBAR */
 #block-last-publications h2 {
     font-size:1.1em;
@@ -187,6 +208,9 @@ div.homepage  {
 }
 #block-fil-discussion a {
     color: #fff;
+}
+#block-carte-france {
+    min-height: 100px;
 }
 
 @media (max-width: 991px) {

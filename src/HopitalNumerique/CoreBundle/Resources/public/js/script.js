@@ -37,4 +37,5 @@ $(document).ready(function() {
 /*Recalcule la taille du block header slider en fonction de la taille de la fenêtre*/
 function resize_header() {
     $('#slide').height($(window).outerHeight()-$('#header').outerHeight()-$('#menu-container').outerHeight()-$('#search-help').outerHeight());
+    //$('#block-fil-discussion').height($(window).outerHeight()-$('#header').outerHeight()-$('#menu-container').outerHeight()-$('#block-chiffres-cles').outerHeight()-$('#block-last-publications').outerHeight()-$('#block-carte-france').height());
 }
