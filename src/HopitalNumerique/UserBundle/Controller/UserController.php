@@ -446,7 +446,8 @@ class UserController extends Controller
                             'fonctionDansEtablissementSante'     => 'Fonction dans l\'établissement de Santé',
                             'nbVisites'                          => 'Nombre de visites',
                             'raisonDesinscription'               => 'Raison de désinscription',
-                            'remarque'                           => 'Remarque pour la gestion'
+                            'remarque'                           => 'Remarque pour la gestion',
+                            'ipLastConnection'                   => 'Dernière ip de connexion'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
