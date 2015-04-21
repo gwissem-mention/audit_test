@@ -9,3 +9,9 @@
 
 .informations_manquantes {margin: 0 0 10px 0; }
 .button_donnees_personnelles { margin: 0 0 15px 0;}
+
+.button_questionnaire {
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: 10px;
+}
