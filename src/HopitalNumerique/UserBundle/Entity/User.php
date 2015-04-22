@@ -582,6 +582,18 @@ class User extends BaseUser
         $this->nbVisites  = 0;
     }
 
+    public function getConfirmationToken()
+    {
+      return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken($confirmationToken)
+    {
+      $this->confirmationToken = $confirmationToken;
+
+      return $this;
+    }
+
     public function __toString()
     {
         return (string) $this->id;
