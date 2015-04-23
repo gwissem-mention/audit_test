@@ -1,0 +1,45 @@
+{% trans_default_domain 'FOSUserBundle' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hopital Numérique">
+    <meta name="author" content="Nodevo">
+
+    <title>{% block title %}Hopital Numérique{% endblock %}</title>
+
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    {% block stylesheets %}
+        {% stylesheets output="compiled/login.css" filter="cssrewrite, ?yui_css"
+        'bundles/nodevoadmin/css/avant.css'
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+    {% endblock %}
+</head>
+{% block body %}
+    <body class="focusedform">
+    <div class="verticalcenter">
+        <a href="{{path('hopital_numerique_homepage')}}">
+            <img src="{{asset('bundles/nodevoadmin/img/logo-big.png')}}" alt="Logo" class="brand" />
+        </a>
+        <div class="panel panel-primary" style="text-align: center">
+            {% block fos_user_content %}
+                <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
+                {% if app.session is not empty %}
+                    {% set targetUrl = app.session.get('_security.' ~ app.security.token.providerKey ~ '.target_path') %}
+                    {% if targetUrl is not empty %}<p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>{% endif %}
+                {% endif %}
+                <a href="{{path('hopital_numerique_homepage')}}">
+                    Retour à la page d'accueil
+                </a>
+            {% endblock %}
+        </div>
+    </div>
+    </body>
+{% endblock %}
+</html>
+
