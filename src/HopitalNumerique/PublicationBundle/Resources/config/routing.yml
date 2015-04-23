@@ -38,9 +38,6 @@ hopital_numerique_publication_actualite_categorie:
     pattern:  /actualites/{id}-{libelle}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:categorie", id:1, libelle:libelle}
 
-hopital_numerique_publication_actualite_categorie:
-    pattern:  /actualites/{id}-{libelle}
-    defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:categorie", id:1, libelle:libelle}
 
 
 #Commentaire
