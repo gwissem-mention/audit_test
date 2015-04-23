@@ -823,4 +823,40 @@ class ObjetManager extends BaseManager
             return false;
         }
     }
+
+    /**
+     * Enregistre l'entitée
+     *
+     * @param Entity|array $entity L'entitée
+     *
+     * @return empty
+     */
+    public function save( $entity )
+    {
+
+      if( is_array($entity) ){
+        foreach( $entity as $one )
+          if($one->getAlaune() == 1) {
+            $this->setAllAlaUneFalse($one->getId());
+          }
+          $this->_em->persist( $one );
+      }else {
+
+        if($entity->getAlaune() == 1) {
+          $this->setAllAlaUneFalse($entity->getId());
+        }
+
+        $this->_em->persist( $entity );
+      }
+
+
+      $this->_em->flush();
+    }
+
+    /**
+     * Set le champ A la une à false pour tous les contenus
+     */
+    public function setAllAlaUneFalse($id) {
+      return $this->getRepository()->setAllAlaUneFalse($id)->getQuery()->getResult();
+    }
 }

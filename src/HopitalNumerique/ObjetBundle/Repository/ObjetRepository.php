@@ -210,4 +210,17 @@ class ObjetRepository extends EntityRepository
 
         return $qb;
     }
+
+  /**
+   * Set toute la colone A la une à false
+   */
+  public function setAllAlaUneFalse($id) {
+    $qb = $this->_em->createQueryBuilder();
+    $qb->update()
+      ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+      ->set('obj.alaune', '0')
+      ->where('obj.id != :id')
+      ->setParameter('id', $id);
+    return $qb;
+  }
 }
