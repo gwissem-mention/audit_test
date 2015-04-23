@@ -88,7 +88,7 @@ class PublicationController extends Controller
     /**
      * Contenu Action
      */
-    public function contenuAction($id, $alias, $idc, $aliasc)
+    public function contenuAction($id, $alias = null, $idc, $aliasc = null)
     {
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
 
