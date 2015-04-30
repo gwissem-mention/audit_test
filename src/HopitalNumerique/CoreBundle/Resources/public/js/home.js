@@ -55,10 +55,11 @@ $(window).scroll(function() {
         $("#menu-container").find('ul.menu_level_1').removeClass('menu-bottom');
     }
 
-    if(scrollTop >= ($(window).height() - $('#menu-container').outerHeight())) {
-        $("#menu-container").addClass('menu-sticky');
-    } else {
-        $("#menu-container").removeClass('menu-sticky');
+    if($(window).width() > 1650) {
+        if(scrollTop >= ($(window).height() - $('#menu-container').outerHeight())) {
+            $("#menu-container").addClass('menu-sticky');
+        } else {
+            $("#menu-container").removeClass('menu-sticky');
+        }
     }
-
 });
