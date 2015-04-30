@@ -16,7 +16,7 @@ function rechercheAideEtBesoin()
 }
 
 $(function() {
-    $('#test').fancybox({
+    $('#recherche-aidee').fancybox({
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '80%',
@@ -34,7 +34,7 @@ enquire.register("screen and (max-width: 991px)", {
     },
     unmatch : function() {
         $(function() {
-            $('#test').fancybox({
+            $('#recherche-aidee').fancybox({
                 'padding'   : 0,
                 'autoSize'  : false,
                 'width'     : '80%',

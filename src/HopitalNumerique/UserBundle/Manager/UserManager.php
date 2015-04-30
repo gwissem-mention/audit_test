@@ -257,4 +257,13 @@ class UserManager extends BaseManager
   public function getAllUsers() {
     return $this->getRepository()->getAllUsers()->getQuery()->getResult();
   }
+
+  /**
+   * Récupère le nombre d'établissements connectés
+   *
+   * @return int
+   */
+  public function getNbEtablissements() {
+    return $this->getRepository()->getNbEtablissements()->getQuery()->getSingleScalarResult();
+  }
 }

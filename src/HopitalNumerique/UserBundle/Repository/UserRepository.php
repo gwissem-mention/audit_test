@@ -475,4 +475,18 @@ class UserRepository extends EntityRepository
         ->from('HopitalNumeriqueUserBundle:User', 'user');
       return $qb;
     }
+
+  /**
+   * Récupère le nombre d'établissements connectés
+   *
+   * @return QueryBuilder
+   */
+  public function getNbEtablissements() {
+    $qb = $this->_em->createQueryBuilder();
+    $qb->select('COUNT(user.etablissementRattachementSante)')
+      ->from('HopitalNumeriqueUserBundle:User', 'user')
+      ->where('user.etablissementRattachementSante IS NOT NULL')
+      ->distinct();
+    return $qb;
+  }
 }

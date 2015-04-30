@@ -859,4 +859,12 @@ class ObjetManager extends BaseManager
     public function setAllAlaUneFalse($id) {
       return $this->getRepository()->setAllAlaUneFalse($id)->getQuery()->getResult();
     }
+
+    /**
+     * Retourne l'article à la une
+     * @return \HopitalNumerique\ObjetBundle\Entity\Objet[]
+     */
+    public function getArticleAlaUne() {
+      return $this->getRepository()->getArticleAlaUne()->getQuery()->getResult();
+    }
 }

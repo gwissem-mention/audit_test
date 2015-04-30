@@ -22,27 +22,15 @@ class DefaultController extends Controller
         $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
         $user          = $this->get('security.context')->getToken()->getUser();
         $role          = $this->get('nodevo_role.manager.role')->getUserRole($user);
-        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role, 2 );
+        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role, 3 );
 
         // Get publications (production)
         $publications  = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByNbVue(array(425,176,177,178,179,180,181,182,435), 3);
 
         // Get nombres comptes créés
-        $nb_comptes    = count($this->get('hopitalnumerique_user.manager.user')->getAllUsers());
+        $nb_eta = $this->get('hopitalnumerique_user.manager.user')->getNbEtablissements();
 
-        // Get nombres de fils sur le forum
-        $boards = $this->get('ccdn_forum_forum.model.board')->findAllBoards();
-        $i = 0;
-        foreach($boards as $board ) {
-          $topics = $board->getTopics();
-          foreach ($topics as $topic) {
-            $i++;
-          }
-        }
-        $nb_fils = $i;
-
-
-        // Get last topic by forum
+        // Définition du forum en fonction de l'utilisateur connecté
         if( $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') ){
           // authenticated (NON anonymous)
           $usr = $this->getUser();
@@ -69,18 +57,37 @@ class DefaultController extends Controller
           $forumName = "Public";
         }
 
-        $topics = $this->get('hopitalnumerique_forum.manager.topic')->getLastTopicsForum($idForum,6);
+        // Get nombres de fils sur le forum
+        $boards = $this->get('ccdn_forum_forum.model.board')->findAllBoards();
+        $i = 0;
+        foreach($boards as $board ) {
+          $topics = $board->getTopics();
+          $cat = $board->getCategory();
+          if($cat->getForum()->getId() == $idForum) {
+            foreach ($topics as $topic) {
+              $i++;
+            }
+          }
+        }
+        $nb_fils = $i;
+        $topics = $this->get('hopitalnumerique_forum.manager.topic')->getLastTopicsForum($idForum,10);
+
+        // Get Article à la une
+        $alaune = $this->get('hopitalnumerique_objet.manager.objet')->getArticleAlaUne();
+
+        // Get nombres de publications consultées
+        $nb_pub_consultees = $this->get('hopitalnumerique_objet.manager.consultation')->getNbConsultations();
 
         return $this->render('HopitalNumeriqueCoreBundle:Default:index.html.twig', array(
-            'article'      => $article,
-            'actualites'   => $actualites,
-            'publications' => $publications,
-            'nb_comptes'   => $nb_comptes,
-            'nb_fils'      => $nb_fils,
-            'topics'       => $topics,
-            'forumName'    => $forumName
+            'article'          => $article,
+            'actualites'       => $actualites,
+            'publications'     => $publications,
+            'nb_eta'           => $nb_eta,
+            'nb_fils'          => $nb_fils,
+            'topics'           => $topics,
+            'forumName'        => $forumName,
+            'alaune'           => $alaune,
+            'nb_consultations' => $nb_pub_consultees
         ));
-
-
     }
 }

@@ -223,4 +223,15 @@ class ObjetRepository extends EntityRepository
       ->setParameter('id', $id);
     return $qb;
   }
+
+  /**
+   * Retourne l'article à la une
+   */
+  public function getArticleAlaUne() {
+    $qb = $this->_em->createQueryBuilder();
+    $qb->select('obj')
+      ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+      ->where('obj.alaune = 1');
+    return $qb;
+  }
 }

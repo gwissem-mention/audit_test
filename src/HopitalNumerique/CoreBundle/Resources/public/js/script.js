@@ -1,9 +1,13 @@
 $(window).load(function() {
-    resize_header();
+    if($(window).width() > 1000) {
+        resize_header();
+    }
 });
 
 $(window).resize(function() {
-    resize_header();
+    if($(window).width() > 1000) {
+        resize_header();
+    }
 });
 
 $(document).ready(function() {
@@ -30,12 +34,10 @@ $(document).ready(function() {
         $('a#search-header-home').attr('href', "/recherche-par-referencement/requete-generator/null/" + $(this).val()  + "/null");
         $('a#search-avance-header-home').attr('href', "/recherche-par-referencement?type=avancee");
     });
-
-    /*$('#slide').slick({adaptiveHeight:true});*/
 });
 
 /*Recalcule la taille du block header slider en fonction de la taille de la fenêtre*/
 function resize_header() {
-    $('#slide').height($(window).outerHeight()-$('#header').outerHeight()-$('#menu-container').outerHeight()-$('#search-help').outerHeight());
-    //$('#block-fil-discussion').height($(window).outerHeight()-$('#header').outerHeight()-$('#menu-container').outerHeight()-$('#block-chiffres-cles').outerHeight()-$('#block-last-publications').outerHeight()-$('#block-carte-france').height());
+    $('#slide .slick-slide').height($(window).height()-$('#header').outerHeight()-$('#menu-container').outerHeight()-$('#search-help').outerHeight());
+    $('#block-fil-discussion').outerHeight($(window).height()-$('#header').outerHeight()-$('#menu-container').outerHeight()-$('#block-chiffres-cles').outerHeight()-$('#block-last-publications').outerHeight()-$('#block-carte-france').height());
 }
