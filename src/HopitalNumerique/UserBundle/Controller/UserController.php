@@ -2,6 +2,8 @@
 namespace HopitalNumerique\UserBundle\Controller;
 
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\UserBundle\Event\UserEvent;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -415,7 +417,9 @@ class UserController extends Controller
         if($allPrimaryKeys == 1){
             $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
             foreach($rawDatas as $data)
+            {
                 $primaryKeys[] = $data['id'];
+            }
         }
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
 
@@ -447,6 +451,7 @@ class UserController extends Controller
                             'nbVisites'                          => 'Nombre de visites',
                             'raisonDesinscription'               => 'Raison de désinscription',
                             'remarque'                           => 'Remarque pour la gestion',
+                            'domainesString'                     => 'Domaine(s) concerné(s)',
                             'ipLastConnection'                   => 'Dernière ip de connexion'
                         );
 
@@ -798,6 +803,7 @@ class UserController extends Controller
         {
             $form->remove('plainPassword');
             $form->remove('remarque');
+            $form->remove('domaine');
             $form->remove('raisonDesinscription');
             $form->remove('file');
         }
@@ -806,6 +812,8 @@ class UserController extends Controller
 
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
+            
+            $this->get('event_dispatcher')->dispatch( 'user_nodevo.before_update', new UserEvent(clone $user));
                         
             // On bind les données du form
             $form->handleRequest($request);
@@ -959,6 +967,8 @@ class UserController extends Controller
 
                 $user->setDateLastUpdate(new \DateTime());
                 
+                $this->get('event_dispatcher')->dispatch( 'user_nodevo.update', new UserEvent($user));
+
                 //Mise à jour / création de l'utilisateur
                 $this->get('fos_user.user_manager')->updateUser( $user );
 

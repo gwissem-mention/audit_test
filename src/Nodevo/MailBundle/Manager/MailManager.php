@@ -462,6 +462,21 @@ class MailManager extends BaseManager
     }
     
     /**
+     * Envoi un mail pour notifier le changement de domaine
+     *
+     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : 'nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendDomaineChanged( $user, $options )
+    {
+        $mail = $this->findOneById(41);
+    
+        return $this->generationMail($user, $mail, $options);
+    }
+    
+    /**
      * [sendInscriptionSession description]
      *
      * @param  [type] $user    [description]

@@ -31,13 +31,15 @@ parameters:
     #Refus candidature
     hopitalnumerique_user.manager.refuscandidature.class: HopitalNumerique\UserBundle\Manager\RefusCandidatureManager
     hopitalnumerique_user.grid.refuscandidature.class: HopitalNumerique\UserBundle\Grid\RefusCandidatureGrid
+    #Listener
+    hopitalnumerique_user.listener.user.class: HopitalNumerique\UserBundle\EventListener\UserUpdateListener
 
 services:
     #Utilisateur:
     #--Manager
     hopitalnumerique_user.manager.user:
         class: %hopitalnumerique_user.manager.user.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.questionnaire", "@hopitalnumerique_user.manager.refus_candidature"]
+        arguments: ["@doctrine.orm.entity_manager", "@security.context" , "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.questionnaire", "@hopitalnumerique_user.manager.refus_candidature", "@hopitalnumerique_domaine.manager.domaine"]
         calls:
             - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
     #--Type
@@ -155,3 +157,10 @@ services:
         tags:
             - { name: 'kernel.event_subscriber'}
             - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+
+    #Listener
+    hopitalnumerique_user.listener.user:
+        class: %hopitalnumerique_user.listener.user.class%
+        arguments: ["@nodevo_mail.manager.mail", "@mailer"]
+        tags:
+            - { name: 'kernel.event_subscriber' }

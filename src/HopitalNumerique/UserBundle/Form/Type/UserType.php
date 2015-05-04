@@ -175,6 +175,14 @@ class UserType extends AbstractType
                         },
                         'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
                     ))
+                    ->add('domaines', 'entity', array(
+                            'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
+                            'property'    => 'url',
+                            'required'    => false,
+                            'multiple'    => true,
+                            'label'       => 'Domaine(s) concerné(s)',
+                            'empty_value' => ' - '
+                    ))
                     ->add('remarque', 'textarea', array(
                         'required'   => false, 
                         'label'      => 'Remarque pour la gestion'

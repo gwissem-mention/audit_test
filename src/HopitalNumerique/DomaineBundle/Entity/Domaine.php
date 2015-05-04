@@ -44,6 +44,11 @@ class Domaine
      */
     protected $adresseMailContact;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", mappedBy="domaines")
+     */
+    protected $users;
+
 
     /**
      * Get id
@@ -122,5 +127,45 @@ class Domaine
     public function getTemplate()
     {
         return $this->template;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add users
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $users
+     * @return Domaine
+     */
+    public function addUser(\HopitalNumerique\UserBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+
+        return $this;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $users
+     */
+    public function removeUser(\HopitalNumerique\UserBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }
