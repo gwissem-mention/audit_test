@@ -32,9 +32,6 @@
     <a class="btn btn-default" href="{{ path('hopitalnumerique_domaine_admin_domaine') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
     <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
-    {% if domaine.id %}
-        <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_domaine_admin_domaine_delete', { 'id': domaine.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
-    {% endif %}
 {% endblock %}
 
 {% block body %}
