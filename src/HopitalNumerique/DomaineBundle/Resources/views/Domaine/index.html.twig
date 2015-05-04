@@ -1,0 +1,27 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{# Grid mandatory Stuff #}
+{% use 'NodevoGridBundle::grid.config.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('grid_stylesheets')}}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ block('grid_javascripts')}}
+{% endblock %}
+
+{% block h1Title %}
+    Gestion des Domaine
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_domaine_admin_domaine_add') }}" title="Ajouter un Domaine"><i class="fa fa-plus"></i></a>
+{% endblock %}
+
+{% block body %}
+    {{ grid(grid, _self) }}
+{% endblock %}
+

@@ -1,0 +1,3 @@
+hopital_numerique_domaine_admin_domaine:
+    resource: "@HopitalNumeriqueDomaineBundle/Resources/config/routing/domaine.yml"
+    prefix:   /domaine
