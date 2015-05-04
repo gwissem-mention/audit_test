@@ -17,6 +17,12 @@ hopital_numerique_publication_publication_contenu:
     requirements:
         id: \d+
 
+hopital_numerique_publication_publication_contenu_without_alias:
+    pattern:  /publication/{id}/{idc}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:contenu", id:1, idc:1}
+    requirements:
+        id: \d+
+
 hopital_numerique_publication_publication_article:
     pattern:  /publication/{categorie}/{id}-{alias}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:article", categorie:categorie, id:1, alias:alias }
@@ -32,9 +38,6 @@ hopital_numerique_publication_actualite_categorie:
     pattern:  /actualites/{id}-{libelle}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:categorie", id:1, libelle:libelle}
 
-hopital_numerique_publication_actualite_categorie:
-    pattern:  /actualites/{id}-{libelle}
-    defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:categorie", id:1, libelle:libelle}
 
 
 #Commentaire

@@ -29,7 +29,7 @@ class UserController extends Controller
         {
             //Création d'un nouvel user
             $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
-            
+
             //Tableau des options à passer à la vue twig
             $options = array(
                 //Récupération de l'article des conditions générales
@@ -446,7 +446,8 @@ class UserController extends Controller
                             'fonctionDansEtablissementSante'     => 'Fonction dans l\'établissement de Santé',
                             'nbVisites'                          => 'Nombre de visites',
                             'raisonDesinscription'               => 'Raison de désinscription',
-                            'remarque'                           => 'Remarque pour la gestion'
+                            'remarque'                           => 'Remarque pour la gestion',
+                            'ipLastConnection'                   => 'Dernière ip de connexion'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
@@ -858,6 +859,8 @@ class UserController extends Controller
                     }
                     else
                     {
+                        $user->setEnabled( 0 );
+                        $user->setConfirmationToken($this->get('fos_user.util.token_generator')->generateToken());
                         //--FO--
                         $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserMail($user);
                         $this->get('mailer')->send($mail);
@@ -949,7 +952,7 @@ class UserController extends Controller
                 }
                 
                 //bind Référence Etat with Enable FosUserField
-                if( intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif')) === $user->getEtat()->getId())
+                if( intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif')) === $user->getEtat()->getId() && $this->get('security.context')->isGranted('ROLE_USER'))
                     $user->setEnabled( 1 );
                 else
                     $user->setEnabled( 0 );

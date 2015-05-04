@@ -66,5 +66,8 @@ class LoginManager implements EventSubscriberInterface
             // user has just logged in
             $user->addNbVisites();
         //}
+
+        $ip = $event->getRequest()->getClientIp();
+        $user->setIpLastConnection($ip);
     }
 }

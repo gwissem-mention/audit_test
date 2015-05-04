@@ -5,6 +5,8 @@ namespace Nodevo\MailBundle\Manager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use FOS\UserBundle\Model\UserInterface;
 
 /**
  * Manager de l'entité Mail.
@@ -106,8 +108,9 @@ class MailManager extends BaseManager
     public function sendAjoutUserMail( $user )
     {
         $mail = $this->findOneById(2);
-        
-        return $this->generationMail($user, $mail);
+        $url = $this->_router->generate('fos_user_registration_confirm', array('token' => $user->getConfirmationToken()), true);
+
+        return $this->generationMail($user, $mail, array('url' => $url));
     }
     
     /**

@@ -115,6 +115,9 @@ fos_user:
     resetting:
         email:
             template: HopitalNumeriqueUserBundle:Resetting:email.txt.twig
+    registration:
+        confirmation:
+            enabled: true
 
 #KNP Menu Bundle
 knp_menu:

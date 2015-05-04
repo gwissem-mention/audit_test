@@ -561,6 +561,11 @@ class User extends BaseUser
     protected $autodiagsImportes;
 
     /**
+    * @ORM\Column(name="usr_last_ip_connection", type="text", options = {"comment" = "IP de la dernière connexion de l'utilisateur"}, nullable=true)
+    */
+    protected $ipLastConnection;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -575,6 +580,18 @@ class User extends BaseUser
         $this->lock       = false;
         $this->archiver   = false;
         $this->nbVisites  = 0;
+    }
+
+    public function getConfirmationToken()
+    {
+      return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken($confirmationToken)
+    {
+      $this->confirmationToken = $confirmationToken;
+
+      return $this;
     }
 
     public function __toString()
@@ -1579,5 +1596,23 @@ class User extends BaseUser
     
         if (file_exists($file) )
             unlink($file);
+    }
+
+    /**
+     * Get Last ip connection
+     * @return string
+     */
+    public function getIpLastConnection() {
+      return $this->ipLastConnection;
+    }
+
+    /**
+     * Set Last ip Connection
+     * @param string $ip
+     * @return string
+     */
+    public function setIpLastConnection($ip) {
+      $this->ipLastConnection = $ip;
+      return $this;
     }
 }

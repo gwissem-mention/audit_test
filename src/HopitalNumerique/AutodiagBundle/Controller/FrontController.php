@@ -914,7 +914,7 @@ class FrontController extends Controller
             'footer-spacing'   => '10',
             'footer-html'      => '<p style="font-size:10px;text-align:center;color:#999">
                                      &copy; ANAP<br/>
-                                     Ces contenus extraits de l\'Anap sont diffus&eacute;s gratuitement.<br/>
+                                     Ces contenus extraits de l\'ANAP sont diffus&eacute;s gratuitement.<br/>
                                      Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP"'
         );
 
