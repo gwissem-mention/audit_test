@@ -26,9 +26,11 @@ class ReferenceController extends Controller
     public function sitemapAction()
     {
         $references = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat();
+        $domainesOrderedByReference = $this->get('hopitalnumerique_reference.manager.reference')->getDomainesOrderedByReference();
 
         return $this->render('HopitalNumeriqueReferenceBundle:Reference:sitemap.html.twig', array(
-            'references' => $references
+            'references'                 => $references,
+            'domainesOrderedByReference' => $domainesOrderedByReference
         )); 
     }
 
@@ -156,7 +158,8 @@ class ReferenceController extends Controller
 
         $colonnes = array( 
                             'id'           => 'id', 
-                            'libelle'      => 'Libelle', 
+                            'libelle'      => 'Libelle',
+                            'domaineUrl'   => 'Domaine(s)',
                             'code'         => 'Code', 
                             'dictionnaire' => 'Présent dans le dictionnaire', 
                             'recherche'    => 'Présent dans la recherhce', 

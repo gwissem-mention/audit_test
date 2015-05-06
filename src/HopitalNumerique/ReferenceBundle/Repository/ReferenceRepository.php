@@ -43,7 +43,7 @@ class ReferenceRepository extends EntityRepository
     public function getDatasForGrid($domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ref.id, ref.libelle, ref.code, ref.dictionnaire, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent')
+        $qb->select('ref.id, ref.libelle, ref.code, ref.dictionnaire, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.url as domaineUrl')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->leftJoin('ref.etat','refEtat')
             ->leftJoin('ref.parent','refParent')
@@ -53,7 +53,7 @@ class ReferenceRepository extends EntityRepository
                     $qb->expr()->isNull('domaine.id')
                 ))
                 ->setParameter('domainesId', $domainesIds)
-            ->groupBy('ref')
+            // ->groupBy('ref')
             ->orderBy('ref.code, ref.order');
             
         return $qb;
@@ -67,13 +67,31 @@ class ReferenceRepository extends EntityRepository
     public function getDatasForExport( $ids )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ref.id, ref.libelle, ref.code, ref.dictionnaire, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent')
+        $qb->select('ref.id, ref.libelle, ref.code, ref.dictionnaire, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.url as domaineUrl')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->leftJoin('ref.etat','refEtat')
             ->leftJoin('ref.parent','refParent')
+            ->leftJoin('ref.domaines', 'domaine')
             ->where('ref.id IN (:ids)')
             ->orderBy('ref.code, ref.order')
             ->setParameter('ids', $ids);
+            
+        return $qb;
+    }
+
+    /**
+     * Récupère les références ayant un domaine
+     *
+     * @return [type]
+     */
+    public function getReferencesWithDomaine()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('ref')
+            ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
+            ->leftJoin('ref.domaines','domaine')
+                ->where($qb->expr()->isNotNull('domaine.id'))
+            ->orderBy('domaine.url');
             
         return $qb;
     }

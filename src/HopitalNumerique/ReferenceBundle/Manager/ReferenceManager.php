@@ -99,11 +99,25 @@ class ReferenceManager extends BaseManager
      */
     public function getDatasForGrid( \StdClass $condition = null )
     {
+        $referencesForGrid = array();
+
         $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
 
         $references = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
 
-        return $references;
+        foreach ($references as $reference) 
+        {
+            if(!array_key_exists($reference['id'], $referencesForGrid))
+            {
+                $referencesForGrid[$reference['id']] = $reference;
+            }
+            else
+            {
+                $referencesForGrid[$reference['id']]['domaineUrl'] .= ";" . $reference['domaineUrl'];
+            }
+        }
+
+        return array_values($referencesForGrid);
     }
 
     /**
@@ -113,7 +127,23 @@ class ReferenceManager extends BaseManager
      */
     public function getDatasForExport( $ids )
     {
-        return $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
+        $referencesForExport = array();
+
+        $references = $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
+
+        foreach ($references as $reference) 
+        {
+            if(!array_key_exists($reference['id'], $referencesForExport))
+            {
+                $referencesForExport[$reference['id']] = $reference;
+            }
+            else
+            {
+                $referencesForExport[$reference['id']]['domaineUrl'] .= "|" . $reference['domaineUrl'];
+            }
+        }
+
+        return array_values($referencesForExport);
     }
 
     /**
@@ -124,6 +154,32 @@ class ReferenceManager extends BaseManager
     public function getAllRefCode()
     {
         return $this->getRepository()->getAllRefCode()->getQuery()->getResult();
+    }
+
+    /**
+     * Récupération des domaines triés par réference
+     *
+     * @return [type]
+     */
+    public function getDomainesOrderedByReference()
+    {
+        $references                 = $this->getRepository()->getReferencesWithDomaine()->getQuery()->getResult();
+        $domainesOrderedByReference = array();
+
+        foreach ($references as $reference) 
+        {
+            foreach ($reference->getDomaines() as $domaine) 
+            {
+                if(!array_key_exists($reference->getId(), $domainesOrderedByReference))
+                {
+                    $domainesOrderedByReference[$reference->getId()] = array();    
+                }
+
+                $domainesOrderedByReference[$reference->getId()][] = $domaine;
+            }
+        }
+
+        return $domainesOrderedByReference;
     }
 
     /**

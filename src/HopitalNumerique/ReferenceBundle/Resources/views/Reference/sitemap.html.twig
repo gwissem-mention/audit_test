@@ -37,7 +37,7 @@
             <div class="panel panel-midnightblue">
                 <div class="panel-heading panel-collapse">{{ code }}</div>
                 <div class="panel-body">
-                    {{ mySelf.buildTree(reference) }}
+                    {{ mySelf.buildTree(reference, domainesOrderedByReference) }}
                 </div>
             </div>
             {% endfor %}
@@ -45,14 +45,18 @@
     </div>
 {% endblock %}
 
-{% macro buildTree(reference, codeChild = false) %}
+{% macro buildTree(reference, domainesOrderedByReference, codeChild = false) %}
     {% import _self as mySelf %}
     {% for ref in reference  %}
         <li>
-            {% if codeChild %}
-                {{ref.libelle}} ({{ codeChild }})
-            {% else %}
-                {{ref.libelle}}
+            {{ref.libelle}} {% if codeChild %} ({{ codeChild }}) {% endif %}
+            {# Ajout du/des domaine(s) de la référence #}
+            {% if ref.id in domainesOrderedByReference|keys %}
+                <span class="text-muted pull-right">
+                    {% for domaine in domainesOrderedByReference[ref.id] %}
+                        {% if not loop.first %} - {% endif %}{{domaine.url}}
+                    {% endfor %}
+                </span>
             {% endif %}
      
             {% if ref.childs %}
