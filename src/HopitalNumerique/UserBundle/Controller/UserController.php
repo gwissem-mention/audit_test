@@ -912,6 +912,7 @@ class UserController extends Controller
                         //--BO--
                         //set Role for User : not mapped field
                         $user->setRoles( array( $role->getRole() ) );
+                        $this->get('event_dispatcher')->dispatch( 'user_nodevo.update', new UserEvent($user));
                     }
                 }
                 else
@@ -919,9 +920,13 @@ class UserController extends Controller
                     //--FO-- Inscription
                     //Set du role "Enregistré" par défaut pour les utilisateurs
                     if( !is_null($user->getEtablissementRattachementSante()) )
+                    {
                         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ES_8'));
+                    }
                     else
+                    {
                         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
+                    }
                     $user->setRoles( array( $role->getRole() ) );
                 }
 
@@ -961,13 +966,15 @@ class UserController extends Controller
                 
                 //bind Référence Etat with Enable FosUserField
                 if( intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif')) === $user->getEtat()->getId() && $this->get('security.context')->isGranted('ROLE_USER'))
+                {
                     $user->setEnabled( 1 );
+                }
                 else
+                {
                     $user->setEnabled( 0 );
+                }
 
                 $user->setDateLastUpdate(new \DateTime());
-                
-                $this->get('event_dispatcher')->dispatch( 'user_nodevo.update', new UserEvent($user));
 
                 //Mise à jour / création de l'utilisateur
                 $this->get('fos_user.user_manager')->updateUser( $user );

@@ -11,15 +11,18 @@ use Doctrine\ORM\EntityRepository;
 class ReferenceType extends AbstractType
 {
     private $_constraints = array();
+    private $_userManager;
 
-    public function __construct($manager, $validator)
+    public function __construct($manager, $validator, $userManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
+        $this->_userManager = $userManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $datas = $options['data'];
+        $connectedUser = $this->_userManager->getUserConnected();
 
         //code
         $attrCode = array('class' => $this->_constraints['code']['class']);
@@ -83,7 +86,9 @@ class ReferenceType extends AbstractType
                               ->orderBy('ref.parent, ref.code, ref.order', 'ASC');
                     
                     if( $id )
+                    {
                         $qb->andWhere("ref.id != $id");
+                    }
                     
                     return $qb;
                 }
@@ -93,6 +98,22 @@ class ReferenceType extends AbstractType
                 'label'    => 'Ordre d\'affichage',
                 'attr'     => array('class' => $this->_constraints['order']['class'] )
             ));
+
+        if(count($datas->getChilds()) === 0)
+        {
+            $builder
+                ->add('domaines', 'entity', array(
+                    'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
+                    'property'    => 'url',
+                    'required'    => false,
+                    'multiple'    => true,
+                    'label'       => 'Domaine(s) associé(s)',
+                    'empty_value' => ' - ',
+                    'query_builder' => function(EntityRepository $er) use ($connectedUser){
+                        return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                    }
+                )); 
+        }
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

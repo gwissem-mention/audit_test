@@ -9,7 +9,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * Domaine
  *
  * @ORM\Table(name="hn_domaine")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\DomaineBundle\Repository\DomaineRepository")
  */
 class Domaine
 {
@@ -49,6 +49,20 @@ class Domaine
      */
     protected $users;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", mappedBy="domaines")
+     */
+    protected $references;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->users    = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -128,13 +142,6 @@ class Domaine
     {
         return $this->template;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add users
@@ -167,5 +174,38 @@ class Domaine
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Add references
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $references
+     * @return Domaine
+     */
+    public function addReference(\HopitalNumerique\ReferenceBundle\Entity\Reference $references)
+    {
+        $this->references[] = $references;
+
+        return $this;
+    }
+
+    /**
+     * Remove references
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $references
+     */
+    public function removeReference(\HopitalNumerique\ReferenceBundle\Entity\Reference $references)
+    {
+        $this->references->removeElement($references);
+    }
+
+    /**
+     * Get references
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReferences()
+    {
+        return $this->references;
     }
 }

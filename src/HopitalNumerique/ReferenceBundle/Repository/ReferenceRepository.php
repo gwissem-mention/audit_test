@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ReferenceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * ReferenceRepository
@@ -39,13 +40,20 @@ class ReferenceRepository extends EntityRepository
      *
      * @return Query Builder
      */
-    public function getDatasForGrid()
+    public function getDatasForGrid($domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref.id, ref.libelle, ref.code, ref.dictionnaire, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->leftJoin('ref.etat','refEtat')
             ->leftJoin('ref.parent','refParent')
+            ->leftJoin('ref.domaines', 'domaine')
+                ->where($qb->expr()->orX(
+                    $qb->expr()->in('domaine.id', ':domainesId'),
+                    $qb->expr()->isNull('domaine.id')
+                ))
+                ->setParameter('domainesId', $domainesIds)
+            ->groupBy('ref')
             ->orderBy('ref.code, ref.order');
             
         return $qb;

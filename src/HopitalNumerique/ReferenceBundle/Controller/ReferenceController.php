@@ -193,7 +193,7 @@ class ReferenceController extends Controller
         $form = $this->createForm( $formName, $reference);
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
             //get uploaded form datas (used to manipulate parent next)
@@ -210,6 +210,31 @@ class ReferenceController extends Controller
                 if( isset($formDatas['parent']) && !is_null($formDatas['parent']) ){
                     $parent = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $formDatas['parent'] ) );    
                     $reference->setParent( $parent );
+
+                    //Mise à jour du/des domaine(s) sur l'ensemble de l'arbre d'héritage des parents
+                    $family = array();
+                    $daddy  = $parent;
+                    //Tant qu'il y a des parents on ajoute le(s) nouveau(x) domaine(s) dessus
+                    while(!is_null($daddy))
+                    {
+                        //Récupération des domaines du parent courant pour éviter la dupplication de domaine sur une entité
+                        $daddyDomainesId = $daddy->getDomainesId();
+                        foreach ($reference->getDomaines() as $domaine) 
+                        {
+                            if(!in_array($domaine->getId(),$daddyDomainesId))
+                            {
+                                //Si il n'a pas encore ce domaine, on lui ajoute
+                                $daddy->addDomaine($domaine);
+                            }
+                        }
+
+                        $family[] = $daddy;
+
+                        //Parent suivant ou null si on est au sommet de l'arbre
+                        $daddy = $daddy->getParent();
+                    }
+                
+                    $this->get('hopitalnumerique_reference.manager.reference')->save($family);
                 }
                 
                 //test ajout ou edition

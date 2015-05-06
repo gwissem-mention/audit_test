@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Manager\UserManager;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -18,19 +19,20 @@ class ReferenceManager extends BaseManager
     protected $_class       = 'HopitalNumerique\ReferenceBundle\Entity\Reference';
     private $_tabReferences = array();
     private $_session;
+    protected $_userManager;
 
     /**
      * Constructeur du manager gérant les références
      *
      * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
-     * @param \HopitalNumerique\AutodiagBundle\Manager\ResultatManager $resultatManager Le manager de l'entité Resultat
      * @return void
      */
-    public function __construct(EntityManager $entityManager, Session $session)
+    public function __construct(EntityManager $entityManager, Session $session, UserManager $userManager)
     {
         parent::__construct($entityManager);
 
-        $this->_session = $session;
+        $this->_session     = $session;
+        $this->_userManager = $userManager;
     }
 
     /**
@@ -97,7 +99,11 @@ class ReferenceManager extends BaseManager
      */
     public function getDatasForGrid( \StdClass $condition = null )
     {
-        return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
+
+        $references = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+
+        return $references;
     }
 
     /**
@@ -439,11 +445,22 @@ class ReferenceManager extends BaseManager
         $childs   = $this->getReferentielChildsFromCollection($referentiels, $referentiel);
         $nbChilds = count($childs);
 
-        for ($i=0; $i < $nbChilds; $i++) { 
-            $childs[$i]->setOrder($i+1);
-            $this->save($childs[$i]);
-            $this->refreshReferentielOrder($referentiels, $childs[$i]);
+        $compteur = 0;
+        foreach ($childs as $key => $child) 
+        {
+            $compteur++;
+            $childs[$key]->setOrder($compteur);
+            $this->save($childs[$key]);
+            $this->refreshReferentielOrder($referentiels, $childs[$key]);
         }
+
+        //Correctif 
+        // for ($i=0; $i < $nbChilds; $i++) 
+        // { 
+        //     $childs[$i]->setOrder($i+1);
+        //     $this->save($childs[$i]);
+        //     $this->refreshReferentielOrder($referentiels, $childs[$i]);
+        // }
     }
 
     /**
@@ -463,8 +480,11 @@ class ReferenceManager extends BaseManager
                                         ->orderBy( array("order" => Criteria::ASC) );
             $childs = $referentiels->matching( $criteria );
         //si le parent existe, on récupère tous ses enfants
-        } else 
+        } 
+        else 
+        {
             $childs = $parent->getChildsFromCollection( $referentiels );
+        }
 
         return $childs;
     }
