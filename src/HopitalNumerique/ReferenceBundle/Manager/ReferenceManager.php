@@ -113,7 +113,7 @@ class ReferenceManager extends BaseManager
             }
             else
             {
-                $referencesForGrid[$reference['id']]['domaineUrl'] .= ";" . $reference['domaineUrl'];
+                $referencesForGrid[$reference['id']]['domaineNom'] .= ";" . $reference['domaineNom'];
             }
         }
 
@@ -139,7 +139,7 @@ class ReferenceManager extends BaseManager
             }
             else
             {
-                $referencesForExport[$reference['id']]['domaineUrl'] .= "|" . $reference['domaineUrl'];
+                $referencesForExport[$reference['id']]['domaineNom'] .= "|" . $reference['domaineNom'];
             }
         }
 

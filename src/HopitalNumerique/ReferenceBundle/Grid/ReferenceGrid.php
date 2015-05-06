@@ -34,7 +34,7 @@ class ReferenceGrid extends Grid implements GridInterface
         $this->addColonne( new Column\TextColumn('code', 'Code') );
         $this->addColonne( new Column\TextColumn('libelle', 'Libellé') );
 
-        $domaineColumn = new Column\TextColumn('domaineUrl', 'Domaine(s)');
+        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s)');
         $domaineColumn->setSize( 150 );
         $this->addColonne( $domaineColumn );
 

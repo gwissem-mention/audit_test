@@ -159,7 +159,7 @@ class ReferenceController extends Controller
         $colonnes = array( 
                             'id'           => 'id', 
                             'libelle'      => 'Libelle',
-                            'domaineUrl'   => 'Domaine(s)',
+                            'domaineNom'   => 'Domaine(s)',
                             'code'         => 'Code', 
                             'dictionnaire' => 'Présent dans le dictionnaire', 
                             'recherche'    => 'Présent dans la recherhce', 
@@ -220,9 +220,27 @@ class ReferenceController extends Controller
                     //Tant qu'il y a des parents on ajoute le(s) nouveau(x) domaine(s) dessus
                     while(!is_null($daddy))
                     {
+                        $childsDomaines = array();
+                        //Vérifie si l'élément courant a un parent
+                        $childs = $daddy->getChilds();
+
+                        foreach ($childs as $child) 
+                        {
+                            foreach ($child->getDomaines() as $domaine) 
+                            {
+                                if(!array_key_exists($domaine->getId(), $childsDomaines))
+                                {
+                                    $childsDomaines[$domaine->getId()] = $domaine;
+                                }
+                            }
+                        }
+
+                        //Vide les domaines du père pour remettre uniquement ceux des enfants (suppression d'un domaine lors de la sauvegarde n'étant plus chez aucun enfant)
+                        $daddy->setDomaines(array());
+
                         //Récupération des domaines du parent courant pour éviter la dupplication de domaine sur une entité
                         $daddyDomainesId = $daddy->getDomainesId();
-                        foreach ($reference->getDomaines() as $domaine) 
+                        foreach ($childsDomaines as $domaine) 
                         {
                             if(!in_array($domaine->getId(),$daddyDomainesId))
                             {

@@ -28,7 +28,7 @@ class DomaineManager extends BaseManager
                     );
                 }
 
-                $domaineByUser[$user->getId()]['url'] .= ($domaineByUser[$user->getId()]['url'] != '' ?  ' - ' : '') . $domaine->getUrl();
+                $domaineByUser[$user->getId()]['url'] .= ($domaineByUser[$user->getId()]['url'] != '' ?  ' - ' : '') . $domaine->getNom();
                 $domaineByUser[$user->getId()]['id'][] = $domaine->getId();
             }
         }

@@ -777,7 +777,7 @@ class User extends BaseUser
 
         foreach ($this->domaines as $domaine) 
         {
-            $domaineString .= ($domaineString != '' ? ' | ' : ' ') . $domaine->getUrl();
+            $domaineString .= ($domaineString != '' ? ' | ' : ' ') . $domaine->getNom();
         }
 
         return $domaineString;

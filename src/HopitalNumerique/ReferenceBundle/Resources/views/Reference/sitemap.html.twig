@@ -52,11 +52,11 @@
             {{ref.libelle}} {% if codeChild %} ({{ codeChild }}) {% endif %}
             {# Ajout du/des domaine(s) de la référence #}
             {% if ref.id in domainesOrderedByReference|keys %}
-                <span class="text-muted pull-right">
+                <span class="text-muted" style="font-size:10px;">( 
                     {% for domaine in domainesOrderedByReference[ref.id] %}
-                        {% if not loop.first %} - {% endif %}{{domaine.url}}
+                        {% if not loop.first %} - {% endif %}{{domaine.nom}}
                     {% endfor %}
-                </span>
+                )</span>
             {% endif %}
      
             {% if ref.childs %}

@@ -46,7 +46,7 @@ class UserUpdateListener implements EventSubscriberInterface
 
             foreach ($user->getDomaines() as $domaine) 
             {
-                $domainesString .= '<li><a href="'.$domaine->getUrl().'">'.$domaine->getUrl().'</a></li>';
+                $domainesString .= '<li><a href="'.$domaine->getUrl().'">'.$domaine->getNom().'</a></li>';
             }
 
             $domainesString .= '</ul>';

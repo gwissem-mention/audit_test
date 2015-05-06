@@ -449,7 +449,9 @@ class Reference
      */
     public function setDomaines($domaines = null)
     {
-        return $this->domaines;
+        $this->domaines = $domaines;
+
+        return $this;
     }
 
     /**

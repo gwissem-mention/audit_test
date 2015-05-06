@@ -25,6 +25,13 @@ class Domaine
     /**
      * @var string
      *
+     * @ORM\Column(name="dom_nom", type="string", length=255)
+     */
+    protected $nom;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="dom_url", type="string", length=255)
      */
     protected $url;
@@ -54,14 +61,20 @@ class Domaine
      */
     protected $references;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet", mappedBy="domaines")
+     */
+    protected $objets;
+
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->users    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users      = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->references = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objets     = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -207,5 +220,61 @@ class Domaine
     public function getReferences()
     {
         return $this->references;
+    }
+
+    /**
+     * Add objets
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objets
+     * @return Domaine
+     */
+    public function addObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objets)
+    {
+        $this->objets[] = $objets;
+
+        return $this;
+    }
+
+    /**
+     * Remove objets
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objets
+     */
+    public function removeObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objets)
+    {
+        $this->objets->removeElement($objets);
+    }
+
+    /**
+     * Get objets
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getObjets()
+    {
+        return $this->objets;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return Domaine
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string 
+     */
+    public function getNom()
+    {
+        return $this->nom;
     }
 }
