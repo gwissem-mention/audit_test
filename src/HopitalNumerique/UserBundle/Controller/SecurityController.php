@@ -4,7 +4,6 @@ namespace HopitalNumerique\UserBundle\Controller;
 
 use FOS\UserBundle\Controller\SecurityController as BaseController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * {@inheritDoc}

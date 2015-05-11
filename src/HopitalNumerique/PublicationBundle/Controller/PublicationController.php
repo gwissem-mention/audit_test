@@ -4,14 +4,13 @@ namespace HopitalNumerique\PublicationBundle\Controller;
 
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class PublicationController extends Controller
 {
     /**
      * Objet Action
      */
-    public function objetAction(Request $request, Objet $objet)
+    public function objetAction(Objet $objet)
     {
         //objet visualisation
         if(!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1'))
@@ -21,17 +20,8 @@ class PublicationController extends Controller
         }
 
         //Si l'user connecté à le rôle requis pour voir l'objet
-        if( $this->checkAuthorization( $objet ) === false )
-        {
-            if($this->get('security.context')->getToken()->getUser() == "anon.")
-            {
-                $request->getSession()->set('previous_url_contenu', $this->generateUrl('hopital_numerique_publication_publication_objet', array('id' => $objet->getId())) );
-                return $this->redirect( $this->generateUrl('account_login') );
-            }
-            else
-            {
-                return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
-            }
+        if( $this->checkAuthorization( $objet ) === false ){
+            return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
         }
         
         //Types objet

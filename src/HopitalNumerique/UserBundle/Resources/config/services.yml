@@ -31,8 +31,6 @@ parameters:
     #Refus candidature
     hopitalnumerique_user.manager.refuscandidature.class: HopitalNumerique\UserBundle\Manager\RefusCandidatureManager
     hopitalnumerique_user.grid.refuscandidature.class: HopitalNumerique\UserBundle\Grid\RefusCandidatureGrid
-    #Login Handler
-    hopitalnumerique_user.handler.login.class: HopitalNumerique\UserBundle\Handler\LoginHandler
 
 services:
     #Utilisateur:
@@ -157,9 +155,3 @@ services:
         tags:
             - { name: 'kernel.event_subscriber'}
             - { name: 'kernel.event_listener', event: 'security.interactive_login' }
-    #--Handler
-    hopitalnumerique_user.handler.login:
-        class:  %hopitalnumerique_user.handler.login.class%
-        arguments:  ["@router"]
-        tags:
-            - { name: 'monolog.logger', channel: 'security' }
