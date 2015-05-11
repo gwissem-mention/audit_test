@@ -17,6 +17,6 @@ services:
 
     hopitalnumerique_glossaire.form.glossaire:
         class: %hopitalnumerique_glossaire.form.glossaire.class%
-        arguments: ["@hopitalnumerique_glossaire.manager.glossaire", "@validator"]
+        arguments: ["@hopitalnumerique_glossaire.manager.glossaire", "@validator", "@hopitalnumerique_user.manager.user"]
         tags:
             - { name: form.type, alias: hopitalnumerique_glossaire_glossaire }

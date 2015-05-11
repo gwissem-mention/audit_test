@@ -21,8 +21,10 @@ class GlossaireManager extends BaseManager
         $glossaires = $this->findAll();
 
         $datas = array();
-        foreach($glossaires as $one){
-            if( $one->getEtat()->getId() == 3){
+        foreach($glossaires as $one)
+        {
+            if( $one->getEtat()->getId() == 3)
+            {
                 $firstL = substr( ucfirst($one->getMot()), 0, 1);
                 $datas[ $firstL ][ strtolower($one->getMot()) ] = $one;
             }

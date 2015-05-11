@@ -69,6 +69,15 @@ class Glossaire
     protected $etat;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine")
+     * @ORM\JoinTable(name="hn_domaine_gestions_glossaire",
+     *      joinColumns={ @ORM\JoinColumn(name="glo_id", referencedColumnName="glo_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
+     * )
+     */
+    protected $domaines;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -197,5 +206,48 @@ class Glossaire
     public function setEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $etat)
     {
         $this->etat = $etat;
+    }
+
+    /**
+     * Get sensitive
+     *
+     * @return boolean 
+     */
+    public function getSensitive()
+    {
+        return $this->sensitive;
+    }
+
+    /**
+     * Add domaines
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     * @return Glossaire
+     */
+    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    {
+        $this->domaines[] = $domaines;
+
+        return $this;
+    }
+
+    /**
+     * Remove domaines
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     */
+    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    {
+        $this->domaines->removeElement($domaines);
+    }
+
+    /**
+     * Get domaines
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDomaines()
+    {
+        return $this->domaines;
     }
 }

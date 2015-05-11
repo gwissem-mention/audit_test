@@ -28,6 +28,13 @@ class GlossaireGrid extends Grid implements GridInterface
     public function setColumns()
     {
         $this->addColonne( new Column\TextColumn('mot', 'Mot') );
+        
+        $domaineColumn = new Column\TextColumn('domaines', 'Domaine(s) associé(s)');
+        $domaineColumn->setFilterType('select');
+        $domaineColumn->setSelectFrom('values');
+        $domaineColumn->setOperatorsVisible( false );
+        $this->addColonne( $domaineColumn );
+
         $this->addColonne( new Column\TextColumn('intitule', 'Intitule') );
         
         $sensitive = new Column\BooleanColumn('sensitive', 'Sensible à la casse');
