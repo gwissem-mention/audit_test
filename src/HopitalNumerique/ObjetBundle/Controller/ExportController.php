@@ -31,6 +31,7 @@ class ExportController extends Controller
                             'id'                   => 'ID publication', 
                             'titre'                => 'Titre publication',
                             'alias'                => 'Alias publication',
+                            'domaines'             => 'Domaine(s) associé(s)',
                             'note'                 => 'Note référencement',
                             'commentaires'         => 'Commentaires autorisé ?',
                             'synthese'             => 'Synthèse',

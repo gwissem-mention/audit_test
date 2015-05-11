@@ -104,7 +104,7 @@ class ReferenceType extends AbstractType
             $builder
                 ->add('domaines', 'entity', array(
                     'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
-                    'property'    => 'url',
+                    'property'    => 'nom',
                     'required'    => false,
                     'multiple'    => true,
                     'label'       => 'Domaine(s) associé(s)',

@@ -31,6 +31,7 @@ class ObjetGrid extends Grid implements GridInterface
     {
         $this->addColonne( new Column\TextColumn('titre', 'Titre') );
         $this->addColonne( new Column\TextColumn('types','Catégories') );
+        $this->addColonne( new Column\TextColumn('domaineNom','Domaine(s) associé(s)') );
         
         $infraColumn = new Column\BooleanColumn('isInfraDoc', 'Infra-doc ?');
         $infraColumn->setSize( 90 );
