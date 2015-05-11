@@ -21,7 +21,10 @@ class PublicationController extends Controller
 
         //Si l'user connecté à le rôle requis pour voir l'objet
         if( $this->checkAuthorization( $objet ) === false ){
-            return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+            $urlPublication = $this->generateUrl('hopital_numerique_publication_publication_objet', array('id' => $objet->getId()));
+            $urlPublication = rtrim(strtr(base64_encode($urlPublication), '+/', '-_'), '=');
+            return $this->redirect( $this->generateUrl('account_login', array('urlToRedirect' => $urlPublication) ) );
+            // return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
         }
         
         //Types objet
