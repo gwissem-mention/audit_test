@@ -52,8 +52,8 @@
                 <div class="btn-toolbar">
                     {% if app.user %}
                         <button onclick="saveQuestionnaire('save', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="finish btn btn-primary save" disabled="disabled"><i class="fa fa-save"></i> Enregistrer</button>
-                        <button onclick="saveQuestionnaire('acces_resultats', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="acces_resultats_button finish btn btn-success save" disabled="disabled"><i class="fa fa-bar-chart-o"></i> Accéder aux résultats</button>
                     {% endif %}
+                        <button onclick="saveQuestionnaire('acces_resultats', {% if app.user %}true{% else %}false{% endif %}, {% if resultatEnCours %}true{% else %}false{% endif %});" class="acces_resultats_button finish btn btn-success save" disabled="disabled"><i class="fa fa-bar-chart-o"></i> Accéder aux résultats</button>
                     {% if reponses %}
                         <button onclick="emptyAutodiag();" class="emptyAutodiag btn btn-danger" disabled="disabled"><i class="fa fa-trash-o"></i> Vider toutes les réponses</button>
                     {% endif %}
