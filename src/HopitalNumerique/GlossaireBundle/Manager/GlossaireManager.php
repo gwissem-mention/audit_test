@@ -21,15 +21,19 @@ class GlossaireManager extends BaseManager
         $glossaires = $this->findAll();
 
         $datas = array();
-        foreach($glossaires as $one){
-            if( $one->getEtat()->getId() == 3){
+        foreach($glossaires as $one)
+        {
+            if( $one->getEtat()->getId() == 3)
+            {
                 $firstL = substr( ucfirst($one->getMot()), 0, 1);
                 $datas[ $firstL ][ strtolower($one->getMot()) ] = $one;
             }
         }
 
         foreach($datas as &$data)
+        {
             ksort($data);
+        }
 
         return $datas;
     }
@@ -60,7 +64,8 @@ class GlossaireManager extends BaseManager
 
         //objets
         if( count($objets) > 0){
-            foreach($objets as $objet){
+            foreach($objets as $objet)
+            {
                 //parse Resume + Synthese
                 $words      = strip_tags($objet->getResume()) . ' ' . strip_tags($objet->getSynthese());
                 $motsFounds = $this->searchWords( $words, $glossairesWords );
@@ -114,10 +119,13 @@ class GlossaireManager extends BaseManager
         $motsFounds = array();
         $posFounds  = array();
 
-        foreach($glossairesWords as $glossairesWord => $sensitive){
+        foreach($glossairesWords as $glossairesWord => $sensitive)
+        {
             $pattern = "|$glossairesWord|";
             if( !$sensitive )
+            {
                 $pattern .= 'i';
+            }
 
             preg_match_all($pattern, $words, $matches, PREG_OFFSET_CAPTURE);
             

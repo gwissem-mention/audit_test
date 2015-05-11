@@ -27,6 +27,8 @@ class LogoutHandler implements LogoutSuccessHandlerInterface
     public function onLogoutSuccess(Request $request) 
     {
         $user = null;
+        $request->getSession()->set('previous_url_contenu', null);
+        $request->getSession()->set('_security.frontoffice_connecte.target_path', null);
 
         //On récupère l'utilisateur qui est connecté
         if(!is_null($this->_securityContext->getToken()))
