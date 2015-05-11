@@ -14,7 +14,7 @@ security:
 
         # Formulaire FRONT : connexion + reset password (accessible aux anonymes)
         comptehn_login:
-            pattern: (^/compte-hn/(connexion|mot-de-passe-perdu(.*))$)|(^/compte-hn/inscription)|(^/compte-hn/acces-compte) # Cette expression régulière permet de prendre /login
+            pattern: (^/compte-hn/(connexion|(connexion\/\w+)|mot-de-passe-perdu(.*))$)|(^/compte-hn/inscription)|(^/compte-hn/acces-compte) # Cette expression régulière permet de prendre /login
             anonymous: true
             context: application
 
@@ -36,6 +36,7 @@ security:
                 default_target_path: hopital_numerique_account_homepage
                 use_referer : true
                 csrf_provider: form.csrf_provider
+                success_handler: hopitalnumerique_user.handler.login
             logout:
                 path:   account_logout
                 target: hopital_numerique_homepage
@@ -77,6 +78,7 @@ security:
                 default_target_path: hopital_numerique_account_homepage
                 use_referer : true
                 csrf_provider: form.csrf_provider
+                success_handler: hopitalnumerique_user.handler.login
             logout:
                 path:   account_logout
                 target: hopital_numerique_homepage
