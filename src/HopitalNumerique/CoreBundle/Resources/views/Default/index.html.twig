@@ -85,17 +85,21 @@
 <div class="homepage" id="body">
     <div class="col-md-12 no-padding" id="header-container">
         <div id="header" class="col-md-12">
-            <a href="/" target="_blank">
+            <a href="/" target="_blank" id="logo-header">
                 <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
             </a>
             <div id="titre" class="pull-left">
                 <a href="{{path('hopital_numerique_homepage')}}" class="h1">Mon Hôpital Numérique</a>
                 <div class="h2">faciliter l'usage du numérique au service des soins</div>
             </div>
-
-            <a href="http://www.anap.fr/" class="" id="logoHn" target="_blank">
-                <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="HOPITAL NUMERIQUE" />
-            </a>
+            <div id="bloc_exalead"class="pull-left">
+                <div id="recherche_textuelle_group">
+                     <span class="bt-recherche pull-right">
+                        <a class="infos btn btn-orange" href="/recherche-par-referencement?type=avancee" id="search-avance-header-home">Recherche avancée</a>
+                        <a class="infos btn btn-rose" href="/recherche-par-parcours">Parcours guidé</a>
+                     </span>
+                </div>
+            </div>
 
             <div class="loggedUser pull-right">
                 <div class="connexion">
@@ -122,16 +126,12 @@
                     <a class="infos btn btn-rose" href="{{path('hopital_numerique_user_inscription')}}">Créer un compte</a>
                 {% endif %}
             </div>
-
-            <div id="bloc_exalead" class="pull-right">
-                <div id="recherche_textuelle_group">
-                     <span class="bt-recherche pull-right">
-                        <a class="infos btn btn-orange" href="/recherche-par-referencement?type=avancee" id="search-avance-header-home">Recherche avancée</a>
-                        <a class="infos btn btn-rose" href="/recherche-par-parcours">Parcours guidé</a>
-                     </span>
-                </div>
+            <div id="logoHn" class="pull-left">
+                <a href="http://www.anap.fr/" target="_blank">
+                    <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-anap-small.jpg')}}" alt="ANAP" />
+                </a>
+                <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn-small.jpg')}}" alt="HOPITAL NUMERIQUE" />
             </div>
-
             {# <p class="violet pull-right align-right">
                 Ce projet s’inscrit dans le cadre du programme
             </p>#}
@@ -148,7 +148,7 @@
                         {% endfor %}
                     {% endif %}#}
                     <div>
-                        <img src="{{asset('bundles/hopitalnumeriquecore/img/slideshow/SLIDESHOW-01.jpg')}}"/>
+                        <img src="{{asset('bundles/hopitalnumeriquecore/img/slideshow/SLIDESHOW-01.jpg')}}" alt="Slideshow"/>
                         <div class="block-text-slide-1">
                             <div class="text-content">
                                 <h2>Actualités</h2>
@@ -161,7 +161,7 @@
                         </div>
                     </div>
                     <div>
-                        <img src="{{asset('bundles/hopitalnumeriquecore/img/slideshow/02-SLIDESHOW.jpg')}}"/>
+                        <img src="{{asset('bundles/hopitalnumeriquecore/img/slideshow/02-SLIDESHOW.jpg')}}" alt="Slideshow"/>
                         <div class="block-text-slide-2">
                             <div class="text-content">
                                 <h2>1<sup>ère</sup> visite</h2>
@@ -175,7 +175,7 @@
                         </div>
                     </div>
                     <div>
-                        <img src="{{asset('bundles/hopitalnumeriquecore/img/slideshow/03-SLIDESHOW.jpg')}}"/>
+                        <img src="{{asset('bundles/hopitalnumeriquecore/img/slideshow/03-SLIDESHOW.jpg')}}" alt="Slideshow"/>
                         <div class="block-text-slide-3">
                             <div class="text-content">
                                 <h2>L'ANAP et HN</h2>
@@ -189,7 +189,7 @@
                             </div>
                             <div class="text-plus"><a class="btn btn-rose" href="/publication/article/226-l-anap-et-hopital-numerique">EN SAVOIR PLUS</a></div>
                         </div>
-                        <img src="{{asset('bundles/hopitalnumeriquecore/img/slideshow/corner-anap.png')}}" class="corner-anap"/>
+                        <img src="{{asset('bundles/hopitalnumeriquecore/img/slideshow/corner-anap.png')}}" class="corner-anap" alt="Anap"/>
                     </div>
                 </div>
                 <div id="search-help" class="col-md-12 col-sm-12">
@@ -200,7 +200,7 @@
                     <div class="col-md-3 col-sm-3"></div>
                         </div>
                     <div class="start-search col-md-3 col-sm-3 col-xs-12 pull-right">
-                        <img src="{{asset('bundles/hopitalnumeriquecore/img/Schema-2.jpg')}}" />
+                        <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-HN-big.jpg')}}" alt="logo"/>
                         <a id="recherche-aidee" class="btn btn-orange-clair link fancybox.iframe" href="{{ path('hopital_numerique_expbesoin_rechercheFancy') }}">Commencer</a>
                     </div>
                 </div>
@@ -293,12 +293,12 @@
     {% block prebody %}
         <div id="block-home-menu" class="col-md-12 no-padding">
             <div class="block-home-menu anap col-md-3 col-sm-6 col-xs-12">
-                <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/01-bloc-ANAP.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
+                <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/01-bloc-ANAP.jpg')}}) no-repeat top left;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
                     <a href="/publication/article/1-anap-a-vos-cotes" class="img-link"></a>
                     <div class="block-bottom">
                         <a href="/publication/article/226-l-anap-et-hopital-numerique"></a>
                         <h2>L'ANAP ET HN</h2>
-                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-anap-hn.png')}}" alt="anap-hn"/</p>
+                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-anap-hn.png')}}" alt="anap-hn"/></p>
                     </div>
                 </div>
             </div>
@@ -323,7 +323,7 @@
                 </div>
             </div>
             <div class="block-home-menu experts col-md-3 col-sm-6 col-xs-12">
-                <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/04-bloc-EXPERT.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
+                <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/bloc-expert.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
                     <a href="/publication/article/348-le-coin-des-experts" class="img-link"></a>
                     <div class="block-bottom">
                         <a href="/publication/article/348-le-coin-des-experts"></a>
@@ -348,7 +348,7 @@
                                     <span>Le {{actu.date|date('d/m/Y')}} | {{actu.types}}</span>
                                     <p>
                                         {% set resume = actu.resume %}
-                                        {{actu.resume|length > 350 ? (resume[:350]|striptags ~ '...'):actu.resume|parsePublication|raw}}
+                                        {{actu.resume|length > 550 ? (resume[:550]|striptags ~ '...'):actu.resume|parsePublication|raw}}
                                     </p>
                                     <a class="lire-suite" href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">Lire la suite</a>
                                 </div>
@@ -374,9 +374,10 @@
             <div class="home-right col-md-6">
                 <h5>L'ANAP, une agence au service des organisations de santé</h5>
                 <div class="videoWrapper">
-                    <iframe width="100%" src="https://www.youtube.com/embed/E-N4D0SuTWw" frameborder="0" allowfullscreen></iframe>
+                    <iframe width="100%" src="https://www.youtube.com/embed/E-N4D0SuTWw" allowfullscreen></iframe>
                 </div>
             </div>
+        </div>
     {% endblock body %}
         <div class="clearfix"></div>
     {% endblock %}

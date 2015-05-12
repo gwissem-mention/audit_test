@@ -39,10 +39,10 @@ $(document).ready(function(){
 
     $('#block-carte-france').hover(
         function() {
-            $('.carte-france').stop().fadeOut();
+            $('.carte-france').stop().fadeOut(200);
         },
         function() {
-            $('.carte-france').stop().fadeIn();
+            $('.carte-france').stop().fadeIn(200);
         }
     )
 });
