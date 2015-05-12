@@ -1,3 +1,5 @@
+*{ font-family: 'Open Sans', sans-serif }
+
 div.homepage  {
     width: auto;
 }
@@ -12,6 +14,9 @@ div.homepage  {
 }
 
 /* HEADER */
+#header .nom {
+    margin-right: 10px;
+}
 #logo-header {
     width: 69px;
     display: block;
