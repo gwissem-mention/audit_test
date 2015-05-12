@@ -92,7 +92,7 @@
                 <a href="{{path('hopital_numerique_homepage')}}" class="h1">Mon Hôpital Numérique</a>
                 <div class="h2">faciliter l'usage du numérique au service des soins</div>
             </div>
-            <div id="bloc_exalead"class="pull-left">
+            <div id="bloc_exalead" class="pull-left">
                 <div id="recherche_textuelle_group">
                      <span class="bt-recherche pull-right">
                         <a class="infos btn btn-orange" href="/recherche-par-referencement?type=avancee" id="search-avance-header-home">Recherche avancée</a>
@@ -350,7 +350,7 @@
                                     <span>Le {{actu.date|date('d/m/Y')}} | {{actu.types}}</span>
                                     <p>
                                         {% set resume = actu.resume %}
-                                        {{actu.resume|length > 550 ? (resume[:550]|striptags ~ '...'):actu.resume|parsePublication|raw}}
+                                        {{actu.resume|truncate(350, true, '...')|parsePublication|raw}}
                                     </p>
                                     <a class="lire-suite" href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">Lire la suite</a>
                                 </div>
@@ -360,7 +360,7 @@
                                     <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
                                     <p>
                                         {% set resume = actu.resume %}
-                                        {{actu.resume|length > 250 ? (resume[:250]|striptags ~ '...'):actu.resume|parsePublication|raw}}
+                                        {{actu.resume|truncate(250, true, '...')|parsePublication|raw}}
                                     </p>
                                     <a class="lire-suite" href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">Lire la suite</a>
                                 </div>
