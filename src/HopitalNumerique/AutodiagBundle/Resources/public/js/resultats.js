@@ -310,7 +310,7 @@ $(document).ready(function() {
                 lineWidth         : 0
             },
             legend:{
-                padding : 30,
+                padding : 20,
                 reversed: true
             },
             yAxis : {
