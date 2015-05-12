@@ -140,7 +140,7 @@ div.homepage  {
 
     #header .loggedUser {
         float:none!important;
-        width: 212px;
+        width: 250px;
         margin: 0 auto!important;
     }
 }
@@ -204,7 +204,7 @@ div.homepage  {
         background-size: 100% 100%;
     }
 }
-@media (max-width: 1380px) {
+@media (max-width: 1400px) {
     #search-help .frise {
         background: url("../img/demarrer-700.jpg") no-repeat scroll left center;
         background-size: 100% 100%;
@@ -377,6 +377,10 @@ div.homepage  {
     #slide .block-text-slide-3 {
         bottom: 23px;
         left: 10px;
+    }
+
+    .slick-slide .text-content h2 {
+        margin-bottom: 20px;
     }
 }
 @media (max-width:550px) {
