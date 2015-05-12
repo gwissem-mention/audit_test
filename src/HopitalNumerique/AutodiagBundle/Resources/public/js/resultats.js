@@ -311,8 +311,7 @@ $(document).ready(function() {
             },
             legend:{
                 padding : 30,
-                reversed: true,
-                verticalAlign : 'top'
+                reversed: true
             },
             yAxis : {
                 gridLineInterpolation : 'polygon',
