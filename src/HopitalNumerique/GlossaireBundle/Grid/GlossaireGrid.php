@@ -17,9 +17,15 @@ class GlossaireGrid extends Grid implements GridInterface
      */
     public function setConfig()
     {
-        $this->setSource( 'HopitalNumeriqueGlossaireBundle:Glossaire' );
+        // $this->setSource( 'HopitalNumeriqueGlossaireBundle:Glossaire' );
+        // $this->setNoDataMessage('Aucun élément du glossaire à afficher.');
+        // $this->setDefaultOrder('mot', 'ASC');
+        
         $this->setNoDataMessage('Aucun élément du glossaire à afficher.');
-        $this->setDefaultOrder('mot', 'ASC');
+        $this->setSource( 'hopitalnumerique_glossaire.manager.glossaire' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->showIDColumn( false );
+        $this->setFilterIdColumn( false );
     }
 
     /**
@@ -29,7 +35,7 @@ class GlossaireGrid extends Grid implements GridInterface
     {
         $this->addColonne( new Column\TextColumn('mot', 'Mot') );
         
-        $domaineColumn = new Column\TextColumn('domaines', 'Domaine(s) associé(s)');
+        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
         $domaineColumn->setFilterType('select');
         $domaineColumn->setSelectFrom('values');
         $domaineColumn->setOperatorsVisible( false );

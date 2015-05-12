@@ -118,14 +118,15 @@ class GlossaireController extends Controller
             foreach($rawDatas as $data)
                 $primaryKeys[] = $data['id'];
         }
-        $datas = $this->get('hopitalnumerique_glossaire.manager.glossaire')->findBy( array('id' => $primaryKeys) );
+        $datas = $this->get('hopitalnumerique_glossaire.manager.glossaire')->getDatasForExport( $primaryKeys );
 
         $colonnes = array( 
                             'id'           => 'id', 
                             'mot'          => 'Mot',
                             'intitule'     => 'Intitulé',
+                            'domaineNom'   => 'Domaine(s) associé(s)',
                             'description'  => 'Description',
-                            'etat.libelle' => 'Etat'
+                            'etatLibelle'  => 'Etat'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');

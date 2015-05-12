@@ -7,7 +7,7 @@ parameters:
 services:
     hopitalnumerique_glossaire.manager.glossaire:
         class: %hopitalnumerique_glossaire.manager.glossaire.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
