@@ -292,7 +292,8 @@ $(document).ready(function() {
             chart : {
                 polar  : true,
                 type   : 'area',
-                height : 700
+                height : 750,
+                width  : 900
             },
             title : {
                 text : null
@@ -309,8 +310,9 @@ $(document).ready(function() {
                 lineWidth         : 0
             },
             legend:{
-                padding : 20,
-                reversed: true
+                padding : 30,
+                reversed: true,
+                verticalAlign : 'top'
             },
             yAxis : {
                 gridLineInterpolation : 'polygon',
