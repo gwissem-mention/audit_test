@@ -14,7 +14,7 @@
     <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     {% block stylesheets %}
-        {% stylesheets output="compiled/hopitalnumerique-core.css" filter="cssrewrite, ?yui_css"
+        {% stylesheets output="compiled/hopitalnumerique_homepage-core.css" filter="cssrewrite, ?yui_css"
         "@bootstrap_css"
         "@font_awesome_css"
         "@fancybox_css"
@@ -27,14 +27,14 @@
         {% endstylesheets %}
 
 
-        {% stylesheets output="compiled/hopitalnumerique-core-ie8.css" filter="cssrewrite, ?yui_css"
+        {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriquecore/css/ie8.css'
         %}
         <!--[if IE 8]>
         <link rel="stylesheet" href="{{ asset_url }}" />
         <![endif]-->
         {% endstylesheets %}
-        {% stylesheets output="compiled/hopitalnumerique-core-default-index.css" filter="cssrewrite, ?yui_css"
+        {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriquecore/css/homepage.css'
         %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -42,7 +42,7 @@
     {% endblock stylesheets %}
 
     {% block javascripts %}
-        {% javascripts output="compiled/hopitalnumerique-core.js"
+        {% javascripts output="compiled/hopitalnumerique-homepage-core.js"
         "@jquery_js"
         "@jquery_ui_js"
         "@bootstrap_js"
