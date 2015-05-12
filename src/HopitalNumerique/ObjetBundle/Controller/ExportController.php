@@ -55,7 +55,7 @@ class ExportController extends Controller
                             'vignette'             => 'Vignette',
                             'referentAnap'         => 'Référent ANAP',
                             'sourceDocument'       => 'Source du document',
-                            'commentairesFichier'  => 'Commentaires',
+                            'commentairesFichier'  => 'Commentaires backoffice',
                             'pathEdit'             => 'Fichier d\'administration',
                             'module'               => 'Module(s) de formation lié(s)',
                             'idParent'             => 'Id de la publication parente',
@@ -70,7 +70,7 @@ class ExportController extends Controller
                             'noteMoyenneC'         => 'Note moyenne de l\'infra-doc',
                             'nombreNoteC'          => 'Nombre de notes de l\'infra-doc',
                             'objets'               => 'Productions liées',
-                            'commentairesAssocies' => 'Commentaires'
+                            'commentairesAssocies' => 'Commentaires frontoffice'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');

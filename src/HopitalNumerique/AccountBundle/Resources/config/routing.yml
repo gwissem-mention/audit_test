@@ -8,8 +8,8 @@ hopital_numerique_account_homepage_reorder:
 
 # Connexion
 account_login:
-    pattern:  /connexion
-    defaults: { _controller: FOSUserBundle:Security:login }
+    pattern:  /connexion/{urlToRedirect}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Security:loginCustom, urlToRedirect:'' }
 
 account_login_check:
     pattern:  /login_check

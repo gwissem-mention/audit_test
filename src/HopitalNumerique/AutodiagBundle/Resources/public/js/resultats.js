@@ -292,7 +292,8 @@ $(document).ready(function() {
             chart : {
                 polar  : true,
                 type   : 'area',
-                height : 700
+                height : 750,
+                width  : 900
             },
             title : {
                 text : null

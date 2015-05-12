@@ -33,6 +33,8 @@ parameters:
     hopitalnumerique_user.grid.refuscandidature.class: HopitalNumerique\UserBundle\Grid\RefusCandidatureGrid
     #Listener
     hopitalnumerique_user.listener.user.class: HopitalNumerique\UserBundle\EventListener\UserUpdateListener
+    #Login Handler
+    hopitalnumerique_user.handler.login.class: HopitalNumerique\UserBundle\Handler\LoginHandler
 
 services:
     #Utilisateur:
@@ -164,3 +166,9 @@ services:
         arguments: ["@nodevo_mail.manager.mail", "@mailer"]
         tags:
             - { name: 'kernel.event_subscriber' }
+    #--Handler
+    hopitalnumerique_user.handler.login:
+        class:  %hopitalnumerique_user.handler.login.class%
+        arguments:  ["@router"]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
