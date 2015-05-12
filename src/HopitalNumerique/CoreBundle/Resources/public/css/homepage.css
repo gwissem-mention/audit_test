@@ -60,7 +60,7 @@ div.homepage  {
 }
 #header #bloc_exalead {
     margin-top: 18px;
-    margin-right:40px;
+    margin-right:28px;
 }
 #header #bloc_exalead .input-group-addon {
     background-color: #fff;
@@ -89,7 +89,7 @@ div.homepage  {
 #header .loggedUser {
     color: #d60030;
     margin-top: 18px;
-    margin-left: 15px;
+    margin-left: 5px;
     font-size: 0.9em;
 }
 #header .loggedUser p {
@@ -204,7 +204,7 @@ div.homepage  {
         background-size: 100% 100%;
     }
 }
-@media (max-width: 1400px) {
+@media (max-width: 1380px) {
     #search-help .frise {
         background: url("../img/demarrer-700.jpg") no-repeat scroll left center;
         background-size: 100% 100%;
