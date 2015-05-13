@@ -428,11 +428,11 @@ div.homepage  {
 }
 #block-last-publications a {
     font-size: 1em;
-    color: #262352;
+    color: #333;
     margin:0px;
 }
 #block-last-publications {
-    color: #262352;
+    color: #d60030;
     padding: 10px 10px 10px 20px;
     background-color: #dbdbdb;
 }

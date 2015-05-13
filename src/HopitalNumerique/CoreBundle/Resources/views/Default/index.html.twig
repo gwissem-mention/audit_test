@@ -347,7 +347,7 @@
                             {% if loop.first %}
                                 <div class="actu col-md-12">
                                     <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
-                                    <span>Le {{actu.date|date('d/m/Y')}} | {{actu.types}}</span>
+                                    <span><b>Le {{actu.date|date('d/m/Y')}} | {{actu.types}}</b></span>
                                     <p>
                                         {% set resume = actu.resume %}
                                         {{actu.resume|truncate(350, true, '...')|parsePublication|raw}}
@@ -356,7 +356,7 @@
                                 </div>
                             {% else %}
                                 <div class="actu col-md-6">
-                                    <span>Le {{actu.date|date('d/m/Y')}} | {{actu.types}}</span>
+                                    <span><b>Le {{actu.date|date('d/m/Y')}} | {{actu.types}}</b></span>
                                     <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
                                     <p>
                                         {% set resume = actu.resume %}
