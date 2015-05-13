@@ -13,3 +13,8 @@ INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expe
 VALUES
 	(41, 'Modification d’inscription par un gestionnaire', 'Modification d’inscription par un gestionnaire', 'communication@anap.fr', 'ANAP Hôpital numérique', 'Bonjour %u,\r\n\nVous venez d\'être associé au(x) domaine(s) suivant : %domaines\r\n\nCordialement,', '{\"%u\":\"Nom d\'utilisateur\",\"%domaines\":\"Domaines de l\'utilisateur\"}');
 
+INSERT INTO `hn_domaine_template` (`temp_id`, `temp_nom`)
+VALUES
+	(1, 'Template générique'),
+	(2, 'Template HNum');
+
