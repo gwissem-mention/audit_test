@@ -23,7 +23,7 @@ class DomaineType extends AbstractType
                 'max_length' => 255, 
                 'required'   => true, 
                 'label'      => 'URL du domaine',
-                'attr'       => array('class' => 'validate[required,max[255]]')
+                'attr'       => array('class' => 'validate[required,max[255],custom[url]]')
             ))
             ->add('adresseMailContact', 'text', array(
                 'max_length' => 255, 

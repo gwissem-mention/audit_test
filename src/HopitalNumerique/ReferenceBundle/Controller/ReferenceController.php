@@ -206,8 +206,8 @@ class ReferenceController extends Controller
             $form->handleRequest($request);
 
             //si le formulaire est valide
-            if ( $form->isValid() ) {
-
+            if ( $form->isValid() ) 
+            {
                 $oldParent = $reference->getParent();
 
                 if( isset($formDatas['parent']) && !is_null($formDatas['parent']) ){
@@ -217,12 +217,21 @@ class ReferenceController extends Controller
                     //Mise à jour du/des domaine(s) sur l'ensemble de l'arbre d'héritage des parents
                     $family = array();
                     $daddy  = $parent;
+
                     //Tant qu'il y a des parents on ajoute le(s) nouveau(x) domaine(s) dessus
                     while(!is_null($daddy))
                     {
                         $childsDomaines = array();
                         //Vérifie si l'élément courant a un parent
                         $childs = $daddy->getChilds();
+
+                        //Si on est au niveau du parent de la référence courante, on ajoute cette dernière au tableau des enfants du parent qui n'est pas encore setté
+                        //si la référence est un ajout
+                        if($daddy->getId() === $parent->getId() 
+                            && is_null($reference->getId()))
+                        {
+                            $childs = count($childs) !== 0 ? array_merge(array($reference), $childs) : array($reference);
+                        }
 
                         foreach ($childs as $child) 
                         {

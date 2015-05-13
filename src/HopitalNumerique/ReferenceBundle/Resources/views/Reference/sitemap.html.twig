@@ -62,7 +62,7 @@
             {% if ref.childs %}
                 <ul>
                     {% for code, child in ref.childs %}
-                        {{ mySelf.buildTree(child, code) }}
+                        {{ mySelf.buildTree(child, domainesOrderedByReference, code) }}
                     {% endfor %}
                 </ul>
             {% endif %}
