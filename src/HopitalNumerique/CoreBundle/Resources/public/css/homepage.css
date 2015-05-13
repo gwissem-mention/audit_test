@@ -33,7 +33,7 @@ div.homepage  {
 }
 #header #titre {
     padding-left: 10px;
-    padding-right: 30px;
+    padding-right: 80px;
 }
 
 #header #titre .h1 {
@@ -51,6 +51,7 @@ div.homepage  {
     margin-top: 0px;
     display: block;
     float: left;
+    margin-right: 30px;
 }
 #header #titre .h2 {
     font-size: 1em;
@@ -111,6 +112,10 @@ div.homepage  {
     text-transform: none!important;
 }
 @media (max-width:767px) {
+    #header #titre {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
     #logo-header {
         width: 69px;
         display: block;
@@ -280,12 +285,7 @@ div.homepage  {
     display: block;
     width: 100%;
 }
-#slide .corner-anap {
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    width: 60%!important;
-}
+
 #slide .slick-prev-custom {
     left: 5px;
 }
@@ -327,9 +327,9 @@ div.homepage  {
     padding: 0px;
     list-style: outside none none;
     position: absolute;
-    top: 3%;
+    top: 6%;
     text-align: right;
-    right: 40px;
+    left: 80px;
     clear: both;
     height: 20px;
 }
@@ -339,25 +339,24 @@ div.homepage  {
 }
 #slide .block-text-slide-3 {
     position: absolute;
-    bottom: 86px;
-    left: 150px;
     z-index: 1;
-    max-width: 80%;
+    top: 90px;
+    max-width: 55%;
+    left: 90px;
 }
 #slide .block-text-slide-2 {
     position: absolute;
     z-index: 1;
     top: 90px;
-    max-width: 80%;
+    max-width: 55%;
     left: 90px;
 }
 #slide .block-text-slide-1 {
     position: absolute;
     z-index: 1;
     top: 90px;
-    max-width: 50%;
+    max-width: 55%;
     left: 90px;
-    font-size: 1.3em;
 }
 #slide .block-text-slide-1 .text-content {
     background-color: rgba(0, 0, 0, 0.55);
@@ -369,6 +368,7 @@ div.homepage  {
     color:#431C6F;
     text-transform: uppercase;
     font-weight: bold;
+    font-size: 1.5em;
 }
 #slide .text-content {
     background-color: rgba(255,255,255,0.8);
@@ -379,11 +379,6 @@ div.homepage  {
     color: #fff;
 }
 @media (max-width: 767px) {
-    #slide .block-text-slide-3 {
-        bottom: 23px;
-        left: 10px;
-    }
-
     .slick-slide .text-content h2 {
         margin-bottom: 20px;
     }
@@ -391,7 +386,7 @@ div.homepage  {
 @media (max-width:550px) {
     #slide .block-text-slide-3 {
         position: relative;
-        bottom: 10px;
+        top: -10px;
         left: 10px;
     }
     #slide .block-text-slide-2 {
