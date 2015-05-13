@@ -13,6 +13,12 @@ class DomaineType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('nom', 'text', array(
+                'max_length' => 255, 
+                'required'   => true, 
+                'label'      => 'Nom du domaine',
+                'attr'       => array('class' => 'validate[required,max[255]]')
+            ))
             ->add('url', 'text', array(
                 'max_length' => 255, 
                 'required'   => true, 
