@@ -66,9 +66,6 @@ class UserGrid extends Grid implements GridInterface
         $this->addColonne( $roleColumn );
 
         $domaineColumn = new Column\TextColumn('domaines', 'Domaine(s) associé(s)');
-        $domaineColumn->setFilterType('select');
-        $domaineColumn->setSelectFrom('values');
-        $domaineColumn->setOperatorsVisible( false );
         $this->addColonne( $domaineColumn );
         
         $contractualisationColumn = new Column\TextColumn('contra', 'À jour');

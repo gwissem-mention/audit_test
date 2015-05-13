@@ -41,7 +41,7 @@ services:
     #--Manager
     hopitalnumerique_user.manager.user:
         class: %hopitalnumerique_user.manager.user.class%
-        arguments: ["@doctrine.orm.entity_manager", "@security.context" , "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.questionnaire", "@hopitalnumerique_user.manager.refus_candidature", "@hopitalnumerique_domaine.manager.domaine"]
+        arguments: ["@doctrine.orm.entity_manager", "@security.context" , "@hopitalnumerique_questionnaire.manager.reponse",  "@hopitalnumerique_user.manager.refus_candidature", "@hopitalnumerique_domaine.manager.domaine"]
         calls:
             - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
     #--Type

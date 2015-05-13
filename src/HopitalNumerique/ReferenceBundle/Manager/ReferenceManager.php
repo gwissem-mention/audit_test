@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -151,9 +152,11 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    public function getAllRefCode()
+    public function getAllRefCode(Questionnaire $questionnaire)
     {
-        return $this->getRepository()->getAllRefCode()->getQuery()->getResult();
+        $domainesQuestionnaireId = $questionnaire->getDomainesId();
+
+        return $this->getRepository()->getAllRefCode($domainesQuestionnaireId)->getQuery()->getResult();
     }
 
     /**

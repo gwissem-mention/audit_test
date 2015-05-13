@@ -36,9 +36,6 @@ class GlossaireGrid extends Grid implements GridInterface
         $this->addColonne( new Column\TextColumn('mot', 'Mot') );
         
         $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
-        $domaineColumn->setFilterType('select');
-        $domaineColumn->setSelectFrom('values');
-        $domaineColumn->setOperatorsVisible( false );
         $this->addColonne( $domaineColumn );
 
         $this->addColonne( new Column\TextColumn('intitule', 'Intitule') );

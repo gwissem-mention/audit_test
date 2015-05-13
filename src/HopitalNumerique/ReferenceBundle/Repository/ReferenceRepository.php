@@ -103,11 +103,18 @@ class ReferenceRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getAllRefCode()
+    public function getAllRefCode(array $domainesQuestionnaireId)
     {
+        //TODO : check si la fonction est utilisée autre part que pour les questions + passées les domaines du questionnaire pour filtrer
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
+            ->leftJoin('ref.domaines', 'domaine')
+                ->where($qb->expr()->orX(
+                    $qb->expr()->in('domaine.id', ':domainesId'),
+                    $qb->expr()->isNull('domaine.id')
+                ))
+                ->setParameter('domainesId', $domainesQuestionnaireId)
             ->groupBy('ref.code')
             ->orderBy('ref.code');
             

@@ -9,18 +9,16 @@ class UserManager extends BaseManager
     protected $_class = '\HopitalNumerique\UserBundle\Entity\User';
     protected $_securityContext;
     protected $_managerReponse;
-    protected $_managerQuestionnaire;
     protected $_managerRefusCandidature;    
     protected $_managerDomaine;    
     protected $_options;
 
-    public function __construct($managerUser, $securityContext, $managerReponse, $managerQuestionnaire, $managerRefusCandidature, $managerDomaine)
+    public function __construct($managerUser, $securityContext, $managerReponse, $managerRefusCandidature, $managerDomaine)
     {
         parent::__construct($managerUser);
         $this->_securityContext = $securityContext;
         //Récupération des managers Réponses et Questionnaire
         $this->_managerReponse          = $managerReponse;
-        $this->_managerQuestionnaire    = $managerQuestionnaire;
         $this->_managerRefusCandidature = $managerRefusCandidature;
         $this->_managerDomaine          = $managerDomaine;
         $this->_options                 = array();
@@ -37,8 +35,8 @@ class UserManager extends BaseManager
         $users = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
         $usersForGrid = array();
 
-        $idExpert      = $this->_managerQuestionnaire->getQuestionnaireId('expert');
-        $idAmbassadeur = $this->_managerQuestionnaire->getQuestionnaireId('ambassadeur');
+        $idExpert      = 1;
+        $idAmbassadeur = 2;
         
         //Récupération des questionnaires et users
         $questionnaireByUser = $this->_managerReponse->reponseExiste($idExpert, $idAmbassadeur);

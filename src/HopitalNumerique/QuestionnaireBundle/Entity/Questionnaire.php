@@ -58,6 +58,15 @@ class Questionnaire
      * @ORM\OneToMany(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Outil", mappedBy="questionnairePrealable")
      */
     private $outils;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine")
+     * @ORM\JoinTable(name="hn_domaine_gestions_questionnaire",
+     *      joinColumns={ @ORM\JoinColumn(name="qst_id", referencedColumnName="qst_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
+     * )
+     */
+    protected $domaines;
     
     /**
      * Constructor
@@ -254,5 +263,54 @@ class Questionnaire
     public function getOutils()
     {
         return $this->outils;
+    }
+
+    /**
+     * Add domaines
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     * @return Questionnaire
+     */
+    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    {
+        $this->domaines[] = $domaines;
+
+        return $this;
+    }
+
+    /**
+     * Remove domaines
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     */
+    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    {
+        $this->domaines->removeElement($domaines);
+    }
+
+    /**
+     * Get domaines
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDomaines()
+    {
+        return $this->domaines;
+    }
+    /**
+     * Get les ids des domaines concerné par le questionnaire
+     *
+     * @return array[integer]
+     */
+    public function getDomainesId()
+    {
+        $domainesId = array();
+
+        foreach ($this->domaines as $domaine) 
+        {
+            $domainesId[] = $domaine->getId();
+        }
+
+        return $domainesId;
     }
 }
