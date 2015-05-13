@@ -17,7 +17,7 @@ $(document).ready(function(){
     });
     $('.block-home-menu .block-bottom').hover(
             function() {
-                $(this).find('p').animate( {'height':"160px", 'display':'block'}, { queue:false, duration:500 });
+                $(this).find('p').animate( {'height':"164px", 'display':'block'}, { queue:false, duration:500 });
             },
             function() {
                 $(this).find('p').animate( {'height':"0px", 'display':'none'}, { queue:false, duration:500 });
