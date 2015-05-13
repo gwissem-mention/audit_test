@@ -177,7 +177,7 @@ class UserType extends AbstractType
                     ))
                     ->add('domaines', 'entity', array(
                             'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
-                            'property'    => 'domaine',
+                            'property'    => 'nom',
                             'required'    => false,
                             'multiple'    => true,
                             'label'       => 'Domaine(s) concerné(s)',
