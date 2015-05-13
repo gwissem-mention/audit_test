@@ -78,7 +78,7 @@
     
 	.recherche_textuelle_avancee { background-color:#f4f4f4;border-color:#ccc;border-style:solid;border-width:1px;display:none;left:0px;position:absolute;top:33px;width:100%;z-index:1000; }
 	    .recherche_textuelle_avancee .close { float:right;font-size:15px;padding:10px; }
-	    .recherche_textuelle_avancee .title { color:#6f3596;font-weight:bold;padding:10px; }
+	    .recherche_textuelle_avancee .title { color:#d60030;font-weight:bold;padding:10px; }
 	    .recherche_textuelle_avancee ul { list-style-type:none; }
 	        .recherche_textuelle_avancee ul a { cursor:pointer; }
     

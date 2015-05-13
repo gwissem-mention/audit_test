@@ -3,7 +3,7 @@
 #glossaire .alphabet *{ font-size: 18px; margin: 0 8px; float: left; width: 21px; text-align: center; font-weight: bold }
 #glossaire .alphabet p { color: #e5e5e5; }
 #glossaire .alphabet a { color: #5d5d5d; display: block; }
-#glossaire .alphabet a:hover { color: #6f3596; background: #f4f4f4; border-radius: 3px; text-decoration: none; }
+#glossaire .alphabet a:hover { color: #d60030; background: #f4f4f4; border-radius: 3px; text-decoration: none; }
 #glossaire .liste .col-md-12 h2{ font-size: 48px; margin: 0 0 10px 0; }
 #glossaire .liste .col-md-12 > .sep{ height: 1px; width: 100%; background: #c8c8c8; margin-bottom: 15px; }
 #glossaire .liste .col-md-12 .elements{ width: 100%; }

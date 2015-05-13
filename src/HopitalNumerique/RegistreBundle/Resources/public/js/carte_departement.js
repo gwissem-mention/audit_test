@@ -93,7 +93,7 @@ function afficheCarteFrance(donneesParRegionJSON, remplissage)
     	//Pour chaque région, on set la couleur par défaut (du chargement ou d'un remplissage via "Selectionner tous")
         if (0 <= jQuery.inArray( state, donneesParRegion))
         {
-            region[state].attr({ fill: remplissage ? "#de0d4d" : "#6f3596" });
+            region[state].attr({ fill: remplissage ? "#de0d4d" : "#d60030" });
         }
 
         (function (st, state) {
@@ -142,14 +142,14 @@ function afficheCarteFrance(donneesParRegionJSON, remplissage)
                     	regionsSelectionnes.push('reunion');
                     	regionsSelectionnes.push('mayotte');
                     	//Permet de mettre la couleur violette ou rose en fonction de l'ajout et réutilisation du filtre
-                    	region['reunion'].attr({ fill: (jQuery.inArray('reunion', donneesParRegion) >= 0 || jQuery.inArray('mayotte', donneesParRegion) >= 0)? "#6f3596" : "#de0d4d" });
-                    	region['mayotte'].attr({ fill: (jQuery.inArray('reunion', donneesParRegion) >= 0 || jQuery.inArray('mayotte', donneesParRegion) >= 0)? "#6f3596" : "#de0d4d" });
+                    	region['reunion'].attr({ fill: (jQuery.inArray('reunion', donneesParRegion) >= 0 || jQuery.inArray('mayotte', donneesParRegion) >= 0)? "#d60030" : "#de0d4d" });
+                    	region['mayotte'].attr({ fill: (jQuery.inArray('reunion', donneesParRegion) >= 0 || jQuery.inArray('mayotte', donneesParRegion) >= 0)? "#d60030" : "#de0d4d" });
                 	}
                 	else
             		{
                     	//On l'ajoute
                     	regionsSelectionnes.push(state);
-                    	region[state].attr({ fill: jQuery.inArray(state, donneesParRegion) >= 0 ? "#6f3596" : "#de0d4d" });
+                    	region[state].attr({ fill: jQuery.inArray(state, donneesParRegion) >= 0 ? "#d60030" : "#de0d4d" });
             		}
             	}
                 

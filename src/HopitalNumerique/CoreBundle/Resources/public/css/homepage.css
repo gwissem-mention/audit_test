@@ -181,6 +181,21 @@ div.homepage  {
     background-color: #f98f30;
     color: #fff;
 }
+@media (max-width: 1204px) {
+    #header #bloc_exalead {
+        margin-right: 20px;
+        clear: left;
+    }
+
+    #header #logoHn {
+        float: right !important;
+    }
+}
+@media (max-width: 770px) {
+    #header .loggedUser {
+        margin-top: 20px;
+    }
+}
 #search-help {
     background-color: #fff;
     height: 215px;
@@ -246,16 +261,6 @@ div.homepage  {
     margin: 0px auto;
     padding: 6px 12px;
     font-size: 1em;
-}
-@media (max-width: 1204px) {
-    #header #bloc_exalead {
-        margin-right: 20px;
-        clear: left;
-    }
-
-    #header #logoHn {
-        float: right !important;
-    }
 }
 @media (max-width: 767px) {
     #search-help .frise {
@@ -415,11 +420,6 @@ div.homepage  {
     }
 }
 
-@media (max-width: 770px) {
-    #header .loggedUser {
-        margin-top: 20px;
-    }
-}
 
 /* SIDEBAR */
 #block-last-publications h2 {

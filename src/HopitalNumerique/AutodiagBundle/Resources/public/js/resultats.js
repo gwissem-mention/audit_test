@@ -264,7 +264,7 @@ $(document).ready(function() {
             },
             name  : 'Valeur optimale préconisée par l\'ANAP',
             data  : optimale,
-            color : '#6f3596',
+            color : '#d60030',
             type  : 'line',
             pointPlacement: 'on'
         });
@@ -281,7 +281,7 @@ $(document).ready(function() {
             align: 'left'
         },
         name  : (estSynthese ? 'Valeur moyenne de la synthèse' : 'Votre résultat'),
-        color : '#6f3596',
+        color : '#d60030',
         type  : 'line',
         data  : values,
         pointPlacement: 'on'

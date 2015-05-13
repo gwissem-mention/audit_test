@@ -20,7 +20,7 @@
         #autodiag #chapitres ul li div{padding:5px 0; cursor:pointer;}
         #autodiag #chapitres ul li div p{margin:0;  color:#777777; font-size: 14px; width: 90%; }
         #autodiag #chapitres ul li div .text-muted, #autodiag #chapitres ul li div .text-success, #autodiag #chapitres ul li div .text-warning, #autodiag #chapitres ul li div .text-danger{font-size:10px;float: right;font-weight: bold;}
-        #autodiag #chapitres ul li.stepy-active div,#autodiag #chapitres ul li:hover div{color:#6f3596;}
+        #autodiag #chapitres ul li.stepy-active div,#autodiag #chapitres ul li:hover div{color:#d60030;}
         #autodiag .avancement-global span{font-size:10px;}
         .progress-bar[aria-valuenow="0"] { min-width: 30px; color: #777; background-color: transparent; background-image: none; -webkit-box-shadow: none; box-shadow: none; }
 
@@ -30,17 +30,17 @@
     #autodiag .content .emptyChapter{margin-top:10px;}
     #autodiag .content .chapitreNonConcerne{margin-top:10px; margin-right:10px;}
     #autodiag .content form{clear:both;}
-    #autodiag .content h2{color:#6f3596; text-transform: uppercase;}
+    #autodiag .content h2{color:#d60030; text-transform: uppercase;}
     #autodiag .content h2.prev{font-size: 24px; color:#de0d4d;}
-    #autodiag .content h3{color:#6f3596; margin-bottom: 10px; font-size: 18px; padding-left:10px;}
-    #autodiag .content h3.prev{font-size: 20px; color:#de0d4d;7}
+    #autodiag .content h3{color:#d60030; margin-bottom: 10px; font-size: 18px; padding-left:10px;}
+    #autodiag .content h3.prev{font-size: 20px; color:#de0d4d;}
     #autodiag .content h3 .chapitreNonConcerne{cursor: pointer}
     #autodiag .content .level1{font-size: 14px}
     #autodiag .content .level2{font-size: 13px; margin: 0 0 0 12px;}
-    #autodiag .content .badge-primary{background-color:#6f3596; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
-    #autodiag .content div.remarques-toggle{color:#6f3596; cursor: pointer; margin-top: 7px}
+    #autodiag .content .badge-primary{background-color:#d60030; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
+    #autodiag .content div.remarques-toggle{color:#d60030; cursor: pointer; margin-top: 7px}
     #autodiag .content .radio{float: left; margin-right: 30px;}
-    #autodiag .content .saveBtns{ float:right;margin: 20px auto;x }
+    #autodiag .content .saveBtns{ float:right;margin: 20px auto;}
     #autodiag .content .saveBtns .btn{ text-align: center}
     #autodiag .content .sous-chapitre label{padding-left:40px;}
     #autodiag .content .sous-chapitre .radio label{padding-left:5px;}
@@ -71,7 +71,7 @@
         #resultats #chapitres h3{ text-transform: uppercase;}
         #resultats #chapitres h3.prev{font-size: 24px; color:#de0d4d;}
         #resultats #chapitres h4{ font-size: 18px}
-        #resultats #chapitres h4.prev{font-size: 20px; color:#de0d4d;7}
+        #resultats #chapitres h4.prev{font-size: 20px; color:#de0d4d;}
         #resultats #chapitres .synthese{font-style: italic; font-size: 12px}
         #resultats #chapitres .question{font-weight: bold; margin-bottom: 0}
         #resultats #chapitres .sous-chapitre .question{padding-left:40px;}
@@ -119,7 +119,7 @@
         #resultats #reponses h3{ text-transform: uppercase;}
         #resultats #reponses h3.prev{font-size: 24px; color:#de0d4d;}
         #resultats #reponses h4{ font-size: 18px}
-        #resultats #reponses h4.prev{font-size: 20px; color:#de0d4d;7}
+        #resultats #reponses h4.prev{font-size: 20px; color:#de0d4d;}
 
 /* Partie Compte HN */
     .create{margin-right: 18px;margin-top: 10px;}

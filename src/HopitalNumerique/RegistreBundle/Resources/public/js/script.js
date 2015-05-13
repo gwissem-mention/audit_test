@@ -14,7 +14,7 @@ $(document).bind("carteReady", function(){
     if ( selectedRegion ){
         $('#canvas_france a').each(function(key, val){
             if( $(this).attr('title') == selectedRegion ){
-                $(this).find('path').attr('fill', '#6f3596');
+                $(this).find('path').attr('fill', '#d60030');
             }
         });
     }

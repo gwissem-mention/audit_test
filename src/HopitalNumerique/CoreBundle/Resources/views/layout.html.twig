@@ -75,7 +75,7 @@
     <body>
         {% include 'NodevoCookieBundle:Cookie:index.html.twig' %}
         <div class="row" id="body">
-            <div id="header">
+            {#<div id="header">
                 <a href="http://www.anap.fr/" target="_blank">
                     <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
                 </a>
@@ -123,6 +123,63 @@
                 </div>
 
                 <div class="common-sprite common-sprite-header"></div>
+            </div>#}
+            <div id="header" class="col-md-12">
+                <a href="/" target="_blank" id="logo-header">
+                    <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
+                </a>
+                <div id="titre" class="pull-left">
+                    <a href="{{path('hopital_numerique_homepage')}}" class="h1">Mon Hôpital Numérique</a>
+                    <div class="h2">faciliter l'usage du numérique au service des soins</div>
+                </div>
+                <div id="bloc_exalead" class="pull-left">
+                    <div id="recherche_textuelle_group">
+                     <span class="bt-recherche pull-right">
+                        <a class="infos btn btn-orange" href="/recherche-par-referencement?type=avancee" id="search-avance-header-home">Recherche avancée</a>
+                        <a class="infos btn btn-rose" href="/recherche-par-parcours">Parcours guidé</a>
+                     </span>
+                    </div>
+                </div>
+
+                <div class="loggedUser pull-right">
+                    <div class="connexion">
+                        {% if app.user == false %}
+                            <a href="{{path('account_login')}}"><i class="fa fa-user" ></i>Se connecter</a>
+                        {% endif %}
+                    </div>
+                    {% if app.user %}
+                        {% if app.user.nom or app.user.prenom %}
+                            <p>
+                                <i class="fa fa-user" ></i> {{ app.user.prenom|capitalize }}
+                                <span class="nom">{{ app.user.nom|capitalize }}</span>
+                            </p>
+                        {% else %}
+                            <p>
+                                <i class="fa fa-user" ></i> {{ app.user.username|capitalize }}
+                            </p>
+                        {% endif %}
+                        <div class="connexion">
+                            <a href="{{path('account_logout')}}">Déconnexion</a>
+                        </div>
+                        {#<a class="infos btn btn-rose" href="{{path('hopital_numerique_account_homepage')}}">Tableau de bord</a>#}
+                    {% else %}
+                        <a class="infos btn btn-rose" href="{{path('hopital_numerique_user_inscription')}}">Créer un compte</a>
+                    {% endif %}
+                </div>
+                <div id="logoHn" class="pull-left">
+                    {#<a href="http://www.anap.fr/" target="_blank">
+                        <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-anap-small.jpg')}}" alt="ANAP" />
+                    </a>#}
+                    <a href="http://www.sante.gouv.fr/le-programme-hopital-numerique.html" targt="_blank">
+                        <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn-small.jpg')}}" alt="HOPITAL NUMERIQUE" />
+                    </a>
+                </div>
+                {# <p class="violet pull-right align-right">
+                    Ce projet s’inscrit dans le cadre du programme
+                </p>#}
+
+                <div class="common-sprite common-sprite-header"></div>
+                <div class="clearfix"></div>
             </div>
             <div class="col-md-12" id="content">
                 {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
