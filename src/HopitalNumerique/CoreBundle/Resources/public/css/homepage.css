@@ -54,7 +54,7 @@ div.homepage  {
     margin-right: 30px;
 }
 #header #titre .h2 {
-    font-size: 1em;
+    font-size: 0.95em;
     margin-top: 3px;
     color: #000;
     margin-bottom: 0px;
@@ -359,19 +359,20 @@ div.homepage  {
     left: 90px;
 }
 #slide .block-text-slide-1 .text-content {
-    background-color: rgba(0, 0, 0, 0.55);
+    background-color: rgba(0, 0, 0, 0.65);
     color: #fff;
     padding: 1px 20px;
     margin-bottom: 10px;
 }
 #slide .text-content h2 {
-    color:#431C6F;
+    color:#fff;
     text-transform: uppercase;
     font-weight: bold;
     font-size: 1.5em;
 }
 #slide .text-content {
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(0, 0, 0, 0.65);
+    color: #fff;
     padding:1px 20px;
     margin-bottom: 10px;
 }
@@ -386,11 +387,13 @@ div.homepage  {
 @media (max-width:550px) {
     #slide .block-text-slide-3 {
         position: relative;
+        max-width: 75%;
         top: -10px;
         left: 10px;
     }
     #slide .block-text-slide-2 {
         position: relative;
+        max-width: 75%;
         top: -10px;
         left: 10px;
     }
@@ -402,13 +405,8 @@ div.homepage  {
         font-size:1em;
     }
     #slide .block-text-slide-1 .text-content {
-        background-color: rgba(255,255,255,0.8);
-        color: #333;
         padding:1px 20px;
         margin-bottom: 10px;
-    }
-    #slide .block-text-slide-1 h2 {
-        color: #431C6F;
     }
     #slide .btn-rose {
         margin-left: 20px;
@@ -707,7 +705,7 @@ div.homepage  {
     font-size:1em;
     overflow: hidden;
     height:0;
-    line-height: 174px;
+    line-height: 176px;
 }
 .block-home-menu.forum .block-bottom {
     background-color: #8e1675;
