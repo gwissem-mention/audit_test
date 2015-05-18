@@ -15,12 +15,12 @@ $(document).ready(function(){
             }
         ]
     });
-    $('.block-home-menu .block-bottom').hover(
-            function() {
-                $(this).find('p').animate( {'height':"166px", 'display':'block'}, { queue:false, duration:500 });
-            },
+    $('.block-home-menu').hover(
             function() {
                 $(this).find('p').animate( {'height':"0px", 'display':'none'}, { queue:false, duration:500 });
+            },
+            function() {
+                $(this).find('p').animate( {'height':"166px", 'display':'block'}, { queue:false, duration:500 });
             }
     );
 
@@ -39,10 +39,10 @@ $(document).ready(function(){
 
     $('#block-carte-france').hover(
         function() {
-            $('.carte-france').stop().fadeOut(200);
+            $('.carte-france-hover').stop().fadeOut(200);
         },
         function() {
-            $('.carte-france').stop().fadeIn(200);
+            $('.carte-france-hover').stop().fadeIn(200);
         }
     )
 });
