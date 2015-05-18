@@ -16,7 +16,7 @@ class ContenuRepository extends EntityRepository
      *
      * @return array
      */
-    public function getArboForObjet( $id )
+    public function getArboForObjet( $id, $domaineIds = array() )
     {
         $qb = $this->_em->createQueryBuilder()
                         ->select('con')
@@ -24,9 +24,20 @@ class ContenuRepository extends EntityRepository
                         ->leftJoin('con.objet','obj');
 
         if( is_array($id) )
+        {
             $qb->where('obj.id IN (:id)');
+        }
         else
+        {
             $qb->where('obj.id = :id');
+        }
+
+        if(count($domaineIds) !== 0)
+        {
+            $qb->leftJoin('obj.domaines', 'domaine')
+                ->andWhere('domaine.id IN (:domainesId)')
+                ->setParameter('domainesId', $domaineIds);
+        }
 
         $qb->orderBy('con.parent, con.order')
            ->setParameter('id', $id);

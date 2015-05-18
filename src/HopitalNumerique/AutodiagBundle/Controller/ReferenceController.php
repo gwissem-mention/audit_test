@@ -25,7 +25,9 @@ class ReferenceController extends Controller
 
         $titre = $chapitre->getTitle();
         if( $chapitre->getCode() != '' )
+        {
             $titre = $chapitre->getCode() . '. ' . $chapitre->getTitle();
+        }
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Reference:manage.html.twig', array(
             'references' => $references,
@@ -63,7 +65,7 @@ class ReferenceController extends Controller
         $this->get('hopitalnumerique_autodiag.manager.refchapitre')->save( $refToSave );
 
         //get Chapitre Note
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($chapitre->getOutil()->getDomainesId());
         $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $chapitre->getReferences(), $refsPonderees );
 
         return new Response('{"success":true, "note":"' . number_format($note, 2, ',', ' ') . '"}', 200);
@@ -120,7 +122,7 @@ class ReferenceController extends Controller
         $this->get('hopitalnumerique_autodiag.manager.refquestion')->save( $refToSave );
 
         //get question Note
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($question->getChapitre()->getOutil()->getDomainesId());
         $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $question->getReferences(), $refsPonderees );
 
         return new Response('{"success":true, "note":"' . number_format($note, 2, ',', ' ') . '"}', 200);

@@ -45,10 +45,10 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false )
+    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = array() )
     {
         //get All References, and convert to ArrayCollection
-        $datas = new ArrayCollection( $this->getRepository()->getArbo( $unlockedOnly, $fromDictionnaire, $fromRecherche ) );
+        $datas = new ArrayCollection( $this->getRepository()->getArbo( $unlockedOnly, $fromDictionnaire, $fromRecherche, $domaineIds ) );
 
         //Récupère uniquement les premiers parents
         $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );
@@ -87,9 +87,9 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    public function getArboFormat( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false )
+    public function getArboFormat( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false , $domaineIds = array() )
     {
-        $arbo = $this->getArbo($unlockedOnly, $fromDictionnaire, $fromRecherche );
+        $arbo = $this->getArbo($unlockedOnly, $fromDictionnaire, $fromRecherche, $domaineIds );
         return $this->formatArbo($arbo);
     }
     
@@ -299,9 +299,15 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    public function getReferencesPonderees()
+    public function getReferencesPonderees( $domaineIds = array() )
     {
-        $references = $this->getArboFormat(false, false, true);
+        $references = $this->getArboFormat( false, false, true, $domaineIds);
+
+        if(!array_key_exists('CATEGORIES_RECHERCHE', $references))
+        {
+            return array();
+        }
+        
         $references = $references['CATEGORIES_RECHERCHE'];
         $results    = array();
 

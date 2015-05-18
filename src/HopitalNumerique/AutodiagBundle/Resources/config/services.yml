@@ -69,7 +69,7 @@ services:
     #Chapitres
     hopitalnumerique_autodiag.manager.chapitre:
         class: %hopitalnumerique_autodiag.manager.chapitre.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.resultat"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.resultat", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
@@ -82,7 +82,7 @@ services:
     #Questions
     hopitalnumerique_autodiag.manager.question:
         class: %hopitalnumerique_autodiag.manager.question.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 

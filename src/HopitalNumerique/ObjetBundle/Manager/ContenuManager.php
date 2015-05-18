@@ -59,9 +59,9 @@ class ContenuManager extends BaseManager
      *
      * @return array
      */
-    public function getArboForObjet( $id )
+    public function getArboForObjet( $id, $domaineIds = array() )
     {
-        $datas = new ArrayCollection( $this->getRepository()->getArboForObjet( $id )->getQuery()->getResult() );
+        $datas = new ArrayCollection( $this->getRepository()->getArboForObjet( $id, $domaineIds )->getQuery()->getResult() );
 
         //Récupère uniquement les premiers parents
         $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );

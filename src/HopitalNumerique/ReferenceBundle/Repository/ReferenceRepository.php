@@ -15,22 +15,36 @@ class ReferenceRepository extends EntityRepository
      *
      * @return array
      */
-    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false )
+    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = array() )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref.id, ref.libelle, ref.code, par.id as parent, ref.order')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->leftJoin('ref.parent','par')
-            ->orderBy('ref.parent, ref.code, ref.order');
+            ->leftJoin('ref.parent','par');
+
+        if(count($domaineIds) !== 0)
+        {
+            $qb->leftJoin('ref.domaines', 'domaine')
+                ->andWhere('domaine.id IN (:domainesId)')
+                ->setParameter('domainesId', $domaineIds);
+        }
             
         if( $unlockedOnly )
+        {
             $qb->andWhere('ref.lock = 0');
+        }
 
         if( $fromDictionnaire )
+        {
             $qb->andWhere('ref.dictionnaire = 1');
+        }
 
         if( $fromRecherche )
+        {
             $qb->andWhere('ref.recherche = 1');
+        }
+
+        $qb->orderBy('ref.parent, ref.code, ref.order');
 
         return $qb->getQuery()->getResult();
     }

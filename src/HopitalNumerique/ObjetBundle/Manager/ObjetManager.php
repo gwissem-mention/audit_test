@@ -313,10 +313,13 @@ class ObjetManager extends BaseManager
      */
     public function unlock( $objet )
     {
-        $objet->setLock( 0 );
-        $objet->setLockedBy( null );
+        if(!is_null($objet))
+        {
+            $objet->setLock( 0 );
+            $objet->setLockedBy( null );
 
-        $this->save( $objet );
+            $this->save( $objet );
+        }
     }
 
     /**
@@ -329,8 +332,6 @@ class ObjetManager extends BaseManager
      */
     public function getReferences($objet, $references)
     {
-        //TODO : récupèrer les references accèssible à l'objet uniquement
-        $domainesObjet      = $objet->getDomaines();
         $selectedReferences = $objet->getReferences();
 
         //applique les références 
@@ -690,7 +691,9 @@ class ObjetManager extends BaseManager
             $id = $reference->getReference()->getId();
 
             if( isset($ponderations[ $id ]) )
+            {
                 $note += $ponderations[ $id ]['poids'];
+            }
         }
         
         return $note;

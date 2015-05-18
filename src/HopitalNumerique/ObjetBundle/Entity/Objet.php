@@ -1694,4 +1694,21 @@ class Objet
     {
         return $this->domaines;
     }
+    
+    /**
+     * Get les ids des domaines concerné par l'user
+     *
+     * @return array[integer]
+     */
+    public function getDomainesId()
+    {
+        $domainesId = array();
+
+        foreach ($this->domaines as $domaine) 
+        {
+            $domainesId[] = $domaine->getId();
+        }
+
+        return $domainesId;
+    }
 }
