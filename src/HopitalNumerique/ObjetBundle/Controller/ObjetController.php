@@ -52,8 +52,10 @@ class ObjetController extends Controller
     {
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->createEmpty();
 
-        if( $type == 2 )
-            $objet->setArticle(true);
+        if( $type == 2 ) {
+          $objet->setArticle(true);
+        }
+
 
         $options = array(
             'toRef' => 0,

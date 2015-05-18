@@ -32,6 +32,7 @@
     "highcharts.com": "4.0.0",
     "qtip2": "2.2.0",
     "gridster": "0.5.2",
-    "bootstrap-multiselect": "~0.9"
+    "bootstrap-multiselect": "~0.9",
+    "slick.js": "*"
   }
 }

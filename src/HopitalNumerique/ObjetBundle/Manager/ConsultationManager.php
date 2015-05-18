@@ -173,4 +173,13 @@ class ConsultationManager extends BaseManager
         
         return $productions;
     }
+
+  /**
+   * Get nombre consultations
+   *
+   * @return int
+   */
+  public function getNbConsultations() {
+    return $this->getRepository()->getNbConsultations()->getQuery()->getSingleScalarResult();
+  }
 }

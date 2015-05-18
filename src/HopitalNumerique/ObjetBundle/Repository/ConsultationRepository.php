@@ -27,4 +27,17 @@ class ConsultationRepository extends EntityRepository
                     ->setParameter('user', $user )
                     ->orderBy('clt.dateLastConsulted', 'DESC');
     }
+
+    /**
+     * Get nombre consultations
+     *
+     * @return int
+     */
+    public function getNbConsultations() {
+      $qb = $this->_em->createQueryBuilder();
+
+      $qb->select('COUNT(clt)')
+        ->from('\HopitalNumerique\ObjetBundle\Entity\Consultation', 'clt');
+      return $qb;
+    }
 }

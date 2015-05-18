@@ -10,12 +10,12 @@
 #resultat-detail h3{margin-left:30px;}
 
 /* Affichage de la liste des questions/réponses d'un outil */
-#listeChapitres h2{background: #cfcfcf; margin-top: 20px; padding: 5px 20px; color: #6f3596}
+#listeChapitres h2{background: #cfcfcf; margin-top: 20px; padding: 5px 20px; color: #d60030}
 #listeChapitres h2 span{color:#4d4d4d; font-size: 20px; padding:10px 0;}
 #listeChapitres .sous-chapitre .row{padding-left:20px;}
 #listeChapitres .question{font-weight: bold; margin-left: 5px}
 #listeChapitres .question span{font-weight: normal;}
-#listeChapitres h3{background: #efefef; margin-top: 20px; padding: 5px 20px;color: #6f3596}
+#listeChapitres h3{background: #efefef; margin-top: 20px; padding: 5px 20px;color: #d60030}
 #listeChapitres h3 span{color:#4d4d4d; font-size: 17px; padding:5px 0;}
 
 /* Affichage des réponses */
