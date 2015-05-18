@@ -248,4 +248,22 @@ class UserManager extends BaseManager
     {
         return $this->getRepository()->getUsersByQuestionnaire( $idQuestionnaire )->getQuery()->getResult();
     }
+
+  /**
+   * Récupère tous les utilisateurs (tous les rôles)
+   *
+   * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+   */
+  public function getAllUsers() {
+    return $this->getRepository()->getAllUsers()->getQuery()->getResult();
+  }
+
+  /**
+   * Récupère le nombre d'établissements connectés
+   *
+   * @return int
+   */
+  public function getNbEtablissements() {
+    return $this->getRepository()->getNbEtablissements()->getQuery()->getSingleScalarResult();
+  }
 }

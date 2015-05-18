@@ -1180,7 +1180,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2015-04-16 23:14:14"
+            "time": "2015-04-15 14:50:07"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -1659,7 +1659,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "Knplabs",
+                    "name": "KnpLabs",
                     "homepage": "http://knplabs.com"
                 },
                 {

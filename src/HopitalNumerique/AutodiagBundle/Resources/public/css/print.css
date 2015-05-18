@@ -13,7 +13,7 @@ img{ width:auto !important }
 #resultats #graphiques #radarChart{width: 650px; height: 535px; margin: auto!important}
 #resultats #graphiques .panel{box-shadow: none !important; border-radius: 0}
 #resultats #graphiques .panel-default{height:90px}
-#resultats #graphiques .panel h3.toPrint{color:#6f3596; display: block; margin-bottom: 10px; font-size: 14px; margin-top: 0 }
+#resultats #graphiques .panel h3.toPrint{color:#d60030; display: block; margin-bottom: 10px; font-size: 14px; margin-top: 0 }
 #resultats #graphiques .panel .panel-heading{display: none}
 #resultats #graphiques .tableContainer{overflow:visible;}
 

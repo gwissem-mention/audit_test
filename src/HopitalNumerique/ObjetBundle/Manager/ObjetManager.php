@@ -237,6 +237,18 @@ class ObjetManager extends BaseManager
     {
         return $this->getRepository()->getObjetsByTypes( $types, $limit )->getQuery()->getResult();
     }
+
+    /**
+     * Retourne la liste des objets selon le/les types et trié par nombre de vu
+     *
+     * @param array $types Les types à filtrer
+     *
+     * @return array
+     */
+    public function getObjetsByNbVue( $types, $limit = 0 )
+    {
+      return $this->getRepository()->getObjetsByNbVue( $types, $limit )->getQuery()->getResult();
+    }
     
     /**
      * Retourne l'ensemble des productions actives
@@ -829,5 +841,49 @@ class ObjetManager extends BaseManager
         } else {
             return false;
         }
+    }
+
+    /**
+     * Enregistre l'entitée
+     *
+     * @param Entity|array $entity L'entitée
+     *
+     * @return empty
+     */
+    public function save( $entity )
+    {
+
+      if( is_array($entity) ){
+        foreach( $entity as $one )
+          if($one->getAlaune() == 1) {
+            $this->setAllAlaUneFalse($one->getId());
+          }
+          $this->_em->persist( $one );
+      }else {
+
+        if($entity->getAlaune() == 1) {
+          $this->setAllAlaUneFalse($entity->getId());
+        }
+
+        $this->_em->persist( $entity );
+      }
+
+
+      $this->_em->flush();
+    }
+
+    /**
+     * Set le champ A la une à false pour tous les contenus
+     */
+    public function setAllAlaUneFalse($id) {
+      return $this->getRepository()->setAllAlaUneFalse($id)->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne l'article à la une
+     * @return \HopitalNumerique\ObjetBundle\Entity\Objet[]
+     */
+    public function getArticleAlaUne() {
+      return $this->getRepository()->getArticleAlaUne()->getQuery()->getResult();
     }
 }

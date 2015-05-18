@@ -2,13 +2,7 @@
 
 {% block linkElement %}
     {% import 'knp_menu.html.twig' as knp_menu %}
-    {% if item.attribute('icon') %}
-        <a {{ knp_menu.attributes(item.linkAttributes) }} href="{{ item.uri }}">
-            <i class="{{ item.attribute('icon') }}" ></i>
-        </a>
-    {% else %}
         <a {{ knp_menu.attributes(item.linkAttributes) }} href="{{ item.uri }}">
             {{ block('spanElement') }}
         </a>
-    {% endif %}
 {% endblock %}
