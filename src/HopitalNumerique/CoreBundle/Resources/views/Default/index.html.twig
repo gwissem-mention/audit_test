@@ -211,11 +211,11 @@
                 <div id="block-chiffres-cles">
                     <div class="col-md-4 center">
                         <span class="chiffre-cle">{{ nb_eta }}</span>
-                        <p>Établissements connectés</p>
+                        <p>Établissements inscrits</p>
                     </div>
                     <div class="col-md-4 center">
                         <span class="chiffre-cle">{{ nb_consultations }}</span>
-                        <p>Publications consultées</p>
+                        <p>Vues de publications</p>
                     </div>
                     <div class="col-md-4 center">
                         <span class="chiffre-cle">{{ nb_fils }}</span>
@@ -251,14 +251,14 @@
                 {% endif %}
                 <div class="clearfix"></div>
                 <div id="block-carte-france">
-                    <div class="carte-france">
-                        <h2>PRÈS DE CHEZ VOUS</h2>
-                        <img src="{{asset('bundles/hopitalnumeriquecore/img/carte-france.png')}}" alt="Carte de France"/>
-                    </div>
                     <div class="carte-france-hover">
                         <h2><a href="{{ path('hopital_numerique_registre_homepage') }}">Vous êtes à la recherche<br /><strong>d'un ambassadeur dans votre région ?</strong></a></h2>
                         <a href="{{ path('hopital_numerique_registre_homepage') }}"><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-ambassadeurs.png')}}" alt="Carte de France"/></a>
 
+                    </div>
+                    <div class="carte-france">
+                        <h2><a href="{{ path('hopital_numerique_registre_homepage') }}">PRÈS DE CHEZ VOUS</a></h2>
+                        <a href="{{ path('hopital_numerique_registre_homepage') }}"><img src="{{asset('bundles/hopitalnumeriquecore/img/carte-france.png')}}" alt="Carte de France"/></a>
                     </div>
                 </div>
             </div>
@@ -346,8 +346,9 @@
                         {% for actu in actualites %}
                             {% if loop.first %}
                                 <div class="actu col-md-12">
-                                    <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
                                     <span><b>Le {{actu.date|date('d/m/Y')}} | {{actu.types}}</b></span>
+                                    <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
+
                                     <p>
                                         {% set resume = actu.resume %}
                                         {{actu.resume|truncate(350, true, '...')|parsePublication|raw}}

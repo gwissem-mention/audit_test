@@ -449,8 +449,8 @@ div.homepage  {
 
 #block-chiffres-cles {
     background-color: #fff;
-    padding:5px 0px 0px;
-    border-top: solid 5px #d60030;
+    padding:4px 0px 0px;
+    border-top: solid 4px #d60030;
 }
 .center {
     text-align: center;
@@ -473,10 +473,10 @@ div.homepage  {
     overflow-y:scroll;
 }
 #block-fil-discussion ul {
-    padding:0px;
+    padding-left:12px;
 }
 #block-fil-discussion ul li {
-    list-style: none;
+    color: #d60030;
     margin-bottom: 10px;
     border-bottom: dotted 1px #fff;
     font-size: 0.9em;
@@ -525,11 +525,17 @@ div.homepage  {
     font-size: 1em;
     color : #060606;
 }
-.carte-france-hover h2 a {
+.carte-france-hover h2 a{
     text-align: center;
     margin: 0px;
     font-size: 1em;
     color : #060606;
+}
+.carte-france h2 a {
+    text-align: center;
+    margin: 0px;
+    font-size: 1em;
+    color : #FFF;
 }
 .carte-france-hover h2 a:hover {
     text-decoration: none;
@@ -704,11 +710,11 @@ div.homepage  {
     margin:0;
     font-size:1em;
     overflow: hidden;
-    height:0;
+    height:166px;
     line-height: 176px;
 }
 .block-home-menu.forum .block-bottom {
-    background-color: #8e1675;
+    background-color: #F98F30;
 }
 .block-home-menu.anap .block-bottom {
     background-color: #d60030;

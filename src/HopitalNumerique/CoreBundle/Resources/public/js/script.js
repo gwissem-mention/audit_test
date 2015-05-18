@@ -39,5 +39,5 @@ $(document).ready(function() {
 /*Recalcule la taille du block header slider en fonction de la taille de la fenêtre*/
 function resize_header() {
     $('#slide .slick-slide').height($(window).height()-$('#header').outerHeight()-$('#menu-container').outerHeight()-$('#search-help').outerHeight());
-    $('#block-fil-discussion').outerHeight($(window).height()-$('#header').outerHeight()-$('#menu-container').outerHeight()-$('#block-chiffres-cles').outerHeight()-$('#block-last-publications').outerHeight()-$('#block-carte-france').height());
+    $('#block-fil-discussion').outerHeight($(window).height()-$('#header').outerHeight()-$('#menu-container').outerHeight()-$('#block-chiffres-cles').outerHeight()-$('#block-last-publications').outerHeight()-$('#block-carte-france').height()-1);
 }
