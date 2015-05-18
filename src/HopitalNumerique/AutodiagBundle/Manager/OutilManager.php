@@ -82,7 +82,7 @@ class OutilManager extends BaseManager
 
             foreach ($outil->getDomaines() as $domaine) 
             {
-                $object['domainesNom'] = $object['domainesNom'] === '' ? $domaine->getNom() : $object['domainesNom'] . '|' . $domaine->getNom();
+                $object['domainesNom'] = $object['domainesNom'] === '' ? $domaine->getNom() : $object['domainesNom'] . ';' . $domaine->getNom();
             }
 
             //do some maths
