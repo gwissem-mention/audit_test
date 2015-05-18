@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\AutodiagBundle\Manager;
 
+use Doctrine\ORM\EntityManager;
+use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Nodevo\ToolsBundle\Tools\Chaine;
@@ -12,6 +14,20 @@ use Nodevo\ToolsBundle\Tools\Chaine;
 class OutilManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Outil';
+    protected $_userManager;
+
+    /**
+     * Constructeur du manager gérant les références
+     *
+     * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
+     * @return void
+     */
+    public function __construct(EntityManager $entityManager, UserManager $userManager)
+    {
+        parent::__construct($entityManager);
+
+        $this->_userManager = $userManager;
+    }
 
     /**
      * Sauvegarde l'outil :gère les mises en forme et exceptions
@@ -47,7 +63,9 @@ class OutilManager extends BaseManager
      */
     public function getDatasForGrid( \StdClass $condition = null )
     {
-        $outils  = $this->findAllOrdered('title','asc');
+        $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
+        $outils = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+
         $results = array();
 
         foreach($outils as $outil) {
@@ -60,19 +78,32 @@ class OutilManager extends BaseManager
             $object['nbQuest']      = 0;
             $object['nbForm']       = 0;
             $object['nbFormValid']  = 0;
+            $object['domainesNom']  = '';
+
+            foreach ($outil->getDomaines() as $domaine) 
+            {
+                $object['domainesNom'] = $object['domainesNom'] === '' ? $domaine->getNom() : $object['domainesNom'] . '|' . $domaine->getNom();
+            }
 
             //do some maths
             $chapitres = $outil->getChapitres();
             $object['nbChap'] = count($chapitres);
             foreach($chapitres as $chapitre)
+            {
                 $object['nbQuest'] += count($chapitre->getQuestions());
+            }
 
             $resultats = $outil->getResultats();
-            foreach($resultats as $resultat) {
+            foreach($resultats as $resultat) 
+            {
                 if( is_null($resultat->getDateValidation()) )
+                {
                     $object['nbForm']++;
+                }
                 else
+                {
                     $object['nbFormValid']++;
+                }
             }
 
             //set result to big array
