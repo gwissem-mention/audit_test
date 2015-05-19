@@ -110,6 +110,22 @@ class ReferenceRepository extends EntityRepository
         return $qb;
     }
 
+    public function getReferencesUserConnectedForForm( $userId )
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('ref')
+            ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
+            ->leftJoin('ref.domaines','domaine')
+            ->leftJoin('domaine.users','user')
+            ->where($qb->expr()->orX(
+                $qb->expr()->eq('user.id', ':userId'),
+                $qb->expr()->isNull('domaine.id')
+            ))
+            ->setParameter('userId', $userId);
+            
+        return $qb;
+    }
+
 
 
     /**

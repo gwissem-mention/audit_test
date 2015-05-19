@@ -13,7 +13,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * RechercheParcoursGestion
  *
  * @ORM\Table(name="hn_recherche_recherche_parcours_gestion")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursGestionRepository")
  */
 class RechercheParcoursGestion
 {
@@ -46,15 +46,30 @@ class RechercheParcoursGestion
      * @var integer
      * 
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
-     * @ORM\JoinTable(name="hn_module_connaissances",
-     *      joinColumns={ @ORM\JoinColumn(name="mod_id", referencedColumnName="mod_id")},
+     * @ORM\JoinTable(name="hn_recherche_recherche_parcours_gestion_reference_parente",
+     *      joinColumns={ @ORM\JoinColumn(name="rrpg_id", referencedColumnName="rrpg_id")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
      * )
      * @ORM\OrderBy({"order" = "ASC"})
-     * 
-     * @GRID\Column(field="connaissances.libelle")
      */
-    protected $connaissances;
+    protected $referencesParentes;
+
+    /**
+     * @var integer
+     * 
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinTable(name="hn_recherche_recherche_parcours_gestion_reference_ventilation",
+     *      joinColumns={ @ORM\JoinColumn(name="rrpg_id", referencedColumnName="rrpg_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
+     * )
+     * @ORM\OrderBy({"order" = "ASC"})
+     */
+    protected $referencesVentilations;
+
+    /**
+     * @ORM\OneToMany(targetEntity="RechercheParcours", mappedBy="recherchesParcoursGestion")
+     */
+    protected $rechercheParcours;
 
     /**
      * Constructor
@@ -145,5 +160,104 @@ class RechercheParcoursGestion
         }
 
         return $domainesId;
+    }
+
+    /**
+     * Add referencesParentes
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referencesParentes
+     * @return RechercheParcoursGestion
+     */
+    public function addReferencesParente(\HopitalNumerique\ReferenceBundle\Entity\Reference $referencesParentes)
+    {
+        $this->referencesParentes[] = $referencesParentes;
+
+        return $this;
+    }
+
+    /**
+     * Remove referencesParentes
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referencesParentes
+     */
+    public function removeReferencesParente(\HopitalNumerique\ReferenceBundle\Entity\Reference $referencesParentes)
+    {
+        $this->referencesParentes->removeElement($referencesParentes);
+    }
+
+    /**
+     * Get referencesParentes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReferencesParentes()
+    {
+        return $this->referencesParentes;
+    }
+
+    /**
+     * Add referencesVentilations
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referencesVentilations
+     * @return RechercheParcoursGestion
+     */
+    public function addReferencesVentilation(\HopitalNumerique\ReferenceBundle\Entity\Reference $referencesVentilations)
+    {
+        $this->referencesVentilations[] = $referencesVentilations;
+
+        return $this;
+    }
+
+    /**
+     * Remove referencesVentilations
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referencesVentilations
+     */
+    public function removeReferencesVentilation(\HopitalNumerique\ReferenceBundle\Entity\Reference $referencesVentilations)
+    {
+        $this->referencesVentilations->removeElement($referencesVentilations);
+    }
+
+    /**
+     * Get referencesVentilations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReferencesVentilations()
+    {
+        return $this->referencesVentilations;
+    }
+
+    /**
+     * Add rechercheParcours
+     *
+     * @param \HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours $rechercheParcours
+     * @return RechercheParcoursGestion
+     */
+    public function addRechercheParcour(\HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours $rechercheParcours)
+    {
+        $this->rechercheParcours[] = $rechercheParcours;
+
+        return $this;
+    }
+
+    /**
+     * Remove rechercheParcours
+     *
+     * @param \HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours $rechercheParcours
+     */
+    public function removeRechercheParcour(\HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours $rechercheParcours)
+    {
+        $this->rechercheParcours->removeElement($rechercheParcours);
+    }
+
+    /**
+     * Get rechercheParcours
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRechercheParcours()
+    {
+        return $this->rechercheParcours;
     }
 }

@@ -109,6 +109,24 @@ class RechercheParcoursGestionController extends Controller
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->save($rechercheparcoursgestion);
+
+                $rechercheParcoursFilsNew = array();
+                $rechercheParcoursFils    = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->getRechercheParcoursFils($rechercheparcoursgestion);
+                
+                foreach ($rechercheparcoursgestion->getReferencesParentes() as $refParente) 
+                {
+                    if(!array_key_exists($refParente->getId(), $rechercheParcoursFils))
+                    {
+                        $rechercheParcours = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->createEmpty();
+                        $rechercheParcours->setReference($refParente);
+                        $rechercheParcours->setRecherchesParcoursGestion($rechercheparcoursgestion);
+                        $rechercheParcours->setOrder(count($rechercheParcoursFilsNew) + 1);
+
+                        $rechercheParcoursFilsNew[] = $rechercheParcours; 
+                    }
+                }
+
+                $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->save($rechercheParcoursFilsNew);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'RechercheParcoursGestion ' . ($new ? 'ajouté.' : 'mis à jour.') ); 

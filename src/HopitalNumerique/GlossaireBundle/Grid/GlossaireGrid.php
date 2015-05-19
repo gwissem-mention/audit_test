@@ -16,11 +16,7 @@ class GlossaireGrid extends Grid implements GridInterface
      * Définie la config spécifique au grid Glossaire.
      */
     public function setConfig()
-    {
-        // $this->setSource( 'HopitalNumeriqueGlossaireBundle:Glossaire' );
-        // $this->setNoDataMessage('Aucun élément du glossaire à afficher.');
-        // $this->setDefaultOrder('mot', 'ASC');
-        
+    {   
         $this->setNoDataMessage('Aucun élément du glossaire à afficher.');
         $this->setSource( 'hopitalnumerique_glossaire.manager.glossaire' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
@@ -55,7 +51,6 @@ class GlossaireGrid extends Grid implements GridInterface
     {
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_glossaire_glossaire_show' ) );
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_glossaire_glossaire_edit' ) );
-        //$this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_glossaire_glossaire_delete' ) );
     }
 
     /**

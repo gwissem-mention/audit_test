@@ -24,19 +24,7 @@ class RechercheParcoursDetailsController extends Controller
         }
 
         //Création du tableau des étapes pour lié un détail
-        $etapes = array();
-        if(!in_array(234, $etapesSelected))
-            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 234));
-        if(!in_array(237, $etapesSelected))
-            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 237));
-        if(!in_array(235, $etapesSelected))
-            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 235));
-        if(!in_array(236, $etapesSelected))
-            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 236));
-        if(!in_array(233, $etapesSelected))
-            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 233));
-        if(!in_array(226, $etapesSelected))
-            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 226));
+        $etapes = $rechercheParcours->getRecherchesParcoursGestion()->getReferencesVentilations();
 
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:index.html.twig', array(
                 'etapes'            => $etapes,

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
 
 /**
  * Manager de l'entité Requete.
@@ -29,5 +30,26 @@ class RechercheParcoursManager extends BaseManager
             $rechercheParcours->setOrder( $order );
             $order++;
         }
+    }
+
+    /**
+     * Récupération de toutes les instances de rechercheParcours fils de rechercheParcoursGestion passé en param ordonnée par leur id
+     *
+     * @param RechercheParcoursGestion $rechercheParcoursGestion [description]
+     *
+     * @return [type]
+     */
+    public function getRechercheParcoursFils(RechercheParcoursGestion $rechercheParcoursGestion)
+    {
+        $results = array();
+
+        $rechercheParcours = $this->findBy(array('recherchesParcoursGestion' => $rechercheParcoursGestion));
+
+        foreach ($rechercheParcours as $recherche) 
+        {
+            $results[$recherche->getReference()->getId()] = $recherche;
+        }
+
+        return $results;
     }
 }
