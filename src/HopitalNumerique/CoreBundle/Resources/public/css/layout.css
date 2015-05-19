@@ -85,28 +85,28 @@ h3{font-size: 20px}
         color: #000;
         margin-bottom: 0px;
     }
-    #header #bloc_exalead {
+    #header #bloc_exalead_header {
         margin-top: 18px;
         margin-right:20px;
     }
-    #header #bloc_exalead .input-group-addon {
+    #header #bloc_exalead_header .input-group-addon {
         background-color: #fff;
         color: #d60030;
         border-left: none;
         padding: 3px 7px;
     }
-    #header #bloc_exalead .input-group-addon a {
+    #header #bloc_exalead_header .input-group-addon a {
         color: #d60030;
         font-size: 1.7em;
     }
-    #header #bloc_exalead #recherche_textuelle {
+    #header #bloc_exalead_header #recherche_textuelle {
         border-right: none;
     }
-    #header #bloc_exalead a#search-avance-header-home {
+    #header #bloc_exalead_header a#search-avance-header-home {
         color: #fff;
         font-weight: bold;
     }
-    #header #bloc_exalead a#search-avance-header-home i{
+    #header #bloc_exalead_header a#search-avance-header-home i{
         margin-left:5px;
         font-size: 1.2em;
     }
@@ -147,7 +147,7 @@ h3{font-size: 20px}
             margin-bottom:10px;
         }
 
-        #bloc_exalead {
+        #bloc_exalead_header {
             clear: both;
             float:none!important;
             width: 282px;
