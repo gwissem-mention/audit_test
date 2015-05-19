@@ -67,6 +67,18 @@ class RechercheParcoursGestion
     protected $referencesVentilations;
 
     /**
+     * @var integer
+     * 
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinTable(name="hn_recherche_recherche_parcours_gestion_type_publication",
+     *      joinColumns={ @ORM\JoinColumn(name="rrpg_id", referencedColumnName="rrpg_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
+     * )
+     * @ORM\OrderBy({"order" = "ASC"})
+     */
+    protected $typePublication;
+
+    /**
      * @ORM\OneToMany(targetEntity="RechercheParcours", mappedBy="recherchesParcoursGestion")
      */
     protected $rechercheParcours;
@@ -259,5 +271,38 @@ class RechercheParcoursGestion
     public function getRechercheParcours()
     {
         return $this->rechercheParcours;
+    }
+
+    /**
+     * Add typePublication
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typePublication
+     * @return RechercheParcoursGestion
+     */
+    public function addTypePublication(\HopitalNumerique\ReferenceBundle\Entity\Reference $typePublication)
+    {
+        $this->typePublication[] = $typePublication;
+
+        return $this;
+    }
+
+    /**
+     * Remove typePublication
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typePublication
+     */
+    public function removeTypePublication(\HopitalNumerique\ReferenceBundle\Entity\Reference $typePublication)
+    {
+        $this->typePublication->removeElement($typePublication);
+    }
+
+    /**
+     * Get typePublication
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTypePublication()
+    {
+        return $this->typePublication;
     }
 }

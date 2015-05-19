@@ -42,6 +42,20 @@ class RechercheParcoursGestionType extends AbstractType
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
                 }
             ))
+            ->add('typePublication', 'genemu_jqueryselect2_entity', array(
+                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property'    => 'libelle',
+                'required'    => true,
+                'multiple'    => true,
+                'label'       => 'Type de publication à afficher',
+                'empty_value' => ' - ',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('ref')
+                              ->where('ref.code = :code')
+                              ->andWhere('ref.parent IS NULL')
+                              ->setParameter('code', 'CATEGORIE_OBJET');
+                }
+            )) 
             ->add('referencesParentes', 'genemu_jqueryselect2_entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'    => 'libelle',
