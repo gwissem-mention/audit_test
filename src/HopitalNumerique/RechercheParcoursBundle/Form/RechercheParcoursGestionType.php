@@ -42,26 +42,24 @@ class RechercheParcoursGestionType extends AbstractType
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
                 }
             ))
-            ->add('referencesParentes', 'entity', array(
+            ->add('referencesParentes', 'genemu_jqueryselect2_entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'    => 'libelle',
                 'required'    => true,
                 'multiple'    => true,
                 'label'       => 'Référence(s) parente(s)',
                 'empty_value' => ' - ',
-                'attr'        => array('class' => 'validate[required]'),
                 'query_builder' => function(EntityRepository $er) use ($connectedUser){
                     return $er->getReferencesUserConnectedForForm($connectedUser->getId());
                 }
             ))
-            ->add('referencesVentilations', 'entity', array(
+            ->add('referencesVentilations', 'genemu_jqueryselect2_entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'    => 'libelle',
                 'required'    => true,
                 'multiple'    => true,
                 'label'       => 'Référence(s) de ventilation',
                 'empty_value' => ' - ',
-                'attr'        => array('class' => 'validate[required]'),
                 'query_builder' => function(EntityRepository $er) use ($connectedUser){
                     return $er->getReferencesUserConnectedForForm($connectedUser->getId());
                 }

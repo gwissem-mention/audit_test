@@ -13,6 +13,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-gestion-edit.css" filter="cssrewrite, ?yui_css"
         '@validationEngine_css'
+        "@select2_css"
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -22,7 +23,8 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-recherche-parcours-gestion-edit.js"
         '@validationEngine_js'
-        'bundles/hopitalnumeriquerechercheparcours/js/script.js'
+        "@select2_js"
+        'bundles/hopitalnumeriquerechercheparcours/js/gestion.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

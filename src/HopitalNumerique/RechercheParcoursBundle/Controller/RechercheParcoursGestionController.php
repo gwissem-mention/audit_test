@@ -104,6 +104,20 @@ class RechercheParcoursGestionController extends Controller
 
             //si le formulaire est valide
             if ($form->isValid()) {
+                $referencesParentes    = $form->get('referencesParentes')->getData();
+                $referencesVentilation = $form->get('referencesVentilations')->getData();
+
+                //Vérif à la mano php pour select2
+                if(count($referencesParentes) === 0 || count($referencesVentilation) === 0)
+                {
+                    $this->get('session')->getFlashBag()->add( 'danger', 'Les références sont obligatoires, veuillez remplir ces champs avant de sauvegarder à nouveau.' ); 
+
+                    return $this->render( $view , array(
+                        'form'             => $form->createView(),
+                        'rechercheparcoursgestion' => $rechercheparcoursgestion
+                    ));
+                }
+
                 //test ajout ou edition
                 $new = is_null($rechercheparcoursgestion->getId());
 
