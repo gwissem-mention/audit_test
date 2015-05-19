@@ -18,3 +18,7 @@ VALUES
 	(1, 'Template générique'),
 	(2, 'Template HNum');
 
+
+
+/* 19/05:  */
+/* 15:44:49 HN */ UPDATE `core_menu_item` SET `itm_name` = 'Parcours guidé', `itm_route` = 'hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion' WHERE `itm_id` = '192';
