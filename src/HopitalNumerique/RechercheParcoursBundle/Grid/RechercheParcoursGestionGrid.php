@@ -48,7 +48,7 @@ class RechercheParcoursGestionGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        
+        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:deleteMass') );
         
     }
 }

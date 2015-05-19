@@ -76,6 +76,34 @@ class RechercheParcoursGestionController extends Controller
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion').'"}', 200);
     }
 
+    /**
+     * Actuib de masse de suppression
+     *
+     * @param [type] $primaryKeys    [description]
+     * @param [type] $allPrimaryKeys [description]
+     *
+     * @return [type]
+     */
+    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }   
+
+        $rechercheParcoursGestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->findBy( array('id' => $primaryKeys) );
+
+        $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->delete( $rechercheParcoursGestion );
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion') );
+    }
+
 
 
 
