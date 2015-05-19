@@ -3,6 +3,7 @@ $(document).ready(function(){
         adaptiveHeight:true,
         dots: true,
         autoplay: true,
+        autoplaySpeed:10000,
         infinite:true,
         prevArrow: "<i class='fa fa-chevron-circle-left slick-prev-custom'></i>",
         nextArrow: "<i class='fa fa-chevron-circle-right slick-next-custom'></i>",
