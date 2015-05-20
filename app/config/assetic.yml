@@ -140,6 +140,10 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/qtip2/jquery.qtip.min.js"
             filters : [ ?yui_js ]
+        slick_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/slick.js/slick/slick.min.js"
+            filters : [ ?yui_js ]
         #CSS
         bbcode_css:
             inputs:
@@ -185,3 +189,11 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/bootstrap-multiselect/dist/css/bootstrap-multiselect.css"
             filters: [ cssembed, ?yui_css ]
+        slick_css:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/slick.js/slick/slick.css"
+            filters : [ cssembed, ?yui_css ]
+        slick_theme_css:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/slick.js/slick/slick-theme.css"
+            filters : [ cssembed, ?yui_css ]

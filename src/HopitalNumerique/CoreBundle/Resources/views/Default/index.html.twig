@@ -1,182 +1,421 @@
-{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block metadesc %}Page d'accueil{% endblock %}">
+    <meta name="keywords" content="{% block metakeywords %}{% endblock %}">
+    <meta name="author" content="NODEVO">
 
-{# Référencement #}
-{% block title %}{{parent()}} - Accueil{% endblock %}
-{% block metadesc %}Page d'accueil{% endblock %}
+    <title>{% block title %}Mon Hôpital Numérique - Accueil{% endblock title %}</title>
 
-{% block stylesheets %}
-    {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-core-default-index.css" filter="cssrewrite, ?yui_css"
-        'bundles/hopitalnumeriquecore/css/homepage.css'
-    %}
+    <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    {% block stylesheets %}
+        {% stylesheets output="compiled/hopitalnumerique_homepage-core.css" filter="cssrewrite, ?yui_css"
+        "@bootstrap_css"
+        "@font_awesome_css"
+        "@fancybox_css"
+        "@slick_css"
+        "@slick_theme_css"
+        'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+        %}
         <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock %}
+        {% endstylesheets %}
 
-{% block body %}
-    <div id="homepage" >
-        <div class="home-left col-md-5" >
-            {% if article.image %}
-                <img src="{{article.image}}" alt="Article Home" />
-            {% endif %}
-            <h1>{{article.titre}}</h1>
-            <p>
-                {{article.resume|raw}}
-            </p>
 
-            <h3 class="violet">Actualités</h3>
-            <div class="actus">
-                {% if actualites %}
-                    {% for actu in actualites %}
-                        <div class="actu">
-                            <h6>{{actu.types}}</h6>
-                            <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
-                            <span>Le {{actu.date|date('d/m/Y')}}</span>
-                            <p>
-                                {{actu.resume|parsePublication|raw}}
-                            </p>
-                        </div>
-                    {% endfor %}
-                    <a href="{{path('hopital_numerique_publication_actualite')}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Voir toutes les actualités</a>
+        {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquecore/css/ie8.css'
+        %}
+        <!--[if IE 8]>
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        <![endif]-->
+        {% endstylesheets %}
+        {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquecore/css/homepage.css'
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+    {% endblock stylesheets %}
+
+    {% block javascripts %}
+        {% javascripts output="compiled/hopitalnumerique-homepage-core.js"
+        "@jquery_js"
+        "@jquery_ui_js"
+        "@bootstrap_js"
+        "@enquire_js"
+        "@fancybox_js"
+        "@json_js"
+        "@slick_js"
+        'bundles/hopitalnumeriquecore/js/script.js'
+        'bundles/hopitalnumeriquecore/js/home.js'
+        'bundles/hopitalnumeriquecore/js/recherche.js'
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        {% if app.debug %}
+        {% javascripts output="compiled/nodevo-debogage.js"
+        'bundles/nodevotools/js/Debogage.js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        {% endif %}
+    {% endblock %}
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-49829801-1', 'monhopitalnumerique.fr');
+        ga('send', 'pageview');
+    </script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+{% include 'NodevoCookieBundle:Cookie:index.html.twig' %}
+<div class="homepage" id="body">
+    <div class="col-md-12 no-padding" id="header-container">
+        <div id="header" class="col-md-12">
+            <a href="/" target="_blank" id="logo-header">
+                <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
+            </a>
+            <div id="titre" class="pull-left">
+                <a href="{{path('hopital_numerique_homepage')}}" class="h1">Mon Hôpital Numérique</a>
+                <div class="h2">faciliter l'usage du numérique au service des soins</div>
+            </div>
+            <div id="bloc_exalead_home" class="pull-left">
+                <div id="recherche_textuelle_group">
+                    <span class="bt-recherche pull-right">
+                        <a class="infos btn btn-rose" href="{{path('hopital_numerique_recherche_parcours_homepage_front')}}">Parcours guidé</a>
+                        <a class="infos btn btn-orange" href="{{path('hopital_numerique_recherche_homepage')}}" id="search-avance-header-home">Recherche avancée</a>
+                    </span>
+                </div>
+            </div>
+
+            <div class="loggedUser pull-right">
+                <div class="connexion">
+                    {% if app.user == false %}
+                        <a href="{{path('account_login')}}"><i class="fa fa-user" ></i>Se connecter</a>
+                    {% endif %}
+                </div>
+                {% if app.user %}
+                    {% if app.user.nom or app.user.prenom %}
+                        <p>
+                            <i class="fa fa-user" ></i> {{ app.user.prenom|capitalize }}
+                            <span class="nom">{{ app.user.nom|capitalize }}</span>
+                        </p>
+                    {% else %}
+                        <p>
+                            <i class="fa fa-user" ></i> {{ app.user.username|capitalize }}
+                        </p>
+                    {% endif %}
+                    <div class="connexion">
+                        <a href="{{path('account_logout')}}">Déconnexion</a>
+                    </div>
+                    {#<a class="infos btn btn-rose" href="{{path('hopital_numerique_account_homepage')}}">Tableau de bord</a>#}
                 {% else %}
-                - Aucunes actualités - 
+                    <a class="infos btn btn-rose" href="{{path('hopital_numerique_user_inscription')}}">Créer un compte</a>
                 {% endif %}
             </div>
-        </div>
-
-        
-        
-        <div class="col-md-7 home-right" >
-            <div class="row">
-                <div class="rechercheAideExp col-md-4">
-                    <a id="test" class="link fancybox.iframe" href="{{path('hopital_numerique_expbesoin_rechercheFancy')}}" >
-                    {#<a href="javascript:rechercheAideEtBesoin();">#}
-                        <div class="common-sprite icone"></div>
-                        <h3>Recherche aidée</h3>
-                        <p>
-                            Je décris mon besoin, Mon Hôpital Numérique trouve la solution !
-                        </p>
-                    </a>
-                </div>
-                <div class="recherche col-md-4">
-                    <a href="{{path('hopital_numerique_recherche_homepage')}}">
-                        <div class="common-sprite icone"></div>
-                        <h3>Recherche avancée</h3>
-                        <p>
-                            Je choisis mes critères de recherche, je trouve les productions utiles à mon contexte.
-                        </p>
-                    </a>
-                </div>
-                <div class="rechercheEtapeProjet col-md-4">
-                    <a href="{{path('hopital_numerique_recherche_parcours_homepage_front')}}">
-                        <div class="common-sprite icone"></div>
-                        <h3>Parcours guidé</h3>
-                        <p>
-                            Etape par étape, j'identifie les risques à venir, et les solutions pour les maîtriser.
-                        </p>
-                    </a>
-                </div>
-                
+            <div id="logoHn" class="pull-right">
+                {#<a href="http://www.anap.fr/" target="_blank">
+                    <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-anap-small.jpg')}}" alt="ANAP" />
+                </a>#}
+                <a href="http://www.sante.gouv.fr/le-programme-hopital-numerique.html" targt="_blank">
+                <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn-small.jpg')}}" alt="HOPITAL NUMERIQUE" />
+                </a>
             </div>
-            
-            <div class="row">
-                <div class="creation-compte col-md-6">
-                    <div class="bloc-creation">
-                        <div class="common-sprite icone"></div>
-                        {% if app.user %}
-                            <h3>Mon tableau de bord</h3>
-                            <p>
-                                Je bénéficie de nombreux services : enregistrement de mon contexte, de mes auto-diagnostics, notification des mises à jour, sollicitation d'un ambassadeur, etc.
-                            </p>
-                            <div class="buttons-tdb">
-                                <div class="buttons-centrer">
-                                    <a href="{{path('hopital_numerique_account_homepage')}}" class="btn btn-default tdb">Accès au tableau de bord</a>
-                                </div>
+            {# <p class="violet pull-right align-right">
+                Ce projet s’inscrit dans le cadre du programme
+            </p>#}
+
+            <div class="common-sprite common-sprite-header"></div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="header-slide" class="col-md-12 no-padding">
+            <div class="col-md-9 no-padding">
+                <div id="slide" class="col-md-12 no-padding">
+                    {#{% if alaune %}
+                        {% for une in alaune %}
+                            <div><div class="block-info-alaune">{{ une.titre }}</div></div>
+                        {% endfor %}
+                    {% endif %}#}
+                    <div>
+                        <img src="{{asset('bundles/hopitalnumeriquecore/img/slideshow/SLIDESHOW-01.jpg')}}" alt="Slideshow"/>
+                        <div class="block-text-slide-1">
+                            <div class="text-content">
+                                <h2>Actualités</h2>
+                                <p>
+                                    Au coeur de l'Accompagnement Hôpital Numérique, découvrez les dernières manifestations,
+                                    productions, interviews et vidéos.
+                                </p>
                             </div>
-                        {% else %}
-                            <h3>Mon compte</h3>
-                            <p>
-                                En créant mon compte, je bénéficie de nombreux services. <br />
-                                <a target="_blank" href="{{path('hopital_numerique_publication_publication_article',{'id':314, 'alias':'pourquoi-creer-un-compte','categorie':'publication'|lower})}}">Pourquoi créer un compte ?</a>                             
-                            </p>
-                            <div class="buttons">
-                                <div class="buttons-centrer">
-                                    <div class="row"><a href="{{path('account_login')}}" class="btn btn-default login">Connexion</a></div>
-                                    <div class="row"><a href="{{path('hopital_numerique_user_inscription')}}" class="btn btn-default signup">Créer un compte</a></div>
-                                </div>
+                            <div class="text-plus"><a class="btn btn-rose" href="{{ path('hopital_numerique_publication_actualite') }}">Voir toutes les actualités</a></div>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="{{asset('bundles/hopitalnumeriquecore/img/slideshow/02-SLIDESHOW.jpg')}}" alt="Slideshow"/>
+                        <div class="block-text-slide-2">
+                            <div class="text-content">
+                                <h2>1<sup>ère</sup> visite</h2>
+                                <p>
+                                    Dotée d'un outil performant de diagnostic et de recherche personnalisés, la plateforme MHN
+                                    vous propose 5 services intéractifs d'accompagnement pour la mise en oeuvre de vos projets SI,
+                                    dans l'atteinte des cibles HNum, quelle que soit leur avancée. Venez les découvrir.
+                                </p>
                             </div>
-                        {% endif %}
-                        
-                        <div class="clearfix"></div>
+                            <div class="text-plus"><a class="btn btn-rose" href="/publication/article/420-monhopitalnumerique-fr-1-plateforme-pour-5-services">EN SAVOIR PLUS</a></div>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="{{asset('bundles/hopitalnumeriquecore/img/slideshow/03-SLIDESHOW.jpg')}}" alt="Slideshow"/>
+                        <div class="block-text-slide-3">
+                            <div class="text-content">
+                                <h2>L'ANAP et HN</h2>
+                                <p>
+                                    La mission de l'ANAP (Agence Nationale d'Appui à la Performance des établissements de santé
+                                    et médico-sociaux) est d'apporter un appui concret à l'amélioration des organisations de santé.
+                                    Le programme Hôpital Numérique mis en place par la DGOS, vise, entre autre, à conduire
+                                    l'ensemble des établissements de santé vers un meilleur niveau de maturité de leur SIH.
+                                    L'ANAP participe pleinement à la mise en oeuvre de ce programme en pilotant 5 projets.
+                                </p>
+                            </div>
+                            <div class="text-plus"><a class="btn btn-rose" href="/publication/article/226-l-anap-et-hopital-numerique">EN SAVOIR PLUS</a></div>
+                        </div>
+
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="forum">
-                        <div class="common-sprite icone"></div>
-                        <h3>Forums</h3>
-                        <p>
-                            Je partage mes questions et mon expérience avec mes pairs.
-                        </p>
-                        {# Mode connecté (obligé de séparer les deux car app.user|checkAuthorization pète si pas connecté car app.user = null #}
-                        {% if app.user is not null %}
-                            {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Experts'})) 
-                               and app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Ambassadeurs'}))
-                               and app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'CMSI'}))
-                            %}
-                                <div class="groupe-lien">
-                                    <div class="pull-left">
-                                    <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Public'}) -}}">
-                                        > Public
-                                    </a>
-                                    <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Experts'}) -}}">
-                                        > Experts
-                                    </a>
-                                    </div>
-                                    <div class="pull-left">
-                                    <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Ambassadeurs'}) -}}">
-                                        > Ambassadeurs
-                                    </a>
-                                    <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'CMSI'}) -}}">
-                                        > CMSI
-                                    </a>
-                                    </div>
-                                    <div class="clearfix"></div>
+                <div id="search-help" class="col-md-12 col-sm-12">
+                    <div class="frise col-md-9 col-sm-9">
+                    <div class="col-md-3 col-sm-3"></div>
+                    <div class="col-md-3 col-sm-3"></div>
+                    <div class="col-md-3 col-sm-3"></div>
+                    <div class="col-md-3 col-sm-3"></div>
+                        </div>
+                    <div class="start-search col-md-3 col-sm-3 col-xs-12 pull-right">
+                        <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-HN-big.jpg')}}" alt="logo"/>
+                        <a id="recherche-aidee" class="btn btn-orange-clair link fancybox.iframe" href="{{ path('hopital_numerique_expbesoin_rechercheFancy') }}">Commencer</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 no-padding" id="sidebar">
+                <div id="block-chiffres-cles">
+                    <div class="col-md-4 center">
+                        <span class="chiffre-cle">{{ nb_eta }}</span>
+                        <p>Établissements inscrits</p>
+                    </div>
+                    <div class="col-md-4 center">
+                        <span class="chiffre-cle">{{ nb_consultations }}</span>
+                        <p>Vues de publications</p>
+                    </div>
+                    <div class="col-md-4 center">
+                        <span class="chiffre-cle">{{ nb_fils }}</span>
+                        <p>Discussions dans le forum</p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                {% if publications %}
+                    <div id="block-last-publications">
+                        <h2><strong>Publications les plus consultées</strong></h2>
+                        <ul>
+                    {% for publication in publications %}
+                        <li>
+                            <a href="{{path('hopital_numerique_publication_publication_objet', {'id':publication.id,'alias':publication.alias})}}">{{ publication.titre }}</a>
+                        </li>
+                    {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <div class="clearfix"></div>
+                {% if topics %}
+                    <div id="block-fil-discussion">
+                        <h2>Discussions en cours</h2> <a href="{{ path('ccdn_forum_user_category_index', {'forumName' : forumName}) }}" class="btn btn-rose">Accéder au forum</a>
+                        <ul>
+                    {% for topic in topics %}
+                        <li><a href="{{ path('ccdn_forum_user_topic_show', {'forumName': forumName,'topicId': topic.id}) }}" title="{{ topic.title }}">
+                            {{ topic.title }}
+                        </a></li>
+                    {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <div class="clearfix"></div>
+                <div id="block-carte-france">
+                    <div class="carte-france-hover">
+                        <h2><a href="{{ path('hopital_numerique_registre_homepage') }}">Vous êtes à la recherche<br /><strong>d'un ambassadeur dans votre région ?</strong></a></h2>
+                        <a href="{{ path('hopital_numerique_registre_homepage') }}"><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-ambassadeurs.png')}}" alt="Carte de France"/></a>
+
+                    </div>
+                    <div class="carte-france">
+                        <h2><a href="{{ path('hopital_numerique_registre_homepage') }}">PRÈS DE CHEZ VOUS</a></h2>
+                        <a href="{{ path('hopital_numerique_registre_homepage') }}"><img src="{{asset('bundles/hopitalnumeriquecore/img/carte-france.png')}}" alt="Carte de France"/></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12" id="menu-container">
+            <div class="onbottom onbottomdown pull-left">
+                <a href="#actus"><i class="fa fa-angle-down"></i></a>
+            </div>
+            <div class="onbottom onbottomup pull-left" style="display:none">
+                <a href="#body"><i class="fa fa-angle-up"></i></a>
+            </div>
+            <div class="col-md-10 col-sm-12">
+                {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+                {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu_responsive.html.twig'}) }}
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+<div class="col-md-12 no-padding" id="content">
+
+    {{ block('flashBags') }}
+    {% if error is defined and error %}
+        <div class="alert nalert-warning" onclick="$(this).slideUp();" >
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+    {% endif %}
+    {% if invalid_username is defined %}
+        <div class="alert nalert-warning" onclick="$(this).slideUp();" >
+            {{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}
+        </div>
+    {% endif %}
+    {% block block_du_body %}
+    {% block prebody %}
+        <div id="block-home-menu" class="col-md-12 no-padding">
+            <div class="block-home-menu anap col-md-3 col-sm-6 col-xs-12">
+                <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/01-bloc-ANAP.jpg')}}) no-repeat top left;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
+                    <a href="/publication/article/1-anap-a-vos-cotes" class="img-link"></a>
+                    <div class="block-bottom">
+                        <a href="/publication/article/226-l-anap-et-hopital-numerique"></a>
+                        <h2>L'ANAP ET HN</h2>
+                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-anap-hn.png')}}" alt="anap-hn"/></p>
+                    </div>
+                </div>
+            </div>
+            <div class="block-home-menu autodiag col-md-3 col-sm-6 col-xs-12">
+                <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/02-bloc-AUTODIAG.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
+                    <a href="/publication/438-MonHopitalNumerique.fr" class="img-link"></a>
+                    <div class="block-bottom">
+                        <a href="/publication/438-MonHopitalNumerique.fr"></a>
+                        <h2>AUTODIAGNOSTIC</h2>
+                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-autodiag.png')}}" alt="Autodiagnostic"/></p>
+                    </div>
+                </div>
+            </div>
+            <div class="block-home-menu forum col-md-3 col-sm-6 col-xs-12">
+                <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/03-bloc-FORUM.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
+                    <a href="{{ path('ccdn_forum_user_category_index', {'forumName' : forumName}) }}" class="img-link"></a>
+                    <div class="block-bottom">
+                        <a href="{{ path('ccdn_forum_user_category_index', {'forumName' : forumName}) }}"></a>
+                        <h2>FORUM</h2>
+                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-forum.png')}}" alt="Forum"/></p>
+                    </div>
+                </div>
+            </div>
+            <div class="block-home-menu experts col-md-3 col-sm-6 col-xs-12">
+                <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/bloc-expert.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
+                    <a href="/publication/article/480-presentation-des-experts" class="img-link"></a>
+                    <div class="block-bottom">
+                        <a href="/publication/article/480-presentation-des-experts"></a>
+                        <h2>EXPERTS</h2>
+                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-experts.png')}}" alt="Experts"/></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock prebody %}
+    <div class="clearfix"></div>
+    {% block body %}
+        <div id="homepage" >
+            <h3 class="center" id="actus">Actualités</h3>
+            <div class="home-left col-md-6" >
+                <div class="actus">
+                    {% if actualites %}
+                        {% for actu in actualites %}
+                            {% if loop.first %}
+                                <div class="actu col-md-12">
+                                    <span><b>Le {{actu.date|date('d/m/Y')}} | {{actu.types}}</b></span>
+                                    <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
+
+                                    <p>
+                                        {% set resume = actu.resume %}
+                                        {{actu.resume|truncate(350, true, '...')|parsePublication|raw}}
+                                    </p>
+                                    <a class="lire-suite" href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">Lire la suite</a>
                                 </div>
                             {% else %}
-                                <div class="groupe-lien">
-                                    <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Public'}) -}}">
-                                        > Forum public
-                                    </a>
-                                    {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Experts'})) %}
-                                        <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Experts'}) -}}">
-                                            > Forum des experts
-                                        </a>
-                                    {% endif %}
-                                    {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'Ambassadeurs'})) %}
-                                        <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Ambassadeurs'}) -}}">
-                                            > Forum des ambassadeurs
-                                        </a>
-                                    {% endif %}
-                                    {% if app.user|checkAuthorization(path('ccdn_forum_user_category_index', {'forumName': 'CMSI'})) %}
-                                        <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'CMSI'}) -}}">
-                                            > Forum des CMSI
-                                        </a>
-                                    {% endif %}
+                                <div class="actu col-md-6">
+                                    <span><b>Le {{actu.date|date('d/m/Y')}} | {{actu.types}}</b></span>
+                                    <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
+                                    <p>
+                                        {% set resume = actu.resume %}
+                                        {{actu.resume|truncate(250, true, '...')|parsePublication|raw}}
+                                    </p>
+                                    <a class="lire-suite" href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">Lire la suite</a>
                                 </div>
                             {% endif %}
-                        {# Mode non-connecté #}
-                        {% else %}
-                            <div class="groupe-lien">
-                                <a class="btn btn-link" href="{{- path('ccdn_forum_user_category_index', {'forumName': 'Public'}) -}}">
-                                    > Forum public
-                                </a>
-                            </div>
-                        {% endif %}
-                    </div>
+                        {% endfor %}
+                        <div class="clearfix"></div>
+                        <a href="{{path('hopital_numerique_publication_actualite')}}" class="readmore"><i class="fa fa-angle-right"></i> Voir toutes les actualités</a>
+                    {% else %}
+                    - Aucunes actualités -
+                    {% endif %}
+                </div>
+            </div>
+            <div class="home-right col-md-6">
+                <h5>L'ANAP, une agence au service des organisations de santé</h5>
+                <div class="videoWrapper">
+                    <iframe width="100%" src="https://www.youtube.com/embed/E-N4D0SuTWw" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
-
+    {% endblock body %}
         <div class="clearfix"></div>
+    {% endblock %}
+
+    <input type="hidden" id="fancy-recherche-url" value="{{path('hopital_numerique_expbesoin_rechercheFancy')}}" />
+</div>
+
+<div class="col-md-12" id="footer">
+    {{ knp_menu_render('menu-footer-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+
+{#    {% if app.user %}
+        <a class="reporting btn btn-xs" href="{{path('hopitalnumerique_report_homepage', {url: app.request.uri|base64Nodevo})}}">Signaler une anomalie sur cette page</a>
+    {% endif %}#}
+
+</div>
+</div>
+
+{% if app.user and app.user|checkAuthorization( path('hopital_numerique_requete_homepage') ) %}
+    <div id="mesrequetes" class="closed">
+        <div class="content col-md-12" style="display:none">
+            <h3 class="violet">Mes requêtes de recherche</h3>
+            {{ render(controller("HopitalNumeriqueRechercheBundle:Requete:index", {'indexVue':false} )) }}
+            <a href="{{path('hopital_numerique_requete_homepage')}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Gérer mes requêtes</a>
+        </div>
     </div>
+{% endif %}
+</body>
+</html>
+
+{% block flashBags %}
+    {% for type, messages in app.session.flashBag.all %}
+        {% for message in messages %}
+            <div class="alert alert-block nalert-{{type}}" onclick="$(this).slideUp();">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
 {% endblock %}

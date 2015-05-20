@@ -463,4 +463,32 @@ class UserRepository extends EntityRepository
         
         return $qb;
     }
+
+    /**
+     * Récupère tous les utilisateurs (tous les rôles)
+     *
+     * @return QueryBuilder
+     */
+    public function getAllUsers() 
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('user')
+            ->from('HopitalNumeriqueUserBundle:User', 'user');
+        return $qb;
+    }
+
+    /**
+     * Récupère le nombre d'établissements connectés
+     *
+     * @return QueryBuilder
+     */
+    public function getNbEtablissements() {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('COUNT(user.etablissementRattachementSante)')
+           ->from('HopitalNumeriqueUserBundle:User', 'user')
+           ->where('user.etablissementRattachementSante IS NOT NULL')
+           ->distinct();
+    
+        return $qb;
+  }
 }

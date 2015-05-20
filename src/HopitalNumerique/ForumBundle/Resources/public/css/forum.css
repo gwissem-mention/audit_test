@@ -14,13 +14,13 @@
 #breadcrumbs-forum .blocBreadcrumb {background-color: #f5f5f5;border-radius: 4px;margin-bottom: 20px;padding: 8px 15px;}
 #breadcrumbs-forum .blocBreadcrumb .charte{font-size: 10px; margin-top: 6px;}
 #breadcrumbs-forum .blocBreadcrumb .breadcrumb {list-style: outside none none; padding: 4px 15px 0; margin: 0;}
-#breadcrumbs-forum .blocBreadcrumb .breadcrumb a{color:#6931A0; font-size: 12px}
+#breadcrumbs-forum .blocBreadcrumb .breadcrumb a{color:#c51534; font-size: 12px}
 /* ---  Menu  --- */
 
-#sidebar .menu-main{0 auto 15px auto; list-style: none; padding:0; background: #f8f8f8; width: 100%;}
+#sidebar .menu-main{margin: 0 auto 15px auto; list-style: none; padding:0; background: #f8f8f8; width: 100%;}
 #sidebar .menu-main li a{display: block; padding: 20px 10px 20px 10px; margin: 0; font-size: 14px; color: #5d5e5e; background: url('../img/menu-tdb-sep.jpg') no-repeat top; border-left:5px solid #f8f8f8;}
 #sidebar .menu-main li a span{color:#777777; font-size: 14px; }
-#sidebar .menu-main li.active a, #sidebar .menu-main li.active-son a, #sidebar .menu-main li a:hover, #sidebar .menu-main li.forum a{border-left:5px solid #7635AB;text-decoration: none ;border-radius:0px;}
+#sidebar .menu-main li.active a, #sidebar .menu-main li.active-son a, #sidebar .menu-main li a:hover, #sidebar .menu-main li.forum a{border-left:5px solid #c51534;text-decoration: none ;border-radius:0px;}
 #sidebar .menu-main li.last{border-bottom:1px solid #f0f0f0; }
 
 /* ---  En-tête FO  --- */
@@ -46,10 +46,10 @@ h4 {font-size: 15px;}
 
 #choix-forum .label{color:#BFD302;}
 #choix-forum .list-group-item.active, #choix-forum .list-group-item.active:hover,#choix-forum .list-group-item.active:focus {
-    background-image: linear-gradient(to bottom, #7635AB 0px, #8746BC 100%);
+    background-image: linear-gradient(to bottom, #c51534 0px, #d60030 100%);
     background-repeat: repeat-x;
-    border-color: #7635AB;
-    text-shadow: 0 -1px 0 #7635AB;
+    border-color: #c51534;
+    text-shadow: 0 -1px 0 #c51534;
 }
 
 /* - Création */

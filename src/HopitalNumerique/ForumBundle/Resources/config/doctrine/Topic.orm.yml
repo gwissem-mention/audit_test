@@ -1,6 +1,7 @@
 HopitalNumerique\ForumBundle\Entity\Topic:
     type: entity
     table: hn_forum_topic
+    repositoryClass: HopitalNumerique\ForumBundle\Repository\TopicRepository
     id:
         id:
             type: integer

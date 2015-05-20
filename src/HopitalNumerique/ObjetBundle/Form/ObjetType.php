@@ -131,6 +131,14 @@ class ObjetType extends AbstractType
                               ->orderBy('user.nom');
                 }
             ))
+            ->add('alaune', 'checkbox', array(
+              'required'   => false,
+              'label'      => 'À la une ?',
+              'label_attr' => array(
+                'class' => 'col-md-7 control-label'
+              ),
+              'attr'       => array( 'class'=> 'checkbox' )
+            ))
             ->add('commentaires', 'checkbox', array(
                 'required'   => false,
                 'label'      => 'Commentaires autorisés',

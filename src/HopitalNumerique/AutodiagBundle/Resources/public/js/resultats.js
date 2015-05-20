@@ -262,7 +262,7 @@ $(document).ready(function() {
             },
             name  : 'Valeur optimale préconisée par l\'ANAP',
             data  : optimale,
-            color : '#6f3596',
+            color : '#d60030',
             type  : 'line',
             pointPlacement: 'on'
         });
