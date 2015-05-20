@@ -8,6 +8,10 @@ parameters:
     hopitalnumerique_recherche.manager.expbesoinreponses.class    : HopitalNumerique\RechercheBundle\Manager\ExpBesoinReponsesManager
     hopitalnumerique_recherche.manager.refexpbesoinreponses.class : HopitalNumerique\RechercheBundle\Manager\RefExpBesoinReponsesManager
     hopitalnumerique_recherche.service.logger.cronlogger.class    : HopitalNumerique\RechercheBundle\DependencyInjection\Logger\CronLogger
+    #Gestionnaire
+    hopitalnumerique_recherche.manager.expbesoingestion.class : HopitalNumerique\RechercheBundle\Manager\ExpBesoinGestionManager
+    hopitalnumerique_recherche.grid.expbesoingestion.class    : HopitalNumerique\RechercheBundle\Grid\ExpBesoinGestionGrid
+    hopitalnumerique_recherche.form.expbesoingestion.class    : HopitalNumerique\RechercheBundle\Form\ExpBesoinGestionType
 
 services:
     hopitalnumerique_recherche.manager.search:
@@ -47,3 +51,20 @@ services:
     hopitalnumerique_recherche.service.logger.cronlogger:
         class: "%hopitalnumerique_recherche.service.logger.cronlogger.class%"
         arguments: ["@logger", "@session"]
+
+    #Gestionnaire
+    hopitalnumerique_recherche.manager.expbesoingestion:
+        class: %hopitalnumerique_recherche.manager.expbesoingestion.class%
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_recherche.grid.expbesoingestion:
+        class: %hopitalnumerique_recherche.grid.expbesoingestion.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_recherche.form.expbesoingestion:
+        class: %hopitalnumerique_recherche.form.expbesoingestion.class%
+        arguments: ["@hopitalnumerique_recherche.manager.expbesoingestion", "@validator", "@hopitalnumerique_user.manager.user"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_recherche_expbesoingestion }

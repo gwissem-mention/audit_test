@@ -70,7 +70,7 @@
                     </div>
                 </div>
 
-                <input type="hidden" id="add-question-url" value="{{path('hopital_numerique_expbesoin_addquestion')}}" />
+                <input type="hidden" id="add-question-url" value="{{path('hopital_numerique_expbesoin_addquestion', {'id': expBesoinGestion.id })}}" />
                 <input type="hidden" id="order-question-url" value="{{path('hopital_numerique_expbesoin_reorderquestion')}}" />
                 {#<input type="hidden" id="calc-ponderation-url" value="{{path('hopitalnumerique_autodiag_outil_ponderation',{'id':outil.id})}}" />#}
 

@@ -19,6 +19,9 @@ VALUES
 	(2, 'Template HNum');
 
 
-
+/* A voir si tu as les mêmes items de menu que moi, mais il ne faut as oublié de les modifier ! */
 /* 19/05:  */
 /* 15:44:49 HN */ UPDATE `core_menu_item` SET `itm_name` = 'Parcours guidé', `itm_route` = 'hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion' WHERE `itm_id` = '192';
+
+/* 20/05 */
+/* 09:59:45 HN */ UPDATE `core_menu_item` SET `itm_route` = 'hopitalnumerique_recherche_admin_aide-expression-besoin_gestion' WHERE `itm_id` = '191';

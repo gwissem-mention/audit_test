@@ -7,20 +7,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoin;
+use HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion;
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses;
 
 class ExpBesoinController extends Controller
 {
-    public function indexAction()
+    public function indexAction(ExpBesoinGestion $expBesoinGestion)
     {
-        $expBesoins      = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array(), array('order' => 'ASC'));
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array('expBesoinGestion' => $expBesoinGestion), array('order' => 'ASC'));
 
         return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:index.html.twig', array(
-                'expBesoins'      => $expBesoins
+                'expBesoins'       => $expBesoins,
+                'expBesoinGestion' => $expBesoinGestion
             ));
     }
 
-    public function addQuestionAction(Request $request)
+    public function addQuestionAction(Request $request, ExpBesoinGestion $expBesoinGestion )
     {
         //créer un question
         $question = $this->get('hopitalnumerique_recherche.manager.expbesoin')->createEmpty();
@@ -31,6 +33,7 @@ class ExpBesoinController extends Controller
 
         $question->setOrder( $order );
         $question->setLibelle( $titre );
+        $question->setExpBesoinGestion($expBesoinGestion);
 
         //save
         $this->get('hopitalnumerique_recherche.manager.expbesoin')->save( $question );

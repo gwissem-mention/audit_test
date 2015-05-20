@@ -65,22 +65,61 @@ hopital_numerique_requete_consultation_delete:
         id: \d+
 
 #Expression du besoin
+#--Gestionnaire
+hopitalnumerique_recherche_admin_aide-expression-besoin_gestion:
+    pattern:  /admin/aide-expression-besoin/gestion
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinGestion:index" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_add:
+    pattern:  /admin/aide-expression-besoin/gestion/add
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinGestion:add" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_show:
+    pattern:  /admin/aide-expression-besoin/gestion/show/{id}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinGestion:show" }
+    requirements:
+        id: \d+
+        _method: GET
+
+hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_edit:
+    pattern:  /admin/aide-expression-besoin/gestion/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinGestion:edit" }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_delete:
+    pattern:  /admin/aide-expression-besoin/gestion/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinGestion:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
+#Aide expression besoin
 hopital_numerique_expbesoin_index:
-    pattern:  /admin/aide-expression-besoin
+    pattern:  /admin/aide-expression-besoin/{id}                #l'id correspond à l'id du gestionnaire
     defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:index }
+    requirements: 
+        id: \d+
 
 hopital_numerique_expbesoin_addquestion:
-    pattern:  /admin/aide-expression-besoin/add-question
+    pattern:  /admin/aide-expression-besoin/{id}/add-question   #l'id correspond à l'id du gestionnaire
     defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:addQuestion }
+    requirements: 
+        id: \d+
 
 hopital_numerique_expbesoin_description:
-    pattern:  /admin/aide-expression-besoin/{id}/description
+    pattern:  /admin/aide-expression-besoin/{id}/description    #l'id correspond à l'id de l'exp du besoin de la description
     defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:description }
     requirements: 
         id: \d+
 
 hopital_numerique_expbesoin_descriptionSave:
-    pattern:  /admin/aide-expression-besoin/{id}/description/save
+    pattern:  /admin/aide-expression-besoin/{id}/description/save #l'id correspond à l'id de l'exp du besoin de la description
     defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:descriptionSave }
     requirements: 
         id: \d+
