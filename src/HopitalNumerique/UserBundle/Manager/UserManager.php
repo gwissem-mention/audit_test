@@ -313,5 +313,4 @@ class UserManager extends BaseManager
   public function getNbEtablissements() {
     return $this->getRepository()->getNbEtablissements()->getQuery()->getSingleScalarResult();
   }
->>>>>>> develop
 }

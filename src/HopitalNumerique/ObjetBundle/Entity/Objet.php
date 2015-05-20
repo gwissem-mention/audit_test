@@ -114,6 +114,14 @@ class Objet
     private $notes;
 
     /**
+     * @var boolean
+     *
+     * @Gedmo\Versioned
+     * @ORM\Column(name="obj_alaune", type="boolean", options = {"comment" = "A la une ?"})
+     */
+    private $alaune;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="obj_date_creation", type="datetime", options = {"comment" = "Date de création de l objet"})
@@ -1710,5 +1718,28 @@ class Objet
         }
 
         return $domainesId;
+    }
+
+    /**
+     * Set alaune
+     *
+     * @param boolean $alaune
+     * @return Objet
+     */
+    public function setAlaune($alaune)
+    {
+        $this->alaune = $alaune;
+
+        return $this;
+    }
+
+    /**
+     * Get alaune
+     *
+     * @return boolean 
+     */
+    public function getAlaune()
+    {
+        return $this->alaune;
     }
 }
