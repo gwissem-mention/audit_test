@@ -32,7 +32,7 @@ services:
 
     hopitalnumerique_recherche.manager.expbesoinreponses:
         class: %hopitalnumerique_recherche.manager.expbesoinreponses.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 

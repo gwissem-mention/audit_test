@@ -118,6 +118,23 @@ class ExpBesoinGestion
     }
 
     /**
+     * Get les ids des domaines 
+     *
+     * @return array[integer]
+     */
+    public function getDomainesId()
+    {
+        $domainesId = array();
+
+        foreach ($this->domaines as $domaine) 
+        {
+            $domainesId[] = $domaine->getId();
+        }
+
+        return $domainesId;
+    }
+
+    /**
      * Add expBesoins
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoin $expBesoins

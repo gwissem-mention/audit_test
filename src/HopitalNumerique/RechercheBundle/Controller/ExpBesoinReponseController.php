@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoin;
+use HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion;
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses;
 
 class ExpBesoinReponseController extends Controller
@@ -33,7 +34,7 @@ class ExpBesoinReponseController extends Controller
             ));    
     }
 
-    public function addAction(Request $request)
+    public function addAction(Request $request, ExpBesoinGestion $expBesoinGestion)
     {
         $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array(), array('order' => 'ASC'));
 
@@ -80,7 +81,7 @@ class ExpBesoinReponseController extends Controller
         ));  
     }
 
-    public function editAction(Request $request)
+    public function editAction(Request $request, ExpBesoinGestion $expBesoinGestion)
     {
         //Récupération des données envoyées par la requete AJAX
         $idReponse       = $request->request->get('idReponse');
@@ -206,7 +207,7 @@ class ExpBesoinReponseController extends Controller
         $this->get('hopitalnumerique_recherche.manager.refexpbesoinreponses')->save( $refToAdd );
 
         //get ExpBesoinReponses Note
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($expBesoinReponses->getQuestion()->getExpBesoinGestion()->getDomainesId());
         $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $expBesoinReponses->getReferences(), $refsPonderees );
 
         return new Response('{"success":true, "note":"'.$note.'"}', 200);
