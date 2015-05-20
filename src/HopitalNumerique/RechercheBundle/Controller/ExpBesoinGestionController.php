@@ -76,6 +76,34 @@ class ExpBesoinGestionController extends Controller
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_recherche_admin_aide-expression-besoin_gestion').'"}', 200);
     }
 
+    /**
+     * action de masse de suppression
+     *
+     * @param [type] $primaryKeys    [description]
+     * @param [type] $allPrimaryKeys [description]
+     *
+     * @return [type]
+     */
+    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_recherche.manager.expbesoingestion')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }   
+
+        $expBesoinGestion = $this->get('hopitalnumerique_recherche.manager.expbesoingestion')->findBy( array('id' => $primaryKeys) );
+
+        $this->get('hopitalnumerique_recherche.manager.expbesoingestion')->delete( $expBesoinGestion );
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_recherche_admin_aide-expression-besoin_gestion') );
+    }
+
 
 
 

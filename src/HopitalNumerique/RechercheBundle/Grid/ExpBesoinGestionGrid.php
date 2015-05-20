@@ -48,6 +48,6 @@ class ExpBesoinGestionGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:deleteMass') );
+        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueRechercheBundle:ExpBesoinGestion:deleteMass') );
     }
 }
