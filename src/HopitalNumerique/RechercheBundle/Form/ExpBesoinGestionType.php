@@ -28,7 +28,7 @@ class ExpBesoinGestionType extends AbstractType
             ->add('nom', 'text', array(
                 'max_length' => 255, 
                 'required'   => true, 
-                'label'      => 'nom'
+                'label'      => 'Nom de la recherche aidée'
             )) 
             ->add('domaines', 'entity', array(
                 'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
