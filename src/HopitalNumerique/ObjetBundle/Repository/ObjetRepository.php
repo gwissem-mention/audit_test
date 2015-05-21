@@ -32,6 +32,7 @@ class ObjetRepository extends EntityRepository
                     $qb->expr()->isNull('domaine.id')
                 ))
                 ->setParameter('domainesId', $domainesIds)
+            ->groupBy('obj.id')
         ;
             
         return $qb;

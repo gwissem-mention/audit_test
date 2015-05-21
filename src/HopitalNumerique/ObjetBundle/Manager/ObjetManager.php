@@ -64,7 +64,7 @@ class ObjetManager extends BaseManager
                 $resultatsForGrid[$result['id']]['moyenne'] = number_format($this->_noteManager->getMoyenneNoteByObjet($result['id'], false),2);
                 $resultatsForGrid[$result['id']]['nbNotes'] = $this->_noteManager->countNbNoteByObjet($result['id'], false);
             }
-            else
+            elseif(trim($result['domaineNom']) != '')
             {
                 $resultatsForGrid[$result['id']]['domaineNom'] .= ";" . $result['domaineNom'];
             }
@@ -153,7 +153,7 @@ class ObjetManager extends BaseManager
             {
                 $row['domaines'][] = $domaine->getNom();
             }
-            $row['domaines'] = implode('| ', $row['domaines']);
+            $row['domaines'] = implode('|', $row['domaines']);
                 
             //handle types (catégories)
             $types        = $objet->getTypes();
