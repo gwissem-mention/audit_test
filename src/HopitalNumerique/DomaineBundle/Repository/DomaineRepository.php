@@ -32,7 +32,7 @@ class DomaineRepository extends EntityRepository
     public function getDomaineFromHttpHost($httpHost)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('domaine.id')
+        $qb->select('domaine')
             ->from('HopitalNumeriqueDomaineBundle:Domaine', 'domaine')
             ->leftJoin('domaine.template', 'template')
             ->where('domaine.url LIKE :httpHost')

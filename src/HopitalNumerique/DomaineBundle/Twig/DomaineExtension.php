@@ -20,18 +20,15 @@ class DomaineExtension extends \Twig_Extension
     public function getGlobals()
     {
         return array(
-            'domaineCurrentId' => $this->getDomaineCurrentId()
+            'domaineCurrentId'  => $this->getDomaineCurrentId(),
+            'templateCurrentId' => $this->getTemplateCurrentId(),
         );
     }
 
     /**
-     * Vérifie que l'utilisateur a bien renseignés certains champs
+     * Récupère l'id du domaine courant
      *
-     * @param Reponses[] $reponses         Listes des réponses
-     * @param int        $questionnaireId  Questionnaire à vérifier
-     * @param int        $paramId          Clé étrangère à vérifier
-     *
-     * @return boolean
+     * @return domaine id
      */
     public function getDomaineCurrentId()
     {
@@ -40,6 +37,23 @@ class DomaineExtension extends \Twig_Extension
             return null;
         }
         return $this->_container->get('request')->getSession()->get('domaineId');
+    }
+
+    /**
+     * Récupère l'id du template du domaine courant
+     *
+     * @return domaine id
+     */
+    public function getTemplateCurrentId()
+    {
+        if (!$this->_container->isScopeActive('request')) 
+        {
+            return null;
+        }
+
+        $template = $this->_container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->_container->get('request')->getSession()->get('domaineId'));
+        
+        return $template->getId();
     }
 
     /**

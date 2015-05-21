@@ -207,6 +207,7 @@ class GlossaireManager extends BaseManager
                     }
                 }
 
+                //Si il n'y a pas de domaine en commun entre le glossaire et l'objet courant ALORS que le glossaire a un domaine, on ne parse pas l'objet/contenu
                 if(!$sameDomaine)
                 {
                     continue;
