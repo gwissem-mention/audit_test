@@ -107,6 +107,8 @@ class DomaineController extends Controller
                 //test ajout ou edition
                 $new = is_null($domaine->getId());
 
+                $domaine->setDateLastUpdate(new \DateTime());
+
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_domaine.manager.domaine')->save($domaine);
                 

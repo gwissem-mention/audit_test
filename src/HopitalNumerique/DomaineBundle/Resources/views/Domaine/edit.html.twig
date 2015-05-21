@@ -43,7 +43,42 @@
 
             <div class="panel-body">
                 {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
-                {{ form(form) }}
+                {{ form_start(form) }}
+                    {{ form_errors(form) }}
+                    
+                    {# Formulaire : #}
+                    {{ form_row(form.nom) }}
+                    {{ form_row(form.url) }}
+
+                    {# Gestion de l'upload #}
+                    <div class="form-group">
+                        {{ form_label(form.file) }}
+                        <div class="col-md-6">
+                            {% if domaine.getAbsolutePath() is not null %}
+                                {% set visibility = 'none' %}
+                            {% else %}
+                                {% set visibility = 'block' %}
+                            {% endif %}
+                            <div class="inputUpload" style="display:{{visibility}}">
+                                {{ form_widget(form.file) }}
+                            </div>
+
+                            {% if domaine.getAbsolutePath() is not null %}
+                                <img class="uploadedFile" src="/{{ domaine.getWebPath() }}" alt="Photo de profil" width="92px" height="132px">
+                                <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" ><i class="fa fa-trash-o"></i></div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3">
+                            <div class="help-block error_file">
+                                {{ form_errors(form.file) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {{form_row(form.adresseMailContact)}}
+                    {{form_row(form.template)}}
+
+                {{ form_end(form) }}
             </div>
         </div>
     </div>

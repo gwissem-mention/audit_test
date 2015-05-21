@@ -19,6 +19,11 @@ class DomaineType extends AbstractType
                 'label'      => 'Nom du domaine',
                 'attr'       => array('class' => 'validate[required,max[255]]')
             ))
+            ->add('file', 'file', array(
+                'required' => false, 
+                'label'    => 'Logo du domaine'
+            ))
+            ->add('path', 'hidden')
             ->add('url', 'text', array(
                 'max_length' => 255, 
                 'required'   => true, 

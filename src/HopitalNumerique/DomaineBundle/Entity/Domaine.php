@@ -4,12 +4,17 @@ namespace HopitalNumerique\DomaineBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use APY\DataGridBundle\Grid\Mapping as GRID;
+use Symfony\Component\Validator\Constraints as Assert;
+
+//Tools
+use \Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
  * Domaine
  *
  * @ORM\Table(name="hn_domaine")
  * @ORM\Entity(repositoryClass="HopitalNumerique\DomaineBundle\Repository\DomaineRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Domaine
 {
@@ -37,8 +42,37 @@ class Domaine
     protected $url;
 
     /**
+     * @Assert\File(
+     *     maxSize = "10M",
+     *     mimeTypes = { 
+     *         "image/gif", 
+     *         "image/jpeg", 
+     *         "image/png",
+     *     },
+     *     mimeTypesMessage = "Choisissez un fichier valide (IMAGE)"
+     * )
+     */
+    public $file;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dom_logo", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier stocké"})
+     */
+    protected $path;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dom_date_derniere_maj", type="datetime")
+     */
+    protected $dateLastUpdate;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Template", cascade={"persist"})
      * @ORM\JoinColumn(name="temp_id", referencedColumnName="temp_id")
+     * 
+     * @GRID\Column(field="template.nom", options = {"comment" = "Type de template à utiliser sur le domaine"})
      */
     protected $template;
 
@@ -274,5 +308,125 @@ class Domaine
     public function getNom()
     {
         return $this->nom;
+    }
+
+    /**
+     * Set dateLastUpdate
+     *
+     * @param \DateTime $dateLastUpdate
+     * @return Domaine
+     */
+    public function setDateLastUpdate($dateLastUpdate)
+    {
+        $this->dateLastUpdate = $dateLastUpdate;
+
+        return $this;
+    }
+
+    /**
+     * Get dateLastUpdate
+     *
+     * @return \DateTime 
+     */
+    public function getDateLastUpdate()
+    {
+        return $this->dateLastUpdate;
+    }
+    // ----------------------------------------
+    // --- Gestion de l'upload des fichiers ---
+    // ----------------------------------------
+    
+    /**
+     * Set path
+     *
+     * @param string $path
+     * @return Domaine
+     */
+    public function setPath($path)
+    {
+        if( is_null($path) && file_exists($this->getAbsolutePath()) )
+            unlink($this->getAbsolutePath());
+    
+        $this->path = $path;
+    
+        return $this;
+    }
+    
+    /**
+     * Get path
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+    
+    public function getAbsolutePath()
+    {
+        return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+    }
+    
+    public function getWebPath()
+    {
+        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+    }
+    
+    public function getUploadRootDir()
+    {
+        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
+        return __WEB_DIRECTORY__.'/'.$this->getUploadDir();
+    }
+    
+    public function getUploadDir()
+    {
+        return 'medias/Domaines';
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if (null !== $this->file){
+            //delete Old File
+            if ( file_exists($this->getAbsolutePath()) )
+                unlink($this->getAbsolutePath());
+
+            $tool = new Chaine( $this->getNom() );
+            $nomFichier = $tool->minifie();
+
+            $this->path = round(microtime(true) * 1000) . '_' . $nomFichier . '.png';
+        }
+    }
+    
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        if (null === $this->file)
+            return;
+    
+        // s'il y a une erreur lors du déplacement du fichier, une exception
+        // va automatiquement être lancée par la méthode move(). Cela va empêcher
+        // proprement l'entité d'être persistée dans la base de données si
+        // erreur il y a
+        $this->file->move($this->getUploadRootDir(), $this->path);
+    
+        unset($this->file);
+    }
+    
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        $file = $this->getAbsolutePath();
+    
+        if (file_exists($file) )
+            unlink($file);
     }
 }
