@@ -29,7 +29,7 @@ class ExpBesoinGestion
     protected $nom;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine")
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
      * @ORM\JoinTable(name="hn_domaine_gestions_recherche_aidee",
      *      joinColumns={ @ORM\JoinColumn(name="expbg_id", referencedColumnName="expbg_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}

@@ -566,7 +566,7 @@ class User extends BaseUser
     protected $ipLastConnection;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine")
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
      * @ORM\JoinTable(name="hn_domaine_gestions_user",
      *      joinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
@@ -829,7 +829,7 @@ class User extends BaseUser
      * @param \Doctrine\Common\Collections\Collection $domaines
      * @return Domaine
      */
-    public function setDomaines(array $domaines)
+    public function setDomaines($domaines)
     {        
         $this->domaines = $domaines;
     

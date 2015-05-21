@@ -11,6 +11,11 @@ class DomaineManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\DomaineBundle\Entity\Domaine';
 
+    public function getDomaineFromHttpHost($httpHost)
+    {
+        return $this->getRepository()->getDomaineFromHttpHost($httpHost)->getQuery()->getOneOrNullResult();
+    }
+
     public function getDomainesByUsers()
     {
         $domaines = $this->findAll();

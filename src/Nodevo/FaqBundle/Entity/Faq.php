@@ -52,7 +52,7 @@ class Faq
     protected $categorie;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine")
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
      * @ORM\JoinTable(name="hn_domaine_gestions_faq",
      *      joinColumns={ @ORM\JoinColumn(name="faq_id", referencedColumnName="faq_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}

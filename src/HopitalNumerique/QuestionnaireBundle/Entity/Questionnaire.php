@@ -60,7 +60,7 @@ class Questionnaire
     private $outils;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine")
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
      * @ORM\JoinTable(name="hn_domaine_gestions_questionnaire",
      *      joinColumns={ @ORM\JoinColumn(name="qst_id", referencedColumnName="qst_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}

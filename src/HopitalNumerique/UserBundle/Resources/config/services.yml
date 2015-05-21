@@ -169,6 +169,6 @@ services:
     #--Handler
     hopitalnumerique_user.handler.login:
         class:  %hopitalnumerique_user.handler.login.class%
-        arguments:  ["@router"]
+        arguments:  ["@router", "@security.context", "@nodevo_acl.manager.acl", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_domaine.manager.domaine"]
         tags:
             - { name: 'monolog.logger', channel: 'security' }

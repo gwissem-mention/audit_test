@@ -19,14 +19,14 @@ class Template
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="temp_nom", type="string", length=255)
      */
-    public $nom;
+    protected $nom;
 
 
     /**

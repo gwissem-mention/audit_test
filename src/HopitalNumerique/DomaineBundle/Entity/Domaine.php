@@ -39,8 +39,6 @@ class Domaine
     /**
      * @ORM\ManyToOne(targetEntity="Template", cascade={"persist"})
      * @ORM\JoinColumn(name="temp_id", referencedColumnName="temp_id")
-     *
-     * @GRID\Column(field="template.nom", options = {"comment" = "Type de template à utiliser sur le domaine"})
      */
     protected $template;
 
