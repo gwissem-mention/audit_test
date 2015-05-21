@@ -1050,7 +1050,8 @@ class ResultatManager extends BaseManager
         $outstream = fopen("php://temp", 'r+');
 
         fputcsv($outstream, array('Autodiagnostic "' . $resultat->getOutil()->getTitle() . '" - "' . $resultat->getName() . '"'));
-        fputcsv($outstream, array("Plan d'actions exporté le " . date('d/m/Y') . " à " . date('H:i') . " par " . $user->getAppellation()));
+        $userName = ($user == 'anon.') ? '' :  (" par " . $user->getAppellation());
+        fputcsv($outstream, array("Plan d'actions exporté le " . date('d/m/Y') . " à " . date('H:i') . $userName));
 
         //Ajout de la colonne d'en-têtes
         $colonnesLines = array_values($colonnes);
