@@ -25,3 +25,7 @@ VALUES
 
 /* 20/05 */
 /* 09:59:45 HN */ UPDATE `core_menu_item` SET `itm_route` = 'hopitalnumerique_recherche_admin_aide-expression-besoin_gestion' WHERE `itm_id` = '191';
+
+
+/* 22/05 %/
+/* 15:34:16 HN */ UPDATE `core_menu` SET `mnu_alias` = 'menu-footer-front_gen' WHERE `mnu_id` = '2';
