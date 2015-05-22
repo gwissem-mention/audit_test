@@ -37,6 +37,13 @@ class Domaine
     /**
      * @var string
      *
+     * @ORM\Column(name="dom_description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="dom_url", type="string", length=255)
      */
     protected $url;
@@ -428,5 +435,28 @@ class Domaine
     
         if (file_exists($file) )
             unlink($file);
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Domaine
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

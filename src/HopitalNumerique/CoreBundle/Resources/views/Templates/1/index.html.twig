@@ -87,19 +87,11 @@
     <div class="col-md-12 no-padding" id="header-container">
         <div id="header" class="col-md-12">
             <a href="/" target="_blank" id="logo-header">
-                <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
+                <img src="/{{ domaineCurrent.getWebPath() }}" alt="ANAP" id="logoAnap" class="pull-left" width="69px" />
             </a>
             <div id="titre" class="pull-left">
-                <a href="{{path('hopital_numerique_homepage')}}" class="h1">Mon Hôpital Numérique</a>
-                <div class="h2">faciliter l'usage du numérique au service des soins</div>
-            </div>
-            <div id="bloc_exalead_home" class="pull-left">
-                <div id="recherche_textuelle_group">
-                    <span class="bt-recherche pull-right">
-                        <a class="infos btn btn-rose" href="{{path('hopital_numerique_recherche_parcours_homepage_front')}}">Parcours guidé</a>
-                        <a class="infos btn btn-orange" href="{{path('hopital_numerique_recherche_homepage')}}" id="search-avance-header-home">Recherche avancée</a>
-                    </span>
-                </div>
+                <a href="{{path('hopital_numerique_homepage')}}" class="h1">{{domaineCurrent.nom}}</a>
+                <div class="h2">{{domaineCurrent.description}}</div>
             </div>
 
             <div class="loggedUser pull-right">
@@ -132,7 +124,7 @@
                     <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-anap-small.jpg')}}" alt="ANAP" />
                 </a>#}
                 <a href="http://www.sante.gouv.fr/le-programme-hopital-numerique.html" targt="_blank">
-                <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn-small.jpg')}}" alt="HOPITAL NUMERIQUE" />
+                    <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn-small.jpg')}}" alt="HOPITAL NUMERIQUE" />a remplacer
                 </a>
             </div>
             {# <p class="violet pull-right align-right">
@@ -144,19 +136,6 @@
         </div>
         
         <div class="clearfix"></div>
-        <div class="col-md-12" id="menu-container">
-            <div class="onbottom onbottomdown pull-left">
-                <a href="#actus"><i class="fa fa-angle-down"></i></a>
-            </div>
-            <div class="onbottom onbottomup pull-left" style="display:none">
-                <a href="#body"><i class="fa fa-angle-up"></i></a>
-            </div>
-            <div class="col-md-10 col-sm-12">
-                {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
-                {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu_responsive.html.twig'}) }}
-            </div>
-            <div class="clearfix"></div>
-        </div>
     </div>
 <div class="col-md-12 no-padding" id="content">
 
@@ -173,93 +152,15 @@
     {% endif %}
     {% block block_du_body %}
     {% block prebody %}
-        <div id="block-home-menu" class="col-md-12 no-padding">
-            <div class="block-home-menu anap col-md-3 col-sm-6 col-xs-12">
-                <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/01-bloc-ANAP.jpg')}}) no-repeat top left;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
-                    <a href="/publication/article/1-anap-a-vos-cotes" class="img-link"></a>
-                    <div class="block-bottom">
-                        <a href="/publication/article/226-l-anap-et-hopital-numerique"></a>
-                        <h2>L'ANAP ET HN</h2>
-                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-anap-hn.png')}}" alt="anap-hn"/></p>
-                    </div>
-                </div>
-            </div>
-            <div class="block-home-menu autodiag col-md-3 col-sm-6 col-xs-12">
-                <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/02-bloc-AUTODIAG.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
-                    <a href="/publication/438-MonHopitalNumerique.fr" class="img-link"></a>
-                    <div class="block-bottom">
-                        <a href="/publication/438-MonHopitalNumerique.fr"></a>
-                        <h2>AUTODIAGNOSTIC</h2>
-                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-autodiag.png')}}" alt="Autodiagnostic"/></p>
-                    </div>
-                </div>
-            </div>
-            <div class="block-home-menu forum col-md-3 col-sm-6 col-xs-12">
-                <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/03-bloc-FORUM.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
-                    <a href="{{ path('ccdn_forum_user_category_index', {'forumName' : forumName}) }}" class="img-link"></a>
-                    <div class="block-bottom">
-                        <a href="{{ path('ccdn_forum_user_category_index', {'forumName' : forumName}) }}"></a>
-                        <h2>FORUM</h2>
-                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-forum.png')}}" alt="Forum"/></p>
-                    </div>
-                </div>
-            </div>
-            <div class="block-home-menu experts col-md-3 col-sm-6 col-xs-12">
-                <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/bloc-expert.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
-                    <a href="/publication/article/480-presentation-des-experts" class="img-link"></a>
-                    <div class="block-bottom">
-                        <a href="/publication/article/480-presentation-des-experts"></a>
-                        <h2>EXPERTS</h2>
-                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-experts.png')}}" alt="Experts"/></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     {% endblock prebody %}
     <div class="clearfix"></div>
     {% block body %}
         <div id="homepage" >
-            <h3 class="center" id="actus">Actualités</h3>
-            <div class="home-left col-md-6" >
-                <div class="actus">
-                    {% if actualites %}
-                        {% for actu in actualites %}
-                            {% if loop.first %}
-                                <div class="actu col-md-12">
-                                    <span><b>Le {{actu.date|date('d/m/Y')}} | {{actu.types}}</b></span>
-                                    <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
-
-                                    <p>
-                                        {% set resume = actu.resume %}
-                                        {{actu.resume|truncate(350, true, '...')|parsePublication|raw}}
-                                    </p>
-                                    <a class="lire-suite" href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">Lire la suite</a>
-                                </div>
-                            {% else %}
-                                <div class="actu col-md-6">
-                                    <span><b>Le {{actu.date|date('d/m/Y')}} | {{actu.types}}</b></span>
-                                    <h5><a href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">{{actu.titre}}</a></h5>
-                                    <p>
-                                        {% set resume = actu.resume %}
-                                        {{actu.resume|truncate(250, true, '...')|parsePublication|raw}}
-                                    </p>
-                                    <a class="lire-suite" href="{{path('hopital_numerique_publication_publication_article',{'id':actu.id, 'alias':actu.alias,'categorie':actu.categories})}}">Lire la suite</a>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                        <div class="clearfix"></div>
-                        <a href="{{path('hopital_numerique_publication_actualite')}}" class="readmore"><i class="fa fa-angle-right"></i> Voir toutes les actualités</a>
-                    {% else %}
-                    - Aucunes actualités -
-                    {% endif %}
-                </div>
-            </div>
-            <div class="home-right col-md-6">
-                <h5>L'ANAP, une agence au service des organisations de santé</h5>
-                <div class="videoWrapper">
-                    <iframe width="100%" src="https://www.youtube.com/embed/E-N4D0SuTWw" allowfullscreen></iframe>
-                </div>
-            </div>
+            <a class="infos btn btn-rose" href="{{path('hopital_numerique_recherche_parcours_homepage_front')}}">Parcours guidé</a>
+            <a class="infos btn btn-orange" href="{{path('hopital_numerique_recherche_homepage')}}" id="search-avance-header-home">Recherche avancée</a>
+            <a class="infos btn btn-success" href="/publication/438-MonHopitalNumerique.fr" id="search-avance-header-home">Autodiag</a>
+            <a id="recherche-aidee" class="btn btn-orange-clair link fancybox.iframe" href="{{ path('hopital_numerique_expbesoin_rechercheFancy') }}">Recherche aidée</a>
         </div>
     {% endblock body %}
         <div class="clearfix"></div>

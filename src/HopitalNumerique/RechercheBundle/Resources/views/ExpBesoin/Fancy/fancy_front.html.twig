@@ -13,8 +13,7 @@
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
-            {% switch templateCurrentId %}
-                {% case 1 %}
+            {% if templateCurrentId == 1 %}
                     {% stylesheets output="compiled/hopitalnumerique-recherche-expBesoin-fancy-1.css" filter="cssrewrite, ?yui_css" 
                         "@bootstrap_css"
                         "@fancybox_css"
@@ -23,7 +22,7 @@
                     %}
                         <link rel="stylesheet" href="{{ asset_url }}" />
                     {% endstylesheets %}
-                {% case 2 %}
+                {% elseif templateCurrentId == 2 %}
                     {% stylesheets output="compiled/hopitalnumerique-recherche-expBesoin-fancy-2.css" filter="cssrewrite, ?yui_css" 
                         "@bootstrap_css"
                         "@fancybox_css"
@@ -32,7 +31,7 @@
                     %}
                         <link rel="stylesheet" href="{{ asset_url }}" />
                     {% endstylesheets %}
-                {% default %}
+                {% else %}
                     {% stylesheets output="compiled/hopitalnumerique-recherche-expBesoin-fancy-default.css" filter="cssrewrite, ?yui_css" 
                         "@bootstrap_css"
                         "@fancybox_css"
@@ -41,7 +40,7 @@
                     %}
                         <link rel="stylesheet" href="{{ asset_url }}" />
                     {% endstylesheets %}
-            {% endswitch %}
+            {% endif %}
         {% endblock %}
 
         {% block javascripts %}

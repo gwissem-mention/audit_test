@@ -26,53 +26,51 @@
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
 
-        {% switch templateCurrentId %}
-            {% case 1 %}
-                {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-1.css" filter="cssrewrite, ?yui_css"
-                'bundles/hopitalnumeriquecore/css/Templates/1/ie8.css'
-                %}
-                    <!--[if IE 8]>
-                    <link rel="stylesheet" href="{{ asset_url }}" />
-                    <![endif]-->
-                {% endstylesheets %}
-            {% case 2 %}
-                {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-2.css" filter="cssrewrite, ?yui_css"
-                'bundles/hopitalnumeriquecore/css/Templates/2/ie8.css'
-                %}
-                    <!--[if IE 8]>
-                    <link rel="stylesheet" href="{{ asset_url }}" />
-                    <![endif]-->
-                {% endstylesheets %}
-            {% default %}
-                {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-default.css" filter="cssrewrite, ?yui_css"
-                'bundles/hopitalnumeriquecore/css/Templates/1/ie8.css'
-                %}
-                    <!--[if IE 8]>
-                    <link rel="stylesheet" href="{{ asset_url }}" />
-                    <![endif]-->
-                {% endstylesheets %}
-        {% endswitch %}
+        {% if templateCurrentId == 1 %}
+            {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-1.css" filter="cssrewrite, ?yui_css"
+            'bundles/hopitalnumeriquecore/css/Templates/1/ie8.css'
+            %}
+                <!--[if IE 8]>
+                <link rel="stylesheet" href="{{ asset_url }}" />
+                <![endif]-->
+            {% endstylesheets %}
+        {% elseif templateCurrentId == 2 %}
+            {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-2.css" filter="cssrewrite, ?yui_css"
+            'bundles/hopitalnumeriquecore/css/Templates/2/ie8.css'
+            %}
+                <!--[if IE 8]>
+                <link rel="stylesheet" href="{{ asset_url }}" />
+                <![endif]-->
+            {% endstylesheets %}
+        {% else %}
+            {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-default.css" filter="cssrewrite, ?yui_css"
+            'bundles/hopitalnumeriquecore/css/Templates/1/ie8.css'
+            %}
+                <!--[if IE 8]>
+                <link rel="stylesheet" href="{{ asset_url }}" />
+                <![endif]-->
+            {% endstylesheets %}
+        {% endif %}
 
-        {% switch templateCurrentId %}
-            {% case 1 %}
-                {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-1.css" filter="cssrewrite, ?yui_css"
-                    'bundles/hopitalnumeriquecore/css/Templates/1/homepage.css'
-                %}
-                    <link rel="stylesheet" href="{{ asset_url }}" />
-                {% endstylesheets %}
-            {% case 2 %}
-                {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-2.css" filter="cssrewrite, ?yui_css"
-                    'bundles/hopitalnumeriquecore/css/Templates/2/homepage.css'
-                %}
-                    <link rel="stylesheet" href="{{ asset_url }}" />
-                {% endstylesheets %}
-            {% default %}
-                {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-default.css" filter="cssrewrite, ?yui_css"
-                    'bundles/hopitalnumeriquecore/css/Templates/1/homepage.css'
-                %}
-                    <link rel="stylesheet" href="{{ asset_url }}" />
-                {% endstylesheets %}
-        {% endswitch %}
+        {% if templateCurrentId == 1 %}
+            {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-1.css" filter="cssrewrite, ?yui_css"
+                'bundles/hopitalnumeriquecore/css/Templates/1/homepage.css'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% else templateCurrentId == 2 %}
+            {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-2.css" filter="cssrewrite, ?yui_css"
+                'bundles/hopitalnumeriquecore/css/Templates/2/homepage.css'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% else %}
+            {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-default.css" filter="cssrewrite, ?yui_css"
+                'bundles/hopitalnumeriquecore/css/Templates/1/homepage.css'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% endif %}
     {% endblock stylesheets %}
 
     {% block javascripts %}

@@ -86,11 +86,11 @@
     <div class="col-md-12 no-padding" id="header-container">
         <div id="header" class="col-md-12">
             <a href="/" target="_blank" id="logo-header">
-                <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
+                <img src="/{{ domaineCurrent.getWebPath() }}" alt="ANAP" id="logoAnap" class="pull-left" width="69px" />
             </a>
             <div id="titre" class="pull-left">
                 <a href="{{path('hopital_numerique_homepage')}}" class="h1">{{domaineCurrent.nom}}</a>
-                <div class="h2">faciliter l'usage du numérique au service des soins</div>
+                <div class="h2">{{domaineCurrent.description}}</div>
             </div>
             <div id="bloc_exalead_home" class="pull-left">
                 <div id="recherche_textuelle_group">
