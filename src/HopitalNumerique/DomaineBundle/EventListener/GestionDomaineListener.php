@@ -34,8 +34,8 @@ class GestionDomaineListener implements EventSubscriberInterface
             || is_null($session->get('templateId')))
         {
             $domaine = $this->_managerDomaine->getDomaineFromHttpHost($request->server->get('HTTP_HOST'));
-            $session->set('domaineId', $domaine->getId());
-            $session->set('templateId', $domaine->getTemplate()->getId());
+            $session->set('domaineId', is_null($domaine) ? 1 : $domaine->getId());
+            $session->set('templateId', is_null($domaine) ? 2 : $domaine->getTemplate()->getId());
         }
     }
 
