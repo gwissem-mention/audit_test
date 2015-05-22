@@ -22,6 +22,10 @@ div.homepage  {
     display: block;
     float: left;
 }
+#logo-anap {
+    width: 69px;
+    height: 69px;
+}
 #header-container {
     height: 100%;
 }
@@ -49,7 +53,7 @@ div.homepage  {
 }
 #header #logoHn {
     margin-top: 0px;
-    display: block;
+    display: block;#logoAnap
     float: left;
     margin-right: 30px;
 }
@@ -215,36 +219,36 @@ div.homepage  {
     height: 100%;
 }
 #search-help .frise {
-    background: url("../img/demarrer-890.jpg") no-repeat scroll left center;
+    background: url("../../../img/demarrer-890.jpg") no-repeat scroll left center;
     background-size: 100% 100%;
 }
 @media (min-width: 1750px) {
     #search-help .frise {
-        background: url("../img/demarrer-1000.jpg") no-repeat scroll left center;
+        background: url("../../../img/demarrer-1000.jpg") no-repeat scroll left center;
         background-size: 100% 100%;
     }
 }
 @media (max-width: 1380px) {
     #search-help .frise {
-        background: url("../img/demarrer-700.jpg") no-repeat scroll left center;
+        background: url("../../../img/demarrer-700.jpg") no-repeat scroll left center;
         background-size: 100% 100%;
     }
 }
 @media (max-width: 1180px) {
     #search-help .frise {
-        background: url("../img/demarrer-580.jpg") no-repeat scroll left center;
+        background: url("../../../img/demarrer-580.jpg") no-repeat scroll left center;
         background-size: 100% 100%;
     }
 }
 @media (max-width: 991px) {
     #search-help .frise {
-        background: url("../img/demarrer-700.jpg") no-repeat scroll left center;
+        background: url("../../../img/demarrer-700.jpg") no-repeat scroll left center;
         background-size: 100% 100%;
     }
 }
 @media (max-width: 840px) {
     #search-help .frise {
-        background: url("../img/demarrer-580.jpg") no-repeat scroll left center;
+        background: url("../../../img/demarrer-580.jpg") no-repeat scroll left center;
         background-size: 100% 100%;
     }
 }

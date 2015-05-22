@@ -1,12 +1,33 @@
 {% block stylesheets %}    
-    {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf.css" filter="cssrewrite, ?yui_css" 
-        "@bootstrap_css"
-        'bundles/hopitalnumeriquecore/css/layout.css'
-        'bundles/hopitalnumeriqueautodiag/css/front.css'
-        'bundles/hopitalnumeriqueautodiag/css/print.css'
-    %}
-        <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
-    {% endstylesheets %}
+    {% switch templateCurrentId %}
+        {% case 1 %}
+            {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-1.css" filter="cssrewrite, ?yui_css" 
+                "@bootstrap_css"
+                'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                'bundles/hopitalnumeriqueautodiag/css/front.css'
+                'bundles/hopitalnumeriqueautodiag/css/print.css'
+            %}
+                <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
+            {% endstylesheets %}
+        {% case 2 %}
+            {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-2.css" filter="cssrewrite, ?yui_css" 
+                "@bootstrap_css"
+                'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
+                'bundles/hopitalnumeriqueautodiag/css/front.css'
+                'bundles/hopitalnumeriqueautodiag/css/print.css'
+            %}
+                <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
+            {% endstylesheets %}
+        {% default %}
+            {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-default.css" filter="cssrewrite, ?yui_css" 
+                "@bootstrap_css"
+                'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                'bundles/hopitalnumeriqueautodiag/css/front.css'
+                'bundles/hopitalnumeriqueautodiag/css/print.css'
+            %}
+                <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
+            {% endstylesheets %}
+    {% endswitch %}
 {% endblock %}
 
 {% block javascripts %}

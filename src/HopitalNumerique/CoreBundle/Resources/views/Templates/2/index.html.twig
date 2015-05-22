@@ -26,53 +26,19 @@
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
 
-        {% switch templateCurrentId %}
-            {% case 1 %}
-                {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-1.css" filter="cssrewrite, ?yui_css"
-                'bundles/hopitalnumeriquecore/css/Templates/1/ie8.css'
-                %}
-                    <!--[if IE 8]>
-                    <link rel="stylesheet" href="{{ asset_url }}" />
-                    <![endif]-->
-                {% endstylesheets %}
-            {% case 2 %}
-                {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-2.css" filter="cssrewrite, ?yui_css"
-                'bundles/hopitalnumeriquecore/css/Templates/2/ie8.css'
-                %}
-                    <!--[if IE 8]>
-                    <link rel="stylesheet" href="{{ asset_url }}" />
-                    <![endif]-->
-                {% endstylesheets %}
-            {% default %}
-                {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-default.css" filter="cssrewrite, ?yui_css"
-                'bundles/hopitalnumeriquecore/css/Templates/1/ie8.css'
-                %}
-                    <!--[if IE 8]>
-                    <link rel="stylesheet" href="{{ asset_url }}" />
-                    <![endif]-->
-                {% endstylesheets %}
-        {% endswitch %}
+        {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-2.css" filter="cssrewrite, ?yui_css"
+            'bundles/hopitalnumeriquecore/css/Templates/2/ie8.css'
+        %}
+            <!--[if IE 8]>
+            <link rel="stylesheet" href="{{ asset_url }}" />
+            <![endif]-->
+        {% endstylesheets %}
 
-        {% switch templateCurrentId %}
-            {% case 1 %}
-                {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-1.css" filter="cssrewrite, ?yui_css"
-                    'bundles/hopitalnumeriquecore/css/Templates/1/homepage.css'
-                %}
-                    <link rel="stylesheet" href="{{ asset_url }}" />
-                {% endstylesheets %}
-            {% case 2 %}
-                {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-2.css" filter="cssrewrite, ?yui_css"
-                    'bundles/hopitalnumeriquecore/css/Templates/2/homepage.css'
-                %}
-                    <link rel="stylesheet" href="{{ asset_url }}" />
-                {% endstylesheets %}
-            {% default %}
-                {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-default.css" filter="cssrewrite, ?yui_css"
-                    'bundles/hopitalnumeriquecore/css/Templates/1/homepage.css'
-                %}
-                    <link rel="stylesheet" href="{{ asset_url }}" />
-                {% endstylesheets %}
-        {% endswitch %}
+        {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-2.css" filter="cssrewrite, ?yui_css"
+            'bundles/hopitalnumeriquecore/css/Templates/2/homepage.css'
+        %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
     {% endblock stylesheets %}
 
     {% block javascripts %}
@@ -123,7 +89,7 @@
                 <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
             </a>
             <div id="titre" class="pull-left">
-                <a href="{{path('hopital_numerique_homepage')}}" class="h1">Mon Hôpital Numérique</a>
+                <a href="{{path('hopital_numerique_homepage')}}" class="h1">{{domaineCurrent.nom}}</a>
                 <div class="h2">faciliter l'usage du numérique au service des soins</div>
             </div>
             <div id="bloc_exalead_home" class="pull-left">

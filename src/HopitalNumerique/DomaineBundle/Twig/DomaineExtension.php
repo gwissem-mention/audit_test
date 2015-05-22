@@ -20,9 +20,24 @@ class DomaineExtension extends \Twig_Extension
     public function getGlobals()
     {
         return array(
+            'domaineCurrent'    => $this->getDomaineCurrent(),
             'domaineCurrentId'  => $this->getDomaineCurrentId(),
-            'templateCurrentId' => $this->getTemplateCurrentId(),
+            'templateCurrentId' => $this->getTemplateCurrentId()
         );
+    }
+
+    /**
+     * Récupère le domaine courant
+     *
+     * @return domaine id
+     */
+    public function getDomaineCurrent()
+    {
+        if (!$this->_container->isScopeActive('request')) 
+        {
+            return null;
+        }
+        return $this->_container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->_container->get('request')->getSession()->get('domaineId'));
     }
 
     /**
@@ -51,7 +66,7 @@ class DomaineExtension extends \Twig_Extension
             return null;
         }
 
-        $template = $this->_container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->_container->get('request')->getSession()->get('domaineId'));
+        $template = $this->_container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->_container->get('request')->getSession()->get('domaineId'))->getTemplate();
         
         return $template->getId();
     }

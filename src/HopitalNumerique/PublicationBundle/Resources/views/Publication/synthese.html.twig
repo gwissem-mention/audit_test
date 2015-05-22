@@ -14,13 +14,32 @@
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 
         {% block stylesheets %}
-            {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese.css" filter="cssrewrite, ?yui_css" 
-                "@bootstrap_css"
-                'bundles/hopitalnumeriquecore/css/layout.css'
-                'bundles/hopitalnumeriquerecherche/css/synthese.css'
-            %}
-                <link rel="stylesheet" href="{{ asset_url }}" />
-            {% endstylesheets %}
+            {% switch templateCurrentId %}
+                {% case 1 %}
+                    {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese-1.css" filter="cssrewrite, ?yui_css" 
+                        "@bootstrap_css"
+                        'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                        'bundles/hopitalnumeriquerecherche/css/synthese.css'
+                    %}
+                        <link rel="stylesheet" href="{{ asset_url }}" />
+                    {% endstylesheets %}
+                {% case 2 %}
+                    {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese-2.css" filter="cssrewrite, ?yui_css" 
+                        "@bootstrap_css"
+                        'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
+                        'bundles/hopitalnumeriquerecherche/css/synthese.css'
+                    %}
+                        <link rel="stylesheet" href="{{ asset_url }}" />
+                    {% endstylesheets %}
+                {% default %}
+                    {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese-default.css" filter="cssrewrite, ?yui_css" 
+                        "@bootstrap_css"
+                        'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                        'bundles/hopitalnumeriquerecherche/css/synthese.css'
+                    %}
+                        <link rel="stylesheet" href="{{ asset_url }}" />
+                    {% endstylesheets %}
+            {% endswitch %}
         {% endblock %}
 
         {% block javascripts %}
