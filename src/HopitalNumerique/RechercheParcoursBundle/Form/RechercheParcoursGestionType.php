@@ -62,6 +62,7 @@ class RechercheParcoursGestionType extends AbstractType
                 'required'    => true,
                 'multiple'    => true,
                 'label'       => 'Référence(s) parente(s)',
+                'group_by'    => 'parent',
                 'empty_value' => ' - ',
                 'query_builder' => function(EntityRepository $er) use ($connectedUser){
                     return $er->getReferencesUserConnectedForForm($connectedUser->getId());
@@ -73,6 +74,7 @@ class RechercheParcoursGestionType extends AbstractType
                 'required'    => true,
                 'multiple'    => true,
                 'label'       => 'Référence(s) de ventilation',
+                'group_by'    => 'parent',
                 'empty_value' => ' - ',
                 'query_builder' => function(EntityRepository $er) use ($connectedUser){
                     return $er->getReferencesUserConnectedForForm($connectedUser->getId());

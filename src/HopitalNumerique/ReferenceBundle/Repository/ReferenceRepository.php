@@ -121,7 +121,10 @@ class ReferenceRepository extends EntityRepository
                 $qb->expr()->eq('user.id', ':userId'),
                 $qb->expr()->isNull('domaine.id')
             ))
-            ->setParameter('userId', $userId);
+            ->setParameter('userId', $userId)
+            ->andWhere('ref.dictionnaire = 1')
+            ->andWhere('ref.recherche = 1')
+            ->orderBy('ref.order', 'ASC');
             
         return $qb;
     }
