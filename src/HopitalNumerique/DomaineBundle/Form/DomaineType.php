@@ -23,6 +23,11 @@ class DomaineType extends AbstractType
                 'required' => false, 
                 'label'    => 'Logo du domaine'
             ))
+            ->add('description', 'textarea', array(
+                'required'   => false, 
+                'label'      => 'Description',
+                'attr'       => array('rows' => 3)
+            ))
             ->add('path', 'hidden')
             ->add('url', 'text', array(
                 'max_length' => 255, 
