@@ -171,7 +171,7 @@ class RechercheParcoursGestionController extends Controller
                 $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->save($rechercheParcoursFilsNew);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'RechercheParcoursGestion ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Gestionnaire de recherche par parcours ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
                 
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');
