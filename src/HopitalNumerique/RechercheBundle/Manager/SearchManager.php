@@ -475,7 +475,7 @@ class SearchManager extends BaseManager
      *
      * @return array
      */
-    public function getObjetsForAutodiag( $references, $role )
+    public function getObjetsForAutodiag( $domaineId, $references, $role )
     {
         //prepare some vars
         $objetsToIntersect   = array();
@@ -483,34 +483,56 @@ class SearchManager extends BaseManager
 
         //on récupères tous les objets, on les formate et on les ajoute à nos catégories
         $results = $this->_refObjetManager->getObjetsForRecherche( $references );
-        if( $results ){
+
+        if( $results )
+        {
             $tmp = array();
-            foreach( $results as $one) {
+            foreach( $results as $one) 
+            {
+                if(!in_array($domaineId, $one->getObjet()->getDomainesId()))
+                {
+                    continue;
+                }
                 $objet = $this->formateObjet( $one, $role );
                 if( !is_null($objet) && $objet['categ'] != '' )
+                {
                     $tmp[ $objet['id'] ] = $objet;
+                }
             }
 
             //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
             $objetsToIntersect[] = $tmp;
-        }else
+        }
+        else
+        {
             $objetsToIntersect[] = array();
+        }
 
         //on récupères tous les contenus (infradoc), on les formate et on les ajoute à nos catégories
         $results = $this->_refContenuManager->getContenusForRecherche( $references );
-        if( $results ) {
+        if( $results ) 
+        {
             $tmp = array();
-            foreach( $results as $one) {
+            foreach( $results as $one) 
+            {
+                if(!in_array($domaineId, $one->getContenu()->getObjet()->getDomainesId()))
+                {
+                    continue;
+                }
                 $contenu = $this->formateContenu( $one, $role );
                 if( !is_null($contenu) && $contenu['categ'] != '' )
+                {
                     $tmp[ $contenu['id'] ] = $contenu;
+                }
             }
 
             //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
             $contenusToIntersect[] = $tmp;
         }
         else
+        {
             $contenusToIntersect[] = array();
+        }
 
         return $this->mergeDatas( $objetsToIntersect, $contenusToIntersect, array() );
     }
@@ -528,12 +550,16 @@ class SearchManager extends BaseManager
 
         //on récupères tous les objets, on les formate et on les ajoute à nos catégories
         $results = $this->_refObjetManager->getObjetsForRecherche( $references );
-        if( $results ){
+        if( $results )
+        {
             $tmp = array();
-            foreach( $results as $one) {
+            foreach( $results as $one) 
+            {
                 $objet = $this->formateObjet( $one );
                 if( !is_null($objet) && $objet['categ'] != '' )
+                {
                     $tmp[ $objet['id'] ] = $objet;
+                }
             }
 
             $objets = array_merge($tmp, $objets);
@@ -577,21 +603,29 @@ class SearchManager extends BaseManager
             foreach ($categ as $idObjet => $objet) 
             {
                 if(array_key_exists($idObjet, $compteurPrimaryObjet))
+                {
                     $compteurPrimaryObjet[$idObjet] += $objet['primary'];
+                }
                 else
+                {
                     $compteurPrimaryObjet[$idObjet] = $objet['primary'];
+                }
             }
         }
 
         //Si on a filtré sur plusieurs catégories, on récupère uniquement les objets commun à chaque catégorie (filtre ET)
         if( isset($objetsToIntersect[0]) )
+        {
             $objets = (count($objetsToIntersect) > 1) ? call_user_func_array('array_intersect_key',$objetsToIntersect) : $objetsToIntersect[0];
+        }
 
         //Set le primary total pour chaque objet
         foreach ($objets as $key => $objet) 
         {
             if(array_key_exists($key, $compteurPrimaryObjet))
+            {
                 $objets[$key]['primary'] = $compteurPrimaryObjet[$key];
+            }
         }
 
         //**************************
@@ -605,20 +639,28 @@ class SearchManager extends BaseManager
             foreach ($categ as $idContenu => $contenu) 
             {
                 if(array_key_exists($idContenu, $compteurPrimaryContenu))
+                {
                     $compteurPrimaryContenu[$idContenu] += $contenu['primary'];
+                }
                 else
+                {
                     $compteurPrimaryContenu[$idContenu] = $contenu['primary'];
+                }
             }
         }
         //Si on a filtré sur plusieurs catégories, on récupère uniquement les contenus commun à chaque catégorie (filtre ET)
         if( isset($contenusToIntersect[0]) )
+        {
             $contenus = (count($contenusToIntersect) > 1) ? call_user_func_array('array_intersect_key',$contenusToIntersect) : $contenusToIntersect[0];
+        }
 
         //Set le primary total pour chaque contenu
         foreach ($contenus as $key => $contenu) 
         {
             if(array_key_exists($key, $compteurPrimaryContenu))
+            {
                 $contenus[$key]['primary'] = $compteurPrimaryContenu[$key];
+            }
         }
 
         //**************************
@@ -632,26 +674,36 @@ class SearchManager extends BaseManager
             foreach ($categ as $idFilForum => $filForum) 
             {
                 if(array_key_exists($idFilForum, $compteurPrimaryFilForum))
+                {
                     $compteurPrimaryFilForum[$idFilForum] += $filForum['primary'];
+                }
                 else
+                {
                     $compteurPrimaryFilForum[$idFilForum] = $filForum['primary'];
+                }
             }
         }
         //Si on a filtré sur plusieurs catégories, on récupère uniquement les fils du forum commun à chaque catégorie (filtre ET)
         if( isset($filsForumToIntersect[0]) )
+        {
             $filsForum = (count($filsForumToIntersect) > 1) ? call_user_func_array('array_intersect_key',$filsForumToIntersect) : $filsForumToIntersect[0];
+        }
         
         //Set le primary total pour chaque topic
         foreach ($filsForum as $key => $filForum) 
         {
             if(array_key_exists($key, $compteurPrimaryFilForum))
+            {
                 $filsForum[$key]['primary'] = $compteurPrimaryFilForum[$key];
+            }
         }
 
         $fusion = array_merge( $objets, $contenus, $filsForum );
 
         if( empty($fusion) )
+        {
             return $fusion;
+        }
 
         //make a $sort array for multi-sort function
         $sort = array();
@@ -689,7 +741,9 @@ class SearchManager extends BaseManager
         foreach($roles as $restrictedRole){
             //on "break" en retournant null, l'objet n'est pas ajouté
             if( $restrictedRole->getRole() == $role)
+            {
                 return null;
+            }
         }
 
         $item['id']       = $contenu->getId();
@@ -737,13 +791,17 @@ class SearchManager extends BaseManager
         //objet
         $objet = $one->getObjet();
         
-        if( !is_null($role) ) {
+        if( !is_null($role) ) 
+        {
             //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
             $roles = $objet->getRoles();
-            foreach($roles as $restrictedRole){
+            foreach($roles as $restrictedRole)
+            {
                 //on "break" en retournant null, l'objet n'est pas ajouté
                 if( $restrictedRole->getRole() == $role)
+                {
                     return null;
+                }
             }    
         }
         
@@ -783,11 +841,14 @@ class SearchManager extends BaseManager
     private function getNoteReferencement( $references )
     {
         $note = 0;
-        foreach($references as $reference){
+        foreach($references as $reference)
+        {
             $id = $reference->getReference()->getId();
 
             if( isset($this->_refsPonderees[ $id ]) )
+            {
                 $note += $this->_refsPonderees[ $id ]['poids'];
+            }
         }
         
         return $note;
@@ -813,7 +874,9 @@ class SearchManager extends BaseManager
         if( !is_null($role) ) {
             //si on à pas accès au topic, on retourne null
             if( !$this->_ccdnAuthorizer->canShowTopic( $topic, $forum ) )
+            {
                 return null;
+            }
         }
 
         $item['id']       = $topic->getId();

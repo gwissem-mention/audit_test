@@ -547,11 +547,11 @@ class FrontController extends Controller
         $radarChartBenchmarkCouleurDecile8 = ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile8() == 'vert' ? '#76e57e' : '#ff7a7a');
 
         $options = array(
-            'chapitresForAnalyse'     => $chapitresForAnalyse,
-            'chapitresForReponse'     => $chapitresForReponse,
-            'resultatsName' => $resultatsName,
-            'questionReponseSynthese' => $questionReponseSynthese,
-            'questionReponseSyntheseTableau' => $questionReponseSyntheseTableau,
+            'chapitresForAnalyse'               => $chapitresForAnalyse,
+            'chapitresForReponse'               => $chapitresForReponse,
+            'resultatsName'                     => $resultatsName,
+            'questionReponseSynthese'           => $questionReponseSynthese,
+            'questionReponseSyntheseTableau'    => $questionReponseSyntheseTableau,
             'radarChartBenchmarkCouleurDecile2' => $radarChartBenchmarkCouleurDecile2,
             'radarChartBenchmarkCouleurDecile8' => $radarChartBenchmarkCouleurDecile8
         );
@@ -570,19 +570,19 @@ class FrontController extends Controller
         
         
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
-            'resultat'                => $resultat,
-            'chapitres'               => $chapitres,
-            'chapitresForAnalyse'     => $chapitresForAnalyse,
-            'chapitresForReponse'     => $chapitresForReponse,
-            'questionReponseSynthese' => $questionReponseSynthese,
-            'questionReponseSyntheseTableau' => $questionReponseSyntheseTableau,
-            'resultatsName'           => $resultatsName,
-            'graphiques'              => $graphiques,
-            'back'                    => $back,
-            'sansGabarit'             => $sansGabarit,
+            'resultat'                          => $resultat,
+            'chapitres'                         => $chapitres,
+            'chapitresForAnalyse'               => $chapitresForAnalyse,
+            'chapitresForReponse'               => $chapitresForReponse,
+            'questionReponseSynthese'           => $questionReponseSynthese,
+            'questionReponseSyntheseTableau'    => $questionReponseSyntheseTableau,
+            'resultatsName'                     => $resultatsName,
+            'graphiques'                        => $graphiques,
+            'back'                              => $back,
+            'sansGabarit'                       => $sansGabarit,
             'radarChartBenchmarkCouleurDecile2' => $radarChartBenchmarkCouleurDecile2,
             'radarChartBenchmarkCouleurDecile8' => $radarChartBenchmarkCouleurDecile8,
-            'processusDonnees'        => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
+            'processusDonnees'                  => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
     }
 
