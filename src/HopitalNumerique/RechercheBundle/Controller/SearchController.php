@@ -176,6 +176,24 @@ class SearchController extends Controller
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
         $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
 
+        //Vire les publications qui ne font pas parti du domaine
+        $domaine            = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+        $objetsDuDomaine    = $domaine->getObjets();
+        $objetsDuDomaineIds = array();
+
+        foreach ($objetsDuDomaine as $objet) 
+        {
+            $objetsDuDomaineIds[] = $objet->getId();
+        }
+
+        foreach ($objets as $key => $objet) 
+        {
+            if(!in_array($objet['id'], $objetsDuDomaineIds))
+            {
+                unset($objets[$key]);
+            }
+        }
+
         //GME 19/09/2014 : Ajout du filtre des categ point dur (liste à choix multiples)
         $categPointDur = $request->request->get('categPointDur');
         $objetsOrder   = array();

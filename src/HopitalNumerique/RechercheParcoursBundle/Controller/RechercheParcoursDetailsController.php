@@ -193,7 +193,7 @@ class RechercheParcoursDetailsController extends Controller
             else
             {
                 $this->get('session')->getFlashBag()->add( 'danger' , 'Il n\'existe aucune étape pour cette rubrique.');
-                return $this->redirect( $this->generateUrl('hopital_numerique_recherche_parcours_homepage_front' ) );
+                return $this->redirect( $this->generateUrl('hopital_numerique_recherche_parcours_homepage_front', array('id' => $rechercheParcours->getRecherchesParcoursGestion()->getId()) ) );
             }
         }
 
@@ -266,7 +266,23 @@ class RechercheParcoursDetailsController extends Controller
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
         $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
 
-        
+        //Vire les publications qui ne font pas parti du domaine
+        $domaine            = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+        $objetsDuDomaine    = $domaine->getObjets();
+        $objetsDuDomaineIds = array();
+
+        foreach ($objetsDuDomaine as $objet) 
+        {
+            $objetsDuDomaineIds[] = $objet->getId();
+        }
+
+        foreach ($objets as $key => $objet) 
+        {
+            if(!in_array($objet['id'], $objetsDuDomaineIds))
+            {
+                unset($objets[$key]);
+            }
+        }
 
         //En mode connecté
         if('anon.' !== $user)
@@ -276,7 +292,7 @@ class RechercheParcoursDetailsController extends Controller
 
             foreach ($objets as $objet) 
             {
-                if("point-dur" === $objet["categ"]
+                if( in_array($objet["categ"], $rechercheParcours->getRecherchesParcoursGestion()->getPublicationString())
                     && ($objet['primary'] >= 1)
                     && !array_key_exists($objet['id'], $notes))
                 {

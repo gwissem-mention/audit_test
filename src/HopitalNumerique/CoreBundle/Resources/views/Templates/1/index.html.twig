@@ -157,7 +157,7 @@
     <div class="clearfix"></div>
     {% block body %}
         <div id="homepage" >
-            <a class="infos btn btn-rose" href="{{path('hopital_numerique_recherche_parcours_homepage_front')}}">Parcours guidé</a>
+            <a class="infos btn btn-rose" href="{{path('hopital_numerique_recherche_parcours_homepage_front', {'id' : 1})}}">Parcours guidé</a>
             <a class="infos btn btn-orange" href="{{path('hopital_numerique_recherche_homepage')}}" id="search-avance-header-home">Recherche avancée</a>
             <a class="infos btn btn-success" href="/publication/438-MonHopitalNumerique.fr" id="search-avance-header-home">Autodiag</a>
             <a id="recherche-aidee" class="btn btn-orange-clair link fancybox.iframe" href="{{ path('hopital_numerique_expbesoin_rechercheFancy', {'id' : 1 }) }}">Recherche aidée</a>

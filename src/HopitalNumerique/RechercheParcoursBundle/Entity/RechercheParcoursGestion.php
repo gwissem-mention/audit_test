@@ -305,4 +305,35 @@ class RechercheParcoursGestion
     {
         return $this->typePublication;
     }
+
+    /**
+     * Recupération du type de publication pour un filtre sur les objets
+     *
+     * @return [type]
+     */
+    public function getPublicationString()
+    {
+        $name = array();
+
+        foreach ($this->typePublication as $typePublication) 
+        {
+            switch ($typePublication->getId()) 
+            {
+                case 175:
+                    $name[] = "production";
+                    break;
+                case 183:
+                    $name[] = "ressource";
+                    break;
+                case 184:
+                    $name[] = "point-dur";
+                    break;
+                default:
+                    $name[] = "null";
+                    break;
+            }
+        }
+
+        return $name;
+    }
 }

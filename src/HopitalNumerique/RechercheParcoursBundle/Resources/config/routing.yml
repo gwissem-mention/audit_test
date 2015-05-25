@@ -82,13 +82,13 @@ hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_delete:
 #-----------------------------------FRONT------------------------------
 #----------------------------------------------------------------------
 hopital_numerique_recherche_parcours_homepage_front:
-    pattern:  /recherche-par-parcours
+    pattern:  /recherche-par-parcours/{id}
     defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:indexFront }
 
 
 #Recherche par parcours - détails
 hopital_numerique_recherche_parcours_details_index_front:
-    pattern:  /recherche-par-parcours/{id}-{alias}/{idEtape}-{etape}
+    pattern:  /recherche-par-parcours/details/{id}-{alias}/{idEtape}-{etape}
     defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:indexFront", id: 1 , idEtape: 0,alias: 'recherche-parcours',etape: '' }
     requirements:
         id : \d+

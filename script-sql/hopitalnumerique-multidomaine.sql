@@ -29,3 +29,6 @@ VALUES
 
 /* 22/05 %/
 /* 15:34:16 HN */ UPDATE `core_menu` SET `mnu_alias` = 'menu-footer-front_gen' WHERE `mnu_id` = '2';
+
+/* 25/05  Lien de menu front pour parcours guidé */
+/* 10:38:13 HN */ UPDATE `core_menu_item` SET `itm_route_parameters` = '{\"id\":\"1\"}' WHERE `itm_id` = '194';

@@ -41,10 +41,10 @@ class RechercheParcoursController extends Controller
     /**
      * Index du front Action
      */
-    public function indexFrontAction()
+    public function indexFrontAction(RechercheParcoursGestion $rechercheParcoursGestion)
     {
         //Tableau des étapes du projet
-        $etapes = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findBy(array(), array('order' => 'ASC'));
+        $etapes = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findBy(array('recherchesParcoursGestion' => $rechercheParcoursGestion), array('order' => 'ASC'));
 
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:Front/index.html.twig', array(
             'etapes' => $etapes
