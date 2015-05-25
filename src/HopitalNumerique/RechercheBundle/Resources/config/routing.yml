@@ -192,7 +192,7 @@ hopitalnumerique_expbesoin_reponse_reference_save:
 
 #Expression du besoin - FO
 hopital_numerique_expbesoin_rechercheFancy:
-    pattern:  /recherche-par-referencement/aide-expression-besoin/fancy
+    pattern:  /recherche-par-referencement/aide-expression-besoin/{id}/fancy
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoin:recherche" }
 
 #Expression du besoin - Modification de la requete

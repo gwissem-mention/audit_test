@@ -125,9 +125,9 @@ class ExpBesoinController extends Controller
     /**
      * POPIN : Recherche en Front de l'aide à l'expression du besoin
      */
-    public function rechercheAction()
+    public function rechercheAction(ExpBesoinGestion $expBesoinGestion)
     {
-        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array(), array('order' => 'ASC'));
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array('expBesoinGestion' => $expBesoinGestion), array('order' => 'ASC'));
         $reponses = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->getAllReponsesInArrayById();
 
         return $this->render( 'HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/fancy_front.html.twig' , array(
