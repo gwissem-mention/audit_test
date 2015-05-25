@@ -102,44 +102,46 @@
                     <hr />
                         
                     <div class="row">
-                        <div id="bloc_exalead" class="col-md-6" {% if not activationExalead %}style="display:none"{% endif %}>
-                            <div id="recherche_textuelle_group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control col-md-12" value="{{rechercheTextuelle}}" />
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
-                                        <button class="btn btn-primary" type="button" title="Recherche avancée" onclick="toggleRechercheAvancee();"><i class="fa fa-cog"></i></button>
-                                    </span>
-                                    <input type="hidden" id="recherche_textuelle_minifie" value="{{categoriesProductionActif}}" />
-                                </div>
-                                <div class="recherche_textuelle_avancee">
-                                    <a class="close" onclick="toggleRechercheAvancee();">Fermer</i></a>
-                                    <div class="title">Que cherchez vous ?</div>
-                                    <ul>
-                                        <li><a onclick="rechercheAvancee('&quot;Entrez votre formulation ici&quot;', 1, -1);">Formulation exacte</a></li>
-                                        <li><a onclick="rechercheAvancee('-Entrez le terme ici', 1, 0);">Termes exclus</a></li>
-                                        <li><a onclick="rechercheAvancee('OPT (Entrez le terme ici)', 5, -1);">Termes optionnels</a></li>
-                                        <li><a onclick="rechercheAvancee('NEAR Entrez le terme ici', 5, 0);">Recherche de proximité</a></li>
-                                        <li><a onclick="rechercheAvancee('Entrez le terme ici*', 0, -1);">Termes commençant par</a></li>
-                                    </ul>
-                                    
-                                    {#<div class="title">Avez-vous besoin de la recherche approximative ?</div>
-                                    <ul>
-                                        <li><a onclick="rechercheAvancee('Entrez le terme ici*', 0, -1);">Termes commençant par</a></li>
-                                    </ul>#}
-                                    
-                                    <div class="title">Où voulez-vous chercher ?</div>
-                                    <ul>
-                                        <li><a onclick="rechercheAvancee('title:(Entrez le terme ici)', 7, -1);">Recherche par titre</a></li>
-                                        <li><a onclick="rechercheAvancee('text:(Entrez le terme ici)', 6, -1);">Recherche de document</a></li>
-                                    </ul>
+                        {% if domaineCurrentId == 1 %}
+                            <div id="bloc_exalead" class="col-md-6" {% if not activationExalead %}style="display:none"{% endif %}>
+                                <div id="recherche_textuelle_group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control col-md-12" value="{{rechercheTextuelle}}" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                                            <button class="btn btn-primary" type="button" title="Recherche avancée" onclick="toggleRechercheAvancee();"><i class="fa fa-cog"></i></button>
+                                        </span>
+                                        <input type="hidden" id="recherche_textuelle_minifie" value="{{categoriesProductionActif}}" />
+                                    </div>
+                                    <div class="recherche_textuelle_avancee">
+                                        <a class="close" onclick="toggleRechercheAvancee();">Fermer</i></a>
+                                        <div class="title">Que cherchez vous ?</div>
+                                        <ul>
+                                            <li><a onclick="rechercheAvancee('&quot;Entrez votre formulation ici&quot;', 1, -1);">Formulation exacte</a></li>
+                                            <li><a onclick="rechercheAvancee('-Entrez le terme ici', 1, 0);">Termes exclus</a></li>
+                                            <li><a onclick="rechercheAvancee('OPT (Entrez le terme ici)', 5, -1);">Termes optionnels</a></li>
+                                            <li><a onclick="rechercheAvancee('NEAR Entrez le terme ici', 5, 0);">Recherche de proximité</a></li>
+                                            <li><a onclick="rechercheAvancee('Entrez le terme ici*', 0, -1);">Termes commençant par</a></li>
+                                        </ul>
+                                        
+                                        {#<div class="title">Avez-vous besoin de la recherche approximative ?</div>
+                                        <ul>
+                                            <li><a onclick="rechercheAvancee('Entrez le terme ici*', 0, -1);">Termes commençant par</a></li>
+                                        </ul>#}
+                                        
+                                        <div class="title">Où voulez-vous chercher ?</div>
+                                        <ul>
+                                            <li><a onclick="rechercheAvancee('title:(Entrez le terme ici)', 7, -1);">Recherche par titre</a></li>
+                                            <li><a onclick="rechercheAvancee('text:(Entrez le terme ici)', 6, -1);">Recherche de document</a></li>
+                                        </ul>
 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
 
-                        <div id="bloc_filtres" class="col-md-6">
+                        <div id="bloc_filtres" {% if domaineCurrentId == 1 %}class="col-md-6"{% else %}class="col-md-12" style="padding-left:15px;"{% endif %}>
 
                             <select multiple="multiple" class="form-control" placeholder="Sélectionnez un filtre pour un point dur" name="categ_production_select" id="categ_production_select" style="height:200px;">
                                 {% for categorieProduction in categoriesProduction %}

@@ -3,15 +3,26 @@
 namespace HopitalNumerique\RechercheBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class SearchController extends Controller
 {
     /**
      * Index Action
      */
-    public function indexAction( $id = null )
+    public function indexAction(Request $request, $id = null )
     {
-        $elements                  = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
+        $domaineId = $request->getSession()->get('domaineId');
+
+        if(is_null($domaineId))
+        {
+            $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
+        }
+        else
+        {
+            $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true, array($domaineId));
+        }
+
         $categoriesProductionActif = "";
         $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('order' => 'ASC'));
 
