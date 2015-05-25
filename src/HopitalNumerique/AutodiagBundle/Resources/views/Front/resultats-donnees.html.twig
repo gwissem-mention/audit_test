@@ -217,7 +217,7 @@
                                     <div class="reverse" onclick="reverse_table(document.getElementById('tableau_resultats'));" ><i class="fa fa-refresh"></i></div>
                                 </th>
                                 {% for id, chapitre in chart.datas.chapitres %}
-                                    <th class="active text-left chapitre-{{id}}"{% if not chart.datas.totauxChapitres[id].isParent %} style="font-weight:normal;"{% endif %}>{{chapitre}}</th>
+                                    <th class="active text-left chapitre-{{id}} {% if chart.datas.totauxChapitres[id].isParent %}chapitre-parent{% endif %}" {% if not chart.datas.totauxChapitres[id].isParent %} style="font-weight:normal;"{% endif %}>{{chapitre}}</th>
                                 {% endfor %}
                                 {% if resultat.outil.tableChartAfficheTotal %}<th class="active text-center title-total">Total</th>{% endif %}
                             </thead>
@@ -304,7 +304,7 @@
                                                     {% set note = 0 %}
                                                 {% endif %}
                                                 <td class="text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
-                                                    <strong>{{ note|number_format(0) }}%</strong>
+                                                    {{ note|number_format(0) }}%
                                                 </td>
                                             {% else %}
                                                 <td class="text-center vertical-align" >

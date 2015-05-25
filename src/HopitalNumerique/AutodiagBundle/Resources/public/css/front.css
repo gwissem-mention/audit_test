@@ -147,3 +147,11 @@
 #table-analyse{margin-top:15px;}
 table.tableau-question-reponse{width:100%;}
 table.tableau-question-reponse td{border:solid #000 1px;padding:5px;}
+
+#tableau_resultats th.chapitre-parent {
+    background-color: #e6e6e6;
+}
+
+#tableau_resultats th.chapitre-parent + td.text-center {
+    font-weight: bold;
+}
