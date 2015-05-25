@@ -120,6 +120,7 @@
                                             {% if panel.value == 0 %}
                                             {% set val = 0 %}
                                             {% endif %}
+
                                             <div class="cursor" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{value}}" title="" ></div>
                                             <div class="cursor-value" style="left:{{value}}">{{val}}</div>
 
@@ -170,7 +171,7 @@
                                             <h4 class="text-center">{{ chapitre.titre }}</h4>
                                             <div class="chapitres">
                                                 {% for chapitreEnfant in chapitre.enfants %}
-                                                    <div class="resultat{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} {% if chapitreEnfant.moyenne > 66 %} resultat_fort{% elseif chapitreEnfant.moyenne > 33 %}resultat_moyen{% else %}resultat_faible{% endif %}{% endif %}"{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} 
+                                                    <div class="resultat{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} {% if chapitreEnfant.moyenne|number_format(0) >= 66 %} resultat_fort{% elseif chapitreEnfant.moyenne|number_format(0) > 33 %}resultat_moyen{% else %}resultat_faible{% endif %}{% endif %}"{% if chapitreEnfant.nombreQuestionsRepondues > 0 %}
                                                     title="Score : {{ chapitreEnfant.moyenne }}% {% if resultat.synthese %}{# <br />Valeur minimale : {{chapitreEnfant.min}}%<br />Valeur maximale : {{chapitreEnfant.max}}% #}{% endif %}"{% endif %}>
                                                         {{ chapitreEnfant.titre }}
                                                     </div>
@@ -303,7 +304,7 @@
                                                 {% else %}
                                                     {% set note = 0 %}
                                                 {% endif %}
-                                                <td class="text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
+                                                <td class="text-center {% if note|number_format(0) < 33 %}danger{% elseif note|number_format(0) < 66 %}warning{% else %}success{% endif %}">
                                                     {{ note|number_format(0) }}%
                                                 </td>
                                             {% else %}
