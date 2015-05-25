@@ -155,3 +155,7 @@ table.tableau-question-reponse td{border:solid #000 1px;padding:5px;}
 #tableau_resultats th.chapitre-parent ~ td.text-center{
     font-weight: bold;
 }
+
+.highcharts-tooltip tspan[dx="0"] {
+  display: block!important;
+}
