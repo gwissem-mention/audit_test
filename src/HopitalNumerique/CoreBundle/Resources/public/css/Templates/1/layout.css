@@ -334,7 +334,7 @@ h3{font-size: 20px}
     #mesrequetes{ position: fixed; right: 0; top: 95px; max-width: 33%}
     #mesrequetes .content{ width:310px; overflow-y:auto }
     #mesrequetes.open{ z-index:20; padding:15px; border:1px solid #e2e2e2; background: #ffffff;top:0px;height:100%; }
-    #mesrequetes.closed{ width: 34px; height: 156px; background: url('../img/mes-requetes.jpg') no-repeat center center; cursor: pointer }
+    #mesrequetes.closed{ width: 34px; height: 156px; background: url('../../../img/mes-requetes.jpg') no-repeat center center; cursor: pointer }
     #mesrequetes h3{margin:0;font-weight:bold;font-size: 23px}
     #mesrequetes ul{padding:0;list-style: none; margin-top: 10px}
     #mesrequetes ul li a{color:#070707; font-size: 12px; border-top:1px solid #c9c9c9; display: block; padding:5px 10px;}

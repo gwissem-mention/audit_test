@@ -105,6 +105,10 @@ class Domaine
      */
     protected $objets;
 
+    /**
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\RechercheBundle\Entity\Requete", mappedBy="domaine")
+     */
+    protected $requetes;
 
     /**
      * Constructor
@@ -458,5 +462,38 @@ class Domaine
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Add requetes
+     *
+     * @param \HopitalNumerique\RechercheBundle\Entity\Requete $requetes
+     * @return Domaine
+     */
+    public function addRequete(\HopitalNumerique\RechercheBundle\Entity\Requete $requetes)
+    {
+        $this->requetes[] = $requetes;
+
+        return $this;
+    }
+
+    /**
+     * Remove requetes
+     *
+     * @param \HopitalNumerique\RechercheBundle\Entity\Requete $requetes
+     */
+    public function removeRequete(\HopitalNumerique\RechercheBundle\Entity\Requete $requetes)
+    {
+        $this->requetes->removeElement($requetes);
+    }
+
+    /**
+     * Get requetes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRequetes()
+    {
+        return $this->requetes;
     }
 }

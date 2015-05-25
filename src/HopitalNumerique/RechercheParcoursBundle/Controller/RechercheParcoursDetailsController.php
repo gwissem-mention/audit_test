@@ -258,10 +258,13 @@ class RechercheParcoursDetailsController extends Controller
             }
         }
 
+        $request       = $this->get('request');
+        $domaineId     = $request->getSession()->get('domaineId');
+
         //Récupérations
         $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
-        $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
+        $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
 
         
 

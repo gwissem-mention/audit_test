@@ -45,6 +45,12 @@ class Consultation
     private $contenu;
 
     /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
+     * @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id")
+     */
+    protected $domaine;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="cln_date_last_consulted", type="datetime", options = {"comment" = "Date de dernière consultation de l objet par l user"})
@@ -144,5 +150,28 @@ class Consultation
     public function setDateLastConsulted($dateLastConsulted)
     {
         $this->dateLastConsulted = $dateLastConsulted;
+    }
+
+    /**
+     * Set domaine
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @return Consultation
+     */
+    public function setDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine = null)
+    {
+        $this->domaine = $domaine;
+
+        return $this;
+    }
+
+    /**
+     * Get domaine
+     *
+     * @return \HopitalNumerique\DomaineBundle\Entity\Domaine 
+     */
+    public function getDomaine()
+    {
+        return $this->domaine;
     }
 }

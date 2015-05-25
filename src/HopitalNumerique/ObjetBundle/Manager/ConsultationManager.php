@@ -31,9 +31,9 @@ class ConsultationManager extends BaseManager
      *
      * @return array
      */
-    public function getLastsConsultations( $user )
+    public function getLastsConsultations( $user, $domaineId )
     {
-        return $this->getRepository()->getLastsConsultations( $user )->getQuery()->getResult();
+        return $this->getRepository()->getLastsConsultations( $user, $domaineId )->getQuery()->getResult();
     }
 
     /**
@@ -44,7 +44,7 @@ class ConsultationManager extends BaseManager
      *
      * @return empty
      */
-    public function consulted($objet, $isContenu = false)
+    public function consulted($domaine, $objet, $isContenu = false)
     {
         $user = $this->_securityContext->getToken()->getUser();
 
@@ -54,6 +54,8 @@ class ConsultationManager extends BaseManager
             //new
             if( is_null($consultation) ){
                 $consultation = $this->createEmpty();
+
+                $consultation->setDomaine($domaine);
 
                 if( $isContenu ){
                     $consultation->setContenu( $objet );
@@ -77,14 +79,14 @@ class ConsultationManager extends BaseManager
      *
      * @return array
      */
-    public function updateObjetsWithConnectedUser( $objets, $user )
+    public function updateObjetsWithConnectedUser( $domaineId, $objets, $user )
     {
         if( $user != "anon.") {
             //get date Inscription user
             $dateInscription = $user->getDateInscription();
 
             //get consulted objets and formate them
-            $results   = $this->getLastsConsultations( $user );
+            $results   = $this->getLastsConsultations( $user, $domaineId );
             $consulted = array('objets' => array(), 'contenus' => array() );
             foreach($results as $one){
                 //Cas objet
@@ -130,14 +132,14 @@ class ConsultationManager extends BaseManager
      *
      * @return array
      */
-    public function updateProductionsWithConnectedUser( $productions, $user )
+    public function updateProductionsWithConnectedUser( $domaineId, $productions, $user )
     {
         if( $user != "anon.") {
             //get date Inscription user
             $dateInscription = $user->getDateInscription();
 
             //get consulted objets and formate them
-            $results   = $this->getLastsConsultations( $user );
+            $results   = $this->getLastsConsultations( $user, $domaineId );
             $consulted = array('objets' => array(), 'contenus' => array() );
             foreach($results as $one){
                 //Cas objet
