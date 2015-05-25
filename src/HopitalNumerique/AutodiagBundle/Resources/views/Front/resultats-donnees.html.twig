@@ -27,7 +27,7 @@
 
         {% if resultat.name or resultat.dateLastSave %}
             <h3 class="text-center">
-                {% if resultat.name %}{% if resultat.synthese %}Synthèse : {% endif %}{{resultat.name }} {% if resultat.resultatSharedBy is not null %} - partagé par {{resultat.resultatSharedBy.user.getAppellation()}} ({{ resultat.resultatSharedBy.user.getEtablissementRattachementSante().getNom() }}){% elseif resultat.resultatSharedFor %} - partagé avec {{resultat.resultatSharedFor.user.getAppellation()}} ({{ resultat.resultatSharedFor.user.getEtablissementRattachementSante().getNom() }}){% endif %}{% endif %}{% if pdf %}<br />{% endif %}
+                {% if resultat.name %}{% if resultat.synthese %}Synthèse : {% endif %}{{resultat.name }} {% if resultat.resultatSharedBy is not null %} - partagé par {{resultat.resultatSharedBy.user.getAppellation()}} {% if resultat.resultatSharedBy.user.getEtablissementRattachementSante() is not null %}({{ resultat.resultatSharedBy.user.getEtablissementRattachementSante().getNom() }}){% endif %}{% elseif resultat.resultatSharedFor %} - partagé avec {{resultat.resultatSharedFor.user.getAppellation()}} {% if resultat.resultatSharedFor.user.getEtablissementRattachementSante() is not null %}({{ resultat.resultatSharedFor.user.getEtablissementRattachementSante().getNom() }}){% endif %}{% endif %}{% endif %}{% if pdf %}<br />{% endif %}
                 {% if resultat.dateLastSave %}<small class="pull-right text-muted">le {{resultat.dateLastSave|date('d/m/Y')}}</small>{% endif %}
             </h3>
         {% endif %}

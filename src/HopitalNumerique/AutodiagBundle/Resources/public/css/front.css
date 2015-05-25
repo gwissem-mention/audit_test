@@ -152,6 +152,6 @@ table.tableau-question-reponse td{border:solid #000 1px;padding:5px;}
     background-color: #e6e6e6;
 }
 
-#tableau_resultats th.chapitre-parent + td.text-center {
+#tableau_resultats th.chapitre-parent ~ td.text-center{
     font-weight: bold;
 }
