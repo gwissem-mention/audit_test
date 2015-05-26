@@ -803,7 +803,7 @@ class UserController extends Controller
         {
             $form->remove('plainPassword');
             $form->remove('remarque');
-            $form->remove('domaine');
+            $form->remove('domaines');
             $form->remove('raisonDesinscription');
             $form->remove('file');
         }
@@ -840,6 +840,7 @@ class UserController extends Controller
                 //Set de l'état
                 $idEtatActif = intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif'));
                 $user->setEtat($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $idEtatActif)));
+                $user->setDomaines(array($this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'))));
             }
             
             //si le formulaire est valide

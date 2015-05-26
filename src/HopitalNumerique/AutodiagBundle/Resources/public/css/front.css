@@ -127,6 +127,14 @@
     .autodiagTable thead tr a { color:#FFFFFF; font-size: 12px }
     .autodiagTable thead th { background-color:#6F3596; vertical-align: middle }
     .autodiagTable th, .autodiagTable td { border: 1px solid #ddd;padding:4px; }
+    #tableau-de-bord .content .panel .onglets{height: 50px;}
+    #tableau-de-bord .content .panel .onglets ul{list-style: none;padding-left: 0;}
+    #tableau-de-bord .content .panel .onglets .onglet{height: 50px;background-color: #ffffff; cursor: pointer;}
+    #tableau-de-bord .content .panel .onglets .onglet:hover{background-color: #FAFAFA;}
+    #tableau-de-bord .content .panel .onglets .onglet.active{height: 50px;background-color: #F8F8F8;}
+    #tableau-de-bord .content .panel .onglets .onglet.active:hover{background-color: #F3F3F3;}
+    #tableau-de-bord .content .panel .onglets .onglet        .domaine {width: 100%; margin-top: 17px; text-align: center; font-size: 12px; font-weight: bold; text-transform: uppercase;}
+    #tableau-de-bord .content .panel .onglets .onglet.active .domaine{color:#D60030;}
 
 /* Partie liste des autodiag */
     #autodiag-liste p.intro{margin-bottom: 20px}

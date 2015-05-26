@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Controller;
 
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use HopitalNumerique\AutodiagBundle\Entity\Resultat;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -592,10 +593,12 @@ class FrontController extends Controller
     public function autodiagAction()
     {
         $user      = $this->get('security.context')->getToken()->getUser();
-        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy( array( 'user' => $user ), array('dateLastSave' => 'DESC') );        
+        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->getAutodiagsMonCompte($user);
+        $domaines  = $this->get('hopitalnumerique_domaine.manager.domaine')->getAllDomainesOrdered();
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:autodiag.html.twig' , array(
-            'resultats' => $resultats
+            'resultatsByDomaine' => $resultats,
+            'domaines'           => $domaines
         ));
     }
 

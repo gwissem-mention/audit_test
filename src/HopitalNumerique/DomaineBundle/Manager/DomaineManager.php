@@ -41,4 +41,23 @@ class DomaineManager extends BaseManager
         return $domaineByUser;
     }
 
+    /**
+     * Récupère l'ensemble des domaines trié par id
+     *
+     * @return [type]
+     */
+    public function getAllDomainesOrdered()
+    {
+        $domaineOrdered = array();
+
+        $domaines = $this->findAll();
+
+        foreach ($domaines as $domaine) 
+        {
+            $domaineOrdered[$domaine->getId()] = $domaine;
+        }
+
+        return $domaineOrdered;
+    }
+
 }

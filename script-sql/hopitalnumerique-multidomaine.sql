@@ -32,3 +32,16 @@ VALUES
 
 /* 25/05  Lien de menu front pour parcours guidé */
 /* 10:38:13 HN */ UPDATE `core_menu_item` SET `itm_route_parameters` = '{\"id\":\"1\"}' WHERE `itm_id` = '194';
+
+
+/* 26/05 : Menu mon compte */
+INSERT INTO `core_menu` (`mnu_id`, `mnu_name`, `mnu_alias`, `mnu_cssClass`, `mnu_cssId`, `mnu_lock`)
+VALUES
+    (4, 'Menu Principal Front générique', 'menu-main-front_gen', 'menu-main', 'menu', 1);
+
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (NULL, NULL, 4, 'Informations personnelles', 'hopital_numerique_user_informations_personnelles', NULL, NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+    (NULL, NULL, 4, 'Requêtes de recherche', 'hopital_numerique_requete_homepage', NULL, 0, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 4),
+    (NULL, NULL, 4, 'Mes autodiagnostics', 'hopitalnumerique_autodiag_front_comptehn', '[]', 0, '#', NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 5),
+    (NULL, NULL, 4, 'Changer mon mot de passe', 'hopital_numerique_user_motdepasse', '[]', NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 2);
