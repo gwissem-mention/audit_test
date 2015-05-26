@@ -86,11 +86,13 @@ class GlossaireManager extends BaseManager
     /**
      * Retourne le tableau du glossaire
      *
+     * @param  int $domaineId Domaine courrant
+     *
      * @return array
      */
-    public function findGlossaireTable()
+    public function findGlossaireTable($domaineId)
     {
-        $glossaires = $this->findAll();
+        $glossaires = $this->getRepository()->getAllGlossaireDomaineNotNull()->getQuery()->getResult();
 
         $datas = array();
         foreach($glossaires as $one)
@@ -98,13 +100,33 @@ class GlossaireManager extends BaseManager
             if( $one->getEtat()->getId() == 3)
             {
                 $firstL = substr( ucfirst($one->getMot()), 0, 1);
-                $datas[ $firstL ][ strtolower($one->getMot()) ] = $one;
+                foreach ($one->getDomaines() as $domaineGlossaire) 
+                {
+                    if(!array_key_exists('all', $datas))
+                    {
+                        $datas['all'] = array();
+                    }
+                    
+                    $datas['all'][ $firstL ][ strtolower($one->getMot()) ] = $one;
+                    //Récupère que le domaine courant
+                    if($domaineGlossaire->getId() == $domaineId)
+                    {
+                        if(!array_key_exists($domaineGlossaire->getId(), $datas))
+                        {
+                            $datas[$domaineGlossaire->getId()] = array();
+                        }
+                        $datas[$domaineGlossaire->getId()][ $firstL ][ strtolower($one->getMot()) ] = $one;
+                    }
+                }
             }
         }
 
-        foreach($datas as &$data)
+        foreach($datas as &$domaine)
         {
-            ksort($data);
+            foreach ($domaine as &$data) 
+            {
+                ksort($data);
+            }
         }
 
         return $datas;

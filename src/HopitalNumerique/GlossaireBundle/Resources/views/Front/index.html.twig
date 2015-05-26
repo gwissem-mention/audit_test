@@ -13,56 +13,72 @@
     {% endstylesheets %}
 {% endblock %}
 
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-glossaire-front-index.js" 
+        'bundles/hopitalnumeriqueglossaire/js/front.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block body %}
     <div id="glossaire">
         <div class="col-md-12">
             <h1 class="violet">Glossaire</h1>
-            <div class="alphabet">
-                {% for letter in 'a'|upper..'z'|upper %}
-                    {% if letter in datas|keys %}
-                        <a href="#{{letter}}">{{letter}}</a>
-                    {% else %}
-                        <p>{{letter}}</p>
-                    {% endif %}
-                {% endfor %}
-            </div>
 
-            <div class="clearfix"></div>
+            {% for key,datas in glossaires %}
+                <div id="glossaire-{{key}}" class="glossaire" {% if key == 'all' %}style="display:none;"{% endif %}>
+                    <div class="alphabet">
+                        {% for letter in 'a'|upper..'z'|upper %}
+                            {% if letter in datas|keys %}
+                                <a href="#{{letter}}">{{letter}}</a>
+                            {% else %}
+                                <p>{{letter}}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
 
-            <p>Sauf indication contraire, les définitions apportées sont issues des productions ANAP.</p>
+                    <div class="clearfix"></div>
 
-            <div class="liste">
-                {% for letter in 'a'|upper..'z'|upper %}
-                    {% if letter in datas|keys %}
-                        {% set glossaires = datas[letter] %}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h2 class="{{ cycle(['rose', 'violet'], loop.index) }}" id="{{letter}}">{{letter}}</h2>
-                                <div class="sep"></div>
-                                <div class="elements">
-                                    {% for element in glossaires %}
-                                        <div class="row">
-                                            <div class="col-md-12" id="{{element.mot|minifieMoi}}">
-                                                <p class="titre">
-                                                    {% if element.intitule %}
-                                                        {{ element.mot ~ ' : ' ~ element.intitule }}
-                                                    {% else %}
-                                                        {{ element.mot }}
-                                                    {% endif %}
-                                                </p>
-                                                <p class="desc">
-                                                    {{ element.description|nl2br }}
-                                                </p>
-                                            </div>
-                                        </div>
+                    <p>Sauf indication contraire, les définitions apportées sont issues des productions ANAP.</p>
+
+                    <div class="liste">
+                        {% for letter in 'a'|upper..'z'|upper %}
+                            {% if letter in datas|keys %}
+                                {% set glossaires = datas[letter] %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h2 class="{{ cycle(['rose', 'violet'], loop.index) }}" id="{{letter}}">{{letter}}</h2>
                                         <div class="sep"></div>
-                                    {% endfor %}
+                                        <div class="elements">
+                                            {% for element in glossaires %}
+                                                <div class="row">
+                                                    <div class="col-md-12" id="{{element.mot|minifieMoi}}">
+                                                        <p class="titre">
+                                                            {% if element.intitule %}
+                                                                {{ element.mot ~ ' : ' ~ element.intitule }}
+                                                            {% else %}
+                                                                {{ element.mot }}
+                                                            {% endif %}
+                                                        </p>
+                                                        <p class="desc">
+                                                            {{ element.description|nl2br }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="sep"></div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
+    <div class="clearfix"></div>
+    <div id="show-all-button" class="pull-right btn btn-success"><i class="fa fa-search"></i> Show all</div>
 {% endblock %}
