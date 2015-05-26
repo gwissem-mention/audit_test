@@ -54,4 +54,16 @@ class FaqManager extends BaseManager
 
         return array_values($faqsForGrid);
     }
+
+    /**
+     * Récupération des éléments de FAQ pour le domaine passé en param
+     *
+     * @param [type] $domaineId [description]
+     *
+     * @return [type]
+     */
+    public function getFaqByDomaine($domaineId)
+    {
+        return $this->getRepository()->getFaqByDomaine( $domaineId )->getQuery()->getResult();
+    }
 }

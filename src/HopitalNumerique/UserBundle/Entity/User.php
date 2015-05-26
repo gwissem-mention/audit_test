@@ -775,6 +775,11 @@ class User extends BaseUser
     {
         $domaineString = '';
 
+        if(is_null($this->domaines))
+        {
+            return $domaineString;
+        }
+
         foreach ($this->domaines as $domaine) 
         {
             $domaineString .= ($domaineString != '' ? ' | ' : ' ') . $domaine->getNom();
@@ -791,6 +796,11 @@ class User extends BaseUser
     public function getDomainesId()
     {
         $domainesId = array();
+
+        if(is_null($this->domaines))
+        {
+            return $domainesId;
+        }
 
         foreach ($this->domaines as $domaine) 
         {

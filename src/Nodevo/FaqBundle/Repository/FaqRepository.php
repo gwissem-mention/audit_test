@@ -31,4 +31,21 @@ class FaqRepository extends EntityRepository
             
         return $qb;
     }
+
+    /**
+     * Récupération des éléments de FAQ pour le domaine passé en param
+     *
+     * @return Query Builder
+     */
+    public function getFaqByDomaine($domaineId)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('faq')
+            ->from('NodevoFaqBundle:Faq', 'faq')
+            ->leftJoin('faq.domaines', 'domaine')
+            ->where('domaine.id = :idDomaine')  
+            ->setParameter('idDomaine', $domaineId);
+            
+        return $qb;
+    }
 }
