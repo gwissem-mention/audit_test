@@ -41,8 +41,6 @@
 
                     <div class="clearfix"></div>
 
-                    <p>Sauf indication contraire, les définitions apportées sont issues des productions ANAP.</p>
-
                     <div class="liste">
                         {% for letter in 'a'|upper..'z'|upper %}
                             {% if letter in datas|keys %}
@@ -77,21 +75,28 @@
                     </div>
                 </div>
             {% endfor %}
+                    
+            <div class="row">
+                <div class="col-md-4">
+                    {# Recherche textuelle #}
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div id="show-all-button" class="btn btn-success"><i class="fa fa-search-plus"></i> Afficher tous les éléments</div>
+                </div>
+                <div class="col-md-5">
+                    <p class="text-muted">Sauf indication contraire, les définitions apportées sont issues des productions ANAP.</p>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+                    
         </div>
     </div>
     <div class="clearfix"></div>
-    <div class="col-md-6"></div>
-    <div class="col-md-2">
-        <div id="show-all-button" class="pull-right btn btn-success"><i class="fa fa-search-plus"></i> Afficher tous les éléments</div>
-    </div>
-    <div class="col-md-4">
-        {# Recherche textuelle #}
-        <div class="input-group pull-right">
-            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-            <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control" />
-            <span class="input-group-btn">
-                <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
-            </span>
-        </div>
-    </div>
 {% endblock %}
