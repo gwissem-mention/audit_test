@@ -193,4 +193,17 @@ class Faq
     {
         return $this->domaines;
     }
+
+    /**
+     * Set domaines
+     *
+     * @param \Doctrine\Common\Collections\Collection $domaines
+     * @return Domaine
+     */
+    public function setDomaines($domaines)
+    {        
+        $this->domaines = $domaines;
+    
+        return $this;
+    }
 }

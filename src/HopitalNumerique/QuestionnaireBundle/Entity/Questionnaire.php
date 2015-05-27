@@ -289,6 +289,19 @@ class Questionnaire
     }
 
     /**
+     * Set domaines
+     *
+     * @param \Doctrine\Common\Collections\Collection $domaines
+     * @return Domaine
+     */
+    public function setDomaines($domaines)
+    {        
+        $this->domaines = $domaines;
+    
+        return $this;
+    }
+
+    /**
      * Get domaines
      *
      * @return \Doctrine\Common\Collections\Collection 

@@ -1,3 +1,8 @@
 hopital_numerique_domaine_admin_domaine:
     resource: "@HopitalNumeriqueDomaineBundle/Resources/config/routing/domaine.yml"
-    prefix:   /domaine
+    prefix:   /admin/domaine
+
+#CRON
+hopitalnumerique_domaine_cron:
+    pattern:  /cron-domaine/{id}
+    defaults: { _controller: HopitalNumeriqueDomaineBundle:Cron:generationDomaine}
