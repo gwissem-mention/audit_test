@@ -18,7 +18,6 @@ div.homepage  {
     margin-right: 10px;
 }
 #logo-header {
-    width: 69px;
     display: block;
     float: left;
 }
@@ -121,7 +120,6 @@ div.homepage  {
         padding-right: 10px;
     }
     #logo-header {
-        width: 69px;
         display: block;
         clear:both;
         margin: 0 auto;

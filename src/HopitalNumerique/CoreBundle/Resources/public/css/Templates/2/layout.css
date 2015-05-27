@@ -45,7 +45,6 @@ h3{font-size: 20px}
         margin-right: 10px;
     }
     #logo-header {
-        width: 69px;
         display: block;
         float: left;
     }
@@ -139,7 +138,6 @@ h3{font-size: 20px}
     }
     @media (max-width:767px) {
         #logo-header {
-            width: 69px;
             display: block;
             clear:both;
             margin: 0 auto;
