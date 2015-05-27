@@ -9,8 +9,8 @@ $(document).ready(function() {
     $("#recherche_textuelle").on('change', function(){
         var search = $("#recherche_textuelle").val();
 
-        $(".glossaire .liste").unhighlight( { wordsOnly: false } );
-        $(".glossaire .liste").highlight( search, { wordsOnly: false } );
+        $(".glossaire .liste").unhighlight( { wordsOnly: false, caseSensitive: false } );
+        $(".glossaire .liste").highlight( search, { wordsOnly: false, caseSensitive: false } );
     })
     
 });
