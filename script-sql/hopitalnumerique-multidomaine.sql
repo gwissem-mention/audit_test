@@ -45,3 +45,43 @@ VALUES
     (NULL, NULL, 4, 'Requêtes de recherche', 'hopital_numerique_requete_homepage', NULL, 0, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 4),
     (NULL, NULL, 4, 'Mes autodiagnostics', 'hopitalnumerique_autodiag_front_comptehn', '[]', 0, '#', NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 5),
     (NULL, NULL, 4, 'Changer mon mot de passe', 'hopital_numerique_user_motdepasse', '[]', NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 2);
+
+INSERT INTO `hn_domaine` (`dom_id`, `temp_id`, `dom_nom`, `dom_description`, `dom_url`, `dom_logo`, `dom_date_derniere_maj`, `dom_adresse_mail_contact`)
+VALUES
+	(1, 2, 'Mon Hôpital Numérique', 'Faciliter l\'usage du numérique au service des soins', 'http://test.hopitalnumeriquemulti.nodevo.com', 'logo-hn.jpg', '2015-05-27 00:00:00', 'accompagnement-hn@anap.fr'),
+	(2, 1, 'Macrodiagnostic', 'Macrodiagnostic - Mesurer le niveau de maturité de mon établissement afin d’identifier des actions d’améliorations.', 'http://macrodiag.hopitalnumeriquemulti.nodevo.com', NULL, '2015-05-27 00:00:00', 'accompagnement-hn@anap.fr');
+
+/* Recherche aidée */
+INSERT INTO `hn_recherche_expbesoin_gestionnaire` (`expbg_id`, `expbg_nom`)
+VALUES
+	(1, 'Recherche Aidée HNum');
+UPDATE hn_recherche_expbesoin SET expbg_id = 1;
+
+/*Parcours guidé*/
+INSERT INTO `hn_recherche_recherche_parcours_gestion` (`rrpg_id`, `rrpg_nom`)
+VALUES
+	(1, 'Parcours guidé HNum');
+INSERT INTO `hn_recherche_recherche_parcours_gestion_reference_parente` (`rrpg_id`, `ref_id`)
+VALUES
+	(1, 291),
+	(1, 292),
+	(1, 293),
+	(1, 294),
+	(1, 295);
+INSERT INTO `hn_recherche_recherche_parcours_gestion_reference_ventilation` (`rrpg_id`, `ref_id`)
+VALUES
+	(1, 226),
+	(1, 233),
+	(1, 234),
+	(1, 235),
+	(1, 236),
+	(1, 237);
+
+INSERT INTO `hn_domaine_gestions_parcours_guide` (`rrpg_id`, `dom_id`)
+VALUES
+	(1, 1);
+UPDATE hn_recherche_recherche_parcours SET rrpg_id = 1
+INSERT INTO `hn_recherche_recherche_parcours_gestion_type_publication` (`rrpg_id`, `ref_id`)
+VALUES
+	(1, 184);
+
