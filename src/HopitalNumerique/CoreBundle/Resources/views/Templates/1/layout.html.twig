@@ -77,19 +77,11 @@
         <div class="row" id="body">
             <div id="header" class="col-md-12">
                 <a href="/" target="_blank" id="logo-header">
-                    <img src="/{{ domaineCurrent.getWebPath() }}" alt="ANAP" id="logoAnap" class="pull-left" width="69px" />
+                    <img src="/{{ domaineCurrent.getWebPath() }}" alt="{{domaineCurrent.nom}}" id="logoAnap" class="pull-left" height="77px" />
                 </a>
                 <div id="titre" class="pull-left">
                     <a href="{{path('hopital_numerique_homepage')}}" class="h1">{{domaineCurrent.nom}}</a>
                     <div class="h2">{{domaineCurrent.description}}</div>
-                </div>
-                <div id="bloc_exalead_header" class="pull-left">
-                    <div id="recherche_textuelle_group">
-                     <span class="bt-recherche pull-right">
-                        <a class="infos btn btn-rose" href="{{path('hopital_numerique_recherche_parcours_homepage_front', {'id' : 1 })}}">Parcours guidé</a>
-                        <a class="infos btn btn-orange" href="{{path('hopital_numerique_recherche_homepage')}}" id="search-avance-header-home">Recherche avancée</a>
-                     </span>
-                    </div>
                 </div>
 
                 <div class="loggedUser pull-right">
@@ -112,22 +104,12 @@
                         <div class="connexion">
                             <a href="{{path('account_logout')}}">Déconnexion</a>
                         </div>
+                        <a class="btn btn-success" href="{{path('hopital_numerique_user_informations_personnelles')}}">Mon compte</a>
                         {#<a class="infos btn btn-rose" href="{{path('hopital_numerique_account_homepage')}}">Tableau de bord</a>#}
                     {% else %}
                         <a class="infos btn btn-rose" href="{{path('hopital_numerique_user_inscription')}}">Créer un compte</a>
                     {% endif %}
                 </div>
-                <div id="logoHn" class="pull-right">
-                    {#<a href="http://www.anap.fr/" target="_blank">
-                        <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-anap-small.jpg')}}" alt="ANAP" />
-                    </a>#}
-                    <a href="http://www.sante.gouv.fr/le-programme-hopital-numerique.html" targt="_blank">
-                        <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn-small.jpg')}}" alt="HOPITAL NUMERIQUE" />
-                    </a>
-                </div>
-                {# <p class="violet pull-right align-right">
-                    Ce projet s’inscrit dans le cadre du programme
-                </p>#}
 
                 <div class="common-sprite common-sprite-header"></div>
                 <div class="clearfix"></div>

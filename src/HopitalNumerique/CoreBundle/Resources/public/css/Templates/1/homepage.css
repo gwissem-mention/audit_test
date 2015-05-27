@@ -34,6 +34,7 @@ div.homepage  {
 }
 #header {
     padding: 10px 25px;
+    background: -webkit-linear-gradient(bottom,#ffffff,#f6f5f5);
 }
 #header #titre {
     padding-left: 10px;
@@ -639,8 +640,8 @@ div.homepage  {
 #homepage {
     padding-top: 20px;
     padding-bottom: 30px;
-    background-color: #f6f6f6;
-    float:left;
+    width: 521px;
+    margin: 0 auto 25px;
 }
 #homepage h3 {
     text-transform: uppercase;

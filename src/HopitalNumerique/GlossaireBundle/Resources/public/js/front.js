@@ -11,9 +11,20 @@ $(document).ready(function() {
 
         $(".glossaire .liste").unhighlight( { wordsOnly: false, caseSensitive: false } );
         $(".glossaire .liste").highlight( search, { wordsOnly: false, caseSensitive: false } );
+
+        recherchePremierElementHighlight();
     })
     
 });
+
+function recherchePremierElementHighlight()
+{
+    $(".glossaire .liste span.highlight:first").attr("id","recherche-glossaire");
+
+    $('html, body').animate({
+        scrollTop: $("#recherche-glossaire").offset().top
+    }, 2000);
+}
 
 //Plugin de highlight
 jQuery.extend({

@@ -57,6 +57,7 @@ h3{font-size: 20px}
     }
     #header {
         padding: 10px;
+        background: -webkit-linear-gradient(bottom,#ffffff,#f6f5f5);
     }
     #header #titre {
         padding-left: 10px;
