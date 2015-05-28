@@ -702,6 +702,7 @@ class InterventionDemandeManager extends BaseManager
         
         $exportTitres = array
         (
+            'Id',
             'Initiateur',
             'Demandeur',
             'Directeur',
@@ -766,6 +767,7 @@ class InterventionDemandeManager extends BaseManager
 
             $interventionDemandeExport = array
             (
+                $interventionDemande->getId(),
                 (null === $interventionDemande->getInterventionInitiateur() ? '' : $interventionDemande->getInterventionInitiateur()->__toString()),
                 (null === $interventionDemande->getReferent() ? '' : $interventionDemande->getReferent()->getAppellation()),
                 (null === $interventionDemande->getDirecteur() ? '' : $interventionDemande->getDirecteur()->getAppellation()),
