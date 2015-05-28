@@ -55,7 +55,7 @@ $(document).ready(function() {
     $(datas).each(function(index, element ){
         if( element.value != 'NC' || element.taux != 0 )
         {
-            title = '<b>' + element.title + '</b>' + (element.centPourcentReponseObligatoire ? '' : ' (Taux de remplissage: ' + element.taux + '%)');
+            title = '<b>' + element.title + '</b><span style="display: none;">' + (element.centPourcentReponseObligatoire ? '' : ' (Taux de remplissage: ' + element.taux + '%)') + '</span>';
             categories.push( title );
             values.push( element.value );
             optimale.push( element.opti );

@@ -478,7 +478,9 @@ class ResultatController extends Controller
             );
             
             $sheet->setCellValueByColumnAndRow(0, 1, 'Autodiagnostic "' . $resultat->getOutil()->getTitle() . '" - "' . $resultat->getName() . '"');
-            $sheet->setCellValueByColumnAndRow(0, 2, "Plan d'actions exporté le " . date('d/m/Y') . " à " . date('H:i') . " par " . $user->getAppellation());
+            
+            $userName = ($user == 'anon.') ? '' :  (" par " . $user->getAppellation());
+            $sheet->setCellValueByColumnAndRow(0, 2, "Plan d'actions exporté le " . date('d/m/Y') . " à " . date('H:i') . $userName);
             
             $nbLigne = 4;
             foreach($datas as $data)

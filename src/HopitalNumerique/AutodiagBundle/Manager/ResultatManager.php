@@ -642,6 +642,14 @@ class ResultatManager extends BaseManager
                             }
                         }
 
+	                    if($one->max == 0) {
+		                    $one->max = 1;
+	                    }
+
+	                    if($one->ponderation == 0) {
+		                    $one->ponderation = 1;
+	                    }
+
                         $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nbQue']++;
                         $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nbPoints']                    += ($one->tableValue * $one->ponderation);
                         $results->categories[ $categorieId ]['chapitres'][$chapitreId]['max']                         += ($one->max * $one->ponderation);
@@ -863,16 +871,17 @@ class ResultatManager extends BaseManager
     public function calculMoyenneChapitre( $chapitre )
     {
         //<-- Cas d'une synthèse
-        if (isset($chapitre->syntheseChapitres) && count($chapitre->syntheseChapitres) > 0)
+        /*if (isset($chapitre->syntheseChapitres) && count($chapitre->syntheseChapitres) > 0)
         {
             $chapitreMoyennes = array();
             foreach ($chapitre->syntheseChapitres as $syntheseChapitre)
             {
                 $chapitreMoyenne = $this->getSommesCalculMoyenneChapitre($syntheseChapitre);
                 if (null !== $chapitreMoyenne && $chapitreMoyenne['sommeMaxPourc'] != 0)
+
                     $chapitreMoyennes[] = $chapitreMoyenne;
             }
-            
+
             $sommeValues = 0;
             $sommeMaxPourc = 0;
             foreach ($chapitreMoyennes as $chapitreMoyenne)
@@ -880,10 +889,11 @@ class ResultatManager extends BaseManager
                 $sommeValues += $chapitreMoyenne['sommeValues'];
                 $sommeMaxPourc += $chapitreMoyenne['sommeMaxPourc'];
             }
+
             if ($sommeMaxPourc == 0)
                 return 0;
             return ($sommeValues / $sommeMaxPourc);
-        }
+        }*/
         //-->
         
         /*
@@ -922,10 +932,10 @@ class ResultatManager extends BaseManager
         {
             $sommeValues       += ($question->value * $question->ponderation);
             $sommeMaxPourc     += $question->ponderation;
-        
+
             $chapitreConcerne = true;
         }
-        
+
         $childs = $chapitre->childs;
         foreach( $childs as $child )
         {
@@ -933,12 +943,14 @@ class ResultatManager extends BaseManager
             foreach($questions as $question)
             {
                 $sommeValues       += ($question->value * $question->ponderation);
+
                 $sommeMaxPourc     += $question->ponderation;
         
                 $chapitreConcerne = true;
             }
+
         }
-        
+
         if( $chapitreConcerne === false )
             return null;
         
@@ -1081,7 +1093,8 @@ class ResultatManager extends BaseManager
         $outstream = fopen("php://temp", 'r+');
 
         fputcsv($outstream, array('Autodiagnostic "' . $resultat->getOutil()->getTitle() . '" - "' . $resultat->getName() . '"'));
-        fputcsv($outstream, array("Plan d'actions exporté le " . date('d/m/Y') . " à " . date('H:i') . " par " . $user->getAppellation()));
+        $userName = ($user == 'anon.') ? '' :  (" par " . $user->getAppellation());
+        fputcsv($outstream, array("Plan d'actions exporté le " . date('d/m/Y') . " à " . date('H:i') . $userName));
 
         //Ajout de la colonne d'en-têtes
         $colonnesLines = array_values($colonnes);

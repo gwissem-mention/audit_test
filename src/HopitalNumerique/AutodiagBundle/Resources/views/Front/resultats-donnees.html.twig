@@ -27,7 +27,7 @@
 
         {% if resultat.name or resultat.dateLastSave %}
             <h3 class="text-center">
-                {% if resultat.name %}{% if resultat.synthese %}Synthèse : {% endif %}{{resultat.name }} {% if resultat.resultatSharedBy is not null %} - partagé par {{resultat.resultatSharedBy.user.getAppellation()}} ({{ resultat.resultatSharedBy.user.getEtablissementRattachementSante().getNom() }}){% elseif resultat.resultatSharedFor %} - partagé avec {{resultat.resultatSharedFor.user.getAppellation()}} ({{ resultat.resultatSharedFor.user.getEtablissementRattachementSante().getNom() }}){% endif %}{% endif %}{% if pdf %}<br />{% endif %}
+                {% if resultat.name %}{% if resultat.synthese %}Synthèse : {% endif %}{{resultat.name }} {% if resultat.resultatSharedBy is not null %} - partagé par {{resultat.resultatSharedBy.user.getAppellation()}} {% if resultat.resultatSharedBy.user.getEtablissementRattachementSante() is not null %}({{ resultat.resultatSharedBy.user.getEtablissementRattachementSante().getNom() }}){% endif %}{% elseif resultat.resultatSharedFor %} - partagé avec {{resultat.resultatSharedFor.user.getAppellation()}} {% if resultat.resultatSharedFor.user.getEtablissementRattachementSante() is not null %}({{ resultat.resultatSharedFor.user.getEtablissementRattachementSante().getNom() }}){% endif %}{% endif %}{% endif %}{% if pdf %}<br />{% endif %}
                 {% if resultat.dateLastSave %}<small class="pull-right text-muted">le {{resultat.dateLastSave|date('d/m/Y')}}</small>{% endif %}
             </h3>
         {% endif %}
@@ -120,6 +120,7 @@
                                             {% if panel.value == 0 %}
                                             {% set val = 0 %}
                                             {% endif %}
+
                                             <div class="cursor" {% if pdf %}style="left:{{value}}"{% endif %} data-position="{{value}}" title="" ></div>
                                             <div class="cursor-value" style="left:{{value}}">{{val}}</div>
 
@@ -170,7 +171,7 @@
                                             <h4 class="text-center">{{ chapitre.titre }}</h4>
                                             <div class="chapitres">
                                                 {% for chapitreEnfant in chapitre.enfants %}
-                                                    <div class="resultat{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} {% if chapitreEnfant.moyenne > 66 %} resultat_fort{% elseif chapitreEnfant.moyenne > 33 %}resultat_moyen{% else %}resultat_faible{% endif %}{% endif %}"{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} 
+                                                    <div class="resultat{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} {% if chapitreEnfant.moyenne|number_format(0) >= 66 %} resultat_fort{% elseif chapitreEnfant.moyenne|number_format(0) > 33 %}resultat_moyen{% else %}resultat_faible{% endif %}{% endif %}"{% if chapitreEnfant.nombreQuestionsRepondues > 0 %}
                                                     title="Score : {{ chapitreEnfant.moyenne }}% {% if resultat.synthese %}{# <br />Valeur minimale : {{chapitreEnfant.min}}%<br />Valeur maximale : {{chapitreEnfant.max}}% #}{% endif %}"{% endif %}>
                                                         {{ chapitreEnfant.titre }}
                                                     </div>
@@ -217,7 +218,7 @@
                                     <div class="reverse" onclick="reverse_table(document.getElementById('tableau_resultats'));" ><i class="fa fa-refresh"></i></div>
                                 </th>
                                 {% for id, chapitre in chart.datas.chapitres %}
-                                    <th class="active text-left chapitre-{{id}}"{% if not chart.datas.totauxChapitres[id].isParent %} style="font-weight:normal;"{% endif %}>{{chapitre}}</th>
+                                    <th class="active text-left chapitre-{{id}} {% if chart.datas.totauxChapitres[id].isParent %}chapitre-parent{% endif %}" {% if not chart.datas.totauxChapitres[id].isParent %} style="font-weight:normal;"{% endif %}>{{chapitre}}</th>
                                 {% endfor %}
                                 {% if resultat.outil.tableChartAfficheTotal %}<th class="active text-center title-total">Total</th>{% endif %}
                             </thead>
@@ -303,8 +304,8 @@
                                                 {% else %}
                                                     {% set note = 0 %}
                                                 {% endif %}
-                                                <td class="text-center {% if note <= 33 %}danger{% elseif note <= 66 %}warning{% else %}success{% endif %}">
-                                                    <strong>{{ note|number_format(0) }}%</strong>
+                                                <td class="text-center {% if note|number_format(0) < 33 %}danger{% elseif note|number_format(0) < 66 %}warning{% else %}success{% endif %}">
+                                                    {{ note|number_format(0) }}%
                                                 </td>
                                             {% else %}
                                                 <td class="text-center vertical-align" >
