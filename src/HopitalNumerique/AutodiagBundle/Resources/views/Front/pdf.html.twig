@@ -1,44 +1,51 @@
-{% block stylesheets %}    
-    {% if templateCurrentId == 1 %}
-        {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-1.css" filter="cssrewrite, ?yui_css" 
-            "@bootstrap_css"
-            'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
-            'bundles/hopitalnumeriqueautodiag/css/front.css'
-            'bundles/hopitalnumeriqueautodiag/css/print.css'
-        %}
-            <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
-        {% endstylesheets %}
-    {% elseif templateCurrentId == 2 %}
-        {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-2.css" filter="cssrewrite, ?yui_css" 
-            "@bootstrap_css"
-            'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
-            'bundles/hopitalnumeriqueautodiag/css/front.css'
-            'bundles/hopitalnumeriqueautodiag/css/print.css'
-        %}
-            <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
-        {% endstylesheets %}
-    {% else %}
-        {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-default.css" filter="cssrewrite, ?yui_css" 
-            "@bootstrap_css"
-            'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
-            'bundles/hopitalnumeriqueautodiag/css/front.css'
-            'bundles/hopitalnumeriqueautodiag/css/print.css'
-        %}
-            <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
-        {% endstylesheets %}
-    {% endif %}
-{% endblock %}
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        {% block stylesheets %}    
+            {% if templateCurrentId == 1 %}
+                {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-1.css" filter="cssrewrite, ?yui_css" 
+                    "@bootstrap_css"
+                    'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                    'bundles/hopitalnumeriqueautodiag/css/front.css'
+                    'bundles/hopitalnumeriqueautodiag/css/print.css'
+                %}
+                    <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
+                {% endstylesheets %}
+            {% elseif templateCurrentId == 2 %}
+                {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-2.css" filter="cssrewrite, ?yui_css" 
+                    "@bootstrap_css"
+                    'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
+                    'bundles/hopitalnumeriqueautodiag/css/front.css'
+                    'bundles/hopitalnumeriqueautodiag/css/print.css'
+                %}
+                    <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
+                {% endstylesheets %}
+            {% else %}
+                {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-default.css" filter="cssrewrite, ?yui_css" 
+                    "@bootstrap_css"
+                    'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                    'bundles/hopitalnumeriqueautodiag/css/front.css'
+                    'bundles/hopitalnumeriqueautodiag/css/print.css'
+                %}
+                    <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
+                {% endstylesheets %}
+            {% endif %}
+        {% endblock %}
 
-{% block javascripts %}
-    {% javascripts output="compiled/hopitalnumerique-autodiag-front-pdf.js" 
-        "@jquery_js"
-        "@bootstrap_js"
-        '@highcharts_js'
-        'bundles/hopitalnumeriquecore/js/script.js'
-        'bundles/hopitalnumeriqueautodiag/js/pdf.js'
-    %}
-        <script type="text/javascript" src="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock %}
+        {% block javascripts %}
+            {% javascripts output="compiled/hopitalnumerique-autodiag-front-pdf.js" 
+                "@jquery_js"
+                "@bootstrap_js"
+                '@highcharts_js'
+                'bundles/hopitalnumeriquecore/js/script.js'
+                'bundles/hopitalnumeriqueautodiag/js/pdf.js'
+            %}
+                <script type="text/javascript" src="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% endblock %}
+    </head>
 
-{% include 'HopitalNumeriqueAutodiagBundle:Front:resultats-donnees.html.twig' with {'resultat':resultat, 'pdf':true, 'sansGabarit': false} %}
+    <body>
+        {% include 'HopitalNumeriqueAutodiagBundle:Front:resultats-donnees.html.twig' with {'resultat':resultat, 'pdf':true, 'sansGabarit': false} %}
+    </body>
+</html>
