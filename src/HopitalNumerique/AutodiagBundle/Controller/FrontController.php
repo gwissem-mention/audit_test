@@ -638,6 +638,273 @@ class FrontController extends Controller
         }
 
         $fileName = __ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf();
+
+        //Regenere le pdf si il n'existe plus/pas
+        if( is_null($resultat->getPdf()) || !file_exists($fileName) ){
+            $back = 0;
+            // si l'autodiagnostic est validé, on ne peut plus revenir à la page d'édition
+            if( $resultat->getStatut()->getId() == 419 )
+            {
+                $back = 1;
+            }
+            //restriction de l'accès aux résultats lorsque l'user est connecté
+            if( 
+                ( $user && !is_null($resultat->getUser()) && $resultat->getUser() != $user ) || 
+                (!$user && !is_null($resultat->getUser()) ) 
+            ) {
+                $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas accès à ces résultats.');
+                return $this->redirect( $this->generateUrl('hopital_numerique_homepage' ) );
+            }
+
+            //récupère les chapitres et les formate pour l'affichage des liens des publications
+            $chapitres            = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+            $chapitresForReponse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+            $chapitresForAnalyse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
+            
+            //Trier par note
+            if ($resultat->getOutil()->isPlanActionPriorise())
+            {
+                uasort($chapitres, array($this,"triParNote"));
+                foreach ($chapitres as $key => $chapitre)
+                {
+                    uasort($chapitre->questions, array($this,"triParNoteQuestion"));
+                    uasort($chapitre->childs, array($this,"triParNote"));
+                    foreach ($chapitre->childs as $child)
+                    {
+                        uasort($child->questions, array($this,"triParNoteQuestion"));
+                    }
+                }
+            }
+            if ($resultat->getOutil()->isPlanActionPriorise())
+            {
+                uasort($chapitresForAnalyse, array($this,"triParNote"));
+                foreach ($chapitresForAnalyse as $key => $chapitre)
+                {
+                    uasort($chapitre->questions, array($this,"triParNoteQuestion"));
+                    uasort($chapitre->childs, array($this,"triParNote"));
+                    foreach ($chapitre->childs as $child)
+                    {
+                        uasort($child->questions, array($this,"triParNoteQuestion"));
+                    }
+                }
+            }
+            //--Analyse
+
+            //Nettoyage des éléments dont il n'y aucun élément
+            foreach ($chapitresForAnalyse as $key => $chapitre)
+            {
+                //Vide le chapitre courant si il a ni de question ni de sous chapitre
+                if(empty($chapitre->questions) && empty($chapitre->childs))
+                {
+                    unset($chapitresForAnalyse[$key]);
+                }
+                //Sinon on cherche parmis les sous chapitres
+                elseif(!empty($chapitre->childs))
+                {
+                    $hideChapitre = false;
+                    foreach ($chapitre->childs as $keyChild => $child) 
+                    {
+                        if(empty($child->questions))
+                        {
+                            unset($chapitre->childs[$keyChild]);
+                            if(empty($chapitre->childs))
+                            {
+                                $hideChapitre = true;
+                            }
+                        }
+                    }
+
+                    if($hideChapitre)
+                    {
+                        unset($chapitresForAnalyse[$key]);
+                    }
+                }
+            }
+
+            $graphiques = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultat, $chapitres );
+            //Dans le cas où nous nous trouvons dans une synthese, il faut récupérer le min et max
+            if ($resultat->getSynthese())
+            {
+                foreach ($resultat->getResultats() as $resultatSynthese)
+                {
+                    $chapitresSynthese = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynthese );
+                    $graphTemp = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultatSynthese, $chapitresSynthese );
+
+                    //Radar
+                    if (array_key_exists('radar', $graphiques))
+                    {
+                        foreach ($graphiques["radar"]->datas as $keyDataGraphique => &$dataGraphique) 
+                        {
+                            //Récupération de la valeur du graph courant
+                            $graphTempValue = $graphTemp["radar"]->datas[$keyDataGraphique]->value;
+        
+                            if(is_null($dataGraphique->min))
+                            {
+                                if($graphTempValue != "NC")
+                                {
+                                    $dataGraphique->min = $graphTempValue;
+                                    $dataGraphique->max = $graphTempValue;
+                                }
+                            }
+                            elseif($graphTempValue == "NC")
+                            {
+                                if($dataGraphique->max != "NC" )
+                                {
+                                    $dataGraphique->min = $dataGraphique->max;
+                                }
+                            }
+                            elseif($dataGraphique->min > $graphTempValue)
+                            {
+                                $dataGraphique->min = $graphTempValue;
+                            }
+                            elseif($dataGraphique->max < $graphTempValue)
+                            {
+                                $dataGraphique->max = $graphTempValue;
+                            }
+                        }
+                    }
+                    //Barre
+                    if (array_key_exists('barre', $graphiques))
+                    {
+                        foreach ($graphiques["barre"]->panels as $keyDataGraphique => &$dataGraphique) 
+                        {
+                            //Récupération de la valeur du graph courant
+                            $graphTempValue = $graphTemp["barre"]->panels[$keyDataGraphique]->value;
+                            if(is_null($dataGraphique->min))
+                            {
+                                if($graphTempValue != "NC")
+                                {
+                                    $dataGraphique->min = $graphTempValue;
+                                    $dataGraphique->max = $graphTempValue;
+                                }
+                            }
+                            elseif($graphTempValue === "NC")
+                            {
+                                if($dataGraphique->max != "NC" )
+                                {
+                                    $dataGraphique->min = $dataGraphique->max;
+                                }
+                            }
+                            elseif( $dataGraphique->min > $graphTempValue )
+                            {
+                                $dataGraphique->min = $graphTempValue;
+                            }
+                            elseif($dataGraphique->max < $graphTempValue)
+                            {
+                                $dataGraphique->max = $graphTempValue;
+                            }
+                        }
+                    }
+                    // table
+                    if (array_key_exists('table', $graphiques))
+                    {
+                        foreach ($graphiques["table"]->datas->categories as $keyDataGraphique => &$dataGraphique) 
+                        {
+                            foreach($dataGraphique['chapitres'] as $id => $chapitre)
+                            {
+                                //Récupération de la valeur du graph courant
+                                $graphTempValue = $graphTemp["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id];
+                                if( $graphTempValue['maxPourc'] != 0 )
+                                {
+                                    $value = ( $graphTempValue['nbPointsPourc'] * 100 ) / $graphTempValue['maxPourc'];
+        
+                                    if( !isset($graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum']) 
+                                        || $value < $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum'] 
+                                    ) {
+                                        $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum'] = $value;
+                                    }
+        
+                                    if( !isset($graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum']) 
+                                        || $value > $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum'] 
+                                    ) {
+                                        $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum'] = $value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ( !$user || $back === 0 )
+            {
+                $back = false;
+            }
+
+            $questionReponseSynthese = $questionReponseSyntheseTableau = $resultatsName = array();
+            if($resultat->getSynthese())
+            {
+                $chapitresSynthese = array();
+                //Récupérations de l'ensemble des chapitres de tout les outils de la synthese
+                foreach ($resultat->getResultats() as $resultatSynth) 
+                {
+                    $chapitresSynthese[$resultatSynth->getId()]  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultatSynth );
+                    $resultatsName[ $resultatSynth->getId() ] = $resultatSynth->getName();
+                }
+                //Récupérations des réponses aux questions
+                foreach ($chapitresSynthese as $resultatId => $chapitresSynthese) 
+                {
+                    $questionReponseSyntheseTableau[$resultatId] = array();
+                    foreach ($chapitresSynthese as $idChapitreSynth => $chapitreSynthese) 
+                    {
+                        foreach ($chapitreSynthese->questionsBack as $idQuestionChapSynth => $questionSynthese) 
+                        {
+                            //Init du tableau
+                            if(!array_key_exists($questionSynthese->id, $questionReponseSynthese))
+                            {
+                                $questionReponseSynthese[$questionSynthese->id] = array();
+                            }
+                            //Init du tableau
+                            if(!array_key_exists($questionSynthese->initialValue, $questionReponseSynthese[$questionSynthese->id]))
+                            {
+                                $questionReponseSynthese[$questionSynthese->id][$questionSynthese->initialValue] = 0;
+                            }
+                            $questionReponseSynthese[$questionSynthese->id][$questionSynthese->initialValue]++;
+                            $questionReponseSyntheseTableau[$resultatId][$questionSynthese->id] = $questionSynthese->initialValue;
+                        }
+
+                        foreach ($chapitreSynthese->childs as $chapitreChildSynthese) 
+                        {
+                            foreach ($chapitreChildSynthese->questionsBack as $idQuestionChapChildSynth => $questionChildSynthese) 
+                            {
+                                //Init du tableau
+                                if(!array_key_exists($questionChildSynthese->id, $questionReponseSynthese))
+                                {
+                                    $questionReponseSynthese[$questionChildSynthese->id] = array();
+                                }
+                                //Init du tableau
+                                if(!array_key_exists($questionChildSynthese->initialValue, $questionReponseSynthese[$questionChildSynthese->id]))
+                                {
+                                    $questionReponseSynthese[$questionChildSynthese->id][$questionChildSynthese->initialValue] = 0;
+                                }
+                                $questionReponseSynthese[$questionChildSynthese->id][$questionChildSynthese->initialValue]++;
+                                $questionReponseSyntheseTableau[$resultatId][$questionChildSynthese->id] = $questionChildSynthese->initialValue;
+                            }
+                        }
+                    }  
+                }
+            }
+            
+            $radarChartBenchmarkCouleurDecile2 = ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile2() == 'vert' ? '#76e57e' : '#ff7a7a');
+            $radarChartBenchmarkCouleurDecile8 = ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile8() == 'vert' ? '#76e57e' : '#ff7a7a');
+
+            $options = array(
+                'chapitresForAnalyse'     => $chapitresForAnalyse,
+                'chapitresForReponse'     => $chapitresForReponse,
+                'resultatsName' => $resultatsName,
+                'questionReponseSynthese' => $questionReponseSynthese,
+                'questionReponseSyntheseTableau' => $questionReponseSyntheseTableau,
+                'radarChartBenchmarkCouleurDecile2' => $radarChartBenchmarkCouleurDecile2,
+                'radarChartBenchmarkCouleurDecile8' => $radarChartBenchmarkCouleurDecile8
+            );
+
+            $pdf = $this->generatePdf( $chapitres, $graphiques, $resultat, $request, $options );
+            $resultat->setPdf( $pdf );
+            $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
+
+            $fileName = __ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf();
+        }
+
         $options  = array(
             'serve_filename' => 'resultat-outil-'.$resultat->getOutil()->getAlias().'.pdf',
             'absolute_path'  => false,
