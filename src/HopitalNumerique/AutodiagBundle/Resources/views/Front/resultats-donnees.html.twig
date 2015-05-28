@@ -214,13 +214,15 @@
                     <div class="col-md-12 tableContainer">
                         <table class="table table-hover table-bordered" id="tableau_resultats" >
                             <thead>
-                                <th colspan="2" class="text-center vertical-align">
-                                    <div class="reverse" onclick="reverse_table(document.getElementById('tableau_resultats'));" ><i class="fa fa-refresh"></i></div>
-                                </th>
-                                {% for id, chapitre in chart.datas.chapitres %}
-                                    <th class="active text-left chapitre-{{id}} {% if chart.datas.totauxChapitres[id].isParent %}chapitre-parent{% endif %}" {% if not chart.datas.totauxChapitres[id].isParent %} style="font-weight:normal;"{% endif %}>{{chapitre}}</th>
-                                {% endfor %}
-                                {% if resultat.outil.tableChartAfficheTotal %}<th class="active text-center title-total">Total</th>{% endif %}
+                                <tr>
+                                    <th colspan="2" class="text-center vertical-align">
+                                        <div class="reverse" onclick="reverse_table(document.getElementById('tableau_resultats'));" ><i class="fa fa-refresh"></i></div>
+                                    </th>
+                                    {% for id, chapitre in chart.datas.chapitres %}
+                                        <th class="active text-left chapitre-{{id}} {% if chart.datas.totauxChapitres[id].isParent %}chapitre-parent{% endif %}" {% if not chart.datas.totauxChapitres[id].isParent %} style="font-weight:normal;"{% endif %}>{{chapitre}}</th>
+                                    {% endfor %}
+                                    {% if resultat.outil.tableChartAfficheTotal %}<th class="active text-center title-total">Total</th>{% endif %}
+                                </tr>
                             </thead>
                             <tbody>
                                 {% for id,categorie in chart.datas.categories %}
@@ -241,9 +243,9 @@
                                         {% if resultat.synthese %}
                                             {% set rowspan = rowspan + 2 %}
                                         {% endif %}
-                                        <td class="active text-center vertical-align categorie-{{id}}" rowspan="{{rowspan}}"><b>{{categorie.title|capitalize}}</b></td>
+                                            <td class="active text-center vertical-align categorie-{{id}}" rowspan="{{rowspan}}"><b>{{categorie.title|capitalize}}</b></td>
                                         {% if not resultat.outil.centPourcentReponseObligatoire %}
-                                        <td class="text-center">Nombre de réponses</td>
+                                            <td class="text-center">Nombre de réponses</td>
                                         {% endif %}
                                         {% for datas in categorie['chapitres'] %}
                                             {% if not datas['nc'] %}
@@ -269,30 +271,32 @@
                                             </td>
                                             {% endif %}
                                         {% endif %}
-                                        {% if resultat.synthese %}
-                                        <td class="text-center vertical-align" rowspan="1">Min</td>
-                                        {% else %}
-                                        <td class="text-center vertical-align" rowspan="1">Score</td>
-                                        {% endif %}
-                                    {% if resultat.synthese %}
-                                    {% for datas in categorie['chapitres'] %}
-                                        {% if not datas['nc'] %}
-                                        <td class="text-center vertical-align">
-                                            <span class="initialism minimum" title="<span>Score minimum</span>">{{ datas['minimum']|number_format(0) }}%</span>
-                                        </td>
-                                        {% else %}
-                                            <td class="text-center vertical-align" >
-                                                NC
-                                            </td>
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% if resultat.outil.tableChartAfficheTotal %}
-                                        <td class="text-center vertical-align">-</td>
-                                    {% endif %}
                                     </tr>
                                     <tr>
-                                        <td class="text-center vertical-align" rowspan="1">Moyenne</td>
-                                    {% endif %}
+                                        {% if resultat.synthese %}
+                                            <td class="text-center vertical-align" rowspan="1">Min</td>
+                                        {% else %}
+                                            <td class="text-center vertical-align" rowspan="1">Score</td>
+                                        {% endif %}
+                                        {% if resultat.synthese %}
+                                            {% for datas in categorie['chapitres'] %}
+                                                {% if not datas['nc'] %}
+                                                <td class="text-center vertical-align">
+                                                    <span class="initialism minimum" title="<span>Score minimum</span>">{{ datas['minimum']|number_format(0) }}%</span>
+                                                </td>
+                                                {% else %}
+                                                    <td class="text-center vertical-align" >
+                                                        NC
+                                                    </td>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if resultat.outil.tableChartAfficheTotal %}
+                                                <td class="text-center vertical-align">-</td>
+                                            {% endif %}
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center vertical-align" rowspan="1">Moyenne</td>
+                                        {% endif %}
                                         {% for datas in categorie['chapitres'] %}
                                             {% if not datas['nc'] %}
                                                 {% set nbPointsCateg = nbPointsCateg + datas['nbPointsPourc'] %}
@@ -324,23 +328,23 @@
                                             </td>
                                         {% endif %}
                                     {% if resultat.synthese %}
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center vertical-align" rowspan="1">Max</td>
-                                    {% for datas in categorie['chapitres'] %}
-                                        {% if not datas['nc'] %}
-                                        <td class="text-center vertical-align">
-                                            <span class="initialism minimum" title="<span>Score maximum</span>">{{ datas['maximum']|number_format(0) }}%</span>
-                                        </td>
-                                        {% else %}
-                                            <td class="text-center vertical-align" >
-                                                NC
-                                            </td>
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% if resultat.outil.tableChartAfficheTotal %}
-                                        <td class="text-center vertical-align">-</td>
-                                    {% endif %}
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center vertical-align" rowspan="1">Max</td>
+                                            {% for datas in categorie['chapitres'] %}
+                                                {% if not datas['nc'] %}
+                                                <td class="text-center vertical-align">
+                                                    <span class="initialism minimum" title="<span>Score maximum</span>">{{ datas['maximum']|number_format(0) }}%</span>
+                                                </td>
+                                                {% else %}
+                                                    <td class="text-center vertical-align" >
+                                                        NC
+                                                    </td>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if resultat.outil.tableChartAfficheTotal %}
+                                                <td class="text-center vertical-align">-</td>
+                                            {% endif %}
                                     {% endif %}
                                     </tr>
                                 {% endfor %}
@@ -833,72 +837,72 @@
 </div>
 
 {% macro buildQuestionReponse(questions, resultat, questionReponseSynthesetableau, resultatsName) %}
-                <div class="clearfix">
-                    <table class="tableau-question-reponse">
-                        {% if resultat.synthese %}
-                        <thead>
-                            <tr>
-                                <td></td>
-                            {% for id,res in questionReponseSynthesetableau %}
-                                <td class="text-center"><span class="titre-autodiag" title="<span>{{resultatsName[id]}}</span>"><i class="fa fa-question-circle" style="margin-right:5px"></i></span></td>
-                            {% endfor %}
-                            </tr>
-                        </thead>
-                        {% endif %}
-                        <tbody>
-    {% for question in questions %}
-        {% if question.initialValue != '' and question.initialValue != -1 %}
-            {% if question.intro != '' %}
+    <div class="clearfix">
+        <table class="tableau-question-reponse">
+            {% if resultat.synthese %}
+                <thead>
+                    <tr>
+                        <td></td>
+                        {% for id,res in questionReponseSynthesetableau %}
+                            <td class="text-center"><span class="titre-autodiag" title="<span>{{resultatsName[id]}}</span>"><i class="fa fa-question-circle" style="margin-right:5px"></i></span></td>
+                        {% endfor %}
+                    </tr>
+                </thead>
+            {% endif %}
+            <tbody>
+                {% for question in questions %}
+                    {% if question.initialValue != '' and question.initialValue != -1 %}
+                        {% if question.intro != '' %}
                             <tr>
                                 <td>{{question.intro}}</td>
                             </tr>
-            {% endif %}
-            {% set options = question.options %}
-            {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
-                {% if (question.colored == 1 and question.min == question.initialValue) or (question.colored == -1 and question.max == question.initialValue) %}
-                    {% set color = "color:#c82f5b" %}
-                {% elseif (question.colored == -1 and question.min == question.initialValue) or (question.colored == 1 and question.max == question.initialValue) %}
-                    {% set color = "color:#ADD500" %}
-                {% else %}
-                    {% set color = "color:#e88824" %}
-                {% endif %}
-            {% else %}
-                {% set color = "" %}
-            {% endif %}
-                            <tr>
-                                <td>{{question.question}}</td>
-                        {% if resultat.synthese %}
-                            {% for res in questionReponseSynthesetableau %}
-                                <td>
-                                {% set hasvalue = false %}
-                                {% for option in options %}
-                                {% set tab = option|split(';') %}
-                                    {% if res[question.id] is defined and tab[0] == res[question.id] %}
-                                    {% set hasvalue = true %}
-                                    <span style="{{color}}">{{tab[1]|trim}}</span><br />
-                                    {% endif %}
-                                {% endfor %}
-                                {% if not hasvalue %}
-                                    -
-                                {% endif %}
-                                </td>
-                            {% endfor %}
-                        {% else %}
-                                <td>
-                            {% if question.initialValue == -1 %}
-                                    <span>Non concerné</span><br />
-                            {% endif %}
-                            {% for option in options %}
-                                {% set tab = option|split(';') %}
-                                {% if tab[0]|trim == question.initialValue %}
-                                    <span style="{{color}}">{{tab[1]|trim}}</span> &nbsp; <em class="text-muted">{{question.remarque}}</em><br />
-                                {% endif %}
-                            {% endfor %}
                         {% endif %}
+                        {% set options = question.options %}
+                        {% if question.colored and question.initialValue != -1 and question.initialValue != '' %}
+                            {% if (question.colored == 1 and question.min == question.initialValue) or (question.colored == -1 and question.max == question.initialValue) %}
+                                {% set color = 'color:#c82f5b' %}
+                            {% elseif (question.colored == -1 and question.min == question.initialValue) or (question.colored == 1 and question.max == question.initialValue) %}
+                                {% set color = 'color:#ADD500' %}
+                            {% else %}
+                                {% set color = 'color:#e88824' %}
+                            {% endif %}
+                        {% else %}
+                            {% set color = "" %}
+                        {% endif %}
+                        <tr>
+                            <td>{{question.question}}</td>
+                            {% if resultat.synthese %}
+                                {% for res in questionReponseSynthesetableau %}
+                                    <td>
+                                        {% set hasvalue = false %}
+                                        {% for option in options %}
+                                        {% set tab = option|split(';') %}
+                                            {% if res[question.id] is defined and tab[0] == res[question.id] %}
+                                            {% set hasvalue = true %}
+                                            <span style="{{color}}">{{tab[1]|trim}}</span><br />
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if not hasvalue %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            {% else %}
+                                <td>
+                                    {% if question.initialValue == -1 %}
+                                        <span>Non concerné</span><br />
+                                    {% endif %}
+                                    {% for option in options %}
+                                        {% set tab = option|split(';') %}
+                                        {% if tab[0]|trim == question.initialValue %}
+                                            <span style="{{color}}">{{tab[1]|trim}}</span> &nbsp; <em class="text-muted">{{question.remarque}}</em><br />
+                                        {% endif %}
+                                    {% endfor %}
                                 </td>
-                            </tr>
-        {% endif %}
-    {% endfor %}
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
                         </tbody>
                     </table>
                 </div>
