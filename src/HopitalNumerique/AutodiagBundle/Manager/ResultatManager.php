@@ -955,9 +955,15 @@ class ResultatManager extends BaseManager
 
                 if( $one->initialValue !== '' )
                 {
-                    if( $one->noteMinimale !== '' && ( ( $one->colored != -1 && $one->initialValue <= $one->noteMinimale )
-                        || ( $one->colored == -1 && $one->initialValue >= $one->noteMinimale ) )
-                    ) {
+                    if
+                    (
+                        $one->noteMinimale !== '' &&
+                        (
+                            ( $one->colored != -1 && $one->initialValue <= $one->noteMinimale )
+                            || ( $one->colored == -1 && $one->initialValue >= $one->noteMinimale )
+                        )
+                    )
+                    {
                         $results[]     = $one;
                         $noteChapitre += $one->value;
                     }

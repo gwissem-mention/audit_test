@@ -683,35 +683,35 @@
                                             <td></td>
                                             <td>{{questionChild.question}}</td>
                                             {% if not resultat.synthese %}
-                                            <td class="note-{{questionChild.initialValue}}" {% if questionChild.colored and questionChild.initialValue != -1 and questionChild.initialValue != '' %}
+                                                <td class="note-{{questionChild.initialValue}}" {% if questionChild.colored and questionChild.initialValue != -1 and questionChild.initialValue != '' %}
                                                     {% if questionChild.colored == "1" %}
                                                         {% if questionChild.min == questionChild.initialValue %}
                                                             style="color:#c82f5b"
                                                         {% elseif questionChild.max == questionChild.initialValue %}
-                                                            style="color:#e88824"
+                                                            style="color:#ADD500"
                                                         {% else %}
                                                             style="color:#e88824"
                                                         {% endif %}
                                                     {% else %}
                                                         {% if questionChild.min == questionChild.initialValue %}
-                                                            style="color:#e88824"
+                                                            style="color:#ADD500"
                                                         {% elseif questionChild.max == questionChild.initialValue %}
                                                             style="color:#c82f5b"
                                                         {% else %}
                                                             style="color:#e88824"
                                                         {% endif %}
                                                     {% endif %}{% endif %}>
-                                                {% if questionChild.initialValue == -1 %}
-                                                    Non concerné
-                                                {% else %}
-                                                    {% for option in questionChild.options %}
-                                                        {% set tab = option|split(';') %}
-                                                        {% if tab[0] == questionChild.initialValue %}
-                                                            {{tab[1]|trim}}
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </td>
+                                                    {% if questionChild.initialValue == -1 %}
+                                                        Non concerné
+                                                    {% else %}
+                                                        {% for option in questionChild.options %}
+                                                            {% set tab = option|split(';') %}
+                                                            {% if tab[0] == questionChild.initialValue %}
+                                                                {{tab[1]|trim}}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </td>
                                             {% endif %}
                                             {% if affichageSynthese %}
                                                 <td>

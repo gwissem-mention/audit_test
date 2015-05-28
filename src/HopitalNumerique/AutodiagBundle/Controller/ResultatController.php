@@ -528,7 +528,7 @@ class ResultatController extends Controller
 
 
 
-    
+
 
     /*
      * Trie par note une stdClass
