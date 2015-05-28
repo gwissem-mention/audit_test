@@ -329,27 +329,27 @@ class FrontController extends Controller
         $chapitresForAnalyse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
         
         //Trier par note
-        if($resultat->getOutil()->isPlanActionPriorise())
+        if ($resultat->getOutil()->isPlanActionPriorise())
         {
             uasort($chapitres, array($this,"triParNote"));
-            foreach ($chapitres as $key => $chapitre) 
+            foreach ($chapitres as $key => $chapitre)
             {
                 uasort($chapitre->questions, array($this,"triParNoteQuestion"));
                 uasort($chapitre->childs, array($this,"triParNote"));
-                foreach ($chapitre->childs as $child) 
+                foreach ($chapitre->childs as $child)
                 {
                     uasort($child->questions, array($this,"triParNoteQuestion"));
                 }
             }
         }
-        if($resultat->getOutil()->isPlanActionPriorise())
+        if ($resultat->getOutil()->isPlanActionPriorise())
         {
             uasort($chapitresForAnalyse, array($this,"triParNote"));
-            foreach ($chapitresForAnalyse as $key => $chapitre) 
+            foreach ($chapitresForAnalyse as $key => $chapitre)
             {
                 uasort($chapitre->questions, array($this,"triParNoteQuestion"));
                 uasort($chapitre->childs, array($this,"triParNote"));
-                foreach ($chapitre->childs as $child) 
+                foreach ($chapitre->childs as $child)
                 {
                     uasort($child->questions, array($this,"triParNoteQuestion"));
                 }
@@ -398,85 +398,94 @@ class FrontController extends Controller
                 $graphTemp = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildCharts( $resultatSynthese, $chapitresSynthese );
 
                 //Radar
-                foreach ($graphiques["radar"]->datas as $keyDataGraphique => &$dataGraphique) 
+                if (array_key_exists('radar', $graphiques))
                 {
-                    //Récupération de la valeur du graph courant
-                    $graphTempValue = $graphTemp["radar"]->datas[$keyDataGraphique]->value;
-
-                    if(is_null($dataGraphique->min))
+                    foreach ($graphiques["radar"]->datas as $keyDataGraphique => &$dataGraphique) 
                     {
-                        if($graphTempValue != "NC")
+                        //Récupération de la valeur du graph courant
+                        $graphTempValue = $graphTemp["radar"]->datas[$keyDataGraphique]->value;
+    
+                        if(is_null($dataGraphique->min))
+                        {
+                            if($graphTempValue != "NC")
+                            {
+                                $dataGraphique->min = $graphTempValue;
+                                $dataGraphique->max = $graphTempValue;
+                            }
+                        }
+                        elseif($graphTempValue == "NC")
+                        {
+                            if($dataGraphique->max != "NC" )
+                            {
+                                $dataGraphique->min = $dataGraphique->max;
+                            }
+                        }
+                        elseif($dataGraphique->min > $graphTempValue)
                         {
                             $dataGraphique->min = $graphTempValue;
+                        }
+                        elseif($dataGraphique->max < $graphTempValue)
+                        {
                             $dataGraphique->max = $graphTempValue;
                         }
-                    }
-                    elseif($graphTempValue == "NC")
-                    {
-                        if($dataGraphique->max != "NC" )
-                        {
-                            $dataGraphique->min = $dataGraphique->max;
-                        }
-                    }
-                    elseif($dataGraphique->min > $graphTempValue)
-                    {
-                        $dataGraphique->min = $graphTempValue;
-                    }
-                    elseif($dataGraphique->max < $graphTempValue)
-                    {
-                        $dataGraphique->max = $graphTempValue;
                     }
                 }
                 //Barre
-                foreach ($graphiques["barre"]->panels as $keyDataGraphique => &$dataGraphique) 
+                if (array_key_exists('barre', $graphiques))
                 {
-                    //Récupération de la valeur du graph courant
-                    $graphTempValue = $graphTemp["barre"]->panels[$keyDataGraphique]->value;
-                    if(is_null($dataGraphique->min))
+                    foreach ($graphiques["barre"]->panels as $keyDataGraphique => &$dataGraphique) 
                     {
-                        if($graphTempValue != "NC")
+                        //Récupération de la valeur du graph courant
+                        $graphTempValue = $graphTemp["barre"]->panels[$keyDataGraphique]->value;
+                        if(is_null($dataGraphique->min))
+                        {
+                            if($graphTempValue != "NC")
+                            {
+                                $dataGraphique->min = $graphTempValue;
+                                $dataGraphique->max = $graphTempValue;
+                            }
+                        }
+                        elseif($graphTempValue === "NC")
+                        {
+                            if($dataGraphique->max != "NC" )
+                            {
+                                $dataGraphique->min = $dataGraphique->max;
+                            }
+                        }
+                        elseif( $dataGraphique->min > $graphTempValue )
                         {
                             $dataGraphique->min = $graphTempValue;
+                        }
+                        elseif($dataGraphique->max < $graphTempValue)
+                        {
                             $dataGraphique->max = $graphTempValue;
                         }
                     }
-                    elseif($graphTempValue === "NC")
-                    {
-                        if($dataGraphique->max != "NC" )
-                        {
-                            $dataGraphique->min = $dataGraphique->max;
-                        }
-                    }
-                    elseif( $dataGraphique->min > $graphTempValue )
-                    {
-                        $dataGraphique->min = $graphTempValue;
-                    }
-                    elseif($dataGraphique->max < $graphTempValue)
-                    {
-                        $dataGraphique->max = $graphTempValue;
-                    }
                 }
                 // table
-                foreach ($graphiques["table"]->datas->categories as $keyDataGraphique => &$dataGraphique) 
+                if (array_key_exists('table', $graphiques))
                 {
-                    foreach($dataGraphique['chapitres'] as $id => $chapitre)
+                    foreach ($graphiques["table"]->datas->categories as $keyDataGraphique => &$dataGraphique) 
                     {
-                        //Récupération de la valeur du graph courant
-                        $graphTempValue = $graphTemp["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id];
-                        if( $graphTempValue['maxPourc'] != 0 )
+                        foreach($dataGraphique['chapitres'] as $id => $chapitre)
                         {
-                            $value = ( $graphTempValue['nbPointsPourc'] * 100 ) / $graphTempValue['maxPourc'];
-
-                            if( !isset($graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum']) 
-                                || $value < $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum'] 
-                            ) {
-                                $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum'] = $value;
-                            }
-
-                            if( !isset($graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum']) 
-                                || $value > $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum'] 
-                            ) {
-                                $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum'] = $value;
+                            //Récupération de la valeur du graph courant
+                            $graphTempValue = $graphTemp["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id];
+                            if( $graphTempValue['maxPourc'] != 0 )
+                            {
+                                $value = ( $graphTempValue['nbPointsPourc'] * 100 ) / $graphTempValue['maxPourc'];
+    
+                                if( !isset($graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum']) 
+                                    || $value < $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum'] 
+                                ) {
+                                    $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['minimum'] = $value;
+                                }
+    
+                                if( !isset($graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum']) 
+                                    || $value > $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum'] 
+                                ) {
+                                    $graphiques["table"]->datas->categories[$keyDataGraphique]['chapitres'][$id]['maximum'] = $value;
+                                }
                             }
                         }
                     }
