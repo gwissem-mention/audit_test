@@ -105,14 +105,22 @@ class FrontController extends Controller
             }
         }
 
+        //Génération du token
+        $passwordTool = new \Nodevo\ToolsBundle\Tools\Password();
+        $token = $passwordTool->generate(20,'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+        $token .= $passwordTool->generate(20,'abcdefghijklmnopqrstuvwyyz');
+        $token = str_shuffle($token);
+        $this->get('request')->getSession()->set('token-autodiag-manuel', $token);
+
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
-            'outil'           => $outil,
-            'resultatEnCours' => $resultatEnCours,
-            'chapitres'       => $chapitresOrdered,
-            'reponses'        => $reponses,
-            'remarque'        => $remarque,
-            'sansGabarit'     => $sansGabarit,
-            'resultat'        => $resultat
+            'outil'                 => $outil,
+            'resultatEnCours'       => $resultatEnCours,
+            'chapitres'             => $chapitresOrdered,
+            'reponses'              => $reponses,
+            'remarque'              => $remarque,
+            'sansGabarit'           => $sansGabarit,
+            'resultat'              => $resultat,
+            'token_autodiag_manuel' => $token
         ));
     }
 
@@ -124,6 +132,19 @@ class FrontController extends Controller
      */
     public function saveAction( Outil $outil, Request $request )
     {
+        $token = $request->request->get('_token');
+
+        if(is_null($this->get('request')->getSession()->get('token-autodiag-manuel'))
+            && $token !== $this->get('request')->getSession()->get('token-autodiag-manuel'))
+        {
+            // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
+            $this->get('session')->getFlashBag()->add( 'danger', 'Il semblerait il y avoir un problème dans la sauvegarde de vos données.' );
+
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
+        }
+        $this->get('request')->getSession()->set('token-autodiag-manuel', null);   
+
+
         //get posted Datas
         $chapitres    = $request->request->get($outil->getAlias());
         $remarques    = $request->request->get('remarques-' . $outil->getAlias());
