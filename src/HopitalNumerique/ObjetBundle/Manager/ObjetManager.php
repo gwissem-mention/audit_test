@@ -624,9 +624,11 @@ class ObjetManager extends BaseManager
                 $categ->id      = $one->getId();
                 $categ->libelle = $one->getLibelle();
 
-                $categories[] = $categ;
+                $categories[$one->getOrder()] = $categ;
             }
         }
+
+        ksort($categories);
 
         return $categories;
     }
