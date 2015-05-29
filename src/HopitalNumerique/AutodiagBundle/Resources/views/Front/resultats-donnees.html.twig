@@ -75,27 +75,27 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title" title="{{panel.title}}">{{panel.title|truncate(30,'...')}}</h3>
                                     <div class="options">
-                                        {% if panel.value|checkNC %}
-                                            {% if tauxChapitre == 0 %}
+                                        {%- if panel.value|checkNC -%}
+                                            {%- if tauxChapitre == 0 -%}
                                                 Score : 0
-                                            {% else %}
+                                            {%- else -%}
                                                 Score : {{panel.value|number_format(0)}}%
-                                            {% endif %}
+                                            {%- endif -%}
 
-                                            {% if tauxChapitre == 0 %}
+                                            {%- if tauxChapitre == 0 -%}
                                                 <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-4.png')}}" alt="Taux Remplissage" title="Taux de remplissage : {{tauxChapitre}}%" />
-                                            {% elseif tauxChapitre <= 50 %}
+                                            {%- elseif tauxChapitre <= 50 -%}
                                                 <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-3.png')}}" alt="Taux Remplissage" title="Taux de remplissage : {{tauxChapitre}}%" />
-                                            {% elseif tauxChapitre <= 99 %}
+                                            {%- elseif tauxChapitre <= 99 -%}
                                                 <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-2.png')}}" alt="Taux Remplissage" title="Taux de remplissage : {{tauxChapitre}}%" />
-                                            {% elseif (resultat.outil.centPourcentReponseObligatoire == false) %}
+                                            {%- elseif (resultat.outil.centPourcentReponseObligatoire == false) -%}
                                                 <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-1.png')}}" alt="Taux Remplissage" title="Taux de remplissage : {{tauxChapitre}}%" />
-                                            {% endif %}
-                                        {% else %}
+                                            {%- endif -%}
+                                        {%- else -%}
                                             Score : NC
 
                                             <img src="{{asset('bundles/hopitalnumeriqueautodiag/img/niv-4.png')}}" alt="Taux Remplissage" title="Taux de remplissage : 0%" />
-                                        {% endif %}
+                                        {%- endif -%}
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -306,10 +306,14 @@
                                                     {#% set note = (datas['nbPoints'] * 100) / datas['max'] %#}
                                                     {% set note = (datas['nbPointsPourc'] * 100) /  datas['maxPourc'] %}
                                                 {% else %}
-                                                    {% set note = 0 %}
+                                                    {% set note = null %}
                                                 {% endif %}
-                                                <td class="text-center {% if note|number_format(0) < 33 %}danger{% elseif note|number_format(0) < 66 %}warning{% else %}success{% endif %}">
-                                                    {{ note|number_format(0) }}%
+                                                <td class="text-center{% if note is not null %} {% if note|number_format(0) < 33 %}danger{% elseif note|number_format(0) < 66 %}warning{% else %}success{% endif %}{% endif %}">
+                                                    {% if note is null %}
+                                                        NC
+                                                    {% else %}
+                                                        {{ note|number_format(0) }}%
+                                                    {% endif %}
                                                 </td>
                                             {% else %}
                                                 <td class="text-center vertical-align" >

@@ -60,7 +60,7 @@ class AutodiagExtension extends \Twig_Extension
 
     public function checkNC( $value )
     {
-        return $value !== 'NC';
+        return ($value !== 'NC' && '' !== $value);
     }
 
 

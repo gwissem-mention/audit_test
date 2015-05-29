@@ -890,7 +890,7 @@ class ResultatManager extends BaseManager
         if (null === $sommesCalculMoyenneChapitre)
             return 'NC';
         
-        return $sommesCalculMoyenneChapitre['sommeMaxPourc'] != 0 ? ($sommesCalculMoyenneChapitre['sommeValues'] / $sommesCalculMoyenneChapitre['sommeMaxPourc']) : 0;
+        return $sommesCalculMoyenneChapitre['sommeMaxPourc'] != 0 ? ($sommesCalculMoyenneChapitre['sommeValues'] / $sommesCalculMoyenneChapitre['sommeMaxPourc']) : '';
     }
     /**
      * 

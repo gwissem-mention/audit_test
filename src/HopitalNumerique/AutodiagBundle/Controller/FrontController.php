@@ -369,7 +369,7 @@ class FrontController extends Controller
         $user = $user != 'anon.' ? $user : false;
         
         // si l'autodiagnostic est validé, on ne peut plus revenir à la page d'édition
-        if( $resultat->getStatut()->getId() == 419 )
+        if ( $resultat->getStatut()->getId() == 419 )
         {
             $back = 1;
         }
