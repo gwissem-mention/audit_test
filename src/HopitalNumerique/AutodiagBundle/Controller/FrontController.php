@@ -348,7 +348,22 @@ class FrontController extends Controller
         $chapitres            = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
         $chapitresForReponse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
         $chapitresForAnalyse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
-        
+
+        //<-- Suppression si colored vaut -1
+        foreach ($chapitresForAnalyse as $chapitreId => $chapitre)
+        {
+            foreach ($chapitre->childs as $chapitreChildId => $chapitreChild)
+            {
+                foreach ($chapitreChild->questions as $questionIndex => $question)
+                {
+                    if (-1 == $question->colored)
+                        unset($chapitresForAnalyse[$chapitreId]->childs[$chapitreChildId]->questions[$questionIndex]);
+                }
+            }
+        }
+        //-->
+
+
         //Trier par note
         if ($resultat->getOutil()->isPlanActionPriorise())
         {
@@ -382,7 +397,7 @@ class FrontController extends Controller
         foreach ($chapitresForAnalyse as $key => $chapitre)
         {
             //Vide le chapitre courant si il a ni de question ni de sous chapitre
-            if(empty($chapitre->questions) && empty($chapitre->childs))
+            if (empty($chapitre->questions) && empty($chapitre->childs))
             {
                 unset($chapitresForAnalyse[$key]);
             }

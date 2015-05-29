@@ -280,10 +280,10 @@
                                         {% endif %}
                                         {% if resultat.synthese %}
                                             {% for datas in categorie['chapitres'] %}
-                                                {% if not datas['nc'] %}
-                                                <td class="text-center vertical-align">
-                                                    <span class="initialism minimum" title="<span>Score minimum</span>">{{ datas['minimum']|number_format(0) }}%</span>
-                                                </td>
+                                                {% if not datas['nc'] and datas['minimum'] is defined %}
+                                                    <td class="text-center vertical-align">
+                                                        <span class="initialism minimum" title="<span>Score minimum</span>">{{ datas['minimum']|number_format(0) }}%</span>
+                                                    </td>
                                                 {% else %}
                                                     <td class="text-center vertical-align" >
                                                         NC
@@ -302,7 +302,7 @@
                                                 {% set nbPointsCateg = nbPointsCateg + datas['nbPointsPourc'] %}
                                                 {% set maxCateg = maxCateg + datas['maxPourc'] %}
                                                 
-                                                {% if datas['max'] != 0 %}
+                                                {% if datas['maxPourc'] != 0 %}
                                                     {#% set note = (datas['nbPoints'] * 100) / datas['max'] %#}
                                                     {% set note = (datas['nbPointsPourc'] * 100) /  datas['maxPourc'] %}
                                                 {% else %}
@@ -332,7 +332,7 @@
                                         <tr>
                                             <td class="text-center vertical-align" rowspan="1">Max</td>
                                             {% for datas in categorie['chapitres'] %}
-                                                {% if not datas['nc'] %}
+                                                {% if not datas['nc'] and datas['maximum'] is defined %}
                                                 <td class="text-center vertical-align">
                                                     <span class="initialism minimum" title="<span>Score maximum</span>">{{ datas['maximum']|number_format(0) }}%</span>
                                                 </td>

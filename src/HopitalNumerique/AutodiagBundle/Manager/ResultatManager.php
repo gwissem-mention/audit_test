@@ -624,8 +624,11 @@ class ResultatManager extends BaseManager
                         $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nbPoints']                    += ($one->tableValue * $one->ponderation);
                         $results->categories[ $categorieId ]['chapitres'][$chapitreId]['max']                         += ($one->max * $one->ponderation);
                         $results->categories[ $categorieId ]['chapitres'][$chapitreId]['pond']                        += $one->ponderation;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nbPointsPourc']               += (($one->tableValue * $one->ponderation) / ($one->max * $one->ponderation)) * 100 * $one->ponderation;
-                        $results->categories[ $categorieId ]['chapitres'][$chapitreId]['maxPourc']                    += $one->ponderation * 100;
+                        if( $one->tableValue != '' )
+                        {
+                            $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nbPointsPourc']               += (($one->tableValue * $one->ponderation) / ($one->max * $one->ponderation)) * 100 * $one->ponderation;
+                            $results->categories[ $categorieId ]['chapitres'][$chapitreId]['maxPourc']                    += $one->ponderation * 100;
+                        }
                         $results->categories[ $categorieId ]['chapitres'][$chapitreId]['nc']                          = false;
                         $results->categories[ $categorieId ]['chapitres'][$chapitreId]['affichageRestitutionTableau'] = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getAffichageRestitutionTableau() : $question->getChapitre()->getParent()->getAffichageRestitutionTableau();
                         
@@ -635,8 +638,11 @@ class ResultatManager extends BaseManager
                             $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['nbPoints']                    += ($one->tableValue * $one->ponderation);
                             $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['max']                         += ($one->max * $one->ponderation);
                             $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['pond']                        += $one->ponderation;
-                            $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['nbPointsPourc']               += (($one->tableValue * $one->ponderation) / ($one->max * $one->ponderation)) * 100 * $one->ponderation;
-                            $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['maxPourc']                    += $one->ponderation * 100;
+                            if( $one->tableValue != '' )
+                            {
+                                $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['nbPointsPourc']               += (($one->tableValue * $one->ponderation) / ($one->max * $one->ponderation)) * 100 * $one->ponderation;
+                                $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['maxPourc']                    += $one->ponderation * 100;
+                            }
                             $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['nc']                          = false;
                             $results->categories[ $categorieId ]['chapitres'][$chapitreParentId]['affichageRestitutionTableau'] = is_null($question->getChapitre()->getParent()) ? $question->getChapitre()->getAffichageRestitutionTableau() : $question->getChapitre()->getParent()->getAffichageRestitutionTableau();
                         }
@@ -865,7 +871,7 @@ class ResultatManager extends BaseManager
             return ($sommeValues / $sommeMaxPourc);
         }*/
         //-->
-        
+
         /*
         La requête qu'il fallait faire :
         SELECT question.que_id, SUM(reponse.rep_value), SUM(question.que_ponderation)
@@ -880,7 +886,7 @@ class ResultatManager extends BaseManager
         */
 
         $sommesCalculMoyenneChapitre = $this->getSommesCalculMoyenneChapitre($chapitre);
-        
+
         if (null === $sommesCalculMoyenneChapitre)
             return 'NC';
         
@@ -898,11 +904,14 @@ class ResultatManager extends BaseManager
         $chapitreConcerne  = false;
         
         $questions = $chapitre->questionsForCharts;
-        foreach($questions as $question)
+        foreach ($questions as $question)
         {
-            $sommeValues       += ($question->value * $question->ponderation);
-            $sommeMaxPourc     += $question->ponderation;
-
+            if ('' !== $question->value)
+            {
+                $sommeValues       += ($question->value * $question->ponderation);
+                $sommeMaxPourc     += $question->ponderation;
+            }
+    
             $chapitreConcerne = true;
         }
 
@@ -912,17 +921,21 @@ class ResultatManager extends BaseManager
             $questions = $child->questionsForCharts;
             foreach($questions as $question)
             {
-                $sommeValues       += ($question->value * $question->ponderation);
-
-                $sommeMaxPourc     += $question->ponderation;
-        
+                if ('' !== $question->value)
+                {
+                    $sommeValues    += ($question->value * $question->ponderation);
+                    $sommeMaxPourc  += $question->ponderation;
+                }
+            
                 $chapitreConcerne = true;
             }
 
         }
 
-        if( $chapitreConcerne === false )
+        if ( $chapitreConcerne === false )
+        {
             return null;
+        }
         
         return array('sommeValues' => $sommeValues, 'sommeMaxPourc' => $sommeMaxPourc);
     }
@@ -944,6 +957,7 @@ class ResultatManager extends BaseManager
         $noteChapitre        = 0;
         $nbQuestions         = 0;
         $nbQuestionsRemplies = 0;
+        
         foreach ($questions as $question)
         {
             if( isset($questionsReponses[ $question->getId() ]) )
@@ -1039,7 +1053,9 @@ class ResultatManager extends BaseManager
                 $rep->min = $tab['min'];
 
                 //on rapporte la valeur de note question sur 100
-                $rep->value = $rep->max != 0 ? ($reponse->getValue() * 100) / $rep->max : 0;
+                if (0 != $rep->max && '' !== $reponse->getValue())
+                    $rep->value = ($reponse->getValue() * 100) / $rep->max;
+                else $rep->value = $reponse->getValue();
             }
             else
             {
@@ -1047,11 +1063,11 @@ class ResultatManager extends BaseManager
                 $rep->max   = 0;
                 $rep->min   = 0;
             }
-
+            
             $rep->initialValue = $reponse->getValue();
 
             //pour le front, on ajoute QUE les réponses valides (! non concernés)
-            if( $reponse->getValue() != -1 )
+            if ( $reponse->getValue() != -1 )
             {
                 $results[ $reponse->getQuestion()->getId() ] = $rep;
             }
@@ -1060,6 +1076,7 @@ class ResultatManager extends BaseManager
             $resultsForBack[ $reponse->getQuestion()->getId() ] = $rep;
         }
 
+        
         return array( 'front' => $results, 'back' => $resultsForBack );
     }
 
