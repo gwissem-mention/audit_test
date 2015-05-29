@@ -287,7 +287,7 @@ class FrontController extends Controller
             }
 
             //Récupération des destinataires dans le fichier de config
-            $mailsContact = $this->get('hopitalnumerique_contact.manager.contact')->getMailsContact();
+            $mailsContact = array($this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'))->getAdresseMailContact());
 
             $variablesTemplate = array(
                     'nomdestinataire'  => '',
