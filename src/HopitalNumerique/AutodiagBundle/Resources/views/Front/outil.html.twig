@@ -142,8 +142,9 @@
                     <input type="hidden" name="sansGabarit" id="sansGabarit" value="{{sansGabarit}}" />
                     <input type="hidden" name="newOne" id="newOne" value="0" />
                     {% if resultat.id is defined %}
-                    <input type="hidden" name="resultat" id="resultat" value="{{resultat.id}}" />
+                        <input type="hidden" name="resultat" id="resultat" value="{{resultat.id}}" />
                     {% endif %}
+                    <input type="hidden" name="_token" value="{{ token_autodiag_manuel }}">
                 </form>
 
                 <div class="saveBtns">

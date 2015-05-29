@@ -63,7 +63,7 @@ class ResultatManager extends BaseManager
     }
 
     /**
-     * Formatte les résultats
+     * Formate les résultats
      *
      * @param Resultat $resultat L'objet Résultat
      *
@@ -529,6 +529,7 @@ class ResultatManager extends BaseManager
         foreach($chapitres as $one)
         {
             $chapitresOrdered[ $one->order ] = $one;
+            ksort($chapitresOrdered[ $one->order ]->childs);
         }
         ksort($chapitresOrdered);
 
@@ -1198,10 +1199,14 @@ class ResultatManager extends BaseManager
         $options = nl2br($question->getOptions());
         $options = explode('<br />', $options);
 
-        foreach($options as $option){
+        foreach($options as $option)
+        {
             $tmp = explode(';', $option);
-            $max = (isset($tmp[0]) && intval(trim($tmp[0])) > $max ) ? intval(trim($tmp[0])) : $max;
-            $min = ( (isset($tmp[0]) && intval(trim($tmp[0])) < $min) || is_null($min) ) ? intval(trim($tmp[0])) : $min;
+            if (-1 != $tmp[0])
+            {
+                $max = (isset($tmp[0]) && intval(trim($tmp[0])) > $max ) ? intval(trim($tmp[0])) : $max;
+                $min = ( (isset($tmp[0]) && intval(trim($tmp[0])) < $min) || is_null($min) ) ? intval(trim($tmp[0])) : $min;
+            }
         }
 
         return array('max' => $max, 'min' => $min );
