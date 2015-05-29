@@ -105,12 +105,24 @@ class FrontController extends Controller
             }
         }
 
-        //Génération du token
+        //Génération du token + mise en session + verif limite domaine
         $passwordTool = new \Nodevo\ToolsBundle\Tools\Password();
         $token = $passwordTool->generate(20,'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
         $token .= $passwordTool->generate(20,'abcdefghijklmnopqrstuvwyyz');
         $token = str_shuffle($token);
-        $this->get('request')->getSession()->set('token-autodiag-manuel', $token);
+
+        $sessionToken = $this->get('request')->getSession()->get('token-autodiag-manuel');
+        $sessionToken[] = $token;
+        $sessionToken = array_values($sessionToken);
+
+        //Pas plus de 100 token pour éviter de 'trop' blinder le serveur
+        if(count($sessionToken) > 20)
+        {
+            unset($sessionToken[0]);
+            $sessionToken = array_values($sessionToken);
+        }
+
+        $this->get('request')->getSession()->set('token-autodiag-manuel', $sessionToken);
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
             'outil'                 => $outil,
@@ -132,17 +144,21 @@ class FrontController extends Controller
      */
     public function saveAction( Outil $outil, Request $request )
     {
-        $token = $request->request->get('_token');
+        $token = $request->request->get('_token_manuel_autodiag');
 
-        if(is_null($this->get('request')->getSession()->get('token-autodiag-manuel'))
-            && $token !== $this->get('request')->getSession()->get('token-autodiag-manuel'))
+        $sessionToken = $this->get('request')->getSession()->get('token-autodiag-manuel');
+        $key = array_search($token, $sessionToken);
+
+        if(is_null($sessionToken)
+            ||  $key === false )
         {
             // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
             $this->get('session')->getFlashBag()->add( 'danger', 'Il semblerait il y avoir un problème dans la sauvegarde de vos données.' );
 
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
         }
-        $this->get('request')->getSession()->set('token-autodiag-manuel', null);   
+        unset($sessionToken[$key]);
+        $this->get('request')->getSession()->set('token-autodiag-manuel', $sessionToken );   
 
 
         //get posted Datas
@@ -262,6 +278,23 @@ class FrontController extends Controller
                     $reponses[] = $reponse;
                 }
             }
+
+            //Récupération des destinataires dans le fichier de config
+            $mailsContact = $this->get('hopitalnumerique_contact.manager.contact')->getMailsContact();
+
+            $variablesTemplate = array(
+                    'nomdestinataire'  => '',
+                    'maildestinataire' => '',
+                    'autodiagnostic'   => $outil->getTitle(),
+                    'user'             => $user !== false ? $user->getAppellation() : 'anonyme'
+            );
+            $mailsAEnvoyer = $this->get('nodevo_mail.manager.mail')->sendAutodiagSauvegardetMail($mailsContact, $variablesTemplate);
+
+            foreach($mailsAEnvoyer as $mailAEnvoyer)
+            {
+                $this->get('mailer')->send($mailAEnvoyer);
+            }
+
             $this->get('hopitalnumerique_autodiag.manager.reponse')->save( $reponses );
         }
 
