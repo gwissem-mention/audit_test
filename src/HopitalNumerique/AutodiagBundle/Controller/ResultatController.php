@@ -140,6 +140,17 @@ class ResultatController extends Controller
         //Nettoyage des éléments dont il n'y aucun élément
         foreach ($chapitres as $key => $chapitre)
         {
+            //<-- Suppression si colored vaut -1
+            foreach ($chapitre->childs as $chapitreChildId => $chapitreChild)
+            {
+                foreach ($chapitreChild->questions as $questionIndex => $question)
+                {
+                    if (-1 == $question->colored)
+                        unset($chapitres[$key]->childs[$chapitreChildId]->questions[$questionIndex]);
+                }
+            }
+            //-->
+                
             //Vide le chapitre courant si il a ni de question ni de sous chapitre
             if(empty($chapitre->questions) && empty($chapitre->childs))
             {
@@ -328,8 +339,19 @@ class ResultatController extends Controller
             //Nettoyage des éléments dont il n'y aucun élément
             foreach ($chapitres as $key => $chapitre)
             {
+                //<-- Suppression si colored vaut -1
+                foreach ($chapitre->childs as $chapitreChildId => $chapitreChild)
+                {
+                    foreach ($chapitreChild->questions as $questionIndex => $question)
+                    {
+                        if (-1 == $question->colored)
+                            unset($chapitres[$key]->childs[$chapitreChildId]->questions[$questionIndex]);
+                    }
+                }
+                //-->
+                
                 //Vide le chapitre courant si il a ni de question ni de sous chapitre
-                if(empty($chapitre->questions) && empty($chapitre->childs))
+                if (empty($chapitre->questions) && empty($chapitre->childs))
                 {
                     unset($chapitres[$key]);
                 }
@@ -528,7 +550,7 @@ class ResultatController extends Controller
 
 
 
-    
+
 
     /*
      * Trie par note une stdClass

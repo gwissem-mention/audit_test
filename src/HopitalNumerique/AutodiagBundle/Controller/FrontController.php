@@ -150,16 +150,22 @@ class FrontController extends Controller
         $key = array_search($token, $sessionToken);
 
         if(is_null($sessionToken)
-            ||  $key === false )
+            ||  $key === false)
         {
             // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
             $this->get('session')->getFlashBag()->add( 'danger', 'Il semblerait il y avoir un problème dans la sauvegarde de vos données.' );
 
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
         }
+        if(is_null($request->request->get('remplissage'))  || $request->request->get('remplissage') == 0 || $request->request->get('remplissage') == '' || $request->request->get('remplissage') == false )
+        {
+            // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
+            $this->get('session')->getFlashBag()->add( 'info', 'Veuillez renseigné au moins une réponse avant d\'enregistrer votre autodiagnostic.' );
+
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
+        }
         unset($sessionToken[$key]);
         $this->get('request')->getSession()->set('token-autodiag-manuel-array', $sessionToken );   
-
 
         //get posted Datas
         $chapitres    = $request->request->get($outil->getAlias());
@@ -381,7 +387,22 @@ class FrontController extends Controller
         $chapitres            = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
         $chapitresForReponse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
         $chapitresForAnalyse  = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
-        
+
+        //<-- Suppression si colored vaut -1
+        foreach ($chapitresForAnalyse as $chapitreId => $chapitre)
+        {
+            foreach ($chapitre->childs as $chapitreChildId => $chapitreChild)
+            {
+                foreach ($chapitreChild->questions as $questionIndex => $question)
+                {
+                    if (-1 == $question->colored)
+                        unset($chapitresForAnalyse[$chapitreId]->childs[$chapitreChildId]->questions[$questionIndex]);
+                }
+            }
+        }
+        //-->
+
+
         //Trier par note
         if ($resultat->getOutil()->isPlanActionPriorise())
         {
@@ -415,7 +436,7 @@ class FrontController extends Controller
         foreach ($chapitresForAnalyse as $key => $chapitre)
         {
             //Vide le chapitre courant si il a ni de question ni de sous chapitre
-            if(empty($chapitre->questions) && empty($chapitre->childs))
+            if (empty($chapitre->questions) && empty($chapitre->childs))
             {
                 unset($chapitresForAnalyse[$key]);
             }
