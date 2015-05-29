@@ -150,16 +150,22 @@ class FrontController extends Controller
         $key = array_search($token, $sessionToken);
 
         if(is_null($sessionToken)
-            ||  $key === false )
+            ||  $key === false)
         {
             // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
             $this->get('session')->getFlashBag()->add( 'danger', 'Il semblerait il y avoir un problème dans la sauvegarde de vos données.' );
 
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
         }
+        if(is_null($request->request->get('remplissage'))  || $request->request->get('remplissage') == 0 || $request->request->get('remplissage') == '' || $request->request->get('remplissage') == false )
+        {
+            // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
+            $this->get('session')->getFlashBag()->add( 'info', 'Veuillez renseigné au moins une réponse avant d\'enregistrer votre autodiagnostic.' );
+
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
+        }
         unset($sessionToken[$key]);
         $this->get('request')->getSession()->set('token-autodiag-manuel-array', $sessionToken );   
-
 
         //get posted Datas
         $chapitres    = $request->request->get($outil->getAlias());
