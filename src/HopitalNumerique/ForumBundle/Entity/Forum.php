@@ -11,6 +11,11 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  */
 class Forum extends BaseForum
 {
+    public function getId()
+    {
+        return $this->id;
+    }
+
     /**
      *
      * @param  SecurityContextInterface $securityContext

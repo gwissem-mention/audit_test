@@ -60,4 +60,15 @@ class DomaineManager extends BaseManager
         return $domaineOrdered;
     }
 
+    /**
+     * Récupération des domaines correspondant au forum passé en param
+     *
+     * @param [type] $idForum [description]
+     *
+     * @return [type]
+     */
+    public function getDomaineForForumId($idForum)
+    {
+        return $this->getRepository()->getDomaineForForumId($idForum)->getQuery()->getResult();
+    }
 }

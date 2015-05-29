@@ -111,6 +111,15 @@ class Domaine
     protected $requetes;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ForumBundle\Entity\Forum", cascade={"persist"})
+     * @ORM\JoinTable(name="hn_domaine_gestions_forum",
+     *      joinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     */
+    protected $forums;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -495,5 +504,38 @@ class Domaine
     public function getRequetes()
     {
         return $this->requetes;
+    }
+
+    /**
+     * Add forums
+     *
+     * @param \HopitalNumerique\ForumBundle\Entity\Forum $forums
+     * @return Domaine
+     */
+    public function addForum(\HopitalNumerique\ForumBundle\Entity\Forum $forums)
+    {
+        $this->forums[] = $forums;
+
+        return $this;
+    }
+
+    /**
+     * Remove forums
+     *
+     * @param \HopitalNumerique\ForumBundle\Entity\Forum $forums
+     */
+    public function removeForum(\HopitalNumerique\ForumBundle\Entity\Forum $forums)
+    {
+        $this->forums->removeElement($forums);
+    }
+
+    /**
+     * Get forums
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getForums()
+    {
+        return $this->forums;
     }
 }

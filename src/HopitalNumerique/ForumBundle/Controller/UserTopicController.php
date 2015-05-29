@@ -52,7 +52,13 @@ class UserTopicController extends UserTopicControllerCCDN
         }
 
         //get ponderations
-        $refsPonderees = $this->container->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $domainesDuForum = $this->container->get('hopitalnumerique_domaine.manager.domaine')->getDomaineForForumId($forum->getId());
+        $domainesIds     = array();
+        foreach ($domainesDuForum as $domaine) 
+        {
+            $domainesIds[] = $domaine->getId();
+        }
+        $refsPonderees = $this->container->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($domainesIds);
         $note          = $this->container->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $topic->getReferences(), $refsPonderees );
 
         $subscriberCount = $this->getSubscriptionModel()->countSubscriptionsForTopicById($topicId);
