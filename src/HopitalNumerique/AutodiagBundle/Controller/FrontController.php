@@ -111,7 +111,7 @@ class FrontController extends Controller
         $token .= $passwordTool->generate(20,'abcdefghijklmnopqrstuvwyyz');
         $token = str_shuffle($token);
 
-        $sessionToken = $this->get('request')->getSession()->get('token-autodiag-manuel');
+        $sessionToken = $this->get('request')->getSession()->get('token-autodiag-manuel-array');
         $sessionToken[] = $token;
         $sessionToken = array_values($sessionToken);
 
@@ -122,7 +122,7 @@ class FrontController extends Controller
             $sessionToken = array_values($sessionToken);
         }
 
-        $this->get('request')->getSession()->set('token-autodiag-manuel', $sessionToken);
+        $this->get('request')->getSession()->set('token-autodiag-manuel-array', $sessionToken);
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:outil.html.twig' , array(
             'outil'                 => $outil,
@@ -146,7 +146,7 @@ class FrontController extends Controller
     {
         $token = $request->request->get('_token_manuel_autodiag');
 
-        $sessionToken = $this->get('request')->getSession()->get('token-autodiag-manuel');
+        $sessionToken = $this->get('request')->getSession()->get('token-autodiag-manuel-array');
         $key = array_search($token, $sessionToken);
 
         if(is_null($sessionToken)
@@ -158,7 +158,7 @@ class FrontController extends Controller
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
         }
         unset($sessionToken[$key]);
-        $this->get('request')->getSession()->set('token-autodiag-manuel', $sessionToken );   
+        $this->get('request')->getSession()->set('token-autodiag-manuel-array', $sessionToken );   
 
 
         //get posted Datas
