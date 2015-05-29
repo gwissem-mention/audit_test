@@ -278,6 +278,23 @@ class FrontController extends Controller
                     $reponses[] = $reponse;
                 }
             }
+
+            //Récupération des destinataires dans le fichier de config
+            $mailsContact = $this->get('hopitalnumerique_contact.manager.contact')->getMailsContact();
+
+            $variablesTemplate = array(
+                    'nomdestinataire'  => '',
+                    'maildestinataire' => '',
+                    'autodiagnostic'   => $outil->getTitle(),
+                    'user'             => $user !== false ? $user->getAppellation() : 'anonyme'
+            );
+            $mailsAEnvoyer = $this->get('nodevo_mail.manager.mail')->sendAutodiagSauvegardetMail($mailsContact, $variablesTemplate);
+
+            foreach($mailsAEnvoyer as $mailAEnvoyer)
+            {
+                $this->get('mailer')->send($mailAEnvoyer);
+            }
+
             $this->get('hopitalnumerique_autodiag.manager.reponse')->save( $reponses );
         }
 
