@@ -54,7 +54,7 @@ class UserTopicController extends UserTopicControllerCCDN
         //get ponderations
         $domainesDuForum = $this->container->get('hopitalnumerique_domaine.manager.domaine')->getDomaineForForumId($forum->getId());
         $domainesIds     = array();
-        foreach ($domainesDuForum as $domaine) 
+        foreach ($domainesDuForum as $domaine)
         {
             $domainesIds[] = $domaine->getId();
         }
