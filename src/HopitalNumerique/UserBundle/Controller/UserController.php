@@ -189,6 +189,10 @@ class UserController extends Controller
     public function addAction()
     {
         $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
+        
+        $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
+        
+        $user->setRoles( array( $role ) );
 
         return $this->renderForm('nodevo_user_user', $user, 'HopitalNumeriqueUserBundle:User:edit.html.twig' );
     }
