@@ -28,6 +28,11 @@ class DomaineType extends AbstractType
                 'label'      => 'Description',
                 'attr'       => array('rows' => 3)
             ))
+            ->add('googleAnalytics', 'textarea', array(
+                'required'   => false, 
+                'label'      => 'Google Analytics',
+                'attr'       => array('rows' => 3)
+            ))
             ->add('path', 'hidden')
             ->add('url', 'text', array(
                 'max_length' => 255, 
