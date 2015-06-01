@@ -44,6 +44,13 @@ class Domaine
     /**
      * @var string
      *
+     * @ORM\Column(name="dom_analytics", type="text", nullable=true)
+     */
+    private $googleAnalytics;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="dom_url", type="string", length=255)
      */
     protected $url;
@@ -537,5 +544,28 @@ class Domaine
     public function getForums()
     {
         return $this->forums;
+    }
+
+    /**
+     * Set googleAnalytics
+     *
+     * @param string $googleAnalytics
+     * @return Domaine
+     */
+    public function setGoogleAnalytics($googleAnalytics)
+    {
+        $this->googleAnalytics = $googleAnalytics;
+
+        return $this;
+    }
+
+    /**
+     * Get googleAnalytics
+     *
+     * @return string 
+     */
+    public function getGoogleAnalytics()
+    {
+        return $this->googleAnalytics;
     }
 }
