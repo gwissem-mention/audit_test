@@ -56,7 +56,6 @@ class ObjetController extends Controller
           $objet->setArticle(true);
         }
 
-
         $options = array(
             'toRef' => 0,
             'note'  => 0
