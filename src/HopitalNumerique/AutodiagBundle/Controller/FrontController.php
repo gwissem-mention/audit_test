@@ -370,7 +370,7 @@ class FrontController extends Controller
         $user = $user != 'anon.' ? $user : false;
         
         // si l'autodiagnostic est validé, on ne peut plus revenir à la page d'édition
-        if( $resultat->getStatut()->getId() == 419 )
+        if ( $resultat->getStatut()->getId() == 419 )
         {
             $back = 1;
         }
@@ -450,7 +450,7 @@ class FrontController extends Controller
                     if(empty($child->questions))
                     {
                         unset($chapitre->childs[$keyChild]);
-                        if(empty($chapitre->childs))
+                        if (empty($chapitre->childs))
                         {
                             $hideChapitre = true;
                         }
@@ -1013,6 +1013,9 @@ class FrontController extends Controller
         $this->get('hopitalnumerique_autodiag.manager.resultat')->save( $resultat );
         
         $this->get('session')->getFlashBag()->add( 'success', 'Votre autodiagnostic a bien été ajouté à votre historique.' );
+        
+        if ($request->query->has('redirect') && 'autodiagnostics' == $request->query->get('redirect'))
+            return $this->redirect($this->generateUrl('hopitalnumerique_autodiag_front_comptehn'));
         return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_resultat', array('id' => $resultat->getId())) );
     }
 
