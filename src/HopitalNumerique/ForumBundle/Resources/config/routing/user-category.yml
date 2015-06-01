@@ -3,6 +3,12 @@
 #    pattern: /index
 #    defaults: { _controller: CCDNForumForumBundle:UserCategory:index, _locale: fr, forumName: Public }
 
+ccdn_forum_user_category_recalculatelastmessages:
+    path: /recalculateLastMessages/{token}
+    defaults: { _controller: "HopitalNumeriqueForumBundle:UserCategory:recalculateLastMessages" }
+    requirements:
+        token: .+
+
 ccdn_forum_user_category_index:
     path:     /{forumName}
     defaults: { _controller: CCDNForumForumBundle:UserCategory:index, _locale: fr, forumName: Public } #Mettre le nom du forum HN
