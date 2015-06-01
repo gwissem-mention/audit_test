@@ -24,8 +24,8 @@ class RechercheParcoursDetails
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="RechercheParcours", inversedBy="recherchesParcoursDetails")
-     * @ORM\JoinColumn(name="rrp_id", referencedColumnName="rrp_id")
+     * @ORM\ManyToOne(targetEntity="RechercheParcours", cascade={"persist"}, inversedBy="recherchesParcoursDetails")
+     * @ORM\JoinColumn(name="rrp_id", referencedColumnName="rrp_id", onDelete="CASCADE")
      */
     protected $rechercheParcours;
     

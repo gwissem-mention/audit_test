@@ -13,14 +13,34 @@
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
-            {% stylesheets output="compiled/hopitalnumerique-recherche-expBesoin-fancy.css" filter="cssrewrite, ?yui_css" 
-                "@bootstrap_css"
-                "@fancybox_css"
-                'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
-                'bundles/hopitalnumeriquecore/css/layout.css'
-            %}
-                <link rel="stylesheet" href="{{ asset_url }}" />
-            {% endstylesheets %}
+            {% if templateCurrentId == 1 %}
+                    {% stylesheets output="compiled/hopitalnumerique-recherche-expBesoin-fancy-1.css" filter="cssrewrite, ?yui_css" 
+                        "@bootstrap_css"
+                        "@fancybox_css"
+                        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+                        'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                    %}
+                        <link rel="stylesheet" href="{{ asset_url }}" />
+                    {% endstylesheets %}
+                {% elseif templateCurrentId == 2 %}
+                    {% stylesheets output="compiled/hopitalnumerique-recherche-expBesoin-fancy-2.css" filter="cssrewrite, ?yui_css" 
+                        "@bootstrap_css"
+                        "@fancybox_css"
+                        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+                        'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
+                    %}
+                        <link rel="stylesheet" href="{{ asset_url }}" />
+                    {% endstylesheets %}
+                {% else %}
+                    {% stylesheets output="compiled/hopitalnumerique-recherche-expBesoin-fancy-default.css" filter="cssrewrite, ?yui_css" 
+                        "@bootstrap_css"
+                        "@fancybox_css"
+                        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+                        'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                    %}
+                        <link rel="stylesheet" href="{{ asset_url }}" />
+                    {% endstylesheets %}
+            {% endif %}
         {% endblock %}
 
         {% block javascripts %}
@@ -47,36 +67,34 @@
     </head>
 
     <body>
+        <div class="panel panel-midnightblue" style="margin:0" >
+            <div class="panel-heading" style="height:5px"></div>
+            <div class="clearfix"></div>
+            <div id="panel-recherche">
+                <div class="tableContent" id="expression-du-besoin">
+                    {% for expBesoin in expBesoins %}
+                        <div id="expBesoin-{{expBesoin.id}}" class="expression-du-besoin-form" data-id="{{expBesoin.id}}">
+                            {% include "HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/Partial/expbesoin_formulaire.html.twig" with { 'expBesoin':expBesoin } %}
+                        </div>
+                        <div class="clearfix"></div>
+                    {% endfor %}
 
-            <div class="panel panel-midnightblue" style="margin:0" >
-                <div class="panel-heading" style="height:5px"></div>
-                <div class="clearfix"></div>
-                <div id="panel-recherche">
-                    <div class="tableContent" id="expression-du-besoin">
-                        {% for expBesoin in expBesoins %}
-                            <div id="expBesoin-{{expBesoin.id}}" class="expression-du-besoin-form" data-id="{{expBesoin.id}}">
-                                {% include "HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/Partial/expbesoin_formulaire.html.twig" with { 'expBesoin':expBesoin } %}
-                            </div>
-                            <div class="clearfix"></div>
-                        {% endfor %}
-
-                        <input type="hidden" id="expBesoin-actif-id" value="" />
-                        <input type="hidden" id="reponses-json" value="{{ reponses }}" />
-
-                    </div>
-                    <div class="clearfix"></div>
-
-                    <input type="hidden" id="url-modification-session-recherche" value="{{ path("hopital_numerique_expbesoin_modification_session_recherche") }}" />
-                    <input type="hidden" id="url-recherche" value="{{ path("hopital_numerique_recherche_homepage") }}" />
-                    <input type="hidden" id="url-sauvegarde-clic-stat" value="{{ path("hopital_numerique_expbesoin_stat_add") }}" />
+                    <input type="hidden" id="expBesoin-actif-id" value="" />
+                    <input type="hidden" id="reponses-json" value="{{ reponses }}" />
 
                 </div>
                 <div class="clearfix"></div>
 
-                {# Sauvegarde des différents clics des réponses #}
-                <input type="hidden" id="order-clic" value="[]" />
-            </div>
+                <input type="hidden" id="url-modification-session-recherche" value="{{ path("hopital_numerique_expbesoin_modification_session_recherche") }}" />
+                <input type="hidden" id="url-recherche" value="{{ path("hopital_numerique_recherche_homepage") }}" />
+                <input type="hidden" id="url-sauvegarde-clic-stat" value="{{ path("hopital_numerique_expbesoin_stat_add") }}" />
 
+            </div>
+            <div class="clearfix"></div>
+
+            {# Sauvegarde des différents clics des réponses #}
+            <input type="hidden" id="order-clic" value="[]" />
+        </div>
     </body>
 </html>
 <script type="text/javascript" >

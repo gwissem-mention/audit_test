@@ -34,6 +34,10 @@ class ReferenceGrid extends Grid implements GridInterface
         $this->addColonne( new Column\TextColumn('code', 'Code') );
         $this->addColonne( new Column\TextColumn('libelle', 'Libellé') );
 
+        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s)');
+        $domaineColumn->setSize( 150 );
+        $this->addColonne( $domaineColumn );
+
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize( 80 );
         $etatColonne->setFilterType('select');

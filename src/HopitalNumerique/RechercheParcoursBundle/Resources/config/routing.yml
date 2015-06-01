@@ -1,6 +1,8 @@
 hopital_numerique_recherche_parcours_homepage:
-    pattern:  /admin/recherche-par-parcours
-    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:index }
+    pattern:  /admin/recherche-par-parcours/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:index, id: 1 }
+    requirements: 
+        id : \d+
 
 hopital_numerique_recherche_parcours_reorder:
     pattern:  /admin/recherche-par-parcours/reorder
@@ -42,17 +44,51 @@ hopital_numerique_recherche_parcours_details_reorder:
     pattern:  /admin/recherche-par-parcours/details/reorder
     defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:reorder" }
 
+
+hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion:
+    pattern:  /admin/recherche-par-parcours/gestion
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:index" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_add:
+    pattern:  /admin/recherche-par-parcours/gestion/add
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:add" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_show:
+    pattern:  /admin/recherche-par-parcours/gestion/show/{id}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:show" }
+    requirements:
+        id: \d+
+        _method: GET
+
+hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_edit:
+    pattern:  /admin/recherche-par-parcours/gestion/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit" }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_delete:
+    pattern:  /admin/recherche-par-parcours/gestion/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE
+
 #----------------------------------------------------------------------
 #-----------------------------------FRONT------------------------------
 #----------------------------------------------------------------------
 hopital_numerique_recherche_parcours_homepage_front:
-    pattern:  /recherche-par-parcours
+    pattern:  /recherche-par-parcours/{id}
     defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:indexFront }
 
 
 #Recherche par parcours - détails
 hopital_numerique_recherche_parcours_details_index_front:
-    pattern:  /recherche-par-parcours/{id}-{alias}/{idEtape}-{etape}
+    pattern:  /recherche-par-parcours/details/{id}-{alias}/{idEtape}-{etape}
     defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:indexFront", id: 1 , idEtape: 0,alias: 'recherche-parcours',etape: '' }
     requirements:
         id : \d+

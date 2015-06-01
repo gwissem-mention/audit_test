@@ -5,6 +5,8 @@ namespace HopitalNumerique\ObjetBundle\Manager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use \Nodevo\ToolsBundle\Tools\Chaine;
+use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -16,6 +18,8 @@ class ObjetManager extends BaseManager
     protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Objet';
     protected $_contenuManager;
     protected $_noteManager;
+    protected $_userManager;
+    protected $_referenceManager;
 
     /**
      * @var \Symfony\Component\HttpFoundation\Session\Session Session
@@ -30,13 +34,15 @@ class ObjetManager extends BaseManager
      * @param NoteManager    $noteManager     NoteManager
      * @param \Symfony\Component\HttpFoundation\Session\Session $session       Le service session de Symfony
      */
-    public function __construct( EntityManager $em, ContenuManager $contenuManager, NoteManager $noteManager, Session $session)
+    public function __construct( EntityManager $em, ContenuManager $contenuManager, NoteManager $noteManager, Session $session, UserManager $userManager, ReferenceManager $referenceManager)
     {
         parent::__construct($em);
 
-        $this->_contenuManager = $contenuManager;
-        $this->_noteManager    = $noteManager;
-        $this->_session = $session;
+        $this->_contenuManager   = $contenuManager;
+        $this->_noteManager      = $noteManager;
+        $this->_session          = $session;
+        $this->_userManager      = $userManager;
+        $this->_referenceManager = $referenceManager;
     }
 
     /**
@@ -46,14 +52,25 @@ class ObjetManager extends BaseManager
      */
     public function getDatasForGrid( \StdClass $condition = null )
     {
-        $results = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
-        
-        // Nombre de notes et moyenne
-        foreach ($results as $key => $result)
+        $resultatsForGrid        = array();
+        $userConnectedDomainesId = $this->_userManager->getUserConnected()->getDomainesId();
+        $results                 = $this->getRepository()->getDatasForGrid( $userConnectedDomainesId, $condition )->getQuery()->getResult();
+
+        foreach ($results as $result) 
         {
-            $results[$key]['moyenne'] = number_format($this->_noteManager->getMoyenneNoteByObjet($results[$key]['id'], false),2);;
-            $results[$key]['nbNotes'] = $this->_noteManager->countNbNoteByObjet($results[$key]['id'], false);;
+            if(!array_key_exists($result['id'], $resultatsForGrid))
+            {
+                $resultatsForGrid[$result['id']] = $result;
+                $resultatsForGrid[$result['id']]['moyenne'] = number_format($this->_noteManager->getMoyenneNoteByObjet($result['id'], false),2);
+                $resultatsForGrid[$result['id']]['nbNotes'] = $this->_noteManager->countNbNoteByObjet($result['id'], false);
+            }
+            elseif(trim($result['domaineNom']) != '')
+            {
+                $resultatsForGrid[$result['id']]['domaineNom'] .= ";" . $result['domaineNom'];
+            }
         }
+
+        $results = array_merge($resultatsForGrid);
 
         return $this->rearangeForTypes( $results );
     }
@@ -124,8 +141,19 @@ class ObjetManager extends BaseManager
             $roles        = $objet->getRoles();
             $row['roles'] = array();
             foreach($roles as $role)
+            {
                 $row['roles'][] = $role->getName();
+            }
             $row['roles'] = implode(', ', $row['roles']);
+
+            //handle domaines
+            $domaines = $objet->getDomaines();
+            $row['domaines'] = array();
+            foreach ($domaines as $domaine) 
+            {
+                $row['domaines'][] = $domaine->getNom();
+            }
+            $row['domaines'] = implode('|', $row['domaines']);
                 
             //handle types (catégories)
             $types        = $objet->getTypes();
@@ -191,7 +219,7 @@ class ObjetManager extends BaseManager
                         $rowInfradoc = array();
 
                         $rowInfradoc['id'] = $rowInfradoc['idParent'] = $rowInfradoc['titre'] = $rowInfradoc['alias'] = $rowInfradoc['synthese'] = $rowInfradoc['resume'] = $rowInfradoc['commentaires'] = $rowInfradoc['notes'] = $rowInfradoc['type'] = $rowInfradoc['nbVue'] = $rowInfradoc['etat'] = '';
-                        $rowInfradoc['dateCreation'] = $rowInfradoc['dateParution'] = $rowInfradoc['dateDebutPublication'] = $rowInfradoc['dateFinPublication'] = $rowInfradoc['dateModification'] = $rowInfradoc['roles'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
+                        $rowInfradoc['dateCreation'] = $rowInfradoc['dateParution'] = $rowInfradoc['dateDebutPublication'] = $rowInfradoc['dateFinPublication'] = $rowInfradoc['dateModification'] = $rowInfradoc['roles'] = $rowInfradoc['domaines'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
                         $rowInfradoc['fichier1'] = $rowInfradoc['fichier2'] = $rowInfradoc['vignette'] = $rowInfradoc['note'] = $rowInfradoc['objets'] = $rowInfradoc['noteMoyenne'] = $rowInfradoc['nombreNote'] = $row['nombreUserMaitrise'] = '';
                         $rowInfradoc['referentAnap'] = $rowInfradoc['sourceDocument'] = $rowInfradoc['commentairesFichier'] =  $rowInfradoc['pathEdit'] =  $rowInfradoc['module'] = '';
 
@@ -297,10 +325,13 @@ class ObjetManager extends BaseManager
      */
     public function unlock( $objet )
     {
-        $objet->setLock( 0 );
-        $objet->setLockedBy( null );
+        if(!is_null($objet))
+        {
+            $objet->setLock( 0 );
+            $objet->setLockedBy( null );
 
-        $this->save( $objet );
+            $this->save( $objet );
+        }
     }
 
     /**
@@ -328,6 +359,8 @@ class ObjetManager extends BaseManager
             //on remet l'élément à sa place
             $references[ $selected->getReference()->getId() ] = $ref;
         }
+
+        $references = $this->filtreReferencesByDomaines($objet, $references);
         
         return $references;
     }
@@ -672,7 +705,9 @@ class ObjetManager extends BaseManager
             $id = $reference->getReference()->getId();
 
             if( isset($ponderations[ $id ]) )
+            {
                 $note += $ponderations[ $id ]['poids'];
+            }
         }
         
         return $note;
@@ -737,6 +772,71 @@ class ObjetManager extends BaseManager
 
 
 
+    /**
+     * Filtre les reférences en fonction de l'objet passés en paramètre
+     *
+     * @param [type] $objet      [description]
+     * @param [type] $references [description]
+     *
+     * @return [type]
+     */
+    private function filtreReferencesByDomaines($objet, $references)
+    {
+        $referencesIds    = array();
+        $domainesObjetIds = array();
+        $userConnectedDomaineIds = $this->_userManager->getUserConnected()->getDomainesId();
+
+        //Récupération des id de domaine de l'objet
+        foreach ($objet->getDomaines() as $domaine) 
+        {
+            if(in_array($domaine->getId(), $userConnectedDomaineIds))
+            {
+                $domainesObjetIds[] = $domaine->getId();
+            }
+        }
+
+        //Vérifie qu'il y a bien un domaine pour la publication courante
+        if(count($domainesObjetIds) !== 0)
+        {   
+            //Récupération des id des références "stdClass" pour récupérer les entités correspondantes et donc les domaines
+            foreach ($references as $reference) 
+            {
+                $referencesIds[] = $reference->id;
+            }
+
+            $referencesByIds = $this->_referenceManager->findBy(array('id'=> $referencesIds));
+
+            //Parcourt la liste des entités de référence
+            foreach ($referencesByIds as $reference) 
+            {
+                if(array_key_exists($reference->getId(), $references))
+                {
+                    $inArray = false;
+
+                    foreach ($reference->getDomaines() as $domaine) 
+                    {
+                        if(in_array($domaine->getId(), $domainesObjetIds))
+                        {
+                            $inArray = true;
+                            break;
+                        }   
+                    }
+
+                    if(!$inArray)
+                    {
+                        unset($references[$reference->getId()]);
+                    }
+                }
+            }
+        }
+        //Sinon vide les références, car une publication sans domaine ne peut pas être référencées
+        else
+        {
+            $references = array();
+        }
+
+        return $references;
+    }
 
     /**
      * Formatte les types de l'objet pour les URLS (catégorie param)

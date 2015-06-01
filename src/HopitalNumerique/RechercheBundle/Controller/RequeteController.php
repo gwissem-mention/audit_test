@@ -4,20 +4,22 @@ namespace HopitalNumerique\RechercheBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class RequeteController extends Controller
 {
     /**
      * Affichage de la liste des requêtes de l'utilisateur connecté
      */
-    public function indexAction($indexVue)
+    public function indexAction(Request $request, $indexVue)
     {
         //get connected user
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user      = $this->get('security.context')->getToken()->getUser();
+        $domaineId = $request->getSession()->get('domaineId');
 
         //get requetes
-        $requetes      = $this->get('hopitalnumerique_recherche.manager.requete')->findBy( array( 'user' => $user ) );
-        $consultations = $this->get('hopitalnumerique_objet.manager.consultation')->getLastsConsultations( $user );
+        $requetes      = $this->get('hopitalnumerique_recherche.manager.requete')->findBy( array( 'user' => $user, 'domaine' => $domaineId ) );
+        $consultations = $this->get('hopitalnumerique_objet.manager.consultation')->getLastsConsultations( $user, $domaineId );
 
         if( $indexVue )
             return $this->render('HopitalNumeriqueRechercheBundle:Requete:index.html.twig', array('requetes' => $requetes, 'consultations' => $consultations));

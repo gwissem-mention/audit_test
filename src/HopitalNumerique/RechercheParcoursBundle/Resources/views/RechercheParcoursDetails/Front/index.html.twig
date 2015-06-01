@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
 
 {% block title %}{{parent()}} - Parcours guidé{% endblock %}
 
@@ -39,7 +39,7 @@
                 <h3>{{rechercheParcours.reference.libelle}}</h3>
             </div>
             <div class="col-md-1 toolbar">
-                <a class="btn btn-default" href="{{ path('hopital_numerique_recherche_parcours_homepage_front') }}" title="Retour à la recherche guidée"><i class="fa fa-reply"></i></a>
+                <a class="btn btn-default" href="{{ path('hopital_numerique_recherche_parcours_homepage_front', {'id': 1}) }}" title="Retour à la recherche guidée"><i class="fa fa-reply"></i></a>
             </div>
         </div>
 

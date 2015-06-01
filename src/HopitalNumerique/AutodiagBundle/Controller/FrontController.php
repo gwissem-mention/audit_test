@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Controller;
 
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use HopitalNumerique\AutodiagBundle\Entity\Resultat;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -286,7 +287,7 @@ class FrontController extends Controller
             }
 
             //Récupération des destinataires dans le fichier de config
-            $mailsContact = $this->get('hopitalnumerique_contact.manager.contact')->getMailsContact();
+            $mailsContact = array($this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'))->getAdresseMailContact());
 
             $variablesTemplate = array(
                     'nomdestinataire'  => '',
@@ -631,11 +632,11 @@ class FrontController extends Controller
         $radarChartBenchmarkCouleurDecile8 = ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile8() == 'vert' ? '#76e57e' : '#ff7a7a');
 
         $options = array(
-            'chapitresForAnalyse'     => $chapitresForAnalyse,
-            'chapitresForReponse'     => $chapitresForReponse,
-            'resultatsName' => $resultatsName,
-            'questionReponseSynthese' => $questionReponseSynthese,
-            'questionReponseSyntheseTableau' => $questionReponseSyntheseTableau,
+            'chapitresForAnalyse'               => $chapitresForAnalyse,
+            'chapitresForReponse'               => $chapitresForReponse,
+            'resultatsName'                     => $resultatsName,
+            'questionReponseSynthese'           => $questionReponseSynthese,
+            'questionReponseSyntheseTableau'    => $questionReponseSyntheseTableau,
             'radarChartBenchmarkCouleurDecile2' => $radarChartBenchmarkCouleurDecile2,
             'radarChartBenchmarkCouleurDecile8' => $radarChartBenchmarkCouleurDecile8
         );
@@ -654,19 +655,19 @@ class FrontController extends Controller
         
         
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:resultat.html.twig' , array(
-            'resultat'                => $resultat,
-            'chapitres'               => $chapitres,
-            'chapitresForAnalyse'     => $chapitresForAnalyse,
-            'chapitresForReponse'     => $chapitresForReponse,
-            'questionReponseSynthese' => $questionReponseSynthese,
-            'questionReponseSyntheseTableau' => $questionReponseSyntheseTableau,
-            'resultatsName'           => $resultatsName,
-            'graphiques'              => $graphiques,
-            'back'                    => $back,
-            'sansGabarit'             => $sansGabarit,
+            'resultat'                          => $resultat,
+            'chapitres'                         => $chapitres,
+            'chapitresForAnalyse'               => $chapitresForAnalyse,
+            'chapitresForReponse'               => $chapitresForReponse,
+            'questionReponseSynthese'           => $questionReponseSynthese,
+            'questionReponseSyntheseTableau'    => $questionReponseSyntheseTableau,
+            'resultatsName'                     => $resultatsName,
+            'graphiques'                        => $graphiques,
+            'back'                              => $back,
+            'sansGabarit'                       => $sansGabarit,
             'radarChartBenchmarkCouleurDecile2' => $radarChartBenchmarkCouleurDecile2,
             'radarChartBenchmarkCouleurDecile8' => $radarChartBenchmarkCouleurDecile8,
-            'processusDonnees'        => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
+            'processusDonnees'                  => ($resultat->getOutil()->isProcessChart() ? $this->get('hopitalnumerique_autodiag.manager.process')->getDonneesRestitutionParProcessus($resultat) : null)
         ));
     }
 
@@ -676,10 +677,20 @@ class FrontController extends Controller
     public function autodiagAction()
     {
         $user      = $this->get('security.context')->getToken()->getUser();
-        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy( array( 'user' => $user ), array('dateLastSave' => 'DESC') );        
+        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->getAutodiagsMonCompte($user);
+        $domaines  = $this->get('hopitalnumerique_domaine.manager.domaine')->getAllDomainesOrdered();
+
+        foreach ($domaines as $domaine) 
+        {
+            if(!array_key_exists($domaine->getId(), $resultats))
+            {
+                $resultats[$domaine->getId()] = array();
+            }
+        }
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Front:autodiag.html.twig' , array(
-            'resultats' => $resultats
+            'resultatsByDomaine' => $resultats,
+            'domaines'           => $domaines
         ));
     }
 

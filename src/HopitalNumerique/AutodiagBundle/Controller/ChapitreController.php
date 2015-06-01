@@ -20,8 +20,8 @@ class ChapitreController extends Controller
     public function indexAction(Outil $outil)
     {
         //get ponderations
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($outil->getDomainesId());
+        
         //get chapitres
         $chapitres = $this->get('hopitalnumerique_autodiag.manager.chapitre')->getArbo( $outil, $refsPonderees );
 

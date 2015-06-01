@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -18,19 +20,20 @@ class ReferenceManager extends BaseManager
     protected $_class       = 'HopitalNumerique\ReferenceBundle\Entity\Reference';
     private $_tabReferences = array();
     private $_session;
+    protected $_userManager;
 
     /**
      * Constructeur du manager gérant les références
      *
      * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
-     * @param \HopitalNumerique\AutodiagBundle\Manager\ResultatManager $resultatManager Le manager de l'entité Resultat
      * @return void
      */
-    public function __construct(EntityManager $entityManager, Session $session)
+    public function __construct(EntityManager $entityManager, Session $session, UserManager $userManager)
     {
         parent::__construct($entityManager);
 
-        $this->_session = $session;
+        $this->_session     = $session;
+        $this->_userManager = $userManager;
     }
 
     /**
@@ -42,10 +45,10 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false )
+    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = array() )
     {
         //get All References, and convert to ArrayCollection
-        $datas = new ArrayCollection( $this->getRepository()->getArbo( $unlockedOnly, $fromDictionnaire, $fromRecherche ) );
+        $datas = new ArrayCollection( $this->getRepository()->getArbo( $unlockedOnly, $fromDictionnaire, $fromRecherche, $domaineIds ) );
 
         //Récupère uniquement les premiers parents
         $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );
@@ -84,9 +87,9 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    public function getArboFormat( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false )
+    public function getArboFormat( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false , $domaineIds = array() )
     {
-        $arbo = $this->getArbo($unlockedOnly, $fromDictionnaire, $fromRecherche );
+        $arbo = $this->getArbo($unlockedOnly, $fromDictionnaire, $fromRecherche, $domaineIds );
         return $this->formatArbo($arbo);
     }
     
@@ -97,7 +100,25 @@ class ReferenceManager extends BaseManager
      */
     public function getDatasForGrid( \StdClass $condition = null )
     {
-        return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        $referencesForGrid = array();
+
+        $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
+
+        $references = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+
+        foreach ($references as $reference) 
+        {
+            if(!array_key_exists($reference['id'], $referencesForGrid))
+            {
+                $referencesForGrid[$reference['id']] = $reference;
+            }
+            else
+            {
+                $referencesForGrid[$reference['id']]['domaineNom'] .= ";" . $reference['domaineNom'];
+            }
+        }
+
+        return array_values($referencesForGrid);
     }
 
     /**
@@ -107,7 +128,23 @@ class ReferenceManager extends BaseManager
      */
     public function getDatasForExport( $ids )
     {
-        return $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
+        $referencesForExport = array();
+
+        $references = $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
+
+        foreach ($references as $reference) 
+        {
+            if(!array_key_exists($reference['id'], $referencesForExport))
+            {
+                $referencesForExport[$reference['id']] = $reference;
+            }
+            else
+            {
+                $referencesForExport[$reference['id']]['domaineNom'] .= "|" . $reference['domaineNom'];
+            }
+        }
+
+        return array_values($referencesForExport);
     }
 
     /**
@@ -115,9 +152,37 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    public function getAllRefCode()
+    public function getAllRefCode(Questionnaire $questionnaire)
     {
-        return $this->getRepository()->getAllRefCode()->getQuery()->getResult();
+        $domainesQuestionnaireId = $questionnaire->getDomainesId();
+
+        return $this->getRepository()->getAllRefCode($domainesQuestionnaireId)->getQuery()->getResult();
+    }
+
+    /**
+     * Récupération des domaines triés par réference
+     *
+     * @return [type]
+     */
+    public function getDomainesOrderedByReference()
+    {
+        $references                 = $this->getRepository()->getReferencesWithDomaine()->getQuery()->getResult();
+        $domainesOrderedByReference = array();
+
+        foreach ($references as $reference) 
+        {
+            foreach ($reference->getDomaines() as $domaine) 
+            {
+                if(!array_key_exists($reference->getId(), $domainesOrderedByReference))
+                {
+                    $domainesOrderedByReference[$reference->getId()] = array();    
+                }
+
+                $domainesOrderedByReference[$reference->getId()][] = $domaine;
+            }
+        }
+
+        return $domainesOrderedByReference;
     }
 
     /**
@@ -234,9 +299,15 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    public function getReferencesPonderees()
+    public function getReferencesPonderees( $domaineIds = array() )
     {
-        $references = $this->getArboFormat(false, false, true);
+        $references = $this->getArboFormat( false, false, true, $domaineIds);
+
+        if(!array_key_exists('CATEGORIES_RECHERCHE', $references))
+        {
+            return array();
+        }
+        
         $references = $references['CATEGORIES_RECHERCHE'];
         $results    = array();
 
@@ -439,11 +510,22 @@ class ReferenceManager extends BaseManager
         $childs   = $this->getReferentielChildsFromCollection($referentiels, $referentiel);
         $nbChilds = count($childs);
 
-        for ($i=0; $i < $nbChilds; $i++) { 
-            $childs[$i]->setOrder($i+1);
-            $this->save($childs[$i]);
-            $this->refreshReferentielOrder($referentiels, $childs[$i]);
+        $compteur = 0;
+        foreach ($childs as $key => $child) 
+        {
+            $compteur++;
+            $childs[$key]->setOrder($compteur);
+            $this->save($childs[$key]);
+            $this->refreshReferentielOrder($referentiels, $childs[$key]);
         }
+
+        //Correctif 
+        // for ($i=0; $i < $nbChilds; $i++) 
+        // { 
+        //     $childs[$i]->setOrder($i+1);
+        //     $this->save($childs[$i]);
+        //     $this->refreshReferentielOrder($referentiels, $childs[$i]);
+        // }
     }
 
     /**
@@ -463,8 +545,11 @@ class ReferenceManager extends BaseManager
                                         ->orderBy( array("order" => Criteria::ASC) );
             $childs = $referentiels->matching( $criteria );
         //si le parent existe, on récupère tous ses enfants
-        } else 
+        } 
+        else 
+        {
             $childs = $parent->getChildsFromCollection( $referentiels );
+        }
 
         return $childs;
     }

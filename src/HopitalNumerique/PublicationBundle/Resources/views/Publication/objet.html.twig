@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
 
 {# Référencement #}
 {% block title %}{{parent()}} - {% if contenu is defined %}{{objet.titre ~ ' - ' ~ prefix ~ ' ' ~ contenu.titre}}{% else %}{{objet.titre}}{% endif %}{% endblock %}

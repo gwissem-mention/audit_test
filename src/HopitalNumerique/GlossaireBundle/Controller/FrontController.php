@@ -14,10 +14,10 @@ class FrontController extends Controller
      */
     public function indexAction()
     {
-        $datas = $this->get('hopitalnumerique_glossaire.manager.glossaire')->findGlossaireTable();
-
+        $glossaires = $this->get('hopitalnumerique_glossaire.manager.glossaire')->findGlossaireTable($this->get('request')->getSession()->get('domaineId'));
+        
         return $this->render('HopitalNumeriqueGlossaireBundle:Front:index.html.twig', array(
-            'datas' => $datas,
+            'glossaires' => $glossaires,
         ));
     }
 }

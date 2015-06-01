@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
 
 {# Référencement #}
 {% block title %}{{parent()}} - Mon compte{% endblock %}
@@ -22,34 +22,37 @@
         {% set mainBlockClass = "col-md-9 col-sm-12" %}
 
         <div class="col-md-3 col-sm-12">
-            {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
-            {#{% set currentPath = path(app.request.attributes.get('_route')) %}#}
-            {% set root = knp_menu_get('menu-main-front') %}
-            {% set parent = null %}
+            {% if domaineCurrentId == 1 %}
+                {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+                {% set root = knp_menu_get('menu-main-front') %}
+                {% set parent = null %}
 
-            {% for item in root %}
-                {% if currentPath == item.uri %}
-                    {% set parent = item.name %}
-                {% endif %}
-
-                {% for child in item.children %}
-                    {% if currentPath == child.uri %}
+                {% for item in root %}
+                    {% if currentPath == item.uri %}
                         {% set parent = item.name %}
                     {% endif %}
 
-                    {% for babyChild in child.children %}
-                        {% if currentPath == babyChild.uri %}
+                    {% for child in item.children %}
+                        {% if currentPath == child.uri %}
                             {% set parent = item.name %}
                         {% endif %}
+
+                        {% for babyChild in child.children %}
+                            {% if currentPath == babyChild.uri %}
+                                {% set parent = item.name %}
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
                 {% endfor %}
-            {% endfor %}
 
-            {% if parent is not null %}
-                {% set menu = root[parent] %}
-                {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+                {% if parent is not null %}
+                    {% set menu = root[parent] %}
+                    {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+                {% else %}
+                    {% set mainBlockClass = "col-md-12 col-sm-12" %}
+                {% endif %}
             {% else %}
-                {% set mainBlockClass = "col-md-12 col-sm-12" %}
+                {{ knp_menu_render('menu-main-front_gen', {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
             {% endif %}
         </div>
         

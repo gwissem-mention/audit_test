@@ -4,14 +4,18 @@ namespace HopitalNumerique\PublicationBundle\Controller;
 
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class PublicationController extends Controller
 {
     /**
      * Objet Action
      */
-    public function objetAction(Objet $objet)
+    public function objetAction(Request $request, Objet $objet)
     {
+        $domaineId = $request->getSession()->get('domaineId');
+        $domaine   = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+
         //objet visualisation
         if(!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1'))
         {
@@ -34,7 +38,7 @@ class PublicationController extends Controller
         $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $objet->getId() ) : array();
 
         //set Consultation entry
-        $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $objet );
+        $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $domaine, $objet );
 
         //build productions with authorizations
         $productions = $this->getProductionsAssocies($objet->getObjets());
@@ -91,8 +95,11 @@ class PublicationController extends Controller
     /**
      * Contenu Action
      */
-    public function contenuAction($id, $alias = null, $idc, $aliasc = null)
+    public function contenuAction(Request $request, $id, $alias = null, $idc, $aliasc = null)
     {
+        $domaineId = $request->getSession()->get('domaineId');
+        $domaine   = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
 
         //Si l'user connecté à le rôle requis pour voir l'objet
@@ -129,7 +136,7 @@ class PublicationController extends Controller
         $note = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('user' => $user, 'contenu' => $contenu));
 
         //set Consultation entry
-        $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $contenu, true );
+        $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $domaine, $contenu, true );
 
         $contenuTemp      = $contenu;
         $breadCrumbsArray = array();
@@ -327,9 +334,12 @@ class PublicationController extends Controller
             }
         }
 
+        $request       = $this->get('request');
+        $domaineId     = $request->getSession()->get('domaineId');
+
         //update status updated + new
         $user        = $this->get('security.context')->getToken()->getUser();
-        $productions = $this->get('hopitalnumerique_objet.manager.consultation')->updateProductionsWithConnectedUser( $productions, $user );
+        $productions = $this->get('hopitalnumerique_objet.manager.consultation')->updateProductionsWithConnectedUser( $domaineId, $productions, $user );
 
         return $productions;
     }
@@ -351,10 +361,12 @@ class PublicationController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
 
+        $domaineId = $this->get('request')->getSession()->get('domaineId');
+
         //on récupère sa recherche
         $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
         $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $refs, $role, $refsPonderees );
-        $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
+        $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
     
         //make array unique
         $ids = array();

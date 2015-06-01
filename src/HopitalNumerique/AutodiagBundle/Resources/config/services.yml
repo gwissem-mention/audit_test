@@ -35,17 +35,17 @@ services:
     #Outils
     hopitalnumerique_autodiag.manager.outil:
         class: %hopitalnumerique_autodiag.manager.outil.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
     hopitalnumerique_autodiag.grid.outil:
         class: %hopitalnumerique_autodiag.grid.outil.class%
-        arguments: ["@service_container"]
+        arguments: ["@service_container",]
 
     hopitalnumerique_autodiag.form.outil:
         class: %hopitalnumerique_autodiag.form.outil.class%
-        arguments: ["@hopitalnumerique_autodiag.manager.outil", "@validator", "@hopitalnumerique_autodiag.manager.process", "@hopitalnumerique_autodiag.manager.chapitre", "@hopitalnumerique_questionnaire.manager.questionnaire"]
+        arguments: ["@hopitalnumerique_autodiag.manager.outil", "@validator", "@hopitalnumerique_autodiag.manager.process", "@hopitalnumerique_autodiag.manager.chapitre", "@hopitalnumerique_questionnaire.manager.questionnaire", "@hopitalnumerique_user.manager.user"]
         tags:
             - { name: form.type, alias: hopitalnumerique_autodiag_outil }
 
@@ -69,7 +69,7 @@ services:
     #Chapitres
     hopitalnumerique_autodiag.manager.chapitre:
         class: %hopitalnumerique_autodiag.manager.chapitre.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.resultat"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.resultat", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
@@ -82,7 +82,7 @@ services:
     #Questions
     hopitalnumerique_autodiag.manager.question:
         class: %hopitalnumerique_autodiag.manager.question.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 

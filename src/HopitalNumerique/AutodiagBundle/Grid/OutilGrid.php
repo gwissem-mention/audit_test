@@ -35,6 +35,8 @@ class OutilGrid extends Grid implements GridInterface
         $nbFormColumn->setSize( 160 );
         $this->addColonne( $nbFormColumn );
 
+        $this->addColonne( new Column\TextColumn('domainesNom', 'Domaine(s) associé(s)') );
+
         $nbFormValidColumn = new Column\TextColumn('nbFormValid', 'Nb formulaires finalisés');
         $nbFormValidColumn->setSize( 160 );
         $this->addColonne( $nbFormValidColumn );

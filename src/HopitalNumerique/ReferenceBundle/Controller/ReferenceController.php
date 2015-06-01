@@ -26,9 +26,11 @@ class ReferenceController extends Controller
     public function sitemapAction()
     {
         $references = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat();
+        $domainesOrderedByReference = $this->get('hopitalnumerique_reference.manager.reference')->getDomainesOrderedByReference();
 
         return $this->render('HopitalNumeriqueReferenceBundle:Reference:sitemap.html.twig', array(
-            'references' => $references
+            'references'                 => $references,
+            'domainesOrderedByReference' => $domainesOrderedByReference
         )); 
     }
 
@@ -156,7 +158,8 @@ class ReferenceController extends Controller
 
         $colonnes = array( 
                             'id'           => 'id', 
-                            'libelle'      => 'Libelle', 
+                            'libelle'      => 'Libelle',
+                            'domaineNom'   => 'Domaine(s)',
                             'code'         => 'Code', 
                             'dictionnaire' => 'Présent dans le dictionnaire', 
                             'recherche'    => 'Présent dans la recherhce', 
@@ -193,7 +196,7 @@ class ReferenceController extends Controller
         $form = $this->createForm( $formName, $reference);
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
             //get uploaded form datas (used to manipulate parent next)
@@ -203,13 +206,65 @@ class ReferenceController extends Controller
             $form->handleRequest($request);
 
             //si le formulaire est valide
-            if ( $form->isValid() ) {
-
+            if ( $form->isValid() ) 
+            {
                 $oldParent = $reference->getParent();
 
                 if( isset($formDatas['parent']) && !is_null($formDatas['parent']) ){
                     $parent = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $formDatas['parent'] ) );    
                     $reference->setParent( $parent );
+
+                    //Mise à jour du/des domaine(s) sur l'ensemble de l'arbre d'héritage des parents
+                    $family = array();
+                    $daddy  = $parent;
+
+                    //Tant qu'il y a des parents on ajoute le(s) nouveau(x) domaine(s) dessus
+                    while(!is_null($daddy))
+                    {
+                        $childsDomaines = array();
+                        //Vérifie si l'élément courant a un parent
+                        $childs = $daddy->getChilds();
+
+                        //Si on est au niveau du parent de la référence courante, on ajoute cette dernière au tableau des enfants du parent qui n'est pas encore setté
+                        //si la référence est un ajout
+                        if($daddy->getId() === $parent->getId() 
+                            && is_null($reference->getId()))
+                        {
+                            $childs = count($childs) !== 0 ? array_merge(array($reference), $childs) : array($reference);
+                        }
+
+                        foreach ($childs as $child) 
+                        {
+                            foreach ($child->getDomaines() as $domaine) 
+                            {
+                                if(!array_key_exists($domaine->getId(), $childsDomaines))
+                                {
+                                    $childsDomaines[$domaine->getId()] = $domaine;
+                                }
+                            }
+                        }
+
+                        //Vide les domaines du père pour remettre uniquement ceux des enfants (suppression d'un domaine lors de la sauvegarde n'étant plus chez aucun enfant)
+                        $daddy->setDomaines(array());
+
+                        //Récupération des domaines du parent courant pour éviter la dupplication de domaine sur une entité
+                        $daddyDomainesId = $daddy->getDomainesId();
+                        foreach ($childsDomaines as $domaine) 
+                        {
+                            if(!in_array($domaine->getId(),$daddyDomainesId))
+                            {
+                                //Si il n'a pas encore ce domaine, on lui ajoute
+                                $daddy->addDomaine($domaine);
+                            }
+                        }
+
+                        $family[] = $daddy;
+
+                        //Parent suivant ou null si on est au sommet de l'arbre
+                        $daddy = $daddy->getParent();
+                    }
+                
+                    $this->get('hopitalnumerique_reference.manager.reference')->save($family);
                 }
                 
                 //test ajout ou edition

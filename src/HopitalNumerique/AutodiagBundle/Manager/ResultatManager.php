@@ -191,6 +191,37 @@ class ResultatManager extends BaseManager
     {
         return $this->getRepository()->getLastResultatValided($outil, $user)->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * Récupération des autodiags de l'utilisateur trié par domaine pour l'interface de "mon compte"
+     *
+     * @param User $user [description]
+     *
+     * @return [type]
+     */
+    public function getAutodiagsMonCompte(User $user)
+    {
+        $resultatsByDomaine = array();
+
+        //Récupération des résultats à trier
+        $resultats = $this->findBy( array( 'user' => $user ), array('dateLastSave' => 'DESC') );
+        
+        //Tri les résultats par domaine
+        foreach ($resultats as $resultat) 
+        {
+            foreach ($resultat->getOutil()->getDomaines() as $domaineOutil) 
+            {
+                if(!array_key_exists($domaineOutil->getId(), $resultatsByDomaine))
+                {
+                    $resultatsByDomaine[$domaineOutil->getId()] = array();
+                }
+
+                $resultatsByDomaine[$domaineOutil->getId()][] = $resultat;
+            }
+        }
+
+        return $resultatsByDomaine;
+    }
     
     /**
      * Construit le tableau de graphiques pour la génération en FRONT

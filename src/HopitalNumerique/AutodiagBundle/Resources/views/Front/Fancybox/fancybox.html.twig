@@ -13,14 +13,34 @@
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
         {% block stylesheets %}
-            {% stylesheets output="compiled/hopitalnumerique-autodiag-front-fancy.css" filter="cssrewrite, ?yui_css" 
-                "@bootstrap_css"
-                "@fancybox_css"
-                'bundles/hopitalnumeriquecore/css/layout.css'
-                'bundles/hopitalnumeriqueautodiag/css/fancybox.css'
-            %}
-                <link rel="stylesheet" href="{{ asset_url }}" />
-            {% endstylesheets %}
+            {% if templateCurrentId == 1 %}
+                {% stylesheets output="compiled/hopitalnumerique-autodiag-front-fancy-1.css" filter="cssrewrite, ?yui_css" 
+                    "@bootstrap_css"
+                    "@fancybox_css"
+                    'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                    'bundles/hopitalnumeriqueautodiag/css/fancybox.css'
+                %}
+                    <link rel="stylesheet" href="{{ asset_url }}" />
+                {% endstylesheets %}
+            {% elseif templateCurrentId == 2 %}
+                {% stylesheets output="compiled/hopitalnumerique-autodiag-front-fancy-2.css" filter="cssrewrite, ?yui_css" 
+                    "@bootstrap_css"
+                    "@fancybox_css"
+                    'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
+                    'bundles/hopitalnumeriqueautodiag/css/fancybox.css'
+                %}
+                    <link rel="stylesheet" href="{{ asset_url }}" />
+                {% endstylesheets %}
+            {% else %}
+                {% stylesheets output="compiled/hopitalnumerique-autodiag-front-fancy-default.css" filter="cssrewrite, ?yui_css" 
+                    "@bootstrap_css"
+                    "@fancybox_css"
+                    'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                    'bundles/hopitalnumeriqueautodiag/css/fancybox.css'
+                %}
+                    <link rel="stylesheet" href="{{ asset_url }}" />
+                {% endstylesheets %}
+            {% endif %}
         {% endblock %}
 
         {% block javascripts %}

@@ -15,30 +15,62 @@
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     {% block stylesheets %}
         {% stylesheets output="compiled/hopitalnumerique_homepage-core.css" filter="cssrewrite, ?yui_css"
-        "@bootstrap_css"
-        "@font_awesome_css"
-        "@fancybox_css"
-        "@slick_css"
-        "@slick_theme_css"
-        'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
-        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+            "@bootstrap_css"
+            "@font_awesome_css"
+            "@fancybox_css"
+            "@slick_css"
+            "@slick_theme_css"
+            'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
+            'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
+            <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
 
+        {% if templateCurrentId == 1 %}
+            {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-1.css" filter="cssrewrite, ?yui_css"
+            'bundles/hopitalnumeriquecore/css/Templates/1/ie8.css'
+            %}
+                <!--[if IE 8]>
+                <link rel="stylesheet" href="{{ asset_url }}" />
+                <![endif]-->
+            {% endstylesheets %}
+        {% elseif templateCurrentId == 2 %}
+            {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-2.css" filter="cssrewrite, ?yui_css"
+            'bundles/hopitalnumeriquecore/css/Templates/2/ie8.css'
+            %}
+                <!--[if IE 8]>
+                <link rel="stylesheet" href="{{ asset_url }}" />
+                <![endif]-->
+            {% endstylesheets %}
+        {% else %}
+            {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-default.css" filter="cssrewrite, ?yui_css"
+            'bundles/hopitalnumeriquecore/css/Templates/1/ie8.css'
+            %}
+                <!--[if IE 8]>
+                <link rel="stylesheet" href="{{ asset_url }}" />
+                <![endif]-->
+            {% endstylesheets %}
+        {% endif %}
 
-        {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8.css" filter="cssrewrite, ?yui_css"
-        'bundles/hopitalnumeriquecore/css/ie8.css'
-        %}
-        <!--[if IE 8]>
-        <link rel="stylesheet" href="{{ asset_url }}" />
-        <![endif]-->
-        {% endstylesheets %}
-        {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index.css" filter="cssrewrite, ?yui_css"
-        'bundles/hopitalnumeriquecore/css/homepage.css'
-        %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-        {% endstylesheets %}
+        {% if templateCurrentId == 1 %}
+            {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-1.css" filter="cssrewrite, ?yui_css"
+                'bundles/hopitalnumeriquecore/css/Templates/1/homepage.css'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% else templateCurrentId == 2 %}
+            {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-2.css" filter="cssrewrite, ?yui_css"
+                'bundles/hopitalnumeriquecore/css/Templates/2/homepage.css'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% else %}
+            {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-default.css" filter="cssrewrite, ?yui_css"
+                'bundles/hopitalnumeriquecore/css/Templates/1/homepage.css'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% endif %}
     {% endblock stylesheets %}
 
     {% block javascripts %}
@@ -95,7 +127,7 @@
             <div id="bloc_exalead_home" class="pull-left">
                 <div id="recherche_textuelle_group">
                     <span class="bt-recherche pull-right">
-                        <a class="infos btn btn-rose" href="{{path('hopital_numerique_recherche_parcours_homepage_front')}}">Parcours guidé</a>
+                        <a class="infos btn btn-rose" href="{{path('hopital_numerique_recherche_parcours_homepage_front', {'id': 1})}}">Parcours guidé</a>
                         <a class="infos btn btn-orange" href="{{path('hopital_numerique_recherche_homepage')}}" id="search-avance-header-home">Recherche avancée</a>
                     </span>
                 </div>
@@ -203,7 +235,7 @@
                         </div>
                     <div class="start-search col-md-3 col-sm-3 col-xs-12 pull-right">
                         <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-HN-big.jpg')}}" alt="logo"/>
-                        <a id="recherche-aidee" class="btn btn-orange-clair link fancybox.iframe" href="{{ path('hopital_numerique_expbesoin_rechercheFancy') }}">Commencer</a>
+                        <a id="recherche-aidee" class="btn btn-orange-clair link fancybox.iframe" href="{{ path('hopital_numerique_expbesoin_rechercheFancy', {'id' : 1 }) }}">Commencer</a>
                     </div>
                 </div>
             </div>
@@ -385,11 +417,11 @@
         <div class="clearfix"></div>
     {% endblock %}
 
-    <input type="hidden" id="fancy-recherche-url" value="{{path('hopital_numerique_expbesoin_rechercheFancy')}}" />
+    <input type="hidden" id="fancy-recherche-url" value="{{path('hopital_numerique_expbesoin_rechercheFancy', {'id' : 1 })}}" />
 </div>
 
 <div class="col-md-12" id="footer">
-    {{ knp_menu_render('menu-footer-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+    {{ knp_menu_render('menu-footer-front_gen', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
 
 {#    {% if app.user %}
         <a class="reporting btn btn-xs" href="{{path('hopitalnumerique_report_homepage', {url: app.request.uri|base64Nodevo})}}">Signaler une anomalie sur cette page</a>
