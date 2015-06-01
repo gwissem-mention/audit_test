@@ -32,7 +32,7 @@ services:
     #--Board
     hopitalnumerique_forum.manager.board:
         class: %hopitalnumerique_forum.manager.board.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@ccdn_forum_forum.model.topic", "@ccdn_forum_forum.model.post"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
     #--Topic
