@@ -26,7 +26,7 @@ class DefaultController extends Controller
         $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role, 3 );
 
         // Get publications (production)
-        $publications  = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByNbVue(array(425,176,177,178,179,180,181,182,435), 3);
+        $publications  = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByNbVue();
 
         // Get nombres comptes créés
         $nb_eta = $this->get('hopitalnumerique_user.manager.user')->getNbEtablissements();

@@ -170,6 +170,13 @@ class Objet
     /**
      * @var boolean
      *
+     * @ORM\Column(name="obj_publication_plus_consulte", type="boolean", options = {"comment" = "Publication affichee dans les plus consultees ?"})
+     */
+    private $publicationPlusConsulte;
+
+    /**
+     * @var boolean
+     *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_isInfraDoc", type="boolean", options = {"comment" = "L objet est de type infradocumentaire ?"})
      */
@@ -1754,5 +1761,28 @@ class Objet
     public function getAlaune()
     {
         return $this->alaune;
+    }
+
+    /**
+     * Set publicationPlusConsulte
+     *
+     * @param boolean $publicationPlusConsulte
+     * @return Objet
+     */
+    public function setPublicationPlusConsulte($publicationPlusConsulte)
+    {
+        $this->publicationPlusConsulte = $publicationPlusConsulte;
+
+        return $this;
+    }
+
+    /**
+     * Get publicationPlusConsulte
+     *
+     * @return boolean 
+     */
+    public function getPublicationPlusConsulte()
+    {
+        return $this->publicationPlusConsulte;
     }
 }

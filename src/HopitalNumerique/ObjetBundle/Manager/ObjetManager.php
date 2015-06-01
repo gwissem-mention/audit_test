@@ -273,9 +273,9 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getObjetsByNbVue( $types, $limit = 0 )
+    public function getObjetsByNbVue( $limit = 0 )
     {
-      return $this->getRepository()->getObjetsByNbVue( $types, $limit )->getQuery()->getResult();
+      return $this->getRepository()->getObjetsByNbVue( $limit )->getQuery()->getResult();
     }
     
     /**

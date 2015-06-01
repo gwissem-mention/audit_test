@@ -147,6 +147,14 @@ class ObjetType extends AbstractType
                 ),
                 'attr'       => array( 'class'=> 'checkbox' )
             ))
+            ->add('publicationPlusConsulte', 'checkbox', array(
+                'required'   => false,
+                'label'      => 'Afficher dans les plus consultées',
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                ),
+                'attr'       => array( 'class'=> 'checkbox' )
+            ))
             ->add('notes', 'checkbox', array(
                 'required'   => false,
                 'label'      => 'Notes autorisés',

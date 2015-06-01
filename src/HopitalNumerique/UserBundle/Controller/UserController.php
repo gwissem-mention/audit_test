@@ -867,9 +867,7 @@ class UserController extends Controller
                     if($this->get('security.context')->isGranted('ROLE_USER'))
                     {
                         //--BO--
-                        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->get('request')->getSession()->get('domaineId'));
-                        $options = array('subjectDomaine' => str_replace(' ', '', strtoupper($domaine->getNom())));
-                        $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserFromAdminMail($user, $options);
+                        $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserFromAdminMail($user, array());
                         $this->get('mailer')->send($mail);
                     }
                     else
@@ -877,9 +875,7 @@ class UserController extends Controller
                         $user->setEnabled( 0 );
                         $user->setConfirmationToken($this->get('fos_user.util.token_generator')->generateToken());
                         //--FO--
-                        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->get('request')->getSession()->get('domaineId'));
-                        $options = array('subjectDomaine' => str_replace(' ', '', strtoupper($domaine->getNom())));
-                        $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserMail($user, $options);
+                        $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserMail($user, array());
                         $this->get('mailer')->send($mail);
                     }
                 }

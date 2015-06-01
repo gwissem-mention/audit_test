@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use FOS\UserBundle\Model\UserInterface;
 
+use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
+
 /**
  * Manager de l'entité Mail.
  */
@@ -37,13 +39,17 @@ class MailManager extends BaseManager
     private $_router;
     private $_requestStack;
 
+    private $_session;
+    private $_domaineManager;
+    private $_optionsMail = array();
+
     /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails
      *
      * @param EntityManager $em Entity      Manager de Doctrine
      * @param Array         $options        Tableau d'options
      */
-    public function __construct(EntityManager $em, \Twig_Environment $twig, $router, RequestStack $requestStack, $options = array())
+    public function __construct(EntityManager $em, \Twig_Environment $twig, $router, RequestStack $requestStack, $session, DomaineManager $domaineManager, $options = array())
     {        
         parent::__construct($em);
 
@@ -57,6 +63,11 @@ class MailManager extends BaseManager
         $this->_mailExpediteur     = isset($options['mailExpediteur'])    ? $options['mailExpediteur']    : '';
         $this->_destinataire       = isset($options['destinataire'])      ? $options['destinataire']      : '';
         $this->_mailAnap           = isset($options['mailAnap'])          ? $options['mailAnap']          : array();
+
+        $this->_session        = $session;
+        $this->_domaineManager = $domaineManager;
+
+        $this->setOptions();
     }
 
     public function getDestinataire()
@@ -663,11 +674,25 @@ class MailManager extends BaseManager
 
 
 
+    private function getAllOptions(array $options)
+    {
+        return array_merge($options, $this->_optionsMail);
+    }
 
+    private function setOptions()
+    {
+        $this->_optionsMail = array('subjectDomaine' => $this->getDomaineSubjet());
+    }
 
-
-
-
+    /**
+     * Retourne le domaine courant sous forme de label pour le sujet du mail
+     *
+     * @return [type]
+     */
+    private function getDomaineSubjet()
+    {
+        return str_replace(' ', '', strtoupper(is_null($this->_domaineManager->findOneById($this->_session->get('domaineId'))) ? 'Hopital Numérique' : $this->_domaineManager->findOneById($this->_session->get('domaineId'))->getNom()));
+    }
 
     /**
      * Génération du mail avec le template NodevoMailBundle::template.mail.html.twig + envoi à l'user
@@ -680,6 +705,8 @@ class MailManager extends BaseManager
      */
     private function generationMail( $user, $mail, $options = array() )
     {
+        $options = $this->getAllOptions($options);
+
         //prepare content
         $body    = $this->replaceContent($mail->getBody(), $user, $options);
         $from    = array($mail->getExpediteurMail() => $mail->getExpediteurName() );
