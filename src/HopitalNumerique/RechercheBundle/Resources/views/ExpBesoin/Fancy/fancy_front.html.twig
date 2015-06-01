@@ -4,11 +4,11 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="{% block metadesc %}Mon Hôpital Numérique{% endblock %}">
+        <meta name="description" content="{% block metadesc %}{{domaineCurrent.nom}}{% endblock %}">
         <meta name="keywords" content="{% block metakeywords %}{% endblock %}">
         <meta name="author" content="NODEVO">
 
-        <title>Mon Hôpital Numérique - Recherche aidée</title>
+        <title>{{domaineCurrent.nom}} - Recherche aidée</title>
 
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />

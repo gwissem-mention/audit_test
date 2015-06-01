@@ -91,11 +91,11 @@ class MailManager extends BaseManager
      *
      * @return Swift_Message
      */
-    public function sendAjoutUserFromAdminMail( $user )
+    public function sendAjoutUserFromAdminMail( $user, $options )
     {
         $mail = $this->findOneById(1);
         
-        return $this->generationMail($user, $mail);
+        return $this->generationMail($user, $mail, $options);
     }  
 
     /**
@@ -105,12 +105,13 @@ class MailManager extends BaseManager
      *
      * @return Swift_Message
      */
-    public function sendAjoutUserMail( $user )
+    public function sendAjoutUserMail( $user, $options )
     {
         $mail = $this->findOneById(2);
         $url = $this->_router->generate('fos_user_registration_confirm', array('token' => $user->getConfirmationToken()), true);
+        $options['url'] = $url;
 
-        return $this->generationMail($user, $mail, array('url' => $url));
+        return $this->generationMail($user, $mail, $options);
     }
     
     /**
@@ -599,36 +600,6 @@ class MailManager extends BaseManager
         return $mailsToSend;
     }
 
-    // /**
-    //  * Envoi un mail de contact (différent des autres envoie de mail)
-    //  *
-    //  * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
-    //  * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
-    //  *
-    //  * @return Swift_Message
-    //  */
-    // public function sendAutodiagSauvegardeMail( $options )
-    // {
-    //     $mail = $this->findOneById(42);
-        
-    //     //tableau de SwiftMessage a envoyé
-    //     $mailsToSend = array();
-
-    //     $recepteurName = $options["nomdestinataire"];
-    //     $recepteurMail = $options["maildestinataire"];
-        
-    //     //prepare content
-    //     $content        = $this->replaceContent($mail->getBody(), NULL , $options);
-    //     $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), NULL, $options);
-    //     $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
-    //     $content        = $this->replaceContent($mail->getBody(), NULL, $options);
-    //     $from           = array($expediteurMail => $expediteurName );
-        
-    //     $mailsToSend[] = $this->sendMail( $mail->getObjet(), $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
-
-    //     return $mailsToSend;
-    // }
-
     /**
      * Envoi un mail des réponses+question d'un questionnaire rempli par un utilisateur (différent des autres envoie de mail)
      *
@@ -710,12 +681,13 @@ class MailManager extends BaseManager
     private function generationMail( $user, $mail, $options = array() )
     {
         //prepare content
-        $body = $this->replaceContent($mail->getBody(), $user, $options);
-        $from = array($mail->getExpediteurMail() => $mail->getExpediteurName() );
-        $cci  = $this->_expediteurEnCopie ? array_merge( $this->_mailAnap, $from ) : $this->_mailAnap;
-        $cci  = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
+        $body    = $this->replaceContent($mail->getBody(), $user, $options);
+        $from    = array($mail->getExpediteurMail() => $mail->getExpediteurName() );
+        $cci     = $this->_expediteurEnCopie ? array_merge( $this->_mailAnap, $from ) : $this->_mailAnap;
+        $cci     = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
+        $subject = $this->replaceContent($mail->getObjet(), $user, $options);
 
-        return $this->sendMail( $mail->getObjet(), $from, $user->getEmail(), $body, $cci );
+        return $this->sendMail( $subject, $from, $user->getEmail(), $body, $cci );
     }
 
     /**
