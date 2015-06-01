@@ -2,7 +2,7 @@
 
 {# Référencement #}
 {% block title %}{{parent()}} - Inscription{% endblock %}
-{% block metadesc %}Créez-vous à un compte "Mon Hôpital Numérique" pour accéder aux outils proposés par l'ANAP{% endblock %}
+{% block metadesc %}Créez-vous à un compte "{{domaineCurrent.nom}}" pour accéder aux outils proposés par l'ANAP{% endblock %}
 
 {% block stylesheets %}
     {{parent()}}

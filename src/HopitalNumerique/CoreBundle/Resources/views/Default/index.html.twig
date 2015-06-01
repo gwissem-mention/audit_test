@@ -9,7 +9,7 @@
     <meta name="keywords" content="{% block metakeywords %}{% endblock %}">
     <meta name="author" content="NODEVO">
 
-    <title>{% block title %}Mon Hôpital Numérique - Accueil{% endblock title %}</title>
+    <title>{% block title %}{{domaineCurrent.nom}} - Accueil{% endblock title %}</title>
 
     <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
@@ -116,7 +116,7 @@
                 <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn.jpg')}}" alt="ANAP" id="logoAnap" class="pull-left" />
             </a>
             <div id="titre" class="pull-left">
-                <a href="{{path('hopital_numerique_homepage')}}" class="h1">Mon Hôpital Numérique</a>
+                <a href="{{path('hopital_numerique_homepage')}}" class="h1">{{domaineCurrent.nom}}</a>
                 <div class="h2">faciliter l'usage du numérique au service des soins</div>
             </div>
             <div id="bloc_exalead_home" class="pull-left">
