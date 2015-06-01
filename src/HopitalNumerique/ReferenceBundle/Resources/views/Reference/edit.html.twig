@@ -56,6 +56,10 @@
                     {% form_theme form 'HopitalNumeriqueReferenceBundle::form.html.twig' %}
                     {{ form_row(form.parent) }}
                     {{ form_row(form.order) }}
+                    {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                    {% if reference.childs|length == 0 %}
+                        {{ form_row(form.domaines) }}
+                    {% endif %}
                 {{ form_end(form) }}
             </div>
         </div>

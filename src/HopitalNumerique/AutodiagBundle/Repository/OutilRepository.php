@@ -11,6 +11,27 @@ use HopitalNumerique\AutodiagBundle\Entity\Outil;
 class OutilRepository extends EntityRepository
 {
     /**
+     * Récupère les données du grid sous forme de tableau correctement formaté
+     *
+     * @return Query Builder
+     */
+    public function getDatasForGrid($domainesIds, $condition = null)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('out')
+            ->from('HopitalNumeriqueAutodiagBundle:Outil', 'out')
+            ->leftJoin('out.domaines', 'domaine')
+                ->where($qb->expr()->orX(
+                    $qb->expr()->in('domaine.id', ':domainesId'),
+                    $qb->expr()->isNull('domaine.id')
+                ))
+                ->setParameter('domainesId', $domainesIds)
+            ->orderBy('out.title', 'ASC');
+            
+        return $qb;
+    }
+
+    /**
      * Retourne un tableau à 2 dimensions avec les duos de tous les Resultat/Chapitre.
      * 
      * @param \HopitalNumerique\AutodiagBundle\Entity\Outil $outil

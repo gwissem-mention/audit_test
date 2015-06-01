@@ -16,15 +16,20 @@ class ConsultationRepository extends EntityRepository
      *
      * @return array
      */
-    public function getLastsConsultations( $user )
+    public function getLastsConsultations( $user, $domaineId )
     {
         $qb = $this->_em->createQueryBuilder();
 
         return $qb->select('clt')
                     ->from('\HopitalNumerique\ObjetBundle\Entity\Consultation', 'clt')
                     ->leftJoin('clt.objet','obj')
-                    ->andWhere('clt.user = :user')
-                    ->setParameter('user', $user )
+                        ->andWhere('clt.user = :user')
+                    ->leftJoin('clt.domaine', 'domaine')
+                        ->andWhere('domaine.id = :domaineId')
+                        ->setParameters(array(
+                            'user'      => $user,
+                            'domaineId' => $domaineId
+                        ))
                     ->orderBy('clt.dateLastConsulted', 'DESC');
     }
 
@@ -33,11 +38,20 @@ class ConsultationRepository extends EntityRepository
      *
      * @return int
      */
-    public function getNbConsultations() {
+    public function getNbConsultations($domaineId = null) {
       $qb = $this->_em->createQueryBuilder();
 
       $qb->select('COUNT(clt)')
         ->from('\HopitalNumerique\ObjetBundle\Entity\Consultation', 'clt');
+
+        if(!is_null($domaineId))
+        {
+
+            $qb->leftJoin('clt.domaine', 'domaine')
+                ->andWhere('domaine.id = :domaineId')
+                ->setParameter('domaineId', $domaineId);
+        }
+
       return $qb;
     }
 }

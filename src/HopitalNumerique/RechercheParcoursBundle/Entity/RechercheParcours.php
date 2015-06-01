@@ -22,6 +22,12 @@ class RechercheParcours
     protected $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="RechercheParcoursGestion", cascade={"persist"}, inversedBy="rechercheParcours")
+     * @ORM\JoinColumn(name="rrpg_id", referencedColumnName="rrpg_id", onDelete="CASCADE")
+     */
+    protected $recherchesParcoursGestion;
+
+    /**
      * Détails liés à la recherche par parcours
      *
      * @var /HopitalNumerique/RechercheParcoursBundle/Entity/RechercheParcoursDetails
@@ -46,6 +52,13 @@ class RechercheParcours
      */
     protected $order;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->recherchesParcoursDetails = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -147,5 +160,28 @@ class RechercheParcours
     {
         $this->order = $order;
         return $this;
+    }
+
+    /**
+     * Set recherchesParcoursGestion
+     *
+     * @param \HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion $recherchesParcoursGestion
+     * @return RechercheParcours
+     */
+    public function setRecherchesParcoursGestion(\HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion $recherchesParcoursGestion = null)
+    {
+        $this->recherchesParcoursGestion = $recherchesParcoursGestion;
+
+        return $this;
+    }
+
+    /**
+     * Get recherchesParcoursGestion
+     *
+     * @return \HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion 
+     */
+    public function getRecherchesParcoursGestion()
+    {
+        return $this->recherchesParcoursGestion;
     }
 }

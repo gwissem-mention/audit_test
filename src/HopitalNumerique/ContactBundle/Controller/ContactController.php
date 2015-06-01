@@ -63,8 +63,8 @@ class ContactController extends NodevoController
                 $formContact = $this->get('hopitalnumerique_contact.manager.contact')->getContactFormateMail($contact);
                 
                 //Récupération des destinataires dans le fichier de config
-                $mailsContact = $this->get('hopitalnumerique_contact.manager.contact')->getMailsContact();
-                
+                $mailsContact = array($this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'))->getAdresseMailContact());
+
                 $variablesTemplate = array(
                         'nomdestinataire'  => '',
                         'maildestinataire' => '',
@@ -75,7 +75,9 @@ class ContactController extends NodevoController
                 $mailsAEnvoyer = $this->get('nodevo_mail.manager.mail')->sendContactMail($mailsContact, $variablesTemplate);
 
                 foreach($mailsAEnvoyer as $mailAEnvoyer)
+                {
                     $this->get('mailer')->send($mailAEnvoyer);
+                }
                 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopital_numerique_contact.manager.contact')->save($contact);

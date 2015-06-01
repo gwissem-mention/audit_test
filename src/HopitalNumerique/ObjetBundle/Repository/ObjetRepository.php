@@ -12,17 +12,28 @@ class ObjetRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
+     * @param array $domainesIds Tableau d'id de domaines autorisés pour l'utilisateur connecté
+     * @param [type] $condition   [description]
+     *
      * @return array
      */
-    public function getDatasForGrid()
+    public function getDatasForGrid( $domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
 
-        $qb->select('obj.id, obj.titre, obj.isInfraDoc, obj.nbVue, refEtat.libelle as etat, obj.dateCreation, obj.dateModification, obj.lock, user.email as lockedBy, refTypes.libelle as types')
+        $qb->select('obj.id, obj.titre, obj.isInfraDoc, obj.nbVue, refEtat.libelle as etat, obj.dateCreation, obj.dateModification, obj.lock, user.email as lockedBy, refTypes.libelle as types, domaine.nom as domaineNom')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->leftJoin('obj.etat','refEtat')
             ->leftJoin('obj.types','refTypes')
-            ->leftJoin('obj.lockedBy','user');
+            ->leftJoin('obj.lockedBy','user')
+            ->leftJoin('obj.domaines', 'domaine')
+                ->where($qb->expr()->orX(
+                    $qb->expr()->in('domaine.id', ':domainesId'),
+                    $qb->expr()->isNull('domaine.id')
+                ))
+                ->setParameter('domainesId', $domainesIds)
+            ->groupBy('obj.id')
+        ;
             
         return $qb;
     }

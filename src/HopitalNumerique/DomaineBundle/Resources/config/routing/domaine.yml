@@ -1,0 +1,25 @@
+hopitalnumerique_domaine_admin_domaine:
+    pattern:  /
+    defaults: { _controller: "HopitalNumeriqueDomaineBundle:Domaine:index" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_domaine_admin_domaine_add:
+    pattern:  /add
+    defaults: { _controller: "HopitalNumeriqueDomaineBundle:Domaine:add" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_domaine_admin_domaine_edit:
+    pattern:  /edit/{id}
+    defaults: { _controller: "HopitalNumeriqueDomaineBundle:Domaine:edit", id: 1 }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+hopitalnumerique_domaine_admin_domaine_delete:
+    pattern:  /delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueDomaineBundle:Domaine:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE

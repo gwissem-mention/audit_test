@@ -24,19 +24,7 @@ class RechercheParcoursDetailsController extends Controller
         }
 
         //Création du tableau des étapes pour lié un détail
-        $etapes = array();
-        if(!in_array(234, $etapesSelected))
-            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 234));
-        if(!in_array(237, $etapesSelected))
-            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 237));
-        if(!in_array(235, $etapesSelected))
-            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 235));
-        if(!in_array(236, $etapesSelected))
-            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 236));
-        if(!in_array(233, $etapesSelected))
-            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 233));
-        if(!in_array(226, $etapesSelected))
-            $etapes[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 226));
+        $etapes = $rechercheParcours->getRecherchesParcoursGestion()->getReferencesVentilations();
 
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:index.html.twig', array(
                 'etapes'            => $etapes,
@@ -205,7 +193,7 @@ class RechercheParcoursDetailsController extends Controller
             else
             {
                 $this->get('session')->getFlashBag()->add( 'danger' , 'Il n\'existe aucune étape pour cette rubrique.');
-                return $this->redirect( $this->generateUrl('hopital_numerique_recherche_parcours_homepage_front' ) );
+                return $this->redirect( $this->generateUrl('hopital_numerique_recherche_parcours_homepage_front', array('id' => $rechercheParcours->getRecherchesParcoursGestion()->getId()) ) );
             }
         }
 
@@ -270,12 +258,31 @@ class RechercheParcoursDetailsController extends Controller
             }
         }
 
+        $request       = $this->get('request');
+        $domaineId     = $request->getSession()->get('domaineId');
+
         //Récupérations
         $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
-        $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
+        $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
 
-        
+        //Vire les publications qui ne font pas parti du domaine
+        $domaine            = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+        $objetsDuDomaine    = $domaine->getObjets();
+        $objetsDuDomaineIds = array();
+
+        foreach ($objetsDuDomaine as $objet) 
+        {
+            $objetsDuDomaineIds[] = $objet->getId();
+        }
+
+        foreach ($objets as $key => $objet) 
+        {
+            if(!in_array($objet['id'], $objetsDuDomaineIds))
+            {
+                unset($objets[$key]);
+            }
+        }
 
         //En mode connecté
         if('anon.' !== $user)
@@ -285,7 +292,7 @@ class RechercheParcoursDetailsController extends Controller
 
             foreach ($objets as $objet) 
             {
-                if("point-dur" === $objet["categ"]
+                if( in_array($objet["categ"], $rechercheParcours->getRecherchesParcoursGestion()->getPublicationString())
                     && ($objet['primary'] >= 1)
                     && !array_key_exists($objet['id'], $notes))
                 {

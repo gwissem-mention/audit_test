@@ -1,0 +1,39 @@
+parameters:
+    #Options
+    hopital_numerique_domaine.options:parameters:
+    hopitalnumerique_domaine.manager.domaine.class: HopitalNumerique\DomaineBundle\Manager\DomaineManager
+    hopitalnumerique_domaine.grid.domaine.class: HopitalNumerique\DomaineBundle\Grid\DomaineGrid
+    hopitalnumerique_domaine.form.domaine.class: HopitalNumerique\DomaineBundle\Form\DomaineType
+    #Events
+    hopitalnumerique_domaine.listener.domaine.class: HopitalNumerique\DomaineBundle\EventListener\GestionDomaineListener
+    #Extensions twig
+    hopitalnumerique_domaine.twig_extension.domaine.class: HopitalNumerique\DomaineBundle\Twig\DomaineExtension
+
+services:
+    hopitalnumerique_domaine.manager.domaine:
+        class: %hopitalnumerique_domaine.manager.domaine.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_domaine.grid.domaine:
+        class: %hopitalnumerique_domaine.grid.domaine.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_domaine.form.domaine:
+        class: %hopitalnumerique_domaine.form.domaine.class%
+        arguments: ["@hopitalnumerique_domaine.manager.domaine", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_domaine_domaine }
+
+    hopitalnumerique_domaine.listener.domaine:
+        class: %hopitalnumerique_domaine.listener.domaine.class%
+        arguments: ["@hopitalnumerique_domaine.manager.domaine"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method:'onKernelRequest' }
+    #Extension Twig        
+    hopitalnumerique_domaine.twig_extension.domaine:
+        class: %hopitalnumerique_domaine.twig_extension.domaine.class%
+        arguments: ["@service_container"]
+        tags:
+            - { name: twig.extension }

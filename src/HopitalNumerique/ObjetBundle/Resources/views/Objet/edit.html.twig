@@ -96,6 +96,19 @@
                             <div class="col-md-4">
                                 {{ form_row(form.titre) }}
                                 {{ form_row(form.alias) }}
+
+                                <div class="form-group {% if objet.isArticle() %}hide{% endif %}">
+                                    {{ form_label(form.domaines) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.domaines) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.domaines) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 {{ form_row(form.etat) }}
                                 {{ form_row(form.roles) }}
                                 <div class="form-group">

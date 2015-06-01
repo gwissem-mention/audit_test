@@ -4,23 +4,41 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="{% block metadesc %}Mon Hôpital Numérique{% endblock %}">
+        <meta name="description" content="{% block metadesc %}{{domaineCurrent.nom}}{% endblock %}">
         <meta name="keywords" content="{% block metakeywords %}{% endblock %}">
         <meta name="author" content="NODEVO">
 
-        <title>Mon Hôpital Numérique - Synthèse</title>
+        <title>{{domaineCurrent.nom}} - Synthèse</title>
 
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 
         {% block stylesheets %}
-            {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese.css" filter="cssrewrite, ?yui_css" 
-                "@bootstrap_css"
-                'bundles/hopitalnumeriquecore/css/layout.css'
-                'bundles/hopitalnumeriquerecherche/css/synthese.css'
-            %}
-                <link rel="stylesheet" href="{{ asset_url }}" />
-            {% endstylesheets %}
+            {% if templateCurrentId == 1 %}
+                {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese-1.css" filter="cssrewrite, ?yui_css" 
+                    "@bootstrap_css"
+                    'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                    'bundles/hopitalnumeriquerecherche/css/synthese.css'
+                %}
+                    <link rel="stylesheet" href="{{ asset_url }}" />
+                {% endstylesheets %}
+            {% else templateCurrentId ==  2 %}
+                {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese-2.css" filter="cssrewrite, ?yui_css" 
+                    "@bootstrap_css"
+                    'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
+                    'bundles/hopitalnumeriquerecherche/css/synthese.css'
+                %}
+                    <link rel="stylesheet" href="{{ asset_url }}" />
+                {% endstylesheets %}
+            {% else %}
+                {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese-default.css" filter="cssrewrite, ?yui_css" 
+                    "@bootstrap_css"
+                    'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                    'bundles/hopitalnumeriquerecherche/css/synthese.css'
+                %}
+                    <link rel="stylesheet" href="{{ asset_url }}" />
+                {% endstylesheets %}
+            {% endif %}
         {% endblock %}
 
         {% block javascripts %}
@@ -71,9 +89,9 @@
                 {% if objet %}
                     {{objet.synthese|parsePublication(objet.glossaires)|raw}}
                     <p class="copyright text-muted text-center">
-                        © ANAP - Mon Hôpital Numérique<br />
+                        © ANAP - {{domaineCurrent.nom}}<br />
                         Ces contenus extraits de la plateforme de l'ANAP <a href="www.monhopitalnumerique.fr">www.MonHopitalNumerique.fr</a> sont diffusés gratuitement. <br />
-                        Toutefois, leur utilisation ou citation est soumise à l'inscription de la mention suivante : "© ANAP - Mon Hôpital Numérique"
+                        Toutefois, leur utilisation ou citation est soumise à l'inscription de la mention suivante : "© ANAP - {{domaineCurrent.nom}}"
                     </p>
                 {% else %}
                     Vous n'avez pas les droits nécessaires pour accéder à cette publication.

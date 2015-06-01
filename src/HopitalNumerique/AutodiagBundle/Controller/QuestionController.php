@@ -19,7 +19,7 @@ class QuestionController extends Controller
     public function indexAction(Chapitre $chapitre)
     {
         //get ponderations
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($chapitre->getOutil()->getDomainesId());
 
         //get questions
         $questions = $this->get('hopitalnumerique_autodiag.manager.question')->getQuestionsOrdered( $chapitre, $refsPonderees );
@@ -145,7 +145,7 @@ class QuestionController extends Controller
             $this->get('hopitalnumerique_autodiag.manager.question')->saveQuestion( $question );
 
             //get ponderations
-            $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+            $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($chapitre->getOutil()->getDomainesId());
 
             //get questions
             $questions = $this->get('hopitalnumerique_autodiag.manager.question')->getQuestionsOrdered( $chapitre, $refsPonderees );

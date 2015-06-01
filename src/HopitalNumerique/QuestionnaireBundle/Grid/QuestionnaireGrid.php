@@ -34,6 +34,9 @@ class QuestionnaireGrid extends Grid implements GridInterface
     {
         $this->addColonne( new Column\TextColumn('nom', 'Nom du questionnaire') );
 
+        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
+        $this->addColonne( $domaineColumn );
+
         $nbRepondantColumn = new Column\TextColumn('nbUser', 'Nombre de répondant');
         $nbRepondantColumn->setSize( 150 );
         $this->addColonne( $nbRepondantColumn );

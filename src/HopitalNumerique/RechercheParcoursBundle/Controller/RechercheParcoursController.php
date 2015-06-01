@@ -5,14 +5,16 @@ namespace HopitalNumerique\RechercheParcoursBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
+use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
+
 class RechercheParcoursController extends Controller
 {
     /**
      * Index Action
      */
-    public function indexAction()
+    public function indexAction(RechercheParcoursGestion $rechercheParcoursGestion)
     {
-        $recherchesParcours = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findBy(array(), array('order' => 'ASC'));
+        $recherchesParcours = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findBy(array('recherchesParcoursGestion' => $rechercheParcoursGestion), array('order' => 'ASC'));
 
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:Back/index.html.twig', array(
             'recherchesParcours' => $recherchesParcours
@@ -39,10 +41,10 @@ class RechercheParcoursController extends Controller
     /**
      * Index du front Action
      */
-    public function indexFrontAction()
+    public function indexFrontAction(RechercheParcoursGestion $rechercheParcoursGestion)
     {
         //Tableau des étapes du projet
-        $etapes = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findBy(array(), array('order' => 'ASC'));
+        $etapes = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findBy(array('recherchesParcoursGestion' => $rechercheParcoursGestion), array('order' => 'ASC'));
 
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:Front/index.html.twig', array(
             'etapes' => $etapes

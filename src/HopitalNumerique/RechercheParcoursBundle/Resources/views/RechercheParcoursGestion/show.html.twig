@@ -1,0 +1,33 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    Fiche de la gestion des recherches par parcours
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if rechercheparcoursgestion.id %}
+        <a href="{{ path('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_edit', { 'id': rechercheparcoursgestion.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                <p>
+                    <strong>Id : </strong>
+                    {{ rechercheparcoursgestion.id }}
+                </p>
+                <p>
+                    <strong>Nom : </strong>
+                    {{ rechercheparcoursgestion.nom }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

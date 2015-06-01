@@ -64,7 +64,7 @@ class QuestionController extends Controller
     {
         $question      = $this->get('hopitalnumerique_questionnaire.manager.question')->findOneBy(array('id' => $id));
         $typeQuestions = $this->get('hopitalnumerique_questionnaire.manager.typequestion')->findBy(array(), array('nom' => 'ASC'));
-        $references    = $this->get('hopitalnumerique_reference.manager.reference')->getAllRefCode();
+        $references    = $this->get('hopitalnumerique_reference.manager.reference')->getAllRefCode($question->getQuestionnaire());
 
         return $this->render('HopitalNumeriqueQuestionnaireBundle:Question:edit.html.twig', array(
                 'question'      => $question,

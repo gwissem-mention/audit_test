@@ -23,6 +23,12 @@ class ExpBesoin
     protected $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="ExpBesoinGestion", cascade={"persist"}, inversedBy="expBesoins")
+     * @ORM\JoinColumn(name="expbg_id", referencedColumnName="expbg_id", onDelete="CASCADE")
+     */
+    protected $expBesoinGestion;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="expb_order", type="smallint", options = {"comment" = "Ordre de la question"})
@@ -170,5 +176,28 @@ class ExpBesoin
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set expBesoinGestion
+     *
+     * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion $expBesoinGestion
+     * @return ExpBesoin
+     */
+    public function setExpBesoinGestion(\HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion $expBesoinGestion = null)
+    {
+        $this->expBesoinGestion = $expBesoinGestion;
+
+        return $this;
+    }
+
+    /**
+     * Get expBesoinGestion
+     *
+     * @return \HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion 
+     */
+    public function getExpBesoinGestion()
+    {
+        return $this->expBesoinGestion;
     }
 }

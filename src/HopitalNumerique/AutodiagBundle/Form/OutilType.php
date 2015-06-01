@@ -6,19 +6,22 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+
 use HopitalNumerique\AutodiagBundle\Manager\ProcessManager;
 use HopitalNumerique\AutodiagBundle\Manager\ChapitreManager;
 use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
+use HopitalNumerique\UserBundle\Manager\UserManager;
 
 class OutilType extends AbstractType
 {
     private $_constraints = array();
+    private $_userManager;
     private $validator;
     private $processManager;
     private $chapitreManager;
     private $questionnaireManager;
 
-    public function __construct($manager, $validator, ProcessManager $processManager, ChapitreManager $chapitreManager, QuestionnaireManager $questionnaireManager)
+    public function __construct($manager, $validator, ProcessManager $processManager, ChapitreManager $chapitreManager, QuestionnaireManager $questionnaireManager, UserManager $userManager)
     {
         $this->validator = $validator;
         $this->_constraints = $manager->getConstraints( $validator );
@@ -26,11 +29,14 @@ class OutilType extends AbstractType
         $this->processManager = $processManager;
         $this->chapitreManager = $chapitreManager;
         $this->questionnaireManager = $questionnaireManager;
+
+        $this->_userManager = $userManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $outil = $options['data'];
+        $outil             = $options['data'];
+        $connectedUser     = $this->_userManager->getUserConnected();
         $processFormulaire = new ProcessType($this->processManager, $this->validator, $this->chapitreManager);
         $processFormulaire->setOutil($outil);
 
@@ -46,6 +52,17 @@ class OutilType extends AbstractType
                 'required'   => false, 
                 'label'      => 'Alias',
                 'attr'       => array('class' => $this->_constraints['alias']['class'] )
+            ))
+            ->add('domaines', 'entity', array(
+                'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
+                'property'    => 'nom',
+                'required'    => false,
+                'multiple'    => true,
+                'label'       => 'Domaine(s) associé(s)',
+                'empty_value' => ' - ',
+                'query_builder' => function(EntityRepository $er) use ($connectedUser){
+                    return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                }
             ))
             ->add('questionnairePrealable', 'entity', array(
                 'label'    => 'Questionnaire préalable',

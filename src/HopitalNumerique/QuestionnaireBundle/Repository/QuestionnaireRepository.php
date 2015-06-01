@@ -21,18 +21,28 @@ class QuestionnaireRepository extends EntityRepository
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function getDatasForGrid()
+    public function getDatasForGrid($domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('questionnaire.id, questionnaire.nom, count(DISTINCT user.id) as nbUser')
+        $qb->select('questionnaire.id, questionnaire.nom, count(DISTINCT user.id) as nbUser, domaine.nom as domaineNom')
             ->from('HopitalNumeriqueQuestionnaireBundle:Questionnaire', 'questionnaire')
             ->leftJoin('questionnaire.questions' , 'questions')
             ->leftJoin('questions.reponses', 'reponses')
             ->leftJoin('reponses.user', 'user')
-            ->where('questionnaire.lock = :locked')
-            ->setParameter('locked', false)
+
+            ->leftJoin('questionnaire.domaines', 'domaine')
+                ->where($qb->expr()->orX(
+                    $qb->expr()->in('domaine.id', ':domainesId'),
+                    $qb->expr()->isNull('domaine.id')
+                ))
+            ->andWhere('questionnaire.lock = :locked')
+            ->setParameters(array(
+                'locked' => false,
+                'domainesId' => $domainesIds
+            ))
             ->orderBy('questionnaire.nom')
-            ->groupBy('questionnaire.id');
+            ->groupBy('questionnaire.id', 'domaine.id');
+            // ->addGroupBy('domaine.id');
         
         return $qb;
     }

@@ -7,7 +7,7 @@ parameters:
 services:
     hopitalnumerique_glossaire.manager.glossaire:
         class: %hopitalnumerique_glossaire.manager.glossaire.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
@@ -17,6 +17,6 @@ services:
 
     hopitalnumerique_glossaire.form.glossaire:
         class: %hopitalnumerique_glossaire.form.glossaire.class%
-        arguments: ["@hopitalnumerique_glossaire.manager.glossaire", "@validator"]
+        arguments: ["@hopitalnumerique_glossaire.manager.glossaire", "@validator", "@hopitalnumerique_user.manager.user"]
         tags:
             - { name: form.type, alias: hopitalnumerique_glossaire_glossaire }

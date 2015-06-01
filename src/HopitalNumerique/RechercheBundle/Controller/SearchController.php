@@ -3,15 +3,26 @@
 namespace HopitalNumerique\RechercheBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class SearchController extends Controller
 {
     /**
      * Index Action
      */
-    public function indexAction( $id = null )
+    public function indexAction(Request $request, $id = null )
     {
-        $elements                  = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
+        $domaineId = $request->getSession()->get('domaineId');
+
+        if(is_null($domaineId))
+        {
+            $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
+        }
+        else
+        {
+            $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true, array($domaineId));
+        }
+
         $categoriesProductionActif = "";
         $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('order' => 'ASC'));
 
@@ -158,11 +169,30 @@ class SearchController extends Controller
         $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
 
         $request       = $this->get('request');
+        $domaineId     = $request->getSession()->get('domaineId');
         $references    = $request->request->get('references');
 
         $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
-        $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
+        $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
+
+        //Vire les publications qui ne font pas parti du domaine
+        $domaine            = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+        $objetsDuDomaine    = $domaine->getObjets();
+        $objetsDuDomaineIds = array();
+
+        foreach ($objetsDuDomaine as $objet) 
+        {
+            $objetsDuDomaineIds[] = $objet->getId();
+        }
+
+        foreach ($objets as $key => $objet) 
+        {
+            if(!in_array($objet['id'], $objetsDuDomaineIds))
+            {
+                unset($objets[$key]);
+            }
+        }
 
         //GME 19/09/2014 : Ajout du filtre des categ point dur (liste à choix multiples)
         $categPointDur = $request->request->get('categPointDur');

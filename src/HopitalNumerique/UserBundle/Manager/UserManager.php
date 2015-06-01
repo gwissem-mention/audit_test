@@ -7,18 +7,20 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class UserManager extends BaseManager
 {
     protected $_class = '\HopitalNumerique\UserBundle\Entity\User';
+    protected $_securityContext;
     protected $_managerReponse;
-    protected $_managerQuestionnaire;
     protected $_managerRefusCandidature;    
+    protected $_managerDomaine;    
     protected $_options;
 
-    public function __construct($managerUser, $managerReponse, $managerQuestionnaire, $managerRefusCandidature)
+    public function __construct($managerUser, $securityContext, $managerReponse, $managerRefusCandidature, $managerDomaine)
     {
         parent::__construct($managerUser);
+        $this->_securityContext = $securityContext;
         //Récupération des managers Réponses et Questionnaire
         $this->_managerReponse          = $managerReponse;
-        $this->_managerQuestionnaire    = $managerQuestionnaire;
         $this->_managerRefusCandidature = $managerRefusCandidature;
+        $this->_managerDomaine          = $managerDomaine;
         $this->_options                 = array();
     }
 
@@ -29,10 +31,12 @@ class UserManager extends BaseManager
      */
     public function getDatasForGrid( \StdClass $condition = null )
     {
+        $userConnected = $this->getUserConnected();
         $users = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        $usersForGrid = array();
 
-        $idExpert      = $this->_managerQuestionnaire->getQuestionnaireId('expert');
-        $idAmbassadeur = $this->_managerQuestionnaire->getQuestionnaireId('ambassadeur');
+        $idExpert      = 1;
+        $idAmbassadeur = 2;
         
         //Récupération des questionnaires et users
         $questionnaireByUser = $this->_managerReponse->reponseExiste($idExpert, $idAmbassadeur);
@@ -44,10 +48,42 @@ class UserManager extends BaseManager
         $interval->m = -1;
         
         $refusCandidature = $this->_managerRefusCandidature->getRefusCandidatureByQuestionnaire();
+
+        $domainesByUsers = $this->_managerDomaine->getDomainesByUsers();
         
         //Pour chaque utilisateur, set la contractualisation à jour
         foreach ($users as $key => $user)
-        {              
+        {    
+            //Filtre uniquement si l'utilisateur connecté à un domaine, sinon on affiche toujours tout le monde
+            if(!empty($userConnected->getDomainesId()))
+            {
+                //Si l'utilisateur n'a pas de domaine concerné, il n'apparait plus dans la liste
+                if(!array_key_exists($user['id'], $domainesByUsers))
+                {
+                    continue;
+                }
+                //Sinon on vérifié que l'utilisateur courant et l'utilisateur connecté appartiennent au(x) même(s) domaine(s)
+                else
+                {
+                    $notInArray = true;
+                    $domainesIdUserConnected = $userConnected->getDomainesId();
+
+                    foreach ($domainesIdUserConnected as $idDomaineUserConnected)
+                    {
+                        if(in_array($idDomaineUserConnected, $domainesByUsers[$user['id']]['id']))
+                        {
+                            $notInArray = false;
+                            break;
+                        }
+                    }
+
+                    if($notInArray)
+                    {
+                        continue;
+                    }
+                }
+            }
+
             //Récupération des questionnaires rempli par l'utilisateur courant
             $questionnairesByUser = array_key_exists($user['id'], $questionnaireByUser) ? $questionnaireByUser[$user['id']] : array();
             
@@ -64,9 +100,14 @@ class UserManager extends BaseManager
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);
             $users[$key]['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui) : false;
+
+            //Gestion du domaine
+            $user['domaines'] = array_key_exists($user['id'], $domainesByUsers) ? $domainesByUsers[$user['id']]['url'] : '';
+
+            $usersForGrid[] = $user;
         }
         
-        return $users;
+        return $usersForGrid;
     }
 
     /**
@@ -249,14 +290,20 @@ class UserManager extends BaseManager
         return $this->getRepository()->getUsersByQuestionnaire( $idQuestionnaire )->getQuery()->getResult();
     }
 
-  /**
-   * Récupère tous les utilisateurs (tous les rôles)
-   *
-   * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
-   */
-  public function getAllUsers() {
-    return $this->getRepository()->getAllUsers()->getQuery()->getResult();
-  }
+    public function getUserConnected()
+    {
+        return $this->_securityContext->getToken()->getUser();
+    }
+
+    /**
+     * Récupère tous les utilisateurs (tous les rôles)
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     */
+    public function getAllUsers() 
+    {
+        return $this->getRepository()->getAllUsers()->getQuery()->getResult();
+    }
 
   /**
    * Récupère le nombre d'établissements connectés

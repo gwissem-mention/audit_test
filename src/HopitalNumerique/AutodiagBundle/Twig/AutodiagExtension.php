@@ -81,14 +81,18 @@ class AutodiagExtension extends \Twig_Extension
     {
         $refs = array();
 
+        $domaineId = $this->container->isScopeActive('request') ? $this->container->get('request')->getSession()->get('domaineId') : null;
+
         foreach($references as $reference)
+        {
             $refs[] = $reference->getReference()->getId();
+        }
 
         //On récupère le role de l'user connecté
         $user = $this->container->get('security.context')->getToken()->getUser();
         $role = $this->container->get('nodevo_role.manager.role')->getUserRole($user);
 
-        $objets = $this->container->get('hopitalnumerique_recherche.manager.search')->getObjetsForAutodiag( $refs, $role );
+        $objets = $this->container->get('hopitalnumerique_recherche.manager.search')->getObjetsForAutodiag( $domaineId, $refs, $role );
 
         if( count($objets) == 0 )
             return false;

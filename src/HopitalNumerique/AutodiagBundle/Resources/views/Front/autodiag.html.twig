@@ -23,6 +23,14 @@
 {% endblock %}
 
 {% block content %}
+    <div class="onglets">
+        <ul>
+            {% for idDomaineResultat, resultats in resultatsByDomaine %}
+                <li id="onglet-{{idDomaineResultat}}" class="onglet {% if idDomaineResultat == domaineCurrentId %}active{% endif %} col-md-{{12 / resultatsByDomaine|length}}" data-id="{{idDomaineResultat}}">
+                    <div class="domaine">{{domaines[idDomaineResultat].nom}}</div>
+                </li>
+            {% endfor %}
+        </ul>
     <h2>Mes formulaires d'autodiagnostics en cours</h2>
     <div class="col-md-12">
         <table class="table autodiagTable">
@@ -63,113 +71,157 @@
 
     <div class="clearfix"></div>
 
-    <h2 class="pull-left">Historique de mes autodiagnostics</h2>
-    <div class="btn btn-default pull-right create">Créer une synthèse des autodiags selectionnés</div>
+    {% for idDomaineResultat, resultats in resultatsByDomaine %}
+        <div id="autodiag-domaine-{{idDomaineResultat}}" class="autodiag-domaine" data-id="{{idDomaineResultat}}" {% if idDomaineResultat != domaineCurrentId %}style="display:none"{% endif %}>
+            <h2>Mes formulaires d'autodiagnostics en cours</h2>
+            <div class="col-md-12">
+                <table class="table autodiagTable">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Titre</th>
+                            <th>Date début remplissage</th>
+                            <th>Date dernier enregistrement</th>
+                            <th>Pourcentage remplissage</th>
+                            <th width="100px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resultat in resultats if resultat.dateValidation is null and not resultat.synthese %}
+                            <tr>
+                                <td>{{resultat.name}}</td>
+                                <td>{{resultat.outil.title}}</td>
+                                <td>{{resultat.dateCreation|date('d/m/Y')}}</td>
+                                <td>{{resultat.dateLastSave|date('d/m/Y')}}</td>
+                                <td>{{resultat.tauxRemplissage}}%</td>
+                                <td>
+                                    <div class="btn-group" >
+                                        <a href="{{domaines[idDomaineResultat].url}}{{path('hopitalnumerique_autodiag_front_outil_resultat', { 'alias':resultat.outil.alias, 'outil':resultat.outil.id, 'resultat':resultat.id })}}" class="btn btn-success" title="Continuer le questionnaire"><i class="fa fa-external-link"></i></a>
+                                        <div class="btn btn-danger" onclick='deleteWithConfirm("{{domaines[idDomaineResultat].url}}{{ path('hopitalnumerique_autodiag_front_comptehn_delete', { 'id': resultat.id }) }}");' title="Vider mon questionnaire"><i class="fa fa-trash-o"></i></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" align="center"> - Aucun formulaire d'autodiagnostic en cours - </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <h2 class="pull-left">Historique de mes autodiagnostics</h2>
+            <div class="btn btn-default pull-right create">Créer une synthèse des autodiags selectionnés</div>
+            
+            <div class="col-md-12">
+                <table class="table autodiagTable">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Nom</th>
+                            <th>Titre</th>
+                            <th>validation</th>
+                            <th>Partage</th>
+                            <th width="178px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resultat in resultats if resultat.dateValidation is not null and not resultat.synthese %}
+                            <tr>
+                                <td align="center"><input type="checkbox" class="checkbox" value="{{resultat.id}}" data-outil="{{resultat.outil.id}}" /></td>
+                                <td>{{resultat.name}}</td>
+                                <td>{{resultat.outil.title}}</td>
+                                <td>{{resultat.dateValidation|date('d/m/Y')}}</td>
+                                <td style="text-align:center">
+                                    {% if resultat.resultatSharedBy is not null %}
+                                        Partagé par {{resultat.resultatSharedBy.user.getAppellation()}}
+                                        {% if resultat.resultatSharedBy.user.etablissementRattachementSante is not null %}
+                                            ({{ resultat.resultatSharedBy.user.etablissementRattachementSante.getNom() }})
+                                        {% endif %}
+                                        {% if resultat.datePartage is not null %}
+                                            le {{resultat.datePartage|date('d/m/Y')}}
+                                        {% endif %}
+                                    {% elseif resultat.resultatSharedFor is not null %}
+                                        Partagé avec {{resultat.resultatSharedFor.user.getAppellation()}}
+                                        {% if resultat.resultatSharedFor.user.etablissementRattachementSante is not null %}
+                                            ({{ resultat.resultatSharedFor.user.etablissementRattachementSante.getNom() }})
+                                        {% endif %}
+                                        {% if resultat.datePartage is not null %}
+                                            le {{resultat.datePartage|date('d/m/Y')}}
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                
+                                <td>
+                                    <div class="btn-group btn-group-sm pull-right" >
+                                        {% if resultat.resultatSharedBy is null and resultat.resultatSharedFor is null %}
+                                            <a href="{{domaines[idDomaineResultat].url}}{{path('hopitalnumerique_autodiag_front_resultat_reactivate', {'id':resultat.id})}}" class="btn btn-primary" title="Réactiver cet autodiagnostic"><i class="fa fa-repeat"></i></a>
+                                            <a href="{{domaines[idDomaineResultat].url}}{{path('hopitalnumerique_autodiag_resultat_share', {'id':resultat.id})}}" class="btn btn-info share-fancy link fancybox.ajax" title="Partager cet autodiagnostic"><i class="fa fa-exchange"></i></a>
+                                        {% elseif resultat.resultatSharedFor is not null %}
+                                            <div class="btn btn-danger" onclick='deleteWithConfirm("{{domaines[idDomaineResultat].url}}{{ path('hopitalnumerique_autodiag_front_comptehn_delete_partage', { 'id': resultat.id }) }}");' title="Supprimer le partage"><i class="fa fa-exchange"></i></div>
+                                        {% endif %}
+                                        <a href="{{domaines[idDomaineResultat].url}}{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="btn btn-success" title="Télécharger le PDF du résultat"><i class="fa fa-download"></i></a>
+                                        <a href="{{domaines[idDomaineResultat].url}}{{path('hopitalnumerique_autodiag_front_resultat', {'id':resultat.id, 'back': 1})}}" class="btn btn-warning" title="Voir les résultats"><i class="fa fa-eye"></i></a>
+                                        <div class="btn btn-danger" onclick='deleteWithConfirm("{{domaines[idDomaineResultat].url}}{{ path('hopitalnumerique_autodiag_front_comptehn_delete', { 'id': resultat.id }) }}");' title="Supprimer mes réponses"><i class="fa fa-trash-o"></i></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" align="center"> - Aucun formulaire d'autodiagnostic validé - </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="clearfix"></div>
+
+            <h2>Mes synthèses d'autodiagnostics</h2>
+            <div class="col-md-12">
+                <table class="table autodiagTable">
+                    <thead>
+                        <tr>
+                            <th width="250px">Nom</th>
+                            <th>Autodiagnostics liés</th>
+                            <th width="140px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resultat in resultats if resultat.synthese %}
+                            <tr>
+                                <td>{{resultat.name}}</td>
+                                <td>
+                                    <ul>
+                                        {% for one in resultat.resultats %}
+                                            <li><a href="{{path('hopitalnumerique_autodiag_front_resultat', {'id':one.id})}}">{{one.name}}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+
+                                <td>
+                                    <div class="btn-group" >
+                                        <a href="{{domaines[idDomaineResultat].url}}{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="btn btn-success" title="Télécharger le PDF de la synthèse"><i class="fa fa-download"></i></a>
+                                        <a href="{{domaines[idDomaineResultat].url}}{{path('hopitalnumerique_autodiag_front_resultat', {'id':resultat.id, 'back': 1})}}" class="btn btn-warning" title="Voir la synthèse"><i class="fa fa-eye"></i></a>
+                                        <div class="btn btn-danger" onclick='deleteWithConfirm("{{domaines[idDomaineResultat].url}}{{ path('hopitalnumerique_autodiag_front_comptehn_delete', { 'id': resultat.id }) }}");' title="Supprimer la synthèse"><i class="fa fa-trash-o"></i></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="3" align="center"> - Aucune synthèse d'autodiagnostic - </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    {% endfor %}
     
-    <div class="col-md-12">
-        <table class="table autodiagTable">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Nom</th>
-                    <th>Titre</th>
-                    <th>validation</th>
-                    <th>Partage</th>
-                    <th width="178px">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for resultat in resultats if resultat.dateValidation is not null and not resultat.synthese %}
-                    <tr>
-                        <td align="center"><input type="checkbox" class="checkbox" value="{{resultat.id}}" data-outil="{{resultat.outil.id}}" /></td>
-                        <td>{{resultat.name}}</td>
-                        <td>{{resultat.outil.title}}</td>
-                        <td>{{resultat.dateValidation|date('d/m/Y')}}</td>
-                        <td style="text-align:center">
-                            {% if resultat.resultatSharedBy is not null %}
-                                Partagé par {{resultat.resultatSharedBy.user.getAppellation()}}
-                                {% if resultat.resultatSharedBy.user.etablissementRattachementSante is not null %}
-                                    ({{ resultat.resultatSharedBy.user.etablissementRattachementSante.getNom() }})
-                                {% endif %}
-                                {% if resultat.datePartage is not null %}
-                                    le {{resultat.datePartage|date('d/m/Y')}}
-                                {% endif %}
-                            {% elseif resultat.resultatSharedFor is not null %}
-                                Partagé avec {{resultat.resultatSharedFor.user.getAppellation()}}
-                                {% if resultat.resultatSharedFor.user.etablissementRattachementSante is not null %}
-                                    ({{ resultat.resultatSharedFor.user.etablissementRattachementSante.getNom() }})
-                                {% endif %}
-                                {% if resultat.datePartage is not null %}
-                                    le {{resultat.datePartage|date('d/m/Y')}}
-                                {% endif %}
-                            {% endif %}
-                        </td>
-                        
-                        <td>
-                            <div class="btn-group btn-group-sm pull-right" >
-                                {% if resultat.resultatSharedBy is null and resultat.resultatSharedFor is null %}
-                                    <a href="{{path('hopitalnumerique_autodiag_front_resultat_reactivate', {'id':resultat.id})}}" class="btn btn-primary" title="Réactiver cet autodiagnostic"><i class="fa fa-repeat"></i></a>
-                                    <a href="{{path('hopitalnumerique_autodiag_resultat_share', {'id':resultat.id})}}" class="btn btn-info share-fancy link fancybox.ajax" title="Partager cet autodiagnostic"><i class="fa fa-exchange"></i></a>
-                                {% elseif resultat.resultatSharedFor is not null %}
-                                    <div class="btn btn-danger" onclick='deleteWithConfirm("{{ path('hopitalnumerique_autodiag_front_comptehn_delete_partage', { 'id': resultat.id }) }}");' title="Supprimer le partage"><i class="fa fa-exchange"></i></div>
-                                {% endif %}
-                                <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="btn btn-success" title="Télécharger le PDF du résultat"><i class="fa fa-download"></i></a>
-                                <a href="{{path('hopitalnumerique_autodiag_front_resultat', {'id':resultat.id, 'back': 1})}}" class="btn btn-warning" title="Voir les résultats"><i class="fa fa-eye"></i></a>
-                                <div class="btn btn-danger" onclick='deleteWithConfirm("{{ path('hopitalnumerique_autodiag_front_comptehn_delete', { 'id': resultat.id }) }}");' title="Supprimer mes réponses"><i class="fa fa-trash-o"></i></div>
-                            </div>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="6" align="center"> - Aucun formulaire d'autodiagnostic validé - </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <input type="hidden" id="generate-synthese-url" value="{{path('hopitalnumerique_autodiag_front_comptehn_generate_synthese')}}" />
-    </div>
-
-    <div class="clearfix"></div>
-
-    <h2>Mes synthèses d'autodiagnostics</h2>
-    <div class="col-md-12">
-        <table class="table autodiagTable">
-            <thead>
-                <tr>
-                    <th width="250px">Nom</th>
-                    <th>Autodiagnostics liés</th>
-                    <th width="140px">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for resultat in resultats if resultat.synthese %}
-                    <tr>
-                        <td>{{resultat.name}}</td>
-                        <td>
-                            <ul>
-                                {% for one in resultat.resultats %}
-                                    <li><a href="{{path('hopitalnumerique_autodiag_front_resultat', {'id':one.id})}}">{{one.name}}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </td>
-
-                        <td>
-                            <div class="btn-group" >
-                                <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="btn btn-success" title="Télécharger le PDF de la synthèse"><i class="fa fa-download"></i></a>
-                                <a href="{{path('hopitalnumerique_autodiag_front_resultat', {'id':resultat.id, 'back': 1})}}" class="btn btn-warning" title="Voir la synthèse"><i class="fa fa-eye"></i></a>
-                                <div class="btn btn-danger" onclick='deleteWithConfirm("{{ path('hopitalnumerique_autodiag_front_comptehn_delete', { 'id': resultat.id }) }}");' title="Supprimer la synthèse"><i class="fa fa-trash-o"></i></div>
-                            </div>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="3" align="center"> - Aucune synthèse d'autodiagnostic - </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <div class="clearfix"></div>
+    <input type="hidden" id="generate-synthese-url" value="{{path('hopitalnumerique_autodiag_front_comptehn_generate_synthese')}}" />
 {% endblock %}

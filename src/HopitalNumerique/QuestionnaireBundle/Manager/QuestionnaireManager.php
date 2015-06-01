@@ -4,6 +4,7 @@ namespace HopitalNumerique\QuestionnaireBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\UserBundle\Manager\UserManager;
 
 /**
  * Manager de l'entité Contractualisation.
@@ -16,19 +17,21 @@ class QuestionnaireManager extends BaseManager
     protected $_mailExpertReponses = array();
     protected $_mailReponses       = array();
     protected $_managerReponse;
+    protected $_userManager;
         
     /**
      * Constructeur du manager
      *
      * @param EntityManager $em Entity Manager de Doctrine
      */
-    public function __construct( EntityManager $em, $managerReponse, $options = array() )
+    public function __construct( EntityManager $em, $managerReponse, UserManager $userManager, $options = array() )
     {
         parent::__construct($em);
         $this->_questionnaireArray = isset($options['idRoles']) ? $options['idRoles'] : array();
         $this->_mailExpertReponses = isset($options['mailExpertReponses']) ? $options['mailExpertReponses'] : array();
         $this->_mailReponses       = isset($options['mailReponses']) ? $options['mailReponses'] : array();
         $this->_managerReponse     = $managerReponse;
+        $this->_userManager        = $userManager;
     }
 
     /**
@@ -41,7 +44,25 @@ class QuestionnaireManager extends BaseManager
      */
     public function getDatasForGrid( \StdClass $condition = null )
     {
-        return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        $questionnairesForGrid = array();
+
+        $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
+
+        $questionnaires = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+
+        foreach ($questionnaires as $questionnaire) 
+        {
+            if(!array_key_exists($questionnaire['id'], $questionnairesForGrid))
+            {
+                $questionnairesForGrid[$questionnaire['id']] = $questionnaire;
+            }
+            else
+            {
+                $questionnairesForGrid[$questionnaire['id']]['domaineNom'] .= ";" . $questionnaire['domaineNom'];
+            }
+        }
+
+        return array_values($questionnairesForGrid);
     }
     
     /**

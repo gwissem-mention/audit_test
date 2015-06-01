@@ -2,6 +2,8 @@
 namespace HopitalNumerique\UserBundle\Controller;
 
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\UserBundle\Event\UserEvent;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -419,7 +421,9 @@ class UserController extends Controller
         if($allPrimaryKeys == 1){
             $rawDatas = $this->get('hopitalnumerique_user.grid.user')->getRawData();
             foreach($rawDatas as $data)
+            {
                 $primaryKeys[] = $data['id'];
+            }
         }
         $users = $this->get('hopitalnumerique_user.manager.user')->findBy( array('id' => $primaryKeys) );
 
@@ -451,6 +455,7 @@ class UserController extends Controller
                             'nbVisites'                          => 'Nombre de visites',
                             'raisonDesinscription'               => 'Raison de désinscription',
                             'remarque'                           => 'Remarque pour la gestion',
+                            'domainesString'                     => 'Domaine(s) concerné(s)',
                             'ipLastConnection'                   => 'Dernière ip de connexion'
                         );
 
@@ -802,6 +807,7 @@ class UserController extends Controller
         {
             $form->remove('plainPassword');
             $form->remove('remarque');
+            $form->remove('domaines');
             $form->remove('raisonDesinscription');
             $form->remove('file');
         }
@@ -810,6 +816,8 @@ class UserController extends Controller
 
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
+            
+            $this->get('event_dispatcher')->dispatch( 'user_nodevo.before_update', new UserEvent(clone $user));
                         
             // On bind les données du form
             $form->handleRequest($request);
@@ -836,6 +844,7 @@ class UserController extends Controller
                 //Set de l'état
                 $idEtatActif = intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif'));
                 $user->setEtat($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $idEtatActif)));
+                $user->setDomaines(array($this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'))));
             }
             
             //si le formulaire est valide
@@ -858,7 +867,9 @@ class UserController extends Controller
                     if($this->get('security.context')->isGranted('ROLE_USER'))
                     {
                         //--BO--
-                        $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserFromAdminMail($user);
+                        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->get('request')->getSession()->get('domaineId'));
+                        $options = array('subjectDomaine' => str_replace(' ', '', strtoupper($domaine->getNom())));
+                        $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserFromAdminMail($user, $options);
                         $this->get('mailer')->send($mail);
                     }
                     else
@@ -866,7 +877,9 @@ class UserController extends Controller
                         $user->setEnabled( 0 );
                         $user->setConfirmationToken($this->get('fos_user.util.token_generator')->generateToken());
                         //--FO--
-                        $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserMail($user);
+                        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->get('request')->getSession()->get('domaineId'));
+                        $options = array('subjectDomaine' => str_replace(' ', '', strtoupper($domaine->getNom())));
+                        $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserMail($user, $options);
                         $this->get('mailer')->send($mail);
                     }
                 }
@@ -908,6 +921,7 @@ class UserController extends Controller
                         //--BO--
                         //set Role for User : not mapped field
                         $user->setRoles( array( $role->getRole() ) );
+                        $this->get('event_dispatcher')->dispatch( 'user_nodevo.update', new UserEvent($user));
                     }
                 }
                 else
@@ -915,9 +929,13 @@ class UserController extends Controller
                     //--FO-- Inscription
                     //Set du role "Enregistré" par défaut pour les utilisateurs
                     if( !is_null($user->getEtablissementRattachementSante()) )
+                    {
                         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ES_8'));
+                    }
                     else
+                    {
                         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_ENREGISTRE_9'));
+                    }
                     $user->setRoles( array( $role->getRole() ) );
                 }
 
@@ -957,12 +975,16 @@ class UserController extends Controller
                 
                 //bind Référence Etat with Enable FosUserField
                 if( intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif')) === $user->getEtat()->getId() && $this->get('security.context')->isGranted('ROLE_USER'))
+                {
                     $user->setEnabled( 1 );
+                }
                 else
+                {
                     $user->setEnabled( 0 );
+                }
 
                 $user->setDateLastUpdate(new \DateTime());
-                
+
                 //Mise à jour / création de l'utilisateur
                 $this->get('fos_user.user_manager')->updateUser( $user );
 
