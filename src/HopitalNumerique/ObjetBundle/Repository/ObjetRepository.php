@@ -133,13 +133,14 @@ class ObjetRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getObjetsByNbVue( $types, $limit = 0 )
+    public function getObjetsByNbVue( $limit = 0 )
     {
       $qb = $this->_em->createQueryBuilder();
       $qb->select('obj')
          ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
          ->leftJoin('obj.types','refTypes')
-         ->where('refTypes.id IN (:types)','obj.etat = 3')
+         ->where('obj.etat = 3')
+         ->andWhere('obj.publicationPlusConsulte = :true')
          ->andWhere(
            $qb->expr()->orx(
              $qb->expr()->isNull('obj.dateDebutPublication'),
@@ -150,9 +151,12 @@ class ObjetRepository extends EntityRepository
              $qb->expr()->gte('obj.dateFinPublication', ':today')
            )
          )
-         ->setParameter('today', new \DateTime() )
-         ->orderBy('obj.nbVue', 'DESC')
-         ->setParameter('types', $types );
+         ->setParameters(
+            array(
+                'today' => new \DateTime(),
+                'true'  => true
+         ))
+         ->orderBy('obj.nbVue', 'DESC');
 
       if( $limit !== 0 )
         $qb->setMaxResults($limit);
