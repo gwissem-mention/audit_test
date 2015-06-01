@@ -85,3 +85,5 @@ INSERT INTO `hn_recherche_recherche_parcours_gestion_type_publication` (`rrpg_id
 VALUES
 	(1, 184);
 
+	
+

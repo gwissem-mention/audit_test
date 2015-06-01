@@ -1300,21 +1300,33 @@ class Objet
      *
      * @return [type]
      */
-    public function getWebPath( $type )
+    public function getWebPath( $type = null )
     {
         $result = null;
 
-        switch ($type) {
-            case self::FICHIER_1:
-                if( !is_null($this->path) )
-                    $result = $this->path;
-                break;
-
-            case self::FICHIER_2:
-                if( !is_null($this->path2) )
-                    $result = $this->path2;
-                break;
+        if(is_null($type))
+        {
+            if( !is_null($this->path) )
+            {
+                $result = $this->path;
+            }
         }
+        else
+        {
+            switch ($type) {
+                case self::FICHIER_1:
+                    if( !is_null($this->path) )
+                        $result = $this->path;
+                    break;
+
+                case self::FICHIER_2:
+                    if( !is_null($this->path2) )
+                        $result = $this->path2;
+                    break;
+            }
+        }
+
+        
         if( is_null($result) )
             return null;
 
@@ -1731,6 +1743,11 @@ class Objet
     public function getDomainesId()
     {
         $domainesId = array();
+
+        if(is_null($this->domaines))
+        {
+            return $domainesId;
+        }
 
         foreach ($this->domaines as $domaine) 
         {

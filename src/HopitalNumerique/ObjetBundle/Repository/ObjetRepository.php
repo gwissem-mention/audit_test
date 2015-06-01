@@ -117,7 +117,7 @@ class ObjetRepository extends EntityRepository
                 )
             )
             ->setParameter('today', new \DateTime() )
-            ->orderBy('obj.dateCreation', 'DESC')
+            ->orderBy('obj.dateModification', 'DESC')
             ->setParameter('types', $types );
         
         if( $limit !== 0 )
