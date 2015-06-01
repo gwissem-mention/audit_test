@@ -142,7 +142,7 @@ class ReferenceController extends Controller
         $this->get('hopitalnumerique_objet.manager.refobjet')->save( $refsToSave );
 
         //get Object Note
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($objet->getDomainesId());
         $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $objet->getReferences(), $refsPonderees );
 
         return new Response('{"success":true, "note":"' . number_format($note, 2, ',', ' ') . '"}', 200);

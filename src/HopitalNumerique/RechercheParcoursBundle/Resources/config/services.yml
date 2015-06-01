@@ -2,6 +2,10 @@ parameters:
     hopitalnumerique_recherche_parcours.manager.recherche_parcours.class: HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager
     hopitalnumerique_recherche_parcours.manager.recherche_parcours_details.class: HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursDetailsManager
     hopitalnumerique_recherche_parcours.manager.matrise_user.class: HopitalNumerique\RechercheParcoursBundle\Manager\MaitriseUserManager
+    #gestionnaire
+    hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion.class: HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursGestionManager
+    hopitalnumerique_rechercheparcours.grid.rechercheparcoursgestion.class: HopitalNumerique\RechercheParcoursBundle\Grid\RechercheParcoursGestionGrid
+    hopitalnumerique_rechercheparcours.form.rechercheparcoursgestion.class: HopitalNumerique\RechercheParcoursBundle\Form\RechercheParcoursGestionType
 
 services:
     #RechercheParcours
@@ -22,3 +26,20 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    #gestionnaire
+    hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion:
+        class: %hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion.class%
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_rechercheparcours.grid.rechercheparcoursgestion:
+        class: %hopitalnumerique_rechercheparcours.grid.rechercheparcoursgestion.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_rechercheparcours.form.rechercheparcoursgestion:
+        class: %hopitalnumerique_rechercheparcours.form.rechercheparcoursgestion.class%
+        arguments: ["@hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion", "@validator", "@hopitalnumerique_user.manager.user"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_rechercheparcours_rechercheparcoursgestion }

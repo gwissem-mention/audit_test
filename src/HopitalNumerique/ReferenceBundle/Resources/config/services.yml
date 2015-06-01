@@ -6,7 +6,7 @@ parameters:
 services:
     hopitalnumerique_reference.manager.reference:
         class: "%hopitalnumerique_reference.manager.reference.class%"
-        arguments: ["@doctrine.orm.entity_manager", "@session"]
+        arguments: ["@doctrine.orm.entity_manager", "@session", "@hopitalnumerique_user.manager.user"]
         calls:
            - [ setCache, [ "@liip_doctrine_cache.ns.main" ] ]
 
@@ -16,7 +16,7 @@ services:
 
     hopitalnumerique_reference.form.reference:
         class: "%hopitalnumerique_reference.form.reference.class%"
-        arguments: ["@hopitalnumerique_reference.manager.reference", "@validator"]
+        arguments: ["@hopitalnumerique_reference.manager.reference", "@validator", "@hopitalnumerique_user.manager.user"]
         tags:
             - { name: form.type, alias: hopitalnumerique_reference_reference }
 

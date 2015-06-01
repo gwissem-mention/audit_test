@@ -1,8 +1,8 @@
-{% extends 'HopitalNumeriqueCoreBundle::layout.html.twig' %}
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
 
 {# Référencement #}
 {% block title %}{{parent()}} - Connexion{% endblock %}
-{% block metadesc %}Connectez-vous à votre compte "Mon Hôpital Numérique" pour accéder aux outils proposés par l'ANAP{% endblock %}
+{% block metadesc %}Connectez-vous à votre compte "{{domaineCurrent.nom}}" pour accéder aux outils proposés par l'ANAP{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}

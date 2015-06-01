@@ -95,12 +95,26 @@ class Reference
     protected $parent = null;
 
     /**
+     * @ORM\OneToMany(targetEntity="Reference", mappedBy="parent")
+     */
+    protected $childs;
+
+    /**
      * @var integer
      * @Assert\NotBlank(message="L'ordre ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required, custom[onlyNumberSp]]")
      * @ORM\Column(name="ref_order", type="integer", options = {"comment" = "Ordre de la référence"})
      */
     protected $order;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
+     * @ORM\JoinTable(name="hn_domaine_gestions_reference",
+     *      joinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
+     * )
+     */
+    protected $domaines;
 
     public function __construct()
     {
@@ -376,5 +390,100 @@ class Reference
     public static function getStatutActifId()
     {
         return self::$STATUT_ACTIF_ID;
+    }
+
+    /**
+     * Add domaines
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     * @return Reference
+     */
+    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    {
+        $this->domaines[] = $domaines;
+
+        return $this;
+    }
+
+    /**
+     * Remove domaines
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     */
+    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    {
+        $this->domaines->removeElement($domaines);
+    }
+
+    /**
+     * Get domaines
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDomaines()
+    {
+        return $this->domaines;
+    }
+
+    /**
+     * Get les ids des domaines concerné par l'user
+     *
+     * @return array[integer]
+     */
+    public function getDomainesId()
+    {
+        $domainesId = array();
+
+        foreach ($this->domaines as $domaine) 
+        {
+            $domainesId[] = $domaine->getId();
+        }
+
+        return $domainesId;
+    }
+
+    /**
+     * set domaines
+     *
+     * @return Reference
+     */
+    public function setDomaines($domaines = null)
+    {
+        $this->domaines = $domaines;
+
+        return $this;
+    }
+
+    /**
+     * Add childs
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $childs
+     * @return Reference
+     */
+    public function addChild(\HopitalNumerique\ReferenceBundle\Entity\Reference $childs)
+    {
+        $this->childs[] = $childs;
+
+        return $this;
+    }
+
+    /**
+     * Remove childs
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $childs
+     */
+    public function removeChild(\HopitalNumerique\ReferenceBundle\Entity\Reference $childs)
+    {
+        $this->childs->removeElement($childs);
+    }
+
+    /**
+     * Get childs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChilds()
+    {
+        return $this->childs;
     }
 }

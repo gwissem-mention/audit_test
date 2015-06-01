@@ -33,6 +33,14 @@
 
 {% block headerDesc %}
     <p><strong>Attention :</strong> Si vous êtes expert ou ambassadeur, informez l'ANAP avant de modifier les données contractuelles (nom, prénom, établissement, etc).</p>
+    {% if user.domaines|length > 0 %}
+        <p>Voici l'ensemble des domaines auxquelles vous avez accès :</p>
+        <ul>
+            {% for domaine in user.domaines %}
+                <li><a href="{{domaine.url}}">{{domaine.nom}}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
 
 {% block content%}
@@ -140,7 +148,7 @@
     			</p>
             </div>
             <div class="lien">
-                <a target="_blank" href="{{path('hopital_numerique_user_desinscription')}}">Me désinscrire de Mon Hôpital Numérique</a>
+                <a target="_blank" href="{{path('hopital_numerique_user_desinscription')}}">Me désinscrire de {{domaineCurrent.nom}}</a>
             </div>
 		</div>
 {% endblock %}

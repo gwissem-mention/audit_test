@@ -281,7 +281,7 @@ hopitalnumerique_user_refuscandidature_show:
         id: \d+
         _method: GET
 
-hopital_numerique_user_get_user_from_email:
-    pattern:  /compte-hn/recuperation-user
+hopital_numerique_user_get_user_from_email_forAutodiag:
+    pattern:  /compte-hn/autodiagnostic/recuperation-user
     defaults: { _controller: HopitalNumeriqueUserBundle:User:getUserFromEmail }
 

@@ -38,7 +38,7 @@ services:
     #--Topic
     hopitalnumerique_forum.manager.topic:
         class: %hopitalnumerique_forum.manager.topic.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_domaine.manager.domaine", "@hopitalnumerique_reference.manager.reference"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
     #--RefTopic

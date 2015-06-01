@@ -3,6 +3,10 @@
 namespace HopitalNumerique\GlossaireBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use Doctrine\ORM\EntityManager;
+use HopitalNumerique\UserBundle\Manager\UserManager;
+
+use HopitalNumerique\GlossaireBundle\Entity\Glossaire;
 
 /**
  * Manager de l'entité Glossaire.
@@ -10,26 +14,120 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class GlossaireManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\GlossaireBundle\Entity\Glossaire';
+    protected $_userManager;
+
+    /**
+     * Constructeur du manager gérant les références
+     *
+     * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
+     * @return void
+     */
+    public function __construct(EntityManager $entityManager, UserManager $userManager)
+    {
+        parent::__construct($entityManager);
+
+        $this->_userManager = $userManager;
+    }
+
+    /**
+     * Override : Récupère les données pour le grid sous forme de tableau
+     *
+     * @return array
+     */
+    public function getDatasForGrid( \StdClass $condition = null )
+    {
+        $glossairesForGrid = array();
+
+        $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
+
+        $glossaires = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+
+        foreach ($glossaires as $glossaire) 
+        {
+            if(!array_key_exists($glossaire['id'], $glossairesForGrid))
+            {
+                $glossairesForGrid[$glossaire['id']] = $glossaire;
+            }
+            else
+            {
+                $glossairesForGrid[$glossaire['id']]['domaineNom'] .= ";" . $glossaire['domaineNom'];
+            }
+        }
+
+        return array_values($glossairesForGrid);
+    }
+
+    /**
+     * Récupère les données pour l'export CSV
+     *
+     * @return array
+     */
+    public function getDatasForExport( $ids )
+    {
+        $glossairesForExport = array();
+
+        $glossaires = $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
+
+        foreach ($glossaires as $glossaire) 
+        {
+            if(!array_key_exists($glossaire['id'], $glossairesForExport))
+            {
+                $glossairesForExport[$glossaire['id']] = $glossaire;
+            }
+            else
+            {
+                $glossairesForExport[$glossaire['id']]['domaineNom'] .= "|" . $glossaire['domaineNom'];
+            }
+        }
+
+        return array_values($glossairesForExport);
+    }
 
     /**
      * Retourne le tableau du glossaire
      *
+     * @param  int $domaineId Domaine courrant
+     *
      * @return array
      */
-    public function findGlossaireTable()
+    public function findGlossaireTable($domaineId)
     {
-        $glossaires = $this->findAll();
+        $glossaires = $this->getRepository()->getAllGlossaireDomaineNotNull()->getQuery()->getResult();
 
         $datas = array();
-        foreach($glossaires as $one){
-            if( $one->getEtat()->getId() == 3){
+        foreach($glossaires as $one)
+        {
+            if( $one->getEtat()->getId() == 3)
+            {
                 $firstL = substr( ucfirst($one->getMot()), 0, 1);
-                $datas[ $firstL ][ strtolower($one->getMot()) ] = $one;
+                foreach ($one->getDomaines() as $domaineGlossaire) 
+                {
+                    if(!array_key_exists('all', $datas))
+                    {
+                        $datas['all'] = array();
+                    }
+                    
+                    $datas['all'][ $firstL ][ strtolower($one->getMot()) ] = $one;
+                    //Récupère que le domaine courant
+                    if($domaineGlossaire->getId() == $domaineId)
+                    {
+                        if(!array_key_exists($domaineGlossaire->getId(), $datas))
+                        {
+                            $datas[$domaineGlossaire->getId()] = array();
+                        }
+                        $datas[$domaineGlossaire->getId()][ $firstL ][ strtolower($one->getMot()) ] = $one;
+                    }
+                }
             }
         }
 
-        foreach($datas as &$data)
-            ksort($data);
+        foreach($datas as &$domaine)
+        {
+            foreach ($domaine as &$data) 
+            {
+                ksort($data);
+            }
+        }
 
         return $datas;
     }
@@ -47,9 +145,15 @@ class GlossaireManager extends BaseManager
         //éléments du glossaire
         $datas = $this->findAll();
         $glossairesWords = array();
-        foreach($datas as $one){
+        foreach($datas as $one)
+        {
             if( $one->getEtat()->getId() == 3)
-                $glossairesWords[ trim(htmlentities($one->getMot())) ] = $one->isSensitive();
+            {
+                $glossairesWords[ trim(htmlentities($one->getMot())) ] = array(
+                    'sensitive' => $one->isSensitive(),
+                    'domaines'  => $one->getDomainesId()
+                );
+            }
         }
         
         //tri des éléments les plus longs aux plus petits
@@ -63,7 +167,7 @@ class GlossaireManager extends BaseManager
             foreach($objets as $objet){
                 //parse Resume + Synthese
                 $words      = strip_tags($objet->getResume()) . ' ' . strip_tags($objet->getSynthese());
-                $motsFounds = $this->searchWords( $words, $glossairesWords );
+                $motsFounds = $this->searchWords( $words, $glossairesWords, $objet );
 
                 $objet->setGlossaires( $motsFounds );
             }    
@@ -74,16 +178,12 @@ class GlossaireManager extends BaseManager
             foreach($contenus as $contenu){
                 //parse Contenu
                 $words      = strip_tags($contenu->getContenu());
-                $motsFounds = $this->searchWords( $words, $glossairesWords );
+                $motsFounds = $this->searchWords( $words, $glossairesWords, $contenu->getObjet() );
 
                 $contenu->setGlossaires( $motsFounds );
             }    
         }
     }
-
-
-
-
 
 
 
@@ -109,21 +209,47 @@ class GlossaireManager extends BaseManager
      *
      * @return [type]
      */
-    private function searchWords( $words, $glossairesWords )
+    private function searchWords( $words, $glossairesWords, $objet )
     {
         $motsFounds = array();
         $posFounds  = array();
 
-        foreach($glossairesWords as $glossairesWord => $sensitive){
+        foreach($glossairesWords as $glossairesWord => $arrayGlossaire)
+        {
+            //Si le glossaire avait un domaine on vérifie qu'il correspond à celui de l'objet
+            if(count($arrayGlossaire['domaines']) !== 0 )
+            {
+                $sameDomaine = false;
+                foreach ($objet->getDomainesId() as $domaineObjetId) 
+                {
+                    if(in_array($domaineObjetId, $arrayGlossaire['domaines']))
+                    {
+                        $sameDomaine = true;
+                        break;
+                    }
+                }
+
+                //Si il n'y a pas de domaine en commun entre le glossaire et l'objet courant ALORS que le glossaire a un domaine, on ne parse pas l'objet/contenu
+                if(!$sameDomaine)
+                {
+                    continue;
+                }
+            }
+
             $pattern = "|$glossairesWord|";
-            if( !$sensitive )
+            if( !$arrayGlossaire['sensitive'] )
+            {
                 $pattern .= 'i';
+            }
 
             preg_match_all($pattern, $words, $matches, PREG_OFFSET_CAPTURE);
             
-            if( $matches[0] ){
-                foreach($matches[0] as $match){
-                    if( !in_array($match[1], $posFounds) ){
+            if( $matches[0] )
+            {
+                foreach($matches[0] as $match)
+                {
+                    if( !in_array($match[1], $posFounds) )
+                    {
                         $motsFounds[] = $glossairesWord;
                         $posFounds[]  = $match[1];
                     }

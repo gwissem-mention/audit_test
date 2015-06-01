@@ -18,13 +18,13 @@ services:
     #managers
     hopitalnumerique_objet.manager.objet:
         class: %hopitalnumerique_objet.manager.objet.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_objet.manager.contenu", "@hopitalnumerique_objet.manager.note", "@session"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_objet.manager.contenu", "@hopitalnumerique_objet.manager.note", "@session", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
     hopitalnumerique_objet.manager.contenu:
         class: %hopitalnumerique_objet.manager.contenu.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
@@ -55,7 +55,7 @@ services:
     #forms
     hopitalnumerique_objet.form.objet:
         class: %hopitalnumerique_objet.form.objet.class%
-        arguments: ["@hopitalnumerique_objet.manager.objet", "@validator"]
+        arguments: ["@hopitalnumerique_objet.manager.objet", "@validator", "@hopitalnumerique_user.manager.user"]
         tags:
             - { name: form.type, alias: hopitalnumerique_objet_objet }
 

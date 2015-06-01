@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * 
@@ -14,7 +15,7 @@ class DefaultController extends Controller
      *
      * @return [type]
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $article = $this->get('hopitalnumerique_objet.manager.objet')->getArticleHome();
 
@@ -25,7 +26,7 @@ class DefaultController extends Controller
         $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role, 3 );
 
         // Get publications (production)
-        $publications  = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByNbVue(array(425,176,177,178,179,180,181,182,435), 3);
+        $publications  = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByNbVue();
 
         // Get nombres comptes créés
         $nb_eta = $this->get('hopitalnumerique_user.manager.user')->getNbEtablissements();
@@ -78,7 +79,9 @@ class DefaultController extends Controller
         // Get nombres de publications consultées
         $nb_pub_consultees = $this->get('hopitalnumerique_objet.manager.consultation')->getNbConsultations();
 
-        return $this->render('HopitalNumeriqueCoreBundle:Default:index.html.twig', array(
+        $view = 'HopitalNumeriqueCoreBundle:Templates/' .  $request->getSession()->get('templateId') . ':index.html.twig'; 
+
+        return $this->render($view, array(
             'article'          => $article,
             'actualites'       => $actualites,
             'publications'     => $publications,

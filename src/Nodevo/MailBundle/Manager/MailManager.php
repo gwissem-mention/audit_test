@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use FOS\UserBundle\Model\UserInterface;
 
+use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
+
 /**
  * Manager de l'entité Mail.
  */
@@ -37,13 +39,17 @@ class MailManager extends BaseManager
     private $_router;
     private $_requestStack;
 
+    private $_session;
+    private $_domaineManager;
+    private $_optionsMail = array();
+
     /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails
      *
      * @param EntityManager $em Entity      Manager de Doctrine
      * @param Array         $options        Tableau d'options
      */
-    public function __construct(EntityManager $em, \Twig_Environment $twig, $router, RequestStack $requestStack, $options = array())
+    public function __construct(EntityManager $em, \Twig_Environment $twig, $router, RequestStack $requestStack, $session, DomaineManager $domaineManager, $options = array())
     {        
         parent::__construct($em);
 
@@ -57,6 +63,11 @@ class MailManager extends BaseManager
         $this->_mailExpediteur     = isset($options['mailExpediteur'])    ? $options['mailExpediteur']    : '';
         $this->_destinataire       = isset($options['destinataire'])      ? $options['destinataire']      : '';
         $this->_mailAnap           = isset($options['mailAnap'])          ? $options['mailAnap']          : array();
+
+        $this->_session        = $session;
+        $this->_domaineManager = $domaineManager;
+
+        $this->setOptions();
     }
 
     public function getDestinataire()
@@ -91,11 +102,11 @@ class MailManager extends BaseManager
      *
      * @return Swift_Message
      */
-    public function sendAjoutUserFromAdminMail( $user )
+    public function sendAjoutUserFromAdminMail( $user, $options )
     {
         $mail = $this->findOneById(1);
         
-        return $this->generationMail($user, $mail);
+        return $this->generationMail($user, $mail, $options);
     }  
 
     /**
@@ -105,12 +116,13 @@ class MailManager extends BaseManager
      *
      * @return Swift_Message
      */
-    public function sendAjoutUserMail( $user )
+    public function sendAjoutUserMail( $user, $options )
     {
         $mail = $this->findOneById(2);
         $url = $this->_router->generate('fos_user_registration_confirm', array('token' => $user->getConfirmationToken()), true);
+        $options['url'] = $url;
 
-        return $this->generationMail($user, $mail, array('url' => $url));
+        return $this->generationMail($user, $mail, $options);
     }
     
     /**
@@ -462,6 +474,21 @@ class MailManager extends BaseManager
     }
     
     /**
+     * Envoi un mail pour notifier le changement de domaine
+     *
+     * @param User  $user    Utilisateur qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : 'nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendDomaineChanged( $user, $options )
+    {
+        $mail = $this->findOneById(41);
+    
+        return $this->generationMail($user, $mail, $options);
+    }
+    
+    /**
      * [sendInscriptionSession description]
      *
      * @param  [type] $user    [description]
@@ -584,36 +611,6 @@ class MailManager extends BaseManager
         return $mailsToSend;
     }
 
-    // /**
-    //  * Envoi un mail de contact (différent des autres envoie de mail)
-    //  *
-    //  * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
-    //  * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
-    //  *
-    //  * @return Swift_Message
-    //  */
-    // public function sendAutodiagSauvegardeMail( $options )
-    // {
-    //     $mail = $this->findOneById(42);
-        
-    //     //tableau de SwiftMessage a envoyé
-    //     $mailsToSend = array();
-
-    //     $recepteurName = $options["nomdestinataire"];
-    //     $recepteurMail = $options["maildestinataire"];
-        
-    //     //prepare content
-    //     $content        = $this->replaceContent($mail->getBody(), NULL , $options);
-    //     $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), NULL, $options);
-    //     $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
-    //     $content        = $this->replaceContent($mail->getBody(), NULL, $options);
-    //     $from           = array($expediteurMail => $expediteurName );
-        
-    //     $mailsToSend[] = $this->sendMail( $mail->getObjet(), $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
-
-    //     return $mailsToSend;
-    // }
-
     /**
      * Envoi un mail des réponses+question d'un questionnaire rempli par un utilisateur (différent des autres envoie de mail)
      *
@@ -677,11 +674,25 @@ class MailManager extends BaseManager
 
 
 
+    private function getAllOptions(array $options)
+    {
+        return array_merge($options, $this->_optionsMail);
+    }
 
+    private function setOptions()
+    {
+        $this->_optionsMail = array('subjectDomaine' => $this->getDomaineSubjet());
+    }
 
-
-
-
+    /**
+     * Retourne le domaine courant sous forme de label pour le sujet du mail
+     *
+     * @return [type]
+     */
+    private function getDomaineSubjet()
+    {
+        return str_replace(' ', '', strtoupper(is_null($this->_domaineManager->findOneById($this->_session->get('domaineId'))) ? 'Hopital Numérique' : $this->_domaineManager->findOneById($this->_session->get('domaineId'))->getNom()));
+    }
 
     /**
      * Génération du mail avec le template NodevoMailBundle::template.mail.html.twig + envoi à l'user
@@ -694,13 +705,16 @@ class MailManager extends BaseManager
      */
     private function generationMail( $user, $mail, $options = array() )
     {
-        //prepare content
-        $body = $this->replaceContent($mail->getBody(), $user, $options);
-        $from = array($mail->getExpediteurMail() => $mail->getExpediteurName() );
-        $cci  = $this->_expediteurEnCopie ? array_merge( $this->_mailAnap, $from ) : $this->_mailAnap;
-        $cci  = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
+        $options = $this->getAllOptions($options);
 
-        return $this->sendMail( $mail->getObjet(), $from, $user->getEmail(), $body, $cci );
+        //prepare content
+        $body    = $this->replaceContent($mail->getBody(), $user, $options);
+        $from    = array($mail->getExpediteurMail() => $mail->getExpediteurName() );
+        $cci     = $this->_expediteurEnCopie ? array_merge( $this->_mailAnap, $from ) : $this->_mailAnap;
+        $cci     = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
+        $subject = $this->replaceContent($mail->getObjet(), $user, $options);
+
+        return $this->sendMail( $subject, $from, $user->getEmail(), $body, $cci );
     }
 
     /**

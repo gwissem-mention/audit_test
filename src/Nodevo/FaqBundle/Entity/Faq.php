@@ -51,6 +51,15 @@ class Faq
      */
     protected $categorie;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
+     * @ORM\JoinTable(name="hn_domaine_gestions_faq",
+     *      joinColumns={ @ORM\JoinColumn(name="faq_id", referencedColumnName="faq_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
+     * )
+     */
+    protected $domaines;
+
     public function __construct()
     {
         $this->order = 0;
@@ -150,5 +159,51 @@ class Faq
     public function setCategorie(Categorie $categorie)
     {
         $this->categorie = $categorie;
+    }
+
+    /**
+     * Add domaines
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     * @return Faq
+     */
+    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    {
+        $this->domaines[] = $domaines;
+
+        return $this;
+    }
+
+    /**
+     * Remove domaines
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     */
+    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    {
+        $this->domaines->removeElement($domaines);
+    }
+
+    /**
+     * Get domaines
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDomaines()
+    {
+        return $this->domaines;
+    }
+
+    /**
+     * Set domaines
+     *
+     * @param \Doctrine\Common\Collections\Collection $domaines
+     * @return Domaine
+     */
+    public function setDomaines($domaines)
+    {        
+        $this->domaines = $domaines;
+    
+        return $this;
     }
 }

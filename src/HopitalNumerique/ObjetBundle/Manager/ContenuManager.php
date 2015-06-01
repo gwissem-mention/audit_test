@@ -3,10 +3,15 @@
 namespace HopitalNumerique\ObjetBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use Nodevo\ToolsBundle\Tools\Chaine;
+
+use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 
-use \Nodevo\ToolsBundle\Tools\Chaine;
+use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+
 
 /**
  * Manager de l'entité Contenu.
@@ -14,7 +19,28 @@ use \Nodevo\ToolsBundle\Tools\Chaine;
 class ContenuManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Contenu';
+    protected $_userManager;
+    protected $_referenceManager;
     private $_refPonderees;
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\Session\Session Session
+     */
+    private $_session;
+
+    /**
+     * Construct 
+     *
+     * @param EntityManager  $em              Entity Mangager de doctrine
+     *
+     */
+    public function __construct( EntityManager $em, UserManager $userManager, ReferenceManager $referenceManager)
+    {
+        parent::__construct($em);
+
+        $this->_userManager      = $userManager;
+        $this->_referenceManager = $referenceManager;
+    }
 
     /**
      * [setRefPonderees description]
@@ -33,9 +59,9 @@ class ContenuManager extends BaseManager
      *
      * @return array
      */
-    public function getArboForObjet( $id )
+    public function getArboForObjet( $id, $domaineIds = array() )
     {
-        $datas = new ArrayCollection( $this->getRepository()->getArboForObjet( $id )->getQuery()->getResult() );
+        $datas = new ArrayCollection( $this->getRepository()->getArboForObjet( $id, $domaineIds )->getQuery()->getResult() );
 
         //Récupère uniquement les premiers parents
         $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );
@@ -70,7 +96,9 @@ class ContenuManager extends BaseManager
 
             //si on est un enfant et que l'on est présent dans le tableau disabled childs, on devient disabled (car notre parent est sélectionné)
             if( in_array($ref->id, $disabledChilds))
+            {
                 $ref->disabled = true;
+            }
 
             //si y'a des enfants, on ajoute les ids dans les disabledChilds
             if( !is_null($ref->childs) ){
@@ -81,6 +109,8 @@ class ContenuManager extends BaseManager
             //on remet l'élément à sa place
             $references[ $selected->getReference()->getId() ] = $ref;
         }
+
+        $references = $this->filtreReferencesByDomaines($contenu->getObjet(), $references);
         
         return $references;
     }
@@ -108,7 +138,9 @@ class ContenuManager extends BaseManager
             $return[ $selected->getReference()->getId() ]['primary'] = $selected->getPrimary();
             
             if( $reference->getParent() )
+            {
                 $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
+            }
         }
         
         $this->formatReferencesOwn( $return );
@@ -280,6 +312,71 @@ class ContenuManager extends BaseManager
 
 
 
+    /**
+     * Filtre les reférences en fonction de l'objet passés en paramètre
+     *
+     * @param [type] $objet      [description]
+     * @param [type] $references [description]
+     *
+     * @return [type]
+     */
+    private function filtreReferencesByDomaines($objet, $references)
+    {
+        $referencesIds    = array();
+        $domainesObjetIds = array();
+        $userConnectedDomaineIds = $this->_userManager->getUserConnected()->getDomainesId();
+
+        //Récupération des id de domaine de l'objet
+        foreach ($objet->getDomaines() as $domaine) 
+        {
+            if(in_array($domaine->getId(), $userConnectedDomaineIds))
+            {
+                $domainesObjetIds[] = $domaine->getId();
+            }
+        }
+
+        //Vérifie qu'il y a bien un domaine pour la publication courante
+        if(count($domainesObjetIds) !== 0)
+        {   
+            //Récupération des id des références "stdClass" pour récupérer les entités correspondantes et donc les domaines
+            foreach ($references as $reference) 
+            {
+                $referencesIds[] = $reference->id;
+            }
+
+            $referencesByIds = $this->_referenceManager->findBy(array('id'=> $referencesIds));
+
+            //Parcourt la liste des entités de référence
+            foreach ($referencesByIds as $reference) 
+            {
+                if(array_key_exists($reference->getId(), $references))
+                {
+                    $inArray = false;
+
+                    foreach ($reference->getDomaines() as $domaine) 
+                    {
+                        if(in_array($domaine->getId(), $domainesObjetIds))
+                        {
+                            $inArray = true;
+                            break;
+                        }   
+                    }
+
+                    if(!$inArray)
+                    {
+                        unset($references[$reference->getId()]);
+                    }
+                }
+            }
+        }
+        //Sinon vide les références, car une publication sans domaine ne peut pas être référencées
+        else
+        {
+            $references = array();
+        }
+
+        return $references;
+    }
 
     /**
      * Retourne la note des références

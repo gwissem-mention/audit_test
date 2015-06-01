@@ -16,10 +16,12 @@ class GlossaireGrid extends Grid implements GridInterface
      * Définie la config spécifique au grid Glossaire.
      */
     public function setConfig()
-    {
-        $this->setSource( 'HopitalNumeriqueGlossaireBundle:Glossaire' );
+    {   
         $this->setNoDataMessage('Aucun élément du glossaire à afficher.');
-        $this->setDefaultOrder('mot', 'ASC');
+        $this->setSource( 'hopitalnumerique_glossaire.manager.glossaire' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->showIDColumn( false );
+        $this->setFilterIdColumn( false );
     }
 
     /**
@@ -28,6 +30,10 @@ class GlossaireGrid extends Grid implements GridInterface
     public function setColumns()
     {
         $this->addColonne( new Column\TextColumn('mot', 'Mot') );
+        
+        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
+        $this->addColonne( $domaineColumn );
+
         $this->addColonne( new Column\TextColumn('intitule', 'Intitule') );
         
         $sensitive = new Column\BooleanColumn('sensitive', 'Sensible à la casse');
@@ -45,7 +51,6 @@ class GlossaireGrid extends Grid implements GridInterface
     {
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_glossaire_glossaire_show' ) );
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_glossaire_glossaire_edit' ) );
-        //$this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_glossaire_glossaire_delete' ) );
     }
 
     /**

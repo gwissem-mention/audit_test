@@ -3,17 +3,20 @@ namespace HopitalNumerique\RechercheBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class CronController extends Controller
 {
     /**
      * Cron de mise à jour des requetes
      */
-    public function requetesAction($id)
+    public function requetesAction(Request $request, $id)
     {
         if ($id == 'FHFURJYIHOLPMFKVIDUESQGEUDRCTUFT')
         {
             ini_set('max_execution_time', 0);
+
+            $domaineId = $request->getSession()->get('domaineId');
 
             $context = $this->container->get('router')->getContext();
             $urlSite = $context->getScheme() . '://' . $context->getHost().$context->getBaseUrl();
@@ -46,7 +49,7 @@ class CronController extends Controller
                     //get objets and format them
                     $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
                     $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $requete->getRefs(), $role, $refsPonderees );
-                    $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $objets, $user );
+                    $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
 
                     //prepare somes vars
                     $requeteNew     = false;

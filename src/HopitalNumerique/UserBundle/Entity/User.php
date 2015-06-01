@@ -566,6 +566,15 @@ class User extends BaseUser
     protected $ipLastConnection;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
+     * @ORM\JoinTable(name="hn_domaine_gestions_user",
+     *      joinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
+     * )
+     */
+    protected $domaines;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -754,11 +763,105 @@ class User extends BaseUser
         else
             $this->region = null;
     }
+
+    /*--- Gestion domaine ---*/
+
+    /**
+     * Get domaine
+     *
+     * @return String $domaine
+     */
+    public function getDomainesString()
+    {
+        $domaineString = '';
+
+        if(is_null($this->domaines))
+        {
+            return $domaineString;
+        }
+
+        foreach ($this->domaines as $domaine) 
+        {
+            $domaineString .= ($domaineString != '' ? ' | ' : ' ') . $domaine->getNom();
+        }
+
+        return $domaineString;
+    }
+
+    /**
+     * Get les ids des domaines concerné par l'user
+     *
+     * @return array[integer]
+     */
+    public function getDomainesId()
+    {
+        $domainesId = array();
+
+        if(is_null($this->domaines))
+        {
+            return $domainesId;
+        }
+
+        foreach ($this->domaines as $domaine) 
+        {
+            $domainesId[] = $domaine->getId();
+        }
+
+        return $domainesId;
+    }
+
+    /**
+     * Add domaine
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @return Resultat
+     */
+    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        $this->domaines[] = $domaine;
+    
+        return $this;
+    }
+
+    /**
+     * Remove domaine
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     */
+    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        $this->domaines->removeElement($domaine);
+    }
+
+    /**
+     * Set domaines
+     *
+     * @param \Doctrine\Common\Collections\Collection $domaines
+     * @return Domaine
+     */
+    public function setDomaines($domaines)
+    {        
+        $this->domaines = $domaines;
+    
+        return $this;
+    }
+
+    /**
+     * Get domaines
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDomaines()
+    {
+        return $this->domaines;
+    }
+
+    /*-- Fin gestion domaine --*/
     
     /**
      * Get département
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
+     * @return \HopitalNumerique\DomaineBundle\Entity\Domaine $departement
      */
     public function getDepartement()
     {

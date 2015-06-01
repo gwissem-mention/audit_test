@@ -8,7 +8,7 @@ parameters:
 services:
     nodevo_faq.manager.faq:
         class: %nodevo_faq.manager.faq.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
@@ -18,6 +18,6 @@ services:
 
     nodevo_faq.form.faq:
         class: %nodevo_faq.form.faq.class%
-        arguments: ["@nodevo_faq.manager.faq", "@validator"]
+        arguments: ["@nodevo_faq.manager.faq", "@validator", "@hopitalnumerique_user.manager.user"]
         tags:
             - { name: form.type, alias: nodevo_faq_faq }

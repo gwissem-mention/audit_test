@@ -12,17 +12,28 @@ class ObjetRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
+     * @param array $domainesIds Tableau d'id de domaines autorisés pour l'utilisateur connecté
+     * @param [type] $condition   [description]
+     *
      * @return array
      */
-    public function getDatasForGrid()
+    public function getDatasForGrid( $domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
 
-        $qb->select('obj.id, obj.titre, obj.isInfraDoc, obj.nbVue, refEtat.libelle as etat, obj.dateCreation, obj.dateModification, obj.lock, user.email as lockedBy, refTypes.libelle as types')
+        $qb->select('obj.id, obj.titre, obj.isInfraDoc, obj.nbVue, refEtat.libelle as etat, obj.dateCreation, obj.dateModification, obj.lock, user.email as lockedBy, refTypes.libelle as types, domaine.nom as domaineNom')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->leftJoin('obj.etat','refEtat')
             ->leftJoin('obj.types','refTypes')
-            ->leftJoin('obj.lockedBy','user');
+            ->leftJoin('obj.lockedBy','user')
+            ->leftJoin('obj.domaines', 'domaine')
+                ->where($qb->expr()->orX(
+                    $qb->expr()->in('domaine.id', ':domainesId'),
+                    $qb->expr()->isNull('domaine.id')
+                ))
+                ->setParameter('domainesId', $domainesIds)
+            ->groupBy('obj.id')
+        ;
             
         return $qb;
     }
@@ -122,13 +133,14 @@ class ObjetRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getObjetsByNbVue( $types, $limit = 0 )
+    public function getObjetsByNbVue( $limit = 0 )
     {
       $qb = $this->_em->createQueryBuilder();
       $qb->select('obj')
          ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
          ->leftJoin('obj.types','refTypes')
-         ->where('refTypes.id IN (:types)','obj.etat = 3')
+         ->where('obj.etat = 3')
+         ->andWhere('obj.publicationPlusConsulte = :true')
          ->andWhere(
            $qb->expr()->orx(
              $qb->expr()->isNull('obj.dateDebutPublication'),
@@ -139,9 +151,12 @@ class ObjetRepository extends EntityRepository
              $qb->expr()->gte('obj.dateFinPublication', ':today')
            )
          )
-         ->setParameter('today', new \DateTime() )
-         ->orderBy('obj.nbVue', 'DESC')
-         ->setParameter('types', $types );
+         ->setParameters(
+            array(
+                'today' => new \DateTime(),
+                'true'  => true
+         ))
+         ->orderBy('obj.nbVue', 'DESC');
 
       if( $limit !== 0 )
         $qb->setMaxResults($limit);

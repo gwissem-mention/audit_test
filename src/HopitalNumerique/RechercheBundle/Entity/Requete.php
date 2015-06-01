@@ -98,6 +98,12 @@ class Requete
     private $user;
 
     /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", inversedBy="requetes", cascade={"persist"})
+     * @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id")
+     */
+    protected $domaine;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -446,5 +452,28 @@ class Requete
     public function getRechercheTextuelle()
     {
         return $this->rechercheTextuelle;
+    }
+
+    /**
+     * Set domaine
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @return Requete
+     */
+    public function setDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine = null)
+    {
+        $this->domaine = $domaine;
+
+        return $this;
+    }
+
+    /**
+     * Get domaine
+     *
+     * @return \HopitalNumerique\DomaineBundle\Entity\Domaine 
+     */
+    public function getDomaine()
+    {
+        return $this->domaine;
     }
 }
