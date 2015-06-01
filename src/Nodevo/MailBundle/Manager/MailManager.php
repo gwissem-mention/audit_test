@@ -691,7 +691,8 @@ class MailManager extends BaseManager
      */
     private function getDomaineSubjet()
     {
-        return str_replace(' ', '', strtoupper(is_null($this->_domaineManager->findOneById($this->_session->get('domaineId'))) ? 'Hopital Numérique' : $this->_domaineManager->findOneById($this->_session->get('domaineId'))->getNom()));
+        $chaine = new \Nodevo\ToolsBundle\Tools\Chaine(is_null($this->_domaineManager->findOneById($this->_session->get('domaineId'))) ? 'Hopital Numérique' : $this->_domaineManager->findOneById($this->_session->get('domaineId'))->getNom());
+        return str_replace(' ', '', strtoupper($chaine->supprimeAccents()));
     }
 
     /**
