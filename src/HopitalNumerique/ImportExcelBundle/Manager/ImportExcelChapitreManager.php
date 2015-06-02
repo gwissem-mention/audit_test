@@ -53,6 +53,7 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
             {
                 //Création d'une nouvelle catégorie
                 $chapitre = $this->createEmpty();
+                $chapitre->setOrder($key + 1);
             }
 
             $tool  = new Chaine( $chapitreDonnees['libelle'] );
@@ -71,7 +72,6 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
             $chapitre->setDescriptionLien($chapitreDonnees['descriptionLien']);
             $chapitre->setAffichageRestitutionBarre($chapitreDonnees['affichageRestitutionBarre']);
             $chapitre->setAffichageRestitutionRadar($chapitreDonnees['affichageRestitutionRadar']);
-            $chapitre->setOrder($key + 1);
 
             if (trim($chapitreDonnees['idParent']) !== '' && isset($arrayIdsChapitres[$chapitreDonnees['idParent']]))
             {
