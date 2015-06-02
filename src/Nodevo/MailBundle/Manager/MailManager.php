@@ -706,6 +706,7 @@ class MailManager extends BaseManager
         (
             'autodiagnostic' => $autodiagnostic->getTitle()
         );
+        $options = $this->getAllOptions($options);
         
         foreach ($courrielDestinataires as $courrielDestinataire)
         {
