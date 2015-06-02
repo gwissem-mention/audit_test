@@ -6,6 +6,8 @@ use HopitalNumerique\AutodiagBundle\Manager\ChapitreManager as ChapitreManagerAu
 use Nodevo\ToolsBundle\Tools\Chaine;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Manager\ResultatManager;
+use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
 /**
  * Manager de l'entité Categorie.
@@ -22,9 +24,9 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
      * @param \HopitalNumerique\AutodiagBundle\Manager\ResultatManager $resultatManager Le manager de l'entité Resultat
      * @return void
      */
-    public function __construct(EntityManager $entityManager, ResultatManager $resultatManager)
+    public function __construct(EntityManager $entityManager, ResultatManager $resultatManager, UserManager $userManager, ReferenceManager $referenceManager)
     {
-        parent::__construct($entityManager, $resultatManager);
+        parent::__construct($entityManager, $resultatManager, $userManager, $referenceManager);
     }
 
     /**
