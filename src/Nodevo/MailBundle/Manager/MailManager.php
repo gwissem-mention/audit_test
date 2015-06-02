@@ -9,6 +9,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use FOS\UserBundle\Model\UserInterface;
 
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
+use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\AutodiagBundle\Entity\Outil;
 
 /**
  * Manager de l'entité Mail.
@@ -16,6 +18,11 @@ use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 class MailManager extends BaseManager
 {
     protected $_class = 'Nodevo\MailBundle\Entity\Mail';
+    
+    /**
+     * @var \Swift_Mailer Mailer
+     */
+    private $mailer;
 
     private $_allowAdd;
     private $_allowDelete;
@@ -49,9 +56,11 @@ class MailManager extends BaseManager
      * @param EntityManager $em Entity      Manager de Doctrine
      * @param Array         $options        Tableau d'options
      */
-    public function __construct(EntityManager $em, \Twig_Environment $twig, $router, RequestStack $requestStack, $session, DomaineManager $domaineManager, $options = array())
+    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, RequestStack $requestStack, $session, DomaineManager $domaineManager, $options = array())
     {        
         parent::__construct($em);
+        
+        $this->mailer = $mailer;
 
         $this->_twig               = $twig;
         $this->_router             = $router;
@@ -666,7 +675,43 @@ class MailManager extends BaseManager
         return $this->sendMail( $mail->getObjet(), $from, $this->_destinataire, $mail->getBody() );
     }
 
-
+    /**
+     * Envoi le courriel de partage d'un autodiagnostic.
+     *
+     * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     *
+     * @return Swift_Message
+     */
+    public function sendPartageAutodiagnostic(User $partageur, User $destinataire, Outil $autodiagnostic)
+    {
+        $mail = $this->findOneById(43);
+        
+        $courrielDestinataires = array
+        (
+            array($partageur->getEmail() => $partageur->getAppellation()),
+            array($destinataire->getEmail() => $destinataire->getAppellation())
+        );
+        $options = array
+        (
+            'autodiagnostic' => $autodiagnostic->getTitle()
+        );
+        
+        foreach ($courrielDestinataires as $courrielDestinataire)
+        {
+            $this->mailer->send
+            (
+                $this->sendMail
+                (
+                    $mail->getObjet(),
+                    $partageur->getEmail(),
+                    $courrielDestinataire,
+                    $this->replaceContent($mail->getBody(), $partageur, $options),
+                    $this->_mailAnap
+                )
+            );
+        }
+    }
 
 
 

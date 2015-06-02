@@ -103,6 +103,7 @@ class ResultatController extends Controller
             }
 
             $this->get('hopitalnumerique_autodiag.manager.reponse')->save( $reponses );
+            $this->container->get('nodevo_mail.manager.mail')->sendPartageAutodiagnostic($user, $userPartageAvec, $resultat->getOutil());
 
             $success = true;
         }
