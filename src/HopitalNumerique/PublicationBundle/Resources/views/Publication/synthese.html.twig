@@ -22,7 +22,7 @@
                 %}
                     <link rel="stylesheet" href="{{ asset_url }}" />
                 {% endstylesheets %}
-            {% else templateCurrentId ==  2 %}
+            {% elseif templateCurrentId ==  2 %}
                 {% stylesheets output="compiled/hopitalnumerique-publication-publication-synthese-2.css" filter="cssrewrite, ?yui_css" 
                     "@bootstrap_css"
                     'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
