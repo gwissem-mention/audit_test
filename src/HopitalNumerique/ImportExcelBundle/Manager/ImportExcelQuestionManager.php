@@ -6,6 +6,7 @@ use HopitalNumerique\AutodiagBundle\Manager\QuestionManager as QuestManagerAutod
 use HopitalNumerique\ImportExcelBundle\Manager\ImportExcelCategorieManager;
 use HopitalNumerique\ImportExcelBundle\Manager\ImportExcelChapitreManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\UserBundle\Manager\UserManager;
 
 /**
  * Manager de l'entité Question.
@@ -17,9 +18,9 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
     protected $_importExcelChapitreManager;
     protected $_referenceManager;
 
-    public function __construct($entityManager, ImportExcelCategorieManager $importExcelCategorieManager, ImportExcelChapitreManager $importExcelChapitreManager, ReferenceManager $referenceManager )
+    public function __construct($entityManager, ImportExcelCategorieManager $importExcelCategorieManager, ImportExcelChapitreManager $importExcelChapitreManager, UserManager $userManager, ReferenceManager $referenceManager )
     {
-        parent::__construct($entityManager);
+        parent::__construct($entityManager, $userManager, $referenceManager);
         $this->_importExcelCategorieManager = $importExcelCategorieManager;
         $this->_importExcelChapitreManager  = $importExcelChapitreManager;
         $this->_referenceManager            = $referenceManager;

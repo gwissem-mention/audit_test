@@ -21,12 +21,12 @@ services:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
     hopital_numerique_import_excel.manager.chapitre:
         class: %hopital_numerique_import_excel.manager.chapitre.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.resultat"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.resultat", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
     hopital_numerique_import_excel.manager.question:
         class: %hopital_numerique_import_excel.manager.question.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopital_numerique_import_excel.manager.categorie", "@hopital_numerique_import_excel.manager.chapitre", "@hopitalnumerique_reference.manager.reference"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopital_numerique_import_excel.manager.categorie", "@hopital_numerique_import_excel.manager.chapitre", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
     hopital_numerique_import_excel.manager.resultat:

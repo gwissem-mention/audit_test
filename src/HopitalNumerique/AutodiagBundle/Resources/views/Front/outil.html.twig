@@ -182,7 +182,9 @@
                     <option value=""></option>
                     {% for option in options %}
                         {% set datas = option|split(';', 2) %}
-                        <option value="{{datas[0]|trim}}" {% if reponse['value'] == datas[0] %}selected="selected"{% endif %} >{{ datas[1]|raw }}</option>
+                        {% if datas|length > 1 %}
+                            <option value="{{datas[0]|trim}}" {% if reponse['value'] == datas[0] %}selected="selected"{% endif %} >{{ datas[1]|raw }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
             {# RADIO #}

@@ -28,6 +28,9 @@ class DefaultController extends Controller
         // Get publications (production)
         $publications  = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByNbVue();
 
+        $typeArticleCarrousel = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('id' => 520 ));
+        $articlesALaUne       = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByTypes($typeArticleCarrousel);
+
         // Get nombres comptes créés
         $nb_eta = $this->get('hopitalnumerique_user.manager.user')->getNbEtablissements();
 
@@ -85,6 +88,7 @@ class DefaultController extends Controller
             'article'          => $article,
             'actualites'       => $actualites,
             'publications'     => $publications,
+            'articlesALaUne'   => $articlesALaUne,
             'nb_eta'           => $nb_eta,
             'nb_fils'          => $nb_fils,
             'topics'           => $topics,

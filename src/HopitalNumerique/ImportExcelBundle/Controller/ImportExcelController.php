@@ -321,17 +321,17 @@ class ImportExcelController extends Controller
         //Récupèration de la feuille Synthese
         $sheetSynthese  = $phpExcelObject->getSheetByName('syntheses');
 
-        //Nettoyage des données sur l'autodiag courant
-        $categories = $this->get('hopital_numerique_import_excel.manager.categorie')->findBy(array('outil' => $outil));
-        $this->get('hopital_numerique_import_excel.manager.categorie')->delete($categories);
+        // //Nettoyage des données sur l'autodiag courant
+        // $categories = $this->get('hopital_numerique_import_excel.manager.categorie')->findBy(array('outil' => $outil));
+        // $this->get('hopital_numerique_import_excel.manager.categorie')->delete($categories);
 
-        $chapitres  = $this->get('hopital_numerique_import_excel.manager.chapitre')->findBy(array('outil' => $outil));
-        $this->get('hopital_numerique_import_excel.manager.chapitre')->delete($chapitres);
+        // $chapitres  = $this->get('hopital_numerique_import_excel.manager.chapitre')->findBy(array('outil' => $outil));
+        // $this->get('hopital_numerique_import_excel.manager.chapitre')->delete($chapitres);
 
-        $resultats  = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy(array('outil' => $outil));
-        $this->get('hopitalnumerique_autodiag.manager.resultat')->delete($resultats);
+        // $resultats  = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy(array('outil' => $outil));
+        // $this->get('hopitalnumerique_autodiag.manager.resultat')->delete($resultats);
 
-        $this->get('hopitalnumerique_autodiag.manager.process')->delete($this->get('hopitalnumerique_autodiag.manager.process')->findBy(array('outil' => $outil)));
+        // $this->get('hopitalnumerique_autodiag.manager.process')->delete($this->get('hopitalnumerique_autodiag.manager.process')->findBy(array('outil' => $outil)));
 
         //Récupération et ajouts des données importées
         //Méthode de Thomas : Si erreur générée c'est que le fichier n'est pas valide
@@ -348,21 +348,6 @@ class ImportExcelController extends Controller
             // ~~~ Questions
             $arrayQuestions   = $this->get('hopital_numerique_import_excel.manager.importexcel')->getQuestionsImported($sheetQuestions);
             $arrayIdQuestions = $this->get('hopital_numerique_import_excel.manager.question')->saveQuestionImported($arrayQuestions, $outil, $arrayIdChapitres);
-
-            // ~~~ Resultats
-            if(!is_null($sheetResultats))
-            {
-                $arrayResultats   = $this->get('hopital_numerique_import_excel.manager.importexcel')->getResultatImported($sheetResultats);
-                $arraySyntheses   = $this->get('hopital_numerique_import_excel.manager.importexcel')->getSyntheseImported($sheetSynthese);
-                $arrayIdResultats = $this->get('hopital_numerique_import_excel.manager.resultat')->saveResultatImported($arrayResultats, $arraySyntheses, $outil);
-
-                // ~~~ Reponses
-                if(!is_null($sheetReponses))
-                {
-                    $arrayReponses  = $this->get('hopital_numerique_import_excel.manager.importexcel')->getReponsesImported($sheetReponses);
-                    $this->get('hopital_numerique_import_excel.manager.reponse')->saveReponseImported($arrayReponses, $outil, $arrayIdResultats, $arrayIdQuestions);
-                }
-            }
             
             $this->container->get('hopital_numerique_import_excel.manager.process')->importSheetsProcess($phpExcelObject, $outil, $arrayIdChapitres);
         }

@@ -147,8 +147,9 @@
                 <table class="table autodiagTable">
                     <thead>
                         <tr>
-                            <th width="250px">Nom</th>
-                            <th>Autodiagnostics liés</th>
+                            <th width="20%">Nom</th>
+                            <th width="40%">Autodiagnostics liés</th>
+                            <th width="20%">Titre</th>
                             <th width="140px">Actions</th>
                         </tr>
                     </thead>
@@ -163,6 +164,7 @@
                                         {% endfor %}
                                     </ul>
                                 </td>
+                                <td>{{resultat.outil.title}}</td>
 
                                 <td>
                                     <div class="btn-group" >
