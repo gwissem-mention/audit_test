@@ -202,8 +202,9 @@ class MailManager extends BaseManager
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
             $content        = $this->replaceContent($mail->getBody(), NULL, $options);
             $from           = array($expediteurMail => $expediteurName );
+            $subject        = $this->replaceContent($mail->getObjet(), $user, $options);
             
-            $mailsToSend[] = $this->sendMail( $mail->getObjet(), $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
+            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
         }
 
         return $mailsToSend;
@@ -547,8 +548,9 @@ class MailManager extends BaseManager
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
             $content        = $this->replaceContent($mail->getBody(), NULL, $options);
             $from           = array($expediteurMail => $expediteurName );
+            $subject        = $this->replaceContent($mail->getObjet(), $user, $options);
             
-            $mailsToSend[] = $this->sendMail( $mail->getObjet(), $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
+            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
         }
 
         return $mailsToSend;
@@ -580,8 +582,9 @@ class MailManager extends BaseManager
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
             $content        = $this->replaceContent($mail->getBody(), NULL, $options);
             $from           = array($expediteurMail => $expediteurName );
+            $subject        = $this->replaceContent($mail->getObjet(), $user, $options);
             
-            $mailsToSend[] = $this->sendMail( $mail->getObjet(), $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
+            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
         }
 
         return $mailsToSend;
@@ -613,8 +616,9 @@ class MailManager extends BaseManager
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
             $content        = $this->replaceContent($mail->getBody(), NULL, $options);
             $from           = array($expediteurMail => $expediteurName );
+            $subject        = $this->replaceContent($mail->getObjet(), $user, $options);
             
-            $mailsToSend[] = $this->sendMail( $mail->getObjet(), $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
+            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
         }
 
         return $mailsToSend;
@@ -645,8 +649,9 @@ class MailManager extends BaseManager
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
             $content        = $this->replaceContent($mail->getBody(), NULL, $options);
             $from           = array($expediteurMail => $expediteurName );
+            $subject        = $this->replaceContent($mail->getObjet(), $user, $options);
             
-            $mailsToSend[] = $this->sendMail( $mail->getObjet(), $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
+            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
         }
 
         return $mailsToSend;
