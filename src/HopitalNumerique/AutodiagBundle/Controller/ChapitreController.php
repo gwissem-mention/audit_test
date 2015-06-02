@@ -161,7 +161,7 @@ class ChapitreController extends Controller
         if ( $form->handleRequest($request)->isValid() ) {
 
             //handle Alias
-            $tool = new Chaine( ( $chapitre->getAlias() == '' ? $chapitre->getTitle() : $chapitre->getAlias() ) );
+            $tool = new Chaine( ( $chapitre->getAlias() == '' ? $chapitre->getTitle() : $chapitre->getAlias() ) . ' ' . $chapitre->getId());
             $chapitre->setAlias( $tool->minifie() );
 
             //Récupère tout les chapitres enfants de ce chapitre
